@@ -1,3 +1,43 @@
+/* http://localhost:1843/classic/theme-base/sass/etc/mixins/frame.scss:237 */
+.x-btn-plain-toolbar-small-mc {
+    background-color: transparent;
+}
+/* http://localhost:1843/classic/theme-base/sass/etc/mixins/frame.scss:264 */
+.x-nbr .x-btn-plain-toolbar-small {
+    padding: 0 !important;
+    border-width: 0 !important;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+/* http://localhost:1843/classic/theme-base/sass/etc/mixins/frame.scss:281 */
+.x-btn-plain-toolbar-small-frameInfo {
+    font-family: th-1-1-1-1-1-1-1-1-7-7-7-7;
+}
+/* http://localhost:1843/classic/theme-base/sass/etc/mixins/frame.scss:347 */
+.x-btn-plain-toolbar-small-tl {
+    background-position: 0 -2px;
+}
+/* http://localhost:1843/classic/theme-base/sass/etc/mixins/frame.scss:351 */
+.x-btn-plain-toolbar-small-tr {
+    background-position: right -3px;
+}
+/* http://localhost:1843/classic/theme-base/sass/etc/mixins/frame.scss:355 */
+.x-btn-plain-toolbar-small-bl {
+    background-position: 0 -4px;
+}
+/* http://localhost:1843/classic/theme-base/sass/etc/mixins/frame.scss:359 */
+.x-btn-plain-toolbar-small-br {
+    background-position: right -5px;
+}
+/* http://localhost:1843/classic/theme-base/sass/etc/mixins/frame.scss:363 */
+.x-btn-plain-toolbar-small-ml {
+    background-position: 0 top;
+}
 /* http://localhost:1843/classic/theme-base/sass/etc/mixins/frame.scss:371 */
 .x-btn-plain-toolbar-small-mr {
     background-position: right top;
@@ -355,7 +395,7 @@
 }
 /* http://localhost:1843/classic/theme-neutral/sass/src/button/Button.scss:1081 */
 .x-btn-disabled.x-btn-plain-toolbar-small {
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     opacity: 0.5;
 }
 /* http://localhost:1843/classic/theme-neutral/sass/src/button/Button.scss:1100 */
@@ -901,7 +941,7 @@
 }
 /* http://localhost:1843/classic/theme-neutral/sass/src/button/Button.scss:1081 */
 .x-btn-disabled.x-btn-plain-toolbar-medium {
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     opacity: 0.5;
 }
 /* http://localhost:1843/classic/theme-neutral/sass/src/button/Button.scss:1100 */
@@ -1447,7 +1487,7 @@
 }
 /* http://localhost:1843/classic/theme-neutral/sass/src/button/Button.scss:1081 */
 .x-btn-disabled.x-btn-plain-toolbar-large {
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     opacity: 0.5;
 }
 /* http://localhost:1843/classic/theme-neutral/sass/src/button/Button.scss:1100 */
@@ -1594,7 +1634,7 @@
 .x-ie8 .x-btn-plain-toolbar-small-disabled .x-btn-icon-el,
 .x-ie8 .x-btn-plain-toolbar-medium-disabled .x-btn-icon-el,
 .x-ie8 .x-btn-plain-toolbar-large-disabled .x-btn-icon-el {
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     opacity: 0.5;
 }
 /* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:276 */
@@ -1689,11 +1729,11 @@
     color: #606060;
     background-position: center center;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:493 */
-.x-ie8 .x-panel-header-title-light > .x-title-icon-wrap-light > .x-title-icon-light {
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:494 */
+.x-ie8 .x-panel-header-title-light > .x-title-icon-wrap-light > .x-title-icon-light.x-title-glyph {
     color: #606060;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:503 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:505 */
 .x-panel-body-light {
     background: #fff;
     border-color: #d0d0d0;
@@ -1704,29 +1744,29 @@
     border-width: 1px;
     border-style: solid;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:667 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:669 */
 .x-panel-header-light {
     background-image: none;
     background-color: #fff;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:671 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:673 */
 .x-panel-header-light-vertical {
     background-image: none;
     background-color: #fff;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:729 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:731 */
 .x-panel .x-panel-header-light-collapsed-border-top {
     border-bottom-width: 1px !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:733 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:735 */
 .x-panel .x-panel-header-light-collapsed-border-right {
     border-left-width: 1px !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:737 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:739 */
 .x-panel .x-panel-header-light-collapsed-border-bottom {
     border-top-width: 1px !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:741 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:743 */
 .x-panel .x-panel-header-light-collapsed-border-left {
     border-right-width: 1px !important;
 }
@@ -1750,23 +1790,23 @@
     display: none;
     content: "x-slicer:, stretch:left" !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:777 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:779 */
 .x-panel-header-light-horizontal .x-tool-after-title {
     margin: 0 0 0 6px;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:787 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:789 */
 .x-panel-header-light-horizontal .x-tool-before-title {
     margin: 0 6px 0 0;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:799 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:801 */
 .x-panel-header-light-vertical .x-tool-after-title {
     margin: 6px 0 0 0;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:809 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:811 */
 .x-panel-header-light-vertical .x-tool-before-title {
     margin: 0 0 6px 0;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:821 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:823 */
 .x-panel-header-light .x-tool-focus {
     outline: 1px solid #5fa2dd;
     outline-offset: 1px;
@@ -1786,9 +1826,9 @@
     border: 1px solid #5fa2dd;
     pointer-events: none;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:850 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:852 */
 .x-panel-light-resizable .x-panel-handle {
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
     opacity: 0;
 }
 /* http://localhost:1843/classic/theme-base/sass/etc/mixins/border-management.scss:2 */
@@ -1986,11 +2026,11 @@
     color: #606060;
     background-position: center center;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:493 */
-.x-ie8 .x-panel-header-title-light-framed > .x-title-icon-wrap-light-framed > .x-title-icon-light-framed {
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:494 */
+.x-ie8 .x-panel-header-title-light-framed > .x-title-icon-wrap-light-framed > .x-title-icon-light-framed.x-title-glyph {
     color: #606060;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:503 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:505 */
 .x-panel-body-light-framed {
     background: #fff;
     border-color: #d0d0d0;
@@ -3054,55 +3094,55 @@
     display: none;
     content: "x-slicer:, frame:2px 2px 2px 2px, corners:url(images/panel-header/panel-header-light-framed-collapsed-left-corners.gif), sides:url(images/panel-header/panel-header-light-framed-collapsed-left-sides.gif)" !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:629 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:631 */
 .x-panel .x-panel-header-light-framed-top {
     border-bottom-width: 2px !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:633 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:635 */
 .x-panel .x-panel-header-light-framed-right {
     border-left-width: 2px !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:637 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:639 */
 .x-panel .x-panel-header-light-framed-bottom {
     border-top-width: 2px !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:641 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:643 */
 .x-panel .x-panel-header-light-framed-left {
     border-right-width: 2px !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:647 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:649 */
 .x-nbr .x-panel-header-light-framed-collapsed-top {
     border-bottom-width: 0 !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:651 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:653 */
 .x-nbr .x-panel-header-light-framed-collapsed-right {
     border-left-width: 0 !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:655 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:657 */
 .x-nbr .x-panel-header-light-framed-collapsed-bottom {
     border-top-width: 0 !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:659 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:661 */
 .x-nbr .x-panel-header-light-framed-collapsed-left {
     border-right-width: 0 !important;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:777 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:779 */
 .x-panel-header-light-framed-horizontal .x-tool-after-title {
     margin: 0 0 0 6px;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:787 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:789 */
 .x-panel-header-light-framed-horizontal .x-tool-before-title {
     margin: 0 6px 0 0;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:799 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:801 */
 .x-panel-header-light-framed-vertical .x-tool-after-title {
     margin: 6px 0 0 0;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:809 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:811 */
 .x-panel-header-light-framed-vertical .x-tool-before-title {
     margin: 0 0 6px 0;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:821 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:823 */
 .x-panel-header-light-framed .x-tool-focus {
     outline: 1px solid #5fa2dd;
     outline-offset: 1px;
@@ -3122,9 +3162,9 @@
     border: 1px solid #5fa2dd;
     pointer-events: none;
 }
-/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:850 */
+/* http://localhost:1843/classic/theme-neutral/sass/src/panel/Panel.scss:852 */
 .x-panel-light-framed-resizable .x-panel-handle {
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
     opacity: 0;
 }
 /* http://localhost:1843/classic/theme-base/sass/etc/mixins/border-management.scss:2 */
@@ -3464,35 +3504,35 @@
 }
 /* http://localhost:1843/packages/font-awesome/sass/etc/_rotated-flipped.scss:4 */
 .fa-rotate-90 {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
     -webkit-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
 }
 /* http://localhost:1843/packages/font-awesome/sass/etc/_rotated-flipped.scss:5 */
 .fa-rotate-180 {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
     -webkit-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
     transform: rotate(180deg);
 }
 /* http://localhost:1843/packages/font-awesome/sass/etc/_rotated-flipped.scss:6 */
 .fa-rotate-270 {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)";
     -webkit-transform: rotate(270deg);
     -ms-transform: rotate(270deg);
     transform: rotate(270deg);
 }
 /* http://localhost:1843/packages/font-awesome/sass/etc/_rotated-flipped.scss:8 */
 .fa-flip-horizontal {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0)";
     -webkit-transform: scale(-1, 1);
     -ms-transform: scale(-1, 1);
     transform: scale(-1, 1);
 }
 /* http://localhost:1843/packages/font-awesome/sass/etc/_rotated-flipped.scss:9 */
 .fa-flip-vertical {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2)";
     -webkit-transform: scale(1, -1);
     -ms-transform: scale(1, -1);
     transform: scale(1, -1);
@@ -6201,119 +6241,6 @@
     width: 16px;
     line-height: 16px;
     text-align: center;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/tree/View.scss:1 */
-.x-tree-checkbox {
-    color: #5fa2dd;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/window/Toast.scss:1 */
-.x-toast {
-    -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 2px 2px;
-    -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 2px 2px;
-    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 2px;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/Component.scss:3 */
-@font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-Light.ttf');
-    font-weight: 300;
-    font-style: normal;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/Component.scss:10 */
-@font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-LightItalic.ttf');
-    font-weight: 300;
-    font-style: italic;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/Component.scss:17 */
-@font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-Regular.ttf');
-    font-weight: 400;
-    font-style: normal;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/Component.scss:24 */
-@font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-Italic.ttf');
-    font-weight: 400;
-    font-style: italic;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/Component.scss:31 */
-@font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-Semibold.ttf');
-    font-weight: 600;
-    font-style: normal;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/Component.scss:38 */
-@font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-SemiboldItalic.ttf');
-    font-weight: 600;
-    font-style: italic;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/Component.scss:45 */
-@font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-Bold.ttf');
-    font-weight: 700;
-    font-style: normal;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/Component.scss:52 */
-@font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-BoldItalic.ttf');
-    font-weight: 700;
-    font-style: italic;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/Component.scss:59 */
-@font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-ExtraBold.ttf');
-    font-weight: 800;
-    font-style: normal;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/Component.scss:66 */
-@font-face {
-    font-family: 'Open Sans';
-    src: url('fonts/OpenSans-ExtraBoldItalic.ttf');
-    font-weight: 800;
-    font-style: italic;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/form/FieldSet.scss:1 */
-.x-fieldset {
-    border-top: 1px solid #bbb !important;
-    background: #f6f6f6;
-    position: static;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/form/FieldSet.scss:6 */
-.x-fieldset .x-fieldset-header {
-    padding: 10px 5px 10px 5px;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/form/FieldSet.scss:9 */
-.x-fieldset .x-fieldset-body {
-    position: relative;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/form/FieldSet.scss:12 */
-.x-fieldset.x-fieldset-collapsed {
-    background: none;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/menu/Menu.scss:1 */
-.x-menu-item-active .x-menu-item-text {
-    font-weight: 400;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/tab/Tab.scss:1 */
-.x-tab-close-btn:before {
-    display: block;
-    width: 16px;
-    line-height: 16px;
-    text-align: center;
-}
-/* http://localhost:1843/classic/theme-triton/sass/src/tree/View.scss:1 */
-.x-tree-checkbox {
-    color: #5fa2dd;
 }
 /* http://localhost:1843/classic/theme-triton/sass/src/window/Toast.scss:1 */
 .x-toast {

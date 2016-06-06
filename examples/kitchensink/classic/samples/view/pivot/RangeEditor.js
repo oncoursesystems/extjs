@@ -80,10 +80,7 @@ Ext.define('KitchenSink.view.pivot.RangeEditor', {
     //</example>
 
     initComponent: function () {
-        var me = this;
-
-        me.width = me.profileInfo.width;
-
-        me.callParent();
+        this.width = this.profileInfo.width;
+        this.callParent();
     }
 });

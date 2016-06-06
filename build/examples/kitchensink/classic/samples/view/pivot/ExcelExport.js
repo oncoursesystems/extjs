@@ -93,10 +93,7 @@ Ext.define('KitchenSink.view.pivot.ExcelExport', {
     //</example>
 
     initComponent: function () {
-        var me = this;
-
-        me.width = me.profileInfo.width;
-
-        me.callParent();
+        this.width = this.profileInfo.width;
+        this.callParent();
     }
 });

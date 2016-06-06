@@ -1,6 +1,7 @@
 Ext.define('KitchenSink.store.Navigation', {
     extend: 'Ext.data.TreeStore',
     alias: 'store.navigation',
+    filterer: 'bottomup',
 
     constructor: function(config) {
         var me = this,

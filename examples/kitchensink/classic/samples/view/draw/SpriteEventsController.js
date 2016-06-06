@@ -11,10 +11,16 @@ Ext.define('KitchenSink.view.draw.SpriteEventsController', {
             );
 
         if (sprite) {
-            sprite.setAttributes({
-                fillStyle: color,
-                strokeStyle: color
-            });
+            if (sprite.type === 'image') {
+                sprite.setAttributes({
+                    rotationRads: sprite.attr.rotationRads + Math.PI / 4
+                });
+            } else {
+                sprite.setAttributes({
+                    fillStyle: color,
+                    strokeStyle: color
+                });
+            }
             sprite.getSurface().renderFrame();
         }
     }

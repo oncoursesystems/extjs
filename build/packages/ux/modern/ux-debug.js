@@ -28,7 +28,8 @@ Ext.define('Ext.ux.ajax.Simlet', function() {
             'responseText',
             'responseXML',
             'status',
-            'statusText'
+            'statusText',
+            'responseHeaders'
         ],
         /**
          * @cfg {Number} responseText

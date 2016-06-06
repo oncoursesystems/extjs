@@ -20,6 +20,28 @@
     }
 
     var sprite, list = [], old1 = [0, 0], old2 = [0, 0];
+
+    function handleEnd() {
+        if (!sprite) {
+            return;
+        }
+
+        var cmp = this;
+        cmp.getSurface().add({
+            type: 'path',
+            path: sprite.attr.path,
+            lineWidth: sprite.attr.lineWidth,
+            lineCap: 'round',
+            lineJoin: 'round',
+            strokeStyle: sprite.attr.strokeStyle
+        });
+        cmp.getSurface().setDirty(true);
+        cmp.getSurface().renderFrame();
+        sprite.destroy();
+        cmp.getSurface('overlay').renderFrame();
+        sprite = null;
+    }
+
     /**
      * Demonstrates smoothening and cubic bezier Curve rendering
      */
@@ -29,7 +51,7 @@
             background: 'white',
             listeners: {
                 element: 'element',
-                'drag': function (e) {
+                drag: function (e) {
                     if (sprite) {
                         var me = this,
                             p = e.touches[0].point,
@@ -61,7 +83,7 @@
                         }
                     }
                 },
-                'touchstart': function (e) {
+                touchstart: function (e) {
                     if (!sprite) {
                         var cmp = this,
                             p0 = cmp.element.getXY(),
@@ -82,22 +104,9 @@
                         cmp.getSurface('overlay').renderFrame();
                     }
                 },
-                'dragend': function (e) {
-                    var cmp = this;
-                    cmp.getSurface().add({
-                        type: 'path',
-                        path: sprite.attr.path,
-                        lineWidth: sprite.attr.lineWidth,
-                        lineCap: 'round',
-                        lineJoin: 'round',
-                        strokeStyle: sprite.attr.strokeStyle
-                    });
-                    cmp.getSurface().setDirty(true);
-                    cmp.getSurface().renderFrame();
-                    sprite.destroy();
-                    cmp.getSurface('overlay').renderFrame();
-                    sprite = null;
-                }
+                // Handle both events here. touchend is for when we don't hit the drag threshold.
+                dragend: handleEnd,
+                touchend: handleEnd
             }
         },
 

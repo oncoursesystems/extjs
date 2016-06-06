@@ -141,10 +141,7 @@ Ext.define('KitchenSink.view.pivot.LayoutCompact', {
     //</example>
 
     initComponent: function () {
-        var me = this;
-
-        me.width = me.profileInfo.width;
-
-        me.callParent();
+        this.width = this.profileInfo.width;
+        this.callParent();
     }
 });

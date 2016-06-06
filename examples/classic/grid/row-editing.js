@@ -151,7 +151,7 @@ Ext.onReady(function(){
                 });
 
                 store.insert(0, r);
-                rowEditing.startEdit(0, 0);
+                rowEditing.startEdit(r, 0);
             }
         }, {
             itemId: 'removeEmployee',

@@ -17,6 +17,8 @@ Ext.define('KitchenSink.view.navigation.Tree', {
     stateful: true,
     stateId: 'mainnav.west',
     collapsible: true,
+    enableColumnResize: false,
+    enableColumnMove: false,
     
     bufferedRenderer: !Ext.platformTags.test,
 
@@ -37,6 +39,13 @@ Ext.define('KitchenSink.view.navigation.Tree', {
     }],
     bind: {
         selection: '{selectedView}'
+    },
+
+    viewConfig: {
+        selectionModel: {
+            type: 'treemodel',
+            pruneRemoved: false
+        }
     },
 
     store: 'navigation',

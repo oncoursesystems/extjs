@@ -170,6 +170,10 @@
      */
     "js": [
         {
+            "path": "//ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0",
+            "remote": true
+        },
+        {
             "path": "app.js",
             "bundle": true
         }
