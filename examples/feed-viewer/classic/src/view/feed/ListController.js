@@ -43,21 +43,22 @@ Ext.define('FeedViewer.view.feed.ListController',{
     },
 
     /**
-     * React to a feed being removed
+     * React to a feed being removed via the toolbar remove button
      */
-    onRemoveFeedClick: function () {
-        var feedGrid = this.lookup('feedGrid'),
+    onRemoveSelectedFeedClick: function() {
+        var me = this,
             selected = this.getSelectedItem();
 
         if (selected) {
-            this.animateNode(feedGrid.getView().getNode(selected), 1, 0, {
-                afteranimate: function() {
-                    selected.drop();
-                }
-            });
+            me.doRemoveFeed(selected);
+        }    
+    },
 
-            this.fireViewEvent('feedremove', selected);
-        }
+    /**
+     * React to a feed being removed via the delete icon in the grid
+     */
+    onRemoveFeedClick: function (view, recordIndex, cellIndex, item, e, record, row) {
+        this.doRemoveFeed(record);
     },
 
     /**
@@ -103,5 +104,18 @@ Ext.define('FeedViewer.view.feed.ListController',{
             },
             listeners: listeners
         });
+    },
+
+    privates: {
+        doRemoveFeed: function(record) {
+            var view = this.lookup('feedGrid').getView();
+            this.animateNode(view.getNode(record), 1, 0, {
+                afteranimate: function() {
+                    record.drop();
+                }
+            });
+
+            this.fireViewEvent('feedremove', record);
+        }
     }
 });

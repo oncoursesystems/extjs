@@ -28,7 +28,7 @@ Ext.define('FeedViewer.view.feed.List', {
         text: 'Add',
         iconCls: 'feed-add x-fa fa-plus'
     }, {
-        handler: 'onRemoveFeedClick',
+        handler: 'onRemoveSelectedFeedClick',
         text: 'Remove',
         iconCls: 'feed-remove x-fa fa-minus',
         bind: {

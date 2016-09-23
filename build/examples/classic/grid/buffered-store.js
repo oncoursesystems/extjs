@@ -1,11 +1,8 @@
 Ext.require([
     'Ext.grid.*',
     'Ext.data.*',
-    'Ext.util.*',
-//    'Ext.state.*',
-    'Ext.grid.filters.Filters'
+    'Ext.util.*'
 ]);
-
 
 Ext.onReady(function(){
 
@@ -108,7 +105,6 @@ Ext.onReady(function(){
             ftype: 'grouping',
             hideGroupedHeader: false
         }],
-        plugins: 'gridfilters',
         columns:[{
             xtype: 'rownumberer',
             width: 50,
@@ -121,8 +117,7 @@ Ext.onReady(function(){
             renderer: renderTopic,
             sortable: true,
             groupable: false,
-            cellWrap: true,
-            filter: true
+            cellWrap: true
         },{
             text: "Author",
             dataIndex: 'username',
@@ -135,10 +130,7 @@ Ext.onReady(function(){
             dataIndex: 'replycount',
             align: 'center',
             width: 70,
-            sortable: false,
-            filter: {
-                type: 'numeric'
-            }
+            sortable: false
         },{
             id: 'last',
             text: "Last Post",

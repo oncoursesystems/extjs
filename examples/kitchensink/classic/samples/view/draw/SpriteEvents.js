@@ -77,7 +77,7 @@ Ext.define('KitchenSink.view.draw.SpriteEvents', {
                 },
                 {
                     type: 'image',
-                    src: Ext.getResourcePath('images/samples/sencha.png'),
+                    src: Ext.getResourcePath('images/bounce.png'),
                     id: 'logo',
                     x: 100,
                     y: 320,
