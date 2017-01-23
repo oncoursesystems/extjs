@@ -1523,7 +1523,7 @@ Ext.define('Ext.data.TreeStore', {
      * @param {String} fieldName The name of the Record field to test.
      * @param {String/RegExp} value Either a string that the field value
      * should begin with, or a RegExp to test against the field.
-     * @param {Boolean} [anyMatch=true] False to match any part of the string, not just 
+     * @param {Boolean} [anyMatch=true] False to match any part of the string, not just
      * the beginning.
      * @param {Boolean} [caseSensitive=false] True for case sensitive comparison
      * @param {Boolean} [exactMatch=false] True to force exact match (^ and $ characters

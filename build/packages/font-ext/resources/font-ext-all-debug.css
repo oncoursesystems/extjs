@@ -63,7 +63,7 @@
     content: "\e612";
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/font-ext/sass/src/all.scss:57 */
-.ext-collapse:before {
+.ext-expand:before {
     content: "\e600";
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/font-ext/sass/src/all.scss:60 */
@@ -87,7 +87,7 @@
     content: "\e605";
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/font-ext/sass/src/all.scss:75 */
-.ext-expand:before {
+.ext-collapse:before {
     content: "\e606";
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/font-ext/sass/src/all.scss:78 */

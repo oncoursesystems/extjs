@@ -952,7 +952,7 @@ var noArgs = [],
             var me = this,
                 mixin, prototype, key, statics, i, ln, 
                 mixinName, name, mixinValue, mixins,
-                mixinStatics;
+                mixinStatics, staticName;
 
             if (typeof name !== 'string') {
                 mixins = name;
@@ -1015,9 +1015,9 @@ var noArgs = [],
 
             if (statics) {
                 mixinStatics = {};
-                for (name in statics) {
-                    if (!me.hasOwnProperty(name)) {
-                        mixinStatics[name] = mixinClass[name];
+                for (staticName in statics) {
+                    if (!me.hasOwnProperty(staticName)) {
+                        mixinStatics[staticName] = mixinClass[staticName];
                     }
                 }
                 me.addInheritableStatics(mixinStatics);
@@ -1698,7 +1698,7 @@ var noArgs = [],
 
         /**
          * Adds a "destroyable" object to an internal list of objects that will be destroyed
-         * when this instance is destroyed (via `{@link #destroy}`).
+         * when this instance is destroyed (via `{@link #method!destroy}`).
          * @param {String} name
          * @param {Object} value
          * @return {Object} The `value` passed.
@@ -1848,7 +1848,7 @@ var noArgs = [],
      * from the current method, for example: `this.callOverridden(arguments)`
      * @return {Object} Returns the result of calling the overridden method
      * @protected
-     * @deprecated Use {@link #callParent} instead.
+     * @deprecated Use {@link #method-callParent} instead.
      */
     BasePrototype.callOverridden = BasePrototype.callParent;
 

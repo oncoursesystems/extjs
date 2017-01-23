@@ -89,6 +89,7 @@ Ext.define('KitchenSink.controller.desktop.Main', {
             border: true,
             shadow: true,
             floated: true,
+            bodyPadding: 5,
             defaultType: 'button',
             layout: 'vbox',
             showAnimation: {

@@ -20,8 +20,6 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
     },
     controller: 'treemap',
 
-    session: true,
-
     cls: 'card1',
     layout: 'fit',
     shadow: true,

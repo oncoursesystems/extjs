@@ -1,3 +1,7 @@
+/**
+ * @class Ext.draw.ContainerBase
+ * @private
+ */
 Ext.define('Ext.draw.ContainerBase', {
     extend: 'Ext.Container',
     constructor: function(config) {
@@ -2504,7 +2508,14 @@ Ext.define('Ext.draw.Animator', {
         if (Ext.draw.Animator.frameCallbacks[id] && Ext.draw.Animator.frameCallbacks[id].once) {
             this.scheduled--;
             delete Ext.draw.Animator.frameCallbacks[id];
+            Ext.draw.Draw.endUpdateIOS();
         }
+    },
+    clear: function() {
+        this.animations.length = 0;
+        this.running = false;
+        Ext.draw.Animator.frameCallbacks = {};
+        Ext.draw.Draw.endUpdateIOS();
     },
     /**
      * Register a recursive callback that will be called at every frame.
@@ -3015,7 +3026,7 @@ Ext.define('Ext.draw.modifier.Animation', {
         Ext.draw.Animator.remove(me);
     },
     destroy: function() {
-        this.stop();
+        Ext.draw.Animator.remove(this);
         this.callParent();
     }
 });
@@ -8071,6 +8082,7 @@ Ext.define('Ext.draw.TextMeasurer', {
      */
     precise: Ext.isIE8,
     measureDivTpl: {
+        id: 'ext-draw-text-measurer',
         tag: 'div',
         style: {
             overflow: 'hidden',
@@ -9846,7 +9858,7 @@ Ext.define('Ext.draw.overrides.hittest.Surface', {
      * Performs a hit test on all sprites in the surface, returning the first matching one.
      * Since hit testing is typically performed on mouse events, this convenience method
      * converts event's page coordinates to surface coordinates before calling {@link #hitTest}.
-     * @param {Array} point An event object.
+     * @param {Object} event An event object.
      * @param {Object} options Hit testing options.
      * @return {Object} A hit result object that contains more information about what
      * exactly was hit or null if nothing was hit.
@@ -10495,7 +10507,7 @@ Ext.define('Ext.draw.engine.SvgContext', {
     }
 });
 /**
- * @class Ext.draw.engine.SvgContext.Gradient.
+ * @class Ext.draw.engine.SvgContext.Gradient
  *
  * A class that implements native CanvasGradient interface
  * (https://developer.mozilla.org/en/docs/Web/API/CanvasGradient)
@@ -11377,7 +11389,6 @@ if (!document.createElement('canvas').getContext) {
    * be associated with
    * @private
    */
-        //
         function CanvasRenderingContext2D_(canvasElement) {
             this.m_ = createMatrixIdentity();
             this.mStack_ = [];
@@ -13076,7 +13087,10 @@ Ext.define('Ext.draw.Container', {
      * @param {Object} size The object containing 'width' and 'height' of the draw container's body.
      */
     config: {
-        cls: Ext.baseCSSPrefix + 'draw-container',
+        cls: [
+            Ext.baseCSSPrefix + 'draw-container',
+            Ext.baseCSSPrefix + 'unselectable'
+        ],
         /**
          * @cfg {Function} [resizeHandler]
          * The resize function that can be configured to have a behavior,
@@ -15073,10 +15087,12 @@ Ext.define('Ext.chart.series.Series', {
                 constrainPosition: true,
                 shrinkWrapDock: true,
                 autoHide: true,
+                hideDelay: 200,
                 mouseOffset: [
                     20,
                     20
-                ]
+                ],
+                trackmouse: true
             }, tooltip);
         return Ext.create(config);
     },
@@ -15110,27 +15126,12 @@ Ext.define('Ext.chart.series.Series', {
         if (!tooltip) {
             return;
         }
-        clearTimeout(me.tooltipTimeout);
-        // If trackMouse is set, a ToolTip shows by its pointerEvent.
-        // A Tooltip aligning to an element uses a currentTarget flyweight
-        // which may be pointed at any element.
-        // It aligns using the component level defaultAlign config.
-        tooltip.pointerEvent = event;
-        tooltip.currentTarget.attach((item.sprite.length ? item.sprite[0] : item.sprite).getSurface().el.dom);
         Ext.callback(tooltip.renderer, tooltip.scope, [
             tooltip,
             item.record,
             item
         ], 0, me);
-        if (tooltip.isVisible()) {
-            // After show handling repositions according
-            // to configuration. trackMouse uses the pointerEvent
-            // If aligning to an element, it uses a currentTarget
-            // flyweight which may be attached to any DOM element.
-            tooltip.handleAfterShow();
-        } else {
-            tooltip.show();
-        }
+        tooltip.showBy(event);
     },
     hideTooltip: function(item) {
         var me = this,
@@ -15138,10 +15139,7 @@ Ext.define('Ext.chart.series.Series', {
         if (!tooltip) {
             return;
         }
-        clearTimeout(me.tooltipTimeout);
-        me.tooltipTimeout = Ext.defer(function() {
-            tooltip.hide();
-        }, 1);
+        tooltip.delayHide();
     },
     applyStore: function(store) {
         return store && Ext.StoreManager.lookup(store);
@@ -15362,7 +15360,7 @@ Ext.define('Ext.chart.series.Series', {
             }
         }
     },
-    onAxesChange: function(chart) {
+    onAxesChange: function(chart, force) {
         var me = this,
             axes = chart.getAxes(),
             axis,
@@ -15387,7 +15385,7 @@ Ext.define('Ext.chart.series.Series', {
         }
         for (i = 0 , ln = directions.length; i < ln; i++) {
             direction = directions[i];
-            if (me['get' + direction + 'Axis']()) {
+            if (!force && me['get' + direction + 'Axis']()) {
                 
                 continue;
             }
@@ -16027,7 +16025,6 @@ Ext.define('Ext.chart.series.Series', {
         me.clearListeners();
         if (tooltip) {
             Ext.destroy(tooltip);
-            clearTimeout(me.tooltipTimeout);
         }
         me.callParent();
     }
@@ -16817,7 +16814,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                 case 'gauge':
                     var gaugeAngles = me.getGaugeAngles();
                     me.iterate(majorTicks, function(position, labelText, i) {
-                        position = (position - attr.min) / (attr.max - attr.min + 1) * attr.totalAngle - attr.totalAngle + gaugeAngles.start;
+                        position = (position - attr.min) / (attr.max - attr.min) * attr.totalAngle - attr.totalAngle + gaugeAngles.start;
                         ctx.moveTo(attr.centerX + (attr.length) * Math.cos(position), attr.centerY + (attr.length) * Math.sin(position));
                         ctx.lineTo(attr.centerX + (attr.length + majorTickSize) * Math.cos(position), attr.centerY + (attr.length + majorTickSize) * Math.sin(position));
                     });
@@ -17086,7 +17083,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                     }
                     lastLabelText = labelText;
                     if (typeof text !== 'undefined') {
-                        var angle = (position - attr.min) / (attr.max - attr.min + 1) * attr.totalAngle - attr.totalAngle + gaugeAngles.start;
+                        var angle = (position - attr.min) / (attr.max - attr.min) * attr.totalAngle - attr.totalAngle + gaugeAngles.start;
                         label.setAttributes({
                             text: String(text),
                             translationX: attr.centerX + (attr.length + labelOffset) * Math.cos(angle),
@@ -17583,6 +17580,12 @@ Ext.define('Ext.chart.axis.segmenter.Numeric', {
             step: estStepSize
         };
     },
+    leadingZeros: function(n) {
+        // For example:
+        // leadingZeros(0.2) is 1,
+        // leadingZeros(-0.01) is 2.
+        return -Math.floor(Ext.Number.log10(Math.abs(n)));
+    },
     /**
      * Wraps the provided estimated step size of a range without altering it into a step size object.
      *
@@ -17592,12 +17595,6 @@ Ext.define('Ext.chart.axis.segmenter.Numeric', {
      * @return {Number} return.step The step count of units.
      * @return {Object} return.unit The unit.
      */
-    leadingZeros: function(n) {
-        // For example:
-        // leadingZeros(0.2) is 1,
-        // leadingZeros(-0.01) is 2.
-        return -Math.floor(Ext.Number.log10(Math.abs(n)));
-    },
     exactStep: function(min, estStepSize) {
         var stepZeros = this.leadingZeros(estStepSize),
             scale = Math.pow(10, stepZeros);
@@ -18427,7 +18424,7 @@ Ext.define('Ext.chart.axis.Axis', {
         /**
          * @private
          * @cfg {Number} rotation
-         * Rotation of the polar axis.
+         * Rotation of the polar axis in radians.
          * WARNING: Meant to be set automatically by chart. Do not set it manually.
          */
         rotation: null,
@@ -18869,14 +18866,14 @@ Ext.define('Ext.chart.axis.Axis', {
     onSeriesChange: function(chart) {
         var me = this,
             series = chart.getSeries(),
-            getAxisMethod = 'get' + me.getDirection() + 'Axis',
             boundSeries = [],
-            i,
-            ln = series.length,
-            linkedTo, masterAxis;
-        for (i = 0; i < ln; i++) {
-            if (this === series[i][getAxisMethod]()) {
-                boundSeries.push(series[i]);
+            linkedTo, masterAxis, getAxisMethod, i, ln;
+        if (series) {
+            getAxisMethod = 'get' + me.getDirection() + 'Axis';
+            for (i = 0 , ln = series.length; i < ln; i++) {
+                if (this === series[i][getAxisMethod]()) {
+                    boundSeries.push(series[i]);
+                }
             }
         }
         me.boundSeries = boundSeries;
@@ -21788,7 +21785,7 @@ Ext.define('Ext.chart.AbstractChart', {
                 right: 'left'
             },
             result = [],
-            axis, oldAxis, linkedTo, id, i, ln, oldMap;
+            axis, oldAxis, linkedTo, id, i, j, ln, oldMap, series;
         me.animationSuspendCount++;
         me.getStore();
         if (!oldAxes) {
@@ -21838,17 +21835,44 @@ Ext.define('Ext.chart.AbstractChart', {
                 }
             }
         }
+        me.axesChangeSeries = {};
         for (i in oldMap) {
             if (!result.map[i]) {
-                oldMap[i].destroy();
+                oldAxis = oldMap[i];
+                if (oldAxis && !oldAxis.destroyed) {
+                    // At this point the series still have their `xAxis` and `yAxis` configs
+                    // set to old axes. We need to update such series with new matching axes
+                    // by calling their `onAxesChange` method.
+                    for (j = 0 , ln = oldAxis.boundSeries.length; j < ln; j++) {
+                        series = oldAxis.boundSeries[j];
+                        me.axesChangeSeries[series.getId()] = series;
+                    }
+                    oldAxis.destroy();
+                }
             }
         }
         me.animationSuspendCount--;
         return result;
     },
-    updateAxes: function() {
-        if (!this.isDestroying) {
-            this.scheduleLayout();
+    updateAxes: function(axes) {
+        var me = this,
+            seriesMap = me.axesChangeSeries,
+            series, id, i, ln, axis;
+        for (id in seriesMap) {
+            series = seriesMap[id];
+            // `true` to force set series' axes, even if they are already set
+            // (in this case to old axes that were just destroyed in the `axes` applier).
+            series.onAxesChange(me, true);
+        }
+        // If changes to the `axes` config are made post chart creation, without making any
+        // changes to the series afterwards, we need to figure out the new axes' `boundSeries`
+        // manually, as the 'serieschange' event won't be fired in this case.
+        for (i = 0 , ln = axes.length; i < ln; i++) {
+            axis = axes[i];
+            axis.onSeriesChange(me);
+        }
+        if (!me.isDestroying) {
+            me.scheduleLayout();
         }
     },
     circularCopyArray: function(inArray, startIndex, count) {
@@ -24997,10 +25021,12 @@ Ext.define('Ext.chart.interactions.Crosshair', {
     },
     getGestures: function() {
         var me = this,
-            gestures = {};
-        gestures[me.getGesture()] = 'onGesture';
-        gestures[me.getGesture() + 'start'] = 'onGestureStart';
-        gestures[me.getGesture() + 'end'] = 'onGestureEnd';
+            gestures = {},
+            gesture = me.getGesture();
+        gestures[gesture] = 'onGesture';
+        gestures[gesture + 'start'] = 'onGestureStart';
+        gestures[gesture + 'end'] = 'onGestureEnd';
+        gestures[gesture + 'cancel'] = 'onGestureCancel';
         return gestures;
     },
     onGestureStart: function(e) {
@@ -25231,6 +25257,9 @@ Ext.define('Ext.chart.interactions.Crosshair', {
         }
         surface.renderFrame();
         me.unlockEvents(me.getGesture());
+    },
+    onGestureCancel: function(e) {
+        this.onGestureEnd(e);
     }
 });
 
@@ -25287,15 +25316,28 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
                 me.sync();
             }
             if (isMousePointer) {
-                if (tipItem && (!item || tipItem.field !== item.field || tipItem.record !== item.record)) {
+                // If we detected a mouse hit, show/refresh the tooltip
+                if (item) {
+                    tooltip = item.series.getTooltip();
+                    if (tooltip) {
+                        // If there was a different previously active item, ask it to hide its tooltip.
+                        // Unless it's the same tooltip instance that we are about to show.
+                        // In which case, we are just going to reposition it.
+                        if (tipItem && tipItem !== item && tipItem.series.getTooltip() !== tooltip) {
+                            tipItem.series.hideTooltip(tipItem);
+                        }
+                        if (tooltip.getTrackMouse()) {
+                            item.series.showTooltip(item, e);
+                        }
+                        me.tipItem = item;
+                    }
+                }
+                // No mouse hit - schedule a hide for hideDelay ms.
+                // If pointer enters another item within that time,
+                // there will be no flickery reshow.
+                else if (tipItem) {
                     tipItem.series.hideTooltip(tipItem);
                     me.tipItem = tipItem = null;
-                }
-                if (item && (tooltip = item.series.getTooltip())) {
-                    if (tooltip.trackMouse || !tipItem) {
-                        item.series.showTooltip(item, e);
-                    }
-                    me.tipItem = item;
                 }
             }
             return false;
@@ -25317,6 +25359,9 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
     onMouseUpGesture: function() {
         this.isDragging = false;
     },
+    isSameItem: function(a, b) {
+        return a && b && a.series === b.series && a.field === b.field && a.index === b.index;
+    },
     onTapGesture: function(e) {
         var me = this;
         // A click/tap on an item makes its highlight sticky.
@@ -25325,9 +25370,10 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
             return;
         }
         var item = me.getItemForEvent(e);
-        if (me.stickyHighlightItem && item && (me.stickyHighlightItem.index === item.index)) {
+        if (me.isSameItem(me.stickyHighlightItem, item)) {
             item = null;
         }
+        // toggle
         me.stickyHighlightItem = item;
         me.highlight(item);
     }
@@ -25471,10 +25517,8 @@ Ext.define('Ext.chart.interactions.ItemEdit', {
             switch (type) {
                 case 'barSeries':
                     return me.onDragBar(e);
-                    break;
                 case 'scatterSeries':
                     return me.onDragScatter(e);
-                    break;
             }
         }
     },
@@ -25656,7 +25700,7 @@ Ext.define('Ext.chart.interactions.ItemEdit', {
                 // to configuration. trackMouse uses the pointerEvent
                 // If aligning to an element, it uses a currentTarget
                 // flyweight which may be attached to any DOM element.
-                tooltip.handleAfterShow();
+                tooltip.realignToTarget();
             } else {
                 tooltip.show();
             }
@@ -26377,21 +26421,24 @@ Ext.define('Ext.chart.interactions.Rotate', {
             axes = chart.getAxes(),
             series = chart.getSeries(),
             oldRotations = me.oldRotations,
-            axis, seriesItem, oldRotation, i, ln;
+            rotation, oldRotation, axis, seriesItem, i, ln;
         if (!animate) {
             chart.suspendAnimation();
         }
         for (i = 0 , ln = axes.length; i < ln; i++) {
             axis = axes[i];
             oldRotation = oldRotations[axis.getId()] || (oldRotations[axis.getId()] = axis.getRotation());
-            axis.setRotation(angle + (relative ? oldRotation : 0));
+            rotation = angle + (relative ? oldRotation : 0);
+            axis.setRotation(rotation);
         }
         for (i = 0 , ln = series.length; i < ln; i++) {
             seriesItem = series[i];
             oldRotation = oldRotations[seriesItem.getId()] || (oldRotations[seriesItem.getId()] = seriesItem.getRotation());
-            seriesItem.setRotation(angle + (relative ? oldRotation : 0));
+            // Unline axis's 'rotation', Polar series' 'rotation' is a public config and in degrees.
+            rotation = Ext.draw.Draw.degrees(angle + (relative ? oldRotation : 0));
+            seriesItem.setRotation(rotation);
         }
-        me.setRotation(angle + (relative ? oldRotation : 0));
+        me.setRotation(rotation);
         me.fireEvent('rotate', me, me.getRotation());
         me.sync();
         if (!animate) {
@@ -28710,7 +28757,6 @@ Ext.define('Ext.draw.LimitedCache', {
     /**
      * Get a cached object.
      * @param {String} id
-     * @param {Mixed...} args Arguments appended to feeder.
      * @return {Object}
      */
     get: function(id) {
@@ -29779,7 +29825,7 @@ Ext.define('Ext.chart.series.Polar', {
         };
     },
     applyRotation: function(rotation) {
-        return Ext.draw.sprite.AttributeParser.angle(rotation);
+        return Ext.draw.sprite.AttributeParser.angle(Ext.draw.Draw.rad(rotation));
     },
     updateRotation: function(rotation) {
         var sprites = this.getSprites();
@@ -33378,6 +33424,15 @@ Ext.define('Ext.chart.series.Radar', {
         this.doUpdateStyles();
     },
     updateRotation: function(rotation) {
+        // Overrides base class method.
+        var me = this,
+            chart = me.getChart(),
+            axes = chart.getAxes(),
+            i, ln, axis;
+        for (i = 0 , ln = axes.length; i < ln; i++) {
+            axis = axes[i];
+            axis.setRotation(rotation);
+        }
         this.setStyle({
             rotationRads: rotation
         });

@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.SourceOverlay', {
             align: 'right',
 
             style: 'z-index: 2',
-            shadow: Ext.theme.name !== 'Triton',
+            shadow: Ext.theme.name === 'Material',
             minHeight: Ext.theme.name === 'Triton' ? 44 : undefined,
             items: Ext.os.is.Phone ? {
                 type: 'button',

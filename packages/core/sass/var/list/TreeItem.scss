@@ -37,7 +37,7 @@ $treelist-item-line-height: dynamic(36px);
 
 /**
  * @var {number}
- * The line height for tree items in the {@link Global_CSS#$enable-big big} sizing scheme
+ * The line height for tree items in the {@link Global_CSS#css_var-S-$enable-big big} sizing scheme
  */
 $treelist-item-line-height-big: dynamic(null);
 
@@ -151,7 +151,7 @@ $treelist-item-expander-width: dynamic(18px);
 
 /**
  * @var {number}
- * The width of the expander icon in the {@link Global_CSS#$enable-big big} sizing scheme
+ * The width of the expander icon in the {@link Global_CSS#css_var-S-$enable-big big} sizing scheme
  */
 $treelist-item-expander-width-big: dynamic(null);
 
@@ -163,7 +163,7 @@ $treelist-item-expander-font-size: dynamic(16px);
 
 /**
  * @var {number}
- * The size of the expander icon font in the {@link Global_CSS#$enable-big big} sizing scheme
+ * The size of the expander icon font in the {@link Global_CSS#css_var-S-$enable-big big} sizing scheme
  */
 $treelist-item-expander-font-size-big: dynamic(null);
 
@@ -189,7 +189,7 @@ $treelist-item-icon-width: dynamic(22px);
 
 /**
  * @var {number}
- * The width of the item icon in the {@link Global_CSS#$enable-big big} sizing scheme
+ * The width of the item icon in the {@link Global_CSS#css_var-S-$enable-big big} sizing scheme
  */
 $treelist-item-icon-width-big: dynamic(null);
 
@@ -201,7 +201,7 @@ $treelist-item-icon-font-size: dynamic(18px);
 
 /**
  * @var {number}
- * The size of the item icon font in the {@link Global_CSS#$enable-big big} sizing scheme
+ * The size of the item icon font in the {@link Global_CSS#css_var-S-$enable-big big} sizing scheme
  */
 $treelist-item-icon-font-size-big: dynamic(null);
 

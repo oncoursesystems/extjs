@@ -370,4 +370,160 @@ describe("grid-general-locking", function() {
             });
         });
     });
+
+    describe('Focusing the view el, not a cell', function() {
+        it('should move to the same row on the other side', function() {
+            var errorSpy = jasmine.createSpy('error handler'),
+                old = window.onError;
+
+            store = new Ext.data.ArrayStore({
+                data: [
+                    [ 1, 'Lorem'],
+                    [ 2, 'Ipsum'],
+                    [ 3, 'Dolor']
+                ],
+                fields: ['row', 'lorem']
+            });
+
+            window.onerror = errorSpy.andCallFake(function() {
+                if (old) {
+                    old();
+                }
+            });
+
+            createGrid();
+
+            runs(function() {
+                jasmine.fireMouseEvent(grid.normalGrid.view.el, 'click', 200, 200);
+                expect(errorSpy).not.toHaveBeenCalled();
+            });
+
+            waitsFor(function() {
+                return grid.normalGrid.containsFocus;
+            });
+
+            runs(function() {
+                jasmine.fireMouseEvent(grid.lockedGrid.view.el, 'click', 25, 200);
+                expect(errorSpy).not.toHaveBeenCalled();
+            });
+
+            waitsFor(function() {
+                return grid.lockedGrid.containsFocus;
+            });
+
+            runs(function() {
+                jasmine.fireMouseEvent(grid.normalGrid.view.el, 'click', 200, 200);
+                expect(errorSpy).not.toHaveBeenCalled();
+            });
+
+            waitsFor(function() {
+                return grid.normalGrid.containsFocus;
+            });
+
+            runs(function() {
+                jasmine.fireMouseEvent(grid.lockedGrid.view.el, 'click', 25, 200);
+                expect(errorSpy).not.toHaveBeenCalled();
+            });
+
+            waitsFor(function() {
+                return grid.lockedGrid.containsFocus;
+            });
+
+            runs(function() {
+                expect(errorSpy).not.toHaveBeenCalled();
+                window.onerror = old;
+            });
+        });
+    });
+    
+    describe('View focus from cell editor', function () {
+        it('should set position to the closest cell', function () {
+            var rowIdx = 0,
+                colIdx = 2,
+                editor, editorActive, position,
+                record, cellEl, cellRegion, viewRegion,
+                x, y;
+    
+            store = new Ext.data.ArrayStore({
+                data: [
+                    [ 1, 'Lorem'],
+                    [ 2, 'Ipsum'],
+                    [ 3, 'Dolor']
+                ],
+                fields: ['row', 'lorem']
+            });
+            
+            createGrid({
+                plugins: [{
+                    ptype: 'cellediting',
+                    listeners: {
+                        beforeedit: function () {
+                            editorActive = true;
+                        }
+                    }
+                }],
+                columns: [{
+                    text: 'Row',
+                    dataIndex: 'row',
+                    locked: true,
+                    width: 50
+                }, {
+                    text: 'Lorem',
+                    dataIndex: 'lorem'
+                }, {
+                    text: 'Lorem (editor)',
+                    dataIndex: 'lorem',
+                    editor: 'textfield'
+                }]
+            });
+            
+            view = grid.normalGrid.view;
+            editor = grid.findPlugin('cellediting');
+            navModel = grid.normalGrid.getNavigationModel();
+            record = store.getAt(0);
+            
+            editor.startEditByPosition({row: rowIdx, column: colIdx});
+    
+            waitFor(function () {
+                return editorActive;
+            });
+    
+            run(function () {
+                cellEl = view.getCell(record, colIdx-1);
+                cellRegion = cellEl.getRegion();
+                viewRegion = view.getRegion();
+                
+                // get the XY position in the middle between the grid cell and the
+                // bottom of the view
+                x = (cellRegion.left + cellRegion.right) / 2;
+                y = (cellRegion.bottom + viewRegion.bottom) / 2;
+                
+                // mousedown in the view container below the cell being edited
+                jasmine.fireMouseEvent(view, 'mousedown', x, y);
+                position = navModel.getPosition();
+                
+                // position should remain on the same cell
+                expect({
+                    rowIdx: position.rowIdx,
+                    colIdx: position.colIdx}).
+                toEqual({
+                    rowIdx: rowIdx,
+                    colIdx: --colIdx
+                });
+                
+                // mousedown below the cell to the left
+                jasmine.fireMouseEvent(view.el, 'mousedown', x - cellRegion.width, y);
+                position = navModel.getPosition();
+    
+                // position should be moved to the cell to the left
+                expect({
+                    rowIdx: position.rowIdx,
+                    colIdx: position.colIdx}).
+                toEqual({
+                    rowIdx: rowIdx,
+                    colIdx: --colIdx
+                });
+            });
+        });
+    });
 });

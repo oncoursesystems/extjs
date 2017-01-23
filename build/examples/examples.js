@@ -23,7 +23,7 @@ Ext.samples = {
             "items": [
                 {
                     "text": "Kitchen Sink (Classic)",
-                    "url": "kitchensink/",
+                    "url": "kitchensink/?classic",
                     "icon": "kitchensink",
                     "desc": "Showcase of Ext JS components and features in the Classic Toolkit"
                 },

@@ -952,7 +952,7 @@ Ext.define('Ext.data.amf.Encoder', {
      * @return {Array} byte array containing the encoded number
      * @private
      */
-    encodeDouble: function(v) {
+    encodeDouble: function(num) {
         var ebits = 11,
             fbits = 52;
         // double
@@ -991,30 +991,30 @@ Ext.define('Ext.data.amf.Encoder', {
                 0
             ];
         // Compute sign, exponent, fraction
-        if (isNaN(v)) {
+        if (isNaN(num)) {
             data = K_NAN;
-        } else if (v === Infinity) {
+        } else if (num === Infinity) {
             data = K_INFINITY;
-        } else if (v == -Infinity) {
+        } else if (num == -Infinity) {
             data = K_NINFINITY;
         } else {
             // not a special case, so encode
-            if (v === 0) {
+            if (num === 0) {
                 e = 0;
                 f = 0;
-                s = (1 / v === -Infinity) ? 1 : 0;
+                s = (1 / num === -Infinity) ? 1 : 0;
             } else {
-                s = v < 0;
-                v = Math.abs(v);
-                if (v >= Math.pow(2, 1 - bias)) {
+                s = num < 0;
+                num = Math.abs(num);
+                if (num >= Math.pow(2, 1 - bias)) {
                     // Normalized
-                    ln = Math.min(Math.floor(Math.log(v) / Math.LN2), bias);
+                    ln = Math.min(Math.floor(Math.log(num) / Math.LN2), bias);
                     e = ln + bias;
-                    f = Math.round(v * Math.pow(2, fbits - ln) - Math.pow(2, fbits));
+                    f = Math.round(num * Math.pow(2, fbits - ln) - Math.pow(2, fbits));
                 } else {
                     // Denormalized
                     e = 0;
-                    f = Math.round(v / Math.pow(2, 1 - bias - fbits));
+                    f = Math.round(num / Math.pow(2, 1 - bias - fbits));
                 }
             }
             // Pack sign, exponent, fraction
@@ -3110,8 +3110,8 @@ Ext.define('Ext.data.amf.XmlEncoder', {
      * Writes an AMFX remoting message with the AMFX envelope to the string.
      * @param {Ext.data.amf.RemotingMessage} message the message to pass on to serialize.
      */
-    writeAmfxRemotingPacket: function(params) {
-        this.write(this.encodeAmfxRemotingPacket(params));
+    writeAmfxRemotingPacket: function(message) {
+        this.write(this.encodeAmfxRemotingPacket(message));
     },
     /**
      * Converts an XML Document object to a string.
@@ -3521,6 +3521,7 @@ TestAction.multiply(
      * @private
      * @param {String} action The action being executed
      * @param {Object} method The method being executed
+     * @param {Object} args The argument to pass to the request
      */
     configureRequest: function(action, method, args) {
         var me = this,

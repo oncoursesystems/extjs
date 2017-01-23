@@ -8,7 +8,7 @@
 Ext.define('KitchenSink.view.d3.Tree', {
     extend: 'Ext.panel.Panel',
     xtype: 'd3-view-tree',
-    controller: 'tree',
+    controller: 'd3-tree',
 
     requires: [
         'KitchenSink.view.d3.SalaryViewModel',
@@ -19,19 +19,19 @@ Ext.define('KitchenSink.view.d3.Tree', {
     otherContent: [
         {
             type: 'Controller',
-            path: 'classic/samples/view/d3/TreeController.js'
+            path: 'app/view/d3/TreeController.js'
         },
         {
             type: 'View Model',
-            path: 'classic/samples/view/d3/SalaryViewModel.js'
+            path: 'app/view/d3/SalaryViewModel.js'
         },
         {
             type: 'Model',
-            path: 'classic/samples/model/Salary.js'
+            path: 'app/model/Salary.js'
         },
         {
             type: 'Reader',
-            path: 'classic/samples/reader/Salary.js'
+            path: 'app/reader/Salary.js'
         }
         // { // Too much for a browser to handle.
         //     type: 'Data',
@@ -46,7 +46,7 @@ Ext.define('KitchenSink.view.d3.Tree', {
     layout: 'border',
 
     viewModel: {
-        type: 'salary'
+        type: 'd3-salary'
     },
 
     items: [
@@ -75,7 +75,7 @@ Ext.define('KitchenSink.view.d3.Tree', {
 
             xtype: 'panel',
             layout: 'fit',
-            title: 'Highest-paying Industries',
+            title: 'Highest Paying Industries',
             items: {
                 xtype: 'd3-tree',
                 interactions: {

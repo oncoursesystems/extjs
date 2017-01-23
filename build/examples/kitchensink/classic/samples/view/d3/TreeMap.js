@@ -47,8 +47,6 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
         type: 'stocks'
     },
 
-    session: true,
-
     items: [
         {
             xtype: 'treepanel',

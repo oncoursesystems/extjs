@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.lists.EditorPanel', {
     modal: true,
     hideOnMaskTap: false,
     centered: true,
-    width: Ext.filterPlatform('ie10') ? '100%' : 300,
+    width: 300,
     scrollable: null,
     header: {
         title: 'Edit Item'

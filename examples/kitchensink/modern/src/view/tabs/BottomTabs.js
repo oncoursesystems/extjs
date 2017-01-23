@@ -41,15 +41,13 @@ Ext.define('KitchenSink.view.tabs.BottomTabs', {
             html: 'Badge labels will truncate if the text is wider than the tab.',
             badgeText: 'Overflow test',
             cls: 'card',
-            iconCls: 'x-fa fa-download',
-            hidden: (Ext.filterPlatform('ie10') && Ext.os.is.Phone) ? true : false
+            iconCls: 'x-fa fa-download'
         },
         {
             title: 'Settings',
             html: 'Tabbars are <code>ui:"dark"</code> by default, but also have light variants.',
             cls: 'card',
-            iconCls: 'x-fa fa-gear',
-            hidden: (Ext.filterPlatform('ie10') && Ext.os.is.Phone) ? true : false
+            iconCls: 'x-fa fa-gear'
         },
         {
             title: 'User',

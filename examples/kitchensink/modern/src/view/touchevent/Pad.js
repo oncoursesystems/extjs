@@ -6,6 +6,13 @@ Ext.define('KitchenSink.view.touchevent.Pad', {
     flex: 1,
     margin: 10,
 
+    touchAction: {
+        panX: false,
+        panY: false,
+        doubleTapZoom: false,
+        pinchZoom: false
+    },
+
     layout: {
         type: 'vbox',
         pack: 'center',

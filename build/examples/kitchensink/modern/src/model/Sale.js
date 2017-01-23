@@ -21,18 +21,18 @@ Ext.define('KitchenSink.model.Sale', function() {
             {name: 'quantity',  type: 'float'},
             {
                 name: 'year',
-                convert: function(v, record){
-                    return Ext.Date.format(record.get('date'), "Y");
+                calculate: function(data){
+                    return parseInt(Ext.Date.format(data.date, "Y"), 10);
                 }
             },{
                 name: 'month',
-                convert: function(v, record){
-                    return parseInt(Ext.Date.format(record.get('date'), "m"), 10) - 1;
+                calculate: function(data){
+                    return parseInt(Ext.Date.format(data.date, "m"), 10) - 1;
                 }
             },{
                 name: 'continent',
-                convert: function(v, record){
-                    return regions[record.get('country')];
+                calculate: function(data){
+                    return regions[data.country];
                 }
             }
         ]

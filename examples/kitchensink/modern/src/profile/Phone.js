@@ -2,7 +2,7 @@ Ext.define('KitchenSink.profile.Phone', {
     extend: 'KitchenSink.profile.Base',
 
     controllers: ['Main'],
-    views: ['Main', 'TouchEvents'],
+    views: ['TouchEvents'],
 
     mainView: 'KitchenSink.view.phone.Main',
 

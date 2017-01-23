@@ -1,5 +1,5 @@
 /**
- * @class Ext.data.schema.HasMany
+ * @class Ext.data.schema.BelongsTo
  *
  * **This is not a real JavaScript class and cannot be created.  This is for documentation purposes only.**
  *

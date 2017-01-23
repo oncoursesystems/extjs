@@ -181,6 +181,9 @@ $tabbar-min-height-big: dynamic($toolbar-min-height-big);
  * Tab Bar background-gradient. Can be either the name of a gradient defined by
  * {@link Global_CSS#background-gradient} or a list of color stops.
  *
+ * @param {color} $color
+ * Tab Bar border-width
+ *
  * @param {number/list} $border-width
  * Tab Bar border-width
  *

@@ -79,9 +79,6 @@
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/charts/sass/src/draw/Container.scss:1 */
 .x-draw-container {
     position: relative;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
     cursor: default;
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/charts/sass/src/chart/legend/Legend.scss:1 */

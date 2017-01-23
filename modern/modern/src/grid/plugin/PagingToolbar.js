@@ -1,7 +1,7 @@
 /**
  */
 Ext.define('Ext.grid.plugin.PagingToolbar', {
-    extend: 'Ext.AbstractPlugin',
+    extend: 'Ext.plugin.Abstract',
     alias: ['plugin.pagingtoolbar', 'plugin.gridpagingtoolbar'],
     mixins: ['Ext.mixin.Hookable'],
 

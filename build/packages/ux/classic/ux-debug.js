@@ -82,23 +82,23 @@ Ext.define('Ext.ux.Gauge', {
          */
         maxValue: 100,
         /**
-         * @cfg {Number} start The current value of the gauge.
+         * @cfg {Number} value The current value of the gauge.
          */
         value: 50,
         /**
          * @cfg {Boolean} [clockwise=true]
-         * `true` - {@link #value} increments in a clockwise fashion
-         * `false` - {@link #value} increments in an anticlockwise fashion
+         * `true` - {@link #cfg!value} increments in a clockwise fashion
+         * `false` - {@link #cfg!value} increments in an anticlockwise fashion
          */
         clockwise: true,
         /**
          * @cfg {Ext.XTemplate} textTpl The template for the text in the center of the gauge.
          * The available data values are:
-         * - `value` - The {@link #value} of the gauge.
+         * - `value` - The {@link #cfg!value} of the gauge.
          * - `percent` - The value as a percentage between 0 and 100.
-         * - `minValue` - The value of the {@link #minValue} config.
-         * - `maxValue` - The value of the {@link #maxValue} config.
-         * - `delta` - The delta between the {@link #minValue} and {@link #maxValue}.
+         * - `minValue` - The value of the {@link #cfg!minValue} config.
+         * - `maxValue` - The value of the {@link #cfg!maxValue} config.
+         * - `delta` - The delta between the {@link #cfg!minValue} and {@link #cfg!maxValue}.
          */
         textTpl: [
             '<tpl>{value:number("0.00")}%</tpl>'
@@ -174,7 +174,7 @@ Ext.define('Ext.ux.Gauge', {
         /**
          * @cfg {Object/Boolean} [animation=true]
          * The animation applied to the gauge on changes to the {@link #value}
-         * and the {@link angleOffset} configs. Defaults to 1 second animation
+         * and the {@link #angleOffset} configs. Defaults to 1 second animation
          * with the  'out' easing.
          * @cfg {Number} animation.duration The duraction of the animation.
          * @cfg {String} animation.easing The easing function to use for the animation.
@@ -257,6 +257,7 @@ Ext.define('Ext.ux.Gauge', {
     },
     doDestroy: function() {
         var me = this;
+        clearTimeout(me.resizeTimerId);
         me.un('resize', 'onElementResize', me);
         me.stopAnimation();
         me.callParent();
@@ -3840,21 +3841,21 @@ Ext.define('Ext.ux.CellDragDrop', {
      */
     applyEmptyText: false,
     /**
-     * @cfg {Boolean} emptyText
+     * @cfg {String} emptyText
      * If {@link #applyEmptyText} is `true`, then this value as the drag record's value after a node drop.
      *
      * Defaults to an empty string.
      */
     emptyText: '',
     /**
-     * @cfg {Boolean} dropBackgroundColor
+     * @cfg {String} dropBackgroundColor
      * The default background color for when a drop is allowed.
      *
      * Defaults to green.
      */
     dropBackgroundColor: 'green',
     /**
-     * @cfg {Boolean} noDropBackgroundColor
+     * @cfg {String} noDropBackgroundColor
      * The default background color for when a drop is not allowed.
      *
      * Defaults to red.
@@ -5541,8 +5542,8 @@ Ext.define('Ext.ux.GMapPanel', {
 });
 
 /**
-* Allows GroupTab to render a table structure.
-*/
+ * Allows GroupTab to render a table structure.
+ */
 Ext.define('Ext.ux.GroupTabRenderer', {
     extend: 'Ext.plugin.Abstract',
     alias: 'plugin.grouptabrenderer',
@@ -5584,7 +5585,7 @@ Ext.define('Ext.ux.GroupTabRenderer', {
  * A TabPanel with grouping support.
  */
 Ext.define('Ext.ux.GroupTabPanel', {
-    extend: 'Ext.Container',
+    extend: 'Ext.container.Container',
     alias: 'widget.grouptabpanel',
     requires: [
         'Ext.tree.Panel',

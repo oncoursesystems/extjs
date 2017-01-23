@@ -24,8 +24,8 @@ Ext.define('KitchenSink.view.data.NestedLoading', {
                         modal: true,
                         hideOnMaskTap: true,
                         centered: true,
-                        width: Ext.filterPlatform('ie10') ? '100%' : 320,
-                        height: Ext.filterPlatform('ie10') ? '60%' : 200,
+                        width: 320,
+                        height: 200,
                         styleHtmlContent: true,
                         scrollable: true,
                         items: {

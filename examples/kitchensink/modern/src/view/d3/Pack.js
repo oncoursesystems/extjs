@@ -21,8 +21,6 @@ Ext.define('KitchenSink.view.d3.Pack', {
         type: 'tree'
     },
 
-    session: true,
-
     cls: 'card1',
     layout: 'fit',
     shadow: true,

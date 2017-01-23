@@ -1,6 +1,6 @@
 Ext.define('KitchenSink.view.d3.Tree', {
     extend: 'Ext.Panel',
-    controller: 'tree',
+    controller: 'd3-tree',
 
     requires: [
         'KitchenSink.view.d3.TreeViewModel',
@@ -13,34 +13,26 @@ Ext.define('KitchenSink.view.d3.Tree', {
     otherContent: [
         {
             type: 'Controller',
-            path: 'modern/src/view/d3/TreeController.js'
+            path: 'app/view/d3/TreeController.js'
         },
         {
             type: 'VM',
-            path: 'modern/src/view/d3/SalaryViewModel.js'
+            path: 'app/view/d3/SalaryViewModel.js'
         },
         {
             type: 'Model',
-            path: 'modern/src/model/Salary.js'
+            path: 'app/model/Salary.js'
+        },
+        {
+            type: 'Reader',
+            path: 'app/reader/Salary.js'
         }
     ],
     // </example>
-
-    // <example>
-    otherContent: [{
-        type: 'Controller',
-        path: 'modern/src/view/d3/TreeController.js'
-    }, {
-        type: 'ViewModel',
-        path: 'modern/src/view/d3/TreeViewModel.js'
-    }],
-    // </example>
     
     viewModel: {
-        type: 'salary'
+        type: 'd3-salary'
     },
-
-    session: true,
 
     cls: 'card1',
     layout: 'fit',

@@ -740,7 +740,9 @@ Ext.define('Ext.chart.series.Series', {
             constrainPosition: true,
             shrinkWrapDock: true,
             autoHide: true,
-            mouseOffset: [20, 20]
+            hideDelay: 200,
+            mouseOffset: [20, 20],
+            trackmouse: true
         }, tooltip);
 
         return Ext.create(config);
@@ -782,27 +784,11 @@ Ext.define('Ext.chart.series.Series', {
         if (!tooltip) {
             return;
         }
-        clearTimeout(me.tooltipTimeout);
-
-        // If trackMouse is set, a ToolTip shows by its pointerEvent.
-        // A Tooltip aligning to an element uses a currentTarget flyweight
-        // which may be pointed at any element.
-        // It aligns using the component level defaultAlign config.
-        tooltip.pointerEvent = event;
-        tooltip.currentTarget.attach((item.sprite.length ? item.sprite[0] : item.sprite).getSurface().el.dom);
 
         Ext.callback(tooltip.renderer, tooltip.scope,
             [tooltip, item.record, item], 0, me);
 
-        if (tooltip.isVisible()) {
-            // After show handling repositions according
-            // to configuration. trackMouse uses the pointerEvent
-            // If aligning to an element, it uses a currentTarget
-            // flyweight which may be attached to any DOM element.
-            tooltip.handleAfterShow();
-        } else {
-            tooltip.show();
-        }
+        tooltip.showBy(event);
     },
 
     hideTooltip: function (item) {
@@ -812,10 +798,7 @@ Ext.define('Ext.chart.series.Series', {
         if (!tooltip) {
             return;
         }
-        clearTimeout(me.tooltipTimeout);
-        me.tooltipTimeout = Ext.defer(function () {
-            tooltip.hide();
-        }, 1);
+        tooltip.delayHide();
     },
 
     applyStore: function (store) {
@@ -1054,7 +1037,7 @@ Ext.define('Ext.chart.series.Series', {
         }
     },
 
-    onAxesChange: function (chart) {
+    onAxesChange: function (chart, force) {
         var me = this,
             axes = chart.getAxes(), axis,
             directionToAxesMap = {},
@@ -1079,7 +1062,7 @@ Ext.define('Ext.chart.series.Series', {
 
         for (i = 0, ln = directions.length; i < ln; i++) {
             direction = directions[i];
-            if (me['get' + direction + 'Axis']()) {
+            if (!force && me['get' + direction + 'Axis']()) {
                 continue;
             }
             if (directionToAxesMap[direction]) {
@@ -1800,7 +1783,6 @@ Ext.define('Ext.chart.series.Series', {
 
         if (tooltip) {
             Ext.destroy(tooltip);
-            clearTimeout(me.tooltipTimeout);
         }
         me.callParent();
     }

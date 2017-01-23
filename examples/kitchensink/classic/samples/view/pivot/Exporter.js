@@ -76,6 +76,10 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
                     italic: true
                 }
             }]
+        },{
+            dataIndex: 'value',
+            header: 'Count',
+            aggregator: 'count'
         }],
 
         // Configure the left axis dimensions that will be used to generate the grid rows

@@ -181,7 +181,6 @@ Ext.define('Calendar.util.Remote', {
 
         while (current < end) {
             incr = 1;
-            o = null;
 
             if (!D.isWeekend(current)) {
                 r = Math.random();
@@ -334,7 +333,6 @@ Ext.define('Calendar.util.Remote', {
 
         while (current < end) {
             incr = 1;
-            o = null;
 
             if (!D.isWeekend(current)) {
                 if (current.getDay() === D.TUESDAY || current.getDay() === D.THURSDAY) {

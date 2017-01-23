@@ -160,7 +160,6 @@ Ext.define('Ext.data.NodeInterface', {
      */
 
     /**
-     * @cfg {String} glyph
      * @cfg {Number/String} glyph
      *
      * A numeric unicode character code to use as the icon.  The default font-family 
@@ -689,16 +688,16 @@ Ext.define('Ext.data.NodeInterface', {
                     };
 
                     // The only way child data can be influenced is if this node has changed level in this update.
-                    if (info.depth !== me.data.depth) {
+                    if (info.depth != null && info.depth !== me.data.depth) {
                         var childInfo = {
-                                depth: me.data.depth + 1
+                                depth: info.depth + 1
                             },
                             children = me.childNodes,
                             childCount = children.length,
                             i;
 
                         for (i = 0; i < childCount; i++) {
-                            children[i].set(childInfo);
+                            children[i].updateInfo(commit, childInfo);
                         }
                     }
                     

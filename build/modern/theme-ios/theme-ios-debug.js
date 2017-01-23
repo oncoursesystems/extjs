@@ -55,6 +55,11 @@ Ext.define('Ext.theme.ios.panel.Header', {
     }
 });
 
+Ext.define('Ext.theme.ios.plugin.PullRefresh', {
+    override: 'Ext.plugin.PullRefresh',
+    updateContent: false
+});
+
 Ext.define('Ext.theme.ios.tab.Tab', {
     override: 'Ext.tab.Tab',
     config: {

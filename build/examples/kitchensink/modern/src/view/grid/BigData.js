@@ -66,6 +66,8 @@ Ext.define('KitchenSink.view.grid.BigData', {
         type: 'rowexpander'
     },{
         type: 'gridexporter'
+    }, {
+        type: 'multiselection'
     }],
 
     listeners: {
@@ -73,16 +75,17 @@ Ext.define('KitchenSink.view.grid.BigData', {
         beforedocumentsave: 'onBeforeDocumentSave'
     },
 
-    items: [{
-        docked: 'top',
-        xtype: 'toolbar',
+    title: 'Big Data Grid',
+
+    titleBar: {
         shadow: false,
         items: [{
+            align: 'right',
             xtype: 'button',
             text: 'Export to ...',
             handler: 'exportTo'
         }]
-    }],
+    },
 
     // Instruct rows to create view models so we can use data binding
     itemConfig: {

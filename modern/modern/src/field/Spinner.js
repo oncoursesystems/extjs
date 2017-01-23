@@ -143,10 +143,6 @@ Ext.define('Ext.field.Spinner', {
     classCls: Ext.baseCSSPrefix + 'spinnerfield',
     groupedButtonsCls: Ext.baseCSSPrefix + 'grouped-buttons',
 
-    /**
-     * Updates the {@link #component} configuration
-     */
-
     updateGroupButtons: function(groupButtons) {
         var downTrigger = this.getTriggers().spindown;
 

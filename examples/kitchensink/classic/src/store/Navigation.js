@@ -296,7 +296,7 @@ Ext.define('KitchenSink.store.Navigation', {
             text: 'D3',
             id: 'd3',
             expanded: true,
-            tier: 'pro',
+            tier: 'premium',
             since: '6.2.0',
 
             description: 'Ext JS seamlessly integrates with D3, so you can visualize ' +
@@ -679,7 +679,24 @@ Ext.define('KitchenSink.store.Navigation', {
     },
 
     getNavItemsTips: function () {
-        return { id: 'tooltips', text: 'ToolTips', leaf: true };
+        return {
+            text: 'Tooltips',
+            id: 'tooltips',
+
+            description: 'Tooltip examples',
+            
+            children: [{
+                id: 'anchored-tooltips', text: 'Anchored ToolTips', leaf: true
+            }, {
+                id: 'mousetrack-tooltips', text: 'Mouse Tracking ToolTips', leaf: true, compat: Ext.platformTags.desktop
+            }, {
+                id: 'html-tooltips', text: 'Tooltips embedded in HTML', leaf: true
+            }, {
+                id: 'tip-aligning', text: 'Tooltip align options', leaf: true
+            }, {
+                id: 'closable-tooltips', text: 'Closable ToolTips', leaf: true
+            }]
+        };
     },
 
     getNavItemsToolbars: function () {
@@ -795,6 +812,8 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'outline-pivot-grid', text: 'Outline layout', leaf: true },
                 { id: 'compact-pivot-grid', text: 'Compact layout', leaf: true },
                 { id: 'locked-pivot-grid', text: 'Locked', leaf: true },
+                { id: 'stateful-pivot-grid', text: 'Stateful', leaf: true },
+                { id: 'datachanges-pivot-grid', text: 'Data changes', leaf: true },
                 { id: 'drilldown-pivot-grid', text: 'DrillDown plugin', leaf: true },
                 { id: 'configurable-pivot-grid', text: 'Configurator plugin', leaf: true },
                 { id: 'cellediting-pivot-grid', text: 'CellEditing plugin', leaf: true },

@@ -794,14 +794,10 @@ Ext.define('Ext.data.Store', {
     },
 
     /**
-     * Removes all items from the store.
-     *
+     * Removes all unfiltered items from the store.  Filtered records will not be removed.
      * Individual record `{@link #event-remove}` events are not fired by this method.
      *
      * @param {Boolean} [silent=false] Pass `true` to prevent the `{@link #event-clear}` event from being fired.
-     *
-     * This method is affected by filtering.
-     * 
      * @return {Ext.data.Model[]} The removed records.
      */
     removeAll: function(silent) {

@@ -1,43 +1,172 @@
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2032 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1693 */
+.x6-tab-default-top.x6-tab-focus {
+    -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1706 */
+.x6-tab-default-top.x6-tab-over {
+    -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1735 */
+.x6-tab-default-top.x6-tab.x6-tab-active {
+    -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1764 */
+.x6-tab-default-top.x6-tab.x6-tab-disabled {
+    -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1777 */
+.x6-tab-default-right {
+    margin: 2px 0 0 0;
+    -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+    box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1781 */
+.x6-tab-default-right.x6-rtl {
+    margin: 2px 0 0 0;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1786 */
+.x6-tab-default-right.x6-tab-rotate-right {
+    margin: 0 0 2px 0;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1790 */
+.x6-tab-default-right.x6-tab-rotate-right.x6-rtl {
+    margin: 0 0 2px 0;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1808 */
+.x6-tab-default-right.x6-tab-focus {
+    -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+    box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1821 */
+.x6-tab-default-right.x6-tab-over {
+    -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+    box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1850 */
+.x6-tab-default-right.x6-tab.x6-tab-active {
+    -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+    box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1879 */
+.x6-tab-default-right.x6-tab.x6-tab-disabled {
+    -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+    box-shadow: #fff 0 1px 0px 0 inset, #fff -1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1892 */
+.x6-tab-default-bottom {
+    margin: 0 0 0 2px;
+    -webkit-box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1896 */
+.x6-tab-default-bottom.x6-rtl {
+    margin: 0 2px 0 0;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1901 */
+.x6-tab-default-bottom.x6-tab-rotate-left {
+    margin: 0 2px 0 0;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1905 */
+.x6-tab-default-bottom.x6-tab-rotate-left.x6-rtl {
+    margin: 0 0 0 2px;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1923 */
+.x6-tab-default-bottom.x6-tab-focus {
+    -webkit-box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1936 */
+.x6-tab-default-bottom.x6-tab-over {
+    -webkit-box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1965 */
+.x6-tab-default-bottom.x6-tab.x6-tab-active {
+    -webkit-box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:1994 */
+.x6-tab-default-bottom.x6-tab.x6-tab-disabled {
+    -webkit-box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+    box-shadow: #fff 0 -1px 0px 0 inset, #fff -1px 0 0px 0 inset, #fff 1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2007 */
+.x6-tab-default-left {
+    margin: 2px 0 0 0;
+    -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
+    -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
+    box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2011 */
+.x6-tab-default-left.x6-rtl {
+    margin: 2px 0 0 0;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2016 */
+.x6-tab-default-left.x6-tab-rotate-right {
+    margin: 0 0 2px 0;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2020 */
+.x6-tab-default-left.x6-tab-rotate-right.x6-rtl {
+    margin: 0 0 2px 0;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2038 */
 .x6-tab-default-left.x6-tab-focus {
     -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
     -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
     box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2045 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2051 */
 .x6-tab-default-left.x6-tab-over {
     -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
     -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
     box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2074 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2080 */
 .x6-tab-default-left.x6-tab.x6-tab-active {
     -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
     -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
     box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2103 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2109 */
 .x6-tab-default-left.x6-tab.x6-tab-disabled {
     -webkit-box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
     -moz-box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
     box-shadow: #fff 0 1px 0px 0 inset, #fff 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2116 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2122 */
 .x6-tab-button-default {
     height: 16px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2121 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2127 */
 .x6-tab-inner-default {
     font: bold 11px/13px tahoma, arial, verdana, sans-serif;
     color: #416da3;
     max-width: 100%;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2137 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2143 */
 .x6-tab-icon-right > .x6-tab-inner-default,
 .x6-tab-icon-left > .x6-tab-inner-default {
     max-width: calc(100% - 16px);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2145 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2151 */
 .x6-tab-icon-el-default {
     min-height: 16px;
     background-position: center center;
@@ -45,56 +174,56 @@
     line-height: 16px;
     color: #416da3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2146 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2152 */
 .x6-tab-icon-left > .x6-tab-icon-el-default,
 .x6-tab-icon-right > .x6-tab-icon-el-default {
     width: 16px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2151 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2157 */
 .x6-tab-icon-top > .x6-tab-icon-el-default,
 .x6-tab-icon-bottom > .x6-tab-icon-el-default {
     min-width: 16px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2167 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2173 */
 .x6-tab-icon-el-default.x6-tab-glyph {
     opacity: 0.5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2180 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2186 */
 .x6-ie8 .x6-tab-icon-el-default.x6-tab-glyph {
     color: #90acd0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2187 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2193 */
 .x6-tab-text.x6-tab-icon-left > .x6-tab-icon-el-default {
     margin-right: 4px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2191 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2197 */
 .x6-tab-text.x6-tab-icon-left > .x6-tab-icon-el-default.x6-rtl {
     margin-right: 0;
     margin-left: 4px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2198 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2204 */
 .x6-tab-text.x6-tab-icon-right > .x6-tab-icon-el-default {
     margin-left: 4px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2202 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2208 */
 .x6-tab-text.x6-tab-icon-right > .x6-tab-icon-el-default.x6-rtl {
     margin-left: 0;
     margin-right: 4px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2209 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2215 */
 .x6-tab-text.x6-tab-icon-top > .x6-tab-icon-el-default {
     margin-bottom: 4px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2213 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2219 */
 .x6-tab-text.x6-tab-icon-bottom > .x6-tab-icon-el-default {
     margin-top: 4px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2218 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2224 */
 .x6-tab-focus.x6-tab-default {
     border-color: #8db3e3;
     background-color: #deecfd;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2284 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2290 */
 .x6-tab-focus.x6-tab-default .x6-tab-button:before {
     position: absolute;
     content: ' ';
@@ -105,16 +234,16 @@
     pointer-events: none;
     outline: 1px dotted #416da3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2301 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2307 */
 .x6-tab-focus.x6-tab-default.x6-tab-closable .x6-tab-button:before {
     right: 14px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2354 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2360 */
 .x6-tab-over.x6-tab-default {
     border-color: #8db3e3;
     background-color: #e8f2ff;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2454 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2460 */
 .x6-tab-over.x6-tab-default-top,
 .x6-tab-over.x6-tab-default-left,
 .x6-tab-over.x6-tab-default-right {
@@ -127,7 +256,7 @@
     background-image: -ms-linear-gradient(top, #d7e5fd, #e0edff 25%, #e8f2ff 45%);
     background-image: linear-gradient(top, #d7e5fd, #e0edff 25%, #e8f2ff 45%);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2459 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2465 */
 .x6-tab-over.x6-tab-default-bottom {
     background-image: none;
     background-color: #e8f2ff;
@@ -138,29 +267,29 @@
     background-image: -ms-linear-gradient(bottom, #d7e5fd, #e0edff 25%, #e8f2ff 45%);
     background-image: linear-gradient(bottom, #d7e5fd, #e0edff 25%, #e8f2ff 45%);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2466 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2472 */
 .x6-tab-focus.x6-tab-over.x6-tab-default {
     border-color: #8db3e3;
     background-color: #e8f2ff;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2581 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2587 */
 .x6-tab.x6-tab-active.x6-tab-default {
     border-color: #8db3e3;
     background-color: #deecfd;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2637 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2643 */
 .x6-tab.x6-tab-active.x6-tab-default .x6-tab-inner-default {
     color: #15498b;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2657 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2663 */
 .x6-tab.x6-tab-active.x6-tab-default .x6-tab-icon-el {
     color: #15498b;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2665 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2671 */
 .x6-ie8 .x6-tab.x6-tab-active.x6-tab-default .x6-tab-icon-el {
     color: #7a9bc4;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2679 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2685 */
 .x6-tab.x6-tab-active.x6-tab-default-top,
 .x6-tab.x6-tab-active.x6-tab-default-left,
 .x6-tab.x6-tab-active.x6-tab-default-right {
@@ -173,7 +302,7 @@
     background-image: -ms-linear-gradient(top, #fff, #f5f9fe 25%, #deecfd 45%);
     background-image: linear-gradient(top, #fff, #f5f9fe 25%, #deecfd 45%);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2685 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2691 */
 .x6-tab.x6-tab-active.x6-tab-default-bottom {
     background-image: none;
     background-color: #deecfd;
@@ -184,37 +313,37 @@
     background-image: -ms-linear-gradient(bottom, #fff, #f5f9fe 25%, #deecfd 45%);
     background-image: linear-gradient(bottom, #fff, #f5f9fe 25%, #deecfd 45%);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2692 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2698 */
 .x6-tab-focus.x6-tab-active.x6-tab-default {
     border-color: #8db3e3;
     background-color: #deecfd;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2808 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2814 */
 .x6-tab.x6-tab-disabled.x6-tab-default {
     border-color: #bbd2ef;
     background-color: #e1ecfa;
     cursor: default;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2868 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2874 */
 .x6-tab.x6-tab-disabled.x6-tab-default .x6-tab-inner-default {
     color: #c3b3b3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2892 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2898 */
 .x6-tab.x6-tab-disabled.x6-tab-default .x6-tab-icon-el-default {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     opacity: 0.5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2897 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2903 */
 .x6-tab.x6-tab-disabled.x6-tab-default .x6-tab-icon-el {
     color: #c3b3b3;
     opacity: 0.3;
     filter: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2912 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2918 */
 .x6-ie8 .x6-tab.x6-tab-disabled.x6-tab-default .x6-tab-icon-el {
     color: #d8dbe5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2925 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2931 */
 .x6-tab.x6-tab-disabled.x6-tab-default-top,
 .x6-tab.x6-tab-disabled.x6-tab-default-left,
 .x6-tab.x6-tab-disabled.x6-tab-default-right {
@@ -227,7 +356,7 @@
     background-image: -ms-linear-gradient(top, #e1ecfa, #ecf4fe);
     background-image: linear-gradient(top, #e1ecfa, #ecf4fe);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2931 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2937 */
 .x6-tab.x6-tab-disabled.x6-tab-default-bottom {
     background-image: none;
     background-color: #e1ecfa;
@@ -238,11 +367,11 @@
     background-image: -ms-linear-gradient(bottom, #e1ecfa, #ecf4fe);
     background-image: linear-gradient(bottom, #e1ecfa, #ecf4fe);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2938 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2944 */
 .x6-nbr .x6-tab-default {
     background-image: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-over .x6-tab-default-top-tl,
 .x6-tab-over .x6-tab-default-top-bl,
 .x6-tab-over .x6-tab-default-top-tr,
@@ -251,17 +380,17 @@
 .x6-tab-over .x6-tab-default-top-bc {
     background-image: url(images/tab/tab-default-top-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-over .x6-tab-default-top-ml,
 .x6-tab-over .x6-tab-default-top-mr {
     background-image: url(images/tab/tab-default-top-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-over .x6-tab-default-top-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-top-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus .x6-tab-default-top-tl,
 .x6-tab-focus .x6-tab-default-top-bl,
 .x6-tab-focus .x6-tab-default-top-tr,
@@ -270,17 +399,17 @@
 .x6-tab-focus .x6-tab-default-top-bc {
     background-image: url(images/tab/tab-default-top-focus-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus .x6-tab-default-top-ml,
 .x6-tab-focus .x6-tab-default-top-mr {
     background-image: url(images/tab/tab-default-top-focus-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus .x6-tab-default-top-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-top-focus-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-top-tl,
 .x6-tab-focus.x6-tab-over .x6-tab-default-top-bl,
 .x6-tab-focus.x6-tab-over .x6-tab-default-top-tr,
@@ -289,17 +418,17 @@
 .x6-tab-focus.x6-tab-over .x6-tab-default-top-bc {
     background-image: url(images/tab/tab-default-top-focus-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-top-ml,
 .x6-tab-focus.x6-tab-over .x6-tab-default-top-mr {
     background-image: url(images/tab/tab-default-top-focus-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-top-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-top-focus-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab.x6-tab-active .x6-tab-default-top-tl,
 .x6-tab.x6-tab-active .x6-tab-default-top-bl,
 .x6-tab.x6-tab-active .x6-tab-default-top-tr,
@@ -308,17 +437,17 @@
 .x6-tab.x6-tab-active .x6-tab-default-top-bc {
     background-image: url(images/tab/tab-default-top-active-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab.x6-tab-active .x6-tab-default-top-ml,
 .x6-tab.x6-tab-active .x6-tab-default-top-mr {
     background-image: url(images/tab/tab-default-top-active-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab.x6-tab-active .x6-tab-default-top-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-top-active-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-top-tl,
 .x6-tab-focus.x6-tab-active .x6-tab-default-top-bl,
 .x6-tab-focus.x6-tab-active .x6-tab-default-top-tr,
@@ -327,17 +456,17 @@
 .x6-tab-focus.x6-tab-active .x6-tab-default-top-bc {
     background-image: url(images/tab/tab-default-top-focus-active-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-top-ml,
 .x6-tab-focus.x6-tab-active .x6-tab-default-top-mr {
     background-image: url(images/tab/tab-default-top-focus-active-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-top-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-top-focus-active-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab.x6-tab-disabled .x6-tab-default-top-tl,
 .x6-tab.x6-tab-disabled .x6-tab-default-top-bl,
 .x6-tab.x6-tab-disabled .x6-tab-default-top-tr,
@@ -346,17 +475,17 @@
 .x6-tab.x6-tab-disabled .x6-tab-default-top-bc {
     background-image: url(images/tab/tab-default-top-disabled-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab.x6-tab-disabled .x6-tab-default-top-ml,
 .x6-tab.x6-tab-disabled .x6-tab-default-top-mr {
     background-image: url(images/tab/tab-default-top-disabled-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab.x6-tab-disabled .x6-tab-default-top-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-top-disabled-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-over .x6-tab-default-right-tl,
 .x6-tab-over .x6-tab-default-right-bl,
 .x6-tab-over .x6-tab-default-right-tr,
@@ -365,17 +494,17 @@
 .x6-tab-over .x6-tab-default-right-bc {
     background-image: url(images/tab/tab-default-right-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-over .x6-tab-default-right-ml,
 .x6-tab-over .x6-tab-default-right-mr {
     background-image: url(images/tab/tab-default-right-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-over .x6-tab-default-right-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-right-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus .x6-tab-default-right-tl,
 .x6-tab-focus .x6-tab-default-right-bl,
 .x6-tab-focus .x6-tab-default-right-tr,
@@ -384,17 +513,17 @@
 .x6-tab-focus .x6-tab-default-right-bc {
     background-image: url(images/tab/tab-default-right-focus-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus .x6-tab-default-right-ml,
 .x6-tab-focus .x6-tab-default-right-mr {
     background-image: url(images/tab/tab-default-right-focus-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus .x6-tab-default-right-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-right-focus-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-right-tl,
 .x6-tab-focus.x6-tab-over .x6-tab-default-right-bl,
 .x6-tab-focus.x6-tab-over .x6-tab-default-right-tr,
@@ -403,17 +532,17 @@
 .x6-tab-focus.x6-tab-over .x6-tab-default-right-bc {
     background-image: url(images/tab/tab-default-right-focus-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-right-ml,
 .x6-tab-focus.x6-tab-over .x6-tab-default-right-mr {
     background-image: url(images/tab/tab-default-right-focus-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-right-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-right-focus-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab.x6-tab-active .x6-tab-default-right-tl,
 .x6-tab.x6-tab-active .x6-tab-default-right-bl,
 .x6-tab.x6-tab-active .x6-tab-default-right-tr,
@@ -422,17 +551,17 @@
 .x6-tab.x6-tab-active .x6-tab-default-right-bc {
     background-image: url(images/tab/tab-default-right-active-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab.x6-tab-active .x6-tab-default-right-ml,
 .x6-tab.x6-tab-active .x6-tab-default-right-mr {
     background-image: url(images/tab/tab-default-right-active-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab.x6-tab-active .x6-tab-default-right-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-right-active-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-right-tl,
 .x6-tab-focus.x6-tab-active .x6-tab-default-right-bl,
 .x6-tab-focus.x6-tab-active .x6-tab-default-right-tr,
@@ -441,17 +570,17 @@
 .x6-tab-focus.x6-tab-active .x6-tab-default-right-bc {
     background-image: url(images/tab/tab-default-right-focus-active-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-right-ml,
 .x6-tab-focus.x6-tab-active .x6-tab-default-right-mr {
     background-image: url(images/tab/tab-default-right-focus-active-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-right-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-right-focus-active-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab.x6-tab-disabled .x6-tab-default-right-tl,
 .x6-tab.x6-tab-disabled .x6-tab-default-right-bl,
 .x6-tab.x6-tab-disabled .x6-tab-default-right-tr,
@@ -460,17 +589,17 @@
 .x6-tab.x6-tab-disabled .x6-tab-default-right-bc {
     background-image: url(images/tab/tab-default-right-disabled-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab.x6-tab-disabled .x6-tab-default-right-ml,
 .x6-tab.x6-tab-disabled .x6-tab-default-right-mr {
     background-image: url(images/tab/tab-default-right-disabled-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab.x6-tab-disabled .x6-tab-default-right-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-right-disabled-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-over .x6-tab-default-bottom-tl,
 .x6-tab-over .x6-tab-default-bottom-bl,
 .x6-tab-over .x6-tab-default-bottom-tr,
@@ -479,17 +608,17 @@
 .x6-tab-over .x6-tab-default-bottom-bc {
     background-image: url(images/tab/tab-default-bottom-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-over .x6-tab-default-bottom-ml,
 .x6-tab-over .x6-tab-default-bottom-mr {
     background-image: url(images/tab/tab-default-bottom-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-over .x6-tab-default-bottom-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-bottom-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus .x6-tab-default-bottom-tl,
 .x6-tab-focus .x6-tab-default-bottom-bl,
 .x6-tab-focus .x6-tab-default-bottom-tr,
@@ -498,17 +627,17 @@
 .x6-tab-focus .x6-tab-default-bottom-bc {
     background-image: url(images/tab/tab-default-bottom-focus-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus .x6-tab-default-bottom-ml,
 .x6-tab-focus .x6-tab-default-bottom-mr {
     background-image: url(images/tab/tab-default-bottom-focus-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus .x6-tab-default-bottom-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-bottom-focus-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-bottom-tl,
 .x6-tab-focus.x6-tab-over .x6-tab-default-bottom-bl,
 .x6-tab-focus.x6-tab-over .x6-tab-default-bottom-tr,
@@ -517,17 +646,17 @@
 .x6-tab-focus.x6-tab-over .x6-tab-default-bottom-bc {
     background-image: url(images/tab/tab-default-bottom-focus-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-bottom-ml,
 .x6-tab-focus.x6-tab-over .x6-tab-default-bottom-mr {
     background-image: url(images/tab/tab-default-bottom-focus-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-bottom-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-bottom-focus-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab.x6-tab-active .x6-tab-default-bottom-tl,
 .x6-tab.x6-tab-active .x6-tab-default-bottom-bl,
 .x6-tab.x6-tab-active .x6-tab-default-bottom-tr,
@@ -536,17 +665,17 @@
 .x6-tab.x6-tab-active .x6-tab-default-bottom-bc {
     background-image: url(images/tab/tab-default-bottom-active-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab.x6-tab-active .x6-tab-default-bottom-ml,
 .x6-tab.x6-tab-active .x6-tab-default-bottom-mr {
     background-image: url(images/tab/tab-default-bottom-active-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab.x6-tab-active .x6-tab-default-bottom-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-bottom-active-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-bottom-tl,
 .x6-tab-focus.x6-tab-active .x6-tab-default-bottom-bl,
 .x6-tab-focus.x6-tab-active .x6-tab-default-bottom-tr,
@@ -555,17 +684,17 @@
 .x6-tab-focus.x6-tab-active .x6-tab-default-bottom-bc {
     background-image: url(images/tab/tab-default-bottom-focus-active-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-bottom-ml,
 .x6-tab-focus.x6-tab-active .x6-tab-default-bottom-mr {
     background-image: url(images/tab/tab-default-bottom-focus-active-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-bottom-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-bottom-focus-active-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab.x6-tab-disabled .x6-tab-default-bottom-tl,
 .x6-tab.x6-tab-disabled .x6-tab-default-bottom-bl,
 .x6-tab.x6-tab-disabled .x6-tab-default-bottom-tr,
@@ -574,17 +703,17 @@
 .x6-tab.x6-tab-disabled .x6-tab-default-bottom-bc {
     background-image: url(images/tab/tab-default-bottom-disabled-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab.x6-tab-disabled .x6-tab-default-bottom-ml,
 .x6-tab.x6-tab-disabled .x6-tab-default-bottom-mr {
     background-image: url(images/tab/tab-default-bottom-disabled-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab.x6-tab-disabled .x6-tab-default-bottom-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-bottom-disabled-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-over .x6-tab-default-left-tl,
 .x6-tab-over .x6-tab-default-left-bl,
 .x6-tab-over .x6-tab-default-left-tr,
@@ -593,17 +722,17 @@
 .x6-tab-over .x6-tab-default-left-bc {
     background-image: url(images/tab/tab-default-left-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-over .x6-tab-default-left-ml,
 .x6-tab-over .x6-tab-default-left-mr {
     background-image: url(images/tab/tab-default-left-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-over .x6-tab-default-left-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-left-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus .x6-tab-default-left-tl,
 .x6-tab-focus .x6-tab-default-left-bl,
 .x6-tab-focus .x6-tab-default-left-tr,
@@ -612,17 +741,17 @@
 .x6-tab-focus .x6-tab-default-left-bc {
     background-image: url(images/tab/tab-default-left-focus-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus .x6-tab-default-left-ml,
 .x6-tab-focus .x6-tab-default-left-mr {
     background-image: url(images/tab/tab-default-left-focus-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus .x6-tab-default-left-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-left-focus-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-left-tl,
 .x6-tab-focus.x6-tab-over .x6-tab-default-left-bl,
 .x6-tab-focus.x6-tab-over .x6-tab-default-left-tr,
@@ -631,17 +760,17 @@
 .x6-tab-focus.x6-tab-over .x6-tab-default-left-bc {
     background-image: url(images/tab/tab-default-left-focus-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-left-ml,
 .x6-tab-focus.x6-tab-over .x6-tab-default-left-mr {
     background-image: url(images/tab/tab-default-left-focus-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus.x6-tab-over .x6-tab-default-left-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-left-focus-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab.x6-tab-active .x6-tab-default-left-tl,
 .x6-tab.x6-tab-active .x6-tab-default-left-bl,
 .x6-tab.x6-tab-active .x6-tab-default-left-tr,
@@ -650,17 +779,17 @@
 .x6-tab.x6-tab-active .x6-tab-default-left-bc {
     background-image: url(images/tab/tab-default-left-active-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab.x6-tab-active .x6-tab-default-left-ml,
 .x6-tab.x6-tab-active .x6-tab-default-left-mr {
     background-image: url(images/tab/tab-default-left-active-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab.x6-tab-active .x6-tab-default-left-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-left-active-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-left-tl,
 .x6-tab-focus.x6-tab-active .x6-tab-default-left-bl,
 .x6-tab-focus.x6-tab-active .x6-tab-default-left-tr,
@@ -669,17 +798,17 @@
 .x6-tab-focus.x6-tab-active .x6-tab-default-left-bc {
     background-image: url(images/tab/tab-default-left-focus-active-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-left-ml,
 .x6-tab-focus.x6-tab-active .x6-tab-default-left-mr {
     background-image: url(images/tab/tab-default-left-focus-active-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab-focus.x6-tab-active .x6-tab-default-left-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-left-focus-active-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2957 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2963 */
 .x6-tab.x6-tab-disabled .x6-tab-default-left-tl,
 .x6-tab.x6-tab-disabled .x6-tab-default-left-bl,
 .x6-tab.x6-tab-disabled .x6-tab-default-left-tr,
@@ -688,24 +817,24 @@
 .x6-tab.x6-tab-disabled .x6-tab-default-left-bc {
     background-image: url(images/tab/tab-default-left-disabled-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2966 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2972 */
 .x6-tab.x6-tab-disabled .x6-tab-default-left-ml,
 .x6-tab.x6-tab-disabled .x6-tab-default-left-mr {
     background-image: url(images/tab/tab-default-left-disabled-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2971 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2977 */
 .x6-tab.x6-tab-disabled .x6-tab-default-left-mc {
     background-repeat: repeat-x;
     background-image: url(images/tab/tab-default-left-disabled-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2981 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2987 */
 .x6-tab-default-tl,
 .x6-tab-default-bl,
 .x6-tab-default-tr,
 .x6-tab-default-br {
     -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF)";
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2991 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:2997 */
 .x6-tab-default .x6-tab-close-btn {
     top: 2px;
     right: 2px;
@@ -715,30 +844,30 @@
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
     opacity: 0.6;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3013 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3019 */
 .x6-tab-default .x6-tab-close-btn-over {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
     opacity: 1;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3082 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3088 */
 .x6-tab-default.x6-tab-active .x6-tab-close-btn {
     background-position: 0 -11px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3115 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3121 */
 .x6-tab-default.x6-tab-disabled .x6-tab-close-btn {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
     opacity: 0.3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3136 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3142 */
 .x6-rtl.x6-tab-default .x6-tab-close-btn {
     right: auto;
     left: 2px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3142 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3148 */
 .x6-tab-closable.x6-tab-default .x6-tab-button {
     padding-right: 14px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3147 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tab/Tab.scss:3153 */
 .x6-rtl.x6-tab-closable.x6-tab-default .x6-tab-button {
     padding-right: 0px;
     padding-left: 14px;

@@ -196,6 +196,36 @@ describe("Ext.tree.TreeGrid", function() {
 
         Ext.destroy(tree);
     });
+
+    describe('tabbability', function() {
+        it('should keep all elements untabbable when not in actionable mode', function() {
+            makeTreeGrid({
+                width: 300,
+                columns: [{
+                    xtype: 'treecolumn',
+                    text: 'F1',
+                    dataIndex: 'f1',
+                    width: 100
+                }, {
+                    text: 'F2',
+                    dataIndex: 'f2',
+                    flex: 1
+                }, {
+                    xtype: 'actioncolumn'
+                }]
+            });
+
+            tree.getNavigationModel().setPosition(0, 0);
+            waitsFor(function() {
+                return tree.view.containsFocus;
+            });
+            runs(function() {
+                expect(tree.view.el.findTabbableElements({skipSelf: true}).length).toBe(0);
+                tree.store.first().expand();
+                expect(tree.view.el.findTabbableElements({skipSelf: true}).length).toBe(0);
+            });
+        });
+    });
     
     describe('Model mutation', function() {
         it('should not have to render a whole row, it should update innerHTML of cell', function() {
@@ -332,18 +362,23 @@ describe("Ext.tree.TreeGrid", function() {
             rootNode.expand();
             tree.view.setScrollY(40);
 
+            // We must wait until the Scroller knows about the scroll position
+            // at which point it fires a scrollend event
+            waitsForEvent(tree.getView().getScrollable(), 'scrollend', 'Tree scrollend');
+
             // Wait for scroll position to be read
-            waitsFor(function() {
-                return tree.view.getScrollable().getPosition().y === 40;
+            runs(function() {
+                expect(tree.view.getScrollable().getPosition().y).toBe(40);
             });
             
             runs(function() {
                 tree.getRootNode().childNodes[1].expand();
             });
 
-            // We must wait until the Scroller knows about the scroll position
-            // at which point it fires a scrollend event
-            waitsForEvent(tree.getView().getScrollable(), 'scrollend', 'Tree scrollend');
+            // Nothing should happen. The bug was that expansion caused focus-scroll.
+            // No scrolling, and no event firing sohuld take place, scroll position
+            // and application state should remain unchanged.
+            waits(200);
 
             // Expanding a node should not scroll.
             runs(function() {
@@ -361,11 +396,15 @@ describe("Ext.tree.TreeGrid", function() {
             rootNode.expand();
             tree.view.setScrollX(40);
 
-            // Wait for scroll syncing to complete
-            waitsFor(function() {
-                return tree.headerCt.getScrollable().getPosition().x === 40;
-            });
+            // We must wait until the Scroller knows about the scroll position
+            // at which point it fires a scrollend event
+            waitsForEvent(tree.getView().getScrollable(), 'scrollend', 'Tree scrollend');
 
+            // Wait for scroll position to be read
+            runs(function() {
+                expect(tree.view.getScrollable().getPosition().x).toBe(40);
+            });
+            
             runs(function() {
                 tree.getRootNode().childNodes[1].expand();
             });
@@ -731,7 +770,7 @@ describe("Ext.tree.TreeGrid", function() {
         });
     });
 
-    describe('auto hide headers, then headers arriging from a bind', function() {
+    describe('auto hide headers, then headers arriving from a bind', function() {
         var store = Ext.create('Ext.data.TreeStore', {
             autoDestroy: true,
             root: {
@@ -760,7 +799,6 @@ describe("Ext.tree.TreeGrid", function() {
             tree = Ext.create('Ext.tree.Panel', {
                 title: 'Simple Tree',
                 width: 300,
-                hideHeaders: null,
                 viewModel: {
                     data: {
                         headerText: 'A header'

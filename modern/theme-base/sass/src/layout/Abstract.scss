@@ -64,7 +64,7 @@ body.#{$prefix}chromeios {
     }
 }
 
-.#{$prefix}ios {
+.#{$prefix}mobile-safari {
     .#{$prefix}float-wrap {
         // Must use height:100% on iOS, 100vh is the full device height including
         // browser chrome, so sizing the float-wrap to that causes overflow.

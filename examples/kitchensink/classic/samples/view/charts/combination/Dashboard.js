@@ -35,7 +35,7 @@ Ext.define('KitchenSink.view.charts.combination.Dashboard', {
     items: [{
         xtype: 'panel',
         width: '100%',
-        height: 510,
+        height: 535,
         bodyPadding: 10,
 
         layout: {

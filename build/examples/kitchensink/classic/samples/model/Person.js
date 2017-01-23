@@ -30,7 +30,7 @@ Ext.define('KitchenSink.model.Person', {
                     seenNames = {},
                     adultsUndef = adults === undefined,
                     childrenUndef = children === undefined,
-                    name;
+                    name, i;
 
                 if (!adultsUndef && !childrenUndef) {
                     total = adults + children;

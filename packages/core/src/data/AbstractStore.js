@@ -38,7 +38,27 @@ Ext.define('Ext.data.AbstractStore', {
          *         }
          *     ]
          *
-         * To filter after the grid is loaded use the {@link Ext.data.Store#filterBy filterBy} function.
+         * Individual filters can be specified as an `Ext.util.Filter` instance, a config
+         * object for `Ext.util.Filter` or simply a function that will be wrapped in a
+         * instance with its {@Ext.util.Filter#filterFn filterFn} set.
+         *
+         * For fine grain control of the filters collection, call `getFilters` to return
+         * the `Ext.util.Collection` instance that holds this store's filters.
+         *
+         *      var filters = store.getFilters(); // an Ext.util.FilterCollection
+         *
+         *      function legalAge (item) {
+         *          return item.age >= 21;
+         *      }
+         *
+         *      filters.add(legalAge);
+         *
+         *      //...
+         *
+         *      filters.remove(legalAge);
+         *
+         * Any changes to the `filters` collection will cause this store to adjust
+         * its items accordingly.
          */
         filters: null,
 
@@ -68,6 +88,26 @@ Ext.define('Ext.data.AbstractStore', {
         /**
          * @cfg {Ext.util.Sorter[]/Object[]} sorters
          * The initial set of {@link Ext.util.Sorter Sorters}
+         *
+         * Individual sorters can be specified as an `Ext.util.Sorter` instance, a config
+         * object for `Ext.util.Sorter` or simply the name of a property by which to sort.
+         *
+         * An alternative way to extend the sorters is to call the `sort` method and pass
+         * a property or sorter config to add to the sorters.
+         *
+         * For fine grain control of the sorters collection, call `getSorters` to return
+         * the `Ext.util.Collection` instance that holds this collection's sorters.
+         *
+         *      var sorters = store.getSorters(); // an Ext.util.SorterCollection
+         *
+         *      sorters.add('name');
+         *
+         *      //...
+         *
+         *      sorters.remove('name');
+         *
+         * Any changes to the `sorters` collection will cause this store to adjust
+         * its items accordingly.
          */
         sorters: null,
 
@@ -540,8 +580,8 @@ Ext.define('Ext.data.AbstractStore', {
      *         }
      *     ]);
      *
-     * Internally, Store converts the passed arguments into an array of {@link Ext.util.Filter} instances, and delegates
-     * the actual filtering to its internal {@link Ext.util.MixedCollection}.
+     * Internally, Store converts the passed arguments into an array of {@link Ext.util.Filter} instances, and
+     * delegates the actual filtering to its internal {@link Ext.util.Collection} or the remote server.
      *
      * @param {String/Ext.util.Filter[]} [filters] Either a string name of one of the fields in this Store's configured
      * {@link Ext.data.Model Model}, or an array of filter configurations.
@@ -896,8 +936,8 @@ Ext.define('Ext.data.AbstractStore', {
      *         }
      *     ]);
      *
-     * Internally, Store converts the passed arguments into an array of {@link Ext.util.Sorter} instances, and delegates
-     * the actual sorting to its internal {@link Ext.util.MixedCollection}.
+     * Internally, Store converts the passed arguments into an array of {@link Ext.util.Sorter} instances, and
+     * either delegates the actual sorting to its internal {@link Ext.util.Collection} or the remote server.
      *
      * When passing a single string argument to sort, Store maintains a ASC/DESC toggler per field, so this code:
      *

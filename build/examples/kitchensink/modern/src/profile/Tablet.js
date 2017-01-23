@@ -3,7 +3,7 @@ Ext.define('KitchenSink.profile.Tablet', {
 
     controllers: ['Main'],
 
-    views: ['Main', 'TouchEvents'],
+    views: ['TouchEvents'],
 
     mainView: 'KitchenSink.view.tablet.Main',
 

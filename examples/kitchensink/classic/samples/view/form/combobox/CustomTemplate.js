@@ -37,7 +37,7 @@ Ext.define('KitchenSink.view.form.combobox.CustomTemplate', {
                 '<h3>Custom Item Templates</h3>',
                 '<p>This ComboBox uses the same data, but also illustrates ',
                 'how to use an optional custom template to create custom UI ',
-                'renditions for list items by overriding the getInnerTpl method. ',
+                'renditions for list items by overriding the itemTpl config. ',
                 'In this case each item shows the state\'s abbreviation, and has ',
                 'a QuickTip which displays the state\'s nickname when hovered over.</p>'
             ]

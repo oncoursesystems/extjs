@@ -547,7 +547,7 @@ Ext.define('Ext.panel.Table', {
 
         var me = this,
             headerCtCfg = me.columns || me.colModel || [],
-            store, view, i, len, bufferedRenderer, columns, viewScroller, headerCt, headerCtScroller;
+            store, view, i, len, bufferedRenderer, columns, headerCt;
 
         // Look up the configured Store. If none configured, use the fieldless, empty Store
         // defined in Ext.data.Store.
@@ -578,7 +578,10 @@ Ext.define('Ext.panel.Table', {
         // If any of the Column objects contain a locked property, and are not processed, this is a lockable TablePanel, a
         // special view will be injected by the Ext.grid.locking.Lockable mixin, so no processing of .
         if (me.enableLocking) {
-            me.self.mixin('lockable', Ext.grid.locking.Lockable);
+            // Only first invocation mixes Lockable into the TablePanel class
+            if (!me.mixins.lockable) {
+                me.self.mixin('lockable', Ext.grid.locking.Lockable);
+            }
             me.injectLockable();
             headerCt = me.headerCt;
         }
@@ -674,10 +677,6 @@ Ext.define('Ext.panel.Table', {
                 refresh: me.onRestoreHorzScroll,
                 scope: me
             });
-
-            // Decide upon hideHeaders configuration based on columns having content or not.
-            // Scroll syncing will be set up with the view's scroller if headers are visible.
-            me.syncHeaderVisibility();
         }
 
         // Whatever kind of View we have, be it a TableView, or a LockingView, we are interested in the selection model
@@ -1036,6 +1035,7 @@ Ext.define('Ext.panel.Table', {
         }
 
         me.callParent();
+        me.syncHeaderVisibility();
         if (me.enableLocking) {
             me.afterInjectLockable();
         } else {
@@ -1144,52 +1144,6 @@ Ext.define('Ext.panel.Table', {
          */
     },
 
-    syncHeaderVisibility: function() {
-        var me = this,
-            headerCt = me.headerCt,
-            columns = headerCt.items.items,
-            len = columns.length,
-            currentHideHeaderState = headerCt.height === 0,
-            hideHeaders = !!len,
-            column, colText, i, viewScroller;
-
-        // If we have not been configured with hideHeaders, then set it if
-        // there ARE columns and none of the columns has header text or child columns.
-        // For example, a simple tree with an automatically inserted TreeColumn.
-        if (me.hideHeaders != null) {
-            hideHeaders = me.hideHeaders;
-        } else {
-            // Loop until we find a column with content.
-            for (i = 0; hideHeaders && i < len; i++) {
-                column = columns[i];
-                colText = column.text;
-
-                // If any column was configured with text *that is not &nbsp;* or child columns, then
-                // we must show headers.
-                if ((colText && colText !== '\u00a0') || column.columns || (column.isGroupHeader && column.items.items.length)) {
-                    hideHeaders = false;
-                }
-            }
-        }
-
-        if (!headerCt.rendered || hideHeaders !== currentHideHeaderState) {            
-            headerCt.setHeight(hideHeaders ? 0 : null);
-            headerCt.hiddenHeaders = hideHeaders;
-            me.headerCt.toggleCls(me.hiddenHeaderCtCls, hideHeaders);
-            me.toggleCls(me.hiddenHeaderCls, hideHeaders);
-            if (!hideHeaders) {
-                headerCt.setScrollable({
-                    x: false,
-                    y: false
-                });
-                viewScroller = me.view.getScrollable();
-                if (viewScroller) {
-                    headerCt.getScrollable().addPartner(viewScroller, 'x');
-                }
-            }
-        }
-    },
-
     updateHideHeaders: function(hideHeaders) {
         // Must only update the visibility after all configuration is finished.
         // initComponent calls syncHeaderVisibility
@@ -1245,16 +1199,6 @@ Ext.define('Ext.panel.Table', {
         }
 
         this.callParent();
-    },
-
-    afterLayout: function(layout) {
-        var lockable = this.mixins.lockable;
-
-        if (lockable) {
-            lockable.syncLockableLayout.call(this, layout);
-        }
-
-        this.callParent([layout]);
     },
 
     onHide: function(animateTarget, cb, scope) {
@@ -1556,8 +1500,8 @@ Ext.define('Ext.panel.Table', {
         }
     },
 
-    createManagedWidget: function(ownerId, widgetConfig, record) {
-        return this.liveRowContexts[record.internalId].getWidget(ownerId, widgetConfig);
+    createManagedWidget: function(view, ownerId, widgetConfig, record) {
+        return this.liveRowContexts[record.internalId].getWidget(view, ownerId, widgetConfig);
     },
 
     destroyManagedWidgets: function(ownerId) {
@@ -2090,8 +2034,8 @@ Ext.define('Ext.panel.Table', {
     },
 
     /**
-     * A convenience method that fires {@link #reconfigure} with the store param.  To set the store AND change columns,
-     * use the {@link #reconfigure reconfigure method}.
+     * A convenience method that fires {@link #event-reconfigure} with the store param.  To set the store AND change columns,
+     * use the {@link #method-reconfigure reconfigure method}.
      *
      * @param {Ext.data.Store} [store] The new store.
      */
@@ -2157,7 +2101,7 @@ Ext.define('Ext.panel.Table', {
             lockable = me.lockable,
             oldColumns = headerCt ? headerCt.items.getRange() : me.columns,
             view = me.getView(),
-            block, refreshCounter, storeChanged, columnsChanged, restoreFocus;
+            scroller, block, refreshCounter, storeChanged, columnsChanged, restoreFocus;
 
         // Allow optional store argument to be fully omitted, and the columns argument to be solo
         if (arguments.length === 1 && Ext.isArray(store)) {
@@ -2183,6 +2127,10 @@ Ext.define('Ext.panel.Table', {
         me.fireEvent('beforereconfigure', me, store, columns, oldStore, oldColumns);
 
         Ext.suspendLayouts();
+
+        if (me.rendered && (scroller = me.getScrollable())) {
+            scroller.scrollTo(0,0);
+        }
 
         if (lockable) {
             me.reconfigureLockable(store, columns, allowUnbind);
@@ -2236,7 +2184,12 @@ Ext.define('Ext.panel.Table', {
 
     doDestroy: function() {
         var me = this,
-            task = me.scrollTask;
+            task = me.scrollTask,
+            view = me.view;
+
+        if (view) {
+            view.destroying = true;
+        }
 
         if (me.lockable) {
             me.destroyLockable();
@@ -2275,8 +2228,9 @@ Ext.define('Ext.panel.Table', {
             var me = this,
                 view = me.getView(),
                 domNode = view.getNode(record),
+                isLocking = me.ownerGrid.lockable,
                 callback, scope, animate,
-                highlight, select, doFocus, scrollable, column, cell;
+                highlight, select, doFocus, verticalScroller, horizontalScroller, column, cell;
 
             if (options) {
                 callback = options.callback;
@@ -2313,12 +2267,24 @@ Ext.define('Ext.panel.Table', {
             
             // We found the DOM node associated with the record
             if (domNode) {
-                scrollable = view.getScrollable();
-                if (column) {
-                    cell = Ext.fly(domNode).selectNode(column.getCellSelector());
-                }
-                if (scrollable) {
-                    scrollable.scrollIntoView(cell || domNode, !!column, animate, highlight);
+                verticalScroller = isLocking ? me.ownerGrid.getScrollable() : view.getScrollable();
+
+                if (verticalScroller) {
+                    if (column) {
+                        cell = Ext.fly(domNode).selectNode(column.getCellSelector());
+                    }
+
+                    // We're going to need two scrollers if we are locking, and we need to scroll horizontally.
+                    // The whole arrangement of side by side views scrolls up and down.
+                    // Each view itself scrolls horizontally.
+                    if (isLocking && column) {
+                        verticalScroller.scrollIntoView(domNode);
+                        view.getScrollable().scrollIntoView(cell || domNode, !!column, animate, highlight);
+                    }
+                    // No locking, it's simple - we just use the view's scroller
+                    else {
+                        verticalScroller.scrollIntoView(cell || domNode, !!column, animate, highlight);
+                    }
                 }
                 if (!record.isEntity) {
                     record = view.getRecord(domNode);
@@ -2350,6 +2316,20 @@ Ext.define('Ext.panel.Table', {
         
         getFocusEl: function() {
             return this.getView().getFocusEl();
+        },
+
+        handleWidgetViewChange: function(view, ownerId) {
+            var contexts = this.liveRowContexts,
+                freeRowContexts = this.freeRowContexts,
+                len = freeRowContexts && freeRowContexts.length,
+                i, recInternalId, rowWidgets;
+
+            for (recInternalId in contexts) {
+                contexts[recInternalId].handleWidgetViewChange(view, ownerId);
+            }
+            for (i = 0; i < len; i++) {
+                freeRowContexts[i].handleWidgetViewChange(view, ownerId);
+            }
         },
 
         /**
@@ -2385,6 +2365,61 @@ Ext.define('Ext.panel.Table', {
 
         getOverflowEl: function() {
             return null;
+        },
+
+        shouldAutoHideHeaders: function() {
+            var me = this,
+                columns = me.headerCt.items.items,
+                len = columns.length,
+                autoHideHeaders = !!len,
+                column, i;
+
+            // Loop until we find a column with content.
+            for (i = 0; autoHideHeaders && i < len; i++) {
+                column = columns[i];
+
+                // If any column was configured with visible text, we must show headers.
+                if (!column.isEmptyText(column.text, true) || column.columns || (column.isGroupHeader && column.items.items.length)) {
+                    autoHideHeaders = false;
+                }
+            }
+
+            return autoHideHeaders;
+        },
+
+        syncHeaderVisibility: function() {
+            var me = this,
+                headerCt = me.headerCt,
+                hideHeaders = me.hideHeaders,
+                viewScroller, currentHideHeaderState;
+
+            if (me.lockable) {
+                me.syncLockableHeaderVisibility();
+                return;
+            }
+
+            if (hideHeaders == null) {
+                hideHeaders = me.shouldAutoHideHeaders();
+            }
+
+            currentHideHeaderState = headerCt.height === 0;
+
+            if (!headerCt.rendered || hideHeaders !== currentHideHeaderState) {            
+                headerCt.setHeight(hideHeaders ? 0 : null);
+                headerCt.hiddenHeaders = hideHeaders;
+                headerCt.toggleCls(me.hiddenHeaderCtCls, hideHeaders);
+                me.toggleCls(me.hiddenHeaderCls, hideHeaders);
+                if (!hideHeaders) {
+                    headerCt.setScrollable({
+                        x: false,
+                        y: false
+                    });
+                    viewScroller = me.view.getScrollable();
+                    if (viewScroller) {
+                        headerCt.getScrollable().addPartner(viewScroller, 'x');
+                    }
+                }
+            }
         }
     }
 });

@@ -81,8 +81,8 @@ Ext.define('KitchenSink.view.Overlays', {
                             easing: 'ease-out'
                         },
                         centered: true,
-                        width: Ext.filterPlatform('ie10') ? '100%' : (Ext.os.deviceType == 'Phone') ? 260 : 400,
-                        maxHeight: Ext.filterPlatform('ie10') ? '30%' : (Ext.os.deviceType == 'Phone') ? 220 : 400,
+                        width: Ext.os.is.Phone ? 260 : 400,
+                        maxHeight: Ext.os.is.Phone ? 220 : 400,
                         styleHtmlContent: true,
                         html: '<p>This is a modal, centered and floated panel. hideOnMaskTap is true by default so ' +
                         'we can tap anywhere outside the overlay to hide it.</p>',

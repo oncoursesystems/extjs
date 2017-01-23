@@ -119,11 +119,6 @@ if (Ext.util && Ext.util.Format) {
         currencyAtEnd: true,
         dateFormat: 'Y-m-d',
         currencySpacer: ' '
-    }, function() {
-        var originalParse = Ext.Date.parse;
-        Ext.Date.parse = function(input, format, strict) {
-            return originalParse(input.replace('am', 'em').replace('pm', 'fm').replace('AM', 'EM').replace('PM', 'FM'), format, strict);
-        };
     });
 }// changing the msg text below will affect the LoadMask
 Ext.define("Ext.locale.sv_SE.view.AbstractView", {

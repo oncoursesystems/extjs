@@ -109,7 +109,8 @@ Ext.define('Ext.grid.Row', {
             record = me.getRecord(),
             expandField = me.getExpandedField(),
             expandedCls = me.expandedCls,
-            recordsExpanded;
+            expanderCell = me.expanderCell,
+            recordsExpanded, id;
 
         // Set state correctly before any other code executes which may read this.
         if (record) {
@@ -125,6 +126,10 @@ Ext.define('Ext.grid.Row', {
                     recordsExpanded[record.internalId] = true;
                 }
             }
+        }
+
+        if (expanderCell) {
+            expanderCell.setCollapsed(collapsed);
         }
 
         if (body) {
@@ -222,6 +227,9 @@ Ext.define('Ext.grid.Row', {
         }
 
         me.columnMap[column.getId()] = cell;
+        if (cell.isExpanderCell) {
+            me.expanderCell = cell;
+        }
     },
 
     moveColumn: function (column, fromIdx, toIdx) {

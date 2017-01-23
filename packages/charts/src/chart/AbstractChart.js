@@ -962,7 +962,8 @@ Ext.define('Ext.chart.AbstractChart', {
             result = [],
             axis, oldAxis,
             linkedTo, id,
-            i, ln, oldMap;
+            i, j, ln, oldMap,
+            series;
 
         me.animationSuspendCount++;
 
@@ -1019,9 +1020,21 @@ Ext.define('Ext.chart.AbstractChart', {
             }
         }
 
+        me.axesChangeSeries = {};
         for (i in oldMap) {
             if (!result.map[i]) {
-                oldMap[i].destroy();
+                oldAxis = oldMap[i];
+                if (oldAxis && !oldAxis.destroyed) {
+                    // At this point the series still have their `xAxis` and `yAxis` configs
+                    // set to old axes. We need to update such series with new matching axes
+                    // by calling their `onAxesChange` method.
+                    for (j = 0, ln = oldAxis.boundSeries.length; j < ln; j++) {
+                        series = oldAxis.boundSeries[j];
+                        me.axesChangeSeries[series.getId()] = series;
+
+                    }
+                    oldAxis.destroy();
+                }
             }
         }
 
@@ -1030,9 +1043,28 @@ Ext.define('Ext.chart.AbstractChart', {
         return result;
     },
 
-    updateAxes: function () {
-        if (!this.isDestroying) {
-            this.scheduleLayout();
+    updateAxes: function (axes) {
+        var me = this,
+            seriesMap = me.axesChangeSeries,
+            series, id, i, ln, axis;
+
+        for (id in seriesMap) {
+            series = seriesMap[id];
+            // `true` to force set series' axes, even if they are already set
+            // (in this case to old axes that were just destroyed in the `axes` applier).
+            series.onAxesChange(me, true);
+        }
+
+        // If changes to the `axes` config are made post chart creation, without making any
+        // changes to the series afterwards, we need to figure out the new axes' `boundSeries`
+        // manually, as the 'serieschange' event won't be fired in this case.
+        for (i = 0, ln = axes.length; i < ln; i++) {
+            axis = axes[i];
+            axis.onSeriesChange(me);
+        }
+
+        if (!me.isDestroying) {
+            me.scheduleLayout();
         }
     },
 

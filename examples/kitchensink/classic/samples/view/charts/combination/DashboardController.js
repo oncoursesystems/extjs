@@ -11,7 +11,9 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
 
     onItemHighlight: function (chart, item) {
         var gridPanel = this.lookupReference('gridPanel');
-        gridPanel.getSelectionModel().select(item.record);
+        gridPanel.ensureVisible(item.record, {
+            select: true
+        });
     },
 
     onBarChartAxisLabelRender: function (axis, label, layoutContext) {
@@ -48,7 +50,7 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
     // Loads fresh records into the radar store
     // based upon the passed company record.
     updateRadarChart: function (rec) {
-        var store = this.lookupReference('radarChart').getStore();;
+        var store = this.lookupReference('radarChart').getStore();
 
         store.loadData([
             { 'Name': 'Price',     'Data': rec.get('price') },
@@ -63,8 +65,7 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
     highlightCompanyPriceBar: function (record) {
         var barChart = this.lookupReference('barChart'),
             store = barChart.getStore(),
-            series = barChart.getSeries()[0],
-            name = record.get('name');
+            series = barChart.getSeries()[0];
 
         barChart.setHighlightItem(series.getItemByIndex(store.indexOf(record)));
     },

@@ -331,6 +331,9 @@ $panel-anchor-width: dynamic($panel-anchor-height * 2.33);
  * @param {number/list} $body-padding
  * Panel body padding
  *
+ * @param {number/list} $body-padding-big
+ * Panel body padding in the {@link Global_CSS#$enable-big big} sizing scheme
+ *
  * @param {color} $header-background-color
  * Panel Header background-color
  *

@@ -19,7 +19,6 @@ Ext.define('KitchenSink.view.calendar.Panel', {
             },
             workweek: {
                 xtype: 'calendar-week',
-                controlStoreRange: false,
                 titleTpl: '{start:date("j M")} - {end:date("j M")}',
                 label: 'Work Week',
                 weight: 15,
@@ -37,5 +36,4 @@ Ext.define('KitchenSink.view.calendar.Panel', {
             }
         }
     }]
-
-})
+});

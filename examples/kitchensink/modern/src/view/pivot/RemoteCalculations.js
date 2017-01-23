@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
         path: 'modern/src/view/pivot/PivotController.js'
     }, {
         type: 'Model',
-        path: 'modern/src/Model/Sale.js' 
+        path: 'modern/src/model/Sale.js'
     }],
     // </example>
     

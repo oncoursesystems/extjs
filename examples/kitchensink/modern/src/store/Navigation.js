@@ -28,9 +28,7 @@ Ext.define('KitchenSink.store.Navigation', {
         items.push(me.getNavItemsCharts());
         items.push(me.getNavItemsCalendar());
         items.push(me.getNavItemsGridPivot());
-        if (!Ext.isIE10m) {
-            items.push(me.getNavItemsD3());
-        }
+        items.push(me.getNavItemsD3());
 
         items = {
             text: 'All',
@@ -316,7 +314,7 @@ Ext.define('KitchenSink.store.Navigation', {
             text: 'D3',
             id: 'd3',
             expanded: true,
-            tier: 'pro',
+            tier: 'premium',
             since: '6.2.0',
 
             description: 'Ext JS seamlessly integrates with D3, so you can visualize ' +
@@ -454,9 +452,31 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'overlays', text: 'Overlays', view: 'Overlays', leaf: true },          // needs icon
                 me.getNavItemsTabs(),
                 me.getNavItemsToolbars(),
-                { id: 'tooltips', compat: Ext.platformTags.desktop, text: 'ToolTips', view: 'tip.ToolTips', leaf: true },          // needs icon
+                me.getNavItemsTips(),
                 { id: 'touch-events', text: 'Touch Events', view: 'TouchEvents', leaf: true }         // needs icon
             ]
+        };
+    },
+
+    getNavItemsTips: function () {
+        return {
+            text: 'Tooltips',
+            id: 'tooltips',
+            iconCls: 'icon-tooltips',
+            compat: Ext.platformTags.desktop || Ext.platformTags.tablet,
+            description: 'Tooltip examples',
+            
+            children: [{
+                id: 'anchored-tooltips', text: 'Anchored ToolTips', view: 'tip.AnchoredToolTips', leaf: true
+            }, {
+                id: 'mousetrack-tooltips', text: 'Mouse Tracking ToolTips', view: 'tip.MouseTrackToolTips', leaf: true, compat: Ext.platformTags.desktop
+            }, {
+                id: 'html-tooltips', text: 'Tooltips embedded in HTML', view: 'tip.HtmlToolTips', leaf: true
+            }, {
+                id: 'tip-aligning', text: 'Tooltip align options', view: 'tip.TipAligning', leaf: true
+            }, {
+                id: 'closable-tooltips', text: 'Closable ToolTips', view: 'tip.ClosableToolTips', leaf: true
+            }]
         };
     },
 
@@ -862,6 +882,7 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'outline-pivot-grid', text: 'Outline layout', view: 'pivot.LayoutOutline', leaf: true },
                 { id: 'compact-pivot-grid', text: 'Compact layout', view: 'pivot.LayoutCompact', leaf: true },
                 //{ id: 'locked-pivot-grid', text: 'Locked', leaf: true },
+                { id: 'datachanges-pivot-grid', text: 'Data changes', view: 'pivot.DataChanges', leaf: true },
                 { id: 'drilldown-pivot-grid', text: 'DrillDown plugin', view: 'pivot.DrillDown', leaf: true },
                 { id: 'configurable-pivot-grid', text: 'Configurator plugin', view: 'pivot.Configurator', leaf: true },
                 //{ id: 'cellediting-pivot-grid', text: 'CellEditing plugin', leaf: true },

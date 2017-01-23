@@ -408,7 +408,7 @@ Ext.define('Ext.grid.locking.View', {
                 return false;
             }
         } else {
-            this.relayFn('setActionableMode', [false]);
+            this.relayFn('setActionableMode', [false, position]);
         }
     },
 
@@ -635,8 +635,7 @@ Ext.define('Ext.grid.locking.View', {
         // Unbind from the dataSource we bound to in constructor
         me.bindStore(null, false, 'dataSource');
         
-        Ext.destroy(me.selModel, me.navigationModel, me.loadMask,
-                    me.lockedViewEventRelayers, me.normalViewEventRelayers);
+        Ext.destroy(me.selModel, me.navigationModel, me.loadMask);
         
         me.lockedView.lockingPartner = me.normalView.lockingPartner = null;
         

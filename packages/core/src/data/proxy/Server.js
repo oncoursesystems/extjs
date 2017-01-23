@@ -510,10 +510,10 @@ Ext.define('Ext.data.proxy.Server', {
     },
 
     /**
-     * In ServerProxy subclasses, the {@link #create}, {@link #read}, {@link #update} and {@link #erase} methods all
-     * pass through to doRequest. Each ServerProxy subclass must implement the doRequest method - see {@link
-     * Ext.data.proxy.JsonP} and {@link Ext.data.proxy.Ajax} for examples. This method carries the same signature as
-     * each of the methods that delegate to it.
+     * In ServerProxy subclasses, the {@link #method-create}, {@link #method-read}, {@link #method-update} and
+     * {@link #method-erase} methods all pass through to doRequest. Each ServerProxy subclass must implement the
+     * doRequest method - see {@link Ext.data.proxy.JsonP} and {@link Ext.data.proxy.Ajax} for examples. This method
+     * carries the same signature as each of the methods that delegate to it.
      *
      * @param {Ext.data.operation.Operation} operation The Ext.data.operation.Operation object
      * @param {Function} callback The callback function to call when the Operation has completed

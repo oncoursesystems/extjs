@@ -3,7 +3,6 @@
  */
 Ext.define('KitchenSink.view.pivot.ExporterController', {
     extend: 'KitchenSink.view.pivot.PivotController',
-
     alias: 'controller.pivotexport',
 
     requires: [
@@ -18,85 +17,85 @@ Ext.define('KitchenSink.view.pivot.ExporterController', {
 
     exportAllToXml: function(){
         this.doExport({
-            type:       'excel03',
-            title:      'Pivot grid export demo',
-            fileName:   'ExportAll.xml'
+            type: 'excel03',
+            title: 'Pivot grid export demo',
+            fileName: 'ExportAll.xml'
         });
     },
 
     exportVisibleToXml: function(){
         this.doExport({
-            type:               'excel03',
-            title:              'Pivot grid export demo',
-            fileName:           'ExportVisible.xml',
-            onlyExpandedNodes:  true
+            type: 'excel03',
+            title: 'Pivot grid export demo',
+            fileName: 'ExportVisible.xml',
+            onlyExpandedNodes: true
         });
     },
 
     exportAllToCSV: function(){
         this.doExport({
-            type:       'csv',
-            title:      'Pivot grid export demo',
-            fileName:   'ExportAll.csv'
+            type: 'csv',
+            title: 'Pivot grid export demo',
+            fileName: 'ExportAll.csv'
         });
     },
 
     exportVisibleToCSV: function(){
         this.doExport({
-            type:               'csv',
-            title:              'Pivot grid export demo',
-            fileName:           'ExportVisible.csv',
-            onlyExpandedNodes:  true
+            type: 'csv',
+            title: 'Pivot grid export demo',
+            fileName: 'ExportVisible.csv',
+            onlyExpandedNodes: true
         });
     },
 
     exportAllToTSV: function(){
         this.doExport({
-            type:       'tsv',
-            title:      'Pivot grid export demo',
-            fileName:   'ExportAll.csv'
+            type: 'tsv',
+            title: 'Pivot grid export demo',
+            fileName: 'ExportAll.csv'
         });
     },
 
     exportVisibleToTSV: function(){
         this.doExport({
-            type:               'tsv',
-            title:              'Pivot grid export demo',
-            fileName:           'ExportVisible.csv',
-            onlyExpandedNodes:  true
+            type: 'tsv',
+            title: 'Pivot grid export demo',
+            fileName: 'ExportVisible.csv',
+            onlyExpandedNodes: true
         });
     },
 
     exportAllToHtml: function(){
         this.doExport({
-            type:       'html',
-            title:      'Pivot grid export demo',
-            fileName:   'ExportAll.html'
+            type: 'html',
+            title: 'Pivot grid export demo',
+            fileName: 'ExportAll.html'
         });
     },
 
     exportVisibleToHtml: function(){
         this.doExport({
-            type:               'html',
-            title:              'Pivot grid export demo',
-            fileName:           'ExportVisible.html',
-            onlyExpandedNodes:  true
+            type: 'html',
+            title: 'Pivot grid export demo',
+            fileName: 'ExportVisible.html',
+            onlyExpandedNodes: true
         });
     },
 
     exportAllToXlsx: function(){
         this.doExport({
-            type:       'excel07',
-            title:      'Pivot grid export demo',
-            fileName:   'ExportAll.xlsx'
+            type: 'excel07',
+            title: 'Pivot grid export demo',
+            fileName: 'ExportAll.xlsx'
         });
     },
 
     exportVisibleToXlsx: function(){
         this.doExport({
-            type:               'excel07',
-            title:              'Pivot grid export demo',
-            fileName:           'ExportVisible.xlsx',
+            type: 'excel07',
+            title: 'Pivot grid export demo',
+            fileName: 'ExportVisible.xlsx',
             onlyExpandedNodes:  true
         });
     },
@@ -116,5 +115,4 @@ Ext.define('KitchenSink.view.pivot.ExporterController', {
     onDocumentSave: function(view){
         view.unmask();
     }
-
 });

@@ -165,7 +165,6 @@ Ext.define('Ext.selection.CheckboxModel', {
 
     beforeViewRender: function(view) {
         var me = this,
-            owner,
             ownerLockable = view.grid.ownerLockable;
 
         me.callParent(arguments);
@@ -189,12 +188,6 @@ Ext.define('Ext.selection.CheckboxModel', {
             // If the view is the normal one and we have not already added the column, add it.
             if (!ownerLockable || (view.isLockedView && me.hasLockedHeader()) || (view.isNormalView && !me.column)) {
                 me.addCheckbox(view);
-                owner = view.ownerCt;
-                // Listen to the outermost reconfigure event
-                if (view.headerCt.lockedCt) {
-                    owner = owner.ownerCt;
-                }
-
                 // Listen for reconfigure of outermost grid panel.
                 me.mon(view.ownerGrid, {
                     beforereconfigure: me.onBeforeReconfigure,
@@ -330,7 +323,6 @@ Ext.define('Ext.selection.CheckboxModel', {
     onHeaderClick: function(headerCt, header, e) {
         var me = this,
             store = me.store,
-            column = me.column,
             isChecked, records, i, len,
             selections, selection;
 
@@ -383,7 +375,9 @@ Ext.define('Ext.selection.CheckboxModel', {
             menuDisabled: true,
             checkOnly: me.checkOnly,
             checkboxAriaRole: 'presentation',
-            tdCls: me.tdCls,
+            // Firefox needs pointer-events: none on the checkbox span with checkOnly: true
+            // to work around focusing issues
+            tdCls: (me.checkOnly ? Ext.baseCSSPrefix + 'selmodel-checkonly ' : '') + me.tdCls,
             cls: Ext.baseCSSPrefix + 'selmodel-column',
             editRenderer: me.editRenderer || me.renderEmpty,            
             locked: me.hasLockedHeader(),
@@ -426,6 +420,10 @@ Ext.define('Ext.selection.CheckboxModel', {
      */
     processColumnEvent: function(type, view, cell, recordIndex, cellIndex, e, record, row) {
         var navModel = view.getNavigationModel();
+
+        if (navModel.position.isEqual(e.position)) {
+            return;
+        }
 
         // Fire a navigate event upon SPACE in actionable mode.
         // SPACE events are ignored by the NavModel in actionable mode.
@@ -477,9 +475,8 @@ Ext.define('Ext.selection.CheckboxModel', {
      * @private
      */
     onSelectChange: function(record, isSelected) {
-        var me = this,
-            label;
-        
+        var me = this;
+
         me.callParent(arguments);
         
         if (me.column) {

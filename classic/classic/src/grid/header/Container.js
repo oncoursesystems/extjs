@@ -424,7 +424,7 @@ Ext.define('Ext.grid.header.Container', {
                     }
                     else if (e.type === 'contextmenu') {
                         me.onHeaderContextMenu(header, e, t);
-                    } else if (e.type === 'dblclick' && header.resizable) {
+                    } else if (e.type === 'dblclick') {
                         header.onTitleElDblClick(e, targetEl.dom);
                     }
                 }
@@ -433,12 +433,16 @@ Ext.define('Ext.grid.header.Container', {
     },
 
     blockNextEvent: function() {
-        this.blockEvents = true;
-        Ext.asap(this.unblockEvents, this);
+        var me = this;
+
+        me.blockEvents = true;
+        if (!me.unblockTimer) {
+            me.unblockTimer = Ext.asap(me.unblockEvents, me);
+        }
     },
 
     unblockEvents: function() {
-        this.blockEvents = false;
+        this.blockEvents = this.unblockTimer = false;
     },
 
     onHeaderCtMouseDown: function(e, target) {
@@ -553,12 +557,23 @@ Ext.define('Ext.grid.header.Container', {
         if (me.menu) {
             me.menu.un('hide', me.onMenuHide, me);
         }
-        
+
+        Ext.asapCancel(me.unblockTimer);
         me.menuTask.cancel();
         
         Ext.destroy(me.visibleColumnManager, me.columnManager, me.menu);
         
         me.callParent();
+    },
+
+    removeAll: function(autoDestroy) {
+        var me = this;
+
+        // fire a single columnschanged event after all removes have been made
+        me.suspendEvent('columnschanged');
+        me.callParent([autoDestroy]);
+        me.resumeEvent('columnschanged');
+        me.fireEvent('columnschanged', me);
     },
 
     applyColumnsState: function(columnsState, storeState) {
@@ -1056,7 +1071,7 @@ Ext.define('Ext.grid.header.Container', {
      * Shows the column menu under the target element passed. This method is used when the trigger element on the column
      * header is clicked on and rarely should be used otherwise.
      *
-     * @param {Ext.event.Event} [event] The event which triggered the current handler. If omitted
+     * @param {Ext.event.Event} [clickEvent] The event which triggered the current handler. If omitted
      * or a key event, the menu autofocuses its first item.
      * @param {HTMLElement/Ext.dom.Element} t The target to show the menu by
      * @param {Ext.grid.header.Container} header The header container that the trigger was clicked on.

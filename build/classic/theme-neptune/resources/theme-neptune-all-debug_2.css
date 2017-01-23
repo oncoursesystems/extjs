@@ -1,3 +1,128 @@
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tree/ViewDropZone.scss:21 */
+.x-tree-drop-ok-between .x-dd-drop-icon {
+    background-image: url(images/tree/drop-between.png);
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/tree/ViewDropZone.scss:26 */
+.x-tree-ddindicator {
+    height: 1px;
+    border-width: 1px 0px 0px;
+    border-style: dotted;
+    border-color: green;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/view/MultiSelector.scss:1 */
+.x-multiselector-remove {
+    font-size: 110%;
+    color: #e1e1e1;
+    cursor: pointer;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/view/MultiSelector.scss:6 */
+.x-multiselector-remove .x-grid-cell-inner {
+    padding: 5px 4px 4px 4px;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/view/MultiSelector.scss:11 */
+.x-grid-item-over .x-multiselector-remove {
+    color: red;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/window/Toast.scss:1 */
+.x-toast-icon-information {
+    background-image: url(images/window/toast/icon16_info.png);
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/window/Toast.scss:5 */
+.x-toast-icon-error {
+    background-image: url(images/window/toast/icon16_error.png);
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/window/Toast.scss:11 */
+.x-toast-window .x-window-body {
+    /* Using standard theme */
+    padding: 15px 5px 15px 5px;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/window/Toast.scss:17 */
+.x-toast-light .x-window-header {
+    /* Custom styling */
+    background-color: #3892d4;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/window/Toast.scss:21 */
+.x-toast-light .x-tool-img {
+    background-color: #3892d4;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/window/Toast.scss:25 */
+.x-toast-light {
+    background-image: url(images/window/toast/fader.png);
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/window/Toast.scss:29 */
+.x-toast-light .x-window-body {
+    padding: 15px 5px 20px 5px;
+    background-color: transparent;
+    border: 0px solid white;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:187 */
+.x-btn-plain-toolbar-small {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    padding: 3px 3px 3px 3px;
+    border-width: 1px;
+    border-style: solid;
+    background-image: none;
+    background-color: transparent;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:237 */
+.x-btn-plain-toolbar-small-mc {
+    background-image: url(images/btn/btn-plain-toolbar-small-fbg.gif);
+    background-position: 0 top;
+    background-color: transparent;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:264 */
+.x-nbr .x-btn-plain-toolbar-small {
+    padding: 0 !important;
+    border-width: 0 !important;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    background-color: transparent !important;
+    background-image: none;
+    box-shadow: none !important;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:281 */
+.x-btn-plain-toolbar-small-frameInfo {
+    font-family: th-3-3-3-3-1-1-1-1-3-3-3-3;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:347 */
+.x-btn-plain-toolbar-small-tl {
+    background-position: 0 -6px;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:351 */
+.x-btn-plain-toolbar-small-tr {
+    background-position: right -9px;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:355 */
+.x-btn-plain-toolbar-small-bl {
+    background-position: 0 -12px;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:359 */
+.x-btn-plain-toolbar-small-br {
+    background-position: right -15px;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:363 */
+.x-btn-plain-toolbar-small-ml {
+    background-position: 0 top;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:371 */
+.x-btn-plain-toolbar-small-mr {
+    background-position: right top;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:379 */
+.x-btn-plain-toolbar-small-tc {
+    background-position: 0 0;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:383 */
+.x-btn-plain-toolbar-small-bc {
+    background-position: 0 -3px;
+}
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-base/sass/etc/mixins/frame.scss:388 */
 .x-btn-plain-toolbar-small-tr,
 .x-btn-plain-toolbar-small-br,
@@ -48,100 +173,105 @@
     padding: 0 5px;
     max-width: 100%;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:479 */
-.x-btn-icon-right > .x-btn-inner-plain-toolbar-small,
-.x-btn-icon-left > .x-btn-inner-plain-toolbar-small {
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:484 */
+.x-ie9 .x-btn-icon-right > .x-btn-inner-plain-toolbar-small,
+.x-ie9 .x-btn-icon-left > .x-btn-inner-plain-toolbar-small {
     max-width: calc(100% - 16px);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:487 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:492 */
+.x-safari8m .x-btn-icon-right > .x-btn-inner-plain-toolbar-small,
+.x-safari8m .x-btn-icon-left > .x-btn-inner-plain-toolbar-small {
+    max-width: calc(100% - 15px);
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:498 */
 .x-ie10p .x-btn-inner-plain-toolbar-small {
     max-width: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:492 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:503 */
 .x-btn-icon-el-plain-toolbar-small {
     font-size: 16px;
     height: 16px;
     color: #666;
     line-height: 16px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:498 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:509 */
 .x-btn-icon-left > .x-btn-icon-el-plain-toolbar-small,
 .x-btn-icon-right > .x-btn-icon-el-plain-toolbar-small {
     width: 16px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:503 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:514 */
 .x-btn-icon-top > .x-btn-icon-el-plain-toolbar-small,
 .x-btn-icon-bottom > .x-btn-icon-el-plain-toolbar-small {
     min-width: 16px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:508 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:519 */
 .x-btn-icon-el-plain-toolbar-small.x-btn-glyph {
     opacity: 0.5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:525 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:536 */
 .x-ie8 .x-btn-icon-el-plain-toolbar-small.x-btn-glyph {
     color: #b3b3b3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:532 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:543 */
 .x-btn-text.x-btn-icon-left > .x-btn-icon-el-plain-toolbar-small {
     margin-right: 0px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:543 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:554 */
 .x-btn-text.x-btn-icon-right > .x-btn-icon-el-plain-toolbar-small {
     margin-left: 0px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:554 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:565 */
 .x-btn-text.x-btn-icon-top > .x-btn-icon-el-plain-toolbar-small {
     margin-bottom: 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:558 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:569 */
 .x-btn-text.x-btn-icon-bottom > .x-btn-icon-el-plain-toolbar-small {
     margin-top: 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:564 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:575 */
 .x-btn-arrow-right > .x-btn-icon.x-btn-no-text.x-btn-button-plain-toolbar-small {
     padding-right: 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:567 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:578 */
 .x-btn-arrow-right > .x-btn-text.x-btn-icon-right > .x-btn-icon-el-plain-toolbar-small {
     margin-right: 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:574 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:585 */
 .x-btn-arrow-bottom > .x-btn-button-plain-toolbar-small,
 .x-btn-split-bottom > .x-btn-button-plain-toolbar-small {
     padding-bottom: 3px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:580 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:591 */
 .x-btn-wrap-plain-toolbar-small.x-btn-arrow-right:after {
     width: 16px;
     background-image: url(images/button/plain-toolbar-small-arrow.png);
     padding-right: 16px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:607 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:618 */
 .x-btn-wrap-plain-toolbar-small.x-btn-arrow-bottom:after {
     height: 13px;
     background-image: url(images/button/plain-toolbar-small-arrow.png);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:647 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:658 */
 .x-btn-wrap-plain-toolbar-small.x-btn-split-right:after {
     width: 20px;
     background-image: url(images/button/plain-toolbar-small-s-arrow.png);
     padding-right: 20px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:686 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:697 */
 .x-btn-wrap-plain-toolbar-small.x-btn-split-bottom:after {
     height: 15px;
     background-image: url(images/button/plain-toolbar-small-s-arrow-b.png);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:719 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:730 */
 .x-btn-split-right > .x-btn-icon.x-btn-no-text.x-btn-button-plain-toolbar-small {
     padding-right: 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:722 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:733 */
 .x-btn-split-right > .x-btn-text.x-btn-icon-right > .x-btn-icon-el-plain-toolbar-small {
     margin-right: 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:727 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:738 */
 .x-btn-focus.x-btn-plain-toolbar-small {
     background-image: none;
     background-color: transparent;
@@ -149,7 +279,7 @@
     -moz-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:762 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:773 */
 .x-btn-plain-toolbar-small .x-btn-arrow-el {
     position: absolute;
     top: 0;
@@ -158,11 +288,11 @@
     width: 23px;
     pointer-events: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:778 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:789 */
 .x-btn-plain-toolbar-small.x-arrow-focus .x-btn-arrow-el {
     border: 1px solid #4297d4;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:785 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:796 */
 .x-btn-over.x-btn-plain-toolbar-small {
     border-color: #d8d8d8;
     background-image: none;
@@ -174,13 +304,13 @@
     background-image: -ms-linear-gradient(top, #eee, #ececec 50%, #e0e0e0 51%, #ececec);
     background-image: linear-gradient(top, #eee, #ececec 50%, #e0e0e0 51%, #ececec);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:812 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:823 */
 .x-btn-focus.x-btn-over.x-btn-plain-toolbar-small {
     -webkit-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     -moz-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:840 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:851 */
 .x-btn.x-btn-menu-active.x-btn-plain-toolbar-small,
 .x-btn.x-btn-pressed.x-btn-plain-toolbar-small {
     border-color: #cfcfcf;
@@ -193,19 +323,19 @@
     background-image: -ms-linear-gradient(top, #e2e2e2, #d6d6d6 50%, #e2e2e2 51%, #e5e5e5);
     background-image: linear-gradient(top, #e2e2e2, #d6d6d6 50%, #e2e2e2 51%, #e5e5e5);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:868 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:879 */
 .x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-small,
 .x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-small {
     -webkit-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     -moz-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:897 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:908 */
 .x-btn.x-btn-disabled.x-btn-plain-toolbar-small {
     background-image: none;
     background-color: transparent;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:929 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:940 */
 .x-btn-focus .x-btn-plain-toolbar-small-tl,
 .x-btn-focus .x-btn-plain-toolbar-small-bl,
 .x-btn-focus .x-btn-plain-toolbar-small-tr,
@@ -214,17 +344,17 @@
 .x-btn-focus .x-btn-plain-toolbar-small-bc {
     background-image: url(images/btn/btn-plain-toolbar-small-focus-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:937 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:948 */
 .x-btn-focus .x-btn-plain-toolbar-small-ml,
 .x-btn-focus .x-btn-plain-toolbar-small-mr {
     background-image: url(images/btn/btn-plain-toolbar-small-focus-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:941 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:952 */
 .x-btn-focus .x-btn-plain-toolbar-small-mc {
     background-color: transparent;
     background-image: url(images/btn/btn-plain-toolbar-small-focus-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:953 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:964 */
 .x-btn-over .x-btn-plain-toolbar-small-tl,
 .x-btn-over .x-btn-plain-toolbar-small-bl,
 .x-btn-over .x-btn-plain-toolbar-small-tr,
@@ -233,17 +363,17 @@
 .x-btn-over .x-btn-plain-toolbar-small-bc {
     background-image: url(images/btn/btn-plain-toolbar-small-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:961 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:972 */
 .x-btn-over .x-btn-plain-toolbar-small-ml,
 .x-btn-over .x-btn-plain-toolbar-small-mr {
     background-image: url(images/btn/btn-plain-toolbar-small-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:965 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:976 */
 .x-btn-over .x-btn-plain-toolbar-small-mc {
     background-color: #ececec;
     background-image: url(images/btn/btn-plain-toolbar-small-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:977 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:988 */
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-small-tl,
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-small-bl,
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-small-tr,
@@ -252,17 +382,17 @@
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-small-bc {
     background-image: url(images/btn/btn-plain-toolbar-small-focus-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:985 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:996 */
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-small-ml,
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-small-mr {
     background-image: url(images/btn/btn-plain-toolbar-small-focus-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:989 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1000 */
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-small-mc {
     background-color: #ececec;
     background-image: url(images/btn/btn-plain-toolbar-small-focus-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1003 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1014 */
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-small-tl,
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-small-bl,
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-small-tr,
@@ -277,20 +407,20 @@
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-small-bc {
     background-image: url(images/btn/btn-plain-toolbar-small-pressed-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1011 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1022 */
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-small-ml,
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-small-mr,
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-small-ml,
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-small-mr {
     background-image: url(images/btn/btn-plain-toolbar-small-pressed-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1015 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1026 */
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-small-mc,
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-small-mc {
     background-color: #e2e2e2;
     background-image: url(images/btn/btn-plain-toolbar-small-pressed-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1028 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1039 */
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-small-tl,
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-small-bl,
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-small-tr,
@@ -305,20 +435,20 @@
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-small-bc {
     background-image: url(images/btn/btn-plain-toolbar-small-focus-pressed-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1036 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1047 */
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-small-ml,
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-small-mr,
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-small-ml,
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-small-mr {
     background-image: url(images/btn/btn-plain-toolbar-small-focus-pressed-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1040 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1051 */
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-small-mc,
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-small-mc {
     background-color: #e2e2e2;
     background-image: url(images/btn/btn-plain-toolbar-small-focus-pressed-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1053 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1064 */
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-small-tl,
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-small-bl,
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-small-tr,
@@ -327,115 +457,115 @@
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-small-bc {
     background-image: url(images/btn/btn-plain-toolbar-small-disabled-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1061 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1072 */
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-small-ml,
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-small-mr {
     background-image: url(images/btn/btn-plain-toolbar-small-disabled-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1065 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1076 */
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-small-mc {
     background-color: transparent;
     background-image: url(images/btn/btn-plain-toolbar-small-disabled-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1075 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1086 */
 .x-nbr .x-btn-plain-toolbar-small {
     background-image: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1081 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1092 */
 .x-btn-disabled.x-btn-plain-toolbar-small {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     opacity: 0.5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1100 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1111 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-small.x-segmented-button-first {
     border-right-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1102 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1113 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-small.x-segmented-button-first .x-btn-plain-toolbar-small-mc {
     padding-right: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1106 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1117 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-small.x-segmented-button-middle {
     border-right-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1108 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1119 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-small.x-segmented-button-middle .x-btn-plain-toolbar-small-mc {
     padding-right: 3px !important;
     padding-left: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1114 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1125 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-small.x-segmented-button-last .x-btn-plain-toolbar-small-mc {
     padding-left: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1121 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1132 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-small.x-segmented-button-first {
     border-bottom-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1123 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1134 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-small.x-segmented-button-first .x-btn-plain-toolbar-small-mc {
     padding-bottom: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1127 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1138 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-small.x-segmented-button-middle {
     border-bottom-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1129 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1140 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-small.x-segmented-button-middle .x-btn-plain-toolbar-small-mc {
     padding-top: 3px !important;
     padding-bottom: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1135 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1146 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-small.x-segmented-button-last .x-btn-plain-toolbar-small-mc {
     padding-top: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1141 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1152 */
 .x-nbr .x-segmented-button-item.x-btn-plain-toolbar-small:after {
     content: ' ';
     border-style: solid;
     border-width: 0;
     position: absolute;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1159 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1170 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-small:after {
     top: 1px;
     right: 0;
     bottom: 1px;
     left: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1165 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1176 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-small.x-segmented-button-first:after {
     left: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1168 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1179 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-small.x-segmented-button-last:after {
     right: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1174 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1185 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-small:after {
     top: 0;
     right: 1px;
     bottom: 0;
     left: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1180 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1191 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-small.x-segmented-button-first:after {
     top: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1183 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1194 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-small.x-segmented-button-last:after {
     bottom: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1190 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1201 */
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-plain-toolbar-small:after {
     border-width: 1px;
     border-color: #4297d4;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1204 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1215 */
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-plain-toolbar-small:after {
     border-width: 1px;
     border-color: #4297d4;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1219 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1230 */
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-small:after,
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-small:after {
     border-width: 1px;
@@ -477,12 +607,12 @@
     display: none;
     content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-small-disabled-corners.gif), sides:url(images/btn/btn-plain-toolbar-small-disabled-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-small-disabled-fbg.gif)" !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1246 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1257 */
 .x-button-plain-toolbar-small-cell > .x-grid-cell-inner {
     padding-top: 0px;
     padding-bottom: 0px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1251 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1262 */
 .x-button-plain-toolbar-small-cell > .x-grid-cell-inner >.x-btn-plain-toolbar-small {
     vertical-align: top;
 }
@@ -604,100 +734,105 @@
     padding: 0 8px;
     max-width: 100%;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:479 */
-.x-btn-icon-right > .x-btn-inner-plain-toolbar-medium,
-.x-btn-icon-left > .x-btn-inner-plain-toolbar-medium {
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:484 */
+.x-ie9 .x-btn-icon-right > .x-btn-inner-plain-toolbar-medium,
+.x-ie9 .x-btn-icon-left > .x-btn-inner-plain-toolbar-medium {
     max-width: calc(100% - 24px);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:487 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:492 */
+.x-safari8m .x-btn-icon-right > .x-btn-inner-plain-toolbar-medium,
+.x-safari8m .x-btn-icon-left > .x-btn-inner-plain-toolbar-medium {
+    max-width: calc(100% - 23px);
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:498 */
 .x-ie10p .x-btn-inner-plain-toolbar-medium {
     max-width: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:492 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:503 */
 .x-btn-icon-el-plain-toolbar-medium {
     font-size: 24px;
     height: 24px;
     color: #666;
     line-height: 24px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:498 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:509 */
 .x-btn-icon-left > .x-btn-icon-el-plain-toolbar-medium,
 .x-btn-icon-right > .x-btn-icon-el-plain-toolbar-medium {
     width: 24px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:503 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:514 */
 .x-btn-icon-top > .x-btn-icon-el-plain-toolbar-medium,
 .x-btn-icon-bottom > .x-btn-icon-el-plain-toolbar-medium {
     min-width: 24px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:508 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:519 */
 .x-btn-icon-el-plain-toolbar-medium.x-btn-glyph {
     opacity: 0.5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:525 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:536 */
 .x-ie8 .x-btn-icon-el-plain-toolbar-medium.x-btn-glyph {
     color: #b3b3b3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:532 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:543 */
 .x-btn-text.x-btn-icon-left > .x-btn-icon-el-plain-toolbar-medium {
     margin-right: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:543 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:554 */
 .x-btn-text.x-btn-icon-right > .x-btn-icon-el-plain-toolbar-medium {
     margin-left: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:554 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:565 */
 .x-btn-text.x-btn-icon-top > .x-btn-icon-el-plain-toolbar-medium {
     margin-bottom: 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:558 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:569 */
 .x-btn-text.x-btn-icon-bottom > .x-btn-icon-el-plain-toolbar-medium {
     margin-top: 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:564 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:575 */
 .x-btn-arrow-right > .x-btn-icon.x-btn-no-text.x-btn-button-plain-toolbar-medium {
     padding-right: 8px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:567 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:578 */
 .x-btn-arrow-right > .x-btn-text.x-btn-icon-right > .x-btn-icon-el-plain-toolbar-medium {
     margin-right: 8px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:574 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:585 */
 .x-btn-arrow-bottom > .x-btn-button-plain-toolbar-medium,
 .x-btn-split-bottom > .x-btn-button-plain-toolbar-medium {
     padding-bottom: 3px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:580 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:591 */
 .x-btn-wrap-plain-toolbar-medium.x-btn-arrow-right:after {
     width: 24px;
     background-image: url(images/button/plain-toolbar-medium-arrow.png);
     padding-right: 24px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:607 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:618 */
 .x-btn-wrap-plain-toolbar-medium.x-btn-arrow-bottom:after {
     height: 18px;
     background-image: url(images/button/plain-toolbar-medium-arrow.png);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:647 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:658 */
 .x-btn-wrap-plain-toolbar-medium.x-btn-split-right:after {
     width: 28px;
     background-image: url(images/button/plain-toolbar-medium-s-arrow.png);
     padding-right: 28px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:686 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:697 */
 .x-btn-wrap-plain-toolbar-medium.x-btn-split-bottom:after {
     height: 24px;
     background-image: url(images/button/plain-toolbar-medium-s-arrow-b.png);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:719 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:730 */
 .x-btn-split-right > .x-btn-icon.x-btn-no-text.x-btn-button-plain-toolbar-medium {
     padding-right: 8px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:722 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:733 */
 .x-btn-split-right > .x-btn-text.x-btn-icon-right > .x-btn-icon-el-plain-toolbar-medium {
     margin-right: 8px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:727 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:738 */
 .x-btn-focus.x-btn-plain-toolbar-medium {
     background-image: none;
     background-color: transparent;
@@ -705,7 +840,7 @@
     -moz-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:762 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:773 */
 .x-btn-plain-toolbar-medium .x-btn-arrow-el {
     position: absolute;
     top: 0;
@@ -714,11 +849,11 @@
     width: 31px;
     pointer-events: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:778 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:789 */
 .x-btn-plain-toolbar-medium.x-arrow-focus .x-btn-arrow-el {
     border: 1px solid #4297d4;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:785 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:796 */
 .x-btn-over.x-btn-plain-toolbar-medium {
     border-color: #d8d8d8;
     background-image: none;
@@ -730,13 +865,13 @@
     background-image: -ms-linear-gradient(top, #eee, #ececec 50%, #e0e0e0 51%, #ececec);
     background-image: linear-gradient(top, #eee, #ececec 50%, #e0e0e0 51%, #ececec);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:812 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:823 */
 .x-btn-focus.x-btn-over.x-btn-plain-toolbar-medium {
     -webkit-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     -moz-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:840 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:851 */
 .x-btn.x-btn-menu-active.x-btn-plain-toolbar-medium,
 .x-btn.x-btn-pressed.x-btn-plain-toolbar-medium {
     border-color: #cfcfcf;
@@ -749,19 +884,19 @@
     background-image: -ms-linear-gradient(top, #e2e2e2, #d6d6d6 50%, #e2e2e2 51%, #e5e5e5);
     background-image: linear-gradient(top, #e2e2e2, #d6d6d6 50%, #e2e2e2 51%, #e5e5e5);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:868 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:879 */
 .x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-medium,
 .x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-medium {
     -webkit-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     -moz-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:897 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:908 */
 .x-btn.x-btn-disabled.x-btn-plain-toolbar-medium {
     background-image: none;
     background-color: transparent;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:929 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:940 */
 .x-btn-focus .x-btn-plain-toolbar-medium-tl,
 .x-btn-focus .x-btn-plain-toolbar-medium-bl,
 .x-btn-focus .x-btn-plain-toolbar-medium-tr,
@@ -770,17 +905,17 @@
 .x-btn-focus .x-btn-plain-toolbar-medium-bc {
     background-image: url(images/btn/btn-plain-toolbar-medium-focus-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:937 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:948 */
 .x-btn-focus .x-btn-plain-toolbar-medium-ml,
 .x-btn-focus .x-btn-plain-toolbar-medium-mr {
     background-image: url(images/btn/btn-plain-toolbar-medium-focus-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:941 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:952 */
 .x-btn-focus .x-btn-plain-toolbar-medium-mc {
     background-color: transparent;
     background-image: url(images/btn/btn-plain-toolbar-medium-focus-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:953 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:964 */
 .x-btn-over .x-btn-plain-toolbar-medium-tl,
 .x-btn-over .x-btn-plain-toolbar-medium-bl,
 .x-btn-over .x-btn-plain-toolbar-medium-tr,
@@ -789,17 +924,17 @@
 .x-btn-over .x-btn-plain-toolbar-medium-bc {
     background-image: url(images/btn/btn-plain-toolbar-medium-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:961 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:972 */
 .x-btn-over .x-btn-plain-toolbar-medium-ml,
 .x-btn-over .x-btn-plain-toolbar-medium-mr {
     background-image: url(images/btn/btn-plain-toolbar-medium-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:965 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:976 */
 .x-btn-over .x-btn-plain-toolbar-medium-mc {
     background-color: #ececec;
     background-image: url(images/btn/btn-plain-toolbar-medium-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:977 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:988 */
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-medium-tl,
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-medium-bl,
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-medium-tr,
@@ -808,17 +943,17 @@
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-medium-bc {
     background-image: url(images/btn/btn-plain-toolbar-medium-focus-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:985 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:996 */
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-medium-ml,
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-medium-mr {
     background-image: url(images/btn/btn-plain-toolbar-medium-focus-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:989 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1000 */
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-medium-mc {
     background-color: #ececec;
     background-image: url(images/btn/btn-plain-toolbar-medium-focus-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1003 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1014 */
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-medium-tl,
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-medium-bl,
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-medium-tr,
@@ -833,20 +968,20 @@
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-medium-bc {
     background-image: url(images/btn/btn-plain-toolbar-medium-pressed-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1011 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1022 */
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-medium-ml,
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-medium-mr,
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-medium-ml,
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-medium-mr {
     background-image: url(images/btn/btn-plain-toolbar-medium-pressed-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1015 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1026 */
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-medium-mc,
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-medium-mc {
     background-color: #e2e2e2;
     background-image: url(images/btn/btn-plain-toolbar-medium-pressed-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1028 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1039 */
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-medium-tl,
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-medium-bl,
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-medium-tr,
@@ -861,20 +996,20 @@
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-medium-bc {
     background-image: url(images/btn/btn-plain-toolbar-medium-focus-pressed-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1036 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1047 */
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-medium-ml,
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-medium-mr,
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-medium-ml,
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-medium-mr {
     background-image: url(images/btn/btn-plain-toolbar-medium-focus-pressed-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1040 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1051 */
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-medium-mc,
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-medium-mc {
     background-color: #e2e2e2;
     background-image: url(images/btn/btn-plain-toolbar-medium-focus-pressed-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1053 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1064 */
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-medium-tl,
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-medium-bl,
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-medium-tr,
@@ -883,115 +1018,115 @@
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-medium-bc {
     background-image: url(images/btn/btn-plain-toolbar-medium-disabled-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1061 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1072 */
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-medium-ml,
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-medium-mr {
     background-image: url(images/btn/btn-plain-toolbar-medium-disabled-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1065 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1076 */
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-medium-mc {
     background-color: transparent;
     background-image: url(images/btn/btn-plain-toolbar-medium-disabled-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1075 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1086 */
 .x-nbr .x-btn-plain-toolbar-medium {
     background-image: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1081 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1092 */
 .x-btn-disabled.x-btn-plain-toolbar-medium {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     opacity: 0.5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1100 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1111 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-medium.x-segmented-button-first {
     border-right-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1102 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1113 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-medium.x-segmented-button-first .x-btn-plain-toolbar-medium-mc {
     padding-right: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1106 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1117 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-medium.x-segmented-button-middle {
     border-right-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1108 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1119 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-medium.x-segmented-button-middle .x-btn-plain-toolbar-medium-mc {
     padding-right: 3px !important;
     padding-left: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1114 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1125 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-medium.x-segmented-button-last .x-btn-plain-toolbar-medium-mc {
     padding-left: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1121 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1132 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-medium.x-segmented-button-first {
     border-bottom-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1123 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1134 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-medium.x-segmented-button-first .x-btn-plain-toolbar-medium-mc {
     padding-bottom: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1127 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1138 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-medium.x-segmented-button-middle {
     border-bottom-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1129 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1140 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-medium.x-segmented-button-middle .x-btn-plain-toolbar-medium-mc {
     padding-top: 3px !important;
     padding-bottom: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1135 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1146 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-medium.x-segmented-button-last .x-btn-plain-toolbar-medium-mc {
     padding-top: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1141 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1152 */
 .x-nbr .x-segmented-button-item.x-btn-plain-toolbar-medium:after {
     content: ' ';
     border-style: solid;
     border-width: 0;
     position: absolute;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1159 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1170 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-medium:after {
     top: 1px;
     right: 0;
     bottom: 1px;
     left: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1165 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1176 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-medium.x-segmented-button-first:after {
     left: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1168 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1179 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-medium.x-segmented-button-last:after {
     right: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1174 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1185 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-medium:after {
     top: 0;
     right: 1px;
     bottom: 0;
     left: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1180 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1191 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-medium.x-segmented-button-first:after {
     top: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1183 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1194 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-medium.x-segmented-button-last:after {
     bottom: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1190 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1201 */
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-plain-toolbar-medium:after {
     border-width: 1px;
     border-color: #4297d4;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1204 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1215 */
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-plain-toolbar-medium:after {
     border-width: 1px;
     border-color: #4297d4;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1219 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1230 */
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-medium:after,
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-medium:after {
     border-width: 1px;
@@ -1033,12 +1168,12 @@
     display: none;
     content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-medium-disabled-corners.gif), sides:url(images/btn/btn-plain-toolbar-medium-disabled-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-medium-disabled-fbg.gif)" !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1246 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1257 */
 .x-button-plain-toolbar-medium-cell > .x-grid-cell-inner {
     padding-top: 0;
     padding-bottom: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1251 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1262 */
 .x-button-plain-toolbar-medium-cell > .x-grid-cell-inner >.x-btn-plain-toolbar-medium {
     vertical-align: top;
 }
@@ -1160,100 +1295,105 @@
     padding: 0 10px;
     max-width: 100%;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:479 */
-.x-btn-icon-right > .x-btn-inner-plain-toolbar-large,
-.x-btn-icon-left > .x-btn-inner-plain-toolbar-large {
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:484 */
+.x-ie9 .x-btn-icon-right > .x-btn-inner-plain-toolbar-large,
+.x-ie9 .x-btn-icon-left > .x-btn-inner-plain-toolbar-large {
     max-width: calc(100% - 32px);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:487 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:492 */
+.x-safari8m .x-btn-icon-right > .x-btn-inner-plain-toolbar-large,
+.x-safari8m .x-btn-icon-left > .x-btn-inner-plain-toolbar-large {
+    max-width: calc(100% - 31px);
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:498 */
 .x-ie10p .x-btn-inner-plain-toolbar-large {
     max-width: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:492 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:503 */
 .x-btn-icon-el-plain-toolbar-large {
     font-size: 32px;
     height: 32px;
     color: #666;
     line-height: 32px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:498 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:509 */
 .x-btn-icon-left > .x-btn-icon-el-plain-toolbar-large,
 .x-btn-icon-right > .x-btn-icon-el-plain-toolbar-large {
     width: 32px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:503 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:514 */
 .x-btn-icon-top > .x-btn-icon-el-plain-toolbar-large,
 .x-btn-icon-bottom > .x-btn-icon-el-plain-toolbar-large {
     min-width: 32px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:508 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:519 */
 .x-btn-icon-el-plain-toolbar-large.x-btn-glyph {
     opacity: 0.5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:525 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:536 */
 .x-ie8 .x-btn-icon-el-plain-toolbar-large.x-btn-glyph {
     color: #b3b3b3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:532 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:543 */
 .x-btn-text.x-btn-icon-left > .x-btn-icon-el-plain-toolbar-large {
     margin-right: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:543 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:554 */
 .x-btn-text.x-btn-icon-right > .x-btn-icon-el-plain-toolbar-large {
     margin-left: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:554 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:565 */
 .x-btn-text.x-btn-icon-top > .x-btn-icon-el-plain-toolbar-large {
     margin-bottom: 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:558 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:569 */
 .x-btn-text.x-btn-icon-bottom > .x-btn-icon-el-plain-toolbar-large {
     margin-top: 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:564 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:575 */
 .x-btn-arrow-right > .x-btn-icon.x-btn-no-text.x-btn-button-plain-toolbar-large {
     padding-right: 10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:567 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:578 */
 .x-btn-arrow-right > .x-btn-text.x-btn-icon-right > .x-btn-icon-el-plain-toolbar-large {
     margin-right: 10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:574 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:585 */
 .x-btn-arrow-bottom > .x-btn-button-plain-toolbar-large,
 .x-btn-split-bottom > .x-btn-button-plain-toolbar-large {
     padding-bottom: 3px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:580 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:591 */
 .x-btn-wrap-plain-toolbar-large.x-btn-arrow-right:after {
     width: 28px;
     background-image: url(images/button/plain-toolbar-large-arrow.png);
     padding-right: 28px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:607 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:618 */
 .x-btn-wrap-plain-toolbar-large.x-btn-arrow-bottom:after {
     height: 20px;
     background-image: url(images/button/plain-toolbar-large-arrow.png);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:647 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:658 */
 .x-btn-wrap-plain-toolbar-large.x-btn-split-right:after {
     width: 35px;
     background-image: url(images/button/plain-toolbar-large-s-arrow.png);
     padding-right: 35px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:686 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:697 */
 .x-btn-wrap-plain-toolbar-large.x-btn-split-bottom:after {
     height: 29px;
     background-image: url(images/button/plain-toolbar-large-s-arrow-b.png);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:719 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:730 */
 .x-btn-split-right > .x-btn-icon.x-btn-no-text.x-btn-button-plain-toolbar-large {
     padding-right: 10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:722 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:733 */
 .x-btn-split-right > .x-btn-text.x-btn-icon-right > .x-btn-icon-el-plain-toolbar-large {
     margin-right: 10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:727 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:738 */
 .x-btn-focus.x-btn-plain-toolbar-large {
     background-image: none;
     background-color: transparent;
@@ -1261,7 +1401,7 @@
     -moz-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:762 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:773 */
 .x-btn-plain-toolbar-large .x-btn-arrow-el {
     position: absolute;
     top: 0;
@@ -1270,11 +1410,11 @@
     width: 38px;
     pointer-events: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:778 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:789 */
 .x-btn-plain-toolbar-large.x-arrow-focus .x-btn-arrow-el {
     border: 1px solid #4297d4;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:785 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:796 */
 .x-btn-over.x-btn-plain-toolbar-large {
     border-color: #d8d8d8;
     background-image: none;
@@ -1286,13 +1426,13 @@
     background-image: -ms-linear-gradient(top, #eee, #ececec 50%, #e0e0e0 51%, #ececec);
     background-image: linear-gradient(top, #eee, #ececec 50%, #e0e0e0 51%, #ececec);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:812 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:823 */
 .x-btn-focus.x-btn-over.x-btn-plain-toolbar-large {
     -webkit-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     -moz-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:840 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:851 */
 .x-btn.x-btn-menu-active.x-btn-plain-toolbar-large,
 .x-btn.x-btn-pressed.x-btn-plain-toolbar-large {
     border-color: #cfcfcf;
@@ -1305,19 +1445,19 @@
     background-image: -ms-linear-gradient(top, #e2e2e2, #d6d6d6 50%, #e2e2e2 51%, #e5e5e5);
     background-image: linear-gradient(top, #e2e2e2, #d6d6d6 50%, #e2e2e2 51%, #e5e5e5);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:868 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:879 */
 .x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-large,
 .x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-large {
     -webkit-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     -moz-box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
     box-shadow: #4297d4 0 1px 0px 0 inset, #4297d4 0 -1px 0px 0 inset, #4297d4 -1px 0 0px 0 inset, #4297d4 1px 0 0px 0 inset;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:897 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:908 */
 .x-btn.x-btn-disabled.x-btn-plain-toolbar-large {
     background-image: none;
     background-color: transparent;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:929 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:940 */
 .x-btn-focus .x-btn-plain-toolbar-large-tl,
 .x-btn-focus .x-btn-plain-toolbar-large-bl,
 .x-btn-focus .x-btn-plain-toolbar-large-tr,
@@ -1326,17 +1466,17 @@
 .x-btn-focus .x-btn-plain-toolbar-large-bc {
     background-image: url(images/btn/btn-plain-toolbar-large-focus-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:937 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:948 */
 .x-btn-focus .x-btn-plain-toolbar-large-ml,
 .x-btn-focus .x-btn-plain-toolbar-large-mr {
     background-image: url(images/btn/btn-plain-toolbar-large-focus-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:941 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:952 */
 .x-btn-focus .x-btn-plain-toolbar-large-mc {
     background-color: transparent;
     background-image: url(images/btn/btn-plain-toolbar-large-focus-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:953 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:964 */
 .x-btn-over .x-btn-plain-toolbar-large-tl,
 .x-btn-over .x-btn-plain-toolbar-large-bl,
 .x-btn-over .x-btn-plain-toolbar-large-tr,
@@ -1345,17 +1485,17 @@
 .x-btn-over .x-btn-plain-toolbar-large-bc {
     background-image: url(images/btn/btn-plain-toolbar-large-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:961 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:972 */
 .x-btn-over .x-btn-plain-toolbar-large-ml,
 .x-btn-over .x-btn-plain-toolbar-large-mr {
     background-image: url(images/btn/btn-plain-toolbar-large-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:965 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:976 */
 .x-btn-over .x-btn-plain-toolbar-large-mc {
     background-color: #ececec;
     background-image: url(images/btn/btn-plain-toolbar-large-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:977 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:988 */
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-large-tl,
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-large-bl,
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-large-tr,
@@ -1364,17 +1504,17 @@
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-large-bc {
     background-image: url(images/btn/btn-plain-toolbar-large-focus-over-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:985 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:996 */
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-large-ml,
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-large-mr {
     background-image: url(images/btn/btn-plain-toolbar-large-focus-over-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:989 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1000 */
 .x-btn-focus.x-btn-over .x-btn-plain-toolbar-large-mc {
     background-color: #ececec;
     background-image: url(images/btn/btn-plain-toolbar-large-focus-over-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1003 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1014 */
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-large-tl,
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-large-bl,
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-large-tr,
@@ -1389,20 +1529,20 @@
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-large-bc {
     background-image: url(images/btn/btn-plain-toolbar-large-pressed-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1011 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1022 */
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-large-ml,
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-large-mr,
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-large-ml,
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-large-mr {
     background-image: url(images/btn/btn-plain-toolbar-large-pressed-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1015 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1026 */
 .x-btn.x-btn-menu-active .x-btn-plain-toolbar-large-mc,
 .x-btn.x-btn-pressed .x-btn-plain-toolbar-large-mc {
     background-color: #e2e2e2;
     background-image: url(images/btn/btn-plain-toolbar-large-pressed-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1028 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1039 */
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-large-tl,
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-large-bl,
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-large-tr,
@@ -1417,20 +1557,20 @@
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-large-bc {
     background-image: url(images/btn/btn-plain-toolbar-large-focus-pressed-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1036 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1047 */
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-large-ml,
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-large-mr,
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-large-ml,
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-large-mr {
     background-image: url(images/btn/btn-plain-toolbar-large-focus-pressed-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1040 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1051 */
 .x-btn-focus.x-btn-menu-active .x-btn-plain-toolbar-large-mc,
 .x-btn-focus.x-btn-pressed .x-btn-plain-toolbar-large-mc {
     background-color: #e2e2e2;
     background-image: url(images/btn/btn-plain-toolbar-large-focus-pressed-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1053 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1064 */
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-large-tl,
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-large-bl,
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-large-tr,
@@ -1439,115 +1579,115 @@
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-large-bc {
     background-image: url(images/btn/btn-plain-toolbar-large-disabled-corners.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1061 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1072 */
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-large-ml,
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-large-mr {
     background-image: url(images/btn/btn-plain-toolbar-large-disabled-sides.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1065 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1076 */
 .x-btn.x-btn-disabled .x-btn-plain-toolbar-large-mc {
     background-color: transparent;
     background-image: url(images/btn/btn-plain-toolbar-large-disabled-fbg.gif);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1075 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1086 */
 .x-nbr .x-btn-plain-toolbar-large {
     background-image: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1081 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1092 */
 .x-btn-disabled.x-btn-plain-toolbar-large {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     opacity: 0.5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1100 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1111 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-large.x-segmented-button-first {
     border-right-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1102 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1113 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-large.x-segmented-button-first .x-btn-plain-toolbar-large-mc {
     padding-right: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1106 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1117 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-large.x-segmented-button-middle {
     border-right-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1108 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1119 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-large.x-segmented-button-middle .x-btn-plain-toolbar-large-mc {
     padding-right: 3px !important;
     padding-left: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1114 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1125 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-large.x-segmented-button-last .x-btn-plain-toolbar-large-mc {
     padding-left: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1121 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1132 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-large.x-segmented-button-first {
     border-bottom-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1123 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1134 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-large.x-segmented-button-first .x-btn-plain-toolbar-large-mc {
     padding-bottom: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1127 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1138 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-large.x-segmented-button-middle {
     border-bottom-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1129 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1140 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-large.x-segmented-button-middle .x-btn-plain-toolbar-large-mc {
     padding-top: 3px !important;
     padding-bottom: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1135 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1146 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-large.x-segmented-button-last .x-btn-plain-toolbar-large-mc {
     padding-top: 3px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1141 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1152 */
 .x-nbr .x-segmented-button-item.x-btn-plain-toolbar-large:after {
     content: ' ';
     border-style: solid;
     border-width: 0;
     position: absolute;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1159 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1170 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-large:after {
     top: 1px;
     right: 0;
     bottom: 1px;
     left: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1165 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1176 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-large.x-segmented-button-first:after {
     left: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1168 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1179 */
 .x-nbr .x-segmented-button-item-horizontal.x-btn-plain-toolbar-large.x-segmented-button-last:after {
     right: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1174 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1185 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-large:after {
     top: 0;
     right: 1px;
     bottom: 0;
     left: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1180 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1191 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-large.x-segmented-button-first:after {
     top: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1183 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1194 */
 .x-nbr .x-segmented-button-item-vertical.x-btn-plain-toolbar-large.x-segmented-button-last:after {
     bottom: 1px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1190 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1201 */
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-plain-toolbar-large:after {
     border-width: 1px;
     border-color: #4297d4;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1204 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1215 */
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-over.x-btn-plain-toolbar-large:after {
     border-width: 1px;
     border-color: #4297d4;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1219 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1230 */
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-menu-active.x-btn-plain-toolbar-large:after,
 .x-nbr .x-segmented-button-item.x-btn-focus.x-btn-pressed.x-btn-plain-toolbar-large:after {
     border-width: 1px;
@@ -1589,12 +1729,12 @@
     display: none;
     content: "x-slicer:, stretch:bottom, frame:3px 3px 3px 3px, corners:url(images/btn/btn-plain-toolbar-large-disabled-corners.gif), sides:url(images/btn/btn-plain-toolbar-large-disabled-sides.gif), frame-bg:url(images/btn/btn-plain-toolbar-large-disabled-fbg.gif)" !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1246 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1257 */
 .x-button-plain-toolbar-large-cell > .x-grid-cell-inner {
     padding-top: 0;
     padding-bottom: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1251 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/button/Button.scss:1262 */
 .x-button-plain-toolbar-large-cell > .x-grid-cell-inner >.x-btn-plain-toolbar-large {
     vertical-align: top;
 }
@@ -1616,56 +1756,60 @@
     border-color: #e0ebf3;
     padding: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:282 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:279 */
+.x-panel-light.x-masked {
+    border-color: #f6f9fb;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:287 */
 .x-panel-header-light {
     font-size: 13px;
     border: 1px solid #e0ebf3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:296 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:301 */
 .x-panel-header-light .x-tool-img {
     background-image: url(images/tools/tool-sprites-dark.png);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:307 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:312 */
 .x-panel-header-light .x-tool-tool-el {
     background-color: #e0ebf3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:313 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:318 */
 .x-panel-header-light-horizontal {
     padding: 9px 9px 10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:317 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:322 */
 .x-panel-header-light-horizontal .x-panel-header-light-tab-bar {
     margin-top: -9px;
     margin-bottom: -10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:325 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:330 */
 .x-panel-header-light-horizontal.x-header-noborder {
     padding: 10px 10px 10px 10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:329 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:334 */
 .x-panel-header-light-horizontal.x-header-noborder .x-panel-header-light-tab-bar {
     margin-top: -10px;
     margin-bottom: -10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:337 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:342 */
 .x-panel-header-light-vertical {
     padding: 9px 9px 9px 10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:341 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:346 */
 .x-panel-header-light-vertical .x-panel-header-light-tab-bar {
     margin-right: -9px;
     margin-left: -10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:349 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:354 */
 .x-panel-header-light-vertical.x-header-noborder {
     padding: 10px 10px 10px 10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:353 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:358 */
 .x-panel-header-light-vertical.x-header-noborder .x-panel-header-light-tab-bar {
     margin-right: -10px;
     margin-left: -10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:387 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:392 */
 .x-panel-header-title-light {
     color: #666;
     font-size: 13px;
@@ -1673,32 +1817,32 @@
     font-family: helvetica, arial, verdana, sans-serif;
     line-height: 16px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:400 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:405 */
 .x-panel-header-title-light > .x-title-text-light {
     text-transform: none;
     padding: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:447 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:452 */
 .x-panel-header-title-light > .x-title-icon-wrap-light.x-title-icon-top {
     height: 22px;
     padding-bottom: 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:452 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:457 */
 .x-panel-header-title-light > .x-title-icon-wrap-light.x-title-icon-right {
     width: 22px;
     padding-left: 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:464 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:469 */
 .x-panel-header-title-light > .x-title-icon-wrap-light.x-title-icon-bottom {
     height: 22px;
     padding-top: 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:469 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:474 */
 .x-panel-header-title-light > .x-title-icon-wrap-light.x-title-icon-left {
     width: 22px;
     padding-right: 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:481 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:486 */
 .x-panel-header-title-light > .x-title-icon-wrap-light > .x-title-icon-light {
     width: 16px;
     height: 16px;
@@ -1706,15 +1850,15 @@
     color: #666;
     background-position: center center;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:488 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:493 */
 .x-panel-header-title-light > .x-title-icon-wrap-light > .x-title-icon-light.x-title-glyph {
     opacity: 0.5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:501 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:506 */
 .x-ie8 .x-panel-header-title-light > .x-title-icon-wrap-light > .x-title-icon-light.x-title-glyph {
     color: #a3a8ac;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:512 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:517 */
 .x-panel-body-light {
     background: #fff;
     border-color: #e0ebf3;
@@ -1725,29 +1869,29 @@
     border-width: 1px;
     border-style: solid;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:676 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:681 */
 .x-panel-header-light {
     background-image: none;
     background-color: #e0ebf3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:680 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:685 */
 .x-panel-header-light-vertical {
     background-image: none;
     background-color: #e0ebf3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:738 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:743 */
 .x-panel .x-panel-header-light-collapsed-border-top {
     border-bottom-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:742 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:747 */
 .x-panel .x-panel-header-light-collapsed-border-right {
     border-left-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:746 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:751 */
 .x-panel .x-panel-header-light-collapsed-border-bottom {
     border-top-width: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:750 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:755 */
 .x-panel .x-panel-header-light-collapsed-border-left {
     border-right-width: 1px !important;
 }
@@ -1775,23 +1919,23 @@
     display: none;
     content: "x-slicer:, stretch:left" !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:786 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:791 */
 .x-panel-header-light-horizontal .x-tool-after-title {
     margin: 0 0 0 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:796 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:801 */
 .x-panel-header-light-horizontal .x-tool-before-title {
     margin: 0 6px 0 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:808 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:813 */
 .x-panel-header-light-vertical .x-tool-after-title {
     margin: 6px 0 0 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:818 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:823 */
 .x-panel-header-light-vertical .x-tool-before-title {
     margin: 0 0 6px 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:830 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:835 */
 .x-panel-header-light .x-tool-focus {
     outline: 1px solid #157fcc;
     outline-offset: 1px;
@@ -1815,7 +1959,7 @@
     border: 1px solid #157fcc;
     pointer-events: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:859 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:864 */
 .x-panel-light-resizable .x-panel-handle {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
     opacity: 0;
@@ -1928,56 +2072,60 @@
     border-color: #e0ebf3;
     padding: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:282 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:279 */
+.x-panel-light-framed.x-masked {
+    border-color: #f6f9fb;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:287 */
 .x-panel-header-light-framed {
     font-size: 13px;
     border: 5px solid #e0ebf3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:296 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:301 */
 .x-panel-header-light-framed .x-tool-img {
     background-image: url(images/tools/tool-sprites-dark.png);
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:307 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:312 */
 .x-panel-header-light-framed .x-tool-tool-el {
     background-color: #e0ebf3;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:313 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:318 */
 .x-panel-header-light-framed-horizontal {
     padding: 5px 5px 5px 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:317 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:322 */
 .x-panel-header-light-framed-horizontal .x-panel-header-light-framed-tab-bar {
     margin-top: -5px;
     margin-bottom: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:325 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:330 */
 .x-panel-header-light-framed-horizontal.x-header-noborder {
     padding: 10px 10px 5px 10px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:329 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:334 */
 .x-panel-header-light-framed-horizontal.x-header-noborder .x-panel-header-light-framed-tab-bar {
     margin-top: -10px;
     margin-bottom: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:337 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:342 */
 .x-panel-header-light-framed-vertical {
     padding: 5px 5px 5px 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:341 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:346 */
 .x-panel-header-light-framed-vertical .x-panel-header-light-framed-tab-bar {
     margin-right: -5px;
     margin-left: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:349 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:354 */
 .x-panel-header-light-framed-vertical.x-header-noborder {
     padding: 10px 10px 10px 5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:353 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:358 */
 .x-panel-header-light-framed-vertical.x-header-noborder .x-panel-header-light-framed-tab-bar {
     margin-right: -10px;
     margin-left: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:387 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:392 */
 .x-panel-header-title-light-framed {
     color: #666;
     font-size: 13px;
@@ -1985,32 +2133,32 @@
     font-family: helvetica, arial, verdana, sans-serif;
     line-height: 16px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:400 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:405 */
 .x-panel-header-title-light-framed > .x-title-text-light-framed {
     text-transform: none;
     padding: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:447 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:452 */
 .x-panel-header-title-light-framed > .x-title-icon-wrap-light-framed.x-title-icon-top {
     height: 22px;
     padding-bottom: 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:452 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:457 */
 .x-panel-header-title-light-framed > .x-title-icon-wrap-light-framed.x-title-icon-right {
     width: 22px;
     padding-left: 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:464 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:469 */
 .x-panel-header-title-light-framed > .x-title-icon-wrap-light-framed.x-title-icon-bottom {
     height: 22px;
     padding-top: 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:469 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:474 */
 .x-panel-header-title-light-framed > .x-title-icon-wrap-light-framed.x-title-icon-left {
     width: 22px;
     padding-right: 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:481 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:486 */
 .x-panel-header-title-light-framed > .x-title-icon-wrap-light-framed > .x-title-icon-light-framed {
     width: 16px;
     height: 16px;
@@ -2018,15 +2166,15 @@
     color: #666;
     background-position: center center;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:488 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:493 */
 .x-panel-header-title-light-framed > .x-title-icon-wrap-light-framed > .x-title-icon-light-framed.x-title-glyph {
     opacity: 0.5;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:501 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:506 */
 .x-ie8 .x-panel-header-title-light-framed > .x-title-icon-wrap-light-framed > .x-title-icon-light-framed.x-title-glyph {
     color: #a3a8ac;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:512 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:517 */
 .x-panel-body-light-framed {
     background: #fff;
     border-color: #e0ebf3;
@@ -3092,55 +3240,55 @@
     display: none;
     content: "x-slicer:, frame:5px 5px 5px 5px, corners:url(images/panel-header/panel-header-light-framed-collapsed-left-corners.gif), sides:url(images/panel-header/panel-header-light-framed-collapsed-left-sides.gif)" !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:638 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:643 */
 .x-panel .x-panel-header-light-framed-top {
     border-bottom-width: 5px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:642 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:647 */
 .x-panel .x-panel-header-light-framed-right {
     border-left-width: 5px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:646 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:651 */
 .x-panel .x-panel-header-light-framed-bottom {
     border-top-width: 5px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:650 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:655 */
 .x-panel .x-panel-header-light-framed-left {
     border-right-width: 5px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:656 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:661 */
 .x-nbr .x-panel-header-light-framed-collapsed-top {
     border-bottom-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:660 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:665 */
 .x-nbr .x-panel-header-light-framed-collapsed-right {
     border-left-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:664 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:669 */
 .x-nbr .x-panel-header-light-framed-collapsed-bottom {
     border-top-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:668 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:673 */
 .x-nbr .x-panel-header-light-framed-collapsed-left {
     border-right-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:786 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:791 */
 .x-panel-header-light-framed-horizontal .x-tool-after-title {
     margin: 0 0 0 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:796 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:801 */
 .x-panel-header-light-framed-horizontal .x-tool-before-title {
     margin: 0 6px 0 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:808 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:813 */
 .x-panel-header-light-framed-vertical .x-tool-after-title {
     margin: 6px 0 0 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:818 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:823 */
 .x-panel-header-light-framed-vertical .x-tool-before-title {
     margin: 0 0 6px 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:830 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:835 */
 .x-panel-header-light-framed .x-tool-focus {
     outline: 1px solid #157fcc;
     outline-offset: 1px;
@@ -3164,47 +3312,47 @@
     border: 1px solid #157fcc;
     pointer-events: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:856 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:861 */
 .x-panel-light-framed-resizable {
     overflow: visible;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:859 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:864 */
 .x-panel-light-framed-resizable .x-panel-handle {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
     opacity: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:868 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:873 */
 .x-panel-light-framed-resizable .x-panel-handle-north-br {
     top: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:871 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:876 */
 .x-panel-light-framed-resizable .x-panel-handle-south-br {
     bottom: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:874 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:879 */
 .x-panel-light-framed-resizable .x-panel-handle-east-br {
     right: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:877 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:882 */
 .x-panel-light-framed-resizable .x-panel-handle-west-br {
     left: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:880 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:885 */
 .x-panel-light-framed-resizable .x-panel-handle-northwest-br {
     left: -5px;
     top: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:884 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:889 */
 .x-panel-light-framed-resizable .x-panel-handle-northeast-br {
     right: -5px;
     top: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:888 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:893 */
 .x-panel-light-framed-resizable .x-panel-handle-southeast-br {
     right: -5px;
     bottom: -5px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:892 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/classic/theme-neutral/sass/src/panel/Panel.scss:897 */
 .x-panel-light-framed-resizable .x-panel-handle-southwest-br {
     left: -5px;
     bottom: -5px;

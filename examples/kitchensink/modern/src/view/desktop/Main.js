@@ -1,6 +1,5 @@
 Ext.define('KitchenSink.view.desktop.Main', {
     extend: 'Ext.Container',
-    xtype: 'mainview',
 
     requires: [
         'KitchenSink.view.ContentPanel',

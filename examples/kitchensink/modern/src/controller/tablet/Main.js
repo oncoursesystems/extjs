@@ -136,12 +136,14 @@ Ext.define('KitchenSink.controller.tablet.Main', {
             cp1 = activeCard.id === 'contentPanel2',
             thumbnails, thumbnails1, thumbnails2,
             icons = cp1 ? me.getIcons() : me.getIcons2(),
-            cmp, thumbnailsStore, demoContent, tier;
+            cmp, thumbnailsStore, demoContent, tier,
+            viewName;
 
         Ext.suspendLayouts();
 
         me.record = node;
         if (node.isLeaf()) {
+            viewName = me.getViewName(node);
             cmp = {
                 xtype: 'contentPanel',
                 layout: {
@@ -150,13 +152,14 @@ Ext.define('KitchenSink.controller.tablet.Main', {
                     align: 'center'
                 },
                 items: {
-                    xclass: me.getViewName(node)
+                    xclass: viewName,
+                    id: viewName.replace(/\./g, '-').toLowerCase()
                 }
             };
                 
             cmp = cardPanel.add(cmp);
             demoContent = cmp.getItems().items[0];
-            if (demoContent.getWidth() === null) {
+            if (!demoContent.$preventContentSize && demoContent.getWidth() === null) {
                 demoContent.setWidth('90%');
                 demoContent.setHeight('90%');
             }

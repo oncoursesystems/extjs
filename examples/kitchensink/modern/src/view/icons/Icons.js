@@ -41,15 +41,13 @@ Ext.define('KitchenSink.view.icons.Icons', {
             iconCls: 'x-fa fa-star',
             title  : 'Favorites',
             cls    : 'card',
-            html   : '<span class="action">User tapped Favorites</span>',
-            hidden: (Ext.filterPlatform('ie10') && Ext.os.is.Phone) ? true : false
+            html   : '<span class="action">User tapped Favorites</span>'
         },
         {
             iconCls: 'x-fa fa-bookmark',
             title  : 'Bookmarks',
             cls    : 'card',
-            html   : '<span class="action">User tapped Bookmarks</span>',
-            hidden: (Ext.filterPlatform('ie10') && Ext.os.is.Phone) ? true : false
+            html   : '<span class="action">User tapped Bookmarks</span>'
         },
         {
             iconCls: 'x-fa fa-ellipsis-h',
@@ -74,7 +72,7 @@ Ext.define('KitchenSink.view.icons.Icons', {
                 { iconCls: 'x-fa fa-reply' }
             ],
             layout: {
-                pack : (Ext.filterPlatform('ie10') && !Ext.os.is.Phone) ? 'start' : 'center',
+                pack : 'center',
                 align: 'center'
             }
         }

@@ -164,7 +164,7 @@ Ext.define('KitchenSink.view.grid.WidgetGrid', {
     },
     
     onButtonWidgetClick: function(btn) {
-        var rec = btn.getViewModel().get('record');
+        var rec = btn.lookupViewModel().get('record');
         Ext.Msg.alert("Button clicked", "Hey! " + rec.get('name'));
     },
 

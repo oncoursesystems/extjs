@@ -128,47 +128,6 @@
     width: 1px !important;
     height: 1px !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/util/Translatable.scss:5 */
-.x-translatable {
-    /**
- * @class Ext.util.Translatable
- */
-    position: absolute !important;
-    top: 500000px !important;
-    left: 500000px !important;
-    overflow: visible !important;
-    z-index: 1;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/util/Translatable.scss:13 */
-.x-translatable-hboxfix {
-    position: absolute;
-    min-width: 100%;
-    top: 0;
-    left: 0;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/util/Translatable.scss:19 */
-.x-translatable-hboxfix > .x-translatable {
-    position: relative !important;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/util/Translatable.scss:24 */
-.x-translatable-container {
-    overflow: hidden;
-    width: auto;
-    height: auto;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/util/Translatable.scss:34 */
-.x-translatable-container::before {
-    content: '';
-    display: block;
-    width: 1000000px;
-    height: 1000000px;
-    visibility: hidden;
-}
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/scroll/Scroller.scss:1 */
 .x-scroller {
     -webkit-overflow-scrolling: touch;
@@ -244,34 +203,34 @@
     z-index: 1000000!important;
     pointer-events: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:560 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:562 */
 .x-treelist {
     background-position: 22px 0%;
     overflow: hidden;
     padding: 0 0 0 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:565 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:567 */
 .x-big .x-treelist {
     background-position:  0%;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:573 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:575 */
 .x-treelist-container,
 .x-treelist-root-container {
     width: 100%;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:578 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:580 */
 .x-treelist-toolstrip {
     display: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:583 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:585 */
 .x-treelist-micro > .x-treelist-toolstrip {
     display: inline-block;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:586 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:588 */
 .x-treelist-micro > .x-treelist-root-container {
     display: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:591 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:593 */
 .x-treelist-item,
 .x-treelist-container,
 .x-treelist-root-container {
@@ -280,69 +239,69 @@
     padding: 0;
     margin: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:600 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:602 */
 .x-treelist-item-tool,
 .x-treelist-row,
 .x-treelist-item-wrap {
     position: relative;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:606 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:608 */
 .x-treelist-item-icon,
 .x-treelist-item-expander {
     display: none;
     position: absolute;
     top: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:613 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:615 */
 .x-treelist-item-expander {
     right: 0;
     cursor: pointer;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:618 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:620 */
 .x-treelist-expander-only .x-treelist-item-expandable > * > .x-treelist-item-wrap > * {
     cursor: pointer;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:622 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:624 */
 .x-treelist-item-text {
     cursor: default;
     white-space: nowrap;
     overflow: hidden;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:628 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:630 */
 .x-treelist-item-collapsed > .x-treelist-container {
     display: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:632 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:634 */
 .x-treelist-item-expandable > * > * > .x-treelist-item-expander,
 .x-treelist-item-icon {
     display: block;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:637 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:639 */
 .x-treelist-item-floated > * > * > .x-treelist-item-expander,
 .x-treelist-item-floated > * > * > .x-treelist-item-icon {
     display: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:642 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:644 */
 .x-treelist-expander-first .x-treelist-item-expander {
     left: 0;
     right: auto;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:100 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:102 */
 .x-treelist-toolstrip {
     background-color: #f8f8f8;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:140 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:142 */
 .x-treelist-item-tool {
     padding-left: 8px;
     padding-right: 8px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:163 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:165 */
 .x-treelist-item-icon:before,
 .x-treelist-item-tool:before,
 .x-treelist-item-expander {
     line-height: 36px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:175 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:177 */
 .x-treelist-item-icon,
 .x-treelist-item-tool,
 .x-treelist-item-expander {
@@ -350,136 +309,136 @@
     background-repeat: no-repeat;
     background-position: 0 center;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:185 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:187 */
 .x-treelist-item-loading .x-treelist-item-icon {
     background-image: url(images/tree/loading.gif);
     color: transparent;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:190 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:192 */
 .x-treelist-item-icon,
 .x-treelist-item-tool {
     font-size: 18px;
     width: 22px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:203 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:205 */
 .x-treelist-item-tool {
     width: 38px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:213 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:215 */
 .x-treelist-item-expander {
     font-size: 16px;
     width: 18px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:229 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:231 */
 .x-treelist-item-expander:after {
     content: "\f105";
     font-feature-settings: 'liga';
     font-family: FontAwesome;
     line-height: 1;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:233 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:235 */
 .x-treelist-item-expanded > * > * > .x-treelist-item-expander:after {
     content: "\f107";
     font-feature-settings: 'liga';
     font-family: FontAwesome;
     line-height: 1;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:242 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:244 */
 .x-treelist-item-text {
     margin-left: 26px;
     margin-right: 18px;
     line-height: 36px;
     text-overflow: ellipsis;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:258 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:260 */
 .x-treelist-row {
     padding-left: 8px;
     padding-right: 8px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:289 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:291 */
 .x-treelist-item-floated .x-treelist-container {
     width: auto;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:292 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:294 */
 .x-treelist-item-floated > .x-treelist-row {
     background-color: #f8f8f8;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:296 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:298 */
 .x-treelist-item-floated > .x-treelist-container {
     margin-left: -22px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:299 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:301 */
 .x-big .x-treelist-item-floated > .x-treelist-container {
     margin-left: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:305 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:307 */
 .x-treelist-item-floated > * > * > .x-treelist-item-text {
     margin-left: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:309 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:311 */
 .x-treelist-item-floated > * .x-treelist-row {
     padding-left: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:313 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:315 */
 .x-treelist-item-floated .x-treelist-row:before {
     width: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:317 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:319 */
 .x-treelist-item-floated > .x-treelist-row-over {
     background-color: #f8f8f8;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:333 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:335 */
 .x-treelist-item-expanded > .x-treelist-item-expander:after {
     content: "\f107";
     font-feature-settings: 'liga';
     font-family: FontAwesome;
     line-height: 1;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:338 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:340 */
 .x-treelist-item-collapsed > * > .x-treelist-item-expander:after {
     content: "\f105";
     font-feature-settings: 'liga';
     font-family: FontAwesome;
     line-height: 1;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:344 */
-&.x-treelist-highlight-path .x-treelist-item-over > * > .x-treelist-item-icon {
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:346 */
+&.x-treelist-highlight-path .x-treelist-item-over > * > * > .x-treelist-item-icon {
     transition: color 0.5s;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:348 */
-&.x-treelist-highlight-path .x-treelist-item-over > * > .x-treelist-item-text {
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:350 */
+&.x-treelist-highlight-path .x-treelist-item-over > * > * > .x-treelist-item-text {
     transition: color 0.5s;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:352 */
-&.x-treelist-highlight-path .x-treelist-item-over > * > .x-treelist-item-expander {
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:354 */
+&.x-treelist-highlight-path .x-treelist-item-over > * > * > .x-treelist-item-expander {
     transition: color 0.5s;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:362 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:364 */
 .x-treelist-row-over > * > .x-treelist-item-icon {
     transition: color 0.5s;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:366 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:368 */
 .x-treelist-row-over > * > .x-treelist-item-text {
     transition: color 0.5s;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:370 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:372 */
 .x-treelist-row-over > * > .x-treelist-item-expander {
     transition: color 0.5s;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:377 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:379 */
 .x-treelist-expander-first .x-treelist-item-icon {
     left: 18px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:386 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:388 */
 .x-treelist-expander-first .x-treelist-item-text {
     margin-left: 44px;
     margin-right: 0;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:396 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:398 */
 .x-treelist-expander-first .x-treelist-item-hide-icon > * > * > .x-treelist-item-text {
     margin-left: 22px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:406 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/packages/core/sass/src/list/TreeItem.scss:408 */
 .x-treelist-item-hide-icon > * > * > .x-treelist-item-text {
     margin-left: 4px;
 }
@@ -496,6 +455,8 @@
 .x-scroller > .x-inner:after {
     content: '';
     display: table;
+    -webkit-box-flex: 0;
+    flex: 0 0 0;
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:2 */
 :root {
@@ -923,6 +884,17 @@ textarea {
     position: absolute !important;
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:256 */
+.x-unselectable {
+    user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: -moz-none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-drag: none;
+    cursor: default;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:260 */
 .x-center {
     position: absolute;
     top: 0;
@@ -939,19 +911,19 @@ textarea {
     -ms-flex-pack: center;
     justify-content: center;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:262 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:266 */
 .x-center > * {
     position: relative;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:266 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:270 */
 .x-center > .x-floating {
     position: relative !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:274 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:278 */
 .x-ios-native:not(.x-phone.x-landscape) {
     padding-top: 20px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:279 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:283 */
 .x-font-icon {
     font-weight: normal;
     display: -webkit-inline-box;
@@ -964,7 +936,7 @@ textarea {
     -ms-flex-pack: center;
     justify-content: center;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:289 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:293 */
 .x-font-icon:before {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -988,77 +960,77 @@ textarea {
     /* Support for Safari and Chrome. */
     text-rendering: optimizeLegibility;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:313 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:317 */
 .x-noborder-l {
     border-left-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:317 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:321 */
 .x-noborder-b {
     border-bottom-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:321 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:325 */
 .x-noborder-bl {
     border-bottom-width: 0 !important;
     border-left-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:326 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:330 */
 .x-noborder-r {
     border-right-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:330 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:334 */
 .x-noborder-rl {
     border-right-width: 0 !important;
     border-left-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:335 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:339 */
 .x-noborder-rb {
     border-right-width: 0 !important;
     border-bottom-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:340 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:344 */
 .x-noborder-rbl {
     border-right-width: 0 !important;
     border-bottom-width: 0 !important;
     border-left-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:346 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:350 */
 .x-noborder-t {
     border-top-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:350 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:354 */
 .x-noborder-tl {
     border-top-width: 0 !important;
     border-left-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:355 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:359 */
 .x-noborder-tb {
     border-top-width: 0 !important;
     border-bottom-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:360 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:364 */
 .x-noborder-tbl {
     border-top-width: 0 !important;
     border-bottom-width: 0 !important;
     border-left-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:366 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:370 */
 .x-noborder-tr {
     border-top-width: 0 !important;
     border-right-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:371 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:375 */
 .x-noborder-trl {
     border-top-width: 0 !important;
     border-right-width: 0 !important;
     border-left-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:377 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:381 */
 .x-noborder-trb {
     border-top-width: 0 !important;
     border-right-width: 0 !important;
     border-bottom-width: 0 !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:383 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Component.scss:387 */
 .x-noborder-trbl {
     border-width: 0 !important;
 }
@@ -1334,7 +1306,7 @@ body.x-chromeios .x-float-wrap {
     height: 100vh;
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/layout/Abstract.scss:68 */
-.x-ios .x-float-wrap {
+.x-mobile-safari .x-float-wrap {
     height: 100%;
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/layout/Card.scss:5 */
@@ -1486,7 +1458,9 @@ audio {
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Button.scss:31 */
 .x-button-icon.x-shown {
-    display: block;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/Button.scss:35 */
 .x-button-icon.x-hidden {
@@ -2620,6 +2594,7 @@ div.x-trigger.x-grouped {
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/grid/HeaderContainer.scss:1 */
 .x-headercontainer {
     overflow: hidden;
+    position: relative;
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/grid/HeaderGroup.scss:1 */
 .x-headergroup {
@@ -2711,6 +2686,10 @@ div.x-expandercell {
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/grid/plugin/SummaryRow.scss:5 */
 .x-summaryrow .x-expandercell .x-inner-el:before {
     display: none;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/SortableList.scss:1 */
+.x-list-item-dragging {
+    z-index: 100;
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/layout/Fit.scss:5 */
 .x-layout-fit.x-stretched > .x-layout-fit-item {
@@ -2827,7 +2806,7 @@ div.x-expandercell {
     display: none;
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:5 */
-.x-list-pullrefresh {
+.x-pullrefresh {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -2843,76 +2822,34 @@ div.x-expandercell {
     -webkit-box-direction: normal;
     -ms-flex-direction: row;
     flex-direction: row;
-    position: absolute;
-    top: -5em;
-    left: 0;
-    width: 100%;
-    height: 4.5em;
+    bottom: auto !important;
+    height: auto !important;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:18 */
-.x-list-pullrefresh .x-loading-spinner {
-    display: none;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:23 */
-.x-list-pullrefresh-arrow {
-    width: 2.5em;
-    height: 4.5em;
-    background-color: #bbb;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:29 */
-.x-list-pullrefresh-wrap {
-    width: 20em;
-    font-size: 0.7em;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:34 */
-.x-list-pullrefresh-message {
-    font-weight: bold;
-    font-size: 1.3em;
-    text-align: center;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:40 */
-.x-list-pullrefresh-updated {
-    text-align: center;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:45 */
-.x-list-pullrefresh-loading *.x-loading-spinner {
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:16 */
+.x-pullrefresh.x-loading .x-pullrefresh-loading-wrap {
     display: block;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:49 */
-.x-list-pullrefresh-loading .x-list-pullrefresh-arrow {
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:20 */
+.x-pullrefresh.x-loading .x-pullrefresh-arrow {
     display: none;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:55 */
-.x-android-2 .x-list-pullrefresh-loading *.x-loading-spinner {
-    display: none;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/tab/Panel.scss:6 */
-.x-tabbar.x-docked-top .x-tab .x-button-icon {
-    /**
- * @class Ext.tab.Panel
- */
-    position: relative;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/tab/Panel.scss:9 */
-.x-tabbar.x-docked-top .x-tab .x-button-icon.x-shown {
-    display: inline-block;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/tab/Panel.scss:13 */
-.x-tabbar.x-docked-top .x-tab .x-button-icon.x-hidden {
-    display: none;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/tab/Panel.scss:20 */
-.x-tabbar.x-docked-bottom .x-tab .x-button-icon {
-    display: block;
-    position: relative;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/tab/Panel.scss:24 */
-.x-tabbar.x-docked-bottom .x-tab .x-button-icon.x-shown {
-    visibility: visible;
-}
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/tab/Panel.scss:28 */
-.x-tabbar.x-docked-bottom .x-tab .x-button-icon.x-hidden {
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:26 */
+.x-pullrefresh.x-loaded .x-pullrefresh-arrow {
     visibility: hidden;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:31 */
+.x-pullrefresh.x-overlay {
+    z-index: 5;
+    position: absolute;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:37 */
+.x-pullrefresh-wrap {
+    text-align: center;
+}
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/plugin/PullRefresh.scss:41 */
+.x-pullrefresh-loading-wrap {
+    display: none;
+    position: relative;
 }
 /* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-base/sass/src/table/Table.scss:6 */
 .x-table-inner {
@@ -4047,12 +3984,12 @@ body {
     -webkit-border-bottom-right-radius: 6px;
     border-bottom-right-radius: 6px;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-cupertino/sass/src/Panel.scss:26 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-cupertino/sass/src/Panel.scss:25 */
 .x-webkit .x-anchor {
     position: absolute;
     overflow: hidden;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-cupertino/sass/src/Panel.scss:30 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-cupertino/sass/src/Panel.scss:28 */
 .x-webkit .x-anchor.x-anchor-top {
     margin-top: -0.68em;
     margin-left: -0.8155em;
@@ -4062,7 +3999,7 @@ body {
     -webkit-mask-size: 1.631em 0.7em;
     background-color: white;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-cupertino/sass/src/Panel.scss:40 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-cupertino/sass/src/Panel.scss:37 */
 .x-webkit .x-anchor.x-anchor-bottom {
     margin-left: -0.8155em;
     width: 1.631em;
@@ -4071,7 +4008,7 @@ body {
     -webkit-mask-size: 1.631em 0.7em;
     background-color: white;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-cupertino/sass/src/Panel.scss:49 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-cupertino/sass/src/Panel.scss:45 */
 .x-webkit .x-anchor.x-anchor-left {
     margin-left: -0.6655em;
     margin-top: -0.35em;
@@ -4081,7 +4018,7 @@ body {
     -webkit-mask-size: 0.7em 1.631em;
     background-color: white;
 }
-/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-cupertino/sass/src/Panel.scss:59 */
+/* /Users/space/buildAgent/work/8cc7421dd8da164c/staging/modern/theme-cupertino/sass/src/Panel.scss:54 */
 .x-webkit .x-anchor.x-anchor-right {
     margin-top: -0.35em;
     height: 1.631em;
@@ -5294,7 +5231,7 @@ Some Fashion error here, checkmark mixin is not taking effect like it does for c
     /**
  * @class Ext.plugin.PullRefresh
  */
-    background: center center url(images/pullarrow.png.png) no-repeat;
+    background: center center url(images/pullarrow.png) no-repeat;
     background-size: 2em 3em;
     -webkit-transition-property: -webkit-transform;
     -webkit-transition-duration: 200ms;

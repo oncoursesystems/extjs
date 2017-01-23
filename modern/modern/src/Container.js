@@ -150,6 +150,7 @@ Ext.define('Ext.Container', {
          * @removed 2.0.0 Please use {@link Ext.layout.Card#animation} instead
          */
 
+        // @cmd-auto-dependency { aliasPrefix : "layout."}
         /**
          * @cfg {Object/String} layout Configuration for this Container's layout. Example:
          *
@@ -173,7 +174,6 @@ Ext.define('Ext.Container', {
          *     });
          *
          * @accessor
-         * @cmd-auto-dependency { aliasPrefix : "layout."}
          */
         layout: 'default',
 
@@ -257,6 +257,7 @@ Ext.define('Ext.Container', {
          */
         defaultType: null,
 
+        // @cmd-auto-dependency {defaultType: "Ext.Mask"}
         /**
          * @cfg {Boolean/Object/Ext.Mask/Ext.LoadMask} masked
          * A configuration to allow you to mask this container.
@@ -285,7 +286,6 @@ Ext.define('Ext.Container', {
          *     });
          *
          * @accessor
-         * @cmd-auto-dependency {defaultType: "Ext.Mask"}
          */
         masked: null
     },

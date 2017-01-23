@@ -143,7 +143,9 @@ Ext.define('KitchenSink.controller.phone.Main', {
             cache.length = j;
         }
 
-        view = Ext.create(name);
+        view = Ext.create(name, {
+            id: name.replace(/\./g, '-').toLowerCase()
+        });
         view.viewName = name;
         cache.push(view);
         me.viewCache = cache;

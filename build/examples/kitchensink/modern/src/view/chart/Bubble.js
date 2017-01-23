@@ -1,4 +1,4 @@
-(function() {
+Ext.require(['Ext.util.Color'], function() {
     /**
      * Demonstrates how to make a buble chart using Ext.chart.series.Scatter
      */
@@ -155,4 +155,4 @@
             interpolate(lambda, minSrc, maxSrc, fromHSL[2], toHSL[2])
         ).toString();
     }
-})();
+});

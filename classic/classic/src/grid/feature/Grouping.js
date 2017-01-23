@@ -879,7 +879,7 @@ Ext.define('Ext.grid.feature.Grouping', {
     /**
      * Expand a group
      * @param {String} groupName The group name.
-     * @param {Object} [options]. Pass when the group should be scrolled into view.
+     * @param {Object} [options] Pass when the group should be scrolled into view.
      * This contains flags for postprocessing the group's first row after
      * expansion. See {@link Ext.panel.Table#ensureVisible} for details. *note:*
      * a boolean may be passed to indicate whether to focus the target group after expand.
@@ -1113,9 +1113,7 @@ Ext.define('Ext.grid.feature.Grouping', {
      * @private
      */
     onGroupMousedown: function(view, rowElement, groupName, e) {
-        if (e.pointerType === 'mouse') {
-            e.preventDefault();
-        }
+        e.preventDefault();
     },
 
     /**

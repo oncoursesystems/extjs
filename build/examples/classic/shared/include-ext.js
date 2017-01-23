@@ -59,32 +59,36 @@
         rtlSuffix = (rtl ? '-rtl' : ''),
         debugSuffix = (devMode ? '-debug' : ''),
         cssSuffix = rtlSuffix + debugSuffix + '.css',
-        themePackageDir, chartsJS, d3JS, uxJS, themeOverrideJS, extPrefix, extPackagesRoot;
+        themePackageDir, d3JS, uxJS, themeOverrideJS, extPrefix, extPackagesRoot,
+        sdkRoot;
 
     rtl = rtl && rtl.toString() === 'true';
 
     while (i--) {
         extDir = extDir.substring(0, extDir.lastIndexOf('/'));
     }
+    sdkRoot = extDir.substring(0, extDir.lastIndexOf('/'));
 
     extPackagesRoot = devMode ? (extDir + '/build') : extDir;
+    if (devMode === 1) {
+        extDir = extPackagesRoot;
+    }
 
     uxJS = extPackagesRoot + '/packages/ux/classic/ux' + debugSuffix + '.js';
-    chartsJS = extPackagesRoot + '/packages/charts/classic/charts' + debugSuffix + '.js';
-    d3JS = extPackagesRoot + '/packages/d3/classic/d3' + debugSuffix + '.js';
+    d3JS = sdkRoot + '/packages/d3/d3.js';
     themePackageDir = extPackagesRoot + '/classic/theme-' + themeName + '/';
 
     if (includeCSS) {
         loadCss(themePackageDir + 'resources/theme-' + themeName + '-all' + cssSuffix);
         loadCss(extPackagesRoot + '/packages/charts/classic/' + themeName + '/resources/charts-all' + cssSuffix);
         loadCss(extPackagesRoot + '/packages/ux/classic/' + themeName + '/resources/ux-all' + cssSuffix);
-        if (Ext.devMode === 2) {
-            loadCss(extPackagesRoot + '/packages/d3/classic/' + themeName + '/resources/d3-all' + cssSuffix);
+        if (devMode === 2) {
+            loadCss(sdkRoot + '/packages/d3/build/classic/' + themeName + '/resources/d3-all' + cssSuffix);
         }
     }
 
     extPrefix = useDebug ? '/ext' : '/ext-all';
-    
+
     document.write('<script type="text/javascript" src="' + extDir + extPrefix + rtlSuffix + '.js"></script>');
 
     if (hasOverrides) {
@@ -108,14 +112,13 @@
             } else {
                 loadScript(themeOverrideJS, true);
             }
+            if (devMode === 2) {
+                loadScript(d3JS);
+            }
         } else {
             loadScript(themeOverrideJS, true);
             // ux and charts js are not needed in dev mode because they are included in bootstrap
             loadScript(uxJS);
-            loadScript(chartsJS);
-            if (Ext.devMode === 2) {
-                loadScript(d3JS);
-            }
         }
     }
 

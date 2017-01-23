@@ -198,6 +198,10 @@
             "mode": "relative"
         },
         {
+            "path": "app",
+            "mode": "relative"
+        },
+        {
             "path": "data",
             "mode": "relative"
         },

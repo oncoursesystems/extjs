@@ -29,10 +29,14 @@ Ext.define('KitchenSink.Application', {
         });
 
         // Set the default route to start the application.
-        this.setDefaultToken('all');
+        if (Ext.os.deviceType !== 'Phone') {
+            this.setDefaultToken('all');
+        }
 
         Ext.setGlyphFontFamily('Pictos');
-        Ext.tip.QuickTipManager.init();
+        Ext.tip.QuickTipManager.init(null, {
+            showOnTap: true
+        });
         
         if (!Ext.platformTags.test) {
             Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
@@ -40,9 +44,19 @@ Ext.define('KitchenSink.Application', {
     },
 
     launch: function () {
+        if (Ext.os.deviceType === 'Phone') {
+            Ext.Msg.show({
+                title: 'Unsupported Device',
+                message: 'Ext JS Classic Toolkit does not support phones.',
+                icon: Ext.Msg.ERROR,
+                buttons: Ext.Msg.OK
+            });
+            return;
+        }
+
         var view = 'KitchenSink.view.main.Main';
         if (/[?&]solo\b/.test(location.search)) {
-            view = 'KitchenSink.view.main.Solo'
+            view = 'KitchenSink.view.main.Solo';
         }
         this.setMainView({
             xclass: view

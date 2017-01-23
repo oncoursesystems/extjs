@@ -459,10 +459,10 @@ Ext.define('Ext.Component', {
          */
         html: null,
 
+        // @cmd-auto-dependency {defaultType: "Ext.behavior.Draggable"}
         /**
          * @cfg {Object} [draggable] Configuration options to make this Component draggable
          * @accessor
-         * @cmd-auto-dependency {defaultType: "Ext.behavior.Draggable"}
          */
         draggable: null,
 
@@ -570,6 +570,7 @@ Ext.define('Ext.Component', {
          */
         useBodyElement: null,
 
+        // @cmd-auto-dependency {defaultType: "Ext.tip.ToolTip"}
         /**
          * @cfg {String/Object} tooltip
          * The tooltip for this component - can be a string to be used as innerHTML
@@ -583,8 +584,6 @@ Ext.define('Ext.Component', {
          *
          * Configuring this with `autoHide: false` implies `autoCreate: true` so that the desired persistent
          * behavior can be obtained with other targets still showing the singleton instance.
-         *
-         * @cmd-auto-dependency {defaultType: "Ext.tip.ToolTip"}
          */
         tooltip: null,
 
@@ -597,17 +596,17 @@ Ext.define('Ext.Component', {
          */
         axisLock: null,
 
+        // @cmd-auto-dependency {defaultType: "Ext.Mask"}
         /**
          * @cfg {Boolean} modal `true` to make this Componenrt modal. This will create a mask underneath the Component
          * that covers its parent and does not allow the user to interact with any other Components until this
          * Component is dismissed.
          * @accessor
-         * @cmd-auto-dependency {defaultType: "Ext.Mask"}
          */
         modal: null,
 
         /**
-         * @cfg {Boolean} hideOnMaskTap When using a {@link #modal} Component, setting this to `true` will hide the modal
+         * @cfg {Boolean} hideOnMaskTap When using a {@link #cfg!modal} Component, setting this to `true` will hide the modal
          * mask and the Container when the mask is tapped on.
          * @accessor
          */
@@ -905,7 +904,7 @@ Ext.define('Ext.Component', {
     },
 
     /**
-     * Center this *{@link #cfg-floated}* Component in its parent.
+     * Center this {@link #cfg-floated} or {@link #isPositioned positioned} Component in its parent.
      * @return {Ext.Component} this
      */
     center: function() {
@@ -914,12 +913,17 @@ Ext.define('Ext.Component', {
 
         if (me.el.isVisible()) {
             parent = me.getParent();
-            parent = parent ? parent.element : Ext.getBody();
+            parent = parent ? parent.bodyElement : Ext.getBody();
             parentBox = parent.getConstrainRegion();
             xy = [(parentBox.getWidth() - me.el.getWidth()) / 2, (parentBox.getHeight() - me.el.getHeight()) / 2];
 
-            me.setX(xy[0]);
-            me.setY(xy[1]);
+            if (me.isPositioned()) {
+                me.setLeft(xy[0]);
+                me.setTop(xy[1]);
+            } else {
+                me.setX(xy[0]);
+                me.setY(xy[1]);
+            }
         } else {
             me.needsCenter = true;
         }
@@ -1806,7 +1810,7 @@ Ext.define('Ext.Component', {
 
         me.callParent([hidden, oldHidden]);
 
-        if (element && !element.destroyed) {
+        if (!me.destroying && element && !element.destroyed) {
             element.toggleCls(me.hiddenCls, hidden);
 
             // Updating to hidden during config should not fire events
@@ -1854,7 +1858,7 @@ Ext.define('Ext.Component', {
                 }
                 me.on({
                     beforehiddenchange: 'animateFn',
-                    scope: this,
+                    scope: me,
                     single: true,
                     args: [animation]
                 });
@@ -2433,7 +2437,7 @@ Ext.define('Ext.Component', {
     privates: {
         doAddListener: function(name, fn, scope, options, order, caller, manager) {
             if (name == 'painted' || name == 'resize') {
-                this.element.doAddListener(name, fn, scope || this, options, order);
+                this.element.doAddListener(name, fn, scope, options, order);
             }
 
             this.callParent([name, fn, scope, options, order, caller, manager]);
@@ -2463,7 +2467,7 @@ Ext.define('Ext.Component', {
 }, function() {
     //<debug>
     if (!document.querySelector('meta[name=viewport]')) {
-        Ext.log.warn('Ext JS requires a viewport meta tag in order to function correctly on mobile devices.  Please add the following tag to the <head> of your html page: \n <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">');
+        Ext.log.warn('Ext JS requires a viewport meta tag in order to function correctly on mobile devices.  Please add the following tag to the <head> of your html page: \n <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=10, user-scalable=yes">');
     }
     //</debug>
 });

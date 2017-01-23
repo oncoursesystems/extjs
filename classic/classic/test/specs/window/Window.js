@@ -1,7 +1,8 @@
 /* global Ext, expect, jasmine, xit */
 
 describe("Ext.window.Window", function() {
-    var win, container;
+    var itNotIE8 = Ext.isIE8 ? xit : it,
+        win, container;
     
     function makeWindow(config, noShow) {
         config = Ext.apply({
@@ -56,6 +57,26 @@ describe("Ext.window.Window", function() {
             
             it("should not be tabbable", function() {
                 expect(tool.el.isTabbable()).toBe(false);
+            });
+        });
+    });
+
+    describe("closable", function() {
+        describe("esc key", function() {
+            it("should close on esc key with closable: true", function() {
+                makeWindow({
+                    closable: true
+                });
+                jasmine.fireKeyEvent(win.body, 'keydown', Ext.event.Event.ESC);
+                expect(win.destroyed).toBe(true);
+            });
+
+            it("should not close on esc key with closable: false", function() {
+                makeWindow({
+                    closable: false
+                });
+                jasmine.fireKeyEvent(win.body, 'keydown', Ext.event.Event.ESC);
+                expect(win.destroyed).toBe(false);
             });
         });
     });
@@ -1267,7 +1288,7 @@ describe("Ext.window.Window", function() {
                 expectFocused(cmp);
             });
 
-            it("should focus the window if the selector does not match", function() {
+            itNotIE8("should focus the window if the selector does not match", function() {
                 makeWindow({
                     defaultFocus: '#notthere',
                     defaultType: 'textfield',
