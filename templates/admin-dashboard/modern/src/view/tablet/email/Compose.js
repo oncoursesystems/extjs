@@ -22,18 +22,18 @@ Ext.define('Admin.view.tablet.email.Compose', {
 
     items: [{
         xtype: 'textfield',
-        placeHolder: 'To',
+        placeholder: 'To',
         reference: 'toField',
         name: 'to',
         margin: '0 0 20 0'
     }, {
         xtype: 'textfield',
-        placeHolder: 'Subject',
+        placeholder: 'Subject',
         name: 'subject',
         margin: '0 0 20 0'
     }, {
         xtype: 'textareafield',
-        placeHolder: 'Content',
+        placeholder: 'Content',
         name: 'message',
         flex: 1,
         margin: '0 0 10 0'

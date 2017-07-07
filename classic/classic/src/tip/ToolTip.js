@@ -470,8 +470,8 @@ Ext.define('Ext.tip.ToolTip', {
     onTargetTap: function(e) {
         // On hybrid mouse/touch systems, we want to show the tip on touch, but
         // we don't want to show it if this is coming from a click event, because
-        // the mouse is already hovered.
-        if (this.showOnTap && e.pointerType !== 'mouse') {
+        // the mouse is already hovered. Tap occasionally hides - eg: pickers, menus.
+        if (this.showOnTap && e.pointerType !== 'mouse' && Ext.fly(e.target).isVisible(true)) {
             this.onTargetOver(e);
         }
     },
@@ -715,13 +715,17 @@ Ext.define('Ext.tip.ToolTip', {
     onShow: function() {
         var me = this;
         me.callParent();
-        me.mon(Ext.getDoc(), 'mousedown', me.onDocMouseDown, me);
+        me.mousedownListener = Ext.on({
+            mousedown: 'onDocMouseDown',
+            scope: me,
+            destroyable: true
+        });
     },
 
     onHide: function() {
         var me = this;
         me.callParent();
-        me.mun(Ext.getDoc(), 'mousedown', me.onDocMouseDown, me);
+        Ext.destroy(me.mousedownListener);
     },
 
     /**
@@ -770,10 +774,9 @@ Ext.define('Ext.tip.ToolTip', {
         var me = this;
         
         me.clearTimers();
-        Ext.getDoc().un('mousedown', me.onDocMouseDown, me);
-        
-        Ext.destroy(me.anchorEl);
-        
+
+        me.destroyMembers('mousedownListener', 'anchorEl');
+
         me.callParent();
     },
 

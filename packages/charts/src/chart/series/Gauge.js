@@ -1,8 +1,5 @@
 /**
- * @class Ext.chart.series.Gauge
- * @extends Ext.chart.series.Series
- * 
- * Creates a Gauge Chart.
+ * Displays a gauge chart.
  *
  *     @example
  *     Ext.create({
@@ -326,9 +323,9 @@ Ext.define('Ext.chart.series.Gauge', {
     processData: function () {
         var me = this,
             store = me.getStore(),
-            axis, min, max,
-            fx, fxDuration,
             record = store && store.first(),
+            animation, duration,
+            axis, min, max,
             xField, value;
 
         if (record) {
@@ -342,9 +339,9 @@ Ext.define('Ext.chart.series.Gauge', {
             min = axis.getMinimum();
             max = axis.getMaximum();
             // Animating the axis here can lead to weird looking results.
-            fx = axis.getSprites()[0].fx;
-            fxDuration = fx.getDuration();
-            fx.setDuration(0);
+            animation = axis.getSprites()[0].getAnimation();
+            duration = animation.getDuration();
+            animation.setDuration(0);
             if (Ext.isNumber(min)) {
                 me.setMinimum(min);
             } else {
@@ -355,7 +352,7 @@ Ext.define('Ext.chart.series.Gauge', {
             } else {
                 axis.setMaximum(me.getMaximum());
             }
-            fx.setDuration(fxDuration);
+            animation.setDuration(duration);
         }
         if (!Ext.isNumber(value)) {
             value = me.getMinimum();
@@ -367,7 +364,7 @@ Ext.define('Ext.chart.series.Gauge', {
         return {
             type: this.seriesType,
             renderer: this.getRenderer(),
-            fx: {
+            animation: {
                 customDurations: {
                     translationX: 0,
                     translationY: 0,

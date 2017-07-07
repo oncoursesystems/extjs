@@ -99,8 +99,11 @@ Ext.define('Ext.event.publisher.Dom', {
     },
 
     constructor: function() {
-        var me = this;
+        var me = this,
+            supportsPassive = Ext.supports.PassiveEventListener;
 
+        me.listenerOptions = supportsPassive ? { passive: false } : false;
+        me.captureOptions = supportsPassive ? { passive: false, capture: true } : true;
         me.bubbleSubscribers = {};
         me.captureSubscribers = {};
         me.directSubscribers = {};
@@ -116,23 +119,22 @@ Ext.define('Ext.event.publisher.Dom', {
         Ext.onInternalReady(me.onReady, me);
 
         me.callParent();
+
+        me.registerDomEvents();
     },
 
-    registerEvents: function() {
+    registerDomEvents: function() {
         var me = this,
             publishersByEvent = Ext.event.publisher.Publisher.publishersByEvent,
             domEvents = me.handledDomEvents,
             ln = domEvents.length,
-            i = 0,
-            eventName;
+            i, eventName;
 
-        for (; i < ln; i++) {
+        for (i = 0; i < ln; i++) {
             eventName = domEvents[i];
             me.handles[eventName] = 1;
             publishersByEvent[eventName] = me;
         }
-
-        this.callParent();
     },
 
     onReady: function() {
@@ -168,32 +170,46 @@ Ext.define('Ext.event.publisher.Dom', {
     },
 
     addDelegatedListener: function(eventName) {
-        this.delegatedListeners[eventName] = 1;
-        this.target.addEventListener(
-            eventName, this.onDelegatedEvent, !!this.captureEvents[eventName]
+        var me = this;
+
+        me.delegatedListeners[eventName] = 1;
+
+        me.target.addEventListener(
+            eventName,
+            me.onDelegatedEvent,
+            me.captureEvents[eventName] ? me.captureOptions : me.listenerOptions
         );
     },
 
     removeDelegatedListener: function(eventName) {
-        delete this.delegatedListeners[eventName];
-        this.target.removeEventListener(
-            eventName, this.onDelegatedEvent, !!this.captureEvents[eventName]
+        var me = this;
+
+        delete me.delegatedListeners[eventName];
+
+        me.target.removeEventListener(
+            eventName,
+            me.onDelegatedEvent,
+            me.captureEvents[eventName] ? me.captureOptions : me.listenerOptions
         );
     },
 
     addDirectListener: function(eventName, element, capture) {
+        var me = this;
+
         element.dom.addEventListener(
             eventName,
-            capture ? this.onDirectCaptureEvent : this.onDirectEvent,
-            capture
+            capture ? me.onDirectCaptureEvent : me.onDirectEvent,
+            capture ? me.captureOptions : me.listenerOptions
         );
     },
 
     removeDirectListener: function(eventName, element, capture) {
+        var me = this;
+
         element.dom.removeEventListener(
             eventName,
-            capture ? this.onDirectCaptureEvent : this.onDirectEvent,
-            capture
+            capture ? me.onDirectCaptureEvent : me.onDirectEvent,
+            capture ? me.captureOptions : me.listenerOptions
         );
     },
 
@@ -469,9 +485,14 @@ Ext.define('Ext.event.publisher.Dom', {
 
             Ext.frameStartTime = timeStamp;
 
+            me.reEnterCountAdjusted = false;
             me.reEnterCount++;
             me.publishDelegatedDomEvent(e);
-            me.reEnterCount--;
+            
+            // Gesture publisher deals with exceptions in recognizers
+            if (!me.reEnterCountAdjusted) {
+                me.reEnterCount--;
+            }
 
             me.afterEvent(e);
         }
@@ -530,9 +551,14 @@ Ext.define('Ext.event.publisher.Dom', {
         if (el) {
             // Since natural DOM propagation has occurred, no emulated propagation is needed.
             // Simply dispatch the event on the currentTarget element
+            me.reEnterCountAdjusted = false;
             me.reEnterCount++;
             me.fire(el, e.type, e, true, capture);
-            me.reEnterCount--;
+            
+            // Gesture publisher deals with exceptions in recognizers
+            if (!me.reEnterCountAdjusted) {
+                me.reEnterCount--;
+            }
         }
 
         me.afterEvent(e);

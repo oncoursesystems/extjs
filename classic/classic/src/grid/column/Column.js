@@ -140,7 +140,7 @@ Ext.define('Ext.grid.column.Column', {
 
     ariaRole: 'columnheader',
 
-    enableFocusableContainer: false,
+    focusableContainer: false,
 
     sortState: null,
 
@@ -157,11 +157,11 @@ Ext.define('Ext.grid.column.Column', {
     ],
 
     /**
-     * @private
      * @cfg {Boolean} [headerWrap=false]
      * The default setting indicates that external CSS rules dictate that the title is `white-space: nowrap` and
      * therefore, width cannot affect the measured height by causing text wrapping. This is what the Sencha-supplied
      * styles set. If you change those styles to allow text wrapping, you must set this to `true`.
+     * @private
      */
     headerWrap: false,
 
@@ -561,10 +561,10 @@ Ext.define('Ext.grid.column.Column', {
      *                 allowBlank: false
      *             }
      *         }],
-     *         plugins: {
+     *         plugins: [{
      *             ptype: 'rowediting',
      *             clicksToEdit: 1
-     *         },
+     *         }],
      *         height: 200,
      *         width: 400,
      *         renderTo: document.body
@@ -669,14 +669,13 @@ Ext.define('Ext.grid.column.Column', {
      * supported editor field type.
      */
     
-    //<locale>
     /**
      * @cfg {String} [dirtyText="Cell value has been edited"]
      * This text will be announced by Assistive Technologies such as screen readers when
      * a cell with changed ("dirty") value is focused.
+     * @locale
      */
     dirtyText: "Cell value has been edited",
-    //</locale>
 
     /**
      * @cfg {Object/String} field
@@ -730,8 +729,8 @@ Ext.define('Ext.grid.column.Column', {
      *          }
      *      }
      *
-     * You could also define it as an array of objects, each object having a `type` that specifies by
-     * which exporter will be used:
+     * You could also define it as an array of objects, each object having a `type`
+     * that specifies by which exporter will be used:
      *
      *      {
      *          xtype: 'numbercolumn',
@@ -779,6 +778,69 @@ Ext.define('Ext.grid.column.Column', {
      *
      */
     exportStyle: null,
+
+    /**
+     * @cfg {Boolean/Function/String} exportRenderer
+     *
+     * During data export via the {@link Ext.grid.plugin.Exporter} plugin the data for
+     * this column could be formatted in multiple ways:
+     *
+     * - using the `exportStyle.format`
+     * - using the `formatter` if no `exportStyle` is defined
+     * - using the `exportRenderer`
+     *
+     * If you want to use the `renderer` defined on this column then set `exportRenderer`
+     * to `true`. Beware that this should only happen if the `renderer` deals only with
+     * data on the record or value and it does NOT style the cell or returns an html
+     * string.
+     *
+     *      {
+     *          xtype: 'numbercolumn',
+     *          dataIndex: 'price',
+     *          text: 'Price',
+     *          renderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+     *              return Ext.util.Format.currency(value);
+     *          },
+     *          exportRenderer: true
+     *      }
+     *
+     * If you don't want to use the `renderer` during export but you still want to format
+     * the value in a special way then you can provide a function to `exportRenderer` or
+     * a string (which is a function name on the ViewController).
+     * The provided function has the same signature as the renderer.
+     *
+     *      {
+     *          xtype: 'numbercolumn',
+     *          dataIndex: 'price',
+     *          text: 'Price',
+     *          exportRenderer: function (value, metaData, record, rowIndex, colIndex, store, view) {
+     *              return Ext.util.Format.currency(value);
+     *          }
+     *      }
+     *
+     *
+     *      {
+     *          xtype: 'numbercolumn',
+     *          dataIndex: 'price',
+     *          text: 'Price',
+     *          exportRenderer: 'exportAsCurrency' // this is a function on the ViewController
+     *      }
+     *
+     *
+     * If `exportStyle.format`, `formatter` and `exportRenderer` are all defined on the
+     * column then the `exportStyle` wins and will be used to format the data for this
+     * column.
+     */
+    exportRenderer: false,
+
+    /**
+     * @cfg {Boolean/Function/String} exportSummaryRenderer
+     *
+     * This config is similar to {@link #exportRenderer} but is applied to summary
+     * records.
+     *
+     */
+    exportSummaryRenderer: false,
 
     /**
      * @property {Ext.dom.Element} triggerEl
@@ -947,6 +1009,9 @@ Ext.define('Ext.grid.column.Column', {
 
         me.callParent([container, pos, instanced]);
 
+        // Invalidate references, so that when asked for, they have to be regathered
+        me.view = me.rootHeaderCt = me.cellSelector = me.visibleIndex = null;
+
         if (!me.headerId) {
             me.calculateHeaderId();
         }
@@ -1106,11 +1171,16 @@ Ext.define('Ext.grid.column.Column', {
     },
 
     getView: function() {
-        var rootHeaderCt = this.getRootHeaderCt();
+        var rootHeaderCt;
 
-        if (rootHeaderCt) {
-            return rootHeaderCt.view;
+        // Only traverse to get our view once.
+        if (!this.view) {
+            rootHeaderCt = this.getRootHeaderCt();
+            if (rootHeaderCt) {
+                this.view = rootHeaderCt.view;
+            }
         }
+        return this.view;
     },
 
     onFocusLeave: function(e) {
@@ -1742,7 +1812,7 @@ Ext.define('Ext.grid.column.Column', {
      * and as such will *not* have the {@link #locked} flag set.
      */
     isLocked: function() {
-        return this.locked || !!this.up('[isColumn][locked]', '[isRootHeader]');
+        return this.locked || this.getInherited().inLockedGrid;
     },
 
     hasMultipleVisibleChildren: function(result) {
@@ -1925,12 +1995,15 @@ Ext.define('Ext.grid.column.Column', {
     },
 
     getCellSelector: function() {
-        var view = this.getView();
+        if (!this.cellSelector) {
+            var view = this.getView();
 
-        // We must explicitly access the view's cell selector as well as this column's own ID class because
-        // <col> elements are given this column's ID class.
-        // If we are still atached to a view. If not, the identifying class will do.
-        return (view ? view.getCellSelector() : '') + '.' + this.getCellId();
+            // We must explicitly access the view's cell selector as well as this column's own ID class because
+            // <col> elements are given this column's ID class.
+            // If we are still atached to a view. If not, the identifying class will do.
+            this.cellSelector = (view ? view.getCellSelector() : '') + '.' + this.getCellId();
+        }
+        return this.cellSelector;
     },
 
     getCellInnerSelector: function() {

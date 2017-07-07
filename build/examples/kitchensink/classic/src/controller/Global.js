@@ -349,32 +349,52 @@ Ext.define('KitchenSink.controller.Global', {
     },
 
     onMaximizeClick: function(){
-        var preview = this.getCodePreview(),
+        var me = this,
+            viewport = me.getViewport(),
+            preview = me.getCodePreview(),
             activeView = preview.activeView,
-            w = new Ext.window.Window({
+            w = me.previewWindow;
+
+        if (w) {
+            if (activeView) {
+                // Reuse window. Add code previews.
+                Ext.suspendLayouts();
+                me.codePreviewTabPanel.add(activeView.codePreviewProcessed);
+                Ext.resumeLayouts();
+            }
+        } else {
+            w = me.previewWindow = new Ext.window.Window({
                 rtl: false,
-                maximized: true,
+                shadow: false,
+                resizable: false,
+                draggable: false,
                 title: 'Code Preview',
                 closable: true,
                 layout: 'fit',
                 defaultFocus: 'tab',
-                items: {
+                closeAction: 'hide',
+                x: 0,
+                y: 0,
+                width: viewport.width,
+                height: viewport.height,
+                items: me.codePreviewTabPanel = Ext.create({
                     xtype: 'codePreview',
+                    ptype: 'lazyitems',
                     activeTab: activeView ? preview.items.indexOf(preview.getActiveTab()) : 0,
                     tools: [],
                     showTitle: false,
                     items: activeView ? activeView.codePreviewProcessed : []
-                },
+                }),
                 doClose: function() {
                     w.hide(preview, function() {
-                        w.destroy();
+                        me.codePreviewTabPanel.removeAll(false);
                     });
                 },
                 onFocusLeave: function() {
-                    this.close();
+                    w.close();
                 }
             });
-
+        }
         w.show(preview);
     }
 });

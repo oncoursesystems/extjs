@@ -296,6 +296,9 @@ Ext.raise = function () {
                 last = n;
             }
         };
+    
+    // Allow unit tests to skip this when checking for dangling timers
+    notify.$skipTimerCheck = true;
 
     // window.onerror sounds ideal but it prevents the built-in error dialog from doing
     // its (better) thing.

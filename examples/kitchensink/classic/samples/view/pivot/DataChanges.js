@@ -1,6 +1,7 @@
 /**
  *
- * This example shows that the pivot grid recalculates when store data has been changed.
+ * This example shows that the pivot grid recalculates when store data
+ * has been changed.
  *
  * Use the buttons add/update/remove/clear store data.
  */
@@ -59,7 +60,8 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
                 }
             }
         },
-        // Configure the aggregate dimensions. Multiple dimensions are supported.
+        // Configure the aggregate dimensions. Multiple dimensions
+        // are supported.
         aggregate: [{
             dataIndex: 'value',
             header: 'Total',
@@ -70,7 +72,8 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
             aggregator: 'count'
         }],
 
-        // Configure the left axis dimensions that will be used to generate the grid rows
+        // Configure the left axis dimensions that will be used to generate
+        // the grid rows
         leftAxis: [{
             dataIndex: 'year',
             header: 'Year'
@@ -80,10 +83,13 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
         }],
 
         /**
-         * Configure the top axis dimensions that will be used to generate the columns.
-         * When columns are generated the aggregate dimensions are also used. If multiple aggregation dimensions
-         * are defined then each top axis result will have in the end a column header with children
-         * columns for each aggregate dimension defined.
+         * Configure the top axis dimensions that will be used to generate
+         * the columns.
+         *
+         * When columns are generated the aggregate dimensions are also used.
+         * If multiple aggregation dimensions are defined then each top axis
+         * result will have in the end a column header with children columns
+         * for each aggregate dimension defined.
          */
         topAxis: [{
             dataIndex: 'country',

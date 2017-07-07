@@ -144,7 +144,7 @@ Ext.define('Ext.dd.DragTracker', {
      */
 
     /**
-     * @event beforestart
+     * @event beforedragstart
      * @param {Object} this
      * @param {Object} e event object
      */
@@ -228,7 +228,7 @@ Ext.define('Ext.dd.DragTracker', {
         // See if the handle or delegates are inside the scrolling part of the component.
         // If they are, we will need to use longpress to trigger the dragstart.
         if (Ext.supports.Touch) {
-            elCmp = Ext.ComponentManager.fromElement(el);
+            elCmp = Ext.Component.from(el);
             touchScrollable = elCmp && elCmp.getScrollable();
             if (touchScrollable) {
                 elCmp = touchScrollable.getElement();

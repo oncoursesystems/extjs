@@ -65,15 +65,19 @@ Ext.define('Ext.grid.plugin.Clipboard', {
 
             if (isRaw) {
                 data = record.data[dataIndex];
-            } else {
+            }
+            else {
                 // Try to access the view node.
                 viewNode = view.all.item(cellContext.rowIdx);
+                
                 // If we could not, it's because it's outside of the rendered block - recreate it.
                 if (!viewNode) {
                     viewNode = Ext.fly(view.createRowElement(record, cellContext.rowIdx));
                 }
-                cell = viewNode.down(column.getCellInnerSelector());
-                data = cell.dom.innerHTML;
+                
+                cell = viewNode.dom.querySelector(column.getCellInnerSelector());
+                data = cell.innerHTML;
+                
                 if (isText) {
                     data = Ext.util.Format.stripTags(data);
                 }

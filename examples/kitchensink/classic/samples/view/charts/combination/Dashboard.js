@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.charts.combination.Dashboard', {
         path: 'classic/samples/view/charts/combination/DashboardController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Dashboard.js'
+        path: 'app/store/Dashboard.js'
     }],
     // </example>
     width: 700,

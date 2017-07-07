@@ -1,8 +1,7 @@
 /* global Ext, jasmine, expect */
 
 // This will test all interaction between drag/drop targets.
-describe("Ext.drag.Manager", function() {
-
+topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Scroller'], function() {
     var helper = Ext.testHelper,
         touchId = 0,
         cursorTrack, source, target,
@@ -504,6 +503,7 @@ describe("Ext.drag.Manager", function() {
                 });
 
                 runs(function() {
+                    endDrag();
                     inner.destroy();
                 });
             });
@@ -538,6 +538,8 @@ describe("Ext.drag.Manager", function() {
                     endDrag();
                     runs(function() {
                         stretcher.remove();
+                        
+                        Scroller.viewport = Ext.destroy(Scroller.viewport);
                     });
                 }
             });

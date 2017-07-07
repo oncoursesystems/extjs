@@ -132,14 +132,51 @@ Ext.define('Ext.app.ViewController', {
     },
 
     config: {
+        /**
+         * @cfg {Object} bindings
+         * A declarative set of bindings to the {@link #getViewModel} for this
+         * controller. The key should be the method, the value should be
+         * the bind statement:
+         *
+         *     Ext.define('MyApp.TestController', {
+         *         extend: 'Ext.app.ViewController',
+         *
+         *         bindings: {
+         *             onTotalChange: '{total}',
+         *             onCoordsChange: '({x}, {y})',
+         *             onProductChange: {
+         *                 amount: '{qty}',
+         *                 rating: '{rating}'
+         *             }
+         *         },
+         *
+         *          onTotalChange: function(total) {
+         *              console.log(total);
+         *          },
+         *
+         *          onCoordsChange: function(coords) {
+         *              console.log('The coordinates are: ', coords);
+         *          },
+         *
+         *          onProductChange: function(productInfo) {
+         *              console.log('Amount: ', productInfo.amount, ' Rating: ', productInfo.rating);
+         *          }
+         *     });
+         *
+         * @since 6.5.0
+         */
+        bindings: {
+            $value: null,
+            lazy: true
+        },
         closeViewAction: 'destroy'
     },
 
     view: null,
 
-    constructor: function() {
+    constructor: function(config) {
         this.compDomain = new Ext.app.domain.View(this);
-        this.callParent(arguments);
+        this.callParent([config]);
     },
 
     /**
@@ -176,7 +213,18 @@ Ext.define('Ext.app.ViewController', {
      */
     destroy: function() {
         var me = this,
-            domain = me.compDomain;
+            domain = me.compDomain,
+            bind, b, key;
+
+        if (me.$hasBinds) {
+            bind = me.getBindings();
+            for (key in bind) {
+                b = bind[key];
+                if (b) {
+                    b.destroy();
+                }
+            }
+        }
 
         if (domain) {
             domain.unlisten(me);
@@ -323,22 +371,58 @@ Ext.define('Ext.app.ViewController', {
      * @return {Boolean} returns false if any of the handlers return false otherwise it returns true.
      * @protected
      */
-    fireViewEvent: function(eventName, firstArg) {
+    fireViewEvent: function (eventName, args) {
         var view = this.view,
             result = false,
-            args = arguments;
+            a = arguments;
 
         if (view) {
-            if (view !== firstArg) {
-                args = Ext.Array.slice(args);
+            if (view !== args) {
+                a = Ext.Array.slice(a);
 
-                args.splice(1, 0, view);
+                a.splice(1, 0, view); // insert view at [1]
             }
 
-            result = view.fireEvent.apply(view, args);
+            result = view.fireEvent.apply(view, a);
         }
 
         return result;
+    },
+
+    /**
+     * @method setBind
+     * @hide
+     */
+
+    applyBindings: function(bindings) {
+        if (!bindings) {
+            return null;
+        }
+
+        var me = this,
+            viewModel = me.getViewModel(),
+            getBindTemplateScope = me.getBindTemplateScope(),
+            b, fn, descriptor;
+
+        me.$hasBinds = true;
+        //<debug>
+        if (!viewModel) {
+            Ext.raise('Cannot use bind config without a viewModel');
+        }
+        //</debug>
+
+        for (fn in bindings) {
+            descriptor = bindings[fn];
+            b = null;
+
+            if (descriptor) {
+                b = viewModel.bind(descriptor, fn, me);
+                b.getTemplateScope = getBindTemplateScope;
+            }
+            bindings[fn] = b;
+        }
+
+        return bindings;
     },
 
     //=========================================================================
@@ -356,32 +440,16 @@ Ext.define('Ext.app.ViewController', {
                 view.attachReference(component);
             }
         },
-        
-        /**
-         * Clear a reference to a component
-         * @param {Ext.Component} ref The component to reference
-         * 
-         * @private
-         */
-        clearReference: function(ref) {
-            var view = this.view;
-            if (view) {
-                view.clearReference(ref);
-            }
+
+        getBindTemplateScope: function() {
+            // This method is called as a method on a Binding instance, so the "this" pointer
+            // is that of the Binding. The "scope" of the Binding is the controller.
+            return this.scope;
         },
 
-        /**
-         * Invalidates the references collection. Typically called when
-         * removing a container from this container, since it's difficult
-         * to know what references got removed.
-         *
-         * @private
-         */
-        clearReferences: function () {
-            var view = this.view;
-            if (view) {
-                view.clearReferences();
-            }
+        initBindings: function() {
+            // Force bind creation
+            this.getBindings();
         },
 
         /**

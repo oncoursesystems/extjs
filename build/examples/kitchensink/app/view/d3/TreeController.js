@@ -3,7 +3,7 @@ Ext.define('KitchenSink.view.d3.TreeController', {
     alias: 'controller.d3-tree',
 
     onTooltip: function (component, tooltip, node, element, event) {
-        var n = node.childNodes.length;
+        var n = node.data.childNodes.length;
 
         tooltip.setHtml(n + ' item' + (n === 1 ? '' : 's') + ' inside.');
     }

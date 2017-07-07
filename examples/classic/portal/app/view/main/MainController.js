@@ -3,17 +3,11 @@ Ext.define('Portal.view.main.MainController', {
 
     alias: 'controller.main',
 
-    onAddFeed: function () {
+    onAddUser: function (item) {
         var dashboard = this.lookupReference('dashboard');
-        dashboard.addNew('rss');
-    },
-
-    onAddFeedUrl: function (sender) {
-        var dashboard = this.lookupReference('dashboard');
-
+        
         dashboard.addView({
-            type: 'rss',
-            feedUrl: sender.feedUrl
+            type: 'userForm'
         });
     }
 });

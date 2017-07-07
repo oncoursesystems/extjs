@@ -1,5 +1,8 @@
 /* global Ext, xit, it, spyOn, jasmine, expect */
-describe("grid-widgets", function(){
+topSuite("grid-widgets", 
+    [false, 'Ext.grid.Panel', 'Ext.grid.column.Widget', 'Ext.ProgressBarWidget',
+     'Ext.slider.Widget', 'Ext.sparkline.*', 'Ext.Button'],
+function() {
 
     var grid, view, store, testIt = Ext.isWebKit ? it : xit,
         GridModel = Ext.define(null, {
@@ -181,7 +184,7 @@ describe("grid-widgets", function(){
         view = useLocking ? grid.normalGrid.getView() : grid.getView();
     }
     
-    afterEach(function(){
+    afterEach(function() {
         Ext.destroy(grid, store);
         grid = store = null;
         Ext.data.Model.schema.clear();
@@ -269,6 +272,40 @@ describe("grid-widgets", function(){
 
             // Return one progressbarwidget for each row
             expect(grid.query('progressbarwidget').length).toBe(10);
+        });
+    });
+
+    describe('widget focus', function () {
+        it('should not focus the cell on mousedown', function () {
+            var view, pos, btn;
+
+            makeGrid(5, {}, [{
+                width: 200,
+                xtype: 'widgetcolumn',
+                dataIndex: 'name',
+                cellFocusable: false,
+                widget: {
+                    xtype: 'container',
+                    layout: 'vbox',
+                    items: [{
+                        html: '',
+                        height: 200
+                    }, {
+                        xtype: 'button'
+                    }]
+                }
+            }]);
+
+            view = grid.getView();
+
+            // scroll the first row partially out of view
+            view.scrollTo(0, 100);
+            pos = view.getScrollY();
+
+            btn = Ext.fly(grid.getView().getRow(0)).down('.x-btn');
+            jasmine.fireMouseEvent(btn.dom, 'mousedown', null, null, true);
+
+            expect(pos).toEqual(view.getScrollY());
         });
     });
 });

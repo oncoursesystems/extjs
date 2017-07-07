@@ -21,19 +21,19 @@ Ext.define('KitchenSink.view.tree.HeterogeneousTree', {
     exampleTitle: 'Heterogeneous Geographical Tree',
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/GeoData.js'
+        path: 'app/store/GeoData.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/tree/Territory.js'
+        path: 'app/model/tree/Territory.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/tree/Country.js'
+        path: 'app/model/tree/Country.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/tree/City.js'
+        path: 'app/model/tree/City.js'
     },{
         type: 'Data',
-        path: 'classic/samples/data/GeoData.js'
+        path: 'app/data/GeoData.js'
     }],
     //</example>
     store: 'GeoData',
@@ -143,7 +143,7 @@ Ext.define('KitchenSink.view.tree.HeterogeneousTree', {
                 node.leaf = true;
                 node.mtype = 'City';
             }
-            
+
             node = target.appendChild(node);
 
             // User might want to see what they've just added!

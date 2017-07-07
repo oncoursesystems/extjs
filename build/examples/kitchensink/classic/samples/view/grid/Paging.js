@@ -17,10 +17,10 @@ Ext.define('KitchenSink.view.grid.Paging', {
         path: 'classic/samples/view/grid/PagingController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/ForumThreads.js'
+        path: 'app/store/ForumThreads.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/grid/ForumThread.js'
+        path: 'app/model/grid/ForumThread.js'
     }],
     profiles: {
         classic: {

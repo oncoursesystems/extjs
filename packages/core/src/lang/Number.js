@@ -37,6 +37,66 @@ Ext.Number = (new function() { // jshint ignore:line
                 }, ClipDefault)
         },
 
+        binarySearch: function (array, value, begin, end) {
+            if (begin === undefined) {
+                begin = 0;
+            }
+            if (end === undefined) {
+                end = array.length;
+            }
+
+            --end;
+
+            var middle, midVal;
+
+            while (begin <= end) {
+                middle = (begin + end) >>> 1;  // unsigned right shift = Math.floor(x/2)
+                midVal = array[middle];
+
+                if (value === midVal) {
+                    return middle;
+                }
+                if (midVal < value) {
+                    begin = middle + 1;
+                }
+                else{
+                    end = middle - 1;
+                }
+            }
+
+            return begin;
+        },
+
+        bisectTuples: function (array, value, index, begin, end) {
+            if (begin === undefined) {
+                begin = 0;
+            }
+            if (end === undefined) {
+                end = array.length;
+            }
+
+            --end;
+
+            var middle, midVal;
+
+            while (begin <= end) {
+                middle = (begin + end) >>> 1;  // unsigned right shift = Math.floor(x/2)
+                midVal = array[middle][index];
+
+                if (value === midVal) {
+                    return middle;
+                }
+                if (midVal < value) {
+                    begin = middle + 1;
+                }
+                else{
+                    end = middle - 1;
+                }
+            }
+
+            return begin;
+        },
+
         /**
          * Coerces a given index into a valid index given a `length`.
          *
@@ -251,6 +311,12 @@ Ext.Number = (new function() { // jshint ignore:line
             interval = interval || 1;
             return interval * math.round(value / interval);
         },
+        
+        roundToPrecision: function(value, precision) {
+            var factor = math.pow(10, precision || 1);
+
+            return math.round(value * factor) / factor;
+        },
 
         /**
          * Returns the sign of the given number. See also MDN for Math.sign documentation
@@ -308,6 +374,12 @@ Ext.Number = (new function() { // jshint ignore:line
          */
         isFinite: Number.isFinite || function (value) {
             return typeof value === 'number' && isFinite(value);
+        },
+
+        isInteger: Number.isInteger || function (value) {
+            // Add zero get a valid result in a special case where the value is a number string.
+            // E.g. '10' + 0 is '100'.
+            return ~~(value + 0) === value;
         },
 
         /**

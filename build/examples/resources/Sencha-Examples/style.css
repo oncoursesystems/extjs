@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Sencha-Examples';
-  src:  url('fonts/Sencha-Examples.eot?6j91te');
-  src:  url('fonts/Sencha-Examples.eot?6j91te#iefix') format('embedded-opentype'),
-    url('fonts/Sencha-Examples.ttf?6j91te') format('truetype'),
-    url('fonts/Sencha-Examples.woff?6j91te') format('woff'),
-    url('fonts/Sencha-Examples.svg?6j91te#Sencha-Examples') format('svg');
+  src:  url('fonts/Sencha-Examples.eot?2a4uuv');
+  src:  url('fonts/Sencha-Examples.eot?2a4uuv#iefix') format('embedded-opentype'),
+    url('fonts/Sencha-Examples.ttf?2a4uuv') format('truetype'),
+    url('fonts/Sencha-Examples.woff?2a4uuv') format('woff'),
+    url('fonts/Sencha-Examples.svg?2a4uuv#Sencha-Examples') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -23,6 +23,174 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-line-real-time-date:before {
+  content: "\e98f";
+}
+.icon-line-real-time-number:before {
+  content: "\e990";
+}
+.icon-line-real-time:before {
+  content: "\e991";
+}
+.icon-gridheader-tools:before {
+  content: "\e96a";
+}
+.icon-rowoperations-grid:before {
+  content: "\e98b";
+}
+.icon-editable-grid:before {
+  content: "\e98c";
+}
+.icon-layout-card-indicator:before {
+  content: "\e98d";
+}
+.icon-undoable-step-swiper:before {
+  content: "\e98e";
+}
+.icon-grid-tools:before {
+  content: "\e95a";
+}
+.icon-menu-grid:before {
+  content: "\e95b";
+}
+.icon-row-body-grid:before {
+  content: "\e95c";
+}
+.icon-summary-row-grid:before {
+  content: "\e95d";
+}
+.icon-view-options-grid:before {
+  content: "\e95e";
+}
+.icon-flexible-selection-grid:before {
+  content: "\e95f";
+}
+.icon-ticker-grid:before {
+  content: "\e960";
+}
+.icon-boxplot-charts:before {
+  content: "\e961";
+}
+.icon-boxplot-nobel:before {
+  content: "\e962";
+}
+.icon-navigator-line:before {
+  content: "\e963";
+}
+.icon-navigator-charts:before {
+  content: "\e964";
+}
+.icon-d3-view-sencha-tree:before {
+  content: "\e965";
+}
+.icon-field-validation-adv:before {
+  content: "\e966";
+}
+.icon-form-errortargets:before {
+  content: "\e967";
+}
+.icon-form-masks:before {
+  content: "\e968";
+}
+.icon-form-fieldui:before {
+  content: "\e969";
+}
+.icon-field-validation:before {
+  content: "\e98a";
+}
+.icon-form-validation:before {
+  content: "\e96b";
+}
+.icon-form-remote-combo:before {
+  content: "\e96c";
+}
+.icon-gauge-sectors:before {
+  content: "\e96d";
+}
+.icon-layout-form:before {
+  content: "\e96e";
+}
+.icon-layout-box:before {
+  content: "\e96f";
+}
+.icon-basic-accordion-swiper:before {
+  content: "\e970";
+}
+.icon-undoable-accordion-swiper:before {
+  content: "\e971";
+}
+.icon-listpaging-list:before {
+  content: "\e972";
+}
+.icon-basic-step-swiper:before {
+  content: "\e973";
+}
+.icon-pullrefresh-list:before {
+  content: "\e974";
+}
+.icon-audio-basic:before {
+  content: "\e975";
+}
+.icon-video-basic:before {
+  content: "\e976";
+}
+.icon-actionsheets:before {
+  content: "\e977";
+}
+.icon-panel-date-adv:before {
+  content: "\e978";
+}
+.icon-panel-date:before {
+  content: "\e979";
+}
+.icon-panel-basic:before {
+  content: "\e97a";
+}
+.icon-panel-collapsible:before {
+  content: "\e97b";
+}
+.icon-panel-complex-collapsible:before {
+  content: "\e97c";
+}
+.icon-panel-headerposition:before {
+  content: "\e97d";
+}
+.icon-panel-handleresize:before {
+  content: "\e97e";
+}
+.icon-panel-splitresize:before {
+  content: "\e97f";
+}
+.icon-collapsible-pivot-grid:before {
+  content: "\e980";
+}
+.icon-tabular-pivot-grid:before {
+  content: "\e981";
+}
+.icon-widgets-pivot-grid:before {
+  content: "\e982";
+}
+.icon-basic-dialog:before {
+  content: "\e983";
+}
+.icon-toast-view:before {
+  content: "\e984";
+}
+.icon-progress-basic:before {
+  content: "\e985";
+}
+.icon-progress-decorated:before {
+  content: "\e986";
+}
+.icon-tree-cell-editing:before {
+  content: "\e987";
+}
+.icon-tree-editable:before {
+  content: "\e988";
+}
+.icon-tree-decorations:before {
+  content: "\e989";
+}
 .icon-amf-three:before {
   content: "\e938";
 }
@@ -1090,9 +1258,6 @@
 }
 .icon-lazy-tabs:before {
   content: "\e7b8";
-}
-.icon-line-real-time:before {
-  content: "\e7bc";
 }
 .icon-sprite-events:before {
   content: "\e7bb";

@@ -1,4 +1,4 @@
-describe("Ext.ClassManager", function() {
+topSuite("Ext.ClassManager", function() {
     var manager = Ext.ClassManager,
         cls, emptyFn = function(){};
 

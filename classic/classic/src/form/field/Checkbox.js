@@ -137,7 +137,7 @@ Ext.define('Ext.form.field.Checkbox', {
                 '{afterBoxLabelTpl}',
             '</tpl>',
             '<span id="{cmpId}-displayEl" data-ref="displayEl" role="presentation" class="{fieldCls} {typeCls} ',
-                '{typeCls}-{ui} {inputCls} {inputCls}-{ui} {childElCls} {afterLabelCls}">',
+                '{typeCls}-{ui} {inputCls} {inputCls}-{ui} {fixCls} {childElCls} {afterLabelCls}">',
                 '<input type="{inputType}" id="{id}" name="{inputName}" data-ref="inputEl" {inputAttrTpl}',
                     '<tpl if="tabIdx != null"> tabindex="{tabIdx}"</tpl>',
                     '<tpl if="disabled"> disabled="disabled"</tpl>',

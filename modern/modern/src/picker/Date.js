@@ -6,14 +6,14 @@
  *
  * ## Examples
  *
- *     @example miniphone preview
+ *     @example
  *     var datePicker = Ext.create('Ext.picker.Date');
  *     Ext.Viewport.add(datePicker);
  *     datePicker.show();
  *
  * You may want to adjust the {@link #yearFrom} and {@link #yearTo} properties:
  *
- *     @example miniphone preview
+ *     @example
  *     var datePicker = Ext.create('Ext.picker.Date', {
  *         yearFrom: 2000,
  *         yearTo  : 2015
@@ -23,7 +23,7 @@
  *
  * You can set the value of the {@link Ext.picker.Date} to the current date using `new Date()`:
  *
- *     @example miniphone preview
+ *     @example
  *     var datePicker = Ext.create('Ext.picker.Date', {
  *         value: new Date()
  *     });
@@ -32,7 +32,7 @@
  *
  * And you can hide the titles from each of the slots by using the {@link #useTitles} configuration:
  *
- *     @example miniphone preview
+ *     @example
  *     var datePicker = Ext.create('Ext.picker.Date', {
  *         useTitles: false
  *     });
@@ -155,6 +155,8 @@ Ext.define('Ext.picker.Date', {
 
         this.callParent([value, animated]);
         this.onSlotPick();
+
+        return this;
     },
 
     getValue: function(useDom) {

@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.window.MessageBox', {
     //<example>
     exampleTitle: 'Message Box',
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/window/MessageBoxController.js'
     }],
     //</example>

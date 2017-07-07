@@ -1,7 +1,8 @@
 // HasMany is not a real class, but is an alternate way of declaring ManyToOne
 // The purpose of these tests is to check that they set everything up correctly,
 // functionality tested in ManyToOne.
-describe("Ext.data.schema.HasMany", function() {
+// false in dependencies means don't attempt to load "Ext.data.schema.HasMany"
+topSuite("Ext.data.schema.HasMany", [false, 'Ext.data.ArrayStore'], function() {
 
     var Thread, Post, Vote;
 

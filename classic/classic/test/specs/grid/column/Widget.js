@@ -1,6 +1,9 @@
 /* global expect, Ext, jasmine */
 
-describe("Ext.grid.column.Widget", function() {
+topSuite("Ext.grid.column.Widget",
+    ['Ext.grid.Panel', 'Ext.Button', 'Ext.app.ViewController', 'Ext.form.RadioGroup',
+     'Ext.form.field.ComboBox', 'Ext.tab.Panel', 'Ext.ProgressBarWidget'],
+function() {
     var webkitIt = Ext.isWebKit ? it : xit,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
@@ -53,7 +56,9 @@ describe("Ext.grid.column.Widget", function() {
             xtype: 'button'
         })];
 
-        data = data || generateData(4);
+        if (typeof data == 'number' || data == null) {
+            data = generateData(data || 4);
+        }
 
         store = new Ext.data.Store({
             model: Model,
@@ -331,11 +336,11 @@ describe("Ext.grid.column.Widget", function() {
 
                 if (col && view.viewReady) {
                     selector = col.getCellInnerSelector();
-                    cells = view.getEl().select(selector, true);
-                    len = cells.getCount();
+                    cells = view.getEl().dom.querySelectorAll(selector);
+                    len = cells.lengtj;
 
                     for (i = start; i < len; ++i) {
-                        expect(getWidget(i, col).getEl().dom.parentNode).toBe(cells.item(i).dom);
+                        expect(getWidget(i, col).getEl().dom.parentNode).toBe(cells[i]);
                     }
                 }
             }
@@ -448,10 +453,10 @@ describe("Ext.grid.column.Widget", function() {
                             return 'foo';
                         }
                     })]);
-                    expect(view.getCellByPosition({row: 0, column: 0})).toHaveCls('foo');
-                    expect(view.getCellByPosition({row: 1, column: 0})).toHaveCls('foo');
-                    expect(view.getCellByPosition({row: 2, column: 0})).toHaveCls('foo');
-                    expect(view.getCellByPosition({row: 3, column: 0})).toHaveCls('foo');
+                    expect(view.getCellByPosition({row: 0, column: 0}, true)).toHaveCls('foo');
+                    expect(view.getCellByPosition({row: 1, column: 0}, true)).toHaveCls('foo');
+                    expect(view.getCellByPosition({row: 2, column: 0}, true)).toHaveCls('foo');
+                    expect(view.getCellByPosition({row: 3, column: 0}, true)).toHaveCls('foo');
                 });
 
                 it("should combine a tdCls on the column with the tdCls on the widget", function() {
@@ -463,14 +468,14 @@ describe("Ext.grid.column.Widget", function() {
                     });
                     cfg.tdCls = 'bar';
                     makeGrid([cfg]);
-                    expect(view.getCellByPosition({row: 0, column: 0})).toHaveCls('foo');
-                    expect(view.getCellByPosition({row: 0, column: 0})).toHaveCls('bar');
-                    expect(view.getCellByPosition({row: 1, column: 0})).toHaveCls('foo');
-                    expect(view.getCellByPosition({row: 1, column: 0})).toHaveCls('bar');
-                    expect(view.getCellByPosition({row: 2, column: 0})).toHaveCls('foo');
-                    expect(view.getCellByPosition({row: 2, column: 0})).toHaveCls('bar');
-                    expect(view.getCellByPosition({row: 3, column: 0})).toHaveCls('foo');
-                    expect(view.getCellByPosition({row: 3, column: 0})).toHaveCls('bar');
+                    expect(view.getCellByPosition({row: 0, column: 0}, true)).toHaveCls('foo');
+                    expect(view.getCellByPosition({row: 0, column: 0}, true)).toHaveCls('bar');
+                    expect(view.getCellByPosition({row: 1, column: 0}, true)).toHaveCls('foo');
+                    expect(view.getCellByPosition({row: 1, column: 0}, true)).toHaveCls('bar');
+                    expect(view.getCellByPosition({row: 2, column: 0}, true)).toHaveCls('foo');
+                    expect(view.getCellByPosition({row: 2, column: 0}, true)).toHaveCls('bar');
+                    expect(view.getCellByPosition({row: 3, column: 0}, true)).toHaveCls('foo');
+                    expect(view.getCellByPosition({row: 3, column: 0}, true)).toHaveCls('bar');
                 });
             });
 
@@ -927,7 +932,7 @@ describe("Ext.grid.column.Widget", function() {
                         expect(view.getCellByPosition({
                             row: 0,
                             column: 0
-                        }).hasCls(view.dirtyCls)).toBe(true);
+                        }, true)).toHaveCls(view.dirtyCls);
 
                         store.first().set('a', oldValue);
 
@@ -935,7 +940,7 @@ describe("Ext.grid.column.Widget", function() {
                         expect(view.getCellByPosition({
                             row: 0,
                             column: 0
-                        }).hasCls(view.dirtyCls)).toBe(false);
+                        }, true)).not.toHaveCls(view.dirtyCls);
                     });
 
                     it("should render with a cell dirty class set if the record is already modified", function() {
@@ -952,7 +957,7 @@ describe("Ext.grid.column.Widget", function() {
                         expect(view.getCellByPosition({
                             row: 0,
                             column: 0
-                        }).hasCls(view.dirtyCls)).toBe(true);
+                        }, true)).toHaveCls(view.dirtyCls);
                     });
 
                     it("should remove all widgets when calling removeAll", function() {
@@ -1324,7 +1329,7 @@ describe("Ext.grid.column.Widget", function() {
                     jasmine.fireMouseEvent(view.getCellByPosition({
                         row: 0,
                         column: 0
-                    }), 'click');
+                    }, true), 'click');
 
                     // Should focus the cell and exit actionable mode.
                     // Some browsers fire async focus events, so wait for it.
@@ -1334,6 +1339,40 @@ describe("Ext.grid.column.Widget", function() {
                             return grid.actionableMode === false;
                         });
                     }
+                });
+
+                describe("in a locked grid", function() {
+                    var normalGrid, lockedGrid, firstNormalRow, firstLockedRow;
+
+                    afterEach(function() {
+                        normalGrid = lockedGrid = firstNormalRow, firstLockedRow = null;
+                    });
+
+                    it("should keep line heights synced after sorting", function() {
+                        
+
+                        createGrid(null, null, {
+                            columns: [Ext.apply(getColCfg({
+                                xtype: 'button',
+                                height: 40
+                            }), {
+                                locked: true
+                            }), {
+                                dataIndex: 'a'
+                            }]
+                        });
+
+                        normalGrid = grid.normalGrid;
+                        lockedGrid = grid.lockedGrid;
+
+                        normalGrid.getColumnManager().getColumns()[0].sort();
+
+                        firstNormalRow = normalGrid.getView().getRow(0);
+                        firstLockedRow = lockedGrid.getView().getRow(0);
+
+                        expect(Ext.fly(firstNormalRow).getHeight()).toBe(Ext.fly(firstLockedRow).getHeight());
+
+                    });
                 });
             });
 

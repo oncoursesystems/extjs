@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.charts.column.Renderer', {
         path: 'classic/samples/view/charts/column/RendererController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Pie.js'
+        path: 'app/store/Pie.js'
     }],
     // </example>
     layout: 'fit',

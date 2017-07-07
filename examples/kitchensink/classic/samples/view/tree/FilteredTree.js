@@ -19,13 +19,13 @@ Ext.define('KitchenSink.view.tree.FilteredTree', {
     exampleTitle: 'Filtered TreeGrid.',
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/Posts.js'
+        path: 'app/store/Posts.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/tree/Post.js'
+        path: 'app/model/tree/Post.js'
     },{
         type: 'Data',
-        path: 'classic/samples/data/Posts.js'
+        path: 'app/data/Posts.js'
     }],
     //</example>
     store: 'Posts',

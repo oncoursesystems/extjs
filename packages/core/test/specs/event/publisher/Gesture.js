@@ -1,6 +1,6 @@
 /* global Ext, expect, xdescribe, xit */
 
-describe("Ext.event.publisher.Gesture", function() {
+topSuite("Ext.event.publisher.Gesture", function() {
     var helper = Ext.testHelper,
         targetEl;
 
@@ -98,6 +98,8 @@ describe("Ext.event.publisher.Gesture", function() {
             expect(result[5]).toEqual(['Ext.event.gesture.Swipe', 600]);
             expect(result[6]).toEqual(['Ext.event.gesture.Pinch', 700]);
             expect(result[7]).toEqual(['Ext.event.gesture.Rotate', 800]);
+            
+            Ext.testHelper.touchEnd(document.body);
 
             delete Drag.onStart;
             delete Tap.onStart;
@@ -121,14 +123,14 @@ describe("Ext.event.publisher.Gesture", function() {
             });
         });
         
-        it("should allow the exception to propagate", function() {
+        it("should not allow the exception to propagate", function() {
             expect(function() {
                 helper.touchStart(targetEl, { id: 1, x: 1, y: 1 });
                 helper.touchEnd(targetEl, { id: 1, x: 1, y: 1 });
             }).toThrow('This error is caught but will show in console IE');
         });
         
-        it("should finish gesture an exception is thrown in recognizer", function() {
+        it("should finish gesture when an exception is thrown in recognizer", function() {
             expect(function() {
                 helper.touchStart(targetEl, { id: 1, x: 1, y: 1 });
                 helper.touchEnd(targetEl, { id: 1, x: 1, y: 1 });

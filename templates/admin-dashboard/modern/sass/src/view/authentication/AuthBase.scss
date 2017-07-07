@@ -1,7 +1,7 @@
-.auth-locked-inner {
+.auth-locked-body-el {
     background-image:url('images/lock-screen-background.jpg');
     background-size:cover;
-    .x-panel-inner.auth-locked-inner {
+    .x-panel-body-el.auth-locked-body-el {
         background-color: transparent;
     }
 }
@@ -9,8 +9,4 @@
 .lockscreen-header{
     background-color:$base-color;
     color:white;
-}
-
-.x-unsized .x-field-input{
-    min-width:2em;
 }

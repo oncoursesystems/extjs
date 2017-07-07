@@ -29,8 +29,6 @@ Ext.define('Admin.view.dashboard.Sales', {
             xtype: 'cartesian',
             animation : !Ext.isIE9m && Ext.os.is.Desktop,
             background: '#8561c5',
-            height: '100%',
-            width: '100%',
             colors: [
                 '#ffffff'
             ],

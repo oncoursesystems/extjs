@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.charts.area.BasicController', {
     },
 
     onPreview: function () {
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         chart.preview();
     },
 
@@ -29,7 +29,7 @@ Ext.define('KitchenSink.view.charts.area.BasicController', {
             marker: {
                 opacity: 0,
                 scaling: 0.01,
-                fx: {
+                animation: {
                     duration: 200,
                     easing: 'easeOut'
                 }
@@ -49,7 +49,7 @@ Ext.define('KitchenSink.view.charts.area.BasicController', {
 
     onAfterRender: function () {
         var me = this,
-            chart = me.lookupReference('chart');
+            chart = me.lookup('chart');
 
         chart.setSeries([
             me.getSeriesConfig('usa', 'USA'),

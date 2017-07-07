@@ -1,7 +1,9 @@
 /* global expect, Ext, spyOn */
 
-describe("Ext.tree.TreeGrid", function() {
-
+topSuite("Ext.tree.TreeGrid",
+    [false, 'Ext.tree.Panel', 'Ext.grid.Panel', 'Ext.grid.column.Action',
+     'Ext.layout.container.Border'],
+function() {
     function spyOnEvent(object, eventName, fn) {
         var obj = {
             fn: fn || Ext.emptyFn
@@ -232,7 +234,7 @@ describe("Ext.tree.TreeGrid", function() {
             makeTreeGrid();
 
             // Test cls config
-            expect(view.getCellByPosition({row:0, column: 0}).hasCls('test-EXTJS-16367')).toBe(true);
+            expect(view.getCellByPosition({row:0, column: 0}, true)).toHaveCls('test-EXTJS-16367');
 
             var createRowSpy = spyOn(view, 'createRowElement').andCallThrough();
             store.getAt(0).set({
@@ -385,6 +387,7 @@ describe("Ext.tree.TreeGrid", function() {
                 expect(tree.view.getScrollY()).toEqual(40);
             });
         });
+        
         it("should not not scroll horizontally upon node toggle", function() {
             // MUST be no scroll so that the non buffered rendering pathway is used
             // and the row count changes and a layout is triggered.
@@ -409,9 +412,8 @@ describe("Ext.tree.TreeGrid", function() {
                 tree.getRootNode().childNodes[1].expand();
             });
 
-            // We must wait until the Scroller knows about the scroll position
-            // at which point it fires a scrollend event
-            waitsForEvent(tree.getView().getScrollable(), 'scrollend', 'Tree scrollend');
+            // Wait for possible (but incorrect) scroll
+            waits(100);
 
             // Expanding a node should not scroll.
             runs(function() {
@@ -424,9 +426,8 @@ describe("Ext.tree.TreeGrid", function() {
                 tree.getRootNode().childNodes[1].collapse();
             });
 
-            // We must wait until the Scroller knows about the scroll position
-            // at which point it fires a scrollend event
-            waitsForEvent(tree.getView().getScrollable(), 'scrollend', 'Tree scrollend');
+            // Wait for possible (but incorrect) scroll
+            waits(100);
 
             // Expanding a node should not scroll.
             runs(function() {

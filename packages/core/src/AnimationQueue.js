@@ -22,6 +22,9 @@ Ext.define('Ext.AnimationQueue', {
         // This timer has to be set as an interval from the very beginning and we have to keep it running for
         // as long as the app lives, setting it later doesn't seem to work
         if (Ext.os.is.iOS) {
+            //<debug>
+            me.watch.$skipTimerCheck = true;
+            //</debug>
             Ext.interval(me.watch, 500, me);
         }
     },
@@ -118,7 +121,10 @@ Ext.define('Ext.AnimationQueue', {
         }
         //</debug>
 
-        me.doIterate();
+        // Could have been stopped while invoking handlers
+        if (me.isRunning) {
+            me.doIterate();
+        }
     },
 
     //<debug>
@@ -141,7 +147,10 @@ Ext.define('Ext.AnimationQueue', {
     },
 
     doStop: function() {
-        Ext.Function.cancelAnimationFrame(this.animationFrameId);
+        if (this.animationFrameId) {
+            Ext.Function.cancelAnimationFrame(this.animationFrameId);
+        }
+        
         this.animationFrameId = null;
     },
 
@@ -178,12 +187,15 @@ Ext.define('Ext.AnimationQueue', {
             //</debug>
             me.isRunning = false;
 
-            me.idleTimer = Ext.defer(me.whenIdle, 100, me);
+            if (me.idleQueue.length && !me.idleTimer) {
+                me.idleTimer = Ext.defer(me.whenIdle, 100, me);
+            }
         }
     },
 
     onIdle: function(fn, scope, args) {
-        var listeners = this.idleQueue,
+        var me = this,
+            listeners = me.idleQueue,
             i, ln, listener;
 
         for (i = 0, ln = listeners.length; i < ln; i++) {
@@ -195,13 +207,17 @@ Ext.define('Ext.AnimationQueue', {
 
         listeners.push(arguments);
 
-        if (this.isIdle) {
-            this.processIdleQueue();
+        if (me.isIdle) {
+            me.processIdleQueue();
+        }
+        else if (!me.idleTimer) {
+            me.idleTimer = Ext.defer(me.whenIdle, 100, me);
         }
     },
 
     unIdle: function(fn, scope, args) {
-        var listeners = this.idleQueue,
+        var me = this,
+            listeners = me.idleQueue,
             i, ln, listener;
 
         for (i = 0, ln = listeners.length; i < ln; i++) {
@@ -210,6 +226,16 @@ Ext.define('Ext.AnimationQueue', {
                 listeners.splice(i, 1);
                 return true;
             }
+        }
+        
+        if (!listeners.length && me.idleTimer) {
+            clearTimeout(me.idleTimer);
+            delete me.idleTimer;
+        }
+        
+        if (!listeners.length && me.idleQueueTimer) {
+            clearTimeout(me.idleQueueTimer);
+            delete me.idleQueueTimer;
         }
 
         return false;
@@ -250,6 +276,7 @@ Ext.define('Ext.AnimationQueue', {
     },
 
     whenIdle: function() {
+        delete this.idleTimer;
         this.isIdle = true;
         this.processIdleQueue();
     },

@@ -48,13 +48,15 @@ Ext.define('Ext.view.AbstractView', {
 
     statics: {
         /**
-         * @cfg {Number} [updateDelay=200] Global config for use when using {@link #throttledUpdate throttled view updating} if the data in the backing {@link Ext.data.Store store}
+         * @prop {Number} [updateDelay=200] Global config for use when using {@link #throttledUpdate throttled view updating} if the data in the backing {@link Ext.data.Store store}
          * is being changed rapidly, for example receiving changes from the server through a WebSocket connection.
          *
          * To avoid too-frequent view updates overloading the browser with style recalculation, layout and paint requests, updates can be {@link #throttledUpdate throttled} to 
          * coalesced, and applied at the interval specified in milliseconds.
+         *
+         * Note that on lower powered devices, updating is throttled to once every second.
          */
-        updateDelay: 200,
+        updateDelay: Ext.platformTags.desktop ? 200: 1000,
 
         queueRecordChange: function(view, store, record, operation, modifiedFieldNames) {
             var me = this,
@@ -108,30 +110,18 @@ Ext.define('Ext.view.AbstractView', {
                 }
             }
 
-            // Unpsecified fields have changed. We have to collect the whole data object.
+            // Unspecified fields have changed. We have to collect the whole data object.
             else {
                 Ext.apply(updated, record.data);
             }
 
-            // Create a task which will call on to the onFlushTick every updateDelay milliseconds.
+            // Create a task which will call flushChangeQueue in updateDelay milliseconds from the time it's invoked.
             if (!me.flushQueueTask) {
-                me.flushQueueTask = Ext.util.TaskManager.newTask({
-                    // Queue the actual render flush on the next animation frame if available.
-                    run: Ext.global.requestAnimationFrame ? Ext.Function.createAnimationFrame(me.onFlushTick, me) : Ext.Function.bind(me.onFlushTick, me),
-                    interval: Ext.view.AbstractView.updateDelay,
-                    repeat: 1
-                });
+                me.flushQueueTask = new Ext.util.DelayedTask(Ext.global.requestAnimationFrame ? Ext.Function.createAnimationFrame(me.flushChangeQueue, me) : Ext.Function.bind(me.flushChangeQueue, me), me, null, false);
             }
-            me.flushQueueTask.start();
-        },
-
-        /**
-         * @private
-         * On every flush (determined by updateDelay setting), ask the animation system to schedule a call to
-         * flushChangeQueue at the next animation frame.
-         */
-        onFlushTick: function() {
-            Ext.AnimationQueue.start(this.flushChangeQueue, this);
+            if (!me.flushTimer) {
+                me.flushTimer = me.flushQueueTask.delay(Ext.view.AbstractView.updateDelay);
+            }
         },
 
         /**
@@ -152,16 +142,16 @@ Ext.define('Ext.view.AbstractView', {
                 recId,
                 i, view;
 
-            // If there is scrolling going on anywhere, requeue the flush operation.
+            // If there is scrolling going on anywhere, requeue the flush operation ASAP.
             if (Ext.isScrolling) {
-                me.flushQueueTask.start();
-                return;
+                return me.flushTimer = me.flushQueueTask.delay(1);
             }
+            me.flushTimer = null;
 
             changeQueue = me.changeQueue;
 
             // Empty the view's changeQueue
-            this.changeQueue = {};
+            me.changeQueue = {};
 
             for (recId in changeQueue) {
                 recChange = changeQueue[recId];
@@ -178,17 +168,10 @@ Ext.define('Ext.view.AbstractView', {
                     }
                 }
             }
-            Ext.AnimationQueue.stop(me.flushChangeQueue, me);
         }
     },
 
     config: {
-        /**
-         * @cfg {Ext.data.Model} selection
-         * The selected model. Typically used with {@link #bind binding}.
-         */
-        selection: null,
-
         /**
          * @cfg {Ext.data.Store} store
          * The {@link Ext.data.Store} to bind this DataView to.
@@ -219,6 +202,12 @@ Ext.define('Ext.view.AbstractView', {
 
     publishes: ['selection'],
     twoWayBindable: ['selection'],
+
+    /**
+     * @cfg {Ext.data.Model} selection
+     * The selected model. Typically used with {@link #bind binding}.
+     */
+    selection: null,
 
     /**
      * @cfg {Boolean} [throttledUpdate=false]
@@ -296,16 +285,15 @@ Ext.define('Ext.view.AbstractView', {
      * Setting this will automatically set {@link #trackOver} to `true`.
      */
 
-    //<locale>
     /**
      * @cfg {String} loadingText
      * A string to display during data load operations.  If specified, this text will be
      * displayed in a loading div and the view's contents will be cleared while loading, otherwise the view's
      * contents will continue to display normally until the new data is loaded and the contents are replaced.
      * @since 2.3.0
+     * @locale
      */
     loadingText: 'Loading...',
-    //</locale>
 
     /**
      * @cfg {Boolean/Object} loadMask
@@ -340,7 +328,6 @@ Ext.define('Ext.view.AbstractView', {
      */
     selectedItemCls: Ext.baseCSSPrefix + 'item-selected',
 
-    //<locale>
     /**
      * @cfg {String} emptyText
      * The text to display in the view when there is no data to display.
@@ -348,9 +335,9 @@ Ext.define('Ext.view.AbstractView', {
      * the {@link #deferEmptyText} option to false.
      * @since 2.3.0
      * @accessor
+     * @locale
      */
     emptyText: "",
-    //</locale>
 
     /**
      * @cfg {Boolean} deferEmptyText
@@ -485,7 +472,13 @@ Ext.define('Ext.view.AbstractView', {
             isDef = Ext.isDefined,
             itemTpl = me.itemTpl,
             memberFn = {},
+            selection = me.selection,
             store;
+
+        if (selection) {
+            me.selection = null;
+            me.setSelection(selection);
+        }
 
         if (itemTpl) {
             if (Ext.isArray(itemTpl)) {
@@ -505,6 +498,11 @@ Ext.define('Ext.view.AbstractView', {
                 me.itemSelector = '.' + me.itemCls;
             }
 
+            if (memberFn.fn) {
+                memberFn.baseFn = memberFn.fn;
+                delete memberFn.fn;
+                itemTpl = "{%this.baseFn(out, values, parent, xindex, xcount, xkey)%}";
+            }
             itemTpl = Ext.String.format('<tpl for="."><div class="{0}" role="{2}">{1}</div></tpl>', me.itemCls, itemTpl, me.itemAriaRole);
             me.tpl = new Ext.XTemplate(itemTpl, memberFn);
         }
@@ -666,6 +664,23 @@ Ext.define('Ext.view.AbstractView', {
         return this.getSelectionModel().getSelection();
     },
 
+    /**
+     * Sets the value of the selection.
+     * @param {Ext.data.Model} selection
+     */
+    setSelection: function(selection) {
+        // This is purposefully written not as a config. Because getSelection
+        // is an existing API that doesn't mirror the value for setSelection, we
+        // don't want the publish system to call the getter, but rather just the
+        // raw property.
+        var current = this.selection;
+
+        if (selection !== current) {
+            this.selection = selection;
+            this.updateSelection(selection, current);
+        }
+    },
+
     updateSelection: function(selection) {
         var me = this,
             sm;
@@ -680,6 +695,7 @@ Ext.define('Ext.view.AbstractView', {
             }
             me.ignoreNextSelection = false;
         }
+        me.publishState('selection', selection);
     },
 
     updateBindSelection: function(selModel, selection) {
@@ -781,13 +797,14 @@ Ext.define('Ext.view.AbstractView', {
     onFocusEnter: function(e) {
         var me = this,
             navigationModel = me.getNavigationModel(),
-            focusPosition;
+            focusPosition = me.lastFocused;
 
         // This is set on mousedown on the scrollbar in IE/Edge.
         // Those browsers focus the element on mousedown on its scrollbar
         // which is not what we want, so throw focus back in this
         // situation.
         // See Ext.view.navigationModel for this being set.
+        me.lastFocused = null;
         if (focusPosition === 'scrollbar') {
             e.relatedTarget.focus();
             return;
@@ -844,6 +861,19 @@ Ext.define('Ext.view.AbstractView', {
         }
 
         me.callParent([e]);
+    },
+    
+    /**
+     * @private
+     * Cancel a pending focus task, if any.
+     * This is a separate method to allow simple abstraction for locked views.
+     */
+    cancelFocusTask: function() {
+        var task = this.getFocusTask();
+        
+        if (task) {
+            task.cancel();
+        }
     },
 
     onRemoved: function(isDestroying) {
@@ -1027,13 +1057,15 @@ Ext.define('Ext.view.AbstractView', {
             scroller = me.getScrollable();
 
         if (scroller) {
-            scroller.on({
+            me.viewScrollListeners = scroller.on({
                 scroll: me.onViewScroll,
                 scrollend: me.onViewScrollEnd,
                 scope: me,
-                onFrame: !!Ext.global.requestAnimationFrame
+                onFrame: !!Ext.global.requestAnimationFrame,
+                destroyable: true
             });
         }
+        
         me.callParent([width, height]);
     },
 
@@ -1082,7 +1114,9 @@ Ext.define('Ext.view.AbstractView', {
     },
 
     onViewScrollEnd: function(scroller, x, y) {
-        this.fireEvent('scrollend', this, x, y);
+        if (!this.destroyed) {
+            this.fireEvent('scrollend', this, x, y);
+        }
     },
 
     /**
@@ -1304,6 +1338,8 @@ Ext.define('Ext.view.AbstractView', {
     onReplace: function(store, startIndex, oldRecords, newRecords) {
         var me = this,
             all = me.all,
+            scroller = me.getScrollable(),
+            yPos = scroller.getPosition().y,
             selModel = me.getSelectionModel(),
             origStart = startIndex,
             result, item, fragment, children, oldItems, endIndex, restoreFocus;
@@ -1335,6 +1371,9 @@ Ext.define('Ext.view.AbstractView', {
 
             // Remove the items which correspond to old records
             oldItems = all.removeRange(startIndex, endIndex, true);
+
+            // Restore scroll position
+            scroller.scrollTo(null, yPos);
 
             // Some subclasses do not need to do this. TableView does not need to do this.
             if (me.refreshSelmodelOnRefresh !== false) {
@@ -1473,13 +1512,26 @@ Ext.define('Ext.view.AbstractView', {
 
     fireItemMutationEvent: function(eventName) {
         var me = this,
-            ownerGrid = me.ownerGrid;
+            ownerGrid = me.ownerGrid,
+            vm;
+
+        Ext.suspendLayouts();
 
         // Inform the ownerGrid.
         if (ownerGrid) {
-            me.ownerGrid[me.eventLifecycleMap[eventName]].apply(me.ownerGrid, Ext.Array.slice(arguments, 1));
+            if (eventName !== 'refresh') {
+                vm = me.lookupViewModel();
+            }
+            ownerGrid[me.eventLifecycleMap[eventName]].apply(ownerGrid, Ext.Array.slice(arguments, 1));
         }
         me.fireEvent.apply(me, arguments);
+
+        // The content height MUST be measurable by the caller (the buffered renderer), so data must be flushed to it immediately.
+        if (vm) {
+            vm.notify();
+        }
+
+        Ext.resumeLayouts(true);
     },
 
     /**
@@ -1907,6 +1959,10 @@ Ext.define('Ext.view.AbstractView', {
         var me = this,
             count = me.updateSuspendCounter,
             tabGuardEl = me.tabGuardEl;
+        
+        if (me.viewScrollListeners) {
+            me.viewScrollListeners.destroy();
+        }
 
         // Can be already destroyed in Table view
         if (me.all && !me.all.destroyed) {
@@ -2024,7 +2080,7 @@ Ext.define('Ext.view.AbstractView', {
             var focusEl = this.getTargetEl();
 
             if (enableTabbing) {
-                focusEl.restoreTabbableState(/* skipSelf = */ true);
+                focusEl.restoreTabbableState({ skipSelf: true });
             }
             else {
                 // Do NOT includeSaved

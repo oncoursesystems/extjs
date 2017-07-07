@@ -1,6 +1,6 @@
 /* global MockAjaxManager, Ext, expect, spyOn, jasmine */
 
-describe("Ext.LoadMask", function(){
+topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
     var mask, target, mockComplete;
     
     beforeEach(function(){

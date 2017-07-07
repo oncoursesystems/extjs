@@ -104,6 +104,6 @@ Ext.define('KitchenSink.view.tree.TreeGrid', {
         align: 'center',
         iconCls: 'tree-grid-edit-task',
         handler: 'onEditRowAction',
-        isDisabled: 'isRowEditDisabled'
+        isActionDisabled: 'isRowEditDisabled'
     }]
 });

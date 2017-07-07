@@ -1,37 +1,40 @@
 Ext.define('KitchenSink.view.tip.MouseTrackToolTips', {
     extend: 'Ext.Container',
+    xtype: 'mousetrack-tooltips',
 
+    //<example>
+    $preventContentSize: true,
     cls: 'demo-solid-background',
-    shadow: true,
+    //</example>
 
     padding: 20,
+
     layout: {
-        type: 'hbox',
-        align: 'start',
+        type: 'vbox',
         pack: 'center'
     },
-    width: '90%',
 
     defaultType: 'button',
-    margin: '0 0 50 0',
     defaults: {
-        margin: '0 15 0 0',
         minWidth: 150
     },
 
+    autoSize: true,
+
     items: [{
-        text: 'Mouse Track',
+        margin: '0 0 10',
+        text: 'Track Mouse',
         tooltip: {
-            title: 'Mouse Track',
             html: 'This tip will follow the mouse while it is over the element',
             trackMouse: true
         }
     }, {
+        margin: '10 0 0',
         text: 'Anchor with tracking',
         tooltip: {
             html: 'Following the mouse with an anchor',
             trackMouse: true,
-            align: 'l-r',
+            align: 't-b',
             anchor: true
         }
     }]

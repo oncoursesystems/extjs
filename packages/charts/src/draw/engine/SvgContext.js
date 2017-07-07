@@ -649,12 +649,12 @@ Ext.define('Ext.draw.engine.SvgContext', {
             gradient;
 
         me.surface.setElementAttributes(element, {
-            "fx": x0,
-            "fy": y0,
-            "cx": x1,
-            "cy": y1,
-            "r": r1,
-            "gradientUnits": "userSpaceOnUse"
+            fx: x0,
+            fy: y0,
+            cx: x1,
+            cy: y1,
+            r: r1,
+            gradientUnits: 'userSpaceOnUse'
         });
         gradient = new Ext.draw.engine.SvgContext.Gradient(me, me.surface, element, r0 / r1);
 

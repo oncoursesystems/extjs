@@ -17,12 +17,12 @@ Ext.define('Admin.view.forms.Address', {
     },
 
     items: [{
-        placeHolder: 'Phone Number'
+        placeholder: 'Phone Number'
     }, {
-        placeHolder: 'Address'
+        placeholder: 'Address'
     }, {
-        placeHolder: 'City'
+        placeholder: 'City'
     }, {
-        placeHolder: 'Postal / Zip Code'
+        placeholder: 'Postal / Zip Code'
     }]
 });

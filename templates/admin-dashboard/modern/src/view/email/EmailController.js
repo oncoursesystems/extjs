@@ -4,9 +4,6 @@
 Ext.define('Admin.view.email.EmailController', {
     extend: 'Ext.app.ViewController',
 
-    //doCompose: function (to) {
-    //    //
-    //},
     actionsVisible: false,
 
     onChangeFilter: function (sender) {
@@ -45,12 +42,8 @@ Ext.define('Admin.view.email.EmailController', {
                 defaults: {
                     scope: me
                 },
-                enter: 'right',
-                exit: 'right',
-                top: 0,
+                side: 'right',
                 hidden: true,
-                left: null,
-                height: '100%',
                 hideOnMaskTap: true,
                 width: 250
             });

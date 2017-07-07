@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.form.CheckboxGroupForm', {
     //<example>
     exampleTitle: 'Checkbox Groups',
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/form/CheckboxGroupFormController.js'
     }],
     //</example>

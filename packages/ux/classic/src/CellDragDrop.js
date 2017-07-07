@@ -1,10 +1,11 @@
 /**
  * This plugin can enable a cell to cell drag and drop operation within the same grid view.
  *
- * Note that the plugin must be added to the grid view, not to the grid panel. For example, using {@link Ext.panel.Table viewConfig}:
+ * Note that the plugin must be added to the grid view, not to the grid panel. For example,
+ * using {@link Ext.panel.Table viewConfig}:
  *
  *      viewConfig: {
- *          plugins: {
+ *          plugins: [{
  *              ptype: 'celldragdrop',
  *
  *              // Remove text from source cell and replace with value of emptyText.
@@ -14,7 +15,7 @@
  *
  *              // Will only allow drops of the same type.
  *              enforceType: true
- *          }
+ *          }]
  *      }
  */
 Ext.define('Ext.ux.CellDragDrop', {
@@ -64,7 +65,6 @@ Ext.define('Ext.ux.CellDragDrop', {
      */
     noDropBackgroundColor: 'red',
 
-    //<locale>
     /**
      * @cfg {String} dragText
      * The text to show while dragging.
@@ -73,9 +73,9 @@ Ext.define('Ext.ux.CellDragDrop', {
      *
      * - `{0}` The number of selected items.
      * - `{1}` 's' when more than 1 items (only useful for English).
+     * @locale
      */
     dragText: '{0} selected row{1}',
-    //</locale>
 
     /**
      * @cfg {String} ddGroup

@@ -3,11 +3,11 @@
  */
 
 @import 'mixins/border';
+@import 'mixins/outline';
 @import 'mixins/font';
 @import 'mixins/font-icon';
 @import 'mixins/icon';
 @import 'mixins/transform';
-@import 'mixins/animation';
 
 // Background property support for vendor prefixing within values.
 @mixin background($background-1,
@@ -128,125 +128,9 @@ $image-10: false) {
     @include absolute-position;
 }
 
-@mixin st-box() {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-}
-
-@mixin st-inline-box() {
-    display: -webkit-inline-box;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-}
-
-@mixin st-box-align($align: stretch) {
-    -webkit-box-align: $align;
-    -ms-flex-align: $align;
-    @if $align == start {
-        align-items: flex-start;
-    }
-    @else if $align == end {
-        align-items: flex-end;
-    }
-    @else {
-        align-items: $align;
-    }
-}
-
-@mixin st-box-orient($orient: horizontal, $important: no) {
-    @if $important == important {
-        -webkit-box-orient: $orient !important;
-        @if $orient == horizontal {
-            -ms-flex-direction: row !important;
-            flex-direction: row !important;
-        } @else {
-            -ms-flex-direction: column !important;
-            flex-direction: column !important;
-        }
-    } @else {
-        -webkit-box-orient: $orient;
-        @if $orient == horizontal {
-            -ms-flex-direction: row;
-            flex-direction: row;
-        } @else {
-            -ms-flex-direction: column;
-            flex-direction: column;
-        }
-    }
-}
-
-@mixin st-box-pack($pack: start, $important: no) {
-    @if $important == important {
-        -webkit-box-pack: $pack !important;
-        -ms-flex-pack: $pack !important;
-        @if $pack == start {
-            justify-content: flex-start !important;
-        }
-        @else if $pack == end {
-            justify-content: flex-end !important;
-        }
-        @else if $pack == justify {
-            justify-content: space-between !important;
-        }
-        @else {
-            justify-content: $pack !important;
-        }
-    } @else {
-        -webkit-box-pack: $pack;
-        -ms-flex-pack: $pack;
-        @if $pack == start {
-            justify-content: flex-start;
-        }
-        @else if $pack == end {
-            justify-content: flex-end;
-        }
-        @else if $pack == justify {
-            justify-content: space-between;
-        }
-        @else if $pack == center {
-            justify-content: center;
-        }
-        @else {
-            justify-content: $pack;
-        }
-    }
-}
-
-@mixin st-box-flex($flex: 1, $preferredSize: auto, $important: no) {
-    @if $important == important {
-        -webkit-box-flex: $flex !important;
-        flex: $flex $flex $preferredSize !important;
-    } @else {
-        -webkit-box-flex: $flex;
-        flex: $flex $flex $preferredSize;
-    }
-}
-
 @mixin st-box-shadow($shadow: none) {
     -webkit-box-shadow: $shadow;
     box-shadow: $shadow;
-}
-
-@mixin st-box-direction($direction: normal, $orientation: row) {
-    -webkit-box-direction: $direction;
-    @if $direction == reverse {
-        @if $orientation == row {
-            -ms-flex-direction: row-reverse;
-            flex-direction: row-reverse;
-        } @else {
-            -ms-flex-direction: column-reverse;
-            flex-direction: column-reverse;
-        }
-    } @else {
-        @if $orientation == row {
-            -ms-flex-direction: row;
-            flex-direction: row;
-        } @else {
-            -ms-flex-direction: column;
-            flex-direction: column;
-        }
-    }
 }
 
 @mixin st-loading-spinner($spinner-size: 50px, $color: #ccc, $bar-width: 5px, $bar-height: 15px) {

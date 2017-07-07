@@ -46,7 +46,8 @@ Ext.define('KitchenSink.view.d3.custom.canvas.Particles', {
                 fn: 'onMouseMove',
                 element: 'element',
                 scope: 'controller'
-            }
+            },
+            destroy: 'onDestroy'
         }
     }
 });

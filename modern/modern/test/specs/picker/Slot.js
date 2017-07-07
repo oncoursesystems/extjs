@@ -1,10 +1,11 @@
 /* global spyOn, expect, Ext */
 
-describe('Ext.picker.Slot', function () {
+topSuite("Ext.picker.Slot", ['Ext.viewport.Default', 'Ext.picker.Picker'], function() {
     var picker, viewport, slot;
 
     afterEach(function () {
         Ext.Viewport = viewport = picker = slot = Ext.destroy(slot, picker, viewport, Ext.Viewport);
+        Ext.scroll.Scroller.viewport = Ext.destroy(Ext.scroll.Scroller.viewport);
     });
 
     function makePicker (value, dataSize) {
@@ -44,7 +45,7 @@ describe('Ext.picker.Slot', function () {
             var scrollComplete = false,
                 spy;
             
-            picker.show();
+            picker.show(false);
 
             spy = spyOn(slot, 'onResize').andCallThrough();
             slot.getScrollable().on('scrollend', function () {
@@ -68,7 +69,7 @@ describe('Ext.picker.Slot', function () {
             var scrollComplete = false,
                 bar, barIndex;
 
-            picker.show();
+            picker.show(false);
 
             slot.getScrollable().on('scrollend', function () {
                 scrollComplete = true;
@@ -88,7 +89,7 @@ describe('Ext.picker.Slot', function () {
         it("should scroll to selection if view is scrolled, no new selection is made, and picker is re-shown", function () {
             var bar, scrollable;
 
-            picker.show();
+            picker.show(false);
 
             bar = picker.bar;
             scrollable = slot.getScrollable();
@@ -109,9 +110,9 @@ describe('Ext.picker.Slot', function () {
                 expect(scrollable.getPosition().y).toBe(0);
 
                 // now let's simulate the scroll to the top, but the picker is dimissed with no selection made
-                picker.hide();
+                picker.hide(false);
                 // now let's re-open the picker
-                picker.show();
+                picker.show(false);
             });
             
             waits(800);
@@ -135,7 +136,7 @@ describe('Ext.picker.Slot', function () {
                 scrollComplete = true;
             });
 
-            picker.show();
+            picker.show(false);
 
             waitsFor(function () {
                 return scrollComplete;
@@ -149,7 +150,7 @@ describe('Ext.picker.Slot', function () {
             makePicker({slot1: 255});
             spyOn(slot, 'select');
 
-            picker.show();
+            picker.show(false);
 
             waitsFor(function () {
                 // since the default index will be 0, no scrolling will occur
@@ -158,6 +159,28 @@ describe('Ext.picker.Slot', function () {
             });
             runs(function () {
                 expect(slot.select).not.toHaveBeenCalled();
+            });
+        });
+
+        it('should not deselect a selected value', function () {
+            var scrollable;
+
+            makePicker({
+                slot1: 45
+            });
+
+            picker.show(false);
+
+            scrollable = slot.getScrollable();
+
+            waitsForEvent(scrollable, 'scrollend', 'slot to scroll selection into view', 800);
+
+            runs(function () {
+                var item = slot.dataItems[45];
+
+                jasmine.fireMouseEvent(item, 'click');
+
+                expect(Ext.fly(item).hasCls('x-selected')).toBe(true);
             });
         });
     });

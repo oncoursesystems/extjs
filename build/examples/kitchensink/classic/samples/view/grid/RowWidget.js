@@ -34,13 +34,13 @@ Ext.define('KitchenSink.view.grid.RowWidget', {
     //<example>
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/Companies.js'
-    },{
+        path: 'app/store/Companies.js'
+    }, {
         type: 'Model',
-        path: 'classic/samples/model/Order.js'
-    },{
+        path: 'app/model/Company.js'
+    }, {
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Order.js'
     }],
     //</example>
 

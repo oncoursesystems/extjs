@@ -52,7 +52,7 @@ Ext.define('KitchenSink.view.draw.CompositeController', {
             toX: 400,
             toY: 150
         });
-        sprite.fx.setConfig({
+        sprite.setAnimation({
             duration: this.animate ? 500 : 0,
             easing: 'easeInOut'
         });

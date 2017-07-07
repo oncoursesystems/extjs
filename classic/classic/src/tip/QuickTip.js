@@ -84,6 +84,10 @@ Ext.define('Ext.tip.QuickTip', {
 
         me.target = me.target || Ext.getDoc();
         me.targets = me.targets || {};
+        
+        me.header = me.header || {};
+        me.header.focusableContainer = false;
+        
         me.callParent();
     },
 

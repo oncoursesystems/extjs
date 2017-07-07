@@ -98,7 +98,8 @@ Ext.onReady(function(){
     board.render('board');
     board.setActive(0, 0);
 
-    var nav = Ext.create('Ext.util.KeyNav', Ext.getDoc(), {
+    var nav = new Ext.util.KeyNav({
+        target: Ext.getDoc(),
         scope: board,
         left: board.moveLeft,
         up: board.moveUp,

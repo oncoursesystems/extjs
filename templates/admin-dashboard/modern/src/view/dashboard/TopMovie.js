@@ -28,8 +28,6 @@ Ext.define('Admin.view.dashboard.TopMovie', {
         {
             xtype: 'polar',
             animation : !Ext.isIE9m && Ext.os.is.Desktop,
-            height: '100%',
-            width: '100%',
             background: '#33abaa',
 
             colors: [

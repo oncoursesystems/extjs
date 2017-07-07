@@ -78,16 +78,28 @@ Ext.define('Aria.view.Viewport', {
             
             items: [{
                 xtype: 'mysimplebuttons',
-                closable: true
+                closable: true,
+                tools: [{
+                    type: 'gear',
+                    tooltip: 'Settings'
+                }]
             }, {
                 xtype: 'panel',
                 title: 'Closable panel',
                 closable: true,
+                tools: [{
+                    type: 'gear',
+                    tooltip: 'Settings'
+                }],
                 html: 'This is an example of a closable panel'
             }, {
                 xtype: 'mysimpleform',
                 title: 'Personal data form',
-                closable: true
+                closable: true,
+                tools: [{
+                    type: 'gear',
+                    tooltip: 'Settings'
+                }]
             }]
         }, {
             xtype: 'tabpanel',

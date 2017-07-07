@@ -2,19 +2,43 @@ Ext.define('KitchenSink.view.animations.AnimationsController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.animations',
 
-    refs: {
-        animationCards: 'animationCards'
+    init: function (view) {
+        var me = this,
+            anims = view.anims,
+            items = [];
+
+        anims.forEach(function (button) {
+            if (Ext.isObject(button)) {
+                items.push(
+                    me.createButton(button.group + ' Left'),
+                    me.createButton(button.group + ' Right'),
+                    me.createButton(button.group + ' Top'),
+                    me.createButton(button.group + ' Bottom', {
+                        margin: '0 0 10 0'
+                    })
+                );
+            } else {
+                items.push(me.createButton(button));
+            }
+        });
+
+        view.add([{
+            items: items
+        }, {
+            items: items
+        }]);
     },
-    control: {
-        'animationCards button': {
-            tap: 'onButtonTap'
-        }
+
+    createButton: function (name, cfg) {
+        return Ext.apply({
+            text: name,
+            handler: 'onButtonTap'
+        }, cfg);
     },
 
     getAnimation: function(type) {
-        type = type.toLowerCase();
-        
-        var parts = type.split(/\s+/);
+        var parts = type.toLowerCase().split(/\s+/);
+
         return {
             type: parts[0],
             direction: parts.length > 1 ? parts[1] : undefined,
@@ -23,14 +47,14 @@ Ext.define('KitchenSink.view.animations.AnimationsController', {
     },
 
     onButtonTap: function(button) {
-        var me = this,
-            view = this.getView(),
+        var view = this.getView(),
             activeItem = view.getActiveItem(),
             layout = view.getLayout(),
             animation = this.getAnimation(button.getText()),
-            cards = view.getItems().getRange();
-        
+            currentIdx = view.indexOf(activeItem);
+
         layout.setAnimation(animation);
-        view.setActiveItem(activeItem === cards[0] ? cards[1] : cards[0]);
+
+        view.setActiveItem(currentIdx === 0 ? 1 : 0);
     }
 });

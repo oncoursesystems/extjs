@@ -3692,20 +3692,6 @@ Ext.onReady(function(){
                   excerpt:"I am trying to create a tooltip inside of a renderer of a column in a grid panel.  I have two problems.\n\n1. I want the tooltip to to have the followin..."
                },
                {
-                  title:"Grouptabpanel several levels",
-                  threadid:132728,
-                  username:"bkraut",
-                  userid:16049,
-                  dateline:1304721761,
-                  postid:599550,
-                  forumtitle:"Ext 3.x: Help",
-                  forumid:40,
-                  replycount:0,
-                  lastpost:1304721761,
-                  lastposter:"bkraut",
-                  excerpt:"Hi,\r\n\r\nis it possible to configure grouptabpanel to have more than just two levels. To act as a tree?\r\nI need at least 4 levels in the left column.\r\n\r..."
-               },
-               {
                   title:"Submit a form which has a grid",
                   threadid:132724,
                   username:"jun.sumi",

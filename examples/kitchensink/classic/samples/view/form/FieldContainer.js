@@ -24,7 +24,7 @@ Ext.define('KitchenSink.view.form.FieldContainer', {
         type: 'Model',
         path: 'classic/samples/model/PartTimeEmployee.js'
     }, {
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/form/FieldContainerController.js'
     }],
     //</example>

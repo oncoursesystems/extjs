@@ -206,7 +206,11 @@ Ext.define('Ext.mixin.Inheritable', {
             // on the instance must skip our own controller and search only for an
             // inherited controller.
             ret = me.getInheritedConfig('controller', hasSkipThis ? skipThis : !namedScope.isSelf);
-        } else if (namedScope.isSelf) {
+        }
+        else if (namedScope.isOwner) {
+            ret = me.getRefOwner();
+        }
+        else if (namedScope.isSelf) {
             // scope:'self' indicates listeners declared on the class body with unspecified
             // scope. Include this instance when searching for an inherited default scope.
             ret = me.getInheritedConfig('defaultListenerScope', hasSkipThis && skipThis) || me;
@@ -256,6 +260,24 @@ Ext.define('Ext.mixin.Inheritable', {
     },
 
     /**
+     * Gets the Form or Component that is used as the name holder for this component.
+     *
+     * @param {Boolean} [skipThis=true] `false` to return this as the name holder if
+     * this instance has set `nameHolder`. Unlike `getInheritedConfig` this method
+     * defaults to `true` because it is possible that a `name` property set by the
+     * owner of a component that is also a `nameHolder` itself. In this case, the
+     * `name` connects not to this component but to the parent nameHolder.
+     *
+     * @return {Ext.Component} The name holder.
+     *
+     * @private
+     * @since 6.5.0
+     */
+    lookupNameHolder: function (skipThis) {
+        return this.getInheritedConfig('nameHolder', skipThis !== false) || null;
+    },
+
+    /**
      * Gets the Controller or Component that is used as the reference holder for this view.
      *
      * @param {Boolean} [skipThis=true] `false` to return this as the reference holder if
@@ -288,8 +310,43 @@ Ext.define('Ext.mixin.Inheritable', {
         var me = this;
         
         // Look for both ownerCt (classic toolkit) and parent (modern toolkit)
-        // Look for ownerCmp before floatParent for scenarios like a button menu inside a floating window.
-        return me.ownerCt || me.parent || me.$initParent || me.ownerCmp || me.floatParent;
+        // Look for ownerCmp before all containment links for scenarios like a button
+        // menu inside a floating window, or a submenu of a menu item.
+        // Floated items have the Viewport as their parent, and ownerCmp exists to
+        // override the containment tree.
+        return me.ownerCmp || me.ownerCt || me.parent || me.$initParent || me.floatParent;
+    },
+
+    /**
+     * Determines whether this component is the descendant of a passed component.
+     * @param {Ext.Component} ancestor A Component which may contain this Component.
+     * @return {Boolean} `true` if the component is the descendant of the passed component,
+     * otherwise `false`.
+     */
+    isDescendantOf: function(ancestor) {
+        var p;
+
+        // Iterate up the owner chain until we don't have one, or we find the ancestor.
+        for (p = this.getRefOwner(); p && p !== ancestor; p = p.getRefOwner()) {
+            // do nothing
+        }
+        return p || null;
+    },
+
+    /**
+     * Determines whether **this Component** is an ancestor of the passed Component.
+     * This will return `true` if the passed Component is anywhere within the subtree
+     * beneath this Component.
+     * @param {Ext.Component} possibleDescendant The Component to test for presence
+     * within this Component's subtree.
+     */
+    isAncestor: function(possibleDescendant) {
+        while (possibleDescendant) {
+            if (possibleDescendant.getRefOwner() === this) {
+                return true;
+            }
+            possibleDescendant = possibleDescendant.getRefOwner();
+        }
     },
 
     /**
@@ -329,16 +386,29 @@ Ext.define('Ext.mixin.Inheritable', {
     },
 
     privates: {
+        _fixName: function () {
+            var me = this,
+                owner;
+
+            if (me.name) {
+                owner = me.lookupNameHolder();
+                
+                if (owner && !owner.destroyed) {
+                    owner.attachNameRef(me);
+                }
+            }
+        },
+
         /**
          * Sets up a reference on our current reference holder.
          *
          * @private
          */
-        fixReference: function() {
+        _fixReference: function() {
             var me = this,
                 refHolder;
 
-            if (me.getReference()) {
+            if (me.reference) {
                 refHolder = me.lookupReferenceHolder();
                 if (refHolder) {
                     refHolder.attachReference(me);
@@ -360,7 +430,7 @@ Ext.define('Ext.mixin.Inheritable', {
                 me.invalidateInheritedState();
             }
 
-            if (me.getReference()) {
+            if (me.name || me.reference) {
                 Ext.ComponentManager.markReferencesDirty();
             }
         },
@@ -370,14 +440,10 @@ Ext.define('Ext.mixin.Inheritable', {
          * @param {Boolean} destroying `true` if this item will be destroyed by it's container
          */
         onInheritedRemove: function(destroying) {
-            var me = this,
-                refHolder;
+            var me = this;
 
-            if (me.getReference()) {
-                refHolder = me.lookupReferenceHolder();
-                if (refHolder) {
-                    refHolder.clearReference(me);
-                }    
+            if (me.name || me.reference) {
+                Ext.ComponentManager.markReferencesDirty();
             }
 
             if (me.inheritedState && !destroying) {

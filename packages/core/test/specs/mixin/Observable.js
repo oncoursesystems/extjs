@@ -4,7 +4,8 @@
 
 function makeObservableSuite(isMixin) {
 
-    describe(isMixin ? "Ext.mixin.Observable" : "Ext.util.Observable", function() {
+    topSuite(isMixin ? "Ext.mixin.Observable" : "Ext.util.Observable", ['Ext.Container'], function() {
+        // @define Observable
         var Observable = isMixin ? Ext.mixin.Observable : Ext.util.Observable,
             Boss,
             boss,

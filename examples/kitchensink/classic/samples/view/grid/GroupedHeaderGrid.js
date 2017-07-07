@@ -17,10 +17,10 @@ Ext.define('KitchenSink.view.grid.GroupedHeaderGrid', {
         path: 'classic/samples/view/grid/BasicGridController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Companies.js'
+        path: 'app/store/Companies.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -83,14 +83,14 @@ Ext.define('KitchenSink.view.grid.GroupedHeaderGrid', {
             formatter: 'usMoney'
         }, {
             text: 'Change',
-            dataIndex: 'change',
+            dataIndex: 'priceChange',
 
             width: '${changeColumnWidth}',
             sortable: true,
             renderer: 'renderChange'
         }, {
             text: '% Change',
-            dataIndex: 'pctChange',
+            dataIndex: 'priceChangePct',
 
             width: '${percentChangeColumnWidth}',
             sortable: true,
@@ -98,7 +98,7 @@ Ext.define('KitchenSink.view.grid.GroupedHeaderGrid', {
         }]
     }, {
         text: 'Last Updated',
-        dataIndex: 'lastChange',
+        dataIndex: 'priceLastChange',
 
         width: '${lastUpdatedColumnWidth}',
         sortable: true,

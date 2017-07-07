@@ -14,7 +14,7 @@ Ext.define('Ext.grid.locking.View', {
     mixins: [
         'Ext.util.Observable',
         'Ext.util.StoreHolder',
-        'Ext.util.Focusable'
+        'Ext.mixin.Focusable'
     ],
 
     /**
@@ -204,7 +204,7 @@ Ext.define('Ext.grid.locking.View', {
     },
 
     getEl: function(column){
-        return this.getViewForColumn(column).getEl();
+        return column.getView().getEl();
     },
 
     getCellSelector: function() {
@@ -213,20 +213,6 @@ Ext.define('Ext.grid.locking.View', {
 
     getItemSelector: function () {
         return this.normalView.getItemSelector();
-    },
-
-    getViewForColumn: function(column) {
-        var view = this.lockedView,
-            inLocked;
-
-        view.headerCt.cascade(function(col){
-            if (col === column) {
-                inLocked = true;
-                return false;
-            }
-        });
-
-        return inLocked ? view : this.normalView;
     },
 
     onItemMouseEnter: function(view, record){
@@ -349,6 +335,7 @@ Ext.define('Ext.grid.locking.View', {
     onDataRefresh: function() {
         Ext.suspendLayouts();
         this.relayFn('onDataRefresh', arguments);
+        this.ownerGrid.view.refreshView();
         Ext.resumeLayouts(true);
     },
 
@@ -479,11 +466,11 @@ Ext.define('Ext.grid.locking.View', {
         return this.normalView.getRow(nodeInfo);
     },
 
-    getCell: function(record, column) {
-        var view = this.getViewForColumn(column),
-            row = view.getRow(record);
-            
-        return Ext.fly(row).down(column.getCellSelector());
+    getCell: function(record, column, returnElement) {
+        var row = column.getView().getRow(record),
+            cell = row.querySelector(column.getCellSelector());
+
+        return returnElement ? Ext.get(cell) : cell;
     },
 
     indexOf: function(record) {
@@ -519,6 +506,11 @@ Ext.define('Ext.grid.locking.View', {
 
     onRowFocus: function() {
         this.relayFn('onRowFocus', arguments);
+    },
+    
+    cancelFocusTask: function() {
+        this.lockedView.cancelFocusTask();
+        this.normalView.cancelFocusTask();
     },
 
     isVisible: function(deep) {

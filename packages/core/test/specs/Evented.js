@@ -1,4 +1,4 @@
-describe("Ext.Evented", function () {
+topSuite("Ext.Evented", function () {
     function createSuite(mode) {
         function getCls(cfg) {
             var base;

@@ -22,7 +22,7 @@ Ext.define('KitchenSink.view.charts.scatter.CustomIcons', {
         path: 'classic/samples/view/charts/scatter/CustomIconsController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Pie.js'
+        path: 'app/store/Pie.js'
     }],
     // </example>
     layout: 'fit',

@@ -3,7 +3,7 @@ Ext.define('KitchenSink.view.charts.column.RendererController', {
     alias: 'controller.column-renderer',
 
     onRefresh: function () {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             store = chart.getStore();
 
         store.setData(store.generateData(7));

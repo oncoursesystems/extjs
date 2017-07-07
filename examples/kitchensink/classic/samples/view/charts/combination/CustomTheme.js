@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.charts.combination.CustomTheme', {
         path: 'classic/samples/view/charts/combination/CustomThemeController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Browsers.js'
+        path: 'app/store/Browsers.js'
     }, {
         type: 'Theme',
         path: 'classic/samples/view/charts/combination/theme/CustomTheme.js'
@@ -51,28 +51,14 @@ Ext.define('KitchenSink.view.charts.combination.CustomTheme', {
         legend: {
             docked: 'bottom'
         },
-        insetPadding: 40,
-        sprites: [{
-            type: 'text',
-            text: 'Column Charts - 100% Stacked Columns',
-            fontSize: 22,
-            width: 100,
-            height: 30,
-            x: 40, // the sprite x position
-            y: 20  // the sprite y position
-        }, {
-            type: 'text',
-            text: 'Data: Browser Stats 2012',
-            fontSize: 10,
-            x: 12,
-            y: 420
-        }, {
-            type: 'text',
-            text: 'Source: http://www.w3schools.com/',
-            fontSize: 10,
-            x: 12,
-            y: 435
-        }],
+        captions: {
+            title: 'Column Charts - 100% Stacked Columns',
+            credits: {
+                text: 'Data: Browser Stats 2012\n' +
+                    'Source: http://www.w3schools.com/',
+                align: 'left'
+            }
+        },
         axes: [{
             type: 'numeric',
             position: 'left',

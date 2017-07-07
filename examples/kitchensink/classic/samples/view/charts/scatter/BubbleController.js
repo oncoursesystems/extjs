@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.charts.scatter.BubbleController', {
 
     onRefresh: function() {
         var me = this,
-            chart = me.lookupReference('chart'),
+            chart = me.lookup('chart'),
             leftAxis = chart.getAxes()[0],
             store = chart.getStore();
 
@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.charts.scatter.BubbleController', {
 
     onDropBubble: function () {
         var me = this,
-            chart = me.lookupReference('chart'),
+            chart = me.lookup('chart'),
             store = chart.getStore(),
             leftAxis = chart.getAxes()[0];
 
@@ -54,7 +54,7 @@ Ext.define('KitchenSink.view.charts.scatter.BubbleController', {
 
     onAfterRender: function () {
         var me = this,
-            chart = me.lookupReference('chart'),
+            chart = me.lookup('chart'),
             store = chart.getStore();
 
         store.setData(me.createData(50));

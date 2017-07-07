@@ -318,7 +318,7 @@ Ext.define('Ext.util.Positionable', {
             inside,
             newRegion;
 
-        alignToEl = Ext.get(alignToEl.el || alignToEl);
+        alignToEl = Ext.fly(alignToEl.el || alignToEl);
 
         if (!alignToEl || !alignToEl.dom) {
             //<debug>
@@ -345,8 +345,10 @@ Ext.define('Ext.util.Positionable', {
                 // Otherwise, use this Positionable's element's parent node.
                 inside = me.constrainTo || me.container || me.el.parent();
             }
-            inside = Ext.get(inside.el || inside).getConstrainRegion();
+            
+            inside = Ext.fly(inside.el || inside).getConstrainRegion();
         }
+        
         newRegion = me.getRegion().alignTo({
             target: alignToEl.getRegion(),
             inside: inside,
@@ -355,6 +357,7 @@ Ext.define('Ext.util.Positionable', {
             align: posSpec,
             axisLock: true
         });
+        
         return newRegion;
     },
 
@@ -645,18 +648,20 @@ Ext.define('Ext.util.Positionable', {
       */
     getOffsetsTo: function(offsetsTo) {
         var o = this.getXY(),
-                e = Ext.fly(offsetsTo.el || offsetsTo).getXY();
-        return [o[0] - e[0],o[1] - e[1]];
+                e = offsetsTo.isRegion ? [offsetsTo.x, offsetsTo.y] : Ext.fly(offsetsTo.el || offsetsTo).getXY();
+        return [o[0] - e[0], o[1] - e[1]];
     },
 
     /**
      * Returns a region object that defines the area of this element.
      * @param {Boolean} [contentBox] If true a box for the content of the element is
      * returned.
+     * @param {Boolean} [local] If true the element's left and top relative to its
+     * `offsetParent` are returned instead of page x/y.
      * @return {Ext.util.Region} A Region containing "top, left, bottom, right" properties.
      */
-    getRegion: function(contentBox) {
-        var box = this.getBox(contentBox);
+    getRegion: function(contentBox, local) {
+        var box = this.getBox(contentBox, local);
         return new Ext.util.Region(box.top, box.right, box.bottom, box.left);
     },
 

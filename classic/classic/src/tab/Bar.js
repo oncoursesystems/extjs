@@ -13,10 +13,6 @@ Ext.define('Ext.tab.Bar', {
         'Ext.util.Point',
         'Ext.layout.component.Body'
     ],
-    
-    mixins: [
-        'Ext.util.FocusableContainer'
-    ],
 
     componentLayout: 'body',
 
@@ -86,6 +82,7 @@ Ext.define('Ext.tab.Bar', {
     ensureActiveVisibleOnChange: true,
     
     ariaRole: 'tablist',
+    focusableContainer: true,
 
     childEls: [
         'body', 'strip'
@@ -148,13 +145,14 @@ Ext.define('Ext.tab.Bar', {
             me.addCls(me.baseCls + '-plain');
         }
 
-        me.callParent();
-
-        me.setLayout({
+        // Will be applied to Ext.panel.Bar's layout config in parent initComponent
+        me.layout = {
             align: initialAlign || (me.getTabStretchMax() ? 'stretchmax' :
-                    me._layoutAlign[me.dock]),
+                me._layoutAlign[me.dock]),
             overflowHandler: initialOverflowHandler || 'scroller'
-        });
+        };
+
+        me.callParent();
 
         me.on({
             click: me.onClick,

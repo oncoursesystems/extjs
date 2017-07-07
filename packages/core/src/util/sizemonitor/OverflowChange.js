@@ -43,19 +43,15 @@ Ext.define('Ext.util.sizemonitor.OverflowChange', {
     },
 
     onExpand: function(e) {
-        if (Ext.browser.is.Webkit && e.horizontalOverflow && e.verticalOverflow) {
-            return;
+        if (!(this.destroyed || (Ext.browser.is.Webkit && e.horizontalOverflow && e.verticalOverflow))) {
+            Ext.TaskQueue.requestRead('refresh', this);
         }
-
-        Ext.TaskQueue.requestRead('refresh', this);
     },
 
     onShrink: function(e) {
-        if (Ext.browser.is.Webkit && !e.horizontalOverflow && !e.verticalOverflow) {
-            return;
+        if (!(this.destroyed || (Ext.browser.is.Webkit && !e.horizontalOverflow && !e.verticalOverflow))) {
+            Ext.TaskQueue.requestRead('refresh', this);
         }
-
-        Ext.TaskQueue.requestRead('refresh', this);
     },
 
     refreshMonitors: function() {

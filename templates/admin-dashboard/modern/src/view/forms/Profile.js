@@ -18,13 +18,13 @@ Ext.define('Admin.view.forms.Profile', {
 
     items: [{
         xtype: 'textfield',
-        placeHolder: 'First Name'
+        placeholder: 'First Name'
     }, {
         xtype: 'textfield',
-        placeHolder: 'Last Name'
+        placeholder: 'Last Name'
     }, {
         xtype: 'textfield',
-        placeHolder: 'Company'
+        placeholder: 'Company'
     }, {
         xtype: 'component',
         html: 'Member Type'

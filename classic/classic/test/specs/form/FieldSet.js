@@ -1,4 +1,6 @@
-describe("Ext.form.FieldSet", function() {
+topSuite("Ext.form.FieldSet",
+    ['Ext.window.Window', 'Ext.form.Panel', 'Ext.form.field.Text', 'Ext.data.Session'],
+function() {
     var component;
     
     function makeComponent(config, preventRender) {

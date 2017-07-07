@@ -1,6 +1,9 @@
 /* global expect, spyOn, Ext, jasmine, xdescribe, describe */
 
-describe("Ext.util.Floating", function() {
+topSuite("Ext.util.Floating",
+    ['Ext.window.Window', 'Ext.menu.Menu', 'Ext.Button', 'Ext.form.Panel', 'Ext.form.field.*',
+     'Ext.grid.Panel'],
+function() {
     var component,
         describeGoodBrowsers = Ext.isWebKit || Ext.isGecko || Ext.isChrome ? describe : xdescribe,
         itNotTouch = jasmine.supportsTouch ? xit : it;
@@ -306,9 +309,9 @@ describe("Ext.util.Floating", function() {
         });
     });
 
-    describe("setActive", function() {
+    describe("onFocusTopmost", function() {
         describe("focus", function() {
-            it("should not focus the floater if a descandant component contains focus", function() {
+            it("should not focus the floater if a descendant component contains focus", function() {
                 component = new Ext.window.Window({
                     autoShow: true,
                     floating: true,
@@ -320,7 +323,7 @@ describe("Ext.util.Floating", function() {
                 var text = component.down('#text');
                 jasmine.focusAndWait(text);
                 runs(function() {
-                    component.setActive(true, true);
+                    component.onFocusTopmost();
                 });
                 jasmine.waitAWhile();
                 runs(function() {
@@ -328,7 +331,7 @@ describe("Ext.util.Floating", function() {
                 });
             });
 
-            it("should not focus the floater if a descandant component contains focus and it is not in the same DOM hierarchy", function() {
+            it("should not focus the floater if a descendant component contains focus and it is not in the same DOM hierarchy", function() {
                 component = new Ext.window.Window({
                     autoShow: true,
                     floating: true
@@ -343,7 +346,7 @@ describe("Ext.util.Floating", function() {
 
                 jasmine.focusAndWait(text);
                 runs(function() {
-                    component.setActive(true, true);
+                    component.onFocusTopmost();
                 });
                 jasmine.waitAWhile();
                 runs(function() {
@@ -429,7 +432,7 @@ describe("Ext.util.Floating", function() {
             });
 
             it("should keep the floater aligned on scroll", function() {
-                floater.alignTo(c.getEl().down('.align'), 'tl-bl');
+                floater.alignTo(c.getEl().down('.align', true), 'tl-bl');
 
                 expect(floater.getEl().getTop()).toBe(200);
 
@@ -458,7 +461,7 @@ describe("Ext.util.Floating", function() {
             });
 
             it("should unbind the scroll listener on destroy", function() {
-                floater.alignTo(c.getEl().down('.align'), 'tl-bl');
+                floater.alignTo(c.getEl().down('.align', true), 'tl-bl');
                 floater.destroy();
                 expect(Ext.GlobalEvents.hasListeners.scroll).toBe(count);
             });
@@ -486,7 +489,7 @@ describe("Ext.util.Floating", function() {
             });
             
             it('should unbind the resize listener when alignTo element is destroyed', function() {
-                var alignEl = c.getEl().down('.align'),
+                var alignEl = c.getEl().down('.align', true),
                     spy = spyOnEvent(Ext.GlobalEvents, 'resize', null, {
                         buffer: 200
                     }),
@@ -496,7 +499,7 @@ describe("Ext.util.Floating", function() {
 
                 expect(floater.getEl().getTop()).toBe(200);
 
-                alignEl.dom.parentNode.removeChild(alignEl.dom);
+                alignEl.parentNode.removeChild(alignEl);
                 
                 window.onerror = onErrorSpy.andCallFake(function() {
                     if (oldOnError) {
@@ -551,6 +554,7 @@ describe("Ext.util.Floating", function() {
                 runs(function() {
                     // Should realign on scroll event
                     expect(floater.getEl().getTop()).toBe(100);
+                    c.down('#align').destroy();
                 });
             });
 
@@ -645,7 +649,7 @@ describe("Ext.util.Floating", function() {
                 width: 50,
                 height: 50,
                 style: 'border: 1px solid black',
-                renderTo: scroller.getInnerElement ? scroller.getInnerElement() : c.getContentTarget()
+                renderTo: c.getContentTarget()
             });
         }
 
@@ -698,9 +702,12 @@ describe("Ext.util.Floating", function() {
                     expect(alignToSpy.callCount).toBe(1);
 
                     expect(floater.getEl().getTop()).toBe(100);
+                    
+                    c.getEl().down('.align').destroy();
                 });
             });
         });
+        
         describe('aligning to Component', function() {
             beforeEach(function() {
                 makeTestComponent(true);
@@ -955,6 +962,65 @@ describe("Ext.util.Floating", function() {
                 expect(headerMenu.el.dom.style.clip.replace(/,\s*/g, ' ')).toBe("rect(-10000px 10000px 0px -10000px)");
                 expect(headerMenu.el.dom.style.clip.replace(/,\s*/g, ' ')).toBe("rect(-10000px 10000px 0px -10000px)");
             });
+        });
+    });
+    
+    describe('showing a focusable floater while there is an unfocable, alwaysOnTop floater visible', function() {
+        var transient, focusable;
+        
+        afterEach(function() {
+            Ext.destroy(transient, focusable);
+        });
+        it('should focus the focusable', function() {
+            transient = new Ext.Component({
+                focusable: false,
+                floating: true,
+                alwaysOnTop: true,
+                renderTo: document.body
+            });
+            focusable = new Ext.window.Window({
+                title: 'I should get focused'
+            }).show();
+
+            // It's not the topmost in the stack, but its the topmost focusable
+            // so it must get focused.
+            waitsFor(function() {
+                return focusable.containsFocus;
+            });
+        });
+    });
+
+    describe('showing an already visible floater', function() {
+        var w, w1;
+
+        afterEach(function() {
+            Ext.destroy(w, w1);
+        });
+
+        it('should move to front if shown when already visible', function() {
+            w = new Ext.window.Window({
+                title: 'Bar',
+                width: 200,
+                height: 200,
+                autoShow: true
+            });
+
+            w1 = new Ext.window.Window({
+                title: 'Foo',
+                width: 100,
+                height: 100,
+                autoShow: true
+            });
+
+            w.toFront();
+
+            // Window w should be on top.
+            expect(w.el.getZIndex()).toBeGreaterThan(w1.el.getZIndex());
+
+            w1.show();
+
+            // Window w1 should now be on top, even though it was already visible.
+            expect(w1.el.getZIndex()).toBeGreaterThan(w.el.getZIndex());
         });
     });
 });

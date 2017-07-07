@@ -1,6 +1,11 @@
 /* global Ext, xdescribe, expect, spyOn, jasmine */
 
-describe("Ext.direct.RemotingProvider", function() {
+var deps = Ext.isModern ? ['Ext.direct.*', 'Ext.form.Panel']
+         : ['Ext.direct.*', 'Ext.form.Panel', 'Ext.layout.container.Form',
+            'Ext.form.field.Hidden', 'Ext.form.action.DirectSubmit',
+            'Ext.form.action.DirectLoad'];
+
+topSuite("Ext.direct.RemotingProvider", deps, function() {
     var RP = Ext.direct.RemotingProvider,
         provider,
         responseText,
@@ -10,7 +15,7 @@ describe("Ext.direct.RemotingProvider", function() {
                 "TestAction": [{
                     len:  1,
                     name: "echo"
-                },{
+                }, {
                     len:  1,
                     name: "directFail"
                 }, {

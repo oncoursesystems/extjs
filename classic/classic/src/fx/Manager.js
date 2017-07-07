@@ -242,7 +242,7 @@ Ext.define('Ext.fx.Manager', {
             lastFrame = true;
         }
 
-        target = this.collectTargetData(anim, elapsedTime, useCSS3, lastFrame);
+        target = me.collectTargetData(anim, elapsedTime, useCSS3, lastFrame);
         
         // For CSS3 animation, we need to immediately set the first frame's attributes without any transition
         // to get a good initial state, then add the transition properties and set the final attributes.
@@ -400,5 +400,6 @@ Ext.define('Ext.fx.Manager', {
         me.targetArr = {};
         me.items.clear();
         me.targets.clear();
+        me.clearFxQueue();
     }
 });

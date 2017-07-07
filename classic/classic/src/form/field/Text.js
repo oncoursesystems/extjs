@@ -120,6 +120,23 @@ Ext.define('Ext.form.field.Text', {
          */
         hideTrigger: false,
 
+        /**
+         * @cfg {Boolean} [autoHideInputMask=true]
+         * Specify as `false` to always show the `inputMask`.
+         * @since 6.5.0
+         */
+        autoHideInputMask: null,
+
+        /**
+         * @cfg {String/Ext.field.InputMask} inputMask
+         *
+         * **Important:** To use this config you must require `Ext.field.InputMask` or
+         * use a complete framework build. The logic to implement an `inputMask` is not
+         * automatically included in a build.
+         * @since 6.5.0
+         */
+        inputMask: null,
+
         // @cmd-auto-dependency {aliasPrefix: "trigger.", isKeyedObject: true}
         /**
          * @cfg {Object} triggers
@@ -220,16 +237,15 @@ Ext.define('Ext.form.field.Text', {
      */
     growMax : 800,
 
-    //<locale>
     /**
      * @cfg {String} growAppend
      * A string that will be appended to the field's current value for the purposes of calculating the target field
      * size. Only used when the {@link #grow} config is true. Defaults to a single capital "W" (the widest character in
      * common fonts) to leave enough space for the next typed character and avoid the field value shifting before the
      * width is adjusted.
+     * @locale
      */
     growAppend: 'W',
-    //</locale>
 
     /**
      * @cfg {String} vtype
@@ -244,7 +260,8 @@ Ext.define('Ext.form.field.Text', {
 
     /**
      * @cfg {Boolean} [disableKeyFilter=false]
-     * Specify true to disable input keystroke filtering
+     * Specify true to disable input keystroke filtering. This will ignore the
+     * maskRe field.
      */
 
     /**
@@ -292,21 +309,19 @@ Ext.define('Ext.form.field.Text', {
      * True to set the maxLength property on the underlying input field. Defaults to false
      */
 
-    //<locale>
     /**
      * @cfg {String} minLengthText
      * Error text to display if the **{@link #minLength minimum length}** validation fails.
+     * @locale
      */
     minLengthText : 'The minimum length for this field is {0}',
-    //</locale>
 
-    //<locale>
     /**
      * @cfg {String} maxLengthText
-     * Error text to display if the **{@link #maxLength maximum length}** validation fails
+     * Error text to display if the **{@link #maxLength maximum length}** validation fails.
+     * @locale
      */
     maxLengthText : 'The maximum length for this field is {0}',
-    //</locale>
 
     /**
      * @cfg {Boolean} [selectOnFocus=false]
@@ -314,13 +329,12 @@ Ext.define('Ext.form.field.Text', {
      * focus. Only applies when {@link #editable editable} = true
      */
 
-    //<locale>
     /**
      * @cfg {String} blankText
-     * The error text to display if the **{@link #allowBlank}** validation fails
+     * The error text to display if the **{@link #allowBlank}** validation fails.
+     * @locale
      */
     blankText : 'This field is required',
-    //</locale>
 
     /**
      * @cfg {Function} validator
@@ -742,6 +756,24 @@ Ext.define('Ext.form.field.Text', {
         }
     },
 
+    applyInputMask: function (value, instance) {
+        var field = Ext.field,
+            InputMask = field && field['InputMask']; // prevent Cmd detection
+
+        //<debug>
+        if (value) {
+            if (!InputMask) {
+                Ext.raise('Missing Ext.field.InputMask (required to use inputMask)');
+            }
+            // if (this.getAutoComplete()) {
+            //     Ext.log.warn('Combining inputMask and autoComplete is not supported');
+            // }
+        }
+        //</debug>
+
+        return value ? InputMask.from(value, instance) : null;
+    },
+
     applyTriggers: function(triggers) {
         var me = this,
             hideAllTriggers = me.getHideTrigger(),
@@ -805,7 +837,7 @@ Ext.define('Ext.form.field.Text', {
             }
         }
 
-        Ext.Array.sort(orderedTriggers, Ext.form.trigger.Trigger.weightComparator);
+        Ext.Array.sort(orderedTriggers, Ext.weightSortFn);
 
         return triggers;
     },
@@ -838,6 +870,12 @@ Ext.define('Ext.form.field.Text', {
      */
     getTrigger: function(id) {
         return this.getTriggers()[id];
+    },
+
+    updateInputMask: function (inputMask, previous) {
+        if (previous) {
+            previous.release();
+        }
     },
 
     updateHideTrigger: function(hideTrigger) {
@@ -955,16 +993,30 @@ Ext.define('Ext.form.field.Text', {
         }
     },
 
-    onKeyDown: function(e) {
-        this.fireEvent('keydown', this, e);
+    onKeyDown: function (event) {
+        var me = this,
+            inputMask = me.getInputMask();
+
+        if (inputMask) {
+            inputMask.onKeyDown(me, me.getValue(), event);
+        }
+
+        this.fireEvent('keydown', this, event);
     },
 
     onKeyUp: function(e) {
         this.fireEvent('keyup', this, e);
     },
 
-    onKeyPress: function(e) {
-        this.fireEvent('keypress', this, e);
+    onKeyPress: function (event) {
+        var me = this,
+            inputMask = me.getInputMask();
+
+        if (inputMask) {
+            inputMask.onKeyPress(me, me.getValue(), event);
+        }
+
+        me.fireEvent('keypress', me, event);
     },
 
     /**
@@ -1063,46 +1115,41 @@ Ext.define('Ext.form.field.Text', {
     onFocus: function(e) {
         var me = this,
             inputEl = me.inputEl.dom,
-            startValue, value, len;
+            inputMask = me.getInputMask(),
+            value, len;
 
         me.callParent([e]);
         
-        // This handler may be called when the focus has already shifted to another element;
-        // calling inputEl.select() will forcibly focus again it which in turn might set up
-        // a nasty circular race condition if focusEl !== inputEl.
-        if (!me.focusTimer) {
-            startValue = inputEl.value;
-            me.focusTimer = Ext.asap(function() {
-                me.focusTimer = null;
-                // This ensures the carret will be at the end of the input element
-                // while tabbing between editors.
-                if (!me.destroyed && document.activeElement === inputEl) {
-                    value = inputEl.value;
-                    len = value.length;
-                    
-                    // If focusing has fired an event which mutated the value,
-                    // place the caret at the end. Else select the initial text
-                    // as is the HTML default behaviour.
-                    me.selectText(value !== startValue ? len : 0, len);
-                }
-            });
-        }
-
         if (me.emptyText) {
             me.autoSize();
+        }
+
+        if (inputMask) {
+            inputMask.onFocus(me, inputEl.value);
         }
 
         me.addCls(me.fieldFocusCls);
         me.triggerWrap.addCls(me.triggerWrapFocusCls);
         me.inputWrap.addCls(me.inputWrapFocusCls);
         me.invokeTriggers('onFieldFocus', [e]);
+
+        // This handler may be called when the focus has already shifted to another element;
+        // calling inputEl.select() will forcibly focus again it which in turn might set up
+        // a nasty circular race condition if focusEl !== inputEl.
+        if (me.selectOnFocus && document.activeElement === inputEl) {
+            value = inputEl.value;
+            len = value.length;
+
+            me.selectText(0, len);
+        }
     },
 
     /**
      * @private
      */
     onBlur: function(e) {
-        var me = this;
+        var me = this,
+            inputMask = me.getInputMask();
 
         me.callParent([e]);
 
@@ -1110,6 +1157,10 @@ Ext.define('Ext.form.field.Text', {
         me.triggerWrap.removeCls(me.triggerWrapFocusCls);
         me.inputWrap.removeCls(me.inputWrapFocusCls);
         me.invokeTriggers('onFieldBlur', [e]);
+
+        if (inputMask && me.getAutoHideInputMask() !== false) {
+            inputMask.onBlur(me, value);
+        }
     },
 
     /**
@@ -1252,33 +1303,39 @@ Ext.define('Ext.form.field.Text', {
         return errors;
     },
 
+    getCaretPos: function () {
+        return this.inputEl.getCaretPos();
+    },
+
+    setCaretPos: function (pos) {
+        this.inputEl.setCaretPos(pos);
+    },
+
     /**
-     * Selects text in this field
-     * @param {Number} [start=0] The index where the selection should start
-     * @param {Number} [end] The index where the selection should end (defaults to the text length)
+     * Returns the selection range of an input element as an array of three values:
+     *
+     *      [ start, end, direction ]
+     *
+     * These have the same meaning as the parameters to `selectText`.
+     * @return {Array}
+     * @since 6.5.0
      */
-    selectText: function (start, end) {
-        var me = this,
-            el = me.inputEl.dom,
-            v = el.value,
-            len = v.length,
-            range;
+    getTextSelection: function () {
+        return this.inputEl.getTextSelection();
+    },
 
-        if (len > 0) {
-            start = start === undefined ? 0 : Math.min(start, len);
-            end = end === undefined ? len : Math.min(end, len);
-
-            if (el.setSelectionRange) {
-                el.setSelectionRange(start, end);
-            } else if (el.createTextRange) {
-                range = el.createTextRange();
-                range.moveStart('character', start);
-                range.moveEnd('character', end - len);
-                range.select();
-            }
-        }
-
-        // TODO: Reinvestigate FF and Opera.
+    /**
+     * Select the specified contents of the input field (all by default).
+     * @param {Number} [start=0]
+     * @param {Number} [end]
+     * @param {"f"/"b"/"forward"/"backward"} [direction="f"] Pass "f" for forward,
+     * "b" for backwards.
+     * @return {Ext.form.field.Text} this
+     * @chainable
+     */
+    selectText: function (start, end, direction) {
+        this.inputEl.selectText(start, end, direction);
+        return this;
     },
 
     // Template method, override in Combobox.
@@ -1327,9 +1384,9 @@ Ext.define('Ext.form.field.Text', {
     doDestroy: function() {
         var me = this;
 
-        Ext.asapCancel(me.focusTimer);
         me.invokeTriggers('destroy');
         Ext.destroy(me.triggerRepeater);
+        me.setInputMask(null);
 
         me.callParent();
     },

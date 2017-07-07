@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked', {
         path: 'classic/samples/view/charts/bar3d/StackedController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Browsers.js'
+        path: 'app/store/Browsers.js'
     }],
     // </example>
 
@@ -36,33 +36,18 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked', {
             docked: 'right'
         },
         store: {type: 'browsers'},
-        insetPadding: 40,
         flipXY: true,
         animation: Ext.isIE8 ? false : {
             easing: 'backOut',
             duration: 500
         },
-        sprites: [{
-            type: 'text',
-            text: 'Bar Charts - Stacked Bars',
-            fontSize: 22,
-            width: 100,
-            height: 30,
-            x: 40, // the sprite x position
-            y: 20  // the sprite y position
-        }, {
-            type: 'text',
-            text: 'Data: Browser Stats 2012',
-            fontSize: 10,
-            x: 12,
-            y: 480
-        }, {
-            type: 'text',
-            text: 'Source: http://www.w3schools.com/',
-            fontSize: 10,
-            x: 12,
-            y: 495
-        }],
+        captions: {
+            title: 'Bar Charts - Stacked Bars',
+            credits: {
+                text: 'Data: Browser Stats 2012\nSource: http://www.w3schools.com/',
+                align: 'left'
+            }
+        },
         axes: [{
             type: 'numeric3d',
             position: 'bottom',

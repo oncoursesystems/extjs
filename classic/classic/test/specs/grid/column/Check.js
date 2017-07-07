@@ -1,6 +1,6 @@
 /* global expect, jasmine, Ext */
 
-describe("Ext.grid.column.Check", function() {
+topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template'], function() {
     var itNotIE9 = Ext.isIE9 ? xit : it,
         grid, view, store, col, invert = false;
 
@@ -53,12 +53,12 @@ describe("Ext.grid.column.Check", function() {
         return grid.getView().getCellInclusive({
             row: rowIdx,
             column: 0
-        });
+        }, true);
     }
     
     function getCellImg(rowIdx) {
         var cell = getCell(rowIdx);
-        return Ext.fly(cell).down('.x-grid-checkcolumn');
+        return cell.querySelector('.x-grid-checkcolumn');
     }
     
     function hasCls(el, cls) {
@@ -66,7 +66,7 @@ describe("Ext.grid.column.Check", function() {
     }
     
     function clickHeader() {
-        jasmine.fireMouseEvent(col.el.down('.' + col.headerCheckboxCls), 'click');
+        jasmine.fireMouseEvent(col.el.dom.querySelector('.' + col.headerCheckboxCls), 'click');
     }
     
     beforeEach(function() {

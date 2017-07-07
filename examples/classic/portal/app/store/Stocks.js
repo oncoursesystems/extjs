@@ -51,8 +51,7 @@ Ext.define('Portal.store.Stocks', {
     },
 
     onProxyLoad: function () {
-        var me = this,
-            isDesktop = Ext.os.is.MacOS || Ext.os.is.Windows || Ext.os.is.Linux;
+        var me = this;
 
         me.callParent(arguments);
         var count = me.getCount() - 1;
@@ -60,6 +59,6 @@ Ext.define('Portal.store.Stocks', {
         me.timer = setInterval(function () {
             var rec = me.getAt(Ext.Number.randomInt(0, count));
             rec.addPriceTick();
-        }, Ext.isIE || !isDesktop ? 100 : 20);
+        }, 100);
     }
 });

@@ -396,13 +396,16 @@ Ext.define('Ext.data.proxy.Ajax', {
      * @return {Function} The callback function
      */
     createRequestCallback: function(request, operation) {
-        var me = this;
-        
         return function(options, success, response) {
+            var me = this;
+            
             if (request === me.lastRequest) {
                 me.lastRequest = null;
             }
-            me.processResponse(success, operation, request, response);
+            
+            if (!me.destroying && !me.destroyed) {
+                me.processResponse(success, operation, request, response);
+            }
         };
     },
     

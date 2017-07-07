@@ -1,6 +1,9 @@
 /* global expect, Ext, jasmine */
 
-describe("grid-columns", function() {
+topSuite("grid-columns",
+    [false, 'Ext.grid.Panel', 'Ext.grid.column.*', 'Ext.data.ArrayStore',
+     'Ext.grid.filters.*', 'Ext.form.field.Text'],
+function() {
     function createSuite(buffered) {
         describe(buffered ? "with buffered rendering" : "without buffered rendering", function() {
             var defaultColNum = 4,
@@ -76,16 +79,18 @@ describe("grid-columns", function() {
                 colRef = grid.getColumnManager().getColumns();
             }
 
-            function getCell(rowIdx, colIdx) {
-                return grid.getView().getCellInclusive({
+            function getCell(rowIdx, colIdx, asDom) {
+                var cell = grid.getView().getCellInclusive({
                     row: rowIdx,
                     column: colIdx
-                });
+                }, true);
+                
+                return asDom ? cell : Ext.fly(cell);
             }
 
             function getCellInner(rowIdx, colIdx) {
-                var cell = getCell(rowIdx, colIdx);
-                return Ext.fly(cell).down(grid.getView().innerSelector).dom;
+                var cell = getCell(rowIdx, colIdx, true);
+                return cell.querySelector(grid.getView().innerSelector);
             }
 
             function getCellText(rowIdx, colIdx) {
@@ -2529,12 +2534,27 @@ describe("grid-columns", function() {
                                     }
                                 }]);
 
-                                cell = grid.view.body.el.down('.x-grid-cell');
+                                cell = Ext.fly(grid.view.body.dom.querySelector('.x-grid-cell'));
 
-                                expect(cell.dom.style['background-color']).toBe('red');
+                                // Edge returns rgb(255, 0, 0) here :(
+                                var style = cell.getStyle('background-color');
+                                
+                                if (style === 'rgb(255, 0, 0)') {
+                                    style = 'red';
+                                }
+                                
+                                expect(style).toBe('red');
+                                
                                 store.getAt(0).set('foo', true);
-                                expect(cell.dom.style['background-color']).not.toBe('red');
-                                expect(cell.dom.style['text-decoration']).toBe('underline');
+                                
+                                style = cell.getStyle('background-color');
+                                
+                                if (style === 'rgb(255, 0, 0)') {
+                                    style = 'red';
+                                }
+                                
+                                expect(style).not.toBe('red');
+                                expect(cell.getStyle('text-decoration')).toBe('underline');
                             });
                         });
 
@@ -3026,4 +3046,3 @@ describe("grid-columns", function() {
     createSuite(false);
     createSuite(true);
 });
-

@@ -1,4 +1,4 @@
-describe("Ext.util.Sorter", function() {
+topSuite("Ext.util.Sorter", ['Ext.data.SortTypes', 'Ext.data.Model'], function() {
     var sorter;
 
     describe("instantiation", function() {

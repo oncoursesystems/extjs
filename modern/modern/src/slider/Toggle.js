@@ -104,7 +104,7 @@ Ext.define('Ext.slider.Toggle', {
             thumb = this.thumbs[0];
 
         this.setIndexValue(0, newValue, this.getAnimation());
-        this.refreshThumbConstraints(thumb);
+        this.refreshAdjacentThumbConstraints(thumb);
     },
 
     privates: {

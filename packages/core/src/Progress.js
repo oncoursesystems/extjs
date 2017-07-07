@@ -63,21 +63,18 @@ Ext.define('Ext.Progress', {
     },
 
     cachedConfig: {
-        /**
-         * @cfg {String} [baseCls='x-progress']
-         * The base CSS class to apply to the progress bar's wrapper element.
-         */
-        baseCls: Ext.baseCSSPrefix + 'progress',
-
         textCls: Ext.baseCSSPrefix + 'progress-text',
 
         cls: null
     },
 
+    baseCls: Ext.baseCSSPrefix + 'progress',
+
     template: [{
         reference: 'backgroundEl'
     }, {
         reference: 'barEl',
+        cls: Ext.baseCSSPrefix + 'progress-bar',
         children: [{
             reference: 'textEl'
         }]
@@ -100,7 +97,9 @@ Ext.define('Ext.Progress', {
     updateUi: function (ui, oldUi) {
         var element = this.element,
             barEl = this.barEl,
-            baseCls = this.getBaseCls() + '-';
+            baseCls = this.baseCls + '-';
+
+        this.callParent([ui, oldUi]);
 
         if (oldUi) {
             element.removeCls(baseCls + oldUi);
@@ -109,16 +108,6 @@ Ext.define('Ext.Progress', {
 
         element.addCls(baseCls + ui);
         barEl.addCls(baseCls + 'bar-' + ui);
-    },
-
-    updateBaseCls: function (baseCls, oldBaseCls) {
-        //<debug>
-        if (oldBaseCls) {
-            Ext.raise('You cannot configure baseCls - use a subclass');
-        }
-        //</debug>
-        this.element.addCls(baseCls);
-        this.barEl.addCls(baseCls + '-bar');
     },
 
     updateTextCls: function (textCls) {

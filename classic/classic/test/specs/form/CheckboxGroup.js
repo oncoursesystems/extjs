@@ -1,6 +1,6 @@
 /* global Ext, expect, jasmine */
 
-describe("Ext.form.CheckboxGroup", function() {
+topSuite("Ext.form.CheckboxGroup", ['Ext.app.ViewModel'], function() {
     var component;
 
     function makeComponent(config) {

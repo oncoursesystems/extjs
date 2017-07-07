@@ -23,6 +23,7 @@ Ext.define('Admin.view.tablet.email.EmailController', {
         if (!composer) {
             me.composer = composer = Ext.Viewport.add({
                 xtype: 'compose',
+                floated: true,
                 modal: true,
                 centered: true,
                 ownerCt: view,

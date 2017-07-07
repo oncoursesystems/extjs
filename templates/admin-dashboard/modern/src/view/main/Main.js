@@ -25,12 +25,13 @@ Ext.define('Admin.view.main.Main', {
             xtype: 'container',
             userCls: 'main-nav-container',
             reference: 'navigation',
-            scrollable: true,
+            layout: 'fit',
             items: [
                 {
                     xtype: 'treelist',
                     reference: 'navigationTree',
-                    ui: 'navigation',
+                    scrollable: true,
+                    ui: 'nav',
                     store: 'NavigationTree',
                     expanderFirst: false,
                     expanderOnly: false,

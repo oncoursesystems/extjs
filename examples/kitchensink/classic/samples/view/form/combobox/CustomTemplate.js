@@ -15,10 +15,10 @@ Ext.define('KitchenSink.view.form.combobox.CustomTemplate', {
     exampleTitle: 'Custom Template ComboBox',
     otherContent: [{
         type: 'Model',
-        path: 'classic/samples/model/State.js'
+        path: 'app/model/State.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/States.js'
+        path: 'app/store/States.js'
     }],
     //</example>
     

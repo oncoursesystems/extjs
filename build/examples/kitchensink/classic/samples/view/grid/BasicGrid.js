@@ -1,11 +1,14 @@
 /**
- * This example shows how to create a grid from a store. The grid is stateful so you
- * can move or hide columns, reload the page, and come back to the grid in the same state
- * you left it in.
+ * This example shows how to create a grid from a store.
  *
- * The cells are selectable due to use of the `enableTextSelection` option.
+ * The grid is stateful so you can move or hide columns,
+ * reload the page, and come back to the grid in the same
+ * state you left it in.
  *
- * It uses an ActionColumn to display clickable icons which are linked to controller methods.
+ * Cell text is selectable due to use of the `enableTextSelection`.
+ *
+ * It uses an ActionColumn to display clickable icons
+ * which are linked to controller methods.
  */
 Ext.define('KitchenSink.view.grid.BasicGrid', {
     extend: 'Ext.grid.Panel',
@@ -22,10 +25,10 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
         path: 'classic/samples/view/grid/BasicGridController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Companies.js'
+        path: 'app/store/Companies.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -57,73 +60,51 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
     multiSelect: true,
     stateId: 'stateGrid',
     headerBorders: false,
-    signTpl: '<span style="' +
-            'color:{value:sign(\'${red}\',\'${green}\')}"' +
-        '>{text}</span>',
 
     viewConfig: {
         enableTextSelection: true
     },
 
-    // Reusable actions
-    actions: {
-        sell: {
-            iconCls: 'array-grid-sell-col',
-            tooltip: 'Sell stock',
-            handler: 'onSellClick'
-        },
-        buy: {
-            getClass: 'getBuyClass',
-            getTip: 'getBuyTip',
-            handler: 'onBuyClick'
-        },
-        suspendTrading: {
-            tooltip: 'Toggles enabled status of all buy and sell actions anywhere in this view',
-            text: 'Suspend Trading',
-            glyph: 'xf256@FontAwesome',
-            toggleHandler: 'onToggleTrading',
-            enableToggle: true
-        }
-    },
-
     columns: [{
         text: 'Company',
         flex: 1,
-        sortable: false,
         dataIndex: 'name'
     }, {
         text: 'Price',
         width: '${priceWidth}',
-        sortable: true,
         formatter: 'usMoney',
         dataIndex: 'price'
     }, {
         text: 'Change',
         width: 80,
-        sortable: true,
         renderer: 'renderChange',
-        dataIndex: 'change'
+        dataIndex: 'priceChange'
     }, {
         text: '% Change',
         width: '${percentChangeColumnWidth}',
-        sortable: true,
         renderer: 'renderPercent',
-        dataIndex: 'pctChange'
+        dataIndex: 'priceChangePct'
     }, {
         text: 'Last Updated',
         width: '${lastUpdatedColumnWidth}',
-        sortable: true,
         formatter: 'date("m/d/Y")',
-        dataIndex: 'lastChange'
+        dataIndex: 'priceLastChange'
     }, {
-        menuDisabled: true,
-        sortable: false,
         xtype: 'actioncolumn',
         width: 50,
-        items: ['@sell', '@buy']
+        menuDisabled: true,
+        sortable: false,
+
+        items: [{
+            iconCls: 'x-fa fa-check green',
+            handler: 'onApprove'
+        }, {
+            iconCls: 'x-fa fa-ban red',
+            handler: 'onDecline'
+        }]
     }],
 
-    bbar: [
-        '@suspendTrading'
-    ]
+    signTpl: '<span style="' +
+            'color:{value:sign(\'${red}\',\'${green}\')}"' +
+        '>{text}</span>'
 });

@@ -1,6 +1,8 @@
 /* global Ext, jasmine, expect, spyOn */
 
-describe("Ext.grid.column.Action", function(){
+topSuite("Ext.grid.column.Action",
+    ['Ext.grid.Panel', 'Ext.window.MessageBox'],
+function() {
     var store, grid, view, actionColumn,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
@@ -16,20 +18,20 @@ describe("Ext.grid.column.Action", function(){
         return grid.getView().getCellInclusive({
             row: rowIdx,
             column: colIdx
-        });
+        }, true);
     }
     
     function getActionItem(rowIdx, colIdx, itemIdx) {
         var cell = getCell(rowIdx || 0, colIdx || 1);
         
-        var items = cell.select('.' + Ext.grid.column.Action.prototype.actionIconCls);
+        var items = cell.querySelectorAll('.' + Ext.grid.column.Action.prototype.actionIconCls);
         
-        return items.item(itemIdx || 0);
+        return items[itemIdx || 0];
     }
     
     function triggerAction(type, row, colIdx) {
         var cell = getCell(row || 0, colIdx || 1);
-        jasmine.fireMouseEvent(cell.down('.' + Ext.grid.column.Action.prototype.actionIconCls, true), type || 'click');
+        jasmine.fireMouseEvent(cell.querySelector('.' + Ext.grid.column.Action.prototype.actionIconCls), type || 'click');
         return cell;
     }
 
@@ -55,7 +57,7 @@ describe("Ext.grid.column.Action", function(){
                 renderer: Ext.emptyFn,
                 items: [{
                     handler: actionHandler|| Ext.emptyFn,
-                    isDisabled: Ext.emptyFn
+                    isActionDisabled: Ext.emptyFn
                 }]
             }],
             renderTo: Ext.getBody()
@@ -97,10 +99,10 @@ describe("Ext.grid.column.Action", function(){
                     renderer: Ext.emptyFn,
                     items: [{
                         handler: handlerSpy,
-                        isDisabled: Ext.emptyFn
+                        isActionDisabled: Ext.emptyFn
                     }, {
                         handler: Ext.emptyFn,
-                        isDisabled: Ext.emptyFn
+                        isActionDisabled: Ext.emptyFn
                     }]
                 }]
             });
@@ -111,7 +113,7 @@ describe("Ext.grid.column.Action", function(){
             cellEl = grid.getView().getCell(0, 1);
             
             // This is a bit hacky but so is Action column :(
-            actionItemEl = cellEl.down('[role=button]', true);
+            actionItemEl = cellEl.querySelector('[role=button]');
         });
         
         afterEach(function() {
@@ -209,6 +211,7 @@ describe("Ext.grid.column.Action", function(){
         it('should not process mousedown events', function () {
             triggerAction('mousedown');
             expect(handled).toBe(false);
+            triggerAction('mouseup');
         });
     });
 
@@ -406,8 +409,8 @@ describe("Ext.grid.column.Action", function(){
 
                 var view   = grid.getView(),
                     rowEl  = view.getNode(0),
-                    img    = Ext.get(rowEl).down('.x-action-col-icon'),
-                    imgCls = img.hasCls('x-item-disabled');
+                    img    = rowEl.querySelector('.x-action-col-icon'),
+                    imgCls = Ext.fly(img).hasCls('x-item-disabled');
 
                 triggerAction();
                 expect(spy1).not.toHaveBeenCalled();
@@ -425,8 +428,8 @@ describe("Ext.grid.column.Action", function(){
 
                 var view   = grid.getView(),
                     rowEl  = view.getNode(0),
-                    img    = Ext.get(rowEl).down('.x-action-col-icon'),
-                    imgCls = img.hasCls('x-item-disabled');
+                    img    = rowEl.querySelector('.x-action-col-icon'),
+                    imgCls = Ext.fly(img).hasCls('x-item-disabled');
 
                 col.enableAction(0);
                 triggerAction();
@@ -443,7 +446,7 @@ describe("Ext.grid.column.Action", function(){
 
                 var view   = grid.getView(),
                     rowEl  = view.getNode(0),
-                    img    = Ext.get(rowEl).down('.x-action-col-icon');
+                    img    = Ext.fly(rowEl.querySelector('.x-action-col-icon'));
 
                 expect(img.hasCls('x-item-disabled')).toBe(false);
                 col.disableAction(0);
@@ -710,16 +713,16 @@ describe("Ext.grid.column.Action", function(){
                 runTest('defaultRenderer');
             });
 
-            describe('isDisabled on items', function () {
-                it('should call isDisabled', function () {
+            describe('isActionDisabled on items', function () {
+                it('should call isActionDisabled', function () {
                     var item;
 
                     makeGrid();
                     item = actionColumn.items[0];
-                    spyOn(item, 'isDisabled').andCallThrough();
+                    spyOn(item, 'isActionDisabled').andCallThrough();
                     store.getAt(0).set('text', 'Kilgore Trout');
 
-                    expect(item.isDisabled.callCount).toBe(1);
+                    expect(item.isActionDisabled.callCount).toBe(1);
                 });
             });
         });
@@ -951,7 +954,7 @@ describe("Ext.grid.column.Action", function(){
                         items: [{
                             ariaRole: null
                         }, {
-                            ariaRole: '',
+                            ariaRole: ''
                         }, {
                             ariaRole: 'throbbe'
                         }]

@@ -513,10 +513,6 @@ Ext.define('Ext.dd.DragDropManager', {
 
         me.isMouseDown = true;
 
-        if (Ext.quickTipsActive){
-            Ext.tip.QuickTipManager.ddDisable();
-        }
-
         me.currentPoint.setPosition(xy);
 
         if (me.dragCurrent){
@@ -562,6 +558,11 @@ Ext.define('Ext.dd.DragDropManager', {
             dragEl;
 
         clearTimeout(me.clickTimeout);
+
+        if (Ext.quickTipsActive){
+            Ext.tip.QuickTipManager.ddDisable();
+        }
+
         if (current) {
             current.b4StartDrag(x, y);
             current.startDrag(x, y);
@@ -595,9 +596,6 @@ Ext.define('Ext.dd.DragDropManager', {
         me.pointerMoveListeners.destroy();
         me.isMouseDown = false;
 
-        if (Ext.quickTipsActive){
-            Ext.tip.QuickTipManager.ddEnable();
-        }
         if (!me.dragCurrent) {
             return;
         }
@@ -647,6 +645,10 @@ Ext.define('Ext.dd.DragDropManager', {
         var me = this,
             current = me.dragCurrent,
             dragEl;
+
+        if (Ext.quickTipsActive){
+            Ext.tip.QuickTipManager.ddEnable();
+        }
 
         // Fire the drag end event for the item that was dragged
         if (current) {

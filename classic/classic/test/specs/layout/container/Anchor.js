@@ -1,4 +1,6 @@
-describe("Ext.layout.container.Anchor", function() {
+topSuite("Ext.layout.container.Anchor",
+    ['Ext.form.Panel', 'Ext.form.field.*'],
+function() {
     function createSuite(shrinkWrap) {
         var suiteName = 'Ext.layout.container.Anchor';
 

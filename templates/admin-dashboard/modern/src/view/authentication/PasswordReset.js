@@ -21,7 +21,7 @@ Ext.define('Admin.view.authentication.PasswordReset', {
             items: [{
                 xtype: 'textfield',
                 minWidth: 300,
-                placeHolder: 'example@example.com',
+                placeholder: 'example@example.com',
                 ui: 'light'
             },{
                 xtype: 'button',

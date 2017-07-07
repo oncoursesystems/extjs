@@ -64,10 +64,5 @@ Ext.define('KitchenSink.view.draw.Easings', {
                 toY: 400
             }]
         }
-    ],
-
-    listeners: {
-        afterrender: 'onAfterRender'
-    }
-
+    ]
 });

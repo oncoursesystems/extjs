@@ -1,5 +1,11 @@
-describe("Ext.toolbar.Toolbar", function(){
-    var toolbar;
+/* global expect, Ext, jasmine, it */
+
+topSuite("Ext.toolbar.Toolbar",
+    ['Ext.Button', 'Ext.button.Segmented', 'Ext.form.field.Text', 'Ext.form.field.Radio',
+     'Ext.slider.Single', 'Ext.layout.container.boxOverflow.Menu'],
+function() {
+    var itNotTouch = jasmine.supportsTouch ? xit : it,
+        toolbar;
 
     function createToolbar(cfg) {
         toolbar = new Ext.toolbar.Toolbar(Ext.apply({
@@ -16,6 +22,22 @@ describe("Ext.toolbar.Toolbar", function(){
     it("should default to using a hbox layout", function() {
         createToolbar();
         expect(toolbar.getLayout() instanceof Ext.layout.container.HBox);
+    });
+
+    it("should be able to change layout to vertical", function() {
+        createToolbar({
+            layout: {
+                type: 'box',
+                vertical: false
+            }
+        });
+
+        expect(function(){
+            toolbar.setLayout({
+                type: 'box',
+                vertical: true
+            });
+        }).not.toThrow();
     });
 
     describe('overflow', function () {
@@ -304,8 +326,7 @@ describe("Ext.toolbar.Toolbar", function(){
                 }]
             });
             
-            expect(toolbar.tabGuardBeforeEl).toHaveAttr('tabIndex', '0');
-            expect(toolbar.tabGuardAfterEl).toHaveAttr('tabIndex', '0');
+            expect(toolbar.isFocusableContainerActive()).toBeTruthy();
         });
         
         it("should be off with input fields", function() {
@@ -317,8 +338,7 @@ describe("Ext.toolbar.Toolbar", function(){
                 }]
             });
             
-            expect(toolbar.tabGuardBeforeEl).not.toHaveAttr('tabIndex');
-            expect(toolbar.tabGuardAfterEl).not.toHaveAttr('tabIndex');
+            expect(toolbar.isFocusableContainerActive()).toBeFalsy();
         });
         
         it("should be off with sliders", function() {
@@ -330,8 +350,28 @@ describe("Ext.toolbar.Toolbar", function(){
                 }]
             });
             
-            expect(toolbar.tabGuardBeforeEl).not.toHaveAttr('tabIndex');
-            expect(toolbar.tabGuardAfterEl).not.toHaveAttr('tabIndex');
+            expect(toolbar.isFocusableContainerActive()).toBeFalsy();
+        });
+        
+        describe("forced to true", function() {
+            beforeEach(function() {
+                createToolbar({
+                    focusableContainer: true,
+                    items: [{
+                        xtype: 'button'
+                    }, {
+                        xtype: 'textfield'
+                    }]
+                });
+            });
+            
+            it("should activate container", function() {
+                expect(toolbar.isFocusableContainerActive()).toBeTruthy();
+            });
+            
+            it("should keep the role of toolbar", function() {
+                expect(toolbar).toHaveAttr('role', 'toolbar');
+            });
         });
     });
     
@@ -368,6 +408,133 @@ describe("Ext.toolbar.Toolbar", function(){
             });
             
             expect(toolbar).toHaveAttr('role', 'group');
+        });
+    });
+    
+    describe('trackMenus', function() {
+        itNotTouch('should maintain menu active state when mouseovering sibling buttons when trackMenus is true', function() {
+            createToolbar({
+                items: [{
+                    text: 'Button1',
+                    id: 'b1',
+                    menu: {
+                        items: [{
+                            text: 'b1 me1',
+                            id: 'b1m1'
+                        }]
+                    }
+                }, {
+                    text: 'Button2',
+                    id: 'b2'
+                }, {
+                    text: 'Button3',
+                    id: 'b3',
+                    menu: {
+                        items: [{
+                            text: 'b3 me1',
+                            id: 'b3m1'
+                        }]
+                    }
+                }]
+            });
+            var b1 = toolbar.down('#b1'),
+                b2 = toolbar.down('#b2'),
+                b3 = toolbar.down('#b3'),
+                m1 = b1.getMenu(),
+                m3 = b3.getMenu();
+
+            jasmine.fireMouseEvent(b1.el, 'mouseover');
+            jasmine.fireMouseEvent(b1.el, 'click');
+
+            // Click shows menu
+            waitsFor(function() {
+                return m1.isVisible(true);
+            });
+
+            // Moving over a menuless button does nothing
+            runs(function() {
+                jasmine.fireMouseEvent(b1.el, 'mouseout');
+                jasmine.fireMouseEvent(b2.el, 'mouseover');
+            });
+
+            // Nothing must happen. We cannot wait for anything
+            waits(100);
+
+            // Moving over another button with menu shows that button's menu
+            runs(function() {
+                expect(m1.isVisible(true)).toBe(true);
+                jasmine.fireMouseEvent(b2.el, 'mouseout');
+                jasmine.fireMouseEvent(b3.el, 'mouseover');
+            });
+            
+            waitsFor(function() {
+                return m3.isVisible(true);
+            });
+
+        });
+        itNotTouch('should not maintain menu active state when mouseovering sibling buttons when trackMenus is false', function() {
+            createToolbar({
+                trackMenus: false,
+                items: [{
+                    text: 'Button1',
+                    id: 'b1',
+                    menu: {
+                        items: [{
+                            text: 'b1 me1',
+                            id: 'b1m1'
+                        }]
+                    }
+                }, {
+                    text: 'Button2',
+                    id: 'b2'
+                }, {
+                    text: 'Button3',
+                    id: 'b3',
+                    menu: {
+                        items: [{
+                            text: 'b3 me1',
+                            id: 'b3m1'
+                        }]
+                    }
+                }]
+            });
+            var b1 = toolbar.down('#b1'),
+                b2 = toolbar.down('#b2'),
+                b3 = toolbar.down('#b3'),
+                m1 = b1.getMenu(),
+                m3 = b3.getMenu();
+
+            jasmine.fireMouseEvent(b1.el, 'mouseover');
+            jasmine.fireMouseEvent(b1.el, 'click');
+
+            // Click shows menu
+            waitsFor(function() {
+                return m1.isVisible(true);
+            }, 'menu 1 to show');
+
+            // Exiting the button hides the menu when trackMenus is false
+            runs(function() {
+                jasmine.fireMouseEvent(b1.el, 'mouseout');
+                jasmine.fireMouseEvent(b2.el, 'mouseover');
+            });
+
+            waitsFor(function() {
+                return !m1.isVisible(true);
+            }, 'menu 1 to hide');
+
+            // Moving over a button with a menu should still do nothing
+            runs(function() {
+                jasmine.fireMouseEvent(b2.el, 'mouseout');
+                jasmine.fireMouseEvent(b3.el, 'mouseover');
+            });
+
+            // Nothing must happen. We cannot wait for anything
+            waits(100);
+
+            // No menus. We are not tracking the active state.
+            runs(function() {
+                expect(m3.isVisible(true)).toBe(false);
+            });
         });
     });
 });

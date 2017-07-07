@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.grid.SlidingPager', {
     //<example>
     otherContent: [{
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -64,21 +64,21 @@ Ext.define('KitchenSink.view.grid.SlidingPager', {
         width: 75
     },{
         text: 'Change',
-        dataIndex: 'change',
+        dataIndex: 'priceChange',
 
         sortable: true,
         renderer: 'renderChange',
         width: 80
     },{
         text: '% Change',
-        dataIndex: 'pctChange',
+        dataIndex: 'priceChangePct',
 
         sortable: true,
         renderer: 'renderPercent',
         width: '${percentChangeColumnWidth}'
     },{
         text: 'Last Updated',
-        dataIndex: 'lastChange',
+        dataIndex: 'priceLastChange',
 
         sortable: true,
         formatter: 'date("m/d/Y")',
@@ -88,8 +88,8 @@ Ext.define('KitchenSink.view.grid.SlidingPager', {
     bbar: {
         xtype: 'pagingtoolbar',
         displayInfo: true,
-        plugins: {
+        plugins: [{
             ptype: 'ux-slidingpager'
-        }
+        }]
     }
 });

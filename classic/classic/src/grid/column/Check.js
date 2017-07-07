@@ -484,7 +484,7 @@ Ext.define('Ext.grid.column.Check', {
             cell = cell || me.getView().getCell(record, me);
             
             if (cell) {
-                cell.dom.setAttribute('aria-describedby', me.id + '-cell-description' + 
+                cell.setAttribute('aria-describedby', me.id + '-cell-description' + 
                                         (!isSelected ? '-not' : '') + '-selected');
             }
         }

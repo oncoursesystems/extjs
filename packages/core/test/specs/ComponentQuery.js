@@ -1,4 +1,4 @@
-describe("Ext.ComponentQuery", function() {
+topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
     var cq,
         cm,
         realComponentMgrAll,
@@ -23,8 +23,8 @@ describe("Ext.ComponentQuery", function() {
                     setup(o.items[i], o);
                 }
             }
-            
             Ext.apply(o, {
+                $iid: ++Ext.$nextIid,
                 getItemId: function() {
                     return this.itemId !== undefined ? this.itemId : this.id;
                 },
@@ -898,8 +898,8 @@ describe("Ext.ComponentQuery", function() {
         beforeEach(function () {
             c = new Ext.container.Container({
                 items: {
-                    xtype: 'button',
-                    text: 'Test',
+                    xtype: 'component',
+                    html: 'Test',
                     action: 'selectVendors'
                 },
                 renderTo: document.body

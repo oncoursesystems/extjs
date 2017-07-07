@@ -1,6 +1,8 @@
 /* global Ext, jasmine, expect, spyOn */
 
-describe('grid-moving-columns', function () {
+topSuite('grid-moving-columns',
+    [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore'],
+function() {
     var transformStyleName = 'webkitTransform' in document.documentElement.style ? 'webkitTransform' : 'transform',
         GridModel = Ext.define(null, {
             extend: 'Ext.data.Model',

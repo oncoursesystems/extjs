@@ -75,11 +75,12 @@ Ext.define('Ext.event.publisher.Gesture', {
             handledDomEvents.push('touchstart', 'touchmove', 'touchend', 'touchcancel');
         }
 
-        if (!handledDomEvents.length || (supportsTouchEvents && Ext.isWebKit && Ext.os.is.Desktop)) {
+        if (!handledDomEvents.length || (supportsTouchEvents && Ext.os.is.Desktop)) {
             // If the browser doesn't have pointer events or touch events we use mouse events
-            // to trigger gestures.  The exception to this rule is touch enabled webkit
-            // browsers such as chrome on Windows 8.  These browsers accept both touch and
-            // mouse input, so we need to listen for both touch events and mouse events.
+            // to trigger gestures.  The exception to this rule is touch enabled desktop
+            // browsers such as chrome and firefox on Windows touch screen devices.  These
+            // browsers accept both touch and mouse input, so we need to listen for both
+            // touch events and mouse events.
             handledDomEvents.push('mousedown', 'mousemove', 'mouseup');
         }
 
@@ -532,19 +533,31 @@ Ext.define('Ext.event.publisher.Gesture', {
             me.invokeRecognizers(me.isCancelEvent[e.type] ? 'onTouchCancel' : 'onTouchEnd', e);
         }
         finally {
-            if (!touchCount) {
-                // no more active touches - invoke onEnd to indicate the end of the gesture
-                me.isStarted = false;
-                me.invokeRecognizers('onEnd', e);
+            // This can throw too
+            try {
+                if (!touchCount) {
+                    // no more active touches - invoke onEnd to indicate the end of the gesture
+                    me.isStarted = false;
+                    me.invokeRecognizers('onEnd', e);
+                }
             }
-
-            me.publishGestures();
-
-            if (!touchCount) {
-                // Gesture is finished, safe to resume garbage collection so that any target
-                // elements destroyed while gesture was in progress can be collected
-                if (Ext.enableGarbageCollector) {
-                    Ext.dom.GarbageCollector.resume();
+            finally {
+                // Right, THIS can throw again!
+                try {
+                    me.publishGestures();
+                }
+                finally {
+                    if (!touchCount) {
+                        // Gesture is finished, safe to resume garbage collection so that any target
+                        // elements destroyed while gesture was in progress can be collected
+                        if (Ext.enableGarbageCollector) {
+                            Ext.dom.GarbageCollector.resume();
+                        }
+                    }
+                    
+                    // The parent code may not to be reached in this case
+                    me.reEnterCountAdjusted = true;
+                    me.reEnterCount--;
                 }
             }
         }

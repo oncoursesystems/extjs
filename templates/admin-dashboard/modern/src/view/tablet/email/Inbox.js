@@ -13,14 +13,14 @@ Ext.define('Admin.view.tablet.email.Inbox', {
         }
     },
 
-    plugins: {
+    plugins: [{
         type: 'multiselection',
 
         selectionColumn: {
             hidden: false,
             width: 40  // Change column width from the default of 60px
         }
-    },
+    }],
 
     rowLines: false,
     striped: false,
@@ -36,7 +36,7 @@ Ext.define('Admin.view.tablet.email.Inbox', {
             cell: {
                 align: 'center',
                 bind: {
-                    innerCls: 'x-fa {record.favorite:pick("fa-heart-o", "fa-heart inbox-favorite-icon")}'
+                    bodyCls: 'x-fa {record.favorite:pick("fa-heart-o", "fa-heart inbox-favorite-icon")}'
                 }
             },
             renderer: function(){
@@ -50,7 +50,7 @@ Ext.define('Admin.view.tablet.email.Inbox', {
             dataIndex: 'from',
             width: 150,
             cell: {
-                innerCls: 'inbox-from'
+                bodyCls: 'inbox-from'
             }
         },
         {
@@ -58,7 +58,7 @@ Ext.define('Admin.view.tablet.email.Inbox', {
             dataIndex: 'title',
             flex: 1,
             cell: {
-                innerCls: 'inbox-title'
+                bodyCls: 'inbox-title'
             }
         },
         {
@@ -69,7 +69,7 @@ Ext.define('Admin.view.tablet.email.Inbox', {
             cell: {
                 align: 'center',
                 bind: {
-                    innerCls: 'x-fa {record.has_attachments:pick("", "fa-paperclip")}'
+                    bodyCls: 'x-fa {record.has_attachments:pick("", "fa-paperclip")}'
                 }
             },
             renderer: function(){

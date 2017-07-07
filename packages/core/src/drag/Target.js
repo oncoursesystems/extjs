@@ -115,7 +115,7 @@ Ext.define('Ext.drag.Target', {
         invalidCls: '',
 
         /**
-         * @cfg {String} invalidCls
+         * @cfg {String} validCls
          * A class to add to the {@link #element} when an
          * invalid drag is over this target.
          */

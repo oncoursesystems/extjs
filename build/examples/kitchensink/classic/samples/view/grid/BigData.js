@@ -23,7 +23,9 @@ Ext.define('KitchenSink.view.grid.BigData', {
 
     requires: [
         'Ext.grid.filters.Filters',
-        'Ext.grid.plugin.Exporter'
+        'Ext.grid.plugin.Exporter',
+        'Ext.sparkline.Line',
+        'Ext.ux.rating.Picker'
     ],
 
     //<example>
@@ -46,9 +48,6 @@ Ext.define('KitchenSink.view.grid.BigData', {
     store: 'BigData',
     columnLines: true,
     multiColumnSort: true,
-
-    // We do not need automatic height synching.
-    syncRowHeight: false,
 
     features: [{
         ftype : 'groupingsummary',
@@ -251,6 +250,15 @@ Ext.define('KitchenSink.view.grid.BigData', {
             }
         }]
     }, {
+        text: 'Rating<br>This Year',
+        dataIndex: 'ratingThisYear',
+        groupable: false,
+        xtype: 'widgetcolumn',
+        widget: {
+            xtype: 'rating',
+            tip: 'Set to {tracking:plural("Star")}'
+        }
+    }, {
         text: 'Salary',
         width: 155,
         sortable: true,
@@ -286,21 +294,43 @@ Ext.define('KitchenSink.view.grid.BigData', {
             xtype: 'button',
             text: 'Export to ...',
             menu: {
+                defaults: {
+                    handler: 'exportTo'
+                },
                 items: [{
                     text:   'Excel xlsx',
-                    handler: 'exportToXlsx'
+                    cfg: {
+                        type: 'excel07',
+                        ext: 'xlsx',
+                        includeGroups: true,
+                        includeSummary: true
+                    }
                 },{
                     text: 'Excel xml',
-                    handler: 'exportToXml'
+                    cfg: {
+                        type: 'excel03',
+                        ext: 'xml',
+                        includeGroups: true,
+                        includeSummary: true
+                    }
                 },{
                     text:   'CSV',
-                    handler: 'exportToCSV'
+                    cfg: {
+                        type: 'csv'
+                    }
                 },{
                     text:   'TSV',
-                    handler: 'exportToTSV'
+                    cfg: {
+                        type: 'tsv',
+                        ext: 'csv'
+                    }
                 },{
                     text:   'HTML',
-                    handler: 'exportToHtml'
+                    cfg: {
+                        type: 'html',
+                        includeGroups: true,
+                        includeSummary: true
+                    }
                 }]
             }
         }]

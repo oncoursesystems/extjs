@@ -33,7 +33,8 @@ Ext.define('KitchenSink.view.form.LoginForm', {
         allowBlank: false,
         fieldLabel: 'User ID',
         name: 'user',
-        emptyText: 'user id'
+        emptyText: 'user id',
+        msgTarget: 'under'
     }, {
         allowBlank: false,
         fieldLabel: 'Password',

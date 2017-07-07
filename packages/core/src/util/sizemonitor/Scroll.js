@@ -40,7 +40,9 @@ Ext.define('Ext.util.sizemonitor.Scroll', {
     },
 
     onScroll: function() {
-        Ext.TaskQueue.requestRead('refresh', this);
+        if (!this.destroyed) {
+            Ext.TaskQueue.requestRead('refresh', this);
+        }
     },
 
     refreshMonitors: function() {

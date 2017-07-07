@@ -1,4 +1,4 @@
-describe('Ext.menu.KeyNav', function () {
+topSuite("Ext.menu.KeyNav", [false, 'Ext.menu.Menu'], function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         menu;
     
@@ -126,11 +126,12 @@ describe('Ext.menu.KeyNav', function () {
             waitsFor(function() {
                 return childMenu.el;
             });
+            
+            runs(function() {
+                pressKey(childMenu.down('menuitem'), 'left');
+            });
 
             runs(function() {
-                node = childMenu.el.down('.x-menu-item-link', true);
-                jasmine.fireKeyEvent(node, 'keydown', 37);
-
                 expect(childMenu.hidden).toBe(true);
             });
         });

@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.charts.combination.Pareto', {
         path: 'classic/samples/view/charts/combination/ParetoController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Pareto.js'
+        path: 'app/store/Pareto.js'
     }],
     // </example>
     width: 650,
@@ -40,31 +40,19 @@ Ext.define('KitchenSink.view.charts.combination.Pareto', {
     items: [{
         xtype: 'cartesian',
         reference: 'chart',
+        downloadServerUrl: '//svg.sencha.io',
         theme: 'category2',
         width: '100%',
         height: 500,
         store: {
             type: 'pareto'
         },
-        insetPadding: '40 40 20 40',
         legend: {
             docked: 'bottom'
         },
-        sprites: [{
-            type: 'text',
-            text: 'Restaurant Complaints by Reported Cause',
-            fontSize: 22,
-            width: 100,
-            height: 30,
-            x: 40, // the sprite x position
-            y: 20  // the sprite y position
-        }, {
-            type: 'text',
-            text: 'Data: Restaurant Complaints',
-            font: '10px Helvetica',
-            x: 12,
-            y: 480
-        }],
+        captions: {
+            title: 'Restaurant Complaints by Reported Cause'
+        },
         axes: [{
             type: 'numeric',
             position: 'left',
@@ -117,7 +105,7 @@ Ext.define('KitchenSink.view.charts.combination.Pareto', {
             },
             marker: {
                 type: 'cross',
-                fx: {
+                animation: {
                     duration: 200
                 }
             },

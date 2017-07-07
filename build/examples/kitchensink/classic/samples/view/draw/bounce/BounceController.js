@@ -88,7 +88,7 @@ Ext.define('KitchenSink.view.draw.bounce.BounceController', {
                 opacity: 0.3
             });
             // Configure the animation modifier of the sprite.
-            ghost.fx.setConfig({
+            ghost.setAnimation({
                 duration: 500,
                 easing: 'easeOut'
             });
@@ -101,7 +101,7 @@ Ext.define('KitchenSink.view.draw.bounce.BounceController', {
                 opacity: 0
             });
             // Remove the sprite from the surface when the animation is done.
-            ghost.fx.on('animationend', function () {
+            ghost.getAnimation().on('animationend', function () {
                 ghost.remove();
             });
         } else {

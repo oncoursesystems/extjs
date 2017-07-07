@@ -194,14 +194,11 @@ Ext.define('Ext.toolbar.Toolbar', {
     uses: [
         'Ext.toolbar.Fill',
         'Ext.toolbar.Separator',
-        'Ext.toolbar.Spacer'
+        'Ext.toolbar.Spacer',
+        'Ext.plugin.MouseEnter'
     ],
     alias: 'widget.toolbar',
     alternateClassName: 'Ext.Toolbar',
-    
-    mixins: [
-        'Ext.util.FocusableContainer'
-    ],
 
     /**
      * @property {Boolean} isToolbar
@@ -210,6 +207,7 @@ Ext.define('Ext.toolbar.Toolbar', {
     isToolbar: true,
     baseCls: Ext.baseCSSPrefix + 'toolbar',
     ariaRole: 'toolbar',
+    focusableContainer: true,
 
     defaultType: 'button',
 
@@ -299,7 +297,12 @@ Ext.define('Ext.toolbar.Toolbar', {
     defaultFooterFieldUI: 'default',
 
     /**
-     * @private
+     * @cfg {Boolean} [trackMenus=true]
+     * By default, when a toolbar button has a menu open, then mouseing over other
+     * toolbar buttons opens their menus.
+     *
+     * If `trackMenus` is set to `false`, then a toolbar button's menu is hidden
+     * when the mouse leaves the button, and no menu open state is maintained.
      */
     trackMenus: true,
 
@@ -364,6 +367,25 @@ Ext.define('Ext.toolbar.Toolbar', {
         }
 
         me.callParent();
+    },
+
+    afterFirstLayout: function(width, height) {
+        var me = this,
+            el = me.layout.getRenderTarget().dom,
+            overCmp;
+
+        me.callParent([width, height]);
+
+        me.addPlugin({
+            ptype: 'mouseenter',
+            element: el,
+            delegate: function(e) {
+                return e.parentNode === el;
+            },
+            handler: me.onItemOver,
+            leaveHandler: me.onItemOut,
+            scope: me
+        });
     },
 
     getRefItems: function (deep) {
@@ -485,8 +507,12 @@ Ext.define('Ext.toolbar.Toolbar', {
         // A widget that is announced as a toolbar but is *not* navigable
         // with arrow keys is highly confusing to disabled users relying on
         // hearing.
-        if (component.needArrowKeys && me.enableFocusableContainer) {
-            me.enableFocusableContainer = false;
+        // Newer edition of WAI-ARIA allows for arrow-processing elements in
+        // Toolbars, so let the users force the flag if they wish so:
+        // https://www.w3.org/TR/wai-aria-practices/#toolbar
+        if (component.needArrowKeys && me.focusableContainer &&
+            !me.hasOwnProperty('focusableContainer')) {
+            me.focusableContainer = false;
             me.ariaRole = 'group';
         }
         
@@ -516,9 +542,8 @@ Ext.define('Ext.toolbar.Toolbar', {
         trackMenu: function (item, remove) {
             var me = this;
 
-            if (me.trackMenus && item.menu) {
+            if (item.menu) {
                 item[remove ? 'un' : 'on']({
-                    mouseover: me.onButtonOver,
                     menushow: me.onButtonMenuShow,
                     menuhide: me.onButtonMenuHide,
                     scope: me
@@ -533,16 +558,26 @@ Ext.define('Ext.toolbar.Toolbar', {
         /**
          * @private
          */
-        onButtonOver: function (btn, e) {
-            var activeMenuBtn = this.activeMenuBtn;
-            if (activeMenuBtn && activeMenuBtn !== btn) {
-                activeMenuBtn.hideMenu();
+        onItemOver: function (e, target) {
+            var btn = Ext.Component.from(target),
+                activeMenuBtn = this.activeMenuBtn;
+
+            // If we have mouseovered a button, and there is still one
+            // with an active menu, then we are tracking menus.
+            if (activeMenuBtn && activeMenuBtn !== btn && btn.showMenu && btn.menu) {
                 btn.focus();
                 btn.showMenu(e);
-                this.activeMenuBtn = btn;
             }
         },
 
+        onItemOut: function (e, target) {
+            var btn = Ext.Component.from(target);
+
+            // If not tracking menus, mouseout of a button hides the menu
+            if (!this.trackMenus && btn.hideMenu) {
+                btn.hideMenu();
+            }
+        },
         /**
          * @private
          */

@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.tab.BasicTabs', {
         'KitchenSink.view.tab.TabController'
     ],
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/tab/TabController.js'
     }],
     exampleTitle: 'Basic Tabs',
@@ -21,6 +21,11 @@ Ext.define('KitchenSink.view.tab.BasicTabs', {
     defaults: {
         bodyPadding: 10,
         scrollable: true
+    },
+    tabBar: {
+        layout: {
+            pack: 'center'
+        }
     },
     items: [{
         title: 'Active Tab',

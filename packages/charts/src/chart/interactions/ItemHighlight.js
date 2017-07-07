@@ -38,7 +38,8 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
         var me = this,
             tipItem = me.tipItem,
             isMousePointer = e.pointerType === 'mouse',
-            item, tooltip, chart;
+            item, itemBBox, tooltip, chart, marker,
+            surface, surfaceXY, isInverseY;
 
         if (me.getSticky()) {
             return true;
@@ -77,6 +78,8 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
 
                         if (tooltip.getTrackMouse()) {
                             item.series.showTooltip(item, e);
+                        } else {
+                            me.showUntracked(item);
                         }
                         me.tipItem = item;
                     }
@@ -103,6 +106,36 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
     showTooltip: function (e, item) {
         item.series.showTooltip(item, e);
         this.tipItem = item;
+    },
+
+    showUntracked: function (item) {
+        var marker = item.sprite.getMarker(item.category),
+            surface, surfaceXY, isInverseY,
+            itemBBox;
+
+        if (marker) {
+            surface = marker.getSurface();
+            isInverseY = surface.matrix.elements[3] < 0;
+            surfaceXY = surface.element.getXY();
+            itemBBox = Ext.clone(marker.getBBoxFor(item.index));
+            if (isInverseY) {
+                // The item.category for bar series will be 'items'.
+                // The item.category for line series will be 'markers'.
+                // 'items' are in the 'series' surface, which is flipped vertically
+                // for cartesian series.
+                // 'markers' are in the 'overlay' surface, which isn't flipped.
+                // So for 'markers' we already have the bbox in a coordinate system
+                // with the origin at the top-left of the surface, but for 'items'
+                // we need to do a conversion.
+                itemBBox = surface.inverseMatrix.transformBBox(itemBBox);
+            }
+            itemBBox.x += surfaceXY[0];
+            itemBBox.y += surfaceXY[1];
+            item.series.showTooltipAt(item,
+                itemBBox.x + itemBBox.width * .5,
+                itemBBox.y + itemBBox.height * .5
+            );
+        }
     },
 
     onMouseDownGesture: function () {

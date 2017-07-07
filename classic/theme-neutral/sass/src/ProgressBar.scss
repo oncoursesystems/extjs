@@ -138,13 +138,15 @@
         }
         
         &.#{$prefix}progress-focus {
-            @include css-outline(
-                $width: $ui-focus-border-width,
-                $style: $ui-focus-border-style,
-                $color: $ui-focus-border-color,
-                $offset: -$ui-focus-border-width,
-                $pseudo: true
-            );
+            .#{$prefix}keyboard-mode & {
+                @include css-outline(
+                    $width: $ui-focus-border-width,
+                    $style: $ui-focus-border-style,
+                    $color: $ui-focus-border-color,
+                    $offset: -$ui-focus-border-width,
+                    $pseudo: true
+                );
+            }
         }
     }
     

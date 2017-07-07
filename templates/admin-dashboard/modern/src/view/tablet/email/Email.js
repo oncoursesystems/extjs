@@ -107,8 +107,8 @@ Ext.define('Admin.view.tablet.email.Email', {
                     items: [{
                         xtype: 'list',
                         bind: '{friends}',
-                        defaultType: 'button',
                         itemConfig: {
+                            xtype: 'button',
                             ui: 'presence',
                             iconAlign: 'right',
                             textAlign: 'left',

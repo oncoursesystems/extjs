@@ -1,7 +1,9 @@
 /* global Ext, expect, Infinity, jasmine, spyOn */
 
-describe("Ext.scroll.Scroller", function() {
-    var scroller, el;
+topSuite("Ext.scroll.Scroller", function() {
+    var ctWidth = 100,
+        ctHeight = 100,
+        scroller, el;
 
     function makeScroller(config) {
         scroller = new Ext.scroll.Scroller(Ext.apply({
@@ -9,22 +11,41 @@ describe("Ext.scroll.Scroller", function() {
         }, config));
     }
 
+    function appendEl(w, h, styles) {
+        styles = Ext.apply({}, styles);
+        if (typeof w === 'number') {
+            styles.width = w + 'px';
+        }
+
+        if (typeof h === 'number') {
+            styles.height = h + 'px';
+        }
+
+        el.appendChild({
+            style: styles
+        }, true);
+    }
+
     beforeEach(function() {
         el = Ext.getBody().createChild({
-            style: 'height:100px;width:100px;'
+            style: {
+                height: ctHeight + 'px',
+                width: ctWidth + 'px'
+            }
         });
     });
 
     afterEach(function() {
-        if (scroller) {
-            scroller.destroy();
-            scroller = null;
-        }
-        if (el) {
-            el.destroy();
-            el = null;
-        }
+        scroller = el = Ext.destroy(scroller, el);
     });
+
+    function calculateMaxScrollPosition(contentWidth, contentHeight) {
+        var sz = Ext.getScrollbarSize();
+        return {
+            x: contentWidth - ctWidth + sz.width,
+            y: contentHeight - ctHeight + sz.height
+        };
+    }
 
     describe("configuring the element", function() {
         var element;
@@ -526,370 +547,684 @@ describe("Ext.scroll.Scroller", function() {
         });
     });
 
-    describe("scrollTo", function() {
-        function makeOverflow(cfg) {
-            el.appendChild({
-                style: 'height:200px;width:300px;'
-            }, true);
+    xdescribe("scrolling methods", function() {
+        describe("scrollTo", function() {
+            var contentWidth = 300,
+                contentHeight = 200;
 
-            makeScroller(cfg);
-        }
+            function makeOverflow(cfg) {
+                el.appendChild({
+                    style: {
+                        height: contentHeight + 'px',
+                        width: contentWidth + 'px'
+                    }
+                }, true);
 
-        function makeNoOverflow(cfg) {
-            el.appendChild({
-                style: 'height:100px;width:100px;'
-            }, true);
+                makeScroller(cfg);
+            }
 
-            makeScroller(cfg);
-        }
+            function makeNoOverflow(cfg) {
+                el.appendChild({
+                    style: 'height:100px;width:100px;'
+                }, true);
 
-        it("should scroll on the x axis", function() {
-            makeOverflow();
+                makeScroller(cfg);
+            }
 
-            scroller.scrollTo(50, 0);
+            it("should scroll on the x axis", function() {
+                makeOverflow();
 
-            expect(scroller.getPosition()).toEqual({
-                x: 50,
-                y: 0
+                scroller.scrollTo(50, 0);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 50,
+                    y: 0
+                });
+            });
+
+            it("should scroll on the x axis when the x axis is disabled", function() {
+                makeOverflow({
+                    x: false
+                });
+
+                scroller.scrollTo(50, 0);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 50,
+                    y: 0
+                });
+            });
+
+            it("should not scroll on the x axis if the content does not overflow horizontally", function() {
+                makeNoOverflow();
+
+                scroller.scrollTo(50, 0);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 0
+                });
+            });
+
+            it("should constrain to the max x position", function() {
+                makeOverflow();
+
+                scroller.scrollTo(250, 0);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 200 + Ext.getScrollbarSize().width,
+                    y: 0
+                });
+            });
+
+            it("should scroll on the y axis", function() {
+                makeOverflow();
+
+                scroller.scrollTo(0, 50);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 50
+                });
+            });
+
+            it("should scroll on the y axis when the y axis is disabled", function() {
+                makeOverflow({
+                    y: false
+                });
+
+                scroller.scrollTo(0, 50);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 50
+                });
+            });
+
+            it("should not scroll on the y axis if the content does not overflow vertically", function() {
+                makeNoOverflow();
+
+                scroller.scrollTo(0, 50);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 0
+                });
+            });
+
+            it("should constrain to the max y position", function() {
+                makeOverflow();
+
+                scroller.scrollTo(0, 250);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 100 + Ext.getScrollbarSize().height
+                });
+            });
+
+            it("should scroll on both axes", function() {
+                makeOverflow();
+
+                scroller.scrollTo(50, 60);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 50,
+                    y: 60
+                });
+            });
+
+            it("should constrain to max x and y", function() {
+                makeOverflow();
+
+                scroller.scrollTo(300, 300);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 200 + Ext.getScrollbarSize().width,
+                    y: 100 + Ext.getScrollbarSize().height
+                });
+            });
+
+            it("should scroll to max x using Infinity", function() {
+                makeOverflow();
+
+                scroller.scrollTo(Infinity, 0);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 200 + Ext.getScrollbarSize().height,
+                    y: 0
+                });
+            });
+
+            it("should scroll to max y using Infinity", function() {
+                makeOverflow();
+
+                scroller.scrollTo(0, Infinity);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 100 + Ext.getScrollbarSize().width
+                });
+            });
+
+            it("should scroll to max x and y using Infinity", function() {
+                makeOverflow();
+
+                scroller.scrollTo(Infinity, Infinity);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 200 + Ext.getScrollbarSize().height,
+                    y: 100 + Ext.getScrollbarSize().width
+                });
+            });
+
+            it("should ignore x if null is passed", function() {
+                makeOverflow();
+
+                scroller.scrollTo(10, 10);
+
+                scroller.scrollTo(null, 20);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 10,
+                    y: 20
+                });
+            });
+
+            it("should ignore y if null is passed", function() {
+                makeOverflow();
+
+                scroller.scrollTo(10, 10);
+
+                scroller.scrollTo(20, null);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 20,
+                    y: 10
+                });
+            });
+
+            it("should ignore x and y if both null", function() {
+                makeOverflow();
+
+                scroller.scrollTo(10, 10);
+
+                scroller.scrollTo(null, null);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 10,
+                    y: 10
+                });
+            });
+
+            it("should scroll to negative offset from max x", function() {
+                makeOverflow();
+
+                scroller.scrollTo(-20, 0);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 180 + Ext.getScrollbarSize().height,
+                    y: 0
+                });
+            });
+
+            it("should scroll to negative offset from max y", function() {
+                makeOverflow();
+
+                scroller.scrollTo(0, -20);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 80 + Ext.getScrollbarSize().width
+                });
+            });
+
+            it("should scroll to negative offset from max x and y", function() {
+                makeOverflow();
+
+                scroller.scrollTo(-20, -20);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 180 + Ext.getScrollbarSize().height,
+                    y: 80 + Ext.getScrollbarSize().width
+                });
+            });
+
+            describe("promise return value", function() {
+                var spy;
+
+                beforeEach(function() {
+                    spy = jasmine.createSpy();
+                    makeOverflow();
+                });
+
+                afterEach(function() {
+                    spy = null;
+                });
+
+                function scrollAndWait(x, y, animate, expectedX, expectedY) {
+                    var promise = scroller.scrollTo(x, y, animate);
+                    promise.then(spy);
+                    waitsForSpy(spy);
+                    runs(function() {
+                        var xVal = x === null ? 0 : x,
+                            yVal = y === null ? 0 : y;
+
+                        expectedX = expectedX === undefined ? xVal : expectedX;
+                        expectedY = expectedY === undefined ? yVal : expectedY;
+
+                        expect(spy.callCount).toBe(1);
+                        expect(scroller.getPosition()).toEqual({
+                            x: expectedX,
+                            y: expectedY
+                        });
+                    });
+                }
+
+                Ext.Array.forEach([false, true], function(animate) {
+                    describe(animate ? "with animation" : "without animation", function() {
+                        it("should resolve if the position doesn't change", function() {
+                            scrollAndWait(0, 0, animate);
+                        });
+
+                        it("should resolve if only the x value changes", function() {
+                            scrollAndWait(50, null, animate);
+                        });
+
+                        it("should resolve if only the y value changes", function() {
+                            scrollAndWait(null, 50, animate);
+                        });
+
+                        it("should resolve when both values change", function() {
+                            scrollAndWait(50, 50, animate);
+                        });
+
+                        it("should have the correct value if past scroll boundaries", function() {
+                            var max = calculateMaxScrollPosition(contentWidth, contentHeight);
+                            scrollAndWait(3000, 3000, animate, max.x, max.y);
+                        });
+
+                        it("should reject if there is no element available", function() {
+                            scroller.setElement(null);
+                            var promise = scroller.scrollTo(50, 50, animate).then(null, spy);
+                            waitsForSpy(spy);
+                            runs(function() {
+                                expect(spy.callCount).toBe(1);
+                            });
+                        });
+
+                        if (animate) {
+                            it("should reject if destroyed during animation", function() {
+                                var promise = scroller.scrollTo(50, 50, animate).then(null, spy);
+                                waits(1);
+                                runs(function() {
+                                    scroller.destroy();
+                                });
+                                waitsForSpy(spy);
+                                runs(function() {
+                                    expect(spy.callCount).toBe(1);
+                                });
+                            });
+                        }
+                    });
+                });
+            });
+
+            it("should fire scroll events if calling getPosition after scrolling", function() {
+                makeOverflow();
+                var spy = jasmine.createSpy();
+                scroller.on('scroll', spy);
+                scroller.scrollTo(20, 40);
+                scroller.getPosition();
+                waitsForSpy(spy);
+                runs(function() {
+                    var args = spy.mostRecentCall.args;
+                    expect(spy.callCount).toBe(1);
+                    expect(args[0]).toBe(scroller);
+                    expect(args[1]).toBe(20);
+                    expect(args[2]).toBe(40);
+                });
             });
         });
 
-        it("should scroll on the x axis when the x axis is disabled", function() {
-            makeOverflow({
-                x: false
+        describe("scrollBy", function() {
+            var contentWidth = 300,
+                contentHeight = 200;
+
+            beforeEach(function() {
+                el.appendChild({
+                    style: {
+                        height: contentHeight + 'px',
+                        width: contentWidth + 'px'
+                    }
+                }, true);
             });
 
-            scroller.scrollTo(50, 0);
+            it("should set the scroll position", function() {
+                makeScroller();
 
-            expect(scroller.getPosition()).toEqual({
-                x: 50,
-                y: 0
-            });
-        });
+                scroller.scrollBy(20, 10);
 
-        it("should not scroll on the x axis if the content does not overflow horizontally", function() {
-            makeNoOverflow();
+                expect(scroller.getPosition()).toEqual({
+                    x: 20,
+                    y: 10
+                });
 
-            scroller.scrollTo(50, 0);
+                scroller.scrollBy(-10, -5);
 
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 0
-            });
-        });
-
-        it("should constrain to the max x position", function() {
-            makeOverflow();
-
-            scroller.scrollTo(250, 0);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 200 + Ext.getScrollbarSize().width,
-                y: 0
-            });
-        });
-
-        it("should scroll on the y axis", function() {
-            makeOverflow();
-
-            scroller.scrollTo(0, 50);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 50
-            });
-        });
-
-        it("should scroll on the y axis when the y axis is disabled", function() {
-            makeOverflow({
-                y: false
+                expect(scroller.getPosition()).toEqual({
+                    x: 10,
+                    y: 5
+                });
             });
 
-            scroller.scrollTo(0, 50);
+            it("should ignore x if null is passed", function() {
+                makeScroller();
 
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 50
-            });
-        });
+                scroller.scrollTo(10, 10);
 
-        it("should not scroll on the y axis if the content does not overflow vertically", function() {
-            makeNoOverflow();
+                scroller.scrollBy(null, 10);
 
-            scroller.scrollTo(0, 50);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 0
-            });
-        });
-
-        it("should constrain to the max y position", function() {
-            makeOverflow();
-
-            scroller.scrollTo(0, 250);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 100 + Ext.getScrollbarSize().height
-            });
-        });
-
-        it("should scroll on both axes", function() {
-            makeOverflow();
-
-            scroller.scrollTo(50, 60);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 50,
-                y: 60
-            });
-        });
-
-        it("should constrain to max x and y", function() {
-            makeOverflow();
-
-            scroller.scrollTo(300, 300);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 200 + Ext.getScrollbarSize().width,
-                y: 100 + Ext.getScrollbarSize().height
-            });
-        });
-
-        it("should scroll to max x using Infinity", function() {
-            makeOverflow();
-
-            scroller.scrollTo(Infinity, 0);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 200 + Ext.getScrollbarSize().height,
-                y: 0
-            });
-        });
-
-        it("should scroll to max y using Infinity", function() {
-            makeOverflow();
-
-            scroller.scrollTo(0, Infinity);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 100 + Ext.getScrollbarSize().width
-            });
-        });
-
-        it("should scroll to max x and y using Infinity", function() {
-            makeOverflow();
-
-            scroller.scrollTo(Infinity, Infinity);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 200 + Ext.getScrollbarSize().height,
-                y: 100 + Ext.getScrollbarSize().width
-            });
-        });
-
-        it("should ignore x if null is passed", function() {
-            makeOverflow();
-
-            scroller.scrollTo(10, 10);
-
-            scroller.scrollTo(null, 20);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 10,
-                y: 20
-            });
-        });
-
-        it("should ignore y if null is passed", function() {
-            makeOverflow();
-
-            scroller.scrollTo(10, 10);
-
-            scroller.scrollTo(20, null);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 20,
-                y: 10
-            });
-        });
-
-        it("should ignore x and y if both null", function() {
-            makeOverflow();
-
-            scroller.scrollTo(10, 10);
-
-            scroller.scrollTo(null, null);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 10,
-                y: 10
-            });
-        });
-
-        it("should scroll to negative offset from max x", function() {
-            makeOverflow();
-
-            scroller.scrollTo(-20, 0);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 180 + Ext.getScrollbarSize().height,
-                y: 0
-            });
-        });
-
-        it("should scroll to negative offset from max y", function() {
-            makeOverflow();
-
-            scroller.scrollTo(0, -20);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 80 + Ext.getScrollbarSize().width
-            });
-        });
-
-        it("should scroll to negative offset from max x and y", function() {
-            makeOverflow();
-
-            scroller.scrollTo(-20, -20);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 180 + Ext.getScrollbarSize().height,
-                y: 80 + Ext.getScrollbarSize().width
-            });
-        });
-    });
-
-    describe("scrollBy", function() {
-        beforeEach(function() {
-            el.appendChild({
-                style: 'height:200px;width:300px;'
-            }, true);
-        });
-
-        it("should set the scroll position", function() {
-            makeScroller();
-
-            scroller.scrollBy(20, 10);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 20,
-                y: 10
+                expect(scroller.getPosition()).toEqual({
+                    x: 10,
+                    y: 20
+                });
             });
 
-            scroller.scrollBy(-10, -5);
+            it("should ignore y if null is passed", function() {
+                makeScroller();
 
-            expect(scroller.getPosition()).toEqual({
-                x: 10,
-                y: 5
+                scroller.scrollTo(10, 10);
+
+                scroller.scrollBy(10, null);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 20,
+                    y: 10
+                });
             });
-        });
 
-        it("should ignore x if null is passed", function() {
-            makeScroller();
+            it("should ignore x and y if both null", function() {
+                makeScroller();
 
-            scroller.scrollTo(10, 10);
+                scroller.scrollTo(10, 10);
 
-            scroller.scrollBy(null, 10);
+                scroller.scrollBy(null, null);
 
-            expect(scroller.getPosition()).toEqual({
-                x: 10,
-                y: 20
+                expect(scroller.getPosition()).toEqual({
+                    x: 10,
+                    y: 10
+                });
+            });
+
+            it("should constrain to the max x position", function() {
+                makeScroller();
+
+                scroller.scrollBy(250, 0);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 200 + Ext.getScrollbarSize().height,
+                    y: 0
+                });
+            });
+
+            it("should constrain to the min x position", function() {
+                makeScroller();
+
+                scroller.scrollBy(-10, 0);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 0
+                });
+            });
+
+            it("should constrain to the max y position", function() {
+                makeScroller();
+
+                scroller.scrollBy(0, 250);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 100 + Ext.getScrollbarSize().width
+                });
+            });
+
+            it("should constrain to the min y position", function() {
+                makeScroller();
+
+                scroller.scrollBy(0, -10);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 0
+                });
+            });
+
+            it("should constrain to max x and y", function() {
+                makeScroller();
+
+                scroller.scrollBy(300, 300);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 200 + Ext.getScrollbarSize().height,
+                    y: 100 + Ext.getScrollbarSize().width
+                });
+            });
+
+            it("should constrain to min x and y", function() {
+                makeScroller();
+
+                scroller.scrollBy(-10, -10);
+
+                expect(scroller.getPosition()).toEqual({
+                    x: 0,
+                    y: 0
+                });
+            });
+
+            describe("promise return value", function() {
+                var spy;
+
+                beforeEach(function() {
+                    spy = jasmine.createSpy();
+                    makeScroller();
+                });
+
+                afterEach(function() {
+                    spy = null;
+                });
+
+                function scrollAndWait(x, y, animate, expectedX, expectedY) {
+                    var promise = scroller.scrollBy(x, y, animate);
+                    promise.then(spy);
+                    waitsForSpy(spy);
+                    runs(function() {
+                        var xVal = x === null ? 0 : x,
+                            yVal = y === null ? 0 : y;
+
+                        expectedX = expectedX === undefined ? xVal : expectedX;
+                        expectedY = expectedY === undefined ? yVal : expectedY;
+
+                        expect(spy.callCount).toBe(1);
+                        expect(scroller.getPosition()).toEqual({
+                            x: expectedX,
+                            y: expectedY
+                        });
+                    });
+                }
+
+                Ext.Array.forEach([false, true], function(animate) {
+                    describe(animate ? "with animation" : "without animation", function() {
+                        it("should resolve if the position doesn't change", function() {
+                            scrollAndWait(0, 0, animate);
+                        });
+
+                        it("should resolve if only the x value changes", function() {
+                            scrollAndWait(50, null, animate);
+                        });
+
+                        it("should resolve if only the y value changes", function() {
+                            scrollAndWait(null, 50, animate);
+                        });
+
+                        it("should resolve when both values change", function() {
+                            scrollAndWait(50, 50, animate);
+                        });
+
+                        it("should have the correct value if past scroll boundaries", function() {
+                            var max = calculateMaxScrollPosition(contentWidth, contentHeight);
+                            scrollAndWait(3000, 3000, animate, max.x, max.y);
+                        });
+
+                        it("should reject if there is no element available", function() {
+                            scroller.setElement(null);
+                            var promise = scroller.scrollBy(50, 50, animate).then(null, spy);
+                            waitsForSpy(spy);
+                            runs(function() {
+                                expect(spy.callCount).toBe(1);
+                            });
+                        });
+
+                        if (animate) {
+                            it("should reject if destroyed during animation", function() {
+                                var promise = scroller.scrollBy(50, 50, animate).then(null, spy);
+                                waits(1);
+                                runs(function() {
+                                    scroller.destroy();
+                                });
+                                waitsForSpy(spy);
+                                runs(function() {
+                                    expect(spy.callCount).toBe(1);
+                                });
+                            });
+                        }
+                    });
+                });
+            });
+
+            it("should fire scroll events if calling getPosition after scrolling", function() {
+                makeScroller();
+                var spy = jasmine.createSpy();
+                scroller.on('scroll', spy);
+                scroller.scrollBy(20, 40);
+                scroller.getPosition();
+                waitsForSpy(spy);
+                runs(function() {
+                    var args = spy.mostRecentCall.args;
+                    expect(spy.callCount).toBe(1);
+                    expect(args[0]).toBe(scroller);
+                    expect(args[1]).toBe(20);
+                    expect(args[2]).toBe(40);
+                });
             });
         });
 
-        it("should ignore y if null is passed", function() {
-            makeScroller();
-
-            scroller.scrollTo(10, 10);
-
-            scroller.scrollBy(10, null);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 20,
-                y: 10
+        describe("scrollIntoView", function() {
+            var child;
+            
+            afterEach(function() {
+                child = Ext.destroy(child);
             });
-        });
+            
+            function makeOverflow() {
+                for (var i = 1; i <= 100; ++i) {
+                    el.appendChild({
+                        html: 'Line' + i,
+                        cls: 'line',
+                        style: 'height: 20px'
+                    }, true);
+                }
+                makeScroller();
+            }
 
-        it("should ignore x and y if both null", function() {
-            makeScroller();
+            function makeAbsoluteOverflow(left, top) {
+                el.dom.style.position = 'relative';
+                child = el.createChild({
+                    style: {
+                        width: '100px',
+                        height: '100px',
+                        html: 'Foo',
+                        position: 'absolute',
+                        left: (left || 0) + 'px',
+                        top: (top || 0) + 'px'
+                    }
+                });
+                makeScroller();
+                return child;
+            }
 
-            scroller.scrollTo(10, 10);
+            function getChild(i) {
+                return el.dom.childNodes[i];
+            }
 
-            scroller.scrollBy(null, null);
+            // TODO: add tests for scrollIntoView
 
-            expect(scroller.getPosition()).toEqual({
-                x: 10,
-                y: 10
-            });
-        });
+            describe("promise return value", function() {
+                var spy;
 
-        it("should constrain to the max x position", function() {
-            makeScroller();
+                beforeEach(function() {
+                    spy = jasmine.createSpy();
+                });
 
-            scroller.scrollBy(250, 0);
+                afterEach(function() {
+                    spy = null;
+                });
 
-            expect(scroller.getPosition()).toEqual({
-                x: 200 + Ext.getScrollbarSize().height,
-                y: 0
-            });
-        });
+                function scrollAndWait(el, hscroll, animate, expectedX, expectedY) {
+                    if (typeof el === 'number') {
+                        el = getChild(el);
+                    }
+                    var promise = scroller.scrollIntoView(el, hscroll, animate);
+                    promise.then(spy);
+                    waitsForSpy(spy);
+                    runs(function() {
+                        expect(spy.callCount).toBe(1);
+                        expect(scroller.isInView(el)).toEqual({
+                            x: true,
+                            y: true
+                        });
+                    });
+                }
 
-        it("should constrain to the min x position", function() {
-            makeScroller();
+                Ext.Array.forEach([false, true], function(animate) {
+                    describe(animate ? "with animation" : "without animation", function() {
+                        it("should resolve if the position doesn't change", function() {
+                            makeOverflow();
+                            scrollAndWait(0, null, animate, 0, 0);
+                        });
 
-            scroller.scrollBy(-10, 0);
+                        it("should resolve if only the x value changes", function() {
+                            makeAbsoluteOverflow(200, 0);
+                            scrollAndWait(0, null, animate, 200, 0);
+                        });
 
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 0
-            });
-        });
+                        it("should resolve if only the y value changes", function() {
+                            makeOverflow();
+                            scrollAndWait(50, null, animate, 0, 920);
+                        });
 
-        it("should constrain to the max y position", function() {
-            makeScroller();
+                        it("should resolve when both values change", function() {
+                            makeAbsoluteOverflow(200, 200);
+                            scrollAndWait(0, null, animate, 200, 200);
+                        });
 
-            scroller.scrollBy(0, 250);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 100 + Ext.getScrollbarSize().width
-            });
-        });
-
-        it("should constrain to the min y position", function() {
-            makeScroller();
-
-            scroller.scrollBy(0, -10);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 0
-            });
-        });
-
-        it("should constrain to max x and y", function() {
-            makeScroller();
-
-            scroller.scrollBy(300, 300);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 200 + Ext.getScrollbarSize().height,
-                y: 100 + Ext.getScrollbarSize().width
-            });
-        });
-
-        it("should constrain to min x and y", function() {
-            makeScroller();
-
-            scroller.scrollBy(-10, -10);
-
-            expect(scroller.getPosition()).toEqual({
-                x: 0,
-                y: 0
+                        if (animate) {
+                            it("should reject if destroyed during animation", function() {
+                                makeOverflow();
+                                var promise = scroller.scrollIntoView(getChild(20), null, animate).then(null, spy);
+                                waits(1);
+                                runs(function() {
+                                    scroller.destroy();
+                                });
+                                waitsForSpy(spy);
+                                runs(function() {
+                                    expect(spy.callCount).toBe(1);
+                                });
+                            });
+                        }
+                    });
+                });
             });
         });
     });
@@ -986,6 +1321,649 @@ describe("Ext.scroll.Scroller", function() {
                 expect(scroller.getMaxUserPosition()).toEqual({
                     x: 0,
                     y: 0
+                });
+            });
+        });
+    });
+
+    describe("events", function() {
+        var w = 200,
+            h = 300,
+            spy, oldBuffer;
+
+        function makeEventScroll(x, y) {
+            makeScroller({
+                x: x,
+                y: y 
+            });
+            appendEl(w, h);
+        }
+
+        beforeEach(function() {
+            spy = jasmine.createSpy();
+
+            var P = Ext.scroll.Scroller.prototype;
+
+            // The default runner modifies these
+            oldBuffer = P.scrollEndBuffer;
+            P.scrollEndBuffer = 100;
+        });
+
+        afterEach(function() {
+            Ext.scroll.Scroller.prototype.scrollEndBuffer = oldBuffer;
+            spy = oldBuffer = null;
+        });
+
+        describe("scrollstart", function() {
+            function makeSuite(x, y, negative) {
+                var offset = negative ? -1 : 1,
+                    offsetX = x ? 20 : 0,
+                    offsetY = y ? 20 : 0,
+                    scrollByX = x ? offsetX * offset : null,
+                    scrollByY = y ? offsetY * offset : null,
+                    endSpy;
+
+                beforeEach(function() {
+                    var called = false;
+                    endSpy = jasmine.createSpy();
+
+                    makeEventScroll(x, y);
+                    if (negative) {
+                        scroller.on('scrollend', function() {
+                            called = true;
+                        }, null, {single: true});
+                        scroller.scrollTo(x ? w : null, y ? 300 : null, false);
+                    } else {
+                        called = true;
+                    }
+
+                    waitsFor(function() {
+                        return called;
+                    });
+
+                    runs(function() {
+                        scroller.on({
+                            scrollstart: spy,
+                            scrollend: endSpy
+                        });
+                    });
+                });
+
+                afterEach(function() {
+                    endSpy = null;
+                });
+
+                function getValue(xVal, yVal) {
+                    var xy = {
+                        x: 0,
+                        y: 0
+                    };
+
+                    if (x) {
+                        xy.x = xVal;
+                        if (negative) {
+                            xy.x = w - ctWidth - xy.x;
+                            if (y) {
+                                xy.x += Ext.getScrollbarSize().width;
+                            }
+                        }
+                    }
+
+                    if (y) {
+                        xy.y = yVal;
+                        if (negative) {
+                            xy.y = h - ctHeight - xy.y;
+                            if (x) {
+                                xy.y += Ext.getScrollbarSize().height;
+                            }
+                        }
+
+                    }   
+                    return xy;
+                }
+
+                it("should fire the event", function() {
+                    scroller.scrollBy(scrollByX, scrollByY);
+                    waitsForSpy(spy);
+                    runs(function() {
+                        expect(spy.callCount).toBe(1);
+                        var args = spy.mostRecentCall.args,
+                            value = getValue(offsetX, offsetY);
+
+                        expect(args[0]).toBe(scroller);
+                        expect(args[1]).toBe(value.x);
+                        expect(args[2]).toBe(value.y);
+                    });
+                    waitsForSpy(endSpy);
+                });
+
+                it("should only fire at the start", function() {
+                    var scrollSpy = jasmine.createSpy(),
+                        wait = function() {
+                            return scrollSpy.callCount > 0;
+                        },
+                        scrollIt = function() {
+                            scrollSpy.reset();
+                            scroller.scrollBy(scrollByX, scrollByY);
+                        };
+
+                    scroller.on('scroll', scrollSpy);
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+                    
+                    runs(scrollIt);
+                    waitsFor(wait);
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+
+                    waitsForSpy(endSpy);
+                    runs(function() {
+                        expect(spy.callCount).toBe(1);
+                        var args = spy.mostRecentCall.args,
+                            value = getValue(offsetX, offsetY);
+
+                        expect(args[0]).toBe(scroller);
+                        expect(args[1]).toBe(value.x);
+                        expect(args[2]).toBe(value.y);
+                    });
+                });
+
+                it("should fire for each independent scroll", function() {
+                    scroller.scrollBy(scrollByX, scrollByY);
+                    waitsForSpy(endSpy);
+                    runs(function() {
+                        expect(spy.callCount).toBe(1);
+                        var args = spy.mostRecentCall.args,
+                            value = getValue(offsetX, offsetY);
+
+                        expect(args[0]).toBe(scroller);
+                        expect(args[1]).toBe(value.x);
+                        expect(args[2]).toBe(value.y);
+                    });
+
+                    runs(function() {
+                        endSpy.reset();
+                        scroller.scrollBy(scrollByX, scrollByY);
+                    });
+
+                    waitsForSpy(endSpy);
+                    runs(function() {
+                        expect(spy.callCount).toBe(2);
+                        var args = spy.mostRecentCall.args,
+                            value = getValue(offsetX * 2, offsetY * 2);
+
+                        expect(args[0]).toBe(scroller);
+                        expect(args[1]).toBe(value.x);
+                        expect(args[2]).toBe(value.y);
+                    });
+                });
+
+                it("should not fire if a scroll doesn't occur", function() {
+                    scroller.scrollBy(-scrollByX * 1000, -scrollByY * 1000);
+                    waits(200);
+                    runs(function() {
+                        expect(spy).not.toHaveBeenCalled();
+                    });
+                });
+            }
+
+            describe("x only", function() {
+                describe("positive", function() {
+                    makeSuite(true, false, false);
+                });
+
+                describe("negative", function() {
+                    makeSuite(true, false, true);
+                });
+            });
+
+            describe("y only", function() {
+                describe("positive", function() {
+                    makeSuite(false, true, false);
+                });
+
+                describe("negative", function() {
+                    makeSuite(false, true, true);
+                });
+            });
+
+            describe("both", function() {
+                describe("positive", function() {
+                    makeSuite(true, true, false);
+                });
+
+                describe("negative", function() {
+                    makeSuite(true, true, true);
+                });
+            });
+        });
+
+        describe("scroll", function() {
+            function makeSuite(x, y, negative) {
+                var offset = negative ? -1 : 1,
+                    offsetX = x ? 20 : 0,
+                    offsetY = y ? 20 : 0,
+                    scrollByX = x ? offsetX * offset : null,
+                    scrollByY = y ? offsetY * offset : null,
+                    endSpy;
+
+                beforeEach(function() {
+                    var called = false;
+                    endSpy = jasmine.createSpy();
+
+                    makeEventScroll(x, y);
+                    if (negative) {
+                        scroller.on('scrollend', function() {
+                            called = true;
+                        }, null, {single: true});
+                        scroller.scrollTo(x ? w : null, y ? 300 : null, false);
+                    } else {
+                        called = true;
+                    }
+
+                    waitsFor(function() {
+                        return called;
+                    });
+
+                    runs(function() {
+                        scroller.on({
+                            scroll: spy,
+                            scrollend: endSpy
+                        });
+                    });
+                });
+
+                afterEach(function() {
+                    endSpy = null;
+                });
+
+                function getValue(xVal, yVal) {
+                    var xy = {
+                        x: 0,
+                        y: 0
+                    };
+
+                    if (x) {
+                        xy.x = xVal;
+                        if (negative) {
+                            xy.x = w - ctWidth - xy.x;
+                            if (y) {
+                                xy.x += Ext.getScrollbarSize().width;
+                            }
+                        }
+                    }
+
+                    if (y) {
+                        xy.y = yVal;
+                        if (negative) {
+                            xy.y = h - ctHeight - xy.y;
+                            if (x) {
+                                xy.y += Ext.getScrollbarSize().height;
+                            }
+                        }
+
+                    }   
+                    return xy;
+                }
+
+                it("should only fire at the start", function() {
+                    var wait = function() {
+                            return spy.callCount > 0;
+                        },
+                        scrollIt = function() {
+                            spy.reset();
+                            scroller.scrollBy(scrollByX, scrollByY);
+                        },
+                        expectArgs = function(x, y, dx, dy) {
+                            expect(spy.callCount).toBe(1);
+                            var args = spy.mostRecentCall.args,
+                                value = getValue(x, y);
+
+                            expect(args[0]).toBe(scroller);
+                            expect(args[1]).toBe(value.x);
+                            expect(args[2]).toBe(value.y);
+                            expect(args[3]).toBe(x ? dx : 0);
+                            expect(args[4]).toBe(y ? dy : 0);
+                        };
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+                    runs(function() {
+                        expectArgs(offsetX, offsetY, scrollByX, scrollByY);
+                    });
+                    
+                    runs(scrollIt);
+                    waitsFor(wait);
+                    runs(function() {
+                        expectArgs(offsetX * 2, offsetY * 2, scrollByX, scrollByY);
+                    });
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+                    runs(function() {
+                        expectArgs(offsetX * 3, offsetY * 3, scrollByX, scrollByY);
+                    });
+
+                    waitsForSpy(endSpy);
+                });
+
+                it("should fire as deltas go positive to negative", function() {
+                    var count = 0,
+                        offset,
+                        wait = function() {
+                            return spy.callCount > 0;
+                        },
+                        scrollIt = function() {
+                            offset = count % 2 === 0 ? 1 : -1;
+
+                            ++count;
+                            spy.reset();
+                            scroller.scrollBy(x ? scrollByX * offset : null, y ? scrollByY * offset : null);
+                        },
+                        expectPos = function() {
+                            expect(spy.callCount).toBe(1);
+                            var args = spy.mostRecentCall.args,
+                                value;
+
+                            expect(args[0]).toBe(scroller);
+
+                            if (offset === 1) {
+                                value = getValue(offsetX, offsetY);
+                                expect(args[1]).toBe(value.x);
+                                expect(args[2]).toBe(value.y);
+                                expect(args[3]).toBe(x ? scrollByX : 0);
+                                expect(args[4]).toBe(y ? scrollByY : 0);
+                            } else {
+                                expect(args[0]).toBe(scroller);
+                                expect(args[1]).toBe(start.x);
+                                expect(args[2]).toBe(start.y);
+                                expect(args[3]).toBe(x ? -scrollByX : 0);
+                                expect(args[4]).toBe(y ? -scrollByY : 0);
+                            }
+                        };
+
+                    var start = scroller.getPosition();
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+                    runs(expectPos);
+                    
+                    runs(scrollIt);
+                    waitsFor(wait);
+                    runs(expectPos);
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+                    runs(expectPos);
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+                    runs(expectPos);
+
+                    waitsForSpy(endSpy);
+                });
+            }
+
+            describe("x only", function() {
+                describe("positive", function() {
+                    makeSuite(true, false, false);
+                });
+
+                describe("negative", function() {
+                    makeSuite(true, false, true);
+                });
+            });
+
+            describe("y only", function() {
+                describe("positive", function() {
+                    makeSuite(false, true, false);
+                });
+
+                describe("negative", function() {
+                    makeSuite(false, true, true);
+                });
+            });
+
+            describe("both", function() {
+                describe("positive", function() {
+                    makeSuite(true, true, false);
+                });
+
+                describe("negative", function() {
+                    makeSuite(true, true, true);
+                });
+            });
+        });
+
+        describe("scrollend", function() {
+            function makeSuite(x, y, negative) {
+                var offset = negative ? -1 : 1,
+                    offsetX = x ? 20 : 0,
+                    offsetY = y ? 20 : 0,
+                    scrollByX = x ? offsetX * offset : null,
+                    scrollByY = y ? offsetY * offset : null,
+                    endSpy;
+
+                beforeEach(function() {
+                    var called = false;
+
+                    makeEventScroll(x, y);
+                    if (negative) {
+                        scroller.on('scrollend', function() {
+                            called = true;
+                        }, null, {single: true});
+                        scroller.scrollTo(x ? w : null, y ? 300 : null, false);
+                    } else {
+                        called = true;
+                    }
+
+                    waitsFor(function() {
+                        return called;
+                    });
+
+                    runs(function() {
+                        scroller.on('scrollend', spy);
+                    });
+                });
+
+                function getValue(xVal, yVal) {
+                    var xy = {
+                        x: 0,
+                        y: 0
+                    };
+
+                    if (x) {
+                        xy.x = xVal;
+                        if (negative) {
+                            xy.x = w - ctWidth - xy.x;
+                            if (y) {
+                                xy.x += Ext.getScrollbarSize().width;
+                            }
+                        }
+                    }
+
+                    if (y) {
+                        xy.y = yVal;
+                        if (negative) {
+                            xy.y = h - ctHeight - xy.y;
+                            if (x) {
+                                xy.y += Ext.getScrollbarSize().height;
+                            }
+                        }
+
+                    }   
+                    return xy;
+                }
+
+                it("should fire the event", function() {
+                    scroller.scrollBy(scrollByX, scrollByY);
+                    waitsForSpy(spy);
+                    runs(function() {
+                        expect(spy.callCount).toBe(1);
+                        var args = spy.mostRecentCall.args,
+                            value = getValue(offsetX, offsetY);
+
+                        expect(args[0]).toBe(scroller);
+                        expect(args[1]).toBe(value.x);
+                        expect(args[2]).toBe(value.y);
+                        expect(args[3]).toBe(x ? scrollByX : 0);
+                        expect(args[4]).toBe(y ? scrollByY : 0);
+                    });
+                });
+
+                it("should only fire at the end", function() {
+                    var scrollSpy = jasmine.createSpy(),
+                        wait = function() {
+                            return scrollSpy.callCount > 0;
+                        },
+                        scrollIt = function() {
+                            scrollSpy.reset();
+                            expect(spy.callCount).toBe(0);
+                            scroller.scrollBy(scrollByX, scrollByY);
+                        };
+
+                    scroller.on('scroll', scrollSpy);
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+                    
+                    runs(scrollIt);
+                    waitsFor(wait);
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+
+                    waitsForSpy(spy);
+                    runs(function() {
+                        expect(spy.callCount).toBe(1);
+                        var args = spy.mostRecentCall.args,
+                            value = getValue(offsetX * 3, offsetY * 3);
+
+                        expect(args[0]).toBe(scroller);
+                        expect(args[1]).toBe(value.x);
+                        expect(args[2]).toBe(value.y);
+                        expect(args[3]).toBe(x ? scrollByX * 3 : 0);
+                        expect(args[4]).toBe(y ? scrollByY * 3 : 0);
+                    });
+                });
+
+                it("should fire for each independent scroll", function() {
+                    scroller.scrollBy(scrollByX, scrollByY);
+
+                    waitsForSpy(spy);
+                    runs(function() {
+                        expect(spy.callCount).toBe(1);
+                        var args = spy.mostRecentCall.args,
+                            value = getValue(offsetX, offsetY);
+
+                        expect(args[0]).toBe(scroller);
+                        expect(args[1]).toBe(value.x);
+                        expect(args[2]).toBe(value.y);
+                        expect(args[3]).toBe(x ? scrollByX : 0);
+                        expect(args[4]).toBe(y ? scrollByY : 0);
+                    });
+
+                    runs(function() {
+                        spy.reset();
+                        scroller.scrollBy(scrollByX, scrollByY);
+                    });
+
+                    waitsForSpy(spy);
+                    runs(function() {
+                        expect(spy.callCount).toBe(1);
+                        var args = spy.mostRecentCall.args,
+                            value = getValue(offsetX * 2, offsetY * 2);
+
+                        expect(args[0]).toBe(scroller);
+                        expect(args[1]).toBe(value.x);
+                        expect(args[2]).toBe(value.y);
+                        expect(args[3]).toBe(x ? scrollByX : 0);
+                        expect(args[4]).toBe(y ? scrollByY : 0);
+                    });
+                });
+
+                it("should not fire if a scroll doesn't occur", function() {
+                    scroller.scrollBy(-scrollByX * 1000, -scrollByY * 1000);
+                    waits(200);
+                    runs(function() {
+                        expect(spy).not.toHaveBeenCalled();
+                    });
+                });
+
+                it("should fire even if the delta is 0", function() {
+                    var count = 0,
+                        scrollSpy = jasmine.createSpy(),
+                        wait = function() {
+                            return scrollSpy.callCount > 0;
+                        },
+                        scrollIt = function() {
+                            var offset = count % 2 === 0 ? 1 : -1;
+
+                            ++count;
+                            scrollSpy.reset();
+                            expect(spy.callCount).toBe(0);
+                            scroller.scrollBy(x ? scrollByX * offset : null, y ? scrollByY * offset : null);
+                        };
+
+                    var start = scroller.getPosition();
+
+                    scroller.on('scroll', scrollSpy);
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+                    
+                    runs(scrollIt);
+                    waitsFor(wait);
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+
+                    runs(scrollIt);
+                    waitsFor(wait);
+
+                    waitsForSpy(spy);
+                    runs(function() {
+                        expect(spy.callCount).toBe(1);
+                        var args = spy.mostRecentCall.args;
+
+                        expect(args[0]).toBe(scroller);
+                        expect(args[1]).toBe(start.x);
+                        expect(args[2]).toBe(start.y);
+                        expect(args[3]).toBe(0);
+                        expect(args[4]).toBe(0);
+                    });
+                });
+            }
+
+            describe("x only", function() {
+                describe("positive", function() {
+                    makeSuite(true, false, false);
+                });
+
+                describe("negative", function() {
+                    makeSuite(true, false, true);
+                });
+            });
+
+            describe("y only", function() {
+                describe("positive", function() {
+                    makeSuite(false, true, false);
+                });
+
+                describe("negative", function() {
+                    makeSuite(false, true, true);
+                });
+            });
+
+            describe("both", function() {
+                describe("positive", function() {
+                    makeSuite(true, true, false);
+                });
+
+                describe("negative", function() {
+                    makeSuite(true, true, true);
                 });
             });
         });
@@ -1310,6 +2288,26 @@ describe("Ext.scroll.Scroller", function() {
                     expect(scroller.getPosition()).toEqual({
                         x: 30,
                         y: 45
+                    });
+                });
+            });
+        });
+
+        describe("cleanup", function() {
+            it("should cleanup partners on destroy", function() {
+                makeScroller2();
+                scroller.addPartner(scroller2);
+
+                scroller2.destroy();
+
+                scroller.scrollBy(50, 50);
+                waitsFor(function() {
+                    return scrollSpy.wasCalled;
+                });
+                runs(function() {
+                    expect(scroller.getPosition()).toEqual({
+                        x: 50,
+                        y: 50
                     });
                 });
             });

@@ -31,6 +31,7 @@ Ext.define('Ext.plugin.Responsive', {
     id: 'responsive',
 
     isPlugin: true,
+    weight: -1000,
 
     constructor: function (config) {
         //<debug>

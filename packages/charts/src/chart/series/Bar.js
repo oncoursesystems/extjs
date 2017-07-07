@@ -82,7 +82,7 @@ Ext.define('Ext.chart.series.Bar', {
          */
         itemInstancing: {
             type: 'rect',
-            fx: {
+            animation: {
                 customDurations: {
                     x: 0,
                     y: 0,
@@ -111,7 +111,7 @@ Ext.define('Ext.chart.series.Bar', {
 
     updateXAxis: function (xAxis) {
         //<debug>
-        if (!this.is3D && xAxis.type !== 'category') {
+        if (!this.is3D && !xAxis.isCategory) {
             Ext.raise("'bar' series should be used with a 'category' axis. Please refer to the bar series docs.");
         }
         //</debug>
@@ -126,29 +126,32 @@ Ext.define('Ext.chart.series.Bar', {
 
     updateStacked: function (stacked) {
         var me = this,
+            attributes = {},
             sprites = me.getSprites(),
-            ln = sprites.length,
-            visible = [],
-            attributes = {}, i;
+            spriteCount = sprites.length,
+            visibleSprites = [],
+            visibleSpriteCount,
+            i;
 
-        for (i = 0; i < ln; i++) {
+        for (i = 0; i < spriteCount; i++) {
             if (!sprites[i].attr.hidden) {
-                visible.push(sprites[i]);
+                visibleSprites.push(sprites[i]);
             }
         }
-        ln = visible.length;
+
+        visibleSpriteCount = visibleSprites.length;
 
         if (me.getStacked()) {
             attributes.groupCount = 1;
             attributes.groupOffset = 0;
-            for (i = 0; i < ln; i++) {
-                visible[i].setAttributes(attributes);
+            for (i = 0; i < visibleSpriteCount; i++) {
+                visibleSprites[i].setAttributes(attributes);
             }
         } else {
-            attributes.groupCount = visible.length;
-            for (i = 0; i < ln; i++) {
+            attributes.groupCount = visibleSpriteCount;
+            for (i = 0; i < visibleSpriteCount; i++) {
                 attributes.groupOffset = i;
-                visible[i].setAttributes(attributes);
+                visibleSprites[i].setAttributes(attributes);
             }
         }
         me.callParent(arguments);

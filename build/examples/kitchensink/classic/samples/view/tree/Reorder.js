@@ -48,10 +48,10 @@ Ext.define('KitchenSink.view.tree.Reorder', {
     },
 
     viewConfig: {
-        plugins: {
+        plugins: [{
             ptype: 'treeviewdragdrop',
             containerScroll: true
-        }
+        }]
     },
 
     tbar: {

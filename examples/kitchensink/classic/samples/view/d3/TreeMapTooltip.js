@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.d3.TreeMapTooltip', {
         },
         {
             type: 'Model',
-            path: 'classic/samples/model/Stock.js'
+            path: 'app/model/Stock.js'
         },
         {
             type: 'View Model',
@@ -29,7 +29,7 @@ Ext.define('KitchenSink.view.d3.TreeMapTooltip', {
         },
         {
             type: 'Data',
-            path: 'data/tree/tree.json'
+            path: 'data/tree/stocks.json'
         },
         {
             type: 'Styles',
@@ -48,6 +48,7 @@ Ext.define('KitchenSink.view.d3.TreeMapTooltip', {
 
     items: {
         xtype: 'd3-treemap',
+        rootVisible: false,
         interactions: {
             type: 'panzoom',
             pan: {
@@ -61,12 +62,13 @@ Ext.define('KitchenSink.view.d3.TreeMapTooltip', {
             store: '{store}',
             selection: '{selection}'
         },
-        rootVisible: false,
         selectEventName: null,
         expandEventName: null,
         nodeValue: function (node) {
             return node.data.cap;
         },
+        noParentValue: true,
+        scaleLabels: true,
         tooltip: {
             cls: 'tip',
             ui: 'd3-treemap',
@@ -81,7 +83,8 @@ Ext.define('KitchenSink.view.d3.TreeMapTooltip', {
             },
             field: 'change',
             processor: function (axis, scale, node, field) {
-                return node.isLeaf() ? scale(node.data[field]) : '#ececec';
+                var record = node.data;
+                return record.isLeaf() ? scale(record.get(field)) : '#ececec';
             }
         }
     },

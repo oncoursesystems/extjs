@@ -9,13 +9,19 @@ var shortLorem =
  */
 Ext.define('Portal.view.main.Main', {
     extend: 'Ext.container.Container',
-
+    
     requires: [
+        'Ext.button.Split',
+        'Ext.dashboard.Dashboard',
+        'Ext.layout.container.Accordion',
         'Ext.layout.container.Border',
-        'Ext.ux.dashboard.GoogleRssPart',
-        'Ext.dashboard.Dashboard'
+        'Portal.view.main.Header',
+        'Portal.view.main.MainController',
+        'Portal.view.markets.Markets',
+        'Portal.view.stocks.Stocks',
+        'Portal.view.user.User'
     ],
-
+    
     layout: {
         type: 'border'
     },
@@ -44,32 +50,10 @@ Ext.define('Portal.view.main.Main', {
             itemPosition: 1, // after title before collapse tool
             items: [{
                 xtype: 'splitbutton',
-                text: 'Add Feed',
-                handler: 'onAddFeed',
+                text: 'Add Item',
                 menu: [{
-                    text: 'Sencha Blog',
-                    handler: 'onAddFeedUrl',
-                    feedUrl: 'http://feeds.feedburner.com/sencha'
-                },{
-                    text: 'Ajaxian',
-                    handler: 'onAddFeedUrl',
-                    feedUrl: 'http://feeds.feedburner.com/ajaxian'
-                },{
-                    text: 'CNN',
-                    handler: 'onAddFeedUrl',
-                    feedUrl: 'http://rss.cnn.com/rss/edition.rss'
-                },{
-                    text: 'Sci/Tech - Google News',
-                    handler: 'onAddFeedUrl',
-                    feedUrl: 'http://news.google.com/news?ned=us&topic=t&output=rss'
-                }, {
-                    text: 'Yahoo News',
-                    handler: 'onAddFeedUrl',
-                    feedUrl: 'http://news.yahoo.com/rss'
-                }, {
-                    text: 'ESPN Top News',
-                    handler: 'onAddFeedUrl',
-                    feedUrl: 'http://sports.espn.go.com/espn/rss/news'
+                    text: 'User Sign-up Form',
+                    handler: 'onAddUser'
                 }]
             }]
         },
@@ -94,13 +78,10 @@ Ext.define('Portal.view.main.Main', {
         stateful: false,
 
         columnWidths: [
-            0.35,
-            0.40,
-            0.25
+            0.50,
+            0.40
         ],
         parts: {
-            rss: 'google-rss',
-
             stocks: {
                 viewTemplate: {
                     title: 'Markets',
@@ -117,27 +98,26 @@ Ext.define('Portal.view.main.Main', {
                         xtype: 'stocks'
                     }]
                 }
+            },
+            
+            userForm: {
+                viewTemplate: {
+                    title: 'New User',
+                    items: [{
+                        xtype: 'user'
+                    }]
+                }
             }
         },
 
         defaultContent: [{
-            type: 'rss',
-            columnIndex: 0,
-            height: 500,
-            feedUrl: 'http://feeds.feedburner.com/sencha'
-        }, {
             type: 'stockTicker',
-            columnIndex: 1,
+            columnIndex: 0,
             height: 300
         }, {
             type: 'stocks',
             columnIndex: 1,
             height: 300
-        }, {
-            type: 'rss',
-            columnIndex: 2,
-            height: 350,
-            feedUrl: 'http://rss.cnn.com/rss/edition.rss'
         }]
     }]
 });

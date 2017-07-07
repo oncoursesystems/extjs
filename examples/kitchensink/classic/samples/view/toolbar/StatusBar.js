@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
         'Ext.ux.statusbar.ValidationStatus'
     ],
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/toolbar/StatusBarController.js'
     }],
     //</example>
@@ -107,10 +107,10 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
             dock: 'bottom',
             reference: 'form-statusbar',
             defaultText: 'Ready',
-            plugins: {
+            plugins: [{
                 ptype: 'validationstatus',
                 form: 'status-form'
-            }
+            }]
         }]
     }, {
         title: 'Ext Word Processor',

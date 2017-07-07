@@ -35,6 +35,11 @@
  * class, there is the `getSaveBatch` method. That method returns an `Ext.data.Batch`
  * object populated with the necessary `create`, `update` and `destory` operations to
  * save all of the changes in the Session.
+ *
+ * ## Conflicts
+ *
+ * If data is loaded from the server (for example a store load) and there is an existing record,
+ * the {@link Ext.data.Model#method-mergeData `mergeData`} method will be called to resolve the conflict.
  * 
  * @since 5.0.0
  */
@@ -576,6 +581,51 @@ Ext.define('Ext.data.Session', {
     }, 
 
     //-------------------------------------------------------------------------
+
+    /**
+     * Template method, will be called by Model after a record is committed.
+     * @param {Ext.data.Model} record The record.
+     *
+     * @protected
+     * @since 6.2.0
+     */
+    afterCommit: function (record) {
+        this.trackRecordState(record);
+    },
+
+    /**
+     * Template method, will be called by Model after a record is dropped.
+     * @param {Ext.data.Model} record The record.
+     *
+     * @protected
+     * @since 6.2.0
+     */
+    afterDrop: function (record) {
+        this.trackRecordState(record);
+    },
+
+    /**
+     * Template method, will be called by Model after a record is edited.
+     * @param {Ext.data.Model} record The record.
+     *
+     * @protected
+     * @since 6.2.0
+     */
+    afterEdit: function (record) {
+        this.trackRecordState(record);
+    },
+
+    /**
+     * Template method, will be called by Model after a record is erased (a drop
+     * that is committed).
+     * @param {Ext.data.Model} record The record.
+     *
+     * @protected
+     */
+    afterErase: function(record) {
+        this.evict(record);
+    },
+
     privates: {
         /**
          * Add a record instance to this session. Called by model.
@@ -603,50 +653,6 @@ Ext.define('Ext.data.Session', {
             for (roleName in associations) {
                 associations[roleName].checkMembership(me, record);
             }
-        },
-
-        /**
-         * Template method, will be called by Model after a record is committed.
-         * @param {Ext.data.Model} record The record.
-         *
-         * @protected
-         * @since 6.2.0
-         */
-        afterCommit: function (record) {
-            this.trackRecordState(record);
-        },
-
-        /**
-         * Template method, will be called by Model after a record is dropped.
-         * @param {Ext.data.Model} record The record.
-         *
-         * @protected
-         * @since 6.2.0
-         */
-        afterDrop: function (record) {
-            this.trackRecordState(record);
-        },
-
-        /**
-         * Template method, will be called by Model after a record is edited.
-         * @param {Ext.data.Model} record The record.
-         *
-         * @protected
-         * @since 6.2.0
-         */
-        afterEdit: function (record) {
-            this.trackRecordState(record);
-        },
-
-        /**
-         * Template method, will be called by Model after a record is erased (a drop
-         * that is committed).
-         * @param {Ext.data.Model} record The record.
-         *
-         * @protected
-         */
-        afterErase: function(record) {
-            this.evict(record);
         },
 
         /**
@@ -1021,13 +1027,8 @@ Ext.define('Ext.data.Session', {
                 // and the stub will deal with it onLoad.
                 record = new Model(data, me);
             } else {
-                //TODO no easy answer here... we are trying to create a record and have
-                //TODO some (potentially new) data. We probably should check for mid-air
-                //TODO collisions using versionProperty but for now we just ignore the
-                //TODO new data in favor of our potentially edited data.
-                
-                // Peek checks if it exists at any level, by getting it we ensure that the record is copied down
                 record = me.getRecord(Model, id);
+                record.mergeData(data);
             }
 
             return record;

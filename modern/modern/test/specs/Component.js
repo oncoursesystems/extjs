@@ -1,21 +1,14 @@
 /* global Ext, expect */
 
-describe('Ext.Component', function() {
+topSuite("Ext.Component",
+    ['Ext.Container', 'Ext.app.ViewModel', 'Ext.layout.HBox',
+     'Ext.layout.VBox', 'Ext.Mask'],
+function() {
     var component;
 
     function makeComponent(config) {
         return component = new Ext.Component(config);
     }
-
-    var hasCls = function(cls) {
-        if (component) {
-            var compCls = component.getCls() || [];
-
-            return compCls.indexOf(cls) !== -1;
-        }
-
-        return false;
-    };
 
     var elHasCls = function(cls) {
         var el = component.element;
@@ -78,6 +71,13 @@ describe('Ext.Component', function() {
                     },
                     bind: '{theHtml}'
                 });
+
+                // The component's defaultBindProperty is bound
+                expect(component.isBound(component.defaultBindProperty)).toBe(true);
+
+                // No arg version should check defaultBindProperty
+                expect(component.isBound()).toBe(true);
+
                 component.getViewModel().notify();
                 expect(component.getInnerHtmlElement().dom.innerHTML).toBe('foo');
             });
@@ -85,6 +85,7 @@ describe('Ext.Component', function() {
             it("should throw an exception if we have no default bind", function() {
                 expect(function() {
                     makeComponent({
+                        id: 'this-should-throw',
                         defaultBindProperty: '',
                         viewModel: {
                             data: {
@@ -93,20 +94,86 @@ describe('Ext.Component', function() {
                         },
                         bind: '{theHtml}'
                     });
+
+                    // Any arbitrary name will return false as not being bound
+                    expect(component.isBound('foo')).toBe(false);
+
+                    // No defaultBindProperty - should return false
+                    expect(component.isBound()).toBe(false);
+
                     component.getBind();
                 }).toThrow();
-                
-                // The caught exception above was thrown after the component was
-                // constructed and registered with ComponentManager, so we have to clean up
-                Ext.ComponentMgr.clearAll();
+                // The exception prevented the assoignment to the component var, but the
+                // component MUST be cleaned up in the afterEach to prevent ViewModel/Scheduler
+                // timer leaks, so we must collect the component into the var now.
+                component = Ext.getCmp('this-should-throw');
             });
         });
     });
 
     describe("'cls' methods", function() {
         var spy;
+        var spacesRe = /\s+/;
+
+        function getClsList (el) {
+            if (el.isWidget) {
+                el = el.el;
+            }
+
+            var list = el.dom.className.split(spacesRe);
+
+            Ext.Array.remove(list, 'x-root');
+            Ext.Array.remove(list, 'x-component');
+
+            return list;
+        }
+
+        function getClsMap (el) {
+            var classes = getClsList(el);
+            var map = {};
+
+            while (classes.length) {
+                map[classes.pop()] = 1;
+            }
+
+            return map;
+        }
+
+        function expectCls (el, cls) {
+            if (el.isWidget) {
+                el = el.el;
+            }
+
+            var classes = typeof cls === 'string' ? cls.split(' ') : cls;
+            var map = getClsMap(el);
+
+            while (classes.length) {
+                var c = classes.pop();
+
+                if (c) {
+                    if (!map[c]) {
+                        Ext.raise('Expected element to have class "' + c +
+                            '" but it had these "' + el.dom.className + '"');
+                    }
+
+                    delete map[c];
+                }
+            }
+
+            classes = Ext.Object.getKeys(map);
+            if (classes.length) {
+                Ext.raise('Expected cls to have only "' + cls + '" but found "' +
+                    classes.join(' ') + '"');
+            }
+        }
 
         describe("configuration", function() {
+            it("should start empty", function() {
+                makeComponent();
+
+                expectCls(component, '');
+            });
+
             it("should convert a string into an array", function() {
                 makeComponent({
                     cls: 'one'
@@ -124,201 +191,173 @@ describe('Ext.Component', function() {
             });
         });
 
-        /**
-         * Ext.Component#addCls
-         */
         describe("addCls", function() {
             beforeEach(function() {
                 makeComponent();
-                spy = spyOn(component, "updateCls");
             });
 
             describe("no prefix/suffix", function() {
                 it("should convert the cls to an array and add it to the component", function() {
                     component.addCls('one');
-                    expect(spy).toHaveBeenCalledWith(['one'], null);
-                    expect(component.getCls()).toEqual(['one']);
+                    expectCls(component, 'one');
+                    expect(getClsMap(component)).toEqual({ one: 1 });
 
                     component.addCls('two');
-                    expect(spy).toHaveBeenCalledWith(['one', 'two'], ['one']);
-                    expect(component.getCls()).toEqual(['one', 'two']);
+                    expectCls(component, 'one two');
+                    expect(getClsMap(component)).toEqual({ one: 1, two: 1 });
                 });
 
                 it("should add each of the cls to the component", function() {
                     component.addCls(['one', 'two']);
-                    expect(spy).toHaveBeenCalledWith(['one', 'two'], null);
-                    expect(component.getCls()).toEqual(['one', 'two']);
+                    expectCls(component, 'one two');
 
                     component.addCls(['two', 'three']);
-                    expect(spy).toHaveBeenCalledWith(['one', 'two', 'three'], ['one', 'two']);
-                    expect(component.getCls()).toEqual(['one', 'two', 'three']);
+                    expectCls(component, 'one two three');
+                    expect(getClsMap(component)).toEqual({ one: 1, two: 1, three: 1 });
                 });
 
                 it("should allow for adding both strings and arrays", function() {
                     component.addCls('one');
-                    expect(spy).toHaveBeenCalledWith(['one'], null);
-                    expect(component.getCls()).toEqual(['one']);
+                    expectCls(component, 'one');
 
                     component.addCls(['two', 'three']);
-                    expect(spy).toHaveBeenCalledWith(['one', 'two', 'three'], ['one']);
-                    expect(component.getCls()).toEqual(['one', 'two', 'three']);
+                    expectCls(component, 'one two three');
                 });
 
                 it("should allow for adding both strings and arrays (reverse)", function() {
                     component.addCls(['two', 'three']);
-                    expect(spy).toHaveBeenCalledWith(['two', 'three'], null);
-                    expect(component.getCls()).toEqual(['two', 'three']);
+                    expectCls(component, 'two three');
 
                     component.addCls('one');
-                    expect(spy).toHaveBeenCalledWith(['two', 'three', 'one'], ['two', 'three']);
-                    expect(component.getCls()).toEqual(['two', 'three', 'one']);
+                    expectCls(component, 'one two three');
                 });
             });
 
             describe("prefix", function() {
                 it("should convert the cls to an array and add it to the component", function() {
                     component.addCls('one', 'x-');
-                    expect(spy).toHaveBeenCalledWith(['x-one'], null);
-                    expect(component.getCls()).toEqual(['x-one']);
+                    expectCls(component, 'x-one');
 
                     component.addCls('two', 'x-');
-                    expect(spy).toHaveBeenCalledWith(['x-one', 'x-two'], ['x-one']);
-                    expect(component.getCls()).toEqual(['x-one', 'x-two']);
+                    expectCls(component, 'x-one x-two');
+                });
+
+                it("should trim spaces and add it to the component", function() {
+                    component.addCls('   one   ', 'x-');
+                    expectCls(component, 'x-one');
+
+                    component.addCls('two', 'x-');
+                    expectCls(component, 'x-one x-two');
                 });
 
                 it("should add each of the cls to the component", function() {
                     component.addCls(['one', 'two'], 'x-');
-                    expect(spy).toHaveBeenCalledWith(['x-one', 'x-two'], null);
-                    expect(component.getCls()).toEqual(['x-one', 'x-two']);
+                    expectCls(component, 'x-one x-two');
 
                     component.addCls(['two', 'three'], 'x-');
-                    expect(spy).toHaveBeenCalledWith(['x-one', 'x-two', 'x-three'], ['x-one', 'x-two']);
-                    expect(component.getCls()).toEqual(['x-one', 'x-two', 'x-three']);
+                    expectCls(component, 'x-one x-two x-three');
                 });
 
                 it("should allow for adding both strings and arrays", function() {
                     component.addCls('one', 'x-');
-                    expect(spy).toHaveBeenCalledWith(['x-one'], null);
-                    expect(component.getCls()).toEqual(['x-one']);
+                    expectCls(component, 'x-one');
 
                     component.addCls(['two', 'three'], 'x-');
-                    expect(spy).toHaveBeenCalledWith(['x-one', 'x-two', 'x-three'], ['x-one']);
-                    expect(component.getCls()).toEqual(['x-one', 'x-two', 'x-three']);
+                    expectCls(component, 'x-one x-two x-three');
                 });
 
                 it("should allow for adding both strings and arrays (reverse)", function() {
                     component.addCls(['two', 'three'], 'x-');
-                    expect(spy).toHaveBeenCalledWith(['x-two', 'x-three'], null);
-                    expect(component.getCls()).toEqual(['x-two', 'x-three']);
+                    expectCls(component, 'x-two x-three');
 
                     component.addCls('one', 'x-');
-                    expect(spy).toHaveBeenCalledWith(['x-two', 'x-three', 'x-one'], ['x-two', 'x-three']);
-                    expect(component.getCls()).toEqual(['x-two', 'x-three', 'x-one']);
+                    expectCls(component, 'x-one x-two x-three');
                 });
             });
 
             describe("suffix", function() {
                 it("should convert the cls to an array and add it to the component", function() {
                     component.addCls('one', null, '-y');
-                    expect(spy).toHaveBeenCalledWith(['one-y'], null);
-                    expect(component.getCls()).toEqual(['one-y']);
+                    expectCls(component, 'one-y');
 
                     component.addCls('two', null, '-y');
-                    expect(spy).toHaveBeenCalledWith(['one-y', 'two-y'], ['one-y']);
-                    expect(component.getCls()).toEqual(['one-y', 'two-y']);
+                    expectCls(component, 'one-y two-y');
                 });
 
                 it("should add each of the cls to the component", function() {
                     component.addCls(['one', 'two'], null, '-y');
-                    expect(spy).toHaveBeenCalledWith(['one-y', 'two-y'], null);
-                    expect(component.getCls()).toEqual(['one-y', 'two-y']);
+                    expectCls(component, 'one-y two-y');
 
                     component.addCls(['two', 'three'], null, '-y');
-                    expect(spy).toHaveBeenCalledWith(['one-y', 'two-y', 'three-y'], ['one-y', 'two-y']);
-                    expect(component.getCls()).toEqual(['one-y', 'two-y', 'three-y']);
+                    expectCls(component, 'one-y two-y three-y');
                 });
 
                 it("should allow for adding both strings and arrays", function() {
                     component.addCls('one', null, '-y');
-                    expect(spy).toHaveBeenCalledWith(['one-y'], null);
-                    expect(component.getCls()).toEqual(['one-y']);
+                    expectCls(component, 'one-y');
 
                     component.addCls(['two', 'three'], null, '-y');
-                    expect(spy).toHaveBeenCalledWith(['one-y', 'two-y', 'three-y'], ['one-y']);
-                    expect(component.getCls()).toEqual(['one-y', 'two-y', 'three-y']);
+                    expectCls(component, 'one-y two-y three-y');
                 });
 
                 it("should allow for adding both strings and arrays (reverse)", function() {
                     component.addCls(['two', 'three'], null, '-y');
-                    expect(spy).toHaveBeenCalledWith(['two-y', 'three-y'], null);
-                    expect(component.getCls()).toEqual(['two-y', 'three-y']);
+                    expectCls(component, 'two-y three-y');
 
                     component.addCls('one', null, '-y');
-                    expect(spy).toHaveBeenCalledWith(['two-y', 'three-y', 'one-y'], ['two-y', 'three-y']);
-                    expect(component.getCls()).toEqual(['two-y', 'three-y', 'one-y']);
+                    expectCls(component, 'one-y two-y three-y');
                 });
             });
 
             describe("prefix + suffix", function() {
                 it("should convert the cls to an array and add it to the component", function() {
                     component.addCls('one', 'x-', '-y');
-                    expect(spy).toHaveBeenCalledWith(['x-one-y'], null);
-                    expect(component.getCls()).toEqual(['x-one-y']);
+                    expectCls(component, 'x-one-y');
 
                     component.addCls('two', 'x-', '-y');
-                    expect(spy).toHaveBeenCalledWith(['x-one-y', 'x-two-y'], ['x-one-y']);
-                    expect(component.getCls()).toEqual(['x-one-y', 'x-two-y']);
+                    expectCls(component, 'x-one-y x-two-y');
                 });
 
                 it("should add each of the cls to the component", function() {
                     component.addCls(['one', 'two'], 'x-', '-y');
-                    expect(spy).toHaveBeenCalledWith(['x-one-y', 'x-two-y'], null);
-                    expect(component.getCls()).toEqual(['x-one-y', 'x-two-y']);
+                    expectCls(component, 'x-one-y x-two-y');
 
                     component.addCls(['two', 'three'], 'x-', '-y');
-                    expect(spy).toHaveBeenCalledWith(['x-one-y', 'x-two-y', 'x-three-y'], ['x-one-y', 'x-two-y']);
-                    expect(component.getCls()).toEqual(['x-one-y', 'x-two-y', 'x-three-y']);
+
+                    expectCls(component, 'x-one-y x-two-y x-three-y');
                 });
 
                 it("should allow for adding both strings and arrays", function() {
                     component.addCls('one', 'x-', '-y');
-                    expect(spy).toHaveBeenCalledWith(['x-one-y'], null);
-                    expect(component.getCls()).toEqual(['x-one-y']);
+                    expectCls(component, 'x-one-y');
 
                     component.addCls(['two', 'three'], 'x-', '-y');
-                    expect(spy).toHaveBeenCalledWith(['x-one-y', 'x-two-y', 'x-three-y'], ['x-one-y']);
-                    expect(component.getCls()).toEqual(['x-one-y', 'x-two-y', 'x-three-y']);
+                    expectCls(component, 'x-one-y x-two-y x-three-y');
                 });
 
                 it("should allow for adding both strings and arrays (reverse)", function() {
                     component.addCls(['two', 'three'], 'x-', '-y');
-                    expect(spy).toHaveBeenCalledWith(['x-two-y', 'x-three-y'], null);
-                    expect(component.getCls()).toEqual(['x-two-y', 'x-three-y']);
+                    expectCls(component, 'x-two-y x-three-y');
 
                     component.addCls('one', 'x-', '-y');
-                    expect(spy).toHaveBeenCalledWith(['x-two-y', 'x-three-y', 'x-one-y'], ['x-two-y', 'x-three-y']);
-                    expect(component.getCls()).toEqual(['x-two-y', 'x-three-y', 'x-one-y']);
+                    expectCls(component, 'x-one-y x-two-y x-three-y');
                 });
             });
         });
 
-        /**
-         * Ext.Component#removeCls
-         */
         describe("removeCls", function() {
             describe("no prefix/suffix", function() {
                 describe("removing nothing", function() {
                     beforeEach(function() {
                         makeComponent();
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should do nothing", function() {
-                        expect(component.getCls()).toEqual(null);
+                        var s = component.el.dom.className;
 
                         component.removeCls('one');
 
-                        expect(component.getCls()).toEqual(null);
+                        expect(component.el.dom.className).toEqual(s);
                     });
                 });
 
@@ -327,7 +366,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: 'one'
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should remove the cls (string)", function() {
@@ -335,8 +373,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls('one');
 
-                        expect(spy).toHaveBeenCalledWith(null, ['one']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
 
                     it("should remove the cls (array)", function() {
@@ -344,8 +381,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one']);
 
-                        expect(spy).toHaveBeenCalledWith(null, ['one']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
                 });
 
@@ -354,7 +390,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: ['one', 'two']
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should remove the cls (string)", function() {
@@ -362,8 +397,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls('two');
 
-                        expect(spy).toHaveBeenCalledWith(['one'], ['one', 'two']);
-                        expect(component.getCls()).toEqual(['one']);
+                        expectCls(component, 'one');
                     });
 
                     it("should remove the cls (array)", function() {
@@ -371,8 +405,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one']);
 
-                        expect(spy).toHaveBeenCalledWith(['two'], ['one', 'two']);
-                        expect(component.getCls()).toEqual(['two']);
+                        expectCls(component, 'two');
                     });
 
                     it("should remove the cls (array, multiple)", function() {
@@ -380,8 +413,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one', 'two']);
 
-                        expect(spy).toHaveBeenCalledWith(null, ['one', 'two']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
                 });
             });
@@ -393,11 +425,11 @@ describe('Ext.Component', function() {
                     });
 
                     it("should do nothing", function() {
-                        expect(component.getCls()).toEqual(null);
+                        var s = component.el.dom.className;
 
                         component.removeCls('one', 'x-');
 
-                        expect(component.getCls()).toEqual(null);
+                        expect(component.el.dom.className).toEqual(s);
                     });
                 });
 
@@ -406,7 +438,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: 'x-one'
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should remove the cls (string)", function() {
@@ -414,8 +445,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls('one', 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(null, ['x-one']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
 
                     it("should remove the cls (array)", function() {
@@ -423,8 +453,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one'], 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(null, ['x-one']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
                 });
 
@@ -433,7 +462,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: ['x-one', 'x-two']
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should remove the cls (string)", function() {
@@ -441,8 +469,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls('two', 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(['x-one'], ['x-one', 'x-two']);
-                        expect(component.getCls()).toEqual(['x-one']);
+                        expectCls(component, 'x-one');
                     });
 
                     it("should remove the cls (array)", function() {
@@ -450,8 +477,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one'], 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(['x-two'], ['x-one', 'x-two']);
-                        expect(component.getCls()).toEqual(['x-two']);
+                        expectCls(component, 'x-two');
                     });
 
                     it("should remove the cls (array, multiple)", function() {
@@ -459,8 +485,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one', 'two'], 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(null, ['x-one', 'x-two']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
                 });
             });
@@ -472,11 +497,11 @@ describe('Ext.Component', function() {
                     });
 
                     it("should do nothing", function() {
-                        expect(component.getCls()).toEqual(null);
+                        var s = component.el.dom.className;
 
                         component.removeCls('one', null, '-y');
 
-                        expect(component.getCls()).toEqual(null);
+                        expect(component.el.dom.className).toEqual(s);
                     });
                 });
 
@@ -485,7 +510,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: 'one-y'
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should remove the cls (string)", function() {
@@ -493,8 +517,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls('one', null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(null, ['one-y']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
 
                     it("should remove the cls (array)", function() {
@@ -502,8 +525,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one'], null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(null, ['one-y']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
                 });
 
@@ -512,7 +534,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: ['one-y', 'two-y']
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should remove the cls (string)", function() {
@@ -520,8 +541,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls('two', null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['one-y'], ['one-y', 'two-y']);
-                        expect(component.getCls()).toEqual(['one-y']);
+                        expectCls(component, 'one-y');
                     });
 
                     it("should remove the cls (array)", function() {
@@ -529,8 +549,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one'], null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['two-y'], ['one-y', 'two-y']);
-                        expect(component.getCls()).toEqual(['two-y']);
+                        expectCls(component, 'two-y');
                     });
 
                     it("should remove the cls (array, multiple)", function() {
@@ -538,8 +557,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one', 'two'], null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(null, ['one-y', 'two-y']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
                 });
             });
@@ -551,11 +569,11 @@ describe('Ext.Component', function() {
                     });
 
                     it("should do nothing", function() {
-                        expect(component.getCls()).toEqual(null);
+                        var s = component.el.dom.className;
 
                         component.removeCls('one', 'x-', '-y');
 
-                        expect(component.getCls()).toEqual(null);
+                        expect(component.el.dom.className).toEqual(s);
                     });
                 });
 
@@ -564,7 +582,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: 'x-one-y'
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should remove the cls (string)", function() {
@@ -572,8 +589,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls('one', 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(null, ['x-one-y']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
 
                     it("should remove the cls (array)", function() {
@@ -581,8 +597,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one'], 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(null, ['x-one-y']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
                 });
 
@@ -591,7 +606,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: ['x-one-y', 'x-two-y']
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should remove the cls (string)", function() {
@@ -599,8 +613,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls('two', 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['x-one-y'], ['x-one-y', 'x-two-y']);
-                        expect(component.getCls()).toEqual(['x-one-y']);
+                        expectCls(component, 'x-one-y');
                     });
 
                     it("should remove the cls (array)", function() {
@@ -608,8 +621,7 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one'], 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['x-two-y'], ['x-one-y', 'x-two-y']);
-                        expect(component.getCls()).toEqual(['x-two-y']);
+                        expectCls(component, 'x-two-y');
                     });
 
                     it("should remove the cls (array, multiple)", function() {
@@ -617,16 +629,12 @@ describe('Ext.Component', function() {
 
                         component.removeCls(['one', 'two'], 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(null, ['x-one-y', 'x-two-y']);
-                        expect(component.getCls()).toEqual(null);
+                        expect(getClsList(component)).toEqual([]);
                     });
                 });
             });
         });
 
-        /**
-         * Ext.Component#setCls
-         */
         describe("setCls", function() {
             describe("with no existing cls", function() {
                 beforeEach(function() {
@@ -708,15 +716,11 @@ describe('Ext.Component', function() {
             });
         });
 
-        /**
-         * Ext.Component#replaceCls
-         */
         describe("replaceCls", function() {
             describe("no prefix/suffix", function() {
                 describe("with no existing cls", function() {
                     beforeEach(function() {
                         makeComponent();
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should set the cls (string)", function() {
@@ -724,8 +728,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('two', 'one');
 
-                        expect(spy).toHaveBeenCalledWith(['one'], null);
-                        expect(component.getCls()).toEqual(['one']);
+                        expectCls(component, 'one');
                     });
 
                     it("should set the cls (array)", function() {
@@ -733,8 +736,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one', 'two'], ['three', 'four']);
 
-                        expect(spy).toHaveBeenCalledWith(['three', 'four'], null);
-                        expect(component.getCls()).toEqual(['three', 'four']);
+                        expectCls(component, 'three four');
                     });
                 });
 
@@ -743,7 +745,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: 'one'
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should replace the cls (string)", function() {
@@ -751,8 +752,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('one', 'two');
 
-                        expect(spy).toHaveBeenCalledWith(['two'], ['one']);
-                        expect(component.getCls()).toEqual(['two']);
+                        expectCls(component, 'two');
                     });
 
                     it("should replace the cls (array)", function() {
@@ -760,8 +760,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one'], ['two']);
 
-                        expect(spy).toHaveBeenCalledWith(['two'], ['one']);
-                        expect(component.getCls()).toEqual(['two']);
+                        expectCls(component, 'two');
                     });
 
                     it("should replace the cls (array, multiple)", function() {
@@ -769,8 +768,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one'], ['two', 'three']);
 
-                        expect(spy).toHaveBeenCalledWith(['two', 'three'], ['one']);
-                        expect(component.getCls()).toEqual(['two', 'three']);
+                        expectCls(component, 'two three');
                     });
                 });
 
@@ -779,7 +777,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: ['one', 'two']
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should replace the cls (string)", function() {
@@ -787,8 +784,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('one', 'three');
 
-                        expect(spy).toHaveBeenCalledWith(['two', 'three'], ['one', 'two']);
-                        expect(component.getCls()).toEqual(['two', 'three']);
+                        expectCls(component, 'two three');
                     });
 
                     it("should replace the cls (array)", function() {
@@ -796,8 +792,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one', 'two'], ['four', 'three']);
 
-                        expect(spy).toHaveBeenCalledWith(['four', 'three'], ['one', 'two']);
-                        expect(component.getCls()).toEqual(['four', 'three']);
+                        expectCls(component, 'three four');
                     });
                 });
             });
@@ -806,7 +801,6 @@ describe('Ext.Component', function() {
                 describe("with no existing cls", function() {
                     beforeEach(function() {
                         makeComponent();
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should set the cls (string)", function() {
@@ -814,8 +808,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('two', 'one', 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(['x-one'], null);
-                        expect(component.getCls()).toEqual(['x-one']);
+                        expectCls(component, 'x-one');
                     });
 
                     it("should set the cls (array)", function() {
@@ -823,8 +816,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one', 'two'], ['three', 'four'], 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(['x-three', 'x-four'], null);
-                        expect(component.getCls()).toEqual(['x-three', 'x-four']);
+                        expectCls(component, 'x-three x-four');
                     });
                 });
 
@@ -833,7 +825,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: 'x-one'
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should replace the cls (string)", function() {
@@ -841,8 +832,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('one', 'two', 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(['x-two'], ['x-one']);
-                        expect(component.getCls()).toEqual(['x-two']);
+                        expectCls(component, 'x-two');
                     });
 
                     it("should replace the cls (array)", function() {
@@ -850,8 +840,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one'], ['two'], 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(['x-two'], ['x-one']);
-                        expect(component.getCls()).toEqual(['x-two']);
+                        expectCls(component, 'x-two');
                     });
 
                     it("should replace the cls (array, multiple)", function() {
@@ -859,8 +848,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one'], ['two', 'three'], 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(['x-two', 'x-three'], ['x-one']);
-                        expect(component.getCls()).toEqual(['x-two', 'x-three']);
+                        expectCls(component, 'x-two x-three');
                     });
                 });
 
@@ -869,7 +857,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: ['x-one', 'x-two']
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should replace the cls (string)", function() {
@@ -877,8 +864,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('one', 'three', 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(['x-two', 'x-three'], ['x-one', 'x-two']);
-                        expect(component.getCls()).toEqual(['x-two', 'x-three']);
+                        expectCls(component, 'x-two x-three');
                     });
 
                     it("should replace the cls (array)", function() {
@@ -886,8 +872,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one', 'two'], ['four', 'three'], 'x-');
 
-                        expect(spy).toHaveBeenCalledWith(['x-four', 'x-three'], ['x-one', 'x-two']);
-                        expect(component.getCls()).toEqual(['x-four', 'x-three']);
+                        expectCls(component, 'x-four x-three');
                     });
                 });
             });
@@ -896,7 +881,6 @@ describe('Ext.Component', function() {
                 describe("with no existing cls", function() {
                     beforeEach(function() {
                         makeComponent();
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should set the cls (string)", function() {
@@ -904,8 +888,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('two', 'one', null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['one-y'], null);
-                        expect(component.getCls()).toEqual(['one-y']);
+                        expectCls(component, 'one-y');
                     });
 
                     it("should set the cls (array)", function() {
@@ -913,8 +896,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one', 'two'], ['three', 'four'], null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['three-y', 'four-y'], null);
-                        expect(component.getCls()).toEqual(['three-y', 'four-y']);
+                        expectCls(component, 'three-y four-y');
                     });
                 });
 
@@ -923,7 +905,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: 'one-y'
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should replace the cls (string)", function() {
@@ -931,8 +912,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('one', 'two', null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['two-y'], ['one-y']);
-                        expect(component.getCls()).toEqual(['two-y']);
+                        expectCls(component, 'two-y');
                     });
 
                     it("should replace the cls (array)", function() {
@@ -940,8 +920,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one'], ['two'], null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['two-y'], ['one-y']);
-                        expect(component.getCls()).toEqual(['two-y']);
+                        expectCls(component, 'two-y');
                     });
 
                     it("should replace the cls (array, multiple)", function() {
@@ -949,8 +928,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one'], ['two', 'three'], null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['two-y', 'three-y'], ['one-y']);
-                        expect(component.getCls()).toEqual(['two-y', 'three-y']);
+                        expectCls(component, 'two-y three-y');
                     });
                 });
 
@@ -959,7 +937,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: ['one-y', 'two-y']
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should replace the cls (string)", function() {
@@ -967,8 +944,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('one', 'three', null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['two-y', 'three-y'], ['one-y', 'two-y']);
-                        expect(component.getCls()).toEqual(['two-y', 'three-y']);
+                        expectCls(component, 'two-y three-y');
                     });
 
                     it("should replace the cls (array)", function() {
@@ -976,8 +952,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one', 'two'], ['four', 'three'], null, '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['four-y', 'three-y'], ['one-y', 'two-y']);
-                        expect(component.getCls()).toEqual(['four-y', 'three-y']);
+                        expectCls(component, 'four-y three-y');
                     });
                 });
             });
@@ -986,7 +961,6 @@ describe('Ext.Component', function() {
                 describe("with no existing cls", function() {
                     beforeEach(function() {
                         makeComponent();
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should set the cls (string)", function() {
@@ -994,8 +968,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('two', 'one', 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['x-one-y'], null);
-                        expect(component.getCls()).toEqual(['x-one-y']);
+                        expectCls(component, 'x-one-y');
                     });
 
                     it("should set the cls (array)", function() {
@@ -1003,8 +976,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one', 'two'], ['three', 'four'], 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['x-three-y', 'x-four-y'], null);
-                        expect(component.getCls()).toEqual(['x-three-y', 'x-four-y']);
+                        expectCls(component, 'x-three-y x-four-y');
                     });
                 });
 
@@ -1013,7 +985,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: 'x-one-y'
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should replace the cls (string)", function() {
@@ -1021,8 +992,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('one', 'two', 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['x-two-y'], ['x-one-y']);
-                        expect(component.getCls()).toEqual(['x-two-y']);
+                        expectCls(component, 'x-two-y');
                     });
 
                     it("should replace the cls (array)", function() {
@@ -1030,8 +1000,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one'], ['two'], 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['x-two-y'], ['x-one-y']);
-                        expect(component.getCls()).toEqual(['x-two-y']);
+                        expectCls(component, 'x-two-y');
                     });
 
                     it("should replace the cls (array, multiple)", function() {
@@ -1039,8 +1008,7 @@ describe('Ext.Component', function() {
 
                         component.replaceCls(['one'], ['two', 'three'], 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['x-two-y', 'x-three-y'], ['x-one-y']);
-                        expect(component.getCls()).toEqual(['x-two-y', 'x-three-y']);
+                        expectCls(component, 'x-two-y x-three-y');
                     });
                 });
 
@@ -1049,7 +1017,6 @@ describe('Ext.Component', function() {
                         makeComponent({
                             cls: ['x-one-y', 'x-two-y']
                         });
-                        spy = spyOn(component, "updateCls");
                     });
 
                     it("should replace the cls (string)", function() {
@@ -1057,16 +1024,14 @@ describe('Ext.Component', function() {
 
                         component.replaceCls('one', 'three', 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['x-two-y', 'x-three-y'], ['x-one-y', 'x-two-y']);
-                        expect(component.getCls()).toEqual(['x-two-y', 'x-three-y']);
+                        expectCls(component, 'x-two-y x-three-y');
                     });
 
                     it("should replace the cls (array)", function() {
                         expect(component.getCls()).toEqual(['x-one-y', 'x-two-y']);
                         component.replaceCls(['one', 'two'], ['four', 'three'], 'x-', '-y');
 
-                        expect(spy).toHaveBeenCalledWith(['x-four-y', 'x-three-y'], ['x-one-y', 'x-two-y']);
-                        expect(component.getCls()).toEqual(['x-four-y', 'x-three-y']);
+                        expectCls(component, 'x-three-y x-four-y');
                     });
                 });
             });
@@ -1082,14 +1047,6 @@ describe('Ext.Component', function() {
                     expect(component.element).toHaveCls('one');
                 });
 
-                it("add cls to component's cls cache", function() {
-                    makeComponent();
-
-                    component.toggleCls('one');
-
-                    expect(hasCls('one')).toBe(true);
-                });
-
                 it("force add cls to component", function() {
                     makeComponent({
                         cls : 'one'
@@ -1099,7 +1056,7 @@ describe('Ext.Component', function() {
                     //but since we are passing `true`, it will force it to add
                     component.toggleCls('one', true);
 
-                    expect(hasCls('one')).toBe(true);
+                    expect(component.element).toHaveCls('one');
                 });
             });
 
@@ -1112,16 +1069,6 @@ describe('Ext.Component', function() {
                     component.toggleCls('one');
 
                     expect(component.element).not.toHaveCls('one');
-                });
-
-                it("remove cls from component's cls cache", function() {
-                    makeComponent({
-                        cls : 'one'
-                    });
-
-                    component.toggleCls('one');
-
-                    expect(hasCls('one')).toBe(false);
                 });
             });
         });
@@ -1396,7 +1343,9 @@ describe('Ext.Component', function() {
                     });
 
                     it("should return true if the component is not hidden", function() {
-                        makeComponent();
+                        makeComponent({
+                            renderTo: document.body
+                        });
                         expect(component.isVisible()).toBe(true);
                     });
                 });
@@ -1427,8 +1376,20 @@ describe('Ext.Component', function() {
                         ct.destroy();
                     });
 
+                    it('should return false if the component is not rendered', function() {
+                        var ct = new Ext.Container({
+                            items: {
+                                xtype: 'component'
+                            }
+                        });
+                        component = ct.getItems().first();
+                        expect(component.isVisible()).toBe(false);
+                        ct.destroy();
+                    });
+
                     it("should return true if the component is not hidden and the container is not", function() {
                         var ct = new Ext.Container({
+                            renderTo: document.body,
                             items: {
                                 xtype: 'component'
                             }
@@ -1440,6 +1401,7 @@ describe('Ext.Component', function() {
 
                     it("should return true if the component is not hidden and the container is hidden", function() {
                         var ct = new Ext.Container({
+                            renderTo: document.body,
                             hidden: true,
                             items: {
                                 xtype: 'component'
@@ -1452,6 +1414,7 @@ describe('Ext.Component', function() {
 
                     it("should return true if the component is not hidden and a high level container is hidden", function() {
                         var ct = new Ext.Container({
+                            renderTo: document.body,
                             hidden: true,
                             items: {
                                 xtype: 'container',
@@ -1481,7 +1444,9 @@ describe('Ext.Component', function() {
                     });
 
                     it("should return true if the component is not hidden", function() {
-                        makeComponent();
+                        makeComponent({
+                            renderTo: document.body
+                        });
                         expect(component.isVisible(false)).toBe(true);
                     });
                 });
@@ -1514,6 +1479,7 @@ describe('Ext.Component', function() {
 
                     it("should return true if the component is not hidden and the container is not", function() {
                         var ct = new Ext.Container({
+                            renderTo: document.body,
                             items: {
                                 xtype: 'component'
                             }
@@ -1525,6 +1491,7 @@ describe('Ext.Component', function() {
 
                     it("should return true if the component is not hidden and the container is hidden", function() {
                         var ct = new Ext.Container({
+                            renderTo: document.body,
                             hidden: true,
                             items: {
                                 xtype: 'component'
@@ -1537,6 +1504,7 @@ describe('Ext.Component', function() {
 
                     it("should return true if the component is not hidden and a high level container is hidden", function() {
                         var ct = new Ext.Container({
+                            renderTo: document.body,
                             hidden: true,
                             items: {
                                 xtype: 'container',
@@ -1566,7 +1534,9 @@ describe('Ext.Component', function() {
                     });
 
                     it("should return true if the component is not hidden", function() {
-                        makeComponent();
+                        makeComponent({
+                            renderTo: document.body
+                        });
                         expect(component.isVisible(true)).toBe(true);
                     });
                 });
@@ -1574,6 +1544,7 @@ describe('Ext.Component', function() {
                 describe("in a container", function() {
                     it("should return false if the component is hidden but the container is not", function() {
                         var ct = new Ext.Container({
+                            renderTo: document.body,
                             items: {
                                 xtype: 'component',
                                 hidden: true
@@ -1599,6 +1570,7 @@ describe('Ext.Component', function() {
 
                     it("should return true if the component is not hidden and the container is not", function() {
                         var ct = new Ext.Container({
+                            renderTo: document.body,
                             items: {
                                 xtype: 'component'
                             }
@@ -1679,6 +1651,597 @@ describe('Ext.Component', function() {
         });
     });
 
+    describe('responding to resizing', function() {
+        var container, onResizeSpy, resizeEventSpy, prevWidth, prevHeight;
+
+        beforeEach(function() {
+            onResizeSpy = jasmine.createSpy();
+            resizeEventSpy = jasmine.createSpy();
+        });
+        afterEach(function() {
+            container = Ext.destroy(container);
+        });
+
+        describe('shrinkWrap', function() {
+            it('should respond to content size changes', function() {
+                makeComponent({
+                    html: '<p>Foo</p><p>bar</p><p>bletch</p>',
+                    onResize: onResizeSpy,
+                    listeners: {
+                        resize: resizeEventSpy
+                    },
+                    renderTo: document.body
+                });
+                component.el.down('p').destroy();
+
+                waitsFor(function() {
+                    return onResizeSpy.callCount === 1 &&
+                        resizeEventSpy.callCount === 1;
+                });
+
+                // The event is asynchronous, and is fired opn the tail of a browser layout.
+                // We have only paused for one layout, so it will be the result of the DOM
+                // removal, and there will be no "old" size values.
+                runs(function() {
+                    var w = component.el.dom.offsetWidth,
+                        h = component.el.dom.offsetHeight,
+                        info = {
+                            flag: 3,  // w = 0x01, h = 0x02
+                            width: w,
+                            height: h,
+                            contentWidth: w,
+                            contentHeight: h
+                        };
+
+                    expect(onResizeSpy.mostRecentCall.args).toEqual(
+                        [ w, h, null, null, info ]);
+
+                    expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual(
+                        [ component, w, h, null, null, info ]);
+
+                    // onResize is called first - its element resize listener is at priority 1000
+                    expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+                });
+            });
+        });
+
+        describe('Auto sizing', function() {
+            it('should respond to changes in relative sizing values', function() {
+                container = new Ext.Container({
+                    layout: 'hbox',
+                    height: 100,
+                    width: 100,
+                    items: [makeComponent({
+                        width: '50%',
+                        onResize: onResizeSpy,
+                        listeners: {
+                            resize: resizeEventSpy
+                        }
+                    })],
+                    renderTo: document.body
+                });
+
+                waitsFor(function() {
+                    return onResizeSpy.callCount === 1 &&
+                        resizeEventSpy.callCount === 1;
+                }, 'first resize', 1000);
+
+                // Wait for the resize event mechanism to flush all its timers
+                waits(100);
+
+                // Wait for the layout and the async event to run on the tail end of a browser layout
+                runs(function() {
+                    var w = component.el.dom.offsetWidth,
+                        h = component.el.dom.offsetHeight,
+                        info = {
+                            flag: 3,  // w = 0x01, h = 0x02
+                            width: w,
+                            height: h,
+                            contentWidth: w,
+                            contentHeight: h
+                        };
+
+                    expect(onResizeSpy.mostRecentCall.args).toEqual([
+                        50, h, null, null, info
+                    ]);
+                    expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                        component, 50, h, null, null, info
+                    ]);
+
+                    // onResize is called first - its element resize listener is at priority 1000
+                    expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+
+                    component.setWidth('70%');
+                    component.el.dom.offsetWidth;
+                });
+
+                // Wait for the resize event mechanism to flush all its timers
+                waits(100);
+
+                waitsFor(function() {
+                    return onResizeSpy.callCount === 2 &&
+                        resizeEventSpy.callCount === 2;
+                }, 'second resize', 1000);
+
+                // Wait for the layout and the async event to run on the tail end of a browser layout
+                runs(function() {
+                    var w = component.el.dom.offsetWidth,
+                        h = component.el.dom.offsetHeight,
+                        info = {
+                            flag: 1,  // w = 0x01
+                            width: w,
+                            height: h,
+                            contentWidth: w,
+                            contentHeight: h
+                        };
+
+                    // width:50% -> width:70% should mean 70px width
+                    expect(w).toEqual(70);
+
+                    expect(onResizeSpy.mostRecentCall.args).toEqual([
+                        70, h, 50, h, info
+                    ]);
+                    expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                        component, 70, h, 50, h, info
+                    ]);
+
+                    // onResize is called first - its element resize listener is at priority 1000
+                    expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+
+                    // Now widen the container
+                    container.setWidth(200);
+                    component.el.dom.offsetWidth;
+                });
+
+                // Wait for the resize event mechanism to flush all its timers
+                waits(100);
+
+                waitsFor(function() {
+                    return onResizeSpy.callCount === 3 &&
+                        resizeEventSpy.callCount === 3;
+                }, 'third resize', 1000);
+
+                // Wait for the layout and the async event to run on the tail end of a browser layout
+                runs(function() {
+                    var w = component.el.dom.offsetWidth,
+                        h = component.el.dom.offsetHeight,
+                        info = {
+                            flag: 1,
+                            width: w,
+                            height: h,
+                            contentWidth: w,
+                            contentHeight: h
+                        };
+
+                    // Doubled container width, so double the component's width
+                    expect(component.el.dom.offsetWidth).toEqual(140);
+
+                    expect(onResizeSpy.mostRecentCall.args).toEqual([
+                        140, h, 70, h, info
+                    ]);
+                    expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                        component, 140, h, 70, h, info
+                    ]);
+
+                    // onResize is called first - its element resize listener is at priority 1000
+                    expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+                });
+            });
+        });
+
+        describe('Layout sizing', function() {
+            it('should respond to layout-induced changes', function() {
+                container = new Ext.Container({
+                    layout: 'hbox',
+                    height: 100,
+                    width: 100,
+                    items: [{
+                        flex: 1
+                    }, makeComponent({
+                        flex: 1,
+                        onResize: onResizeSpy,
+                        listeners: {
+                            resize: resizeEventSpy
+                        }
+                    })],
+                    renderTo: document.body
+                });
+
+                waitsFor(function() {
+                    return onResizeSpy.callCount === 1 &&
+                        resizeEventSpy.callCount === 1;
+                });
+
+                // Wait for the layout and the async event to run on the tail end of a browser layout
+                runs(function() {
+                    var w = component.el.dom.offsetWidth,
+                        h = component.el.dom.offsetHeight,
+                        info = {
+                            flag: 3,  // w = 0x01, h = 0x02
+                            width: w,
+                            height: h,
+                            contentWidth: w,
+                            contentHeight: h
+                        };
+
+                    expect(onResizeSpy.mostRecentCall.args).toEqual([
+                        50, h, null, null, info ]);
+                    expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                        component, 50, h, null, null, info ]);
+
+                    // onResize is called first - its element resize listener is at priority 1000
+                    expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+
+                    component.setFlex(2);
+                });
+
+                waitsFor(function() {
+                    return onResizeSpy.callCount === 2 &&
+                        resizeEventSpy.callCount === 2;
+                });
+
+                // Wait for the layout and the async event to run on the tail end of a browser layout
+                runs(function() {
+                    var w = component.el.dom.offsetWidth,
+                        h = component.el.dom.offsetHeight,
+                        info = {
+                            flag: 1,  // w = 0x01, h = 0x02
+                            width: w,
+                            height: h,
+                            contentWidth: w,
+                            contentHeight: h
+                        };
+
+                    // flex:1 -> flex:2 should mean ~67px width
+                    expect(w).toBeGreaterThan(50);
+                    prevWidth = w;
+
+                    expect(onResizeSpy.mostRecentCall.args).toEqual([ w, h, 50, h, info ]);
+
+                    expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                        component, w, h, 50, h, info ]);
+
+                    // onResize is called first - its element resize listener is at priority 1000
+                    expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+
+                    // Now widen the container
+                    container.setWidth(200);
+                });
+
+                waits(100);
+
+                // Wait for the layout and the async event to run on the tail end of a browser layout
+                runs(function() {
+                    var w = component.el.getWidth(),
+                        ow = component.el.dom.offsetWidth,
+                        h = component.el.dom.offsetHeight,
+                        info = {
+                            flag: 1,  // w = 0x01, h = 0x02
+                            width: w,
+                            height: h,
+                            contentWidth: ow,
+                            contentHeight: h
+                        };
+
+                    // Double container width should mean ~(67 * 2)px width
+                    expect(ow).toBeGreaterThan(prevWidth);
+
+                    expect(onResizeSpy.mostRecentCall.args).toEqual([
+                        w, h, prevWidth, h, info ]);
+
+                    expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                        component, w, h, prevWidth, h, info ]);
+
+                    // onResize is called first - its element resize listener is at priority 1000
+                    expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+                });
+            });
+        });
+
+        describe('Constraints', function() {
+            it('should respond to releasing the maxWidth constraint', function() {
+                container = new Ext.Container({
+                    layout: 'hbox',
+                    height: 100,
+                    width: 100,
+                    items: [{
+                        flex: 1
+                    }, makeComponent({
+                        flex: 1,
+                        maxWidth: 40,
+                        onResize: onResizeSpy,
+                        listeners: {
+                            resize: resizeEventSpy
+                        }
+                    })],
+                    renderTo: document.body
+                });
+
+                waitsFor(function() {
+                    return onResizeSpy.callCount === 1 &&
+                        resizeEventSpy.callCount === 1;
+                });
+
+                // Wait for the layout and the async event to run on the tail end of a browser layout
+                runs(function() {
+                    var w = component.el.dom.offsetWidth,
+                        h = component.el.dom.offsetHeight,
+                        info = {
+                            flag: 3,  // w = 0x01, h = 0x02
+                            width: w,
+                            height: h,
+                            contentWidth: w,
+                            contentHeight: h
+                        };
+
+                    expect(onResizeSpy.mostRecentCall.args).toEqual([ 40, h, null, null, info ]);
+                    expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                        component, 40, h, null, null, info ]);
+
+                    // onResize is called first - its element resize listener is at priority 1000
+                    expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+
+                    // Release the maxWidth: 40 constraint
+                    component.setMaxWidth(null);
+                });
+
+                waitsFor(function() {
+                    return onResizeSpy.callCount === 2 &&
+                        resizeEventSpy.callCount === 2;
+                });
+
+                // Wait for the layout and the async event to run on the tail end of a browser layout
+                runs(function() {
+                    var w = component.el.dom.offsetWidth,
+                        h = component.el.dom.offsetHeight,
+                        info = {
+                            flag: 1,  // w = 0x01, h = 0x02
+                            width: w,
+                            height: h,
+                            contentWidth: w,
+                            contentHeight: h
+                        };
+
+                    // Releasing the constraint moves to obeying flex: 1
+                    expect(onResizeSpy.mostRecentCall.args).toEqual([ 50, h, 40, h, info ]);
+                    expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                        component, 50, h, 40, h, info ]);
+
+                    // onResize is called first - its element resize listener is at priority 1000
+                    expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+                });
+            });
+        });
+
+        it('should respond to releasing the minWidth constraint', function() {
+            container = new Ext.Container({
+                layout: 'hbox',
+                height: 100,
+                width: 100,
+                items: [{
+                    flex: 1
+                }, makeComponent({
+                    flex: 1,
+                    minWidth: 60,
+                    onResize: onResizeSpy,
+                    listeners: {
+                        resize: resizeEventSpy
+                    }
+                })],
+                renderTo: document.body
+            });
+
+            waitsFor(function() {
+                return onResizeSpy.callCount === 1 &&
+                    resizeEventSpy.callCount === 1;
+            });
+
+            // Wait for the layout and the async event to run on the tail end of a browser layout
+            runs(function() {
+                var w = component.el.dom.offsetWidth,
+                    h = component.el.dom.offsetHeight,
+                    info = {
+                        flag: 3,  // w = 0x01, h = 0x02
+                        width: w,
+                        height: h,
+                        contentWidth: w,
+                        contentHeight: h
+                    };
+
+                expect(onResizeSpy.mostRecentCall.args).toEqual([
+                    60, h, null, null, info ]);
+
+                expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                    component, 60, h, null, null, info ]);
+
+                // onResize is called first - its element resize listener is at priority 1000
+                expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+
+                // Release the minWidth: 60 constraint
+                component.setMinWidth(null);
+            });
+
+            waitsFor(function() {
+                return onResizeSpy.callCount === 2 &&
+                    resizeEventSpy.callCount === 2;
+            });
+
+            // Wait for the layout and the async event to run on the tail end of a browser layout
+            runs(function() {
+                var w = component.el.dom.offsetWidth,
+                    h = component.el.dom.offsetHeight,
+                    info = {
+                        flag: 1,  // w = 0x01, h = 0x02
+                        width: w,
+                        height: h,
+                        contentWidth: w,
+                        contentHeight: h
+                    };
+
+                expect(onResizeSpy.callCount).toBe(2);
+
+                // Releasing the constraint moves to obeying flex: 1
+                expect(onResizeSpy.mostRecentCall.args).toEqual([
+                    50, h, 60, h, info ]);
+                expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                    component, 50, h, 60, h, info ]);
+
+                // onResize is called first - its element resize listener is at priority 1000
+                expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+            });
+        });
+
+        it('should respond to releasing the maxHeight constraint', function() {
+            container = new Ext.Container({
+                layout: 'vbox',
+                height: 100,
+                width: 100,
+                items: [{
+                    flex: 1
+                }, makeComponent({
+                    flex: 1,
+                    maxHeight: 40,
+                    onResize: onResizeSpy,
+                    listeners: {
+                        resize: resizeEventSpy
+                    }
+                })],
+                renderTo: document.body
+            });
+
+            waitsFor(function() {
+                return onResizeSpy.callCount === 1 &&
+                    resizeEventSpy.callCount === 1;
+            });
+
+            // Wait for the layout and the async event to run on the tail end of a browser layout
+            runs(function() {
+                var w = component.el.dom.offsetWidth,
+                    h = component.el.dom.offsetHeight,
+                    info = {
+                        flag: 3,  // w = 0x01, h = 0x02
+                        width: w,
+                        height: h,
+                        contentWidth: w,
+                        contentHeight: h
+                    };
+
+                expect(onResizeSpy.mostRecentCall.args).toEqual([
+                    w, 40, null, null, info ]);
+
+                expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                    component, w, 40, null, null, info ]);
+
+                // onResize is called first - its element resize listener is at priority 1000
+                expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+
+                // Release the maxHeight: 40 constraint
+                component.setMaxHeight(null);
+            });
+
+            waitsFor(function() {
+                return onResizeSpy.callCount === 2 &&
+                    resizeEventSpy.callCount === 2;
+            });
+
+            // Wait for the layout and the async event to run on the tail end of a browser layout
+            runs(function() {
+                var w = component.el.dom.offsetWidth,
+                    h = component.el.dom.offsetHeight,
+                    info = {
+                        flag: 2,  // w = 0x01, h = 0x02
+                        width: w,
+                        height: h,
+                        contentWidth: w,
+                        contentHeight: h
+                    };
+
+                // Releasing the constraint moves to obeying flex: 1
+                expect(onResizeSpy.mostRecentCall.args).toEqual([ w, 50, w, 40, info ]);
+                expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                    component, w, 50, w, 40, info ]);
+
+                // onResize is called first - its element resize listener is at priority 1000
+                expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+            });
+        });
+
+        it('should respond to releasing the minHeight constraint', function() {
+            container = new Ext.Container({
+                layout: 'vbox',
+                height: 100,
+                width: 100,
+                items: [{
+                    flex: 1
+                }, makeComponent({
+                    flex: 1,
+                    minHeight: 60,
+                    onResize: onResizeSpy,
+                    listeners: {
+                        resize: resizeEventSpy
+                    }
+                })],
+                renderTo: document.body
+            });
+
+            waitsFor(function() {
+                return onResizeSpy.callCount === 1 &&
+                    resizeEventSpy.callCount === 1;
+            });
+
+            // Wait for the layout and the async event to run on the tail end of a browser layout
+            runs(function() {
+                var w = component.el.dom.offsetWidth,
+                    h = component.el.dom.offsetHeight,
+                    info = {
+                        flag: 3,  // w = 0x01, h = 0x02
+                        width: w,
+                        height: h,
+                        contentWidth: w,
+                        contentHeight: h
+                    };
+
+                expect(onResizeSpy.mostRecentCall.args).toEqual([ w, 60, null, null, info ]);
+                expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                    component, w, 60, null, null, info ]);
+
+                // onResize is called first - its element resize listener is at priority 1000
+                expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+
+                // Release the minHeight: 60 constraint
+                component.setMinHeight(null);
+            });
+
+            waitsFor(function() {
+                return onResizeSpy.callCount === 2 &&
+                    resizeEventSpy.callCount === 2;
+            });
+
+            // Wait for the layout and the async event to run on the tail end of a browser layout
+            runs(function() {
+                var w = component.el.dom.offsetWidth,
+                    h = component.el.dom.offsetHeight,
+                    info = {
+                        flag: 2,  // w = 0x01, h = 0x02
+                        width: w,
+                        height: h,
+                        contentWidth: w,
+                        contentHeight: h
+                    };
+
+                expect(onResizeSpy.callCount).toBe(2);
+
+                // Releasing the constraint moves to obeying flex: 1
+                expect(onResizeSpy.mostRecentCall.args).toEqual([ w, 50, w, 60, info ]);
+                expect(resizeEventSpy.mostRecentCall.args.slice(0, 6)).toEqual([
+                    component, w, 50, w, 60, info ]);
+
+                // onResize is called first - its element resize listener is at priority 1000
+                expect(onResizeSpy.callSequence).toBeLessThan(resizeEventSpy.callSequence);
+            });
+        });
+    });
+
     describe('destroy', function () {
         it("should fire the 'destroy' event", function () {
             var cmp = makeComponent({}),
@@ -1694,33 +2257,96 @@ describe('Ext.Component', function() {
 
         it("should destroy the animations when destroying the component", function() {
             var cmp = makeComponent({
-                renderTo: Ext.getBody(),
-                showAnimation: {
-                    type: 'slideIn',
-                    duration: 250,
-                    easing: 'ease-out'
-                },
-
-                hideAnimation: {
-                    type: 'slideOut',
-                    duration: 250,
-                    easing: 'ease-in'
-                },
-                modal: true,
-                floated: true,
-                html: 'Test'
-            }),
-            showAnim = cmp.getShowAnimation(),
+                    showAnimation: {
+                        type: 'slideIn',
+                        duration: 250,
+                        easing: 'ease-out'
+                    },
+    
+                    hideAnimation: {
+                        type: 'slideOut',
+                        duration: 250,
+                        easing: 'ease-in'
+                    },
+                    modal: true,
+                    floated: true,
+                    html: 'Test'
+                }),
+                showAnim, hideAnim;
+            
+            showAnim = cmp.getShowAnimation();
             hideAnim = cmp.getHideAnimation();
 
             cmp.show();
             cmp.hide();
 
-            spyOn(showAnim, 'destroy');
-            spyOn(hideAnim, 'destroy');
+            var showAnimSpy = spyOn(showAnim, 'destroy').andCallThrough();
+            var hideAnimSpy = spyOn(hideAnim, 'destroy').andCallThrough();
+            
             cmp.destroy();
-            expect(showAnim.destroy).toHaveBeenCalled();
-            expect(hideAnim.destroy).toHaveBeenCalled();
+            
+            expect(showAnimSpy).toHaveBeenCalled();
+            expect(hideAnimSpy).toHaveBeenCalled();
+        });
+    });
+
+    describe("rootCls", function() {
+        it("should add the rootCls to the component if it has no parent container", function() {
+            var cmp = new Ext.Component();
+
+            expect(cmp.el).toHaveCls('x-root');
+
+            cmp.destroy();
+        });
+
+        it("should remove the rootCls from the component when it is added to a container", function() {
+            var cmp = new Ext.Component(),
+                ct = new Ext.Container();
+
+            ct.add(cmp);
+            expect(cmp.el).not.toHaveCls('x-root');
+            expect(ct.el).toHaveCls('x-root');
+
+            ct.destroy();
+        });
+
+        it("should add the rootCls when the component is removed from a container", function() {
+            var ct = Ext.create({
+                xtype: 'container',
+                items: [{
+                    xtype: 'component',
+                    id: 'cmp'
+                }]
+            });
+
+            var cmp = Ext.getCmp('cmp');
+
+            ct.remove(cmp, false);
+
+            expect(cmp).toHaveCls('x-root');
+
+            ct.destroy();
+            cmp.destroy();
+        });
+
+        it("should add the rootCls to only the top-level component in a hierarchy", function() {
+            var ct = Ext.create({
+                xtype: 'container',
+                items: [{
+                    xtype: 'container',
+                    id: 'ct2',
+                    items: [{
+                        xtype: 'component',
+                        id: 'cmp'
+                    }]
+                }]
+            });
+
+            expect(ct).toHaveCls('x-root');
+            expect(Ext.getCmp('ct2')).not.toHaveCls('x-root');
+            expect(Ext.getCmp('cmp')).not.toHaveCls('x-root');
+
+            ct.destroy();
         });
     });
 

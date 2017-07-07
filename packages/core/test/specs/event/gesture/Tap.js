@@ -1,6 +1,6 @@
 /* global expect, jasmine, Ext */
 
-describe("Ext.event.gesture.Tap", function() {
+topSuite("Ext.event.gesture.Tap", function() {
     var helper = Ext.testHelper,
         tapRecognizer = Ext.event.gesture.Tap.instance,
         moveDistance = tapRecognizer.getMoveDistance(),

@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Pivot', {
             path: 'classic/samples/view/d3/heatmap/PivotController.js'
         },{
             type: 'Store',
-            path: 'classic/samples/store/SalesPerEmployee.js'
+            path: 'app/store/SalesPerEmployee.js'
         }
     ],
     // </example>

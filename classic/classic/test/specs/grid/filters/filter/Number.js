@@ -1,6 +1,8 @@
 /* global Ext, expect, jasmine, spyOn */
 
-describe("Ext.grid.filters.filter.Number", function () {
+topSuite("Ext.grid.filters.filter.Number",
+    ['Ext.grid.Panel', 'Ext.grid.filters.Filters'],
+function() {
     var grid, store, plugin, columnFilter, headerCt, menu, rootMenuItem,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,

@@ -210,7 +210,9 @@
 
         // TODO Come up with proper styling!
         &.#{$prefix}focus {
-            outline: 1px solid red;
+            .#{$prefix}keyboard-mode & {
+                outline: 1px solid $form-field-focus-border-color;
+            }
         }
     }
 

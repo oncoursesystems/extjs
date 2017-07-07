@@ -346,6 +346,14 @@ Ext.define('Ext.chart.series.Pie3D', {
                 thickness: me.getThickness(),
                 distortion: me.getDistortion()
             },
+            renderer = me.getRenderer(),
+            rendererData = {
+                store: store,
+                angleField: me.getXField(),
+                radiusField: me.getYField(),
+                series: me
+            },
+            rendererIndex = 0,
             sprites = me.sprites,
             label = me.getLabel(),
             labelTpl = label.getTemplate(),
@@ -358,13 +366,17 @@ Ext.define('Ext.chart.series.Pie3D', {
                 for (j = 0; j < me.partNames.length; j++) {
                     sprite = surface.add({
                         type: 'pie3dPart',
-                        part: me.partNames[j]
+                        part: me.partNames[j],
+                        series: me,
+                        renderer: renderer,
+                        rendererData: rendererData,
+                        rendererIndex: rendererIndex
                     });
                     if (j === 0 && labelTpl.getField()) {
                         // Make the 'top' part hold the label.
                         sprite.bindMarker('labels', label);
                     }
-                    sprite.fx.setDurationOn('baseRotation', rotation);
+                    sprite.getAnimation().setDurationOn('baseRotation', rotation);
                     if (highlight) {
                         sprite.config.highlight = highlight;
                         sprite.addModifier('highlight', true);

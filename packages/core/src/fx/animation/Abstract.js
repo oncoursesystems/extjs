@@ -2,7 +2,6 @@
  * @private
  */
 Ext.define('Ext.fx.animation.Abstract', {
-
     extend: 'Ext.Evented',
 
     isAnimation: true,
@@ -17,7 +16,7 @@ Ext.define('Ext.fx.animation.Abstract', {
         element: null,
 
         /**
-         * @cfg
+         * @cfg before
          * Before configuration.
          */
         before: null,
@@ -33,7 +32,7 @@ Ext.define('Ext.fx.animation.Abstract', {
         duration:  300,
 
         /**
-         * @cfg
+         * @cfg easing
          * Easing type.
          */
         easing: 'linear',
@@ -67,7 +66,11 @@ Ext.define('Ext.fx.animation.Abstract', {
 
     DIRECTION_UP: 'up',
 
+    DIRECTION_TOP: 'top',
+
     DIRECTION_DOWN: 'down',
+
+    DIRECTION_BOTTOM: 'bottom',
 
     DIRECTION_LEFT: 'left',
 
@@ -153,6 +156,8 @@ Ext.define('Ext.fx.animation.Abstract', {
         this.destroying = true;
         this.stop();
         this.callParent();
+        this.destroying = false;
+        this.destroyed = true;
     },
 
     setState: function(name, state) {

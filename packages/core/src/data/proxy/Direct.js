@@ -217,7 +217,7 @@ Ext.define('Ext.data.proxy.Direct', {
      */
 
     config: {
-        /**
+       /**
         * @cfg {String/String[]} paramOrder
         * A list of params to be passed to server side Read function. Specify the params
         * in the order in which they must be executed on the server-side as either (1) an Array
@@ -231,14 +231,14 @@ Ext.define('Ext.data.proxy.Direct', {
         */
         paramOrder: undefined,
 
-        /**
+       /**
         * @cfg {Boolean} paramsAsHash
         * Send Read function parameters as a collection of named arguments. Providing a
         * {@link #paramOrder} nullifies this configuration.
         */
         paramsAsHash: true,
 
-        /**
+       /**
         * @cfg {Function/String} directFn
         * Function to call when executing a request. `directFn` is a simple alternative to defining
         * the api configuration parameter for Stores which will not implement a full CRUD api.
@@ -248,7 +248,7 @@ Ext.define('Ext.data.proxy.Direct', {
         */
         directFn: undefined,
 
-        /**
+       /**
         * @cfg {Object} api
         * The same as {@link Ext.data.proxy.Server#api}, however instead of providing urls
         * you should provide a Direct function name for each CRUD method.

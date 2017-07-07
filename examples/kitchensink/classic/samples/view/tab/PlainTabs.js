@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.tab.PlainTabs', {
         'KitchenSink.view.tab.TabController'
     ],
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/tab/TabController.js'
     }],
     exampleTitle: 'Plain Tabs',

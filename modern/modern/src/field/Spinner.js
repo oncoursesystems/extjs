@@ -1,7 +1,7 @@
 /**
  * Wraps an HTML5 number field. Example usage:
  *
- *     @example miniphone
+ *     @example
  *     var spinner = Ext.create('Ext.field.Spinner', {
  *         label: 'Spinner Field',
  *         minValue: 0,
@@ -86,24 +86,7 @@ Ext.define('Ext.field.Spinner', {
          */
         cycle: false,
 
-        /**
-         * @cfg {Boolean} clearIcon
-         * @hide
-         * @accessor
-         */
-        clearIcon: false,
-
-        /**
-         * @cfg {Number} defaultValue The default value for this field when no value has been set.
-         * It is also used when the value is set to `NaN`.
-         */
-        defaultValue: 0,
-
-        /**
-         * @cfg {Number} tabIndex
-         * @hide
-         */
-        tabIndex: -1,
+        clearable: false,
 
         /**
          * @cfg {Boolean} groupButtons
@@ -112,14 +95,6 @@ Ext.define('Ext.field.Spinner', {
          * @deprecated 6.2.0 This concern should be handled by the theme.
          */
         groupButtons: true,
-
-        /**
-         * @cfg component
-         * @inheritdoc
-         */
-        component: {
-            readOnly: true
-        },
 
         triggers: {
             spindown: {
@@ -132,16 +107,25 @@ Ext.define('Ext.field.Spinner', {
                 group: 'spin',
                 repeat: true
             }
-        },
-
-        /**
-         * @cfg {Number}
-         */
-        value: undefined
+        }
     },
+
+    /**
+     * @cfg {Number} value
+     * @inheritdoc
+     */
+    value: 0,
 
     classCls: Ext.baseCSSPrefix + 'spinnerfield',
     groupedButtonsCls: Ext.baseCSSPrefix + 'grouped-buttons',
+    
+    inputType: 'number',
+    
+    initElement: function() {
+        this.callParent();
+        
+        this.inputElement.dom.readOnly = true;
+    },
 
     updateGroupButtons: function(groupButtons) {
         var downTrigger = this.getTriggers().spindown;
@@ -177,16 +161,12 @@ Ext.define('Ext.field.Spinner', {
         return this.callParent([triggers, oldTriggers]);
     },
 
-    applyValue: function(value) {
-        value = parseFloat(value);
-        if (isNaN(value) || value === null) {
-            value = this.getDefaultValue();
+    applyValue: function (value, oldValue) {
+        value = Number(value);
+        if (isNaN(value)) {
+            value = null;
         }
-
-        //round the value to 1 decimal
-        value = Math.round(value * 10) / 10;
-
-        return this.callParent([value]);
+        return this.callParent([value, oldValue]);
     },
 
     /**
@@ -242,9 +222,5 @@ Ext.define('Ext.field.Spinner', {
 
         me.fireEvent('spin', me, value, direction);
         me.fireEvent('spin' + direction, me, value);
-    },
-
-    reset: function() {
-        this.setValue(this.getDefaultValue());
     }
 });

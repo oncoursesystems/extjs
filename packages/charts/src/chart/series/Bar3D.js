@@ -80,7 +80,7 @@ Ext.define('Ext.chart.series.Bar3D', {
 
     requires: [
         'Ext.chart.series.sprite.Bar3D',
-        'Ext.chart.series.sprite.Box'
+        'Ext.chart.sprite.Bar3D'
     ],
 
     alias: 'series.bar3d',
@@ -90,8 +90,8 @@ Ext.define('Ext.chart.series.Bar3D', {
 
     config: {
         itemInstancing: {
-            type: 'box',
-            fx: {
+            type: 'bar3d',
+            animation: {
                 customDurations: {
                     x: 0,
                     y: 0,

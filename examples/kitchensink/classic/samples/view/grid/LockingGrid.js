@@ -27,10 +27,10 @@ Ext.define('KitchenSink.view.grid.LockingGrid', {
         path: 'classic/samples/view/grid/BasicGridController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Companies.js'
+        path: 'app/store/Companies.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -85,21 +85,21 @@ Ext.define('KitchenSink.view.grid.LockingGrid', {
         formatter: 'pick("Ⓐ","Ⓑ","Ⓒ")'
     }, {
         text: 'Change',
-        dataIndex: 'change',
+        dataIndex: 'priceChange',
 
         width: 90,
         sortable: true,
         renderer: 'renderChange'
     }, {
         text: '% Change',
-        dataIndex: 'pctChange',
+        dataIndex: 'priceChangePct',
 
         width: 105,
         sortable: true,
         renderer: 'renderChange'
     }, {
         text: 'Last Updated',
-        dataIndex: 'lastChange',
+        dataIndex: 'priceLastChange',
 
         width: 135,
         sortable: true,

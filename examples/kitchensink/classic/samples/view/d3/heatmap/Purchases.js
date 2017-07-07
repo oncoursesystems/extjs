@@ -47,9 +47,9 @@ Ext.define('KitchenSink.view.d3.heatmap.Purchases', {
 
         xAxis: {
             axis: {
-                ticks: 'd3.time.days',
-                tickFormat: "d3.time.format('%b %d')",
-                orient: 'bottom'
+                orient: 'bottom',
+                ticks: 'd3.timeDay',
+                tickFormat: "d3.timeFormat('%b %d')"
             },
             scale: {
                 type: 'time'
@@ -64,7 +64,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Purchases', {
         yAxis: {
             axis: {
                 orient: 'left',
-                tickFormat: "d3.format('$ %d')"
+                tickFormat: "d3.format('$d')"
             },
             scale: {
                 type: 'linear'
@@ -98,7 +98,6 @@ Ext.define('KitchenSink.view.d3.heatmap.Purchases', {
             items: {
                 count: 7,
                 slice: [1],
-                reverse: true,
                 size: {
                     x: 60,
                     y: 30

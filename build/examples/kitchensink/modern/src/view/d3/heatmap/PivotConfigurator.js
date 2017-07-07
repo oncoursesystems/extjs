@@ -5,14 +5,12 @@
 Ext.define('KitchenSink.view.d3.heatmap.PivotConfigurator', {
     extend: 'Ext.pivot.d3.Container',
     xtype: 'd3-view-heatmap-pivot-configurator',
+    controller: 'heatmap-pivot',
 
     requires: [
         'KitchenSink.view.d3.heatmap.PivotController',
         'KitchenSink.store.Sales'
     ],
-
-    layout: 'fit',
-    controller: 'heatmap-pivot',
 
     // <example>
     otherContent: [{
@@ -20,11 +18,18 @@ Ext.define('KitchenSink.view.d3.heatmap.PivotConfigurator', {
         path: 'modern/src/view/d3/heatmap/PivotController.js'
     }],
     // </example>
-    //
+
+    layout: 'fit',
+
     listeners: {
         beforemoveconfigfield: 'onBeforeAddConfigField',
         showconfigfieldsettings: 'onShowFieldSettings'
     },
+
+    tbar: ['->', {
+        text: 'Show configurator',
+        handler: 'showConfigurator'
+    }],
 
     matrix: {
         store: {
@@ -50,9 +55,10 @@ Ext.define('KitchenSink.view.d3.heatmap.PivotConfigurator', {
 
     drawing: {
         xtype: 'pivotheatmap',
+
         legend: {
             items: {
-                count: 5
+                count: 10
             }
         },
 
@@ -166,16 +172,5 @@ Ext.define('KitchenSink.view.d3.heatmap.PivotConfigurator', {
                 allowed: ['leftAxis', 'topAxis']
             }
         }]
-    },
-
-    items: [{
-        xtype: 'toolbar',
-        docked: 'bottom',
-        items: [{
-            text: 'Show configurator',
-            handler: 'showConfigurator'
-        }]
-    }]
-
-
+    }
 });

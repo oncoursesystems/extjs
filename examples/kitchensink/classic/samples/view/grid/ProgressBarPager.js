@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.grid.ProgressBarPager', {
     //<example>
     otherContent: [{
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -63,21 +63,21 @@ Ext.define('KitchenSink.view.grid.ProgressBarPager', {
         width: 75
     },{
         text: 'Change',
-        dataIndex: 'change',
+        dataIndex: 'priceChange',
         
         width: 80,
         sortable: true,
         renderer: 'renderChange'
     },{
         text: '% Change',
-        dataIndex: 'pctChange',
+        dataIndex: 'priceChangePct',
         
         width: '${percentChangeColumnWidth}',
         sortable: true,
         renderer: 'renderPercent'
     },{
         text: 'Last Updated',
-        dataIndex: 'lastChange',
+        dataIndex: 'priceLastChange',
 
         width: '${lastUpdatedColumnWidth}',
         sortable: true,

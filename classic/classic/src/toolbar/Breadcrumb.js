@@ -16,10 +16,6 @@ Ext.define('Ext.toolbar.Breadcrumb', {
         'Ext.data.TreeStore',
         'Ext.button.Split'
     ],
-    
-    mixins: [
-        'Ext.util.FocusableContainer'
-    ],
 
     isBreadcrumb: true,
     baseCls: Ext.baseCSSPrefix + 'breadcrumb',
@@ -125,6 +121,8 @@ Ext.define('Ext.toolbar.Breadcrumb', {
     _btnCls: Ext.baseCSSPrefix + 'breadcrumb-btn',
     _folderIconCls: Ext.baseCSSPrefix + 'breadcrumb-icon-folder',
     _leafIconCls: Ext.baseCSSPrefix + 'breadcrumb-icon-leaf',
+    
+    focusableContainer: true,
 
     initComponent: function() {
         var me = this,

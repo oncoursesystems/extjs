@@ -145,16 +145,15 @@ Ext.define('Ext.form.field.ComboBox', {
          */
         displayTpl: null,
 
-        //<locale>
         /**
          * @cfg {String} delimiter
          * The character(s) used to separate the {@link #displayField display values} of multiple selected items when
          * `{@link #multiSelect} = true`.
          * @deprecated 5.1.0 For multiple selection use {@link Ext.form.field.Tag} or 
          * {@link Ext.view.MultiSelector}
+         * @locale
          */
         delimiter: ', ',
-        //</locale>
 
         /**
          * @cfg {String} displayField
@@ -1246,8 +1245,8 @@ Ext.define('Ext.form.field.ComboBox', {
             }
             else {
                 if (me.forceSelection && !me.changingFilters && !me.findRecordByValue(me.value)) {
-                    // skip this if query mode is remote and the user is typing
-                    if (me.queryMode != 'local' && me.hasFocus) {
+                    // skip this if query mode is remote and the user is typing or is executing a page load
+                    if (me.queryMode != 'local' && (me.hasFocus || me.isPaging)) {
                         return;
                     }
                     me.setValue(null);
@@ -1262,6 +1261,7 @@ Ext.define('Ext.form.field.ComboBox', {
     },
 
     onException: function() {
+        this.isPaging = false;
         this.collapse();
     },
 
@@ -1275,12 +1275,13 @@ Ext.define('Ext.form.field.ComboBox', {
         // If not returning from a query, and the value was set from a raw data value, unrelated to a record
         // because the displayField was not honoured when calculating the raw value, then we update
         // the raw value.
-        if (success && needsValueUpdating && !(store.lastOptions && 'rawQuery' in store.lastOptions)) {
+        if (success && needsValueUpdating && !me.isPaging && !(store.lastOptions && 'rawQuery' in store.lastOptions)) {
             me.setValueOnData();
         }
 
         // This synchronizes the value based upon contents of the store
         me.checkValueOnChange();
+        me.isPaging = false;
     },
 
     setValueOnData: function() {
@@ -1529,6 +1530,7 @@ Ext.define('Ext.form.field.ComboBox', {
     },
 
     loadPage: function(pageNum, options) {
+        this.isPaging = true;
         this.store.loadPage(pageNum, Ext.apply({
             params: this.getParams(this.lastQuery)
         }, options));
@@ -1598,7 +1600,7 @@ Ext.define('Ext.form.field.ComboBox', {
         }
     },
 
-    onTriggerClick: function(e) {
+    onTriggerClick: function(comboBox, trigger, e) {
         var me = this,
             oldAutoSelect;
 
@@ -1785,10 +1787,18 @@ Ext.define('Ext.form.field.ComboBox', {
             el;
         
         if (newRecord) {
-            // Ext.get is to ensure the node has an id
-            el = Ext.get(picker.getNodeByRecord(newRecord));
+            el = picker.getNodeByRecord(newRecord);
+            
+            if (!el.id) {
+                
+            }
             
             if (el) {
+                // Need to make sure el has an id without leaving Ext.cache entry
+                if (!el.id) {
+                    el.id = Ext.id();
+                }
+                
                 inputEl.dom.setAttribute('aria-activedescendant', el.id);
             }
             else {
@@ -1905,9 +1915,14 @@ Ext.define('Ext.form.field.ComboBox', {
         
         me.doAutoSelect();
         
-        node = Ext.get(picker.highlightedItem);
+        node = picker.highlightedItem;
         
         if (node) {
+            // Need to make sure node has an id without leaving Ext.cache entry
+            if (!node.id) {
+                node.id = Ext.id();
+            }
+            
             me.inputEl.dom.setAttribute('aria-activedescendant', node.id);
         }
     },
@@ -2317,8 +2332,13 @@ Ext.define('Ext.form.field.ComboBox', {
      * Generates the string value to be displayed in the text field for the currently stored value
      */
     getDisplayValue: function(tplData) {
+        var s;
+
         tplData = tplData || this.displayTplData;
-        var s = this.getDisplayTpl().apply(tplData) || '';
+        
+        s = this.getDisplayTpl().apply(tplData);
+        s = (s == null) ? '' : String(s);
+
         // The display field may have newlines characters, but the raw value in
         // the field will not because they will be automatically stripped, so do
         // the same here for the sake of comparison.

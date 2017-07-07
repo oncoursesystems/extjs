@@ -3,6 +3,9 @@
  */
 Ext.define('KitchenSink.view.animations.Animations', {
     extend: 'Ext.Container',
+    xtype: 'animations',
+    controller: 'animations',
+
     requires: [
         'KitchenSink.view.animations.AnimationsController'
     ],
@@ -12,53 +15,49 @@ Ext.define('KitchenSink.view.animations.Animations', {
         type: 'Controller',
         path: 'modern/src/view/animations/AnimationsController.js'
     }],
+
+    profiles: {
+        defaults: {
+            height: 430,
+            width: 300
+        },
+        'modern-triton': {
+            height: 550
+        },
+        phone: {
+            defaults: {
+                height: '100%',
+                width: '100%'
+            }
+        }
+    },
+
+    cls: 'demo-solid-background',
     // </example>
 
-    xtype: 'animationCards',
+    height: '${height}',
+    width: '${width}',
 
-    layout: 'card',
-    shadow: true,
+    layout: {
+        type: 'card'
+    },
 
-    controller: 'animations',
-    buttons: [
-        'Slide Left',
-        'Slide Right',
-        'Slide Up',
-        'Slide Down',
-        'Cover Left',
-        'Cover Right',
-        'Cover Up',
-        'Cover Down',
-        'Reveal Left',
-        'Reveal Right',
-        'Reveal Up',
-        'Reveal Down',
+    anims: [{
+            group: 'Slide'
+        }, {
+            group: 'Cover'
+        }, {
+            group: 'Reveal'
+        },
         'Fade',
         'Pop',
         'Flip'
     ],
 
-    defaultType: 'container',
     defaults: {
-        cls: 'demo-solid-background',
         defaultType: 'button',
         layout: 'vbox',
-        scrollable: true
-    },
-
-    initialize: function() {
-        this.callParent();
-
-        var items = this.buttons.map(function(name) {
-            return {
-                text: name
-            };
-        });
-
-        this.add([{
-            items: items
-        }, {
-            items: items
-        }]);
+        padding: 20,
+        scrollable: 'y'
     }
 });

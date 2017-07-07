@@ -1,6 +1,7 @@
 /* global Ext, expect, xit */
 
-describe("Ext.Element.static", function() {
+// false in dependencies to avoid loading "Ext.dom.Element.static"
+topSuite("Ext.dom.Element.static", [false, 'Ext.dom.Element'], function() {
     var el, input, child1, child2, child3;
     
     beforeEach(function() {
@@ -186,4 +187,4 @@ describe("Ext.Element.static", function() {
             expect(document.id).toBe('ext-document-1');
         });
     });
-}, "/src/dom/Element.static.js");
+});

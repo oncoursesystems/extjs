@@ -1,6 +1,9 @@
 /* global Ext, expect, spyOn, jasmine, xit, MockAjaxManager, it */
 
-describe("grid-general-locking", function() {
+topSuite("grid-general-locking",
+    [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore', 'Ext.layout.container.Border',
+     'Ext.grid.plugin.CellEditing', 'Ext.form.field.Text'],
+function() {
     var grid, view, store, colRef, navModel,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
@@ -435,6 +438,75 @@ describe("grid-general-locking", function() {
             });
         });
     });
+
+    describe("scrolling", function() {
+        beforeEach(function() {
+            store = new Ext.data.Store({
+                fields: ['name', 'email', 'phone'],
+                data: [
+                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' }, 
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' }, 
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' }, 
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' },
+                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' }, 
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' }, 
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' }, 
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' },
+                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' }, 
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' }, 
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' }, 
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' },
+                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' }, 
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' }, 
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' }, 
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
+                ]
+            });
+        });
+
+        it("should not scroll back to top when selecting records", function() {
+            var scroller;
+
+            createGrid({
+                columns: [{
+                    text: 'Name',
+                    dataIndex: 'name',
+                    locked: true
+                }, {
+                    text: 'Email',
+                    dataIndex: 'email',
+                    width: 300
+                }, {
+                    text: 'Phone',
+                    dataIndex: 'phone',
+                    width: 300
+                }],
+                height: 200,
+                width: 400
+            });
+
+
+
+            scroller = grid.getScrollable();
+            scroller.scrollTo(null, 100);
+            scroller.scrollTo(100, null);
+
+            waitsFor(function() {
+                return scroller.position.y === scroller.position.x && scroller.position.y === 100;
+            });
+
+            runs(function(){ 
+                jasmine.fireMouseEvent(grid.normalGrid.view.getCell(7, 0), 'mousedown');
+            });
+
+            // Need waits here because we are waitign for the scroller not to move
+            waits(100);
+
+            runs(function() {
+                expect(scroller.getPosition().y).toBe(100);
+            });
+        });
+    });
     
     describe('View focus from cell editor', function () {
         it('should set position to the closest cell', function () {
@@ -489,7 +561,7 @@ describe("grid-general-locking", function() {
             });
     
             run(function () {
-                cellEl = view.getCell(record, colIdx-1);
+                cellEl = view.getCell(record, colIdx-1, true);
                 cellRegion = cellEl.getRegion();
                 viewRegion = view.getRegion();
                 
@@ -501,6 +573,7 @@ describe("grid-general-locking", function() {
                 // mousedown in the view container below the cell being edited
                 jasmine.fireMouseEvent(view, 'mousedown', x, y);
                 position = navModel.getPosition();
+                jasmine.fireMouseEvent(view, 'mouseup', x, y);
                 
                 // position should remain on the same cell
                 expect({
@@ -514,6 +587,7 @@ describe("grid-general-locking", function() {
                 // mousedown below the cell to the left
                 jasmine.fireMouseEvent(view.el, 'mousedown', x - cellRegion.width, y);
                 position = navModel.getPosition();
+                jasmine.fireMouseEvent(view.el, 'mouseup', x - cellRegion.width, y);
     
                 // position should be moved to the cell to the left
                 expect({

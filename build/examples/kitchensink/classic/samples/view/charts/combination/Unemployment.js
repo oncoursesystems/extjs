@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.charts.combination.Unemployment', {
         path: 'classic/samples/view/charts/combination/UnemploymentController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Unemployment.js'
+        path: 'app/store/Unemployment.js'
     }, {
         type: 'Sprite',
         path: 'classic/samples/view/charts/combination/ArcText.js'

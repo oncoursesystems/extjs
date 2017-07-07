@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.binding.ChainedStores', {
         type: 'ViewModel',
         path: 'classic/samples/view/binding/ChainedStoresModel.js'
     }, {
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/binding/ChainedStoresController.js'
     }, {
         type: 'Model',

@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.charts.bar.Stacked', {
         path: 'classic/samples/view/charts/bar/StackedController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Browsers.js'
+        path: 'app/store/Browsers.js'
     }],
     // </example>
 
@@ -32,33 +32,19 @@ Ext.define('KitchenSink.view.charts.bar.Stacked', {
         reference: 'chart',
         width: '100%',
         height: 500,
+        captions: {
+            title: 'Bar Charts - Stacked Bars',
+            credits: {
+                text: 'Data: Browser Stats 2012\n' +
+                    'Source: http://www.w3schools.com/',
+                align: 'left'
+            }
+        },
         legend: {
             docked: 'right'
         },
         store: {type: 'browsers'},
-        insetPadding: 40,
         flipXY: true,
-        sprites: [{
-            type: 'text',
-            text: 'Bar Charts - Stacked Bars',
-            fontSize: 22,
-            width: 100,
-            height: 30,
-            x: 40, // the sprite x position
-            y: 20  // the sprite y position
-        }, {
-            type: 'text',
-            text: 'Data: Browser Stats 2012',
-            fontSize: 10,
-            x: 12,
-            y: 480
-        }, {
-            type: 'text',
-            text: 'Source: http://www.w3schools.com/',
-            fontSize: 10,
-            x: 12,
-            y: 495
-        }],
         axes: [{
             type: 'numeric',
             position: 'bottom',
@@ -91,25 +77,5 @@ Ext.define('KitchenSink.view.charts.bar.Stacked', {
                 renderer: 'onSeriesTooltipRender'
             }
         }]
-    }, {
-        style: 'margin-top: 10px;',
-        xtype: 'gridpanel',
-        height: 150,
-        columns : {
-            defaults: {
-                sortable: false,
-                menuDisabled: true,
-                renderer: 'onColumnRender'
-            },
-            items: [
-                { text: 'Month', dataIndex: 'month' },
-                { text: 'IE', dataIndex: 'data1' },
-                { text: 'Firefox', dataIndex: 'data2' },
-                { text: 'Chrome', dataIndex: 'data3' },
-                { text: 'Safari', dataIndex: 'data4' }
-            ]
-        },
-        store: {type: 'browsers'},
-        width: '100%'
     }]
 });

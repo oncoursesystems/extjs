@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.charts.combination.ParetoController', {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
             return;
         }
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
 
         if (Ext.os.is.Desktop) {
             chart.download({

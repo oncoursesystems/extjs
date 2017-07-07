@@ -6,7 +6,7 @@
  * 
  */
 Ext.define('KitchenSink.view.grid.BigDataController', {
-    extend: 'KitchenSink.view.grid.ExporterController',
+    extend: 'Ext.app.ViewController',
     alias: 'controller.bigdata',
 
     init: function() {
@@ -91,5 +91,14 @@ Ext.define('KitchenSink.view.grid.BigDataController', {
     renderMailto: function (v) {
         return '<a href="mailto:' + encodeURIComponent(v) + '">' + 
             Ext.htmlEncode(v) + '</a>';
+    },
+
+    exportTo: function(btn){
+        var cfg = Ext.merge({
+            title: 'Grid export demo',
+            fileName: 'GridExport' + '.' + (btn.cfg.ext || btn.cfg.type)
+        }, btn.cfg);
+
+        this.getView().saveDocumentAs(cfg);
     }
 });

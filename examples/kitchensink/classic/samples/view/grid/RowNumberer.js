@@ -5,10 +5,10 @@ Ext.define('KitchenSink.view.grid.RowNumberer', {
     //<example>
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/Companies.js'
+        path: 'app/store/Companies.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -44,17 +44,17 @@ Ext.define('KitchenSink.view.grid.RowNumberer', {
         text: "Change",
         width: 120,
         sortable: true,
-        dataIndex: 'change'
+        dataIndex: 'priceChange'
     }, {
         text: "% Change",
         width: 120,
         sortable: true,
-        dataIndex: 'pctChange'
+        dataIndex: 'priceChangePct'
     }, {
         text: "Last Updated",
         width: 120,
         sortable: true,
         formatter: 'date("m/d/Y")',
-        dataIndex: 'lastChange'
+        dataIndex: 'priceLastChange'
     }]
 });

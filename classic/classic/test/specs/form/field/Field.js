@@ -1,6 +1,9 @@
 /* global expect, jasmine, it, spyOn */
 
-describe('Ext.form.field.Field', function () {
+topSuite('Ext.form.field.Field',
+    ['Ext.form.field.*', 'Ext.data.validator.*', 'Ext.form.Panel',
+     'Ext.app.ViewController', 'Ext.app.ViewModel'],
+function () {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         ajaxRequestCfg, ct, action, form;
 

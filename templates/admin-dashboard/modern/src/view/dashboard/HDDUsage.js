@@ -29,8 +29,6 @@ Ext.define('Admin.view.dashboard.HDDUsage', {
         {
             xtype: 'cartesian',
             animation : !Ext.isIE9m && Ext.os.is.Desktop,
-            height: '100%',
-            width: '100%',
             constrain: true,
             constrainHeader: true,
             background: '#70bf73',

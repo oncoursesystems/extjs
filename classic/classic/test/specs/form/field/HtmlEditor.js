@@ -1,6 +1,6 @@
 /* global expect, Ext */
 
-describe('Ext.form.field.HtmlEditor', function() {
+topSuite('Ext.form.field.HtmlEditor', function() {
     var editor;
 
     function createHtmlEditor(cfg) {

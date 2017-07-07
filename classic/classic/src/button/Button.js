@@ -1386,6 +1386,11 @@ Ext.define('Ext.button.Button', {
     doDestroy: function() {
         var me = this,
             menu = me.menu;
+        
+        if (me.deferFocusTimer) {
+            clearTimeout(me.deferFocusTimer);
+            me.deferFocusTimer = null;
+        }
 
         if (me.rendered) {
             me.clearTip();
@@ -1584,7 +1589,9 @@ Ext.define('Ext.button.Button', {
     },
 
     onTouchStart: function(e) {
-        this.doPreventDefault(e);
+        if (this.disabled) {
+            this.doPreventDefault(e);
+        }
     },
 
     /**
@@ -1805,7 +1812,7 @@ Ext.define('Ext.button.Button', {
         me.callParent();
 
         me.removeCls(me._disabledCls);
-        dom.setAttribute('tabIndex', me.tabIndex);
+        me.el.setTabIndex(me.tabIndex);
 
         // https://sencha.jira.com/browse/EXTJS-11964
         // Disabled links are clickable on iPad, and right clickable on desktop browsers.
@@ -1827,7 +1834,7 @@ Ext.define('Ext.button.Button', {
         me.addCls(me._disabledCls);
         me.removeCls(me.overCls);
 
-        dom.removeAttribute('tabIndex');
+        me.el.setTabIndex(null);
 
         // https://sencha.jira.com/browse/EXTJS-11964
         // Disabled links are clickable on iPad, and right clickable on desktop browsers.
@@ -1878,8 +1885,21 @@ Ext.define('Ext.button.Button', {
             // In IE the use of unselectable on the button's elements causes the element
             // to not receive focus, even when it is directly clicked.
             // On Touch devices, we need to explicitly focus on touchstart.
-            Ext.defer(function() {
-                var focusEl = me.getFocusEl();
+            if (me.deferFocusTimer) {
+                clearTimeout(me.deferFocusTimer);
+            }
+            
+            me.deferFocusTimer = Ext.defer(function() {
+                var focusEl;
+                
+                me.deferFocusTimer = null;
+                
+                if (me.destroying || me.destroyed) {
+                    return;
+                }
+                
+                focusEl = me.getFocusEl();
+                
                 // Deferred to give other mousedown handlers the chance to preventDefault
                 if (focusEl && !e.defaultPrevented) {
                     focusEl.focus();

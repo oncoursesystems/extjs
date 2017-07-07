@@ -39,7 +39,7 @@
  *     Ext.create({
  *         xtype: 'grid',
  *         fullscreen: true,
- *         plugins: {
+ *         plugins: [{
  *             type: 'grideditable',
  *             triggerEvent: 'doubletap',
  *             enableDeleteButton: true,
@@ -70,7 +70,7 @@
  *                     action: 'submit'
  *                 }]
  *             },
- *         },
+ *         }],
  *         store: {
  *             fields: [],
  *             data: [{
@@ -111,8 +111,8 @@
  *  the defaultFormConfig instead.
  */
 Ext.define('Ext.grid.plugin.Editable', {
-    extend: 'Ext.Component',
-    alias: 'plugin.grideditable' ,
+    extend: 'Ext.plugin.Abstract',
+    alias: 'plugin.grideditable',
 
     config: {
         /**
@@ -124,7 +124,7 @@ Ext.define('Ext.grid.plugin.Editable', {
          * @cfg {String} triggerEvent
          * The event used to trigger the showing of the editor form.
          */
-        triggerEvent: 'doubletap',
+        triggerEvent: 'childdoubletap',
 
         /**
          * @cfg {Object} formConfig
@@ -154,13 +154,13 @@ Ext.define('Ext.grid.plugin.Editable', {
             docked: 'top',
             items: [{
                 xtype: 'button',
-                ui: 'decline',
+                ui: 'alt',
                 text: 'Cancel',
                 align: 'left',
                 action: 'cancel'
             }, {
                 xtype: 'button',
-                ui: 'confirm',
+                ui: 'alt',
                 text: 'Submit',
                 align: 'right',
                 action: 'submit'
@@ -181,14 +181,19 @@ Ext.define('Ext.grid.plugin.Editable', {
         });
     },
 
+    destroy: function() {
+        this.cleanup();
+        this.callParent();
+    },
+
     updateGrid: function(grid, oldGrid) {
         var triggerEvent = this.getTriggerEvent();
         if (oldGrid) {
-            oldGrid.renderElement.un(triggerEvent, 'onTrigger', this);
+            oldGrid.un(triggerEvent, 'onTrigger', this);
         }
 
         if (grid) {
-            grid.renderElement.on(triggerEvent, 'onTrigger', this);
+            grid.on(triggerEvent, 'onTrigger', this);
         }
     },
 
@@ -202,35 +207,28 @@ Ext.define('Ext.grid.plugin.Editable', {
     },
 
     onSheetHide: function() {
-        this.sheet.destroy();
-        this.form = null;
-        this.sheet = null;
-    },
-
-    getRecordByTriggerEvent: function(e) {
-        var rowEl = e.getTarget('.' + Ext.baseCSSPrefix + 'gridrow'),
-            row;
-
-        if (rowEl) {
-            row = Ext.getCmp(rowEl.id);
-            if (row) {
-                return row.getRecord();
-            }
-        }
-
-        return null;
+        this.cleanup();
     },
 
     getEditorFields: function(columns) {
         var fields = [],
             ln = columns.length,
-            i, column, editor;
+            i, column, editor, editable, cfg;
 
         for (i = 0; i < ln; i++) {
             column = columns[i];
-            if (column.getEditable()) {
-                editor = Ext.apply({}, column.getEditor() || column.getDefaultEditor());
-                editor.label = column.getText();
+            editable = column.getEditable();
+            if (!(editor = editable !== false && column.getEditor()) && editable) {
+                cfg = column.getDefaultEditor();
+                editor = Ext.create(cfg);
+                column.setEditor(editor);
+            }
+
+            if (editor) {
+                if (editor.isEditor) {
+                    editor = editor.getField();
+                }
+                editor.setLabel(column.getText());
                 fields.push(editor);
             }
         }
@@ -238,60 +236,70 @@ Ext.define('Ext.grid.plugin.Editable', {
         return fields;
     },
 
-    onTrigger: function(e) {
+    onTrigger: function(grid, location) {
         var me = this,
-            grid = me.getGrid(),
+            record = location.record,
             formConfig = me.getFormConfig(),
             toolbarConfig = me.getToolbarConfig(),
-            record = me.getRecordByTriggerEvent(e),
             fields, form, sheet, toolbar;
 
-        if (record) {
-            if (formConfig) {
-                this.form = form = Ext.factory(formConfig, Ext.form.Panel);
-            } else {
-                this.form = form = Ext.factory(me.getDefaultFormConfig());
+        if (formConfig) {
+            me.form = form = Ext.factory(formConfig, Ext.form.Panel);
+        } else {
+            me.form = form = Ext.factory(me.getDefaultFormConfig());
 
-                fields = me.getEditorFields(grid.getColumns());
-                form.down('fieldset').setItems(fields);
-            }
+            fields = me.getEditorFields(grid.getColumns());
+            form.down('fieldset').setItems(fields);
+            form.clearFields = true;
+        }
 
-            form.setRecord(record);
+        form.setRecord(record);
 
-            toolbar = Ext.factory(toolbarConfig, Ext.form.TitleBar);
-            toolbar.down('button[action=cancel]').on('tap', 'onCancelTap', this);
-            toolbar.down('button[action=submit]').on('tap', 'onSubmitTap', this);
+        toolbar = Ext.factory(toolbarConfig, Ext.form.TitleBar);
+        toolbar.down('button[action=cancel]').on('tap', 'onCancelTap', me);
+        toolbar.down('button[action=submit]').on('tap', 'onSubmitTap', me);
 
-            this.sheet = sheet = grid.add({
-                xtype: 'sheet',
-                items: [toolbar, form],
-                hideOnMaskTap: true,
-                enter: 'right',
-                exit: 'right',
-                centered: false,
-                right: 0,
-                width: 320,
-                layout: 'fit',
-                stretchY: true,
-                hidden: true
+        me.sheet = sheet = grid.add({
+            xtype: 'sheet',
+            items: [toolbar, form],
+            hideOnMaskTap: true,
+            enter: 'right',
+            exit: 'right',
+            right: 0,
+            width: 320,
+            layout: 'fit',
+            stretchY: true,
+            hidden: true
+        });
+
+        if (me.getEnableDeleteButton()) {
+            form.add({
+                xtype: 'button',
+                text: 'Delete',
+                ui: 'decline',
+                margin: 10,
+                handler: function() {
+                    grid.getStore().remove(record);
+                    sheet.hide();
+                }
             });
+        }
 
-            if (me.getEnableDeleteButton()) {
-                form.add({
-                    xtype: 'button',
-                    text: 'Delete',
-                    ui: 'decline',
-                    margin: 10,
-                    handler: function() {
-                        grid.getStore().remove(record);
-                        sheet.hide();
-                    }
-                });
+        sheet.on('hide', 'onSheetHide', me);
+
+        sheet.show();
+    },
+
+    privates: {
+        cleanup: function() {
+            var me = this,
+                form = me.form;
+
+            if (form && form.clearFields) {
+                form.removeAll(false);
             }
 
-            sheet.on('hide', 'onSheetHide', this);
-
-            sheet.show();
+            me.form = me.sheet = Ext.destroy(me.sheet);
         }
     }
 });

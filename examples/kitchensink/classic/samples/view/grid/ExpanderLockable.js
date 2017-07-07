@@ -5,10 +5,10 @@ Ext.define('KitchenSink.view.grid.ExpanderLockable', {
     //<example>
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/Companies.js'
+        path: 'app/store/Companies.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -40,15 +40,15 @@ Ext.define('KitchenSink.view.grid.ExpanderLockable', {
         dataIndex: 'price'
     }, {
         text: "Change",
-        dataIndex: 'change'
+        dataIndex: 'priceChange'
     }, {
         text: "% Change",
-        dataIndex: 'pctChange'
+        dataIndex: 'priceChangePct'
     }, {
         text: "Last Updated",
         width: 120,
         formatter: 'date("m/d/Y")',
-        dataIndex: 'lastChange'
+        dataIndex: 'priceLastChange'
     }],
 
     plugins: [{

@@ -4,64 +4,97 @@
  */
 Ext.define('KitchenSink.view.forms.FormPanel', {
     extend: 'Ext.form.Panel',
+    xtype: 'form-panel',
+    controller: 'formpanel',
+
+    requires: [
+        'Ext.field.*',
+        'Ext.form.FieldSet',
+        'KitchenSink.view.forms.FormPanelController',
+        'KitchenSink.store.States'
+    ],
 
     //<example>
-    requires: [
-        'Ext.form.FieldSet',
-        'Ext.field.Number',
-        'Ext.field.Spinner',
-        'Ext.field.Password',
-        'Ext.field.Email',
-        'Ext.field.Url',
-        'Ext.field.DatePicker',
-        'Ext.field.Select',
-        'Ext.field.Hidden',
-        'Ext.field.Radio',
-        'KitchenSink.view.forms.FormPanelController'
-    ],
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/forms/FormPanelController.js'
     }],
+
+    profiles: {
+        defaults: {
+            defaults: undefined,
+            bodyPadding: 20,
+            height: 500,
+            width: 400
+        },
+        material: {
+            height: 500,
+            width: 300
+        },
+        phone: {
+            defaults: {
+                bodyPadding: undefined,
+                height: undefined,
+                width: undefined,
+                defaults: {
+                    labelWidth: 90
+                }
+            }
+        }
+    },
     //</example>
 
-    controller: 'formpanel',
-    shadow: true,
-    cls: 'demo-solid-background',
+    height: '${height}',
+    bodyPadding: '${bodyPadding}',
+    scrollable: 'y',
+    width: '${width}',
+
+    buttons: [{
+        text: 'Disable fields',
+        handler: 'onDisableTap'
+    }, {
+        text: 'Reset',
+        handler: 'onResetTap'
+    }],
+
     items: [{
         xtype: 'fieldset',
         reference: 'fieldset1',
         title: 'Personal Info',
         instructions: 'Please enter the information above.',
-        defaults: {
-            labelWidth: '35%'
-        },
+        defaults: '${defaults}',
         items: [{
             xtype: 'textfield',
             name: 'name',
             label: 'Name',
-            placeHolder: 'Tom Roy',
+            placeholder: 'Tom Roy',
             autoCapitalize: true,
             required: true,
-            clearIcon: true
+            clearable: true
         }, {
             xtype: 'passwordfield',
             revealable: true,
             name: 'password',
             label: 'Password',
-            clearIcon: true
+            clearable: true
         }, {
             xtype: 'emailfield',
             name: 'email',
             label: 'Email',
-            placeHolder: 'me@sencha.com',
-            clearIcon: true
+            placeholder: 'me@sencha.com',
+            clearable: true
         }, {
             xtype: 'urlfield',
             name: 'url',
             label: 'Url',
-            placeHolder: 'http://sencha.com',
-            clearIcon: true
+            placeholder: 'http://sencha.com',
+            clearable: true
+        }, {
+            xtype: 'searchfield',
+            name: 'search',
+            label: 'Search',
+            placeholder: 'Search',
+            clearable: true
         }, {
             xtype: 'spinnerfield',
             name: 'spinner',
@@ -86,7 +119,7 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
             name: 'date',
             label: 'Start Date',
             value: new Date(),
-            picker: {
+            edgePicker: {
                 yearFrom: 1990
             }
         }, {
@@ -102,7 +135,19 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
             }, {
                 text: 'Apprentice',
                 value: 'apprentice'
-            }]
+            }],
+            clearable: true
+        }, {
+            xtype: 'combobox',
+            label: 'State',
+            store: {
+                type: 'states'
+            },
+            displayField: 'state',
+            valueField: 'abbr',
+            queryMode: 'local',
+            itemTpl: '<div data-qalign="b-t" data-qanchor="true" data-qtip="{state}: {description}">{state} ({abbr})</div>',
+            clearable: true
         }, {
             xtype: 'sliderfield',
             name: 'slider',
@@ -151,25 +196,6 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
             name: 'color',
             label: 'Purple',
             value: 'purple'
-        }]
-    }, {
-        xtype: 'container',
-        defaults: {
-            xtype: 'button',
-            style: 'margin: 1em',
-            flex: 1
-        },
-        layout: {
-            type: 'hbox'
-        },
-        items: [{
-            text: 'Disable fields',
-            ui: 'action',
-            handler: 'onDisableTap'
-        }, {
-            text: 'Reset',
-            ui: 'action',
-            handler: 'onResetTap'
         }]
     }]
 });

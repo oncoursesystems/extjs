@@ -1,6 +1,8 @@
 /* global expect, Ext, jasmine */
 
-describe("Ext.ZIndexManager", function() {
+topSuite("Ext.ZIndexManager",
+    ['Ext.window.*', 'Ext.grid.Panel', 'Ext.form.field.*', 'Ext.Button', 'Ext.grid.plugin.CellEditing'],
+function() {
     function cancelFocus() {
         var task = Ext.focusTask;
         if (task) {
@@ -834,50 +836,41 @@ describe("Ext.ZIndexManager", function() {
         });
         
         it("should restore focus after showing", function() {
-            var xy, x, y, child, text;
+            var xy, headerXY, x, y, child, text;
             
             win = new Ext.window.Window({
                 title: 'Test Window',
                 width: 410,
-                height: 400
-            });
-            child = new Ext.window.Window({
-                width: 200,
-                height: 100,
-                items: {
-                    xtype: 'textfield'
-                }
+                height: 400,
+                x: 0, y: 0,
+                items: child = new Ext.window.Window({
+                    width: 200,
+                    height: 100,
+                    items: {
+                        xtype: 'textfield'
+                    }
+                })
             });
 
-            win.add(child);
             text = child.items.first();
 
             win.show();
 
             jasmine.waitForFocus(win, 'top window to focus');
-            
+
             runs(function() {
-                // Kick off the show soon, once jasmine has set up the wait for focus
-                setTimeout(function() {
-                    child.show();
-                }, 100);
+                child.show();
             });
 
             jasmine.waitForFocus(child, 'child window to focus');
 
-            runs(function() {
-                // Kick off the focus request soon, once jasmine has set up the wait for focus
-                setTimeout(function() {
-                    text.focus();
-                }, 100);
-            });
-
-            jasmine.waitForFocus(text, 'text field within child window to focus');
+            jasmine.focusAndWait(text, text, 'text field within child window to focus');
 
             runs(function() {
                 xy = win.getXY();
-                x = win.header.getX();
-                y = win.header.getY();
+                headerXY = win.header.el.getAnchorXY('c'),
+                x = headerXY[0];
+                y = headerXY[1];
 
                 expect(text.hasFocus).toBe(true);
                 // Drag the Window by the header
@@ -890,13 +883,8 @@ describe("Ext.ZIndexManager", function() {
             runs(function() {
                 expect(child.isVisible()).toBe(false);
 
-                // Kick off the mouseup soon, once jasmine has set up the wait for focus
-                setTimeout(function() {
-                    jasmine.fireMouseEvent(Ext.getBody(), 'mouseup', x + 100, y);
-                }, 100);
+                jasmine.fireMouseEvent(Ext.getBody(), 'mouseup', x + 100, y);
             });
-
-            waits(100);
 
             runs(function() {
                 // Window should have moved 100px right

@@ -1,6 +1,6 @@
 /* global Ext, expect, jasmine, spyOn */
 
-describe("Ext", function() {
+topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], function() {
 
     describe("Ext.global", function() {
         it("should return the global scope", function() {

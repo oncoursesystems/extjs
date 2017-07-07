@@ -18,16 +18,16 @@ Ext.define('Admin.view.forms.Account', {
 
     items: [{
         xtype: 'textfield',
-        placeHolder: 'Username must be unique'
+        placeholder: 'Username must be unique'
     }, {
         xtype: 'textfield',
-        placeHolder: 'Email (ex: me@somewhere.com)',
+        placeholder: 'Email (ex: me@somewhere.com)',
         vtype: 'email'
     }, {
         xtype: 'passwordfield',
-        placeHolder: 'Enter a password'
+        placeholder: 'Enter a password'
     }, {
         xtype: 'passwordfield',
-        placeHolder: 'Passwords must match'
+        placeholder: 'Passwords must match'
     }]
 });

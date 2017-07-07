@@ -420,6 +420,7 @@ Ext.define('Ext.direct.RemotingProvider', {
      *
      * @param {String} action The action being executed
      * @param {Object} method The method being executed
+     * @param {Object} args Transaction arguments
      *
      * @private
      */
@@ -658,6 +659,10 @@ Ext.define('Ext.direct.RemotingProvider', {
     onData: function(options, success, response) {
         var me = this,
             i, len, events, event, transaction, transactions;
+        
+        if (me.destroying || me.destroyed) {
+            return;
+        }
         
         // Success in this context means lack of communication failure,
         // i.e. that we have successfully connected to the server and

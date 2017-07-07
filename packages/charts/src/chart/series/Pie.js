@@ -315,7 +315,7 @@ Ext.define('Ext.chart.series.Pie', {
     },
 
     // Subtract 90 degrees from rotation, so that `rotation` config's default
-    // zero value makes first pie sector start at noon, rather than 3 o'clock.
+    // value of 0 makes first pie sector start at noon, rather than 3 o'clock.
     rotationOffset: -Math.PI / 2,
 
     updateRotation: function (rotation) {
@@ -370,7 +370,7 @@ Ext.define('Ext.chart.series.Pie', {
                     labelTpl.setAttributes({
                         labelOverflowPadding: me.getLabelOverflowPadding()
                     });
-                    labelTpl.fx.setCustomDurations({'callout': 200});
+                    labelTpl.getAnimation().setCustomDurations({'callout': 200});
                 }
                 sprite.setAttributes(me.getStyleByIndex(i));
                 sprite.setRendererData(rendererData);

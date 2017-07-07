@@ -1,5 +1,4 @@
-describe("Ext.form.FieldContainer", function() {
-
+topSuite("Ext.form.FieldContainer", ['Ext.form.field.*'], function() {
     var component, makeComponent;
 
     beforeEach(function() {

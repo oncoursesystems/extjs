@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.form.CustomErrorHandling', {
     
     exampleTitle: 'Custom Error Handling',
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/form/CustomErrorHandlingController.js'
     }],
     //</example>

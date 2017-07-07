@@ -6,6 +6,10 @@ Ext.define('KitchenSink.data.PivotData', {
 
     statics: {
         rand: 37,
+        companies: ['Google', 'Apple', 'Dell', 'Microsoft', 'Adobe'],
+        countries: ['Belgium', 'Netherlands', 'United Kingdom', 'Canada', 'United States', 'Australia'],
+        persons: ['John', 'Michael', 'Mary', 'Anne', 'Robert', 'Müller'],
+
         getRandomItem: function(data){
             var rand = this.rand,
                 k = rand % data.length;
@@ -20,11 +24,24 @@ Ext.define('KitchenSink.data.PivotData', {
             return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime() ));
         },
 
+        getRandomNumber: function(multiply){
+            return Math.random() * (multiply || 1000) + 1;
+        },
+
+        getRandomCompany: function(){
+            return this.getRandomItem(this.companies);
+        },
+
+        getRandomCountry: function(){
+            return this.getRandomItem(this.countries);
+        },
+
+        getRandomPerson: function(){
+            return this.getRandomItem(this.persons);
+        },
+
         getData: function(items){
             var data = [],
-                companies = ['Google', 'Apple', 'Dell', 'Microsoft', 'Adobe'],
-                countries = ['Belgium', 'Netherlands', 'United Kingdom', 'Canada', 'United States', 'Australia'],
-                persons = ['John', 'Michael', 'Mary', 'Anne', 'Robert', 'Müller'],
                 i;
 
             if(items == null){
@@ -33,12 +50,12 @@ Ext.define('KitchenSink.data.PivotData', {
 
             for (i = 0; i < items; i++){
                 data.push({
-                    company:    this.getRandomItem(companies),
-                    country:    this.getRandomItem(countries),
-                    person:     this.getRandomItem(persons),
-                    date:       this.getRandomDate(new Date(2012, 0, 1), new Date()),
-                    value:      Math.random() * 1000 + 1,
-                    quantity:   Math.floor(Math.random() * 30 + 1)
+                    company:    this.getRandomCompany(),
+                    country:    this.getRandomCountry(),
+                    person:     this.getRandomPerson(),
+                    date:       this.getRandomDate(new Date(2012, 0, 1), new Date(2016, 11, 31)),
+                    value:      this.getRandomNumber(),
+                    quantity:   Math.floor(this.getRandomNumber(30))
                 });
             }
             return data;

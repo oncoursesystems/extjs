@@ -118,13 +118,13 @@ Ext.define('Ext.plugin.Viewport', {
                     // Note that nothing says that components that use configured elements have to have
                     // matching ids (they probably won't), but this is at least making the attempt so that
                     // getCmp *may* be able to find the component. However, in these cases, it's really
-                    // better to use Component#fromElement to find the owner component.
+                    // better to use Component#from to find the owner component.
                     if (!el.id) {
                         el.id = me.id;
                     }
 
                     // In addition, stamp on the data-componentid so lookups using Component's
-                    // fromElement will work.
+                    // from will work.
                     el.setAttribute('data-componentid', me.id);
                     
                     if (!me.ariaStaticRoles[me.ariaRole]) {
@@ -236,7 +236,7 @@ Ext.define('Ext.plugin.Viewport', {
 
                     meta.setAttribute('name', name);
                     meta.setAttribute('content', content);
-                    Ext.getHead().appendChild(meta);
+                    Ext.getHead().appendChild(meta, true);
                 },
 
                 privates: {
@@ -265,7 +265,7 @@ Ext.define('Ext.plugin.Viewport', {
                         var el = this.el;
                         
                         if (el) {
-                            el.restoreTabbableState(/* skipSelf = */ true);
+                            el.restoreTabbableState({ skipSelf: true });
                         }
                     }
                 }

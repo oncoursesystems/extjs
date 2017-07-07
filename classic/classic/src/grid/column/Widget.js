@@ -8,13 +8,17 @@
  * 
  * There are two ways of setting values in a cell widget.
  * 
- * Ths simplest way is to use data binding. Each cell widget has a {@link Ext.app.ViewModel ViewModel} injected which inherits from any ViewModel
- * that the grid is using, and contains two extra properties:
+ * The simplest way is to use data binding. To use column widget data binding, the widget must either contain 
+ * a top-level bind statement, which will cause a {@link Ext.app.ViewModel ViewModel} to be automatically injected
+ * into the widget. This ViewModel will inherit data from any ViewModel that the grid is using, and it will also
+ * contain two extra properties:
  *
  * - `record` : {@link Ext.data.Model Model}<br>The record which backs the grid row.
  * - `recordIndex` : {@link Number}<br>The index in the dataset of the record which backs the grid row.
  *
- * The widget configuration may contain a {@link #cfg-bind} config which uses the ViewModel's data.
+ * For complex widgets, where the widget may be a container that does not directly use any data binding, but has items
+ * which do, the specification of a {@link Ext.panel.Table#rowViewModel rowViewModel} type or configuration 
+ * is required on the grid. This can simply be an empty object if grid widgets only require binding to the row record.
  * 
  * The deprecated way is to configure the column with a {@link #dataIndex}. The widget's
  * {@link Ext.Component#defaultBindProperty defaultBindProperty} will be set using the
@@ -66,6 +70,8 @@
  *             // This is the widget definition for each cell.
  *             // The Progress widget class's defaultBindProperty is 'value'
  *             // so its "value" setting is taken from the ViewModel's record "capacityUsed" field
+ *             // Note that a row ViewModel will automatically be injected due to the existence of 
+ *             // the bind property in the widget configuration.
  *             widget: {
  *                 xtype: 'progressbarwidget',
  *                 bind: '{record.capacityUsed}',
@@ -158,7 +164,7 @@
  */
 Ext.define('Ext.grid.column.Widget', {
     extend: 'Ext.grid.column.Column',
-    alias: 'widget.widgetcolumn',
+    xtype: 'widgetcolumn',
 
     mixins: ['Ext.mixin.StyleCacher'],
 
@@ -387,8 +393,15 @@ Ext.define('Ext.grid.column.Widget', {
         me.callParent(arguments);
 
         me.ownerGrid = me.up('tablepanel').ownerGrid;
-        view = me.getView();
 
+        // If the grid is lockable we should mark this column with variableRowHeight,
+        // as widgets can cause rows to be taller and this config will force them
+        // to be synced on every layout cycle.
+        if (me.ownerGrid.lockable) {
+            me.variableRowHeight = true;
+        }
+
+        view = me.getView();
         // If we are being added to a rendered HeaderContainer
         if (view) {
             me.setupViewListeners(view);
@@ -458,7 +471,7 @@ Ext.define('Ext.grid.column.Widget', {
 
                     // May be a placeholder with no data row
                     if (cell) {
-                        cell = cell.dom.firstChild;
+                        cell = cell.firstChild;
                         if (!isFixedSize && !width && me.lastBox) {
                             width = me.lastBox.width - parseInt(me.getCachedStyle(cell, 'padding-left'), 10) - parseInt(me.getCachedStyle(cell, 'padding-right'), 10);
                         }

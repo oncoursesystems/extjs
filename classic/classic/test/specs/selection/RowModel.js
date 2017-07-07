@@ -1,4 +1,7 @@
-describe('Ext.selection.RowModel', function () {
+topSuite("Ext.selection.RowModel",
+    ['Ext.grid.Panel', 'Ext.tree.Panel', 'Ext.app.ViewModel',
+     'Ext.toolbar.Paging', 'Ext.Button'],
+function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         grid, view, selModel, navModel, store, columns, cell, rawData,
         synchronousLoad = true,

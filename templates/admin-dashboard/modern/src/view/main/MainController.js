@@ -1,6 +1,10 @@
 Ext.define('Admin.view.main.MainController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.main',
+    
+    requires: [
+        'Ext.MessageBox'
+    ],
 
     listen : {
         controller : {

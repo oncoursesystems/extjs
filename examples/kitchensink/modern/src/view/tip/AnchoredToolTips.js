@@ -1,34 +1,47 @@
 Ext.define('KitchenSink.view.tip.AnchoredToolTips', {
     extend: 'Ext.Container',
+    xtype: 'anchored-tooltips',
+    controller: 'anchored-tooltips',
 
-    // <example>
     requires: [
         'KitchenSink.view.tip.AnchoredToolTipsController',
         'KitchenSink.data.ToolTips'
     ],
 
+    // <example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/tip/AnchoredToolTipsController.js'
     }],
-    // <example>
+
+    profiles: {
+        defaults: {
+            height: 200,
+            width: 200
+        },
+        phone: {
+            defaults: {
+                height: undefined,
+                width: undefined
+            }
+        }
+    },
 
     cls: 'demo-solid-background',
-    shadow: true,
-    width: '90%',
+    // <example>
 
-    controller: 'anchored-tooltips',
-    padding: 20,
+    height: '${height}',
+    width: '${width}',
+
     layout: {
-        type: 'hbox',
-        align: 'start',
+        type: 'vbox',
+        align: 'middle',
         pack: 'center'
     },
 
     defaultType: 'button',
-    margin: '0 0 50 0',
     defaults: {
-        margin: '0 15 0 0',
+        margin: '10 0',
         minWidth: 150
     },
 

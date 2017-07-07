@@ -3,9 +3,11 @@
 // TODO: Add specs for locked grid and removing stores from other parts of the app.
 // TODO: Add specs for making sure that new filters replace existing filters with same dataIndex.
 // TODO: Add specs for addFilter(), making sure that only one filter store is ever created per dataIndex.
-describe("Ext.grid.filters.Filters", function () {
-    var grid, tree, store, filtersPlugin, data,
-        synchronousLoad = false;
+topSuite("Ext.grid.filters.Filters",
+    ['Ext.grid.Panel', 'Ext.tree.Panel'],
+function() {
+    var synchronousLoad = false,
+        grid, tree, store, filtersPlugin, filter, data;
 
     function completeWithData(theData) {
         Ext.Ajax.mockComplete({
@@ -154,7 +156,7 @@ describe("Ext.grid.filters.Filters", function () {
 
     afterEach(function () {
         MockAjaxManager.removeMethods();
-        grid = tree = filtersPlugin = Ext.destroy(grid, tree);
+        grid = tree = filtersPlugin = filter = Ext.destroy(grid, tree);
         store = Ext.destroy(store);
     });
 
@@ -278,6 +280,71 @@ describe("Ext.grid.filters.Filters", function () {
                 it("should create a default String filter type", function () {
                     expect(colMgr.getHeaderByDataIndex('dob').filter.type).toBe('string');
                 });
+            });
+        });
+    });
+
+    describe("events", function() {
+        var activateSpy, deactivateSpy;
+        
+        beforeEach(function() {
+            activateSpy = jasmine.createSpy('filteractivate');
+            deactivateSpy = jasmine.createSpy('filterdeactivate');
+            
+            createGrid(null, {
+                columns: [{
+                    dataIndex: 'name',
+                    filter: {
+                        type: 'string'
+                    }
+                }],
+                listeners: {
+                    filteractivate: activateSpy,
+                    filterdeactivate: deactivateSpy
+                }
+            });
+            
+            filter = grid.columnManager.getHeaderByDataIndex('name').filter;
+        });
+        
+        afterEach(function() {
+            activateSpy = deactivateSpy = null;
+        });
+        
+        describe("activate", function() {
+            beforeEach(function() {
+                filter.setValue('Jimmy');
+            });
+            
+            it("should fire when filter is activated programmatically", function() {
+                expect(activateSpy).toHaveBeenCalled();
+            });
+            
+            it("should pass filter and column", function() {
+                var args = Ext.Array.slice(activateSpy.mostRecentCall.args, 0, 2);
+                
+                expect(args).toEqual([filter, filter.column]);
+            });
+            
+            it("should not fire deactivate event", function() {
+                expect(deactivateSpy).not.toHaveBeenCalled();
+            });
+        });
+        
+        describe("deactivate", function() {
+            beforeEach(function() {
+                filter.setValue('Jimmy');
+                grid.clearFilters();
+            });
+            
+            it("should fire when filter is cleared programmatically", function() {
+                expect(deactivateSpy).toHaveBeenCalled();
+            });
+            
+            it("should pass filter and column", function() {
+                var args = Ext.Array.slice(deactivateSpy.mostRecentCall.args, 0, 2);
+                
+                expect(args).toEqual([filter, filter.column]);
             });
         });
     });
@@ -2033,7 +2100,7 @@ describe("Ext.grid.filters.Filters", function () {
                 });
 
                 it("should not send a network request", function () {
-                    grid.columnManager.getHeaderByDataIndex('name').setActive(false);
+                    grid.columnManager.getHeaderByDataIndex('name').filter.setActive(false);
                     completeWithData();
                     // Note that the load count would be 2 if setActive(false) had initiated another request.
                     expect(store.flushCallCount).toBe(1);
@@ -2063,7 +2130,7 @@ describe("Ext.grid.filters.Filters", function () {
 
                 it("should not send a network request", function () {
                     filtersPlugin.addFilter({dataIndex: 'age', type: 'numeric'});
-                    grid.columnManager.getHeaderByDataIndex('age').setActive(true);
+                    grid.columnManager.getHeaderByDataIndex('age').filter.setActive(true);
 
                     waitsFor(function () {
                         return store.flushCallCount === 1;

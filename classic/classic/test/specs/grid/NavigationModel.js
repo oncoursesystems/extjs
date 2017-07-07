@@ -1,7 +1,9 @@
 /* global Ext, jasmine, expect */
 
-describe('Ext.grid.NavigationModel', function() {
-    
+topSuite('Ext.grid.NavigationModel',
+    ['Ext.grid.Panel', 'Ext.grid.column.Widget', 'Ext.form.field.Number',
+     'Ext.Button'],
+function() {
     // Expect that a row and column are focused.
     // Column index is overall across a locked pair.
     function expectPosition(rowIdx, colIdx) {
@@ -156,13 +158,13 @@ describe('Ext.grid.NavigationModel', function() {
                 jasmine.fireKeyEvent(colRef[4].el, 'keydown', Ext.event.Event.SPACE);
 
                 // View's element Region MUST contain the focused cell.
-                expect(view.getEl().getRegion().contains(view.getCellByPosition(navModel.lastFocused).getRegion())).toBe(true);
+                expect(view.getEl().getRegion().contains(Ext.fly(view.getCellByPosition(navModel.lastFocused, true)).getRegion())).toBe(true);
 
                 // Sort descending
                 jasmine.fireKeyEvent(colRef[4].el, 'keydown', Ext.event.Event.SPACE);
 
                 // View's element Region MUST still contain the focused cell.
-                expect(view.getEl().getRegion().contains(view.getCellByPosition(navModel.lastFocused).getRegion())).toBe(true);
+                expect(view.getEl().getRegion().contains(Ext.fly(view.getCellByPosition(navModel.lastFocused, true)).getRegion())).toBe(true);
             });
         });
     });
@@ -531,7 +533,7 @@ describe('Ext.grid.NavigationModel', function() {
                 describe("boundary skipping", function() {
                     it("should navigate to the next available column when moving right", function() {
                         makeGrid([{
-                            dataIndex: 'field1',
+                            dataIndex: 'field1'
                         }, {
                             dataIndex: 'field2',
                             cellFocusable: false

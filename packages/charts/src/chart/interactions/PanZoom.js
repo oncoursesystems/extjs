@@ -220,6 +220,12 @@ Ext.define('Ext.chart.interactions.PanZoom', {
          */
         zoomOnPan: false,
 
+        /**
+         * @cfg {Boolean} [doubleTapReset=false]
+         * If `true`, the double tap on a chart will reset the current pan/zoom to show the whole chart.
+         */
+        doubleTapReset: false,
+
         modeToggleButton: {
             xtype: 'segmentedbutton',
             width: 200,
@@ -258,22 +264,17 @@ Ext.define('Ext.chart.interactions.PanZoom', {
     },
 
     applyModeToggleButton: function (button, oldButton) {
-        var me = this,
-            result = Ext.factory(button, 'Ext.button.Segmented', oldButton);
-
-        if (!result && oldButton) {
-            oldButton.destroy();
-        }
-        if (result && !oldButton) {
-            result.on('toggle', 'onModeToggleChange', me);
-        }
-        return result;
+        return Ext.factory(button, 'Ext.button.Segmented', oldButton);
     },
 
-    onModeToggleChange: function (segmentedButton, button, pressed) {
-        if (pressed) {
-            this.setZoomOnPan(button.getValue() === 'zoom');
+    updateModeToggleButton: function (button) {
+        if (button) {
+            button.on('change', 'onModeToggleChange', this);
         }
+    },
+
+    onModeToggleChange: function (segmentedButton, value) {
+        this.setZoomOnPan(value === 'zoom');
     },
 
     getGestures: function () {
@@ -289,20 +290,24 @@ Ext.define('Ext.chart.interactions.PanZoom', {
         gestures[pan + 'start'] = 'onPanGestureStart';
         gestures[pan + 'end'] = 'onPanGestureEnd';
         gestures.doubletap = 'onDoubleTap';
+
         return gestures;
     },
 
     onDoubleTap: function (e) {
         var me = this,
-            chart = me.getChart(),
-            axes = chart.getAxes(),
-            axis, i, ln;
+            doubleTapReset = me.getDoubleTapReset(),
+            chart, axes, axis, i, ln;
 
-        for (i = 0, ln = axes.length; i < ln; i++) {
-            axis = axes[i];
-            axis.setVisibleRange([0, 1]);
+        if (doubleTapReset) {
+            chart = me.getChart();
+            axes = chart.getAxes();
+            for (i = 0, ln = axes.length; i < ln; i++) {
+                axis = axes[i];
+                axis.setVisibleRange([0, 1]);
+            }
+            chart.redraw();
         }
-        chart.redraw();
     },
 
     onPanGestureStart: function (e) {
@@ -513,6 +518,7 @@ Ext.define('Ext.chart.interactions.PanZoom', {
         var me = this,
             axisConfigs = me.getAxes(),
             axes = me.getChart().getAxes();
+
         for (var i = 0; i < axes.length; i++) {
             if (axisConfigs[axes[i].getPosition()]) {
                 if (false === fn.call(this, axes[i])) {
@@ -556,6 +562,7 @@ Ext.define('Ext.chart.interactions.PanZoom', {
             actualMaxZoom =  maxZoom || me.getMaxZoom() || axis.config.maxZoom,
             rect = me.getChart().getInnerRect(),
             left, right;
+
         if (!rect) {
             return;
         }
@@ -587,6 +594,7 @@ Ext.define('Ext.chart.interactions.PanZoom', {
             (oldVisibleRange[0] + oldVisibleRange[1] - visibleLength) * 0.5 - pan / length * visibleLength,
             (oldVisibleRange[0] + oldVisibleRange[1] + visibleLength) * 0.5 - pan / length * visibleLength
         ]);
+
         return Math.abs(left - axis.getVisibleRange()[0]) > 1e-10 ||
                Math.abs(right - axis.getVisibleRange()[1]) > 1e-10;
     },

@@ -1,6 +1,6 @@
 /* global Ext, expect, jasmine, spyOn */
 
-describe("Ext.drag.Target", function() {
+topSuite("Ext.drag.Target", ['Ext.drag.*', 'Ext.dom.Element'], function() {
     var helper = Ext.testHelper,
         touchId = 0,
         cursorTrack, source, target,
@@ -2550,7 +2550,7 @@ describe("Ext.drag.Target", function() {
                 }
             });
 
-            var handle = dragEl.down('.foo');
+            var handle = Ext.fly(dragEl.down('.foo', true));
             startDrag(null, null, handle);
             moveBy(100, 100);
             endDrag(null, null, handle);

@@ -38,40 +38,15 @@
  *     userId.setValue(1234);
  */
 Ext.define('Ext.field.Hidden', {
-    extend: 'Ext.field.Text',
+    extend: 'Ext.field.Input',
     alternateClassName: 'Ext.form.Hidden',
     xtype: 'hiddenfield',
 
-    config: {
-        /**
-         * @cfg
-         * @inheritdoc
-         */
-        component: {
-            xtype: 'input',
-            type : 'hidden'
-        },
+    /**
+     * @cfg
+     * @hide
+     */
+    inputType: 'hidden',
 
-        /**
-         * @cfg hidden
-         * @hide
-         */
-        hidden: true,
-
-        /**
-         * @cfg {Number} tabIndex
-         * @hide
-         */
-        tabIndex: -1
-    },
-
-    classCls: Ext.baseCSSPrefix + 'hiddenfield',
-
-    applyClearIcon: function() {
-        return false;
-    },
-
-    applyTriggers: function() {
-        return null;
-    }
+    classCls: Ext.baseCSSPrefix + 'hiddenfield'
 });

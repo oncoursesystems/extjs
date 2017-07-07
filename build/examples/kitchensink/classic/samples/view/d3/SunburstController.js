@@ -7,10 +7,12 @@ Ext.define('KitchenSink.view.d3.SunburstController', {
     ],
 
     onTooltip: function (component, tooltip, node, element, event) {
-        var size = node.get('size'),
-            n = node.childNodes.length;
+        var record = node.data,
+            size = record.get('size'),
+            n = record.childNodes.length;
 
-        tooltip.setTitle(node.get('text'));
+        tooltip.setTitle(record.get('text'));
+
         if (size) {
             tooltip.setHtml(Ext.util.Format.fileSize(size));
         } else {

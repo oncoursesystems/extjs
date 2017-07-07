@@ -11,13 +11,14 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
     extend: 'Ext.panel.Panel',
     xtype: 'tip-aligning',
     controller: 'tip-aligning',
+    title: 'Draggable button with configurable tooltip',
 
-    //<example>
     requires: [
         'KitchenSink.view.tip.TipAligningController',
         'KitchenSink.view.tip.TipAligningModel'
     ],
 
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/tip/TipAligningController.js'
@@ -27,9 +28,6 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
     }],
     //</example>
 
-    height: 500,
-    width: 750,
-    title: 'Draggable button with configurable tooltip',
     bodyBorder: true,
 
     viewModel: {
@@ -52,16 +50,17 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
         text: 'Confirm selection',
         hidden: true,
         draggable: {
+            constrain: {
+                element: true // Constrain to the parent element
+            },
             listeners: {
-                drag: function(draggable, event) {
-                    draggable.getComponent().lookupController().onButtonDrag(event);
-                }
+                dragmove: 'onButtonDrag'
             }
         },
         tooltip: {
-            defaultAlign: 't-b',
+            align: 't-b',
             minWidth: 250,
-            title: 'Confirm selection of destination',
+            title: 'Confirm choice of destination',
             html: '<ul><li>Condition one.</li><li>Condition two</li><li>Condition three</li></ul>',
             anchor: true,
             autoHide: false,
@@ -71,18 +70,23 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
                 anchor: '{anchor}'
             }
         }
-    }, {
-        docked: 'bottom',
-        xtype: 'toolbar',
+    }],
+
+    bbar: {
         defaults: {
             margin: '0 10 0 0'
         },
         items: [{
-            xtype: 'label',
+            xtype: 'component',
             html: 'Tip:'
         }, {
             xtype: 'segmentedbutton',
             bind: '{tipEdge}',
+            width: 100,
+            defaults: {
+                ui: 'default-toolbar',
+                width: 25
+            },
             items: [{
                 text: 'T'
             }, {
@@ -94,17 +98,23 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
             }]
         }, {
             xtype: 'sliderfield',
-            width: 100,
+            flex: 1,
+            minWidth: 100,
             minValue: 0,
             maxValue: 100,
             bind: '{tipOffset}',
             liveUpdate: true
         }, {
-            xtype: 'label',
+            xtype: 'component',
             html: 'Target:'
         }, {
             xtype: 'segmentedbutton',
             bind: '{targetEdge}',
+            width: 100,
+            defaults: {
+                ui: 'default-toolbar',
+                width: 25
+            },
             items: [{
                 text: 'T'
             }, {
@@ -116,7 +126,8 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
             }]
         }, {
             xtype: 'sliderfield',
-            width: 100,
+            flex: 1,
+            minWidth: 100,
             minValue: 0,
             maxValue: 100,
             bind: '{targetOffset}',
@@ -126,7 +137,7 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
             editable: false,
             bind: '{alignSpec}',
             width: 80,
-            clearIcon: false,
+            clearable: false,
             readOnly: true
         }, {
             xtype: 'checkboxfield',
@@ -135,5 +146,5 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
             bind: '{anchor}',
             inputValue: true
         }]
-    }]
+    }
 });

@@ -1,6 +1,6 @@
 /* global Ext, expect, jasmine */
 
-describe("Ext.event.Event", function() {
+topSuite("Ext.event.Event", function() {
     var E = Ext.event.Event,
         e;
     
@@ -559,7 +559,8 @@ describe("Ext.event.Event", function() {
                 }
             });
 
-            jasmine.fireMouseEvent(target,'mousedown');
+            jasmine.fireMouseEvent(target, 'mousedown');
+            jasmine.fireMouseEvent(target, 'mouseup');
         });
 
         it("should return false if allowEl is false and e.target === el.dom", function() {
@@ -569,7 +570,8 @@ describe("Ext.event.Event", function() {
                 }
             });
 
-            jasmine.fireMouseEvent(target,'mousedown');
+            jasmine.fireMouseEvent(target, 'mousedown');
+            jasmine.fireMouseEvent(target, 'mouseup');
         });
     });
 
@@ -592,8 +594,9 @@ describe("Ext.event.Event", function() {
 
             it("should be the current date in milliseconds", function() {
                 var start = +new Date();
-                jasmine.fireMouseEvent(target,'mousedown');
+                jasmine.fireMouseEvent(target, 'mousedown');
                 var end = +new Date();
+                jasmine.fireMouseEvent(target, 'mouseup');
 
                 expect(event.time >= start && event.time <= end).toBe(true);
             });
@@ -601,6 +604,7 @@ describe("Ext.event.Event", function() {
             it("should set both time and timeStamp", function() {
                 jasmine.fireMouseEvent(target,'mousedown');
                 expect(event.time).toBe(event.timeStamp);
+                jasmine.fireMouseEvent(target, 'mouseup');
             });
         });
 
@@ -627,6 +631,7 @@ describe("Ext.event.Event", function() {
                 var start = +new Date();
                 jasmine.fireMouseEvent(target,'mousedown');
                 var end = +new Date();
+                jasmine.fireMouseEvent(target, 'mouseup');
 
                 expect(event.time >= start && event.time <= end).toBe(true);
             });
@@ -634,6 +639,7 @@ describe("Ext.event.Event", function() {
             it("should set both time and timeStamp", function() {
                 jasmine.fireMouseEvent(target,'mousedown');
                 expect(event.time).toBe(event.timeStamp);
+                jasmine.fireMouseEvent(target, 'mouseup');
             });
         });
     });

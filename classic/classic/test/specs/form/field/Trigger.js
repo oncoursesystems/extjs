@@ -1,6 +1,6 @@
 // Although Ext.form.field.Trigger is deprecated, these specs remain as they were in 4.x
 // so that we can have a reasonable assurance of compatibility
-describe("Ext.form.field.Trigger", function() {
+topSuite("Ext.form.field.Trigger", function() {
 
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         component, makeComponent;
@@ -530,6 +530,7 @@ describe("Ext.form.field.Trigger", function() {
             it("should add the base clickCls on mousedown", function() {
                 triggerEvent('mousedown', 0);
                 expect(hasCls(baseCls + '-click', 0)).toBe(true);
+                triggerEvent('mouseup', 0);
             });
         
             it("should remove the base clickCls on mouseup", function() {
@@ -562,6 +563,7 @@ describe("Ext.form.field.Trigger", function() {
             it("should add the base clickCls on mousedown", function() {
                 triggerEvent('mousedown', 1);
                 expect(hasCls(baseCls + '-click', 1)).toBe(true);
+                triggerEvent('mouseup', 1);
             });
         
             it("should remove the base clickCls on mouseup", function() {
@@ -598,6 +600,7 @@ describe("Ext.form.field.Trigger", function() {
                 });    
                 triggerEvent('mousedown', 0);
                 expect(hasCls('bar-click', 0)).toBe(true);
+                triggerEvent('mouseup', 0);
             });
             
             it("should remove a custom clickCls on mouseup if specified", function() {
@@ -624,6 +627,7 @@ describe("Ext.form.field.Trigger", function() {
                 });    
                 triggerEvent('mousedown', 0);
                 expect(hasCls('undefined-over', 0)).toBe(false);
+                triggerEvent('mouseup', 0);
             });
         });
     });

@@ -1,4 +1,4 @@
-describe("Ext.Util", function() {
+topSuite("Ext.Util", false, function() {
     describe("Ext.callback", function() {
         var spy;
 

@@ -1,6 +1,6 @@
 /* global Ext, spyOn, expect */
 
-describe("Ext.app.Controller", function() {
+topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() {
     var panelEventFired = false,
         customEventFired = false,
         Controller = Ext.app.Controller,

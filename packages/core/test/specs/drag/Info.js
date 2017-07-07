@@ -1,6 +1,6 @@
 /* global expect, jasmine, Ext */
 
-describe("Ext.drag.Info", function() {
+topSuite("Ext.drag.Info", ['Ext.drag.*', 'Ext.dom.Element'], function() {
     var helper = Ext.testHelper,
         touchId = 0,
         cursorTrack, source, target,
@@ -339,13 +339,13 @@ describe("Ext.drag.Info", function() {
             var spy = jasmine.createSpy();
 
             makeDragEl();
-            var child = dragEl.createChild({
+            var child = Ext.fly(dragEl.createChild({
                 width: '20px',
                 height: '20px',
                 left: '40px',
                 top: '40px',
                 position: 'absolute'
-            });
+            }, null, true));
             makeSource();
             source.on('dragmove', spy);
             var center = getCenter(child);
@@ -398,6 +398,8 @@ describe("Ext.drag.Info", function() {
 
             startDrag();
             moveBy(10, 10);
+            endDrag();
+            
             runs(function() {
                 expect(describeSpy.callCount).toBe(1);
                 expect(describeSpy.mostRecentCall.args[0]).toBe(dragSpy.mostRecentCall.args[1]);

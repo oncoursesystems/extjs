@@ -1,6 +1,8 @@
 /* global Ext, MockAjaxManager, expect, jasmine */
 
-describe("Ext.view.View", function() {
+topSuite("Ext.view.View",
+    ['Ext.data.ArrayStore', 'Ext.selection.RowModel', 'Ext.app.ViewModel'],
+function() {
     var view, store, TestModel, navModel,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
@@ -452,6 +454,7 @@ describe("Ext.view.View", function() {
                 createSimpleView();
                 var node = Ext.get(view.getNode(1));
                 expect(view.getRecord(node)).toBe(store.getAt(1));
+                node.destroy();
             });
 
             it("should return null if no item could be found", function() {
@@ -2555,6 +2558,8 @@ describe("Ext.view.View", function() {
             // Navigation conditions must be restored after the refresh.
             expect(view.el.query('.' + navModel.focusCls).length).toBe(1);
             expect(itemAfterRefresh.hasCls(navModel.focusCls)).toBe(true);
+            
+            itemBeforeRefresh.destroy();
         });
     });
 

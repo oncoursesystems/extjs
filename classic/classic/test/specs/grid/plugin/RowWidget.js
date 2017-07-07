@@ -1,6 +1,8 @@
 /* global Ext, jasmine, expect, spyOn, it */
 
-describe('Ext.grid.plugin.RowWidget', function () {
+topSuite("Ext.grid.plugin.RowWidget",
+    ['Ext.grid.Panel', 'Ext.Button', 'Ext.app.ViewModel', 'Ext.grid.column.*'],
+function() {
     var itNotIE8 = Ext.isIE8 ? xit : it,
         dummyData = [
             ['3m Co',71.72,0.02,0.03,'9/1 12:00am', 'Manufacturing'],
@@ -81,8 +83,13 @@ describe('Ext.grid.plugin.RowWidget', function () {
         });
         Ext.define('spec.RowWidgetOrder', {
             extend: 'Ext.data.Model',
-
-            fields: [
+    
+    requires: [
+        'Ext.data.proxy.Memory',
+        'Ext.data.reader.Json'
+    ],
+    
+    fields: [
                 { name: 'id' },
                 // Declare an association with Company.
                 // Each Company record will be decorated with
@@ -860,7 +867,7 @@ describe('Ext.grid.plugin.RowWidget', function () {
 
     function getRowBodyTr(index, locked) {
         view = locked ? expander.lockedView : expander.view;
-        return view.all.item(index).down('.' + Ext.baseCSSPrefix + 'grid-rowbody-tr');
+        return Ext.fly(view.all.item(index).down('.' + Ext.baseCSSPrefix + 'grid-rowbody-tr', true));
     }
     
     beforeEach(function() {
@@ -885,6 +892,8 @@ describe('Ext.grid.plugin.RowWidget', function () {
             jasmine.fireMouseEvent(grid.view.el.query('.x-grid-row-expander')[0], 'mousedown');
 
             expect(getRowBodyTr(0).isVisible()).toBe(false);
+            
+            jasmine.fireMouseEvent(grid.view.el.query('.x-grid-row-expander')[0], 'mouseup');
         });
 
         it("should expand on click", function() {
@@ -905,7 +914,7 @@ describe('Ext.grid.plugin.RowWidget', function () {
             // Check that the widget is of the correct type and rendered and updated correctly.
             widget = expander.getWidget(grid.view, store.getAt(0));
             expect(widget.isButton).toBe(true);
-            expect(widget === Ext.Component.fromElement(grid.view.all.item(0).down('.' + Ext.baseCSSPrefix + 'grid-rowbody', true).firstChild)).toBe(true);
+            expect(widget === Ext.Component.from(grid.view.all.item(0).down('.' + Ext.baseCSSPrefix + 'grid-rowbody', true).firstChild)).toBe(true);
 
             // Flush the VM's data so we can work synchronously
             widget.lookupViewModel().notify();
@@ -972,9 +981,9 @@ describe('Ext.grid.plugin.RowWidget', function () {
 
             expander.toggleRow(0, rec);
             var btn = grid.down('[isExpanderButton]');
-            expect(btn.el.parent()).toHaveCls('x-grid-rowbody');
+            expect(btn.el.parent(null, true)).toHaveCls('x-grid-rowbody');
             rec.set('company', 'Foo');
-            expect(expect(btn.el.parent()).toHaveCls('x-grid-rowbody'));
+            expect(expect(btn.el.parent(null, true)).toHaveCls('x-grid-rowbody'));
         });
 
         describe("with scrollIntoViewOnExpand", function() {
@@ -1089,6 +1098,8 @@ describe('Ext.grid.plugin.RowWidget', function () {
                 jasmine.fireMouseEvent(grid.lockedGrid.view.el.query('.x-grid-row-expander')[0], 'mousedown');
 
                 expect(getRowBodyTr(0, true).isVisible()).toBe(false);
+
+                jasmine.fireMouseEvent(grid.lockedGrid.view.el.query('.x-grid-row-expander')[0], 'mouseup');
             });
 
             it("should expand on click", function() {
@@ -1114,7 +1125,7 @@ describe('Ext.grid.plugin.RowWidget', function () {
                 widget = expander.getWidget(grid.lockedGrid.view, store.getAt(0));
                 widget.lookupViewModel().notify();
                 expect(widget.isComponent).toBe(true);
-                expect(widget === Ext.Component.fromElement(grid.lockedGrid.view.all.item(0).down('.' + Ext.baseCSSPrefix + 'grid-rowbody', true).firstChild)).toBe(true);
+                expect(widget === Ext.Component.from(grid.lockedGrid.view.all.item(0).down('.' + Ext.baseCSSPrefix + 'grid-rowbody', true).firstChild)).toBe(true);
                 expect(widget.el.dom.textContent || widget.el.dom.innerText).toBe(store.getAt(0).get('industry'));
 
                 // Check thetwo rows (one on each side) are synched in height
@@ -1358,8 +1369,8 @@ describe('Ext.grid.plugin.RowWidget', function () {
             grid.setStore(newStore);
             expander.toggleRow(0, newStore.getAt(0));
             newStore.sort('company');
-            var body = grid.el.down('.x-grid-rowbody');
-            expect(body.down('.x-btn')).not.toBeNull();
+            var body = grid.el.dom.querySelector('.x-grid-rowbody');
+            expect(body.querySelector('.x-btn')).not.toBeNull();
         });
     });
 
@@ -1368,6 +1379,7 @@ describe('Ext.grid.plugin.RowWidget', function () {
 
         beforeEach(function() {
             makeGrid({
+                height: 600,
                 leadingBufferZone: 10,
                 trailingBufferZone: 10,
                 height: 200
@@ -1464,32 +1476,36 @@ describe('Ext.grid.plugin.RowWidget', function () {
                 expect(loadSpy.callCount).toBe(2);
             });
         });
-
-        itNotIE8('should correctly resize rendered block when last row expands', function() {
+    
+        itNotIE8('should correctly resize rendered block when last row expands', function () {
             var lastRow;
-
-            jasmine.waitsForScroll(scroller, function(scroller, x, y) {
-                if (y >= scroller.getMaxUserPosition().y - 2 &&
+        
+            waitsFor(function () {
+                if (scroller.getPosition().y === scroller.getMaxUserPosition().y &&
                     view.all.endIndex === store.getCount() - 1) {
                     return true;
                 }
-                scroller.scrollBy(0, 100);
-            }, 'scroll to end', 30000);
-
-            runs(function() {
+            
+                scroller.scrollBy(null, 100);
+            }, 'scroll to end', 500);
+        
+            runs(function () {
                 lastRow = view.all.last(true);
-                jasmine.fireMouseEvent(Ext.fly(lastRow).down('.x-grid-row-expander'), 'click');
+                jasmine.fireMouseEvent(Ext.fly(lastRow).down('.x-grid-row-expander', true), 'click');
             });
-            jasmine.waitsForScroll(scroller, function(s, x, y) {
-                if (y >= scroller.getMaxUserPosition().y - 2&&
-                    (view.all.endIndex === store.getCount() - 1)) {
+        
+            waitsFor(function () {
+            
+                if (scroller.getPosition().y === scroller.getMaxUserPosition().y &&
+                    view.all.endIndex === store.getCount() - 1) {
                     return true;
                 }
-                scroller.scrollBy(0, 100);
-             }, 'scroll to end after row expansion', 20000);
-
+            
+                scroller.scrollBy(null, 100);
+            }, 'scroll to end after row expansion', 500);
+        
             // Last row should still be the same
-            runs(function() {
+            runs(function () {
                 expect(view.all.last(true)).toBe(lastRow);
             });
         });

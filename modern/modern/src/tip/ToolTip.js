@@ -73,13 +73,12 @@ Ext.define('Ext.tip.ToolTip', {
 
     floated: true,
     
-    ui: 'tooltip',
-
     hidden: true,
 
     shadow: true,
 
     border: true,
+    bodyBorder: false,
 
     anchor: false,
 
@@ -266,6 +265,15 @@ Ext.define('Ext.tip.ToolTip', {
         trackMouse: false
     },
 
+    classCls: Ext.baseCSSPrefix + 'tooltip',
+
+    headerCls: Ext.baseCSSPrefix + 'tooltipheader',
+    titleCls: Ext.baseCSSPrefix + 'tooltiptitle',
+    toolCls: [
+        Ext.baseCSSPrefix + 'paneltool',
+        Ext.baseCSSPrefix + 'tooltiptool'
+    ],
+
     closeToolText: null,
 
     constructor: function (config) {
@@ -394,31 +402,43 @@ Ext.define('Ext.tip.ToolTip', {
             me.callParent([alignDelegate ? target.child(alignDelegate, true) : target, alignment || me.getAlign(), passedOptions]);
         }
     },
-    
-    onViewportResize: function() {
-        var me = this,
-            currentTarget = me.currentTarget;
 
-        if (me.isVisible() && !me.lastShowWasPointer && currentTarget.dom) {
-            me.showByTarget(me.currentTarget);
+    beforeShow: function(options) {
+        var me = this,
+            result = me.callParent(arguments);
+
+        // Show is going ahead. Ensure there is alignment if a raw show() call used.
+        // Cancel an impending hide.
+        if (result !== false) {
+            // A call to show with no alignment specified should align to the target
+            if (!options.alignment && (me.pointerEvent || me.getTarget())) {
+                options.alignment = {
+                    component: me.getElFromTarget(),
+                    alignment: me.getAlign(),
+                    options: {
+                        overlap: me.getTrackMouse() && !me.getAnchor()
+                    }
+                };
+            }
+            me.clearTimer('dismiss');
         }
     },
 
-    show: function() {
+    afterShow: function() {
         var me = this,
             dismissDelay = me.getDismissDelay();
 
-        // A programmatic show should align to the target
-        if (!me.currentTarget.dom && (me.pointerEvent || me.getTarget())) {
-            return me.showByTarget(me.getElFromTarget());
-        }
-        me.callParent();
+        me.callParent(arguments);
         me.clearTimer('show');
         if (dismissDelay && me.getAutoHide()) {
             me.dismissTimer = Ext.defer(me.hide, dismissDelay, me);
         }
         me.toFront();
-        Ext.getDoc().on('mousedown', me.onDocMouseDown, me);
+        me.mousedownListener = Ext.on({
+            mousedown: 'onDocMouseDown',
+            scope: me,
+            destroyable: true
+        });
     },
 
     hide: function() {
@@ -429,7 +449,7 @@ Ext.define('Ext.tip.ToolTip', {
         me.callParent();
         me.lastHidden = new Date();
         me.updateCurrentTarget(null);
-        Ext.getDoc().un('mousedown', me.onDocMouseDown, me);
+        Ext.destroy(me.mousedownListener);
     },
 
     doDestroy: function() {
@@ -437,7 +457,7 @@ Ext.define('Ext.tip.ToolTip', {
 
         me.clearTimers();
         me.setTarget(null);
-        me.overListeners = null;
+        me.destroyMembers('mousedownListener', 'overListeners');
         me.callParent();
     },
 
@@ -468,21 +488,19 @@ Ext.define('Ext.tip.ToolTip', {
             }
         },
 
-        forceTargetOver: function(e, newTarget) {
-            this.pointerEvent = e;
-            this.updateCurrentTarget(newTarget);
-            this.handleTargetOver();
-        },
-
         onTargetOver: function(e) {
             var me = this,
                 myTarget = me.getElFromTarget(),
                 delegate = me.getDelegate(),
                 currentTarget = me.currentTarget,
-                myListeners = me.hasListeners,
                 newTarget;
 
             if (me.getDisabled()) {
+                return;
+            }
+
+            // If mouse moves over the tip, ignore it if that is allowed.
+            if (me.getAllowOver() && me.el.contains(e.target)) {
                 return;
             }
 
@@ -509,13 +527,7 @@ Ext.define('Ext.tip.ToolTip', {
 
             // If pointer entered the target or a delegate child, then show.
             if (newTarget) {
-                // If users need to see show events on target change, we must hide.
-                if ((myListeners.beforeshow || myListeners.show) && me.isVisible()) {
-                    me.hide();
-                    me.hiddenByTargetOver = me.isHidden();
-                }
-
-                me.forceTargetOver(e, newTarget);
+                me.handleTargetOver(e, newTarget);
             }
             // If over a non-delegate child, behave as in target out
             else if (currentTarget.dom) {
@@ -523,16 +535,39 @@ Ext.define('Ext.tip.ToolTip', {
             }
         },
 
-        handleTargetOver: function() {
-            // Separated from onTargetOver so that subclasses can handle target over in any way.
-            this.delayShow(this.currentTarget);
+        handleTargetOver: function(e, newTarget) {
+            var me = this,
+                myListeners = me.hasListeners;
+
+            me.pointerEvent = e;
+            me.updateCurrentTarget(newTarget);
+
+            // We are over a new target. If we are still visible, we
+            // do not want to hide to avoid flickering. But if there is a
+            // beforeshow listener which may mutate us, we still have to
+            // consult it. If it returns a veto, then we do in fact hide.
+            // Under normal circumstances we continue with no delay into
+            // showByTarget in a visible state.
+            if (me.isVisible()) {
+                if (myListeners.beforeshow && me.fireEvent('beforeshow', me) === false) {
+                    return me.hide();
+                }
+                me.clearTimer('hide');
+                me.clearTimer('dismiss');
+                me.showByTarget(newTarget);
+                if (myListeners.show) {
+                    me.fireEvent('show', me);
+                }
+            } else {
+                me.delayShow(newTarget);
+            }
         },
 
         onTargetTap: function(e) {
             // On hybrid mouse/touch systems, we want to show the tip on touch, but
             // we don't want to show it if this is coming from a click event, because
-            // the mouse is already hovered.
-            if (e.pointerType !== 'mouse') {
+            // the mouse is already hovered. Tap occasionally hides - eg: pickers, menus.
+            if (e.pointerType !== 'mouse' && Ext.fly(e.target).isVisible(true)) {
                 this.onTargetOver(e);
             }
         },
@@ -562,7 +597,12 @@ Ext.define('Ext.tip.ToolTip', {
         },
 
         onTipOut: function() {
-            this.handleTargetOut();
+            // A mouseout of the tip itself is only a mouseout if the pointer has already moved
+            // outside the target and we have no current target, or the mouseout point is outside
+            // of the target.
+            if (!this.currentTarget.dom || !this.pointerEvent.getPoint().isContainedBy(this.currentTarget.getRegion())) {
+                this.handleTargetOut();
+            }
         },
 
         onMouseMove: function(e) {
@@ -571,7 +611,9 @@ Ext.define('Ext.tip.ToolTip', {
 
             // Always update pointerEvent, so that if there's a delayed show
             // scheduled, it gets the latest pointer to align to.
-            me.pointerEvent = e;
+            if (!me.el.contains(e.target)) {
+                me.pointerEvent = e;
+            }
             if (me.isVisible() && me.currentTarget.contains(e.target)) {
                 // If they move the mouse, restart the dismiss delay
                 if (dismissDelay && me.getAutoHide() !== false) {
@@ -591,8 +633,7 @@ Ext.define('Ext.tip.ToolTip', {
             me.clearTimer('hide');
             if (me.getHidden() && !me.showTimer) {
                 // Allow rapid movement from delegate to delegate to show immediately
-                if ((me.getDelegate() || me.hiddenByTargetOver) && Ext.Date.getElapsed(me.lastHidden) < me.getQuickShowInterval()) {
-                    me.hiddenByTargetOver = false;
+                if (me.getDelegate() && Ext.Date.getElapsed(me.lastHidden) < me.getQuickShowInterval()) {
                     me.showByTarget(target);
                 } else {
                     // If a tap event triggered, do not wait. Show immediately.
@@ -653,6 +694,7 @@ Ext.define('Ext.tip.ToolTip', {
             }
 
             if (me.isVisible()) {
+                me.clearTimer('hide');
                 me.alignTo(target, align, options);
             } else {
                 me.showBy(target, align, options);
@@ -715,7 +757,8 @@ Ext.define('Ext.tip.ToolTip', {
 
             me.clearTimers();
             if (me.allowRealign && me.isVisible() && dom) {
-                me.showByTarget(me.pointerEvent || dom);
+                // Realign, overriding possibly stale alignment
+                me.realign(null, me.getAlign());
             }
         },
 

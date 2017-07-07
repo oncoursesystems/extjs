@@ -85,14 +85,13 @@ Ext.define('Ext.menu.CheckItem', {
      */
     checkChangeDisabled: false,
     
-    //<locale>
     /**
      * @cfg {String} submenuText Text to be announced by screen readers when a check item
      * submenu is focused.
+     * @locale
      */
     submenuText: '{0} submenu',
-    //</locale>
-    
+
     ariaRole: 'menuitemcheckbox',
 
     childEls: [

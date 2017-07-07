@@ -34,12 +34,6 @@ Ext.samples = {
                     "desc": "Showcase of Ext JS components and features in the Modern Toolkit"
                 },
                 {
-                    "text": "Feed Viewer",
-                    "url": "feed-viewer/",
-                    "icon": "feeds",
-                    "desc": "RSS feed reader example application"
-                },
-                {
                     "text": "Ext JS Calendar",
                     "url": "calendar/",
                     "icon": "calendar",

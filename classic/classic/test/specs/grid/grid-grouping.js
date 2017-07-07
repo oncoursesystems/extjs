@@ -1,6 +1,8 @@
 /* global Ext, jasmine, expect */
 
-describe("grid-grouping", function() {
+topSuite("grid-grouping",
+    [false, 'Ext.grid.Panel', 'Ext.grid.feature.GroupingSummary'],
+function() {
     function createSuite(buffered) {
         describe(buffered ? "with buffered rendering" : "without buffered rendering", function() {
             var grid, view, store, dataSource, grouping, colRef,
@@ -25,7 +27,7 @@ describe("grid-grouping", function() {
                 var cell = view.getCell(store.getAt(row), colRef[col]),
                     selectorView = grid.lockedGrid ? grid.lockedGrid.getView() : view;
 
-                return cell.down(selectorView.innerSelector).dom.innerHTML;
+                return cell.querySelector(selectorView.innerSelector).innerHTML;
             }
 
             function triggerCellMouseEvent(type, rowIdx, cellIdx, button, x, y) {
@@ -601,10 +603,10 @@ describe("grid-grouping", function() {
 
                 it("should update the summary rows", function() {
                     function expectSummaryText(row, values) {
-                        row = Ext.fly(view.getNode(row)).down(grouping.summaryRowSelector);
+                        row = view.getNode(row).querySelector(grouping.summaryRowSelector);
                         
                         Ext.Array.forEach(grid.getColumnManager().getColumns(), function(col, index) {
-                            var text = row.down(col.getCellInnerSelector()).dom.innerHTML;
+                            var text = row.querySelector(col.getCellInnerSelector()).innerHTML;
                             expect(text).toBe(values[index]);
                         });
                     }
@@ -773,7 +775,8 @@ describe("grid-grouping", function() {
                                 viewIndex,
                                 selItem,
                                 expanded,
-                                storeCount = store.getCount();
+                                storeCount = store.getCount(),
+                                spy = jasmine.createSpy();
 
                             // viewSize might be larger than available records if buffer zones have been extended,
                             // so minimize the test value with the storeCount
@@ -800,17 +803,23 @@ describe("grid-grouping", function() {
 
                             view.bufferedRenderer.scrollTo(75, {
                                 select: true,
-                                focus: true
+                                focus: true,
+                                callback: spy
                             });
-                            selectedRecord = grid.selModel.getSelection()[0];
-                            viewIndex = view.indexOf(selectedRecord);
-                            selItem = view.all.item(viewIndex);
-
-                            // The outer <table> carries the selected class.
-                            expect(selItem).toHaveCls(view.selectedItemCls);
-
-                            // The cell carries the focus class.
-                            expect(view.getCell(selItem, view.getHeaderAtIndex(0))).toHaveCls(view.focusedItemCls);
+                            
+                            waitsForSpy(spy, 'scroller promise to resolve');
+                            
+                            runs(function () {
+                                selectedRecord = grid.selModel.getSelection()[0];
+                                viewIndex = view.indexOf(selectedRecord);
+                                selItem = view.all.item(viewIndex);
+                                // The outer <table> carries the selected class.
+                                expect(selItem).toHaveCls(view.selectedItemCls);
+                            
+                                // The cell carries the focus class.
+                                expect(view.getCell(selItem, view.getHeaderAtIndex(0))).toHaveCls(view.focusedItemCls);
+                            });
+                            
                         });
 
                         it("should collapse the header on clicking", function(){
@@ -1325,58 +1334,97 @@ describe("grid-grouping", function() {
             
             if (buffered) {
                 describe('Selection', function() {
+                    // selection via Ext.view.Table#ensureVisible is async via a Promise
+                    // so we need to wait for a change in selection prior to evaluating
+                    // the expectation
+                    var selectionChange = (function () {
+                        var lastSelection;
+                        
+                        return function () {
+                            var selection = grid.selModel.getSelection()[0],
+                                isChanged = selection !== lastSelection;
+    
+                            lastSelection = selection;
+                            return  isChanged;
+                        }
+                        
+                    }());
+                    
                     it('should skip collapsed groups', function() {
                         makeGrid();
 
-                        triggerHeaderClick('t1');
-                        triggerHeaderClick('t4');
-
-                        // Rows for all the child records of the uncollapsed groups, t2 and t3. Plus two collapsed placeholders.
-                        expect(grid.view.all.getCount()).toBe(grouping.getGroup('t2').getRange().length + grouping.getGroup('t3').getRange().length + 2);
-
-                        // Focus and select the first record of group t2
-                        triggerCellMouseEvent('click', 1, 0);
-
-                        // ALT+End - Ask to go to end.
-                        // With buffered rendering, that will expand the group that the target
-                        // is in, so should select record 99
-                        triggerCellKeyEvent(1, 0, 'keydown', Ext.event.Event.END, true);
-
-                        expect(grid.selModel.getSelection()[0] === grid.store.getAt(99)).toBe(true);
-
-                        // ALT+Home - Ask to go to top.
-                        // With buffered rendering, that will expand the group that the target
-                        // is in, so should select record 0
-                        triggerCellKeyEvent(1, 0, 'keydown', Ext.event.Event.HOME, true);
-
-                        expect(grid.selModel.getSelection()[0] === grid.store.getAt(0)).toBe(true);
-
-                        triggerHeaderClick('t2'); // Collapse
-                        triggerHeaderClick('t3'); // Collapse
-
-                        // Rows for all the child records of the uncollapsed groups, t1 and t4 Plus two collapsed placeholders.
-                        expect(grid.view.all.getCount()).toBe(grouping.getGroup('t1').getRange().length + grouping.getGroup('t4').getRange().length + 2);
-
-                        // Focus and select the first record of group t1
-                        triggerCellMouseEvent('click', 0, 0);
-
-                        // ALT/END - Ask to go to end. Should skip the two collapsed groups and select record 99
-                        triggerCellKeyEvent(1, 0, 'keydown', Ext.event.Event.END, true);
-
-                        expect(grid.selModel.getSelection()[0] === grid.store.getAt(99)).toBe(true);
-
-                        // Focus and select the last record of group t1
-                        triggerCellMouseEvent('click', 24, 0);
-
-                        // Ask to go to down 1. Should skip the two collapsed groups and select record 75
-                        triggerCellKeyEvent(24, 0, 'keydown', Ext.event.Event.DOWN);
-
-                        expect(grid.selModel.getSelection()[0] === grid.store.getAt(75)).toBe(true);
-
-                        // Ask to go to up 1. Should skip the two collapsed groups and select record 24
-                        triggerCellKeyEvent(27, 0, 'keydown', Ext.event.Event.UP);
-
-                        expect(grid.selModel.getSelection()[0] === grid.store.getAt(24)).toBe(true);
+                        runs(function () {
+                            triggerHeaderClick('t1');
+                            triggerHeaderClick('t4');
+    
+                            // Rows for all the child records of the uncollapsed groups, t2 and t3. Plus two collapsed placeholders.
+                            expect(grid.view.all.getCount()).toBe(grouping.getGroup('t2').getRange().length + grouping.getGroup('t3').getRange().length + 2);
+    
+                            // Focus and select the first record of group t2
+                            triggerCellMouseEvent('click', 1, 0);
+                        });
+                        
+                        waitsFor(selectionChange);
+                        runs(function () {
+                            // ALT+End - Ask to go to end.
+                            // With buffered rendering, that will expand the group that the target
+                            // is in, so should select record 99
+                            triggerCellKeyEvent(1, 0, 'keydown', Ext.event.Event.END, true);
+                        });
+                        
+                        waitsFor(selectionChange);
+                        runs(function () {
+                            expect(grid.selModel.getSelection()[0] === grid.store.getAt(99)).toBe(true);
+    
+                            // ALT+Home - Ask to go to top.
+                            // With buffered rendering, that will expand the group that the target
+                            // is in, so should select record 0
+                            triggerCellKeyEvent(1, 0, 'keydown', Ext.event.Event.HOME, true);
+                        });
+    
+                        waitsFor(selectionChange);
+                        runs(function () {
+                            expect(grid.selModel.getSelection()[0] === grid.store.getAt(0)).toBe(true);
+    
+                            triggerHeaderClick('t2'); // Collapse
+                            triggerHeaderClick('t3'); // Collapse
+    
+                            // Rows for all the child records of the uncollapsed groups, t1 and t4 Plus two collapsed placeholders.
+                            expect(grid.view.all.getCount()).toBe(grouping.getGroup('t1').getRange().length + grouping.getGroup('t4').getRange().length + 2);
+    
+                            // Focus and select the first record of group t1
+                            triggerCellMouseEvent('click', 0, 0);
+    
+                            // ALT/END - Ask to go to end. Should skip the two collapsed groups and select record 99
+                            triggerCellKeyEvent(1, 0, 'keydown', Ext.event.Event.END, true);
+                        });
+    
+                        waitsFor(selectionChange);
+                        runs(function () {
+                            expect(grid.selModel.getSelection()[0] === grid.store.getAt(99)).toBe(true);
+    
+                            // Focus and select the last record of group t1
+                            triggerCellMouseEvent('click', 24, 0);
+                        });
+                        
+                        waitsFor(selectionChange);
+                        runs(function () {
+                            // Ask to go to down 1. Should skip the two collapsed groups and select record 75
+                            triggerCellKeyEvent(24, 0, 'keydown', Ext.event.Event.DOWN);
+                        });
+                        
+                        waitsFor(selectionChange);
+                        runs(function () {
+                            expect(grid.selModel.getSelection()[0] === grid.store.getAt(75)).toBe(true);
+    
+                            // Ask to go to up 1. Should skip the two collapsed groups and select record 24
+                            triggerCellKeyEvent(27, 0, 'keydown', Ext.event.Event.UP);
+                        });
+    
+                        waitsFor(selectionChange);
+                        runs(function () {
+                            expect(grid.selModel.getSelection()[0] === grid.store.getAt(24)).toBe(true);
+                        });
                     });
                 });
 

@@ -28,9 +28,11 @@ Ext.define('Ext.util.sizemonitor.Abstract', {
     contentHeight: null,
 
     constructor: function(config) {
-        this.refresh = Ext.Function.bind(this.refresh, this);
+        var me = this;
 
-        this.info = {
+        me.refresh = Ext.Function.bind(me.refresh, me);
+
+        me.info = {
             width: 0,
             height: 0,
             contentWidth: 0,
@@ -38,11 +40,11 @@ Ext.define('Ext.util.sizemonitor.Abstract', {
             flag: 0
         };
 
-        this.initElement();
+        me.initElement();
 
-        this.initConfig(config);
+        me.initConfig(config);
 
-        this.bindListeners(true);
+        me.bindListeners(true);
     },
 
     bindListeners: Ext.emptyFn,
@@ -54,7 +56,7 @@ Ext.define('Ext.util.sizemonitor.Abstract', {
     },
 
     updateElement: function(element) {
-        element.append(this.detectorsContainer);
+        element.append(this.detectorsContainer, true);
         element.addCls(Ext.baseCSSPrefix + 'size-monitored');
     },
 
@@ -87,20 +89,21 @@ Ext.define('Ext.util.sizemonitor.Abstract', {
             return false;
         }
 
-        var width = element.getWidth(),
+        var me = this,
+            width = element.getWidth(),
             height = element.getHeight(),
-            contentWidth = this.getContentWidth(),
-            contentHeight = this.getContentHeight(),
-            currentContentWidth = this.contentWidth,
-            currentContentHeight = this.contentHeight,
-            info = this.info,
+            contentWidth = me.getContentWidth(),
+            contentHeight = me.getContentHeight(),
+            currentContentWidth = me.contentWidth,
+            currentContentHeight = me.contentHeight,
+            info = me.info,
             resized = false,
-            flag = 0;
+            flag;
 
-        this.width = width;
-        this.height = height;
-        this.contentWidth = contentWidth;
-        this.contentHeight = contentHeight;
+        me.width = width;
+        me.height = height;
+        me.contentWidth = contentWidth;
+        me.contentHeight = contentHeight;
 
         flag = ((currentContentWidth !== contentWidth ? 1 : 0) + (currentContentHeight !== contentHeight ? 2 : 0));
 
@@ -112,7 +115,7 @@ Ext.define('Ext.util.sizemonitor.Abstract', {
             info.flag = flag;
 
             resized = true;
-            this.getCallback().apply(this.getScope(), this.getArgs());
+            me.getCallback().apply(me.getScope(), me.getArgs());
         }
 
         return resized;

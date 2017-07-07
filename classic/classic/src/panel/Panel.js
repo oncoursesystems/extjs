@@ -328,16 +328,15 @@ Ext.define('Ext.panel.Panel', {
      */
     closeAction: 'destroy',
     
-    //<locale>
     /**
      * @cfg {String} closeToolText Text to be announced by screen readers when the 
      * **close** {@link Ext.panel.Tool tool} is focused.  Will also be set as the close 
      * tool's {@link Ext.panel.Tool#cfg-tooltip tooltip} text.
      * 
      * **Note:** Applicable when the panel is {@link #closable}: true
+     * @locale
      */
     closeToolText: 'Close panel',
-    //</locale>
 
     /**
      * @cfg {Boolean} collapsed
@@ -401,13 +400,13 @@ Ext.define('Ext.panel.Panel', {
      * - `"mini"` - The Panel collapses without a visible header.
      */
     
-    //<locale>
     /**
      * @cfg {String} collapseToolText Text to be announced by screen readers when 
      * **collapse** {@link Ext.panel.Tool tool} is focused.  Will also be set as the 
      * collapse tool's {@link Ext.panel.Tool#cfg-tooltip tooltip} text.
      * 
      * **Note:** Applicable when the panel is {@link #collapsible}: true
+     * @locale
      */
     collapseToolText: 'Collapse panel',
     
@@ -417,9 +416,9 @@ Ext.define('Ext.panel.Panel', {
      * expand tool's {@link Ext.panel.Tool#cfg-tooltip tooltip} text.
      * 
      * **Note:** Applicable when the panel is {@link #collapsible}: true
+     * @locale
      */
     expandToolText: 'Expand panel',
-    //</locale>
 
     /**
      * @cfg {Boolean} constrain
@@ -579,7 +578,7 @@ Ext.define('Ext.panel.Panel', {
     rbar: null,
 
     /**
-     * @cfg {Object/Object[]} buttons
+     * @cfg {Object[]} buttons
      * Convenience config used for adding buttons docked to the bottom of the panel. This is a
      * synonym for the {@link #fbar} config.
      *
@@ -1090,9 +1089,9 @@ Ext.define('Ext.panel.Panel', {
             tools = [tools];
         }
 
-        var me     = this,
+        var me = this,
             header = me.header,
-            tLen   = tools.length,
+            len = tools.length,
             curTools = me.tools,
             t, tool;
 
@@ -1103,8 +1102,11 @@ Ext.define('Ext.panel.Panel', {
             }
         }
 
-        for (t = 0; t < tLen; t++) {
+        for (t = 0; t < len; t++) {
             tool = tools[t];
+            if (typeof tool !== 'string' && !tool.isTool) {
+                tool = Ext.apply({}, tool);
+            }
             tool.toolOwner = me;
 
             if (header) {
@@ -1496,15 +1498,15 @@ Ext.define('Ext.panel.Panel', {
             toolbar.dock = pos;
             
             if (disableFocusableContainer) {
-                toolbar.enableFocusableContainer = false;
+                toolbar.focusableContainer = false;
             }
 
             // Legacy support for buttonAlign (only used by buttons/fbar)
             if (useButtonAlign) {
-                toolbar.layout = Ext.applyIf(toolbar.layout || {}, {
+                toolbar.layout = Ext.apply({
                     // default to 'end' (right-aligned) if me.buttonAlign is undefined or invalid
-                    pack: { left:'start', center:'center' }[me.buttonAlign] || 'end'
-                });
+                    pack: {left:'start', center:'center' }[me.buttonAlign] || 'end'
+                }, toolbar.layout);
             }
             return toolbar;
         }
@@ -1766,7 +1768,7 @@ Ext.define('Ext.panel.Panel', {
         
         if (header) {
             Ext.apply(result, {
-                enableFocusableContainer: header.enableFocusableContainer,
+                focusableContainer: header.focusableContainer,
                 activeChildTabIndex: header.activeChildTabIndex,
                 inactiveChildTabIndex: header.inactiveChildTabIndex,
                 allowFocusingDisabledChildren: header.allowFocusingDisabledChildren
@@ -2234,9 +2236,10 @@ Ext.define('Ext.panel.Panel', {
                     click: {
                         // titleCollapse needs to take precedence over floatable
                         fn: function(e, target) {
+                            var expandTool = placeholder.expandTool;
                             // If the element click was specifically on the tool, that tool's handler
                             // will process it and we must not: https://sencha.jira.com/browse/EXTJS-21045
-                            if (!placeholder.expandTool.el.dom.contains(arguments[1])) {
+                            if (!(expandTool && expandTool.el.dom.contains(arguments[1]))) {
                                 me[(!titleCollapse && floatable) ? 'floatCollapsedPanel' : 'toggleCollapse']();
                             }
                         },
@@ -2415,18 +2418,22 @@ Ext.define('Ext.panel.Panel', {
             header = me.header,
             ghostHeader, tools, icon, iconCls, glyph, i;
 
+        Ext.suspendLayouts();
         if (!ghostPanel) {
             me.ghostPanel = ghostPanel = Ext.widget(me.createGhost(cls));
             ghostPanel.el.dom.removeAttribute('tabIndex');
         } else {
             ghostPanel.el.show();
         }
+        ghostPanel.setXY([box.x, box.y]);
+        ghostPanel.setSize(box.width, box.height);
         ghostPanel.setHiddenState(false);
         ghostPanel.floatParent = me.floatParent;
-        if (header && !me.preventHeader) {
+
+        // Only churn ghost's header if our header has changed composition
+        if (header && !me.preventHeader && me.lastHeaderGen !== header.items.generation) {
             ghostHeader = ghostPanel.header;
             // restore options
-            ghostHeader.suspendLayouts();
             tools = ghostHeader.query('tool');
             for (i = tools.length; i--;) {
                 ghostHeader.remove(tools[i]);
@@ -2454,11 +2461,9 @@ Ext.define('Ext.panel.Panel', {
             }
 
             ghostHeader.addCls(Ext.baseCSSPrefix + 'header-ghost');
-            ghostHeader.resumeLayouts(true);
+            me.lastHeaderGen = header.items.generation;
         }
-
-        ghostPanel.setPagePosition(box.x, box.y);
-        ghostPanel.setSize(box.width, box.height);
+        Ext.resumeLayouts(true);
 
         // Hide element, but do not disturb focus or clobber accessibility
         me.elVisMode = myEl.getVisibilityMode();
@@ -2490,7 +2495,7 @@ Ext.define('Ext.panel.Panel', {
                 // a simple bare-minimum clone of each tool for ghosting purposes.
                 tools.push({
                     type: tool.type,
-                    tooltip: tool.tooltip
+                    focusable: false
                 });
             }
         } else {
@@ -2668,13 +2673,19 @@ Ext.define('Ext.panel.Panel', {
     initTools: function() {
         var me = this,
             tools = me.tools,
+            len = tools && tools.length,
             i, toolCfg, tool;
 
         me.tools = [];
-        for (i = tools && tools.length; i; ) {
-            --i;
-            me.tools[i] = tool = tools[i];
-            tool.toolOwner = me;
+        if (len) {
+            for (i = 0; i < len; ++i) {
+                tool = tools[i];
+                if (typeof tool !== 'string' && !tool.isTool) {
+                    tool = Ext.apply({}, tool);
+                }
+                me.tools.push(tool);
+                tool.toolOwner = me;
+            }
         }
 
         // Add a collapse tool unless configured to not show a collapse tool
@@ -2787,7 +2798,7 @@ Ext.define('Ext.panel.Panel', {
             });
             
             me.accordionBodyKeyNav = new Ext.util.KeyNav({
-                target: me.body,
+                target: me.bodyWrap,
                 scope: me,
                 
                 up: {
@@ -3667,6 +3678,10 @@ Ext.define('Ext.panel.Panel', {
     fireDefaultButton: function(e) {
         var me = this,
             refHolder, btn;
+
+        if (e.target.tagName === 'TEXTAREA' || e.target.getAttribute('aria-multiline') === 'true') {
+            return true;
+        }
         
         refHolder = me.lookupReferenceHolder(/* skipThis = */ false) || me;
         btn = refHolder.lookupReference(me.defaultButton);
@@ -4186,10 +4201,7 @@ Ext.define('Ext.panel.Panel', {
          * @private
          */
         slideOutFloatedPanelBegin: function() {
-            var me = this,
-                placeholderEl = me.placeholder.el,
-                el = me.el,
-                bodyMousedownListener = me.bodyMousedownListener;
+            var me = this;
 
             me.collapsed = me.floatedFromCollapse;
             me.setHiddenState(true);
@@ -4197,9 +4209,6 @@ Ext.define('Ext.panel.Panel', {
 
             // Remove mouse leave/enter monitors, and the mousedown monitor
             Ext.destroy(me.pointerLeaveListener, me.phHoverListeners, me.elHoverListeners);
-            if (bodyMousedownListener) {
-                me.bodyMousedownListener = bodyMousedownListener.destroy()
-            }
         },
 
         /**

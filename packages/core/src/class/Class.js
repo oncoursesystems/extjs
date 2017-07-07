@@ -381,6 +381,55 @@
 
         Class.triggerExtended.apply(Class, arguments);
 
+        /**
+         * @cfg {Object} eventedConfig
+         * Config options defined within `eventedConfig` will auto-generate the setter /
+         * getter methods (see {@link #cfg-config config} for more information on
+         * auto-generated getter / setter methods).  Additionally, when an
+         * `eventedConfig` is set it will also fire a before{cfg}change and {cfg}change
+         * event when the value of the eventedConfig is changed from its originally
+         * defined value.
+         *
+         * **Note:** When creating a custom class you'll need to extend Ext.Evented
+         *
+         * Example custom class:
+         *
+         *     Ext.define('MyApp.util.Test', {
+         *         extend: 'Ext.Evented',
+         *
+         *         eventedConfig: {
+         *             foo: null
+         *         }
+         *     });
+         *
+         * In this example, the `foo` config will initially be null.  Changing it via
+         * `setFoo` will fire the `beforefoochange` event.  The call to the setter can be
+         * halted by returning `false` from a listener on the **before** event.
+         *
+         *     var test = Ext.create('MyApp.util.Test', {
+         *         listeners: {
+         *             beforefoochange: function (instance, newValue, oldValue) {
+         *                 return newValue !== 'bar';
+         *             },
+         *             foochange: function (instance, newValue, oldValue) {
+         *                console.log('foo changed to:', newValue);
+         *             }
+         *         }
+         *     });
+         *
+         *     test.setFoo('bar');
+         *
+         * The `before` event handler can be used to validate changes to `foo`.
+         * Returning `false` will prevent the setter from changing the value of the
+         * config.  In the previous example the `beforefoochange` handler returns false
+         * so `foo` will not be updated and `foochange` will not be fired.
+         *
+         *     test.setFoo('baz');
+         *
+         * Setting `foo` to 'baz' will not be prevented by the `before` handler.  Foo
+         * will be set to the value: 'baz' and the `foochange` event will be fired.
+         */
+
         if (data.onClassExtended) {
             Class.onExtended(data.onClassExtended, Class);
             delete data.onClassExtended;
@@ -506,80 +555,6 @@
         ret.sort(ruleKeySortFn);
         return ret;
     };
-
-    //<feature classSystem.platformConfig>
-    /**
-     * @cfg {Object} platformConfig
-     * Allows setting config values for a class based on specific platforms. The value
-     * of this config is an object whose properties are "rules" and whose values are
-     * objects containing config values.
-     *
-     * For example:
-     *
-     *      Ext.define('App.view.Foo', {
-     *          extend: 'Ext.panel.Panel',
-     *
-     *          platformConfig: {
-     *              desktop: {
-     *                  title: 'Some Rather Descriptive Title'
-     *              },
-     *
-     *              '!desktop': {
-     *                  title: 'Short Title'
-     *              }
-     *          }
-     *      });
-     *
-     * In the above, "desktop" and "!desktop" are (mutually exclusive) rules. Whichever
-     * evaluates to `true` will have its configs applied to the class. In this case, only
-     * the "title" property, but the object can contain any number of config properties.
-     * In this case, the `platformConfig` is evaluated as part of the class and there is
-     * no cost for each instance created.
-     *
-     * The rules are evaluated expressions in the context of the platform tags contained
-     * in `{@link Ext#platformTags Ext.platformTags}`. Any properties of that object are
-     * implicitly usable (as shown above).
-     *
-     * If a `platformConfig` specifies a config value, it will replace any values declared
-     * on the class itself.
-     *
-     * Use of `platformConfig` on instances is handled by the config system when classes
-     * call `{@link Ext.Base#initConfig initConfig}`. For example:
-     *
-     *      Ext.create({
-     *          xtype: 'panel',
-     *
-     *          platformConfig: {
-     *              desktop: {
-     *                  title: 'Some Rather Descriptive Title'
-     *              },
-     *
-     *              '!desktop': {
-     *                  title: 'Short Title'
-     *              }
-     *          }
-     *      });
-     *
-     * The following is equivalent to the above:
-     *
-     *      if (Ext.platformTags.desktop) {
-     *          Ext.create({
-     *              xtype: 'panel',
-     *              title: 'Some Rather Descriptive Title'
-     *          });
-     *      } else {
-     *          Ext.create({
-     *              xtype: 'panel',
-     *              title: 'Short Title'
-     *          });
-     *      }
-     *
-     * To adjust configs based on dynamic conditions, see `{@link Ext.mixin.Responsive}`.
-     */
-    ExtClass.registerPreprocessor('platformConfig', function(Class, data, hooks) {
-        Class.addPlatformConfig(data);
-    });
-    //</feature>
 
     //<feature classSystem.config>
     /**
@@ -797,7 +772,6 @@
     });
     //</feature>
 
-
     //<feature classSystem.backwardsCompatible>
     // Backwards compatible
     Ext.extend = function(Class, Parent, members) {
@@ -828,9 +802,6 @@
             //</feature>
             //<feature classSystem.mixins>
             ,'mixins'
-            //</feature>
-            //<feature classSystem.platformConfig>
-            ,'platformConfig'
             //</feature>
             //<feature classSystem.config>
             ,'config'

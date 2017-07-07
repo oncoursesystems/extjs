@@ -4,6 +4,10 @@
 Ext.define('Ext.chart.MarkerHolder', {
     extend: 'Ext.Mixin',
 
+    requires: [
+        'Ext.chart.Markers'
+    ],
+
     mixinConfig: {
         id: 'markerHolder',
         after: {

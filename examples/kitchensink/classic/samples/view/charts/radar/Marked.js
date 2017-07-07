@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.charts.radar.Marked', {
         path: 'classic/samples/view/charts/radar/BasicController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Browsers.js'
+        path: 'app/store/Browsers.js'
     }],
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -49,29 +49,16 @@ Ext.define('KitchenSink.view.charts.radar.Marked', {
         store: {
             type: 'browsers'
         },
-        insetPadding: '40 40 60 40',
+        insetPadding: 20,
         interactions: ['rotate'],
-        sprites: [{
-            type: 'text',
-            text: 'Radar Charts - Marked',
-            fontSize: 22,
-            width: 100,
-            height: 30,
-            x: 40, // the sprite x position
-            y: 20  // the sprite y position
-        }, {
-            type: 'text',
-            text: 'Data: Browser Stats 2012',
-            fontSize: 10,
-            x: 12,
-            y: 480
-        }, {
-            type: 'text',
-            text: 'Source: http://www.w3schools.com/',
-            fontSize: 10,
-            x: 12,
-            y: 495
-        }],
+        captions: {
+            title: 'Radar Charts - Marked',
+            credits: {
+                text: 'Data: Browser Stats 2012 - Internet Explorer\n' +
+                    'Source: http://www.w3schools.com/',
+                align: 'left'
+            }
+        },
         axes: [{
             type: 'numeric',
             position: 'radial',

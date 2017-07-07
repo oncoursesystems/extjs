@@ -114,7 +114,7 @@ Ext.testHelper = {
         return events;
     },
 
-    pointerEvents: navigator.pointerEnabled ? {
+    pointerEvents: Ext.supports.PointerEvents ? {
         start: 'pointerdown',
         move: 'pointermove',
         end: 'pointerup',
@@ -126,7 +126,7 @@ Ext.testHelper = {
         // incorrect on IE11, so force it to use mouseleave here.
         // See: https://connect.microsoft.com/IE/feedback/details/851111/ev-relatedtarget-in-pointerleave-indicates-departure-element-not-destination-element
         leave: jasmine.browser.isIE11 ? 'mouseleave' : 'pointerleave'
-    } : navigator.msPointerEnabled ? {
+    } : Ext.supports.MSPointerEvents ? {
         start: 'MSPointerDown',
         move: 'MSPointerMove',
         end: 'MSPointerUp',
@@ -152,7 +152,8 @@ Ext.testHelper = {
         over: 'mouseover',
         out: 'mouseout',
         enter: 'mouseenter',
-        leave: 'mouseleave'
+        leave: 'mouseleave',
+        cancel: 'mouseup'
     },
 
     fireEvent: function(type, target, cfg) {
@@ -204,8 +205,8 @@ Ext.testHelper = {
             // If it's "over" or "out", we'll fall through to mouse events.
             // This is important for touch enabled platforms which have a mouse but
             // do not support W3C pointer events.
-            // If they insist on specifying touch events, override the fallback to mouse on WebKits which implement touch on desktop
-            if (jasmine.supportsTouch && (cfg.pointerType === 'touch' || ((eventType = me.touchEvents[type]) && !(Ext.isWebKit && Ext.os.is.Desktop)))) {
+            // If they insist on specifying touch events, override the fallback to mouse on desktop browsers that support touch events
+            if (jasmine.supportsTouch && (cfg.pointerType === 'touch' || ((eventType = me.touchEvents[type]) && !Ext.os.is.Desktop))) {
                 // If a translated mousemove happens with no prior mousedown
                 // we have to ignore it - that's no gesture on touch.
                 if (eventType === 'touchmove' && !Ext.Object.getKeys(me.activeTouches).length) {
@@ -344,9 +345,96 @@ Ext.testHelper = {
                 [activeTouches[id]]
             );
         }
+        
         this.activeTouches = null;
 
-        // End any mousedown counters
-        jasmine.doFireMouseEvent(document.body, 'mouseup');
+        // End any mousedown counters. Don't fire mouseup if there was no mousedown though!
+        if (jasmine.doFireMouseEvent.needMouseup) {
+            // We don't need stack for this one, and collecting it is expensive!
+            id = jasmine.CAPTURE_CALL_STACK;
+            jasmine.CAPTURE_CALL_STACK = false;
+
+            jasmine.doFireMouseEvent(document.body, 'mouseup');
+
+            jasmine.CAPTURE_CALL_STACK = id;
+        }
+    },
+
+    createHashMock: function () {
+        var HashMock = {
+            hash: '',
+            historyStack: [],
+            currentIdx: -1,
+            history: {
+                go: function (direction) {
+                    var newIdx = HashMock.currentIdx + direction;
+
+                    if (newIdx < 0) {
+                        //cannot go to -1
+                        newIdx = 0;
+                    }
+
+                    HashMock.currentIdx = newIdx;
+
+                    HashMock.hash = HashMock.historyStack[newIdx] || '';
+                }
+            },
+            location: {
+                replace: function (uri) {
+                    var stack = HashMock.historyStack,
+                        idx = HashMock.currentIdx;
+
+                    if (idx < 0) {
+                        //should not replace -1
+                        idx = HashMock.currentIdx = 0;
+                    }
+
+                    stack[idx] = uri;
+
+                    HashMock.hash = '#' + uri.split('#')[1];
+                }
+            },
+            reset: function () {
+                this.hash = '';
+                this.historyStack.length = 0;
+                this.currentIdx = -1;
+            }
+        };
+
+        if (!Ext.isIE8) {
+            Object.defineProperty(HashMock.location, 'hash', {
+                enumerable : true,
+                get        : function () {
+                    return HashMock.hash;
+                },
+                set        : function (frag) {
+                    if (frag.substr(0, 1) !== '#') {
+                        frag = '#' + frag;
+                    }
+
+                    if (HashMock.hash !== frag) {
+                        var stack = HashMock.historyStack,
+                            num = stack.length;
+
+                        if (HashMock.currentIdx === -1) {
+                            stack.push('');
+                            HashMock.currentIdx = num;
+
+                            num++;
+                        }
+
+                        if (num - 1 > HashMock.currentIdx) {
+                            stack.length = num - 1;
+                        }
+
+                        stack.push(HashMock.hash = frag);
+
+                        HashMock.currentIdx = num;
+                    }
+                }
+            });
+        }
+
+        return HashMock;
     }
 };

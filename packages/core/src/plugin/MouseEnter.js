@@ -5,7 +5,7 @@
  *
  * This is useful for components which render arbitrary and transient child elements
  * such as DataViews and Charts. It allows notification of mousenter events from 
- * child nodes witghout having to add  listeners to each child element.
+ * child nodes without having to add  listeners to each child element.
  */
 Ext.define('Ext.plugin.MouseEnter', {
     extend: 'Ext.plugin.Abstract',
@@ -26,14 +26,14 @@ Ext.define('Ext.plugin.MouseEnter', {
      * @cfg {String/Function} handler A callback to invoke when a the mouse enters a
      * descendant delegate.
      * @cfg {Ext.event.Event} handler.e The `mouseover` event which triggered the mouse enter.
-     * @cfg {HtmlElement} handler.target The delegate element into which the mouse just entered.
+     * @cfg {HTMLElement} handler.target The delegate element into which the mouse just entered.
      */
 
     /**
      * @cfg {String/Function} [leaveHandler] A callback to invoke when a the mouse leaves a
      * descendant delegate.
-     * @cfg {Ext.event.Event} handler.e The `mouseover` event which triggered the mouse leave.
-     * @cfg {HtmlElement} handler.target The delegate element which the mouse just left.
+     * @cfg {Ext.event.Event} leaveHandler.e The `mouseover` event which triggered the mouse leave.
+     * @cfg {HTMLElement} leaveHandler.target The delegate element which the mouse just left.
      */
 
     /**
@@ -56,7 +56,7 @@ Ext.define('Ext.plugin.MouseEnter', {
         //</debug>
         var me = this,
             listeners = {
-                mouseover: me.onMouseEvent,
+                mouseover: 'onMouseEvent',
                 scope: me,
                 destroyable: true
             },
@@ -65,7 +65,7 @@ Ext.define('Ext.plugin.MouseEnter', {
         // Need the mouseout listener if there's a delay, so that we get an event 
         // in which to cancel the mouseover handling.
         if (me.leaveHandler || me.delay) {
-            listeners.mouseout = me.onMouseEvent;
+            listeners.mouseout = 'onMouseEvent';
         }
 
         // Element being a string means a referenced element name in the Component
@@ -75,10 +75,12 @@ Ext.define('Ext.plugin.MouseEnter', {
 
         // If the component has the element, add the listener.
         // Modern components always will have their elements.
-        if (element){
-            me.mouseListener = element.on(listeners);
+        if (element) {
+            me.mouseListener = Ext.get(element).on(listeners);
         }
         // For classic, we have to wait until render.
+        // destroyable: true does not work on named element listeners on a component
+        // https://sencha.jira.com/browse/EXTJS-22866
         else {
             component.on({
                 render: function() {

@@ -28,18 +28,33 @@ Ext.define('Ext.grid.RowEditor', {
      * record which has not been modified will delete that record from the store.
      */
 
-    //<locale>
+    /**
+     * @cfg {String} saveBtnText
+     * The text for the Update button below the row edit form.
+     * @locale
+     */
     saveBtnText: 'Update',
-    //</locale>
-    //<locale>
+
+    /**
+     * @cfg {String} cancelBtnText
+     * The text for the Cancel button below the row edit form.
+     * @locale
+     */
     cancelBtnText: 'Cancel',
-    //</locale>
-    //<locale>
+
+    /**
+     * @cfg {String} errorsText
+     * The title for displaying an error tip.
+     * @locale
+     */
     errorsText: 'Errors',
-    //</locale>
-    //<locale>
+
+    /**
+     * @cfg {String} dirtyText
+     * The message to display when dirty data prevents closing the row editor.
+     * @locale
+     */
     dirtyText: 'You need to commit or cancel your changes',
-    //</locale>
 
     lastScrollLeft: 0,
     lastScrollTop: 0,
@@ -55,6 +70,13 @@ Ext.define('Ext.grid.RowEditor', {
     // Change the hideMode to offsets so that we get accurate measurements when
     // the roweditor is hidden for laying out things like a TriggerField.
     hideMode: 'offsets',
+    
+    defaultFocus: 'field:canfocus',
+    
+    layout: {
+        type: 'hbox',
+        align: 'middle'
+    },
 
     _cachedNode: false,
 
@@ -65,11 +87,6 @@ Ext.define('Ext.grid.RowEditor', {
             form, normalCt, lockedCt;
 
         me.cls = Ext.baseCSSPrefix + 'grid-editor ' + Ext.baseCSSPrefix + 'grid-row-editor';
-
-        me.layout = {
-            type: 'hbox',
-            align: 'middle'
-        };
 
         me.lockable = grid.lockable;
 
@@ -286,7 +303,8 @@ Ext.define('Ext.grid.RowEditor', {
         var me = this,
             plugin = me.editingPlugin;
 
-        me.keyNav = new Ext.util.KeyNav(me.el, {
+        me.keyNav = new Ext.util.KeyNav({
+            target: me.el,
             tab: {
                 fn: me.onFieldTab,
                 scope: me
@@ -314,7 +332,8 @@ Ext.define('Ext.grid.RowEditor', {
         // Ignore refresh caused by the completion process
         if (!me.completing) {
             // Recover our row node after a view refresh
-            if (context && (row = view.getRow(context.record))) {
+            // Note that refresh could have been caused by column removal
+            if (context && !context.column.destroyed && (row = view.getRow(context.record))) {
                 if (view === context.column.getView()) {
                     context.row = row;
                     context.view = view;
@@ -544,8 +563,8 @@ Ext.define('Ext.grid.RowEditor', {
         // Cache the active field so that we can restore focus into its cell onHide
 
         // Makes the cursor always be placed at the end of the textfield
-        // when the field is being edited for the first time (IE/Edge only).
-        if ((Ext.isIE || Ext.isEdge) && field.selectText) {
+        // when the field is being edited for the first time.
+        if (field.selectText) {
             field.selectText(field.inputEl.dom.value.length);
         }
 
@@ -636,7 +655,8 @@ Ext.define('Ext.grid.RowEditor', {
         if (!btns && !me.destroying && !me.destroyed) {
             me.floatingButtons = btns = new Ext.grid.RowEditorButtons({
                 ownerCmp: me,
-                rowEditor: me
+                rowEditor: me,
+                hidden: me.hidden
             });
         }
         return btns;
@@ -846,9 +866,11 @@ Ext.define('Ext.grid.RowEditor', {
         }
 
         if (column.getEditor) {
-
             // Get a default display field if necessary
             field = column.getEditor(null, me.getDefaultFieldCfg());
+            
+            // Focus is managed by RowEditor
+            field.preventRefocus = true;
 
             if (column.align === 'right') {
                 style = field.fieldStyle;
@@ -1186,6 +1208,7 @@ Ext.define('Ext.grid.RowEditor', {
         if (me._cachedNode) {
             me.clearCache();
         }
+        
         me.hide();
 
         // If we are editing a new record, and we cancel still in invalid state, then remove it.
@@ -1275,8 +1298,11 @@ Ext.define('Ext.grid.RowEditor', {
             column = context.column;
         }
         
-        focusContext = new Ext.grid.CellContext(column.getView()).setPosition(context.record, column);
-        focusContext.view.getNavigationModel().setPosition(focusContext);
+        // Hiding could have been caused by removing our column
+        if (column && !column.destroyed) {
+            focusContext = new Ext.grid.CellContext(column.getView()).setPosition(context.record, column);
+            focusContext.view.getNavigationModel().setPosition(focusContext);
+        }
         
         me.activeField = null;
         me.wrapEl.hide();
@@ -1410,7 +1436,8 @@ Ext.define('Ext.grid.RowEditor', {
         }
 
         // Properties must be cleared because class-specific getRefItems explicitly references them.
-        me.keyNav = me.floatingButtons = me.tooltip = Ext.destroy(me.keyNav, me.floatingButtons, me.tooltip);
+        me.keyNav = me.floatingButtons = me.tooltip =
+            Ext.destroy(me.keyNav, me.floatingButtons, me.tooltip, me.wrapEl);
         
         me.callParent();    
     }

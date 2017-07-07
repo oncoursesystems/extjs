@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.charts.pie.DoubleDonutController', {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
             return;
         }
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         chart.preview();
     },
 
@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.charts.pie.DoubleDonutController', {
     },
 
     onAfterRender: function () {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             series = chart.getSeries(),
             outerSeries = series[0],
             store = outerSeries.getStore(),

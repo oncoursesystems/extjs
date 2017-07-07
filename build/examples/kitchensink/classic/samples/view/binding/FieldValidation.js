@@ -10,10 +10,10 @@ Ext.define('KitchenSink.view.binding.FieldValidation', {
     //<example>
     otherContent: [{
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     },{
         type: 'Field',
-        path: 'classic/samples/model/field/PhoneNumber.js'
+        path: 'app/model/field/PhoneNumber.js'
     }],
 
     defaults: {

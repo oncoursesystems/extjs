@@ -1,4 +1,4 @@
-describe("Ext.form.field.Date", function() {
+topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anchor'], function() {
     var component, makeComponent;
     
     function spyOnEvent(object, eventName, fn) {
@@ -378,6 +378,20 @@ describe("Ext.form.field.Date", function() {
                 date.setYear('2099');
                 component.setValue(date);
                 expect(component.getValue()).toEqual(date);
+            });
+
+            it("should strip off time if the format does not contain a time specification", function() {
+                makeComponent();
+                component.setValue(new Date(2016, 9, 26, 8));   // Date contains a time
+                expect(component.getValue().getHours()).toBe(0);
+            });
+
+            it("should not alter the passed date", function() {
+                var d = new Date(2016, 9, 26, 8);
+                makeComponent();
+                component.setValue(d);
+                expect(component.getValue().getHours()).toBe(0);
+                expect(d.getHours()).toBe(8);
             });
         });
     });
@@ -912,5 +926,3 @@ describe("Ext.form.field.Date", function() {
         });
     });
 });
-
-

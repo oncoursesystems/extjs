@@ -93,7 +93,8 @@ Ext.define('Ext.form.field.FileButton', {
             keydown: me.handlePrompt,
             change: me.fireChange,
             focus: me.onFileFocus,
-            blur: me.onFileBlur
+            blur: me.onFileBlur,
+            destroyable: true
         };
         
         if (me.useTabGuards) {
@@ -123,7 +124,27 @@ Ext.define('Ext.form.field.FileButton', {
             listeners.keydown = me.onFileInputKeydown;
         }
         
-        me.fileInputEl.on(listeners);
+        me.fileInputElListeners = me.fileInputEl.on(listeners);
+    },
+    
+    doDestroy: function() {
+        var me = this;
+        
+        if (me.fileInputElListeners) {
+            me.fileInputElListeners.destroy();
+        }
+        
+        if (me.beforeInputGuard) {
+            me.beforeInputGuard.destroy();
+            me.beforeInputGuard = null;
+        }
+        
+        if (me.afterInputGuard) {
+            me.afterInputGuard.destroy();
+            me.afterInputGuard = null;
+        }
+        
+        me.callParent();
     },
     
     fireChange: function(e) {

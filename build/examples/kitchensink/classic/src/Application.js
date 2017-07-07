@@ -1,5 +1,5 @@
 Ext.define('KitchenSink.Application', {
-    extend: 'Ext.app.Application',
+    extend: 'KitchenSink.BaseApplication',
     namespace: 'KitchenSink',
 
     requires: [
@@ -28,16 +28,11 @@ Ext.define('KitchenSink.Application', {
             storeId: 'navigation'
         });
 
-        // Set the default route to start the application.
-        if (Ext.os.deviceType !== 'Phone') {
-            this.setDefaultToken('all');
-        }
-
         Ext.setGlyphFontFamily('Pictos');
         Ext.tip.QuickTipManager.init(null, {
             showOnTap: true
         });
-        
+
         if (!Ext.platformTags.test) {
             Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
         }
@@ -51,6 +46,12 @@ Ext.define('KitchenSink.Application', {
                 icon: Ext.Msg.ERROR,
                 buttons: Ext.Msg.OK
             });
+
+            // don't let any routes fire
+            Ext.on('beforeroute', function () {
+                return false;
+            });
+
             return;
         }
 
@@ -61,6 +62,49 @@ Ext.define('KitchenSink.Application', {
         this.setMainView({
             xclass: view
         });
+
+        this.destroyLoader();
+    },
+
+    destroyLoader: function () {
+        if (Ext.supports.Transitions) {
+            this.callParent();
+        } else {
+            var circles = Ext.fly('loadingSplashCircles'),
+                bottom = Ext.get('loadingSplashBottom'),
+                top = Ext.get('loadingSplashTop'),
+                wrapper = Ext.fly('loadingSplash');
+
+            circles.destroy();
+
+            Ext.create('Ext.fx.Anim', {
+                target: top,
+                duration: 500,
+                from: {
+                    top: 0
+                },
+                to: {
+                    top: top.getHeight() * -1
+                }
+            });
+
+            Ext.create('Ext.fx.Anim', {
+                target: bottom,
+                duration: 500,
+                from: {
+                    bottom: 0
+                },
+                to: {
+                    bottom: bottom.getHeight() * -1
+                },
+                listeners: {
+                    single: true,
+                    delay: 500, //afteranimate event and callback fn are executing right away
+                    scope: wrapper,
+                    afteranimate: wrapper.destroy
+                }
+            });
+        }
     }
 }, function() {
     KitchenSink.toast = function (title) {

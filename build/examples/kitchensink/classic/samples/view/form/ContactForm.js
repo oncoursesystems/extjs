@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.form.ContactForm', {
     
     exampleTitle: 'Contact Form',
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/form/ContactFormController.js'
     }, {
         type: 'Window',

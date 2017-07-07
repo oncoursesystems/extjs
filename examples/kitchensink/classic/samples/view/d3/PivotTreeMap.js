@@ -56,6 +56,7 @@ Ext.define('KitchenSink.view.d3.PivotTreeMap', {
 
     drawing: {
         xtype: 'pivottreemap',
+        rootVisible: false,
         tooltip: {
             cls: 'tip',
             renderer: 'onTooltip'

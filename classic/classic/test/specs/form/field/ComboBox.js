@@ -1,6 +1,9 @@
 /* global Ext, xit, jasmine, expect, spyOn, MockAjaxManager, xdescribe */
 
-describe("Ext.form.field.ComboBox", function() {
+topSuite("Ext.form.field.ComboBox",
+    ['Ext.app.ViewModel', 'Ext.window.Window', 'Ext.form.Panel', 'Ext.grid.Panel',
+     'Ext.data.ArrayStore', 'Ext.layout.container.Fit'],
+function() {
     var component, store, CBTestModel,
         itNotIE = Ext.isIE ? xit : it,
         itNotIE9m = Ext.isIE9m ? xit : it,
@@ -505,7 +508,7 @@ describe("Ext.form.field.ComboBox", function() {
         });
         
         it("should set aria-activedescendant", function() {
-            var node = Ext.get(component.picker.highlightedItem);
+            var node = component.picker.highlightedItem;
             
             expect(component).toHaveAttr('aria-activedescendant', node.id);
         });
@@ -2721,6 +2724,82 @@ describe("Ext.form.field.ComboBox", function() {
                 completeWithData();
                 expect(component.inputEl.dom.value).toBe('foob');
             });
+
+            it("should not clear an unmatched value while paging and forceSelection is true", function() {
+                var paging, next;
+
+                store.destroy();
+                store = new Ext.data.Store({
+                    model: CBTestModel,
+                    proxy: {
+                        type: 'ajax',
+                        url: 'foo',
+                        reader: {
+                            rootProperty: 'data',
+                            totalProperty: 'total'
+                        }
+                    },
+                    autoLoad: true,
+                    pageSize: 2
+                });
+
+                makeComponent({
+                    store: store,
+                    displayField: 'text',
+                    valueField: 'val',
+                    forceSelection: true,
+                    queryMode: 'remote',
+                    pageSize: 2,
+                    renderTo: Ext.getBody()
+                });
+
+                spyOn(component, 'loadPage').andCallThrough();
+
+                paging = component.getPicker().down('pagingtoolbar');
+                next = paging.down('#next');
+
+                component.setRawValue('foobar');
+                component.doQuery('foobar');
+
+                // first page of data
+                completeWithData({
+                    total: 10,
+                    data: [{
+                        text: 'foobar1',
+                        val: 'foobar1'
+                    },{
+                        text: 'foobar2',
+                        val: 'foobar2'
+                    }]
+                });
+                
+                // focus "next"; this will simulate what happens when button is clicked and hasFocus on combo is set to false
+                next.focus();
+                paging.moveNext();
+
+                // second page of data
+                completeWithData({
+                    total: 10,
+                    data: [{
+                        text: 'foobar3',
+                        val: 'foobar3'
+                    },{
+                        text: 'foobar4',
+                        val: 'foobar4'
+                    }]
+                });
+
+                // combo.loadPage should be called twice, once for initial load, once for "next"
+                expect(component.loadPage.callCount).toBe(2);
+                // store's last options should reflect 2nd page, preserving the query param
+                expect(store.lastOptions.page).toBe(2);
+                expect(store.lastOptions.params.query).toBe('foobar');
+                // combo should have lost focus because of interaction with toolbar
+                expect(component.hasFocus).toBe(false);
+                // rawValue should be perserved
+                expect(component.inputEl.dom.value).toBe('foobar'); 
+                expect(component.isPaging).toBe(false);               
+            });
         });
     });
 
@@ -2963,7 +3042,7 @@ describe("Ext.form.field.ComboBox", function() {
                 component = new Ext.form.field.ComboBox({
                     transform: 'mySelect'
                 });
-                expect(Ext.getDom('mySelect')).toBeNull();
+                expect(Ext.getDom('mySelect') == null).toBe(true);
                 expect(component.rendered).toBe(true);
             });
         
@@ -2972,7 +3051,7 @@ describe("Ext.form.field.ComboBox", function() {
                 component = new Ext.form.field.ComboBox({
                     transform: sel
                 });
-                expect(Ext.getDom('mySelect')).toBeNull();
+                expect(Ext.getDom('mySelect') == null).toBe(true);
                 expect(component.rendered).toBe(true);
             });
         
@@ -2981,7 +3060,7 @@ describe("Ext.form.field.ComboBox", function() {
                 component = new Ext.form.field.ComboBox({
                     transform: Ext.get(sel)
                 });
-                expect(Ext.getDom('mySelect')).toBeNull();
+                expect(Ext.getDom('mySelect') == null).toBe(true);
                 expect(component.rendered).toBe(true);
             });
         });
@@ -4500,6 +4579,8 @@ describe("Ext.form.field.ComboBox", function() {
                 dom = Ext.getCmp('foo-ghost').el.dom;
 
                 expect(c.owns(Ext.fly(dom))).toBe(true);
+
+                jasmine.fireMouseEvent(dom, 'mouseup');
             });
 
             it('should inject a getRefOwner API that returns a reference to the combo', function () {
@@ -4510,6 +4591,8 @@ describe("Ext.form.field.ComboBox", function() {
                 jasmine.fireMouseEvent(dom, 'mousemove', 0, 1000);
 
                 expect(Ext.getCmp('foo-ghost').getRefOwner()).toBe(c);
+
+                jasmine.fireMouseEvent(dom, 'mouseup');
             });
 
             it('should share the same reference between the picker and the ghost panel', function () {
@@ -4520,6 +4603,8 @@ describe("Ext.form.field.ComboBox", function() {
                 jasmine.fireMouseEvent(dom, 'mousemove', 0, 1000);
 
                 expect(Ext.getCmp('foo-ghost').getRefOwner()).toBe(panel.ownerCmp);
+
+                jasmine.fireMouseEvent(dom, 'mouseup');
             });
         });
     });

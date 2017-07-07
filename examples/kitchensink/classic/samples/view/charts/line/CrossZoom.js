@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.charts.line.CrossZoom', {
         path: 'classic/samples/view/charts/line/CrossZoomController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/USD2EUR.js'
+        path: 'app/store/USD2EUR.js'
     }],
     // </example>
 

@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.grid.CellEditingController', {
     
     onAddClick: function () {
         var view = this.getView(),
-            rec = new KitchenSink.model.grid.Plant({
+            rec = new KitchenSink.model.Plant({
                 common: '',
                 light: 'Mostly Shady',
                 price: 0,

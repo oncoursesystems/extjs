@@ -14,7 +14,8 @@ Ext.define('Ext.sparkline.Box', {
     config: {
 
         /**
-         * @cfg {Boolean} [raw=false] By default the points are calculated from the input values array. Set this to true to passthe pre-calculated points in the values config.
+         * @cfg {Boolean} [raw=false] By default the points are calculated from the
+         * input values array. Set this to true to pass the pre-calculated points in the values config.
          */
         raw: false,
 
@@ -54,7 +55,7 @@ Ext.define('Ext.sparkline.Box', {
         showOutliers: true,
         
         /**
-         * @cfg {Number} [outlierIQR=1.5] The inter-quartile range multipler used to calculate values that qualify as an outlier.
+         * @cfg {Number} [outlierIQR=1.5] The inter-quartile range multiplier used to calculate values that qualify as an outlier.
          */
         outlierIQR: 1.5,
         
@@ -120,8 +121,15 @@ Ext.define('Ext.sparkline.Box', {
     // Ensure values is an array of numbers
     applyValues: function(newValues) {
         newValues = Ext.Array.map(Ext.Array.from(newValues), Number);
+
+        // If we are calculating the values, they need to be sorted
+        if (!this.raw) {
+            newValues.sort(function (a, b) {
+                return a - b;
+            });
+        }
         this.disabled = !(newValues && newValues.length);
-        this.applyConfigChange();
+        this.updateConfigChange();
         return newValues;
     },
 
@@ -199,7 +207,6 @@ Ext.define('Ext.sparkline.Box', {
                 rwhisker = values[4];
             }
         } else {
-            values.sort(function (a, b) { return a - b; });
             q1 = me.quartile(values, 1);
             q2 = me.quartile(values, 2);
             q3 = me.quartile(values, 3);

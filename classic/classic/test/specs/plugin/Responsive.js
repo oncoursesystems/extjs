@@ -1,4 +1,6 @@
-describe('Ext.plugin.Responsive', function () {
+topSuite("Ext.plugin.Responsive",
+    ['Ext.container.Viewport', 'Ext.Panel', 'Ext.layout.container.Border'],
+function() {
     var Responsive,
         oldGetOrientation, oldGetViewWidth, oldGetViewHeight, oldResponsiveContext,
         environments = {
@@ -121,7 +123,7 @@ describe('Ext.plugin.Responsive', function () {
             expect(child.title).toBe('Title - Narrow');
         });
 
-        describe('creation', function (){
+        describe('creation', function () {
             it('should be created using config object', function () {
                 createPanel({
                     ptype: 'responsive'

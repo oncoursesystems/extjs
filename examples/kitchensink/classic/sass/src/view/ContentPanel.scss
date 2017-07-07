@@ -21,6 +21,12 @@
     }
 }
 
+@if $theme-name == 'theme-aria' {
+    #content-panel-body {
+        background-image: url(get-resource-path('images/square-dark.gif', 'toolkit')) !important;
+    }
+}
+
 #content-panel-innerCt {
     padding: 20px;
     vertical-align: middle;

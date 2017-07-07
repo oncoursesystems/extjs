@@ -1,6 +1,6 @@
 /* global Ext, expect, jasmine, spyOn */
 
-describe("Ext-more", function() {
+topSuite("Ext-more", ['Ext.dom.Element', 'Ext.app.Application'], function() {
     describe("Ext.id", function(){
         var el;
         describe("if element passed as first argument is different of document or window", function() {
@@ -215,6 +215,7 @@ describe("Ext-more", function() {
             jasmine.fireMouseEvent(document, 'mousedown');
             jasmine.fireMouseEvent(dom, 'mouseup');
             expect(listener).not.toHaveBeenCalled();
+            jasmine.fireMouseEvent(document, 'mouseup');
         });
     });
 

@@ -76,6 +76,23 @@ Ext.define('Ext.util.FilterCollection', {
         return !this.filterFn(item);
     },
 
+    /**
+     * returns the number of *enabled* filters in this `FilterCollection`
+     * @returns {Number}
+     */
+    getFilterCount: function() {
+        var filters = this.items,
+            len = filters.length,
+            i;
+
+        for (i = len - 1; i >= 0; i--) {
+            if (filters[i].getDisabled()) {
+                len--;
+            }
+        }
+        return len;
+    },
+
     //-------------------------------------------------------------------------
     // Private
 

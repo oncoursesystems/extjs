@@ -12,10 +12,10 @@ Ext.define('KitchenSink.view.grid.XmlGrid', {
     //<example>
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/Books.js'
+        path: 'app/store/Books.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/grid/Book.js'
+        path: 'app/model/grid/Book.js'
     }],
     profiles: {
         classic: {

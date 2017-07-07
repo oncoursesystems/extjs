@@ -1,6 +1,9 @@
 /* global Ext, jasmine, expect, describe, spyOn, xdescribe */
 
-describe("Ext.form.field.Picker", function() {
+topSuite("Ext.form.field.Picker",
+    ['Ext.grid.Panel', 'Ext.grid.plugin.CellEditing', 'Ext.data.TreeStore',
+     'Ext.tree.Panel', 'Ext.button.Button', 'Ext.window.Window'],
+function() {
     var itNotIE8 = Ext.isIE8 ? xit : it,
         component, makeComponent;
 
@@ -351,9 +354,9 @@ describe("Ext.form.field.Picker", function() {
         });
 
         it("should collapse the picker when the escape key is pressed", function() {
-            spyOn(component, component.keyMap.ESC.handler).andCallThrough();
+            spyOn(component, component.keyMap.ESC[0].handler).andCallThrough();
             fireKey(27);
-            expect(component[component.keyMap.ESC.handler]).toHaveBeenCalled();
+            expect(component[component.keyMap.ESC[0].handler]).toHaveBeenCalled();
         });
     });
 

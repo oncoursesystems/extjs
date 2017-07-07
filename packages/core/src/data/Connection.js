@@ -378,10 +378,16 @@ Ext.define('Ext.data.Connection', {
             
             return request.start(requestOptions.data);
         }
+        
+        // Reusing for response
+        request = {
+            status: -1,
+            statusText: 'Request cancelled in beforerequest event handler'
+        };
 
-        Ext.callback(options.callback, options.scope, [options, undefined, undefined]);
+        Ext.callback(options.callback, options.scope, [options, false, request]);
 
-        return Ext.Deferred.rejected([options, undefined, undefined]);
+        return Ext.Deferred.rejected([options, false, request]);
     },
 
     createRequest: function(options, requestOptions) {

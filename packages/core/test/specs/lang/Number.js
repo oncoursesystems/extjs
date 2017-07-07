@@ -1,4 +1,4 @@
-describe("Ext.Number", function(){
+topSuite("Ext.Number", function(){
     var EN = Ext.Number;
     
     describe("constraining a number", function(){
@@ -814,6 +814,35 @@ describe("Ext.Number", function(){
 
         it('should return NaN for negative numbers as strings', function () {
             expect(Ext.Number.log10('-1')).toBeNaN();
+        });
+    });
+
+    describe('isInteger', function () {
+        it('should return true for an integer', function () {
+            expect(Ext.Number.isInteger(0)).toBe(true);
+            expect(Ext.Number.isInteger(0.0)).toBe(true);
+            expect(Ext.Number.isInteger(3)).toBe(true);
+            expect(Ext.Number.isInteger(3.0)).toBe(true);
+            expect(Ext.Number.isInteger(-5)).toBe(true);
+            expect(Ext.Number.isInteger(-5.0)).toBe(true);
+        });
+        it('should return false for an non-integer', function () {
+            expect(Ext.Number.isInteger(0.3)).toBe(false);
+            expect(Ext.Number.isInteger(3.5)).toBe(false);
+            expect(Ext.Number.isInteger(-5.7)).toBe(false);
+            expect(Ext.Number.isInteger(Infinity)).toBe(false);
+            expect(Ext.Number.isInteger(-Infinity)).toBe(false);
+            expect(Ext.Number.isInteger(NaN)).toBe(false);
+            expect(Ext.Number.isInteger(null)).toBe(false);
+            expect(Ext.Number.isInteger(undefined)).toBe(false);
+            expect(Ext.Number.isInteger(true)).toBe(false);
+            expect(Ext.Number.isInteger(false)).toBe(false);
+            expect(Ext.Number.isInteger([])).toBe(false);
+            expect(Ext.Number.isInteger([5, 7])).toBe(false);
+            expect(Ext.Number.isInteger({})).toBe(false);
+            expect(Ext.Number.isInteger({test: 8})).toBe(false);
+            expect(Ext.Number.isInteger("test")).toBe(false);
+            expect(Ext.Number.isInteger("10")).toBe(false);
         });
     });
 

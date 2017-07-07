@@ -2,8 +2,16 @@
  * The slider is a way to allow the user to select a value from a given numerical range. You might use it for choosing
  */
 Ext.define('Ext.field.SingleSlider', {
-    extend  : 'Ext.field.Slider',
-    xtype   : 'singlesliderfield',
+    extend: 'Ext.field.Slider',
+    xtype: 'singlesliderfield',
+
+    twoWayBindable: {
+        value: 1
+    },
+
+    publishes: {
+        value: 1
+    },
 
     /**
      * @event dragchange
@@ -62,11 +70,6 @@ Ext.define('Ext.field.SingleSlider', {
     publishes: {
         value: 1
     },
-
-    initialize: function() {
-        this.callParent();
-        this.publishState('value', this.getValue());
-    },  
 
     applyValue: function(value, oldValue) {
         value = this.callParent([value, oldValue]);

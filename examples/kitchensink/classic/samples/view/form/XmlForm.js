@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.form.XmlForm', {
         type: 'Store',
         path: 'classic/samples/store/States.js'
     }, {
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/form/XmlFormController.js'
     }, {
         type: 'Load XML',

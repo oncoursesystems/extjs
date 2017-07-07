@@ -29,10 +29,10 @@ Ext.define('KitchenSink.view.grid.ActionsGrid', {
         path: 'classic/samples/view/grid/ActionsGridController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Companies.js'
+        path: 'app/store/Companies.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -100,24 +100,18 @@ Ext.define('KitchenSink.view.grid.ActionsGrid', {
         width: 80,
         sortable: true,
         renderer: 'renderChange',
-        dataIndex: 'change'
-    }, {
-        text: 'Change',
-        width: 80,
-        sortable: true,
-        renderer: 'renderChange',
-        dataIndex: 'change'
+        dataIndex: 'priceChange'
     }, {
         text: '% Change',
         width: '${percentChangeColumnWidth}',
         sortable: true,
         renderer: 'renderPctChange',
-        dataIndex: 'pctChange'
+        dataIndex: 'priceChangePct'
     }, {
         text: 'Last Updated',
         width: '${lastUpdatedColumnWidth}',
         sortable: true,
         formatter: 'date("m/d/Y")',
-        dataIndex: 'lastChange'
+        dataIndex: 'priceLastChange'
     }]
 });

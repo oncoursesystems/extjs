@@ -1,6 +1,6 @@
 /* global Ext, expect, jasmine */
 
-describe("Ext.event.gesture.Drag", function() {
+topSuite("Ext.event.gesture.Drag", function() {
     var helper = Ext.testHelper,
         recognizer = Ext.event.gesture.Drag.instance,
         minDistance = recognizer.getMinDistance(),

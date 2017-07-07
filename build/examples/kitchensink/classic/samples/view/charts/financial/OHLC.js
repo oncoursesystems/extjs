@@ -105,41 +105,37 @@ Ext.define('KitchenSink.view.charts.financial.OHLC', {
                 }
             }
         ],
-        series: [
-            {
-                type: 'candlestick',
-                xField: 'time',
-                openField: 'open',
-                highField: 'high',
-                lowField: 'low',
-                closeField: 'close',
-                style: {
-                    ohlcType: 'ohlc',
-                    barWidth: 10,
-                    opacity: 0.9,
-                    dropStyle: {
-                        fill: 'rgb(237,123,43)',
-                        stroke: 'rgb(237,123,43)'
-                    },
-                    raiseStyle: {
-                        fill: 'rgb(55,153,19)',
-                        stroke: 'rgb(55,153,19)'
-                    }
+        series: {
+            type: 'candlestick',
+            xField: 'time',
+            openField: 'open',
+            highField: 'high',
+            lowField: 'low',
+            closeField: 'close',
+            style: {
+                ohlcType: 'ohlc',
+                barWidth: 10,
+                opacity: 0.9,
+                dropStyle: {
+                    fill: 'rgb(237,123,43)',
+                    stroke: 'rgb(237,123,43)'
+                },
+                raiseStyle: {
+                    fill: 'rgb(55,153,19)',
+                    stroke: 'rgb(55,153,19)'
                 }
             }
-        ],
+        },
         axes: [
             {
                 type: 'numeric',
-                fields: ['open', 'high', 'low', 'close'],
                 position: 'left',
-                maximum: 1000,
-                minimum: 0
+                fields: ['open', 'high', 'low', 'close']
             },
             {
                 type: 'time',
-                fields: ['time'],
                 position: 'bottom',
+                fields: ['time'],
                 visibleRange: [0, 0.3]
             }
         ]

@@ -10,10 +10,11 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
     },
 
     onItemHighlight: function (chart, item) {
-        var gridPanel = this.lookupReference('gridPanel');
-        gridPanel.ensureVisible(item.record, {
-            select: true
-        });
+        if (item) {
+            this.lookup('gridPanel').ensureVisible(item.record, {
+                select: true
+            });
+        }
     },
 
     onBarChartAxisLabelRender: function (axis, label, layoutContext) {
@@ -27,7 +28,7 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
         if (records[0]) {
             me.selectedRec = records[0];
             if (!me.form) {
-                me.form = me.lookupReference('form').getForm();
+                me.form = me.lookup('form').getForm();
                 fields = me.form.getFields();
                 fields.each(function(field){
                     if (field.name != 'name') {
@@ -41,7 +42,7 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
             // prevent change events from firing
             me.form.suspendEvents();
             me.form.loadRecord(me.selectedRec);
-            me.lookupReference('fieldset').setTitle(me.selectedRec.get('name'));
+            me.lookup('fieldset').setTitle(me.selectedRec.get('name'));
             me.form.resumeEvents();
             me.highlightCompanyPriceBar(me.selectedRec);
         }
@@ -50,7 +51,7 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
     // Loads fresh records into the radar store
     // based upon the passed company record.
     updateRadarChart: function (rec) {
-        var store = this.lookupReference('radarChart').getStore();
+        var store = this.lookup('radarChart').getStore();
 
         store.loadData([
             { 'Name': 'Price',     'Data': rec.get('price') },
@@ -63,7 +64,7 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
 
     // Performs the highlight of an item in the bar series.
     highlightCompanyPriceBar: function (record) {
-        var barChart = this.lookupReference('barChart'),
+        var barChart = this.lookup('barChart'),
             store = barChart.getStore(),
             series = barChart.getSeries()[0];
 
@@ -92,8 +93,8 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
     },
 
     onAfterRender: function () {
-        var barChart = this.lookupReference('barChart'),
-            gridPanel = this.lookupReference('gridPanel');
+        var barChart = this.lookup('barChart'),
+            gridPanel = this.lookup('gridPanel');
 
         var store = Ext.create('KitchenSink.store.Dashboard', {
             listeners: {

@@ -35,10 +35,11 @@
  */
 Ext.define('Ext.grid.column.Boolean', {
     extend: 'Ext.grid.column.Column',
+    xtype: 'booleancolumn',
+
+    isBooleanColumn: true,
 
     requires: ['Ext.grid.cell.Boolean'],
-
-    xtype: 'booleancolumn',
 
     config: {
         /**

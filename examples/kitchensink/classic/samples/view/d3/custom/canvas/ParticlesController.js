@@ -18,20 +18,14 @@ Ext.define('KitchenSink.view.d3.custom.canvas.ParticlesController', {
         me.x = width / 2;
         me.y = height / 2;
 
-        me.color = d3.scale.linear()
+        me.color = d3.scaleLinear()
             .domain([0, 0.2, 0.4, 0.6, 0.8, 1])
             .range(['red', 'orange', 'yellow', 'green', 'blue', 'violet']);
 
         var context = canvas.getContext('2d');
         context.lineWidth = 4;
 
-        d3.timer(function() {
-            // There is no other way to stop a D3 timer
-            // other than returning 'true' from a callback.
-            if (component.isDestroyed) {
-                return true;
-            }
-
+        me.timer = d3.timer(function() {
             context.save();
             context.globalCompositeOperation = 'lighter';
             for (var i = list.length - 1; i >= 0; i--) {
@@ -74,6 +68,12 @@ Ext.define('KitchenSink.view.d3.custom.canvas.ParticlesController', {
 
         if (isRtl) {
             me.x = view.getSize().width - me.x;
+        }
+    },
+
+    onDestroy: function () {
+        if (this.timer) {
+            this.timer.stop();
         }
     }
 

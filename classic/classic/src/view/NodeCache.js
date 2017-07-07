@@ -410,7 +410,6 @@ Ext.define('Ext.view.NodeCache', {
     scroll: function(newRecords, direction, removeCount) {
         var me = this,
             view = me.view,
-            vm = view.lookupViewModel(),
             store = view.store,
             elements = me.elements,
             recCount = newRecords.length,
@@ -513,11 +512,6 @@ Ext.define('Ext.view.NodeCache', {
         // Keep count consistent.
         me.count = me.endIndex - me.startIndex + 1;
 
-        // The content height MUST be measurable by the caller (the buffered renderer), so data must be flushed to it immediately.
-        if (vm) {
-            vm.notify();
-        }
- 
         return children;
     },
 

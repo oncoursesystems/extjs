@@ -1,5 +1,10 @@
 Ext.define('KitchenSink.view.binding.Selection', {
     extend: 'Ext.Container',
+    xtype: 'binding-selection',
+
+    viewModel: {
+        type: 'binding-selection'
+    },
 
     // <example>
     otherContent: [{
@@ -9,45 +14,55 @@ Ext.define('KitchenSink.view.binding.Selection', {
         type: 'Model',
         path: 'modern/src/model/Person.js'
     }],
+
+    profiles: {
+        defaults: {
+            width: 500
+        },
+        phone: {
+            defaults: {
+                width: undefined
+            }
+        }
+    },
+
+    cls: 'demo-solid-background',
     // </example>
 
     referenceHolder: true,
-
-    viewModel: 'binding-selection',
+    width: '${width}',
+    autoSize: true,
 
     layout: {
         type: 'hbox',
         align: 'stretch'
     },
 
-    shadow: true,
-    cls: 'demo-solid-background',
-
     items: [{
         xtype: 'list',
         flex: 1,
+        autoSize: true,
         itemTpl: '{lastName}, {firstName}',
         bind: '{people}',
         reference: 'peopleList'
     }, {
         xtype: 'formpanel',
         flex: 1,
-        items: {
-            xtype: 'fieldset',
-            instructions: [
-                'The form is bound to the selection in the list. As the form ',
-                'fields change, the models in the list are automatically updated ',
+        autoSize: true,
+        items: [{
+            xtype: 'textfield',
+            label: 'First Name',
+            bind: '{peopleList.selection.firstName}'
+        }, {
+            xtype: 'textfield',
+            label: 'Last Name',
+            bind: '{peopleList.selection.lastName}'
+        }, {
+            xtype: 'component',
+            margin: '10 0 0',
+            html: 'The form is bound to the selection in the list. As the form ' +
+                'fields change, the models in the list are automatically updated ' +
                 'with the field input.'
-            ].join(''),
-            items: [{
-                xtype: 'textfield',
-                label: 'First Name',
-                bind: '{peopleList.selection.firstName}'
-            }, {
-                xtype: 'textfield',
-                label: 'Last Name',
-                bind: '{peopleList.selection.lastName}'
-            }]
-        }
+        }]
     }]
 });

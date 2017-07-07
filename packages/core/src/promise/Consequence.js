@@ -196,4 +196,10 @@ Ext.define('Ext.promise.Consequence', function(Consequence) { return {
             Consequence.queueSize = 0;
         }
     }
-}});
+}}
+//<debug>
+, function(Consequence) {
+    Consequence.dispatch.$skipTimerCheck = true;
+}
+//</debug>
+);

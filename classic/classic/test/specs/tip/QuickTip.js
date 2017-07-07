@@ -1,5 +1,4 @@
-describe("Ext.tip.QuickTip", function() {
-
+topSuite("Ext.tip.QuickTip", function() {
     var target, tip;
 
     function createTargetEl(attrString) {

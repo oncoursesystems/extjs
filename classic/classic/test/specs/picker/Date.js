@@ -1,6 +1,6 @@
 // date picker has 42 cells
 
-describe("Ext.picker.Date", function() {
+topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
     var component, makeComponent, makeRange;
     
     beforeEach(function() {
@@ -50,6 +50,37 @@ describe("Ext.picker.Date", function() {
                 });
             }).not.toThrow();
         });
+        
+        describe("startDay", function() {
+            var weekStart;
+            
+            beforeEach(function() {
+                weekStart = Ext.Date.firstDayOfWeek;
+                Ext.Date.firstDayOfWeek = 1;
+            });
+            
+            afterEach(function() {
+                Ext.Date.firstDayOfWeek = weekStart;
+            });
+            
+            it("should default to Ext.Date.firstDayOfWeek", function() {
+                makeComponent();
+                
+                var th = component.eventEl.down('th', true);
+                
+                expect(th.firstChild.innerHTML).toBe('M');
+            });
+            
+            it("should take config option", function() {
+                makeComponent({
+                    startDay: 2
+                });
+                
+                var th = component.eventEl.down('th', true);
+                
+                expect(th.firstChild.innerHTML).toBe('T');
+            });
+        });
 
         // https://sencha.jira.com/browse/EXTJS-15718
         describe("when rendered within a td element", function () {
@@ -72,6 +103,7 @@ describe("Ext.picker.Date", function() {
 
             afterEach(function () {
                 component = Ext.destroy(component);
+                Ext.get('nestedDiv').destroy();
                 Ext.get('ownerTable').destroy();
             });
 
@@ -83,11 +115,11 @@ describe("Ext.picker.Date", function() {
                     renderTo: Ext.get('nestedDiv')
                 });
 
-                node = component.el.down('.x-datepicker-column-header');
+                node = component.el.down('.x-datepicker-column-header', true);
                 // should have 42 text nodes (6 weeks x 7 days)
                 expect(component.textNodes.length).toBe(42);
                 // check first and last node in first row
-                expect(node.first().getHtml()).toBe('S');
+                expect(node.firstChild.innerHTML).toBe('S');
             });
 
             it("should select the correct item", function () {

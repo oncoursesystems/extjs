@@ -28,9 +28,8 @@ Ext.define('KitchenSink.view.d3.custom.canvas.Particles', {
 
     cls: 'card1',
     layout: 'fit',
-    shadow: true,
 
-    items: {
+    items: [{
         xtype: 'd3-canvas',
         // D3 is not an abstraction layer, however having crisp looking
         // Canvas visualizations on retina devices requires support for
@@ -45,7 +44,8 @@ Ext.define('KitchenSink.view.d3.custom.canvas.Particles', {
                 fn: 'onMouseMove',
                 element: 'element',
                 scope: 'controller'
-            }
+            },
+            destroy: 'onDestroy'
         }
-    }
+    }]
 });

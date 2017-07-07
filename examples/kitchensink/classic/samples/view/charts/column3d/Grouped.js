@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.charts.column3d.Grouped', {
         path: 'classic/samples/view/charts/column3d/GroupedController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/TwoYearSales.js'
+        path: 'app/store/TwoYearSales.js'
     }],
     // </example>
     width: 650,
@@ -29,8 +29,17 @@ Ext.define('KitchenSink.view.charts.column3d.Grouped', {
         xtype: 'cartesian',
         width: '100%',
         height: 400,
+        captions: {
+            title: {
+                text: 'Sales in Last Two Years',
+                alignTo: 'chart'
+            },
+            subtitle: {
+                text: 'Quarter-wise comparison',
+                alignTo: 'chart'
+            }
+        },
         theme: 'Muted',
-        insetPadding: '70 40 0 40',
         interactions: ['itemhighlight'],
         animation: {
             duration: 200
@@ -38,31 +47,10 @@ Ext.define('KitchenSink.view.charts.column3d.Grouped', {
         store: {
             type: 'two-year-sales'
         },
-        legend: true,
-        sprites: [{
-            type: 'text',
-            text: 'Sales in Last Two Years',
-            textAlign: 'center',
-            fontSize: 18,
-            fontWeight: 'bold',
-            width: 100,
-            height: 30,
-            x: 325, // the sprite x position
-            y: 30  // the sprite y position
-        }, {
-            type: 'text',
-            text: 'Quarter-wise comparison',
-            textAlign: 'center',
-            fontSize: 16,
-            x: 325,
-            y: 50
-        }, {
-            type: 'text',
-            text: 'Source: http://www.w3schools.com/',
-            fontSize: 10,
-            x: 12,
-            y: 495
-        }],
+        legend: {
+            type: 'dom',
+            docked: 'bottom'
+        },
         axes: [{
             type: 'numeric3d',
             position: 'left',

@@ -1,6 +1,9 @@
 /* global Ext, expect, spyOn, jasmine, xit, MockAjaxManager */
 
-describe("grid-general-paging-buffered-renderer", function() {
+topSuite("grid-general-paging-buffered-renderer",
+    [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore', 'Ext.toolbar.Paging',
+     'Ext.Button'],
+function() {
     var grid, store,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,

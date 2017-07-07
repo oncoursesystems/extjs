@@ -5,10 +5,10 @@ Ext.define('KitchenSink.view.grid.FramingButtons', {
     //<example>
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/Companies.js'
+        path: 'app/store/Companies.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -54,19 +54,19 @@ Ext.define('KitchenSink.view.grid.FramingButtons', {
         formatter: 'usMoney'
     }, {
         text: "Change",
-        dataIndex: 'change',
+        dataIndex: 'priceChange',
 
         width: 120,
         sortable: true
     }, {
         text: "% Change",
-        dataIndex: 'pctChange',
+        dataIndex: 'priceChangePct',
 
         width: 120,
         sortable: true
     }, {
         text: "Last Updated",
-        dataIndex: 'lastChange',
+        dataIndex: 'priceLastChange',
 
         width: 120,
         sortable: true,

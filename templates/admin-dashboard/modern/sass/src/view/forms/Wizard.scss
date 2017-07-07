@@ -11,7 +11,7 @@
 );
 
 .wizard {
-    .x-form-inner {
+    .x-formpanel-body-el {
         background-color: #fff;
     }
 }
@@ -21,7 +21,7 @@
         .x-tab-icon {
             margin: 0;
         }
-        .x-tab .x-button-label {
+        .x-tab .x-text-el {
             display: none;
         }
     }

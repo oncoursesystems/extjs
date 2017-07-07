@@ -162,7 +162,6 @@ Ext.define('KitchenSink.view.draw.Protractor', {
                     me.radiusText.setAttributes({
                         x: x,
                         y: y,
-                        rotationRads: alpha,
                         rotationRads: radiusTextFlip === 1 ? alpha : alpha - PI,
                         rotationCenterX: x,
                         rotationCenterY: y,
@@ -197,43 +196,43 @@ Ext.define('KitchenSink.view.draw.Protractor', {
 
         // Only create sprites if they haven't been created yet.
         if (!me.baseLine) {
-            me.baseLine = me.add({
+            me.baseLine = me.addSprite({
                 type: 'line',
                 lineDash: [2, 2]
             });
-            me.radiusLine = me.add({
+            me.radiusLine = me.addSprite({
                 type: 'line'
             });
             // Left line of the radius arrow.
-            me.radiusArrowLeft = me.add({
+            me.radiusArrowLeft = me.addSprite({
                 type: 'line'
             });
             // Right line of the radius arrow.
-            me.radiusArrowRight = me.add({
+            me.radiusArrowRight = me.addSprite({
                 type: 'line'
             });
-            me.angleLine = me.add({
+            me.angleLine = me.addSprite({
                 type: 'arc',
                 strokeStyle: 'black',
                 lineDash: [2, 2]
             });
             // Left line of the angle arrow.
-            me.angleArrowLeft = me.add({
+            me.angleArrowLeft = me.addSprite({
                 type: 'line',
                 lineDash: [2, 2]
             });
             // Right line of the angle arrow.
-            me.angleArrowRight = me.add({
+            me.angleArrowRight = me.addSprite({
                 type: 'line',
                 lineDash: [2, 2]
             });
-            me.radiusText = me.add({
+            me.radiusText = me.addSprite({
                 type: 'text',
                 textAlign: 'center',
                 textBaseline: 'middle',
                 font: '12px'
             });
-            me.angleText = me.add({
+            me.angleText = me.addSprite({
                 type: 'text',
                 textBaseline: 'middle',
                 font: '12px'

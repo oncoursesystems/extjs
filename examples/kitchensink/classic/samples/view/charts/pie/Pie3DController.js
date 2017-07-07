@@ -1,5 +1,5 @@
 Ext.define('KitchenSink.view.charts.pie.Pie3DController', {
-    extend: 'Ext.app.ViewController',
+    extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.pie-3d',
 
     onSeriesTooltipRender: function (tooltip, record, item) {
@@ -14,32 +14,12 @@ Ext.define('KitchenSink.view.charts.pie.Pie3DController', {
         });
     },
 
-    onThemeSwitch: function () {
-        var chart = this.lookupReference('chart'),
-            currentThemeClass = Ext.getClassName(chart.getTheme()),
-            themes = Ext.chart.theme,
-            themeNames = [],
-            currentIndex = 0,
-            name;
-
-        for (name in themes) {
-            if (Ext.getClassName(themes[name]) === currentThemeClass) {
-                currentIndex = themeNames.length;
-            }
-            if (name !== 'Base' && name.indexOf('Gradients') < 0) {
-                themeNames.push(name);
-            }
-        }
-        chart.setTheme(themes[themeNames[++currentIndex % themeNames.length]]);
-        chart.redraw();
-    },
-
     onDownload: function() {
         if (Ext.isIE8) {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
             return;
         }
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
 
         if (Ext.os.is.Desktop) {
             chart.download({
@@ -51,7 +31,7 @@ Ext.define('KitchenSink.view.charts.pie.Pie3DController', {
     },
 
     onThicknessChange: function (slider, value) {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             series = chart.getSeries()[0];
 
         series.setThickness(value);
@@ -59,7 +39,7 @@ Ext.define('KitchenSink.view.charts.pie.Pie3DController', {
     },
 
     onDistortionChange: function (slider, value) {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             series = chart.getSeries()[0];
 
         series.setDistortion(value / 100);
@@ -73,7 +53,7 @@ Ext.define('KitchenSink.view.charts.pie.Pie3DController', {
     },
 
     onDonutChange: function (slider, value) {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             series = chart.getSeries()[0];
 
         series.setDonut(value);
@@ -87,7 +67,7 @@ Ext.define('KitchenSink.view.charts.pie.Pie3DController', {
     },
 
     setPieStyle: function (style) {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             series = chart.getSeries()[0];
 
         series.setStyle(style);
@@ -95,12 +75,12 @@ Ext.define('KitchenSink.view.charts.pie.Pie3DController', {
     },
 
     onSliderDragStart: function () {
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         chart.suspendAnimation();
     },
 
     onSliderDragEnd: function () {
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         chart.resumeAnimation();
     }
 

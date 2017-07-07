@@ -332,9 +332,13 @@ Ext.define('KitchenSink.view.charts.combination.UnemploymentController', {
         // about the highlighted item, like its 'index', the 'series' it belongs to,
         // the associated store 'record' and its 'field'.
 
+        if (!item || !this.regions) {
+            return;
+        }
+
         var regions = this.regions,
             label = item.record.get('label'),
-            cartesianChart = this.lookupReference('cartesian'),
+            cartesianChart = this.lookup('cartesian'),
             data = item.record.data,
             i, j, ik, jk, region, sprite;
 
@@ -360,10 +364,6 @@ Ext.define('KitchenSink.view.charts.combination.UnemploymentController', {
                     {year: '2012', percent: data.y2012}
                 ]
             });
-        }
-
-        if (!regions) {
-            return;
         }
 
         // Find the region the highlighted state sector belongs to and highlight its sprites,

@@ -39,74 +39,40 @@ Ext.define('KitchenSink.view.charts.financial.Candlestick', {
             handler: 'onRefresh'
         },
         {
-            xtype: 'segmentedbutton',
-            width: 270,
-            defaults: {
-                ui: 'default-toolbar'
-            },
-            items: [
-                {
-                    text: 'Crosshair',
-                    pressed: true
-                },
-                {
-                    text: 'Pan'
-                },
-                {
-                    text: 'Zoom'
-                }
-            ],
-            listeners: {
-                toggle: 'onModeToggle'
-            }
-        },
-        {
-            text: 'Reset pan/zoom',
-            handler: 'onPanZoomReset'
+            text: 'Download',
+            handler: 'onDownload'
         }
     ],
 
-    items: [{
-        xtype: 'cartesian',
-        reference: 'chart',
-        width: '100%',
-        height: 500,
-        insetPadding: 20,
-        store: {
-            type: 'stock-price'
-        },
-        interactions: [
-             {
-                 type: 'panzoom',
-                 enabled: false,
-                 zoomOnPanGesture: false,
-                 axes: {
-                     left: {
-                         allowPan: false,
-                         allowZoom: false
-                     },
-                     bottom: {
-                         allowPan: true,
-                         allowZoom: true
-                     }
-                 }
-             },
-             {
-                 type: 'crosshair',
-                 axes: {
-                     label: {
-                         fillStyle: 'white'
-                     },
-                     rect: {
-                         fillStyle: '#344459',
-                         opacity: 0.7,
-                         radius: 5
-                     }
-                 }
-             }
-        ],
-        series: [
-            {
+    items: {
+        xtype: 'chartnavigator',
+        reference: 'chartnavigator',
+
+        chart: {
+            xtype: 'cartesian',
+            reference: 'chart',
+            width: '100%',
+            height: 500,
+            insetPadding: 20,
+
+            store: {
+                type: 'stock-price'
+            },
+
+            interactions: {
+                type: 'crosshair',
+                axes: {
+                    label: {
+                        fillStyle: 'white'
+                    },
+                    rect: {
+                        fillStyle: '#344459',
+                        opacity: 0.7,
+                        radius: 5
+                    }
+                }
+            },
+            series: {
                 type: 'candlestick',
                 xField: 'time',
                 openField: 'open',
@@ -125,23 +91,25 @@ Ext.define('KitchenSink.view.charts.financial.Candlestick', {
                         stroke: 'rgb(55,153,19)'
                     }
                 }
-            }
-        ],
-        axes: [
-            {
-                type: 'numeric',
-                fields: ['open', 'high', 'low', 'close'],
-                position: 'left',
-                maximum: 1000,
-                minimum: 0
             },
-            {
-                type: 'time',
-                fields: ['time'],
-                position: 'bottom',
-                visibleRange: [0, 0.3]
-            }
-        ]
-    }]
+            axes: [
+                {
+                    type: 'numeric',
+                    position: 'left',
+                    fields: ['open', 'high', 'low', 'close']
+                },
+                {
+                    id: 'bottom',
+                    type: 'time',
+                    position: 'bottom',
+                    fields: ['time']
+                }
+            ]
+        },
+
+        navigator: {
+            axis: 'bottom'
+        }
+    }
 
 });

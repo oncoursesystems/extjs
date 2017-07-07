@@ -8,29 +8,32 @@
 .#{$prefix}column-options-groupindicator,
 .#{$prefix}column-options-folder,
 .#{$prefix}column-options-leaf {
-    height: $gridviewoptions-icon-size;
-    width: $gridviewoptions-icon-size;
+    @include icon(
+        $size: $gridviewoptions-icon-size,
+        $size-big: $gridviewoptions-icon-size-big,
+        $font-size: $gridviewoptions-icon-font-size,
+        $font-size-big: $gridviewoptions-icon-font-size-big
+    );
+}
 
-    @if $enable-big {
-        .#{$prefix}big & {
-            height: $gridviewoptions-icon-size;
-            width: $gridviewoptions-icon-size;
-        }
-    }
-
-    @include icon($font-size: $gridviewoptions-icon-font-size, $font-size-big: $gridviewoptions-icon-font-size-big);
+.#{$prefix}column-options-item .#{$prefix}innerhtml {
+    flex: 1;
 }
 
 .#{$prefix}column-options-itemwrap {
-    @include st-box;
-    @include st-box-align(center);
+    display: flex;
+    align-items: center;
 
     > * {
-        margin-right: .5em;
+        margin-right: 7px;
     }
 
     > :last-child {
         margin-right: 0;
+    }
+
+    > .#{$prefix}column-options-visibleindicator {
+        margin-left: auto;
     }
 }
 
@@ -40,7 +43,7 @@
 }
 
 .#{$prefix}column-options-text {
-    @include st-box-flex;
+    flex: 1 1;
 }
 
 .#{$prefix}column-options-visibleindicator {

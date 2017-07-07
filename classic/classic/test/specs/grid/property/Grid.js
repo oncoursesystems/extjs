@@ -1,4 +1,4 @@
-describe("Ext.grid.property.Grid", function() {
+topSuite("Ext.grid.property.Grid", function() {
     var grid;
 
     function makeGrid(source) {

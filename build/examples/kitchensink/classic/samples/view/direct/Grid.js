@@ -22,10 +22,10 @@ Ext.define('KitchenSink.view.direct.Grid', {
     ].join(''),
     
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/direct/GridController.js'
     }, {
-        type: 'Base ViewController',
+        type: 'Base Controller',
         path: 'classic/samples/view/direct/DirectVC.js'
     }, {
         type: 'Server TestAction class',

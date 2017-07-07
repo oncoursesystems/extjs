@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.charts.area.NegativeController', {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
             return;
         }
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         chart.preview();
     },
 
@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.charts.area.NegativeController', {
             marker: {
                 opacity: 0,
                 scaling: 0.01,
-                fx: {
+                animation: {
                     duration: 200,
                     easing: 'easeOut'
                 }
@@ -44,7 +44,7 @@ Ext.define('KitchenSink.view.charts.area.NegativeController', {
 
     onAfterRender: function () {
         var me = this,
-            chart = me.lookupReference('chart');
+            chart = me.lookup('chart');
 
         chart.setSeries([
             me.getSeriesConfig('phone', 'Phone Hardware'),

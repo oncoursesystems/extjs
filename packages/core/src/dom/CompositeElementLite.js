@@ -405,7 +405,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
 
     /**
      * Removes the specified element(s).
-     * @param {String/HTMLElement/Ext.dom.Element/Number} el The id of an element, the Element itself, the index of the
+     * @param {String/HTMLElement/Ext.dom.Element/Number} keys The id of an element, the Element itself, the index of the
      * element in this composite or an array of any of those.
      * @param {Boolean} [removeDom] `true` to also remove the element from the document
      * @return {Ext.dom.CompositeElementLite} this
@@ -437,8 +437,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
     },
 
     destroy: function() {
-        // TOUCH-4761: ensure Element#destroy() gets called and not Base#destroy()
-        return this.invoke('destroy', arguments);
+        this.invoke('destroy', arguments);
         this.callParent();
     }
 

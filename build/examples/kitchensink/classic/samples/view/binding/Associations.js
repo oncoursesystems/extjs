@@ -16,16 +16,16 @@ Ext.define('KitchenSink.view.binding.Associations', {
     //<example>
     otherContent: [{
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/Order.js'
+        path: 'app/model/Order.js'
     },{
         type: 'Data',
-        path: 'classic/samples/data/Company.js'
+        path: 'app/data/Company.js'
     },{
         type: 'Data',
-        path: 'classic/samples/data/Order.js'
+        path: 'app/data/Order.js'
     }],
     //</example>
     viewModel: {

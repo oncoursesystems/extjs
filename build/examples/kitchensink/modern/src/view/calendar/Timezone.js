@@ -36,11 +36,9 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
     },
 
     layout: 'fit',
-    shadow: true,
 
-    bind: {
-        title: '{value:date("M Y")}'
-    },
+    bind: '{value:date("M Y")}',
+
     header: {
         layout: 'hbox',
         items: [{
@@ -66,6 +64,7 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
             }]
         }]
     },
+
     items: [{
         xtype: 'calendar-days',
         startTime: 6,
@@ -80,5 +79,4 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
             timezoneOffset: '{tzSelector.selection.value}'
         }
     }]
-
 })

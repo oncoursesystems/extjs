@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.form.FileUploads', {
     
     exampleTitle: 'File Upload fields',
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/form/FileUploadsController.js'
     }],
     //</example>

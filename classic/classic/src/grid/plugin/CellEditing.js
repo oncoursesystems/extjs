@@ -51,10 +51,10 @@
  *             {header: 'Phone', dataIndex: 'phone'}
  *         ],
  *         selModel: 'cellmodel',
- *         plugins: {
+ *         plugins: [{
  *             ptype: 'cellediting',
  *             clicksToEdit: 1
- *         },
+ *         }],
  *         height: 200,
  *         width: 400,
  *         renderTo: Ext.getBody()
@@ -358,8 +358,10 @@ Ext.define('Ext.grid.plugin.CellEditing', {
             if (!editor.rendered) {
                 editor.hidden = true;
                 editor.render(cell);
-            } else {
+            }
+            else {
                 p = editor.el.dom.parentNode;
+                
                 if (p !== cell.dom) {
                     // This can sometimes throw an error
                     // https://code.google.com/p/chromium/issues/detail?id=432392
@@ -368,6 +370,11 @@ Ext.define('Ext.grid.plugin.CellEditing', {
                     } catch (e) {
                         
                     }
+                    
+                    if (editor.container && editor.container.dom !== cell.dom) {
+                        editor.container.collect();
+                    }
+                    
                     editor.container = cell;
                     cell.dom.appendChild(editor.el.dom, cell.dom.firstChild);
                 }
@@ -573,6 +580,8 @@ Ext.define('Ext.grid.plugin.CellEditing', {
         
         // Keep upward pointer correct for each use - editors are shared between locking sides
         editor.editingPlugin = me;
+        editor.collectContainerElement = true;
+        
         return editor;
     },
 
@@ -600,10 +609,11 @@ Ext.define('Ext.grid.plugin.CellEditing', {
      * Gets the cell (td) for a particular record and column.
      * @param {Ext.data.Model} record
      * @param {Ext.grid.column.Column} column
+     * @param {Boolean} [returnElement=false] `true` to return an Ext.Element, else a raw `<td>` is returned.
      * @private
      */
-    getCell: function(record, column) {
-        return this.grid.getView().getCell(record, column);
+    getCell: function(record, column, returnElement) {
+        return this.grid.getView().getCell(record, column, returnElement);
     },
 
     onEditComplete: function(ed, value, startValue) {

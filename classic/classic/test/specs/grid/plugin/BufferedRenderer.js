@@ -1,6 +1,10 @@
 /* global Ext, MockAjaxManager, expect, spyOn, jasmine, xit */
 
-describe('Ext.grid.plugin.BufferedRenderer', function () {
+topSuite("Ext.grid.plugin.BufferedRenderer",
+    ['Ext.grid.Panel', 'Ext.tree.Panel', 'Ext.grid.feature.Grouping',
+     'Ext.grid.column.Widget', 'Ext.ProgressBarWidget', 'Ext.tab.Panel',
+     'Ext.window.Window'],
+function() {
     var itNotIE8 = Ext.isIE8 ? xit : it,
         store, grid, tree, view, scroller, plugin,
         synchronousLoad = true,
@@ -1651,7 +1655,7 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                     }
 
                     // Scroll until the end
-                    return (navModel.getPosition().rowIdx === store.getCount() - 1);
+                    return ((p = navModel.getPosition()) && p.rowIdx === store.getCount() - 1);
                 }
             }, 'down arrow to scroll to the last row. 20 seconds expired', 20000);
 
@@ -1733,7 +1737,7 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                         grid.reconfigure(null, columns);
                     }
 
-                    expect(view.el.down('.x-grid-item-container').getHeight() === view.lockingPartner.el.down('.x-grid-item-container').getHeight()).toBe(true);
+                    expect(Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight()).toBe(Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight());
                 });
             }
 
@@ -1751,7 +1755,7 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
         });
 
         describe('locking grid with variableRowHeight', function () {
-            itIE10p('should keep the row heights on both sides synchronized', function() {
+            it('should keep the row heights on both sides synchronized', function() {
                 var columns = [{
                     text: 'Col 1',
                     dataIndex: 'field1',
@@ -1822,7 +1826,7 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                 view.bufferedRenderer.syncRowHeights = Ext.Function.createSequence(view.bufferedRenderer.syncRowHeights, onSyncHeights);
                 lockedView.bufferedRenderer.syncRowHeights = Ext.Function.createSequence(view.bufferedRenderer.syncRowHeights, onSyncHeights);
 
-                jasmine.waitsForScroll(scroller, function () {
+                jasmine.waitsForScroll(scroller, function() {
                     var reachedTargetRow = nodeCache.startIndex <= 99 && nodeCache.endIndex >= 99;
 
                     // If row 99 is in the nodeCache, we're done
@@ -1834,21 +1838,24 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
 
                 // Must have invoked the row syncher and the two body heights must be the same
                 runs(function () {
-
                     expect(bufferedRendererInvocationCount).toBeGreaterThan(0);
-                    expect(view.el.down('.x-grid-item-container', true).offsetHeight === view.lockingPartner.el.down('.x-grid-item-container', true).offsetHeight).toBe(true);
+                    expect(view.el.down('.x-grid-item-container', true).offsetHeight).toBe(view.lockingPartner.el.down('.x-grid-item-container', true).offsetHeight);
                     bufferedRendererInvocationCount = 0;
                 });
 
-                // Now teleport down to neat the bottom
-                jasmine.waitsForScroll(scroller, function () {
-                    var reachedTargetRow = view.bufferedRenderer.getLastVisibleRowIndex() > 990;
+                // Now teleport down to near the bottom
+                jasmine.waitsForScroll(scroller, function() {
+                    // We don't want to try scrolling to the very bottom; there's a race condition
+                    // between us and BufferedRenderer.stretchView() that also tries to scroll
+                    // the same element. 950 rows out of 1000 is enough, tf there was a problem
+                    // it would have manifested itself already.
+                    var reachedTargetRow = view.bufferedRenderer.getLastVisibleRowIndex() > 950;
 
                     if (reachedTargetRow) {
                         return true;
                     }
                     scroller.scrollBy(0, 1000);
-                }, 'row 990 to scroll into view', 30000);
+                }, 'row 950 to scroll into view', 30000);
                 
                 // Scrolling is too fast for IE8, need to repaint the grid
                 // so that measurements below will yield correct values
@@ -1863,8 +1870,8 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                 runs(function () {
                     expect(bufferedRendererInvocationCount).toBeGreaterThan(0);
                     
-                    var mainHeight = view.el.down('.x-grid-item-container').getHeight(),
-                        partnerHeight = view.lockingPartner.el.down('.x-grid-item-container').getHeight();
+                    var mainHeight = Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight(),
+                        partnerHeight = Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight();
                     
                     expect(partnerHeight).toBe(mainHeight);
                     bufferedRendererInvocationCount = 0;
@@ -1963,13 +1970,13 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                 // Must have invoked the row syncher and the two body heights must be the same
                 runs(function () {
                     expect(bufferedRendererInvocationCount).toBeGreaterThan(0);
-                    expect(view.el.down('.x-grid-item-container').getHeight() === view.lockingPartner.el.down('.x-grid-item-container').getHeight()).toBe(true);
+                    expect(Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight()).toBe(Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight());
                     bufferedRendererInvocationCount = 0;
                 });
 
                 // Now teleport down to neat the bottom
                 jasmine.waitsForScroll(scroller, function () {
-                    var reachedTargetRow = view.bufferedRenderer.getLastVisibleRowIndex() > 990;
+                    var reachedTargetRow = view.bufferedRenderer.getLastVisibleRowIndex() > 950;
 
                     if (reachedTargetRow) {
                         return true;
@@ -1990,8 +1997,8 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                 runs(function () {
                     expect(bufferedRendererInvocationCount).toBeGreaterThan(0);
                     
-                    var mainHeight = view.el.down('.x-grid-item-container').getHeight(),
-                        partnerHeight = view.lockingPartner.el.down('.x-grid-item-container').getHeight();
+                    var mainHeight = Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight(),
+                        partnerHeight = Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight();
                     
                     expect(partnerHeight).toBe(mainHeight);
                     bufferedRendererInvocationCount = 0;
@@ -2213,7 +2220,7 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                     expect(view.getRecord(view.all.last()).get('treeData')).toBe('Child of 99, number 6');
 
                     // Now let's collapse the parent node by simulating a click on the elbow node.
-                    jasmine.fireMouseEvent(nodeCache.item(99).down('.x-tree-expander'), 'click');
+                    jasmine.fireMouseEvent(nodeCache.item(99).down('.x-tree-expander', true), 'click');
                 });
             });
         });
@@ -2572,13 +2579,13 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
     });
 
     describe('Expanding view size', function() {
-        var window;
+        var win;
 
         afterEach(function() {
-            window.destroy();
+            win.destroy();
         });
 
-        itNotIE8('should scroll to top when view size expands to encapsulate whole dataset', function() {
+        it('should scroll to top when view size expands to encapsulate whole dataset', function() {
             var Person = Ext.define(null, {
                 extend: 'Ext.data.Model',
                 fields: ['name'],
@@ -2589,27 +2596,29 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                         rootProperty: 'data'
                     }
                 }
-            });
-
-            var store = new Ext.data.Store({
+            }), 
+            store = new Ext.data.Store({
                 model: Person,
                 proxy: {
                     type: 'memory',
                     data: makeData(52)
                 },
                 autoDestroy: true
-            });
+            }), store1, grid, grid1, tabPanel, view;
+
             store.load();
-            var store1 = new Ext.data.Store({
+            
+            store1 = new Ext.data.Store({
                 model: Person,
                 proxy: {
                     type: 'memory',
                     data: makeData(52)
                 }
             });
+            
             store1.load();
 
-            var grid = new Ext.grid.Panel({
+            grid = new Ext.grid.Panel({
                 hideMode: 'offsets',
                 title: 'Grid 1',
                 store: store,
@@ -2620,7 +2629,8 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                     dataIndex: 'name'
                 }]
             });
-            var grid1 = new Ext.grid.Panel({
+            
+            grid1 = new Ext.grid.Panel({
                 hideMode: 'offsets',
                 title: 'Grid 2',
                 store: store1,
@@ -2632,7 +2642,7 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                 }]
             });
 
-            window = new Ext.window.Window({
+            win = new Ext.window.Window({
                 title: 'Test',
                 height: 395,
                 width: 800,
@@ -2650,18 +2660,19 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
                     ]
                 }
             });
-            var tabPanel = window.child('tabpanel');
-
-            var view = grid.getView();
+            
+            tabPanel = win.child('tabpanel');
+            view = grid.getView();
             scroller = view.isLockingView ? grid.getScrollable() : view.getScrollable();
 
             // Scroll all the way to the end
-            jasmine.waitsForScroll(scroller, function () {
-                if (view.all.endIndex === view.store.getCount() - 1) {
+            waitsFor(function () {
+                if (view.all.endIndex === store.getCount() - 1) {
                     return true;
                 }
-                scroller.scrollBy(0, 200);
-            }, 'scroll to end', 30000);
+        
+                scroller.scrollBy(null, Infinity);
+            }, 'scroll to end', 500);
 
             runs(function() {
                 view.scrollBy(null, 100);
@@ -2677,16 +2688,17 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
 
                 tabPanel.setActiveTab(0);
 
-                window.setHeight(940);
+                win.setHeight(940);
             });
             
             // Scroll all the way to the start
-            jasmine.waitsForScroll(scroller, function () {
-                if (view.getScrollY() === 0) {
+            waitsFor(function () {
+                if (view.getScrollY() < 100) {
                     return true;
                 }
-                scroller.scrollBy(0, -100);                
-            }, 'scroll to top', 10000);
+        
+                scroller.scrollBy(null, -Infinity);
+            }, 'scroll to the start', 500);
 
             runs(function() {
                 expect(view.bufferedRenderer.bodyTop).toBe(0);
@@ -2944,6 +2956,27 @@ describe('Ext.grid.plugin.BufferedRenderer', function () {
             // the view has moved downwards, so the first visible row index must be "trailingBufferZone" rows
             // after the requested refresh start row.
             expect(view.bufferedRenderer.getFirstVisibleRowIndex()).toBe(500 + view.bufferedRenderer.trailingBufferZone);
+        });
+    });
+
+    describe('scrolling position', function() {
+        it('should not scroll up when fetching a new range of rows', function() {
+            makeGrid(null,{
+                data: createData(1000, false, true)
+            });
+
+            grid.getNavigationModel().setPosition(0, 0);
+
+            jasmine.waitsForScroll(scroller, function() {
+                if (view.all.startIndex !== 0) {
+                    return true;
+                }
+                scroller.scrollBy(0, 10);
+            }, 'view is scrolled to the last record');
+
+            runs(function() {
+                expect(view.getScrollY()).not.toBeLessThan(600);
+            });
         });
     });
     

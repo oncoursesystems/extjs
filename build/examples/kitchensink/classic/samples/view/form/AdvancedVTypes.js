@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.form.AdvancedVTypes', {
     
     exampleTitle: 'Advanced VTypes',
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/form/AdvancedVTypesController.js'
     }, {
         type: 'VType',

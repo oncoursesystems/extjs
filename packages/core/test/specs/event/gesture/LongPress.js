@@ -1,4 +1,4 @@
-describe("Ext.event.gesture.LongPress", function() {
+topSuite("Ext.event.gesture.LongPress", function() {
     var helper = Ext.testHelper,
         recognizer = Ext.event.gesture.LongPress.instance,
         originalMinDuration = recognizer.getMinDuration(),

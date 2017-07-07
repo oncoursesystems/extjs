@@ -43,26 +43,27 @@ Ext.define('Admin.view.faq.ItemsController', {
         this.animateBody(body, 0, height);
     },
 
-    onItemTap: function (sender, index, target, record, event) {
+    onChildTap: function (view, context) {
         var me = this,
-            hit = event.getTarget(),
+            hit = context.event.target,
+            child = context.child,
             cursor = hit && Ext.fly(hit).getStyle('cursor'),
             expanded;
 
         // Check if the element tapped is styled as a pointer and toggle if so.
         if (cursor === 'pointer') {
-            if (target.hasCls('faq-expanded')) {
-                me.collapseBody(target);
+            if (child.hasCls('faq-expanded')) {
+                me.collapseBody(child);
             } else {
                 // If the target is not expanded, we may need to collapse the currently
                 // expanded item.
 
-                expanded = sender.element.down('.faq-expanded');
+                expanded = view.element.down('.faq-expanded');
                 if (expanded) {
                     me.collapseBody(expanded);
                 }
 
-                me.expandBody(target);
+                me.expandBody(child);
             }
         }
     }

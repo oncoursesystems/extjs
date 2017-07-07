@@ -36,7 +36,7 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
         path: 'classic/samples/view/dd/FieldToGridController.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     },{
         type: 'Data',
         path: 'classic/samples/data/DataSets.js'
@@ -66,11 +66,11 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
         store: {
             type: 'companies'
         },
-        plugins: {
+        plugins: [{
             ptype: 'ux-cellfielddropzone',
             ddGroup: 'dd-field-to-grid',
             onCellDrop: 'onCellDrop'
-        },
+        }],
 
         columns: [{
             id:'company',
@@ -86,13 +86,13 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
             dataIndex: 'price'
         }, {
             header: 'Change',
-            dataIndex: 'change',
+            dataIndex: 'priceChange',
             width: 80,
             sortable: true,
             renderer: 'renderChange'
         }, {
             header: '% Change',
-            dataIndex: 'pctChange',
+            dataIndex: 'priceChangePct',
             width: '${percentChangeColumnWidth}',
             sortable: true,
             renderer: 'renderPercent'
@@ -101,16 +101,16 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
             width: '${lastUpdatedColumnWidth}',
             sortable: true,
             formatter: 'date("m/d/Y")',
-            dataIndex: 'lastChange'
+            dataIndex: 'priceLastChange'
         }]
     }, {
         title: 'Source Form',
         margin: '10 0 0 0',
         bodyPadding: 5,
-        plugins: {
+        plugins: [{
             ptype: 'ux-panelfielddragzone',
             ddGroup: 'dd-field-to-grid'
-        },
+        }],
         defaults: {
             labelWidth: 150
         },

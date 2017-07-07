@@ -1,6 +1,6 @@
 /* global expect, Ext, spyOn, jasmine, describe, xdescribe, xit */
 
-describe("Ext.dom.Element", function() {
+topSuite("Ext.dom.Element", function() {
     
     function underlayHidden(underlayEl) {
         return !Ext.getBody().contains(underlayEl) || !underlayEl.isVisible();
@@ -1070,6 +1070,10 @@ describe("Ext.dom.Element", function() {
                     });
 
                     describe("selector", function() {
+                        afterEach(function() {
+                            Ext.fly(wrap).destroy();
+                        });
+                        
                         it("should place the element in the element match the selector", function() {
                             wrap = element.wrap({
                                 cls: 'foo',
@@ -1079,7 +1083,7 @@ describe("Ext.dom.Element", function() {
                                         cls: 'baz'
                                     }]
                                 }]
-                            }, false, '.baz');
+                            }, true, '.baz');
 
                             expect(element.dom.parentNode.className).toBe('baz');
                             expect(element.dom.parentNode.parentNode.className).toBe('bar');
@@ -1088,58 +1092,75 @@ describe("Ext.dom.Element", function() {
                     });
 
                     describe("focus", function() {
+                        var child;
+                        
+                        afterEach(function() {
+                            child = Ext.destroy(child);
+                        });
+                        
                         it("should keep focus if the active element is inside the wrapped element", function() {
-                            var child = element.createChild({
+                            child = element.createChild({
                                 tag: 'a',
                                 html: 'Foo',
                                 tabIndex: '0'
                             });
 
-                            jasmine.focusAndWait(child);
+                            focusAndWait(child);
+                            
                             runs(function() {
                                 wrap = element.wrap();
                             });
-                            jasmine.waitsForFocus(child);
+                            
+                            waitsForFocus(child);
+                            
                             runs(function() {
                                 expect(Ext.dom.Element.getActiveElement()).toBe(child.dom);
                             });
                         });
 
                         it("should not fire focus/blur events on the element", function() {
-                            var child = element.createChild({
+                            child = element.createChild({
                                 tag: 'a',
                                 html: 'Foo',
                                 tabIndex: '0'
-                            }), spy = jasmine.createSpy();
+                            });
+                            
+                            var spy = jasmine.createSpy();
 
-                            jasmine.focusAndWait(child);
+                            focusAndWait(child);
+                            
                             runs(function() {
                                 child.on('focus', spy);
                                 child.on('blur', spy);
                                 wrap = element.wrap();
                             });
+                            
                             // Nothing must happen, there's nothing to wait for
                             waits(100);
+                            
                             runs(function() {
                                 expect(spy).not.toHaveBeenCalled();
-                                child.destroy();
                             });
                         });
 
                         it("should not cause an exception when the focused element is not in the element cache", function() {
                             var newId = Ext.id();
+                            
                             element.dom.innerHTML = '<a tabIndex="0" id="' + newId + '">Foo</a>';
 
-                            var child = element.dom.firstChild;
+                            child = element.dom.firstChild;
 
-                            jasmine.focusAndWait(child);
+                            focusAndWait(child);
+                            
                             runs(function() {
                                 expect(function() {
                                     wrap = element.wrap();
                                 }).not.toThrow();
                                 expect(Ext.cache[newId]).toBeUndefined();
                             });
-                            jasmine.waitsForFocus(child);
+                            
+                            waitsForFocus(child);
+                            
                             runs(function() {
                                 expect(Ext.dom.Element.getActiveElement()).toBe(child);
                             });
@@ -1149,7 +1170,7 @@ describe("Ext.dom.Element", function() {
 
                 // API is private, just want to test focus stuff here
                 describe("unwrap", function() {
-                    var wrap;
+                    var wrap, child;
 
                     beforeEach(function() {
                         element = addElement('div');
@@ -1157,44 +1178,51 @@ describe("Ext.dom.Element", function() {
                     });
 
                     afterEach(function() {
-                        wrap = Ext.destroy(wrap);
+                        wrap = child = Ext.destroy(wrap, child);
                     });
 
                     describe("focus", function() {
                         it("should keep focus if the active element is inside the wrapped element", function() {
-                            var child = element.createChild({
+                            child = element.createChild({
                                 tag: 'a',
                                 html: 'Foo',
                                 tabIndex: '0'
                             });
 
-                            jasmine.focusAndWait(child);
+                            focusAndWait(child);
+                            
                             runs(function() {
                                 element.unwrap();
                             });
-                            jasmine.waitsForFocus(child);
+                            
+                            waitsForFocus(child);
+                            
                             runs(function() {
                                 expect(Ext.dom.Element.getActiveElement()).toBe(child.dom);
                             });
                         });
 
                         it("should not fire focus/blur events on the element", function() {
-                            var child = element.createChild({
+                            child = element.createChild({
                                 tag: 'a',
                                 html: 'Foo',
                                 tabIndex: '0'
-                            }), spy = jasmine.createSpy();
+                            });
+                            
+                            var spy = jasmine.createSpy();
 
-                            jasmine.focusAndWait(child);
+                            focusAndWait(child);
+                            
                             runs(function() {
                                 child.on('focus', spy);
                                 child.on('blur', spy);
                                 element.unwrap();
                             });
-                            jasmine.waitsForFocus(child);
+                            
+                            waitsForFocus(child);
+                            
                             runs(function() {
                                 expect(spy).not.toHaveBeenCalled();
-                                child.destroy();
                             });
                         });
 
@@ -1202,16 +1230,19 @@ describe("Ext.dom.Element", function() {
                             var newId = Ext.id();
                             element.dom.innerHTML = '<a tabIndex="0" id="' + newId + '">Foo</a>';
 
-                            var child = element.dom.firstChild;
+                            child = element.dom.firstChild;
 
-                            jasmine.focusAndWait(child);
+                            focusAndWait(child);
+                            
                             runs(function() {
                                 expect(function() {
                                     element.unwrap();
                                 }).not.toThrow();
                                 expect(Ext.cache[newId]).toBeUndefined();
                             });
-                            jasmine.waitsForFocus(child);
+                            
+                            waitsForFocus(child);
+                            
                             runs(function() {
                                 expect(Ext.dom.Element.getActiveElement()).toBe(child);
                             });
@@ -1451,10 +1482,10 @@ describe("Ext.dom.Element", function() {
                     element = addElement('div');
                     element2 = Ext.getBody().createChild({tag: "div"});
 
-
+                    // Have to prefix all custom attributes with "data-", otherwise Edge freaks out
                     if (element.dom.setAttribute) {
-                        element.dom.setAttribute("qtip", "bar");
-                        element2.dom.setAttribute("ext:qtip", "foo");
+                        element.dom.setAttribute("data-qtip", "bar");
+                        element2.dom.setAttribute("ext:data-qtip", "foo");
                     } else {
                         element.dom["qtip"] = "bar";
                         element2.dom["ext:qtip"] = "foo";
@@ -1462,7 +1493,7 @@ describe("Ext.dom.Element", function() {
 
                     if (element.dom.setAttributeNS) {
                         element3 = Ext.getBody().createChild({tag: "div"});
-                        element3.dom.setAttributeNS("ext", "qtip", "foobar");
+                        element3.dom.setAttributeNS("ext", "data-qtip", "foobar");
                     }
                 });
 
@@ -1475,7 +1506,7 @@ describe("Ext.dom.Element", function() {
 
                 describe("without namespace", function() {
                     it("should return the attribute value if it exists", function() {
-                        expect(element.getAttribute("qtip")).toEqual("bar");
+                        expect(element.getAttribute("data-qtip")).toEqual("bar");
                     });
 
                     it("should return null if the attribute does not exist", function() {
@@ -1485,21 +1516,21 @@ describe("Ext.dom.Element", function() {
 
                 describe("with namespace", function() {
                     it("should return null on a non-namespaced attribute", function() {
-                        expect(element.getAttribute("qtip", "ext")).toBeNull();
+                        expect(element.getAttribute("data-qtip", "ext")).toBeNull();
                     });
 
                     it("should return null if the attribute belong to another namespace", function() {
-                        expect(element2.getAttribute("qtip", "nothing")).toBeNull();
+                        expect(element2.getAttribute("data-qtip", "nothing")).toBeNull();
                     });
 
                     it("should return the attribute value if it belongs to the namespace", function() {
                         if (element3) {
-                            expect(element3.getAttribute("qtip", "ext")).toEqual("foobar");
+                            expect(element3.getAttribute("data-qtip", "ext")).toEqual("foobar");
                         }
                     });
 
                     it("should handle xml namespace", function() {
-                        expect(element2.getAttribute("qtip", "ext")).toEqual("foo");
+                        expect(element2.getAttribute("data-qtip", "ext")).toEqual("foo");
                     });
                 });
             });
@@ -1518,13 +1549,13 @@ describe("Ext.dom.Element", function() {
                 it("should return all attributes", function() {
                     var el = Ext.getBody().createChild({
                         tag: 'div',
-                        foo: 42
+                        role: 'foo'
                     });
                     
                     var attrs = el.getAttributes();
                     
                     expect(attrs).toEqual({
-                        foo: '42',
+                        role: 'foo',
                         id: el.id
                     });
                     
@@ -2644,34 +2675,6 @@ describe("Ext.dom.Element", function() {
             expect(element.shim.el).toBeNull();
             expect(element.shim.disabled).toBe(true);
         });
-        
-        if (Ext.toolkit === 'classic') {
-            it("should mask all iframes when resizing an element with shim and unmask when done.", function() {
-                var iframe = Ext.getBody().createChild({
-                    tag : 'iframe',
-                    src: 'about:blank',
-                    style: 'position:absolute;left:0px;top:0px;width:200px;height:100px;'
-                });
-                
-                var win = Ext.create('Ext.window.Window',{
-                    width : 100,
-                    height: 100,
-                    title: 'Test',
-                    shim: true
-                }).show();
-                
-                jasmine.fireMouseEvent(win.resizer.south, 'mousedown');
-                
-                expect(Ext.fly(iframe.dom.parentNode).isMasked()).toBe(true);
-                
-                jasmine.fireMouseEvent(win.resizer.south, 'mouseup');
-                
-                expect(Ext.fly(iframe.dom.parentNode).isMasked()).toBe(false);
-                
-                iframe.destroy();
-                win.destroy();
-            });
-        }
     });
 
     describe("shadow", function() {
@@ -4300,6 +4303,9 @@ describe("Ext.dom.Element", function() {
                 expect(listeners.pointerdown.mostRecentCall.args[0].type).toBe('pointerdown');
                 expect(listeners.touchstart.mostRecentCall.args[0].type).toBe('touchstart');
                 expect(listeners.mousedown.mostRecentCall.args[0].type).toBe('mousedown');
+                
+                // Release gestures
+                Ext.testHelper.fireEvent('end', target);
             });
 
             it("should fire move events", function() {
@@ -4312,6 +4318,7 @@ describe("Ext.dom.Element", function() {
                 expect(listeners.pointermove.mostRecentCall.args[0].type).toBe('pointermove');
                 expect(listeners.touchmove.mostRecentCall.args[0].type).toBe('touchmove');
                 expect(listeners.mousemove.mostRecentCall.args[0].type).toBe('mousemove');
+                Ext.testHelper.fireEvent('end', target);
             });
 
             it("should fire end events", function() {
@@ -4326,9 +4333,9 @@ describe("Ext.dom.Element", function() {
                 expect(listeners.mouseup.mostRecentCall.args[0].type).toBe('mouseup');
             });
 
-            if (Ext.supports.TouchEvents && Ext.isWebKit && Ext.os.is.Desktop) {
-                // Touch Enabled webkit on windows 8 fires both mouse and touch events We already
-                // tested the touch events above, so make sure mouse events/ work as well.
+            if (Ext.supports.TouchEvents && Ext.os.is.Desktop) {
+                // Touch Enabled desktop browsers on windows fire both mouse and touch events.
+                // We already tested the touch events above, so make sure mouse events work as well.
 
                 it("should fire secondary start events", function() {
                     fire('start', true);
@@ -4663,6 +4670,8 @@ describe("Ext.dom.Element", function() {
                 expect(result).toEqual(['pdc', 'cdc', 'gdc', 'gd', 'cd', 'pd', 'pc', 'cc', 'gc', 'g', 'c', 'p']);
             }
 
+            jasmine.fireMouseEvent(grandchild, 'mouseup');
+
             Ext.destroy(parent.select('*', true), parent);
         });
 
@@ -4786,6 +4795,98 @@ describe("Ext.dom.Element", function() {
         });
     });
 
+    describe("static utilities", function() {
+        describe("units", function() {
+            describe("isRelativeUnit", function() {
+                function is(v) {
+                    return Ext.dom.Element.isRelativeUnit(v);
+                }
+
+                it("should be true for an empty string", function() {
+                    expect(is('')).toBe(true);
+                });
+
+                it("should be true for an 'auto'", function() {
+                    expect(is('auto')).toBe(true);
+                });
+
+                it("should be true for a '%' value", function() {
+                    expect(is('30%')).toBe(true);
+                    expect(is('50%')).toBe(true);
+                });
+
+                it("should be true for an 'em' value", function() {
+                    expect(is('1em%')).toBe(true);
+                    expect(is('2.5em')).toBe(true);
+                });
+
+                it("should be true for a 'rem' value", function() {
+                    expect(is('6rem')).toBe(true);
+                    expect(is('7.5rem%')).toBe(true);
+                });
+
+                it("should be true for a 'vh' value", function() {
+                    expect(is('95vh')).toBe(true);
+                    expect(is('10vh')).toBe(true);
+                });
+
+                it("should be true for a 'vw' value", function() {
+                    expect(is('60vw')).toBe(true);
+                    expect(is('1vw')).toBe(true);
+                });
+
+                it("should be true for a 'vmin' value", function() {
+                    expect(is('2vmin')).toBe(true);
+                    expect(is('45vmin')).toBe(true);
+                });
+
+                it("should be true for a 'vmax' value", function() {
+                    expect(is('3vmax')).toBe(true);
+                    expect(is('88vmax')).toBe(true);
+                });
+
+                it("should be true for an 'ex' value", function() {
+                    expect(is('1ex')).toBe(true);
+                    expect(is('0.5ex')).toBe(true);
+                });
+
+                it("should be true for a 'ch' value", function() {
+                    expect(is('2ch')).toBe(true);
+                    expect(is('4ch')).toBe(true);
+                });
+
+                it("should return false for '0'", function() {
+                    expect(is('0')).toBe(false);
+                });
+
+                it("should return false for 'px' values", function() {
+                    expect(is('3px')).toBe(false);
+                    expect(is('100px')).toBe(false);
+                });
+
+                it("should return false for 'mm' values", function() {
+                    expect(is('2mm')).toBe(false);
+                    expect(is('93mm')).toBe(false);
+                });
+
+                it("should return false for 'cm' values", function() {
+                    expect(is('5cm')).toBe(false);
+                    expect(is('0.1cm')).toBe(false);
+                });
+
+                it("should return false for 'in' values", function() {
+                    expect(is('2in')).toBe(false);
+                    expect(is('7in')).toBe(false);
+                });
+
+                it("should return false for 'pt' values", function() {
+                    expect(is('3pt')).toBe(false);
+                    expect(is('0.7pt')).toBe(false);
+                });
+            });
+        });
+    });
+
     describe("special DOM events", function() {
         var el, spy, e;
 
@@ -4884,5 +4985,4 @@ describe("Ext.dom.Element", function() {
             });
         });
     });
-
-}, "/src/dom/Element.js");
+});

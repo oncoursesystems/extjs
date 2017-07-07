@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.charts.column.MultiAxisController', {
     },
 
     onAfterRender: function () {
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
 
         var highSeries = {
                 type: 'bar',

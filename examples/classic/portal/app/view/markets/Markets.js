@@ -45,7 +45,6 @@ Ext.define('Portal.view.markets.Markets', {
         series: [{
             type: 'line',
             lineWidth: 1,
-            showMarkers: false,
             fill: true,
             axis: 'left',
             xField: 'name',
@@ -57,7 +56,6 @@ Ext.define('Portal.view.markets.Markets', {
         }, {
             type: 'line',
             lineWidth: 1,
-            showMarkers: false,
             axis: 'right',
             xField: 'name',
             yField: 'sp500',

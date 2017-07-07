@@ -1,4 +1,4 @@
-describe("Ext.util.TaskRunner", function() {
+topSuite("Ext.util.TaskRunner", function() {
     var spy, runner, task;
 
     describe("idle event", function() {

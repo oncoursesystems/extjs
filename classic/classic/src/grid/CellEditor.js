@@ -48,13 +48,14 @@ Ext.define('Ext.grid.CellEditor', {
      */
     onShow: function() {
         var me = this,
-            innerCell = me.boundEl.down(me.context.view.innerSelector);
+            innerCell = me.boundEl.dom.querySelector(me.context.view.innerSelector);
 
         if (innerCell) {
             if (me.isForTree) {
-                innerCell = innerCell.child(me.treeNodeSelector);
+                innerCell = innerCell.querySelector(me.treeNodeSelector);
             }
-            innerCell.hide();
+            
+            Ext.fly(innerCell).hide();
         }
 
         me.callParent(arguments);
@@ -96,11 +97,14 @@ Ext.define('Ext.grid.CellEditor', {
         delete me.focusLeaveAction;
 
         // If the related target is not a cell, turn actionable mode off
-        if (!view.destroyed && view.el.contains(related) && (!related.isAncestor(e.target) || related === view.el) && !related.up(view.getCellSelector(), view.el)) {
+        if (!view.destroyed && view.el.contains(related) &&
+            (!related.isAncestor(e.target) || related === view.el) &&
+            !related.up(view.getCellSelector(), view.el, true)) {
             me.context.grid.setActionableMode(false, view.actionPosition);
         }
 
         me.cacheElement();
+        
         // Bypass Editor's onFocusLeave
         Ext.container.Container.prototype.onFocusLeave.apply(me, arguments);
     },
@@ -201,13 +205,14 @@ Ext.define('Ext.grid.CellEditor', {
 
     restoreCell: function() {
         var me = this,
-            innerCell = me.boundEl.down(me.context.view.innerSelector);
+            innerCell = me.boundEl.dom.querySelector(me.context.view.innerSelector);
 
         if (innerCell) {
             if (me.isForTree) {
-                innerCell = innerCell.child(me.treeNodeSelector);
+                innerCell = innerCell.querySelector(me.treeNodeSelector);
             }
-            innerCell.show();
+            
+            Ext.fly(innerCell).show();
         }        
     },
 
@@ -255,8 +260,8 @@ Ext.define('Ext.grid.CellEditor', {
     realign: function(autoSize) {
         var me = this,
             boundEl = me.boundEl,
-            innerCell = boundEl.down(me.context.view.innerSelector),
-            innerCellTextNode = innerCell.dom.firstChild,
+            innerCell = boundEl.dom.querySelector(me.context.view.innerSelector),
+            innerCellTextNode = innerCell.firstChild,
             width = boundEl.getWidth(),
             offsets = Ext.Array.clone(me.offsets),
             grid = me.grid,
@@ -287,18 +292,18 @@ Ext.define('Ext.grid.CellEditor', {
 
         // https://sencha.jira.com/browse/EXTJSIV-10871 Ensure the data bearing element has a height from text.
         if (isEmpty) {
-            innerCell.dom.innerHTML = 'X';
+            innerCell.innerHTML = 'X';
         }
 
         me.alignTo(boundEl, me.alignment, offsets);
 
         if (isEmpty) {
-            innerCell.dom.firstChild.data = v;
+            innerCell.firstChild.data = v;
         }
     },
 
     getTreeNodeOffset: function(innerCell) {
-        return innerCell.child(this.treeNodeSelector).getOffsetsTo(innerCell)[0];
+        return Ext.fly(innerCell.querySelector(this.treeNodeSelector)).getOffsetsTo(innerCell)[0];
     }
 });
 

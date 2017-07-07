@@ -1,36 +1,15 @@
 Ext.define('KitchenSink.view.charts.line.ImageMarkersController', {
-    extend: 'Ext.app.ViewController',
+    extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.line-markers',
 
     onRefresh: function () {
-        var chart = this.lookupReference('chart'),
-            store = chart.getStore();
+        var store = this.getChart().getStore();
 
         store.refreshData();
     },
 
-    onThemeSwitch: function () {
-        var chart = this.lookupReference('chart'),
-            currentThemeClass = Ext.getClassName(chart.getTheme()),
-            themes = Ext.chart.theme,
-            themeNames = [],
-            currentIndex = 0,
-            name;
-
-        for (name in themes) {
-            if (Ext.getClassName(themes[name]) === currentThemeClass) {
-                currentIndex = themeNames.length;
-            }
-            if (name !== 'Base' && name.indexOf('Gradients') < 0) {
-                themeNames.push(name);
-            }
-        }
-        chart.setTheme(themes[themeNames[++currentIndex % themeNames.length]]);
-        chart.redraw();
-    },
-
     onPanZoomReset: function () {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             axes = chart.getAxes();
 
         axes[0].setVisibleRange([0, 1]);
@@ -52,8 +31,8 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkersController', {
     },
 
     onAfterRender: function () {
-        var chart = this.lookupReference('chart'),
-            toolbar = this.lookupReference('toolbar'),
+        var chart = this.lookup('chart'),
+            toolbar = this.lookup('toolbar'),
             panzoom = chart.getInteractions()[0];
 
         toolbar.add(panzoom.getModeToggleButton());

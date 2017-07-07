@@ -8,7 +8,6 @@ Ext.define('Admin.view.forms.Finish', {
 
     bodyPadding: '0 20 10 20',
 
-    styleHtmlContent: true,
     html:
         '<div class="finish-form-title">Thank You</div>' +
         '<div class="finish-form-text">Lorem ipsum dolor sit amet, consectetuer adipiscing ' +

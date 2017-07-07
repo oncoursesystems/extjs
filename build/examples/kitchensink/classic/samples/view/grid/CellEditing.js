@@ -19,7 +19,7 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
         path: 'classic/samples/view/grid/CellEditingController.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/grid/Plant.js'
+        path: 'app/model/Plant.js'
     }],
     profiles: {
         classic: {
@@ -72,13 +72,13 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
         }]
     },
 
-    plugins: {
+    plugins: [{
         ptype: 'cellediting',
         clicksToEdit: 1
-    },
+    }],
 
     store: {
-        model: 'KitchenSink.model.grid.Plant',
+        model: 'KitchenSink.model.Plant',
 
         proxy: {
             type: 'ajax',

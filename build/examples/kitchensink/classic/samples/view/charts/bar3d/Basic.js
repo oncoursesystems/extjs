@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.charts.bar3d.Basic', {
         path: 'classic/samples/view/charts/bar3d/BasicController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/EconomySectors.js'
+        path: 'app/store/EconomySectors.js'
     }],
     // </example>
     width: 650,
@@ -36,7 +36,13 @@ Ext.define('KitchenSink.view.charts.bar3d.Basic', {
         reference: 'chart',
         width: '100%',
         height: 500,
-        insetPadding: '40 40 30 40',
+        captions: {
+            title: 'Industry size in major economies (2011)',
+            credits: {
+                text: 'Source: http://en.wikipedia.org/wiki/List_of_countries_by_GDP_sector_composition',
+                align: 'left'
+            }
+        },
         innerPadding: '3 0 0 0',
         theme: {
             type: 'muted'
@@ -91,21 +97,6 @@ Ext.define('KitchenSink.view.charts.bar3d.Basic', {
                 trackMouse: true,
                 renderer: 'onSeriesTooltipRender'
             }
-        }],
-        sprites: [{
-            type: 'text',
-            text: 'Industry size in major economies (2011)',
-            fontSize: 22,
-            width: 100,
-            height: 30,
-            x: 40, // the sprite x position
-            y: 20  // the sprite y position
-        }, {
-            type: 'text',
-            text: 'Source: http://en.wikipedia.org/wiki/List_of_countries_by_GDP_sector_composition',
-            fontSize: 10,
-            x: 12,
-            y: 490
         }]
     }],
 

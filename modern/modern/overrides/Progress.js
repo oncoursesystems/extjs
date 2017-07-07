@@ -9,19 +9,15 @@ Ext.define('Ext.overrides.Progress', {
     initialize: function() {
         this.callParent();
 
-        this.on({
-            scope: this,
-            painted: 'onPainted',
-            resize: 'onResize'
-        });
+        this.on('painted', 'onPainted', this);
     },
 
     onPainted: function() {
       this.syncWidth();
     },
 
-    onResize: function (component, info) {
-        this.syncWidth(info.contentWidth);
+    onResize: function (width) {
+        this.syncWidth(width);
     },
 
     syncWidth: function (width) {

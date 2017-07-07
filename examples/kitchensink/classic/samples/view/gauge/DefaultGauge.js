@@ -40,7 +40,8 @@ Ext.define('KitchenSink.view.gauge.DefaultGauge', {
         width: 300,
         fieldLabel: 'Value',
         labelWidth: 60,
-        bind: '{value}'
+        bind: '{value}',
+        publishOnComplete: false
     }],
 
     defaults: {

@@ -1,6 +1,6 @@
 /* global Ext, jasmine, expect, spyOn, provider */
 
-describe("Ext.direct.Manager", function() {
+topSuite("Ext.direct.Manager", ['Ext.direct.*'], function() {
     var Manager = Ext.direct.Manager,
         provider, handler;
 

@@ -30,18 +30,19 @@ Ext.define('KitchenSink.view.d3.PivotTreeMapController', {
     },
 
     onShowConfigPanel: function(panel){
-        panel.getLeftAxisHeader().getTitle().setText('Tree labels');
+        panel.getLeftAxisHeader().setTitle('Tree labels');
         panel.setTopAxisContainerVisible(false);
     },
 
     onTooltip: function (component, tooltip, node, element, event) {
         var view = this.getView(),
-            tpl = view.lookupTpl(node.isLeaf() ? 'leafTpl' : 'parentTpl'),
+            record = node.data,
+            tpl = view.lookupTpl(record.isLeaf() ? 'leafTpl' : 'parentTpl'),
             html;
 
-        component.setSelection(node);
+        component.setSelection(record);
 
-        html = tpl.apply(node);
+        html = tpl.apply(record);
         tooltip.setHtml(html);
     }
 

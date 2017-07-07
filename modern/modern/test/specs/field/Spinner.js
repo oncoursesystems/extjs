@@ -1,4 +1,4 @@
-describe('Ext.field.Spinner', function() {
+topSuite("Ext.field.Spinner", function() {
     var field,
         createField = function(config) {
             if (field) {
@@ -15,34 +15,11 @@ describe('Ext.field.Spinner', function() {
     });
 
     describe("configurations", function() {
-        describe("defaultValue", function() {
-            beforeEach(function() {
-                createField({
-                    defaultValue: 10
-                });
-            });
-
-            it("should set the defaultValue", function() {
-                expect(field.getValue()).toEqual(10);
-            });
-
-            describe("setter", function() {
-                beforeEach(function() {
-                    field.setDefaultValue(15);
-                });
-
-                it("should set the defaultValue when value is NaN", function() {
-                    field.setValue(NaN);
-                    expect(field.getValue()).toEqual(15);
-                });
-            });
-        });
-
         describe("stepValue", function() {
             beforeEach(function() {
                 createField({
                     stepValue: 1,
-                    defaultValue: 10
+                    value: 10
                 });
             });
 
@@ -73,11 +50,46 @@ describe('Ext.field.Spinner', function() {
             });
         });
 
+        describe("applyValue", function() {
+            it('should show 0 as default value', function () {
+                createField();
+
+                expect(field.getValue()).toBe(0);
+            });
+
+            it("should accept fractional values", function() {
+                createField({
+                    stepValue: 0.1,
+                    value: 0.01
+                });
+                expect(field.getValue()).toEqual(0.01);
+                field.destroy();
+                createField({
+                    stepValue: 1,
+                    value: 0.5
+                });
+                expect(field.getValue()).toEqual(0.5);
+            });
+            it("should convert string to number", function() {
+                createField({
+                    stepValue: 0.1,
+                    value: '.01'
+                });
+                expect(field.getValue()).toEqual(0.01);
+                field.destroy();
+                createField({
+                    stepValue: 0.1,
+                    value: '.5'
+                });
+                expect(field.getValue()).toEqual(0.5);
+            });
+        });
+
         describe("minValue", function() {
             beforeEach(function() {
                 createField({
                     minValue: 9.9,
-                    defaultValue: 10
+                    value: 10
                 });
             });
 
@@ -112,7 +124,7 @@ describe('Ext.field.Spinner', function() {
             beforeEach(function() {
                 createField({
                     maxValue: 10.1,
-                    defaultValue: 10
+                    value: 10
                 });
             });
 
@@ -147,7 +159,7 @@ describe('Ext.field.Spinner', function() {
             beforeEach(function() {
                 createField({
                     cycle: true,
-                    defaultValue: 10,
+                    value: 10,
                     minValue: 8,
                     maxValue: 12,
                     stepValue: 1

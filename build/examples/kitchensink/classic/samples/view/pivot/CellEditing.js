@@ -2,7 +2,8 @@
  *
  * This example shows how to create a pivot grid and inline edit the results.
  *
- * Click into a cell to open the editor. The input value will be used to overwrite all records behind that cell.
+ * Click into a cell to open the editor. The input value will be used to overwrite
+ * all records behind that cell.
  *
  */
 Ext.define('KitchenSink.view.pivot.CellEditing', {
@@ -50,7 +51,9 @@ Ext.define('KitchenSink.view.pivot.CellEditing', {
     plugins: [{
         ptype: 'pivotcellediting',
         clicksToEdit: 1,
-        defaultUpdater: 'uniform' // define here the type of editing: 'overwrite', 'increment', 'percentage', 'uniform'
+        // define here the type of editing: 'overwrite', 'increment',
+        // 'percentage', 'uniform'
+        defaultUpdater: 'uniform'
     }],
 
     matrix: {
@@ -64,11 +67,13 @@ Ext.define('KitchenSink.view.pivot.CellEditing', {
             dataIndex: 'value',
             header: 'Sum of value',
             aggregator: 'sum',
-            // if you want an aggregate dimension to be editable you need to specify its editor
+            // if you want an aggregate dimension to be editable you need to
+            // specify its editor
             editor: 'numberfield'
         }],
 
-        // Configure the left axis dimensions that will be used to generate the grid rows
+        // Configure the left axis dimensions that will be used to generate
+        // the grid rows
         leftAxis: [{
             dataIndex: 'year',
             header: 'Year'
@@ -78,10 +83,13 @@ Ext.define('KitchenSink.view.pivot.CellEditing', {
         }],
 
         /**
-         * Configure the top axis dimensions that will be used to generate the columns.
-         * When columns are generated the aggregate dimensions are also used. If multiple aggregation dimensions
-         * are defined then each top axis result will have in the end a column header with children
-         * columns for each aggregate dimension defined.
+         * Configure the top axis dimensions that will be used to generate
+         * the columns.
+         *
+         * When columns are generated the aggregate dimensions are also used.
+         * If multiple aggregation dimensions are defined then each top axis
+         * result will have in the end a column header with children columns
+         * for each aggregate dimension defined.
          */
         topAxis: [{
             dataIndex: 'continent',

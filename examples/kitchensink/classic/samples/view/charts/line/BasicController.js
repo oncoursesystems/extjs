@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.charts.line.BasicController', {
         tooltip.setHtml(record.get('month') + ': ' + record.get('data1') + '%');
     },
 
-    onItemHighlightChange: function (chart, newHighlightItem, oldHighlightItem) {
+    onItemHighlight: function (chart, newHighlightItem, oldHighlightItem) {
         this.setSeriesLineWidth(newHighlightItem, 4);
         this.setSeriesLineWidth(oldHighlightItem, 2);
     },
@@ -33,7 +33,7 @@ Ext.define('KitchenSink.view.charts.line.BasicController', {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
             return;
         }
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         chart.preview();
     }
 

@@ -31,7 +31,7 @@ Ext.define('KitchenSink.view.charts.scatter.BasicController', {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
             return;
         }
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         chart.preview();
     },
 
@@ -44,15 +44,15 @@ Ext.define('KitchenSink.view.charts.scatter.BasicController', {
     },
 
     onAfterRender: function () {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             panzoom = chart.getInteractions()[0],
-            toolbar = this.lookupReference('toolbar');
+            toolbar = this.lookup('toolbar');
 
         toolbar.add(panzoom.getModeToggleButton());
     },
 
     onPanZoomReset: function () {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             axes = chart.getAxes();
 
         axes[0].setVisibleRange([0, 1]);

@@ -390,5 +390,25 @@ Ext.define('Ext.layout.container.Table', {
             return this.table.isAncestor(item.el);
         }
         return item.el.dom.parentNode === this.tbody.dom.rows[rowIdx].cells[cellIdx];
+    },
+    
+    destroy: function() {
+        // Table layout cells will be referenced by child items who will create
+        // Element instances for their container (layout cell). We need to clean up
+        // these Element instances.
+        if (this.owner.rendered) {
+            var targetEl = this.getRenderTarget(),
+                cells, i, len;
+            
+            if (targetEl) {
+                cells = targetEl.query('.' + this.cellCls, false);
+                
+                for (i = 0, len = cells.length; i < len; i++) {
+                    cells[i].destroy();
+                }
+            }
+        }
+        
+        this.callParent();
     }
 });

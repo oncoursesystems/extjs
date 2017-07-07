@@ -1,17 +1,20 @@
-describe('Ext.picker.Date', function() {
+topSuite("Ext.picker.Date", [
+    'Ext.viewport.Viewport'
+], function() {
     var viewport, datePicker;
 
-    function makeDatePicker (value) {
-        viewport = Ext.Viewport = new Ext.viewport.Default();
+    jasmine.usesViewport();  // setup in beforeAll, teardown in afterAll
 
+    function makeDatePicker (value) {
         datePicker = Ext.create('Ext.picker.Date', {
             value: value || null
         });
-        viewport.add(datePicker);
+
+        Ext.Viewport.add(datePicker);
     } 
     
     afterEach(function() {
-        viewport = datePicker = Ext.destroy(viewport, datePicker);
+        datePicker = Ext.destroy(datePicker);
     });
 
     describe("create", function() {
@@ -20,7 +23,7 @@ describe('Ext.picker.Date', function() {
 
             makeDatePicker(date);
 
-            datePicker.show();
+            datePicker.show(false);
 
             expect(datePicker.getValue()).toEqual(Ext.Date.clearTime(date));
         });

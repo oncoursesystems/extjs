@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.charts.bar.StackedController', {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
             return;
         }
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         chart.preview();
     }
 

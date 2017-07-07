@@ -47,7 +47,7 @@
  *   values will be written out as anonymous objects.
  *
  * For more information on working with AMF data please refer to the
- * [AMF Guide](#/guide/amf).
+ * [AMF Guide](../guides/backend_connectors/amf.html).
  */
 Ext.define('Ext.data.amf.Encoder', {
     alias: 'data.amf.Encoder',
@@ -1174,7 +1174,7 @@ Ext.define('Ext.data.amf.Encoder', {
  *     console.log(packet.version, packet.headers, packet.messages);
  *
  * For more information on working with AMF data please refer to the
- * [AMF Guide](#/guide/amf).
+ * [AMF Guide](../guides/backend_connectors/amf.html).
  */
 Ext.define('Ext.data.amf.Packet', function() {
     var twoPowN52 = Math.pow(2, -52),
@@ -2042,7 +2042,8 @@ Ext.define('Ext.data.amf.Packet', function() {
  * allows its superclass ({@link Ext.data.reader.Json}) to handle converting the
  * raw javascript objects into {@link Ext.data.Model} instances.
  * 
- * For a more detailed tutorial see the [AMF Guide](#/guide/amf).
+ * For a more detailed tutorial see the
+ * [AMF Guide](../guides/backend_connectors/amf.html).
  */
 Ext.define('Ext.data.amf.Reader', {
     extend: 'Ext.data.reader.Json',
@@ -2101,12 +2102,8 @@ Ext.define('Ext.data.amf.Reader', {
  *         }
  *     });
  *     
- * For a detailed tutorial on using AMF data see the [AMF Guide](#/guide/amf).
- *
- * **Note: **  _This functionality is only available with the purchase of 
- * Sencha Complete.  For more information about using this class, please visit 
- * our [Sencha Complete](https://www.sencha.com/products/complete/) product page._
- *
+ * For a detailed tutorial on using AMF data see the
+ * [AMF Guide](../guides/backend_connectors/amf.html).
  */
 Ext.define('Ext.data.amf.Proxy', {
     extend: 'Ext.data.proxy.Ajax',
@@ -2207,7 +2204,7 @@ Ext.define('Ext.data.amf.RemotingMessage', {
  *     resp = decoder.readAmfxMessage(str);
  *
  * For more information on working with AMF data please refer to the
- * [AMF Guide](#/guide/amf).
+ * [AMF Guide](../guides/backend_connectors/amf.html).
  */
 Ext.define('Ext.data.amf.XmlDecoder', {
     alias: 'data.amf.xmldecoder',
@@ -2656,7 +2653,7 @@ Ext.define('Ext.data.amf.XmlDecoder', {
  *   function. A writeByteArray method is provided for writing out ByteArray objects.
  *
  * For more information on working with AMF data please refer to the
- * [AMF Guide](#/guide/amf).
+ * [AMF Guide](../guides/backend_connectors/amf.html).
  */
 Ext.define('Ext.data.amf.XmlEncoder', {
     alias: 'data.amf.xmlencoder',

@@ -41,8 +41,6 @@ Ext.define('Admin.view.dashboard.Earnings', {
                 '#7c7474',
                 '#a66111'
             ],
-            height: '100%',
-            width: '100%',
 
             bind: {
                 store: '{earnings}'

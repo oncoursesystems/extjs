@@ -1,8 +1,8 @@
 /**
- *
  * This example shows how to create a pivot grid and display the results in
  * an outline layout.
  *
+ * The outline layout is similar to the "Outline Form" layout in Excel.
  */
 Ext.define('KitchenSink.view.pivot.LayoutOutline', {
     extend: 'Ext.pivot.Grid',
@@ -55,7 +55,8 @@ Ext.define('KitchenSink.view.pivot.LayoutOutline', {
             type: 'sales'
         },
 
-        // Set layout type to "outline". If this config is missing then the default layout is "outline"
+        // Set layout type to "outline". If this config is missing then the default
+        // layout is "outline"
         viewLayoutType: 'outline',
 
         // Configure the aggregate dimensions. Multiple dimensions are supported.
@@ -66,7 +67,8 @@ Ext.define('KitchenSink.view.pivot.LayoutOutline', {
             width: 90
         }],
 
-        // Configure the left axis dimensions that will be used to generate the grid rows
+        // Configure the left axis dimensions that will be used to generate
+        // the grid rows
         leftAxis: [{
             dataIndex: 'person',
             header: 'Person',
@@ -79,10 +81,13 @@ Ext.define('KitchenSink.view.pivot.LayoutOutline', {
         }],
 
         /**
-         * Configure the top axis dimensions that will be used to generate the columns.
-         * When columns are generated the aggregate dimensions are also used. If multiple aggregation dimensions
-         * are defined then each top axis result will have in the end a column header with children
-         * columns for each aggregate dimension defined.
+         * Configure the top axis dimensions that will be used to generate
+         * the columns.
+         *
+         * When columns are generated the aggregate dimensions are also used.
+         * If multiple aggregation dimensions are defined then each top axis
+         * result will have in the end a column header with children columns
+         * for each aggregate dimension defined.
          */
         topAxis: [{
             dataIndex: 'country',

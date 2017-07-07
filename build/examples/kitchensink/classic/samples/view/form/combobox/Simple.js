@@ -14,10 +14,10 @@ Ext.define('KitchenSink.view.form.combobox.Simple', {
     exampleTitle: 'Simple ComboBox',
     otherContent: [{
         type: 'Model',
-        path: 'classic/samples/model/State.js'
+        path: 'app/model/State.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/States.js'
+        path: 'app/store/States.js'
     }],
     //</example>
     

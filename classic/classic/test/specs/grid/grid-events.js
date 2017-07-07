@@ -1,6 +1,9 @@
 /* global Ext, jasmine, expect, spyOn */
 
-describe("grid-events", function() {
+topSuite("grid-events",
+    [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore', 'Ext.grid.feature.GroupingSummary',
+     'Ext.grid.plugin.CellEditing', 'Ext.form.field.Text'],
+function() {
     function createSuite(buffered) {
         describe(buffered ? "with buffered rendering" : "without buffered rendering", function() {
             var describeNotTouch = jasmine.supportsTouch ? xdescribe : describe,
@@ -171,16 +174,22 @@ describe("grid-events", function() {
                         }
                         
                         describe('longpresses', function() {
+                            var timeout = Ext.event.gesture.LongPress.instance.getMinDuration() + 200;
                             it('should fire beforeitemlongpress', function() {
                                 var test = {
                                     setArgs: setArgs
                                 };
+
                                 spyOn(test, 'setArgs').andCallThrough();
+
                                 grid.on('beforeitemlongpress', test.setArgs);
                                 triggerCellMouseEvent('mousedown', 1, 3);
-                                waitsForEvent(grid, 'beforeitemlongpress');
+
+                                waitsForEvent(grid, 'beforeitemlongpress', null, timeout);
+
                                 runs(function () {
                                     expectArgs(1, 'longpress');
+                                    triggerCellMouseEvent('mouseup', 1, 3);
                                 });
                             });
 
@@ -188,12 +197,17 @@ describe("grid-events", function() {
                                 var test = {
                                     setArgs: setArgs
                                 };
+
                                 spyOn(test, 'setArgs').andCallThrough();
                                 grid.on('itemlongpress', test.setArgs);
+
                                 triggerCellMouseEvent('mousedown', 1, 3);
-                                waitsForEvent(grid, 'itemlongpress');
+
+                                waitsForEvent(grid, 'itemlongpress', null, timeout);
+
                                 runs(function () {
                                     expectArgs(1, 'longpress');
+                                    triggerCellMouseEvent('mouseup', 1, 3);
                                 });
                             });
                         });
@@ -472,12 +486,14 @@ describe("grid-events", function() {
                                 grid.on('beforeitemmousedown', setArgs);
                                 triggerCellMouseEvent('mousedown', 1, 3);
                                 expectArgs(1, 'mousedown');
+                                triggerCellMouseEvent('mouseup', 1, 3);
                             });
                         
                             it("should fire the itemmousedown event", function(){
                                 grid.on('itemmousedown', setArgs);
                                 triggerCellMouseEvent('mousedown', 1, 3);
                                 expectArgs(1, 'mousedown');
+                                triggerCellMouseEvent('mouseup', 1, 3);
                             });
                         
                             it("should not trigger itemmousedown if beforeitemmousedown is vetoed", function(){
@@ -487,6 +503,7 @@ describe("grid-events", function() {
                                 });
                                 triggerCellMouseEvent('mousedown', 1, 3);
                                 expect(called).toBe(false);
+                                triggerCellMouseEvent('mouseup', 1, 3);
                             });
                         });
                         
@@ -569,7 +586,7 @@ describe("grid-events", function() {
                         function expectArgs(rowIndex, colIndex, type) {
                             var record = getRec(rowIndex);
                             expect(args[0]).toBe(view);
-                            expect(args[1]).toBe(view.getCell(record, view.getHeaderAtIndex(colIndex)).dom);
+                            expect(args[1]).toBe(view.getCell(record, view.getHeaderAtIndex(colIndex)));
                             expect(args[2]).toBe(colIndex);
                             expect(args[3]).toBe(record);
                             expect(args[4] === view.getRow(rowIndex)).toBe(true);
@@ -674,12 +691,14 @@ describe("grid-events", function() {
                                 grid.on('beforecellmousedown', setArgs);
                                 triggerCellMouseEvent('mousedown', 3, 6);
                                 expectArgs(3, 6, 'mousedown');
+                                triggerCellMouseEvent('mouseup', 3, 6);
                             });
                     
                             it("should fire the cellmousedown event", function(){
                                 grid.on('cellmousedown', setArgs);
                                 triggerCellMouseEvent('mousedown', 3, 6);
                                 expectArgs(3, 6, 'mousedown');
+                                triggerCellMouseEvent('mouseup', 3, 6);
                             });
                 
                             it("should not trigger cellmousedown if beforecellmousedown is vetoed", function(){
@@ -689,6 +708,7 @@ describe("grid-events", function() {
                                 });
                                 triggerCellMouseEvent('mousedown', 3, 6);
                                 expect(called).toBe(false);
+                                triggerCellMouseEvent('mouseup', 3, 6);
                             });
                         });
                         
@@ -831,12 +851,14 @@ describe("grid-events", function() {
                                 grid.on('beforecontainermousedown', setArgs);
                                 triggerContainerMouseEvent('mousedown');
                                 expectArgs('mousedown');
+                                triggerContainerMouseEvent('mouseup');
                             });
                     
                             it("should fire the containermousedown event", function(){
                                 grid.on('containermousedown', setArgs);
                                 triggerContainerMouseEvent('mousedown');
                                 expectArgs('mousedown');
+                                triggerContainerMouseEvent('mouseup');
                             });
                 
                             it("should not trigger containermousedown if beforecontainermousedown is vetoed", function(){
@@ -846,6 +868,7 @@ describe("grid-events", function() {
                                 });
                                 triggerContainerMouseEvent('mousedown');
                                 expect(called).toBe(false);
+                                triggerContainerMouseEvent('mouseup');
                             });
                         });
                         
@@ -923,7 +946,7 @@ describe("grid-events", function() {
                         function expectArgs(rowIndex, colIndex, type) {
                             var record = getRec(rowIndex);
                             expect(args[0]).toBe(view);
-                            expect(args[1]).toBe(view.getCell(record, view.getHeaderAtIndex(colIndex)).dom);
+                            expect(args[1]).toBe(view.getCell(record, view.getHeaderAtIndex(colIndex)));
                             expect(args[2]).toBe(rowIndex);
                             expect(args[3]).toBe(colIndex);
                             expect(args[4].type).toBe(type);
@@ -959,6 +982,7 @@ describe("grid-events", function() {
                             grid.headerCt.getComponent(6).on('mousedown', setArgs);
                             triggerCellMouseEvent('mousedown', 3, 6);
                             expectArgs(3, 6, 'mousedown');
+                            triggerCellMouseEvent('mouseup', 3, 6);
                         });
                         
                         it("should relay mouseup events", function(){
@@ -1247,7 +1271,7 @@ describe("grid-events", function() {
                         function expectArgs(view, rowIndex, colIndex, type) {
                             var record = getRec(rowIndex);
                             expect(args[0] === view).toBe(true);
-                            expect(args[1] === view.getCell(record, view.getHeaderAtIndex(colIndex)).dom).toBe(true);
+                            expect(args[1] === view.getCell(record, view.getHeaderAtIndex(colIndex))).toBe(true);
                             expect(args[2]).toBe(colIndex);
                             expect(args[3] === record).toBe(true);
                             expect(args[4] === view.getRow(rowIndex)).toBe(true);
@@ -1321,7 +1345,7 @@ describe("grid-events", function() {
                 function expectArgs(view, rowIndex, colIndex, visibleColIndex, type) {
                     var record = getRec(rowIndex);
                     expect(args[0] === view).toBe(true);
-                    expect(args[1] === view.getCell(record, view.getHeaderAtIndex(colIndex)).dom).toBe(true);
+                    expect(args[1] === view.getCell(record, view.getHeaderAtIndex(colIndex))).toBe(true);
                     expect(args[2]).toBe(visibleColIndex);
                     expect(args[3] === record).toBe(true);
                     expect(args[4] === view.getRow(rowIndex)).toBe(true);
@@ -1480,6 +1504,7 @@ describe("grid-events", function() {
                     });
                     jasmine.fireMouseEvent(col.getEditor().inputEl, 'mousedown');
                     expect(spy).not.toHaveBeenCalled();
+                    jasmine.fireMouseEvent(col.getEditor().inputEl, 'mouseup');
                 });
 
                 it("should not fire containermouseup when the target is an editor", function() {

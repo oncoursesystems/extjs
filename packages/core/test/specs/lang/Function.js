@@ -1,6 +1,6 @@
 /* global jasmine, Ext, expect, xit, xdescribe */
 
-describe("Ext.Function", function() {
+topSuite("Ext.Function", function() {
     var _setTimeout,
         _clearTimeout,
         timeouts,
@@ -620,4 +620,25 @@ describe("Ext.Function", function() {
             });
         });
     });
+
+    describe('interval', function() {
+        it('should call the function in the passed scope', function() {
+            var scope = {},
+                foundScope,
+                timerId;
+
+            timerId = Ext.interval(function() {
+                foundScope = this;
+            }, 1, scope);
+
+            waitsFor(function() {
+                return foundScope;
+            });
+
+            runs(function() {
+                clearInterval(timerId);
+                expect(foundScope).toBe(scope);
+            });
+        });
+    })
 });

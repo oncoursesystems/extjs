@@ -4,6 +4,7 @@
  * A collection of useful static methods to deal with function callbacks.
  * @singleton
  */
+
 Ext.Function = (function() {
 // @define Ext.lang.Function
 // @define Ext.Function
@@ -15,6 +16,7 @@ Ext.Function = (function() {
         animFrameNoArgs = [],
         idSource = 0,
         animFrameMap = {},
+        slice = Array.prototype.slice,
         win = window,
         global = Ext.global,
         hasImmediate = !!(global.setImmediate && global.clearImmediate),
@@ -23,10 +25,20 @@ Ext.Function = (function() {
             function(callback) {
                 var currTime = Ext.now(),
                     timeToCall = Math.max(0, 16 - (currTime - lastTime)),
-                    id = win.setTimeout(function() {
+                    timerFn = function() {
                         callback(currTime + timeToCall);
-                    }, timeToCall);
+                    },
+                    id;
+
+                //<debug>
+                timerFn.$origFn = callback.$origFn ? callback.$origFn : callback;
+                timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
+                //</debug>
+                
+                id = win.setTimeout(timerFn, timeToCall);
+                
                 lastTime = currTime + timeToCall;
+                
                 return id;
             },
         fireHandlers = function() {
@@ -143,14 +155,18 @@ Ext.Function = (function() {
          * @return {Function} The new function.
          */
         bind: function(fn, scope, args, appendArgs) {
-            if (arguments.length === 2) {
-                return function() {
-                    return fn.apply(scope, arguments);
-                };
+            // Function.prototype.bind is polyfilled in IE8, otherwise native
+            if (arguments.length < 2) {
+                return fn;
+            }
+            else if (arguments.length < 3) {
+                return fn.bind(scope);
+            }
+            else if (arguments.length < 4) {
+                return Function.prototype.bind.apply(fn, [].concat(scope, args));
             }
 
-            var method = fn,
-                slice = Array.prototype.slice;
+            var method = fn;
 
             return function() {
                 var callArgs = args || arguments;
@@ -182,7 +198,7 @@ Ext.Function = (function() {
          */
         bindCallback: function (callback, scope, args, delay, caller) {
             return function () {
-                var a = Ext.Array.slice(arguments);
+                var a = slice.call(arguments);
                 return Ext.callback(callback, scope, args ? args.concat(a) : a, delay, caller);
             };
         },
@@ -319,21 +335,32 @@ Ext.Function = (function() {
          * @return {Function} A function which, when called, executes the original function after the specified delay.
          */
         createDelayed: function(fn, delay, scope, args, appendArgs) {
+            var boundFn = fn;
+            
             if (scope || args) {
-                fn = Ext.Function.bind(fn, scope, args, appendArgs);
+                boundFn = Ext.Function.bind(fn, scope, args, appendArgs);
             }
 
             return function() {
                 var me = this,
-                    args = Array.prototype.slice.call(arguments);
+                    args = slice.call(arguments),
+                    timerFn;
 
-                setTimeout(function() {
+                timerFn = function() {
                     if (Ext.elevateFunction) {
-                        Ext.elevateFunction(fn, me, args);
-                    } else {
-                        fn.apply(me, args);
+                        Ext.elevateFunction(boundFn, me, args);
                     }
-                }, delay);
+                    else {
+                        boundFn.apply(me, args);
+                    }
+                };
+                
+                //<debug>
+                timerFn.$origFn = fn.$origFn ? fn.$origFn : fn;
+                timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
+                //</debug>
+                
+                setTimeout(timerFn, delay);
             };
         },
 
@@ -369,17 +396,35 @@ Ext.Function = (function() {
          * @return {Number} The timeout id that can be used with `clearTimeout`.
          */
         defer: function(fn, millis, scope, args, appendArgs) {
-            fn = Ext.Function.bind(fn, scope, args, appendArgs);
-            if (millis > 0) {
-                return setTimeout(function () {
-                    if (Ext.elevateFunction) {
-                        Ext.elevateFunction(fn);
-                    } else {
-                        fn();
-                    }
-                }, millis);
+            var timerFn, boundFn;
+            
+            if (!scope && !args && !appendArgs) {
+                boundFn = fn;
             }
-            fn();
+            else {
+                boundFn = Ext.Function.bind(fn, scope, args, appendArgs);
+            }
+            
+            if (millis > 0) {
+                timerFn = function() {
+                    if (Ext.elevateFunction) {
+                        Ext.elevateFunction(boundFn);
+                    }
+                    else {
+                        boundFn();
+                    }
+                };
+                
+                //<debug>
+                timerFn.$origFn = fn.$origFn ? fn.$origFn : fn;
+                timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
+                //</debug>
+                
+                return setTimeout(timerFn, millis);
+            }
+            
+            boundFn();
+            
             return 0;
         },
 
@@ -398,14 +443,25 @@ Ext.Function = (function() {
          * @return {Number} The interval id that can be used with `clearInterval`.
          */
         interval: function(fn, millis, scope, args, appendArgs) {
-            fn = Ext.Function.bind(fn, scope, args, appendArgs);
-            return setInterval(function () {
+            var timerFn, boundFn;
+            
+            boundFn = Ext.Function.bind(fn, scope, args, appendArgs);
+            
+            timerFn = function() {
                 if (Ext.elevateFunction) {
-                    Ext.elevateFunction(fn);
-                } else {
-                    fn();
+                    Ext.elevateFunction(boundFn);
                 }
-            }, millis);
+                else {
+                    boundFn();
+                }
+            };
+            
+            //<debug>
+            timerFn.$origFn = boundFn.$origFn ? boundFn.$origFn : fn;
+            timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
+            //</debug>
+            
+            return setInterval(timerFn, millis);
         },
 
         /**
@@ -463,20 +519,29 @@ Ext.Function = (function() {
         createBuffered: function(fn, buffer, scope, args) {
             var timerId,
                 result = function() {
-                    var callArgs = args || Array.prototype.slice.call(arguments, 0),
-                        me = scope || this;
+                    var callArgs = args || slice.call(arguments, 0),
+                        me = scope || this,
+                        timerFn;
 
                     if (timerId) {
                         clearTimeout(timerId);
                     }
 
-                    timerId = result.timer = setTimeout(function(){
+                    timerFn = function() {
                         if (Ext.elevateFunction) {
                             Ext.elevateFunction(fn, me, callArgs);
-                        } else {
+                        }
+                        else {
                             fn.apply(me, callArgs);
                         }
-                    }, buffer);
+                    };
+                    
+                    //<debug>
+                    timerFn.$origFn = fn.$origFn ? fn.$origFn : fn;
+                    timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
+                    //</debug>
+                    
+                    timerId = result.timer = setTimeout(timerFn, buffer);
                 };
 
             return result;
@@ -499,12 +564,13 @@ Ext.Function = (function() {
          * @return {Function}
          */
         createAnimationFrame: function(fn, scope, args, queueStrategy) {
-            var timerId;
+            var boundFn, timerId;
 
             queueStrategy = queueStrategy || 3;
 
-            return function() {
-                var callArgs = args || Array.prototype.slice.call(arguments, 0);
+            boundFn = function() {
+                var timerFn,
+                    callArgs = args || slice.call(arguments, 0);
 
                 scope = scope || this;
 
@@ -513,12 +579,21 @@ Ext.Function = (function() {
                 }
 
                 if ((queueStrategy & 1) || !timerId) {
-                    timerId = ExtFunction.requestAnimationFrame(function() {
-                        timerId = null;
+                    timerFn = function() {
+                        timerId = boundFn.timerId = null;
                         fn.apply(scope, callArgs);
-                    });
+                    };
+                    
+                    //<debug>
+                    timerFn.$origFn = fn.$origFn ? fn.$origFn : fn;
+                    timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
+                    //</debug>
+                    
+                    timerId = boundFn.timerId = ExtFunction.requestAnimationFrame(timerFn);
                 }
             };
+            
+            return boundFn;
         },
 
         /**
@@ -532,7 +607,7 @@ Ext.Function = (function() {
          */
         requestAnimationFrame: function(fn, scope, args) {
             var id = ++idSource,  // Ids start at 1
-                handler = Array.prototype.slice.call(arguments, 0);
+                handler = slice.call(arguments, 0);
 
             handler[3] = id;
             animFrameMap[id] = 1; // A flag to indicate that the timer exists
@@ -582,6 +657,11 @@ Ext.Function = (function() {
                     lastCallTime = Ext.now();
                     timer = null;
                 };
+            
+            //<debug>
+            execute.$origFn = fn.$origFn ? fn.$origFn : fn;
+            execute.$skipTimerCheck = execute.$origFn.$skipTimerCheck;
+            //</debug>
 
             return function() {
                 // Use scope of last call unless the creator specified a scope
@@ -611,11 +691,18 @@ Ext.Function = (function() {
          * @param {Object} scope The scope (`this` reference) in which the function will be called.
          */    
         createBarrier: function(count, fn, scope) {
-            return function() {
+            var barrierFn = function() {
                 if (!--count) {
                     fn.apply(scope, arguments);
                 }
             };
+            
+            //<debug>
+            barrierFn.$origFn = fn.$origFn ? fn.$origFn : fn;
+            barrierFn.$skipTimerCheck = barrierFn.$origFn.$skipTimerCheck;
+            //</debug>
+            
+            return barrierFn;
         },
 
         /**
@@ -799,6 +886,20 @@ Ext.Function = (function() {
 
                 return memo[key];
             };
+        },
+
+        //<debug>
+        _stripCommentRe: /(\/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+\/)|(\/\/.*)/g,
+        //</debug>
+
+        toCode: function (fn) {
+            var s = fn ? fn.toString() : '';
+
+            //<debug>
+            s = s.replace(ExtFunction._stripCommentRe, '');
+            //</debug>
+
+            return s;
         }
     }; // ExtFunction
 
@@ -818,30 +919,54 @@ Ext.Function = (function() {
      * @return {Number} A cancelation id for `{@link Ext#asapCancel}`.
      */
     Ext.asap = hasImmediate ?
-            function (fn, scope, parameters) {
-                if (scope != null || parameters != null) {
-                    fn = ExtFunction.bind(fn, scope, parameters);
+        function (fn, scope, parameters) {
+            var boundFn = fn,
+                timerFn;
+            
+            if (scope != null || parameters != null) {
+                boundFn = ExtFunction.bind(fn, scope, parameters);
+            }
+            
+            timerFn = function() {
+                if (Ext.elevateFunction) {
+                    Ext.elevateFunction(boundFn);
                 }
-                return setImmediate(function () {
-                    if (Ext.elevateFunction) {
-                        Ext.elevateFunction(fn);
-                    } else {
-                        fn();
-                    }
-                });
-            } :
-            function (fn, scope, parameters) {
-                if (scope != null || parameters != null) {
-                    fn = ExtFunction.bind(fn, scope, parameters);
+                else {
+                    boundFn();
                 }
-                return setTimeout(function () {
-                    if (Ext.elevateFunction) {
-                        Ext.elevateFunction(fn);
-                    } else {
-                        fn();
-                    }
-                }, 0, true);
-            },
+            };
+            
+            //<debug>
+            timerFn.$origFn = fn.$origFn ? fn.$origFn : fn;
+            timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
+            //</debug>
+            
+            return setImmediate(timerFn);
+        } :
+        function (fn, scope, parameters) {
+            var boundFn = fn,
+                timerFn;
+                
+            if (scope != null || parameters != null) {
+                boundFn = ExtFunction.bind(fn, scope, parameters);
+            }
+            
+            timerFn = function() {
+                if (Ext.elevateFunction) {
+                    Ext.elevateFunction(boundFn);
+                }
+                else {
+                    boundFn();
+                }
+            };
+            
+            //<debug>
+            timerFn.$origFn = fn.$origFn ? fn.$origFn : fn;
+            timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
+            //</debug>
+            
+            return setTimeout(timerFn, 0, true);
+        },
 
     /**
      * @member Ext
@@ -893,6 +1018,10 @@ Ext.Function = (function() {
     Ext.bind = ExtFunction.bind;
 
     Ext.deferCallback = ExtFunction.requestAnimationFrame;
+
+    Ext.raf = function () {
+        return ExtFunction.requestAnimationFrame.apply(ExtFunction, arguments);
+    };
 
     return ExtFunction;
 })();

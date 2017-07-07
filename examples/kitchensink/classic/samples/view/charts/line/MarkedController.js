@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.charts.line.MarkedController', {
     },
 
     onToggleMarkers: function () {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             seriesList = chart.getSeries(),
             ln = seriesList.length,
             i = 0,
@@ -37,7 +37,7 @@ Ext.define('KitchenSink.view.charts.line.MarkedController', {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
             return;
         }
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         chart.preview();
     }
 

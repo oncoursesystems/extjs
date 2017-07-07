@@ -121,6 +121,10 @@ Ext.define('Ext.form.field.Display', {
 
     initEvents: Ext.emptyFn,
 
+    /**
+     * @cfg {Boolean} [submitValue=false]
+     * @inheritdoc
+     */
     submitValue: false,
 
     getValue: function() {

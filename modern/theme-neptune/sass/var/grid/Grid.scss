@@ -34,6 +34,7 @@ $grid-resize-marker-width: dynamic(1px);
         .#{$prefix}resize-marker-el {
             background-color: $resize-marker-background-color;
             width: $resize-marker-width;
+            z-index: 1;
         }
     }
 }

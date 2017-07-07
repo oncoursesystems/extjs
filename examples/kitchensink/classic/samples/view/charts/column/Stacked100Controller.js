@@ -4,14 +4,26 @@ Ext.define('KitchenSink.view.charts.column.Stacked100Controller', {
 
     yearTotal: {},
 
-    onPreview: function() {
+    onDownload: function() {
         if (Ext.isIE8) {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
             return;
         }
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
 
-        chart.preview();
+        if (Ext.os.is.Desktop) {
+            chart.download({
+                format: 'pdf',
+                pdf: {
+                    format: 'A5',
+                    orientation: 'landscape',
+                    border: '1cm'
+                },
+                filename: 'Car production by largest manufacturers'
+            });
+        } else {
+            chart.preview();
+        }
     },
 
     getYearTotal: function (record) {

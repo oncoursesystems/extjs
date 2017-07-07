@@ -1,6 +1,6 @@
 /* global Ext, jasmine, expect, xit */
 
-describe('Ext.menu.Item', function () {
+topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         menu, item;
 
@@ -316,7 +316,7 @@ describe('Ext.menu.Item', function () {
                 }]);
                 item.focus();
                 
-                jasmine.waitsForFocus(item);
+                waitsForFocus(item);
                 
                 runs(function() {
                     clickItem(item, true);

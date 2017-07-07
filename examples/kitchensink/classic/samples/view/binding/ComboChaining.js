@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.binding.ComboChaining', {
     //<example>
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/Countries.js'
+        path: 'app/store/Countries.js'
     },{
         type: 'Store',
         path: 'classic/samples/store/CountryStates.js'

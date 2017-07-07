@@ -1,86 +1,66 @@
+Ext.define('Ext.theme.material.Widget', {
+    override: 'Ext.Widget',
+    statics: {
+        floatInset: 16 / (window.devicePixelRatio || 1)
+    }
+});
+
+Ext.define('Ext.theme.material.list.Tree', {
+    override: 'Ext.list.Tree',
+    config: {
+        itemRipple: {
+            release: true,
+            delegate: '.' + Ext.baseCSSPrefix + 'treelist-row',
+            color: 'default'
+        }
+    }
+});
+
+Ext.define('Ext.theme.material.Tool', {
+    override: 'Ext.Tool',
+    config: {
+        ripple: {
+            bound: false,
+            color: 'default',
+            centered: true
+        }
+    }
+});
+
 Ext.define('Ext.theme.material.Button', {
     override: 'Ext.Button',
     config: {
-        ripple: true
-    },
-    destroy: function() {
-        this.callParent(arguments);
-        this.destroyRipple();
-    },
-    updateHidden: function(hidden) {
-        this.callParent(arguments);
-        if (hidden) {
-            this.removeRippleEffect();
+        ripple: {
+            delegate: '.' + Ext.baseCSSPrefix + 'inner-el'
         }
     },
-    onPress: function(e) {
-        if (!this.getDisabled()) {
-            var shouldRipple = this.getRipple();
-            if (shouldRipple) {
-                var color = window.getComputedStyle(this.element.dom).color,
-                    offset = this.element.getXY(),
-                    elementWidth = this.element.getWidth(),
-                    elementHeight = this.element.getHeight(),
-                    rippleDiameter = elementWidth > elementHeight ? elementWidth : elementHeight,
-                    pos = e.getXY(),
-                    posX = pos[0] - offset[0] - (rippleDiameter / 2),
-                    posY = pos[1] - offset[1] - (rippleDiameter / 2);
-                this.$ripple.setStyle('backgroundColor', color);
-                this.$ripple.toggleCls('md-ripple-effect', true);
-                this.$ripple.setWidth(rippleDiameter);
-                this.$ripple.setHeight(rippleDiameter);
-                this.$ripple.setTop(posY);
-                this.$ripple.setLeft(posX);
-                this.$rippleWrap.show();
-                if (this.$rippleAnimationListener) {
-                    this.$rippleAnimationListener.destroy();
+    materialIconRe: /^md-icon[-|_](.*)/,
+    applyIconCls: function(classList) {
+        if (classList) {
+            classList = Ext.dom.Element.splitCls(classList);
+            var len = classList.length,
+                i, cls, materialMatch;
+            for (i = 0; i < len; i++) {
+                cls = classList[i];
+                materialMatch = cls && cls.match(this.materialIconRe);
+                if (materialMatch && materialMatch.length > 1) {
+                    classList.unshift('md-icon');
+                    break;
                 }
-                this.$rippleAnimationListener = this.$ripple.on('animationend', this.onRippleEnd, this, {
-                    single: true,
-                    destroyable: true
-                });
             }
+            return classList.join(' ');
         }
-        this.callParent(arguments);
-    },
-    onRippleEnd: function() {
-        if (this.$ripple) {
-            this.$ripple.toggleCls('md-ripple-effect', false);
-            this.$rippleWrap.hide();
+        return classList;
+    }
+});
+
+Ext.define('Ext.theme.material.Panel', {
+    override: 'Ext.Panel',
+    config: {
+        buttonAlign: 'right',
+        buttonToolbar: {
+            defaultButtonUI: null
         }
-    },
-    updateRipple: function(ripple, oldRipple) {
-        var me = this;
-        if (ripple) {
-            me.$rippleWrap = me.element.insertFirst({
-                cls: 'md-ripple-wrap'
-            });
-            me.$ripple = me.$rippleWrap.insertFirst({
-                cls: 'md-ripple'
-            });
-        } else if (me.$ripple) {
-            me.destroyRipple();
-        }
-    },
-    removeRippleEffect: function() {
-        if (this.$rippleAnimationListener) {
-            this.$rippleAnimationListener.destroy();
-        }
-        this.onRippleEnd();
-    },
-    destroyRipple: function() {
-        this.removeRippleEffect();
-        if (this.$rippleWrap) {
-            this.$rippleWrap.destroy();
-        }
-    },
-    applyIconCls: function(cls) {
-        var materialMatch = cls && cls.match(/^md-icon[-|_](.*)/),
-            materialIcon = materialMatch && materialMatch.length > 1 ? materialMatch[1] : null;
-        if (materialIcon) {
-            return 'md-icon ' + cls;
-        }
-        return cls;
     }
 });
 
@@ -91,14 +71,11 @@ Ext.define('Ext.theme.material.field.Field', {
     }
 });
 
-Ext.define('Ext.theme.material.MessageBox', {
-    override: 'Ext.MessageBox',
+Ext.define('Ext.theme.material.field.Text', {
+    override: 'Ext.field.Text',
     config: {
-        buttonToolbar: {
-            layout: {
-                pack: 'end'
-            }
-        }
+        labelAlign: 'placeholder',
+        animateUnderline: true
     }
 });
 
@@ -117,10 +94,27 @@ Ext.define('Ext.theme.material.TitleBar', {
     }
 });
 
+Ext.define('Ext.theme.material.dataview.Abstract', {
+    override: 'Ext.dataview.Abstract',
+    config: {
+        itemRipple: {
+            release: true,
+            color: 'default'
+        }
+    }
+});
+
+Ext.define('Ext.theme.material.dataview.List', {
+    override: 'Ext.dataview.List',
+    config: {
+        rowLines: false
+    }
+});
+
 Ext.define('Ext.theme.material.dataview.IndexBar', {
     override: 'Ext.dataview.IndexBar',
     config: {
-        direction: 'vertical',
+        autoHide: true,
         letters: [
             '*',
             '#',
@@ -151,65 +145,6 @@ Ext.define('Ext.theme.material.dataview.IndexBar', {
             'Y',
             'Z'
         ]
-    },
-    getElementConfig: function() {
-        return {
-            reference: 'wrapper',
-            classList: [
-                'x-center',
-                'x-indexbar-wrapper'
-            ],
-            children: [
-                {
-                    reference: 'indicator',
-                    classList: [
-                        'x-indexbar-indicator'
-                    ],
-                    hidden: true,
-                    children: [
-                        {
-                            reference: 'indicatorInner',
-                            classList: [
-                                'x-indexbar-indicator-inner'
-                            ]
-                        }
-                    ]
-                },
-                // We want to skip the default list getElementConfig
-                this.callSuper()
-            ]
-        };
-    },
-    onDragEnd: function(event, target) {
-        this.callParent([
-            event,
-            target
-        ]);
-        this.indicator.hide();
-    },
-    privates: {
-        onVerticalDrag: function(point, target, isValidTarget) {
-            var indicator = this.indicator;
-            indicator.show();
-            var element = this.element,
-                indicatorInner = this.indicatorInner,
-                indicatorHeight = indicator.getHeight(),
-                halfIndicatorHeight = indicatorHeight / 2,
-                elementY = element.getY(),
-                y = point.y - elementY;
-            y = Math.min(Math.max(y, halfIndicatorHeight), element.getHeight() - halfIndicatorHeight);
-            if (isValidTarget) {
-                indicatorInner.setHtml(target.getHtml().toUpperCase());
-            }
-            indicator.setTop(y - halfIndicatorHeight);
-        }
-    }
-});
-
-Ext.define('Ext.theme.material.dataview.List', {
-    override: 'Ext.dataview.List',
-    config: {
-        rowLines: false
     }
 });
 
@@ -225,24 +160,68 @@ Ext.define('Ext.theme.material.dataview.NestedList', {
     }
 });
 
-Ext.define('Ext.theme.neptune.tip.ToolTip', {
-    override: 'Ext.tip.ToolTip',
-    bodyBorder: false
+Ext.define('Ext.theme.material.dataview.pullrefresh.PullRefresh', {
+    override: 'Ext.dataview.pullrefresh.PullRefresh',
+    config: {
+        overlay: true,
+        widget: {
+            xtype: 'pullrefreshspinner'
+        }
+    }
 });
 
 Ext.define('Ext.theme.material.field.Checkbox', {
     override: 'Ext.field.Checkbox',
     config: {
         labelAlign: 'left',
-        bodyAlign: 'end'
+        bodyAlign: 'end',
+        ripple: {
+            delegate: '.' + Ext.baseCSSPrefix + 'icon-el',
+            bound: false,
+            color: 'default'
+        }
     }
 });
 
-Ext.define('Ext.theme.material.form.FieldContainer', {
-    override: 'Ext.form.FieldContainer',
+Ext.define('Ext.theme.neptune.panel.Date', {
+    override: 'Ext.panel.Date',
+    border: true
+});
+
+Ext.define('Ext.theme.material.panel.Date', {
+    override: 'Ext.panel.Date',
+    border: false
+});
+
+Ext.define('Ext.theme.material.form.Borders', {
+    override: 'Ext.form.Borders',
     config: {
         fieldSeparators: false,
         inputBorders: true
+    }
+});
+
+Ext.define('Ext.theme.material.field.Toggle', {
+    override: 'Ext.field.Toggle',
+    config: {
+        ripple: {
+            delegate: '.' + Ext.baseCSSPrefix + 'thumb',
+            bound: false,
+            fit: false,
+            color: 'default'
+        }
+    }
+});
+
+Ext.define('Ext.theme.material.grid.cell.Check', {
+    override: 'Ext.grid.cell.Check',
+    config: {
+        ripple: {
+            delegate: '.' + Ext.baseCSSPrefix + 'checkbox-el',
+            bound: false,
+            color: 'default',
+            centered: true
+        }
     }
 });
 
@@ -275,89 +254,30 @@ Ext.define('Ext.theme.material.panel.Header', {
     }
 });
 
-Ext.define('Ext.theme.material.plugin.PullRefresh', {
-    override: 'Ext.plugin.PullRefresh',
-    updateContent: false,
-    animateOverlayHide: true,
-    config: {
-        overlay: true,
-        offsets: {
-            maxPull: '35%',
-            activate: '15%',
-            loading: '5%'
-        },
-        pullTpl: [
-            '<div class="' + Ext.baseCSSPrefix + 'shadow ' + Ext.baseCSSPrefix + 'pullrefresh-loading-wrap">',
-            '<div class="' + Ext.baseCSSPrefix + 'pullrefresh-md-main">',
-            '<div class="' + Ext.baseCSSPrefix + 'pullrefresh-md-loader-wrapper">',
-            '<div class="' + Ext.baseCSSPrefix + 'pullrefresh-md-arrow-wrapper">',
-            '<div class="' + Ext.baseCSSPrefix + 'pullrefresh-md-arrow-main"></div>',
-            '</div>',
-            '<div class="' + Ext.baseCSSPrefix + 'pullrefresh-md-spinner-wrapper">',
-            '<div class="' + Ext.baseCSSPrefix + 'pullrefresh-md-spinner-main">',
-            '<div class="' + Ext.baseCSSPrefix + 'pullrefresh-md-spinner-left">',
-            '<div class="' + Ext.baseCSSPrefix + 'pullrefresh-md-half-circle"></div>',
-            '</div>',
-            '<div class="' + Ext.baseCSSPrefix + 'pullrefresh-md-spinner-right">',
-            '<div class="' + Ext.baseCSSPrefix + 'pullrefresh-md-half-circle"></div>',
-            '</div>',
-            '</div>',
-            '</div>',
-            '</div>',
-            '</div>',
-            '</div>'
-        ].join('')
-    },
-    updateOverlay: function(overlay, oldOverlay) {
-        this.callParent([
-            overlay,
-            oldOverlay
-        ]);
-        this.setHideAnimation(overlay ? {
-            type: 'popOut'
-        } : null);
-    },
-    privates: {
-        arrowMainSelector: '.' + Ext.baseCSSPrefix + 'pullrefresh-md-arrow-main',
-        spinnerWrapperSelector: '.' + Ext.baseCSSPrefix + 'pullrefresh-md-spinner-wrapper',
-        mainSelector: '.' + Ext.baseCSSPrefix + 'pullrefresh-md-main',
-        setState: function(state) {
-            var me = this;
-            if (state !== me.$state) {
-                me.toggleDisplay(me.isLoading(state));
-            }
-            me.callParent([
-                state
-            ]);
-        },
-        init: function(list) {
-            this.callParent([
-                list
-            ]);
-            this.toggleDisplay(this.isLoading());
-        },
-        isLoading: function(state) {
-            state = state || this.$state;
-            return state === 'loading' || state === 'loaded';
-        },
-        onMove: function(pct) {
-            var me = this;
-            Ext.fly(me.element.down(me.mainSelector)).setOpacity(pct);
-            Ext.fly(me.element.down(me.arrowMainSelector)).dom.style.transform = 'rotate(' + (Math.floor(pct * 100 * 3.6) - 110) + 'deg)';
-        },
-        toggleDisplay: function(load) {
-            var me = this;
-            me.element.down(me.arrowMainSelector).setVisible(!load);
-            me.element.down(me.spinnerWrapperSelector).setVisible(load);
-        }
-    }
-});
-
 Ext.define('Ext.theme.material.tab.Tab', {
     override: 'Ext.tab.Tab',
     config: {
         iconAlign: 'top',
         flex: 1
+    },
+    platformConfig: {
+        desktop: {
+            maxWidth: 200
+        }
+    }
+});
+
+Ext.define('Ext.theme.material.tab.Bar', {
+    override: 'Ext.tab.Bar',
+    config: {
+        animateIndicator: true
+    },
+    platformConfig: {
+        desktop: {
+            layout: {
+                pack: 'center'
+            }
+        }
     }
 });
 

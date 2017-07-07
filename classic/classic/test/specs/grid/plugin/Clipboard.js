@@ -1,6 +1,9 @@
 /* global Ext, MockAjaxManager, expect, jasmine, spyOn, xit */
 
-describe('Ext.grid.plugin.Clipboard', function () {
+topSuite("Ext.grid.plugin.Clipboard",
+    ['Ext.grid.Panel', 'Ext.grid.plugin.CellEditing', 'Ext.grid.plugin.Clipboard',
+     'Ext.grid.selection.SpreadsheetModel', 'Ext.form.field.Text'],
+function() {
     var store, cellediting, clipboard, grid, view, navModel, record, column, field,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
@@ -54,6 +57,11 @@ describe('Ext.grid.plugin.Clipboard', function () {
     function startEdit(recId, colId) {
         record = store.getAt(recId || 0);
         column = grid.columns[colId || 0];
+
+        // Skip non-editable columns
+        while (!column.getEditor()) {
+            column = column.nextSibling() || grid.columns[0];
+        }
         cellediting.startEdit(record, column);
         field = column.field;
         waitsForFocus(field);
@@ -125,4 +133,3 @@ describe('Ext.grid.plugin.Clipboard', function () {
         });
     });
 });
-

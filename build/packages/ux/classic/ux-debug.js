@@ -50,7 +50,6 @@ Ext.define('Ext.ux.Gauge', {
         'Ext.util.Region'
     ],
     config: {
-        baseCls: Ext.baseCSSPrefix + 'gauge',
         /**
          * @cfg {Number/String} padding Gauge sector padding in pixels or percent of
          * width/height, whichever is smaller.
@@ -186,9 +185,10 @@ Ext.define('Ext.ux.Gauge', {
          */
         animation: true
     },
+    baseCls: Ext.baseCSSPrefix + 'gauge',
     template: [
         {
-            reference: 'innerElement',
+            reference: 'bodyElement',
             children: [
                 {
                     reference: 'textElement',
@@ -253,13 +253,14 @@ Ext.define('Ext.ux.Gauge', {
         me.callParent([
             config
         ]);
-        me.on('resize', 'onElementResize', me);
+        me.el.on('resize', 'onElementResize', me);
     },
     doDestroy: function() {
         var me = this;
         clearTimeout(me.resizeTimerId);
-        me.un('resize', 'onElementResize', me);
+        me.el.un('resize', 'onElementResize', me);
         me.stopAnimation();
+        me.svg = Ext.destroy(me.svg);
         me.callParent();
     },
     // <if classic>
@@ -520,7 +521,7 @@ Ext.define('Ext.ux.Gauge', {
             svg = me.svg;
         if (!svg) {
             svg = me.svg = Ext.get(document.createElementNS(me.svgNS, 'svg'));
-            me.innerElement.append(svg);
+            me.bodyElement.append(svg);
         }
         return svg;
     },
@@ -529,7 +530,7 @@ Ext.define('Ext.ux.Gauge', {
             trackArc = me.trackArc;
         if (!trackArc) {
             trackArc = me.trackArc = document.createElementNS(me.svgNS, 'path');
-            me.getSvg().append(trackArc);
+            me.getSvg().append(trackArc, true);
             // Note: Ext.dom.Element.addCls doesn't work on SVG elements,
             // as it simply assigns a class string to el.dom.className,
             // which in case of SVG is no simple string:
@@ -545,7 +546,7 @@ Ext.define('Ext.ux.Gauge', {
         // make sure the track arc is created first for proper draw order
         if (!valueArc) {
             valueArc = me.valueArc = document.createElementNS(me.svgNS, 'path');
-            me.getSvg().append(valueArc);
+            me.getSvg().append(valueArc, true);
             valueArc.setAttribute('class', Ext.baseCSSPrefix + 'gauge-value');
         }
         return valueArc;
@@ -3473,6 +3474,515 @@ Ext.define('Ext.ux.event.Recorder', function(Recorder) {
 });
 
 /**
+ * A ratings picker based on `Ext.Gadget`.
+ *
+ *      @example
+ *      Ext.create({
+ *          xtype: 'rating',
+ *          renderTo: Ext.getBody(),
+ *          listeners: {
+ *              change: function (picker, value) {
+ *                 console.log('Rating ' + value);
+ *              }
+ *          }
+ *      });
+ */
+Ext.define('Ext.ux.rating.Picker', {
+    extend: 'Ext.Gadget',
+    xtype: 'rating',
+    focusable: true,
+    /*
+     * The "cachedConfig" block is basically the same as "config" except that these
+     * values are applied specially to the first instance of the class. After processing
+     * these configs, the resulting values are stored on the class `prototype` and the
+     * template DOM element also reflects these default values.
+     */
+    cachedConfig: {
+        /**
+         * @cfg {String} [family]
+         * The CSS `font-family` to use for displaying the `{@link #glyphs}`.
+         */
+        family: 'monospace',
+        /**
+         * @cfg {String/String[]/Number[]} [glyphs]
+         * Either a string containing the two glyph characters, or an array of two strings
+         * containing the individual glyph characters or an array of two numbers with the
+         * character codes for the individual glyphs.
+         *
+         * For example:
+         *
+         *      @example
+         *      Ext.create({
+         *          xtype: 'rating',
+         *          renderTo: Ext.getBody(),
+         *          glyphs: [ 9671, 9670 ], // '◇◆',
+         *          listeners: {
+         *              change: function (picker, value) {
+         *                 console.log('Rating ' + value);
+         *              }
+         *          }
+         *      });
+         */
+        glyphs: '☆★',
+        /**
+         * @cfg {Number} [minimum=1]
+         * The minimum allowed `{@link #value}` (rating).
+         */
+        minimum: 1,
+        /**
+         * @cfg {Number} [limit]
+         * The maximum allowed `{@link #value}` (rating).
+         */
+        limit: 5,
+        /**
+         * @cfg {String/Object} [overStyle]
+         * Optional styles to apply to the rating glyphs when `{@link #trackOver}` is
+         * enabled.
+         */
+        overStyle: null,
+        /**
+         * @cfg {Number} [rounding=1]
+         * The rounding to apply to values. Common choices are 0.5 (for half-steps) or
+         * 0.25 (for quarter steps).
+         */
+        rounding: 1,
+        /**
+         * @cfg {String} [scale="125%"]
+         * The CSS `font-size` to apply to the glyphs. This value defaults to 125% because
+         * glyphs in the stock font tend to be too small. When using specially designed
+         * "icon fonts" you may want to set this to 100%.
+         */
+        scale: '125%',
+        /**
+         * @cfg {String/Object} [selectedStyle]
+         * Optional styles to apply to the rating value glyphs.
+         */
+        selectedStyle: null,
+        /**
+         * @cfg {Object/String/String[]/Ext.XTemplate/Function} tip
+         * A template or a function that produces the tooltip text. The `Object`, `String`
+         * and `String[]` forms are converted to an `Ext.XTemplate`. If a function is given,
+         * it will be called with an object parameter and should return the tooltip text.
+         * The object contains these properties:
+         *
+         *   - component: The rating component requesting the tooltip.
+         *   - tracking: The current value under the mouse cursor.
+         *   - trackOver: The value of the `{@link #trackOver}` config.
+         *   - value: The current value.
+         *
+         * Templates can use these properties to generate the proper text.
+         */
+        tip: null,
+        /**
+         * @cfg {Boolean} [trackOver=true]
+         * Determines if mouse movements should temporarily update the displayed value.
+         * The actual `value` is only updated on `click` but this rather acts as the
+         * "preview" of the value prior to click.
+         */
+        trackOver: true,
+        /**
+         * @cfg {Number} value
+         * The rating value. This value is bounded by `minimum` and `limit` and is also
+         * adjusted by the `rounding`.
+         */
+        value: null,
+        //---------------------------------------------------------------------
+        // Private configs
+        /**
+         * @cfg {String} tooltipText
+         * The current tooltip text. This value is set into the DOM by the updater (hence
+         * only when it changes). This is intended for use by the tip manager
+         * (`{@link Ext.tip.QuickTipManager}`). Developers should never need to set this
+         * config since it is handled by virtue of setting other configs (such as the
+         * {@link #tooltip} or the {@link #value}.).
+         * @private
+         */
+        tooltipText: null,
+        /**
+         * @cfg {Number} trackingValue
+         * This config is used to when `trackOver` is `true` and represents the tracked
+         * value. This config is maintained by our `mousemove` handler. This should not
+         * need to be set directly by user code.
+         * @private
+         */
+        trackingValue: null
+    },
+    config: {
+        /**
+         * @cfg {Boolean/Object} [animate=false]
+         * Specifies an animation to use when changing the `{@link #value}`. When setting
+         * this config, it is probably best to set `{@link #trackOver}` to `false`.
+         */
+        animate: null
+    },
+    // This object describes our element tree from the root.
+    element: {
+        cls: 'u' + Ext.baseCSSPrefix + 'rating-picker',
+        // Since we are replacing the entire "element" tree, we have to assign this
+        // "reference" as would our base class.
+        reference: 'element',
+        children: [
+            {
+                reference: 'innerEl',
+                cls: 'u' + Ext.baseCSSPrefix + 'rating-picker-inner',
+                listeners: {
+                    click: 'onClick',
+                    mousemove: 'onMouseMove',
+                    mouseenter: 'onMouseEnter',
+                    mouseleave: 'onMouseLeave'
+                },
+                children: [
+                    {
+                        reference: 'valueEl',
+                        cls: 'u' + Ext.baseCSSPrefix + 'rating-picker-value'
+                    },
+                    {
+                        reference: 'trackerEl',
+                        cls: 'u' + Ext.baseCSSPrefix + 'rating-picker-tracker'
+                    }
+                ]
+            }
+        ]
+    },
+    // Tell the Binding system to default to our "value" config.
+    defaultBindProperty: 'value',
+    // Enable two-way data binding for the "value" config.
+    twoWayBindable: 'value',
+    overCls: 'u' + Ext.baseCSSPrefix + 'rating-picker-over',
+    trackOverCls: 'u' + Ext.baseCSSPrefix + 'rating-picker-track-over',
+    //-------------------------------------------------------------------------
+    // Config Appliers
+    applyGlyphs: function(value) {
+        if (typeof value === 'string') {
+            //<debug>
+            if (value.length !== 2) {
+                Ext.raise('Expected 2 characters for "glyphs" not "' + value + '".');
+            }
+            //</debug>
+            value = [
+                value.charAt(0),
+                value.charAt(1)
+            ];
+        } else if (typeof value[0] === 'number') {
+            value = [
+                String.fromCharCode(value[0]),
+                String.fromCharCode(value[1])
+            ];
+        }
+        return value;
+    },
+    applyOverStyle: function(style) {
+        this.trackerEl.applyStyles(style);
+    },
+    applySelectedStyle: function(style) {
+        this.valueEl.applyStyles(style);
+    },
+    applyTip: function(tip) {
+        if (tip && typeof tip !== 'function') {
+            if (!tip.isTemplate) {
+                tip = new Ext.XTemplate(tip);
+            }
+            tip = tip.apply.bind(tip);
+        }
+        return tip;
+    },
+    applyTrackingValue: function(value) {
+        return this.applyValue(value);
+    },
+    // same rounding as normal value
+    applyValue: function(v) {
+        if (v !== null) {
+            var rounding = this.getRounding(),
+                limit = this.getLimit(),
+                min = this.getMinimum();
+            v = Math.round(Math.round(v / rounding) * rounding * 1000) / 1000;
+            v = (v < min) ? min : (v > limit ? limit : v);
+        }
+        return v;
+    },
+    //-------------------------------------------------------------------------
+    // Event Handlers
+    onClick: function(event) {
+        var value = this.valueFromEvent(event);
+        this.setValue(value);
+    },
+    onMouseEnter: function() {
+        this.element.addCls(this.overCls);
+    },
+    onMouseLeave: function() {
+        this.element.removeCls(this.overCls);
+    },
+    onMouseMove: function(event) {
+        var value = this.valueFromEvent(event);
+        this.setTrackingValue(value);
+    },
+    //-------------------------------------------------------------------------
+    // Config Updaters
+    updateFamily: function(family) {
+        this.element.setStyle('fontFamily', "'" + family + "'");
+    },
+    updateGlyphs: function() {
+        this.refreshGlyphs();
+    },
+    updateLimit: function() {
+        this.refreshGlyphs();
+    },
+    updateScale: function(size) {
+        this.element.setStyle('fontSize', size);
+    },
+    updateTip: function() {
+        this.refreshTip();
+    },
+    updateTooltipText: function(text) {
+        this.setTooltip(text);
+    },
+    // modern only (replaced by classic override)
+    updateTrackingValue: function(value) {
+        var me = this,
+            trackerEl = me.trackerEl,
+            newWidth = me.valueToPercent(value);
+        trackerEl.setStyle('width', newWidth);
+        me.refreshTip();
+    },
+    updateTrackOver: function(trackOver) {
+        this.element.toggleCls(this.trackOverCls, trackOver);
+    },
+    updateValue: function(value, oldValue) {
+        var me = this,
+            animate = me.getAnimate(),
+            valueEl = me.valueEl,
+            newWidth = me.valueToPercent(value),
+            column, record;
+        if (me.isConfiguring || !animate) {
+            valueEl.setStyle('width', newWidth);
+        } else {
+            valueEl.stopAnimation();
+            valueEl.animate(Ext.merge({
+                from: {
+                    width: me.valueToPercent(oldValue)
+                },
+                to: {
+                    width: newWidth
+                }
+            }, animate));
+        }
+        me.refreshTip();
+        if (!me.isConfiguring) {
+            // Since we are (re)configured many times as we are used in a grid cell, we
+            // avoid firing the change event unless there are listeners.
+            if (me.hasListeners.change) {
+                me.fireEvent('change', me, value, oldValue);
+            }
+            column = me.getWidgetColumn && me.getWidgetColumn();
+            record = column && me.getWidgetRecord && me.getWidgetRecord();
+            if (record && column.dataIndex) {
+                // When used in a widgetcolumn, we should update the backing field. The
+                // linkages will be cleared as we are being recycled, so this will only
+                // reach this line when we are properly attached to a record and the
+                // change is coming from the user (or a call to setValue).
+                record.set(column.dataIndex, value);
+            }
+        }
+    },
+    //-------------------------------------------------------------------------
+    // Config System Optimizations
+    //
+    // These are to deal with configs that combine to determine what should be
+    // rendered in the DOM. For example, "glyphs" and "limit" must both be known
+    // to render the proper text nodes. The "tip" and "value" likewise are
+    // used to update the tooltipText.
+    //
+    // To avoid multiple updates to the DOM (one for each config), we simply mark
+    // the rendering as invalid and post-process these flags on the tail of any
+    // bulk updates.
+    afterCachedConfig: function() {
+        // Now that we are done setting up the initial values we need to refresh the
+        // DOM before we allow Ext.Widget's implementation to cloneNode on it.
+        this.refresh();
+        return this.callParent(arguments);
+    },
+    initConfig: function(instanceConfig) {
+        this.isConfiguring = true;
+        this.callParent([
+            instanceConfig
+        ]);
+        // The firstInstance will already have refreshed the DOM (in afterCacheConfig)
+        // but all instances beyond the first need to refresh if they have custom values
+        // for one or more configs that affect the DOM (such as "glyphs" and "limit").
+        this.refresh();
+    },
+    setConfig: function() {
+        var me = this;
+        // Since we could be updating multiple configs, save any updates that need
+        // multiple values for afterwards.
+        me.isReconfiguring = true;
+        me.callParent(arguments);
+        me.isReconfiguring = false;
+        // Now that all new values are set, we can refresh the DOM.
+        me.refresh();
+        return me;
+    },
+    //-------------------------------------------------------------------------
+    privates: {
+        /**
+         * This method returns the DOM text node into which glyphs are placed.
+         * @param {HTMLElement} dom The DOM node parent of the text node.
+         * @return {HTMLElement} The text node.
+         * @private
+         */
+        getGlyphTextNode: function(dom) {
+            var node = dom.lastChild;
+            // We want all our text nodes to be at the end of the child list, most
+            // especially the text node on the innerEl. That text node affects the
+            // default left/right position of our absolutely positioned child divs
+            // (trackerEl and valueEl).
+            if (!node || node.nodeType !== 3) {
+                node = dom.ownerDocument.createTextNode('');
+                dom.appendChild(node);
+            }
+            return node;
+        },
+        getTooltipData: function() {
+            var me = this;
+            return {
+                component: me,
+                tracking: me.getTrackingValue(),
+                trackOver: me.getTrackOver(),
+                value: me.getValue()
+            };
+        },
+        /**
+         * Forcibly refreshes both glyph and tooltip rendering.
+         * @private
+         */
+        refresh: function() {
+            var me = this;
+            if (me.invalidGlyphs) {
+                me.refreshGlyphs(true);
+            }
+            if (me.invalidTip) {
+                me.refreshTip(true);
+            }
+        },
+        /**
+         * Refreshes the glyph text rendering unless we are currently performing a
+         * bulk config change (initConfig or setConfig).
+         * @param {Boolean} now Pass `true` to force the refresh to happen now.
+         * @private
+         */
+        refreshGlyphs: function(now) {
+            var me = this,
+                later = !now && (me.isConfiguring || me.isReconfiguring),
+                el, glyphs, limit, on, off, trackerEl, valueEl;
+            if (!later) {
+                el = me.getGlyphTextNode(me.innerEl.dom);
+                valueEl = me.getGlyphTextNode(me.valueEl.dom);
+                trackerEl = me.getGlyphTextNode(me.trackerEl.dom);
+                glyphs = me.getGlyphs();
+                limit = me.getLimit();
+                for (on = off = ''; limit--; ) {
+                    off += glyphs[0];
+                    on += glyphs[1];
+                }
+                el.nodeValue = off;
+                valueEl.nodeValue = on;
+                trackerEl.nodeValue = on;
+            }
+            me.invalidGlyphs = later;
+        },
+        /**
+         * Refreshes the tooltip text rendering unless we are currently performing a
+         * bulk config change (initConfig or setConfig).
+         * @param {Boolean} now Pass `true` to force the refresh to happen now.
+         * @private
+         */
+        refreshTip: function(now) {
+            var me = this,
+                later = !now && (me.isConfiguring || me.isReconfiguring),
+                data, text, tooltip;
+            if (!later) {
+                tooltip = me.getTip();
+                if (tooltip) {
+                    data = me.getTooltipData();
+                    text = tooltip(data);
+                    me.setTooltipText(text);
+                }
+            }
+            me.invalidTip = later;
+        },
+        /**
+         * Convert the coordinates of the given `Event` into a rating value.
+         * @param {Ext.event.Event} event The event.
+         * @return {Number} The rating based on the given event coordinates.
+         * @private
+         */
+        valueFromEvent: function(event) {
+            var me = this,
+                el = me.innerEl,
+                ex = event.getX(),
+                rounding = me.getRounding(),
+                cx = el.getX(),
+                x = ex - cx,
+                w = el.getWidth(),
+                limit = me.getLimit(),
+                v;
+            if (me.getInherited().rtl) {
+                x = w - x;
+            }
+            v = x / w * limit;
+            // We have to round up here so that the area we are over is considered
+            // the value.
+            v = Math.ceil(v / rounding) * rounding;
+            return v;
+        },
+        /**
+         * Convert the given rating into a width percentage.
+         * @param {Number} value The rating value to convert.
+         * @return {String} The width percentage to represent the given value.
+         * @private
+         */
+        valueToPercent: function(value) {
+            value = (value / this.getLimit()) * 100;
+            return value + '%';
+        }
+    }
+});
+
+/**
+ * @class Ext.ux.rating.Picker
+ */
+Ext.define('Ext.ux.overrides.rating.Picker', {
+    override: 'Ext.ux.rating.Picker',
+    //<debug>
+    initConfig: function(config) {
+        if (config && config.tooltip) {
+            Ext.log.warn('[Ext.ux.rating.Picker] The "tooltip" config was replaced by "tip"');
+        }
+        this.callParent([
+            config
+        ]);
+    },
+    //</debug>
+    updateTooltipText: function(text) {
+        var innerEl = this.innerEl,
+            QuickTips = Ext.tip && Ext.tip.QuickTipManager,
+            tip = QuickTips && QuickTips.tip,
+            target;
+        if (QuickTips) {
+            innerEl.dom.setAttribute('data-qtip', text);
+            this.trackerEl.dom.setAttribute('data-qtip', text);
+            // If the QuickTipManager is active over our widget, we need to update
+            // the tooltip text directly.
+            target = tip && tip.activeTarget;
+            target = target && target.el;
+            if (target && innerEl.contains(target)) {
+                tip.update(text);
+            }
+        }
+    }
+});
+
+/**
  * Base class from Ext.ux.TabReorderer.
  */
 Ext.define('Ext.ux.BoxReorderer', {
@@ -3536,11 +4046,15 @@ Ext.define('Ext.ux.BoxReorderer', {
         this.mixins.observable.constructor.call(this);
     },
     init: function(container) {
-        var me = this;
+        var me = this,
+            layout = container.getLayout();
         me.container = container;
+        // We must use LTR method names and properties.
+        // The underlying Element APIs normalize them.
+        me.names = layout._props[layout.type].names;
         // Set our animatePolicy to animate the start position (ie x for HBox, y for VBox)
         me.animatePolicy = {};
-        me.animatePolicy[container.getLayout().names.x] = true;
+        me.animatePolicy[me.names.x] = true;
         // Initialize the DD on first layout, when the innerCt has been created.
         me.container.on({
             scope: me,
@@ -3562,7 +4076,7 @@ Ext.define('Ext.ux.BoxReorderer', {
     onBoxReady: function() {
         var me = this,
             layout = me.container.getLayout(),
-            names = layout.names,
+            names = me.names,
             dd;
         // Create a DD instance. Poke the handlers in.
         // TODO: Ext5's DD classes should apply config to themselves.
@@ -3582,7 +4096,8 @@ Ext.define('Ext.ux.BoxReorderer', {
             endDrag: me.endDrag,
             getNewIndex: me.getNewIndex,
             doSwap: me.doSwap,
-            findReorderable: me.findReorderable
+            findReorderable: me.findReorderable,
+            names: names
         });
         // Decide which dimension we are measuring, and which measurement metric defines
         // the *start* of the box depending upon orientation.
@@ -3691,10 +4206,9 @@ Ext.define('Ext.ux.BoxReorderer', {
         var me = this,
             items = me.container.items,
             container = me.container,
-            wasRoot = me.container._isLayoutRoot,
             orig, dest, tmpIndex;
         newIndex = me.findReorderable(newIndex);
-        if (newIndex === -1) {
+        if (newIndex === -1 || newIndex === me.curIndex) {
             return;
         }
         me.reorderer.fireEvent('ChangeIndex', me, container, me.dragCmp, me.startIndex, newIndex);
@@ -3706,9 +4220,9 @@ Ext.define('Ext.ux.BoxReorderer', {
         items.remove(dest);
         items.insert(me.curIndex, dest);
         // Make the Box Container the topmost layout participant during the layout.
-        container._isLayoutRoot = true;
-        container.updateLayout();
-        container._isLayoutRoot = wasRoot;
+        container.updateLayout({
+            isRoot: true
+        });
         me.curIndex = newIndex;
     },
     onDrag: function(e) {
@@ -3733,11 +4247,11 @@ Ext.define('Ext.ux.BoxReorderer', {
             delete me.dragCmp.setPosition;
             me.dragCmp.animate = true;
             // Ensure the lastBox is correct for the animation system to restore to when it creates the "from" animation frame
-            me.dragCmp.lastBox[layout.names.x] = me.dragCmp.getPosition(true)[layout.names.widthIndex];
+            me.dragCmp.lastBox[me.names.x] = me.dragCmp.getPosition(true)[me.names.widthIndex];
             // Make the Box Container the topmost layout participant during the layout.
-            me.container._isLayoutRoot = true;
-            me.container.updateLayout();
-            me.container._isLayoutRoot = undefined;
+            me.container.updateLayout({
+                isRoot: true
+            });
             // Attempt to hook into the afteranimate event of the drag Component to call the cleanup
             temp = Ext.fx.Manager.getFxQueue(me.dragCmp.el.id)[0];
             if (temp) {
@@ -3747,7 +4261,7 @@ Ext.define('Ext.ux.BoxReorderer', {
                 });
             } else // If not animated, clean up after the mouseup has happened so that we don't click the thing being dragged
             {
-                Ext.Function.defer(me.reorderer.afterBoxReflow, 1, me);
+                Ext.asap(me.reorderer.afterBoxReflow, me);
             }
             if (me.animate) {
                 delete layout.animatePolicy;
@@ -3783,7 +4297,8 @@ Ext.define('Ext.ux.BoxReorderer', {
         for (; i < ln; i++) {
             targetEl = it[i].getEl();
             // Only look for a drop point if this found item is an item according to our selector
-            if (targetEl.is(me.reorderer.itemSelector)) {
+            // and is not the item being dragged
+            if (targetEl.dom !== dragEl && targetEl.is(me.reorderer.itemSelector)) {
                 targetBox = targetEl.getBox();
                 targetMidpoint = targetBox[me.startAttr] + (targetBox[me.dim] >> 1);
                 if (i < me.curIndex) {
@@ -3803,10 +4318,11 @@ Ext.define('Ext.ux.BoxReorderer', {
 /**
  * This plugin can enable a cell to cell drag and drop operation within the same grid view.
  *
- * Note that the plugin must be added to the grid view, not to the grid panel. For example, using {@link Ext.panel.Table viewConfig}:
+ * Note that the plugin must be added to the grid view, not to the grid panel. For example,
+ * using {@link Ext.panel.Table viewConfig}:
  *
  *      viewConfig: {
- *          plugins: {
+ *          plugins: [{
  *              ptype: 'celldragdrop',
  *
  *              // Remove text from source cell and replace with value of emptyText.
@@ -3816,7 +4332,7 @@ Ext.define('Ext.ux.BoxReorderer', {
  *
  *              // Will only allow drops of the same type.
  *              enforceType: true
- *          }
+ *          }]
  *      }
  */
 Ext.define('Ext.ux.CellDragDrop', {
@@ -3861,7 +4377,6 @@ Ext.define('Ext.ux.CellDragDrop', {
      * Defaults to red.
      */
     noDropBackgroundColor: 'red',
-    //<locale>
     /**
      * @cfg {String} dragText
      * The text to show while dragging.
@@ -3870,9 +4385,9 @@ Ext.define('Ext.ux.CellDragDrop', {
      *
      * - `{0}` The number of selected items.
      * - `{1}` 's' when more than 1 items (only useful for English).
+     * @locale
      */
     dragText: '{0} selected row{1}',
-    //</locale>
     /**
      * @cfg {String} ddGroup
      * A named drag drop group to which this object belongs. If a group is specified, then both the DragZones and
@@ -5538,331 +6053,6 @@ Ext.define('Ext.ux.GMapPanel', {
         if (map) {
             google.maps.event.trigger(map, 'resize');
         }
-    }
-});
-
-/**
- * Allows GroupTab to render a table structure.
- */
-Ext.define('Ext.ux.GroupTabRenderer', {
-    extend: 'Ext.plugin.Abstract',
-    alias: 'plugin.grouptabrenderer',
-    tableTpl: new Ext.XTemplate('<div id="{view.id}-body" class="' + Ext.baseCSSPrefix + '{view.id}-table ' + Ext.baseCSSPrefix + 'grid-table-resizer" style="{tableStyle}">', '{%', 'values.view.renderRows(values.rows, values.viewStartIndex, out);', '%}', '</div>', {
-        priority: 5
-    }),
-    rowTpl: new Ext.XTemplate('{%', 'Ext.Array.remove(values.itemClasses, "', Ext.baseCSSPrefix + 'grid-row");', 'var dataRowCls = values.recordIndex === -1 ? "" : " ' + Ext.baseCSSPrefix + 'grid-data-row";', '%}', '<div {[values.rowId ? ("id=\\"" + values.rowId + "\\"") : ""]} ', 'data-boundView="{view.id}" ', 'data-recordId="{record.internalId}" ', 'data-recordIndex="{recordIndex}" ', 'class="' + Ext.baseCSSPrefix + 'grouptab-row {[values.itemClasses.join(" ")]} {[values.rowClasses.join(" ")]}{[dataRowCls]}" ', '{rowAttr:attributes}>', '<tpl for="columns">' + '{%', 'parent.view.renderCell(values, parent.record, parent.recordIndex, parent.rowIndex, xindex - 1, out, parent)', '%}', '</tpl>', '</div>', {
-        priority: 5
-    }),
-    cellTpl: new Ext.XTemplate('{%values.tdCls = values.tdCls.replace(" ' + Ext.baseCSSPrefix + 'grid-cell "," ");%}', '<div class="' + Ext.baseCSSPrefix + 'grouptab-cell {tdCls}" {tdAttr}>', '<div {unselectableAttr} class="' + Ext.baseCSSPrefix + 'grid-cell-inner" style="text-align: {align}; {style};">{value}</div>', '<div class="x-grouptabs-corner x-grouptabs-corner-top-left"></div>', '<div class="x-grouptabs-corner x-grouptabs-corner-bottom-left"></div>', '</div>', {
-        priority: 5
-    }),
-    selectors: {
-        // Outer table
-        bodySelector: 'div.' + Ext.baseCSSPrefix + 'grid-table-resizer',
-        // Element which contains rows
-        nodeContainerSelector: 'div.' + Ext.baseCSSPrefix + 'grid-table-resizer',
-        // row
-        itemSelector: 'div.' + Ext.baseCSSPrefix + 'grouptab-row',
-        // row which contains cells as opposed to wrapping rows
-        rowSelector: 'div.' + Ext.baseCSSPrefix + 'grouptab-row',
-        // cell
-        cellSelector: 'div.' + Ext.baseCSSPrefix + 'grouptab-cell',
-        getCellSelector: function(header) {
-            return header ? header.getCellSelector() : this.cellSelector;
-        }
-    },
-    init: function(grid) {
-        var view = grid.getView(),
-            me = this;
-        view.addTpl(me.tableTpl);
-        view.addRowTpl(me.rowTpl);
-        view.addCellTpl(me.cellTpl);
-        Ext.apply(view, me.selectors);
-    }
-});
-
-/**
- * A TabPanel with grouping support.
- */
-Ext.define('Ext.ux.GroupTabPanel', {
-    extend: 'Ext.container.Container',
-    alias: 'widget.grouptabpanel',
-    requires: [
-        'Ext.tree.Panel',
-        'Ext.ux.GroupTabRenderer'
-    ],
-    baseCls: Ext.baseCSSPrefix + 'grouptabpanel',
-    /**
-     * @event beforetabchange
-     * Fires before a tab change (activated by {@link #setActiveTab}). Return false in any listener to cancel
-     * the tabchange
-     * @param {Ext.ux.GroupTabPanel} grouptabPanel The GroupTabPanel
-     * @param {Ext.Component} newCard The card that is about to be activated
-     * @param {Ext.Component} oldCard The card that is currently active
-     */
-    /**
-     * @event tabchange
-     * Fires when a new tab has been activated (activated by {@link #setActiveTab}).
-     * @param {Ext.ux.GroupTabPanel} grouptabPanel The GroupTabPanel
-     * @param {Ext.Component} newCard The newly activated item
-     * @param {Ext.Component} oldCard The previously active item
-     */
-    /**
-     * @event beforegroupchange
-     * Fires before a group change (activated by {@link #setActiveGroup}). Return false in any listener to cancel
-     * the groupchange
-     * @param {Ext.ux.GroupTabPanel} grouptabPanel The GroupTabPanel
-     * @param {Ext.Component} newGroup The root group card that is about to be activated
-     * @param {Ext.Component} oldGroup The root group card that is currently active
-     */
-    /**
-     * @event groupchange
-     * Fires when a new group has been activated (activated by {@link #setActiveGroup}).
-     * @param {Ext.ux.GroupTabPanel} grouptabPanel The GroupTabPanel
-     * @param {Ext.Component} newGroup The newly activated root group item
-     * @param {Ext.Component} oldGroup The previously active root group item
-     */
-    initComponent: function(config) {
-        var me = this;
-        Ext.apply(me, config);
-        // Processes items to create the TreeStore and also set up
-        // "this.cards" containing the actual card items.
-        me.store = me.createTreeStore();
-        me.layout = {
-            type: 'hbox',
-            align: 'stretch'
-        };
-        me.defaults = {
-            border: false
-        };
-        me.items = [
-            {
-                xtype: 'treepanel',
-                cls: 'x-tree-panel x-grouptabbar',
-                width: 150,
-                rootVisible: false,
-                store: me.store,
-                hideHeaders: true,
-                animate: false,
-                processEvent: Ext.emptyFn,
-                border: false,
-                plugins: [
-                    {
-                        ptype: 'grouptabrenderer'
-                    }
-                ],
-                viewConfig: {
-                    overItemCls: '',
-                    getRowClass: me.getRowClass
-                },
-                columns: [
-                    {
-                        xtype: 'treecolumn',
-                        sortable: false,
-                        dataIndex: 'text',
-                        flex: 1,
-                        renderer: function(value, cell, node, idx1, idx2, store, tree) {
-                            var cls = '';
-                            if (node.parentNode && node.parentNode.parentNode === null) {
-                                cls += ' x-grouptab-first';
-                                if (node.previousSibling) {
-                                    cls += ' x-grouptab-prev';
-                                }
-                                if (!node.get('expanded') || node.firstChild == null) {
-                                    cls += ' x-grouptab-last';
-                                }
-                            } else if (node.nextSibling === null) {
-                                cls += ' x-grouptab-last';
-                            } else {
-                                cls += ' x-grouptab-center';
-                            }
-                            if (node.data.activeTab) {
-                                cls += ' x-active-tab';
-                            }
-                            cell.tdCls = 'x-grouptab' + cls;
-                            return value;
-                        }
-                    }
-                ]
-            },
-            {
-                xtype: 'container',
-                flex: 1,
-                layout: 'card',
-                activeItem: me.mainItem,
-                baseCls: Ext.baseCSSPrefix + 'grouptabcontainer',
-                items: me.cards
-            }
-        ];
-        me.callParent(arguments);
-        me.setActiveTab(me.activeTab);
-        me.setActiveGroup(me.activeGroup);
-        me.mon(me.down('treepanel').getSelectionModel(), 'select', me.onNodeSelect, me);
-    },
-    getRowClass: function(node, rowIndex, rowParams, store) {
-        var cls = '';
-        if (node.data.activeGroup) {
-            cls += ' x-active-group';
-        }
-        return cls;
-    },
-    /**
-     * @private
-     * Node selection listener.
-     */
-    onNodeSelect: function(selModel, node) {
-        var me = this,
-            currentNode = me.store.getRootNode(),
-            parent;
-        if (node.parentNode && node.parentNode.parentNode === null) {
-            parent = node;
-        } else {
-            parent = node.parentNode;
-        }
-        if (me.setActiveGroup(parent.get('id')) === false || me.setActiveTab(node.get('id')) === false) {
-            return false;
-        }
-        while (currentNode) {
-            currentNode.set('activeTab', false);
-            currentNode.set('activeGroup', false);
-            currentNode = currentNode.firstChild || currentNode.nextSibling || currentNode.parentNode.nextSibling;
-        }
-        parent.set('activeGroup', true);
-        parent.eachChild(function(child) {
-            child.set('activeGroup', true);
-        });
-        node.set('activeTab', true);
-        selModel.view.refresh();
-    },
-    /**
-     * Makes the given component active (makes it the visible card in the GroupTabPanel's CardLayout)
-     * @param {Ext.Component} cmp The component to make active
-     */
-    setActiveTab: function(cmp) {
-        var me = this,
-            newTab = cmp,
-            oldTab;
-        if (Ext.isString(cmp)) {
-            newTab = Ext.getCmp(newTab);
-        }
-        if (newTab === me.activeTab) {
-            return false;
-        }
-        oldTab = me.activeTab;
-        if (me.fireEvent('beforetabchange', me, newTab, oldTab) !== false) {
-            me.activeTab = newTab;
-            if (me.rendered) {
-                me.down('container[baseCls=' + Ext.baseCSSPrefix + 'grouptabcontainer' + ']').getLayout().setActiveItem(newTab);
-            }
-            me.fireEvent('tabchange', me, newTab, oldTab);
-        }
-        return true;
-    },
-    /**
-     * Makes the given group active
-     * @param {Ext.Component} cmp The root component to make active.
-     */
-    setActiveGroup: function(cmp) {
-        var me = this,
-            newGroup = cmp,
-            oldGroup;
-        if (Ext.isString(cmp)) {
-            newGroup = Ext.getCmp(newGroup);
-        }
-        if (newGroup === me.activeGroup) {
-            return true;
-        }
-        oldGroup = me.activeGroup;
-        if (me.fireEvent('beforegroupchange', me, newGroup, oldGroup) !== false) {
-            me.activeGroup = newGroup;
-            me.fireEvent('groupchange', me, newGroup, oldGroup);
-        } else {
-            return false;
-        }
-        return true;
-    },
-    /**
-     * @private
-     * Creates the TreeStore used by the GroupTabBar.
-     */
-    createTreeStore: function() {
-        var me = this,
-            groups = me.prepareItems(me.items),
-            data = {
-                text: '.',
-                children: []
-            },
-            cards = me.cards = [];
-        me.activeGroup = me.activeGroup || 0;
-        Ext.each(groups, function(groupItem, idx) {
-            var leafItems = groupItem.items.items,
-                rootItem = (leafItems[groupItem.mainItem] || leafItems[0]),
-                groupRoot = {
-                    children: []
-                };
-            // Create the root node of the group
-            groupRoot.id = rootItem.id;
-            groupRoot.text = rootItem.title;
-            groupRoot.iconCls = rootItem.iconCls;
-            groupRoot.expanded = true;
-            groupRoot.activeGroup = (me.activeGroup === idx);
-            groupRoot.activeTab = groupRoot.activeGroup ? true : false;
-            if (groupRoot.activeTab) {
-                me.activeTab = groupRoot.id;
-            }
-            if (groupRoot.activeGroup) {
-                me.mainItem = groupItem.mainItem || 0;
-                me.activeGroup = groupRoot.id;
-            }
-            Ext.each(leafItems, function(leafItem) {
-                // First node has been done
-                if (leafItem.id !== groupRoot.id) {
-                    var child = {
-                            id: leafItem.id,
-                            leaf: true,
-                            text: leafItem.title,
-                            iconCls: leafItem.iconCls,
-                            activeGroup: groupRoot.activeGroup,
-                            activeTab: false
-                        };
-                    groupRoot.children.push(child);
-                }
-                // Ensure the items do not get headers
-                delete leafItem.title;
-                delete leafItem.iconCls;
-                cards.push(leafItem);
-            });
-            data.children.push(groupRoot);
-        });
-        return Ext.create('Ext.data.TreeStore', {
-            fields: [
-                'id',
-                'text',
-                'activeGroup',
-                'activeTab'
-            ],
-            root: {
-                expanded: true
-            },
-            proxy: {
-                type: 'memory',
-                data: data
-            }
-        });
-    },
-    /**
-     * Returns the item that is currently active inside this GroupTabPanel.
-     * @return {Ext.Component/Number} The currently active item
-     */
-    getActiveTab: function() {
-        return this.activeTab;
-    },
-    /**
-     * Returns the root group item that is currently active inside this GroupTabPanel.
-     * @return {Ext.Component/Number} The currently active root group item
-     */
-    getActiveGroup: function() {
-        return this.activeGroup;
     }
 });
 
@@ -13190,6 +13380,9 @@ Ext.define('Ext.ux.form.ItemSelector', {
     }
 });
 
+/**
+ *
+ */
 Ext.define('Ext.ux.form.SearchField', {
     extend: 'Ext.form.field.Text',
     alias: 'widget.searchfield',
@@ -13665,499 +13858,6 @@ function(Responsive) {
                 return this.responsiveSizePolicy;
             }
         });
-    }
-});
-
-/**
- * A ratings picker based on `Ext.Widget`.
- *
- *      @example
- *      Ext.create({
- *          xtype: 'rating',
- *          renderTo: Ext.getBody(),
- *          listeners: {
- *              change: function (picker, value) {
- *                 console.log('Rating ' + value);
- *              }
- *          }
- *      });
- */
-Ext.define('Ext.ux.rating.Picker', {
-    extend: 'Ext.Widget',
-    xtype: 'rating',
-    focusable: true,
-    /*
-     * The "cachedConfig" block is basically the same as "config" except that these
-     * values are applied specially to the first instance of the class. After processing
-     * these configs, the resulting values are stored on the class `prototype` and the
-     * template DOM element also reflects these default values.
-     */
-    cachedConfig: {
-        /**
-         * @cfg {String} [family]
-         * The CSS `font-family` to use for displaying the `{@link #glyphs}`.
-         */
-        family: 'monospace',
-        /**
-         * @cfg {String/String[]/Number[]} [glyphs]
-         * Either a string containing the two glyph characters, or an array of two strings
-         * containing the individual glyph characters or an array of two numbers with the
-         * character codes for the individual glyphs.
-         *
-         * For example:
-         *
-         *      @example
-         *      Ext.create({
-         *          xtype: 'rating',
-         *          renderTo: Ext.getBody(),
-         *          glyphs: [ 9671, 9670 ], // '◇◆',
-         *          listeners: {
-         *              change: function (picker, value) {
-         *                 console.log('Rating ' + value);
-         *              }
-         *          }
-         *      });
-         */
-        glyphs: '☆★',
-        /**
-         * @cfg {Number} [minimum=1]
-         * The minimum allowed `{@link #value}` (rating).
-         */
-        minimum: 1,
-        /**
-         * @cfg {Number} [limit=1]
-         * The maximum allowed `{@link #value}` (rating).
-         */
-        limit: 5,
-        /**
-         * @cfg {String/Object} [overStyle]
-         * Optional styles to apply to the rating glyphs when `{@link #trackOver}` is
-         * enabled.
-         */
-        overStyle: null,
-        /**
-         * @cfg {Number} [rounding=1]
-         * The rounding to apply to values. Common choices are 0.5 (for half-steps) or
-         * 0.25 (for quarter steps).
-         */
-        rounding: 1,
-        /**
-         * @cfg {String} [scale="125%"]
-         * The CSS `font-size` to apply to the glyphs. This value defaults to 125% because
-         * glyphs in the stock font tend to be too small. When using specially designed
-         * "icon fonts" you may want to set this to 100%.
-         */
-        scale: '125%',
-        /**
-         * @cfg {String/Object} [selectedStyle]
-         * Optional styles to apply to the rating value glyphs.
-         */
-        selectedStyle: null,
-        /**
-         * @cfg {Object/String/String[]/Ext.XTemplate/Function} tooltip
-         * A template or a function that produces the tooltip text. The `Object`, `String`
-         * and `String[]` forms are converted to an `Ext.XTemplate`. If a function is given,
-         * it will be called with an object parameter and should return the tooltip text.
-         * The object contains these properties:
-         *
-         *   - component: The rating component requesting the tooltip.
-         *   - tracking: The current value under the mouse cursor.
-         *   - trackOver: The value of the `{@link #trackOver}` config.
-         *   - value: The current value.
-         *
-         * Templates can use these properties to generate the proper text.
-         */
-        tooltip: null,
-        /**
-         * @cfg {Boolean} [trackOver=true]
-         * Determines if mouse movements should temporarily update the displayed value.
-         * The actual `value` is only updated on `click` but this rather acts as the
-         * "preview" of the value prior to click.
-         */
-        trackOver: true,
-        /**
-         * @cfg {Number} value
-         * The rating value. This value is bounded by `minimum` and `limit` and is also
-         * adjusted by the `rounding`.
-         */
-        value: null,
-        //---------------------------------------------------------------------
-        // Private configs
-        /**
-         * @cfg {String} tooltipText
-         * The current tooltip text. This value is set into the DOM by the updater (hence
-         * only when it changes). This is intended for use by the tip manager
-         * (`{@link Ext.tip.QuickTipManager}`). Developers should never need to set this
-         * config since it is handled by virtue of setting other configs (such as the
-         * {@link #tooltip} or the {@link #value}.).
-         * @private
-         */
-        tooltipText: null,
-        /**
-         * @cfg {Number} trackingValue
-         * This config is used to when `trackOver` is `true` and represents the tracked
-         * value. This config is maintained by our `mousemove` handler. This should not
-         * need to be set directly by user code.
-         * @private
-         */
-        trackingValue: null
-    },
-    config: {
-        /**
-         * @cfg {Boolean/Object} [animate=false]
-         * Specifies an animation to use when changing the `{@link #value}`. When setting
-         * this config, it is probably best to set `{@link #trackOver}` to `false`.
-         */
-        animate: null
-    },
-    // This object describes our element tree from the root.
-    element: {
-        cls: 'u' + Ext.baseCSSPrefix + 'rating-picker',
-        // Since we are replacing the entire "element" tree, we have to assign this
-        // "reference" as would our base class.
-        reference: 'element',
-        children: [
-            {
-                reference: 'innerEl',
-                cls: 'u' + Ext.baseCSSPrefix + 'rating-picker-inner',
-                listeners: {
-                    click: 'onClick',
-                    mousemove: 'onMouseMove',
-                    mouseenter: 'onMouseEnter',
-                    mouseleave: 'onMouseLeave'
-                },
-                children: [
-                    {
-                        reference: 'valueEl',
-                        cls: 'u' + Ext.baseCSSPrefix + 'rating-picker-value'
-                    },
-                    {
-                        reference: 'trackerEl',
-                        cls: 'u' + Ext.baseCSSPrefix + 'rating-picker-tracker'
-                    }
-                ]
-            }
-        ]
-    },
-    // Tell the Binding system to default to our "value" config.
-    defaultBindProperty: 'value',
-    // Enable two-way data binding for the "value" config.
-    twoWayBindable: 'value',
-    overCls: 'u' + Ext.baseCSSPrefix + 'rating-picker-over',
-    trackOverCls: 'u' + Ext.baseCSSPrefix + 'rating-picker-track-over',
-    //-------------------------------------------------------------------------
-    // Config Appliers
-    applyGlyphs: function(value) {
-        if (typeof value === 'string') {
-            //<debug>
-            if (value.length !== 2) {
-                Ext.raise('Expected 2 characters for "glyphs" not "' + value + '".');
-            }
-            //</debug>
-            value = [
-                value.charAt(0),
-                value.charAt(1)
-            ];
-        } else if (typeof value[0] === 'number') {
-            value = [
-                String.fromCharCode(value[0]),
-                String.fromCharCode(value[1])
-            ];
-        }
-        return value;
-    },
-    applyOverStyle: function(style) {
-        this.trackerEl.applyStyles(style);
-    },
-    applySelectedStyle: function(style) {
-        this.valueEl.applyStyles(style);
-    },
-    applyTooltip: function(tip) {
-        if (tip && typeof tip !== 'function') {
-            if (!tip.isTemplate) {
-                tip = new Ext.XTemplate(tip);
-            }
-            tip = tip.apply.bind(tip);
-        }
-        return tip;
-    },
-    applyTrackingValue: function(value) {
-        return this.applyValue(value);
-    },
-    // same rounding as normal value
-    applyValue: function(v) {
-        if (v !== null) {
-            var rounding = this.getRounding(),
-                limit = this.getLimit(),
-                min = this.getMinimum();
-            v = Math.round(Math.round(v / rounding) * rounding * 1000) / 1000;
-            v = (v < min) ? min : (v > limit ? limit : v);
-        }
-        return v;
-    },
-    //-------------------------------------------------------------------------
-    // Event Handlers
-    onClick: function(event) {
-        var value = this.valueFromEvent(event);
-        this.setValue(value);
-    },
-    onMouseEnter: function() {
-        this.element.addCls(this.overCls);
-    },
-    onMouseLeave: function() {
-        this.element.removeCls(this.overCls);
-    },
-    onMouseMove: function(event) {
-        var value = this.valueFromEvent(event);
-        this.setTrackingValue(value);
-    },
-    //-------------------------------------------------------------------------
-    // Config Updaters
-    updateFamily: function(family) {
-        this.element.setStyle('fontFamily', "'" + family + "'");
-    },
-    updateGlyphs: function() {
-        this.refreshGlyphs();
-    },
-    updateLimit: function() {
-        this.refreshGlyphs();
-    },
-    updateScale: function(size) {
-        this.element.setStyle('fontSize', size);
-    },
-    updateTooltip: function() {
-        this.refreshTooltip();
-    },
-    updateTooltipText: function(text) {
-        var innerEl = this.innerEl,
-            QuickTips = Ext.tip && Ext.tip.QuickTipManager,
-            tip = QuickTips && QuickTips.tip,
-            target;
-        if (QuickTips) {
-            innerEl.dom.setAttribute('data-qtip', text);
-            this.trackerEl.dom.setAttribute('data-qtip', text);
-            // If the QuickTipManager is active over our widget, we need to update
-            // the tooltip text directly.
-            target = tip && tip.activeTarget;
-            target = target && target.el;
-            if (target && innerEl.contains(target)) {
-                tip.update(text);
-            }
-        }
-    },
-    updateTrackingValue: function(value) {
-        var me = this,
-            trackerEl = me.trackerEl,
-            newWidth = me.valueToPercent(value);
-        trackerEl.setStyle('width', newWidth);
-        me.refreshTooltip();
-    },
-    updateTrackOver: function(trackOver) {
-        this.element[trackOver ? 'addCls' : 'removeCls'](this.trackOverCls);
-    },
-    updateValue: function(value, oldValue) {
-        var me = this,
-            animate = me.getAnimate(),
-            valueEl = me.valueEl,
-            newWidth = me.valueToPercent(value),
-            column, record;
-        if (me.isConfiguring || !animate) {
-            valueEl.setStyle('width', newWidth);
-        } else {
-            valueEl.stopAnimation();
-            valueEl.animate(Ext.merge({
-                from: {
-                    width: me.valueToPercent(oldValue)
-                },
-                to: {
-                    width: newWidth
-                }
-            }, animate));
-        }
-        me.refreshTooltip();
-        if (!me.isConfiguring) {
-            // Since we are (re)configured many times as we are used in a grid cell, we
-            // avoid firing the change event unless there are listeners.
-            if (me.hasListeners.change) {
-                me.fireEvent('change', me, value, oldValue);
-            }
-            column = me.getWidgetColumn && me.getWidgetColumn();
-            record = column && me.getWidgetRecord && me.getWidgetRecord();
-            if (record && column.dataIndex) {
-                // When used in a widgetcolumn, we should update the backing field. The
-                // linkages will be cleared as we are being recycled, so this will only
-                // reach this line when we are properly attached to a record and the
-                // change is coming from the user (or a call to setValue).
-                record.set(column.dataIndex, value);
-            }
-        }
-    },
-    //-------------------------------------------------------------------------
-    // Config System Optimizations
-    //
-    // These are to deal with configs that combine to determine what should be
-    // rendered in the DOM. For example, "glyphs" and "limit" must both be known
-    // to render the proper text nodes. The "tooltip" and "value" likewise are
-    // used to update the tooltipText.
-    //
-    // To avoid multiple updates to the DOM (one for each config), we simply mark
-    // the rendering as invalid and post-process these flags on the tail of any
-    // bulk updates.
-    afterCachedConfig: function() {
-        // Now that we are done setting up the initial values we need to refresh the
-        // DOM before we allow Ext.Widget's implementation to cloneNode on it.
-        this.refresh();
-        return this.callParent(arguments);
-    },
-    initConfig: function(instanceConfig) {
-        this.isConfiguring = true;
-        this.callParent([
-            instanceConfig
-        ]);
-        // The firstInstance will already have refreshed the DOM (in afterCacheConfig)
-        // but all instances beyond the first need to refresh if they have custom values
-        // for one or more configs that affect the DOM (such as "glyphs" and "limit").
-        this.refresh();
-    },
-    setConfig: function() {
-        var me = this;
-        // Since we could be updating multiple configs, save any updates that need
-        // multiple values for afterwards.
-        me.isReconfiguring = true;
-        me.callParent(arguments);
-        me.isReconfiguring = false;
-        // Now that all new values are set, we can refresh the DOM.
-        me.refresh();
-        return me;
-    },
-    //-------------------------------------------------------------------------
-    destroy: function() {
-        this.tip = Ext.destroy(this.tip);
-        this.callParent();
-    },
-    privates: {
-        /**
-         * This method returns the DOM text node into which glyphs are placed.
-         * @param {HTMLElement} dom The DOM node parent of the text node.
-         * @return {HTMLElement} The text node.
-         * @private
-         */
-        getGlyphTextNode: function(dom) {
-            var node = dom.lastChild;
-            // We want all our text nodes to be at the end of the child list, most
-            // especially the text node on the innerEl. That text node affects the
-            // default left/right position of our absolutely positioned child divs
-            // (trackerEl and valueEl).
-            if (!node || node.nodeType !== 3) {
-                node = dom.ownerDocument.createTextNode('');
-                dom.appendChild(node);
-            }
-            return node;
-        },
-        getTooltipData: function() {
-            var me = this;
-            return {
-                component: me,
-                tracking: me.getTrackingValue(),
-                trackOver: me.getTrackOver(),
-                value: me.getValue()
-            };
-        },
-        /**
-         * Forcibly refreshes both glyph and tooltip rendering.
-         * @private
-         */
-        refresh: function() {
-            var me = this;
-            if (me.invalidGlyphs) {
-                me.refreshGlyphs(true);
-            }
-            if (me.invalidTooltip) {
-                me.refreshTooltip(true);
-            }
-        },
-        /**
-         * Refreshes the glyph text rendering unless we are currently performing a
-         * bulk config change (initConfig or setConfig).
-         * @param {Boolean} now Pass `true` to force the refresh to happen now.
-         * @private
-         */
-        refreshGlyphs: function(now) {
-            var me = this,
-                later = !now && (me.isConfiguring || me.isReconfiguring),
-                el, glyphs, limit, on, off, trackerEl, valueEl;
-            if (!later) {
-                el = me.getGlyphTextNode(me.innerEl.dom);
-                valueEl = me.getGlyphTextNode(me.valueEl.dom);
-                trackerEl = me.getGlyphTextNode(me.trackerEl.dom);
-                glyphs = me.getGlyphs();
-                limit = me.getLimit();
-                for (on = off = ''; limit--; ) {
-                    off += glyphs[0];
-                    on += glyphs[1];
-                }
-                el.nodeValue = off;
-                valueEl.nodeValue = on;
-                trackerEl.nodeValue = on;
-            }
-            me.invalidGlyphs = later;
-        },
-        /**
-         * Refreshes the tooltip text rendering unless we are currently performing a
-         * bulk config change (initConfig or setConfig).
-         * @param {Boolean} now Pass `true` to force the refresh to happen now.
-         * @private
-         */
-        refreshTooltip: function(now) {
-            var me = this,
-                later = !now && (me.isConfiguring || me.isReconfiguring),
-                tooltip = me.getTooltip(),
-                data, text;
-            if (!later) {
-                tooltip = me.getTooltip();
-                if (tooltip) {
-                    data = me.getTooltipData();
-                    text = tooltip(data);
-                    me.setTooltipText(text);
-                }
-            }
-            me.invalidTooltip = later;
-        },
-        /**
-         * Convert the coordinates of the given `Event` into a rating value.
-         * @param {Ext.event.Event} event The event.
-         * @return {Number} The rating based on the given event coordinates.
-         * @private
-         */
-        valueFromEvent: function(event) {
-            var me = this,
-                el = me.innerEl,
-                ex = event.getX(),
-                rounding = me.getRounding(),
-                cx = el.getX(),
-                x = ex - cx,
-                w = el.getWidth(),
-                limit = me.getLimit(),
-                v;
-            if (me.getInherited().rtl) {
-                x = w - x;
-            }
-            v = x / w * limit;
-            // We have to round up here so that the area we are over is considered
-            // the value.
-            v = Math.ceil(v / rounding) * rounding;
-            return v;
-        },
-        /**
-         * Convert the given rating into a width percentage.
-         * @param {Number} value The rating value to convert.
-         * @return {String} The width percentage to represent the given value.
-         * @private
-         */
-        valueToPercent: function(value) {
-            value = (value / this.getLimit()) * 100;
-            return value + '%';
-        }
     }
 });
 

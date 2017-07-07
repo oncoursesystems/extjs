@@ -17,19 +17,19 @@ Ext.define('KitchenSink.view.tree.LinearDataTree', {
     exampleTitle: 'Linear Data Geographical Tree',
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/LinearGeoData.js'
+        path: 'app/store/LinearGeoData.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/tree/Territory.js'
+        path: 'app/model/tree/Territory.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/tree/Country.js'
+        path: 'app/model/tree/Country.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/tree/City.js'
+        path: 'app/model/tree/City.js'
     },{
         type: 'Data',
-        path: 'classic/samples/data/LinearGeoData.js'
+        path: 'app/data/LinearGeoData.js'
     }],
     //</example>
     store: 'LinearGeoData',
@@ -140,7 +140,7 @@ Ext.define('KitchenSink.view.tree.LinearDataTree', {
                 node.leaf = true;
                 node.mtype = 'City';
             }
-            
+
             node = target.appendChild(node);
 
             // User might want to see what they've just added!

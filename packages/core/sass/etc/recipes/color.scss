@@ -2,6 +2,9 @@
  * @class Global_CSS
  */
 
+$color-by-background-dark-color: dynamic(null);
+$color-by-background-light-color: dynamic(null);
+
 /**
  * @method brightness
  * @ignore
@@ -80,7 +83,7 @@
 }
 
 @function get-color-mode($color) {
-    @if brightness($color) > 55 {
+    @if brightness($color) > 65 {
         @return light;
     } @else {
         @return dark;
@@ -89,7 +92,7 @@
 
 $color-mode: 'inverse';
 
-@function color-offset($color, $contrast: 85%, $mode: $color-mode, $inverse: false) {
+@function color-offset($color, $contrast: 85%, $mode: $color-mode, $inverse: false, $light-color: null, $dark-color: null) {
     $flat_color: check-opacity($color);
 
     @if $mode == inverse {
@@ -101,9 +104,9 @@ $color-mode: 'inverse';
     }
 
     @if ($mode == light) {
-        @return rgba(lighten($flat_color, $contrast), opacity($color));
+        @return $light-color or $color-by-background-light-color or rgba(lighten($flat_color, $contrast), opacity($color));
     } @else if ($mode == dark) {
-        @return rgba(darken($flat_color, $contrast), opacity($color));
+        @return $dark-color or $color-by-background-dark-color or rgba(darken($flat_color, $contrast), opacity($color));
     } @else {
         @debug $mode + " is not a valid color mode. Use light, dark, or inverse.";
         @return white;
@@ -128,11 +131,22 @@ $color-mode: 'inverse';
     @return $color;
 }
 
-@function color-by-background($bg-color, $contrast: $default-text-contrast) {
+@function color-by-background($bg-color, $contrast: $default-text-contrast, $light-color: null, $dark-color: null) {
+    @if $bg-color == null {
+        @return null;
+    }
+
     $bg-color: check-opacity($bg-color);
     $tmpmode: get-color-mode($bg-color);
 
-    @return color-offset($bg-color, $contrast, $tmpmode, $inverse: true);
+    @return color-offset(
+        $color: $bg-color,
+        $contrast: $contrast,
+        $mode: $tmpmode,
+        $inverse: true,
+        $light-color: $light-color,
+        $dark-color: $dark-color
+    );
 }
 
 @function get-inset-offset($mode){
@@ -167,14 +181,16 @@ $color-mode: 'inverse';
  *
  */
 @mixin color-by-background($bg-color, $contrast: $default-text-contrast, $default-color: false, $inset-text: false) {
-    @if $default-color {
-        color: color-by-background(hsla(hue($default-color), saturation($default-color), lightness($bg-color), opacity($bg-color)), $contrast);
-    } @else {
-        color: color-by-background($bg-color, $contrast);
-    }
+    @if $bg-color != null {
+        @if $default-color {
+            color: color-by-background(hsla(hue($default-color), saturation($default-color), lightness($bg-color), opacity($bg-color)), $contrast);
+        } @else {
+            color: color-by-background($bg-color, $contrast);
+        }
 
-    @if $inset-text {
-        @include inset-by-background($bg-color);
+        @if $inset-text {
+            @include inset-by-background($bg-color);
+        }
     }
 }
 

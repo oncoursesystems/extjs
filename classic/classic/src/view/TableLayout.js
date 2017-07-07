@@ -15,14 +15,20 @@ Ext.define('Ext.view.TableLayout', {
             ownerGrid = owner.ownerGrid,
             partner = owner.lockingPartner,
             partnerContext = ownerContext.lockingPartnerContext,
-            partnerVisible = partner && partner.grid.isVisible() && !partner.grid.collapsed,
-            context = ownerContext.context;
+            partnerVisible = partner && partner.grid.isVisible() && !(partner.grid.collapsed || partner.grid.floatedFromCollapse),
+            context = ownerContext.context,
+            scrollable = ownerGrid.getScrollable();
 
         // Flag whether we need to do row height synchronization.
         // syncRowHeightOnNextLayout is a one time flag used when some code knows it has changed data height
         // and that the upcoming layout must sync row heights even if the grid is configured not to for
         // general row rendering.
         ownerContext.doSyncRowHeights = partnerVisible && (ownerGrid.syncRowHeight || ownerGrid.syncRowHeightOnNextLayout);
+        // The reason for checking .config here is that by setting the overflow on the context, it
+        // overwrites the value in the scrollable. As such, all we're trying to do here is capture the
+        // initial intent to see if the user configured the scroller as x: false. It's not perfect
+        // but will cover 99% of cases.
+        ownerContext.allowScrollX = scrollable && scrollable.config && scrollable.config.x;
 
         if (!me.columnFlusherId) {
             me.columnFlusherId = me.id + '-columns';
@@ -81,7 +87,7 @@ Ext.define('Ext.view.TableLayout', {
 
         // Shortcut when empty grid - let the base handle it.
         // EXTJS-14844: Even when no data rows (all.getCount() === 0) there may be summary rows to size.
-        if (!owner.all.getCount() && (!bodyDom || !owner.body.child('table'))) {
+        if (!owner.all.getCount() && (!bodyDom || !owner.body.child('table', true))) {
             ownerContext.setProp('viewOverflowY', false);
             me.callParent([ ownerContext ]);
             return;
@@ -188,7 +194,7 @@ Ext.define('Ext.view.TableLayout', {
         //
         // If no locking, then if there is no horizontal overflow, we set overflow-x: hidden
         // This avoids "pantom" scrollbars which are only caused by the presence of another scrollbar.
-        if (me.done && Ext.getScrollbarSize().height) {
+        if (me.done && ownerContext.allowScrollX && Ext.getScrollbarSize().height) {
             // No locking sides, ensure X scrolling is on if there is overflow, but not if there is no overflow
             // This eliminates "phantom" scrollbars which are only caused by other scrollbars.
             // Locking horizontal scrollbars are handled in Ext.grid.locking.Lockable#afterLayout
@@ -293,7 +299,8 @@ Ext.define('Ext.view.TableLayout', {
     finishedLayout: function(ownerContext) {
         var me = this,
             ownerGrid = me.owner.ownerGrid,
-            nodeContainer = Ext.fly(me.owner.getNodeContainer());
+            nodeContainer = Ext.fly(me.owner.getNodeContainer()),
+            scroller = this.owner.getScrollable();
 
         me.callParent([ ownerContext ]);
 
@@ -308,6 +315,10 @@ Ext.define('Ext.view.TableLayout', {
         
         if (ownerGrid) {
             ownerGrid.syncRowHeightOnNextLayout = false;
+        }
+
+        if (scroller && !scroller.isScrolling) {
+            scroller.restoreState();
         }
     },
 

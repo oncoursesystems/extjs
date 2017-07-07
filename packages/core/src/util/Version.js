@@ -862,7 +862,9 @@
     
     for (name in packages) {
         pkg = packages[name];
-        Ext.setVersion(name, pkg.version);
+        if (pkg && pkg.version) {
+            Ext.setVersion(name, pkg.version);
+        }
     }
 
     if (compat) {
@@ -876,6 +878,6 @@
     }
 
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext','6.2.1.167');Ext.setVersion('core','6.2.1.167');
+        Ext.setVersion('ext','6.5.0.775');Ext.setVersion('core','6.5.0.775');
     }
 })(Ext.manifest);

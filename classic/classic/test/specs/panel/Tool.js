@@ -1,6 +1,6 @@
 /* global expect, Ext, jasmine, spyOn */
 
-describe("Ext.panel.Tool", function() {
+topSuite("Ext.panel.Tool", function() {
     var describeNotTouch = jasmine.supportsTouch ? xdescribe : describe,
         tool, el;
     
@@ -152,6 +152,10 @@ describe("Ext.panel.Tool", function() {
             describe("mousedown", function() {
                 beforeEach(function() {
                     jasmine.fireMouseEvent(el, 'mousedown', 1, 1);
+                });
+                
+                afterEach(function() {
+                    jasmine.fireMouseEvent(el, 'mouseup', 1, 1);
                 });
                 
                 it("should add toolPressedCls", function() {

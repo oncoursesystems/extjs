@@ -102,7 +102,7 @@ Ext.onReady(function () {
             dataIndex: 'lastChange'
         }],
         viewConfig: {
-            plugins: {
+            plugins: [{
                 ptype: 'celldragdrop',
                 // remove text from source cell and replace with value of emptyText
                 applyEmptyText: true,
@@ -112,7 +112,7 @@ Ext.onReady(function () {
 
                 // will only allow drops of the same type
                 enforceType: true
-            }
+            }]
         },
         height: 400,
         width: 880,

@@ -403,13 +403,20 @@ Ext.define('Ext.ProgressBar', {
 
     doDestroy: function() {
         var me = this,
-            bar = me.bar;
+            bar = me.bar,
+            nodes, el, i, len;
         
         me.clearTimer();
         
         if (me.rendered) {
             if (me.textEl.isComposite) {
-                me.textEl.clear();
+                // Clean up Element references created by the layout
+                nodes = me.textEl.slice();
+                
+                for (i = 0, len = nodes.length; i < len; i++) {
+                    el = Ext.get(nodes[i]);
+                    el.destroy();
+                }
             }
             
             Ext.destroyMembers(me, 'textEl', 'progressBar');

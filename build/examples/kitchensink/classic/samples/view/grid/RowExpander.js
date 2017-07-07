@@ -14,9 +14,9 @@ Ext.define('KitchenSink.view.grid.RowExpander', {
     columns: [
         { text: "Company", flex: 1, dataIndex: 'name'},
         { text: "Price", formatter: 'usMoney', dataIndex: 'price'},
-        { text: "Change", dataIndex: 'change'},
-        { text: "% Change", dataIndex: 'pctChange'},
-        { text: "Last Updated", formatter: 'date("m/d/Y")', dataIndex: 'lastChange'}
+        { text: "Change", dataIndex: 'priceChange'},
+        { text: "% Change", dataIndex: 'priceChangePct'},
+        { text: "Last Updated", formatter: 'date("m/d/Y")', dataIndex: 'priceLastChange'}
     ],
     width: 600,
     height: 300,
@@ -24,10 +24,10 @@ Ext.define('KitchenSink.view.grid.RowExpander', {
     //<example>
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/Companies.js'
+        path: 'app/store/Companies.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     //</example>
 

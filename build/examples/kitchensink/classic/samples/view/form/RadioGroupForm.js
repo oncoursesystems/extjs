@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.form.RadioGroupForm', {
     //<example>
     exampleTitle: 'Radio Groups',
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/form/CheckboxGroupFormController.js'
     }],
     //</example>

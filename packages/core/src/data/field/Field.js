@@ -576,6 +576,29 @@ Ext.define('Ext.data.field.Field', {
      * @cfg {Function} serialize
      * @inheritdoc #method-serialize
      */
+    
+    /**
+     * @cfg {String/Object/Function} [summary]
+     * The summary type for this field. This is used to calculate a
+     * summary value by the {@link Ext.data.Model Model}.
+     *
+     * - If a string, it should be an alias for one of the Ext.data.summary types.
+     * - If an object, a config for one of the Ext.data.summary types.
+     * - If a function, it should match the signature for {@link Ext.data.summary.Base#method-calculate calculate}.
+     * 
+     * @since 6.5.0
+     */
+    summary: null,
+
+    /**
+     * @cfg {String} [summaryField]
+     * A field to use as the basis for calculating a summary. This is used in
+     * conjunction with the virtual summary fields. See {@link Ext.data.Model#cfg-summary}.
+     *
+     * @since 6.5.0
+     * @private
+     */
+    summaryField: '',
 
     /**
      * @cfg {Function/String} sortType
@@ -744,7 +767,7 @@ Ext.define('Ext.data.field.Field', {
             if (!depends) {
                 if (!(depends = calculate.$depends)) {
                     map = {};
-                    str = calculate.toString();
+                    str = Ext.Function.toCode(calculate); // strips comments in debug
                     calculate.$depends = depends = [];
 
                     match = me.argumentNamesRe.exec(str);
@@ -809,14 +832,24 @@ Ext.define('Ext.data.field.Field', {
 
             var length = validators.length,
                 all = this._validators,
-                i, item;
+                i, item, validator, presence;
 
             for (i = 0; i < length; ++i) {
                 item = validators[i];
                 if (item.fn) {
                     item = item.fn;
                 }
-                all.push(Ext.Factory.dataValidator(item));
+
+                validator = Ext.Factory.dataValidator(item);
+                if (!validator.isPresence) {
+                    all.push(validator);
+                } else {
+                    presence = validator;
+                }
+            }
+
+            if (presence) {
+                this.presence = [presence];
             }
         }
     },
@@ -954,8 +987,8 @@ Ext.define('Ext.data.field.Field', {
      * @param {String} [separator] This string is passed if the caller wants all validation
      * messages concatenated with this string between each. This can be handled as a
      * "falsy" value because concatenating with no separator is seldom desirable.
-     * @param {Ext.data.ErrorCollection} [errors] This parameter is passed if the caller
-     * wants all validation results individually added to the collection.
+     * @param {Ext.data.ErrorCollection/Ext.util.Collection/Array} [errors] This parameter is
+     * passed if the caller wants all validation results individually added to the collection.
      * @param {Ext.data.Model} record The record being validated
      * @return {Boolean/String} `true` if the value is valid. A string may be returned if
      * the value is not valid, to indicate an error message. Any other non `true` value
@@ -968,23 +1001,42 @@ Ext.define('Ext.data.field.Field', {
      */
     validate: function(value, separator, errors, record) {
         var me = this,
-            ret = '',
-            result, validator, validators, length, i;
+            result, presence;
 
         if (!me._validators) {
             me.compileValidators();
         }
 
-        validators = me._validators;
+        presence = this.presence;
+
+        if (presence && (value == null || value === '')) {
+            result = me.validateGroup(presence, value, separator, errors, record);
+            if (result !== true) {
+                return result;
+            }
+        }
+
+        return me.validateGroup(me._validators, value, separator, errors, record);
+    },
+
+    validateGroup: function(validators, value, separator, errors, record) {
+        var ret = '',
+            validator, length, i, result;
 
         for (i = 0, length = validators.length; i < length; ++i) {
             validator = validators[i];
-            result = validator.validate(value, record); 
+            result = validator.validate(value, record);
 
             if (result !== true) {
-                result = result || me.defaultInvalidMessage;
+                result = result || this.defaultInvalidMessage;
                 if (errors) {
-                    errors.add(me.name, result);
+                    if (errors.isMixedCollection) {
+                        errors.add(this.name, result);
+                    } else if (errors.isCollection) {
+                        errors.add(result);
+                    } else {
+                        errors.push(result);
+                    }
                     ret = ret || result;
                 } else if (separator) {
                     if (ret) {
@@ -1084,6 +1136,26 @@ Ext.define('Ext.data.field.Field', {
      */
     getSortType: function() {
         return this.sortType;
+    },
+
+    /**
+     * Gets the summary for this field. See {@link #summary}.
+     * @return {Ext.data.summary.Base} The summary.
+     */
+    getSummary: function() {
+        var me = this,
+            doneSummary = me.doneSummary,
+            summary = me.summary;
+
+        if (!doneSummary) {
+            me.doneSummary = true;
+
+            if (summary) {
+                me.summary = summary = Ext.Factory.dataSummary(summary);
+            }
+        }
+
+        return summary || null;
     },
 
     /**

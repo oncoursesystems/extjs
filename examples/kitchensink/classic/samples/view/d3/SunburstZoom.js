@@ -1,6 +1,8 @@
 /**
  * This example shows how to zoom in on the selected node with an animation
- * in the 'd3-sunburst' component.
+ * in the 'd3-sunburst' component. Here, the visibility of the nodes is controlled
+ * by the zoom level, not the `expanded` property. For this, we set
+ * `expandEventName` config to false.
  */
 Ext.define('KitchenSink.view.d3.SunburstZoom', {
     extend: 'Ext.panel.Panel',
@@ -21,7 +23,7 @@ Ext.define('KitchenSink.view.d3.SunburstZoom', {
         },
         {
             type: 'Model',
-            path: 'classic/samples/model/Tree.js'
+            path: 'app/model/Tree.js'
         },
         {
             type: 'View Model',
@@ -34,8 +36,8 @@ Ext.define('KitchenSink.view.d3.SunburstZoom', {
     ],
     // </example>
 
-    width: 930,
-    height: 600,
+    width: 1200,
+    height: 700,
 
     layout: 'border',
 
@@ -69,14 +71,13 @@ Ext.define('KitchenSink.view.d3.SunburstZoom', {
                     store: '{store}',
                     selection: '{selection}'
                 },
-                nodeChildren: function (node) {
-                    // Always render top 3 levels of nodes, whether or not they are expanded.
-                    return node.getDepth() < 2 ? node.childNodes : null;
+                transitions: {
+                    select: false
                 },
-                nodeSelectTransition: false,
                 listeners: {
                     selectionchange: 'onSelectionChange'
-                }
+                },
+                expandEventName: false
             }
         }
     ]

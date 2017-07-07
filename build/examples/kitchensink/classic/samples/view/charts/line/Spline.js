@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.charts.line.Spline', {
         path: 'classic/samples/view/charts/line/SplineController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Spline.js'
+        path: 'app/store/Spline.js'
     }],
     // </example>
     width: 650,
@@ -42,21 +42,10 @@ Ext.define('KitchenSink.view.charts.line.Spline', {
         store: {
             type: 'spline'
         },
-        insetPadding: {
-            top: 40,
-            left: 20,
-            right: 40,
-            bottom: 20
+        insetPadding: '10 20 10 10',
+        captions: {
+            title: 'Line Charts - Spline'
         },
-        sprites: [{
-            type: 'text',
-            text: 'Line Charts - Spline',
-            fontSize: 22,
-            width: 100,
-            height: 30,
-            x: 40, // the sprite x position
-            y: 20  // the sprite y position
-        }],
         axes: [{
             type: 'numeric',
             position: 'left',

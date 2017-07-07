@@ -138,19 +138,6 @@ Ext.define('Ext.util.Renderable', {
      * @since 5.0.0
      */
     _renderState: 0,
-    
-    /**
-     * @property {String} [ariaEl='el'] The name of the Component property that holds
-     * a reference to the Element that serves as that Component's ARIA element.
-     * This property will be replaced with the actual Element reference after rendering.
-     *
-     * Most of the simple Components will have their main element as ariaEl.
-     *
-     * @private
-     * @readonly
-     * @since 6.0.0
-     */
-    ariaEl: 'el',
 
     _layerCls: Ext.baseCSSPrefix + 'layer',
     _fixedLayerCls: Ext.baseCSSPrefix + 'fixed-layer',
@@ -340,6 +327,10 @@ Ext.define('Ext.util.Renderable', {
         controller = me.controller;
         if (controller && controller.afterRender) {
             controller.afterRender(me);
+        }
+        
+        if (me.focusableContainer && me.initFocusableContainer) {
+            me.initFocusableContainer();
         }
     },
 
@@ -881,6 +872,11 @@ Ext.define('Ext.util.Renderable', {
                 query, selector;
 
             me.attachChildEls(el);
+            
+            // Cache focusEl as a property for speedier lookups
+            if (typeof me.focusEl === 'string') {
+                me.focusEl = me[me.focusEl];
+            }
             
             // For the majority of Components, their ariaEl is going to be their main el.
             me.ariaEl = me[me.ariaEl] || me.el;

@@ -5,10 +5,10 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
     //<example>
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/Companies.js'
+        path: 'app/store/Companies.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -51,13 +51,13 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
             formatter: 'usMoney'
         }, {
             text: "Change",
-            dataIndex: 'change'
+            dataIndex: 'priceChange'
         }, {
             text: "% Change",
-            dataIndex: 'pctChange'
+            dataIndex: 'priceChangePct'
         }, {
             text: "Last Updated",
-            dataIndex: 'lastChange',
+            dataIndex: 'priceLastChange',
     
             width: 120,
             formatter: 'date("m/d/Y")'
@@ -86,13 +86,13 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
             formatter: 'usMoney'
         }, {
             text: "Change",
-            dataIndex: 'change'
+            dataIndex: 'priceChange'
         }, {
             text: "% Change",
-            dataIndex: 'pctChange'
+            dataIndex: 'priceChangePct'
         }, {
             text: "Last Updated",
-            dataIndex: 'lastChange',
+            dataIndex: 'priceLastChange',
     
             width: 120,
             formatter: 'date("m/d/Y")'

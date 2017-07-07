@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.charts.line.RealTimeController', {
         });
     },
 
-    onAxisLabelRender: function (axis, label, layoutContext) { // only render interger values
+    onAxisLabelRender: function (axis, label, layoutContext) { // only render integer values
         return Math.abs(layoutContext.renderer(label) % 1) < 1e-5 ? Math.round(label) : '';
     },
 
@@ -65,7 +65,7 @@ Ext.define('KitchenSink.view.charts.line.RealTimeController', {
 
     addNewTimeData: function() {
         var me = this,
-            chart = me.lookupReference('time-chart'),
+            chart = me.lookup('time-chart'),
             store = chart.getStore(),
             count = store.getCount(),
             xAxis = chart.getAxes()[1],
@@ -103,7 +103,7 @@ Ext.define('KitchenSink.view.charts.line.RealTimeController', {
     },
 
     addNewNumberData: function() {
-        var chart = this.lookupReference('number-chart'),
+        var chart = this.lookup('number-chart'),
             store = chart.getStore(),
             count = store.getCount(),
             xAxis = chart.getAxes()[1],

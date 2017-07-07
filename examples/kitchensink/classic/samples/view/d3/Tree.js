@@ -92,15 +92,16 @@ Ext.define('KitchenSink.view.d3.Tree', {
                     renderer: 'onTooltip'
                 },
                 nodeText: function (tree, node) {
-                    var text = node.data.text;
+                    var model = node.data,
+                        text = model.data.text;
 
                     if (node.depth > 1) {
-                        text += ' (' + Ext.util.Format.currency(node.data.salary, '$', 0) + ')';
+                        text += ' (' + Ext.util.Format.currency(model.data.salary, '$', 0) + ')';
                     }
 
                     return text;
                 },
-                nodeSize: [30, 250],
+                nodeSize: [250, 30],
                 nodeRadius: 10,
                 bind: {
                     store: '{store}',
@@ -108,7 +109,7 @@ Ext.define('KitchenSink.view.d3.Tree', {
                 },
                 platformConfig: {
                     desktop: {
-                        nodeSize: [20, 250],
+                        nodeSize: [250, 20],
                         nodeRadius: 5
                     }
                 }

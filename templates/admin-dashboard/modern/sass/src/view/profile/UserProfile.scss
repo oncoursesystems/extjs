@@ -1,4 +1,10 @@
 .userProfile-container {
+    .dashboard-item.shadow{
+        .x-dataview-item {
+            border: none;
+        }
+    }
+
     .userProfilePic {
         border: 4px solid $base-border-color;
           @include border-radius($circle-border-radius);

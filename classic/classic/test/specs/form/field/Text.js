@@ -1,4 +1,7 @@
-describe("Ext.form.field.Text", function() {
+topSuite("Ext.form.field.Text",
+    ['Ext.form.field.Display', 'Ext.form.field.Checkbox', 'Ext.Panel',
+     'Ext.app.ViewModel', 'Ext.Button', 'Ext.data.validator.*'],
+function() {
     var component;
     
     function makeComponent(config) {
@@ -3237,9 +3240,22 @@ describe("Ext.form.field.Text", function() {
                 jasmine.fireMouseEvent(component.inputEl, 'mouseup');
 
                 indices = getTextSelectionIndices(component.inputEl.dom);
-                // start and end of selection should be 0 since selectOnFocus: false
-                expect(indices[0]).toBe(0);
-                expect(indices[1]).toBe(0);
+                // start and end of selection should be the same since selectOnFocus: false
+                expect(indices[0]).toBe(indices[1]);
+            });
+
+            it("should not select text onFocus when selectOnFocus: false", function () {
+                var indices;
+
+                create(false);
+
+                jasmine.focusAndWait(component);
+
+                runs(function() {
+                    indices = getTextSelectionIndices(component.inputEl.dom);
+                    // start and end of selection should be the same since selectOnFocus: false
+                    expect(indices[0]).toBe(indices[1]);
+                });
             });
 
             it("should select text when selectOnFocus: true", function () {

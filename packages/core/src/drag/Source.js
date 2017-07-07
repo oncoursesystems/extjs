@@ -168,6 +168,8 @@ Ext.define('Ext.drag.Source', {
          */
         handle: null,
 
+        local: null,
+
         // @cmd-auto-dependency {aliasPrefix: "drag.proxy."}
         /**
          * {String/Object/Ext.drag.proxy.Base} proxy
@@ -257,6 +259,7 @@ Ext.define('Ext.drag.Source', {
             config = Ext.apply({}, config);
             delete config.describe;
         }
+
         this.callParent([config]);
 
         // Use bracket syntax to prevent Cmd from creating an
@@ -353,13 +356,9 @@ Ext.define('Ext.drag.Source', {
 
     updateActiveCls: function(cls, oldCls) {
         if (this.dragging) {
-            if (oldCls) {
-                this.getElement().removeCls(oldCls);
-            }
+            var el = this.getElement();
 
-            if (cls) {
-                this.getElement().addCls(cls);
-            }
+            el.replaceCls(oldCls, cls);
         }
     },
 
@@ -385,7 +384,7 @@ Ext.define('Ext.drag.Source', {
     updateElement: function(element, oldElement) {
         // We can't bind/unbind these listeners with getElListeners because
         // they will conflict with the dragstart gesture event
-        if (oldElement) {
+        if (oldElement && !oldElement.destroyed) {
             oldElement.un('dragstart', 'stopNativeDrag', this);
         }
 
@@ -396,7 +395,8 @@ Ext.define('Ext.drag.Source', {
             });
             element.on('dragstart', 'stopNativeDrag', this, {translate: false});
         }
-        this.callParent([element, oldElement]);
+
+        this.callParent([ element, oldElement ]);
     },
 
     updateHandle: function() {
@@ -419,6 +419,17 @@ Ext.define('Ext.drag.Source', {
         if (proxy) {
             proxy.setSource(this);
         }
+    },
+
+    resolveListenerScope: function () {
+        var ownerCmp = this.ownerCmp,
+            a = arguments;
+
+        if (ownerCmp) {
+            return ownerCmp.resolveListenerScope.apply(ownerCmp, a);
+        }
+
+        return this.callParent(a);
     },
 
     destroy: function() {
@@ -476,6 +487,7 @@ Ext.define('Ext.drag.Source', {
             if (cls) {
                 el.removeCls(cls);
             }
+
             if (proxyEl) {
                 proxyEl.removeCls(me.draggingCls);
             }
@@ -498,7 +510,10 @@ Ext.define('Ext.drag.Source', {
             }, handle = this.getHandle();
 
             if (handle) {
-                o.delegate = handle;
+                o.dragstart = {
+                    fn: o.dragstart,
+                    delegate: handle
+                };
             }
             if (this.getActivateOnLongPress()) {
                 o.longpress = 'handleLongPress';
@@ -545,8 +560,7 @@ Ext.define('Ext.drag.Source', {
                 manager = me.manager,
                 revert = me.getRevert(),
                 info = me.info,
-                proxy = info.proxy.initial,
-                proxyEl = me.info.proxy.element;
+                proxy = info.proxy;
 
             info.update(e);
 
@@ -559,14 +573,11 @@ Ext.define('Ext.drag.Source', {
             }
             Ext.fireEvent('dragend', me, info, e);
 
-            if (revert && proxyEl) {
-                proxyEl.addCls(me.revertCls);
-                proxyEl.setXY([proxy.x, proxy.y], Ext.apply({
-                    callback: function() {
-                        proxyEl.removeCls(me.revertCls);
-                        me.dragCleanup(info);
-                    }
-                }, revert));
+            proxy = proxy.instance;
+            if (revert && proxy) {
+                proxy.dragRevert(info, me.revertCls, revert, function () {
+                    me.dragCleanup(info);
+                });
             } else {
                 me.dragCleanup(info);
             }
@@ -589,8 +600,8 @@ Ext.define('Ext.drag.Source', {
 
             e.stopPropagation();
             e.claimGesture();
-            info.update(e);
 
+            info.update(e);
             if (manager) {
                 manager.onDragMove(info, e);
             }
@@ -616,6 +627,12 @@ Ext.define('Ext.drag.Source', {
 
             if (me.preventStart(e)) {
                 return false;
+            }
+
+            if (hasListeners.initdragconstraints) {
+                // This (private) event allows drag constraints to be adjusted "JIT"
+                // (used by modern sliders)
+                me.fireEvent('initdragconstraints', me, e);
             }
 
             me.info = info = new Ext.drag.Info(me, initialEvent);

@@ -1,4 +1,4 @@
-describe("Ext.form.field.Checkbox", function() {
+topSuite("Ext.form.field.Checkbox", ['Ext.app.ViewController'], function() {
     var component;
     
     function makeComponent(config) {

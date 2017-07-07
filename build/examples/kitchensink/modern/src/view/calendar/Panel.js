@@ -6,10 +6,9 @@ Ext.define('KitchenSink.view.calendar.Panel', {
         'Ext.calendar.panel.Panel'
     ],
 
-    shadow: true,
-
     layout: 'fit',
-    items: {
+
+    items: [{
         xtype: 'calendar',
         views: {
             day: {
@@ -34,5 +33,5 @@ Ext.define('KitchenSink.view.calendar.Panel', {
                 url: '/KitchenSink/CalendarFull'
             }
         }
-    }
+    }]
 });

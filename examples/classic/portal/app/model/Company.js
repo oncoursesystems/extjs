@@ -14,6 +14,9 @@ Ext.define('Portal.model.Company', {
            calculate: function(data) {
                var pct = data.pctChange;
                return (pct < 0) ? 2 : ((pct < 1) ? 1 : 0);
+           },
+           isEqual: function() {
+               return false;
            }
         }
     ],
@@ -28,7 +31,7 @@ Ext.define('Portal.model.Company', {
         data.trend = [price];
         do {
             length = data.trend.length;
-            data.trend = this.addToTrend(this.generatePriceTick(data.trend[length-1]));
+            this.addToTrend(this.generatePriceTick(data.trend[length-1]));
         } while (data.trend.length !== length);
 
         this.addToTrend(price);
@@ -66,26 +69,23 @@ Ext.define('Portal.model.Company', {
     // Override to keep the last 10 prices in the trend field
     set: function(fieldName, value) {
         if (fieldName === 'price') {
-            return this.callParent([{
-                price: value,
-                trend: this.addToTrend(fieldName.price)
-            }]);
+            this.addToTrend(value);
         }
         else {
             if (typeof fieldName !== 'string' && 'price' in fieldName) {
-                fieldName.trend = this.addToTrend(fieldName.price);
+                this.addToTrend(fieldName.price);
             }
-            return this.callParent(arguments);
         }
+        return this.callParent(arguments);
     },
 
     // Override to keep the last 10 prices in the trend field
     addToTrend: function(value) {
-        var trend = this.data.trend.concat(value);
+        var trend = this.data.trend;
 
+        trend.push(value);
         if (trend.length > 10) {
-            Ext.Array.splice(trend, 0, trend.length - 10);
+            trend.shift();
         }
-        return trend;
     }
 });

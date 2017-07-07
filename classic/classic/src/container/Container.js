@@ -429,7 +429,8 @@ Ext.define('Ext.container.Container', {
 
     mixins: [
         'Ext.mixin.Queryable',
-        'Ext.mixin.Container'
+        'Ext.mixin.Container',
+        'Ext.mixin.FocusableContainer'
     ],
 
     renderTpl:
@@ -667,7 +668,7 @@ Ext.define('Ext.container.Container', {
      *     }
      *
      * @since 2.3.0
-     * 
+     *
      */
     layout: 'auto',
 
@@ -957,6 +958,11 @@ Ext.define('Ext.container.Container', {
                 me.items.insert(pos, item);
                 item.onAdded(me, pos, instanced);
                 delete item.$initParent;
+                
+                if (me.focusableContainer) {
+                    me.onFocusableChildAdd(item);
+                }
+                
                 me.onAdd(item, pos);
                 layout.onAdd(item, pos);
 
@@ -979,6 +985,10 @@ Ext.define('Ext.container.Container', {
         }
 
         if (me.rendered) {
+            if (length && me.focusableContainer) {
+                me.$initFocusableContainerAfterLayout = true;
+            }
+            
             Ext.resumeLayouts(true);
         }
 
@@ -1036,6 +1046,14 @@ Ext.define('Ext.container.Container', {
         if (me.hasListeners.afterlayout) {
             me.fireEvent('afterlayout', me, layout);
         }
+        
+        // focusableContainer could have changed between setting the flag in add()
+        // and actual layout, so check again
+        if (me.focusableContainer && me.$initFocusableContainerAfterLayout) {
+            me.initFocusableContainer();
+        }
+        
+        delete me.$initFocusableContainerAfterLayout;
     },
 
     doDestroy: function() {
@@ -1043,6 +1061,10 @@ Ext.define('Ext.container.Container', {
             items = me.items,
             floatingItems = me.floatingItems,
             c;
+        
+        if (me.focusableContainer) {
+            me.destroyFocusableContainer();
+        }
 
         if (items) {
             while ((c = items.first())) {
@@ -1171,6 +1193,11 @@ Ext.define('Ext.container.Container', {
                 itemsToDisable[i].disable(silent, true);
             }
         }
+        
+        if (me.focusableContainer) {
+            me.activateFocusableContainer(false);
+        }
+        
         return me;
     },
 
@@ -1193,6 +1220,10 @@ Ext.define('Ext.container.Container', {
             for (i = 0; i < len; i++) {
                 itemsToDisable[i].enable(silent, true);
             }
+        }
+        
+        if (me.focusableContainer) {
+            me.activateFocusableContainer(true);
         }
 
         return me;
@@ -1346,7 +1377,8 @@ Ext.define('Ext.container.Container', {
         var defaultFocus = this.defaultFocus,
             result;
         
-        if (defaultFocus) {
+        // This might not work during initConfig
+        if (defaultFocus && !this.isConfiguring) {
             result = this.down(defaultFocus);
         }
         
@@ -1354,12 +1386,17 @@ Ext.define('Ext.container.Container', {
         return result;
     },
     
-    initComponent: function(){
+    setDefaultFocus: function(value) {
+        this.defaultFocus = value;
+    },
+    
+    initComponent: function() {
         var me = this;
 
         me.callParent();
 
         me.getLayout();
+
         // Set a flag to say we're constructing children, can be useful
         // to know during construction time to save work
         me.constructing = true;
@@ -1370,6 +1407,8 @@ Ext.define('Ext.container.Container', {
             me.disabled = false;
             me.disable(true);
         }
+
+        me.reference = me.setupReference(me.reference);
 
         delete me.constructing;
     },
@@ -1709,6 +1748,11 @@ Ext.define('Ext.container.Container', {
     onBeforeAdd: function(item) {
         // Remove from current container without detaching it from the DOM if it's not us.
         var owner = item.ownerCt;
+
+        if (item.isDetached) {
+            item.reattachToBody();
+        }
+
         if (owner && owner !== this) {
             item.isLayoutMoving = true;
             owner.remove(item, {
@@ -1727,8 +1771,9 @@ Ext.define('Ext.container.Container', {
      * removed. This method may be used to update any internal
      * structure which may depend upon the state of the child items.
      *
-     * @param {Ext.Component} component
-     * @param {Boolean} autoDestroy
+     * @param {Ext.Component} component The removed component
+     * @param {Boolean} isDestroying `true` if the the component is being destroyed in
+     * the remove action
      *
      * @template
      * @protected
@@ -1890,40 +1935,49 @@ Ext.define('Ext.container.Container', {
      */
     setLayout: function(layout) {
         var me = this,
-            currentLayout = me.layout,
-            currentIsLayout = currentLayout && currentLayout.isLayout,
-            protoLayout, type;
+            oldLayout = me.layout,
+            type;
 
-        if (typeof layout === 'string') {
-            layout = {
-                type: layout
-            };
-        }
+        if (layout) {
+            if (typeof layout === 'string') {
+                layout = {
+                    type: layout
+                };
+            }
+            type = layout.type;
 
-        type = layout.type;
-
-        if (currentIsLayout && (!type || (type === currentLayout.type))) {
-            // no type passed, or same type as existing layout - reconfigure current layout
-            delete layout.type;
-            currentLayout.setConfig(layout);
-        } else {
-            // no current layout, or different type passed - create new layout
-            if (currentIsLayout) {
-                currentLayout.setOwner(null);
+            if (oldLayout) {
+                if (oldLayout.isLayout) {
+                    // Same layout type requested, or just a reconfigure object.
+                    // Either way, we reconfigure the current layout.
+                    if (!type || (type === oldLayout.type)) {
+                        oldLayout.setConfig(layout);
+                        layout = oldLayout;
+                    }
+                    // Different layout type requested (not allowed after render)
+                    // just detach from the current layout.
+                    else {
+                        oldLayout.setOwner(null);
+                    }
+                }
+                // Old layout has not yet been instantiated; merge new in.
+                else {
+                    if (typeof oldLayout === 'string') {
+                        oldLayout = {
+                            type: oldLayout
+                        };
+                    }
+                    layout = Ext.merge(oldLayout, layout);
+                }
             }
 
-            protoLayout = me.self.prototype.layout;
-
-            if (typeof protoLayout === 'string') {
-                layout.type = type || protoLayout;
-            } else {
-                // use protoLayout as default values
-                Ext.merge(Ext.merge({}, protoLayout), layout);
+            if (!(layout && layout.isLayout)) {
+                layout.owner = this;
+                layout = Ext.Factory.layout(layout);
             }
-
-            layout = this.layout = Ext.Factory.layout(layout);
             layout.setOwner(this);
         }
+        me.layout = layout;
 
         if (me.rendered) {
             me.updateLayout();
@@ -1980,6 +2034,41 @@ Ext.define('Ext.container.Container', {
             }
         }
     },
+    
+    onShowComplete: function(cb, scope) {
+        var me = this;
+        
+        me.callParent([cb, scope]);
+        
+        if (me.focusableContainer && me.activateFocusableContainer) {
+            me.activateFocusableContainer();
+        }
+    },
+    
+    onFocusEnter: function(e) {
+        var me = this;
+
+        me.callParent([e]);
+        
+        // We DO NOT check if `me` is focusable here. The reason is that
+        // non-focusable containers need to track focus entering their
+        // children so that revertFocus would work if these children
+        // become unavailable.
+        if (me.focusableContainer && !me.destroying && !me.destroyed) {
+            me.mixins.focusablecontainer.onFocusEnter.call(me, e);
+        }
+    },
+    
+    onFocusLeave: function(e) {
+        var me = this;
+        
+        me.callParent([e]);
+        
+        // Ditto
+        if (me.focusableContainer && !me.destroying && !me.destroyed) {
+            me.mixins.focusablecontainer.onFocusLeave.call(me, e);
+        }
+    },
 
     // ***********************************************************************************
     // End Methods
@@ -2018,11 +2107,6 @@ Ext.define('Ext.container.Container', {
             return config;
         },
 
-        applyReference: function (reference) {
-            // Need to call like this because applyReference from container comes via a mixin
-            return this.setupReference(reference);
-        },
-
         // The targetCls is a CSS class that the layout needs added to the targetEl. The targetEl is where the container's
         // children are rendered and is usually just the main el. Some containers (e.g. panels) use a body instead.
         //
@@ -2030,11 +2114,6 @@ Ext.define('Ext.container.Container', {
         // avoid a post-render step to add the targetCls.
         applyTargetCls: function(targetCls) {
             this.layoutTargetCls = targetCls;
-        },
-
-        // Detach a component from the DOM
-        detachComponent: function(component){
-            Ext.getDetachedBody().appendChild(component.getEl(), true);
         },
 
         /**
@@ -2082,6 +2161,10 @@ Ext.define('Ext.container.Container', {
                 component.onRemoved(isDestroying);
             }
 
+            if (me.focusableContainer && !me.destroying && !me.destroyed) {
+                me.onFocusableChildRemove(component, isDestroying);
+            }
+
             me.onRemove(component, isDestroying);
 
             // Destroy if we were explicitly told to, or we're defaulting to our autoDestroy
@@ -2097,7 +2180,7 @@ Ext.define('Ext.container.Container', {
                     layout.afterRemove(component);
                 }
                 if (doDetach && component.rendered) {
-                    me.detachComponent(component);
+                    component.detachFromBody();
                 }
             }
         },

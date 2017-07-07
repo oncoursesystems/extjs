@@ -9,20 +9,20 @@ Ext.define('KitchenSink.view.tip.TipAligningController', {
         this.button = this.lookupReference('button');
         this.tooltip = this.button.getTooltip();
 
-        this.tooltip.setConstrainTo(this.getView().bodyElement);
+        this.tooltip.setConstrainAlign(this.getView().bodyElement);
     },
-    
+
     initButton: function() {
         this.button.show();
         this.button.center();
         this.tooltip.delayShow(this.button);
     },
 
-    onButtonDrag: function(event) {
+    onButtonDrag: function() {
         this.tooltip.showByTarget(this.button);
     },
 
-    onTipEdgeChange: function(newValue, oldValue) {
+    onTipEdgeChange: function(newValue) {
         var values = [2, 3, 0, 1];
         this.getViewModel().set('targetEdge', values[newValue]);
     }

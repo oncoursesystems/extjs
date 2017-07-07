@@ -1,7 +1,6 @@
 Ext.define('KitchenSink.view.icons.XRay', {
     alias: 'sprite.xray',
     extend: 'Ext.draw.sprite.Path',
-    shadow: true,
 
     render: function (surface, ctx) {
         var attr = this.attr,

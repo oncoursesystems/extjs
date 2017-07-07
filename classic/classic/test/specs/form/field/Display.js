@@ -1,4 +1,4 @@
-describe("Ext.form.field.Display", function() {
+topSuite("Ext.form.field.Display", ['Ext.app.ViewController'], function() {
     var component;
 
     function makeComponent (config) {

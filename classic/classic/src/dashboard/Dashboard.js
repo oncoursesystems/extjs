@@ -25,7 +25,9 @@ Ext.define('Ext.dashboard.Dashboard', {
 
     scrollable: true,
 
-    layout: null,
+    layout: {
+        type: 'dashboard'
+    },
 
     stateful: false,
 
@@ -129,18 +131,6 @@ Ext.define('Ext.dashboard.Dashboard', {
     /**
      * @event drop
      */
-
-    initComponent: function () {
-        var me = this;
-
-        if (!me.layout) {
-            me.layout = {
-                type: 'dashboard'
-            };
-        }
-
-        me.callParent();
-    },
 
     applyParts: function (parts, collection) {
         if (!collection) {

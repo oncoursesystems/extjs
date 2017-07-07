@@ -1,5 +1,5 @@
 Ext.define('KitchenSink.Application', {
-    extend: 'Ext.app.Application',
+    extend: 'KitchenSink.BaseApplication',
     namespace: 'KitchenSink',
 
     requires: [
@@ -31,8 +31,26 @@ Ext.define('KitchenSink.Application', {
         }
     },
 
-    //loads app/store/Demos.js, which contains the tree data for our main navigation NestedList
-    stores: ['Navigation', 'USD2EUR', 'OrderItems', 'StockPrice', 'List', 'Pie', 'Speakers'],
+    stores: [
+        'Companies',
+        'Navigation',
+        'USD2EUR',
+        'OrderItems',
+        'StockPrice',
+        'List',
+        'Posts',
+        'Pie',
+        'Speakers',
+        'Files',
+        'GeoData',
+        'LinearGeoData',
+        'Restaurants',
+        'States'
+    ],
+
+    controllers: [
+        'Direct'
+    ],
 
     //the Kitchen Sink has Phone and Tablet modes, which rearrange the screen based on the type
     //of device detected
@@ -42,12 +60,15 @@ Ext.define('KitchenSink.Application', {
         'KitchenSink.profile.Phone'
     ],
 
-    init: function() {
-        this.setDefaultToken('all');
+    viewport: {
+        viewModel: {
+            darkMode: false
+        }
     },
 
     launch: function() {
-        Ext.create('KitchenSink.store.Speakers', { id: 'Speakers' });
         KitchenSink.util.Proxy.process('data/feed.js');
+
+        this.destroyLoader();
     }
 });

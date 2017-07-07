@@ -10,14 +10,13 @@ Ext.define('Ext.grid.cell.Expander', {
     align: 'center',
 
     classCls: Ext.baseCSSPrefix + 'expandercell',
+
     expandedCls: Ext.baseCSSPrefix + 'expanded',
 
     innerTemplate: [{
         reference: 'iconElement',
-        classList:[
-            Ext.baseCSSPrefix + 'icon-el',
-            Ext.baseCSSPrefix + 'font-icon'
-        ]
+        cls: Ext.baseCSSPrefix + 'icon-el ' +
+             Ext.baseCSSPrefix + 'font-icon'
     }],
 
     updateCollapsed: function(collapsed) {

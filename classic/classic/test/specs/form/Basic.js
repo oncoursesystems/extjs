@@ -1,4 +1,4 @@
-describe("Ext.form.Basic", function() {
+topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], function() {
     var basicForm,
         container,
         currentActionInstance,

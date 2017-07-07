@@ -53,15 +53,11 @@ Ext.define('Admin.view.widgets.BioTile', {
     items: [{
         xtype: 'container',
         layout: 'vbox',
-        width: '100%',
-        height: '100%',
 
         items: [{
             xtype: 'image',
             reference: 'banner',
             userCls: 'bio-banner',
-            width: '100%',
-            height: '100%',
             flex: 1,
             html: '&#160;'
         }, {

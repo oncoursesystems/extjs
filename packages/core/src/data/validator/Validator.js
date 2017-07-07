@@ -12,6 +12,10 @@ Ext.define('Ext.data.validator.Validator', {
     alias: 'data.validator.base',  // also configures Factoryable
 
     isValidator: true,
+
+    factoryConfig: {
+        cacheable: true
+    },
     
     /**
      * @property {String} type
@@ -75,6 +79,8 @@ Ext.define('Ext.data.validator.Validator', {
         return new me.self(me.getCurrentConfig());
     }
 },
-function() {
+function (Validator) {
     this.register(this.prototype.type, this);
+
+    Ext.Factory.validator = Ext.Factory.dataValidator;
 });

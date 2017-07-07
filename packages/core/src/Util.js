@@ -12,6 +12,7 @@ Ext.apply(Ext, {
     _namedScopes: {
         'this': { isThis: 1 },
         controller: { isController: 1 },
+        owner: { isOwner: 1 },
         // these two are private, used to indicate that listeners were declared on the
         // class body with either an unspecified scope, or scope:'controller'
         self: { isSelf: 1 },
@@ -529,7 +530,8 @@ Ext.apply(Ext, {
 
         if (force || !scrollbarSize) {
             var db = document.body,
-                div = document.createElement('div');
+                div = document.createElement('div'),
+                h, w;
 
             div.style.width = div.style.height = '100px';
             div.style.overflow = 'scroll';
@@ -539,9 +541,12 @@ Ext.apply(Ext, {
 
             // at least in iE9 the div is not 100px - the scrollbar size is removed!
             Ext._scrollbarSize = scrollbarSize = {
-                width: div.offsetWidth - div.clientWidth,
-                height: div.offsetHeight - div.clientHeight
+                width: w = div.offsetWidth - div.clientWidth,
+                height: h = div.offsetHeight - div.clientHeight
             };
+
+            scrollbarSize.reservedWidth = w ? 'calc(100% - ' + w + 'px)' : '';
+            scrollbarSize.reservedHeight = h ? 'calc(100% - ' + h + 'px)' : '';
 
             db.removeChild(div);
         }
@@ -653,6 +658,8 @@ Ext.apply(Ext, {
      * @param {Object} [instance]  The instance to update.
      * @param [aliasNamespace]
      * @member Ext
+     * @deprecated 6.5.0 Use the {@link Ext.Factory#method!update update} method of the
+     * associated factory instead.
      */
     factory: function(config, classReference, instance, aliasNamespace) {
         var manager = Ext.ClassManager,
@@ -714,6 +721,80 @@ Ext.apply(Ext, {
         }
 
         return Ext.create(classReference, config);
+    },
+
+    /**
+     * This method converts an object containing config objects keyed by `itemId` into
+     * an array of config objects.
+     *
+     * @param {Object} items An object containing config objects keyed by `itemId`.
+     * @param {String} [defaultProperty="xtype"] The property to set for string items.
+     * @return {Object[]}
+     * @member Ext
+     * @since 6.5.0
+     * @private
+     */
+    convertKeyedItems: function (items, defaultProperty, functionProperty) {
+        if (items && !items.isInstance && Ext.isObject(items)) {
+            var obj = items,
+                item, itemId, value;
+
+            items = [];
+
+            // See if obj looks like a single thing
+            if (obj.xtype || obj.xclass || obj.itemId || obj.id) {
+                items.push(obj);
+            }
+            else {
+                for (itemId in obj) {
+                    item = obj[itemId];
+
+                    if (item) {
+                        if (item === true) {
+                            item = {};
+                        }
+                        else if (typeof item === 'function') {
+                            //<debug>
+                            if (!functionProperty) {
+                                Ext.raise('Function not expected here');
+                            }
+                            //</debug>
+
+                            value = item;
+                            item = {};
+                            item[functionProperty] = value;
+                        }
+                        else if (typeof item === 'string') {
+                            value = item;
+                            item = {};
+                            item[defaultProperty || 'xtype'] = value;
+                        }
+                        else {
+                            item = Ext.apply({}, item);
+                        }
+
+                        item.itemId = itemId;
+
+                        items.push(item);
+                    }
+                }
+            }
+        }
+
+        return items;
+    },
+
+    /**
+     * Comparison function for sorting an array of objects in ascending order of `weight`.
+     * @param {Object} lhs
+     * @param {Object} rhs
+     * @return {Number}
+     * @member Ext
+     * @private
+     * @since 6.5.0
+     */
+    weightSortFn: function (lhs, rhs) {
+        return (lhs.weight || 0) - (rhs.weight || 0);
     },
 
     /**

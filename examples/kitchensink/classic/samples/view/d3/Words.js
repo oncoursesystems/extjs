@@ -44,8 +44,10 @@ Ext.define('KitchenSink.view.d3.Words', {
     items: {
         xtype: 'd3-pack',
         reference: 'pack',
+        rootVisible: false,
         padding: 0,
         nodeText: 'word',
+        textPadding: [-8, 0],
         nodeValue: function (node) {
             // Instead of using `nodeValue: 'count'` as a config,
             // take a qubic root of the 'count' to downplay
@@ -59,8 +61,6 @@ Ext.define('KitchenSink.view.d3.Words', {
                 range: ['white']
             }
         },
-        rootVisible: false,
-        textPadding: [-8, 0],
         selectEventName: 'mouseenter',
         tooltip: {
             renderer: 'onTooltip'

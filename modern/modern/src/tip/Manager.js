@@ -85,6 +85,10 @@ Ext.define('Ext.tip.Manager', {
             dragend: 'dragEnable',
             dragcancel: 'dragEnable'
         });
+
+        if (!me.self.instance) {
+            me.self.instance = me;
+        }
     },
 
     /**
@@ -111,6 +115,10 @@ Ext.define('Ext.tip.Manager', {
 
     destroy: function () {
         var me = this;
+
+        if (me.self.instance === me) {
+            me.self.instance = null;
+        }
 
         me._fly.detach(); // just in case
         me.globalListeners = me.tip = Ext.destroy(me.tip, me.globalListeners);
@@ -153,6 +161,10 @@ Ext.define('Ext.tip.Manager', {
             }, fn = Ext.identityFn;
 
             return {
+                ui: {
+                    prop: 'data-qui',
+                    parse: fn
+                },
                 html: {
                     prop: 'data-qtip',
                     parse: fn
@@ -186,7 +198,7 @@ Ext.define('Ext.tip.Manager', {
                     parse: fn
                 },
                 anchor : {
-                    prop: 'data-anchor',
+                    prop: 'data-qanchor',
                     parse: fn
                 },
                 showDelay: {
@@ -320,6 +332,12 @@ Ext.define('Ext.tip.Manager', {
 
             if (dom) {
                 data = me.getTipConfig(dom);
+
+                // data could be undefined
+                if (!data) {
+                    return;
+                }
+
                 data.anchorToTarget = !!(data.align || data.anchor);
                 tip.setConfig(data);
                 header = tip.getHeader();

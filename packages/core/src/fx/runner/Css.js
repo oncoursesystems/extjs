@@ -188,7 +188,7 @@ Ext.define('Ext.fx.runner.Css', {
                         ruleStyle.removeProperty(name);
                     }
                     else {
-                        ruleStyle.setProperty(name, value, 'important');
+                        ruleStyle.setProperty(name, value);
                     }
                 }
             }
@@ -220,7 +220,7 @@ Ext.define('Ext.fx.runner.Css', {
                             elementStyle.removeProperty(name);
                         }
                         else {
-                            elementStyle.setProperty(name, value, 'important');
+                            elementStyle.setProperty(name, value);
                         }
                     }
                 }

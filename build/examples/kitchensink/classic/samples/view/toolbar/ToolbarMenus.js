@@ -23,8 +23,8 @@ Ext.define('KitchenSink.view.toolbar.ToolbarMenus', {
         'KitchenSink.store.States'
     ],
     otherContent: [{
-        type: 'ViewController',
-        path: 'classic/samples/view/toolbar/StatusBarController.js'
+        type: 'Controller',
+        path: 'classic/samples/view/toolbar/ToolbarMenusController.js'
     }],
     //</example>
 
@@ -38,6 +38,7 @@ Ext.define('KitchenSink.view.toolbar.ToolbarMenus', {
             iconCls: 'x-fa fa-th',
             menu: {
                 id: 'mainMenu',
+                showSeparator: true,
                 items: [{
                     xtype: 'combobox',
                     hideLabel: true,
@@ -85,7 +86,7 @@ Ext.define('KitchenSink.view.toolbar.ToolbarMenus', {
                             }
                         ]
                     }
-                },{ 
+                },{
                     text: 'Choose a Date',
                     iconCls: 'x-fa fa-calendar',
                     menu: {

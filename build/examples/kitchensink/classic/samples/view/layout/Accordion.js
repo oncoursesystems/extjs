@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.layout.Accordion', {
         path: 'classic/samples/view/grid/BasicGridController.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
     profiles: {
         classic: {
@@ -44,18 +44,41 @@ Ext.define('KitchenSink.view.layout.Accordion', {
         // See Grids / Basic Grid example for this view.
         xtype: 'array-grid',
         title: 'Basic Grid (Click or tap header to collapse)',
+        tools: [
+            { type: 'pin' }, { type: 'unpin' }, { type: 'gear' }
+        ],
         bodyPadding: 0
     }, {
         title: 'Accordion Item 2',
+        tools: [
+            { iconCls: 'x-fa fa-thumb-tack' },
+            { iconCls: 'x-fa fa-thumb-tack fa-rotate-90' },
+            { iconCls: 'x-fa fa-gear' }
+        ],
         html: 'Empty'
     }, {
         title: 'Accordion Item 3',
+        tools: [
+            { glyph: 'xf08d@FontAwesome' },
+            { glyph: 'xf08d@FontAwesome', cls: 'fa-rotate-90' },
+            { glyph: 'xf013@FontAwesome' }
+        ],
         html: 'Empty'
     }, {
         title: 'Accordion Item 4',
+        tools: [
+            { iconCls: 'x-fa fa-thumb-tack' },
+            { iconCls: 'x-fa fa-thumb-tack fa-rotate-90' },
+            { iconCls: 'x-fa fa-gear' }
+        ],
         html: 'Empty'
     }, {
         title: 'Accordion Item 5',
+        tools: [
+            { glyph: 'xf08d@FontAwesome' },
+            { glyph: 'xf08d@FontAwesome', cls: 'fa-rotate-90' },
+            { glyph: 'xf013@FontAwesome' }
+        ],
         html: 'Empty'
     }]
 });

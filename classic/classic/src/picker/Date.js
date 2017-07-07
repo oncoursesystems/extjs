@@ -13,7 +13,7 @@
  *     @example
  *     Ext.create('Ext.panel.Panel', {
  *         title: 'Choose a future date:',
- *         width: 200,
+ *         width: 330,
  *         bodyPadding: 10,
  *         renderTo: Ext.getBody(),
  *         items: [{
@@ -39,29 +39,26 @@ Ext.define('Ext.picker.Date', {
     alias: 'widget.datepicker',
     alternateClassName: 'Ext.DatePicker',
     
-    //<locale>
     /**
      * @cfg {String} todayText
-     * The text to display on the button that selects the current date
+     * The text to display on the button that selects the current date.
+     * @locale
      */
     todayText: 'Today',
-    //</locale>
-    
-    //<locale>
+
     /**
      * @cfg {String} ariaTitle
-     * The text to display for the aria title
+     * The text to display for the aria title.
+     * @locale
      */
     ariaTitle: 'Date Picker: {0}',
-    //</locale>
-    
-    //<locale>
+
     /**
      * @cfg {String} ariaTitleDateFormat
-     * The date format to display for the current value in the {@link #ariaTitle}
+     * The date format to display for the current value in the {@link #ariaTitle}.
+     * @locale
      */
     ariaTitleDateFormat: 'F d',
-    //</locale>
 
     /**
      * @cfg {Function} handler
@@ -84,48 +81,43 @@ Ext.define('Ext.picker.Date', {
      * Defaults to this DatePicker instance.
      */
 
-    //<locale>
     /**
      * @cfg {String} todayTip
      * A string used to format the message for displaying in a tooltip over the button that selects the current date.
      * The `{0}` token in string is replaced by today's date.
+     * @locale
      */
     todayTip: '{0} (Spacebar)',
-    //</locale>
 
-    //<locale>
     /**
      * @cfg {String} minText
      * The error text to display if the minDate validation fails.
+     * @locale
      */
     minText: 'This date is before the minimum date',
-    //</locale>
-    
-    //<locale>
+
     /**
      * @cfg {String} ariaMinText The text that will be announced by Assistive Technologies
      * such as screen readers when user is navigating to the cell which date is less than
      * {@link #minDate}.
+     * @locale
      */
     ariaMinText: "This date is before the minimum date",
-    //</locale>
 
-    //<locale>
     /**
      * @cfg {String} maxText
      * The error text to display if the maxDate validation fails.
+     * @locale
      */
     maxText: 'This date is after the maximum date',
-    //</locale>
-    
-    //<locale>
+
     /**
      * @cfg {String} ariaMaxText The text that will be announced by Assistive Technologies
      * such as screen readers when user is navigating to the cell which date is later than
      * {@link #maxDate}.
+     * @locale
      */
     ariaMaxText: "This date is after the maximum date",
-    //</locale>
 
     /**
      * @cfg {String} format
@@ -133,38 +125,34 @@ Ext.define('Ext.picker.Date', {
      * according to {@link Ext.Date#parse} (defaults to {@link Ext.Date#defaultFormat}).
      */
 
-    //<locale>
     /**
      * @cfg {String} disabledDaysText
      * The tooltip to display when the date falls on a disabled day.
+     * @locale
      */
     disabledDaysText: 'Disabled',
-    //</locale>
-    
-    //<locale>
+
     /**
      * @cfg {String} ariaDisabledDaysText The text that Assistive Technologies such as screen readers
      * will announce when the date falls on a disabled day of week.
+     * @locale
      */
     ariaDisabledDaysText: "This day of week is disabled",
-    //</locale>
-    
-    //<locale>
+
     /**
      * @cfg {String} disabledDatesText
      * The tooltip text to display when the date falls on a disabled date.
+     * @locale
      */
     disabledDatesText: 'Disabled',
-    //</locale>
 
-    //<locale>
     /**
      * @cfg {String} ariaDisabledDatesText The text that Assistive Technologies such as screen readers
      * will announce when the date falls on a disabled date.
+     * @locale
      */
     ariaDisabledDatesText: "This date is disabled",
     
-    //</locale>
     /**
      * @cfg {String[]} monthNames
      * An array of textual month names which can be overriden for localization support (defaults to Ext.Date.monthNames)
@@ -177,56 +165,49 @@ Ext.define('Ext.picker.Date', {
      * @deprecated This config is deprecated. In future the day names will be retrieved from {@link Ext.Date}
      */
 
-    //<locale>
     /**
      * @cfg {String} nextText
-     * The next month navigation button tooltip
+     * The next month navigation button tooltip.
+     * @locale
      */
     nextText: 'Next Month (Control+Right)',
-    //</locale>
 
-    //<locale>
     /**
      * @cfg {String} prevText
-     * The previous month navigation button tooltip
+     * The previous month navigation button tooltip.
+     * @locale
      */
     prevText: 'Previous Month (Control+Left)',
-    //</locale>
 
-    //<locale>
     /**
      * @cfg {String} monthYearText
-     * The header month selector tooltip
+     * The header month selector tooltip.
+     * @locale
      */
     monthYearText: 'Choose a month (Control+Up/Down to move years)',
-    //</locale>
-    
-    //<locale>
+
     /**
      * @cfg {String} monthYearFormat
-     * The date format for the header month
+     * The date format for the header month.
+     * @locale
      */
     monthYearFormat: 'F Y',
-    //</locale>
 
-    //<locale>
     /**
      * @cfg {Number} [startDay=undefined]
      * Day index at which the week should begin, 0-based.
      *
-     * Defaults to `0` (Sunday).
+     * Defaults to the value of {@link Ext.Date.firstDayOfWeek}.
+     * @locale
      */
-    startDay: 0,
-    //</locale>
 
-    //<locale>
     /**
      * @cfg {Boolean} showToday
      * False to hide the footer area containing the Today button and disable the keyboard handler for spacebar that
      * selects the current date.
+     * @locale
      */
     showToday: true,
-    //</locale>
 
     /**
      * @cfg {Date} [minDate=null]
@@ -288,13 +269,12 @@ Ext.define('Ext.picker.Date', {
      * The class to apply to disabled cells.
      */
 
-    //<locale>
     /**
      * @cfg {String} longDayFormat
      * The format for displaying a date in a longer format.
+     * @locale
      */
     longDayFormat: 'F d, Y',
-    //</locale>
 
     /**
      * @cfg {Object} keyNavConfig
@@ -322,7 +302,7 @@ Ext.define('Ext.picker.Date', {
     border: true,
     
     /**
-     * @cfg
+     * @cfg renderTpl
      * @inheritdoc
      */
     renderTpl: [
@@ -411,9 +391,15 @@ Ext.define('Ext.picker.Date', {
         if (!me.format) {
             me.format = Ext.Date.defaultFormat;
         }
+        
         if (!me.dayNames) {
             me.dayNames = Ext.Date.dayNames;
         }
+        
+        if (me.startDay == null) {
+            me.startDay = Ext.Date.firstDayOfWeek;
+        }
+        
         me.dayNames = me.dayNames.slice(me.startDay).concat(me.dayNames.slice(0, me.startDay));
 
         me.callParent();
@@ -566,19 +552,22 @@ Ext.define('Ext.picker.Date', {
         // Month button is pointer interactive only, it should not be allowed to focus.
         me.monthBtn.el.on('mousedown', me.onMouseDown, me);
 
-        me.prevRepeater = new Ext.util.ClickRepeater(me.prevEl, {
+        me.prevRepeater = new Ext.util.ClickRepeater({
+            el: me.prevEl,
             handler: me.showPrevMonth,
             scope: me,
             mousedownStopEvent: true
         });
 
-        me.nextRepeater = new Ext.util.ClickRepeater(me.nextEl, {
+        me.nextRepeater = new Ext.util.ClickRepeater({
+            el: me.nextEl,
             handler: me.showNextMonth,
             scope: me,
             mousedownStopEvent: true
         });
 
-        me.keyNav = new Ext.util.KeyNav(me.eventEl, Ext.apply({
+        me.keyNav = new Ext.util.KeyNav(Ext.apply({
+            target: me.eventEl,
             scope: me,
 
             left: me.onLeftKey,
@@ -762,15 +751,14 @@ Ext.define('Ext.picker.Date', {
         return this.value;
     },
 
-    //<locale type="function">
     /**
      * Gets a single character to represent the day of the week
      * @return {String} The character
+     * @locale
      */
     getDayInitial: function(value) {
         return value.substr(0,1);
     },
-    //</locale>
 
     /**
      * @inheritdoc

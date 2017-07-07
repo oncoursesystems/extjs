@@ -1,13 +1,13 @@
 Ext.define('KitchenSink.view.d3.heatmap.Pivot', {
     extend: 'Ext.panel.Panel',
     xtype: 'd3-view-heatmap-pivot',
+    controller: 'heatmap-pivot',
 
     requires: [
         'KitchenSink.view.d3.heatmap.PivotController',
         'Ext.pivot.d3.HeatMap'
     ],
 
-    controller: 'heatmap-pivot',
     // <example>
     otherContent: [{
         type: 'Controller',
@@ -16,15 +16,14 @@ Ext.define('KitchenSink.view.d3.heatmap.Pivot', {
     // </example>
 
     layout: 'fit',
-    
+
+    tbar: ['->', {
+        iconCls: 'x-fa fa-refresh',
+        text: 'Refresh Data',
+        handler: 'onRefreshData'
+    }],
+
     items: [{
-        xtype: 'toolbar',
-        docked: 'bottom',
-        items: [{
-            text: 'Refresh Data',
-            handler: 'onRefreshData'
-        }]
-    },{
         xtype: 'pivotheatmap',
         reference: 'heatmap',
 
@@ -49,10 +48,10 @@ Ext.define('KitchenSink.view.d3.heatmap.Pivot', {
         },
 
         padding: {
-            top: 0,
-            right: 0,
-            bottom: 5,
-            left: 100
+            top: 20,
+            right: 30,
+            bottom: 70,
+            left: 120
         },
 
         xAxis: {
@@ -79,8 +78,18 @@ Ext.define('KitchenSink.view.d3.heatmap.Pivot', {
         },
 
         legend: {
+            docked: 'right',
+            padding: 50,
+            
+            // Legend items are *not* Container items. This config is an object.
             items: {
-                count: 5
+                count: 10,
+                slice: [1],
+                reverse: true,
+                size: {
+                    x: 60,
+                    y: 30
+                }
             }
         },
 
@@ -100,6 +109,5 @@ Ext.define('KitchenSink.view.d3.heatmap.Pivot', {
                 }
             }
         }
-
     }]
 });

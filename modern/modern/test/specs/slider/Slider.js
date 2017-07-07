@@ -1,4 +1,4 @@
-describe('Ext.slider.Slider', function() {
+topSuite("Ext.slider.Slider", function() {
     var slider,
         createField = function(config) {
             if (slider) {
@@ -36,6 +36,22 @@ describe('Ext.slider.Slider', function() {
 
             expect(value[0]).toBe(30);
             expect(value[1]).toBe(70);
+        });
+
+        it('should clamp value to minValue and maxValue', function() {
+            var done = false;
+            createField({
+                renderTo: document.body,
+                width: 200,
+                value: 50,
+                minValue: 0,
+                maxValue: 100
+            });
+
+            slider.setValue(200);
+            expect(slider.getValue()).toBe(100);
+            slider.setValue(-1);
+            expect(slider.getValue()).toBe(0);
         });
     });
 

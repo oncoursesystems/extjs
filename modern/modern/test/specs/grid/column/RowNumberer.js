@@ -1,7 +1,10 @@
 /* global Ext, expect */
 
-describe('Ext.grid.column.RowNumberer', function () {
-    var panel, container, store,
+topSuite("Ext.grid.column.RowNumberer",
+    ['Ext.grid.Grid', 'Ext.data.ArrayStore', 'Ext.layout.Fit',
+     'Ext.app.ViewModel', 'Ext.app.ViewController'],
+function() {
+    var panel, store,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore;
@@ -29,8 +32,6 @@ describe('Ext.grid.column.RowNumberer', function () {
             height: 200,
             width: 400
         }, gridCfg));
-        container = panel.container;
-        panel.onContainerResize(container, { height: container.element.getHeight() });
     }
 
     function createTree(treeCfg, storeCfg) {
@@ -107,9 +108,13 @@ describe('Ext.grid.column.RowNumberer', function () {
                 renderTo: Ext.getBody()
             });
 
-            expect(getCell(0, 0).el).toHaveCls('x-rownumberercell');
-            expect(getCell(0, 0).el.down('.x-inner-el', true).innerHTML).toBe('1');
-            expect(getCell(1, 0).el.down('.x-inner-el', true).innerHTML).toBe('2');
+            var cell = getCell(0,0);
+            expect(cell.el).toHaveCls('x-rownumberercell');
+
+            expect(cell.el.down('.x-body-el', true).innerHTML).toBe('1');
+
+            cell = getCell(1,0);
+            expect(cell.el.down('.x-body-el', true).innerHTML).toBe('2');
         });
 
         it("should be able to survive a full row update", function() {
@@ -130,8 +135,8 @@ describe('Ext.grid.column.RowNumberer', function () {
             });
 
             expect(getCell(0, 0).el).toHaveCls('x-rownumberercell');
-            expect(getCell(0, 0).el.down('.x-inner-el', true).innerHTML).toBe('1');
-            expect(getCell(1, 0).el.down('.x-inner-el', true).innerHTML).toBe('2');
+            expect(getCell(0, 0).el.down('.x-body-el', true).innerHTML).toBe('1');
+            expect(getCell(1, 0).el.down('.x-body-el', true).innerHTML).toBe('2');
         });
 
         describe('beforeRender method', function () {

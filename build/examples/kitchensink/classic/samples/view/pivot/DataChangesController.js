@@ -2,7 +2,7 @@
  * Controls the "Data changes" pivot grid example.
  */
 Ext.define('KitchenSink.view.pivot.DataChangesController', {
-    extend: 'KitchenSink.view.pivot.PivotController',
+    extend: 'Ext.app.ViewController',
 
     alias: 'controller.datachangespivot',
 

@@ -60,6 +60,7 @@ var Ext = Ext || {}; // jshint ignore:line
         MSDateRe = /^\\?\/Date\(([-+])?(\d+)(?:[+-]\d{4})?\)\\?\/$/;
 
     Ext.global = global;
+    Ext.$nextIid = 0;
 
     /**
      * Returns the current timestamp.
@@ -126,22 +127,24 @@ var Ext = Ext || {}; // jshint ignore:line
      * @return {Object} returns `object`.
      */
     Ext.apply = function(object, config, defaults) {
-        if (defaults) {
-            Ext.apply(object, defaults);
-        }
-
-        if (object && config && typeof config === 'object') {
-            var i, j, k;
-
-            for (i in config) {
-                object[i] = config[i];
+        if (object) {
+            if (defaults) {
+                Ext.apply(object, defaults);
             }
 
-            if (enumerables) {
-                for (j = enumerables.length; j--;) {
-                    k = enumerables[j];
-                    if (config.hasOwnProperty(k)) {
-                        object[k] = config[k];
+            if (config && typeof config === 'object') {
+                var i, j, k;
+
+                for (i in config) {
+                    object[i] = config[i];
+                }
+
+                if (enumerables) {
+                    for (j = enumerables.length; j--;) {
+                        k = enumerables[j];
+                        if (config.hasOwnProperty(k)) {
+                            object[k] = config[k];
+                        }
                     }
                 }
             }
@@ -256,8 +259,8 @@ var Ext = Ext || {}; // jshint ignore:line
         frameStartTime: Ext.now(),
 
         /**
-         * This object is initialized prior to loading the framework (Ext JS or Sencha
-         * Touch) and contains settings and other information describing the application.
+         * This object is initialized prior to loading the framework
+         * and contains settings and other information describing the application.
          *
          * For applications built using Sencha Cmd, this is produced from the `"app.json"`
          * file with information extracted from all of the required packages' `"package.json"`
@@ -266,20 +269,7 @@ var Ext = Ext || {}; // jshint ignore:line
          * requested as `"foo.json"` and the object in that JSON file will parsed and set
          * as this object.
          *
-         * @cfg {String/Object} manifest
-         *
-         * @cfg {String/Object} manifest.compatibility An object keyed by package name with
-         * the value being to desired compatibility level as a version number. If this is
-         * just a string, this version is assumed to apply to the framework ('ext' or
-         * 'touch'). Setting this value to less than 5 for 'ext' will enable the compatibility
-         * layer to assist in the application upgrade process. For details on the upgrade
-         * process, see the (Upgrade Guide)[#/guides/upgrade_50].
-         *
-         * @cfg {Object} manifest.debug An object configuring the debugging characteristics
-         * of the framework. See `Ext.debugConfig` which is set to this value.
-         *
-         * @cfg {Object} manifest.packages An object keyed by package name with the value
-         * being a subset of the package's `"package.json"` descriptor.
+         * @cfg {String/Ext.Manifest} manifest
          * @since 5.0.0
          */
         manifest: manifest,
@@ -493,11 +483,9 @@ var Ext = Ext || {}; // jshint ignore:line
          * @param {Object} config The source of the properties
          * @return {Object} returns obj
          */
-        applyIf: function(object, config) {
-            var property;
-
-            if (object) {
-                for (property in config) {
+        applyIf: function (object, config) {
+            if (object && config && typeof config === 'object') {
+                for (var property in config) {
                     if (object[property] === undefined) {
                         object[property] = config[property];
                     }
@@ -527,7 +515,7 @@ var Ext = Ext || {}; // jshint ignore:line
                 if (arg) {
                     if (Ext.isArray(arg)) {
                         this.destroy.apply(this, arg);
-                    } else if (Ext.isFunction(arg.destroy)) {
+                    } else if (Ext.isFunction(arg.destroy) && !arg.destroyed) {
                         arg.destroy();
                     }
                 }
@@ -683,7 +671,7 @@ var Ext = Ext || {}; // jshint ignore:line
         isObject: (toString.call(null) === '[object Object]') ?
         function(value) {
             // check ownerDocument here as well to exclude DOM nodes
-            return value !== null && value !== undefined && toString.call(value) === '[object Object]' && value.ownerDocument === undefined;
+            return value != null && toString.call(value) === '[object Object]' && value.ownerDocument === undefined;
         } :
         function(value) {
             return toString.call(value) === '[object Object]';
@@ -875,7 +863,7 @@ var Ext = Ext || {}; // jshint ignore:line
          * @return {Object} clone
          */
         clone: function(item, cloneDom) {
-            if (item === null || item === undefined) {
+            if (item == null) {
                 return item;
             }
 
@@ -1093,7 +1081,28 @@ var Ext = Ext || {}; // jshint ignore:line
     
                 return result;
             };
-        })()
+        })(),
+
+        /**
+         * @private
+         */
+        getExpando: function(target, id) {
+            var expandos = target.$expandos;
+            return expandos && expandos[id] || null;
+        },
+
+        /**
+         * @private
+         */
+        setExpando: function(target, id, value) {
+            var expandos = target.$expandos;
+            if (value !== undefined) {
+                (expandos || (target.$expandos = {}))[id] = value;
+            } else if (expandos) {
+                delete expandos[id];
+            }
+        }
+
     }); // Ext.apply(Ext
 
     Ext.returnTrue.$nullFn = Ext.returnId.$nullFn = true;

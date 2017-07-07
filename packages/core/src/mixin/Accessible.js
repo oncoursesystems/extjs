@@ -64,6 +64,19 @@ Ext.define('Ext.mixin.Accessible', {
      * @private
      */
     
+    /**
+     * @property {String} [ariaEl='el'] The name of the Component property that holds
+     * a reference to the Element that serves as that Component's ARIA element.
+     * This property will be replaced with the actual Element reference after rendering.
+     *
+     * Most of the simple Components will have their main element as ariaEl.
+     *
+     * @private
+     * @readonly
+     * @since 6.0.0
+     */
+    ariaEl: 'el',
+    
     privates: {
         /**
          * Find component(s) that label or describe this component,

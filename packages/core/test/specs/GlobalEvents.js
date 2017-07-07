@@ -1,6 +1,9 @@
 /* global Ext, xit, expect, jasmine, MockAjaxManager */
 
-describe("Ext.GlobalEvents", function() {
+topSuite("Ext.GlobalEvents",
+    ['Ext.data.Store', 'Ext.Ajax', 'Ext.data.JsonP', 'Ext.data.proxy.JsonP', 'Ext.TaskManager',
+     'Ext.Panel'],
+function() {
     describe('idle event', function() {
         var delay = Ext.isIE ? 50 : 10,
             store, loadSpy, idleSpy,
@@ -61,13 +64,8 @@ describe("Ext.GlobalEvents", function() {
         });
 
         it("should fire after DOM event handler are invoked, but before control is returned to the browser", function() {
-            var element = Ext.getBody().createChild();
-
-            function expectFalse() {
-                expect(idleSpy).not.toHaveBeenCalled();
-            }
-            
-            var mousedownSpy = jasmine.createSpy('mousedown');
+            var element = Ext.getBody().createChild(),
+                mousedownSpy = jasmine.createSpy('mousedown');
 
             // attach a couple mousedown listeners, the idle event should fire after both
             // handlers have fired
@@ -80,6 +78,8 @@ describe("Ext.GlobalEvents", function() {
 
             expect(mousedownSpy.callCount).toBe(2);
             expect(idleSpy).toHaveBeenCalled();
+            
+            Ext.testHelper.touchCancel(element);
 
             element.destroy();
         });
@@ -184,6 +184,9 @@ describe("Ext.GlobalEvents", function() {
             
             stretcher.destroy();
             scrollingPanel.destroy();
+            
+            // Viewport scroller is going to poison subsequent tests
+            Ext.scroll.Scroller.viewport = Ext.destroy(Ext.scroll.Scroller.viewport);
         });
 
         it('should fire the global scroll event whenever anything scrolls', function() {
@@ -213,10 +216,13 @@ describe("Ext.GlobalEvents", function() {
             Ext.on({
                 scroll: onGlobalScroll
             });
-            Ext.getViewportScroller().scrollBy(null, 100);
+            
+            var viewportScroller = Ext.getViewportScroller();
+            
+            viewportScroller.scrollBy(null, 100);
 
             // Wait for scroll events to fire (may be async)
-            waitsForEvent(Ext.getViewportScroller(), 'scrollend');
+            waitsForEvent(viewportScroller, 'scrollend');
             
             runs(function() {
                 expect(scrolledElements.length).toBe(1);

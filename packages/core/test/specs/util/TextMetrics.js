@@ -1,5 +1,4 @@
-describe("Ext.util.TextMetrics", function(){
-    
+topSuite("Ext.util.TextMetrics", function(){
     var defaultText = 'The quick brown fox jumps over the lazy dog',
         el, tm, makeTm, staticTm, makeEl, w, hasTahoma;
 

@@ -1,6 +1,8 @@
 /* global Ext, expect, spyOn, jasmine, xit, MockAjaxManager, it */
 
-describe("grid-generallocking-from-no-locking", function() {
+topSuite("grid-general-locking-from-no-locking",
+    [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore'],
+function() {
     var grid, store,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,

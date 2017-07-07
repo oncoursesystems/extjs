@@ -111,7 +111,7 @@ var me = this,
             val = o[i];
             if (!useHasOwn || o.hasOwnProperty(i)) {
                 // To match JSON.stringify, we shouldn't encode functions or undefined
-                if (typeof val === 'function' || val === undefined) {
+                if (typeof val === 'function' || val === undefined || val.isInstance) {
                     continue;
                 }
                 a.push(me.encodeValue(i) + ': ' + me.encodeValue(val, cnewline), sep);

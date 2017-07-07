@@ -19,7 +19,7 @@ Ext.define('KitchenSink.view.charts.column.MultiAxis', {
         path: 'classic/samples/view/charts/column/MultiAxisController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Climate.js'
+        path: 'app/store/Climate.js'
     }],
     // </example>
     width: 650,

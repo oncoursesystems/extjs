@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
         },
         {
             type: 'Model',
-            path: 'classic/samples/model/Stock.js'
+            path: 'app/model/Stock.js'
         },
         {
             type: 'View Model',
@@ -33,7 +33,7 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
         },
         {
             type: 'Data',
-            path: 'data/tree/tree.json'
+            path: 'data/tree/stocks.json'
         }
     ],
     // </example>
@@ -57,9 +57,9 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
             collapsible: true,
             minWidth: 100,
             width: 215,
-            rootVisible: false,
             useArrows: true,
             displayField: 'name',
+            rootVisible: false,
             bind: {
                 store: '{store}',
                 selection: '{selection}',
@@ -89,6 +89,7 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
             items: {
                 xtype: 'd3-treemap',
                 reference: 'treemap',
+                rootVisible: false,
                 interactions: {
                     type: 'panzoom',
                     zoom: {
@@ -99,10 +100,9 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
                     store: '{store}',
                     selection: '{selection}'
                 },
-                rootVisible: false,
-                nodeValue: function (node) {
-                    return node.data.cap;
-                },
+                nodeValue: 'cap',
+                noParentValue: true,
+                scaleLabels: true,
                 colorAxis: {
                     scale: {
                         type: 'linear',
@@ -111,7 +111,8 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
                     },
                     field: 'change',
                     processor: function (axis, scale, node, field) {
-                        return node.isLeaf() ? scale(node.data[field]) : '#ececec';
+                        var record = node.data;
+                        return record.isLeaf() ? scale(record.get(field)) : '#ececec';
                     }
                 }
             }

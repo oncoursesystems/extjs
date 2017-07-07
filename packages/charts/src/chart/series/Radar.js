@@ -9,7 +9,7 @@
  *
  *     @example
  *     Ext.create({
- *        xtype: 'polar', 
+ *        xtype: 'polar',
  *        renderTo: document.body,
  *        width: 500,
  *        height: 400,
@@ -125,10 +125,10 @@ Ext.define('Ext.chart.series.Radar', {
             axis.setRotation(rotation);
         }
 
-        this.setStyle({
+        me.setStyle({
             rotationRads: rotation
         });
-        this.doUpdateStyles();
+        me.doUpdateStyles();
     },
 
     updateTotalAngle: function (totalAngle) {
@@ -173,7 +173,7 @@ Ext.define('Ext.chart.series.Radar', {
 
     getDefaultSpriteConfig: function () {
         var config = this.callParent(),
-            fx = {
+            animation = {
                 customDurations: {
                     translationX: 0,
                     translationY: 0,
@@ -184,11 +184,13 @@ Ext.define('Ext.chart.series.Radar', {
                     dataMaxX: 0
                 }
             };
-        if (config.fx) {
-            Ext.apply(config.fx, fx);
+
+        if (config.animation) {
+            Ext.apply(config.animation, animation);
         } else {
-            config.fx = fx;
+            config.animation = animation;
         }
+
         return config;
     },
 

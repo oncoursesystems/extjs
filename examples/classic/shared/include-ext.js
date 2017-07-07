@@ -7,6 +7,8 @@
  * <script type="text/javascript" src="../../examples/shared/include-ext.js?theme=neptune"></script>
  */
 (function() {
+    var toolkit = /modern/.test(window.location.pathname) ? 'modern' : 'classic';
+
     function getQueryParam(name) {
         var regex = RegExp('[?&]' + name + '=([^&]*)');
 
@@ -51,7 +53,9 @@
             gray: 1,
             'neptune-touch': 1,
             crisp: 1,
-            'crisp-touch': 1
+            'crisp-touch': 1,
+            material: 1,
+            ios: 1
         }[themeName],
         i = 4,
         devMode = Ext.devMode,
@@ -59,8 +63,7 @@
         rtlSuffix = (rtl ? '-rtl' : ''),
         debugSuffix = (devMode ? '-debug' : ''),
         cssSuffix = rtlSuffix + debugSuffix + '.css',
-        themePackageDir, d3JS, uxJS, themeOverrideJS, extPrefix, extPackagesRoot,
-        sdkRoot;
+        themePackageDir, sdkRoot, d3JS, uxJS, chartsJS, themeOverrideJS, extPrefix, extPackagesRoot;
 
     rtl = rtl && rtl.toString() === 'true';
 
@@ -74,21 +77,31 @@
         extDir = extPackagesRoot;
     }
 
-    uxJS = extPackagesRoot + '/packages/ux/classic/ux' + debugSuffix + '.js';
+    uxJS = extPackagesRoot + '/packages/ux/' + toolkit + '/ux' + debugSuffix + '.js';
+    chartsJS = extPackagesRoot + '/packages/charts/' + toolkit + '/charts' + debugSuffix + '.js';
     d3JS = sdkRoot + '/packages/d3/d3.js';
-    themePackageDir = extPackagesRoot + '/classic/theme-' + themeName + '/';
+    themePackageDir = extPackagesRoot + '/' + toolkit + '/theme-' + themeName + '/';
 
     if (includeCSS) {
         loadCss(themePackageDir + 'resources/theme-' + themeName + '-all' + cssSuffix);
-        loadCss(extPackagesRoot + '/packages/charts/classic/' + themeName + '/resources/charts-all' + cssSuffix);
-        loadCss(extPackagesRoot + '/packages/ux/classic/' + themeName + '/resources/ux-all' + cssSuffix);
+        if (toolkit === 'modern') {
+            loadCss(extPackagesRoot + '/packages/charts/modern/modern-' + themeName + '/resources/charts-all' + cssSuffix);
+        } else {
+            loadCss(extPackagesRoot + '/packages/charts/' + toolkit + '/' + themeName + '/resources/charts-all' + cssSuffix);
+        }
+        loadCss(extPackagesRoot + '/packages/ux/' + toolkit + '/' + themeName + '/resources/ux-all' + cssSuffix);
         if (devMode === 2) {
-            loadCss(sdkRoot + '/packages/d3/build/classic/' + themeName + '/resources/d3-all' + cssSuffix);
+            loadCss(sdkRoot + '/packages/d3/build/' + toolkit + '/' + themeName + '/resources/d3-all' + cssSuffix);
         }
     }
 
-    extPrefix = useDebug ? '/ext' : '/ext-all';
-
+    if (toolkit === 'modern') {
+        extPrefix = useDebug ? '/ext-modern' : '/ext-modern-all';
+    }
+    else {
+        extPrefix = useDebug ? '/ext' : '/ext-all';
+    }
+    
     document.write('<script type="text/javascript" src="' + extDir + extPrefix + rtlSuffix + '.js"></script>');
 
     if (hasOverrides) {
@@ -119,6 +132,7 @@
             loadScript(themeOverrideJS, true);
             // ux and charts js are not needed in dev mode because they are included in bootstrap
             loadScript(uxJS);
+            loadScript(chartsJS);
         }
     }
 

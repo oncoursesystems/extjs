@@ -1,4 +1,8 @@
-describe("Ext.tab.Bar", function() {
+/* global expect, Ext, jasmine, spyOn */
+
+topSuite("Ext.tab.Bar",
+    ['Ext.tab.Panel', 'Ext.layout.container.boxOverflow.Menu'],
+function() {
     var tabBar;
     
     function createTabBar(config) {
@@ -36,6 +40,20 @@ describe("Ext.tab.Bar", function() {
             tabs.push(o);
         }
         return tabs;
+    }
+
+    function expectVisible(item) {
+        var scroller = tabBar.getScrollable(),
+            curPosition = scroller.getPosition();
+
+        expect(item.el.getScrollIntoViewXY(scroller.getElement(), curPosition.x, curPosition.y).x - curPosition.x).toBe(0);
+    }
+
+    function expectNotVisible(item) {
+        var scroller = tabBar.getScrollable(),
+            curPosition = scroller.getPosition();
+
+        expect(item.el.getScrollIntoViewXY(scroller.getElement(), curPosition.x, curPosition.y).x - curPosition.x).not.toBe(0);
     }
 
     afterEach(function() {
@@ -275,16 +293,6 @@ describe("Ext.tab.Bar", function() {
     describe("ensureTabVisible", function() {
         var items;
 
-        function expectVisible(item) {
-            var scroller = tabBar.layout.overflowHandler;
-            expect(scroller.getItemVisibility(item).fullyVisible).toBe(true);
-        }
-
-        function expectNotVisible(item) {
-            var scroller = tabBar.layout.overflowHandler;
-            expect(scroller.getItemVisibility(item).fullyVisible).toBe(false);
-        }
-
         function makeScrollTabs(cfg) {
             createTabBar(Ext.apply({
                 renderTo: Ext.getBody(),
@@ -393,7 +401,7 @@ describe("Ext.tab.Bar", function() {
                     overflowHandler: 'menu'
                 },
                 items: makeTabs(3)
-            })
+            });
         });
 
         it("should activate the tab when selected from the overflow menu", function() {
@@ -424,16 +432,6 @@ describe("Ext.tab.Bar", function() {
 
     describe("scroll & active tab", function() {
         var items;
-
-        function expectVisible(item) {
-            var scroller = tabBar.layout.overflowHandler;
-            expect(scroller.getItemVisibility(item).fullyVisible).toBe(true);
-        }
-
-        function expectNotVisible(item) {
-            var scroller = tabBar.layout.overflowHandler;
-            expect(scroller.getItemVisibility(item).fullyVisible).toBe(false);
-        }
 
         function makeScrollTabs(cfg) {
             createTabBar(Ext.apply({
@@ -642,18 +640,15 @@ describe("Ext.tab.Bar", function() {
         });
     });
     
-    describe("tabGuards", function() {
+    describe("FocusableContainer", function() {
         describe("no tabs", function() {
             beforeEach(function() {
                 makeBar();
             });
             
-            it("should have non-focusable before tab guard", function() {
-                expect(tabBar.tabGuardBeforeEl.isFocusable()).toBe(false);
-            });
             
-            it("should have non-focusable after tab guard", function() {
-                expect(tabBar.tabGuardAfterEl.isFocusable()).toBe(false);
+            it("should be inactive", function() {
+                expect(tabBar.isFocusableContainerActive()).toBeFalsy();
             });
         });
         
@@ -667,12 +662,12 @@ describe("Ext.tab.Bar", function() {
                 });
             });
             
-            it("should have tabbable before tab guard", function() {
-                expect(tabBar.tabGuardBeforeEl).toHaveAttr('tabIndex', '0');
+            it("should be active", function() {
+                expect(tabBar.isFocusableContainerActive()).toBeTruthy();
             });
             
-            it("should have tabbable after tab guard", function() {
-                expect(tabBar.tabGuardAfterEl).toHaveAttr('tabIndex', '0');
+            it("should have tabbable tab", function() {
+                expect(tabBar.down('tab')).toHaveAttr('tabIndex', 0);
             });
         });
         
@@ -688,12 +683,12 @@ describe("Ext.tab.Bar", function() {
                 });
             });
             
-            it("should have tabbable before tab guard", function() {
-                expect(tabBar.tabGuardBeforeEl).toHaveAttr('tabIndex', '0');
+            it("should be active", function() {
+                expect(tabBar.isFocusableContainerActive()).toBeTruthy();
             });
             
-            it("should have tabbable after tab guard", function() {
-                expect(tabBar.tabGuardAfterEl).toHaveAttr('tabIndex', '0');
+            it("should have tabbable tab", function() {
+                expect(tabBar.down('tab')).toHaveAttr('tabIndex', 0);
             });
         });
         
@@ -709,12 +704,9 @@ describe("Ext.tab.Bar", function() {
                 tabBar.remove(0);
             });
             
-            it("should have non-focusable before tab guard", function() {
-                expect(tabBar.tabGuardBeforeEl.isFocusable()).toBe(false);
-            });
             
-            it("should have non-focusable after tab guard", function() {
-                expect(tabBar.tabGuardAfterEl.isFocusable()).toBe(false);
+            it("should be deactivated", function() {
+                expect(tabBar.isFocusableContainerActive()).toBeFalsy();
             });
         });
     });

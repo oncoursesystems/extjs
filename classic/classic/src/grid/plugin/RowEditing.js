@@ -39,10 +39,10 @@
  *             {header: 'Phone', dataIndex: 'phone'}
  *         ],
  *         selModel: 'rowmodel',
- *         plugins: {
+ *         plugins: [{
  *             ptype: 'rowediting',
  *             clicksToEdit: 1
- *         },
+ *         }],
  *         height: 200,
  *         width: 400,
  *         renderTo: Ext.getBody()
@@ -97,12 +97,12 @@ Ext.define('Ext.grid.plugin.RowEditing', {
      */
     errorSummary: true,
     
-    //<locale>
     /**
      * @cfg {String} [formAriaLabel="'Editing row {0}'"]
      * The ARIA label template for screen readers to announce when row editing starts.
      * This label can be a {@link Ext.String#format} template, with the only parameter
      * being the row number. Note that row numbers start at base {@link #formAriaLabelRowBase}.
+     * @locale
      */
     formAriaLabel: 'Editing row {0}',
     
@@ -112,9 +112,9 @@ Ext.define('Ext.grid.plugin.RowEditing', {
      * so the first actual data row is #2 for screen reader users. If your grid has
      * more than one column header row, you might want to increase this number.
      * If the column header is not visible, the base will be decreased automatically.
+     * @locale
      */
     formAriaLabelRowBase: 2,
-    //</locale>
 
     constructor: function() {
         var me = this;
@@ -211,9 +211,9 @@ Ext.define('Ext.grid.plugin.RowEditing', {
     activateCell: function(pos) {
         // Only activate editing if there are no readily activatable elements in the activate position.
         // We defer to those focusables. Editing may be started on other columns.
-        if (!pos.getCell().query('[tabIndex="-1"]').length) {
+        if (!pos.getCell(true).querySelector('[tabIndex="-1"]')) {
             this.startEdit(pos.record, pos.column);
-            return true ;
+            return true;
         }
     },
 

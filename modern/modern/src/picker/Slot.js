@@ -20,13 +20,6 @@
 Ext.define('Ext.picker.Slot', {
     extend: 'Ext.dataview.DataView',
     xtype: 'pickerslot',
-    
-    requires: [
-        'Ext.XTemplate',
-        'Ext.data.Store',
-        'Ext.Component',
-        'Ext.data.StoreManager'
-    ],
 
     /**
      * @event slotpick
@@ -122,6 +115,10 @@ Ext.define('Ext.picker.Slot', {
         verticallyCenterItems: true
     },
 
+    itemsFocusable: false,
+
+    scrollToTopOnRefresh: false,
+
     snapSelector: '.' + Ext.baseCSSPrefix + 'dataview-item',
 
     /**
@@ -131,6 +128,8 @@ Ext.define('Ext.picker.Slot', {
      * @private
      */
     selectedIndex: 0,
+
+    deselectable: false,
 
     /**
      * Sets the title for this dataview by creating element.
@@ -232,11 +231,7 @@ Ext.define('Ext.picker.Slot', {
         me.on({
             scope: me,
             painted: 'onPainted',
-            itemtap: 'doItemTap',
-            resize: {
-                fn: 'onResize',
-                single: true
-            }
+            childtap: 'doChildTap'
         });
 
         me.picker.on({
@@ -252,7 +247,7 @@ Ext.define('Ext.picker.Slot', {
 
         scroller.on({
             scope: me,
-            scrollend: 'onScrollEnd'
+            scrollend: 'onSlotScrollEnd'
         });
     },
 
@@ -278,7 +273,7 @@ Ext.define('Ext.picker.Slot', {
      */
     onBeforeHiddenChange: function (picker, hidden) {
         if (!hidden) {
-            this.doSetValue(this.getValue());   
+            this.doSetValue(this.getValue());
         }        
     },
 
@@ -305,13 +300,12 @@ Ext.define('Ext.picker.Slot', {
         }
 
         var element = this.element,
-            innerElement = this.innerElement,
+            bodyElement = this.bodyElement,
             picker = this.getPicker(),
             bar = picker.bar,
             value = this.getValue(),
             showTitle = this.getShowTitle(),
             title = this.getTitle(),
-            scroller = this.getScrollable(),
             titleHeight = 0,
             barHeight, offset;
 
@@ -324,20 +318,24 @@ Ext.define('Ext.picker.Slot', {
         offset = Math.ceil((element.getHeight() - titleHeight - barHeight) / 2);
 
         if (this.getVerticallyCenterItems()) {
-            innerElement.setStyle({
-                padding: offset + 'px 0 ' + offset + 'px'
+            bodyElement.setStyle({
+                'padding-top' : offset + 'px'
             });
+            // Due to a change on how browsers set the element now, padding is applied 
+            // at the content edge, not after any overflow. So the padding-bottom will
+            // be clipped if the content becomes scrollable.
+            // For more info see: https://bugzilla.mozilla.org/show_bug.cgi?id=74851
+            if (!this.bottomSpacer) {
+                this.bottomSpacer = this.add({
+                    xtype: 'component',
+                    scrollDock: 'end',
+                    height: offset,
+                    style: 'pointer-events: none'
+                });
+            } else {
+                this.bottomSpacer.setHeight(offset);
+            }
         }
-
-        scroller.setSnapOffset({
-            y: offset
-        });
-
-        scroller.setSnapSelector(this.snapSelector);
-
-        scroller.setMsSnapInterval({
-            y: barHeight
-        });
 
         this.doSetValue(value);
     },
@@ -345,26 +343,23 @@ Ext.define('Ext.picker.Slot', {
     /**
      * @private
      */
-    doItemTap: function(list, index, item, e) {
+    doChildTap: function(list, e) {
         var me = this;
-        me.selectedIndex = index;
-        me.selectedNode = item;
-        me.scrollToItem(item, true);
+        me.selectedIndex = e.viewIndex;
+        me.selectedNode = e.child;
+        me.scrollToItem(me.selectedNode, true);
     },
 
     /**
      * @private
      */
     scrollToItem: function(item, animated) {
-        var y = item.getY(),
-            parentEl = item.parent(),
-            parentY = parentEl.getY(),
-            scroller = this.getScrollable(),
-            difference;
+        // The difference between the required item an the overlayed bar is how far to scroll.
+        var difference = item.getY() - this.picker.bar.getY();
 
-        difference = y - parentY;
-
-        scroller.scrollTo(0, difference, animated);
+        if (difference) {
+            this.getScrollable().scrollBy(0, difference, animated);
+        }
     },
 
     /**
@@ -384,7 +379,7 @@ Ext.define('Ext.picker.Slot', {
     /**
      * @private
      */
-    onScrollEnd: function(scroller, x, y) {
+    onSlotScrollEnd: function(scroller, x, y) {
         var me = this,
             index = Math.round(y / me.picker.bar.dom.getBoundingClientRect().height),
             viewItems = me.getViewItems(),
@@ -445,28 +440,26 @@ Ext.define('Ext.picker.Slot', {
 
     doSetValue: function(value, animated) {
         var me = this,
-            store = me.getStore(),
-            viewItems = me.getViewItems(),
-            valueField = me.getValueField(),
             hasSelection = true,
             index, item;
 
-        index = store.findExact(valueField, value);
+        index = me.getStore().findExact(me.getValueField(), value);
 
         if (index === -1) {
             hasSelection = false;
             index = 0;
         }
 
-        item = Ext.get(viewItems[index]);
-
         me.selectedIndex = index;
 
-        if (item) {
-            me.scrollToItem(item, animated);
-            if (hasSelection) {
-                // only set selection if an item is actually selected
-                me.select(me.selectedIndex);
+        if (me.refreshCounter) {
+            item = Ext.get(me.getViewItems()[index]);
+            if (item) {
+                me.scrollToItem(item, animated);
+                if (hasSelection) {
+                    // only set selection if an item is actually selected
+                    me.select(me.selectedIndex);
+                }
             }
         }
 

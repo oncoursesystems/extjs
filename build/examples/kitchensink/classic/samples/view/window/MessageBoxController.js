@@ -96,7 +96,7 @@ Ext.define('KitchenSink.view.window.MessageBoxController', {
             me.timer = null;
             Ext.MessageBox.hide();
             me.showToast('Your fake data was saved!', 'Done');
-        }, 8000);
+        }, 3000);
     },
 
     onAlertClick: function() {
@@ -160,8 +160,9 @@ Ext.define('KitchenSink.view.window.MessageBoxController', {
             html: s,
             closable: false,
             align: 't',
-            slideInDuration: 400,
-            minWidth: 400
+            slideInDuration: 400
+            //,
+            //minHeight: 1
         });
     },
 

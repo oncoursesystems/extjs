@@ -1,7 +1,8 @@
 /* global Ext, expect, jasmine, xit */
 
-describe("Ext.selection.CellModel", function() {
-    
+topSuite("Ext.selection.CellModel",
+    ['Ext.grid.Panel', 'Ext.app.ViewModel', 'Ext.grid.plugin.DragDrop'],
+function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         grid, view, store, selModel, colRef;
 

@@ -73,7 +73,7 @@ Ext.define('Ext.chart.series.StackedCartesian', {
             splitStacks = me.getSplitStacks(),
             fullStack = me.getFullStack(),
             fullStackTotal = me.getFullStackTotal(),
-            range = {min: 0, max: 0},
+            range = [0, 0],
             directions = me['fieldCategory' + direction],
             dataStart = [], posDataStart = [], negDataStart = [], dataEnd,
             stacked = me.getStacked(),
@@ -89,19 +89,23 @@ Ext.define('Ext.chart.series.StackedCartesian', {
         }
 
         for (i = 0; i < directions.length; i++) {
+
             fieldCategoriesItem = directions[i];
             fields = me.getFields([fieldCategoriesItem]);
             fieldCount = fields.length;
+
             for (j = 0; j < itemCount; j++) {
                 dataStart[j] = 0;
                 posDataStart[j] = 0;
                 negDataStart[j] = 0;
             }
+
             for (j = 0; j < fieldCount; j++) {
                 if (!hidden[j]) {
                     coordinatedData[j] = me.coordinateData(items, fields[j], axis);
                 }
             }
+
             if (stacked && fullStack) {
                 posTotals = [];
                 if (splitStacks) {
@@ -128,17 +132,24 @@ Ext.define('Ext.chart.series.StackedCartesian', {
                     }
                 }
             }
+
             for (j = 0; j < fieldCount; j++) {
+
                 attr = {};
+
                 if (hidden[j]) {
                     attr['dataStart' + fieldCategoriesItem] = dataStart;
                     attr['data' + fieldCategoriesItem] = dataStart;
                     sprites[j].setAttributes(attr);
                     continue;
                 }
+
                 data = coordinatedData[j];
+
                 if (stacked) {
+
                     dataEnd = [];
+
                     for (k = 0; k < itemCount; k++) {
                         if (!data[k]) {
                             data[k] = 0;
@@ -159,23 +170,34 @@ Ext.define('Ext.chart.series.StackedCartesian', {
                             dataEnd[k] = negDataStart[k];
                         }
                     }
+
                     attr['dataStart' + fieldCategoriesItem] = dataStart;
                     attr['data' + fieldCategoriesItem] = dataEnd;
-                    me.getRangeOfData(dataStart, range);
-                    me.getRangeOfData(dataEnd, range);
+
+                    Ext.chart.Util.expandRange(range, dataStart);
+                    Ext.chart.Util.expandRange(range, dataEnd);
+
                 } else {
+
                     attr['dataStart' + fieldCategoriesItem] = dataStart;
                     attr['data' + fieldCategoriesItem] = data;
-                    me.getRangeOfData(data, range);
+
+                    Ext.chart.Util.expandRange(range, data);
                 }
+
                 sprites[j].setAttributes(attr);
             }
         }
-        me.dataRange[directionOffset] = range.min;
-        me.dataRange[directionOffset + directionCount] = range.max;
+
+        range = Ext.chart.Util.validateRange(range, me.defaultRange);
+
+        me.dataRange[directionOffset] = range[0];
+        me.dataRange[directionOffset + directionCount] = range[1];
+
         attr = {};
-        attr['dataMin' + direction] = range.min;
-        attr['dataMax' + direction] = range.max;
+        attr['dataMin' + direction] = range[0];
+        attr['dataMax' + direction] = range[1];
+
         for (i = 0; i < sprites.length; i++) {
             sprites[i].setAttributes(attr);
         }
@@ -183,9 +205,11 @@ Ext.define('Ext.chart.series.StackedCartesian', {
 
     getFields: function (fieldCategory) {
         var me = this,
-            fields = [], fieldsItem,
-            i, ln;
-        for (i = 0, ln = fieldCategory.length; i < ln; i++) {
+            fields = [],
+            ln = fieldCategory.length,
+            i, fieldsItem;
+
+        for (i = 0; i < ln; i++) {
             fieldsItem = me['get' + fieldCategory[i] + 'Field']();
             if (Ext.isArray(fieldsItem)) {
                 fields.push.apply(fields, fieldsItem);
@@ -193,6 +217,7 @@ Ext.define('Ext.chart.series.StackedCartesian', {
                 fields.push(fieldsItem);
             }
         }
+
         return fields;
     },
 
@@ -206,10 +231,11 @@ Ext.define('Ext.chart.series.StackedCartesian', {
             animation = me.getAnimation() || chart && chart.getAnimation(),
             fields = me.getFields(me.fieldCategoryY),
             itemInstancing = me.getItemInstancing(),
-            sprites = me.sprites, sprite,
+            sprites = me.sprites,
             hidden = me.getHidden(),
             spritesCreated = false,
-            i, length = fields.length;
+            length = fields.length,
+            i, sprite;
 
         if (!chart) {
             return [];
@@ -252,7 +278,6 @@ Ext.define('Ext.chart.series.StackedCartesian', {
         if (this.getSprites()) {
             var me = this,
                 i, ln, sprite,
-                itemInstancing = me.getItemInstancing(),
                 sprites = me.getSprites(),
                 store = me.getStore(),
                 hidden = me.getHidden(),
@@ -267,7 +292,7 @@ Ext.define('Ext.chart.series.StackedCartesian', {
                         item = {
                             series: me,
                             index: index,
-                            category: itemInstancing ? 'items' : 'markers',
+                            category: me.getItemInstancing() ? 'items' : 'markers',
                             record: store.getData().items[index],
                             // Handle the case where we're stacked but a single segment
                             field: typeof yField === 'string' ? yField : yField[i],

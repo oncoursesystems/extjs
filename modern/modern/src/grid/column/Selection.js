@@ -1,8 +1,8 @@
 /**
- * A grid column used by the {@link Ext.grid.plugin.MultiSelection MultiSelection} plugin.
+ * A grid column used by the {@link Ext.grid.plugin.RowOperations RowOperations} plugin.
  *
- * This class should not be directly instantiated.  Instances are created automatically
- * when using a {@link Ext.grid.plugin.MultiSelection MultiSelection} plugin.
+ * This class should not be directly instantiated. Instances are created automatically
+ * when using a {@link Ext.grid.plugin.RowOperations RowOperations} plugin.
  */
 Ext.define('Ext.grid.column.Selection', {
     extend: 'Ext.grid.column.Check',
@@ -10,70 +10,46 @@ Ext.define('Ext.grid.column.Selection', {
 
     classCls: Ext.baseCSSPrefix + 'selectioncolumn',
 
+    cell: {
+        cls: Ext.baseCSSPrefix + 'selection-cell'
+    },
+
+    // Not quite as far left as the numberer column
+    weight: -900,
+
+    sortable: false,
+    draggable: false,
+    resizable: false,
+    hideable: false,
+    ignore: true,
+
     /**
      * @cfg {String} stopSelection
      * @hide
      */
+    stopSelection: false,
 
-    onAdded: function(parent, instanced) {
-        this.callParent([parent, instanced]);
-
-        this.grid.on({
-            select: 'onSelect',
-            deselect: 'onDeselect',
-            scope: this
-        });
-    },
-
-    onSelect: function(grid, record) {
-        var me = this,
-            row = grid.getItem(record);
-
-        if (row && !row.destroyed) {
-            row.getCellByColumn(me).addCls(me.checkedCls);
+    updateHeaderState: function() {
+        if (!this.isConfiguring) {
+            this.getGrid().getSelectable().updateHeaderState();
         }
-
-        me.updateHeaderState();
     },
 
-    onDeselect: function(grid, record) {
-        var me = this,
-            row = grid.getItem(record);
-
-        if (row && !row.destroyed) {
-            row.getCellByColumn(me).removeCls(me.checkedCls);
-        }
-
-        me.updateHeaderState();
+    toggleAll: function(e) {
+        this.getGrid().getSelectable().toggleAll(this, e);
     },
 
-    doToggleAll: function(checked) {
-        var grid = this.grid;
+    setRecordChecked:  function(record, checked, e) {
+        var selectionModel = this.getGrid().getSelectable();
 
         if (checked) {
-            grid.selectAll();
+            selectionModel.select(record, selectionModel.getMode() !== 'single');
         } else {
-            grid.deselectAll();
+            selectionModel.deselect(record);
         }
-    },
-
-    areAllChecked: function() {
-        var grid = this.grid;
-
-        return grid.getStore().getCount() === grid.getSelectionCount();
     },
 
     isRecordChecked: function(record) {
-        return this.grid.isSelected(record);
-    },
-
-    doSetRecordChecked: function (record, checked) {
-        var grid = this.grid;
-
-        if (checked) {
-            grid.select(record, true);
-        } else {
-            grid.deselect(record);
-        }
+        return this.getGrid().getSelectable().isRowSelected(record);
     }
 });

@@ -1,6 +1,9 @@
 /* global Ext, expect, jasmine */
 
-describe("Ext.form.field.Tag", function() {
+topSuite("Ext.form.field.Tag",
+    ['Ext.grid.Panel', 'Ext.grid.plugin.CellEditing', 'Ext.data.ArrayStore',
+     'Ext.app.ViewModel'],
+function() {
     var tagField, store, changeSpy,
         describeNotIE9_10 = Ext.isIE9 || Ext.isIE10 ? xdescribe : describe;
 

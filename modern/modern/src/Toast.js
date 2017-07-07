@@ -6,22 +6,22 @@
  *
  * # Simple Toast
  *
- *      @example miniphone
+ *      @example
  *      Ext.toast('Hello Sencha!'); // Toast will close in 1000 milliseconds (default)
  *
  * # Toast with Timeout
  *
- *      @example miniphone
+ *      @example
  *      Ext.toast('Hello Sencha!', 5000); // Toast will close in 5000 milliseconds
  *
  * # Toast with config
  *
- *      @example miniphone
+ *      @example
  *      Ext.toast({message: 'Hello Sencha!', timeout: 2000}); // Toast will close in 2000 milliseconds
  *
  * # Multiple Toasts queued
  *
- *      @example miniphone
+ *      @example
  *      Ext.toast('Hello Sencha!');
  *      Ext.toast('Hello Sencha Again!');
  *      Ext.toast('Hello Sencha One More Time!');
@@ -37,13 +37,7 @@ Ext.define('Ext.Toast', {
          * @cfg
          * @inheritdoc
          */
-        ui: 'dark',
-
-        /**
-         * @cfg
-         * @inheritdoc
-         */
-        baseCls: Ext.baseCSSPrefix + 'toast',
+        centered: false,
 
         /**
          * @cfg
@@ -84,13 +78,13 @@ Ext.define('Ext.Toast', {
         timeout: 1000,
 
         /**
-         * @cfg{Boolean/Object} animation
+         * @cfg {Boolean/Object} messageAnimation
          * The animation that should be used between toast messages when they are queued up
          */
         messageAnimation: true,
 
         /**
-         * @cfg
+         * @cfg {Boolean} hideOnMaskTap
          * @inheritdoc
          */
         hideOnMaskTap: true,
@@ -110,6 +104,8 @@ Ext.define('Ext.Toast', {
         }
     },
 
+    classCls: Ext.baseCSSPrefix + 'toast',
+
     initialize: function() {
         this.callParent(arguments);
         Ext.getDoc().on({
@@ -125,7 +121,7 @@ Ext.define('Ext.Toast', {
     applyMessage: function (value) {
         var config = {
             html: value,
-            cls: this.getBaseCls() + '-text'
+            cls: this.baseCls + '-text'
         };
 
         return Ext.factory(config, Ext.Component, this._message);
@@ -175,7 +171,7 @@ Ext.define('Ext.Toast', {
     /**
      * @private
      */
-    show: function (config) {
+    showToast: function (config) {
         var me = this,
             message = config.message,
             timeout = config.timeout,
@@ -215,7 +211,16 @@ Ext.define('Ext.Toast', {
             me.setMessage(message);
             me.setTimeout(timeout);
             me.startTimer();
-            me.callParent(arguments);
+            me.show({
+                animation: null,
+                alignment: {
+                    component: document.body,
+                    alignment: 't-t',
+                    options: {
+                        offset: [0, 20]
+                    }
+                }
+            });
         }
     },
 
@@ -226,18 +231,17 @@ Ext.define('Ext.Toast', {
     /**
      * @private
      */
-    hide: function (animation) {
-        var isAnimating = this.getIsAnimating();
+    beforeHide: function (animation) {
+        this.callParent(arguments);
 
         // If the message is animating cancel this hide
-        if (isAnimating) {
-            return;
+        if (this.getIsAnimating()) {
+            return false;
         }
 
-        var isEmpty = this.next();
         this.stopTimer();
-        if (isEmpty) {
-            this.callParent(arguments);
+        if (!this.next()) {
+            return false;
         }
     },
 
@@ -263,7 +267,7 @@ Ext.define('Ext.Toast', {
         var config = _queue.shift();
 
         if (config) {
-            this.show(config);
+            this.showToast(config);
         }
 
         return !config;

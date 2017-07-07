@@ -1,7 +1,6 @@
 /* global Ext, jasmine, expect, spyOn, describe, xdescribe */
 
-describe("Ext.tip.ToolTip", function() {
-
+topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function() {
     var tip,
         target,
         describeNotTouch = jasmine.supportsTouch ? xdescribe : describe,
@@ -197,6 +196,7 @@ describe("Ext.tip.ToolTip", function() {
                 this.spy = spyOn(tip, 'hide').andCallThrough();
                 jasmine.fireMouseEvent(Ext.getBody(), 'mousedown', 0, 0);
                 expect(this.spy).toHaveBeenCalled();
+                jasmine.fireMouseEvent(Ext.getBody(), 'mouseup', 0, 0);
             });
         });
     });
@@ -478,7 +478,9 @@ describe("Ext.tip.ToolTip", function() {
                 }
             });
             
-            waitsForEvent(tip, 'hide');
+            waitsFor(function() {
+                return !tip.isVisible();
+            });
             
             runs(function() {
                 expect(tip.triggerElement).toBe(null);
@@ -497,6 +499,7 @@ describe("Ext.tip.ToolTip", function() {
                 showDelay: 0,
                 dismissDelay: 1
             });
+            
             delegatedTarget = Ext.get('delegate-child-1');
 
             runs(function() {
@@ -545,6 +548,10 @@ describe("Ext.tip.ToolTip", function() {
             // After 100ms, there should have been no show
             runs(function() {
                 expect(showSpy).not.toHaveBeenCalled();
+                Ext.get('delegate-child-2-2').destroy();
+                Ext.get('delegate-child-2').destroy();
+                Ext.get('delegate-child-1').destroy();
+                Ext.get('delegatedTarget').destroy();
             });
         });
     });
@@ -654,7 +661,8 @@ describe("Ext.tip.ToolTip", function() {
             combo = centerWindow.down('combobox');
             combo.focus();
             combo.expand();
-            tipTarget = Ext.fly(combo.getPicker().getNode(0));
+            
+            tipTarget = Ext.get(combo.getPicker().getNode(0));
 
             toolTip = new Ext.tip.ToolTip({
                 target: tipTarget,
@@ -694,8 +702,8 @@ describe("Ext.tip.ToolTip", function() {
             // on tooltip hide, was acquiring focus and causing combo collapse.
             runs(function() {
                 expect(combo.getPicker().isVisible()).toBe(triggerEvent === 'mouseover');
+                tipTarget.destroy();
             });
-
         });
     });
 

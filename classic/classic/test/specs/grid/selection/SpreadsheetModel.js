@@ -1,11 +1,14 @@
 /* global expect, Ext, jasmine, xdescribe, MockAjaxManager */
 
-describe("Ext.grid.selection.SpreadsheetModel", function() {
-    
+topSuite("Ext.grid.selection.SpreadsheetModel",
+    ['Ext.grid.Panel', 'Ext.app.ViewModel', 'Ext.grid.plugin.Clipboard',
+     'Ext.grid.plugin.CellEditing', 'Ext.grid.selection.Replicator',
+     'Ext.toolbar.Paging', 'Ext.button.Button'],
+function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         grid, view, store, selModel, colRef,
         // Unreliable synthetic events on IE.
-        // SelModel tests are not broiwser-dependent though
+        // SelModel tests are not browser-dependent though
         smDescribe = Ext.isIE ? xdescribe : describe,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
@@ -306,7 +309,7 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
             jasmine.fireMouseEvent(colRef[0].el.dom, 'click');
 
             // Should have selected all rows
-            expect(view.el.query('.'+view.selectedItemCls).length).toBe(store.getCount());
+            expect(view.el.dom.querySelectorAll('.'+view.selectedItemCls).length).toBe(store.getCount());
 
             jasmine.fireMouseEvent(colRef[0].el.dom, 'click');
 
@@ -578,7 +581,7 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
             expect(view.el.query('.'+view.selectedItemCls).length).toBe(1);
             expect(isRowSelected(3)).toBe(true);
         });
-        itNotTouch("should select a rown on CTRL/click of a rownumberer and not deselect previous rows", function() {
+        itNotTouch("should select a row on CTRL/click of a rownumberer and not deselect previous rows", function() {
             makeGrid();
             clickRowNumberer(1);
 
@@ -666,10 +669,11 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
                     }
                 });
 
-                checkbox = findCell(0,1).down('.x-grid-checkcolumn').dom;
+                checkbox = findCell(0,1).querySelector('.x-grid-checkcolumn');
                 jasmine.fireMouseEvent(checkbox, 'mousedown');
                 jasmine.fireMouseEvent(checkbox, 'mousemove');
                 expect(isRowSelected(0)).toBe(false);
+                jasmine.fireMouseEvent(checkbox, 'mouseup');
             });
             it("should select all records when checkbox is clicked", function() {
                 var checkbox, count;
@@ -897,19 +901,20 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
                         isCellSelected(4, 2)).toBe(true);
             });
         });
+        
         it('should not wrap when SHIFT+RIGHT on last cell', function() {
             makeGrid();
+            
             var c5 = findCell(2, 5),
                 c4Position;
 
             jasmine.fireMouseEvent(c5, 'click');
 
-            // Wait for the NavigationModel to focus the last cell
             waitsFor(function() {
                 c4Position = view.getNavigationModel().getPosition();
 
-                return c4Position && c4Position.getCell(true) === c5.dom;
-            });
+                return c4Position && c4Position.getCell(true) === c5;
+            }, 'NavigationModel to focus the last cell', 2000);
 
             runs(function() {
                 jasmine.fireKeyEvent(c5, 'keydown', Ext.event.Event.RIGHT, true);
@@ -920,7 +925,7 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
 
             // Should not have moved
             runs(function() {
-                expect(view.getNavigationModel().getCell().dom).toBe(c5.dom);
+                expect(view.getNavigationModel().getCell().dom).toBe(c5);
             });
         });
     });
@@ -964,10 +969,12 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
             editor = plugin.getActiveEditor();
             field = editor.field;
 
-            jasmine.fireMouseEvent(field.el, 'mousedown');
-            jasmine.fireMouseEvent(field.el, 'mousemove');
+            jasmine.fireMouseEvent(field.inputEl, 'mousedown');
+            jasmine.fireMouseEvent(field.inputEl, 'mousemove');
 
             expect(editor.editing).toBe(true);
+            
+            jasmine.fireMouseEvent(field.inputEl, 'mouseup');
         });
     });
 
@@ -1285,6 +1292,8 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
                     isCellSelected(3, 1) &&
                     isCellSelected(3, 2) &&
                     isCellSelected(3, 2)).toBe(true);
+
+                jasmine.fireMouseEvent(c3, 'mouseup');
             });
         });
 
@@ -1314,6 +1323,8 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
                 expect(selModel.getSelected().contains(store.getAt(0))).toBe(true);
                 expect(selModel.getSelected().contains(store.getAt(1))).toBe(true);
                 expect(selModel.getSelected().contains(store.getAt(2))).toBe(true);
+
+                jasmine.fireMouseEvent(c2, 'mouseup');
             });
             
             itNotTouch('should select a range of rows using click followed by shift+click', function() {
@@ -1488,6 +1499,24 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
             }
         }
         
+        function spyOnStoreLoad (processRequests, pageNum) {
+            var spy = jasmine.createSpy();
+    
+            store.on('load', spy, null, {single: true});
+            store.loadPage(pageNum || 1);
+            
+            waitsFor(function () {
+                return store.isLoading();
+            }, 'store to begin loading');
+            runs(function () {
+                if (processRequests) {
+                    satisfyRequests();
+                }
+            });
+            
+            return spy;
+        }
+        
         beforeEach(function() {
             MockAjaxManager.addMethods();
         });
@@ -1542,21 +1571,24 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
                 },
                 data: null
             });
-            store.loadPage(1);
-            satisfyRequests();
-
-            target = findCell(1, 5);
-            jasmine.fireMouseEvent(target, 'click', null, null, null, null, null);
-            target = findCell(8, 5);
-            jasmine.fireMouseEvent(target, 'click', null, null, null, true, null);  // shift key down
-            spy = spyOnEvent(grid, 'reconfigure');
-            grid.reconfigure(newCols);
-            expect(spy).toHaveBeenCalled();
+            
+            waitsForSpy(spyOnStoreLoad(true));
+            runs(function () {
+                target = findCell(1, 5);
+                jasmine.fireMouseEvent(target, 'click', null, null, null, null, null);
+                target = findCell(8, 5);
+                jasmine.fireMouseEvent(target, 'click', null, null, null, true, null);  // shift key down
+                spy = spyOnEvent(grid, 'reconfigure');
+                grid.reconfigure(newCols);
+                expect(spy).toHaveBeenCalled();
+            });
         });
 
 
 
         it("should select all, and add all subsequently paged-in records to the selection", function() {
+            var selCount;
+            
             makeGrid(null, null, {
                 checkboxSelect: true
             }, {
@@ -1572,27 +1604,28 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
                 },
                 data: null
             });
-            store.loadPage(1);
-            satisfyRequests();
-
-            // Should select "all", even if the whole dataset is not present
-            // because of the BufferedStore
-            jasmine.fireMouseEvent(selModel.checkColumn.el, 'click');
-            satisfyRequests();
+    
+    
+            waitsForSpy(spyOnStoreLoad(true));
+            runs(function () {
+                // Should select "all", even if the whole dataset is not present
+                // because of the BufferedStore
+                jasmine.fireMouseEvent(selModel.checkColumn.el, 'click');
+    
+                selCount = selModel.getSelection().length;
+    
+                // Selecting "all" when using a BufferedStore is conceptual.
+                // It cannot load the whole dataset into the selection Collection.
+                // It must load just what is present in the page cache.
+                // As more data arrives, it will also be selected.
+                expect(selCount).toBe(store.getData().getCount());
+    
+                view.scrollBy(null, 10000);
+            });
             
-            var selCount = selModel.getSelection().length;
-
-            // Selecting "all" when using a BufferedStore is conceptual.
-            // It cannot load the whole dataset into the selection Collection.
-            // It must load just what is present in the page cache.
-            // As more data arrives, it will also be selected.
-            expect(selCount).toBe(store.getData().getCount());
-            
-            view.scrollBy(null, 10000);
             waitsFor(function() {
                 return !!Ext.Ajax.mockGetAllRequests().length;
             });
-            
             runs(function() {
                 satisfyRequests();
 
@@ -1618,7 +1651,7 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
             
             jasmine.fireMouseEvent(findCell(1, 0), 'click');
 
-            expect(Ext.DomQuery.select(Ext.baseCSSPrefix + 'ssm-extender-drag-handle').length).toBe(0);
+            expect(document.body.querySelectorAll(Ext.baseCSSPrefix + 'ssm-extender-drag-handle').length).toBe(0);
             expect(selModel.getExtensible()).toBeUndefined();
         });
     });
@@ -1670,6 +1703,58 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
                 // Need a bit of fuzziness for IE8, Firefox, Safari...
                 expect(have).toBeWithin(2, handleX + 100);
             });
+        });
+        
+        it('should hide the replicator when cell has been deselected', function () {
+           jasmine.fireMouseEvent(findCell(1, 1), 'click');
+           
+           waitsForFocus(view);
+           runs(function () {
+               selModel.deselectAll();
+               expect(selModel.extensible.handle.isVisible()).toBe(false);
+           });
+           
+        });
+    
+        it('should remove the replicator when a column has been hidden', function () {
+            var columns = grid.getVisibleColumnManager().getColumns(),
+                spy = spyOnEvent(grid, 'columnschanged').andCallThrough(),
+                idleSpy = jasmine.createSpy('idle'),
+                i;
+            
+            // First iteration will hide the column 'field 2' that is to the right of the selection.
+            // Second iteration will hide the column 'field 1' with the selection. Both cases should
+            // remove the replicator handle.
+            for (i = 2; i > 0; i--) {
+                (function (idx) {
+                    runs(function () {
+                        jasmine.fireMouseEvent(findCell(1, 1), 'click');
+                    });
+                    
+                    waitsForFocus(view);
+                    runs(function () {
+                        columns[idx].hide();
+                
+                        // hiding the column eventually creates an 'idle' listener in
+                        // SpreadsheetModel#onColumnsChanged to wait for the UI to update
+                        // before updating the selection replicator. By creating this
+                        // listener, we know that by the time it fires, the other listener
+                        // has also fired. Triggering the 'click' event causes 'idle' to fire.
+                        Ext.on('idle', idleSpy, this, {single: true});
+                        jasmine.fireMouseEvent(Ext.getBody().dom, 'click', -100, -100);
+                    });
+            
+                    // 'columnschanged' and 'idle' must fire before continuing
+                    waitsFor(function () {
+                        return spy.callCount === 1 && idleSpy.callCount === 1;
+                    });
+                    runs(function () {
+                        expect(selModel.extensible.handle.isVisible()).toBe(false);
+                        spy.reset();
+                        idleSpy.reset();
+                    });
+                }(i));
+            }
         });
 
         describe("multiple selection", function() {
@@ -1769,7 +1854,7 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
                     // So force the IDs here.
                     store.getAt(0).data.id = store.getAt(1).data.id = store.getAt(2).data.id = store.getAt(3).data.id;
 
-                    // The values sselected in record 3 should be repeated in the extension area
+                    // The values selected in record 3 should be repeated in the extension area
                     expect(store.getAt(0).data).toEqual(r3Data);
                     expect(store.getAt(1).data).toEqual(r3Data);
                     expect(store.getAt(2).data).toEqual(r3Data);
@@ -1798,7 +1883,7 @@ describe("Ext.grid.selection.SpreadsheetModel", function() {
                     // So force the IDs here.
                     store.getAt(5).data.id = store.getAt(6).data.id = store.getAt(7).data.id = store.getAt(4).data.id;
 
-                    // The values sselected in record 4 should be repeated in the extension area
+                    // The values selected in record 4 should be repeated in the extension area
                     expect(store.getAt(5).data).toEqual(r4Data);
                     expect(store.getAt(6).data).toEqual(r4Data);
                     expect(store.getAt(7).data).toEqual(r4Data);

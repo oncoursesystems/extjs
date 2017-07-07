@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.binding.ModelValidation', {
     //<example>
     otherContent: [{
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }],
 
     defaults: {

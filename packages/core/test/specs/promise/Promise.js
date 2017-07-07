@@ -5,7 +5,7 @@
  Copyright (c) 2013 [DeftJS Framework Contributors](http://deftjs.org)
  Open source under the [MIT License](http://en.wikipedia.org/wiki/MIT_License).
  */
-describe('Ext.promise.Promise', function() {
+topSuite('Ext.promise.Promise', ['Ext.Promise', 'Ext.Deferred', 'Ext.promise.*'], function() {
     var Deferred = Ext.Deferred,
         ExtPromise = Ext.promise.Promise,
         hasNativePromise = !!window.Promise,
@@ -1009,8 +1009,7 @@ describe('Ext.promise.Promise', function() {
         });
     }); // delay
     
-    // TODO Timeout tests are fragile in Firefox
-    (Ext.isGecko ? xdescribe : describe)('timeout()', function() {
+    describe('timeout()', function() {
         describe('returns a new Promise that will resolve with the specified Promise or value if it resolves before the specified timeout', function() {
             it('value with 100 ms timeout', function() {
                 promise = Deferred.timeout('expected value', 100);
@@ -1040,8 +1039,15 @@ describe('Ext.promise.Promise', function() {
         });
 
         describe('returns a new Promise that will reject after the specified timeout if the specified Promise or value has not yet resolved or rejected', function() {
+            var delayedPromise;
+            
+            afterEach(function() {
+                clearTimeout(delayedPromise.owner.timeoutId);
+            });
+            
             it('Promise that resolves in 100 ms with a 50 ms timeout', function() {
-                promise = Deferred.timeout(Deferred.delay('expected value', 100), 50);
+                delayedPromise = Deferred.delay('expected value', 100);
+                promise = Deferred.timeout(delayedPromise, 50);
 
                 expect(promise instanceof ExtPromise).toBe(true);
 
@@ -1049,7 +1055,8 @@ describe('Ext.promise.Promise', function() {
             });
 
             it('Promise that rejects in 50 ms with a 100 ms timeout', function() {
-                promise = Deferred.timeout(Deferred.delay(Deferred.rejected(new Error('error message')), 100), 50);
+                delayedPromise = Deferred.delay(Deferred.rejected(new Error('error message')), 100);
+                promise = Deferred.timeout(delayedPromise, 50);
 
                 expect(promise instanceof ExtPromise).toBe(true);
 
@@ -1526,6 +1533,129 @@ describe('Ext.promise.Promise', function() {
             });
         });
     }); // map
+
+    describe('race', function() {
+        var promises;
+        
+        beforeEach(function() {
+            promises = [];
+        });
+        
+        afterEach(function() {
+            for (var i = 0; i < promises.length; i++) {
+                clearTimeout(promises[i].owner.timeoutId);
+            }
+            
+            promises = null;
+        });
+        
+        function makeTimeoutPromise(timeout, value, isResolve) {
+            var deferred = new Deferred();
+            
+            deferred.timeoutId = setTimeout(function() {
+                clearTimeout(deferred.timeoutId);
+                
+                if (isResolve) {
+                    deferred.resolve(value);
+                }
+                else {
+                    deferred.reject(value);
+                }
+            }, timeout);
+            
+            promises.push(deferred.promise);
+
+            return deferred.promise;
+        }
+
+        function makeResolve(timeout, value) {
+            return makeTimeoutPromise(timeout, value, true);
+        }
+
+        function makeReject(timeout, reason) {
+            return makeTimeoutPromise(timeout, reason, false);
+        }
+
+        describe('empty array', function() {
+            it('should never resolve/reject', function() {
+                var spy = jasmine.createSpy();
+
+                promise = Deferred.race([]).then(spy, spy);
+                waits(100);
+                runs(function() {
+                    expect(spy).not.toHaveBeenCalled();
+                });
+            });
+        });
+
+        describe('resolved only', function() {
+            it('should resolve a single promise', function() {
+                promise = Deferred.race([makeResolve(1, 'foo')]);
+                expect(promise instanceof ExtPromise).toBe(true);
+                eventuallyResolvesTo(promise, 'foo');
+            });
+
+            it('should resolve the first promise to resolve', function() {
+                promise = Deferred.race([
+                    makeResolve(200, 'foo'),
+                    makeResolve(100, 'bar'),
+                    makeResolve(300, 'baz')
+                ]);
+                expect(promise instanceof ExtPromise).toBe(true);
+                eventuallyResolvesTo(promise, 'bar');
+            });
+        });
+
+        describe('rejected only', function() {
+            it('should reject a single promise', function() {
+                promise = Deferred.race([makeReject(1, 'foo')]);
+                expect(promise instanceof ExtPromise).toBe(true);
+                eventuallyRejectedWith(promise, 'foo');
+            });
+
+            it('should reject the first promise to reject', function() {
+                promise = Deferred.race([
+                    makeReject(200, 'foo'),
+                    makeReject(100, 'bar'),
+                    makeReject(300, 'baz')
+                ]);
+                expect(promise instanceof ExtPromise).toBe(true);
+                eventuallyRejectedWith(promise, 'bar');
+            });
+        });
+
+        describe('mixed', function() {
+            it('should resolve the first promise', function() {
+                promise = Deferred.race([
+                    makeResolve(200, 'a'),
+                    makeReject(200, 'b'),
+                    makeResolve(100, 'c'),
+                    makeReject(150, 'd')
+                ]);
+                expect(promise instanceof ExtPromise).toBe(true);
+                eventuallyResolvesTo(promise, 'c');
+            });
+
+            it('should reject the first promise', function() {
+                promise = Deferred.race([
+                    makeReject(200, 'a'),
+                    makeResolve(200, 'b'),
+                    makeReject(100, 'c'),
+                    makeResolve(150, 'd')
+                ]);
+                expect(promise instanceof ExtPromise).toBe(true);
+                eventuallyRejectedWith(promise, 'c');
+            });
+        });
+
+        describe('throws an Error if anything other than an Array or Promise of an Array and a function are specified', function() {
+            it('a single non-Array parameter', function() {
+                expect(function() {
+                    return Deferred.race(1);
+                }).toThrow('Invalid parameter: expected an Array.');
+            });
+        });
+    });
 
     describe('reduce()', function() {
         function sumFunction(previousValue, currentValue, index, array) {
@@ -2622,6 +2752,175 @@ describe('Ext.promise.Promise', function() {
             });
         });
     }); // then
+
+
+    // Cannot use catch as a method name in older browsers, so use the bracketed form
+    describe('catch()', function() {
+        describe('attaches a callback that will be called if this Promise is rejected', function() {
+            describe('with parameters specified via function arguments', function() {
+                it('called if rejected', function() {
+                    var onRejected = jasmine.createSpy();
+                    var error = new Error('error message');
+
+                    promise = Deferred.rejected(error);
+
+                    promise['catch'](onRejected);
+
+                    waitsForSpy(onRejected);
+                    runs(function() {
+                        promise.then(null, function() {
+                            expect(onRejected.callCount).toBe(1);
+                            expect(onRejected.calls[0].args.length).toBe(1);
+                            expect(onRejected.calls[0].args[0]).toBe(error);
+                        });
+                    });
+                });
+
+                it('called in specified scope if rejected', function() {
+                    var onRejected = jasmine.createSpy();
+                    var error = new Error('error message');
+
+                    promise = Deferred.rejected(error);
+
+                    promise['catch'](onRejected, targetScope);
+
+                    waitsForSpy(onRejected);
+
+                    runs(function() {
+                        expect(onRejected.callCount).toBe(1);
+                        expect(onRejected.calls[0].args.length).toBe(1);
+                        expect(onRejected.calls[0].args[0]).toBe(error);
+                        expect(onRejected.calls[0].scope).toBe(targetScope);
+                    });
+                });
+
+                it('not called if resolved', function() {
+                    var onRejected = jasmine.createSpy();
+                    var onResolved = jasmine.createSpy();
+
+                    promise = Deferred.resolved('value');
+
+                    promise['catch'](onRejected);
+
+                    promise.then(onResolved);
+
+                    waitsForSpy(onResolved);
+
+                    runs(function() {
+                        expect(onRejected.callCount).toBe(0);
+                    });
+                });
+            });
+
+            describe('with parameters specified via a configuration object', function() {
+                it('called if rejected', function() {
+                    var onRejected = jasmine.createSpy();
+                    var error = new Error('error message');
+
+                    promise = Deferred.rejected(error);
+
+                    promise['catch']({
+                        fn: onRejected
+                    });
+
+                    waitsForSpy(onRejected);
+                    runs(function() {
+                        expect(onRejected.callCount).toBe(1);
+                        expect(onRejected.calls[0].args.length).toBe(1);
+                        expect(onRejected.calls[0].args[0]).toBe(error);
+                    });
+                });
+
+                it('called in specified scope if rejected', function() {
+                    var onRejected = jasmine.createSpy();
+                    var onFailure = jasmine.createSpy();
+                    var error = new Error('error message');
+
+                    promise = Deferred.rejected(error);
+
+                    promise['catch']({
+                        fn: onRejected,
+                        scope: targetScope
+                    });
+
+                    promise.then(null, onFailure);
+
+                    waitsForSpy(onFailure);
+
+                    runs(function() {
+                        expect(onRejected.callCount).toBe(1);
+                        expect(onRejected.calls[0].args.length).toBe(1);
+                        expect(onRejected.calls[0].args[0]).toBe(error);
+                        expect(onRejected.calls[0].scope).toBe(targetScope);
+                    });
+                });
+
+                it('not called if resolved', function() {
+                    var onRejected = jasmine.createSpy();
+                    var onResolved = jasmine.createSpy();
+
+                    promise = Deferred.resolved('value');
+
+                    promise['catch']({
+                        fn: onRejected
+                    });
+                    promise.then(onResolved);
+
+                    waitsForSpy(onResolved);
+
+                    runs(function() {
+                        expect(onRejected.callCount).toBe(0);
+                    });
+                });
+            });
+        });
+
+        describe('returns a Promise of the transformed future value', function() {
+            it('resolves with the returned value if callback returns a value', function() {
+                var onRejected = function() {
+                    return 'returned value';
+                };
+
+                promise = Deferred.rejected(new Error('error message'))['catch'](onRejected);
+
+                expect(promise instanceof ExtPromise).toBe(true);
+                eventuallyResolvesTo(promise, 'returned value', true);
+            });
+
+            it('resolves with the resolved value if callback returns a Promise that resolves with value', function() {
+                var onRejected = function() {
+                    return Deferred.resolved('resolved value');
+                };
+
+                promise = Deferred.rejected(new Error('error message'))['catch'](onRejected);
+
+                expect(promise instanceof ExtPromise).toBe(true);
+                eventuallyResolvesTo(promise, 'resolved value', true);
+            });
+
+            it('rejects with the thrown Error if callback throws an Error', function() {
+                var onRejected = function() {
+                    throw new Error('thrown error message');
+                };
+
+                promise = Deferred.rejected(new Error('error message'))['catch'](onRejected);
+
+                expect(promise instanceof ExtPromise).toBe(true);
+                eventuallyRejectedWith(promise, Error, 'thrown error message');
+            });
+
+            it('rejects with the rejection reason if callback returns a Promise that rejects with a reason', function() {
+                var onRejected = function() {
+                    return Deferred.rejected(new Error('rejection reason'));
+                };
+
+                promise = Deferred.rejected(new Error('original error message'))['catch'](onRejected);
+
+                expect(promise instanceof ExtPromise).toBe(true);
+                eventuallyRejectedWith(promise, Error, 'rejection reason');
+            });
+        });
+    }); // catch
 
     describe('otherwise()', function() {
         describe('attaches a callback that will be called if this Promise is rejected', function() {

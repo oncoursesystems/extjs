@@ -46,6 +46,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         srcRe = /\ssrc=([\'\"])(.*?)\1/i,
         nonSpaceRe = /\S/,
         typeRe = /\stype=([\'\"])(.*?)\1/i,
+        adjustDirect2DTableRe = /table-row|table-.*-group/,
         msRe = /^-ms-/,
         camelRe = /(-[a-z])/gi,
         camelReplaceFn = function(m, a) {
@@ -65,11 +66,8 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             }
             return visMode;
         },
-        emptyRange      = DOC.createRange ? DOC.createRange() : null,
-        inputTags = {
-            INPUT: true,
-            TEXTAREA: true
-        };
+        syncContentFly,
+        emptyRange = DOC.createRange ? DOC.createRange() : null;
 
     //<feature legacyBrowser>
     if (Ext.isIE8) {
@@ -80,7 +78,8 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             // see http://social.msdn.microsoft.com/Forums/ie/en-US/c76967f0-dcf8-47d0-8984-8fe1282a94f5/ie-appendchildremovechild-memory-problem?forum=iewebdevelopment
             // This function is called to fully destroy an element on a timer so that code following the
             // remove call can still access the element.
-            clearGarbage = Ext.Function.createBuffered(function() {
+            clearGarbage,
+            clearGarbageFn = function() {
                 var len = destroyQueue.length,
                     i;
 
@@ -89,7 +88,13 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 }
                 garbageBin.innerHTML = '';
                 destroyQueue.length = 0;
-            }, 10);
+            };
+            
+            //<debug>
+            clearGarbageFn.$skipTimerCheck = true;
+            //</debug>
+            
+            clearGarbage = Ext.Function.createBuffered(clearGarbageFn, 10);
     }
     //</feature>
 
@@ -119,50 +124,9 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 E.destroyQueue = destroyQueue;
             }
             //</debug>
-            
-            // Allow overriding the attribute name and/or selector; this is
-            // done only once for performance reasons
-            E.tabbableSelector += ',[' + E.tabbableSavedCounterAttribute + ']';
         },
 
         statics: {
-            selectableCls: Ext.baseCSSPrefix + 'selectable',
-            unselectableCls: Ext.baseCSSPrefix + 'unselectable',
-            
-            // This selector will be modified at runtime in the _init() method above
-            // to include the elements with saved tabindex in the returned set
-            tabbableSelector: Ext.supports.CSS3NegationSelector
-                ? 'a[href],button,iframe,input,select,textarea,[tabindex]:not([tabindex="-1"]),[contenteditable="true"]'
-                : 'a[href],button,iframe,input,select,textarea,[tabindex],[contenteditable="true"]',
-            
-            // Anchor and link tags are special; they are only naturally focusable (and tabbable)
-            // if they have href attribute, and tabbabledness is further platform/browser specific.
-            // Thus we check it separately in the code.
-            naturallyFocusableTags: {
-                BUTTON: true,
-                IFRAME: true,
-                EMBED: true,
-                INPUT: true,
-                OBJECT: true,
-                SELECT: true,
-                TEXTAREA: true,
-                HTML: Ext.isIE ? true : false,
-                BODY: Ext.isIE ? false: true
-            },
-
-            // <object> element is naturally tabbable only in IE8 and below
-            naturallyTabbableTags: {
-                BUTTON: true,
-                IFRAME: true,
-                INPUT: true,
-                SELECT: true,
-                TEXTAREA: true,
-                OBJECT: Ext.isIE8m ? true : false
-            },
-            
-            tabbableSavedCounterAttribute: 'data-tabindex-counter',
-            tabbableSavedValueAttribute: 'data-tabindex-value',
-
             normalize: function(prop) {
                 if (prop === 'float') {
                     prop = Ext.supports.Float ? 'cssFloat' : 'styleFloat';
@@ -216,6 +180,44 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             return new Ext.util.KeyMap(Ext.apply({
                 target: this
             }, config));
+        },
+
+        /**
+         * @private
+         * Returns the fractional portion of this element's measurement in the given dimension.
+         * (IE9+ only)
+         * @return {Number}
+         */
+        adjustDirect2DDimension: function(dimension) {
+            var me = this,
+                dom = me.dom,
+                display = me.getStyle('display'),
+                inlineDisplay = dom.style.display,
+                inlinePosition = dom.style.position,
+                originIndex = dimension === WIDTH ? 0 : 1,
+                currentStyle = dom.currentStyle,
+                floating;
+
+            if (display === 'inline') {
+                dom.style.display = 'inline-block';
+            }
+
+            dom.style.position = display.match(adjustDirect2DTableRe) ? 'absolute' : 'static';
+
+            // floating will contain digits that appears after the decimal point
+            // if height or width are set to auto we fallback to msTransformOrigin calculation
+
+            // Use currentStyle here instead of getStyle. In some difficult to reproduce
+            // instances it resets the scrollWidth of the element
+            floating = (parseFloat(currentStyle[dimension]) || parseFloat(currentStyle.msTransformOrigin.split(' ')[originIndex]) * 2) % 1;
+
+            dom.style.position = inlinePosition;
+
+            if (display === 'inline') {
+                dom.style.display = inlineDisplay;
+            }
+
+            return floating;
         },
 
         /**
@@ -468,6 +470,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         },
 
         /**
+         * @method
          * Empties this element. Removes all child nodes.
          */
         empty: emptyRange ? function() {
@@ -567,15 +570,20 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         destroy: function() {
             var me = this,
                 dom = me.dom,
-                data = me.getData(true),
+                data = me.peekData(),
                 maskEl, maskMsg;
 
             if (dom) {
                 if (me.isAnimate) {
-                    me.stopAnimation();
+                    me.stopAnimation(true);
                 }
                 
                 me.removeAnchor();
+            }
+            
+            if (me.deferredFocusTimer) {
+                clearTimeout(me.deferredFocusTimer);
+                me.deferredFocusTimer = null;
             }
 
             me.callParent();
@@ -999,6 +1007,26 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             return me;
         },
 
+        //<feature legacyBrowser>
+        getTextSelection: function () {
+            var ret = this.callParent();
+
+            if (typeof ret[0] !== 'number') {
+                var dom = this.dom;
+                var doc = dom.ownerDocument;
+                var range = doc.selection.createRange();
+                var textRange = dom.createTextRange();
+
+                textRange.setEndPoint('EndToStart', range);
+
+                ret[0] = textRange.text.length;
+                ret[1] = ret[0] + range.text.length;
+            }
+
+            return ret;
+        },
+        //</feature>
+
         /**
          * @override
          * Hide this element - Uses display mode to determine whether to use "display",
@@ -1101,23 +1129,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         },
 
         /**
-         * Sets up event handlers to call the passed functions when the mouse is moved into and out of the Element.
-         * @param {Function} overFn The function to call when the mouse enters the Element.
-         * @param {Function} outFn The function to call when the mouse leaves the Element.
-         * @param {Object} [scope] The scope (`this` reference) in which the functions are executed. Defaults
-         * to the Element's DOM element.
-         * @param {Object} [options] Options for the listener. See {@link Ext.util.Observable#addListener the
-         * options parameter}.
-         * @return {Ext.dom.Element} this
-         */
-        hover: function(overFn, outFn, scope, options) {
-            var me = this;
-            me.on('mouseenter', overFn, scope || me.dom, options);
-            me.on('mouseleave', outFn, scope || me.dom, options);
-            return me;
-        },
-
-        /**
          * Initializes a {@link Ext.dd.DD} drag drop object for this element.
          * @param {String} group The group the DD object is member of
          * @param {Object} config The DD config object
@@ -1153,146 +1164,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             return Ext.apply(dd, overrides);
         },
 
-        /**
-         * Checks whether this element can be focused programmatically or by clicking.
-         * To check if an element is in the document tab flow, use {@link #isTabbable}.
-         *
-         * @return {Boolean} True if the element is focusable
-         */
-        isFocusable: function() {
-            var dom = this.dom,
-                focusable = false,
-                nodeName;
-                
-            if (dom && !dom.disabled) {
-                nodeName = dom.nodeName;
-                
-                /*
-                 * An element is focusable if:
-                 *   - It is naturally focusable, or
-                 *   - It is an anchor or link with href attribute, or
-                 *   - It has a tabIndex, or
-                 *   - It is an editing host (contenteditable="true")
-                 *
-                 * Also note that we can't check dom.tabIndex because IE will return 0
-                 * for elements that have no tabIndex attribute defined, regardless of
-                 * whether they are naturally focusable or not.
-                 */
-                focusable = !!Ext.Element.naturallyFocusableTags[nodeName]            ||
-                            ((nodeName === 'A' || nodeName === 'LINK') && !!dom.href) ||
-                            dom.getAttribute('tabIndex') != null                      ||
-                            dom.contentEditable === 'true';
-                
-                // In IE8, <input type="hidden"> does not have a corresponding style
-                // so isVisible() will assume that it's not hidden.
-                if (Ext.isIE8 && nodeName === 'INPUT' && dom.type === 'hidden') {
-                    focusable = false;
-                }
-                
-                // Invisible elements cannot be focused, so check that as well
-                focusable = focusable && this.isVisible(true);
-            }
-            
-            return focusable;
-        },
-
-        /**
-         * Returns `true` if this Element is an input field, or is editable in any way.
-         * @return {Boolean} `true` if this Element is an input field, or is editable in any way.
-         */
-        isInputField: function() {
-            var dom = this.dom,
-                contentEditable = dom.contentEditable;
-
-            // contentEditable will default to inherit if not specified, only check if the
-            // attribute has been set or explicitly set to true
-            // http://html5doctor.com/the-contenteditable-attribute/
-            // Also skip <input> tags of type="button", we use them for checkboxes
-            // and radio buttons
-            if ((inputTags[dom.tagName] && dom.type !== 'button') ||
-                (contentEditable === '' || contentEditable === 'true')) {
-                return true;
-            }
-            return false;
-        },
-        
-        /**
-         * Checks whether this element participates in the sequential focus navigation,
-         * and can be reached by using Tab key.
-         *
-         * @param {Boolean} [includeHidden=false] pass `true` if hidden, or unattached elements should be returned.
-         * @return {Boolean} True if the element is tabbable.
-         */
-        isTabbable: function(includeHidden) {
-            var dom = this.dom,
-                tabbable = false,
-                nodeName, hasIndex, tabIndex;
-            
-            if (dom && !dom.disabled) {
-                nodeName = dom.nodeName;
-                
-                // Can't use dom.tabIndex here because IE will return 0 for elements
-                // that have no tabindex attribute defined, regardless of whether they are
-                // naturally tabbable or not.
-                tabIndex = dom.getAttribute('tabIndex');
-                hasIndex = tabIndex != null;
-                
-                tabIndex -= 0;
-                
-                // Anchors and links are only naturally tabbable if they have href attribute
-                // See http://www.w3.org/TR/html5/editing.html#specially-focusable
-                if (nodeName === 'A' || nodeName === 'LINK') {
-                    if (dom.href) {
-                        // It is also possible to make an anchor untabbable by setting
-                        // tabIndex < 0 on it
-                        tabbable = hasIndex && tabIndex < 0 ? false : true;
-                    }
-                    
-                    // Anchor w/o href is tabbable if it has tabIndex >= 0,
-                    // or if it's editable 
-                    else {
-                        if (dom.contentEditable === 'true') {
-                            tabbable = !hasIndex || (hasIndex && tabIndex >= 0) ? true : false;
-                        }
-                        else {
-                            tabbable = hasIndex && tabIndex >= 0 ? true : false;
-                        }
-                    }
-                }
-                
-                // If an element has contenteditable="true" or is naturally tabbable,
-                // then it is a potential candidate unless its tabIndex is < 0.
-                else if (dom.contentEditable === 'true' || 
-                         Ext.Element.naturallyTabbableTags[nodeName]) {
-                    tabbable = hasIndex && tabIndex < 0 ? false : true;
-                }
-                
-                // That leaves non-editable elements that can only be made tabbable
-                // by slapping tabIndex >= 0 on them
-                else {
-                    if (hasIndex && tabIndex >= 0) {
-                        tabbable = true;
-                    }
-                }
-                
-                // In IE8, <input type="hidden"> does not have a corresponding style
-                // so isVisible() will assume that it's not hidden.
-                if (Ext.isIE8 && nodeName === 'INPUT' && dom.type === 'hidden') {
-                    tabbable = false;
-                }
-                
-                // Invisible elements can't be tabbed into. If we have a component ref
-                // we'll also check if the component itself is visible before incurring
-                // the expense of DOM style reads.
-                // Allow caller to specify that hiddens should be included.
-                tabbable = tabbable && (includeHidden || 
-                           ((!this.component || this.component.isVisible(true)) &&
-                           this.isVisible(true)));
-            }
-            
-            return tabbable;
-        },
-        
         /**
          * Returns true if this element is masked. Also re-centers any displayed message
          * within the mask.
@@ -1382,7 +1253,8 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     }
                 }
             }, true);
-            maskMsg = Ext.get(maskEl.dom.firstChild);
+            
+            maskMsg = Ext.fly(maskEl.dom.firstChild);
 
             data.maskEl = maskEl;
 
@@ -1409,7 +1281,72 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             if (Ext.isIE9m && dom !== DOC.body && me.isStyle('height', 'auto')) {
                 maskEl.setSize(undefined, elHeight || me.getHeight());
             }
+            
             return maskEl;
+        },
+
+        /**
+         * Measures and returns the size of this element. When `dimension` is `null` (or
+         * not specified), this will be an object with `width` and `height` properties.
+         *
+         * If `dimension` is `'w'` the value returned will be this element's width. If
+         * `dimension` is `'h'` the returned value will be this element's height.
+         *
+         * Unlike `getWidth` and `getHeight` this method only returns "precise" (sub-pixel)
+         * sizes based on the `getBoundingClientRect` API.
+         *
+         * @param {'w'/'h'} [dimension] Specifies which dimension is desired. If omitted
+         * then an object with `width` and `height` properties is returned.
+         * @return {Number/Object} This element's width, height or both as a readonly
+         * object. This object may be the direct result of `getBoundingClientRect` and
+         * hence immutable on some browsers.
+         * @private
+         * @since 6.5.0
+         */
+        measure: function (dimension) {
+            var me = this,
+                dom = me.dom,
+                includeWidth = dimension !== 'h',
+                includeHeight = dimension !== 'w',
+                height, rect, width;
+
+            // Use the viewport height if they are asking for body height
+            if (dom.nodeName === 'BODY') {
+                height = includeHeight && Element.getViewportHeight();
+                width = includeWidth && Element.getViewportWidth();
+                rect = dimension ? null : { width: width, height: height };
+            }
+            else {
+                rect = dom.getBoundingClientRect();
+
+                if (Ext.isIE8) {
+                    // IE8 does not provide width/height *and* the rect is readonly
+                    rect = {
+                        width: rect.right - rect.left,
+                        height: rect.bottom - rect.top
+                    };
+                }
+
+                height = rect.height;
+                width = rect.width;
+
+                // IE9/10 Direct2D dimension rounding bug
+                if (Ext.supports.Direct2DBug) {
+                    if (includeHeight) {
+                        height += me.adjustDirect2DDimension(HEIGHT);
+                    }
+
+                    if (includeWidth) {
+                        width += me.adjustDirect2DDimension(WIDTH);
+                    }
+
+                    rect = dimension ? null : { width: width, height: height };
+                }
+            }
+
+            // NOTE: The modern override ignores all these IE8/9/10 issues
+
+            return dimension ? (includeWidth ? width : height) : rect;
         },
 
         /**
@@ -1485,23 +1422,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             return me;
         },
 
-        /**
-         * Enable text selection for this element (normalized across browsers)
-         * @return {Ext.dom.Element} this
-         */
-        selectable: function() {
-            var me = this;
-
-            // We clear this property for all browsers, not just Opera. This is so that rendering templates don't need to
-            // condition on Opera when making elements unselectable.
-            me.dom.unselectable = '';
-
-            me.removeCls(Element.unselectableCls);
-            me.addCls(Element.selectableCls);
-
-            return me;
-        },
-        
         //<feature legacyBrowser>
         // private
         // used to ensure the mouseup event is captured if it occurs outside of the
@@ -2289,74 +2209,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         },
 
         /**
-         * Stops the specified event(s) from bubbling and optionally prevents the default action
-         * 
-         *     var store = Ext.create('Ext.data.Store', {
-         *         fields: ['name', 'email'],
-         *         data: [{
-         *             'name': 'Finn',
-         *             "email": "finn@adventuretime.com"
-         *         }]
-         *     });
-         *     
-         *     Ext.create('Ext.grid.Panel', {
-         *         title: 'Land of Ooo',
-         *         store: store,
-         *         columns: [{
-         *             text: 'Name',
-         *             dataIndex: 'name'
-         *         }, {
-         *             text: 'Email <img style="vertical-align:middle;" src="{some-help-image-src}" />',
-         *             dataIndex: 'email',
-         *             flex: 1,
-         *             listeners: {
-         *                 render: function(col) {
-         *                     // Swallow the click event when the click occurs on the
-         *                     // help icon - preventing the sorting of data by that
-         *                     // column and instead performing an action specific to
-         *                     // the help icon
-         *                     var img = col.getEl().down('img');
-         *                     img.swallowEvent(['click', 'mousedown'], true);
-         *                     col.on('click', function() {
-         *                         // logic to show a help dialog
-         *                         console.log('image click handler');
-         *                     }, col);
-         *                 }
-         *             }
-         *         }],
-         *         height: 200,
-         *         width: 400,
-         *         renderTo: document.body
-         *     });
-         *
-         * @param {String/String[]} eventName an event / array of events to stop from bubbling
-         * @param {Boolean} [preventDefault] true to prevent the default action too
-         * @return {Ext.dom.Element} this
-         */
-        swallowEvent: function(eventName, preventDefault) {
-            var me = this,
-                e, eLen,
-                fn = function(e) {
-                    e.stopPropagation();
-                    if (preventDefault) {
-                        e.preventDefault();
-                    }
-                };
-
-            if (Ext.isArray(eventName)) {
-                eLen = eventName.length;
-
-                for (e = 0; e < eLen; e++) {
-                    me.on(eventName[e], fn);
-                }
-
-                return me;
-            }
-            me.on(eventName, fn);
-            return me;
-        },
-
-        /**
          * Blinks the element as if it was clicked and then collapses on its center (similar to switching off a television).
          * When the effect is completed, the element will be hidden (visibility = 'hidden') but block elements will still
          * take up space in the document. The element must be removed from the DOM using the 'remove' config option if
@@ -2470,27 +2322,21 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 destNodes = dest.childNodes,
                 destLen = destNodes.length,
                 i,  destNode, sourceNode,
-                nodeType, newAttrs, attLen, attName,
+                nodeType, newAttrs, attLen, attName, value,
                 elData = dest._extData;
 
-            // Copy top node's attributes across. Use IE-specific method if possible.
-            // In IE10, there is a problem where the className will not get updated
-            // in the view, even though the className on the dom element is correct.
-            // See EXTJSIV-9462
-            if (Ext.isIE9m && dest.mergeAttributes) {
-                dest.mergeAttributes(source, true);
+            if (!syncContentFly) {
+                syncContentFly = new Ext.dom.Fly();
+            }
 
-                // EXTJSIV-6803. IE's mergeAttributes appears not to make the source's "src" value available until after the image is ready.
-                // So programmatically copy any src attribute.
-                dest.src = source.src;
-            } else {
-                newAttrs = source.attributes;
-                attLen = newAttrs.length;
-                for (i = 0; i < attLen; i++) {
-                    attName = newAttrs[i].name;
-                    if (attName !== 'id') {
-                        dest.setAttribute(attName, newAttrs[i].value);
-                    }
+            // Update any attributes who's values have changed..
+            newAttrs = source.attributes;
+            attLen = newAttrs.length;
+            for (i = 0; i < attLen; i++) {
+                attName = newAttrs[i].name;
+                value = newAttrs[i].value;
+                if (attName !== 'id' && dest.getAttribute(attName) !== value) {
+                    dest.setAttribute(attName, newAttrs[i].value);
                 }
             }
 
@@ -2529,7 +2375,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     }
                     destNode.style.cssText = sourceNode.style.cssText;
                     destNode.className = sourceNode.className;
-                    Ext.fly(destNode, '_syncContent').syncContent(sourceNode);
+                    syncContentFly.attach(destNode).syncContent(sourceNode);
                 }
             }
         },
@@ -2608,232 +2454,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (y != null) {
                     this.dom.style.top = y + 'px';
                 }
-            }
-        },
-
-        /**
-         * Disables text selection for this element (normalized across browsers)
-         * @return {Ext.dom.Element} this
-         */
-        unselectable: function() {
-            // The approach used to disable text selection combines CSS, HTML attributes and DOM events. Importantly the
-            // strategy is designed to be expressible in markup, so that elements can be rendered unselectable without
-            // needing modifications post-render. e.g.:
-            //
-            // <div class="x-unselectable" unselectable="on"></div>
-            //
-            // Changes to this method may need to be reflected elsewhere, e.g. ProtoElement.
-            var me = this;
-
-            // The unselectable property (or similar) is supported by various browsers but Opera is the only browser that
-            // doesn't support any of the other techniques. The problem with it is that it isn't inherited by child
-            // elements. Theoretically we could add it to all children but the performance would be terrible. In certain
-            // key locations (e.g. panel headers) we add unselectable="on" to extra elements during rendering just for
-            // Opera's benefit.
-            if (Ext.isOpera) {
-                me.dom.unselectable = 'on';
-            }
-
-            // In Mozilla and WebKit the CSS properties -moz-user-select and -webkit-user-select prevent a selection
-            // originating in an element. These are inherited, which is what we want.
-            //
-            // In IE we rely on a listener for the selectstart event instead. We don't need to register a listener on the
-            // individual element, instead we use a single listener and rely on event propagation to listen for the event at
-            // the document level. That listener will walk up the DOM looking for nodes that have either of the classes
-            // x-selectable or x-unselectable. This simulates the CSS inheritance approach.
-            //
-            // IE 10 is expected to support -ms-user-select so the listener may not be required.
-            me.removeCls(Element.selectableCls);
-            me.addCls(Element.unselectableCls);
-
-            return me;
-        },
-        
-        privates: {
-            /**
-             * @private
-             */
-            findTabbableElements: function(options) {
-                var skipSelf, skipChildren, excludeRoot, includeSaved, includeHidden,
-                    dom = this.dom,
-                    cAttr = Ext.Element.tabbableSavedCounterAttribute,
-                    selection = [],
-                    idx = 0,
-                    nodes, node, fly, i, len, tabIndex;
-
-                if (!dom) {
-                    return selection;
-                }
-
-                if (options) {
-                    skipSelf = options.skipSelf;
-                    skipChildren = options.skipChildren;
-                    excludeRoot = options.excludeRoot;
-                    includeSaved = options.includeSaved;
-                    includeHidden = options.includeHidden;
-                }
-                
-                excludeRoot = excludeRoot && Ext.getDom(excludeRoot);
-                
-                if (excludeRoot && excludeRoot.contains(dom)) {
-                    return selection;
-                }
-                
-                if (!skipSelf &&
-                    ((includeSaved && dom.hasAttribute(cAttr)) || this.isTabbable(includeHidden))) {
-                    selection[idx++] = dom;
-                }
-
-                if (skipChildren) {
-                    return selection;
-                }
-                
-                nodes = dom.querySelectorAll(Ext.Element.tabbableSelector);
-                len   = nodes.length;
-                
-                if (!len) {
-                    return selection;
-                }
-                
-                fly = new Ext.dom.Fly();
-                
-                // We're only interested in the elements that an user can *tab into*,
-                // not all programmatically focusable elements. So we have to filter
-                // these out.
-                for (i = 0; i < len; i++) {
-                    node = nodes[i];
-                    
-                    // A node with tabIndex < 0 absolutely can't be tabbable
-                    // so we can save a function call if that is the case.
-                    // Note that we can't use node.tabIndex here because IE
-                    // will return 0 for elements that have no tabindex
-                    // attribute defined, regardless of whether they are
-                    // tabbable or not.
-                    tabIndex = +node.getAttribute('tabIndex'); // quicker than parseInt
-                    
-                    // tabIndex value may be null for nodes with no tabIndex defined;
-                    // most of those may be naturally tabbable. We don't want to
-                    // check this here, that's isTabbable()'s job and it's not trivial.
-                    // We explicitly check that tabIndex is not negative. The expression
-                    // below is purposeful if hairy; this is a very hot code path so care
-                    // is taken to minimize the amount of DOM calls that could be avoided.
-                    
-                    // A node may have its tabindex saved by previous calls to
-                    // saveTabbableState(); in that case we need to return that node
-                    // so that its saved counter could be properly incremented or
-                    // decremented.
-                    if (((includeSaved && node.hasAttribute(cAttr)) || (!(tabIndex < 0) && fly.attach(node).isTabbable(includeHidden))) &&
-                        !(excludeRoot && (excludeRoot === node || excludeRoot.contains(node)))) {
-                        selection[idx++] = node;
-                    }
-                }
-                
-                return selection;
-            },
-
-            /**
-             * @private
-             */
-            saveTabbableState: function(options) {
-                var counterAttr = Ext.Element.tabbableSavedCounterAttribute,
-                    savedAttr = Ext.Element.tabbableSavedValueAttribute,
-                    counter, nodes, node, i, len;
-                
-                // By default include already saved tabbables, and just increase their save counter.
-                // For example, if a View with saved tabbables is covered by a modal Window, saveTabbableState
-                // Must disable tabbability for the whole document. But upon unmask, the View must not
-                // be restored to tabbability. It must only have its save level decremented.
-                // AbstractView#toggleChildrenTabbability however pases this as false so that
-                // it may be called upon row add and it does not increment save levels on already saved tabbables.
-                if (!options || options.includeSaved == null) {
-                    options = Ext.Object.chain(options || null);
-                    options.includeSaved = true;
-                }
-                
-                nodes = this.findTabbableElements(options);
-
-                for (i = 0, len = nodes.length; i < len; i++) {
-                    node = nodes[i];
-                    
-                    counter = +node.getAttribute(counterAttr);
-                
-                    if (counter > 0) {
-                        node.setAttribute(counterAttr, ++counter);
-                    }
-                    else {
-                        // tabIndex could be set on both naturally tabbable and generic elements.
-                        // Either way we need to save it to restore later.
-                        if (node.hasAttribute('tabIndex')) {
-                            node.setAttribute(savedAttr, node.getAttribute('tabIndex'));
-                        }
-                
-                        // When no tabIndex is specified, that means a naturally tabbable element.
-                        else {
-                            node.setAttribute(savedAttr, 'none');
-                        }
-                
-                        // We disable the tabbable state by setting tabIndex to -1.
-                        // The element can still be focused programmatically though.
-                        node.setAttribute('tabIndex', '-1');
-                        node.setAttribute(counterAttr, '1');
-                    }
-                }
-                
-                return nodes;
-            },
-
-            /**
-             * @private
-             */
-            restoreTabbableState: function(skipSelf, skipChildren) {
-                var dom = this.dom,
-                    counterAttr = Ext.Element.tabbableSavedCounterAttribute,
-                    savedAttr = Ext.Element.tabbableSavedValueAttribute,
-                    nodes = [],
-                    idx, counter, nodes, node, i, len;
-
-                if (!dom) {
-                    return this;
-                }
-                
-                if (!skipChildren) {
-                    nodes = Ext.Array.from(dom.querySelectorAll('[' + counterAttr + ']'));
-                }
-                
-                if (!skipSelf) {
-                    nodes.unshift(dom);
-                }
-
-                for (i = 0, len = nodes.length; i < len; i++) {
-                    node = nodes[i];
-                    
-                    if (!node.hasAttribute(counterAttr) || !node.hasAttribute(savedAttr)) {
-                        continue;
-                    }
-                
-                    counter = +node.getAttribute(counterAttr);
-
-                    if (counter > 1) {
-                        node.setAttribute(counterAttr, --counter);
-                    
-                        continue;
-                    }
-                
-                    idx = node.getAttribute(savedAttr);
-                
-                    // That is a naturally tabbable element
-                    if (idx === 'none') {
-                        node.removeAttribute('tabIndex');
-                    }
-                    else {
-                        node.setAttribute('tabIndex', idx);
-                    }
-                
-                    node.removeAttribute(savedAttr);
-                    node.removeAttribute(counterAttr);
-                }
-                
-                return nodes;
             }
         },
 
@@ -3380,8 +3000,14 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 
                 dom = dom || me.dom;
                 
+                if (me.deferredFocusTimer) {
+                    clearTimeout(me.deferredFocusTimer);
+                }
+                
+                me.deferredFocusTimer = null;
+                
                 if (Number(defer)) {
-                    Ext.defer(me.focus, defer, me, [null, dom]);
+                    me.deferredFocusTimer = Ext.defer(me.focus, defer, me, [null, dom]);
                 }
                 else {
                     Ext.GlobalEvents.fireEvent('beforefocus', dom);
@@ -3745,50 +3371,12 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         }
         //</feature>
 
-        // Element.unselectable relies on this listener to prevent selection in IE. Some other browsers support the event too
-        // but it is only strictly required for IE. In WebKit this listener causes subtle differences to how the browser handles
-        // the non-selection, e.g. whether or not the mouse cursor changes when attempting to select text.
-        Ext.getDoc().on('selectstart', function(ev, dom) {
-            var selectableCls = Element.selectableCls,
-                unselectableCls = Element.unselectableCls,
-                tagName = dom && dom.tagName,
-                el = new Ext.dom.Fly();
-
-            tagName = tagName && tagName.toLowerCase();
-
-            // Element.unselectable is not really intended to handle selection within text fields and it is important that
-            // fields inside menus or panel headers don't inherit the unselectability. In most browsers this is automatic but in
-            // IE 9 the selectstart event can bubble up from text fields so we have to explicitly handle that case.
-            if (tagName === 'input' || tagName === 'textarea') {
-                return;
-            }
-
-            // Walk up the DOM checking the nodes. This may be 'slow' but selectstart events don't fire very often
-            while (dom && dom.nodeType === 1 && dom !== DOC.documentElement) {
-                el.attach(dom);
-
-                // If the node has the class x-selectable then stop looking, the text selection is allowed
-                if (el.hasCls(selectableCls)) {
-                    return;
-                }
-
-                // If the node has class x-unselectable then the text selection needs to be stopped
-                if (el.hasCls(unselectableCls)) {
-                    ev.stopEvent();
-                    return;
-                }
-
-                dom = dom.parentNode;
-            }
-        });
-
         function fixTransparent (dom, el, inline, style) {
             var value = style[this.name] || '';
             return transparentRe.test(value) ? 'transparent' : value;
         }
 
-        /**
-         * @method makeSelectionRestoreFn
+        /*
          * Helper function to create the function that will restore the selection.
          */
         function makeSelectionRestoreFn (activeEl, start, end) {
@@ -3798,8 +3386,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             };
         }
 
-        /**
-         * @method getRightMarginFixCleaner
+        /*
          * Creates a function to call to clean up problems with the work-around for the
          * WebKit RightMargin bug. The work-around is to add "display: 'inline-block'" to
          * the element before calling getComputedStyle and then to restore its original
@@ -3874,6 +3461,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             return result;
         }
 
+        //TODO - this was fixed in Safari 3 - verify if this is still an issue
         // Fix bug caused by this: https://bugs.webkit.org/show_bug.cgi?id=13343
         if (!supports.RightMargin) {
             styleHooks.marginRight = styleHooks['margin-right'] = {

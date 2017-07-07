@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.tab.ReorderableTabs', {
 
     //<example>
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/tab/ReorderableTabsController.js'
     }],
     exampleTitle: 'Reorderable Tabs',

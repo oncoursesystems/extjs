@@ -1,4 +1,6 @@
-describe("Ext.tree.plugin.TreeViewDragDrop", function() {
+topSuite("Ext.tree.plugin.TreeViewDragDrop",
+    ['Ext.tree.Panel', 'Ext.grid.column.Widget', 'Ext.form.field.*', 'Ext.Button'],
+function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         TreeItem = Ext.define(null, {
         extend: 'Ext.data.TreeModel',
@@ -174,7 +176,7 @@ describe("Ext.tree.plugin.TreeViewDragDrop", function() {
             });
 
             cell = view.getCell(store.getAt(3), tree.down('treecolumn'));
-            checkbox = view.getCell(store.getAt(4), tree.down('checkcolumn')).down('.x-grid-checkcolumn');
+            checkbox = view.getCell(store.getAt(4), tree.down('checkcolumn')).querySelector('.x-grid-checkcolumn');
 
             jasmine.fireMouseEvent(cell, 'click');
 

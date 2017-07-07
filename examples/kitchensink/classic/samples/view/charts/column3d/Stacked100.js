@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.charts.column3d.Stacked100', {
         path: 'classic/samples/view/charts/column3d/Stacked100Controller.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Browsers.js'
+        path: 'app/store/Browsers.js'
     }],
     layout: {
         type: 'vbox',
@@ -32,9 +32,16 @@ Ext.define('KitchenSink.view.charts.column3d.Stacked100', {
         interactions: ['itemhighlight'],
         width: '100%',
         height: 460,
-        insetPadding: 40,
         innerPadding: '0 3 0 0',
         theme: 'Muted',
+        captions: {
+            title: 'Usage share of desktop browsers',
+            credits: {
+                text: 'Data: Browser Stats 2012\n' +
+                    'Source: http://www.w3schools.com/',
+                align: 'left'
+            }
+        },
         legend: {
             docked: 'bottom'
         },
@@ -79,27 +86,6 @@ Ext.define('KitchenSink.view.charts.column3d.Stacked100', {
                 trackMouse: true,
                 renderer: 'onTooltipRender'
             }
-        }],
-        sprites: [{
-            type: 'text',
-            text: 'Usage share of desktop browsers',
-            fontSize: 22,
-            width: 100,
-            height: 30,
-            x: 40, // the sprite x position
-            y: 20  // the sprite y position
-        }, {
-            type: 'text',
-            text: 'Data: Browser Stats 2012',
-            fontSize: 10,
-            x: 12,
-            y: 380
-        }, {
-            type: 'text',
-            text: 'Source: http://www.w3schools.com/',
-            fontSize: 10,
-            x: 12,
-            y: 395
         }]
     }],
 

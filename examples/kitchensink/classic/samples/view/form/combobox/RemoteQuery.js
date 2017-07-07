@@ -14,10 +14,10 @@ Ext.define('KitchenSink.view.form.combobox.RemoteQuery', {
     exampleTitle: 'Remote Query ComboBox',
     otherContent: [{
         type: 'Model',
-        path: 'classic/samples/model/State.js'
+        path: 'app/model/State.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/RemoteStates.js'
+        path: 'app/store/RemoteStates.js'
     }],
     //</example>
     

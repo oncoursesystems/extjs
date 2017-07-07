@@ -14,6 +14,23 @@ Ext.define('KitchenSink.view.calendar.Week', {
         type: 'Store',
         path: 'samples/data/calendar/Week.js'
     }],
+
+    profiles: {
+        defaults: {
+            weekBtnText: 'Full Week',
+            weekBtnIconCls: undefined,
+            workBtnText: 'Work Week',
+            workBtnIconCls: undefined
+        },
+        phone: {
+            defaults: {
+                weekBtnText: undefined,
+                weekBtnIconCls: 'x-fa fa-calendar-check-o',
+                workBtnText: undefined,
+                workBtnIconCls: 'x-fa fa-briefcase'
+            }
+        }
+    },
     // </example>
 
     viewModel: {
@@ -46,15 +63,12 @@ Ext.define('KitchenSink.view.calendar.Week', {
         }
     },
 
-    shadow: true,
-
     layout: {
         type: 'hbox',
         align: 'stretch'
     },
-    bind: {
-        title: '{value:date("M Y")}'
-    },
+    bind: '{value:date("M Y")}',
+
     header: {
         layout: 'hbox',
         items: [{
@@ -64,16 +78,17 @@ Ext.define('KitchenSink.view.calendar.Week', {
             xtype: 'segmentedbutton',
             bind: '{calMode}',
             items: [{
-                text: Ext.os.is.Phone ? null : 'Full Week',
-                iconCls: Ext.os.is.Phone ? 'x-fa fa-calendar-check-o' : null,
+                text: '${weekBtnText}',
+                iconCls: '${weekBtnIconCls}',
                 value: 'fullweek'
             }, {
-                text: Ext.os.is.Phone ? null : 'Work Week',
-                iconCls: Ext.os.is.Phone ? 'x-fa fa-briefcase' : null,
+                text: '${workBtnText}',
+                iconCls: '${workBtnIconCls}',
                 value: 'workweek'
             }]
         }]
     },
+
     items: [{
         xtype: 'panel',
         title: 'Calendars',
@@ -81,10 +96,10 @@ Ext.define('KitchenSink.view.calendar.Week', {
         width: 150,
         bodyPadding: 5,
         hidden: Ext.os.is.Phone,
-        items: {
+        items: [{
             xtype: 'calendar-list',
             bind: '{calStore}'
-        }
+        }]
     }, {
         xtype: 'calendar-week',
         flex: 1,
@@ -97,5 +112,4 @@ Ext.define('KitchenSink.view.calendar.Week', {
             visibleDays: '{visibleDays}'
         }
     }]
-
-})
+});

@@ -43,7 +43,7 @@ Ext.define('KitchenSink.view.charts.line.RendererController', {
     },
 
     onRefresh: function () {
-        var chart = this.lookupReference('chart'),
+        var chart = this.lookup('chart'),
             store = chart.getStore();
 
         store.refreshData();

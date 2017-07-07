@@ -51,7 +51,7 @@ Ext.define('KitchenSink.view.tab.LazyTabs', {
         }]
     }, {
         title: 'Lazy Tab',
-        plugins: {
+        plugins: [{
             ptype: 'lazyitems',
             items: [{
                 fieldLabel: 'Field 1',
@@ -68,6 +68,6 @@ Ext.define('KitchenSink.view.tab.LazyTabs', {
                 fieldLabel: 'Field 4',
                 xtype: 'datefield'
             }]
-        }
+        }]
     }]
 });

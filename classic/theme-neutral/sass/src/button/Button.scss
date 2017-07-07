@@ -736,36 +736,38 @@
     }
 
     .#{$prefix}btn-focus.#{$prefix}btn-#{$ui} {
-        @if $border-color-focus != $border-color {
-            border-color: $border-color-focus;
-        }
-        @if $background-color-focus != null {
-            @include background-gradient($background-color-focus, $background-gradient-focus);
-        }
-        @if not is-null($inner-border-width-focus) and not is-null($inner-border-color-focus) {
-            @include inner-border($inner-border-width-focus, $inner-border-color-focus);
-        }
+        .#{$prefix}keyboard-mode & {
+            @if $border-color-focus != $border-color {
+                border-color: $border-color-focus;
+            }
+            @if $background-color-focus != null {
+                @include background-gradient($background-color-focus, $background-gradient-focus);
+            }
+            @if not is-null($inner-border-width-focus) and not is-null($inner-border-color-focus) {
+                @include inner-border($inner-border-width-focus, $inner-border-color-focus);
+            }
 
-        @if not is-null($body-outline-width-focus) and $body-outline-width-focus != 0 {
-            .#{$prefix}btn-wrap {
-                $outline-color: if(not is-null($body-outline-color-focus), $body-outline-color-focus, $color);
-                $outline-style: if(not is-null($body-outline-style-focus), $body-outline-style-focus, dotted);
-                outline: $body-outline-width-focus $outline-style $outline-color;
+            @if not is-null($body-outline-width-focus) and $body-outline-width-focus != 0 {
+                .#{$prefix}btn-wrap {
+                    $outline-color: if(not is-null($body-outline-color-focus), $body-outline-color-focus, $color);
+                    $outline-style: if(not is-null($body-outline-style-focus), $body-outline-style-focus, dotted);
+                    outline: $body-outline-width-focus $outline-style $outline-color;
+                }
             }
-        }
 
-        .#{$prefix}btn-inner {
-            @if $color-focus != $color {
-                color: $color-focus;
-            }
-            @if $font-weight-focus != $font-weight {
-                font-weight: $font-weight-focus;
-            }
-            @if $font-size-focus != $font-size {
-                font-size: $font-size-focus;
-            }
-            @if $font-family-focus != $font-family {
-                font-family: $font-family-focus;
+            .#{$prefix}btn-inner {
+                @if $color-focus != $color {
+                    color: $color-focus;
+                }
+                @if $font-weight-focus != $font-weight {
+                    font-weight: $font-weight-focus;
+                }
+                @if $font-size-focus != $font-size {
+                    font-size: $font-size-focus;
+                }
+                @if $font-family-focus != $font-family {
+                    font-family: $font-family-focus;
+                }
             }
         }
     }
@@ -787,9 +789,10 @@
     }
     
     .#{$prefix}btn-#{$ui}.#{$prefix}arrow-focus .#{$prefix}btn-arrow-el {
-        /* TODO @Phil ;) */
-        @if not is-null($inner-border-width-focus) and not is-null($inner-border-color-focus) {
-            border: $inner-border-width-focus solid $inner-border-color-focus;
+        .#{$prefix}keyboard-mode & {
+            @if not is-null($inner-border-width-focus) and not is-null($inner-border-color-focus) {
+                border: $inner-border-width-focus solid $inner-border-color-focus;
+            }
         }
     }
     
@@ -821,28 +824,30 @@
     }
 
     .#{$prefix}btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui} {
-        @if $border-color-focus-over != $border-color-over {
-            border-color: $border-color-focus-over;
-        }
-        @if $background-color-focus-over != $background-color-over or $background-gradient-focus-over != $background-gradient-over {
-            @include background-gradient($background-color-focus-over, $background-gradient-focus-over);
-        }
-        @if not is-null($inner-border-width-focus-over) and not is-null($inner-border-color-focus-over) {
-            @include inner-border($inner-border-width-focus-over, $inner-border-color-focus-over);
-        }
+        .#{$prefix}keyboard-mode & {
+            @if $border-color-focus-over != $border-color-over {
+                border-color: $border-color-focus-over;
+            }
+            @if $background-color-focus-over != $background-color-over or $background-gradient-focus-over != $background-gradient-over {
+                @include background-gradient($background-color-focus-over, $background-gradient-focus-over);
+            }
+            @if not is-null($inner-border-width-focus-over) and not is-null($inner-border-color-focus-over) {
+                @include inner-border($inner-border-width-focus-over, $inner-border-color-focus-over);
+            }
 
-        .#{$prefix}btn-inner {
-            @if $color-focus-over != $color-over {
-                color: $color-focus-over;
-            }
-            @if $font-weight-focus-over != $font-weight-over {
-                font-weight: $font-weight-focus-over;
-            }
-            @if $font-size-focus-over != $font-size-over {
-                font-size: $font-size-focus-over;
-            }
-            @if $font-family-focus-over != $font-family-over {
-                font-family: $font-family-focus-over;
+            .#{$prefix}btn-inner {
+                @if $color-focus-over != $color-over {
+                    color: $color-focus-over;
+                }
+                @if $font-weight-focus-over != $font-weight-over {
+                    font-weight: $font-weight-focus-over;
+                }
+                @if $font-size-focus-over != $font-size-over {
+                    font-size: $font-size-focus-over;
+                }
+                @if $font-family-focus-over != $font-family-over {
+                    font-family: $font-family-focus-over;
+                }
             }
         }
     }
@@ -878,28 +883,30 @@
 
     .#{$prefix}btn-focus.#{$prefix}btn-menu-active.#{$prefix}btn-#{$ui},
     .#{$prefix}btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui} {
-        @if $border-color-focus-pressed != $border-color-pressed {
-            border-color: $border-color-focus-pressed;
-        }
-        @if $background-color-focus-pressed != $background-color-pressed or $background-gradient-focus-pressed != $background-gradient-pressed {
-            @include background-gradient($background-color-focus-pressed, $background-gradient-focus-pressed);
-        }
-        @if not is-null($inner-border-width-focus-pressed) and not is-null($inner-border-color-focus-pressed) {
-            @include inner-border($inner-border-width-focus-pressed, $inner-border-color-focus-pressed);
-        }
+        .#{$prefix}keyboard-mode & {
+            @if $border-color-focus-pressed != $border-color-pressed {
+                border-color: $border-color-focus-pressed;
+            }
+            @if $background-color-focus-pressed != $background-color-pressed or $background-gradient-focus-pressed != $background-gradient-pressed {
+                @include background-gradient($background-color-focus-pressed, $background-gradient-focus-pressed);
+            }
+            @if not is-null($inner-border-width-focus-pressed) and not is-null($inner-border-color-focus-pressed) {
+                @include inner-border($inner-border-width-focus-pressed, $inner-border-color-focus-pressed);
+            }
 
-        .#{$prefix}btn-inner {
-            @if $color-focus-pressed != $color-pressed {
-                color: $color-focus-pressed;
-            }
-            @if $font-weight-focus-pressed != $font-weight-pressed {
-                font-weight: $font-weight-focus-pressed;
-            }
-            @if $font-size-focus-pressed != $font-size-pressed {
-                font-size: $font-size-focus-pressed;
-            }
-            @if $font-family-focus-pressed != $font-family-pressed {
-                font-family: $font-family-focus-pressed;
+            .#{$prefix}btn-inner {
+                @if $color-focus-pressed != $color-pressed {
+                    color: $color-focus-pressed;
+                }
+                @if $font-weight-focus-pressed != $font-weight-pressed {
+                    font-weight: $font-weight-focus-pressed;
+                }
+                @if $font-size-focus-pressed != $font-size-pressed {
+                    font-size: $font-size-focus-pressed;
+                }
+                @if $font-family-focus-pressed != $font-family-pressed {
+                    font-family: $font-family-focus-pressed;
+                }
             }
         }
     }
@@ -934,25 +941,27 @@
 
     @if $include-slicer-border-radius {
         .#{$prefix}btn-focus {
-            $stretch: slicer-background-stretch('btn-focus.#{$prefix}btn-#{$ui}', 'bottom');
-            $frame: slicer-frame('btn-focus.#{$prefix}btn-#{$ui}', $frame-size);
+            .#{$prefix}keyboard-mode & {
+                $stretch: slicer-background-stretch('btn-focus.#{$prefix}btn-#{$ui}', 'bottom');
+                $frame: slicer-frame('btn-focus.#{$prefix}btn-#{$ui}', $frame-size);
 
-            .#{$prefix}btn-#{$ui}-tl,
-            .#{$prefix}btn-#{$ui}-bl,
-            .#{$prefix}btn-#{$ui}-tr,
-            .#{$prefix}btn-#{$ui}-br,
-            .#{$prefix}btn-#{$ui}-tc,
-            .#{$prefix}btn-#{$ui}-bc {
-                background-image: slicer-corner-sprite('btn-focus.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-corners');
-            }
-            .#{$prefix}btn-#{$ui}-ml,
-            .#{$prefix}btn-#{$ui}-mr {
-                background-image: slicer-sides-sprite('btn-focus.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-sides');
-            }
-            .#{$prefix}btn-#{$ui}-mc {
-                background-color: $background-color-focus;
-                @if $background-gradient-focus != null {
-                    background-image: slicer-frame-background-image('btn-focus.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-fbg');
+                .#{$prefix}btn-#{$ui}-tl,
+                .#{$prefix}btn-#{$ui}-bl,
+                .#{$prefix}btn-#{$ui}-tr,
+                .#{$prefix}btn-#{$ui}-br,
+                .#{$prefix}btn-#{$ui}-tc,
+                .#{$prefix}btn-#{$ui}-bc {
+                    background-image: slicer-corner-sprite('btn-focus.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-corners');
+                }
+                .#{$prefix}btn-#{$ui}-ml,
+                .#{$prefix}btn-#{$ui}-mr {
+                    background-image: slicer-sides-sprite('btn-focus.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-sides');
+                }
+                .#{$prefix}btn-#{$ui}-mc {
+                    background-color: $background-color-focus;
+                    @if $background-gradient-focus != null {
+                        background-image: slicer-frame-background-image('btn-focus.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-fbg');
+                    }
                 }
             }
         }
@@ -982,25 +991,27 @@
         }
 
         .#{$prefix}btn-focus.#{$prefix}btn-over {
-            $stretch: slicer-background-stretch('btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}', 'bottom');
-            $frame: slicer-frame('btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}', $frame-size);
+            .#{$prefix}keyboard-mode & {
+                $stretch: slicer-background-stretch('btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}', 'bottom');
+                $frame: slicer-frame('btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}', $frame-size);
 
-            .#{$prefix}btn-#{$ui}-tl,
-            .#{$prefix}btn-#{$ui}-bl,
-            .#{$prefix}btn-#{$ui}-tr,
-            .#{$prefix}btn-#{$ui}-br,
-            .#{$prefix}btn-#{$ui}-tc,
-            .#{$prefix}btn-#{$ui}-bc {
-                background-image: slicer-corner-sprite('btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-over-corners');
-            }
-            .#{$prefix}btn-#{$ui}-ml,
-            .#{$prefix}btn-#{$ui}-mr {
-                background-image: slicer-sides-sprite('btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-over-sides');
-            }
-            .#{$prefix}btn-#{$ui}-mc {
-                background-color: $background-color-focus-over;
-                @if $background-gradient-focus-over != null {
-                    background-image: slicer-frame-background-image('btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-over-fbg');
+                .#{$prefix}btn-#{$ui}-tl,
+                .#{$prefix}btn-#{$ui}-bl,
+                .#{$prefix}btn-#{$ui}-tr,
+                .#{$prefix}btn-#{$ui}-br,
+                .#{$prefix}btn-#{$ui}-tc,
+                .#{$prefix}btn-#{$ui}-bc {
+                    background-image: slicer-corner-sprite('btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-over-corners');
+                }
+                .#{$prefix}btn-#{$ui}-ml,
+                .#{$prefix}btn-#{$ui}-mr {
+                    background-image: slicer-sides-sprite('btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-over-sides');
+                }
+                .#{$prefix}btn-#{$ui}-mc {
+                    background-color: $background-color-focus-over;
+                    @if $background-gradient-focus-over != null {
+                        background-image: slicer-frame-background-image('btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-over-fbg');
+                    }
                 }
             }
         }
@@ -1033,25 +1044,27 @@
 
         .#{$prefix}btn-focus.#{$prefix}btn-menu-active,
         .#{$prefix}btn-focus.#{$prefix}btn-pressed {
-            $stretch: slicer-background-stretch('btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}', 'bottom');
-            $frame: slicer-frame('btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}', $frame-size);
+            .#{$prefix}keyboard-mode & {
+                $stretch: slicer-background-stretch('btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}', 'bottom');
+                $frame: slicer-frame('btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}', $frame-size);
 
-            .#{$prefix}btn-#{$ui}-tl,
-            .#{$prefix}btn-#{$ui}-bl,
-            .#{$prefix}btn-#{$ui}-tr,
-            .#{$prefix}btn-#{$ui}-br,
-            .#{$prefix}btn-#{$ui}-tc,
-            .#{$prefix}btn-#{$ui}-bc {
-                background-image: slicer-corner-sprite('btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-pressed-corners');
-            }
-            .#{$prefix}btn-#{$ui}-ml,
-            .#{$prefix}btn-#{$ui}-mr {
-                background-image: slicer-sides-sprite('btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-pressed-sides');
-            }
-            .#{$prefix}btn-#{$ui}-mc {
-                background-color: $background-color-focus-pressed;
-                @if $background-gradient-focus-pressed != null {
-                    background-image: slicer-frame-background-image('btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-pressed-fbg');
+                .#{$prefix}btn-#{$ui}-tl,
+                .#{$prefix}btn-#{$ui}-bl,
+                .#{$prefix}btn-#{$ui}-tr,
+                .#{$prefix}btn-#{$ui}-br,
+                .#{$prefix}btn-#{$ui}-tc,
+                .#{$prefix}btn-#{$ui}-bc {
+                    background-image: slicer-corner-sprite('btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-pressed-corners');
+                }
+                .#{$prefix}btn-#{$ui}-ml,
+                .#{$prefix}btn-#{$ui}-mr {
+                    background-image: slicer-sides-sprite('btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-pressed-sides');
+                }
+                .#{$prefix}btn-#{$ui}-mc {
+                    background-color: $background-color-focus-pressed;
+                    @if $background-gradient-focus-pressed != null {
+                        background-image: slicer-frame-background-image('btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}', 'btn/btn-#{$ui}-focus-pressed-fbg');
+                    }
                 }
             }
         }
@@ -1199,8 +1212,10 @@
             .#{$prefix}segmented-button-item {
                 @if not is-null($inner-border-width-focus) and not is-null($inner-border-color-focus) {
                     &.#{$prefix}btn-focus.#{$prefix}btn-#{$ui}:after {
-                        border-width: $inner-border-width-focus;
-                        border-color: $inner-border-color-focus;
+                        .#{$prefix}keyboard-mode & {
+                            border-width: $inner-border-width-focus;
+                            border-color: $inner-border-color-focus;
+                        }
                     }
                 }
 
@@ -1213,8 +1228,10 @@
 
                 @if not is-null($inner-border-width-focus-over) and not is-null($inner-border-color-focus-over) {
                     &.#{$prefix}btn-focus.#{$prefix}btn-over.#{$prefix}btn-#{$ui}:after {
-                        border-width: $inner-border-width-focus-over;
-                        border-color: $inner-border-color-focus-over;
+                        .#{$prefix}keyboard-mode & {
+                            border-width: $inner-border-width-focus-over;
+                            border-color: $inner-border-color-focus-over;
+                        }
                     }
                 }
 
@@ -1229,8 +1246,10 @@
                 @if not is-null($inner-border-width-focus-pressed) and not is-null($inner-border-color-focus-pressed) {
                     &.#{$prefix}btn-focus.#{$prefix}btn-menu-active.#{$prefix}btn-#{$ui}:after,
                     &.#{$prefix}btn-focus.#{$prefix}btn-pressed.#{$prefix}btn-#{$ui}:after {
-                        border-width: $inner-border-width-focus-pressed;
-                        border-color: $inner-border-color-focus-pressed;
+                        .#{$prefix}keyboard-mode & {
+                            border-width: $inner-border-width-focus-pressed;
+                            border-color: $inner-border-color-focus-pressed;
+                        }
                     }
                 }
 

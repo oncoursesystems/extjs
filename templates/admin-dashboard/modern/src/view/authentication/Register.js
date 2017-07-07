@@ -24,19 +24,19 @@ Ext.define('Admin.view.authentication.Register', {
             },
             items: [{
                 xtype: 'textfield',
-                placeHolder: 'Full Name',
+                placeholder: 'Full Name',
                 ui: 'light'
             },{
                 xtype: 'textfield',
-                placeHolder: 'Username',
+                placeholder: 'Username',
                 ui: 'light'
             },{
                 xtype: 'textfield',
-                placeHolder: 'Email',
+                placeholder: 'Email',
                 ui: 'light'
             },{
                 xtype: 'passwordfield',
-                placeHolder: 'Password',
+                placeholder: 'Password',
                 ui: 'light'
             },{
                 layout: 'hbox',

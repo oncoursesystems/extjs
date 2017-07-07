@@ -1,8 +1,9 @@
 Ext.define('KitchenSink.view.touchevent.Pad', {
     extend: 'Ext.Container',
     xtype: 'toucheventpad',
-    id: 'touchpad',
-    
+
+    cls: 'touchpad',
+
     flex: 1,
     margin: 10,
 
@@ -19,9 +20,8 @@ Ext.define('KitchenSink.view.touchevent.Pad', {
         align: 'stretch'
     },
 
-    items: [
-        {
-            html: 'Touch here!'
-        }
-    ]
+    items: [{
+        xtype: 'component',
+        html: 'Touch here!'
+    }]
 });

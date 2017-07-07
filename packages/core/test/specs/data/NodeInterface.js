@@ -1,6 +1,8 @@
 /* global expect, Ext, jasmine, spyOn */
 
-describe('Ext.data.NodeInterface', function() {
+topSuite("Ext.data.NodeInterface",
+    ['Ext.data.TreeModel', 'Ext.data.TreeStore', 'Ext.data.Session'],
+function() {
     var fakeScope = {};
 
     function spyOnEvent(object, eventName, fn) {
@@ -312,7 +314,28 @@ describe('Ext.data.NodeInterface', function() {
             it("should have node not expandable if it is a leaf node", function() {
                 spareNode.set('leaf', true);
                 expect(spareNode.isExpandable()).toBe(false);
-            });               
+            });
+        });
+
+        describe("expand", function () {
+            var store;
+            it("should not add phantom children to an expanding empty node", function () {
+                store = new Ext.data.TreeStore({
+                    root: { // if 'data' is used here, the test won't pass
+                        name: 'Root',
+                        children: [
+                            {name: 'Child1'},
+                            {name: 'Child2'}
+                        ]
+                    }
+                });
+                var child2 = store.getRoot().childNodes[1];
+                child2.expand();
+                expect(child2.childNodes.length).toBe(0);
+            });
+            afterEach(function () {
+                Ext.destroy(store);
+            });
         });
 
         describe("append", function(){

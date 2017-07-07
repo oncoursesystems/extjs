@@ -11,15 +11,13 @@ Ext.define('Admin.view.faq.List', {
         autoLoad: true
     },
 
-    defaultType: 'faqitems',
-
     itemConfig: {
-        //ui: 'light', // TODO - timing issue
+        xtype: 'faqitems',
+        ui: 'light',
         userCls: 'dashboard-item shadow',
         viewModel: true,
 
         bind: {
-            ui: 'light',
             title: '{record.name}',
             store: '{record.questions}'
         }

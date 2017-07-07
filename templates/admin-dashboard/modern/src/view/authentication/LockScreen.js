@@ -39,7 +39,7 @@ Ext.define('Admin.view.authentication.LockScreen', {
             },
             items: [{
                 xtype: 'passwordfield',
-                placeHolder: 'Password',
+                placeholder: 'Password',
                 ui: 'light'
             },{
                 xtype: 'button',

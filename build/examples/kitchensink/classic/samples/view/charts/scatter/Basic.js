@@ -51,7 +51,9 @@ Ext.define('KitchenSink.view.charts.scatter.Basic', {
         width: '100%',
         height: 600,
         innerPadding: 20,
-        insetPadding: '50 40 10 10',
+        captions: {
+            title: 'Life expectancy at birth in 2013'
+        },
         store: {
             type: 'life-expectancy'
         },
@@ -95,15 +97,6 @@ Ext.define('KitchenSink.view.charts.scatter.Basic', {
                     lineDash: [2,2]
                 }
             }
-        }],
-        sprites: [{
-            type: 'text',
-            text: 'Life expectancy at birth in 2013',
-            fontSize: 22,
-            width: 100,
-            height: 30,
-            x: 40, // the sprite x position
-            y: 30  // the sprite y position
         }],
         series: [{
             type: 'scatter',

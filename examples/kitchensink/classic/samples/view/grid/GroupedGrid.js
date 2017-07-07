@@ -16,10 +16,10 @@ Ext.define('KitchenSink.view.grid.GroupedGrid', {
         path: 'classic/samples/view/grid/GroupedGridController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Restaurants.js'
+        path: 'app/store/Restaurants.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/Restaurant.js'
+        path: 'app/model/Restaurant.js'
     }],
     profiles: {
         classic: {

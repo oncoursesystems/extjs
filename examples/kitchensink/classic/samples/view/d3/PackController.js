@@ -7,14 +7,18 @@ Ext.define('KitchenSink.view.d3.PackController', {
     ],
 
     onTooltip: function (component, tooltip, node, element, event) {
-        var size = node.get('size'),
-            n = node.childNodes.length;
+        var record = node.data,
+            size = record.get('size'),
+            n = record.childNodes.length,
+            html = '<span style="font-weight: bold">' + record.get('name') + '</span><br>';
 
         if (size) {
-            tooltip.setHtml(Ext.util.Format.fileSize(size));
+            html += Ext.util.Format.fileSize(size);
         } else {
-            tooltip.setHtml(n + ' file' + (n === 1 ? '' : 's') + ' inside.');
+            html += n + ' file' + (n === 1 ? '' : 's') + ' inside.'
         }
+
+        tooltip.setHtml(html);
     }
 
 });

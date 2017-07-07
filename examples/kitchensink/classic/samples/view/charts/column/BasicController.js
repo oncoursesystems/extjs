@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
             return;
         }
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         if (Ext.os.is.Desktop) {
             chart.download({
                 filename: 'Redwood City Climate Data Chart'
@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
     },
 
     onReloadData: function() {
-        var chart = this.lookupReference('chart');
+        var chart = this.lookup('chart');
         chart.getStore().refreshData();
     },
 
@@ -52,7 +52,7 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
 
     onAfterRender: function () {
         var me = this,
-            chart = this.lookupReference('chart'),
+            chart = this.lookup('chart'),
             axis = chart.getAxis(0),
             store = chart.getStore();
 
@@ -67,30 +67,27 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
     },
 
     onAxisRangeChange: function (axis, range) {
-        // this.lookupReference('chart') will fail here,
+        // this.lookup('chart') will fail here,
         // as at the time of this call
         // the chart is not yet in the component tree,
         // so we have to use axis.getChart() instead.
         var chart = axis.getChart(),
             store = chart.getStore(),
-            sum = 0,
-            mean;
+            average = store.average('highF');
 
-        store.each(function (rec) {
-            sum += rec.get('highF');
-        });
-
-        mean = sum / store.getCount();
-
-        axis.setLimits({
-            value: mean,
-            line: {
-                title: {
-                    text: 'Average high: ' + mean.toFixed(2) + '°F'
-                },
-                lineDash: [2,2]
-            }
-        });
+        if (average) {
+            axis.setLimits({
+                value: average,
+                line: {
+                    title: {
+                        text: 'Average high: ' + average.toFixed(2) + '°F'
+                    },
+                    lineDash: [2,2]
+                }
+            });
+        } else {
+            axis.setLimits(null);
+        }
     },
 
     itemAnimationDuration: 0,
@@ -98,18 +95,18 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
     // Disable item's animaton for editing.
     onBeginItemEdit: function (chart, interaction, item) {
         var itemsMarker = item.sprite.getMarker(item.category),
-            fx = itemsMarker.getTemplate().fx; // animation modifier
+            animation = itemsMarker.getTemplate().getAnimation(); // animation modifier
 
-        this.itemAnimationDuration = fx.getDuration();
-        fx.setDuration(0);
+        this.itemAnimationDuration = animation.getDuration();
+        animation.setDuration(0);
     },
 
     // Restore item's animation when editing is done.
     onEndItemEdit: function (chart, interaction, item, target) {
         var itemsMarker = item.sprite.getMarker(item.category),
-            fx = itemsMarker.getTemplate().fx;
+            animation = itemsMarker.getTemplate().getAnimation();
 
-        fx.setDuration(this.itemAnimationDuration);
+        animation.setDuration(this.itemAnimationDuration);
     }
 
 });

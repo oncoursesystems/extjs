@@ -248,7 +248,7 @@ Ext.define('Ext.util.SorterCollection', {
             }
 
             // If a sorter config was created, make it an instance
-            sorter = Ext.create(xclass || 'Ext.util.Sorter', sorterConfig);
+            sorter = Ext.create(xclass || Ext.util.Sorter, sorterConfig);
         }
 
         if (sorterOptionsFn) {

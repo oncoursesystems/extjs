@@ -34,8 +34,6 @@ Ext.define('KitchenSink.view.calendar.Days', {
         }
     },
 
-    shadow: true,
-
     layout: {
         type: 'hbox',
         align: 'stretch'
@@ -53,10 +51,10 @@ Ext.define('KitchenSink.view.calendar.Days', {
         width: 150,
         bodyPadding: 5,
         hidden: Ext.os.is.Phone,
-        items: {
+        items: [{
             xtype: 'calendar-list',
             bind: '{calStore}'
-        }
+        }]
     }, {
         xtype: 'calendar-days',
         flex: 1,

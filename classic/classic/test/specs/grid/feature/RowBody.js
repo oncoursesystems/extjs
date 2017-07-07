@@ -1,6 +1,8 @@
 /* global Ext, expect, jasmine */
 
-describe('Ext.grid.feature.RowBody', function () {
+topSuite("Ext.grid.feature.RowBody",
+    ['Ext.grid.Panel', 'Ext.tree.Panel', 'Ext.grid.feature.Grouping'],
+function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         dummyData = [
             ['3m Co',71.72,0.02,0.03,'9/1 12:00am', 'Manufacturing'],
@@ -261,7 +263,7 @@ describe('Ext.grid.feature.RowBody', function () {
             it('should focus the closest cell when clicking the row body', function () {
                 jasmine.fireMouseEvent(rowBody, 'click', column0Center);
 
-                expect(grid.view.getCell(1, columns[0]).hasCls('x-grid-item-focused')).toBe(true);
+                expect(grid.view.getCell(1, columns[0])).toHaveCls('x-grid-item-focused');;
             });
 
             it('should select the entire wrapped row when clicking the row body', function () {
@@ -423,6 +425,15 @@ describe('Ext.grid.feature.RowBody', function () {
                 expect(normalTr1.childNodes.length).toBe(4);
                 expect(Ext.fly(normalTr1).hasCls('x-grid-row')).toBeTruthy();
 
+            });
+        });
+
+        describe("updating", function() {
+            it("should react to an update", function() {
+                createGrid();
+                store.first().set('company', '2m Co');
+                var el = grid.el.dom.querySelector('.x-grid-rowbody');
+                expect(el.childNodes[0]).hasHTML('2m Co');
             });
         });
 

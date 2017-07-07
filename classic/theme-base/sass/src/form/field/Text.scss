@@ -59,13 +59,6 @@
     background: repeat-x 0 0;
     width: 100%;
     height: 100%;
-    @if $include-webkit {
-        .#{$prefix}webkit & {
-            // webkit adds a mysterious extra 3px of space under the textarea when it
-            // is height:100% of its parent
-            height: calc(100% + 3px);
-        }
-    }
 }
 
 .#{$prefix}form-trigger {

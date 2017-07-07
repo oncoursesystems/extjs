@@ -302,13 +302,12 @@ Ext.define('Ext.form.Basic', {
      * See {@link Ext.direct.Manager} for more information.
      */
 
-    //<locale>
     /**
      * @cfg {String} waitTitle
      * The default title to show for the waiting message box
+     * @locale
      */
     waitTitle: 'Please Wait...',
-    //</locale>
 
     /**
      * @cfg {Boolean} trackResetOnLoad

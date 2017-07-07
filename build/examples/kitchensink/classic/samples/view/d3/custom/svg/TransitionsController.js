@@ -24,8 +24,13 @@ Ext.define('KitchenSink.view.d3.custom.svg.TransitionsController', {
             coefficients = me.coefficients,
             a, b, k, scale, x, y, i, r, theta, dataset,
             datasetIndex = 0,
-            easings = ['linear', 'bounce', 'circle', 'elastic'],
-            intervalId, progressBar;
+            easings = [
+                d3.easeLinear,
+                d3.easeBounce,
+                d3.easeCircle,
+                d3.easeElastic
+            ],
+            timer, progressBar;
 
         me.datasets = [];
 
@@ -63,9 +68,9 @@ Ext.define('KitchenSink.view.d3.custom.svg.TransitionsController', {
 
         resetProgress();
 
-        intervalId = setInterval(function () {
+        timer = d3.interval(function () {
             if (view.isDestroyed) {
-                clearInterval(intervalId);
+                timer.stop();
                 return;
             }
             if (datasetIndex < me.datasets.length - 1) {
@@ -86,8 +91,8 @@ Ext.define('KitchenSink.view.d3.custom.svg.TransitionsController', {
 
         }, 4000);
 
-        function position() {
-            this
+        function position(selection) {
+            selection
                 .attr('cx', function (d) {
                     return d[0];
                 })
@@ -98,11 +103,11 @@ Ext.define('KitchenSink.view.d3.custom.svg.TransitionsController', {
 
         function resetProgress() {
             progressBar.datum(0).call(progress);
-            progressBar.datum(width).transition().ease('linear').duration(3900).call(progress);
+            progressBar.datum(width).transition().ease(d3.easeLinear).duration(3900).call(progress);
         }
 
-        function progress() {
-            this.attr('width', function (d) {
+        function progress(selection) {
+            selection.attr('width', function (d) {
                 return d;
             });
         }

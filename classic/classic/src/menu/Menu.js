@@ -52,10 +52,6 @@ Ext.define('Ext.menu.Menu', {
         'Ext.menu.Separator'
     ],
 
-    mixins: [
-        'Ext.util.FocusableContainer'
-    ],
-
     defaultType: 'menuitem',
 
     /**
@@ -187,6 +183,7 @@ Ext.define('Ext.menu.Menu', {
     // Menus are focusable
     focusable: true,
     tabIndex: -1,
+    focusableContainer: true,
 
     // When a Menu is used as a carrier to float some focusable Component such as a DatePicker or ColorPicker
     // This will be used to delegate focus to its focusable child.
@@ -338,18 +335,7 @@ Ext.define('Ext.menu.Menu', {
         // Keyboard handling can be disabled, e.g. by the DatePicker menu
         // or the Date filter menu constructed by the Grid
         if (keyNav) {
-            keyNav.map.processEventScope = me;
-            keyNav.map.processEvent = function(e) {
-                // ESC may be from input fields, and FocusableContainers ignore keys from 
-                // input fields. We do not want to ignore ESC. ESC hide menus.
-                if (e.keyCode === e.ESC) {
-                    e.target = this.el.dom;
-                }
-                
-                return e;
-            };
-            
-           // Handle ESC key
+            // Handle ESC key
             keyNav.map.addBinding([{
                 key: Ext.event.Event.ESC,
                 handler: me.onEscapeKey,
@@ -368,7 +354,8 @@ Ext.define('Ext.menu.Menu', {
         else {
             // Even when FocusableContainer key event processing is disabled,
             // we still need to handle the Escape key!
-            me.escapeKeyNav = new Ext.util.KeyNav(me.el, {
+            me.escapeKeyNav = new Ext.util.KeyNav({
+                target: me.el,
                 eventName: 'keydown',
                 scope: me,
                 esc: me.onEscapeKey
@@ -566,7 +553,7 @@ Ext.define('Ext.menu.Menu', {
             cmp.setUI(ui);
         } else if (me.items.getCount() > 1 && !cmp.rendered && !cmp.dock) {
             cmpCls = me._itemCmpCls;
-            cls = [cmpCls + ' ' + cmpCls + '-' + ui];
+            cls = [cmpCls, cmpCls + '-' + ui];
 
             // The "plain" setting means that the menu does not look so much like a menu. It's more like a grey Panel.
             // So it has no vertical separator.
@@ -809,9 +796,10 @@ Ext.define('Ext.menu.Menu', {
         me.lastHide = Ext.Date.now();
         Ext.menu.Manager.onHide(me);
 
-        if (me.parentMenu && me.parentMenu.expanded) {
+        if (me.parentMenu) {
             me.parentMenu.expanded = false;
         }
+        
 
         if (me.floating && ariaDom) {
             ariaDom.setAttribute('aria-expanded', false);
@@ -856,6 +844,29 @@ Ext.define('Ext.menu.Menu', {
                 el.dom.setAttribute('tabIndex', tabIndex);
                 el.dom.setAttribute('data-componentid', me.id);
             }
+        },
+
+        processFocusableContainerKeyEvent: function(e) {
+            // ESC may be from input fields, and FocusableContainers ignore keys from
+            // input fields. We do not want to ignore ESC. ESC hide menus.
+            if (e.keyCode === e.ESC) {
+                e.target = this.el.dom;
+            }
+            // TAB from textual input fields is converted into UP or DOWN.
+            else if (e.keyCode === e.TAB && Ext.fly(e.target).is('input[type=text],textarea')) {
+                e.preventDefault();
+                e.target = this.getItemFromEvent(e).el.dom;
+                if (e.shiftKey) {
+                    e.shiftKey = false;
+                    e.keyCode = e.UP;
+                } else {
+                    e.keyCode = e.DOWN;
+                }
+            } else {
+                return this.callParent([e]);
+            }
+
+            return e;
         },
         
         // Tabbing in a floating menu must hide, but not move focus.

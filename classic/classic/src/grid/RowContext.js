@@ -66,7 +66,6 @@ Ext.define('Ext.grid.RowContext', {
                 focusEl.blur();
             }
             widget.detachFromBody();
-            widget.hidden = true;
         }
     },
 
@@ -88,7 +87,7 @@ Ext.define('Ext.grid.RowContext', {
             }
 
             me.viewModel = rowVM = Ext.Factory.viewModel(Ext.merge({
-                parent: ownerGrid.lookupViewModel(),
+                parent: ownerGrid.getRowContextViewModelParent(),
                 data: {
                     record: me.record,
                     recordIndex: me.recordIndex
@@ -100,7 +99,11 @@ Ext.define('Ext.grid.RowContext', {
             result = widgets[ownerId] = Ext.widget(Ext.apply({
                 ownerCmp: view,
                 _rowContext: me,
-                $vmParent: rowVM || ownerGrid.lookupViewModel(),
+                // This will spin up a VM on the grid if we don't have one that
+                // will be shared across all instances. If we don't have a rowVM
+                // or a viewmodel on the created object, we don't  need it, but
+                // we can't really tell until we create an instance.
+                $vmParent: rowVM || ownerGrid.getRowContextViewModelParent(),
                 initInheritedState: me.initInheritedStateHook,
                 lookupViewModel: me.lookupViewModelHook
             }, widgetCfg));
@@ -113,8 +116,17 @@ Ext.define('Ext.grid.RowContext', {
             if (result.isWidget) {
                 result.initBindable();
             }
-        } else {
-            result.hidden = false;
+            else {
+                // Components store an Element reference to their container element.
+                // For ordinary components that is not a problem since usually
+                // that element is also referenced by Container instance, and gets
+                // cleaned up when Container is destroyed. However for row widgets
+                // the container element is a cell; cells do not get Element instances
+                // and View is not going to clean them up.
+                // So we have to clean up explicitly when the widget is destroyed
+                // to avoid orphan Element instances in Ext.cache.
+                result.collectContainerElement = true;
+            }
         }
 
         return result;

@@ -655,11 +655,11 @@ Ext.define('Ext.util.Color', {
          *     Ext.util.Color.create();
          *
          * @param {Array} arg
-         * @param {Ext.util.Color/String/Number[]/Number} arg.[red] Red component (0..255),
+         * @param {Ext.util.Color/String/Number[]/Number} [arg.red] Red component (0..255),
          * CSS color string or array of all components.
-         * @param {Number} arg.[green] Green component (0..255)
-         * @param {Number} arg.[blue] Blue component (0..255)
-         * @param {Number} arg.[alpha=1] Alpha component (0..1)
+         * @param {Number} [arg.green] Green component (0..255)
+         * @param {Number} [arg.blue] Blue component (0..255)
+         * @param {Number} [arg.alpha=1] Alpha component (0..1)
          * @return {Ext.util.Color}
          * @static
          */

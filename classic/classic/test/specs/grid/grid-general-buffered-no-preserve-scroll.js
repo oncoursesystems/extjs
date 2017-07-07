@@ -1,6 +1,8 @@
 /* global Ext, expect, spyOn, jasmine, xit, MockAjaxManager */
 
-describe("grid-general-buffered-no-preserve-scroll", function() {
+topSuite("grid-general-buffered-no-preserve-scroll",
+    [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore'],
+function() {
     var grid, store,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
@@ -172,7 +174,8 @@ describe("grid-general-buffered-no-preserve-scroll", function() {
 
             bufferedRenderer.scrollTo(1000, {
                 select: true,
-                focus: true,
+                focus: false,   // MUST NOT focus - focus restoration scrolls on refresh
+                                // whcih breaks the test expectations
                 callback: function() {
                     scrollDone = true;
                 }

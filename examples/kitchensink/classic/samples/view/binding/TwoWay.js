@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.binding.TwoWay', {
     //<example>
     requires: ['KitchenSink.view.binding.TwoWayController'],
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/binding/TwoWayController.js'
     }],
     //</example>

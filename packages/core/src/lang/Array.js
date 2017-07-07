@@ -368,6 +368,35 @@ Ext.Array = (function() {
             return true;
         },
 
+        /*
+         * Calculates the the insertion index of a passed object into the passed Array according
+         * to the passed comparator function. Note that the passed Array *MUST* already be ordered.
+         * @param {Object} item The item to calculate the insertion index for.
+         * @param {Array} The array into which the item is to be inserted.
+         * @param {Function} comparatorFn The comparison function. Must return -1 or 0 or 1.
+         * @param {Object} comparatorFn.lhs The left object to compare.
+         * @param {Object} comparatorFn.rhs The right object to compare.
+         * @param {Number} index The possible correct index to try first before a binary
+         * search is instigated.
+         */
+        findInsertionIndex: function(item, items, comparatorFn, index) {
+            var len = items.length,
+                beforeCheck, afterCheck;
+
+            comparatorFn = comparatorFn || ExtArray.lexicalCompare;
+
+            if (index < len) {
+                beforeCheck = index > 0 ? comparatorFn(items[index - 1], item) : 0;
+                afterCheck = index < len - 1 ? comparatorFn(item, items[index]) : 0;
+                if (beforeCheck < 1 && afterCheck < 1) {
+                    return index;
+                }
+            }
+
+            return ExtArray.binarySearch(items, item, comparatorFn);
+        },
+
+
         /**
          * @method
          * Iterates an array and invoke the given callback function for each item. Note that this will simply

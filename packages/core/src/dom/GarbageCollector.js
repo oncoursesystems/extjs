@@ -23,6 +23,10 @@ Ext.define('Ext.dom.GarbageCollector', {
 
         me.lastTime = Ext.now();
         me.onTick = me.onTick.bind(me);
+        
+        //<debug>
+        me.onTick.$skipTimerCheck = true;
+        //</debug>
 
         me.resume();
     },

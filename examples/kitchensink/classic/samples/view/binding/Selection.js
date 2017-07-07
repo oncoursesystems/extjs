@@ -12,17 +12,17 @@ Ext.define('KitchenSink.view.binding.Selection', {
     //<example>
     requires: ['KitchenSink.view.binding.SelectionController'],
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/binding/SelectionController.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/Company.js'
+        path: 'app/model/Company.js'
     }, {
         type: 'Model',
-        path: 'classic/samples/model/field/PhoneNumber.js'
+        path: 'app/model/field/PhoneNumber.js'
     }, {
         type: 'Data',
-        path: 'classic/samples/data/Company.js'
+        path: 'app/data/Company.js'
     }],
     //</example>
 

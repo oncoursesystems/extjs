@@ -1,6 +1,6 @@
 /* global Ext, xit, it, expect, jasmine */
 
-describe('Ext.resizer.Resizer', function () {
+topSuite("Ext.resizer.Resizer", ['Ext.window.Window'], function () {
     var resizer, target,
     testIt = Ext.isWebKit ? it : xit;
 

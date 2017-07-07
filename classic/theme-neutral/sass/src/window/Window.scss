@@ -626,12 +626,14 @@
 
     .#{$prefix}window-header-#{$ui} {
         .#{$prefix}tool-focus {
-            @include css-outline(
-                $width: $ui-tool-focus-outline-width,
-                $style: $ui-tool-focus-outline-style,
-                $color: $ui-tool-focus-outline-color,
-                $offset: $ui-tool-focus-outline-offset
-            );
+            .#{$prefix}keyboard-mode & {
+                @include css-outline(
+                    $width: $ui-tool-focus-outline-width,
+                    $style: $ui-tool-focus-outline-style,
+                    $color: $ui-tool-focus-outline-color,
+                    $offset: $ui-tool-focus-outline-offset
+                );
+            }
         }
     }
 

@@ -2,44 +2,23 @@
  * Text Field {@link Ext.field.Text#triggers trigger} widget.
  */
 Ext.define('Ext.field.trigger.Trigger', {
-    extend: 'Ext.Widget',
+    extend: 'Ext.field.trigger.Base',
     xtype: 'trigger',
     alias: 'trigger.trigger',
 
     requires: [
-        'Ext.util.TapRepeater'
+        'Ext.util.ClickRepeater'
     ],
 
-    mixins: [
-        'Ext.mixin.Factoryable'
-    ],
-
-    factoryConfig: {
-        defaultType: 'trigger',
-        aliasPrefix: 'trigger.'
-    },
-
-    isTrigger: true,
+    /**
+     * @cfg {Boolean} [focusOnMouseDown=false] If `true`, the field will be focused upon
+     * mousedown on the trigger. This should be used only for main Picker field triggers
+     * that expand and collapse the picker; additional triggers should not focus the field.
+     * @private
+     */
+    focusOnMousedown: false,
 
     config: {
-        /**
-         * @cfg {Ext.field.Text}
-         * The text field that created this trigger
-         * @private
-         */
-        field: null,
-
-        /**
-         * @cfg {String} [group]
-         * The name of an optional group trigger that this trigger belongs to.  If no trigger
-         * Exists by that name one will automatically be created.  A group trigger is a
-         * special trigger that contains other triggers.  Those triggers' elements are
-         * appended to the group trigger's element in the DOM.
-         *
-         * The {@link #weight} of grouped triggers is relative to other triggers in the group.
-         */
-        group: null,
-
         /**
          * @cfg {Function/String} [handler=undefined]
          * Function to run when trigger is clicked or tapped.
@@ -55,42 +34,19 @@ Ext.define('Ext.field.trigger.Trigger', {
 
         /**
          * @cfg {Boolean/Object}
-         * `true` to attach a {@link Ext.util.TapRepeater tap repeater} to the trigger,
+         * `true` to attach a {@link Ext.util.ClickRepeater tap repeater} to the trigger,
          * or a config object for a tap repeater.
          */
         repeat: null,
 
         /**
-         * @cfg {'left'/'right'} [side='right']
-         * The side of the text field's input to render the trigger on.
-         */
-        side: null,
-
-        /**
          * @cfg {Object} [scope]
          * Execution context for the {@link #handler} function.
          */
-        scope: null,
-
-        /**
-         * @cfg {String}
-         * The key used to identify this trigger in the text field's triggers config.
-         * @private
-         */
-        name: null,
-
-        /**
-         * The triggers contained in this trigger (only applicable for trigger groups)
-         * @private
-         */
-        triggers: null,
-
-        weight: null
+        scope: null
     },
 
-    classCls: Ext.baseCSSPrefix + 'trigger',
     interactiveCls: Ext.baseCSSPrefix + 'interactive',
-    groupedCls: Ext.baseCSSPrefix + 'grouped',
 
     template: [{
         reference: 'iconElement',
@@ -99,32 +55,6 @@ Ext.define('Ext.field.trigger.Trigger', {
             Ext.baseCSSPrefix + 'font-icon'
         ]
     }],
-
-    statics: {
-        /**
-         * Sorts an array of triggers in place by weight
-         * @param {Ext.field.Trigger[]} triggers
-         * @return {Ext.field.Trigger[]}
-         * @private
-         * @static
-         */
-        sort: function(triggers) {
-            Ext.Array.sort(triggers, this.weightComparator);
-            return triggers;
-        },
-
-        /**
-         * Comparison function for sorting an array of triggers in ascending order
-         * @param {Ext.form.field.Trigger} triggerA
-         * @param {Ext.form.field.Trigger} triggerB
-         * @return {Number}
-         * @private
-         * @static
-         */
-        weightComparator: function(triggerA, triggerB) {
-            return (triggerA.getWeight() || 0) - (triggerB.getWeight() || 0);
-        }
-    },
 
     constructor: function(config) {
         var me = this,
@@ -136,27 +66,26 @@ Ext.define('Ext.field.trigger.Trigger', {
         repeat = me.getRepeat();
 
         if (repeat) {
-            me.repeater = new Ext.util.TapRepeater(Ext.apply({
-                el: element
+            me.repeater = new Ext.util.ClickRepeater(Ext.apply({
+                target: me,
+                preventDefault: true,
+                listeners: {
+                    mousedown: me.onClickRepeaterTouchStart,
+                    mouseup: me.onClickRepeaterTouchEnd,
+                    click: me.onClick,
+                    scope: me
+                }
             }, repeat));
-
-            me.repeater.on('tap', 'onClick', this);
         } else {
-            element.on('click', 'onClick', this);
+            element.on({
+                click: me.onClick,
+                mousedown: me.onMouseDown,
+                scope: me
+            });
         }
     },
 
     doDestroy: function() {
-        var triggers = this.getTriggers(),
-            i, ln;
-
-        if (triggers) {
-            for (i = 0, ln = triggers.length; i < ln; i++) {
-                triggers[i].destroy();
-            }
-        }
-
-        this.setTriggers(null);
         Ext.destroyMembers(this, 'repeater');
         this.callParent();
     },
@@ -167,51 +96,53 @@ Ext.define('Ext.field.trigger.Trigger', {
             field = me.getField();
 
         // TODO: skip this if readonly? !editable?
-        if (handler) {
+        if (handler && !me.getDisabled()) {
             Ext.callback(handler, me.getScope(), [field, me, e], null, field);
         }
+    },
+
+    onMouseDown: function(e) {
+        var field = this.getField(),
+            activeEl = document.activeElement;
+
+        // If it was a genuine mousedown or pointerdown, NOT a touch, then focus the input field.
+        // Usually, the field will be focused, but the mousedown on the trigger
+        // might be the user's first contact with the field.
+        // It's definitely NOT the user's first contact with our field if the field
+        // has the focus.
+        // It is also possible that there are multiple triggers on the field, and only one
+        // of them causes picker expand/collapse. When picker is about to be collapsed
+        // we need to focus the input; otherwise if the picker was focused the focus will go
+        // to the document body which is not what we want. However if the mousedown was on
+        // a trigger that does not cause collapse we should NOT focus the field.
+        if (field && e.pointerType !== 'touch' && (!field.containsFocus || this.focusOnMousedown)) {
+            field.focus();
+        }
+        // If we are not focusing this field, we must blur any other widget, otherwise keyboard control
+        // will remain with that widget while this trigger's widget is perceived to be active.
+        else if (activeEl !== field.getFocusEl().dom) {
+            document.activeElement.blur();
+        }
+
+        e.preventDefault();
+    },
+
+    onClickRepeaterTouchStart: function(clickRepeater, e) {
+        this.onMouseDown(e);
+    },
+
+    onClickRepeaterTouchEnd: function(clickRepeater, e) {
+        var me = this,
+            field = me.field;
+
+        Ext.callback(me.endHandler, me.scope, [field, me, e], 0, field);
     },
 
     updateHandler: function(handler) {
         this.toggleCls(this.interactiveCls, !!handler);
     },
 
-    updateGroup: function(group) {
-        if (!this.isConfiguring) {
-            this.getField().syncTriggers();
-        }
-    },
-
     updateIconCls: function(iconCls, oldIconCls) {
         this.iconElement.replaceCls(oldIconCls, iconCls);
-    },
-
-    updateSide: function() {
-        if (!this.isConfiguring) {
-            this.getField().syncTriggers();
-        }
-    },
-
-    updateTriggers: function(triggers) {
-        var me = this,
-            dom = me.element.dom,
-            iconElement = me.iconElement,
-            i, ln;
-
-        me.toggleCls(me.groupedCls, !!(triggers && triggers.length));
-
-        if (triggers) {
-            // group triggers do not have icons of their own, so we can safely remove the iconElement
-            if (iconElement) {
-                iconElement.destroy();
-                me.iconElement = null;
-                Ext.Array.remove(me.referenceList, 'iconElement');
-            }
-
-            for (i = 0, ln = triggers.length; i < ln; i++) {
-                dom.appendChild(triggers[i].element.dom);
-            }
-        }
     }
-
 });

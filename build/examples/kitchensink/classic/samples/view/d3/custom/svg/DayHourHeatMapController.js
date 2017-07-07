@@ -49,14 +49,20 @@ Ext.define('KitchenSink.view.d3.DayHourHeatMapController', {
                     };
                 },
                 function (error, data) {
-                    var colorScale = d3.scale.quantile()
+                    var colorScale = d3.scaleQuantile()
                         .domain([0, buckets - 1, d3.max(data, function (d) { return d.value; })])
                         .range(colors);
 
                     var cards = scene.selectAll('.hour')
                         .data(data, function (d) {return d.day+':'+d.hour;});
 
-                    cards.append('title');
+                    // First time we are here, the update selection will be empty.
+                    // During subsequent calls, the enter selection will be empty.
+
+                    // The exit selection is always going to be empty in this example,
+                    // as we will be reusing elements. Still, it's a good practice
+                    // to take care of it, just in case.
+                    cards.exit().remove();
 
                     cards.enter().append('rect')
                         .attr('x', function (d) { return (d.hour - 1) * gridSize; })
@@ -66,20 +72,20 @@ Ext.define('KitchenSink.view.d3.DayHourHeatMapController', {
                         .attr('class', 'hour bordered')
                         .attr('width', gridSize)
                         .attr('height', gridSize)
-                        .style('fill', colors[0]);
-
-                    cards.transition().duration(1000)
+                        .style('fill', colors[0])
+                        // In D3 4.x selections are now immutable (enter does not mutate update)
+                        .merge(cards) // so we merge enter and update selections manually
+                        .transition().duration(1000)
                         .style('fill', function (d) { return colorScale(d.value); });
-
-                    cards.select('title').text(function (d) { return d.value; });
-
-                    cards.exit().remove();
 
                     var legend = scene.selectAll('.legend')
                         .data([0].concat(colorScale.quantiles()), function (d) { return d; });
 
-                    legend.enter().append('g')
-                        .attr('class', 'legend');
+                    legend.exit().remove();
+
+                    legend = legend.enter().append('g')
+                        .attr('class', 'legend')
+                        .merge(legend);
 
                     legend.append('rect')
                         .attr('x', function (d, i) { return legendElementWidth * i; })
@@ -93,9 +99,6 @@ Ext.define('KitchenSink.view.d3.DayHourHeatMapController', {
                         .text(function (d) { return '≥ ' + Math.round(d); })
                         .attr('x', function (d, i) { return legendElementWidth * i; })
                         .attr('y', height + gridSize);
-
-                    legend.exit().remove();
-
                 });
         };
 

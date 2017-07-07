@@ -18,7 +18,7 @@
  *
  *      Ext.toast('Data saved');
  *
- * This will result in a toast message, which displays in the default location of bottom right in your viewport.
+ * This will result in a toast message, which displays in the default location at the top of your viewport.
  *
  * You may expand upon this simple example with the following parameters: 
  *
@@ -188,13 +188,13 @@ Ext.define('Ext.window.Toast', {
     slideBackDuration: 500,
 
     /**
-     * @cfg {Number} hideDuration
+     * @cfg {Number}
      * The number of milliseconds it takes for a Toast to hide.
      */
     hideDuration: 500,
 
     /**
-     * @cfg {Number} hideDuration
+     * @cfg {Number}
      * The number of milliseconds a Toast waits before automatically closing.
      */
     autoCloseDelay: 3000,
@@ -223,6 +223,12 @@ Ext.define('Ext.window.Toast', {
      * @inheritdoc
      */
     closable: false,
+
+    /**
+     * @cfg minHeight
+     * @inheritdoc
+     */
+    minHeight: 1,
 
     /**
      * @inheritdoc

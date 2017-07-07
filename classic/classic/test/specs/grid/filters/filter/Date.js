@@ -1,6 +1,8 @@
 /* global Ext, jasmine, expect */
 
-describe("Ext.grid.filters.filter.Date", function () {
+topSuite("Ext.grid.filters.filter.Date",
+    ['Ext.grid.Panel', 'Ext.grid.filters.Filters'],
+function() {
     var grid, plugin, store, columnFilter, menu, activeItem, headerCt, rootMenuItem, datepicker,
         pickerEl, headerNode, selectedNode, before, after, on,
         synchronousLoad = true,
@@ -56,7 +58,7 @@ describe("Ext.grid.filters.filter.Date", function () {
     function setPicker(val) {
         // Set the value and use the selected classname to find and fire the event.
         datepicker.setValue(new Date(val));
-        jasmine.fireMouseEvent(datepicker.eventEl.down('.x-datepicker-selected div').dom, 'click');
+        jasmine.fireMouseEvent(datepicker.eventEl.down('.x-datepicker-selected div', true), 'click');
     }
 
     function showMenu() {

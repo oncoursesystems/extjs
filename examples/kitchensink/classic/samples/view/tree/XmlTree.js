@@ -45,9 +45,9 @@ Ext.define('KitchenSink.view.tree.XmlTree', {
     },
 
     viewConfig: {
-        plugins: {
+        plugins: [{
             ptype: 'treeviewdragdrop',
             containerScroll: true
-        }
+        }]
     }
 });

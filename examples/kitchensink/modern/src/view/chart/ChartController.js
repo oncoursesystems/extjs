@@ -2,48 +2,25 @@ Ext.define('KitchenSink.view.chart.ChartController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.chart',
 
-    defaultVisibleRange: null,
-    rangeAxis: ['top', 'bottom'],
-
     requires: [
-        'Ext.chart.theme.Blue',
+        'Ext.chart.theme.Midnight',
         'Ext.chart.theme.Green',
         'Ext.chart.theme.Muted',
-        'Ext.chart.theme.Red',
-        'Ext.chart.theme.Sky',
-        'Ext.chart.theme.Yellow'
+        'Ext.chart.theme.Purple',
+        'Ext.chart.theme.Sky'
     ],
 
-    themes: [
-        'default',
-        'blue',
-        'green',
-        'midnight',
-        'muted',
-        'red',
-        'sky',
-        'yellow'
-    ],
+    onThemeSwitch: function (item) {
+        var chart = this.lookup('chart');
 
-    currentTheme: 0,
-
-    getChart: function() {
-        return this.getView().down('[isChart]');
+        chart.setTheme(item.getText());
+        chart.redraw();
     },
 
-    onThemeChange: function() {
-        var themes = this.themes,
-            idx = ++this.currentTheme;
+    onRefresh: function () {
+        var chart = this.lookup('chart')
+            store = chart.getStore();
 
-        if (idx === themes.length) {
-            this.currentTheme = idx = 0;
-        }
-        this.getChart().setTheme(themes[idx]);
-    },
-
-    onRefresh: function() {
-        var store = this.getChart().getStore();
         store.generateData(store.getNumRecords());
     }
-
 });

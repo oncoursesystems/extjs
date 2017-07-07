@@ -1,4 +1,8 @@
-describe('Ext.chart.series.sprite.Pie3DPart', function () {
+topSuite("Ext.chart.series.sprite.Pie3DPart", ['Ext.chart.*', 'Ext.data.ArrayStore'], function() {
+    beforeEach(function() {
+        // Silence warnings regarding Sencha download server
+        spyOn(Ext.log, 'warn');
+    });
 
     describe("series 'opacity' style change", function () {
         it("should result in a corresponding sprite attribute change", function () {

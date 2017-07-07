@@ -1,7 +1,7 @@
 // describe("Ext.event.gesture.Pinch", function () {});
 // The above appeases Cmd's parser to associate spec run results with files.
 
-(jasmine.supportsTouch ? describe : xdescribe)("Ext.event.gesture.Pinch", function() {
+(jasmine.supportsTouch ? topSuite : xtopSuite)("Ext.event.gesture.Pinch", function() {
     var helper = Ext.testHelper,
         targetEl, pinchstartHandler, pinchHandler, pinchendHandler, pinchcancelHandler,
         pinchstartEvent, pinchEvent, pinchendEvent;

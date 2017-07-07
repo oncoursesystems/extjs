@@ -15,7 +15,7 @@ Ext.define('Ext.util.translatable.Component', {
     doTranslate: function(x, y) {
         var component = this.getComponent();
 
-        if (component.isFloated()) {
+        if (component.getFloated()) {
             component.setX(x);
             component.setY(y);
         } else if (component.isPositioned()) {
@@ -30,7 +30,7 @@ Ext.define('Ext.util.translatable.Component', {
         var component = this.getComponent(),
             result;
 
-        if (component.isFloated()) {
+        if (component.getFloated()) {
             result = [component.getX(), component.getY()];
         } else if (component.isPositioned()) {
             result = [component.getLeft(), component.getTop()];

@@ -1,0 +1,24 @@
+.demo-buttons-basic {
+    .button-group-label {
+        &.button-group-right {
+            text-align: right;
+        }
+    }
+
+    .button-group {
+        background: white;
+        &.alt {
+          background: #607D8B;
+        }
+    }
+
+    &.demo-solid-background {
+        .button-group {
+            background: rgb(240, 240, 240);
+
+            &.alt {
+              background: #607D8B;
+            }
+        }
+    }
+}

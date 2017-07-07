@@ -1,5 +1,4 @@
-describe('Ext.draw.sprite.Text', function () {
-
+topSuite("Ext.draw.sprite.Text", function() {
     var proto = Ext.draw.sprite.Text.prototype;
 
     describe('makeFontShorthand', function () {

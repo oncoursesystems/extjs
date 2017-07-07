@@ -126,13 +126,13 @@ $calendar-days-now-marker-border-color: dynamic(#a94442);
  * @var {number}
  * The width for the time display.
  */
-$calendar-days-time-width: dynamic(4em);
+$calendar-days-time-width: dynamic(48px);
 
 /**
  * @var {number}
  * The width for the time display when in compact mode.
  */
-$calendar-days-compact-time-width: dynamic(2em);
+$calendar-days-compact-time-width: dynamic(24px);
 
 /**
  * @var {number/list}
@@ -186,7 +186,7 @@ $calendar-days-time-text-align: dynamic(right);
  * @var {number}
  * The line height for the am/pm text when used in the time gutter.
  */
-$calendar-days-time-ampm-line-height: dynamic(1em);
+$calendar-days-time-ampm-line-height: dynamic(12px);
 
 /**
  * @var {number}

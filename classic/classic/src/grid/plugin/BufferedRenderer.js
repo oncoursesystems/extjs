@@ -122,15 +122,6 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             viewListeners.refresh = me.onViewRefresh;
         }
 
-        // Only play the pointer-events;none trick on the platform it is needed on.
-        // Only needed when using DOM scrolling on WebKit.
-        // WebKit does a browser layout when you change the pointer-events style.
-        if (Ext.isWebKit) {
-            me.needsPointerEventsFix = true;
-            scrollerListeners.scrollend = me.onViewScrollEnd;
-            viewListeners.itemmousedown = me.onViewItemMouseDown;
-        }
-
         me.grid = grid;
         me.view = view;
         me.isRTL = view.getInherited().rtl;
@@ -310,7 +301,6 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                 // on a sort. If so, it's as if we scrolled to the top, so we'll simulate
                 // it here.
                 me.onViewScroll();
-                me.onViewScrollEnd();
             } else {
                 if (!me.hasOwnProperty('bodyTop')) {
                     me.bodyTop = rows.startIndex * me.rowHeight;
@@ -438,11 +428,20 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
 
         // Only process first layout (the boxready event) or height resizes.
         if (!oldHeight || height !== oldHeight) {
+            // Changing the content height may trigger multiple layouts for locked grids.
+            // Ensure they are coalesced.
+            Ext.suspendLayouts();
 
             // Recalculate the view size in rows now that the grid view has changed height
             me.viewClientHeight = view.lockingPartner ? ((me.scroller && me.scroller.getClientSize().y) || height) : view.el.dom.clientHeight;
-            newViewSize = Math.ceil(height / me.rowHeight) + me.trailingBufferZone + me.leadingBufferZone;
+
+            // Use the theme's default rowHeight unless the measured row height is smaller when calculating the view size.
+            // If the rows are *larger*, that doesn't really matter. We just need to cover the visible range with some scrolling
+            // range extra.
+            newViewSize = Math.ceil(height / Math.min(me.getThemeRowHeight(), me.rowHeight)) + me.trailingBufferZone + me.leadingBufferZone;
             me.viewSize = me.setViewSize(newViewSize);
+
+            Ext.resumeLayouts(true);
         }
     },
 
@@ -506,16 +505,9 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             // or the opposite end from which rows get removed if shrinking the view.
             pointyEnd = Ext.Number.sign((me.getFirstVisibleRowIndex() - rows.startIndex) - (rows.endIndex - me.getLastVisibleRowIndex()));
 
-        // Exchange largest view size as long as the partner has been laid out (and thereby calculated a true view size)
-        if (lockingPartner && !fromLockingPartner && lockingPartner.view.componentLayoutCounter) {
-            if (lockingPartner.viewSize > viewSize) {
-                viewSize = lockingPartner.viewSize;
-            }
-            // If we have not had a layout, we cannot command our partner.
-            // What is happening is that we are being commended to match the partner.
-            else if (view.componentLayoutCounter) {
-                lockingPartner.setViewSize(viewSize, true);
-            }
+        // Synchronize view sizes
+        if (lockingPartner && !fromLockingPartner) {
+            lockingPartner.setViewSize(viewSize, true);
         }
 
         diff = elCount - viewSize;
@@ -867,8 +859,6 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             // Keep the view immediately replenished when we scroll an existing element into view.
             // DOM scroll events fire asynchronously, and we must not leave subsequent code without a valid buffered row block.
             me.onViewScroll();
-            me.onViewScrollEnd();
-
             return;
         }
 
@@ -902,7 +892,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                 view.body.translate(null, me.bodyTop = tableTop);
 
                 // Ensure the scroller knows about the range if we're going down
-                if (direction === 1) {
+                if (direction === 1 && view.hasVariableRowHeight()) {
                     me.refreshSize();
                 }
 
@@ -938,47 +928,22 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
         });
     },
 
-    onViewItemMouseDown: function () {
-        var me = this;
-
-        Ext.getDoc().on({
-            mouseup: me.onDocumentMouseUp,
-            scope: me,
-            single: true
-        });
-        
-        me.preservePointerEvents = true;
-    },
-
-    onDocumentMouseUp: function () {
-        this.preservePointerEvents = false;
-    },
-
-    onViewScroll: function(scroller, x, y) {
+    onViewScroll: function(scroller, x, scrollTop) {
         var me = this,
             bodyDom = me.view.body.dom,
             store = me.store,
             totalCount = (store.getCount()),
             vscrollDistance,
-            scrollDirection,
-            scrollTop = me.scrollTop = me.scroller.getPosition().y;
+            scrollDirection;
+
+        // May be directly called with no args, as well as from the Scroller's scroll event
+        me.scrollTop = scrollTop == null ? (scrollTop = me.scroller.getPosition().y) : scrollTop;
 
         // Because lockable assemblies now only have one Y scroller,
         // initially hidden grids (one side may begin with all the columns)
         // still get the scroll notification, but may not have any DOM
         // to scroll.
         if (bodyDom) {
-
-            // Only play the pointer-events;none trick on the platform it is needed on.
-            // WebKit does a browser layout when you change the pointer-events style.
-            // Stops the jagging DOM scrolling when mouse is over data rows.
-            // But only clear pointer-events if another event hasn't flagged these as necessary
-            // When we click on a partially-visible row, the mousedown will trigger the scroll
-            // but the mouseup/click won't be processed since pointer events are cleared, so no selection will occur
-            if (me.needsPointerEventsFix && !me.preservePointerEvents) {
-                bodyDom.style.pointerEvents = 'none';
-            }
-
             // Only check for nearing the edge if we are enabled, and if there is overflow beyond our view bounds.
             // If there is no paging to be done (Store's dataset is all in memory) we will be disabled.
             if (!(me.disabled || totalCount < me.viewSize)) {
@@ -991,26 +956,6 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                     me.lastScrollDirection = scrollDirection;
                     me.handleViewScroll(me.lastScrollDirection, vscrollDistance);
                 }
-            }
-        }
-    },
-
-    onViewScrollEnd: function() {
-        var me = this,
-            bodyDom = me.view.body.dom;
-
-        // Because lockable assemblies now only have one Y scroller,
-        // initially hidden grids (one side may begin with all the columns)
-        // still get the scroll notification, but may not have any DOM
-        // to scroll.
-        if (bodyDom) {
-
-            // Only play the pointer-events;none trick on the platform it is needed on.
-            // WebKit does a browser layout when you change the pointer-events style.
-            // Stops the jagging DOM scrolling when mouse is over data rows.
-            if (me.needsPointerEventsFix) {
-                bodyDom.style.pointerEvents = '';
-                me.preservePointerEvents = false;
             }
         }
     },
@@ -1179,7 +1124,6 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             previousFirstItem,
             previousLastItem,
             prevRowCount = rows.getCount(),
-            newNodes,
             viewMoved = startIndex !== rows.startIndex && !me.isStoreLoading,
             calculatedTop = -1,
             scrollIncrement,
@@ -1205,7 +1149,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             view.clearViewEl(true);
             view.refreshCounter++;
             if (range.length) {
-                newNodes = view.doAdd(range, startIndex);
+                view.doAdd(range, startIndex);
 
                 if (viewMoved) {
                     // Try to find overlap between newly rendered block and old block
@@ -1314,9 +1258,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             calculatedTop,
             lockingPartner = (view.lockingPartner && !fromLockingPartner && !me.doNotMirror) && view.lockingPartner.bufferedRenderer,
             variableRowHeight = me.variableRowHeight,
-            oldBodyHeight = me.bodyHeight,
-            layoutCount = view.componentLayoutCounter,
-            activeEl, containsFocus, i, newRows, newTop, newFocus, noOverlap,
+            activeEl, containsFocus, i, newRows, newTop, noOverlap,
             oldStart, partnerNewRows, pos, removeCount, topAdditionSize, topBufferZone;
 
         // View may have been destroyed since the DelayedTask was kicked off.
@@ -1363,7 +1305,6 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
 
         // The new range encompasses the current range. Refresh and keep the scroll position stable
         if (start < rows.startIndex && end > rows.endIndex) {
-
             // How many rows will be added at top. So that we can reposition the table to maintain scroll position
             topAdditionSize = rows.startIndex - start;
 
@@ -1377,8 +1318,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
 
             // We've just added a bunch of rows to the top of our range, so move upwards to keep the row appearance stable
            newTop = me.bodyTop + increment;
-        }
-        else {
+        } else {
             // No overlapping nodes; we'll need to render the whole range.
             // teleported flag is set in getFirstVisibleRowIndex/getLastVisibleRowIndex if
             // the table body has moved outside the viewport bounds
@@ -1409,6 +1349,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                 }
                 newRows = rows.scroll(Ext.Array.slice(range, rows.endIndex + 1 - start), 1, removeCount);
 
+                scroller.scrollTo(null, me.scrollTop);
                 // We only have to bump the table down by the height of removed rows if rows are not a standard size
                 if (variableRowHeight) {
                     // Bump the table downwards by the height scraped off the top
@@ -1425,6 +1366,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                 oldStart = rows.startIndex;
                 newRows = rows.scroll(Ext.Array.slice(range, 0, rows.startIndex - start), -1, removeCount);
 
+                scroller.scrollTo(null, me.scrollTop);
                 // We only have to bump the table up by the height of top-added rows if rows are not a standard size
                 if (variableRowHeight) {
                     // Bump the table upwards by the height added to the top
@@ -1439,7 +1381,6 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                             newTop = 0;
                         }
                     }
-
                     // Not at zero yet, but the position has moved into negative range
                     else if (newTop < 0) {
                         increment = rows.startIndex * me.rowHeight;
@@ -1452,7 +1393,6 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                     newTop = calculatedTop;
                 }
             }
-
             // The position property is the scrollTop value *at which the table was last correct*
             // MUST be set at table render/adjustment time
             me.position = me.scrollTop;
@@ -1472,19 +1412,8 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                     view.renderingRows = true;
                     view.onFocusLeave({});
                     view.renderingRows = false;
-                    // Try to focus the contextual column header.
-                    // Failing that, look inside it for a tabbable element.
-                    // Failing that, focus the view.
-                    // Focus MUST NOT just silently die due to DOM removal
-                    if (pos.column.focusable) {
-                        newFocus = pos.column;
-                    } else {
-                        newFocus = pos.column.el.findTabbableElements()[0];
-                    }
-                    if (!newFocus) {
-                        newFocus = view.el;
-                    }
-                    newFocus.focus();
+                    
+                    me.getNewFocusTarget(pos).focus();
                 }
             }
         }
@@ -1517,7 +1446,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             }
         }
 
-        if (view.positionBody) {
+        if (view.positionBody && !fromLockingPartner) {
             me.setBodyTop(newTop, true);
         }
 
@@ -1538,6 +1467,38 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
         }
         //</debug>
         return newRows;
+    },
+    
+    /**
+     * Gets the next focus target based on the position
+     * @param {Ext.grid.CellContext} pos
+     * @returns {Ext.Component}
+     * @since 6.2.2
+     */
+    getNewFocusTarget: function(pos) {
+        var me = this,
+            grid = me.grid,
+            view = me.view,
+            column = pos.column,
+            hiddenHeaders = column.isHidden() || grid.hideHeaders,
+            tabbableItems;
+        
+        // Focus MUST NOT silently die due to DOM removal. Focus will be moved in the following order
+        // as available:
+        // Try focusing the contextual column header
+        if (column.focusable && !hiddenHeaders) {
+            return column;
+        }
+        
+        tabbableItems = column.el.findTabbableElements();
+        
+        // Failing that, look inside it for a tabbable element
+        if (tabbableItems && tabbableItems.length) {
+            return tabbableItems[0];
+        }
+        
+        // Failing that, find the available focus target of the grid or focus the view
+        return grid.findFocusTarget() || view.el;
     },
 
     syncRowHeights: function(itemEls, partnerItemEls) {
@@ -1813,6 +1774,20 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
         }
 
         return (me.scrollHeight = scrollHeight); // jshint ignore:line
+    },
+
+    getThemeRowHeight: function() {
+        var me = this,
+            testEl;
+
+        if (!me.themeRowHeight) {
+            testEl = Ext.getBody().createChild({
+                cls: Ext.baseCSSPrefix + 'theme-row-height-el'
+            });
+            me.self.prototype.themeRowHeight = testEl.dom.offsetHeight;
+            testEl.destroy();
+        }
+        return me.themeRowHeight;
     },
 
     attemptLoad: function(start, end, loadScrollPosition) {

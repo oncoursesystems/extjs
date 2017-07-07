@@ -6,19 +6,25 @@
  * @var {number}
  * Header container border-width
  */
-$headercontainer-border-width: dynamic(null);
+$headercontainer-border-width: dynamic(0 0 1px);
 
 /**
  * @var {string}
  * Header container border-style
  */
-$headercontainer-border-style: dynamic(null);
+$headercontainer-border-style: dynamic(solid);
 
 /**
  * @var {color}
  * Header container border-color
  */
-$headercontainer-border-color: dynamic(null);
+$headercontainer-border-color: dynamic($neutral-medium-dark-color);
+
+/**
+ * @var {color}
+ * Header container background-color
+ */
+$headercontainer-background-color: dynamic($neutral-light-color);
 
 /**
  * Creates a visual theme for a grid header container.
@@ -26,6 +32,9 @@ $headercontainer-border-color: dynamic(null);
  * @param {string} $ui
  * The name of the UI being created. Can not included spaces or special punctuation
  * (used in CSS class names).
+ *
+ * @param {String} [$xtype=headercontainer] (protected) The {@link Ext.Class#xtype} to use
+ * in CSS selectors.  For use by UI mixins of derived classes.
  *
  * @param {number} $border-width
  * Header container border-width
@@ -38,24 +47,16 @@ $headercontainer-border-color: dynamic(null);
  */
 @mixin headercontainer-ui(
     $ui: null,
+    $xtype: headercontainer,
     $border-width: null,
     $border-style: null,
     $border-color: null,
-
-    // This is a private parameter.
-    // It exists purely to enable the column header background color
-    // to be propagated into the column header container because
-    // of https://sencha.jira.com/browse/EXTJS-22515
     $background-color: null
 ) {
     $ui-suffix: ui-suffix($ui);
 
-    .#{$prefix}headercontainer#{$ui-suffix} {
-        // In Safari, stretched box items can not fill container height leaving
-        // a small margin of transparency through which scrolling content can be seen.
-        // So extend the view background into the header
-        // https://sencha.jira.com/browse/EXTJS-22515
-        background-color: $background-color;
+    .#{$prefix}#{$xtype}#{$ui-suffix} {
         @include border($border-width, $border-style, $border-color);
+        background-color: $background-color;
     }
 }

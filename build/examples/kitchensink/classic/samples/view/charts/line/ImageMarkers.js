@@ -22,7 +22,7 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkers', {
         path: 'classic/samples/view/charts/line/ImageMarkersController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Pie.js'
+        path: 'app/store/Pie.js'
     }],
     // </example>
 
@@ -89,7 +89,7 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkers', {
                     x: -24,
                     y: -24,
                     scale: 0.7,
-                    fx: {
+                    animation: {
                         duration: 200
                     }
                 }
@@ -114,7 +114,7 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkers', {
                     x: -24,
                     y: -24,
                     scale: 0.7,
-                    fx: {
+                    animation: {
                         duration: 200
                     }
                 }
@@ -139,7 +139,7 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkers', {
                     x: -24,
                     y: -24,
                     scale: 0.7,
-                    fx: {
+                    animation: {
                         duration: 200
                     }
                 }

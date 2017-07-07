@@ -202,6 +202,10 @@
             "mode": "relative"
         },
         {
+            "path": "packages",
+            "mode": "relative"
+        },
+        {
             "path": "data",
             "mode": "relative"
         },
@@ -262,7 +266,8 @@
      */
     "production": {
         "compressor": {
-            "type": "yui"
+            "type": "cmd",
+            "wrapLines": 100
         },
         "output": {
             "appCache": {
@@ -329,7 +334,10 @@
         "base": "${ext.dir}/build/examples/kitchensink",
         "page": "index.html",
         "manifest": "${build.id}.json",
-        "js": "${build.id}/app.js",
+        "js": {
+            "path": "${build.id}/app.js",
+            "version": "ES6"
+        },
         "framework": "${build.id}/framework.js",
         "resources": {
             "path": "./${build.id}/resources",
@@ -362,7 +370,8 @@
         "charts",
         "d3",
         "calendar",
-        "pivot-d3"
+        "pivot-d3",
+        "package-loader"
     ],
 
     "classic": {
@@ -385,7 +394,10 @@
     "modern": {
         "slicer": null,
         "requires": [
-            "google"
+            "package-loader"
+        ],
+        "uses": [
+            "kitchensink-google"
         ],
         "locales": [
             "en"
@@ -421,7 +433,10 @@
             "toolkit": "classic",
             "theme": "theme-triton"
         },
-
+        "aria": {
+            "toolkit": "classic",
+            "theme": "theme-aria"
+        },
         "modern-triton": {
             "toolkit": "modern",
             "theme": "theme-triton"
@@ -457,6 +472,16 @@
 //        }
 //    }
 
+    "properties": {
+        "app.packages.dir": "${app.dir}/packages"
+    },
+    
+    "mashup": {
+        "map": {
+            "options": "?v=3&sensor=false"
+        }
+    },
+    
     /**
      * Uniquely generated id for this application, used as prefix for localStorage keys.
      * Normally you should never change this value.

@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.d3.Sunburst', {
         },
         {
             type: 'Model',
-            path: 'classic/samples/model/Tree.js'
+            path: 'app/model/Tree.js'
         },
         {
             type: 'View Model',

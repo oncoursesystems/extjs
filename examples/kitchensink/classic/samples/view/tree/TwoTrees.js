@@ -54,13 +54,13 @@ Ext.define('KitchenSink.view.tree.TwoTrees', {
         },
 
         viewConfig: {
-            plugins: {
+            plugins: [{
                 ptype: 'treeviewdragdrop',
                 ddGroup: 'two-trees-drag-drop',
                 appendOnly: true,
                 sortOnDrop: true,
                 containerScroll: true
-            }
+            }]
         }
     }, {
         title: 'Custom Build',
@@ -87,14 +87,14 @@ Ext.define('KitchenSink.view.tree.TwoTrees', {
         },
 
         viewConfig: {
-            plugins: {
+            plugins: [{
                 ptype: 'treeviewdragdrop',
                 ddGroup: 'two-trees-drag-drop',
                 appendOnly: true,
                 sortOnDrop: true,
                 containerScroll: true,
                 allowContainerDrops: true
-            }
+            }]
         }
     }]
 });

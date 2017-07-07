@@ -6,6 +6,16 @@ Ext.define('Ext.overrides.app.Application', {
     requires: ['Ext.viewport.Viewport'],
     uses: ['Ext.tip.Manager'],
 
+    config: {
+        /**
+         * @cfg {Object} viewport
+         * Any configuration to be passed on to the {@link Ext.Viewport}.
+         *
+         * @since 6.5.0
+         */
+        viewport: null
+    },
+
     /**
      * @cfg {Boolean/Object} quickTips
      * `true` to enable quick tips to be read from the DOM and displayed
@@ -15,14 +25,18 @@ Ext.define('Ext.overrides.app.Application', {
      *
      * @since 6.2.0
      */
-     quickTips: false,
+    quickTips: false,
+
+    destroy: function () {
+        this.setQuickTips(false);
+
+        this.callParent();
+    },
 
     initMainView: function() {
         var me = this,
-            viewport,
+            viewport = me.viewport = Ext.Viewport,
             mainView;
-
-        me.viewport = viewport = Ext.Viewport;
 
         me.callParent();
 
@@ -45,6 +59,7 @@ Ext.define('Ext.overrides.app.Application', {
             }
             quickTips = new Ext.tip['Manager'](quickTips);
         }
+
         return quickTips;
     },
 

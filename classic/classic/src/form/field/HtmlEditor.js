@@ -141,53 +141,62 @@ Ext.define('Ext.form.field.HtmlEditor', {
      * Enable the bold, italic and underline buttons
      */
     enableFormat: true,
+
     /**
      * @cfg {Boolean} enableFontSize
      * Enable the increase/decrease font size buttons
      */
     enableFontSize: true,
+
     /**
      * @cfg {Boolean} enableColors
      * Enable the fore/highlight color buttons
      */
     enableColors: true,
+
     /**
      * @cfg {Boolean} enableAlignments
      * Enable the left, center, right alignment buttons
      */
     enableAlignments: true,
+
     /**
      * @cfg {Boolean} enableLists
      * Enable the bullet and numbered list buttons. Not available in Safari 2.
      */
     enableLists: true,
+
     /**
      * @cfg {Boolean} enableSourceEdit
      * Enable the switch to source edit button. Not available in Safari 2.
      */
     enableSourceEdit: true,
+
     /**
      * @cfg {Boolean} enableLinks
      * Enable the create link button. Not available in Safari 2.
      */
     enableLinks: true,
+
     /**
      * @cfg {Boolean} enableFont
      * Enable font selection. Not available in Safari 2.
      */
     enableFont: true,
-    //<locale>
+
     /**
      * @cfg {String} createLinkText
      * The default text for the create link prompt
+     * @locale
      */
     createLinkText: 'Please enter the URL for the link:',
-    //</locale>
+
     /**
      * @cfg {String} [defaultLinkValue='http://']
      * The default value for the create link prompt
      */
     defaultLinkValue: 'http:/'+'/',
+
     /**
      * @cfg {String[]} fontFamilies
      * An array of available font families
@@ -199,6 +208,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
         'Times New Roman',
         'Verdana'
     ],
+
     /**
      * @cfg {String} defaultValue
      * A default value to be put into the editor to resolve focus issues.
@@ -259,6 +269,11 @@ Ext.define('Ext.form.field.HtmlEditor', {
      * @private
      */
     hideMode:'offsets',
+    
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
 
     maskOnDisable: true,
 
@@ -327,11 +342,6 @@ Ext.define('Ext.form.field.HtmlEditor', {
         var me = this;
 
         me.items = [me.createToolbar(), me.createInputCmp()];
-
-        me.layout = {
-            type: 'vbox',
-            align: 'stretch'
-        };
 
         // No value set, we must report empty string
         if (me.value == null) {
@@ -933,7 +943,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
      */
     syncValue: function(){
         var me = this,
-            body, changed, html, bodyStyle, match, textElDom;
+            body, changed, html, bodyStyleText, match, textElDom;
 
         if (me.initialized) {
             body = me.getEditorBody();
@@ -941,8 +951,8 @@ Ext.define('Ext.form.field.HtmlEditor', {
             textElDom = me.textareaEl.dom;
 
             if (Ext.isWebKit) {
-                bodyStyle = body.getAttribute('style'); // Safari puts text-align styles on the body element!
-                match = bodyStyle.match(me.textAlignRE);
+                bodyStyleText = body.style.cssText; // Safari puts text-align styles on the body element!
+                match = bodyStyleText.match(me.textAlignRE);
                 if (match && match[1]) {
                     html = '<div style="' + match[0] + '">' + html + '</div>';
                 }
@@ -1572,7 +1582,6 @@ Ext.define('Ext.form.field.HtmlEditor', {
         return this.toolbar;
     },
 
-    //<locale>
     /**
      * @property {Object} buttonTips
      * Object collection of toolbar tooltips for the buttons in the editor. The key is the command id associated with
@@ -1591,6 +1600,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
      *         }
      *         // ...
      *     }
+     * @locale
      */
     buttonTips: {
         bold: {
@@ -1664,60 +1674,59 @@ Ext.define('Ext.form.field.HtmlEditor', {
             cls: Ext.baseCSSPrefix + 'html-editor-tip'
         }
     },
-    //</locale>
 
     // hide stuff that is not compatible
     /**
      * @event blur
-     * @private
+     * @hide
      */
     /**
      * @event focus
-     * @private
+     * @hide
      */
     /**
      * @event specialkey
-     * @private
+     * @hide
      */
     /**
      * @cfg {String} fieldCls
-     * @private
+     * @hide
      */
     /**
      * @cfg {String} focusCls
-     * @private
+     * @hide
      */
     /**
      * @cfg {String} autoCreate
-     * @private
+     * @hide
      */
     /**
      * @cfg {String} inputType
-     * @private
+     * @hide
      */
     /**
      * @cfg {String} invalidCls
-     * @private
+     * @hide
      */
     /**
      * @cfg {String} invalidText
-     * @private
+     * @hide
      */
     /**
      * @cfg {Boolean} allowDomMove
-     * @private
+     * @hide
      */
     /**
      * @cfg {String} readOnly
-     * @private
+     * @hide
      */
     /**
      * @cfg {String} tabIndex
-     * @private
+     * @hide
      */
     /**
      * @method validate
-     * @private
+     * @hide
      */
 
     privates: {

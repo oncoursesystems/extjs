@@ -19,7 +19,7 @@ Ext.define('Admin.view.faq.Items', {
         scrollable: false,
 
         listeners: {
-            itemtap: 'onItemTap'
+            childtap: 'onChildTap'
         },
 
         itemTpl: '<div class="faq-item">' +

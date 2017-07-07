@@ -1,4 +1,4 @@
-describe("Ext.slider.Single", function() {
+topSuite("Ext.slider.Single", ['Ext.app.ViewModel'], function() {
     var slider;
 
     afterEach(function () {

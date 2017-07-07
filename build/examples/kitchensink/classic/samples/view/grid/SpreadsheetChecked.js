@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.grid.SpreadsheetChecked', {
     requires: [
         'Ext.grid.selection.SpreadsheetModel',
         'Ext.grid.plugin.Clipboard',
-        'KitchenSink.store.grid.MonthlySales'
+        'KitchenSink.store.MonthlySales'
     ],
     //<example>
     exampleTitle: 'Spreadsheet',
@@ -26,10 +26,10 @@ Ext.define('KitchenSink.view.grid.SpreadsheetChecked', {
         path: 'classic/samples/view/grid/SpreadsheetController.js'
     },{
         type: 'Store',
-        path: 'classic/samples/store/grid/MonthlySales.js'
+        path: 'app/store/MonthlySales.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/grid/MonthlySales.js'
+        path: 'app/model/MonthlySales.js'
     }],
     //</example>
 

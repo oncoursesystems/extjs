@@ -123,14 +123,14 @@ $font-family: dynamic(helvetica, arial, sans-serif);
  * @var {number} $font-size
  * The base font-size to be used throughout the theme.
  */
-$font-size: dynamic(pxToRootPct(13px));
+$font-size: dynamic(13px);
 
 /**
  * @var {number}
  * The base font-size to be used throughout the theme in the
  * {@link Global_CSS#$enable-big big} sizing scheme
  */
-$font-size-big: dynamic(pxToRootPct(15px));
+$font-size-big: dynamic(15px);
 
 /**
  * @var {number} $line-height
@@ -161,7 +161,7 @@ $active-color: dynamic(darken(saturate($base-color, 55%), 10%));
  * The minimum row height for items like toolbars.
  * @private
  */
-$global-row-height: dynamic(2.6em);
+$global-row-height: dynamic(34px);
 
 /**
  * @var {measurement} $global-list-height
@@ -218,3 +218,12 @@ $css-variable-selector: dynamic(':root');
 $default-calc-value: dynamic(0%);
 
 $background-color: dynamic(#fff);
+
+$color-by-background-dark-color: dynamic($highlight-color);
+$color-by-background-light-color: dynamic($light-color);
+
+/**
+ * @var {string}
+ * Cursor for draggable components
+ */
+$draggable-cursor: dynamic(move);

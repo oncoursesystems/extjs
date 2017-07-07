@@ -24,11 +24,11 @@ Ext.define('Admin.view.authentication.Login', {
             layout: 'vbox',
             items: [{
                 xtype: 'textfield',
-                placeHolder: 'Email',
+                placeholder: 'Email',
                 ui: 'light'
             },{
                 xtype: 'passwordfield',
-                placeHolder: 'Password',
+                placeholder: 'Password',
                 ui: 'light'
             },{
                 layout: 'hbox',

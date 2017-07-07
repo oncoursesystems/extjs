@@ -48,8 +48,8 @@ Ext.define('KitchenSink.model.Person', {
 
             return function(options) {
                 options = options || {};
-                var out = [],
 
+                var out = [],
                     adults = options.adults,
                     children = options.children,
                     total = options.total,
@@ -58,7 +58,7 @@ Ext.define('KitchenSink.model.Person', {
                     adultsUndef = adults === undefined,
                     childrenUndef = children === undefined,
                     accountIdCounter = 0,
-                    name, o, accounts, j, len;
+                    name, o, accounts, i, j, len;
 
                 if (!adultsUndef && !childrenUndef) {
                     total = adults + children;
@@ -104,6 +104,6 @@ Ext.define('KitchenSink.model.Person', {
 
                 return out;
             };
-            })()
+        })()
     }
 });

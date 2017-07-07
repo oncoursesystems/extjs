@@ -18,21 +18,20 @@ Ext.define('Admin.view.dashboard.Todos', {
         {
             xtype: 'grid',
             flex: 1,
-            width: '100%',
             userCls: 'dashboard-todo-list',
             hideHeaders: true,
             bind: {
                 store: '{todos}'
             },
 
-            plugins: {
+            plugins: [{
                 type: 'multiselection',
 
                 selectionColumn: {
                     hidden: false,
                     width: 40  // Change column width from the default of 60px
                 }
-            },
+            }],
 
             columns: [
                 {
@@ -51,7 +50,7 @@ Ext.define('Admin.view.dashboard.Todos', {
                     flex: 1,
                     fieldLabel: 'Add Task',
                     hideLabel: true,
-                    placeHolder: 'Add New Task'
+                    placeholder: 'Add New Task'
                 },
                 {
                     xtype: 'button',

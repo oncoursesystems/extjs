@@ -3,9 +3,7 @@ Ext.define('KitchenSink.profile.Desktop', {
 
     controllers: ['Main'],
 
-    views: ['TouchEvents'],
-
-    mainView: 'KitchenSink.view.desktop.Main',
+    mainView: 'desktop.Main',
 
     isActive: function () {
         return Ext.os.is.Desktop;

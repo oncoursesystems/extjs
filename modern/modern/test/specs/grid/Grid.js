@@ -1,23 +1,15 @@
 /* global Ext, jasmine, expect */
 
-describe("Ext.grid.Grid", function() {
+topSuite("Ext.grid.Grid",
+    ['Ext.data.ArrayStore', 'Ext.layout.Fit', 'Ext.grid.plugin.ColumnResizing', 'Ext.MessageBox', 'Ext.grid.SummaryRow'],
+function() {
 
     var Model = Ext.define(null, {
         extend: 'Ext.data.Model',
         fields: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9']
     });
 
-    var TestGrid = Ext.define(null, {
-        extend: 'Ext.grid.Grid',
-
-        // This method forces a synchronous layout of the grid to make testing easier
-        $testRefresh: function() {
-            var container = this.container;
-            this.onContainerResize(container, { height: container.element.getHeight() });
-        }
-    });
-
-    var grid, store, colMap;
+    var grid, store, storeCount, columns, colMap, navigationModel, selectable, tool;
 
     function spyOnEvent(object, eventName, fn) {
         var obj = {
@@ -58,13 +50,14 @@ describe("Ext.grid.Grid", function() {
             model: Model,
             data: data
         });
+        storeCount = store.getCount();
     }
 
     afterEach(function() {
         store = grid = Ext.destroy(grid, store);
     });
 
-    function makeGrid(columns, data, gridOptions, specOptions) {
+    function makeGrid(colOptions, data, gridOptions, specOptions) {
         gridOptions = gridOptions || {};
         specOptions = specOptions || {};
 
@@ -72,12 +65,28 @@ describe("Ext.grid.Grid", function() {
             makeStore(data);
         }
 
-        if (!columns && !specOptions.preventColumns) {
-            columns = [{
+        if (colOptions) {
+            for (var i = 0; i < colOptions.length; i++) {
+                if (!colOptions[i].text) {
+                    colOptions[i].text = 'F' + (i + 1);
+                }
+            }
+        }
+        else if (!specOptions.preventColumns) {
+            colOptions = [{
                 dataIndex: 'f1',
                 width: 100,
                 text: 'F1',
-                itemId: 'colf1'
+                itemId: 'colf1',
+                cell: {
+                    tools: {
+                        gear: {
+                            handler: function() {
+                                Ext.Msg.alert('Title', 'Message');
+                            }
+                        }
+                    }
+                }
             }, {
                 dataIndex: 'f2',
                 width: 100,
@@ -101,18 +110,21 @@ describe("Ext.grid.Grid", function() {
             }];
         }
 
-        if (columns && !specOptions.preventColumns) {
-            columns.forEach(function(col, i) {
+        if (colOptions && !specOptions.preventColumns) {
+            colOptions.forEach(function(col, i) {
                 col.dataIndex = col.dataIndex || 'f' + (i + 1);
             });
         }
 
-        grid = new TestGrid(Ext.apply({
+        grid = new Ext.grid.Grid(Ext.apply({
             width: 600,
             height: 1200,
             store: store,
-            columns: columns
+            columns: colOptions
         }, gridOptions));
+        columns = grid.getVisibleColumns();
+        navigationModel = grid.getNavigationModel();
+        selectable = grid.getSelectable();
         setColMap();
     }
 
@@ -124,8 +136,8 @@ describe("Ext.grid.Grid", function() {
     }
 
     function renderWithRefresh(el) {
-        grid.renderTo(el || Ext.getBody());
-        grid.$testRefresh();
+        grid.render(el || Ext.getBody());
+        grid.refresh();
     }
 
     // Force any flex sizes to be published internally
@@ -153,14 +165,16 @@ describe("Ext.grid.Grid", function() {
     // way the native browser flexing behaviour works, for example
     // 3 items, flexed as [{flex: 1}, {flex: 1}, {flex: 2}] in a 600px
     // container will be 155.00~px, 155.00~px, 289.000~px
-    function expectSizes() {
+    function expectSizes(doRefreshColSizes) {
         var columns = grid.query('column'),
             len = columns.length,
             colWidths = [],
             cols = [],
             i, col;
 
-        refreshColSizes();                    
+        if (doRefreshColSizes !== false) {
+            refreshColSizes();
+        }
         for (i = 0; i < len; ++i) {
             col = columns[i];
             cols.push(col);
@@ -187,6 +201,56 @@ describe("Ext.grid.Grid", function() {
         });
         return cells;
     }
+
+    describe('pre-created columns', function () {
+        it('should be able to create a grid with top-level columns', function () {
+            grid = Ext.create({
+                xtype: 'grid',
+
+                store: makeStore(),
+
+                columns: [
+                    Ext.create({
+                        xtype: 'column',
+                        text: 'First Name',
+                        dataIndex: 'firstName'
+                    }),
+                    Ext.create({
+                        xtype: 'column',
+                        text: 'Last Name',
+                        dataIndex: 'lastName'
+                    })
+                ]
+            });
+        });
+
+        it('should be able to create a grid with nested columns', function () {
+            grid = Ext.create({
+                xtype: 'grid',
+
+                store: makeStore(),
+
+                columns: [
+                    Ext.create({
+                        xtype: 'column',
+                        text: 'Employee',
+                        columns: [
+                            Ext.create({
+                                xtype: 'column',
+                                text: 'First Name',
+                                dataIndex: 'firstName'
+                            }),
+                            Ext.create({
+                                xtype: 'column',
+                                text: 'Last Name',
+                                dataIndex: 'lastName'
+                            })
+                        ]
+                    })
+                ]
+            });
+        });
+    });
 
     describe("columns", function() {
         it("should be able to be configured with no columns", function() {
@@ -416,16 +480,6 @@ describe("Ext.grid.Grid", function() {
 
         describe("resizable", function() {
             describe("visibility", function() {
-                it("should not show the resizer if the grid doesn't have the plugin", function() {
-                    makeGrid([{
-                        itemId: 'colf1',
-                        resizable: true
-                    }]);
-                    renderWithRefresh();
-
-                    expect(colMap.colf1.resizerElement.isVisible()).toBe(false);
-                });
-
                 it("should not show the resizer with resizable: false", function() {
                     makeGrid([{
                         itemId: 'colf1',
@@ -489,6 +543,7 @@ describe("Ext.grid.Grid", function() {
                     col.setResizable(false);
                     expect(col.resizerElement.isVisible()).toBe(false);
                 });
+
                 it('should not fire drag events on headercontainer during resize', function() {
                     makeGrid([{
                         itemId: 'colf1',
@@ -502,7 +557,6 @@ describe("Ext.grid.Grid", function() {
                     renderWithRefresh();
 
                     var col = colMap.colf1,
-                        colWidth = col.getWidth(),
                         dragSpy = spyOnEvent(grid.getHeaderContainer().el, 'drag');
 
                     resizeColumn(col, 10);
@@ -1509,16 +1563,30 @@ describe("Ext.grid.Grid", function() {
                                     expectSizes();
                                     grid.on('columnresize', spy);
                                     colMap.colf2.setWidth(300);
-                                    expectSizes();
-                                    expect(spy.callCount).toBe(2);
 
-                                    expect(spy.calls[0].args[0]).toBe(grid);
-                                    expect(spy.calls[0].args[1]).toBe(colMap.colf2);
-                                    expect(spy.calls[0].args[2]).toBe(colMap.colf2.getComputedWidth());
+                                    waitsFor(function() {
+                                        return spy.callCount === 2;
+                                    });
 
-                                    expect(spy.calls[1].args[0]).toBe(grid);
-                                    expect(spy.calls[1].args[1]).toBe(colMap.colf1);
-                                    expect(spy.calls[1].args[2]).toBe(colMap.colf1.getComputedWidth());
+                                    runs(function() {
+                                        // We have waited for the size event propagation, pass false into refresh
+                                        expectSizes(false);
+
+                                        // Don't be picky about order of columnresize events:
+                                        var colf1Width = colMap.colf1.getComputedWidth();
+                                        var colf2Width = colMap.colf2.getComputedWidth();
+                                        var pos = spy.calls[0].args[1] === colMap.colf1;
+                                        pos = pos ? 0 : 1;
+
+                                        expect(spy.calls[pos].args[0]).toBe(grid);
+                                        expect(spy.calls[pos].args[1]).toBe(colMap.colf1);
+                                        expect(spy.calls[pos].args[2]).toBe(colf1Width);
+
+                                        pos = 1 - pos;
+                                        expect(spy.calls[pos].args[0]).toBe(grid);
+                                        expect(spy.calls[pos].args[1]).toBe(colMap.colf2);
+                                        expect(spy.calls[pos].args[2]).toBe(colf2Width);
+                                    });
                                 });
                             });
                         });
@@ -1585,16 +1653,31 @@ describe("Ext.grid.Grid", function() {
                                     expectSizes();
                                     grid.on('columnresize', spy);
                                     colMap.colf1.setFlex(3);
-                                    expectSizes();
-                                    expect(spy.callCount).toBe(2);
 
-                                    expect(spy.calls[0].args[0]).toBe(grid);
-                                    expect(spy.calls[0].args[1]).toBe(colMap.colf1);
-                                    expect(spy.calls[0].args[2]).toBe(colMap.colf1.getComputedWidth());
+                                    waitsFor(function() {
+                                        return spy.callCount === 2;
+                                    });
 
-                                    expect(spy.calls[1].args[0]).toBe(grid);
-                                    expect(spy.calls[1].args[1]).toBe(colMap.colf2);
-                                    expect(spy.calls[1].args[2]).toBe(colMap.colf2.getComputedWidth());
+                                    runs(function() {
+                                        // We have waited for the size event propagation, pass false into refresh
+                                        expectSizes(false);
+                                        expect(spy.callCount).toBe(2);
+
+                                        // Don't be picky about order of columnresize events:
+                                        var colf1Width = colMap.colf1.getComputedWidth();
+                                        var colf2Width = colMap.colf2.getComputedWidth();
+                                        var pos = spy.calls[0].args[1] === colMap.colf1;
+                                        pos = pos ? 0 : 1;
+
+                                        expect(spy.calls[pos].args[0]).toBe(grid);
+                                        expect(spy.calls[pos].args[1]).toBe(colMap.colf1);
+                                        expect(spy.calls[pos].args[2]).toBe(colf1Width);
+
+                                        pos = 1 - pos;
+                                        expect(spy.calls[pos].args[0]).toBe(grid);
+                                        expect(spy.calls[pos].args[1]).toBe(colMap.colf2);
+                                        expect(spy.calls[pos].args[2]).toBe(colf2Width);
+                                    });
                                 });
                             });
                         });
@@ -1612,7 +1695,6 @@ describe("Ext.grid.Grid", function() {
                                 renderWithRefresh();
                                 expectSizes();
                                 colMap.colf1.setFlex(2);
-                                expect(colMap.colf1.getWidth()).toBeNull();
                                 expectSizes();
                             });
 
@@ -1629,11 +1711,18 @@ describe("Ext.grid.Grid", function() {
                                     expectSizes();
                                     grid.on('columnresize', spy);
                                     colMap.colf1.setFlex(1);
-                                    expectSizes();
-                                    expect(spy.callCount).toBe(1);
-                                    expect(spy.mostRecentCall.args[0]).toBe(grid);
-                                    expect(spy.mostRecentCall.args[1]).toBe(colMap.colf1);
-                                    expect(spy.mostRecentCall.args[2]).toBe(colMap.colf1.getComputedWidth());
+
+                                    waitsFor(function() {
+                                        return spy.callCount >= 1;
+                                    });
+
+                                    runs(function() {
+                                        expectSizes();
+                                        expect(spy.callCount).toBe(1);
+                                        expect(spy.mostRecentCall.args[0]).toBe(grid);
+                                        expect(spy.mostRecentCall.args[1]).toBe(colMap.colf1);
+                                        expect(spy.mostRecentCall.args[2]).toBe(colMap.colf1.getComputedWidth());
+                                    });
                                 });
 
                                 it("should not fire an event if the width does not change", function() {
@@ -1648,8 +1737,14 @@ describe("Ext.grid.Grid", function() {
                                     expectSizes();
                                     grid.on('columnresize', spy);
                                     colMap.colf1.setFlex(1);
-                                    expectSizes();
-                                    expect(spy).not.toHaveBeenCalled();
+
+                                    // We are expecting nothing to happen
+                                    waits(100);
+
+                                    runs(function() {
+                                        expectSizes();
+                                        expect(spy).not.toHaveBeenCalled();
+                                    });
                                 });
 
                                 it("should fire events for other affected flex columns", function() {
@@ -1665,16 +1760,29 @@ describe("Ext.grid.Grid", function() {
                                     expectSizes();
                                     grid.on('columnresize', spy);
                                     colMap.colf1.setFlex(1);
-                                    expectSizes();
-                                    expect(spy.callCount).toBe(2);
 
-                                    expect(spy.calls[0].args[0]).toBe(grid);
-                                    expect(spy.calls[0].args[1]).toBe(colMap.colf1);
-                                    expect(spy.calls[0].args[2]).toBe(colMap.colf1.getComputedWidth());
+                                    waitsFor(function() {
+                                        return spy.callCount >= 2;
+                                    });
 
-                                    expect(spy.calls[1].args[0]).toBe(grid);
-                                    expect(spy.calls[1].args[1]).toBe(colMap.colf2);
-                                    expect(spy.calls[1].args[2]).toBe(colMap.colf2.getComputedWidth());
+                                    runs(function () {
+                                        expect(spy.callCount).toBe(2);
+
+                                        // Don't be picky about order of columnresize events:
+                                        var colf1Width = colMap.colf1.getComputedWidth();
+                                        var colf2Width = colMap.colf2.getComputedWidth();
+                                        var pos = spy.calls[0].args[1] === colMap.colf1;
+                                        pos = pos ? 0 : 1;
+
+                                        expect(spy.calls[pos].args[0]).toBe(grid);
+                                        expect(spy.calls[pos].args[1]).toBe(colMap.colf1);
+                                        expect(spy.calls[pos].args[2]).toBe(colf1Width);
+
+                                        pos = 1 - pos;
+                                        expect(spy.calls[pos].args[0]).toBe(grid);
+                                        expect(spy.calls[pos].args[1]).toBe(colMap.colf2);
+                                        expect(spy.calls[pos].args[2]).toBe(colf2Width);
+                                    });
                                 });
                             });
                         });
@@ -1691,8 +1799,8 @@ describe("Ext.grid.Grid", function() {
                                 }]);
                                 renderWithRefresh();
                                 expectSizes();
+                                colMap.colf1.setFlex(null);
                                 colMap.colf1.setWidth(200);
-                                expect(colMap.colf1.getFlex()).toBeNull();
                                 expectSizes();
                                 expect(colMap.colf1.el.getWidth()).toBe(200);
                             });
@@ -1710,12 +1818,21 @@ describe("Ext.grid.Grid", function() {
                                     expectSizes();
                                     grid.on('columnresize', spy);
                                     colMap.colf1.setWidth(100);
-                                    expectSizes();
-                                    expect(spy.callCount).toBe(1);
-                                    expect(spy.mostRecentCall.args[0]).toBe(grid);
-                                    expect(spy.mostRecentCall.args[1]).toBe(colMap.colf1);
-                                    expect(spy.mostRecentCall.args[2]).toBe(colMap.colf1.getComputedWidth());
-                                expect(colMap.colf1.el.getWidth()).toBe(100);
+                                    colMap.colf1.setFlex(null);
+
+                                    waitsFor(function() {
+                                        return spy.callCount >= 1;
+                                    });
+
+                                    runs(function() {
+                                        expect(spy.callCount).toBe(1);
+
+                                        expectSizes();
+                                        expect(spy.mostRecentCall.args[0]).toBe(grid);
+                                        expect(spy.mostRecentCall.args[1]).toBe(colMap.colf1);
+                                        expect(spy.mostRecentCall.args[2]).toBe(colMap.colf1.getComputedWidth());
+                                        expect(colMap.colf1.el.getWidth()).toBe(100);
+                                    });
                                 });
 
                                 it("should not fire an event if the width does not change", function() {
@@ -1730,8 +1847,15 @@ describe("Ext.grid.Grid", function() {
                                     expectSizes();
                                     grid.on('columnresize', spy);
                                     colMap.colf1.setWidth(300);
-                                    expectSizes();
-                                    expect(spy).not.toHaveBeenCalled();
+                                    colMap.colf1.setFlex(null);
+
+                                    // We are expecting nothing to happen
+                                    waits(100);
+
+                                    runs(function() {
+                                        expectSizes();
+                                        expect(spy).not.toHaveBeenCalled();
+                                    });
                                 });
 
                                 it("should fire events for affected flex columns", function() {
@@ -1749,17 +1873,30 @@ describe("Ext.grid.Grid", function() {
                                     expectSizes();
                                     grid.on('columnresize', spy);
                                     colMap.colf1.setWidth(400);
-                                    expectSizes();
-                                    expect(spy.callCount).toBe(2);
-                                    expect(colMap.colf1.el.getWidth()).toBe(400);
+                                    colMap.colf1.setFlex(null);
 
-                                    expect(spy.calls[0].args[0]).toBe(grid);
-                                    expect(spy.calls[0].args[1]).toBe(colMap.colf1);
-                                    expect(spy.calls[0].args[2]).toBe(colMap.colf1.getComputedWidth());
+                                    waitsFor(function() {
+                                        return spy.callCount >= 2;
+                                    });
 
-                                    expect(spy.calls[1].args[0]).toBe(grid);
-                                    expect(spy.calls[1].args[1]).toBe(colMap.colf2);
-                                    expect(spy.calls[1].args[2]).toBe(colMap.colf2.getComputedWidth());
+                                    runs(function () {
+                                        expect(spy.callCount).toBe(2);
+
+                                        // Don't be picky about order of columnresize events:
+                                        var colf1Width = colMap.colf1.getComputedWidth();
+                                        var colf2Width = colMap.colf2.getComputedWidth();
+                                        var pos = spy.calls[0].args[1] === colMap.colf1;
+                                        pos = pos ? 0 : 1;
+
+                                        expect(spy.calls[pos].args[0]).toBe(grid);
+                                        expect(spy.calls[pos].args[1]).toBe(colMap.colf1);
+                                        expect(spy.calls[pos].args[2]).toBe(colf1Width);
+
+                                        pos = 1 - pos;
+                                        expect(spy.calls[pos].args[0]).toBe(grid);
+                                        expect(spy.calls[pos].args[1]).toBe(colMap.colf2);
+                                        expect(spy.calls[pos].args[2]).toBe(colf2Width);
+                                    });
                                 });
                             });
                         });
@@ -1894,6 +2031,62 @@ describe("Ext.grid.Grid", function() {
             });
         });
     });
+    
+    describe('selection', function () {
+        describe('row/record', function () {
+            beforeEach(function () {
+                makeGrid(null, 200);
+                renderWithRefresh();
+            });
+            
+            it('should add the selected cls to row elements', function () {
+                var sm = grid.getSelectable(),
+                    scroller = grid.getScrollable(),
+                    row = grid.getItemAt(0),
+                    rec = row.getRecord(),
+                    cls = 'x-selected',
+                    cell;
+                
+                function expectCells() {
+                    // cells should not be selected
+                    for (cell in row.cells) {
+                        expect(cell).not.toHaveCls(cls);
+                    }
+                }
+                
+                sm.selectRows(rec);
+                expect(row).toHaveCls(cls);
+                expectCells();
+                
+                // scroll until the first row is recycled with a new record
+                jasmine.waitsForScroll(scroller, function (scroller, x, y) {
+                    // If the row records don't match, then it was removed from the buffer
+                    if (row.getRecord() !== rec) {
+                        return true;
+                    }
+                    scroller.scrollBy(0, 50);
+                }, 'grid to recycle row', 5000);
+                runs(function () {
+                    // new record is rendered so it should not be selected
+                    expect(row).not.toHaveCls(cls)
+                });
+                
+                // scroll back to the top
+                jasmine.waitsForScroll(scroller, function (scroller, x, y) {
+                    // If the row records don't match, then it was removed from the buffer
+                    if (row.getRecord() === rec) {
+                        return true;
+                    }
+                    scroller.scrollBy(0, -50);
+                }, 'grid to recycle row', 5000);
+                runs(function () {
+                    // original record is rendered so it should be selected
+                    expect(row).toHaveCls(cls);
+                    expectCells();
+                });
+            });
+        });
+    });
 
     describe("destroy", function() {
         describe("events", function() {
@@ -1921,7 +2114,7 @@ describe("Ext.grid.Grid", function() {
                 it("should destroy all created components", function() {
                     var count = Ext.ComponentManager.getCount();
                     makeGrid();
-                    grid.renderTo(Ext.getBody());
+                    grid.render(Ext.getBody());
                     grid.destroy();
                     expect(Ext.ComponentManager.getCount()).toBe(count);
                 });
@@ -2022,13 +2215,13 @@ describe("Ext.grid.Grid", function() {
                 
                 runs(function() {
                     // HeaderContainer has no immediate child columns
-                    expect(grid.getHeaderContainer().query('>column').length).toBe(0);
+                    expect(grid.getHeaderContainer().query('>column[isLeafHeader]').length).toBe(0);
 
                     // HeaderContainer has one header group
-                    expect(grid.getHeaderContainer().query('>gridheadergroup').length).toBe(1);
+                    expect(grid.getHeaderContainer().query('>column[isHeaderGroup]').length).toBe(1);
 
                     // And there are leaf subcolumns
-                    expect(grid.getHeaderContainer().query('>gridheadergroup>column').length).toBe(3);
+                    expect(grid.getHeaderContainer().query('>column[isHeaderGroup]>column').length).toBe(3);
                 });
             });
 
@@ -2062,6 +2255,647 @@ describe("Ext.grid.Grid", function() {
 
                     // Must be showing one child header at this point
                     expect(contactDetailsHeader.getVisibleCount()).toBe(1);
+                });
+            });
+        });
+    });
+
+    describe('Location and navigation', function() {
+        var location,
+            inputField,
+            focusEnterSpy,
+            focusLeaveSpy,
+            focusMoveSpy;
+
+        // Takes the same arguments as Ext.grid.Location.setPosition.
+        // May be a location, or a record, or a record and a column
+        function expectLocation(record, column, element) {
+            var expectedLocation;
+
+            location = navigationModel.getLocation();
+
+            if (record == null) {
+                expect(location).toBeNull();
+                expect(grid.el.contains(document.activeElement)).toBe(false);
+                expect(grid.el.query('.' + grid.focusedCls).length).toBe(0);
+            } else {
+                if (element) {
+                    expectedLocation = new Ext.grid.Location(grid, element);
+                } else {
+                    if (Ext.isArray(record)) {
+                        column = record[0];
+                        record = record[1];
+                    }
+                    expectedLocation = new Ext.grid.Location(grid, {
+                        record: record,
+                        column: column
+                    });
+                }
+                expect(location.equals(expectedLocation)).toBe(true);
+                expect(document.activeElement).toBe(location.getFocusEl(true));
+                expect(location.getFocusEl()).toHaveCls(grid.focusedCls);
+            }
+        }
+
+        beforeEach(function() {
+            makeGrid(null, null, {
+                renderTo: document.body
+            });
+            focusEnterSpy = spyOn(grid, 'onFocusEnter').andCallThrough();
+            focusLeaveSpy = spyOn(grid, 'onFocusLeave').andCallThrough();
+            focusMoveSpy = spyOn(grid.getNavigationModel(), 'onFocusMove').andCallThrough();
+
+            grid.focus();
+
+            waitsForSpy(focusEnterSpy);
+
+            runs(function() {
+                focusEnterSpy.reset();
+                location = navigationModel.getLocation();
+            });
+        });
+
+        afterEach(function() {
+            Ext.destroy(inputField);
+        });
+
+        it('should be able to access the cell', function() {
+            expect(location.get()).toBe(grid.down('gridcell'));
+        });
+
+        describe('navigation', function() {
+            var newLocation;
+
+            describe('from top/left', function() {
+                it('should move to next from 0, 0', function() {
+                    navigationModel.moveNext();
+                    expectLocation(0, 1);
+                });
+
+                it('should move to next from 0, 0 using arrow key', function() {
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT);
+                    expectLocation(0, 1);
+                });
+
+                it('should move down from 0, 0 using arrow key', function() {
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.DOWN);
+                    expectLocation(1, 0);
+                });
+
+                it('should not move prev from 0, 0', function() {
+                    newLocation = location.previous();
+                    expect(newLocation.equals(location)).toBe(true);
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.LEFT);
+                    expectLocation(0, 0);
+                });
+
+                it('should move to last cell from 0, 0 if wrap passed', function() {
+                    newLocation = location.previous({
+                        wrap: true
+                    });
+                    expect(newLocation.recordIndex).toBe(storeCount - 1);
+                    expect(newLocation.columnIndex).toBe(columns.length - 1);
+                });
+            });
+
+            describe('from top/right', function() {
+                beforeEach(function() {
+                    // Last position
+                    location = location.clone({record: 0, column: columns.length - 1});
+                });
+
+                it('should move to prev from top/right', function() {
+                    newLocation = location.previous();
+                    expect(newLocation.recordIndex).toBe(0);
+                    expect(newLocation.columnIndex).toBe(columns.length - 2);
+                });
+
+                it('should move to start of next row from top/right', function() {
+                    newLocation = location.next();
+                    expect(newLocation.recordIndex).toBe(1);
+                    expect(newLocation.columnIndex).toBe(0);
+                });
+            });
+
+            describe('from bottom/right', function() {
+                beforeEach(function() {
+                    // Last position
+                    location = location.clone({record: storeCount - 1, column: columns.length - 1});
+                });
+
+                it('should move to prev from bottom/right', function() {
+                    newLocation = location.previous();
+                    expect(newLocation.recordIndex).toBe(storeCount - 1);
+                    expect(newLocation.columnIndex).toBe(columns.length - 2);
+                });
+
+                it('should not move next from bottom/right', function() {
+                    newLocation = location.next();
+                    expect(newLocation.equals(location)).toBe(true);
+                });
+
+                it('should move to first cell from bottom/right if wrap passed', function() {
+                    newLocation = location.next({
+                        wrap: true
+                    });
+                    expect(newLocation.recordIndex).toBe(0);
+                    expect(newLocation.columnIndex).toBe(0);
+                });
+            });
+
+            describe('from bottom/left', function() {
+                beforeEach(function() {
+                    // Last position
+                    location = location.clone({record: storeCount - 1, column: 0});
+                });
+
+                it('should move to next from bottom/left', function() {
+                    newLocation = location.next();
+                    expect(newLocation.recordIndex).toBe(storeCount - 1);
+                    expect(newLocation.columnIndex).toBe(1);
+                });
+
+                it('should move to end of previous row from bottom/left', function() {
+                    newLocation = location.previous();
+                    expect(newLocation.recordIndex).toBe(storeCount - 2);
+                    expect(newLocation.columnIndex).toBe(columns.length - 1);
+                });
+            });
+
+            describe('moveUp', function() {
+                it('should not move up from 0, 0', function() {
+                    newLocation = location.up();
+                    expect(newLocation.equals(location)).toBe(true);
+                });
+                it('should move same column on last row if wrap passed', function() {
+                    newLocation = location.up({
+                        wrap: true
+                    });
+                    expect(newLocation.recordIndex).toBe(storeCount - 1);
+                    expect(newLocation.columnIndex).toBe(0);
+                });
+            });
+
+            describe('moveDown', function() {
+                beforeEach(function() {
+                    // Last position
+                    location = location.clone({record: storeCount - 1, column: columns.length - 1});
+                });
+
+                it('should not move down from bottom/right', function() {
+                    newLocation = location.down();
+                    expect(newLocation.equals(location)).toBe(true);
+                });
+                it('should move same column on first row if wrap passed', function() {
+                    newLocation = location.down({
+                        wrap: true
+                    });
+                    expect(newLocation.recordIndex).toBe(0);
+                    expect(newLocation.columnIndex).toBe(columns.length - 1);
+                });
+            });
+
+            it('should refocus last focused when refocused', function() {
+                inputField = Ext.getBody().createChild({
+                    tag: 'input',
+                    type: 'text'
+                });
+
+                // Should sanitize column 5 to 4.
+                // location as an array is in [x, y] order
+                navigationModel.setLocation([5, 10]);
+                expectLocation([4, 10]);
+                inputField.focus();
+
+                waitsForSpy(focusLeaveSpy);
+
+                // No location when not focused
+                runs(function() {
+                    focusEnterSpy.reset();
+                    expectLocation();
+                    grid.focus();
+                });
+
+                // Untargeted refocus - should go to location 5
+                waitsForSpy(focusEnterSpy);
+
+                // Focus should be back where it was
+                runs(function() {
+                    expectLocation([4, 10]);
+                });
+            });
+
+            it('should enter actionable mode on ENTER, and activate the actionable on SPACE', function() {
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.ENTER);
+
+                // Focus should move inside cell 0,0 and into the tool
+                waitsForSpy(focusMoveSpy);
+
+                runs(function() {
+                    // expectlocation will create an ActionLocation to match the passed position
+                    tool = Ext.Component.from(navigationModel.getLocation().getFocusEl());
+                    expectLocation(0, 0, tool.getFocusEl());
+                    expect(tool.isTool).toBe(true);
+                    expect(tool.hasFocus).toBe(true);
+
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.SPACE);
+
+                    //\\ TODO: https://github.com/extjs/SDK/pull/20576 will enable autofocus
+                    Ext.Msg.down('#ok').getFocusEl().focus();
+                });
+
+                // The OK button must focus
+                waitsForSpy(focusLeaveSpy);
+
+                runs(function() {
+                    focusEnterSpy.reset();
+                    focusEnterSpy.reset();
+
+                    // MessageBox must be visible
+                    expect(Ext.Msg.el.isVisible()).toBe(true);
+
+                    // Location must be null
+                    expectLocation();
+
+                    // Click the OK button
+                    Ext.testHelper.tap(Ext.Msg.down('#ok').getFocusEl());
+                });
+
+                // Wait for the TEDIOUS animation, which power users will HATE waiting for!
+                runs(function() {
+                    return !Ext.Msg.el.isVisible();
+                });
+
+                // Automatic focus reversion must send focus back into the grid
+                waitsForSpy(focusEnterSpy);
+
+                runs(function() {
+                    // expectlocation will create an ActionLocation to match the passed position
+                    tool = Ext.Component.from(navigationModel.getLocation().getFocusEl());
+                    expectLocation(0, 0, tool.getFocusEl());
+                    expect(tool.isTool).toBe(true);
+                    expect(tool.hasFocus).toBe(true);
+
+                    // TAB should go to the Tool in the cell below
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.TAB);
+                });
+
+                // Wait for navigation into next row to occur
+                waitsFor(function() {
+                    return navigationModel.getLocation().recordIndex === 1;
+                });
+
+                runs(function() {
+                    // expectlocation will create an ActionLocation to match the passed position
+                    tool = Ext.Component.from(navigationModel.getLocation().getFocusEl());
+                    expectLocation(1, 0, tool.getFocusEl());
+                    expect(tool.isTool).toBe(true);
+                    expect(tool.hasFocus).toBe(true);
+
+                    // SHIT+TAB should move back
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.TAB, true);
+
+                    // expectlocation will create an ActionLocation to match the passed position
+                    tool = Ext.Component.from(navigationModel.getLocation().getFocusEl());
+                    expectLocation(0, 0, tool.getFocusEl());
+                    expect(tool.isTool).toBe(true);
+                    expect(tool.hasFocus).toBe(true);
+                });
+            });
+        });
+    });
+
+    describe('Location and navigation with grouping', function() {
+        var location,
+            inputField,
+            focusEnterSpy,
+            focusLeaveSpy,
+            focusMoveSpy;
+
+        // Takes the same arguments as Ext.grid.Location.setPosition.
+        // May be a location, or a record, or a record and a column
+        function expectLocation(record, column, element) {
+            var expectedLocation;
+
+            location = navigationModel.getLocation();
+
+            if (record == null) {
+                expect(location).toBeNull();
+                expect(grid.el.contains(document.activeElement)).toBe(false);
+                expect(grid.el.query('.' + grid.focusedCls).length).toBe(0);
+            } else {
+                if (element) {
+                    expectedLocation = new Ext.grid.Location(grid, element);
+                } else {
+                    if (Ext.isArray(record)) {
+                        column = record[0];
+                        record = record[1];
+                    }
+                    expectedLocation = new Ext.grid.Location(grid, {
+                        record: record,
+                        column: column
+                    });
+                }
+                expect(location.equals(expectedLocation)).toBe(true);
+                expect(document.activeElement).toBe(location.getFocusEl(true));
+                expect(location.getFocusEl()).toHaveCls(grid.focusedCls);
+            }
+        }
+
+        beforeEach(function() {
+            var data = [],
+                i;
+
+            // Do not need much data.
+            // We are testing how navigation tolerates headers and footers.
+            for (i = 1; i <= 30; ++i) {
+                data.push({
+                    f1: 'group ' + (Math.floor(i / 10) + 1),
+                    f2: 'f2' + i,
+                    f3: 'f3' + i,
+                    f4: 'f4' + i,
+                    f5: 'f5' + i,
+                    f6: 'f6' + i,
+                    f7: 'f7' + i,
+                    f8: 'f8' + i,
+                    f9: 'f9' + i
+                });
+            }
+
+            store = new Ext.data.Store({
+                model: Model,
+                data: data,
+                groupField: 'f1'
+            });
+            storeCount = store.getCount();
+
+            makeGrid(null, data, {
+                store: store,
+                grouped: true,
+                groupFooter: {
+                    xtype: 'gridsummaryrow'
+                },
+                renderTo: document.body
+            });
+            focusEnterSpy = spyOn(grid, 'onFocusEnter').andCallThrough();
+            focusLeaveSpy = spyOn(grid, 'onFocusLeave').andCallThrough();
+            focusMoveSpy = spyOn(grid.getNavigationModel(), 'onFocusMove').andCallThrough();
+
+            grid.focus();
+
+            waitsForSpy(focusEnterSpy);
+
+            runs(function() {
+                focusEnterSpy.reset();
+                location = navigationModel.getLocation();
+            });
+        });
+
+        afterEach(function() {
+            Ext.destroy(inputField);
+        });
+
+        it('should be able to access the cell', function() {
+            expect(location.get()).toBe(grid.down('gridcell'));
+        });
+
+        describe('navigation', function() {
+            var newLocation;
+
+            describe('from top/left', function() {
+                it('should move to next from 0, 0', function() {
+                    navigationModel.moveNext();
+                    expectLocation(0, 1);
+                });
+
+                it('should move to next from 0, 0 using arrow key', function() {
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT);
+                    expectLocation(0, 1);
+                });
+
+                it('should move down from 0, 0 using arrow key', function() {
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.DOWN);
+                    expectLocation(1, 0);
+                });
+
+                it('should not move prev from 0, 0', function() {
+                    newLocation = location.previous();
+                    expect(newLocation.equals(location)).toBe(true);
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.LEFT);
+                    expectLocation(0, 0);
+                });
+
+                it('should move to last cell from 0, 0 if wrap passed', function() {
+                    newLocation = location.previous({
+                        wrap: true
+                    });
+                    expect(newLocation.recordIndex).toBe(storeCount - 1);
+                    expect(newLocation.columnIndex).toBe(columns.length - 1);
+                });
+            });
+
+            describe('from top/right', function() {
+                beforeEach(function() {
+                    // Last position
+                    location = location.clone({record: 0, column: columns.length - 1});
+                });
+
+                it('should move to prev from top/right', function() {
+                    newLocation = location.previous();
+                    expect(newLocation.recordIndex).toBe(0);
+                    expect(newLocation.columnIndex).toBe(columns.length - 2);
+                });
+
+                it('should move to start of next row from top/right', function() {
+                    newLocation = location.next();
+                    expect(newLocation.recordIndex).toBe(1);
+                    expect(newLocation.columnIndex).toBe(0);
+                });
+            });
+
+            describe('from bottom/right', function() {
+                beforeEach(function() {
+                    // Last position
+                    location = location.clone({record: storeCount - 1, column: columns.length - 1});
+                });
+
+                it('should move to prev from bottom/right', function() {
+                    newLocation = location.previous();
+                    expect(newLocation.recordIndex).toBe(storeCount - 1);
+                    expect(newLocation.columnIndex).toBe(columns.length - 2);
+                });
+
+                it('should not move next from bottom/right', function() {
+                    newLocation = location.next();
+                    expect(newLocation.equals(location)).toBe(true);
+                });
+
+                it('should move to first cell from bottom/right if wrap passed', function() {
+                    newLocation = location.next({
+                        wrap: true
+                    });
+                    expect(newLocation.recordIndex).toBe(0);
+                    expect(newLocation.columnIndex).toBe(0);
+                });
+            });
+
+            describe('from bottom/left', function() {
+                beforeEach(function() {
+                    // Last position
+                    location = location.clone({record: storeCount - 1, column: 0});
+                });
+
+                it('should move to next from bottom/left', function() {
+                    newLocation = location.next();
+                    expect(newLocation.recordIndex).toBe(storeCount - 1);
+                    expect(newLocation.columnIndex).toBe(1);
+                });
+
+                it('should move to end of previous row from bottom/left', function() {
+                    newLocation = location.previous();
+                    expect(newLocation.recordIndex).toBe(storeCount - 2);
+                    expect(newLocation.columnIndex).toBe(columns.length - 1);
+                });
+            });
+
+            describe('moveUp', function() {
+                it('should not move up from 0, 0', function() {
+                    newLocation = location.up();
+                    expect(newLocation.equals(location)).toBe(true);
+                });
+                it('should move same column on last row if wrap passed', function() {
+                    newLocation = location.up({
+                        wrap: true
+                    });
+                    expect(newLocation.recordIndex).toBe(storeCount - 1);
+                    expect(newLocation.columnIndex).toBe(0);
+                });
+            });
+
+            describe('moveDown', function() {
+                beforeEach(function() {
+                    // Last position
+                    location = location.clone({record: storeCount - 1, column: columns.length - 1});
+                });
+
+                it('should not move down from bottom/right', function() {
+                    newLocation = location.down();
+                    expect(newLocation.equals(location)).toBe(true);
+                });
+                it('should move same column on first row if wrap passed', function() {
+                    newLocation = location.down({
+                        wrap: true
+                    });
+                    expect(newLocation.recordIndex).toBe(0);
+                    expect(newLocation.columnIndex).toBe(columns.length - 1);
+                });
+            });
+
+            it('should refocus last focused when refocused', function() {
+                inputField = Ext.getBody().createChild({
+                    tag: 'input',
+                    type: 'text'
+                });
+
+                // Should sanitize column 5 to 4.
+                // location as an array is in [x, y] order
+                navigationModel.setLocation([5, 10]);
+                expectLocation([4, 10]);
+                inputField.focus();
+
+                waitsForSpy(focusLeaveSpy);
+
+                // No location when not focused
+                runs(function() {
+                    focusEnterSpy.reset();
+                    expectLocation();
+                    grid.focus();
+                });
+
+                // Untargeted refocus - should go to location 5
+                waitsForSpy(focusEnterSpy);
+
+                // Focus should be back where it was
+                runs(function() {
+                    expectLocation([4, 10]);
+                });
+            });
+
+            it('should enter actionable mode on ENTER, and activate the actionable on SPACE', function() {
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.ENTER);
+
+                // Focus should move inside cell 0,0 and into the tool
+                waitsForSpy(focusMoveSpy);
+
+                runs(function() {
+                    // expectlocation will create an ActionLocation to match the passed position
+                    tool = Ext.Component.from(navigationModel.getLocation().getFocusEl());
+                    expectLocation(0, 0, tool.getFocusEl());
+                    expect(tool.isTool).toBe(true);
+                    expect(tool.hasFocus).toBe(true);
+
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.SPACE);
+
+                    //\\ TODO: https://github.com/extjs/SDK/pull/20576 will enable autofocus
+                    Ext.Msg.down('#ok').getFocusEl().focus();
+                });
+
+                // The OK button must focus
+                waitsForSpy(focusLeaveSpy);
+
+                runs(function() {
+                    focusEnterSpy.reset();
+                    focusEnterSpy.reset();
+
+                    // MessageBox must be visible
+                    expect(Ext.Msg.el.isVisible()).toBe(true);
+
+                    // Location must be null
+                    expectLocation();
+
+                    // Click the OK button
+                    Ext.testHelper.tap(Ext.Msg.down('#ok').getFocusEl());
+                });
+
+                // Wait for the TEDIOUS animation, which power users will HATE waiting for!
+                runs(function() {
+                    return !Ext.Msg.el.isVisible();
+                });
+
+                // Automatic focus reversion must send focus back into the grid
+                waitsForSpy(focusEnterSpy);
+
+                runs(function() {
+                    // expectlocation will create an ActionLocation to match the passed position
+                    tool = Ext.Component.from(navigationModel.getLocation().getFocusEl());
+                    expectLocation(0, 0, tool.getFocusEl());
+                    expect(tool.isTool).toBe(true);
+                    expect(tool.hasFocus).toBe(true);
+
+                    // TAB should go to the Tool in the cell below
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.TAB);
+                });
+
+                // Wait for navigation into next row to occur
+                waitsFor(function() {
+                    return navigationModel.getLocation().recordIndex === 1;
+                });
+
+                runs(function() {
+                    // expectlocation will create an ActionLocation to match the passed position
+                    tool = Ext.Component.from(navigationModel.getLocation().getFocusEl());
+                    expectLocation(1, 0, tool.getFocusEl());
+                    expect(tool.isTool).toBe(true);
+                    expect(tool.hasFocus).toBe(true);
+
+                    // SHIT+TAB should move back
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.TAB, true);
+
+                    // expectlocation will create an ActionLocation to match the passed position
+                    tool = Ext.Component.from(navigationModel.getLocation().getFocusEl());
+                    expectLocation(0, 0, tool.getFocusEl());
+                    expect(tool.isTool).toBe(true);
+                    expect(tool.hasFocus).toBe(true);
                 });
             });
         });

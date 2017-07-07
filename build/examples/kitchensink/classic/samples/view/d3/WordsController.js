@@ -123,12 +123,14 @@ Ext.define('KitchenSink.view.d3.WordsController', {
 
     onTooltip: function (component, tooltip, node, element, event) {
         var me = this,
-            word = node.get('word'),
-            count = node.get('count'),
+            store = component.getStore(),
+            record = node.data,
+            word = record.get('word'),
+            count = record.get('count'),
             pack = me.lookupReference('pack'),
             nodes = me.nodes || (me.nodes = pack.getRenderedNodes()),
-            nextMap = node.data.nextMap,
-            topNextWord = node.data.topNextWord,
+            nextMap = record.data.nextMap,
+            topNextWord = record.data.topNextWord,
             tip = 'The word <strong>' + word + '</strong> is used ' + count + ' times.'
                 + '<br>It is most often followed by the <strong>' + topNextWord.word.word + '</strong> word'
                 + '<br>for a total of ' + topNextWord.count + ' times.',
@@ -136,21 +138,21 @@ Ext.define('KitchenSink.view.d3.WordsController', {
 
         // Create a color scale that will give us a shade of pink depending on how
         // often a given word follows the howevered word.
-        me.scale = me.scale || d3.scale.linear().range(['white', '#bd3163']);
+        me.scale = me.scale || d3.scaleLinear().range(['white', '#bd3163']);
         me.scale.domain([0, topNextWord.count]);
         // Reset the color of all nodes back to white...
         nodes.select('circle')
             .style('fill', 'white')
             .style('stroke-width', 1);
         // ... except for the color of the selected node - we want that to come from the CSS.
-        pack.selectNode(pack.getSelection()).select('circle').style('fill', null);
+        pack.selectionFromRecord(pack.getSelection()).select('circle').style('fill', null);
 
         for (nextKey in nextMap) {
             nextValue = nextMap[nextKey];
             entry = nextValue.word;
-            if (entry.word !== node.data.word) {
+            if (entry.word !== record.data.word) {
                 // Highlight the words that most frequently follow the hovered word.
-                pack.selectNode(entry).select('circle')
+                pack.selectionFromRecord(store.getNodeById(entry.id)).select('circle')
                     .style('fill', me.scale(nextValue.count))
                     .style('stroke-width', 3);
             }

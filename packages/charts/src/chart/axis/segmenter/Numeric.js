@@ -87,12 +87,18 @@ Ext.define('Ext.chart.axis.segmenter.Numeric', {
         var min = range[0],
             max = range[1],
             increment = step * scale,
-            remainder = min % increment;
+            remainder, multiplier;
 
+        multiplier = Math.max(1 / (min || 1), 1 / (increment || 1));
+        multiplier = multiplier > 1 ? multiplier : 1;
+        remainder = ((min * multiplier) % (increment * multiplier)) / multiplier;
         if (remainder !== 0) {
             range[0] = min - remainder + (min < 0 ? -increment : 0);
         }
-        remainder = max % increment;
+
+        multiplier = Math.max(1 / (max || 1), 1 / (increment || 1));
+        multiplier = multiplier > 1 ? multiplier : 1;
+        remainder = ((max * multiplier) % (increment * multiplier)) / multiplier;
         if (remainder !== 0) {
             range[1] = max - remainder + (max > 0 ? increment : 0);
         }

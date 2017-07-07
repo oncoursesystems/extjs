@@ -1,8 +1,10 @@
 Ext.define('KitchenSink.view.tip.HtmlToolTips', {
     extend: 'Ext.Component',
+    xtype: 'html-tooltips',
 
     //<example>
     $preventContentSize: true,
+    cls: 'demo-solid-background',
     //</example>
 
     element: {

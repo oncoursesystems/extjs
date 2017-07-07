@@ -16,35 +16,33 @@ Ext.define('Ext.grid.Row', {
     ],
 
     mixins: [
-        'Ext.mixin.Queryable'
+        'Ext.mixin.Queryable',
+        'Ext.dataview.GenericItem',
+        'Ext.dataview.Pinnable'
     ],
 
     isGridRow: true,
 
-    config: {
-        // Lazy mean if anything calls getter this will be spun up, otherwise it will not
-        // update list to not call getHeader unless grouped is true
-        header: {
-            $value: {
-                xtype: 'rowheader'
-            },
-            lazy: true
-        },
+    cachedConfig: {
+        collapsed: true
+    },
 
+    config: {
         /**
-         * @cfg {Object}
+         * @cfg {Object} body
          * A config object for this row's {@link Ext.grid.RowBody Row Body}.
          * When a {@link Ext.grid.plugin.RowExpander Row Expander} is used all row bodies
          * begin collapsed, and can be expanded by clicking on the row expander icon.
          * When no Row Expander is present row bodies are always expanded by default but
          * can be collapsed programmatically using {@link #collapse}.
+         *
+         * Be aware that if you specify a row body, the owning grid is automatically configured
+         * with `{@link Ext.dataview.List#variableHeights}: true`.
          */
         body: null,
 
-        grid: null,
-
         /**
-         * @cfg {String} [expandedField]
+         * @cfg {String} expandedField
          * The name of a `boolean` field in the grid's record which is to be used to check expanded state.
          * Note that this field should be `true` to indicate expanded, and `false` to indicate collapsed.
          * By default the expanded state of a record is stored on the associated `grid` component allowing
@@ -53,15 +51,23 @@ Ext.define('Ext.grid.Row', {
         expandedField: null,
 
         /**
+         * @cfg {String} defaultCellUI
          * A default {@link #ui ui} to use for {@link Ext.grid.cell.Base cells} in this row.
          */
-        defaultCellUI: null
+        defaultCellUI: null,
+
+        /**
+         * @private
+         */
+        stickyVisibility: null
     },
 
     classCls: [
         Ext.baseCSSPrefix + 'listitem',
         Ext.baseCSSPrefix + 'gridrow'
     ],
+
+    inheritUi: true,
 
     expandedCls: Ext.baseCSSPrefix + 'expanded',
 
@@ -73,19 +79,21 @@ Ext.define('Ext.grid.Row', {
         }]
     },
 
-    // Causes this config to only run against the first instance
-    cachedConfig: {
-        collapsed: true
-    },
-
     constructor: function (config) {
         this.cells = [];
         this.columnMap = {};
+
         this.callParent([config]);
     },
 
-    toggleCollapsed: function() {
-        this.setCollapsed(!this.getCollapsed());
+    doDestroy: function () {
+        var me = this;
+
+        me.setRecord(null);
+        me.setBody(null);
+        me.cells = Ext.destroy(me.cells);
+
+        me.callParent();
     },
 
     /**
@@ -102,15 +110,19 @@ Ext.define('Ext.grid.Row', {
         this.setCollapsed(false);
     },
 
+    toggleCollapsed: function () {
+        this.setCollapsed(!this.getCollapsed());
+    },
+
     updateCollapsed: function (collapsed) {
         var me = this,
             body = me.getBody(),
-            grid = me.getGrid(),
+            grid = me.getParent(),
             record = me.getRecord(),
             expandField = me.getExpandedField(),
             expandedCls = me.expandedCls,
             expanderCell = me.expanderCell,
-            recordsExpanded, id;
+            recordsExpanded;
 
         // Set state correctly before any other code executes which may read this.
         if (record) {
@@ -140,61 +152,82 @@ Ext.define('Ext.grid.Row', {
                 body.show();
                 me.addCls(expandedCls);
             }
+        }
+    },
 
-            if (!me.$updating) {
-                grid.onItemHeightChange();
+    // // Rows shrinkwrap content, so no callParent.
+    // // However their headers must be widthed.
+    // updateWidth: function(width) {
+    //     // Do not trigger its creation, just see if we have one.
+    //     var header = this.getConfig('header', false, true);
+    //
+    //     if (header) {
+    //         header.setWidth(width);
+    //     }
+    // },
+
+    applyBody: function (config, existing) {
+        return Ext.Factory.widget.update(existing, config, this, 'createBody');
+    },
+
+    createBody: function (body) {
+        return Ext.merge({
+            xtype: 'rowbody',
+            ownerCmp: this,
+            row: this,
+            hidden: true
+        }, body);
+    },
+
+    updateBody: function (body) {
+        var me = this,
+            grid = me.getParent();
+
+        if (body) {
+            me.bodyElement.appendChild(body.element);
+
+            if (me.rendered && !body.rendered) {
+                body.setRendered(true);
+            }
+        }
+
+        if (grid) {
+            grid.setVariableHeights(true);
+            if (!grid.hasRowExpander) {
+                me.expand();
             }
         }
     },
 
-    applyHeader: function (header) {
-        var grid = this.getGrid();
-        if (grid && grid.isGrouping() && header && !header.isComponent) {
-            header = Ext.factory(header, Ext.Component, this.getHeader());
-            return header;
-        }
-
-        return null;
-    },
-
-    updateHeader: function (header, oldHeader) {
-        if (oldHeader) {
-            oldHeader.destroy();
-        }
-    },
-
-    applyBody: function (body) {
-        if (body) {
-            body = Ext.merge({parent: this, hidden: true}, body);
-            body = Ext.factory(body, Ext.grid.RowBody, this.getBody());
-        }
-        return body;
-    },
-
-    updateBody: function (body, oldBody) {
+    onAdded: function (grid) {
         var me = this,
-            grid = me.getGrid();
+            cells = me.cells,
+            cell, col, columns, i, k, n;
 
-        if (oldBody) {
-            oldBody.destroy();
-        }
-
-        if (body) {
-            me.innerElement.appendChild(body.element);
-        }
-
-        if (grid && !grid.hasRowExpander) {
-            me.expand();
-        }
-    },
-
-    updateGrid: function (grid) {
-        var me = this,
-            i, columns, ln;
+        me.callParent(arguments);
 
         if (grid) {
             columns = grid.getColumns();
-            for (i = 0, ln = columns.length; i < ln; i++) {
+
+            for (i = 0, n = columns.length; i < n; i++) {
+                cell = cells[i];
+                col = columns[i];
+
+                // Rows can be removed and added back (due to itemCache), so make sure
+                // the cells (if they exist) have the proper column. If not, we need to
+                // remove all cells from that index to the end. We do that backwards to
+                // make things more efficient.
+                if (cell) {
+                    if (cell.getColumn() === col) {
+                        continue; // keep what we can
+                    }
+
+                    for (k = cells.length; k-- > i; ) {
+                        cell = cells[k];
+                        me.removeColumn(cell.getColumn());
+                    }
+                }
+
                 me.addColumn(columns[i]);
             }
         }
@@ -204,20 +237,55 @@ Ext.define('Ext.grid.Row', {
         this.insertColumn(this.cells.length, column);
     },
 
-    getRefItems: function () {
-        return this.cells;
+    /**
+     * Returns the cells owned by this Row.
+     *
+     * Optionally filters the results by the passed {@link Ext.ComponentQuery
+     * ComponentQuery} selector.
+     * @param {String} [selector] The {@link Ext.ComponentQuery ComponentQuery} selector
+     * to filter the results by.
+     * @returns {Ext.grid.cell.Cell[]} The matching cells.
+     */
+    getCells: function(selector) {
+        return selector ? Ext.ComponentQuery.query(selector, this.cells) : this.cells;
+    },
+
+    getRefItems: function(deep) {
+        var result = [],
+            body = this.getConfig('body', false, true),  // Don't initialize lazy
+            cells = this.cells,
+            len = cells && cells.length,
+            i, cell;
+
+        for (i = 0; i < len; i++) {
+            cell = cells[i];
+            result.push(cell);
+            if (deep && cell.getRefItems) {
+                result.push.apply(result, cell.getRefItems());
+            }
+        }
+
+        if (body) {
+            result.push(body);
+            if (deep && body.getRefItems) {
+                result.push.apply(result, body.getRefItems());
+            }
+        }
+
+        return result;
     },
 
     insertColumn: function (index, column) {
         var me = this,
-            cells, cell;
+            cells = me.cells,
+            cell;
 
         if (column.isHeaderGroup) {
             return;
         }
 
-        cells = me.cells;
         cell = me.createCell(column);
+
         if (index >= cells.length) {
             me.cellsElement.appendChild(cell.element);
             cells.push(cell);
@@ -227,8 +295,13 @@ Ext.define('Ext.grid.Row', {
         }
 
         me.columnMap[column.getId()] = cell;
+
         if (cell.isExpanderCell) {
             me.expanderCell = cell;
+        }
+
+        if (me.rendered) {
+            cell.setRendered(true);
         }
     },
 
@@ -257,54 +330,16 @@ Ext.define('Ext.grid.Row', {
         }
     },
 
-    updateRecord: function(record) {
-        if (!record || this.destroyed) {
-            return;
-        }
-
-        var me = this,
-            cells = me.cells,
-            body = me.getBody(),
-            len = cells.length,
-            expandField = me.getExpandedField(),
-            i, cell, grid, recordsExpanded;
-
-        for (i = 0; i < len; ++i) {
-            cell = cells[i];
-            if (cell.getRecord() === record) {
-                cell.updateRecord(record);
-            } else {
-                cell.setRecord(record);
-            }
-        }
-
-        if (body) {
-            grid = me.getGrid();
-            if (body.getRecord() === record) {
-                body.updateRecord(record);
-            } else {
-                body.setRecord(record);
-            }
-
-            // If the plugin knows that the record contains an expanded flag
-            // ensure our state is synchronized with our record.
-            // Maintainer: We are testing the result of the assignment of expandedField
-            // in order to avoid a messy, multiple level if...else.
-            if (expandField) {
-                me.setCollapsed(!record.get(expandField));
-            } else {
-                recordsExpanded = grid.$recordsExpanded || (grid.$recordsExpanded = {});
-                if (grid.hasRowExpander) {
-                    me.setCollapsed(!recordsExpanded[record.internalId]);
-                }
-            }
+    updateRecord: function (record) {
+        if (!this.destroyed && !this.destroying) {
+            this.refresh();
         }
     },
 
-    setColumnWidth: function (column, width) {
+    setColumnWidth: function (column) {
         var cell = this.getCellByColumn(column);
         if (cell) {
-            cell.setWidth(width);
+            cell.setWidth(column.getComputedWidth());
         }
     },
 
@@ -324,51 +359,114 @@ Ext.define('Ext.grid.Row', {
         return cell.getColumn();
     },
 
-    doDestroy: function() {
-        var me = this;
+    updateStickyVisibility: function (value) {
+        this.fireEvent('stickyvisiblitychange', value);
+    },
 
-        Ext.destroy(me.getBody());
-        me.cells = Ext.destroy(me.cells, me.getHeader());
-        me.setRecord(null);
-        me.callParent();
+    refresh: function (context) {
+        var me = this,
+            cells = me.cells,
+            body = me.getBody(),
+            len = cells.length,
+            expandField = me.getExpandedField(),
+            grid = me.getParent(),
+            sm = grid.getSelectable(),
+            selection = sm.getSelection(),
+            isCellSelection = selection.isCells || selection.isColumns,
+            i, cell, record, recordsExpanded;
+
+        // Allows cells/body to know we are bulk updating so they can avoid
+        // things like calling record.getData(true) multiple times.
+        me.refreshContext = context = me.beginRefresh(context);
+
+        record = context.record;
+
+        for (i = 0; i < len; ++i) {
+            cell = cells[i];
+
+            if (!context.summary || !cell.getColumn().getIgnore()) {
+                if (cell.getRecord() === record) {
+                    cell.refresh(context);
+                } else {
+                    cell.refreshContext = context;
+                    cell.setRecord(record);
+                    cell.refreshContext = null;
+                    
+                    if (isCellSelection) {
+                        cell.toggleCls(grid.selectedCls, sm.isCellSelected(record, i));
+                    }
+                }
+            }
+        }
+
+        context.cell = context.column = context.dataIndex = context.scope = null;
+
+        if (body) {
+            body.refreshContext = context;
+
+            if (body.getRecord() === record) {
+                body.updateRecord(record);
+            } else {
+                body.setRecord(record);
+            }
+
+            body.refreshContext = null;
+
+            // If the plugin knows that the record contains an expanded flag
+            // ensure our state is synchronized with our record.
+            // Maintainer: We are testing the result of the assignment of expandedField
+            // in order to avoid a messy, multiple level if...else.
+            if (expandField) {
+                me.setCollapsed(!record.get(expandField));
+            } else {
+                recordsExpanded = grid.$recordsExpanded || (grid.$recordsExpanded = {});
+                if (grid.hasRowExpander) {
+                    me.setCollapsed(!recordsExpanded[record.internalId]);
+                }
+            }
+        }
+
+        me.refreshContext = null;
     },
 
     privates: {
-        createCell: function (column) {
-            var cell = this.getCellCfg(column);
+        refreshContext: null,
 
-            cell.$initParent = this;
+        beginRefresh: function (context) {
+            var me = this,
+                grid = me.getParent();
+
+            context = context || {};
+
+            //<debug>
+            context.from = context.from || 'row';
+            //</debug>
+            context.grid = grid;
+            context.record = me.getRecord();
+            context.row = me;
+            context.store = grid.store;
+
+            return context;
+        },
+
+        createCell: function (column) {
+            var cell = column.createCell(this);
+
             cell = Ext.create(cell);
             delete cell.$initParent;
 
-            return cell;
-        },
-
-        getCellCfg: function (column) {
-            var me = this,
-                cfg = {
-                    parent: me,
-                    column: column,
-                    record: me.getRecord(),
-                    ui: me.getDefaultCellUI(),
-                    hidden: column.isHidden(me.getGrid().getHeaderContainer()),
-                    width: column.getComputedWidth() || column.getWidth()
-                },
-                align = column.getAlign();
-
-            if (align) {
-                // only put align on the config object if it is not null.  This prevents
-                // the column's default value of null from overriding a value set on the
-                // cell's class definition (e.g. widgetcell)
-                cfg.align = align;
+            if (cell.inheritUi) {
+                cell.doInheritUi();
             }
 
-            return Ext.apply(cfg, me.getColumnCell(column));
-        },
+            // The cell element must accept focus for navigation to occur.
+            // The cell component must not be focusable. It must not participate in a
+            // FocusableContainer relationship with the List's container,
+            // and must not react to focus events or its focus API itself.
+            // It is a slave of the NavigationModel.
+            cell.el.setTabIndex(-1);
 
-        // Overridden by Summary Row to return getSummaryCell()
-        getColumnCell: function(column) {
-            return column.getCell();
+            return cell;
         },
 
         setCellHidden: function (column, hidden) {
@@ -376,6 +474,10 @@ Ext.define('Ext.grid.Row', {
             if (cell) {
                 cell.setHidden(hidden);
             }
+        },
+
+        getGrid: function () {
+            return this.getParent();  // backwards compat
         }
     }
 });

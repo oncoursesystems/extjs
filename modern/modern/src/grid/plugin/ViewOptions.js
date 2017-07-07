@@ -1,9 +1,9 @@
 /**
- * The Modern Grid's ViewOptions plugin produces a menu that slides in from the right (by default)
- * when you drag your finger or cursor right-to-left over the grid's column headers. The
- * menu displays the column header names which represents the order of the grid's columns.
- * This allows users to easily reorder the grid's columns by reordering the rows. Items may
- * be dragged by grabbing the furthest left side of the row and moving the item vertically.
+ * The Modern Grid's ViewOptions plugin produces a menu that slides in from the right
+ * (by default) when you longpress on the grid headers. The menu displays the column
+ * header names which represents the order of the grid's columns. This allows users to
+ * easily reorder the grid's columns by reordering the rows. Items may be dragged by
+ * grabbing the furthest left side of the row and moving the item vertically.
  *
  * Once the columns are ordered to your liking, you may then close the menu by tapping the
  * "Done" button.
@@ -56,13 +56,13 @@
  *
  */
 Ext.define('Ext.grid.plugin.ViewOptions', {
-    extend: 'Ext.Component',
-    alias: 'plugin.gridviewoptions' ,
+    extend: 'Ext.plugin.Abstract',
+    alias: 'plugin.gridviewoptions',
 
     requires: [
         'Ext.field.Toggle',
         'Ext.dataview.NestedList',
-        'Ext.plugin.SortableList'
+        'Ext.dataview.plugin.SortableList'
     ],
 
     config: {
@@ -80,7 +80,7 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
          * The configuration of the menu
          */
         sheet: {
-            baseCls: Ext.baseCSSPrefix + 'gridviewoptions',
+            cls: Ext.baseCSSPrefix + 'gridviewoptions',
             xtype: 'sheet',
             items: [{
                 docked: 'top',
@@ -99,9 +99,6 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
             enter: 'right',
             exit: 'right',
             modal: true,
-            translatable: {
-                type: 'csstransform'
-            },
             right: 0,
             layout: 'fit',
             stretchY: true
@@ -116,10 +113,16 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
             listConfig: {
                 plugins: [{
                     type: 'sortablelist',
-                    handleSelector: '.' + Ext.baseCSSPrefix + 'column-options-sortablehandle'
+                    source: {
+                        handle: '.' + Ext.baseCSSPrefix + 'column-options-sortablehandle'
+                    }
                 }],
                 mode: 'MULTI',
                 infinite: true,
+                itemConfig: {
+                    tools: null,
+                    cls: Ext.baseCSSPrefix + 'column-options-item'
+                },
                 itemTpl: [
                     '<div class="' + Ext.baseCSSPrefix + 'column-options-itemwrap<tpl if="hidden"> {hiddenCls}</tpl>',
                             '<tpl if="grouped"> {groupedCls}</tpl>">',
@@ -133,7 +136,9 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
                         '<tpl if="groupable && dataIndex">',
                             '<div class="' + Ext.baseCSSPrefix + 'column-options-groupindicator ' + Ext.baseCSSPrefix + 'font-icon"></div>',
                         '</tpl>',
-                        '<div class="' + Ext.baseCSSPrefix + 'column-options-visibleindicator ' + Ext.baseCSSPrefix + 'font-icon"></div>',
+                        '<tpl if="hideable">',
+                            '<div class="' + Ext.baseCSSPrefix + 'column-options-visibleindicator ' + Ext.baseCSSPrefix + 'font-icon"></div>',
+                        '</tpl>',
                     '</div>'
                 ],
                 triggerEvent: null,
@@ -149,6 +154,7 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
                     'header',
                     'hidden',
                     'hiddenCls',
+                    'hideable',
                     'grouped',
                     'groupedCls',
                     'groupable'
@@ -233,10 +239,9 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
                 scope: this
             });
 
-            list.on({
-                dragsort: 'onColumnReorder',
-                delegate: '> list',
-                scope: this
+            // For each item in the nested list, we want to handle the reorder
+            list.on('dragsort', 'onColumnReorder', this, {
+                delegate: '> list'
             });
 
             this.attachTapListeners();
@@ -250,7 +255,7 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
     },
 
     onDoneButtonTap: function() {
-        this.hideViewOptions();
+        this.getSheet().hide();
     },
 
     onColumnReorder: function(list, row, newIndex) {
@@ -275,7 +280,7 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
         var activeList = this.getColumnList().getActiveItem();
         if (!activeList.hasAttachedTapListeners) {
             activeList.onBefore({
-                itemtap: 'onListItemTap',
+                childtap: 'onListChildTap',
                 scope: this
             });
             activeList.hasAttachedTapListeners = true;
@@ -299,15 +304,16 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
         this.attachTapListeners();
     },
 
-    onListItemTap: function(list, index, row, record, e) {
+    onListChildTap: function(list, location) {
         var me = this,
-            handled = false;
+            handled = false,
+            e = location.event;
 
         if (Ext.fly(e.target).is(me.getVisibleIndicatorSelector())) {
-            me.onVisibleIndicatorTap(row, record, index);
+            me.onVisibleIndicatorTap(location.row, location.record);
             handled = true;
         } else if (Ext.fly(e.target).is(me.getGroupIndicatorSelector())) {
-            me.onGroupIndicatorTap(row, record, index);
+            me.onGroupIndicatorTap(location.row, location.record);
             handled = true;
         }
 
@@ -318,13 +324,8 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
         var hidden = !record.get('hidden'),
             column = Ext.getCmp(record.get('id'));
 
-        if (hidden) {
-            column.hide();
-            record.set('hidden', true);
-        } else {
-            column.show();
-            record.set('hidden', false);
-        }
+        column.setHidden(hidden);
+        record.set('hidden', hidden);
     },
 
     onGroupIndicatorTap: function(row, record) {
@@ -390,6 +391,7 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
                 groupable: isGridGrouped && column.getGroupable(),
                 hidden: column.isHidden(),
                 hiddenCls: hiddenCls,
+                hideable: column.getHideable(),
                 grouped: !!(isGridGrouped && grouper && grouper.getProperty() === dataIndex),
                 groupedCls: me._groupedColumnCls,
                 dataIndex: column.getDataIndex(),
@@ -435,7 +437,7 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
             record.parentNode.removeChild(record, true);
         }
     },
-    
+
     onHeaderContextMenu: function(e) {
         // Stop context menu from being triggered by a longpress
         e.preventDefault();
@@ -470,7 +472,7 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
 
         if (!sheet.isVisible()) {
             // Since we may have shown the header in response to a longpress we don't
-            // want the succeeeding "tap" to trigger column sorting, so we temporarily
+            // want the succeeding "tap" to trigger column sorting, so we temporarily
             // disable sort-on-tap while the ViewOptions are shown
             header = me.getGrid().getHeaderContainer();
             me.cachedSortable = header.getSortable();
@@ -518,8 +520,6 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
 
 
             sheet = me.getSheet();
-            grid.add(sheet);
-            sheet.translate(me.getSheetWidth());
 
             sheet.down('button[role=donebutton]').on({
                 tap: 'onDoneButtonTap',
@@ -532,8 +532,7 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
                 store = grid.getStore(),
                 grouper = store.getGrouper(),
                 isGridGrouped = grid.getGrouped(),
-                grouperProp = grouper && grouper.getProperty(),
-                headerContainer = grid.getHeaderContainer();
+                grouperProp = grouper && grouper.getProperty();
 
             this.getColumnList().getStore().getRoot().cascade(function(node) {
                 var grouped = false,

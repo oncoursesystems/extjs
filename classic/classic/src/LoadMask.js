@@ -59,13 +59,12 @@ Ext.define('Ext.LoadMask', {
      * hidden on either load success, or load fail.
      */
 
-    //<locale>
     /**
      * @cfg {String} [msg="Loading..."]
      * The text to display in a centered loading message box.
+     * @locale
      */
     msg: 'Loading...',
-    //</locale>
 
     msgCls: Ext.baseCSSPrefix + 'mask-loading',
 

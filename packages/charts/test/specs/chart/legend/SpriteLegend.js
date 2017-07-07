@@ -1,9 +1,7 @@
 /* global Ext, expect */
 
-describe("Ext.chart.legend.SpriteLegend", function () {
-
+topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore'], function() {
     function generateStoreData(pointCount) {
-
         var data = [
                 { month: 'Jan' },
                 { month: 'Feb' },
@@ -32,11 +30,341 @@ describe("Ext.chart.legend.SpriteLegend", function () {
 
         return data;
     }
+    
+    beforeEach(function() {
+        // Silence Sencha download server warnings
+        spyOn(Ext.log, 'warn');
+    });
+
+    describe('docked', function () {
+        var chart;
+
+        afterEach(function () {
+            Ext.destroy(chart);
+        });
+
+        it('should position the sprite legend properly', function () {
+            var side = 400,
+                layoutDone,
+                legendSpriteCount,
+                legendSpriteIds;
+
+            chart = new Ext.chart.CartesianChart({
+                renderTo: Ext.getBody(),
+                width: side,
+                height: side,
+                store: {
+                    data: [
+                        { x: 1, y: 1 },
+                        { x: 2, y: 3 },
+                        { x: 3, y: 1 }
+                    ]
+                },
+                axes: [
+                    {
+                        type: 'numeric',
+                        position: 'left'
+                    },
+                    {
+                        type: 'category',
+                        position: 'bottom'
+                    }
+                ],
+                series: {
+                    type: 'bar',
+                    xField: 'x',
+                    yField: 'y'
+                },
+                listeners: {
+                    layout: function () {
+                        layoutDone = true;
+                    }
+                }
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                chart.setLegend({
+                    type: 'sprite',
+                    docked: 'top'
+                });
+                layoutDone = false;
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                // docked: 'top'
+                var chartRect = chart.getChartRect(),
+                    legend = chart.getLegend(),
+                    legendSize = legend.getSize(),
+                    legendSurface = legend.getSurface(),
+                    legendSprites = legendSurface.getItems(),
+                    legendRect = legendSurface.getRect();
+
+                expect(chartRect[0]).toBe(0);
+                expect(chartRect[1]).toBe(legendSize.height);
+                expect(chartRect[2]).toBe(side);
+                expect(chartRect[3]).toBe(side - legendSize.height);
+
+                expect(legendRect[0]).toBe(0);
+                expect(legendRect[1]).toBe(0);
+                expect(legendRect[2]).toBe(side);
+                expect(legendRect[3]).toBe(legendSize.height);
+
+                legendSpriteCount = legendSprites.length;
+                // Don't want to be too specific here, as the number of sprites may change
+                // in the future, but there must be something there.
+                expect(legendSpriteCount).toBeGreaterThan(0);
+
+                legendSpriteIds = {};
+                for (var i = 0; i < legendSpriteCount; i++) {
+                    legendSpriteIds[legendSprites[i].getId()] = true;
+                }
+
+                chart.setLegend({
+                    type: 'sprite',
+                    docked: 'top' // that's not a mistake, setting again to 'top'
+                });
+                layoutDone = false;
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                // docked: 'top'
+                var chartRect = chart.getChartRect(),
+                    legend = chart.getLegend(),
+                    legendSize = legend.getSize(),
+                    legendSurface = legend.getSurface(),
+                    legendSprites = legendSurface.getItems(),
+                    legendRect = legendSurface.getRect();
+
+                // Sprites from the previous legend should not remain in the chart's
+                // 'legend' surface. We should get the same number of sprites, not double
+                // the sprites ...
+                expect(legendSprites.length).toBe(legendSpriteCount);
+
+                // ... and those sprites should be all different.
+                for (var i = 0; i < legendSpriteCount; i++) {
+                    expect(legendSprites[i].getId() in legendSpriteIds).toBe(false);
+                }
+
+                expect(chartRect[0]).toBe(0);
+                expect(chartRect[1]).toBe(legendSize.height);
+                expect(chartRect[2]).toBe(side);
+                expect(chartRect[3]).toBe(side - legendSize.height);
+
+                expect(legendRect[0]).toBe(0);
+                expect(legendRect[1]).toBe(0);
+                expect(legendRect[2]).toBe(side);
+                expect(legendRect[3]).toBe(legendSize.height);
+
+                chart.setLegend({
+                    type: 'sprite',
+                    docked: 'right'
+                });
+                layoutDone = false;
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                // docked: 'right'
+                var chartRect = chart.getChartRect(),
+                    legend = chart.getLegend(),
+                    legendSize = legend.getSize(),
+                    legendRect = legend.getSurface().getRect();
+
+                expect(chartRect[0]).toBe(0);
+                expect(chartRect[1]).toBe(0);
+                expect(chartRect[2]).toBe(side - legendSize.width);
+                expect(chartRect[3]).toBe(side);
+
+                expect(legendRect[0]).toBe(side - legendSize.width);
+                expect(legendRect[1]).toBe(0);
+                expect(legendRect[2]).toBe(legendSize.width);
+                expect(legendRect[3]).toBe(side);
+
+                chart.setLegend({
+                    type: 'sprite',
+                    docked: 'bottom'
+                });
+                layoutDone = false;
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                // docked: 'bottom'
+                var chartRect = chart.getChartRect(),
+                    legend = chart.getLegend(),
+                    legendSize = legend.getSize(),
+                    legendRect = legend.getSurface().getRect();
+
+                expect(chartRect[0]).toBe(0);
+                expect(chartRect[1]).toBe(0);
+                expect(chartRect[2]).toBe(side);
+                expect(chartRect[3]).toBe(side - legendSize.height);
+
+                expect(legendRect[0]).toBe(0);
+                expect(legendRect[1]).toBe(side - legendSize.height);
+                expect(legendRect[2]).toBe(side);
+                expect(legendRect[3]).toBe(legendSize.height);
+
+                chart.setLegend({
+                    type: 'sprite',
+                    docked: 'left'
+                });
+                layoutDone = false;
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                // docked: 'left'
+                var chartRect = chart.getChartRect(),
+                    legend = chart.getLegend(),
+                    legendSize = legend.getSize(),
+                    legendRect = legend.getSurface().getRect();
+
+                expect(chartRect[0]).toBe(legendSize.width);
+                expect(chartRect[1]).toBe(0);
+                expect(chartRect[2]).toBe(side - legendSize.width);
+                expect(chartRect[3]).toBe(side);
+
+                expect(legendRect[0]).toBe(0);
+                expect(legendRect[1]).toBe(0);
+                expect(legendRect[2]).toBe(legendSize.width);
+                expect(legendRect[3]).toBe(side);
+
+                chart.setLegend(null);
+                layoutDone = false;
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                // legend: null
+                var chartRect = chart.getChartRect();
+
+                expect(chartRect[0]).toBe(0);
+                expect(chartRect[1]).toBe(0);
+                expect(chartRect[2]).toBe(side);
+                expect(chartRect[3]).toBe(side);
+
+                chart.setLegend({
+                    type: 'sprite',
+                    docked: 'right' // creating ...
+                });
+                layoutDone = false;
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                var legend = chart.getLegend(),
+                    legendSurface = legend.getSurface();
+
+                expect(legendSurface.getHidden()).toBe(false);
+
+                chart.getLegend().setHidden(true); // ... and hiding
+                layoutDone = false;
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                // docked: 'right',
+                // hidden: true
+                var chartRect = chart.getChartRect(),
+                    legend = chart.getLegend(),
+                    legendSurface = legend.getSurface();
+
+                expect(chartRect[0]).toBe(0);
+                expect(chartRect[1]).toBe(0);
+                expect(chartRect[2]).toBe(side);
+                expect(chartRect[3]).toBe(side);
+
+                expect(legendSurface.getHidden()).toBe(true);
+
+                chart.getLegend().setHidden(false);
+                layoutDone = false;
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                // docked: 'right',
+                // hidden: false
+                var chartRect = chart.getChartRect(),
+                    legend = chart.getLegend(),
+                    legendSize = legend.getSize(),
+                    legendSurface = legend.getSurface();
+
+                expect(chartRect[0]).toBe(0);
+                expect(chartRect[1]).toBe(0);
+                expect(chartRect[2]).toBe(side - legendSize.width);
+                expect(chartRect[3]).toBe(side);
+
+                expect(legendSurface.getHidden()).toBe(false);
+
+                chart.setLegend({
+                    type: 'sprite',
+                    docked: 'right',
+                    hidden: true // creating already hidden
+                });
+                layoutDone = false;
+            });
+
+            waitsFor(function () {
+                return layoutDone;
+            });
+
+            runs(function () {
+                // docked: 'right',
+                // hidden: true
+                var chartRect = chart.getChartRect(),
+                    legend = chart.getLegend(),
+                    legendSurface = legend.getSurface();
+
+                expect(chartRect[0]).toBe(0);
+                expect(chartRect[1]).toBe(0);
+                expect(chartRect[2]).toBe(side);
+                expect(chartRect[3]).toBe(side);
+
+                expect(legendSurface.getHidden()).toBe(true);
+            });
+
+        });
+    });
 
     describe("updateTheme", function () {
         var storeData = generateStoreData(2);
 
         var chartConfig = {
+            animation: false,
             width: 400,
             height: 300,
             renderTo: document.body,
@@ -83,7 +411,7 @@ describe("Ext.chart.legend.SpriteLegend", function () {
         });
 
         afterEach(function () {
-            Ext.destroy(store, chart);
+            Ext.destroy(chart, store);
         });
 
         it("should use the style from the theme, " +
@@ -182,16 +510,23 @@ describe("Ext.chart.legend.SpriteLegend", function () {
         });
     });
 
+    // Safari 7 times out here in Modern for unknown reason in TeamCity only.
+    // Works fine locally (tested in Safari 7.0 (9537.71).
+    TODO(Ext.isSafari7).
     describe("store", function () {
         var storeData = generateStoreData(4),
             store, chart, legend;
 
         beforeEach(function () {
+            var layoutEndSpy;
+
             store = new Ext.data.Store({
                 fields: [ 'month', 'data1', 'data2', 'data3', 'data4' ],
                 data: storeData
             });
+
             chart = new Ext.chart.CartesianChart({
+                animation: false,
                 width: 400,
                 height: 300,
                 renderTo: document.body,
@@ -234,8 +569,9 @@ describe("Ext.chart.legend.SpriteLegend", function () {
                 }]
             });
             legend = chart.getLegend();
-            waits(250);
-//            waitsForSpy(spyOn(chart, 'performLayout').andCallThrough());
+            layoutEndSpy = spyOn(chart, 'onLayoutEnd').andCallThrough();
+
+            waitsForSpy(layoutEndSpy, "chart layout to finish");
         });
 
         afterEach(function () {

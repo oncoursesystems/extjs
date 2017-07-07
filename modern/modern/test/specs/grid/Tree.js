@@ -1,7 +1,6 @@
 /* global Ext, expect, spyOn, jasmine */
 
-describe("Ext.grid.Tree", function() {
-
+topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.ViewModel'], function() {
     var TreeItem = Ext.define(null, {
             extend: 'Ext.data.TreeModel',
             fields: ['id', 'text', 'secondaryId'],
@@ -10,10 +9,8 @@ describe("Ext.grid.Tree", function() {
             }
         }),
         tree,
-        container,
         store,
         rootNode,
-        recordCount,
         testNodes,
         synchronousLoad = true,
         treeStoreLoad = Ext.data.TreeStore.prototype.load,
@@ -29,15 +26,6 @@ describe("Ext.grid.Tree", function() {
         return row.cells[column];
     }
 
-    function spyOnEvent(object, eventName, fn) {
-        var obj = {
-            fn: fn || Ext.emptyFn
-        },
-        spy = spyOn(obj, "fn");
-        object.addListener(eventName, obj.fn);
-        return spy;
-    }
-
     // Force any flex sizes to be published internally
     function refreshColSizes() {
         var cols = tree.query('column');
@@ -45,26 +33,28 @@ describe("Ext.grid.Tree", function() {
     }
 
     function makeTree(nodes, cfg, storeCfg, rootCfg) {
+        var rootConfig = {
+            id: 'root',
+            secondaryId: 'root',
+            text: 'Root',
+
+            // Add cls. Tests must not throw errors with this present.
+            cls: 'test-EXTJS-16367'
+        };
+        if (nodes) {
+            rootConfig.children = nodes;
+        }
+
         tree = new Ext.grid.Tree(Ext.apply({
             renderTo: Ext.getBody(),
             store: store = new Ext.data.TreeStore(Ext.apply({
                 model: TreeItem,
-                root: Ext.apply({
-                    id: 'root',
-                    secondaryId: 'root',
-                    text: 'Root',
-
-                    // Add cls. Tests must not throw errors with this present.
-                    cls: 'test-EXTJS-16367',
-                    children: nodes
-                }, rootCfg)
+                root: Ext.apply(rootConfig, rootCfg)
             }, storeCfg)),
             width: 200,
             height: 300
         }, cfg));
         rootNode = store.getRootNode();
-        container = tree.container;
-        tree.onContainerResize(container, { height: container.element.getHeight() });
 
         // Need because of async response to flex
         refreshColSizes();
@@ -157,7 +147,7 @@ describe("Ext.grid.Tree", function() {
     afterEach(function(){
         // Undo the overrides.
         Ext.data.TreeStore.prototype.load = treeStoreLoad;
-        Ext.destroy(tree);
+        Ext.destroy(tree, store);
         MockAjaxManager.removeMethods();
     });
     
@@ -385,7 +375,8 @@ describe("Ext.grid.Tree", function() {
 
             // Wait until the store has been bound
             waitsFor(function() {
-                return treepanel.getStore() && treepanel.getRootNode().childNodes.length === 3 && treepanel.query('gridrow').length === 4;
+                var root = treepanel.getRootNode();
+                return root && root.childNodes.length === 3 && treepanel.query('gridrow').length === 4;
             }, 'new store to be bound to');
         });
     });
@@ -416,7 +407,7 @@ describe("Ext.grid.Tree", function() {
                     expander = getCell(1, 0).expanderElement;
 
                 tree.on('itemexpand', spy);
-                tree.on('itemtap', itemClickSpy);
+                tree.on('childtap', itemClickSpy);
                 jasmine.fireMouseEvent(expander, 'click');
                 waitsFor(function() {
                     return spy.callCount > 0;
@@ -1130,4 +1121,22 @@ describe("Ext.grid.Tree", function() {
         });
     });
 
+    describe('cell tpl', function() {
+        beforeEach(function() {
+            makeTree(testNodes, {
+                columns: [{
+                    xtype: 'treecolumn',
+                    cell: {
+                        tpl: '{text} id:{secondaryId}'
+                    },
+                    flex: 1
+                }]
+            });
+            tree.expandAll();
+        });
+
+        it('should use the tpl to render the cell text', function() {
+            expect(tree.down('treecell').getRawValue()).toBe("Root id:root");
+        });
+    });
 });

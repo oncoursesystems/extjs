@@ -276,7 +276,7 @@ Ext.define('Ext.tree.Column', {
             // expander, elbow, checkbox).  This is used by the rtl override to add the
             // "x-rtl" class to these elements.
             childCls: me.getChildCls ? me.getChildCls() + ' ' : '',
-            value: value
+            value: value || store.defaultRootText
         };
     },
 

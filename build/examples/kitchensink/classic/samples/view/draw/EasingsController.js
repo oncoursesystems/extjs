@@ -14,9 +14,9 @@ Ext.define('KitchenSink.view.draw.EasingsController', {
             name = record.get('name'),
             sprite = me.sprite;
 
-        sprite.fx.setConfig({
-            easing: name === 'custom' ? me.customEasing : name,
-            duration: me.fxTime
+        sprite.setAnimation({
+            duration: me.fxTime,
+            easing: name === 'custom' ? me.customEasing : name
         });
         sprite.setAttributes({
             cy: me.cyEnd
@@ -39,7 +39,7 @@ Ext.define('KitchenSink.view.draw.EasingsController', {
         }, me.fxTime);
     },
 
-    onAfterRender: function () {
+    init: function () {
         var me = this,
             easingsCombo = me.lookupReference('easings'),
             easingMap = Ext.draw.TimingFunctions.easingMap,
@@ -50,7 +50,7 @@ Ext.define('KitchenSink.view.draw.EasingsController', {
             store, name, easing, record;
 
         me.sprite = sprite;
-        sprite.fx.on('animationend', me.onAnimationEnd, me);
+        sprite.getAnimation().on('animationend', me.onAnimationEnd, me);
 
         for (name in easingMap) {
             easing = easingMap[name];

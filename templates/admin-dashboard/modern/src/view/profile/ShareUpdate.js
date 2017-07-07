@@ -16,7 +16,7 @@ Ext.define('Admin.view.profile.ShareUpdate', {
     items: [
         {
             xtype: 'textareafield',
-            placeHolder: "What's on your mind?"
+            placeholder: "What's on your mind?"
         },
         {
             xtype: 'toolbar',

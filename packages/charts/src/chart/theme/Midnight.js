@@ -17,6 +17,40 @@ Ext.define('Ext.chart.theme.Midnight', {
 
         chart: {
             defaults: {
+                captions: {
+                    title: {
+                        docked: 'top',
+                        padding: 5,
+                        style: {
+                            textAlign: 'center',
+                            fontFamily: 'default',
+                            fontWeight: 'bold',
+                            fillStyle: 'rgb(224, 224, 227)',
+                            fontSize: 'default*1.6'
+                        }
+                    },
+                    subtitle: {
+                        docked: 'top',
+                        style: {
+                            textAlign: 'center',
+                            fontFamily: 'default',
+                            fontWeight: 'normal',
+                            fillStyle: 'rgb(224, 224, 227)',
+                            fontSize: 'default*1.3'
+                        }
+                    },
+                    credits: {
+                        docked: 'bottom',
+                        padding: 5,
+                        style: {
+                            textAlign: 'left',
+                            fontFamily: 'default',
+                            fontWeight: 'lighter',
+                            fillStyle: 'rgb(224, 224, 227)',
+                            fontSize: 'default'
+                        }
+                    }
+                },
                 background: 'rgb(52, 52, 53)'
             }
         },

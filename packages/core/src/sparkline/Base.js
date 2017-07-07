@@ -106,10 +106,10 @@ Ext.define('Ext.sparkline.Base', {
     ],
 
     cachedConfig: {
-        baseCls: Ext.baseCSSPrefix + 'sparkline',
-
         /**
-         * @cfg {String} [lineColor=#157fcc] The hex value for line colors in graphs which display lines ({@link Ext.sparkline.Box Box}, {@link Ext.sparkline.Discrete Discrete and {@link Ext.sparkline.Line Line}).
+         * @cfg {String} [lineColor=#157fcc] The hex value for line colors in graphs which
+         * display lines ({@link Ext.sparkline.Box Box},
+         * {@link Ext.sparkline.Discrete Discrete} and {@link Ext.sparkline.Line Line}).
          */
         lineColor: '#157fcc',
 
@@ -122,39 +122,47 @@ Ext.define('Ext.sparkline.Base', {
         enableHighlight: true,
         
         /**
-         * @cfg {String} [highlightColor=null] The hex value for the highlight color to use when mouseing over a graph segment.
+         * @cfg {String} [highlightColor=null]
+         * The hex value for the highlight color to use when mouseing over a graph segment.
          */
         highlightColor: null,
         
         /**
-         * @cfg {Number} [highlightLighten] How much to lighten the highlight color by when mouseing over a graph segment.
+         * @cfg {Number} [highlightLighten]
+         * How much to lighten the highlight color by when mouseing over a graph segment.
          */
         highlightLighten: 0.1,
         
         /**
-         * @cfg {Boolean} [tooltipSkipNull=true] Null values will not have a tooltip displayed.
+         * @cfg {Boolean} [tooltipSkipNull=true]
+         * Null values will not have a tooltip displayed.
          */
         tooltipSkipNull: true,
         
         /**
-         * @cfg {String} [tooltipPrefix] A string to prepend to each field displayed in a tooltip.
+         * @cfg {String} [tooltipPrefix]
+         * A string to prepend to each field displayed in a tooltip.
          */
         tooltipPrefix: '',
         
         /**
-         * @cfg {String} [tooltipSuffix] A string to append to each field displayed in a tooltip.
+         * @cfg {String} [tooltipSuffix]
+         * A string to append to each field displayed in a tooltip.
          */
         tooltipSuffix: '',
         
         /**
-         * @cfg {Boolean} [disableTooltips=false] Set to `true` to disable mouseover tooltips.
+         * @cfg {Boolean} [disableTooltips=false]
+         * Set to `true` to disable mouseover tooltips.
          */
         disableTooltips: false,
         
         disableInteraction: false,
         
         /**
-         * @cfg {String/Ext.XTemplate} [tipTpl] An XTemplate used to display the value or values in a tooltip when hovering over a Sparkline.
+         * @cfg {String/Ext.XTemplate} [tipTpl]
+         * An XTemplate used to display the value or values in a tooltip when hovering
+         * over a Sparkline.
          *
          * The implemented subclases all define their own `tipTpl`, but it can be overridden.
          */
@@ -167,6 +175,8 @@ Ext.define('Ext.sparkline.Base', {
          */
         values: null
     },
+
+    baseCls: Ext.baseCSSPrefix + 'sparkline',
 
     element: {
         tag: 'canvas',
@@ -206,21 +216,21 @@ Ext.define('Ext.sparkline.Base', {
          * @inheritable
          */
         onClassCreated: function(cls) {
-            var configApplier = cls.prototype.applyConfigChange,
+            var configUpdater = cls.prototype.updateConfigChange,
                 proto = cls.prototype,
                 configs = cls.getConfigurator().configs,
                 config,
-                applierName;
+                updaterName;
 
             // Set up an applier for all local configs which kicks off a request to redraw on the next animation frame
             for (config in configs) {
                 // tipTpl not included in this scheme
                 if (config !== 'tipTpl') {
-                    applierName = Ext.Config.get(config).names.apply;
-                    if (proto[applierName]) {
-                        proto[applierName] = Ext.Function.createSequence(proto[applierName], configApplier);
+                    updaterName = Ext.Config.get(config).names.update;
+                    if (proto[updaterName]) {
+                        proto[updaterName] = Ext.Function.createSequence(proto[updaterName], configUpdater);
                     } else {
-                        proto[applierName] = configApplier;
+                        proto[updaterName] = configUpdater;
                     }
                 }
             }    
@@ -256,16 +266,24 @@ Ext.define('Ext.sparkline.Base', {
         return true;
     },
 
-    // generic config value applier.
-    // Adds this to the queue to do a redraw on the next animation frame
-    applyConfigChange: function(newValue) {
+    // generic config value updater.
+    // Redraws the graph, unless we are configured to buffer redraws
+    // in wehich case it adds this to the queue to do a redraw on the next animation frame.
+    updateConfigChange: function(newValue) {
         var me = this;
-        me.redrawQueue[me.getId()] = me;
 
-        // Ensure that there is a single timer to handle all queued redraws.
-        if (!me.redrawTimer) {
-            Ext.sparkline.Base.prototype.redrawTimer =
-                    Ext.Function.requestAnimationFrame(me.processRedrawQueue);
+        // If we are buffering until animation frame, or we have not been sized, then
+        // queue a redraw flush.
+        if (me.bufferRedraw || !me.height || !me.width) {
+            me.redrawQueue[me.getId()] = me;
+
+            // Ensure that there is a single timer to handle all queued redraws.
+            if (!me.redrawTimer) {
+                Ext.sparkline.Base.prototype.redrawTimer =
+                        Ext.Function.requestAnimationFrame(me.processRedrawQueue);
+            }
+        } else {
+            me.redraw();
         }
         return newValue;
     },
@@ -332,24 +350,36 @@ Ext.define('Ext.sparkline.Base', {
         me.height = height;
     },
 
-    applyValues: function(values, oldValues)  {
-        if (values && oldValues && Ext.Array.equals(values, oldValues)) {
-            values = undefined;
-        }
-        return values;
-    },
+    setValues: function(values)  {
+        var me = this,
+            oldValues = me.getValues();
 
-    updateValues: function(values) {
-        this.values = values;
+        // the values config is expected to be an array
+        values = values == null ? [] : Ext.Array.from(values);
+        me.values = values;
+        me.callParent([values]);
+
+        // If it's physically the same Array object, we need to invoke the updater
+        // because though the array is the same, it may have been mutated,
+        // and the config system setter will reject the change and not invoke the updater.
+        // This is how the Stock Ticker example works. It shuffles values down
+        // a static array.
+        if (values === oldValues) {
+            me.updateValues([values, oldValues]);
+        }
     },
 
     redraw: function() {
         var me = this;
 
-        if (!me.destroyed && me.getValues()) {
-            me.onUpdate();
+        if (!me.destroyed) {
             me.canvas.onOwnerUpdate();
-            me.renderGraph();
+            me.canvas.reset();
+
+            if (me.getValues()) {
+                me.onUpdate();
+                me.renderGraph();
+            }
         }
     },
 
@@ -410,7 +440,7 @@ Ext.define('Ext.sparkline.Base', {
             me.fireEvent('sparklineregionchange', me);
 
             if (tipHtml) {
-                me.tooltip.setHtml(tipHtml);
+                me.getSharedTooltip().setHtml(tipHtml);
                 me.showTip();
             }
         }
@@ -518,9 +548,16 @@ Ext.define('Ext.sparkline.Base', {
 }, function(SparklineBase) {
     var proto = SparklineBase.prototype;
 
-    Ext.onInternalReady(function() {
-        proto.tooltip = SparklineBase.constructTip();
-    });
+    proto.getSharedTooltip = function () {
+        var me = this,
+            tooltip = me.tooltip;
+
+        if (!tooltip) {
+            proto.tooltip = tooltip = SparklineBase.constructTip();
+        }
+
+        return tooltip;
+    };
 
     SparklineBase.onClassCreated(SparklineBase);
     

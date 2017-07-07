@@ -1,4 +1,4 @@
-describe("Ext.chart.series.Pie", function () {
+topSuite("Ext.chart.series.Pie", function() {
     describe("betweenAngle", function () {
         it("should return false if the gap between start and end angles is zero", function () {
             var proto = Ext.chart.series.Pie.prototype,

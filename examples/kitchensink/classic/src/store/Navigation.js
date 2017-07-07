@@ -2,6 +2,10 @@ Ext.define('KitchenSink.store.Navigation', {
     extend: 'Ext.data.TreeStore',
     alias: 'store.navigation',
 
+    requires: [
+        'KitchenSink.view.window.Toast'
+    ],
+
     // So that a leaf node being filtered in
     // causes its parent to be filtered in too.
     filterer: 'bottomup',
@@ -187,7 +191,8 @@ Ext.define('KitchenSink.store.Navigation', {
                     { id: 'line-markers', text: 'With Image Markers', leaf: true },
                     { id: 'line-crosszoom', text: 'With Zoom', leaf: true },
                     { id: 'line-renderer', text: 'With Renderer', leaf: true },
-                    { id: 'line-real-time', text: 'Real-time', leaf: true }
+                    { id: 'line-real-time-date', text: 'Real-time (dates)', leaf: true },
+                    { id: 'line-real-time-number', text: 'Real-time (numbers)', leaf: true }
                 ]
             }, {
                 text: 'Area Charts',
@@ -260,6 +265,14 @@ Ext.define('KitchenSink.store.Navigation', {
                     { id: 'gauge-basic', text: 'Basic', leaf: true }
                 ]
             }, {
+                text: 'Box Plot Charts',
+                id: 'boxplot-charts',
+
+                description: '',
+                children: [
+                    { id: 'boxplot-nobel', text: 'Nobel Prize Winners', leaf: true }
+                ]
+            }, {
                 text: 'Combination Charts',
                 id: 'combination-charts',
 
@@ -271,6 +284,14 @@ Ext.define('KitchenSink.store.Navigation', {
                     { id: 'unemployment', text: 'Infographic', leaf: true, compat: !Ext.isIE8 },
                     { id: 'combination-theme', text: 'Custom Theme', leaf: true },
                     { id: 'combination-bindingtabs', text: 'Binding & Tabs', leaf: true}
+                ]
+            }, {
+                text: 'Navigator',
+                id: 'navigator-charts',
+
+                description: '',
+                children: [
+                    { id: 'navigator-line', text: 'Line Chart', leaf: true }
                 ]
             }, {
                 text: 'Drawing',
@@ -311,6 +332,7 @@ Ext.define('KitchenSink.store.Navigation', {
 
                 children: [
                     { id: 'd3-view-tree', text: 'Tree', leaf: true },
+                    { id: 'd3-view-sencha-tree', text: 'Org Chart', leaf: true },
                     { id: 'd3-view-treemap', text: 'Treemap', leaf: true },
                     { id: 'd3-view-treemap-tooltip', text: 'Treemap Tooltip', leaf: true },
                     { id: 'd3-view-treemap-pivot-configurator', text: 'Configurable Pivot TreeMap', leaf: true },
@@ -649,8 +671,8 @@ Ext.define('KitchenSink.store.Navigation', {
             children: [
                 { id: 'basic-window', text: 'Basic Window', leaf: true },
                 { id: 'message-box', text: 'Message Box', leaf: true },
-                { id: 'window-variations', text: 'Window Variations',
-                    iconCls: 'icon-window', leaf: true }
+                { id: 'window-variations', text: 'Window Variations', iconCls: 'icon-window', leaf: true },
+                { id: 'toast-view', text: 'Ext.Toast', leaf: true }
             ]
         };
     },
@@ -749,7 +771,8 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'spreadsheet', text: 'Spreadsheet with locking', leaf: true},
                 { id: 'spreadsheet-checked', text: 'Spreadsheet with Checked Rows', leaf: true },
                 { id: 'reconfigure-grid', text: 'Reconfigure Grid', leaf: true },
-                { id: 'big-data-grid', text: 'Big Data', leaf: true }
+                { id: 'big-data-grid', text: 'Big Data', leaf: true },
+                { id: 'ticker-grid', text: 'Ticker Grid', leaf: true }
             ]
         };
     },
@@ -811,9 +834,12 @@ Ext.define('KitchenSink.store.Navigation', {
             children: [
                 { id: 'outline-pivot-grid', text: 'Outline layout', leaf: true },
                 { id: 'compact-pivot-grid', text: 'Compact layout', leaf: true },
+                { id: 'tabular-pivot-grid', text: 'Tabular layout', leaf: true },
                 { id: 'locked-pivot-grid', text: 'Locked', leaf: true },
                 { id: 'stateful-pivot-grid', text: 'Stateful', leaf: true },
+                { id: 'collapsible-pivot-grid', text: 'Collapsible', leaf: true },
                 { id: 'datachanges-pivot-grid', text: 'Data changes', leaf: true },
+                { id: 'widgets-pivot-grid', text: 'Widgets', leaf: true },
                 { id: 'drilldown-pivot-grid', text: 'DrillDown plugin', leaf: true },
                 { id: 'configurable-pivot-grid', text: 'Configurator plugin', leaf: true },
                 { id: 'cellediting-pivot-grid', text: 'CellEditing plugin', leaf: true },

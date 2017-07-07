@@ -1,83 +1,254 @@
-describe("Ext.dataview.List", function() {
-    var component, viewport;
+topSuite("Ext.dataview.List", ['Ext.data.ArrayStore'], function() {
+    var list;
 
     afterEach(function() {
-            tearDown();
-        });
+        list = Ext.destroy(list);
+    });
+
+    function makeData (count) {
+        var data = [];
+
+        count = count || 128;
+
+        for (var i = 0; i < count; ++i) {
+            data.push({ value: 'Item' + i });
+        }
+
+        return data;
+    }
 
     function makeComponent(config, storeData) {
-        viewport = Ext.Viewport = new Ext.viewport.Default();
-        component = new Ext.dataview.List(Ext.apply({
+        list = Ext.create(Ext.merge({
+            xtype: 'list',
+            renderTo: Ext.getBody(),
             itemTpl: '{value}',
-
-            store: new Ext.data.Store({
-                data: storeData || [
-                    { value: 'foo' },
-                    { value: 'bar' }
-                ]
-            })
+            height: 256,
+            width: 256,
+            store: {
+                type: 'store',
+                data: storeData || makeData()
+            }
         }, config));
-        viewport.add(component);
     }
 
-    function tearDown() {
-        viewport = component = Ext.destroy(component, Ext.Viewport);
-    }
-    
     describe('Rendered list with loaded store', function() {
         it('should immediately render records', function() {
-            var store = new Ext.data.Store({
-                data: [
+            makeComponent({}, [
                     { value: 'foo' },
                     { value: 'bar' }
-                ]
-            });
-            component = new Ext.dataview.List({
-                renderTo: Ext.getBody(),
-                itemTpl: '<div>{value}</div>',
-                store: store
-            });
+                ]);
 
             // Should be two simplelistitems in the List
-            expect(component.container.getItems().getCount()).toBe(2);
-        });
-    });
-        
+            var items = list.getItems().items;
 
-    describe("infinite lists", function() {
-        beforeEach(function() {
-            makeComponent({
-                infinite: true
+            expect(items.length).toBe(2);
+
+            waitsFor(function () {
+                return list.isPainted();
+            });
+
+            runs(function () {
+                var rec = items[0].getRecord();
+                expect(rec.data.value).toBe('foo');
+
+                rec = items[1].getRecord();
+                expect(rec.data.value).toBe('bar');
             });
         });
+    });
 
-        it("should set visibleCount to the bodyElement size divided by item minimum height", function() {
+    describe("infinite lists", function() {
+        function makeList (config, data) {
+            if (Ext.isArray(config)) {
+                data = config;
+                config = null;
+            }
+
+            config = config || {};
+            config.infinite = true;
+
+            makeComponent(config, data);
+        }
+
+        it("should limit itemCount to number of records", function() {
+            makeList([
+                { value: 'foo' },
+                { value: 'bar' }
+            ]);
+
             waitsFor(function() {
-                return component.visibleCount;
+                return list.isPainted();
             });
 
             runs(function(){
-                var bodyHeight = component.bodyElement.getHeight(),
-                    itemMinimumHeight = component.getItemMap().getMinimumHeight();
+                var bodyHeight = list.bodyElement.getHeight();
 
-                expect(component.visibleCount).toBe(Math.ceil(bodyHeight/itemMinimumHeight));
+                expect(list.getItemCount()).toBe(2);
 
-                // The innerElement gets sized to stretch the scroll region
-                expect(component.innerElement.getHeight()).toBe(component.getScrollable().getSize().y);
+                // The bodyElement gets sized to stretch the scroll region
+                var scroller = list.getScrollable();
+                var size = scroller.getSize();
+
+                expect(bodyHeight).toBe(size.y);
             });
         });
-        
-        it("should set visibleCount to a value different than Infinity when store is empty", function() {
-            tearDown();
-            makeComponent({
-                infinite: true
-            }, []);
+
+        it('should adjust rendered range due to scroll', function () {
+            makeList();
+
+            var scroller = list.getScrollable();
 
             waitsFor(function() {
-                return component.visibleCount != Infinity &&
-                        !component.getStore().getCount() &&
-                        component.isVisible();
+                return list.isPainted();
             });
+
+            runs(function () {
+                scroller.scrollBy(0, list.rowHeight * 20);
+            });
+
+            waitsFor(function () {
+                // scrolling down 20 rows should trigger a 10 row shift
+                return list.getTopRenderedIndex() >= 10;
+            });
+        });
+
+        it('should auto height using maxHeight', function () {
+            makeList({
+                height: null,
+                maxHeight: 400
+            });
+
+            waitsFor(function () {
+                return list.dataItems.length > 0;
+            });
+
+            runs(function () {
+                expect(list.el.getHeight()).toBe(400);
+            });
+        });
+    });
+
+    describe('Grouped List', function() {
+        it('should correctly handle headers when store is cleared', function() {
+            makeComponent({
+                grouped: true,
+                store: {
+                    grouper: {
+                        property: 'group'
+                    },
+                    data: [
+                        { group: 'A', value: 'bar' },
+                        { group: 'F', value: 'foo' },
+                        { group: 'F', value: 'foobar' }
+                    ]
+                }
+            });
+
+            var store = list.getStore();
+            var groupInfo = list.groupingInfo;
+
+            expect(store.getCount()).toBe(3);
+
+            expect(groupInfo.headers.indices).toEqual([0, 1]);
+
+            expect(groupInfo.footers.indices).toEqual([0, 2]);
+
+            expect(store.removeAll.bind(store)).not.toThrow();
+        })
+    });
+
+    describe('scrollToTopOnRefresh', function() {
+        it('should not scroll to top when config is false', function() {
+            makeComponent({scrollToTopOnRefresh: false});
+
+            var scroller = list.getScrollable();
+
+            waitsFor(function() {
+                return list.isPainted();
+            });
+
+            runs(function () {
+                scroller.scrollTo(null, 128);
+                var pos = scroller.getPosition();
+                expect(pos.y).toBe(128);
+
+                list.refresh();
+                pos = scroller.getPosition();
+                expect(pos.y).toBe(128);
+            });
+        });
+
+        it('should not scroll to top when adding a record', function() {
+            makeComponent({scrollToTopOnRefresh: true});
+
+            var scroller = list.getScrollable();
+
+            scroller.scrollTo(null, 128);
+            expect(scroller.getPosition().y).toBe(128);
+
+            list.getStore().add({value: 'New item'});
+            expect(scroller.getPosition().y).toBe(128);
+        });
+
+        it('should not scroll to top when removing a record', function() {
+            makeComponent({scrollToTopOnRefresh: true});
+
+            var scroller = list.getScrollable();
+
+            scroller.scrollTo(null, 128);
+            expect(scroller.getPosition().y).toBe(128);
+
+            list.getStore().removeAt(42);
+            expect(scroller.getPosition().y).toBe(128);
+        });
+
+        it('should not scroll to top when updating a record', function() {
+            makeComponent({scrollToTopOnRefresh: true});
+
+            var scroller = list.getScrollable();
+
+            scroller.scrollTo(null, 128);
+            expect(scroller.getPosition().y).toBe(128);
+
+            list.getStore().getAt(42).set('value', 'foobar');
+            expect(scroller.getPosition().y).toBe(128);
+        });
+
+        it('should scroll to top when the store is refreshed', function() {
+            makeComponent({scrollToTopOnRefresh: true});
+
+            var scroller = list.getScrollable();
+
+            scroller.scrollTo(null, 128);
+            expect(scroller.getPosition().y).toBe(128);
+
+            list.getStore().sort('id', 'DESC');
+            expect(scroller.getPosition().y).toBe(0);
+        });
+
+        it('should scroll to top when calling the refresh() method', function() {
+            makeComponent({scrollToTopOnRefresh: true});
+
+            var scroller = list.getScrollable();
+
+            scroller.scrollTo(null, 128);
+            expect(scroller.getPosition().y).toBe(128);
+
+            list.refresh();
+            expect(scroller.getPosition().y).toBe(0);
+        });
+
+        it('should not scroll to top if the refresh event is prevented', function() {
+            makeComponent({scrollToTopOnRefresh: true});
+
+            var scroller = list.getScrollable();
+
+            scroller.scrollTo(null, 128);
+            expect(scroller.getPosition().y).toBe(128);
+
+            list.on('beforerefresh', function() { return false; });
+            list.refresh();
+            expect(scroller.getPosition().y).toBe(128);
         });
     });
 });

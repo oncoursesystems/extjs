@@ -2,7 +2,7 @@
  * @class kitchensink.controller.tablet.main
  * @extends KitchenSink.controller.Main
  *
- * This is the Main controller subclass for the 'tablet' profile. 
+ * This is the Main controller subclass for the 'tablet' profile.
  *
  * The table profile differs from the phone profile in that navigation is done via screens full of icons
  * instead of a nested list.
@@ -12,12 +12,9 @@ Ext.define('KitchenSink.controller.tablet.Main', {
 
     refs: {
         toolbar: '#mainNavigationBar',
-        burgerButton: 'button[action=burger]',
         contentPanel1: '#contentPanel1',
         contentPanel2: '#contentPanel2',
         cardPanel: '#cardPanel',
-        icons: '#icons',
-        icons2: '#icons2',
         breadcrumb: 'breadcrumb',
         breadcrumbButton: 'button[action=breadcrumb]',
 
@@ -38,53 +35,39 @@ Ext.define('KitchenSink.controller.tablet.Main', {
     },
 
     control: {
-        'burgerButton': {
-            tap: 'onBurgerTap'
+        '#thumbnails1 dataview': {
+            childtap: 'onThumbnailClick'
         },
-        '#thumbnails1': {
-            itemtap: 'onThumbnailClick'
+        '#thumbnails2 dataview': {
+            childtap: 'onThumbnailClick'
         },
-        '#thumbnails2': {
-            itemtap: 'onThumbnailClick'
-        },
-        breadcrumbButton: {
+        'breadcrumbButton': {
             tap: 'onBreadcrumbTap'
         }
     },
 
-    routes: {
-        ':id': {
-            action: 'handleRoute',
-            before: 'beforeHandleRoute'
-        }
+    setAnimate: function(direction) {
+        this.getCardPanel().getLayout().setAnimation({
+            type: 'slide',
+            direction: direction === 'forward' ? 'left' : 'right',
+            duration: 250
+        });
+
+        this.animateDirection = direction;
     },
 
     /**
      * Set animnation for moving forward (right) through the navigation hierarchy.
      */
     animateForward: function() {
-        var me = this;
-
-        me.getCardPanel().getLayout().setAnimation({
-            type: 'slide',
-            direction: 'left',
-            duration: 250
-        });
-        me.animateDirection = 'forward';
+        this.setAnimate('forward');
     },
 
     /**
      * Set animnation for moving backward (left) through the navigation hierarchy.
      */
     animateBackward: function() {
-        var me = this;
-
-        me.getCardPanel().getLayout().setAnimation({
-            type: 'slide',
-            direction: 'right',
-            duration: 250
-        });
-        me.animateDirection = 'backward';
+        this.setAnimate('backward');
     },
 
     updateTitle: function(node) {
@@ -95,7 +78,10 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         if (title === 'All') {
             title = 'Kitchen Sink';
         }
+
         document.title = document.title.split(' - ')[0] + ' - ' + text;
+
+        return this;
     },
 
     updateBreadcrumb: function(node) {
@@ -104,11 +90,20 @@ Ext.define('KitchenSink.controller.tablet.Main', {
             path = [];
 
         do {
-            path.push({ text: node.get('text'), value: node.get('id'), action: 'breadcrumb' });
-            if (node.parentNode) {
-                path.push({ xtype: 'component', html: '&nbsp;>&nbsp;'});
-            }
+            path.push({
+                text: node.get('text'),
+                value: node.get('id'),
+                action: 'breadcrumb'
+            });
+
             node = node.parentNode;
+
+            if (node) {
+                path.push({
+                    xtype: 'component',
+                    html: ' > '
+                });
+            }
         } while (node);
 
         path = path.reverse();
@@ -116,6 +111,8 @@ Ext.define('KitchenSink.controller.tablet.Main', {
 
         breadcrumb.removeAll(true);
         breadcrumb.add(path);
+
+        return me;
     },
 
     onBreadcrumbTap: function(button) {
@@ -129,121 +126,109 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         var me = this,
             store = Ext.StoreMgr.get('Navigation'),
             node = store.getNodeById(id),
-            contentPanel1, contentPanel2,
             cardPanel = me.getCardPanel(),
             animation = cardPanel.getLayout().getAnimation(),
             activeCard = cardPanel.getActiveItem(),
             cp1 = activeCard.id === 'contentPanel2',
+            contentPanel1, contentPanel2,
             thumbnails, thumbnails1, thumbnails2,
-            icons = cp1 ? me.getIcons() : me.getIcons2(),
-            cmp, thumbnailsStore, demoContent, tier,
-            viewName;
-
-        Ext.suspendLayouts();
+            cmp, thumbnailsStore, demoContent,
+            viewClass, viewName;
 
         me.record = node;
+
         if (node.isLeaf()) {
-            viewName = me.getViewName(node);
+            viewClass = me.getViewClass(node);
+            viewName = Ext.ClassManager.getName(viewClass);
+
             cmp = {
                 xtype: 'contentPanel',
-                layout: {
-                    type: 'vbox',
-                    pack: 'center',
-                    align: 'center'
-                },
-                items: {
-                    xclass: viewName,
-                    id: viewName.replace(/\./g, '-').toLowerCase()
-                }
+                layout: 'center',
+                items: [
+                    demoContent = me.activeView = new viewClass({
+                        id: viewName.replace(/\./g, '-').toLowerCase()
+                    })
+                ]
             };
-                
-            cmp = cardPanel.add(cmp);
-            demoContent = cmp.getItems().items[0];
+
             if (!demoContent.$preventContentSize && demoContent.getWidth() === null) {
                 demoContent.setWidth('90%');
                 demoContent.setHeight('90%');
             }
 
-            cardPanel.setActiveItem(cmp);
-            me.updateTitle(node);
+            if (demoContent.getShadow() !== false) {
+                //default to having a shadow
+                demoContent.setShadow(true);
+            }
+
             me.currentDemo = node;
-            me.activeView = cmp.items.items[0];
-            me.updateDetails(node);
         } else {
             contentPanel1 = me.getContentPanel1();
             contentPanel2 = me.getContentPanel2();
             thumbnails1 = me.getThumbnails1();
             thumbnails2 = me.getThumbnails2();
+
             if (contentPanel1 && !me.thumbnailsAdded) {
                 contentPanel1.add(thumbnails1);
                 contentPanel2.add(thumbnails2);
+
                 me.thumbnailsAdded = true;
             }
+
             thumbnails = cp1 ? thumbnails1 : thumbnails2;
             thumbnailsStore = thumbnails.getStore();
-            if (!thumbnails.ownerCt) {
-                if (icons) {
-                    icons.removeAll(true);
-                }
-            }
-            thumbnailsStore.removeAll();
-            thumbnailsStore.loadRecords(node.childNodes);
-            me.updateTitle(node);
-           
+
+            thumbnailsStore.setData(node.childNodes);
+
             if (animation && me.currentDemo) {
                 me.currentDemo = null;
+
                 animation.on({
+                    single: true,
                     animationend: function() {
                         // titlebar, breadcrumb, cardPanel1, cardPanel2, demo (demo = 4)
-                        if (cardPanel.items.items.length > 3) {
+                        if (cardPanel.items.length > 3) {
                             cardPanel.removeAt(3);
                         }
-                    },
-                    single: true
+                    }
                 });
             }
-            cardPanel.setActiveItem(cp1 ? contentPanel1 : contentPanel2);
-            me.updateDetails(node);
+
+            cmp = cp1 ? contentPanel1 : contentPanel2;
+
+            // Hide owned menus - old view destruction doesn't take place until animation end.
+            Ext.menu.Manager.hideAll();
         }
 
-        me.updateBreadcrumb(node);
-        Ext.resumeLayouts(true);
+        me.updateTitle(node)
+            .updateDetails(node)
+            .updateBreadcrumb(node);
+
+        //will add (if needed) and set active
+        cardPanel.setActiveItem(cmp);
     },
 
-    beforeHandleRoute: function(id, action) {
+    onThumbnailClick: function(view, location) {
         var me = this,
-            node = Ext.StoreMgr.get('Navigation').getNodeById(id);
-
-        me.animateDirection = me.animateDireciton || 'forward';
-        if (node) {
-            action.resume();
-        } else {
-            Ext.Msg.alert(
-                'Route Failure',
-                'The view for ' + id + ' could not be found. You will be taken to the application\'s start',
-                function() {
-                    me.redirectTo(me.getApplication().getDefaultToken());
-                }
-            );
-
-            action.stop();
-        }
-    },
-
-    onThumbnailClick: function(view, index, target, record, e, eOpts) {
-        var me = this;
+            record = location.record;
 
         me.record = record;
         me.animateForward();
         me.redirectTo(record.id);
     },
 
-    onBackTap: function() {
-        var me = this,
-            node = me.record,
-            parentId = node ? (node.parentNode ? node.parentNode.get('id') : 'all') : 'all';
+    getAvailableThemes: function () {
+        var items = this.callParent();
 
-        me.animateBackward();
-        me.redirectTo(parentId);
+        items.push({
+            text: 'Classic Kitchen Sink',
+            iconCls: 'x-fa fa-external-link',
+            separator: true,
+            handler: function() {
+                window.location = location.pathname + '?classic';
+            }
+        });
+
+        return items;
     }
 });

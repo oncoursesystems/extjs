@@ -74,7 +74,7 @@ Ext.define('KitchenSink.view.charts.scatter.Bubble', {
                 miterLimit: 1,
                 lineCap: 'butt',
                 lineWidth: 1,
-                fx: {
+                animation: {
                     duration: 200
                 }
             },

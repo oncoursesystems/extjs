@@ -99,21 +99,21 @@ Ext.define('KitchenSink.view.form.FormGrid', {
             sortable: true
         }, {
             text: 'Change',
-            dataIndex: 'change',
+            dataIndex: 'priceChange',
 
             width: 80,
             sortable: true,
             renderer: 'renderChange'
         }, {
             text: '% Change',
-            dataIndex: 'pctChange',
+            dataIndex: 'priceChangePct',
 
             width: '${percentChangeColumnWidth}',
             sortable: true,
             renderer: 'renderPercent'
         }, {
             text: 'Last Updated',
-            dataIndex: 'lastChange',
+            dataIndex: 'priceLastChange',
 
             width: '${lastUpdatedColumnWidth}',
             sortable: true,
@@ -143,11 +143,11 @@ Ext.define('KitchenSink.view.form.FormGrid', {
             bind: '{theCompany.price}'
         }, {
             fieldLabel: '% Change',
-            bind: '{theCompany.pctChange}'
+            bind: '{theCompany.priceChangePct}'
         }, {
             xtype: 'datefield',
             fieldLabel: 'Last Updated',
-            bind: '{theCompany.lastChange}'
+            bind: '{theCompany.priceLastChange}'
         }, {
             xtype: 'radiogroup',
             fieldLabel: 'Rating',

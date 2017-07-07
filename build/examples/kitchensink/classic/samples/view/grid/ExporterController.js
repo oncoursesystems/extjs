@@ -17,48 +17,13 @@ Ext.define('KitchenSink.view.grid.ExporterController', {
         'Ext.exporter.excel.Xlsx'
     ],
 
-    exportToXml: function(){
-        this.doExport({
-            type:       'excel03',
-            title:      'Grid export demo',
-            fileName:   'GridExport.xml'
-        });
-    },
+    exportTo: function(btn){
+        var cfg = Ext.merge({
+            title: 'Grid export demo',
+            fileName: 'GridExport' + '.' + (btn.cfg.ext || btn.cfg.type)
+        }, btn.cfg);
 
-    exportToCSV: function(){
-        this.doExport({
-            type:       'csv',
-            title:      'Grid export demo',
-            fileName:   'GridExport.csv'
-        });
-    },
-
-    exportToTSV: function(){
-        this.doExport({
-            type:       'tsv',
-            title:      'Grid export demo',
-            fileName:   'GridExport.csv'
-        });
-    },
-
-    exportToHtml: function(){
-        this.doExport({
-            type:       'html',
-            title:      'Grid export demo',
-            fileName:   'GridExport.html'
-        });
-    },
-
-    exportToXlsx: function(){
-        this.doExport({
-            type:       'excel07',
-            title:      'Grid export demo',
-            fileName:   'GridExport.xlsx'
-        });
-    },
-
-    doExport: function(config){
-        this.getView().saveDocumentAs(config);
+        this.getView().saveDocumentAs(cfg);
     },
 
     onBeforeDocumentSave: function(view){

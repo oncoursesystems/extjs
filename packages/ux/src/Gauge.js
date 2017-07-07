@@ -52,8 +52,6 @@ Ext.define('Ext.ux.Gauge', {
     ],
 
     config: {
-        baseCls: Ext.baseCSSPrefix + 'gauge',
-
         /**
          * @cfg {Number/String} padding Gauge sector padding in pixels or percent of
          * width/height, whichever is smaller.
@@ -200,8 +198,10 @@ Ext.define('Ext.ux.Gauge', {
         animation: true
     },
 
+    baseCls: Ext.baseCSSPrefix + 'gauge',
+
     template: [{
-        reference: 'innerElement',
+        reference: 'bodyElement',
         children: [{
             reference: 'textElement',
             cls: Ext.baseCSSPrefix + 'gauge-text'
@@ -223,9 +223,9 @@ Ext.define('Ext.ux.Gauge', {
     easings: {
         linear: Ext.identityFn,
         // cubic easings
-        'in': function (t) { return t*t*t },
-        out: function (t) { return (--t)*t*t+1 },
-        inOut: function (t) { return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1 }
+        'in': function (t) { return t*t*t; },
+        out: function (t) { return (--t)*t*t+1; },
+        inOut: function (t) { return t<.5 ? 4*t*t*t : (t-1)*(2*t-2)*(2*t-2)+1; }
     },
 
     resizeDelay: 0,   // in milliseconds
@@ -257,15 +257,17 @@ Ext.define('Ext.ux.Gauge', {
         me.interpolator = me.createInterpolator();
         me.callParent([config]);
 
-        me.on('resize', 'onElementResize', me);
+        me.el.on('resize', 'onElementResize', me);
     },
 
     doDestroy: function () {
         var me = this;
 
         clearTimeout(me.resizeTimerId);
-        me.un('resize', 'onElementResize', me);
+        me.el.un('resize', 'onElementResize', me);
         me.stopAnimation();
+        me.svg = Ext.destroy(me.svg);
+        
         me.callParent();
     },
 
@@ -565,7 +567,7 @@ Ext.define('Ext.ux.Gauge', {
 
         if (!svg) {
             svg = me.svg = Ext.get(document.createElementNS(me.svgNS, 'svg'));
-            me.innerElement.append(svg);
+            me.bodyElement.append(svg);
         }
 
         return svg;
@@ -577,7 +579,7 @@ Ext.define('Ext.ux.Gauge', {
         
         if (!trackArc) {
             trackArc = me.trackArc = document.createElementNS(me.svgNS, 'path');
-            me.getSvg().append(trackArc);
+            me.getSvg().append(trackArc, true);
             // Note: Ext.dom.Element.addCls doesn't work on SVG elements,
             // as it simply assigns a class string to el.dom.className,
             // which in case of SVG is no simple string:
@@ -595,7 +597,7 @@ Ext.define('Ext.ux.Gauge', {
         me.getTrackArc(); // make sure the track arc is created first for proper draw order
         if (!valueArc) {
             valueArc = me.valueArc = document.createElementNS(me.svgNS, 'path');
-            me.getSvg().append(valueArc);
+            me.getSvg().append(valueArc, true);
             valueArc.setAttribute('class', Ext.baseCSSPrefix + 'gauge-value');
         }
 
@@ -898,7 +900,6 @@ Ext.define('Ext.ux.Gauge', {
      * between the inner and outer radii.
      */
     fitSectorInRect: function (width, height, startAngle, lengthAngle, ratio) {
-
         if (Ext.Number.isEqual(lengthAngle, 360, 0.001)) {
             return {
                 cx: width / 2,
@@ -926,8 +927,8 @@ Ext.define('Ext.ux.Gauge', {
                 me.getArcPoint(0, 0, 1, startAngle + lengthAngle),    // end angle outer radius point
                 me.getArcPoint(0, 0, ratio, startAngle + lengthAngle) // end angle inner radius point
             ]);
-            xx = points.map(function (point) { return point[0] });
-            yy = points.map(function (point) { return point[1] });
+            xx = points.map(function (point) { return point[0]; });
+            yy = points.map(function (point) { return point[1]; });
             // The bounding box of a unit sector with the given properties.
             minX = Math.min.apply(null, xx);
             maxX = Math.max.apply(null, xx);
@@ -990,7 +991,6 @@ Ext.define('Ext.ux.Gauge', {
     },
 
     render: function () {
-
         if (!this.size) {
             return;
         }

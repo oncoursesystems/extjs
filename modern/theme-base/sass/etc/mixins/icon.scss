@@ -2,7 +2,7 @@
  * @class Global_CSS
  */
 
-require('icon');
+@import 'icon.js';
 
 /**
  * Generates style rules for an icon element
@@ -50,15 +50,37 @@ require('icon');
  * @private
  */
 @mixin icon(
-    $icon,
-    $font-size,
-    $font-size-big
+    $icon: null,
+    $color: null,
+    $size: null,
+    $size-big: null,
+    $font-size: null,
+    $font-size-big: null
 ) {
     $args: parseIconArgs($icon);
 
     $char: nth($args, 1);
     $font-family: nth($args, 2);
     $rotation: nth($args, 3);
+
+    @if $font-size == null {
+        $font-size: $size;
+    }
+
+    @if $font-size-big == null {
+        $font-size-big: $size-big;
+    }
+
+    color: $color;
+    width: $size;
+    height: $size;
+
+    @if $enable-big {
+        .#{$prefix}big & {
+            width: $size-big;
+            height: $size-big;
+        }
+    }
 
     &:before {
         content: $char;

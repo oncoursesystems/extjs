@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.charts.radar.MultiAxis', {
         path: 'classic/samples/view/charts/radar/BasicController.js'
     }, {
         type: 'Store',
-        path: 'classic/samples/store/Climate.js'
+        path: 'app/store/Climate.js'
     }],
     layout: 'vbox',
     // </example>

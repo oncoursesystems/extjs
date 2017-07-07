@@ -3,19 +3,16 @@ Ext.define('KitchenSink.view.d3.heatmap.SalesController', {
     alias: 'controller.heatmap-sales',
 
     onRefreshData: function () {
-        var me = this,
-            heatmap = me.lookupReference('heatmap'),
+        var heatmap = this.lookup('heatmap'),
             store = heatmap.getStore();
 
         store.refreshData();
     },
 
     onRefreshDataAndSize: function () {
-        var me = this,
-            heatmap = me.lookupReference('heatmap'),
+        var heatmap = this.lookup('heatmap'),
             store = heatmap.getStore();
 
         store.refreshDataAndSize();
     }
-
 });

@@ -19,10 +19,10 @@ Ext.define('KitchenSink.view.direct.NamedForm', {
     ].join(''),
     
     otherContent: [{
-        type: 'ViewController',
+        type: 'Controller',
         path: 'classic/samples/view/direct/NamedFormController.js'
     }, {
-        type: 'Base ViewController',
+        type: 'Base Controller',
         path: 'classic/samples/view/direct/DirectVC.js'
     }, {
         type: 'Server TestAction class',
