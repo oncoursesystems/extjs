@@ -144,8 +144,7 @@ Ext.define('Ext.grid.RowContext', {
     },
 
     handleWidgetViewChange: function(view, ownerId) {
-        var widgets = this.widgets,
-            widget = this.widgets[ownerId];
+        var widget = this.widgets[ownerId];
 
         if (widget) {
             // In this particular case poking the ownerCmp doesn't really have any significance here

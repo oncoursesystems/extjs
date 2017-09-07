@@ -1050,16 +1050,48 @@ function() {
                 });
 
                 describe("with overflow", function() {
-                    beforeEach(function() {
+                    it("should size the columns to fit within the grid body, inside the scrollbar", function() {
                         makeGrid(null, data, {
                             forceFit: true,
                             width: 400,
                             height: 200
                         });
+                        expect(grid.headerCt.getTableWidth()).toBe(grid.body.getWidth() - grid.body.getBorderWidth('lr') - Ext.getScrollbarSize().width);
                     });
 
-                    it('should size the columns to fit within the grid body, inside the scrollbar', function() {
-                        expect(grid.headerCt.getTableWidth()).toBe(grid.body.getWidth() - grid.body.getBorderWidth('lr') - Ext.getScrollbarSize().width);
+                    it("should not change the column sizes after updateLayout when width is not specified", function() {
+                        var w1 = [],
+                            w2 = [],
+                            i;
+
+                        makeGrid([{
+                            dataIndex: 'field1',
+                            text: 'col1'
+                        },{
+                            dataIndex: 'field2',
+                            text: 'col2'
+                        },{
+                            dataIndex: 'field3',
+                            text: 'col3'
+                        }], 10, {
+                            fullScreen: true,
+                            forceFit: true,
+                            width: '100%'
+                        });
+
+                        colRef[0].autoSize();
+
+                        for (i = 0; i < colRef.length; i++) {
+                            w1.push(colRef[i].getWidth());
+                        }
+
+                        grid.updateLayout();
+
+                        for (i = 0; i < colRef.length; i++) {
+                            w2.push(colRef[i].getWidth());
+                        }
+
+                        expect(w1).toEqual(w2);
                     });
                 });
             });
@@ -5295,7 +5327,7 @@ function() {
                                 i;
 
                             for (i = 0; i < len; ++i) {
-                                expect(columns[i].getWidth()).toBe(sizes[i]);
+                                expect(columns[i].getWidth()).toBeApprox(sizes[i], 1);
                             }
 
                         }
@@ -5540,7 +5572,7 @@ function() {
                                         flex: 1
                                     }], scrollRowSize);
                                     expectScroll(true, false);
-                                    expectColumnWidths(scrollbarsTakeSpace ? [200, 260, 260, 260]: [200, 267, 267, 266]);
+                                    expectColumnWidths(scrollbarsTakeSpace ? [200, 260, 260, 260] : [200, 266, 267, 267]);
                                 });
                             });
                         });

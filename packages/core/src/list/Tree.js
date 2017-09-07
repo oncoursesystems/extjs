@@ -108,6 +108,14 @@ Ext.define('Ext.list.Tree', {
 
     config: {
         /**
+         * @cfg {Boolean} floatLeafItems
+         * `true` to allow the popout to show on leaf items on click/tap. This is the same popout (menu)
+         * non-leaf items show their child items in. `false` to prevent the popout from showing
+         * for leaf items.
+         */
+        floatLeafItems: false,
+
+        /**
          * @cfg {Object} [defaults]
          * The default configuration for the widgets created for tree items.
          *
@@ -182,6 +190,10 @@ Ext.define('Ext.list.Tree', {
         selection: 1
     },
 
+    /**
+     * @cfg
+     * @inheritdoc
+     */
     publishes: {
         selection: 1
     },
@@ -393,7 +405,7 @@ Ext.define('Ext.list.Tree', {
     /**
      * This method is called to populate and return a config object for new nodes. This
      * can be overridden by derived classes to manipulate properties or `xtype` of the
-     * returned object. Upon return, the object is passed to `{@link Ext#create}` and the
+     * returned object. Upon return, the object is passed to `{@link Ext#method!create}` and the
      * reference is stored as part of this tree.
      *
      * The base class implementation will apply any configured `{@link #defaults}` to the
@@ -402,7 +414,7 @@ Ext.define('Ext.list.Tree', {
      * @param {Ext.data.TreeModel} node The node backing the item.
      * @param {Ext.list.AbstractTreeItem} parent The parent item. This is never `null` but
      * may be an instance of `{@link Ext.list.RootTreeItem}`.
-     * @return {Object} The config object to pass to `{@link Ext#create}` for the item.
+     * @return {Object} The config object to pass to `{@link Ext#method!create}` for the item.
      * @template
      */
     getItemConfig: function(node, parent) {
@@ -507,6 +519,10 @@ Ext.define('Ext.list.Tree', {
             }
 
             me.unfloatAll();
+
+            if (!byHover && !me.getFloatLeafItems() && item.getNode().isLeaf()) {
+                return;
+            }
 
             me.activeFloater = floater = item;
             me.floatedByHover = byHover;

@@ -240,15 +240,6 @@ Ext.define('Ext.chart.series.sprite.Bar', {
         // of the first and last bars are not at the surface edges (which would mean that
         // bars are half-clipped), but padded, so that those bars are fully visible (assuming no pan/zoom).
 
-        // TODO: Oddly enough, this is controlled by the 'labelInSpan' config of the xAxis, which is set
-        // TODO: to 'true' by the Bar series in its 'updateXAxis' method. The 'labelInSpan' config
-        // TODO: doesn't actually do what it says it does: 'Draws the labels in the middle of the spans.'
-        // TODO: and its use to control the way bars render is puzzling.
-        // TODO: The way this works is the 'axis.getRange' method expands the axis range by the value
-        // TODO: of 'increment' - another axis config, which defaults to 0.5.
-        // TODO: So, for example, if the visible range was [0, 11] (for, say, twelve months of the year),
-        // TODO: it will become [-0.5, 11.5], making space for bars at the edges of a chart.
-
         for (i = start; i <= end; i++) {
             yLow = dataStartY ? dataStartY[i] : 0;
             yHi = dataY[i];

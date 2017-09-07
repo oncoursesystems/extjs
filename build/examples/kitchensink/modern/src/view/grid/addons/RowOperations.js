@@ -79,6 +79,7 @@ Ext.define('KitchenSink.view.grid.addons.RowOperations', {
         columns: [{
             text: 'Company',
             flex: 1,
+            minWidth: 100,
             dataIndex: 'name'
         }, {
             text: 'Price',

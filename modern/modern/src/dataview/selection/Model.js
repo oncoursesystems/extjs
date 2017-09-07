@@ -9,7 +9,7 @@
  * {@link Ext.util.Collection} to use to store the selected records. This can be useful when
  * other objects need access to the current selection. In particular, ComboBox uses this
  * technique to track which records are selected and form the value of the ComboBox field.
- * @private
+ * @since 6.5.0
  */
 Ext.define('Ext.dataview.selection.Model', {
     extend: 'Ext.Evented',
@@ -129,6 +129,11 @@ Ext.define('Ext.dataview.selection.Model', {
             type: 'records'
         }
     },
+    
+    /**
+     * @cfg [publishes='checked']
+     * @inheritdoc Ext.mixin.Bindable#cfg-publishes
+     */
 
     modes: {
         single: true,
@@ -163,7 +168,8 @@ Ext.define('Ext.dataview.selection.Model', {
                 priority: 1000
             },
             load: 'onSelectionStoreLoad',
-            refresh: 'refreshSelection'
+            refresh: 'refreshSelection',
+            idchanged: 'onIdChanged'
         };
     },
 
@@ -357,8 +363,8 @@ Ext.define('Ext.dataview.selection.Model', {
             me.selectRange(start, record, ctrl);
         }
 
-        // CTRL+Navigate, toggle selected state
-        else if (ctrl) {
+        // CTRL+Navigate or single tap, toggle selected state
+        else if (ctrl || (e.pointerType === 'touch' && e.type === 'tap')) {
             me[isSelected ? 'deselect' : 'select'](record, true);
         }
         // Simple click on a selected item.
@@ -368,7 +374,7 @@ Ext.define('Ext.dataview.selection.Model', {
         }
         // Replace the selection
         else if (!isSelected) {
-            me.select(record, false);
+            me.select(record, true);
         }
     },
 
@@ -402,8 +408,8 @@ Ext.define('Ext.dataview.selection.Model', {
     /**
      * Adds the given records to the currently selected set if not {@link #cfg!disabled}..
      * @param {Ext.data.Model/Array/Number} records The records to select.
-     * @param {Boolean} keepExisting If `true`, the existing selection will be added to (if not, the old selection is replaced).
-     * @param {Boolean} suppressEvent If `true`, the `select` event will not be fired.
+     * @param {Boolean} [keepExisting] If `true`, the existing selection will be added to (if not, the old selection is replaced).
+     * @param {Boolean} [suppressEvent] If `true`, the `select` event will not be fired.
      */
     select: function(records, keepExisting, suppressEvent) {
         var me = this,
@@ -619,6 +625,14 @@ Ext.define('Ext.dataview.selection.Model', {
 
         // Only destroy the selected Collection if we own it.
         Ext.destroy(me.selection, me.destroySelected ? me.selected : null);
+    },
+
+    onIdChanged: function(store, rec, oldId, newId) {
+        var selected = this.getSelected();
+
+        if (selected) {
+            selected.updateKey(rec, oldId);
+        }
     },
 
     onSelectionStoreAdd: Ext.emptyFn,

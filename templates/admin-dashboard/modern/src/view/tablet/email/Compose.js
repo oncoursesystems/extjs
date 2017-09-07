@@ -1,7 +1,6 @@
 Ext.define('Admin.view.tablet.email.Compose', {
     extend: 'Ext.form.Panel',
     // xtype: 'compose', -- set by profile
-    cls: 'email-compose',
 
     requires: [
         'Ext.Button',
@@ -9,16 +8,40 @@ Ext.define('Admin.view.tablet.email.Compose', {
         'Ext.field.TextArea'
     ],
 
+    cls: 'email-compose',
     layout: 'vbox',
     padding: 20,
-
-    title: 'Compose',
     scrollable: false,
+    title: 'Compose',
 
     tools: [{
         iconCls: 'x-fa fa-close',
         handler: 'onCloseMessage'
     }],
+
+    bbar: {
+        padding: 20,
+        items: [{
+            ui: 'header',
+            margin: '0 12 0 0',
+            iconCls: 'x-fa fa-floppy-o'
+        }, {
+            ui: 'header',
+            margin: '0 0 0 12',
+            iconCls: 'x-fa fa-paperclip'
+        }, '->', {
+            ui: 'decline',
+            text: 'Discard',
+            minWidth: '6rem',
+            margin: '0 12 0 0',
+            handler: 'onCloseMessage'
+        }, {
+            ui: 'confirm',
+            text: 'Send',
+            minWidth: '6rem',
+            handler: 'onSendMessage'
+        }]
+    },
 
     items: [{
         xtype: 'textfield',
@@ -37,38 +60,5 @@ Ext.define('Admin.view.tablet.email.Compose', {
         name: 'message',
         flex: 1,
         margin: '0 0 10 0'
-    }, {
-        xtype: 'container',
-        layout: 'hbox',
-        height: 40,
-        userCls: 'compose-email-tool',
-
-        items: [{
-            xtype: 'button',
-            ui: 'header',
-            padding: '0 12',
-            iconCls: 'x-fa fa-floppy-o'
-        }, {
-            xtype: 'button',
-            ui: 'header',
-            padding: '0 12',
-            iconCls: 'x-fa fa-paperclip'
-        }, {
-            xtype: 'component',
-            flex: 1
-        }, {
-            xtype: 'button',
-            ui: 'decline',
-            text: 'Discard',
-            minWidth: '6rem',
-            margin: '0 12 0 0',
-            handler: 'onCloseMessage'
-        }, {
-            xtype: 'button',
-            ui: 'confirm',
-            text: 'Send',
-            minWidth: '6rem',
-            handler: 'onSendMessage'
-        }]
     }]
 });

@@ -20,11 +20,12 @@ Ext.onReady(function() {
             xtype: 'tabpanel',
             activeTab: 0,
             itemId: 'tabPanel',
-            plugins: [{
-                ptype: 'tabscrollermenu',
-                maxText  : 15,
-                pageSize : 5
-            }],
+            plugins: {
+                tabscrollermenu: {
+                    maxText: 15,
+                    pageSize: 5
+                }
+            },
             items: [{
                 title: 'First tab',
                 html: 'Creating more tabs...'

@@ -94,4 +94,16 @@ topSuite('Ext.tab.Panel', ['Ext.Panel'], function() {
             expect(panel.getActiveItem()).toBe(panel.getInnerItems()[1]);
         });
     });
+    
+    describe("closable tabs", function() {
+        it("should support creating with closable child panel", function() {
+            makePanel(null, {
+                xtype: 'panel',
+                title: 'foo',
+                closable: true
+            });
+            
+            expect(panel.getActiveItem()).toBe(panel.getInnerItems()[0]);
+        });
+    });
 });

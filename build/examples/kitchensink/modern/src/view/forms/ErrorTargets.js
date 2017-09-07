@@ -26,7 +26,11 @@ Ext.define('KitchenSink.view.forms.ErrorTargets', {
         labelAlign: 'top',
         margin: '${fieldMargin}',
         value: 'invalid email@foo.com',
-        validators: 'email'
+        validators: 'email',
+        errorTip: {
+            anchor: true,
+            align: 'l-r?'
+        }
     },
 
     items: [{

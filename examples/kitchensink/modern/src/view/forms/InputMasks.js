@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.forms.InputMasks', {
 
     profiles: {
         defaults: {
-            width: 250
+            width: 375
         },
         phone: {
             width: undefined

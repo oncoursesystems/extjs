@@ -30,7 +30,9 @@ Ext.define('Neptune.view.grid.widget.Basic', function() {
         xtype: 'basicGrid',
         store: 'Company',
         title: 'Basic Grid',
-        plugins: 'cellediting',
+        plugins: {
+            cellediting: true
+        },
         columns: [
             { text: 'Company', flex: 1, dataIndex: 'company', editor: 'textfield' },
             { text: 'Price', width: 75, sortable: true, formatter: 'usMoney', dataIndex: 'price', editor: 'numberfield' },

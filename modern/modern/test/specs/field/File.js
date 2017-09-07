@@ -12,11 +12,16 @@ describe('Ext.field.File', function () {
 
     describe('fileButton', function () {
         it('should set buttonElement as an input', function () {
-            createField();
+            createField({
+                name: 'testFileField'
+            });
 
             var input = fileButton.buttonElement.dom;
 
             expect(input.tagName).toBe('INPUT');
+
+            // Name must go on the file input
+            expect(input.name).toBe('testFileField');
         });
 
         it('should set type of input to file', function () {

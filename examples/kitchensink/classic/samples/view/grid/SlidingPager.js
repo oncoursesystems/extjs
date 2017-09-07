@@ -88,8 +88,8 @@ Ext.define('KitchenSink.view.grid.SlidingPager', {
     bbar: {
         xtype: 'pagingtoolbar',
         displayInfo: true,
-        plugins: [{
-            ptype: 'ux-slidingpager'
-        }]
+        plugins: {
+            'ux-slidingpager': true
+        }
     }
 });

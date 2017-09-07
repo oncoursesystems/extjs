@@ -61,6 +61,10 @@ Ext.define('KitchenSink.view.d3.Words', {
                 range: ['white']
             }
         },
+        // In this example the tree store is flat (one level deep
+        // from the root node), so we want to prevent any node
+        // expansion attempts, as they are meaningless in this case.
+        expandEventName: null,
         selectEventName: 'mouseenter',
         tooltip: {
             renderer: 'onTooltip'

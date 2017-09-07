@@ -55,6 +55,9 @@ Ext.define('KitchenSink.view.chart.line.LineWithMarker', {
     layout: 'fit',
 
     items: [{
+        bind: {
+            theme: '{menuGroups.charttheme}'
+        },
         xtype: 'cartesian',
         shadow: '${shadow}',
         reference: 'chart',
@@ -198,9 +201,11 @@ Ext.define('KitchenSink.view.chart.line.LineWithMarker', {
             arrow: false,
             margin: '0 10 0 0',
             menu: {
+                bind: {
+                    groups: '{menuGroups}'
+                },
                 defaults: {
                     xtype: 'menuradioitem',
-                    handler: 'onThemeSwitch',
                     group: 'charttheme'
                 },
                 items: [{

@@ -1,4 +1,4 @@
-$image-search-path: '/Users/space/buildAgent/work/8cc7421dd8da164c/staging/build/packages/ux/classic/crisp/resources' !default;
+$image-search-path: '/home/teamcity/buildAgent/work/8cc7421dd8da164c/staging/build/packages/ux/classic/crisp/resources' !default;
 $theme-name:  'theme-crisp' !default;
 $include-ext-abstractcomponent: dynamic(false);;
 $include-ext-abstractcontainer: dynamic(false);;
@@ -584,6 +584,7 @@ $include-ext-layout-component-fieldset: dynamic(false);;
 $include-ext-layout-component-progressbar: dynamic(false);;
 $include-ext-layout-component-field-fieldcontainer: dynamic(false);;
 $include-ext-layout-component-field-htmleditor: dynamic(false);;
+$include-ext-layout-component-field-text: dynamic(false);;
 $include-ext-layout-container-absolute: dynamic(false);;
 $include-ext-layout-container-accordion: dynamic(false);;
 $include-ext-layout-container-anchor: dynamic(false);;
@@ -1068,6 +1069,7 @@ $current-package: 'theme-base';
 $current-resource-root: $theme-base-resource-root;
 $relative-image-path-for-uis: $theme-base-resource-path;
 @import '../../../../../classic/theme-base/sass/var/Component';
+@import '../../../../../classic/theme-base/sass/var/button/Button';
 
 /* including package theme-neutral */
 $theme-neutral-resource-root: '' !default;
@@ -1083,13 +1085,16 @@ $relative-image-path-for-uis: $theme-neutral-resource-path;
 @import '../../../../../classic/theme-neutral/sass/var/panel/Tool';
 @import '../../../../../classic/theme-neutral/sass/var/panel/Header';
 @import '../../../../../classic/theme-neutral/sass/var/resizer/Splitter';
+@import '../../../../../classic/theme-neutral/sass/var/layout/container/Box';
 @import '../../../../../classic/theme-neutral/sass/var/toolbar/Toolbar';
 @import '../../../../../classic/theme-neutral/sass/var/dd/StatusProxy';
 @import '../../../../../classic/theme-neutral/sass/var/panel/Panel';
 @import '../../../../../classic/theme-neutral/sass/var/container/ButtonGroup';
 @import '../../../../../classic/theme-neutral/sass/var/dashboard/Dashboard';
 @import '../../../../../classic/theme-neutral/sass/var/window/Window';
+@import '../../../../../classic/theme-neutral/sass/var/form/Labelable';
 @import '../../../../../classic/theme-neutral/sass/var/form/field/Base';
+@import '../../../../../classic/theme-neutral/sass/var/form/field/Text';
 @import '../../../../../classic/theme-neutral/sass/var/window/MessageBox';
 @import '../../../../../classic/theme-neutral/sass/var/form/field/Checkbox';
 @import '../../../../../classic/theme-neutral/sass/var/form/CheckboxGroup';

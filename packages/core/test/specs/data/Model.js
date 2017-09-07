@@ -222,6 +222,7 @@ topSuite("Ext.data.Model", [
                 model: Ext.data.Model,
                 data: data
             });
+            data = store.getProxy().getData();
 
             // The raw data object should be inported directly as the records' data objects
             expect(store.getAt(0).data).toEqual(data[0]);
@@ -7963,8 +7964,12 @@ topSuite("Ext.data.Model", [
         });
 
         describe("the legacy Errors object", function() {
-            var Val = Ext.data.validator.Validator.all,
+            var V = Ext.data.validator,
                 errors;
+
+            function getMessage(T) {
+                return T.prototype.config.message;
+            }
 
             beforeEach(function() {
                 instance = new User({
@@ -8016,22 +8021,22 @@ topSuite("Ext.data.Model", [
 
             it("should have the correct bad format message", function() {
                 var error = errors.getByField('formatField')[0];
-                expect(error.message).toEqual(Val.format.config.message);
+                expect(error.message).toEqual(getMessage(V.Format));
             });
 
             it("should have the correct non-inclusion message", function() {
                 var error = errors.getByField('color')[0];
-                expect(error.message).toEqual(Val.inclusion.config.message);
+                expect(error.message).toEqual(getMessage(V.Inclusion));
             });
 
             it("should have the correct non-exclusion message", function() {
                 var error = errors.getByField('first')[0];
-                expect(error.message).toEqual(Val.exclusion.config.message);
+                expect(error.message).toEqual(getMessage(V.Exclusion));
             });
 
             it("should have the correct bad email format message", function() {
                 var error = errors.getByField('email')[0];
-                expect(error.message).toEqual(Val.email.config.message);
+                expect(error.message).toEqual(getMessage(V.Email));
             });
 
             it("should allow user-defined error messages", function() {
@@ -8108,8 +8113,12 @@ topSuite("Ext.data.Model", [
         });
 
         describe("the Errors object", function() {
-            var Val = Ext.data.validator.Validator.all,
+            var V = Ext.data.validator,
                 errors;
+
+            function getMessage(T) {
+                return T.prototype.config.message;
+            }
 
             // NOTE: Ext.data.validator.Validator is new to v5 but we need to consult it
             // to see if the proper results are being returned from the legacy API.
@@ -8163,22 +8172,22 @@ topSuite("Ext.data.Model", [
 
             it("should have the correct bad format message", function() {
                 var error = errors.getByField('formatField')[0];
-                expect(error.message).toEqual(Val.format.config.message);
+                expect(error.message).toEqual(getMessage(V.Format));
             });
 
             it("should have the correct non-inclusion message", function() {
                 var error = errors.getByField('color')[0];
-                expect(error.message).toEqual(Val.inclusion.config.message);
+                expect(error.message).toEqual(getMessage(V.Inclusion));
             });
 
             it("should have the correct non-exclusion message", function() {
                 var error = errors.getByField('first')[0];
-                expect(error.message).toEqual(Val.exclusion.config.message);
+                expect(error.message).toEqual(getMessage(V.Exclusion));
             });
 
             it("should have the correct bad email format message", function() {
                 var error = errors.getByField('email')[0];
-                expect(error.message).toEqual(Val.email.config.message);
+                expect(error.message).toEqual(getMessage(V.Email));
             });
 
             it("should allow user-defined error messages", function() {

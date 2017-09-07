@@ -50,9 +50,11 @@ Ext.define('Neptune.view.grid.widget.LockGroupSummary', function() {
         xtype: 'lockGroupSummary',
         store: store,
         title: 'Locking, grouped, summarized, editable grid',
-        plugins: [
-            cellEditing
-        ],
+        plugins: {
+            cellediting: {
+                clicksToEdit: 1
+            }
+        },
         listeners: {
             beforeshowtip: function(grid, tip, data) {
                 var cellNode = tip.pointerEvent.getTarget(tip.view.getCellSelector());

@@ -1,6 +1,7 @@
 /**
  * @class Ext.Panel
  */
+
 Ext.define('Ext.panel.Collapsible', {
     override: 'Ext.Panel',
 
@@ -51,7 +52,7 @@ Ext.define('Ext.panel.Collapsible', {
 
     /**
      * @event drawerhide
-     * Fires then the {@link #Ext.panel.Collapser#cfg-drawer drawer} hides.
+     * Fires then the {@link Ext.panel.Collapser#cfg-drawer drawer} hides.
      *
      * @param {Ext.panel.Panel} this
      * @since 6.5.0
@@ -59,7 +60,7 @@ Ext.define('Ext.panel.Collapsible', {
 
     /**
      * @event drawershow
-     * Fires then the {@link #Ext.panel.Collapser#cfg-drawer drawer} shows.
+     * Fires then the {@link Ext.panel.Collapser#cfg-drawer drawer} shows.
      *
      * @param {Ext.panel.Panel} this
      * @since 6.5.0
@@ -197,12 +198,11 @@ Ext.define('Ext.panel.Collapsible', {
                 bodyWrap = me.bodyWrapElement;
 
             if (bodyWrap.parent() !== el) {
-                /**
-                 * We need to make sure the collapser node
-                 * is after the header in case the resizer
-                 * node is present. The resizer node needs
-                 * to be on top to function.
-                 */
+
+                 // We need to make sure the collapser node
+                 // is after the header in case the resizer
+                 // node is present. The resizer node needs
+                 // to be on top to function.
                 if (header) {
                     bodyWrap.insertAfter(header.element);
                 } else {

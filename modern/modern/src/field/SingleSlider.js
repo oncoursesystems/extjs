@@ -9,12 +9,8 @@ Ext.define('Ext.field.SingleSlider', {
         value: 1
     },
 
-    publishes: {
-        value: 1
-    },
-
     /**
-     * @event dragchange
+     * @event change
      * Fires when the value changes.
      * @param {Ext.field.Slider} me
      * @param {Number} newValue The new value.
@@ -67,6 +63,10 @@ Ext.define('Ext.field.SingleSlider', {
    
     defaultBindProperty: 'value',
 
+    /**
+     * @cfg
+     * @inheritdoc
+     */
     publishes: {
         value: 1
     },

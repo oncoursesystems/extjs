@@ -119,6 +119,6 @@ Ext.define('Desktop.VideoWindow', {
         }
 
         // 20ms to keep the tooltip video smooth
-        Ext.Function.defer(me.renderPreview, 20, me);
+        Ext.defer(me.renderPreview, 20, me);
     }
 });

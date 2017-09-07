@@ -1,5 +1,5 @@
 topSuite("Ext.field.ComboBox",
-    ['Ext.app.ViewModel', 'Ext.form.Panel',
+    ['Ext.app.ViewModel', 'Ext.form.Panel', 'Ext.Dialog',
      'Ext.data.ArrayStore', 'Ext.layout.Fit'],
 function() {
     
@@ -21,6 +21,8 @@ function() {
     // to reach in too far here to call this method. Not ideal, but
     // the infrastructure to get typing simulation is fairly large
     function doTyping(value, isBackspace, keepPickerVisible) {
+        // Focus the field so that trigger taps are processed immediately
+        component.inputElement.focus();
         component.inputElement.dom.value = value;
         component.onInput({
             type: 'input',
@@ -152,6 +154,16 @@ function() {
         jasmine.fireMouseEvent(picker.itemFromRecord(findRecord(value, theStore)).el, 'click');
     }
 
+    function clickExpandTrigger(cmp) {
+        cmp = cmp || component;
+
+        var triggers = cmp.getTriggers();
+
+        if (triggers && triggers.expand) {
+            jasmine.fireMouseEvent(triggers.expand.el, 'click');
+        }
+    }
+
     it("should encode the input value in the template", function(){
         makeComponent({
             renderTo: Ext.getBody(),
@@ -159,6 +171,59 @@ function() {
         });
 
         expect(component.inputElement.dom.value).toBe('test "  <br/> test');
+    });
+
+    // https://sencha.jira.com/browse/EXTJS-25893
+    // BoundList Locations must always promoted to use the encapsulating element el.
+    it("should select value when child element of first item is clicked", function() {
+        var picker,
+            item;
+
+        makeComponent({
+            displayField: 'text',
+            valueField: 'value',
+            queryMode: 'local',
+            renderTo: Ext.getBody()
+        });
+        clickExpandTrigger();
+
+        waitsFor(function() {
+            return (picker = component.getPicker()).isVisible();
+        }, 'picker to show for the first time', 500);
+
+        runs(function() {
+            item = picker.getViewItems()[0].el;
+
+            // The initial location must be sourced on the list item's encapsulating element
+            expect(Ext.getDom(picker.getNavigationModel().getLocation().sourceElement)).toBe(item.dom);
+
+            jasmine.fireMouseEvent(item.down('.x-innerhtml'), 'click');
+            expect(component.getValue()).toBe('value 1');
+        });
+
+        waitsFor(function() {
+            return !picker.isVisible();
+        }, 'picker to hide', 500);
+
+        // Now try selecting the same item again.
+        // It should still collapse the picker
+        runs(function() {
+            clickExpandTrigger();
+        });
+
+        waitsFor(function() {
+            return (picker = component.getPicker()).isVisible();
+        }, 'picker to show for the second time', 500);
+
+        runs(function() {
+            item = picker.getViewItems()[0].el;
+
+            jasmine.fireMouseEvent(item.down('.x-innerhtml'), 'click');
+        });
+
+        waitsFor(function() {
+            return !picker.isVisible();
+        });
     });
 
     describe("forceSelecton false", function() {
@@ -314,7 +379,7 @@ function() {
             expect(component.getValue()).toBeNull();
         });
 
-        it("should retain invalid entry text and null value on blur", function() {
+        it("should clear text when invalid and null on blur", function() {
             makeComponent({
                 displayField: 'text',
                 valueField: 'value',
@@ -329,7 +394,7 @@ function() {
 
             component.completeEdit();
 
-            expect(component.getInputValue()).toBe('abc');
+            expect(component.getInputValue()).toBe('');
             expect(component.getValue()).toBeNull();
         });
 
@@ -524,7 +589,7 @@ function() {
         });
     });
 
-    xdescribe("onExpand", function() {
+    describe("onExpand", function() {
         var getInnerTpl = function() {
             return 'foo';
         };
@@ -536,6 +601,7 @@ function() {
                 picker: 'floated',
                 floatedPicker: {
                     width: 234,
+                    matchFieldWidth: false,
                     maxHeight: 345,
                     loadingText: 'gazingazang',
                     emptyText: 'buffoopaloo',
@@ -559,7 +625,7 @@ function() {
             expect(component.getPicker().displayField).toEqual(component.displayField);
         });
         it("should pass the configured picker.width to the BoundList", function() {
-            expect(component.getPicker().width).toEqual(234);
+            expect(component.getPicker().getWidth()).toEqual(234);
         });
         it("should pass the configured picker.maxHeight to the BoundList", function() {
             expect(component.getPicker().getMaxHeight()).toEqual(345);
@@ -580,21 +646,21 @@ function() {
             expect(component.keyMap).toBeDefined();
             expect(component.getPicker().getNavigationModel() instanceof Ext.view.BoundListKeyNav).toBe(true);
         });
-        xit("should enable the BoundListKeyNav", function() {
+        it("should enable the BoundListKeyNav", function() {
             waitsFor(function() {
-                return component.getPicker().getNavigationModel().disabled === false;
+                return component.getPicker().getNavigationModel().getDisabled() !== true;
             });
         });
-        
-        xit("should set aria-activedescendant", function() {
-            var node = component.getPicker().highlightedItem;
-            
-            expect(component).toHaveAttr('aria-activedescendant', node.id);
+
+        it("should set aria-activedescendant", function() {
+            var node = component.getPicker().getNavigationModel().location.item;
+
+            expect(component.ariaEl).toHaveAttr('aria-activedescendant', node.id);
         });
     });
 
 
-    xdescribe("onCollapse", function() {
+    describe("onCollapse", function() {
         it("should disable the BoundListKeyNav", function() {
             runs(function() {
                 makeComponent({
@@ -603,11 +669,11 @@ function() {
                 component.expand();
             });
             waitsFor(function() {
-                return component.getPicker().getNavigationModel().disabled === false;
+                return component.getPicker().getNavigationModel().getDisabled() !== true;
             });
             runs(function() {
                 component.collapse();
-                expect(component.getPicker().getNavigationModel().disabled).toBe(true);
+                expect(component.getPicker().getNavigationModel().getDisabled()).toBe(true);
             });
         });
     });
@@ -1033,6 +1099,69 @@ function() {
                         expect(component.inputElement.dom.value).toBe('');
                     });
                 });
+            });
+
+            it('should be able to reselect the same dropdown item after setting the value back to null', function() {
+                makeComponent({
+                    renderTo: Ext.getBody(),
+                    valueField: 'value',
+                    displayField: 'text',
+                    queryMode: 'local'
+                });
+                var foo2Rec = findRecord('foo2');
+
+                component.onExpandTap();
+                clickListItem('foo2');
+                expect(component.getValueCollection().contains(foo2Rec)).toBe(true);
+
+                component.setValue(null);
+                expect(component.getValueCollection().length).toBe(0);
+
+                component.onExpandTap();
+                clickListItem('foo2');
+                expect(component.getValueCollection().contains(foo2Rec)).toBe(true);
+            });
+
+            it('should be able to reselect the same dropdown item after clearing the text', function() {
+                makeComponent({
+                    renderTo: Ext.getBody(),
+                    valueField: 'value',
+                    displayField: 'text',
+                    queryMode: 'local'
+                });
+                var foo2Rec = findRecord('foo2');
+
+                component.onExpandTap();
+                clickListItem('foo2');
+                expect(component.getValueCollection().contains(foo2Rec)).toBe(true);
+
+                doTyping('');
+                expect(component.getValueCollection().length).toBe(0);
+
+                component.onExpandTap();
+                clickListItem('foo2');
+                expect(component.getValueCollection().contains(foo2Rec)).toBe(true);
+            });
+
+            it('should be able to reselect the same dropdown item after typing non-matching text', function() {
+                makeComponent({
+                    renderTo: Ext.getBody(),
+                    valueField: 'value',
+                    displayField: 'text',
+                    queryMode: 'local'
+                });
+                var foo2Rec = findRecord('foo2');
+
+                component.onExpandTap();
+                clickListItem('foo2');
+                expect(component.getValueCollection().contains(foo2Rec)).toBe(true);
+
+                doTyping('flerpetty');
+                expect(component.getValueCollection().length).toBe(0);
+
+                component.onExpandTap();
+                clickListItem('foo2');
+                expect(component.getValueCollection().contains(foo2Rec)).toBe(true);
             });
         });
 
@@ -1636,12 +1765,12 @@ function() {
             });
 
             component.expand();
-            spyOn(component.getPicker().getScrollable(), 'scrollIntoView');
+            spyOn(component.getPicker().getScrollable(), 'ensureVisible');
             component.setValue('value 32');
 
             component.doAutoSelect();
 
-            expect(component.getPicker().getScrollable().scrollIntoView).toHaveBeenCalled();
+            expect(component.getPicker().getScrollable().ensureVisible).toHaveBeenCalled();
         });
         
         it("should select first item when autoSelectLast == false", function() {
@@ -4804,7 +4933,7 @@ function() {
         });
     }
 
-    xdescribe("typeahead", function() {
+    describe("typeahead", function() {
         it("should not extend the raw value with typeahead on erase", function() {
             var indices;
 
@@ -4869,6 +4998,9 @@ function() {
                 queryMode: 'local',
                 renderTo: Ext.getBody()
             });
+
+            jasmine.focusAndWait(component);
+
             doTyping('tex');
 
             // The typeahead setting will extend the raw value with a text selection
@@ -4891,6 +5023,35 @@ function() {
                 // previous text selection should be cleared and cursor placed at the end of the raw value
                 expect(indices[0]).toBe(6);
                 expect(indices[1]).toBe(6);
+            });
+        });
+
+        it('should reopen picker after a previous typeahead query', function () {
+            makeComponent({
+                displayField: 'text',
+                valueField: 'value',
+                typeAhead: true,
+                minChars: 2,
+                queryMode: 'local',
+                renderTo: Ext.getBody()
+            });
+
+            jasmine.focusAndWait(component);
+
+            doTyping('tex');
+
+            waitsFor(function () {
+                return getRawValue() === 'text 1';
+            });
+
+            jasmine.blurAndWait(component);
+
+            runs(function () {
+                component.onExpandTap();
+            });
+
+            waitsFor(function () {
+                return component.getPicker().isVisible();
             });
         });
 
@@ -4963,7 +5124,14 @@ function() {
                 jasmine.blurAndWait(component);
 
                 runs(function() {
-                    expect(component.getValue()).toBeNull();
+                    if (enableForceSelection) {
+                        // selectfield casts '' into null for forceSelection: true
+                        expect(component.getValue()).toBeNull();
+                    } else {
+                        // selectfield casts null into '' for forceSelection: false
+                        expect(component.getValue()).toBe('');
+                    }
+
                     expect(spy.callCount).toBe(0);
                 });
             });
@@ -5145,14 +5313,16 @@ function() {
         });
     }
 
-    xdescribe('ComboBox in a Window', function() {
+    describe('ComboBox in a Dialog', function() {
         var testWin, combo;
 
         beforeEach(function() {
-            testWin = Ext.create('Ext.window.Window', {
+            testWin = Ext.create('Ext.Dialog', {
                 title: 'combo popup still shown after resize or move',
                 width: 350,
                 height: 200,
+                hideAnimation: null,
+                showAnimation: null,
                 items: {
                     xtype: 'combobox',
                     padding: '10 10 10 10',
@@ -5165,7 +5335,7 @@ function() {
                     valueField: 'abbr'
                 }
             });
-            testWin.show();
+            testWin.showAt(10, 10);
             combo = testWin.down('combobox');
         });
         afterEach(function() {
@@ -5176,21 +5346,129 @@ function() {
             var offset = 5;
 
             combo.expand();
-            expect(combo.picker.isVisible()).toBe(true);
+            expect(combo.getPicker().isVisible()).toBe(true);
 
-            jasmine.fireMouseEvent(testWin.header.el, 'mouseover', offset, offset);
+            jasmine.fireMouseEvent(testWin.getHeader().el, 'mouseover', offset, offset);
             testWin.el.dom.focus();
-            jasmine.fireMouseEvent(testWin.header.el, 'mousedown', offset, offset);
-            jasmine.fireMouseEvent(testWin.header.el, 'mousemove', 100, 0);
+            jasmine.fireMouseEvent(testWin.getHeader().el, 'mousedown', offset, offset);
+            jasmine.fireMouseEvent(testWin.getHeader().el, 'mousemove', 100, 0);
 
             waitsFor(function() {
-                return combo.isExpanded === false && !combo.picker.pendingShow;
+                return combo.expanded === false && !combo.getPicker().pendingShow;
             });
 
             // Mouseup should not reshow
             runs(function() {
-                jasmine.fireMouseEvent(testWin.header.el, 'mouseup');
-                expect(combo.picker.isVisible()).toBe(false);
+                jasmine.fireMouseEvent(testWin.getHeader().el, 'mouseup');
+                expect(combo.getPicker().isVisible()).toBe(false);
+            });
+        });
+    });
+    describe("with queryMode:remote", function() {
+        beforeEach(function() {
+            MockAjaxManager.addMethods();
+        });
+
+        afterEach(function() {
+            MockAjaxManager.removeMethods();
+        });
+
+        // https://sencha.jira.com/browse/EXTJS-25670
+        it("should not collapse picker when it is expanded after initial selection", function() {
+
+            // Test data must have IDs.
+            // The picker collapses in singleSelect mode if there is a *new* value
+            // selected. And tghat is determined by whether the id of the incoming
+            // selected record matches the id of the oldSelected record.
+            var testData = [
+                { id: 1, value: 1, text: 'foo' },
+                { id: 2, value: 2, text: 'bar' },
+                { id: 3, value: 3, text: 'baz' },
+                { id: 4, value: 4, text: 'qux' }
+            ];
+
+            var expandSpy = jasmine.createSpy('expand'),
+                collapseSpy = jasmine.createSpy('collapse'),
+                loadSpy = jasmine.createSpy('load');
+
+            store.destroy();
+
+            store = new Ext.data.Store({
+                asynchronousLoad: true,
+                autoLoad: true,
+                model: CBTestModel,
+                proxy: {
+                    type: 'ajax',
+                    url: 'fake'
+                },
+                listeners: {
+                    load: loadSpy
+                }
+            });
+
+            makeComponent({
+                store: store,
+                displayField: 'text',
+                valueField: 'value',
+                label: 'Foo',
+                queryMode: 'remote',
+                renderTo: Ext.getBody(),
+                listeners: {
+                    expand: expandSpy,
+                    collapse: collapseSpy
+                }
+            });
+
+            focusAndWait(component);
+
+            runs(function() {
+                // Can't just call component.expand() here!
+                // ComboBox does filtering in onExpandTap()
+                clickExpandTrigger();
+            });
+
+            waitForSpy(expandSpy);
+
+            runs(function() {
+                Ext.Ajax.mockComplete({
+                    status: 200,
+                    responseText: JSON.stringify(testData)
+                });
+            });
+
+            waitForSpy(loadSpy);
+
+            runs(function() {
+                clickListItem('2');
+            });
+
+            waitForSpy(collapseSpy);
+
+            runs(function() {
+                expandSpy.reset();
+                collapseSpy.reset();
+                loadSpy.reset();
+
+                clickExpandTrigger();
+            });
+
+            waitForSpy(expandSpy);
+
+            runs(function() {
+                Ext.Ajax.mockComplete({
+                    status: 200,
+                    responseText: JSON.stringify(testData)
+                });
+            });
+
+            waitForSpy(loadSpy);
+
+            // Can't wait for the spy *not* to fire
+            waits(100);
+
+            runs(function() {
+                expect(collapseSpy).not.toHaveBeenCalled();
+                expect(component.expanded).toBe(true);
             });
         });
     });

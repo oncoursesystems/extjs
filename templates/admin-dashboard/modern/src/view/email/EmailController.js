@@ -4,7 +4,15 @@
 Ext.define('Admin.view.email.EmailController', {
     extend: 'Ext.app.ViewController',
 
-    actionsVisible: false,
+    destroy: function () {
+        this.actions = Ext.destroy(this.actions);
+
+        this.callParent();
+    },
+
+    emptyStringRenderer: function () {
+        return '';
+    },
 
     onChangeFilter: function (sender) {
         console.log('Show ' + sender.getItemId());
@@ -16,6 +24,7 @@ Ext.define('Admin.view.email.EmailController', {
 
     onComposeTo: function (sender) {
         var rec = sender.getRecord();
+
         this.doCompose(rec.get('name'));
     },
 
@@ -29,37 +38,24 @@ Ext.define('Admin.view.email.EmailController', {
         if (actions) {
             actions.hide();
         }
-        this.actionsVisible = false;
     },
 
     showActions: function () {
-        var me = this,
-            actions = me.actions;
+        var actions = this.actions;
 
         if (!actions) {
-            me.actions = actions = Ext.create({
+            actions = this.actions = Ext.create({
                 xtype: 'emailactions',
                 defaults: {
-                    scope: me
+                    scope: this
                 },
                 side: 'right',
                 hidden: true,
                 hideOnMaskTap: true,
                 width: 250
             });
-
-            Ext.Viewport.add(actions);
         }
 
-        actions.on('hide',
-            function () {
-                me.actionsVisible = false;
-            },
-            null,
-            { single: true }
-        );
-
-        actions.show();
-        me.actionsVisible = true;
+        actions.setDisplayed(true);
     }
 });

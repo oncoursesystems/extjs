@@ -1027,11 +1027,7 @@ Ext.define('Ext.data.ProxyStore', {
         },
 
         clearLoadTask: function() {
-            if (this.loadTimer) {
-                Ext.asapCancel(this.loadTimer);
-            }
-            
-            this.pendingLoadOptions = this.loadTimer = null;
+            this.pendingLoadOptions = this.loadTimer = Ext.unasap(this.loadTimer);
         },
 
         cleanRemoved: function() {

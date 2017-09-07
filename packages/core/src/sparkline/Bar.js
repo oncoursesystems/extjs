@@ -75,6 +75,7 @@ Ext.define('Ext.sparkline.Bar', {
         chartRangeClip: false,
         
         /**
+         * @cfg {Object}
          * @inheritdoc Ext.sparkline.TriState
          */
         colorMap: null

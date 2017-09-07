@@ -1067,6 +1067,36 @@ function() {
                 return plugin.activeEditor && plugin.activeEditor.up('grid') === grid;
             });
         });
+    
+        it('should allow custom editors as a config', function () {
+            var spy;
+            
+            Ext.define('CustomEditor', {
+                extend : 'Ext.grid.CellEditor',
+                alias  : 'widget.customeditor',
+                
+                constructor: function (config) {return this.callParent([config])}
+            });
+            
+            spy = spyOn(CustomEditor.prototype, 'constructor').andCallThrough();
+            grid = Ext.destroy(grid);
+            
+            makeGrid(null, {
+                columns: [{
+                    header: 'Name',  dataIndex: 'name', editor: {
+                        xtype: 'customeditor',
+                        field: {
+                            xtype: 'textfield'
+                        }
+                    }
+                }]
+            });
+            startEdit();
+            
+            waitsForSpy(spy);
+            
+            Ext.undefine('CustomEditor');
+        });
 
         describe('positioning the editor', function () {
             it('should default to "l-l!"', function () {

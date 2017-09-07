@@ -19,9 +19,9 @@
  *         title: 'DC Personnel',
  *
  *         store: store,
- *         plugins: [{
- *             type: 'pagingtoolbar'
- *         }],
+ *         plugins: {
+ *             pagingtoolbar: true
+ *         },
  *
  *         columns: [
  *             { text: 'First Name', dataIndex: 'fname',  flex: 1 },
@@ -352,6 +352,7 @@ Ext.define('Ext.grid.plugin.PagingToolbar', {
 
             sliderField.setMaxValue(totalPages || 1);
             sliderField.setValue(currentPage);
+            sliderField.setDisabled(totalPages <= 1);
 
             pageTopRecord = me.getPageTopRecord(currentPage);
             if (grid && !me.preventGridScroll && pageTopRecord) {

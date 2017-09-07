@@ -434,7 +434,7 @@ topSuite("Ext.tip.ToolTip", function() {
         });
 
         itNotTouch("should not hide the tooltip when mouse leaves delegate, then rapidly enters another delegate", function() {
-            createTip({delegate: '.hasTip', showDelay: 0, hideDelay: 200});
+            createTip({delegate: '.hasTip', showDelay: 0, hideDelay: 200, dismissDelay: 2000});
 
             var hideSpy = spyOn(tip, 'hide').andCallThrough();
 
@@ -484,6 +484,11 @@ topSuite("Ext.tip.ToolTip", function() {
                 // No flickering!
                 expect(hideSpy).not.toHaveBeenCalled();
                 expect(tip.isVisible()).toBe(true);
+            });
+
+            // Once we stop mouseovering adjacent delegates, it must dismiss after its dismissDelay
+            waitsFor(function() {
+                return !tip.isVisible();
             });
         });
 

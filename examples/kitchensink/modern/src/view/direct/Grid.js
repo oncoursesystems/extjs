@@ -104,6 +104,8 @@ Ext.define('KitchenSink.view.direct.Grid', {
             valueField: 'table',
             value: 'companies',
             queryMode: 'local',
+            forceSelection: true,
+            editable: false,
             store: {
                 fields: ['table', 'desc'],
                 data: [

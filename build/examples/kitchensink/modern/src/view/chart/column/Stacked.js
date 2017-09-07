@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.chart.column.Stacked', {
             panText: 'Pan',
             refreshText: 'Refresh',
             segBtnProp: 'text',
-            segBtnWidth: 200,
+            segBtnWidth: 240,
             shadow: true,
             stackIcon: 'x-fa fa-bars',
             tbarPadding: '5 8',
@@ -64,6 +64,9 @@ Ext.define('KitchenSink.view.chart.column.Stacked', {
     layout: 'fit',
 
     items: [{
+        bind: {
+            theme: '{menuGroups.charttheme}'
+        },
         xtype: 'cartesian',
         shadow: '${shadow}',
         reference: 'chart',
@@ -140,9 +143,11 @@ Ext.define('KitchenSink.view.chart.column.Stacked', {
             iconCls: 'x-fa fa-picture-o',
             arrow: false,
             menu: {
+                bind: {
+                    groups: '{menuGroups}'
+                },
                 defaults: {
                     xtype: 'menuradioitem',
-                    handler: 'onThemeSwitch',
                     group: 'charttheme'
                 },
                 items: [{

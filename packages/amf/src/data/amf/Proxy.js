@@ -25,15 +25,7 @@ Ext.define('Ext.data.amf.Proxy', {
         'Ext.data.amf.Reader'
     ],
 
-    /**
-     * @cfg
-     * @inheritdoc
-     */
     binary: true,
 
-    /**
-     * @cfg
-     * @inheritdoc
-     */
     reader: 'amf'
 });

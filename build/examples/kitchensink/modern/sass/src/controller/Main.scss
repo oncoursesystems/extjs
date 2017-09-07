@@ -3,10 +3,6 @@ $app-background-color: dynamic(if($theme-name == 'theme-material', $background-c
 $app-primary-text-color: dynamic($color);
 $app-secondary-text-color: dynamic(if($theme-name == 'theme-neptune', gray, $color));
 
-body.#{$prefix}phone {
-    position: fixed;
-}
-
 .menu {
     @if($theme-name == 'theme-material') {
         @include icon('menu');

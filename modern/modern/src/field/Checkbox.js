@@ -77,6 +77,10 @@ Ext.define('Ext.field.Checkbox', {
         checked: 1
     },
 
+    /**
+     * @cfg
+     * @inheritdoc
+     */
     publishes: {
         checked: 1
     },

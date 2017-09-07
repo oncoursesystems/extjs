@@ -55,6 +55,7 @@ Ext.define('Ext.Tool', {
     isTool: true,
 
     focusable: true,
+    tabIndex: 0,
     focusEl: 'element',
     ariaEl: 'element',
 
@@ -178,6 +179,12 @@ Ext.define('Ext.Tool', {
                           type && (baseCls + '-type-' + type));
     },
 
+    updateDisabled: function (disabled, oldDisabled) {
+        this.callParent([disabled, oldDisabled]);
+
+        this.el.removeCls([this.hoveredCls, this.pressedCls]);
+    },
+
     privates: {
         //<debug>
         _toolTypes: {
@@ -269,21 +276,26 @@ Ext.define('Ext.Tool', {
          * @private
          */
         onMouseDown: function(e) {
-            if (this.getDisabled()) {
+            var me = this;
+            if (!me.focusable) {
+                e.preventDefault();
+            }
+
+            if (me.getDisabled()) {
                 return false;
             }
 
-            this.el.addCls(this.pressedCls);
-            Ext.GlobalEvents.setPressedComponent(this, e);
+            me.addCls(me.pressedCls);
+            Ext.GlobalEvents.setPressedComponent(me, e);
         },
 
         /**
-         * @called by {@link Ext.GlobalEvents#setPressedComponent} when the global
+         * Called by {@link Ext.GlobalEvents#setPressedComponent} when the global
          * mouseup event fires and there's a registered pressed component.
          * @private
          */
         onRelease: function() {
-            this.el.removeCls(this.pressedCls);
+            this.removeCls(this.pressedCls);
         },
 
         /**
@@ -295,7 +307,7 @@ Ext.define('Ext.Tool', {
             if (this.getDisabled()) {
                 return false;
             }
-            this.el.addCls(this.hoveredCls);
+            this.addCls(this.hoveredCls);
         },
 
         /**
@@ -304,7 +316,7 @@ Ext.define('Ext.Tool', {
          * @private
          */
         onMouseOut: function() {
-            this.el.removeCls(this.hoveredCls);
+            this.removeCls(this.hoveredCls);
         }
     }
 });

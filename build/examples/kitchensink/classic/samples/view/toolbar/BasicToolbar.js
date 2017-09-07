@@ -56,7 +56,9 @@ Ext.define('KitchenSink.view.toolbar.BasicToolbar', {
     html: KitchenSink.DummyText.longText,
 
     tbar: {
-        plugins: 'boxreorderer',
+        plugins: {
+            boxreorderer: true
+        },
 
         items: [{
             xtype:'splitbutton',

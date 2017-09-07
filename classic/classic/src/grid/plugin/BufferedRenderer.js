@@ -332,10 +332,12 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
      * Called before the start of a view's layout run
      */
     beforeTableLayout: function(ownerContext) {
-        var dom = this.view.body.dom;
+        var dom = this.view.body.dom,
+            size;
         if (dom) {
-            ownerContext.bodyHeight = dom.offsetHeight;
-            ownerContext.bodyWidth = dom.offsetWidth;
+            size = this.grid.getElementSize(dom);
+            ownerContext.bodyHeight = size.height;
+            ownerContext.bodyWidth = size.width;
         }
     },
 
@@ -347,7 +349,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
     afterTableLayout: function(ownerContext) {
         var me = this,
             view = me.view,
-            renderedBlockHeight;
+            renderedBlockHeight, size;
 
         // The rendered block has changed height.
         // This could happen if a cellWrap: true column has changed width.
@@ -355,7 +357,8 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
         if (ownerContext.bodyHeight && view.body.dom) {
             delete me.rowHeight;
             me.refreshSize();
-            renderedBlockHeight = view.body.dom.offsetHeight;
+            renderedBlockHeight = me.grid.getElementHeight(view.body.dom);
+    
             if (renderedBlockHeight !== ownerContext.bodyHeight) {
                 me.onViewResize(view, null, view.el.lastBox.height);
 
@@ -401,7 +404,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
         }
 
         // Cache the rendered block height.
-        me.bodyHeight = view.body.dom.offsetHeight;
+        me.bodyHeight = me.grid.getElementHeight(view.body.dom);
         
         // Calculates scroll range.
         // Also calculates rowHeight if we do not have an own rowHeight property.
@@ -767,7 +770,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
      * Use the grid's {@link Ext.panel.Table#ensureVisible ensureVisible} method to scroll a particular
      * record or record index into view.
      *
-     * @param {Number/Ext.data.Model} record The record, or the zero-based position in the dataset to scroll to.
+     * @param {Number/Ext.data.Model} recordIdx The record, or the zero-based position in the dataset to scroll to.
      * @param {Object}          [options] An object containing options to modify the operation.
      * @param {Boolean}         [options.animate] Pass `true` to animate the row into view.
      * @param {Boolean}         [options.highlight] Pass `true` to highlight the row with a glow animation when it is in view.
@@ -1313,7 +1316,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             newRows = view.doAdd(range, start);
             view.fireItemMutationEvent('itemadd', range, start, newRows, view);
             for (i = 0; i < topAdditionSize; i++) {
-                increment -= newRows[i].offsetHeight;
+                increment -= me.grid.getElementHeight(newRows[i]);
             }
 
             // We've just added a bunch of rows to the top of our range, so move upwards to keep the row appearance stable
@@ -1563,7 +1566,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             }
         }
         // body height might have changed with change of rows, and possible syncRowHeights call.
-        me.bodyHeight = lockingPartner.bodyHeight = view.body.dom.offsetHeight;
+        me.bodyHeight = lockingPartner.bodyHeight = me.grid.getElementHeight(view.body.dom);
     },
 
     setBodyTop: function(bodyTop, skipStretchView) {
@@ -1582,7 +1585,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
 
         // If this is the last page, correct the scroll range to be just enough to fit.
         if (me.variableRowHeight) {
-            me.bodyHeight = body.dom.offsetHeight;
+            me.bodyHeight = me.grid.getElementHeight(body.dom);
 
             // We are displaying the last row, so ensure the scroll range finishes exactly at the bottom of the view body
             if (rows.endIndex === store.getCount() - 1) {
@@ -1640,7 +1643,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             targetTop = bodyTop + elements[target].offsetTop;
 
             // If target is entirely above the viewport, chop downwards
-            if (targetTop + elements[target].offsetHeight <= viewportTop) {
+            if (targetTop + me.grid.getElementHeight(elements[target]) <= viewportTop) {
                 return me.getFirstVisibleRowIndex(target + 1, endRow, viewportTop, viewportBottom);
             }
 
@@ -1699,7 +1702,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             if (targetTop > viewportBottom) {
                 return me.getLastVisibleRowIndex(startRow, target - 1, viewportTop, viewportBottom);
             }
-            targetBottom = targetTop + elements[target].offsetHeight;
+            targetBottom = targetTop + me.grid.getElementHeight(elements[target]);
 
             // Target is last
             if (targetBottom >= viewportBottom) {

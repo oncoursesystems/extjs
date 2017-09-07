@@ -27,6 +27,8 @@ Ext.define('KitchenSink.view.charts.scatter.Bubble', {
 
     layout: 'fit',
     width: 650,
+    border: true,
+    resizable: true,
 
     tbar: [
         '->',

@@ -36,10 +36,9 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
 
     onMouseMoveGesture: function (e) {
         var me = this,
-            tipItem = me.tipItem,
+            oldItem = me.oldItem,
             isMousePointer = e.pointerType === 'mouse',
-            item, itemBBox, tooltip, chart, marker,
-            surface, surfaceXY, isInverseY;
+            item, tooltip;
 
         if (me.getSticky()) {
             return true;
@@ -51,14 +50,13 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
         }
 
         if (me.isDragging) {
-            if (tipItem && isMousePointer) {
-                tipItem.series.hideTooltip(tipItem);
-                me.tipItem = null;
+            if (oldItem && isMousePointer) {
+                oldItem.series.hideTooltip(oldItem);
+                me.oldItem = null;
             }
         } else if (!me.stickyHighlightItem) {
             item = me.getItemForEvent(e);
-            chart = me.getChart();
-            if (item !== chart.getHighlightItem()) {
+            if (item !== me.getChart().getHighlightItem()) {
                 me.highlight(item);
                 me.sync();
             }
@@ -72,8 +70,8 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
                         // If there was a different previously active item, ask it to hide its tooltip.
                         // Unless it's the same tooltip instance that we are about to show.
                         // In which case, we are just going to reposition it.
-                        if (tipItem && tipItem !== item && tipItem.series.getTooltip() !== tooltip) {
-                            tipItem.series.hideTooltip(tipItem);
+                        if (oldItem && oldItem !== item && oldItem.series.getTooltip() !== tooltip) {
+                            oldItem.series.hideTooltip(oldItem, true);
                         }
 
                         if (tooltip.getTrackMouse()) {
@@ -81,15 +79,14 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
                         } else {
                             me.showUntracked(item);
                         }
-                        me.tipItem = item;
+                        me.oldItem = item;
                     }
                 }
                 // No mouse hit - schedule a hide for hideDelay ms.
                 // If pointer enters another item within that time,
                 // there will be no flickery reshow.
-                else if (tipItem) {
-                    tipItem.series.hideTooltip(tipItem);
-                    me.tipItem = tipItem = null;
+                else if (oldItem) {
+                    oldItem.series.hideTooltip(oldItem);
                 }
             }
             return false;
@@ -105,7 +102,7 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
 
     showTooltip: function (e, item) {
         item.series.showTooltip(item, e);
-        this.tipItem = item;
+        this.oldItem = item;
     },
 
     showUntracked: function (item) {

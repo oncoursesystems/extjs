@@ -40,13 +40,14 @@ Ext.define('KitchenSink.view.binding.Selection', {
 
     items: [{
         xtype: 'list',
-        flex: 1,
+        flex: 0.7,
         autoSize: true,
         itemTpl: '{lastName}, {firstName}',
         bind: '{people}',
         reference: 'peopleList'
     }, {
         xtype: 'formpanel',
+        bodyPadding: 10,
         flex: 1,
         autoSize: true,
         items: [{

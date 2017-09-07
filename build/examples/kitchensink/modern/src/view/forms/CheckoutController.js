@@ -14,30 +14,16 @@ Ext.define('KitchenSink.view.forms.CheckoutController', {
         bbar.insert(1, indicator);
     },
 
-    go: function (direction) {
-        var view = this.getView(),
-            viewModel = view.getViewModel(),
-            innerItems = view.getInnerItems(),
-            activeItem = view.getActiveItem(),
-            index = innerItems.indexOf(activeItem) + (direction * 1),
-            newItem = innerItems[index];
-
-        if (newItem) {
-            view.setActiveItem(newItem);
-
-            viewModel.set({
-                index: index,
-                step: newItem.title
-            });
-        }
-    },
-
     onBack: function () {
-        this.go(-1);
+        var card = this.getView().getLayout();
+
+        card.previous();
     },
 
     onNext: function () {
-        this.go(1);
+        var card = this.getView().getLayout();
+
+        card.next();
     },
 
     onSubmit: function () {

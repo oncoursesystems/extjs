@@ -45,9 +45,9 @@ Ext.define('KitchenSink.view.grid.addons.PagingGrid', {
     height: '${height}',
     width: '${width}',
 
-    plugins: [
-        'gridpagingtoolbar'
-    ],
+    plugins: {
+        gridpagingtoolbar: true
+    },
 
     store: {
         type: 'forumthreads',

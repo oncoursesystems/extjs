@@ -7,20 +7,29 @@ Ext.define('Ext.scroll.TableScroller', {
     },
 
     privates: {
-        getScrollIntoViewXY: function(el, hscroll) {
+        getEnsureVisibleXY: function (el, options) {
             var lockingScroller = this.getLockingScroller(),
                 position = this.getPosition(),
                 newPosition;
-            
+
+            if (el && el.element && !el.isElement) {
+                options = el;
+                el = options.element;
+            }
+
+            options = options || {};
+
             if (lockingScroller) {
                 position.y = lockingScroller.position.y;
             }
 
             newPosition = Ext.fly(el).getScrollIntoViewXY(this.getElement(), position.x, position.y);
-            newPosition.x = (hscroll === false) ? position.x : newPosition.x;
+            newPosition.x = (options.x === false) ? position.x : newPosition.x;
+
             if (lockingScroller) {
-                newPosition.y = Ext.fly(el).getScrollIntoViewXY(lockingScroller.getElement(), position.x, position.y).y;
+                newPosition.y = (options.y === false) ? position.y : Ext.fly(el).getScrollIntoViewXY(lockingScroller.getElement(), position.x, position.y).y;
             }
+
             return newPosition;
         },
 

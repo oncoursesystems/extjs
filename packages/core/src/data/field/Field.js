@@ -574,7 +574,7 @@ Ext.define('Ext.data.field.Field', {
 
     /**
      * @cfg {Function} serialize
-     * @inheritdoc #method-serialize
+     * @inheritdoc Ext.data.field.Field#method-serialize
      */
     
     /**
@@ -816,14 +816,6 @@ Ext.define('Ext.data.field.Field', {
         this.modelValidators = modelValidators;
     },
 
-    compileValidators: function() {
-        var me = this;
-        me._validators = [];
-        me.constructValidators(me.validators);
-        me.constructValidators(me.modelValidators);
-        me.constructValidators(me.instanceValidators);
-    },
-
     constructValidators: function (validators) {
         if (validators) {
             if (!(validators instanceof Array)) {
@@ -831,16 +823,18 @@ Ext.define('Ext.data.field.Field', {
             }
 
             var length = validators.length,
-                all = this._validators,
+                all = this._validators, // we are inside getValidators so this is OK
                 i, item, validator, presence;
 
             for (i = 0; i < length; ++i) {
                 item = validators[i];
+
                 if (item.fn) {
                     item = item.fn;
                 }
 
                 validator = Ext.Factory.dataValidator(item);
+
                 if (!validator.isPresence) {
                     all.push(validator);
                 } else {
@@ -1001,11 +995,8 @@ Ext.define('Ext.data.field.Field', {
      */
     validate: function(value, separator, errors, record) {
         var me = this,
+            validators = me.getValidators(),
             result, presence;
-
-        if (!me._validators) {
-            me.compileValidators();
-        }
 
         presence = this.presence;
 
@@ -1016,7 +1007,7 @@ Ext.define('Ext.data.field.Field', {
             }
         }
 
-        return me.validateGroup(me._validators, value, separator, errors, record);
+        return me.validateGroup(validators, value, separator, errors, record);
     },
 
     validateGroup: function(validators, value, separator, errors, record) {
@@ -1165,6 +1156,24 @@ Ext.define('Ext.data.field.Field', {
     getType: function() {
         return 'auto';
     },
+
+    privates: {
+        getValidators: function() {
+            var me = this,
+                validators = me._validators;
+
+            if (!validators) {
+                me._validators = validators = [];
+
+                me.constructValidators(me.validators);
+                me.constructValidators(me.modelValidators);
+                me.constructValidators(me.instanceValidators);
+            }
+
+            return validators;
+        }
+    },
+
     deprecated: {
         5.1: {
             methods: {

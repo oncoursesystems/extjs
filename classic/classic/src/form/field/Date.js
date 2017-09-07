@@ -521,7 +521,7 @@ Ext.define('Ext.form.field.Date', {
      *     dateField.format = 'Y-m-d';
      *     dateField.setValue('2006-05-04');
      *
-     * @param {String/Date} date The date or valid date string
+     * @param {String/Date} v The date or valid date string
      * @return {Ext.form.field.Date} this
      */
     setValue: function(v) {
@@ -708,6 +708,21 @@ Ext.define('Ext.form.field.Date', {
         });
     },
 
+    createInitialDate: function(value) {
+        var minValue = this.minValue, 
+            maxValue = this.maxValue;
+
+        value = value || new Date();
+
+        if (minValue && minValue > value) {
+            value = minValue;
+        } else if (maxValue && maxValue < value) {
+            value = maxValue;
+        }
+
+        return value;
+    },
+
     onSelect: function(m, d) {
         var me = this;
 
@@ -735,7 +750,8 @@ Ext.define('Ext.form.field.Date', {
      */
     onExpand: function() {
         var value = this.rawDate;
-        this.picker.setValue(Ext.isDate(value) ? value : new Date());
+
+        this.picker.setValue(Ext.isDate(value) ? value : this.createInitialDate());
     },
 
     /**

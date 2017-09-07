@@ -21,6 +21,12 @@ Ext.define('KitchenSink.view.buttons.ExtraModel', {
     },
 
     formulas: {
+        type: function(getter) {
+            return getter('buttonType.value');
+        },
+        style: function(getter) {
+            return  getter('buttonStyle.value');
+        },
         normalText: function (getter) {
             var type = getter('type');
 

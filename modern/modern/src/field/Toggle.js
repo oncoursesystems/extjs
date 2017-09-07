@@ -59,6 +59,10 @@ Ext.define('Ext.field.Toggle', {
         value: 1
     },
 
+    /**
+     * @cfg
+     * @inheritdoc
+     */
     publishes: {
         value: 1
     },
@@ -163,6 +167,8 @@ Ext.define('Ext.field.Toggle', {
 
     setSliderValue: function(value) {
         this.getSlider().setValue(value ? 1 : 0);
+        return !!value;
+
     },
 
     /**

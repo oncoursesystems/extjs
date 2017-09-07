@@ -156,13 +156,13 @@ Ext.define('Ext.picker.Date', {
     /**
      * @cfg {String[]} monthNames
      * An array of textual month names which can be overriden for localization support (defaults to Ext.Date.monthNames)
-     * @deprecated This config is deprecated. In future the month names will be retrieved from {@link Ext.Date}
+     * @deprecated 6.5.0 This config is deprecated. In future the month names will be retrieved from {@link Ext.Date}
      */
 
     /**
      * @cfg {String[]} dayNames
      * An array of textual day names which can be overriden for localization support (defaults to Ext.Date.dayNames)
-     * @deprecated This config is deprecated. In future the day names will be retrieved from {@link Ext.Date}
+     * @deprecated 6.5.0 This config is deprecated. In future the day names will be retrieved from {@link Ext.Date}
      */
 
     /**
@@ -217,6 +217,13 @@ Ext.define('Ext.picker.Date', {
     /**
      * @cfg {Date} [maxDate=null]
      * Maximum allowable date (JavaScript date object)
+     */
+
+     /**
+     * @cfg {Date} [defaultValue=new Date()]
+     * @since 6.5.1
+     * A default date for this picker, only used when a value is not set. (JavaScript date object)
+     * Note: This value with be constrained to the minDate/maxDate if they are specified.
      */
 
     /**
@@ -300,11 +307,7 @@ Ext.define('Ext.picker.Date', {
     ],
     
     border: true,
-    
-    /**
-     * @cfg renderTpl
-     * @inheritdoc
-     */
+
     renderTpl: [
         '<div id="{id}-innerEl" data-ref="innerEl" role="presentation">',
             '<div class="{baseCls}-header">',
@@ -387,6 +390,7 @@ Ext.define('Ext.picker.Date', {
         me.cellCls = me.baseCls + '-cell';
         me.nextCls = me.baseCls + '-prevday';
         me.todayCls = me.baseCls + '-today';
+        me.defaultValue = Ext.isDate(me.defaultValue) ? me.defaultValue : new Date();
         
         if (!me.format) {
             me.format = Ext.Date.defaultFormat;
@@ -404,7 +408,7 @@ Ext.define('Ext.picker.Date', {
 
         me.callParent();
 
-        me.value = me.value ? clearTime(me.value, true) : clearTime(new Date());
+        me.value = me.value ? clearTime(me.value, true) : clearTime(me.defaultValue);
 
         me.initDisabledDays();
     },
@@ -597,7 +601,13 @@ Ext.define('Ext.picker.Date', {
         if (me.disabled) {
             me.syncDisabled(true, true);
         }
-        
+
+        if (me.minDate && me.minDate > me.value) {
+            me.value = me.minDate;
+        } else if (me.maxDate && me.maxDate < me.value) {
+            me.value = me.maxDate;
+        }
+
         me.update(me.value);
     },
 
@@ -683,7 +693,7 @@ Ext.define('Ext.picker.Date', {
 
     /**
      * Replaces any existing disabled dates with new values and refreshes the DatePicker.
-     * @param {String[]/RegExp} disabledDates An array of date strings (see the {@link #disabledDates} config for
+     * @param {String[]/RegExp} dd An array of date strings (see the {@link #disabledDates} config for
      * details on supported values), or a JavaScript regular expression used to disable a pattern of dates.
      * @return {Ext.picker.Date} this
      */
@@ -707,28 +717,28 @@ Ext.define('Ext.picker.Date', {
      * on supported values.
      * @return {Ext.picker.Date} this
      */
-    setDisabledDays: function(dd) {
-        this.disabledDays = dd;
+    setDisabledDays: function (disabledDays) {
+        this.disabledDays = disabledDays;
         return this.update(this.value, true);
     },
 
     /**
      * Replaces any existing {@link #minDate} with the new value and refreshes the DatePicker.
-     * @param {Date} value The minimum date that can be selected
+     * @param {Date} minDate The minimum date that can be selected
      * @return {Ext.picker.Date} this
      */
-    setMinDate: function(dt) {
-        this.minDate = dt;
+    setMinDate: function(minDate) {
+        this.minDate = minDate;
         return this.update(this.value, true);
     },
 
     /**
      * Replaces any existing {@link #maxDate} with the new value and refreshes the DatePicker.
-     * @param {Date} value The maximum date that can be selected
+     * @param {Date} maxDate The maximum date that can be selected
      * @return {Ext.picker.Date} this
      */
-    setMaxDate: function(dt) {
-        this.maxDate = dt;
+    setMaxDate: function(maxDate) {
+        this.maxDate = maxDate;
         return this.update(this.value, true);
     },
 
@@ -739,7 +749,7 @@ Ext.define('Ext.picker.Date', {
      */
     setValue: function(value) {
         // If passed a null value just pass in a new date object.
-        this.value = Ext.Date.clearTime(value || new Date(), true);
+        this.value = Ext.Date.clearTime(value || this.defaultValue, true);
         return this.update(this.value);
     },
 
@@ -847,6 +857,11 @@ Ext.define('Ext.picker.Date', {
             picker = me.monthPicker;
 
         if (picker && picker.isVisible()) {
+            // The animated hide causes focus movement to the wrap el
+            // from the soon to be focused button (Button focuses in a delay)
+            // Controlling the focus now will prevent both erroneous
+            // focus movements.
+            me.focus();
             if (me.shouldAnimate(animate)) {
                 me.runAnimation(true);
             } else {
@@ -1475,6 +1490,7 @@ Ext.define('Ext.picker.Date', {
         /**
          * Set the disabled state of various internal components
          * @param {Boolean} disabled
+         * @param {Boolean} doButton
          * @private
          */
         syncDisabled: function (disabled, doButton) {

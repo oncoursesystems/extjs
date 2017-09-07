@@ -318,7 +318,8 @@ Ext.define('Ext.data.Store', {
                 }
                 //</debug>
 
-                return new Ext.data.BufferedStore(config);
+                // Hide this from Cmd
+                return new Ext.data['BufferedStore'](config);
             }
 
             //<debug>

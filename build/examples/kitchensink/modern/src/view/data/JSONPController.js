@@ -10,7 +10,11 @@ Ext.define('KitchenSink.view.data.JSONPController', {
                     '<tpl for="weatherIconUrl">' +
                         '<img src="{value}">' +
                     '</tpl>' +
-                    '<span class="temp">{tempMaxF}&deg;<span class="temp_low">{tempMinF}&deg;</span></span>' +
+                    '<div class="temp">{temperature}&deg;</div>' +
+                    '<div class="temp_low">' +
+                        '<div>high: {maxTemp}&deg;</div>' +
+                        '<div>low: {minTemp}&deg;</div>' +
+                    '</div>' +
                 '</div>' +
             '</tpl>' +
         '</div>'
@@ -29,22 +33,37 @@ Ext.define('KitchenSink.view.data.JSONPController', {
         Ext.data.JsonP.request({
             scope: this,
             callback: this.loadCallback,
-            url: 'http://api.worldweatheronline.com/free/v1/weather.ashx',
+            url: 'weather.php',
             callbackKey: 'callback',
             params: {
-                key: 'qfj4gk3t4u5u3bqc8atf69fn',
                 q: '94301', // Palo Alto
-                format: 'json',
-                num_of_days: 5
+                format: 'json'
             }
         });
     },
 
+    kelvinToFahrenheit: function(k) {
+        return Math.round(9/5 * (k - 273) + 32);
+    },
+
     loadCallback: function(success, result) {
-        var weather = success && result.data.weather;
+        var weather = success && result,
+            format = this.kelvinToFahrenheit,
+            data;
 
         if (weather) {
-            this.lookup('results').updateHtml(this.getTpl().applyTemplate(weather));
+            data = {
+                weatherIconUrl: {
+                    value: 'resources/' + weather.weather[0].icon + '.png'
+                },
+                temperature: format(weather.main.temp),
+                minTemp: format(weather.main.temp_min),
+                maxTemp: format(weather.main.temp_max),
+                date: new Date(weather.dt * 1000).toLocaleDateString()
+            };
+
+            this.lookup('results').updateHtml(this.getTpl().applyTemplate(data));
+
         } else {
             Ext.Msg.alert('Error', 'There was an error retrieving the weather.');
         }

@@ -107,10 +107,11 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
             dock: 'bottom',
             reference: 'form-statusbar',
             defaultText: 'Ready',
-            plugins: [{
-                ptype: 'validationstatus',
-                form: 'status-form'
-            }]
+            plugins: {
+                validationstatus: {
+                    form: 'status-form'
+                }
+            }
         }]
     }, {
         title: 'Ext Word Processor',

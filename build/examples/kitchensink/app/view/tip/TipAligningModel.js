@@ -16,13 +16,6 @@ Ext.define('KitchenSink.view.tip.TipAligningModel', {
                 tipOffset = getter('tipOffset'),
                 targetOffset = getter('targetOffset');
 
-            if (tipOffset === 50) {
-                tipOffset = '';
-            }
-            if (targetOffset === 50) {
-                targetOffset = '';
-            }
-
             return edges[getter('tipEdge')] + tipOffset + '-' + edges[getter('targetEdge')] + targetOffset;
         }
     }

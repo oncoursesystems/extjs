@@ -112,7 +112,9 @@ Ext.onReady(function(){
             trackOver: false,
             emptyText: '<h1 style="margin:20px">No matching results</h1>'
         },
-        plugins: 'gridfilters',
+        plugins: {
+            gridfilters: true
+        },
         columns:[{
             xtype: 'rownumberer',
             width: 50,

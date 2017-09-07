@@ -1,17 +1,17 @@
 Ext.define('Admin.view.forms.Profile', {
     extend: 'Ext.form.Panel',
     xtype: 'profileform',
-    cls: 'wizardform',
 
     requires: [
         'Ext.SegmentedButton',
         'Ext.field.Text'
     ],
 
-    title: 'Profile',
-    iconCls: 'x-fa fa-user',
-
     bodyPadding: '0 20 10 20',
+    cls: 'wizardform',
+    iconCls: 'x-fa fa-user',
+    title: 'Profile',
+
     defaults: {
         margin: '0 0 10 0'
     },
@@ -34,7 +34,6 @@ Ext.define('Admin.view.forms.Profile', {
             flex: 1
         },
         minWidth: '15em',
-
         platformConfig: {
             phone: {
                 width: '100%'
@@ -43,7 +42,6 @@ Ext.define('Admin.view.forms.Profile', {
                 width: '50%'
             }
         },
-
         items: [{
             text: 'Free',
             pressed: true

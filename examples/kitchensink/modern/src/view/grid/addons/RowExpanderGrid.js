@@ -47,7 +47,9 @@ Ext.define('KitchenSink.view.grid.addons.RowExpanderGrid', {
     //</example>
 
     height: '${height}',
-    plugins: 'rowexpander',
+    plugins: {
+        rowexpander: true
+    },
     store: 'Companies',
     width: '${width}',
 
@@ -66,6 +68,7 @@ Ext.define('KitchenSink.view.grid.addons.RowExpanderGrid', {
     columns: [{
         text: 'Company',
         flex: 1,
+        minWidth: 100,
         dataIndex: 'name'
     }, {
         text: 'Price',

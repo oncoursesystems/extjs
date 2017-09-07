@@ -193,7 +193,7 @@ Ext.define('Ext.data.virtual.PageMap', {
             queueTimer = me.queueTimer;
 
         if (queueTimer) {
-            Ext.asapCancel(queueTimer);
+            Ext.unasap(queueTimer);
         }
 
         me.loadNext();
@@ -218,6 +218,7 @@ Ext.define('Ext.data.virtual.PageMap', {
 
     updatePageCount: function (pageCount, oldPageCount) {
         var pages = this.pages,
+            store = this.store,
             pageNumber, page;
 
         if (oldPageCount === null || pageCount < oldPageCount) {
@@ -226,10 +227,10 @@ Ext.define('Ext.data.virtual.PageMap', {
                 page = pages[pageNumber];
                 if (page.number >= pageCount) {
                     this.clearPage(page);
+                    store.onPageDestroy(page);
                     page.destroy();
                 }
             }
-            
         }
     },
 
@@ -302,6 +303,7 @@ Ext.define('Ext.data.virtual.PageMap', {
             var me = this,
                 cache = me.cache,
                 loadQueues = me.loadQueues,
+                store = me.store,
                 cacheSize, concurrency;
 
             // When a page that has never been loaded becomes locked, we want to put
@@ -339,7 +341,8 @@ Ext.define('Ext.data.virtual.PageMap', {
                 for (cacheSize = me.getCacheSize(); cache.length > cacheSize; ) {
                     page = cache.shift();
                     me.clearPage(page, true); // remove LRU item
-                    me.store.onPageEvicted(page);
+                    store.onPageEvicted(page);
+                    store.onPageDestroy(page);
                     page.destroy();
                 }
             }

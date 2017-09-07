@@ -605,9 +605,9 @@ Ext.define('Ext.app.Application', {
      * Get an application's controller based on name or id.  Generally, the controller id will be the same as the name
      * unless otherwise specified.
      * @param {String} name The name or id of the controller you are trying to retrieve
-     * @param {Boolean} preventCreate (private)
+     * @param {Boolean} [preventCreate] (private)
      */
-    getController: function(name, /* private */ preventCreate) {
+    getController: function(name, preventCreate) {
         var me = this,
             controllers = me.controllers,
             className, controller, len, i, c, all;
@@ -668,7 +668,7 @@ Ext.define('Ext.app.Application', {
             ns = Ext.namespace(me.getName()),
             appProp = me.getAppProperty();
 
-        clearTimeout(me.cnsTimer);
+        Ext.undefer(me.cnsTimer);
         Ext.un('appupdate', me.onAppUpdate, me);
 
         Ext.destroy(me.viewport);

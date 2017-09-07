@@ -13,11 +13,14 @@ Ext.define('KitchenSink.view.binding.AssociationModel', {
     stores: {
         people: {
             model: 'Person',
-            proxy: 'memory',
-            data: KitchenSink.model.Person.generateData({
-                includeAccounts: true,
-                total: 5
-            })
+            autoLoad: true,
+            proxy: {
+                type: 'memory',
+                data: KitchenSink.model.Person.generateData({
+                    includeAccounts: true,
+                    total: 5
+                })
+            }
         }
     }
 });

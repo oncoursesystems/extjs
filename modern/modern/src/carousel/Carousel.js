@@ -82,11 +82,6 @@ Ext.define('Ext.carousel.Carousel', {
          */
         direction: 'horizontal',
 
-        /**
-         * @cfg {Boolean} [directionLock=false]
-         * Locks a card's scroller to avoid triggering carousel card changes.
-         */
-
         animation: {
             duration: 250,
             easing: {
@@ -114,7 +109,11 @@ Ext.define('Ext.carousel.Carousel', {
          */
         ui: 'dark',
 
-        itemConfig: {},
+        itemConfig: {
+            translatable: {
+                type: 'csstransform'
+            }
+        },
 
         bufferSize: 1,
 

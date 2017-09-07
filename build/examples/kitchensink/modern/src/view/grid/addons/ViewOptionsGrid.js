@@ -48,7 +48,9 @@ Ext.define('KitchenSink.view.grid.addons.ViewOptionsGrid', {
     //</example>
 
     height: '${height}',
-    plugins: 'gridviewoptions',
+    plugins: {
+        gridviewoptions: true
+    },
     store: 'Companies',
     width: '${width}',
 
@@ -59,6 +61,7 @@ Ext.define('KitchenSink.view.grid.addons.ViewOptionsGrid', {
     columns: [{
         text: 'Company',
         flex: 1,
+        minWidth: 100,
         dataIndex: 'name',
         hideable: false
     }, {

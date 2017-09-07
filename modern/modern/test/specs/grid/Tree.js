@@ -14,7 +14,16 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
         testNodes,
         synchronousLoad = true,
         treeStoreLoad = Ext.data.TreeStore.prototype.load,
-        loadStore;
+        loadStore,
+        navModel,
+        colMap;
+
+    function setColMap() {
+        colMap = {};
+        tree.query('column').forEach(function(col) {
+            colMap[col.getItemId()] = col;
+        });
+    }
 
     function getRow(row) {
         var rec = store.getAt(row);
@@ -54,10 +63,12 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
             width: 200,
             height: 300
         }, cfg));
-        rootNode = store.getRootNode();
+        rootNode = store.getRoot();
+        navModel = tree.getNavigationModel();
 
         // Need because of async response to flex
         refreshColSizes();
+        setColMap();
     }
 
     beforeEach(function() {
@@ -1139,4 +1150,101 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
             expect(tree.down('treecell').getRawValue()).toBe("Root id:root");
         });
     });
+
+    describe('keyboard navigation', function() {
+        describe('Simple Tree', function() {
+            it('should navigate correctly', function() {
+                makeTree(testNodes);
+                navModel.setLocation([0, 0]);
+
+                // RIGHT expands
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT);
+                expect(rootNode.isExpanded()).toBe(true);
+
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.DOWN);
+
+                // RIGHT expands
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT);
+                expect(rootNode.childNodes[0].isExpanded()).toBe(true);
+
+                // LEFT collapses
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.LEFT);
+                expect(rootNode.childNodes[0].isExpanded()).toBe(false);
+            });
+        });
+
+        describe('TreeGrid', function() {
+            it('should navigate correctly', function() {
+                makeTree(testNodes, {
+                    columns: [{
+                        xtype: 'treecolumn',
+                        cell: {
+                            tpl: '{text} id:{secondaryId}'
+                        },
+                        flex: 1
+                    }, {
+                        text: 'Sec. Id.',
+                        dataIndex: 'secondaryId',
+                        flex: 1
+                    }]
+                });
+                navModel.setLocation([0, 0]);
+
+                // CTRL+RIGHT expands because RIGHT navigates in a TreeGrid
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT, false, true);
+                expect(rootNode.isExpanded()).toBe(true);
+
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.DOWN);
+
+                // CTRL+RIGHT expands because RIGHT navigates in a TreeGrid
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.RIGHT, false, true);
+                expect(rootNode.childNodes[0].isExpanded()).toBe(true);
+
+                // CTRL+LEFT collapses because LEFT navigates in a TreeGrid
+                jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.LEFT, false, true);
+                expect(rootNode.childNodes[0].isExpanded()).toBe(false);
+            });
+        });
+    });
+
+    describe('header menu', function() {
+        it('should hide "group by this field" if there is no dataIndex on that column', function () {
+            makeTree(testNodes, {
+                columns: [{
+                    itemId: 'colf1',
+                    xtype: 'treecolumn',
+                    cell: {
+                        tpl: '{text} id:{secondaryId}'
+                    },
+                    flex: 1
+                }, {
+                    itemId: 'colf2',
+                    text: 'Sec. Id.',
+                    dataIndex: 'secondaryId',
+                    flex: 1
+                }]
+            });
+            navModel.setLocation([0, 0]);
+
+            colMap.colf1.showMenu();
+
+            var menu = colMap.colf1.getMenu(),
+                groupByThis = menu.getComponent('groupByThis'),
+                showInGroups = menu.getComponent('showInGroups');
+
+            expect(showInGroups.getHidden()).toBe(true);
+            expect(groupByThis.getHidden()).toBe(true);
+            menu.hide();
+
+            colMap.colf2.showMenu();
+            menu = colMap.colf2.getMenu();
+            groupByThis = menu.getComponent('groupByThis');
+            showInGroups = menu.getComponent('showInGroups');
+
+            expect(showInGroups.getHidden()).toBe(true);
+            expect(groupByThis.getHidden()).toBe(true);
+            menu.hide();
+        });
+    });
+
 });

@@ -252,6 +252,10 @@ Ext.define('Ext.grid.Grid', {
         'Ext.mixin.ConfigProxy'
     ],
 
+    storeEventListeners: {
+        sort: 'onStoreSort'
+    },
+
     config: {
         /**
          * @cfg {Ext.grid.column.Column[]} columns (required)
@@ -309,12 +313,12 @@ Ext.define('Ext.grid.Grid', {
             items: {
                 sortAsc: {
                     xtype: 'gridsortascmenuitem',
-                    handler: 'column.onSortDirectionToggle',
+                    group: 'sortDir',
                     weight: -100 // Wants to be the first
                 },
                 sortDesc: {
                     xtype: 'gridsortdescmenuitem',
-                    handler: 'column.onSortDirectionToggle',
+                    group: 'sortDir',
                     weight: -90 // Wants to be the second
                 },
                 //---------------------------------
@@ -377,11 +381,22 @@ Ext.define('Ext.grid.Grid', {
 
         /**
          * @cfg {Boolean} [multiColumnSort=false]
-         * Configure as `true` to have columns remember their sorted state after other columns have been clicked upon to sort.
+         * Configure as `true` to have columns retain their sorted state after other
+         * columns have been clicked upon to sort.
          *
          * As subsequent columns are clicked upon, they become the new primary sort key.
          *
-         * The maximum number of sorters allowed in a Store is configurable via its underlying data collection. See {@link Ext.util.Collection#multiSortLimit}
+         * Clicking on an already sorted column which is *not* the primary sort key does not
+         * toggle its direction. Analogous to bringing a window to the top by clicking it,
+         * this makes that column's field the primary sort key. Subsequent clicks then toggle it.
+         *
+         * Clicking on a primary key column toggles `ASC` -> `DESC` -> no sorter.
+         *
+         * The column sorting menu items may be used to toggle the direction without
+         * affacting the sorter priority.
+         *
+         * The maximum number of sorters allowed in a Store is configurable via its
+         * underlying data collection. See {@link Ext.util.Collection#multiSortLimit}
          */
         multiColumnSort: false,
 
@@ -457,7 +472,7 @@ Ext.define('Ext.grid.Grid', {
 
     /**
      * @cfg {Boolean} striped
-     * @inherit
+     * @inheritdoc
      */
     striped: true,
 
@@ -630,9 +645,8 @@ Ext.define('Ext.grid.Grid', {
     },
 
     doDestroy: function() {
-        var me = this;
-        Ext.destroy(me.columnsMenu, me.columnsMenuItem, me.rowNumbererColumn);
-        me.callParent();
+        this.destroyMembers('columnsMenu', 'columnsMenuItem', 'rowNumbererColumn');
+        this.callParent();
     },
 
     getColumnForField: function (fieldName) {
@@ -727,14 +741,6 @@ Ext.define('Ext.grid.Grid', {
         return value || null;
     },
 
-    refresh: function() {
-        this.callParent();
-
-        if (this.rendered) {
-            this.getHeaderContainer().setSortState();
-        }
-    },
-
     removeColumn: function(column) {
         return this.getHeaderContainer().remove(column);
     },
@@ -794,11 +800,7 @@ Ext.define('Ext.grid.Grid', {
                 }
             }
 
-            me.onColumnChange();
-
-            if (!me.isConfiguring) {
-                me.fireEvent('columnadd', me, column, columnIndex);
-            }
+            me.onColumnChange('columnadd', [me, column, columnIndex]);
         }
     },
 
@@ -818,30 +820,40 @@ Ext.define('Ext.grid.Grid', {
                 }
             }
 
-            me.onColumnChange();
-
-            me.fireEvent('columnhide', me, column);
+            me.onColumnChange('columnhide', [me, column]);
         }
     },
 
-    onColumnMove: function (container, column, group, fromIdx, toIdx) {
+    onColumnMove: function (container, columns, group, fromIdx) {
         var me = this,
-            items, ln, i, row;
+            before = null,
+            colLen = columns.length,
+            items, ln, i, j, row, column,
+            index, leaves;
 
         if (me.initialized && !me.destroying) {
             items = me.items.items;
             ln = items.length;
 
-            for (i = 0; i < ln; i++) {
-                row = items[i];
-                if (row.isGridRow) {
-                    row.moveColumn(column, fromIdx, toIdx);
+            // Find the item that will be after the last leaf we're going to insert
+            // Don't bother checking the array bounds, if it goes out of bounds then
+            // null is the right answer
+            leaves = me.getHeaderContainer().getLeaves();
+            index = leaves.indexOf(columns[colLen - 1]);
+            before = leaves[index + 1] || null;
+
+            for (i = colLen - 1; i >= 0; --i) {
+                column = columns[i];
+                for (j = 0; j < ln; j++) {
+                    row = items[j];
+                    if (row.isGridRow) {
+                        row.insertColumnBefore(column, before);
+                    }
                 }
+                me.onColumnChange('columnmove', [me, column, fromIdx + i, leaves.indexOf(column)]);
+
+                before = column;
             }
-
-            me.onColumnChange();
-
-            me.fireEvent('columnmove', me, column, fromIdx, toIdx);
         }
     },
 
@@ -864,9 +876,7 @@ Ext.define('Ext.grid.Grid', {
                 }
             }
 
-            me.onColumnChange();
-
-            me.fireEvent('columnremove', me, column);
+            me.onColumnChange('columnremove', [me, column]);
         }
     },
 
@@ -895,9 +905,18 @@ Ext.define('Ext.grid.Grid', {
                 }
             }
 
-            me.onColumnChange();
+            me.onColumnChange('columnshow', [me, column]);
+        }
+    },
 
-            me.fireEvent('columnshow', me, column);
+    onRender: function() {
+        var hideHeaders = this._hideHeaders;
+
+        this.callParent();
+
+        // hideHeaders requires measure, so must be done on render
+        if (hideHeaders) {
+            this.updateHideHeaders(hideHeaders);
         }
     },
 
@@ -905,6 +924,21 @@ Ext.define('Ext.grid.Grid', {
         dataItemMap: {
             header: 1,
             footer: 1
+        },
+
+        handleStoreSort: function() {
+            if (this.rendered) {
+                this.getHeaderContainer().setSortState();
+            }
+        },
+
+        onStoreGroupChange: function(store, grouper) {
+            this.callParent([store, grouper]);
+            this.handleStoreSort();
+        },
+
+        onStoreSort: function() {
+            this.handleStoreSort();
         },
 
         registerColumn: function(column) {
@@ -1011,19 +1045,6 @@ Ext.define('Ext.grid.Grid', {
             return this.getLastVisibleColumn() === column;
         },
 
-        calculateTotalColumnWidth: function() {
-            var columns = this.getColumns(),
-                ln = columns && columns.length,
-                result = 0,
-                i;
-
-            for (i = 0; i < ln; i++) {
-                result += columns[i].getComputedWidth();
-            }
-
-            return result;
-        },
-
         createDataItem: function (cfg) {
             var item = this.callParent([ cfg ]);
 
@@ -1035,12 +1056,33 @@ Ext.define('Ext.grid.Grid', {
         // -----------------------
         // Event handlers
 
-        onColumnChange: function() {
-            this.clearItemCaches();
+        onColumnChange: function(changeEvent, eventArgs) {
+            var me = this;
+
+            // Total width will change upon add/remove/hide/show
+            // So keep innerCt size synced
+            if (changeEvent !== 'columnmove' && changeEvent !== 'columnadd' && changeEvent !== 'columnremove') {
+                me.refreshInnerWidth();
+            }
+
+            if (!me.isConfiguring) {
+                me.fireEventArgs(changeEvent, eventArgs);
+            }
+
+            me.clearItemCaches();
             // TODO: This may cause a change in row heights, currently should
             // be handled by using variableHeights, but the grid could re-measure as
             // needed
             //this.refreshScrollerSize();
+        },
+
+        refreshInnerWidth: function () {
+            var headerCtBody = this.getHeaderContainer().bodyElement.dom,
+                scrollWidth;
+
+            // Set the item containing element to the correct width.
+            scrollWidth = headerCtBody.scrollWidth;
+            this.setInnerWidth(scrollWidth > headerCtBody.clientWidth ? scrollWidth : null);
         },
 
         onColumnComputedWidthChange: function (changedColumns, totalColumnWidth) {
@@ -1139,6 +1181,8 @@ Ext.define('Ext.grid.Grid', {
                 me.rowHeight = null;
 
                 if (header) {
+                    header.beginColumnUpdate();
+
                     if (header.getItems().getCount()) {
                         // Preserve persistent columns
                         if (persist) {
@@ -1172,6 +1216,8 @@ Ext.define('Ext.grid.Grid', {
                         // needed
                         //me.refreshScrollerSize();
                     }
+
+                    header.endColumnUpdate();
                 }
             }
         },
@@ -1207,7 +1253,7 @@ Ext.define('Ext.grid.Grid', {
         // columnsMenuItem
 
         applyColumnsMenuItem: function (config, existing) {
-            return Ext.Factory.widget.update(existing, config, this, 'createColumnsMenuItem');
+            return Ext.updateWidget(existing, config, this, 'createColumnsMenuItem');
         },
 
         createColumnsMenuItem: function (config) {
@@ -1219,7 +1265,7 @@ Ext.define('Ext.grid.Grid', {
         // headerContainer
 
         applyHeaderContainer: function (config, existing) {
-            return Ext.Factory.widget.update(existing, config, this, 'createHeaderContainer');
+            return Ext.updateWidget(existing, config, this, 'createHeaderContainer');
             //
             // if (headerContainer && !headerContainer.isComponent) {
             //     headerContainer = Ext.factory(Ext.apply({
@@ -1257,22 +1303,20 @@ Ext.define('Ext.grid.Grid', {
         // hideHeaders
 
         updateHideHeaders: function(hideHeaders) {
-            var me = this,
-                headerContainer = me.getHeaderContainer(),
-                oldCtHeight = me.oldCtHeight || null;
+            if (this.isRendered) {
+                var headerContainer = this.getHeaderContainer();
 
-            // Don't touch the height if we don't need to
-            if (!hideHeaders && headerContainer.getHeight() !== 0) {
-                return;
+                // To hide the headers, just pull the following element upwards to cover it
+                if (hideHeaders) {
+                    headerContainer.el.setStyle({
+                        marginBottom: '-' + headerContainer.el.measure('h') + 'px'
+                    });
+                } else {
+                    headerContainer.el.setStyle({
+                        marginBottom: ''
+                    });
+                }
             }
-
-            // We rely on the headers to provide sizing, so we can't just hide
-            // the headerCt. Try and capture the old height if we had one.
-            if (hideHeaders) {
-                me.oldCtHeight = headerContainer.getHeight();
-            }
-
-            headerContainer.setHeight(hideHeaders ? 0 : oldCtHeight);
         },
 
         // title
@@ -1296,7 +1340,7 @@ Ext.define('Ext.grid.Grid', {
         // titleBar
 
         applyTitleBar: function (config, existing) {
-            return Ext.Factory.widget.update(existing, config);
+            return Ext.updateWidget(existing, config);
         },
 
         updateTitleBar: function (titleBar) {
@@ -1324,5 +1368,8 @@ Ext.define('Ext.grid.Grid', {
 
             headerContainer.setVerticalOverflow(verticalScrollbarWidth > 0 && value);
         }
-    }
+    } // privates
+},
+function (Grid) {
+    Grid.prototype.indexModifiedFields = Ext.Array.toMap;
 });

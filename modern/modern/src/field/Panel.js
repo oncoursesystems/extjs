@@ -160,6 +160,7 @@ Ext.define('Ext.field.Panel', {
     // classCls: Ext.baseCSSPrefix + 'formpanel',
 
     /**
+     * @cfg scrollable
      * @inheritdoc
      */
     scrollable: true,
@@ -350,9 +351,6 @@ Ext.define('Ext.field.Panel', {
      * @param {Ext.form.Panel} options.failure.result
      * The failed response or result object returned by the server which performed the
      * operation.
-     *
-     * @param {Object} options.success.data
-     * The parsed data returned by the server.
      *
      * @param {Object} options.scope
      * The scope in which to call the callback functions (The `this` reference for the

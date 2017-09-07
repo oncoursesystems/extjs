@@ -4,22 +4,16 @@ Ext.define('KitchenSink.view.forms.ForumSearchController', {
 
     doSearch: function (field) {
         var list = this.lookup('list'),
-            wrapper = this.lookup('wrapper'),
             store = list.getStore(),
             proxy = store.getProxy(),
             value = field.getValue();
 
         proxy.setExtraParam('query', value);
+        this.getViewModel().set('query', value);
 
         if (value) {
-            wrapper.setFlex(1);
-            list.setFlex(1);
-
             store.load();
         } else {
-            wrapper.setFlex(null);
-            list.setFlex(null);
-
             store.removeAll();
         }
     }

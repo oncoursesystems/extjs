@@ -62,9 +62,9 @@ Ext.define('KitchenSink.view.pivot.RangeEditor', {
         xtype: 'pivotgrid',
         shadow: '${shadow}',
         reference: 'pivotgrid',
-        plugins: [{
-            type: 'pivotrangeeditor'
-        }],
+        plugins: {
+            pivotrangeeditor: true
+        },
         matrix: {
             type: 'local',
             store: {

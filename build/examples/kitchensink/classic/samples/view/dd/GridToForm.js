@@ -43,11 +43,12 @@ Ext.define('KitchenSink.view.dd.GridToForm', {
         margin: '0 5 0 0',
 
         viewConfig: {
-            plugins: [{
-                ddGroup: 'grid-to-form',
-                ptype: 'gridviewdragdrop',
-                enableDrop: false
-            }]
+            plugins: {
+                gridviewdragdrop: {
+                    ddGroup: 'grid-to-form',
+                    enableDrop: false
+                }
+            }
         },
 
         tools: [{

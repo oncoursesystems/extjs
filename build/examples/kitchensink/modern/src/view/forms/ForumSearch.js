@@ -25,64 +25,86 @@ Ext.define('KitchenSink.view.forms.ForumSearch', {
 
     profiles: {
         defaults: {
-            bodyPadding: 20,
+            spacing: 20,
             height: 400,
             shadow: true,
             width: 600
         },
         ios: {
-            bodyPadding: undefined,
+            spacing: undefined,
             shadow: false
         },
         phone: {
             defaults: {
-                bodyPadding: undefined,
+                spacing: undefined,
                 height: undefined,
                 shadow: false,
                 width: undefined
             },
             material: {
-                bodyPadding: 20,
+                spacing: 20,
                 shadow: true
             }
         }
     },
     //</example>
 
-    bodyPadding: '${bodyPadding}',
     cls: 'form-forumsearch',
     height: '${height}',
     width: '${width}',
+    scrollable: false,
+    viewModel: {
+        data: {
+            query: null
+        }
+    },
+    layout: {
+        type: 'hbox',
+        align: 'start'
+    },
 
-    items: [{
-        reference: 'wrapper',
-        autoSize: true,
-        shadow: '${shadow}',
-        layout: {
-            type: 'fit'
-        },
-        items: [{
-            xtype: 'searchfield',
-            docked: 'top',
-            ui: 'solo',
-            placeholder: 'Search the Sencha Forums',
-            listeners: {
-                buffer: 500,
-                change: 'doSearch'
-            }
-        }, {
-            xtype: 'list',
-            reference: 'list',
-            emptyText: 'No matching posts found.',
-            plugins: 'pullrefresh',
-            store: {
-                type: 'form-forum-posts',
-                pageSize: 10
+    items: [
+        {
+            reference: 'wrapper',
+            margin: '${spacing}',
+            autoSize: true,
+            flex: 1,
+            layout: 'vbox',
+            shadow: '${shadow}',
+            bind: {
+                alignSelf: '{query ? "stretch" : "start"}'
             },
-            itemTpl : '<a class="search-item" href="http://www.sencha.com/forum/showthread.php?t={topicId}&p={id}">' +
-                        '<h3><span>{[Ext.Date.format(values.lastPost, "M j, Y")]}<br />by {author}</span>{title}</h3>' +
-                        '{excerpt}' +
-                    '</a>'
+            items: [{
+                xtype: 'searchfield',
+                ui: 'solo',
+                placeholder: 'Search the Sencha Forums',
+                listeners: {
+                    buffer: 500,
+                    change: 'doSearch'
+                }
+            }, {
+                xtype: 'list',
+                reference: 'list',
+                emptyText: 'No matching posts found.',
+                flex: 1,
+                hidden: true,
+                bind: {
+                    hidden: '{!query}'
+                },
+                plugins: {
+                    pullrefresh: true
+                },
+                store: {
+                    type: 'form-forum-posts',
+                    pageSize: 10
+                },
+                itemTpl: '<a class="search-item" ' +
+                        'href="http://www.sencha.com/forum/showthread.php?t={topicId}&p={id}">' +
+                    '<h3><span>{[Ext.Date.format(values.lastPost, "M j, Y")]}' + 
+                        '<br>by {author}</span>{title}' +
+                    '</h3>' +
+                    '{excerpt}' +
+                '</a>'
+            }]
         }]
-    }]
 });

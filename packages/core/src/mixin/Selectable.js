@@ -99,6 +99,10 @@ Ext.define('Ext.mixin.Selectable', {
             selection: 1
         },
 
+        /**
+         * @cfg
+         * @inheritdoc Ext.mixin.Bindable#cfg-publishes
+         */
         publishes: {
             selection: 1
         }
@@ -590,7 +594,7 @@ Ext.define('Ext.mixin.Selectable', {
      * @member Ext.mixin.Selectable
      * @method getLastSelected
      * @return {Array} The previous selection.
-     * @deprecated 2.0.0
+     * @deprecated 2.0.0 This method is deprecated.
      */
 
     /**
@@ -605,7 +609,7 @@ Ext.define('Ext.mixin.Selectable', {
      * This was an internal function accidentally exposed in 1.x and now deprecated. Calling it has no effect
      * @member Ext.mixin.Selectable
      * @method setLastFocused
-     * @deprecated 2.0.0
+     * @deprecated 2.0.0 This method is deprecated.
      */
 
     /**

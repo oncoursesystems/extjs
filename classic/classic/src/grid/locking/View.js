@@ -275,7 +275,7 @@ Ext.define('Ext.grid.locking.View', {
      * @param {Ext.data.Store} store The store to bind to this view
      * @since 3.4.0
      */
-    onBindStore : function(store, initial, propName) {
+    onBindStore : function(store) {
         var me = this,
             lockedView = me.lockedView,
             normalView = me.normalView;
@@ -360,6 +360,7 @@ Ext.define('Ext.grid.locking.View', {
     /**
      * Toggles ARIA actionable mode on/off
      * @param {Boolean} enabled
+     * @param {Ext.grid.CellContext} position
      * @return {Boolean} Returns `false` if the request failed.
      * @private
      */

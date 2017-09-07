@@ -111,10 +111,19 @@ Ext.define('Ext.chart.navigator.Container', {
         }
     },
 
-    applyNavigator: function (navigator) {
-        navigator.navigatorContainer = navigator.parent = this;
+    applyNavigator: function (navigator, oldNavigator) {
+        var instance;
 
-        return new Ext.chart.navigator.Navigator(navigator);
+        if (oldNavigator) {
+            oldNavigator.destroy();
+        }
+
+        if (navigator) {
+            navigator.navigatorContainer = navigator.parent = this;
+            instance = new Ext.chart.navigator.Navigator(navigator);
+        }
+
+        return instance;
     },
 
     preview: function () {

@@ -2,6 +2,8 @@
  * This example shows how to create a grid from a store. The grid shows
  * how to use a column renderer and formatter and how to disable the
  * HTML encoding.
+ *
+ * This illustrates multi column sorting.
  */
 Ext.define('KitchenSink.view.grid.core.BasicGrid', {
     extend: 'Ext.grid.Grid',
@@ -23,10 +25,6 @@ Ext.define('KitchenSink.view.grid.core.BasicGrid', {
 
     profiles: {
         defaults: {
-            priceWidth: 75,
-            changeColumnWidth: 90,
-            percentChangeColumnWidth: 100,
-            lastUpdatedColumnWidth: 125,
             green: '#73b51e',
             red: '#cf4c35',
             height: 400,
@@ -44,15 +42,13 @@ Ext.define('KitchenSink.view.grid.core.BasicGrid', {
     height: '${height}',
     store: 'Companies',
     width: '${width}',
-
-    signTpl: '<span style="' +
-            'color:{value:sign("${red}", "${green}")}"' +
-        '>{text}</span>',
+    multiColumnSort: true,
 
     columns: [{
         text: 'Company',
         flex: 1,
         dataIndex: 'name',
+        minWidth: 100,
         menu: {
             customFirst: {
                 text: 'Custom First',
@@ -107,5 +103,9 @@ Ext.define('KitchenSink.view.grid.core.BasicGrid', {
                 }
             }
         }
-    }]
+    }],
+
+    signTpl: '<span style="' +
+            'color:{value:sign("${red}", "${green}")}"' +
+        '>{text}</span>'
 });

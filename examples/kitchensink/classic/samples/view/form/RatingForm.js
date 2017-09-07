@@ -88,7 +88,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
                     xtype: 'rating',
                     selectedStyle: 'color: rgb(96, 169, 23);',
                     overStyle: 'color: rgb(23, 23, 189);',
-                    tooltip: [
+                    tip: [
                         '<div style="white-space: nowrap;"><b>',
                             'Current: {[this.rank[values.value]]}',
                         '</b>',

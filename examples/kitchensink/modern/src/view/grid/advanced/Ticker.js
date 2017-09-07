@@ -33,6 +33,7 @@ Ext.define('KitchenSink.view.grid.advanced.Ticker', {
 
     profiles: {
         defaults: {
+            tickDelay: 200,
             height: 400,
             hideColumn: undefined,
             trendWidth: 200,
@@ -66,6 +67,7 @@ Ext.define('KitchenSink.view.grid.advanced.Ticker', {
         },
         phone: {
             defaults: {
+                tickDelay: '1000',
                 height: undefined,
                 hideColumn: true,
                 trendWidth: 150,
@@ -99,7 +101,7 @@ Ext.define('KitchenSink.view.grid.advanced.Ticker', {
 
     viewModel: {
         data: {
-            tickDelay: 200,
+            tickDelay: '${tickDelay}',
             flashBackground: false
         },
         // This is important, since we want our scheduler to

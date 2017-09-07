@@ -80,6 +80,30 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
             });
         });
 
+        describe('Checking required field value', function() {
+            it('should be valid when it has a value selected', function() {
+                createField({
+                    required: false,
+                    renderTo: document.body,
+                    autoSelect: false,
+                    options: [
+                        { text: 'One', value: 1 },
+                        { text: 'Two', value: 2 },
+                        { text: 'Three', value: 3 }
+                    ]
+                });
+                expect(field.isValid()).toBe(true);
+
+                field.setRequired(true);
+
+                expect(field.isValid()).toBe(false);
+
+                field.setValue(1);
+
+                expect(field.isValid()).toBe(true);
+            });
+        });
+
         describe("options", function() {
             beforeEach(function() {
                 createField({

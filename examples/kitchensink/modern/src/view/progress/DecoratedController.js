@@ -7,9 +7,9 @@ Ext.define('KitchenSink.view.progress.DecoratedController', {
             view = me.getView(),
             vm = this.getViewModel();
 
-        me._interval = setInterval(function() {
+        me._interval = Ext.interval(function() {
             if (view.isDestroyed) {
-                clearInterval(me._interval);
+                Ext.uninterval(me._interval);
             } else {
                 var progress = vm.get('progress');
 
@@ -25,9 +25,7 @@ Ext.define('KitchenSink.view.progress.DecoratedController', {
     },
 
     destroy: function () {
-        clearInterval(this._interval);
-
-        this._interval = null;
+        this._interval = Ext.uninterval(this._interval);
 
         this.callParent();
     }

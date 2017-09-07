@@ -35,10 +35,11 @@
  * For example:
  *
  *     Ext.create('Ext.chart.CartesianChart', {
- *         plugins: [{
- *             ptype: 'chartitemevents',
- *             moveEvents: true
- *         }],
+ *         plugins: {
+ *             chartitemevents: {
+ *                 moveEvents: true
+ *             }
+ *         },
  *         store: {
  *             fields: ['pet', 'households', 'total'],
  *             data: [
@@ -89,6 +90,7 @@ Ext.define('Ext.chart.AbstractChart', {
         'Ext.chart.series.Series',
         'Ext.chart.interactions.Abstract',
         'Ext.chart.axis.Axis',
+        'Ext.chart.Util',
         'Ext.data.StoreManager',
         'Ext.chart.legend.Legend',
         'Ext.chart.legend.SpriteLegend',
@@ -116,7 +118,7 @@ Ext.define('Ext.chart.AbstractChart', {
 
     /**
      * @event redraw
-     * Fires after each {@link #redraw} call.
+     * Fires after each {@link #event!redraw} call.
      * @param {Ext.chart.AbstractChart} this
      */
 
@@ -645,75 +647,70 @@ Ext.define('Ext.chart.AbstractChart', {
         me.resumeChartLayout();
     },
 
-    applyAnimation: function (newAnimation, oldAnimation) {
-        if (!newAnimation) {
-            newAnimation = {
-                duration: 0
-            };
-        } else if (newAnimation === true) {
-            newAnimation = {
-                easing: 'easeInOut',
-                duration: 500
-            };
+    applyAnimation: function (animation, oldAnimation) {
+        return Ext.chart.Util.applyAnimation(animation, oldAnimation);
+    },
+
+    updateAnimation: function () {
+        if (this.isConfiguring) {
+            return;
         }
-        return oldAnimation ? Ext.apply({}, newAnimation, oldAnimation) : newAnimation;
+        var seriesList = this.getSeries(),
+            ln = seriesList.length,
+            i, series;
+
+        this.isSettingSeriesAnimation = true;
+        for (i = 0; i < ln; i++) {
+            series = seriesList[i];
+            // Don't update the series animation config, if it was set by
+            // a user, unless 'suspendAnimation' was called.
+            if (!series.isUserAnimation || this.animationSuspendCount) {
+                series.setAnimation(series.getAnimation());
+            }
+        }
+        this.isSettingSeriesAnimation = false;
     },
 
     getAnimation: function () {
+        var result;
+
         if (this.animationSuspendCount) {
-            return {
+            result = {
                 duration: 0
             };
         } else {
-            return this.callParent();
+            result = this.callParent();
         }
-    },
 
-    applyInsetPadding: function (padding, oldPadding) {
-        if (!Ext.isObject(padding)) {
-            return Ext.util.Format.parseBox(padding);
-        } else if (!oldPadding) {
-            return padding;
-        } else {
-            return Ext.apply(oldPadding, padding);
-        }
+        return result;
     },
 
     suspendAnimation: function () {
-        var me = this,
-            seriesList = me.getSeries(),
-            n = seriesList.length,
-            i = -1,
-            series;
-
-        me.animationSuspendCount++;
-        if (me.animationSuspendCount === 1) {
-            while (++i < n) {
-                // Update animation config to not animate.
-                series = seriesList[i];
-                series.setAnimation(series.getAnimation());
-            }
+        this.animationSuspendCount++;
+        if (this.animationSuspendCount === 1) {
+            this.updateAnimation();
         }
     },
 
     resumeAnimation: function () {
-        var me = this,
-            seriesList = me.getSeries(),
-            n = seriesList.length,
-            i = -1,
-            series, animation;
-
-        me.animationSuspendCount--;
-        if (me.animationSuspendCount === 0) {
-            while (++i < n) {
-                // Update animation config to animate.
-                series = seriesList[i];
-                animation = series.getAnimation();
-                // Series may not have had their own animation to begin with,
-                // so fall back to chart's animation in that case.
-                series.setAnimation(animation.duration && animation || me.getAnimation());
-            }
+        this.animationSuspendCount--;
+        if (this.animationSuspendCount === 0) {
+            this.updateAnimation();
         }
+    },
+
+    applyInsetPadding: function (padding, oldPadding) {
+        var result;
+
+        if (!Ext.isObject(padding)) {
+            result = Ext.util.Format.parseBox(padding);
+        } else if (!oldPadding) {
+            result = padding;
+        } else {
+            result = Ext.apply(oldPadding, padding);
+        }
+
+        return result;
     },
 
     /**
@@ -1766,7 +1763,7 @@ Ext.define('Ext.chart.AbstractChart', {
 
     /**
      * @private
-     * Lays out chart components and triggers a {@link #redraw}.
+     * Lays out chart components and triggers a {@link #event!redraw}.
      * Note: the actual layout is performed in a subclass.
      * A subclass should not perform a layout, if this parent method
      * returns `false`.
@@ -1775,7 +1772,7 @@ Ext.define('Ext.chart.AbstractChart', {
     performLayout: function () {
         if (this.destroying || this.destroyed) {
             //<debug>
-            Ext.raise('Attempting to lay out a dead chart: ' + me.getId());
+            Ext.raise('Attempting to lay out a dead chart: ' + this.getId());
             //</debug>
             return false; // Cancel subclass layout.
         }
@@ -1921,27 +1918,25 @@ Ext.define('Ext.chart.AbstractChart', {
     getItemForPoint: function (x, y) {
         var me = this,
             seriesList = me.getSeries(),
-            mainRect = me.getMainRect(),
+            rect = me.getMainRect(),
             ln = seriesList.length,
-            // If we haven't drawn yet, don't attempt to find any items.
-            i = me.hasFirstLayout ? ln - 1 : -1,
-            series, item;
+            item = null,
+            i;
 
         // The x,y here are already converted to the 'main' surface coordinates.
         // Series surface rect matches the main surface rect.
-        if (!(mainRect && x >= 0 && x <= mainRect[2] && y >= 0 && y <= mainRect[3])) {
+        if (!(me.hasFirstLayout && rect && x >= 0 && x <= rect[2] && y >= 0 && y <= rect[3])) {
             return null;
         }
         // Iterate from the end so that the series that are drawn later get hit tested first.
-        for (; i >= 0; i--) {
-            series = seriesList[i];
-            item = series.getItemForPoint(x, y);
+        for (i = ln - 1; i >= 0; i--) {
+            item = seriesList[i].getItemForPoint(x, y);
             if (item) {
-                return item;
+                break;
             }
         }
 
-        return null;
+        return item;
     },
 
     /**
@@ -2031,6 +2026,14 @@ Ext.define('Ext.chart.AbstractChart', {
         if (isNeedUpdateColors && recordCount > me.recordCount) {
             me.updateColors(me.getColors());
             me.recordCount = recordCount;
+        }
+
+        // 'refreshLegendStore' will attemp to grab the 'series',
+        // which are still configuring at this point.
+        // The legend store will be refreshed inside the chart.series
+        // updater anyway.
+        if (!me.isConfiguring) {
+            me.refreshLegendStore();
         }
     },
 

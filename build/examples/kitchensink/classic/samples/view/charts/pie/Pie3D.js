@@ -68,7 +68,7 @@ Ext.define('KitchenSink.view.charts.pie.Pie3D', {
             type: 'device-market-share'
         },
         theme: 'Muted',
-        interactions: ['itemhighlight', 'rotatePie3d'],
+        interactions: ['itemhighlight', 'rotate'],
         legend: {
             type: 'sprite',
             docked: 'bottom'

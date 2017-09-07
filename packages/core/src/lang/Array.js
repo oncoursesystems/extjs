@@ -330,7 +330,7 @@ Ext.Array = (function() {
          *
          * {@link Ext#each Ext.each} is alias for {@link Ext.Array#each Ext.Array.each}
          *
-         * @param {Array/NodeList/Object} iterable The value to be iterated. If this
+         * @param {Array/NodeList/Object} array The value to be iterated. If this
          * argument is not iterable, the callback function is called once.
          * @param {Function} fn The callback function. If it returns `false`, the iteration
          * stops and this method returns the current `index`. Returning `undefined` (i.e 
@@ -1277,27 +1277,33 @@ Ext.Array = (function() {
          *
          *      // map = { A: 1, B: 2, C: 3 };
          * 
-         * @param {Array} array The Array to create the map from.
+         * @param {String/String[]} strings The strings from which to create the map.
          * @param {String/Function} [getKey] Name of the object property to use
          * as a key or a function to extract the key.
          * @param {Object} [scope] Value of `this` inside callback specified for `getKey`.
          * @return {Object} The resulting map.
          */
-        toMap: function(array, getKey, scope) {
-            var map = {},
-                i = array.length;
+        toMap: function (strings, getKey, scope) {
+            if (!strings) {
+                return null;
+            }
 
-            if (!getKey) {
+            var map = {},
+                i = strings.length;
+
+            if (typeof strings === 'string') {
+                map[strings] = 1;
+            } else if (!getKey) {
                 while (i--) {
-                    map[array[i]] = i+1;
+                    map[strings[i]] = i+1;
                 }
             } else if (typeof getKey === 'string') {
                 while (i--) {
-                    map[array[i][getKey]] = i+1;
+                    map[strings[i][getKey]] = i+1;
                 }
             } else {
                 while (i--) {
-                    map[getKey.call(scope, array[i])] = i+1;
+                    map[getKey.call(scope, strings[i])] = i+1;
                 }
             }
 
@@ -1474,22 +1480,23 @@ Ext.Array = (function() {
          * be an Array, in which case all the elements of that Array will be pushed into the end of the
          * destination Array.
          * @return {Array} An array containing all the new items push onto the end.
-         *
          */
         push: function(target) {
-            var len = arguments.length,
-                i = 1,
-                newItem;
+            var args = arguments,
+                len = args.length,
+                i, newItem;
 
             if (target === undefined) {
                 target = [];
             } else if (!Ext.isArray(target)) {
                 target = [target];
             }
-            for (; i < len; i++) {
-                newItem = arguments[i];
+
+            for (i = 1; i < len; i++) {
+                newItem = args[i];
                 Array.prototype.push[Ext.isIterable(newItem) ? 'apply' : 'call'](target, newItem);
             }
+
             return target;
         },
         

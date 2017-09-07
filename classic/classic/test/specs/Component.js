@@ -6337,6 +6337,22 @@ function() {
                 ct.destroy();
             });
         });
+
+        describe("floating", function() {
+            it("should not destroy a previous align target", function() {
+                var el = Ext.getBody().createChild();
+                makeComponent({
+                    floating: true,
+                    width: 100,
+                    height: 100
+                });
+                c.show();
+                c.alignTo(el);
+                c.destroy();
+                expect(el.dom.parentNode).toBe(Ext.getBody().dom);
+                el.destroy();
+            });
+        });
     });
 
     describe("afterRender", function() {
@@ -7155,7 +7171,7 @@ function() {
             });
 
             // This is still due
-            waitsForSpy(endSpy)
+            waitsForSpy(endSpy);
         });
 
         it("should call onScrollMove during scrolling", function() {
@@ -7191,7 +7207,7 @@ function() {
             });
 
             waitsFor(function() {
-                return endSpy.callCount === 1;
+                return endSpy.callCount === 2;
             }, 'endSpy to fire', 1000);
 
             runs(function() {
@@ -8999,7 +9015,7 @@ function() {
 
                 jasmine.fireMouseEvent(foo.childEl, 'mousedown');
 
-                expect(result).toEqual(['pdc', 'cdc', 'cd', 'pd', 'pc', 'cc', 'c', 'p'])
+                expect(result).toEqual(['pdc', 'cdc', 'cd', 'pd', 'pc', 'cc', 'c', 'p']);
                 
                 // Finish off active gestures
                 jasmine.fireMouseEvent(foo.childEl, 'mouseup');

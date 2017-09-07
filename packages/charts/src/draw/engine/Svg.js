@@ -11,6 +11,7 @@ Ext.define('Ext.draw.engine.Svg', {
 
     config: {
         /**
+         * @cfg {Boolean} highPrecision
          * Nothing needs to be done in high precision mode.
          */
         highPrecision: false

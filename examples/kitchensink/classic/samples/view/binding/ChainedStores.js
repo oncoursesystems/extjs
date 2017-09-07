@@ -74,12 +74,13 @@ Ext.define('KitchenSink.view.binding.ChainedStores', {
                 handler: 'onRemoveClick'
             }
         }],
-        plugins: [{
-            ptype: 'rowediting',
-            listeners: {
-                edit: 'onEditComplete'
+        plugins: {
+            rowediting: {
+                listeners: {
+                    edit: 'onEditComplete'
+                }
             }
-        }]
+        }
     }, {
         xtype: 'grid',
         bind: {

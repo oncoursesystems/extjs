@@ -1115,6 +1115,16 @@ function() {
                         expect(childNodes.length).toBe(1);
                     });
                 });
+
+                it("should be rendered after calling view refreshNode", function() {
+                    makeGrid(null, 1, {
+                        height: 200
+                    });
+
+                    grid.getView().refreshNode(0);
+
+                    expect(Ext.fly(grid.getView().getRow(0)).down('.x-btn')).not.toBeNull();
+                });
             });
 
             describe("item removal", function() {

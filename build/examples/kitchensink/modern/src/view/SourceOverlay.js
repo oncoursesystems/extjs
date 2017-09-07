@@ -72,6 +72,9 @@ Ext.define('KitchenSink.view.SourceOverlay', {
                         pack: 'left'
                     }
                 }
+            },
+            layout: {
+                overflow: 'scroller'
             }
         }
     }],

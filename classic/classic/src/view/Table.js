@@ -639,7 +639,6 @@ Ext.define('Ext.view.Table', {
       * @param {HTMLElement} nextRow Table row that is going to be focused and activated.
       * @param {Boolean} forward `true` if we're navigating forward (Tab), `false` if
       * navigating backward (Shift-Tab).
-      * @cancelable
       */
 
     constructor: function(config) {
@@ -1569,6 +1568,7 @@ Ext.define('Ext.view.Table', {
      * returns the HTML markup for a single row.
      *
      * @param {Ext.data.Model} record The record to render.
+     * @param {Number} rowIdx The index of the row
      * @param {String[]} [out] A string array onto which to append the resulting HTML string. If omitted,
      * the resulting HTML string is returned.
      * @return {String} **only when the out parameter is omitted** The resulting HTML string.
@@ -1649,6 +1649,7 @@ Ext.define('Ext.view.Table', {
      * Emits the HTML representing a single grid cell into the passed output stream (which is an array of strings).
      *
      * @param {Ext.grid.column.Column} column The column definition for which to render a cell.
+     * @param {Ext.data.Model} record The record
      * @param {Number} recordIndex The row index (zero based within the {@link #store}) for which to render the cell.
      * @param {Number} rowIndex The row index (zero based within this view for which to render the cell.
      * @param {Number} columnIndex The column index (zero based) for which to render the cell.
@@ -2113,7 +2114,10 @@ Ext.define('Ext.view.Table', {
                 // situation.
                 // See Ext.view.navigationModel for this being set.
                 if (me.lastFocused === 'scrollbar') {
-                    e.relatedTarget.focus();
+                    if (e.relatedTarget) {
+                        e.relatedTarget.focus();
+                    }
+                    
                     return;
                 }
 
@@ -2299,7 +2303,6 @@ Ext.define('Ext.view.Table', {
 
     // Override the version in Ext.view.View because the focusable elements are the grid cells.
     /**
-     * @override Ext.view.View
      * Focuses a particular row and brings it into view. Will fire the rowfocus event.
      * @param {HTMLElement/String/Number/Ext.data.Model} row An HTMLElement template node, index of a template node, the id of a template node or the
      * @param {Boolean/Number} [delay] Delay the focus this number of milliseconds (true for 10 milliseconds).
@@ -2318,7 +2321,7 @@ Ext.define('Ext.view.Table', {
 
     /**
      * Focuses a particular cell and brings it into view. Will fire the rowfocus event.
-     * @param {Ext.grid.CellContext} pos The cell to select
+     * @param {Ext.grid.CellContext} position The cell to select
      * @param {Boolean/Number} [delay] Delay the focus this number of milliseconds (true for 10 milliseconds).
      */
     focusCell: function(position, delay) {
@@ -2460,7 +2463,10 @@ Ext.define('Ext.view.Table', {
         var scroller = this.getScrollable();
 
         if (scroller) {
-            scroller.scrollIntoView(el, hscroll, animate);
+            scroller.ensureVisible(el, {
+                animation: animate,
+                x: hscroll
+            });
         }
     },
 
@@ -2528,33 +2534,23 @@ Ext.define('Ext.view.Table', {
     },
 
     handleUpdate: function(store, record, operation, changedFieldNames, info, allColumns) {
-        operation = operation || Ext.data.Model.EDIT;
+        
         var me = this,
             recordIndex = me.store.indexOf(record),
             rowTpl = me.rowTpl,
             markDirty = me.markDirty,
             dirtyCls = me.dirtyCls,
-            clearDirty = operation !== Ext.data.Model.EDIT,
             columnsToUpdate = [],
             hasVariableRowHeight = me.variableRowHeight,
             updateTypeFlags = 0,
             ownerCt = me.ownerCt,
             cellFly = me.cellFly || (me.self.prototype.cellFly = new Ext.dom.Fly()),
-            oldItemDom, oldDataRow,
-            newItemDom,
-            newAttrs, attLen, attName, attrIndex,
-            overItemCls,
-            columns,
-            column,
-            len, i,
-            cellUpdateFlag,
-            cell,
-            fieldName,
-            value,
-            defaultRenderer,
-            scope,
-            elData,
-            emptyValue;
+            oldItemDom, oldDataRow, newItemDom, newAttrs, attLen, attName, attrIndex,
+            overItemCls, columns, column, len, i, cellUpdateFlag, cell, fieldName, value,
+            clearDirty, defaultRenderer, scope, elData, emptyValue;
+        
+        operation = operation || Ext.data.Model.EDIT;
+        clearDirty = operation !== Ext.data.Model.EDIT;
 
         if (me.viewReady) {
             // Some features might need to know that we're updating
@@ -2672,7 +2668,7 @@ Ext.define('Ext.view.Table', {
                     // If we have columns which may *need* updating (think locked side of lockable grid with all columns unlocked)
                     // and the changed record is within our view, then update the view.
                     if (columns.length && (oldDataRow = me.getRow(oldItemDom))) {
-                        me.updateColumns(oldDataRow, newItemDom.querySelector(me.rowSelector), columnsToUpdate);
+                        me.updateColumns(oldDataRow, newItemDom.querySelector(me.rowSelector), columnsToUpdate, record);
                     }
 
                     // Loop thru all of rowTpls asking them to sync the content they are responsible for if any.
@@ -2821,7 +2817,7 @@ Ext.define('Ext.view.Table', {
         }
     },
 
-    updateColumns: function(oldRow, newRow, columnsToUpdate) {
+    updateColumns: function(oldRow, newRow, columnsToUpdate, record) {
         var me = this,
             newAttrs, attLen, attName, attrIndex,
             colCount = columnsToUpdate.length,
@@ -2880,6 +2876,10 @@ Ext.define('Ext.view.Table', {
 
             // Carefully replace just the *contents* of the content bearing inner element.
             me.oldCellFly.attach(oldCell.querySelector(me.innerSelector)).syncContent(newCell.querySelector(me.innerSelector));
+
+            if (record && column.onItemAdd) {
+                column.onItemAdd([record]);
+            }
         }
     },
 
@@ -3103,7 +3103,7 @@ Ext.define('Ext.view.Table', {
 
     /**
      * Expands a particular header to fit the max content width.
-     * @deprecated Use {@link #autoSizeColumn} instead.
+     * @deprecated 6.5.0 Use {@link #autoSizeColumn} instead.
      */
     expandToFit: function(header) {
         this.autoSizeColumn(header);
@@ -3210,7 +3210,7 @@ Ext.define('Ext.view.Table', {
     },
 
     /**
-     * @param {Ext.grid.CellContext} position The current navigation position.
+     * @param {Ext.grid.CellContext} pos The current navigation position.
      * @param {String} direction 'up', 'down', 'right' and 'left'
      * @param {Function} [verifierFn] A function to verify the validity of the calculated position.
      * When using this function, you must return true to allow the newPosition to be returned.
@@ -3314,7 +3314,7 @@ Ext.define('Ext.view.Table', {
      * If no row is visible in the specified direction, returns the input row index unchanged.
      * @param {Number} startRow The zero-based row index to start from.
      * @param {Number} distance The distance to move the row by. May be +ve or -ve.
-     * @deprecated 5.5.0
+     * @deprecated 6.5.0 This method is deprecated.
      * @private
      */
     walkRows: function(startRow, distance) {
@@ -3464,7 +3464,7 @@ Ext.define('Ext.view.Table', {
     },
 
     /** 
-     * @private.
+     * @private
      * Respond to store replace event which is fired by GroupStore group expand/collapse operations.
      * This saves a layout because a remove and add operation are coalesced in this operation.
      */
@@ -3617,7 +3617,7 @@ Ext.define('Ext.view.Table', {
                             record && store.contains(record) && !record.isCollapsedPlaceholder ? record : refocusRow, refocusCol
                     );
 
-                    if (actionableMode) {
+                    if (actionableMode && !store.isExpandingOrCollapsing) {
                         me.resumeActionableMode(focusPosition);
                     } else {
                         // Pass "preventNavigation" as true so that that does not cause selection.

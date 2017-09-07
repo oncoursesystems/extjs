@@ -24,7 +24,7 @@
 
 /**
  * @var {color} $listitem-focused-color
- * @inheritdoc Ext.dataview.SimpleListItem#$listitem-focused-color
+ * ListItem text color when focused
  */
 
 /**
@@ -59,7 +59,7 @@
 
 /**
  * @var {color} $listitem-focused-background-color
- * @inheritdoc Ext.dataview.SimpleListItem#$listitem-focused-background-color
+ * ListItem's background color when focused
  */
 
 /**
@@ -99,7 +99,7 @@
 
 /**
  * @var {color} $listitem-focused-border-color
- * @inheritdoc Ext.dataview.SimpleListItem#$listitem-focused-border-color
+ * ListItem border color when focused
  */
 
 /**
@@ -153,6 +153,26 @@
  */
 
 /**
+ * @var {number} $listitem-selected-font-size
+ * @inheritdoc Ext.dataview.SimpleListItem#$listitem-selected-font-size
+ */
+
+/**
+ * @var {number} $listitem-selected-font-size-big
+ * @inheritdoc Ext.dataview.SimpleListItem#$listitem-selected-font-size-big
+ */
+
+/**
+ * @var {number} $listitem-pressed-font-size
+ * @inheritdoc Ext.dataview.SimpleListItem#$listitem-pressed-font-size
+ */
+
+/**
+ * @var {number} $listitem-pressed-font-size-big
+ * @inheritdoc Ext.dataview.SimpleListItem#$listitem-pressed-font-size-big
+ */
+
+/**
  * @var {number} $listitem-line-height
  * @inheritdoc Ext.dataview.SimpleListItem#$listitem-line-height
  */
@@ -177,8 +197,6 @@
  * @inheritdoc Ext.dataview.SimpleListItem#$listitem-padding-big
  */
 
-
 /**
  * @sass-mixin listitem-ui
- * @inheritdoc Ext.dataview.SimpleListItem#listitem-ui
  */

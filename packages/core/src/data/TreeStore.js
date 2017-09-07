@@ -219,6 +219,22 @@ Ext.define('Ext.data.TreeStore', {
 
     implicitModel: 'Ext.data.TreeModel',
 
+    /**
+     * @cfg {String} groupField
+     * @hide
+     */
+    groupField: null,
+    /**
+     * @cfg {String} groupDir
+     * @hide
+     */
+    groupDir: null,
+    /**
+     * @cfg {Object/Ext.util.Grouper} grouper
+     * @hide
+     */
+    grouper: null,
+
     constructor: function(config) {
         var me = this;
 
@@ -314,6 +330,28 @@ Ext.define('Ext.data.TreeStore', {
         }
         me.callParent([fields, oldFields]);
     },
+
+    applyGroupField: function(field) {
+        return null;
+    },
+
+    applyGroupDir: function(dir) {
+        return null;
+    },
+
+    applyGrouper: function(grouper) {
+        //<debug>
+        if(grouper) {
+            Ext.raise('You can\'t group a TreeStore');
+        }
+        //</debug>
+        return null;
+    },
+
+    /**
+     * @hide
+     */
+    group: Ext.emptyFn,
 
     // TreeStore has to do right things upon SorterCollection update
     onSorterEndUpdate: function() {
@@ -1732,6 +1770,11 @@ Ext.define('Ext.data.TreeStore', {
             } 
             // Load a non-root
             else {
+                if (me.loading) {
+                    // set loaded: false so that the eventual response will trigger the UI update
+                    node.data.loaded = false;
+                }
+                
                 if (me.getTrackRemoved() && me.getClearRemovedOnLoad()) {
                     // clear from the removed array any nodes that were descendants of the node being reloaded so that they do not get saved on next sync.
                     me.clearRemoved(node);
@@ -1888,16 +1931,17 @@ Ext.define('Ext.data.TreeStore', {
         };
         if (newNodeCount) {
             me.setupNodes(newNodes);
-        }
-
-        if (me.bulkUpdate === 1) {
-            node.set('loaded', true);
-        } else {
-            node.data.loaded = true;
-        }
-
-        if (newNodes.length) {
             node.appendChild(newNodes, undefined, true);
+        } 
+        // only set loaded if there are no newNodes;
+        // appendChild already handles updating the loaded status, 
+        // and will do it *after* the child nodes have been added
+        else {
+            if (me.bulkUpdate === 1) {
+                node.set('loaded', true);
+            } else {
+                node.data.loaded = true;
+            }
         }
         if (!--me.bulkUpdate) {
             me.resumeEvent('datachanged');

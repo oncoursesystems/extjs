@@ -136,27 +136,16 @@ Ext.define('Ext.chart.series.Cartesian', {
     getSprites: function () {
         var me = this,
             chart = this.getChart(),
-            animation = me.getAnimation() || chart && chart.getAnimation(),
-            itemInstancing = me.getItemInstancing(),
-            sprites = me.sprites,
-            sprite;
+            sprites = me.sprites;
 
         if (!chart) {
-            return [];
+            return Ext.emptyArray;
         }
 
         if (!sprites.length) {
-            sprite = me.createSprite();
-        } else {
-            sprite = sprites[0];
+            me.createSprite();
         }
 
-        if (animation) {
-            if (itemInstancing) {
-                sprite.itemsMarker.getTemplate().setAnimation(animation);
-            }
-            sprite.setAnimation(animation);
-        }
         return sprites;
     },
 

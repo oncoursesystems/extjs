@@ -51,16 +51,9 @@ Ext.define('KitchenSink.view.grid.advanced.BigDataController', {
             'Are you sure you want to verify all ' + count + ' items?',
             function (answer) {
                 if (answer === 'yes') {
-                    // Don't want to grid to update on each change:
-                    store.suspendEvent('update');
-
                     (group || store).each(function (rec) {
                         rec.set('verified', true);
                     });
-
-                    store.resumeEvent('update');
-                    // Now update all the things
-                    view.refresh();
                 }
             });
     },
@@ -71,55 +64,6 @@ Ext.define('KitchenSink.view.grid.advanced.BigDataController', {
 
         rec.set('verified', true);
         Ext.Msg.alert('Verify', 'Verify ' + rec.get('forename') + ' ' + rec.get('surname'));
-    },
-
-    exportTo: function(btn){
-        if (!this.menuExport) {
-            this.menuExport = new Ext.menu.Menu({
-                defaults: {
-                    group: 'top',
-                    handler: 'exportDocument',
-                    scope: this
-                },
-
-                items: [{
-                    text: 'Excel xlsx',
-                    cfg: {
-                        type: 'excel07',
-                        ext: 'xlsx',
-                        includeGroups: true,
-                        includeSummary: true
-                    }
-                }, {
-                    text: 'Excel xml',
-                    cfg: {
-                        type: 'excel03',
-                        ext: 'xml',
-                        includeGroups: true,
-                        includeSummary: true
-                    }
-                }, {
-                    text: 'CSV',
-                    cfg: {
-                        type: 'csv'
-                    }
-                }, {
-                    text: 'TSV',
-                    cfg: {
-                        type: 'tsv',
-                        ext: 'csv'
-                    }
-                }, {
-                    text: 'HTML',
-                    cfg: {
-                        type: 'html',
-                        includeGroups: true,
-                        includeSummary: true
-                    }
-                }]
-            });
-        }
-        this.menuExport.showBy(btn);
     },
 
     exportDocument: function(btn){

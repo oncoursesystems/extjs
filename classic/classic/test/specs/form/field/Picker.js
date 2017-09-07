@@ -421,6 +421,7 @@ function() {
             jasmine.fireMouseEvent(component.picker.el.dom, 'mousedown');
             expect(component.hasFocus).toBe(true);
             expect(Ext.Element.getActiveElement()).toBe(component.inputEl.dom);
+            jasmine.fireMouseEvent(component.picker.el.dom, 'mouseup');
         });
     });
     

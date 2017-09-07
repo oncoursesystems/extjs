@@ -266,9 +266,7 @@ Ext.define('Ext.util.Event', function() {
                 }
                 
                 // Cancel the timer that could have been set if the event has already fired
-                if (listener.fireFn.timerId) {
-                    clearTimeout(listener.fireFn.timerId);
-                }
+                listener.fireFn.timerId = Ext.undefer(listener.fireFn.timerId);
     
                 manager = listener.manager;
 
@@ -526,10 +524,11 @@ Ext.define('Ext.util.Event', function() {
         }
             
         fn = fromWrapped ? listener.fn : fireFn;
+
         //<debug>
         var name = fn;
-
         //</debug>
+
         if (listener.lateBound) {
             // handler is a function name - need to resolve it to a function reference
             if (!scope || namedScope) {
@@ -567,7 +566,7 @@ Ext.define('Ext.util.Event', function() {
         }
 
         // We can only ever be firing one event at a time, so just keep
-        // overwriting tghe object we've got in our closure, otherwise we'll be
+        // overwriting the object we've got in our closure, otherwise we'll be
         // creating a whole bunch of garbage objects
         fireArgs.fn = fn;
         fireArgs.scope = scope;
@@ -615,6 +614,13 @@ Ext.define('Ext.util.Event', function() {
 
     createBuffered: function (handler, listener, o, scope, wrapped) {
         listener.task = new Ext.util.DelayedTask();
+
+        //<debug>
+        if (Ext.Timer.track) {
+            o.$delayedTask = listener.task;  // for unit test access
+        }
+        //</debug>
+
         return function() {
             // If the listener is removed during the event call, the listener stays in the
             // list of listeners to be invoked in the fire method, but the task is deleted
@@ -654,6 +660,13 @@ Ext.define('Ext.util.Event', function() {
                 listener.tasks = [];
             }
             listener.tasks.push(task);
+
+            //<debug>
+            if (Ext.Timer.track) {
+                o.$delayedTask = task;  // for unit test access
+            }
+            //</debug>
+
             task.delay(o.delay || 10, handler, scope, toArray(arguments));
         };
     },

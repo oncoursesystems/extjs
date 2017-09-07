@@ -108,6 +108,51 @@ Test.STATUS_UPDATE_INTERVAL = 100;
     });
 })();
 
+Test.getCookie = function (name) {
+    var parts = document.cookie.split('; '),
+        len = parts.length,
+        item, i, ret;
+
+    // In modern browsers, a cookie with an empty string will be stored:
+    // MyName=
+    // In older versions of IE, it will be stored as:
+    // MyName
+    // So here we iterate over all the parts in an attempt to match the key.
+    for (i = 0; i < len; ++i) {
+        item = parts[i].split('=');
+
+        if (item[0] === name) {
+            ret = item[1];
+            return ret ? unescape(ret) : '';
+        }
+    }
+
+    return null;
+};
+
+Test.removeCookie = function (name, path) {
+    if (Test.getCookie(name)) {
+        path = path || '/';
+        document.cookie = name + '=' + '; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=' + path;
+    }
+};
+
+Test.setCookie = function (name, value) {
+    var argv = arguments,
+        argc = arguments.length,
+        expires = (argc > 2) ? argv[2] : null,
+        path = (argc > 3) ? argv[3] : '/',
+        domain = (argc > 4) ? argv[4] : null,
+        secure = (argc > 5) ? argv[5] : false;
+
+    document.cookie = name + "=" +
+        escape(value) +
+        ((expires === null) ? "" : ("; expires=" + expires.toUTCString())) +
+        ((path === null) ? "" : ("; path=" + path)) +
+        ((domain === null) ? "" : ("; domain=" + domain)) +
+        ((secure === true) ? "; secure" : "");
+};
+
 if (!Function.prototype.bind) {
     Function.prototype.bind = (function() {
         var slice = Array.prototype.slice,
@@ -2489,7 +2534,7 @@ Test.panel.TabPanel.prototype.activatePanel = function(cls) {
         rendered = false,
         child, i;
         
-    for(i = 0; i < length; i++) {
+    for (i = 0; i < length; i++) {
         child = children[i].el;
         Test.Dom.addCls(child, "hideMe"); 
         
@@ -2693,7 +2738,7 @@ Test.panel.TreeGrid = function(config) {
         toolbar;
     
     me.options = Test.Options.get();
-    
+
     toolbar = [
         Test.Options.renderCheckbox("showPassed", "Show passed"),
         Test.Options.renderCheckbox("showDisabled", "Show disabled"),
@@ -3574,6 +3619,21 @@ Test.panel.TreeGrid.prototype.updateRunningSpec = function() {
     this.setStatus("Running: " + Test.util.htmlEscape(this.runningSpec));
 };
 
+Test.toggleDarkMode = function (ev) {
+    if (ev.charCode === 100) { // 'd'
+        var body = document.body;
+
+        if (/dark-mode/.test(body.className)) {
+            Test.Dom.removeCls(body, 'dark-mode');
+            Test.removeCookie('testrunner-dark-mode');
+        }
+        else {
+            Test.Dom.addCls(body, 'dark-mode');
+            Test.setCookie('testrunner-dark-mode', '1');
+        }
+    }
+};
+
 /**
  * @class Test.Reporter
  * The Sencha Unit Tests Reporter
@@ -3581,7 +3641,20 @@ Test.panel.TreeGrid.prototype.updateRunningSpec = function() {
 
 Test.Reporter = function(config) {
     config = config || {};
-    
+
+    var body = document.body;
+
+    if (Test.getCookie('testrunner-dark-mode')) {
+        Test.Dom.addCls(body, 'dark-mode');
+    }
+
+    if (body.addEventListener) {
+        body.addEventListener('keypress', Test.toggleDarkMode, false);
+    }
+    else {
+        body.attachEvent('onkeypress', Test.toggleDarkMode);
+    }
+
     this.options = Test.Options.get();
     this.runnedSpecsCount = 0;
     this.failedSpecsCount = 0;

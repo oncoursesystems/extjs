@@ -54,6 +54,9 @@ Ext.define('KitchenSink.view.chart.radar.MultiAxis', {
     layout: 'fit',
 
     items: [{
+        bind: {
+            theme: '{menuGroups.charttheme}'
+        },
         xtype: 'polar',
         shadow: '${shadow}',
         reference: 'chart',
@@ -119,9 +122,11 @@ Ext.define('KitchenSink.view.chart.radar.MultiAxis', {
             iconCls: 'x-fa fa-picture-o',
             arrow: false,
             menu: {
+                bind: {
+                    groups: '{menuGroups}'
+                },
                 defaults: {
                     xtype: 'menuradioitem',
-                    handler: 'onThemeSwitch',
                     group: 'charttheme'
                 },
                 items: [{

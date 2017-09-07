@@ -474,7 +474,7 @@ Ext.define('Ext.direct.RemotingProvider', {
      *
      * @private
      */
-    configureTransaction: function(action, method, args) {
+    configureTransaction: function(action, method, args, isForm) {
         var data, cb, scope, options, params;
         
         data = method.getCallData(args);
@@ -493,7 +493,7 @@ Ext.define('Ext.direct.RemotingProvider', {
         
         // Callback might be unspecified for a notification
         // that does not expect any return value
-        cb = cb && scope ? Ext.Function.bind(cb, scope) : cb;
+        cb = cb && scope ? cb.bind(scope) : cb;
         
         params = Ext.apply({}, {
             provider: this,

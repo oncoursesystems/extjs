@@ -679,10 +679,10 @@ Ext.define('Ext.grid.NavigationModel', {
                     view.lastFocused = me.lastFocused = me.position.clone();
 
                     // Use explicit scrolling rather than relying on the browser's focus behaviour.
-                    // Scroll on focus overscrolls. scrollIntoView scrolls exatly correctly.
+                    // Scroll on focus overscrolls. ensureVisible scrolls exatly correctly.
                     scroller = view.getScrollable();
                     if (scroller) {
-                        scroller.scrollIntoView(me.cell);
+                        scroller.ensureVisible(me.cell);
                     }
                     me.focusItem(me.cell);
                     view.focusEl = me.cell;

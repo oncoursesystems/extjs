@@ -195,6 +195,7 @@ Ext.define('Ext.layout.ContextItem', {
      *
      * @param {Boolean} full True if all properties are to be invalidated, false to keep
      * those calculated by the ownerCt.
+     * @param {Object} options
      * @return {Mixed} A value to pass as the first argument to {@link #initContinue}.
      * @private
      */

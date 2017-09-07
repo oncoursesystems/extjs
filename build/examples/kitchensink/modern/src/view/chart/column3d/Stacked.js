@@ -68,6 +68,9 @@ Ext.define('KitchenSink.view.chart.column3d.Stacked', {
     layout: 'fit',
 
     items: [{
+        bind: {
+            theme: '{menuGroups.charttheme}'
+        },
         xtype: 'cartesian',
         shadow: '${shadow}',
         reference: 'chart',
@@ -131,9 +134,11 @@ Ext.define('KitchenSink.view.chart.column3d.Stacked', {
             arrow: false,
             margin: '0 10 0 0',
             menu: {
+                bind: {
+                    groups: '{menuGroups}'
+                },
                 defaults: {
                     xtype: 'menuradioitem',
-                    handler: 'onThemeSwitch',
                     group: 'charttheme'
                 },
                 items: [{

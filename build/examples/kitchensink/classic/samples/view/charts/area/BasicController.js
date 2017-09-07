@@ -25,24 +25,6 @@ Ext.define('KitchenSink.view.charts.area.BasicController', {
             yField: field,
             style: {
                 opacity: 0.60
-            },
-            marker: {
-                opacity: 0,
-                scaling: 0.01,
-                animation: {
-                    duration: 200,
-                    easing: 'easeOut'
-                }
-            },
-            highlightCfg: {
-                opacity: 1,
-                scaling: 1.5
-            },
-            tooltip: {
-                trackMouse: true,
-                renderer: function (tooltip, record, item) {
-                    tooltip.setHtml(title + ' (' + record.get('year') + '): ' + record.get(field));
-                }
             }
         };
     },

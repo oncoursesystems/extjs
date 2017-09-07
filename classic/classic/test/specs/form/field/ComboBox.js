@@ -576,6 +576,25 @@ function() {
                 });
                 expect(component.inputEl.dom.value).toEqual('text 1|text 2');
             });
+
+            it('should accept an object with display and value fields', function () {
+                // See https://sencha.jira.com/browse/EXTJS-24354
+                makeComponent({
+                    value: { val: 'foo', disp: 'bar' },
+                    valueField: 'val',
+                    displayField: 'disp',
+                    renderTo: Ext.getBody()
+                });
+
+                expect(component.inputEl.dom.value).toEqual('bar');
+                expect(component.getRawValue()).toEqual('bar');
+                expect(component.getValue()).toEqual('foo');
+
+                component.setValue({ val: 'bar', disp: 'foo' });
+                expect(component.inputEl.dom.value).toEqual('foo');
+                expect(component.getRawValue()).toEqual('foo');
+                expect(component.getValue()).toEqual('bar');
+            });
         });
 
         describe("setValue method", function() {
@@ -1605,12 +1624,12 @@ function() {
             });
 
             component.expand();
-            spyOn(component.picker.getScrollable(), 'scrollIntoView');
+            spyOn(component.picker.getScrollable(), 'ensureVisible');
             component.setValue('value 32');
 
             component.doAutoSelect();
 
-            expect(component.picker.getScrollable().scrollIntoView).toHaveBeenCalled();
+            expect(component.picker.getScrollable().ensureVisible).toHaveBeenCalled();
         });
         
         it("should select first item when autoSelectLast == false", function() {

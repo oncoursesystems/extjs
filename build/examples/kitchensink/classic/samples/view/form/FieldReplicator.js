@@ -49,7 +49,9 @@ Ext.define('KitchenSink.view.form.FieldReplicator', {
                 ]
             },
             displayField: 'email',
-            plugins: 'fieldreplicator',
+            plugins: {
+                fieldreplicator: true
+            },
             fieldLabel: 'Send To',
             anchor: '0',
             queryMode: 'local',

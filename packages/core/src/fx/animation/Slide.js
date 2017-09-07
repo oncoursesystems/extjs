@@ -29,7 +29,7 @@ Ext.define('Ext.fx.animation.Slide', {
         offset: 0,
 
         /**
-         * @cfg
+         * @cfg {String}
          * @inheritdoc
          */
         easing: 'auto',

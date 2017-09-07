@@ -60,6 +60,7 @@ Ext.define('KitchenSink.view.direct.NamedForm', {
         label: 'Age',
         name: 'age',
         value: 25,
+        decimals: 0,
         required: true
     }, {
         xtype: 'toolbar',

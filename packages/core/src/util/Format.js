@@ -245,7 +245,7 @@ Ext.define('Ext.util.Format', function () {
         /**
          * Format a number as a currency.
          * @param {Number/String} value The numeric value to format
-         * @param {String} [sign] The currency sign to use (defaults to {@link #currencySign})
+         * @param {String} [currencySign] The currency sign to use (defaults to {@link #currencySign})
          * @param {Number} [decimals] The number of decimals to use for the currency
          * (defaults to {@link #currencyPrecision})
          * @param {Boolean} [end] True if the currency sign should be at the end of the string

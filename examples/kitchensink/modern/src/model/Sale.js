@@ -17,8 +17,8 @@ Ext.define('KitchenSink.model.Sale', function() {
             {name: 'country',   type: 'string'},
             {name: 'person',    type: 'string'},
             {name: 'date',      type: 'date', dateFormat: 'c'},
-            {name: 'value',     type: 'float'},
-            {name: 'quantity',  type: 'float'},
+            {name: 'value',     type: 'float', allowNull: true},
+            {name: 'quantity',  type: 'float', allowNull: true},
             {
                 name: 'year',
                 calculate: function(data){

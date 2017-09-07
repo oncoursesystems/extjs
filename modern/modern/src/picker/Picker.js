@@ -338,6 +338,7 @@ Ext.define('Ext.picker.Picker', {
     /**
      * Updates the {@link #doneButton} configuration. Will change it into a button when appropriate, or just update the text if needed.
      * @param {Object} config
+     * @param {Object} oldButton
      * @return {Object}
      */
     applyDoneButton: function(config, oldButton) {
@@ -373,6 +374,7 @@ Ext.define('Ext.picker.Picker', {
     /**
      * Updates the {@link #cancelButton} configuration. Will change it into a button when appropriate, or just update the text if needed.
      * @param {Object} config
+     * @param {Object} oldButton
      * @return {Object}
      */
     applyCancelButton: function(config, oldButton) {
@@ -598,5 +600,20 @@ Ext.define('Ext.picker.Picker', {
      */
     getValues: function() {
         return this.getValue();
+    },
+
+    privates: {
+        /**
+         * This override always reverts focus back to its ownerField on hide, as long
+         * as that field still owns focus. We always need to focus the field on picker hide.
+         * If we are hiding because the focus has left the ownerField, we do nothing.
+         */
+        _revertFocus: function() {
+            var ownerField = this.ownerField;
+
+            if (this.rendered && ownerField && ownerField.containsFocus) {
+                ownerField.revertFocusTo(ownerField.ariaEl);
+            }
+        }
     }
 });

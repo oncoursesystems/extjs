@@ -11,10 +11,11 @@
  * For example:
  *
  *     Ext.create('Ext.chart.CartesianChart', {
- *         plugins: [{
- *             ptype: 'chartitemevents',
- *             moveEvents: true
- *         }],
+ *         plugins: {
+ *             chartitemevents: {
+ *                 moveEvents: true
+ *             }
+ *         },
  *         store: {
  *             fields: ['pet', 'households', 'total'],
  *             data: [
@@ -51,6 +52,7 @@
 Ext.define('Ext.chart.series.Series', {
 
     requires: [
+        'Ext.chart.Util',
         'Ext.chart.Markers',
         'Ext.chart.sprite.Label',
         'Ext.tip.ToolTip'
@@ -381,10 +383,8 @@ Ext.define('Ext.chart.series.Series', {
          *              return '(' + text + ')'
          *          }
          *      }
-         *
-         * Default value: null.
          */
-        label: {},
+        label: null,
 
         /**
          * @cfg {Number} labelOverflowPadding
@@ -492,6 +492,8 @@ Ext.define('Ext.chart.series.Series', {
 
         /**
          * @cfg {Object} animation The series animation configuration.
+         * By default, the series is using the same animation the chart uses,
+         * if it's own animation is not explicitly configured.
          */
         animation: null,
 
@@ -541,18 +543,6 @@ Ext.define('Ext.chart.series.Series', {
     directions: [],
 
     sprites: null,
-
-    /**
-     * @private
-     * The template of the 'items' marker.
-     */
-    itemTemplate: null,
-
-    /**
-     * @private
-     * The template of the 'markers' marker.
-     */
-    markerTemplate: null,
 
     /**
      * @private
@@ -630,30 +620,58 @@ Ext.define('Ext.chart.series.Series', {
         return fields;
     },
 
-    applyAnimation: function (newAnimation, oldAnimation) {
-        if (!newAnimation) {
-            newAnimation = {
-                duration: 0
-            };
-        } else if (newAnimation === true) {
-            newAnimation = {
-                easing: 'easeInOut',
-                duration: 500
-            };
+    applyAnimation: function (animation, oldAnimation) {
+        var chart = this.getChart();
+
+        if (!chart.isSettingSeriesAnimation) {
+            this.isUserAnimation = true;
         }
-        return oldAnimation ? Ext.apply({}, newAnimation, oldAnimation) : newAnimation;
+
+        return Ext.chart.Util.applyAnimation(animation, oldAnimation);
+    },
+
+    updateAnimation: function (animation) {
+        var sprites = this.getSprites(),
+            itemsMarker, markersMarker,
+            i, ln, sprite;
+
+        for (i = 0, ln = sprites.length; i < ln; i++) {
+            sprite = sprites[i];
+
+            if (sprite.isMarkerHolder) {
+
+                itemsMarker = sprite.getMarker('items');
+                if (itemsMarker) {
+                    itemsMarker.getTemplate().setAnimation(animation);
+                }
+
+                markersMarker = sprite.getMarker('markers');
+                if (markersMarker) {
+                    markersMarker.getTemplate().setAnimation(animation);
+                }
+            }
+
+            sprite.setAnimation(animation);
+        }
     },
 
     getAnimation: function () {
-        var chart = this.getChart();
+        var chart = this.getChart(),
+            animation;
 
         if (chart && chart.animationSuspendCount) {
-            return {
+            animation = {
                 duration: 0
             };
         } else {
-            return this.callParent();
+            if (this.isUserAnimation) {
+                animation = this.callParent();
+            } else {
+                animation = chart.getAnimation();
+            }
         }
+
+        return animation;
     },
 
     updateTitle: function () {
@@ -675,11 +693,18 @@ Ext.define('Ext.chart.series.Series', {
             highlight = highlightCfg;
         }
 
+        if (highlight) {
+            highlight.type = 'highlight';
+        }
+
         return highlight && Ext.merge({}, oldHighlight, highlight);
     },
 
     updateHighlight: function (highlight) {
-        var me = this;
+        var me = this,
+            sprites = me.sprites,
+            highlightCfg = me.getHighlightCfg(),
+            i, ln, sprite, items, markers;
 
         me.getStyle();
 
@@ -687,22 +712,36 @@ Ext.define('Ext.chart.series.Series', {
 
             me.addItemHighlight();
 
-            // Must fetch these fields here, as they might be undefined if fetched
-            // at the top of the function body.
-            var itemTemplate = me.itemTemplate,
-                markerTemplate = me.markerTemplate;
-
-            if (itemTemplate) {
-                itemTemplate.modifiers.highlight.setStyle(highlight);
+            for (i = 0, ln = sprites.length; i < ln; i++) {
+                sprite = sprites[i];
+                if (sprite.isMarkerHolder) {
+                    items = sprite.getMarker('items');
+                    if (items) {
+                        items.getTemplate().modifiers.highlight.setStyle(highlight);
+                    }
+                    markers = sprite.getMarker('markers');
+                    if (markers) {
+                        markers.getTemplate().modifiers.highlight.setStyle(highlight);
+                    }
+                }
             }
-            if (markerTemplate) {
-                markerTemplate.modifiers.highlight.setStyle(highlight);
-            }
+        } else if (!Ext.Object.equals(highlightCfg, this.defaultConfig.highlightCfg)) {
+            this.addItemHighlight();
         }
     },
 
     updateHighlightCfg: function (highlightCfg) {
-        if (!Ext.Object.equals(highlightCfg, this.defaultConfig.highlightCfg)) {
+        // Make sure to add the 'itemhighlight' interaction to the series, if the default
+        // highlight style changes, even if the 'highlight' config isn't set (defaults to false),
+        // since we probably want to use item highlighting now or later, if we are changing
+        // the default highlight style.
+
+        // This updater will be triggered by the 'highlight' applier, and the 'addItemHighlight'
+        // call here will in turn call 'getHighlight' down the call stack, which will return
+        // 'undefined' since the value hasn't been processed yet. So we don't call 'addItemHighlight'
+        // here during configuration and instead call it in the 'highlight' updater, if it hasn't
+        // already been called ('highlight' config is set to 'false').
+        if (!this.isConfiguring && !Ext.Object.equals(highlightCfg, this.defaultConfig.highlightCfg)) {
             this.addItemHighlight();
         }
     },
@@ -716,39 +755,41 @@ Ext.define('Ext.chart.series.Series', {
             i;
 
         if (sprite) {
-            if (sprite.itemsMarker && item.category === 'items') {
+            if (sprite.isMarkerHolder && item.category === 'items') {
                 sprite.putMarker(item.category, change, item.index, false, true);
             }
             if (sprite.isMarkerHolder && item.category === 'markers') {
                 sprite.putMarker(item.category, change, item.index, false, true);
             } else if (sprite.isInstancing) {
                 sprite.setAttributesFor(item.index, change);
-            } else {
-                if (Ext.isArray(sprite)) {
-                    // In some instances, like with the 3D pie series,
-                    // an item can be composed of multiple sprites
-                    // (e.g. 8 for 3D pie slice).
-                    for (i = 0; i < sprite.length; i++) {
-                        sprite[i].setAttributes(change);
-                    }
-                } else {
-                    sprite.setAttributes(change);
+            } else if (Ext.isArray(sprite)) {
+                // In some instances, like with the 3D pie series,
+                // an item can be composed of multiple sprites
+                // (e.g. 8 sprites are used to render a single 3D pie slice).
+                for (i = 0; i < sprite.length; i++) {
+                    sprite[i].setAttributes(change);
                 }
+            } else {
+                sprite.setAttributes(change);
             }
         }
     },
 
     getBBoxForItem: function (item) {
-        if (item && item.sprite) {
-            if (item.sprite.itemsMarker && item.category === 'items') {
-                return item.sprite.getMarkerBBox(item.category, item.index);
-            } else if (item.sprite instanceof Ext.draw.sprite.Instancing) {
-                return item.sprite.getBBoxFor(item.index);
+        var sprite = item && item.sprite,
+            result = null;
+
+        if (sprite) {
+            if (sprite.getMarker('items') && item.category === 'items') {
+                result = sprite.getMarkerBBox(item.category, item.index);
+            } else if (sprite instanceof Ext.draw.sprite.Instancing) {
+                result = sprite.getBBoxFor(item.index);
             } else {
-                return item.sprite.getBBox();
+                result = sprite.getBBox();
             }
         }
-        return null;
+
+        return result;
     },
 
     /**
@@ -767,7 +808,7 @@ Ext.define('Ext.chart.series.Series', {
      *     coordinate('X', 0, 2)
      *     coordinate('Y', 1, 2)
      *
-     * For numbers coordinated data are numbers themselves.
+     * For numbers, coordinated data are numbers themselves.
      * For categories - their indexes.
      * For Date objects - their timestamps.
      * In other words, whatever source data we have, it has to be converted to numbers
@@ -895,14 +936,18 @@ Ext.define('Ext.chart.series.Series', {
         tooltip.showAt([x, y]);
     },
 
-    hideTooltip: function (item) {
+    hideTooltip: function (item, immediate) {
         var me = this,
             tooltip = me.getTooltip();
 
         if (!tooltip) {
             return;
         }
-        tooltip.delayHide();
+        if (immediate) {
+            tooltip.hide();
+        } else {
+            tooltip.delayHide();
+        }
     },
 
     applyStore: function (store) {
@@ -1039,11 +1084,16 @@ Ext.define('Ext.chart.series.Series', {
     },
 
     updateLabelData: function () {
-        var me = this,
-            store = me.getStore(),
+        var label = this.getLabel();
+
+        if (!label) {
+            return;
+        }
+
+        var store = this.getStore(),
             items = store.getData().items,
-            sprites = me.getSprites(),
-            labelTpl = me.getLabel().getTemplate(),
+            sprites = this.getSprites(),
+            labelTpl = label.getTemplate(),
             labelFields = Ext.Array.from(labelTpl.getField()),
             i, j, ln, labels,
             sprite, field;
@@ -1053,8 +1103,15 @@ Ext.define('Ext.chart.series.Series', {
         }
 
         for (i = 0; i < sprites.length; i++) {
-            labels = [];
             sprite = sprites[i];
+            if (!sprite.getField) {
+                // The 'gauge' series is misnormer, its sprites
+                // do not extend from the base Series sprite and
+                // so do not have the 'field' config. They also
+                // don't support labels in the traditional sense.
+                continue;
+            }
+            labels = [];
             field = sprite.getField();
             if (Ext.Array.indexOf(labelFields, field) < 0) {
                 field = labelFields[i];
@@ -1101,7 +1158,7 @@ Ext.define('Ext.chart.series.Series', {
 
         var directions = this.directions,
             i, ln = directions.length,
-            direction, axis;
+            direction, axis, name;
 
         me.isProcessingData = true;
 
@@ -1112,8 +1169,9 @@ Ext.define('Ext.chart.series.Series', {
                 axis.processData(me);
                 continue;
             }
-            if (me['coordinate' + direction]) {
-                me['coordinate' + direction]();
+            name = 'coordinate' + direction;
+            if (me[name]) {
+                me[name]();
             }
         }
         me.updateLabelData();
@@ -1122,12 +1180,18 @@ Ext.define('Ext.chart.series.Series', {
     },
 
     applyBackground: function (background) {
+        var surface,
+            result;
+
         if (this.getChart()) {
-            this.getSurface().setBackground(background);
-            return this.getSurface().getBackground();
+            surface = this.getSurface();
+            surface.setBackground(background);
+            result = surface.getBackground();
         } else {
-            return background;
+            result = background;
         }
+
+        return result;
     },
 
     updateChart: function (newChart, oldChart) {
@@ -1186,10 +1250,11 @@ Ext.define('Ext.chart.series.Series', {
 
         for (i = 0, ln = axes.length; i < ln; i++) {
             axis = axes[i];
-            if (!directionToAxesMap[axis.getDirection()]) {
-                directionToAxesMap[axis.getDirection()] = [axis];
+            direction = axis.getDirection();
+            if (!directionToAxesMap[direction]) {
+                directionToAxesMap[direction] = [axis];
             } else {
-                directionToAxesMap[axis.getDirection()].push(axis);
+                directionToAxesMap[direction].push(axis);
             }
         }
 
@@ -1256,45 +1321,58 @@ Ext.define('Ext.chart.series.Series', {
     },
 
     updateOverlaySurface: function (overlaySurface) {
-        var me = this;
+        var label = this.getLabel();
 
-        if (overlaySurface) {
-            if (me.getLabel()) {
-                me.getOverlaySurface().add(me.getLabel());
-            }
+        if (overlaySurface && label) {
+            overlaySurface.add(label);
         }
     },
 
-    applyLabel: function (label, oldLabel) {
-        var template;
+    getLabel: function () {
+        return this.labelMarker;
+    },
 
-        if (!oldLabel) {
-            oldLabel = new Ext.chart.Markers({zIndex: 10});
-            oldLabel.setTemplate(new Ext.chart.sprite.Label(label));
-        } else {
-            template = oldLabel.getTemplate();
+    setLabel: function (label) {
+        var me = this,
+            chart = me.getChart(),
+            marker = me.labelMarker,
+            template;
+
+        // The label sprite is reused unless the value of 'label' is falsy,
+        // so that we can transition from one attribute set to another with an
+        // animation, which is important for example during theme switching.
+
+        if (!label && marker) {
+            marker.getTemplate().destroy();
+            marker.destroy();
+            me.labelMarker = marker = null;
+        }
+
+        if (label) {
+            if (!marker) {
+                marker = me.labelMarker = new Ext.chart.Markers({zIndex: 10});
+                marker.setTemplate(new Ext.chart.sprite.Label);
+                me.getOverlaySurface().add(marker);
+            }
+
+            template = marker.getTemplate();
             template.setAttributes(label);
-            if (label) {
-                if (label.field) {
-                    template.setField(label.field);
-                    this.updateLabelData();
-                }
-                if (label.display) {
-                    oldLabel.setAttributes({
-                        hidden: label.display === 'none'
-                    });
-                }
+            template.setConfig(label);
+
+            if (label.field) {
+                template.setField(label.field);
             }
-            oldLabel.setDirty(true); // inform the label about the template change
-            this.updateLabel(); // won't be called automatically in this case
+            if (label.display) {
+                marker.setAttributes({
+                    hidden: label.display === 'none'
+                });
+            }
+            marker.setDirty(true); // Inform the label about the template change.
         }
-        return oldLabel;
-    },
 
-    updateLabel: function () {
-        var chart = this.getChart();
+        me.updateLabelData();
 
-        if (chart && !chart.isInitializing && !this.isConfiguring) {
+        if (chart && !chart.isInitializing && !me.isConfiguring) {
             chart.redraw();
         }
     },
@@ -1310,7 +1388,7 @@ Ext.define('Ext.chart.series.Series', {
 
         markers.setAttributes({zIndex: Number.MAX_VALUE});
         markers.setTemplate(config);
-        template = me.itemTemplate = markers.getTemplate();
+        template = markers.getTemplate();
         template.setAttributes(style);
         animation = template.getAnimation();
         animation.on('animationstart', 'onSpriteAnimationStart', this);
@@ -1330,17 +1408,15 @@ Ext.define('Ext.chart.series.Series', {
 
     updateRenderer: function (renderer) {
         var me = this,
-            chart = me.getChart(),
-            sprites;
+            chart = me.getChart();
 
         if (chart && chart.isInitializing) {
             return;
         }
-        sprites = me.getSprites();
-        // TODO: Removing the renderer won't revert series markers to its original
-        // TODO: style, if the renderer modified their attributes.
-        if (sprites.length) {
-            sprites[0].setAttributes({renderer: renderer || null});
+        // We have to be careful and not call the 'getSprites' method here, as this
+        // method itself may have been called by the 'getSprites' method indirectly already.
+        if (me.sprites.length) {
+            me.sprites[0].setAttributes({renderer: renderer || null});
             if (chart && !chart.isInitializing) {
                 chart.redraw();
             }
@@ -1348,8 +1424,7 @@ Ext.define('Ext.chart.series.Series', {
     },
 
     updateShowMarkers: function (showMarkers) {
-        var sprites = this.getSprites(),
-            sprite = sprites && sprites[0],
+        var sprite = this.getSprite(),
             markers = sprite && sprite.getMarker('markers');
 
         if (markers) {
@@ -1365,23 +1440,23 @@ Ext.define('Ext.chart.series.Series', {
             itemInstancing = me.getItemInstancing(),
             sprite = surface.add(me.getDefaultSpriteConfig()),
             markerCfg = me.getMarker(),
-            marker, animation;
+            marker, animation, label;
 
         sprite.setAttributes(me.getStyle());
         sprite.setSeries(me);
 
         if (itemInstancing) {
-            sprite.itemsMarker = me.createItemInstancingSprite(sprite, itemInstancing);
+            me.createItemInstancingSprite(sprite, itemInstancing);
         }
 
-        if (sprite.bindMarker) {
+        if (sprite.bindMarker) { // if sprite is a MarkerHolder
             if (markerCfg) {
                 marker = new Ext.chart.Markers();
                 markerCfg = Ext.Object.merge({
                     modifiers: 'highlight'
                 }, markerCfg);
                 marker.setTemplate(markerCfg);
-                (me.markerTemplate = marker.getTemplate()).getAnimation().setCustomDurations({
+                marker.getTemplate().getAnimation().setCustomDurations({
                     translationX: 0,
                     translationY: 0
                 });
@@ -1389,8 +1464,9 @@ Ext.define('Ext.chart.series.Series', {
                 sprite.bindMarker('markers', marker);
                 me.getOverlaySurface().add(marker);
             }
-            if (me.getLabel().getTemplate().getField()) {
-                sprite.bindMarker('labels', me.getLabel());
+            label = me.getLabel();
+            if (label && label.getTemplate().getField()) {
+                sprite.bindMarker('labels', label);
             }
         }
 
@@ -1409,7 +1485,7 @@ Ext.define('Ext.chart.series.Series', {
 
     /**
      * @method
-     * Returns sprites the are used to draw this series.
+     * Returns the read-only array of sprites the are used to draw this series.
      */
     getSprites: Ext.emptyFn,
 
@@ -1421,7 +1497,7 @@ Ext.define('Ext.chart.series.Series', {
     getSprite: function () {
         var sprites = this.getSprites();
 
-        return sprites && sprites.length && sprites[0];
+        return sprites && sprites[0];
     },
 
     /**
@@ -1431,6 +1507,15 @@ Ext.define('Ext.chart.series.Series', {
         var sprite = this.getSprite();
 
         return sprite && fn(sprite) || undefined;
+    },
+
+    forEachSprite: function (fn) {
+        var sprites = this.getSprites(),
+            i, ln;
+
+        for (i = 0, ln = sprites.length; i < ln; i++) {
+            fn(sprites[i]);
+        }
     },
 
     onDataChanged: function () {
@@ -1601,6 +1686,10 @@ Ext.define('Ext.chart.series.Series', {
         theme.markerSubStyle = Ext.apply(theme.markerSubStyle || {}, newSubStyle);
 
         me.doUpdateStyles();
+
+        if (!me.isConfiguring) {
+            me.getChart().refreshLegendStore();
+        }
     },
 
     themeOnlyIfConfigured: {
@@ -1655,6 +1744,14 @@ Ext.define('Ext.chart.series.Series', {
 
     updateColors: function (colors) {
         this.updateThemeColors(colors);
+
+        if (!this.isConfiguring) {
+            var chart = this.getChart();
+
+            if (chart) {
+                chart.refreshLegendStore();
+            }
+        }
     },
 
     updateStyle: function () {
@@ -1685,7 +1782,7 @@ Ext.define('Ext.chart.series.Series', {
         for (; i < ln; i++) {
             style = me.getStyleByIndex(i);
             if (itemInstancing) {
-                sprites[i].itemsMarker.getTemplate().setAttributes(style);
+                sprites[i].getMarker('items').getTemplate().setAttributes(style);
             }
             sprites[i].setAttributes(style);
             if (markerCfg && sprites[i].dataMarker) {
@@ -1697,8 +1794,11 @@ Ext.define('Ext.chart.series.Series', {
     getStyleWithTheme: function() {
         var me = this,
             theme = me.getThemeStyle(),
-            seriesThemeStyle = (theme && theme.style) || {},
-            style = Ext.applyIf(Ext.apply({}, me.getStyle()), seriesThemeStyle);
+            style = Ext.clone(me.getStyle());
+
+        if (theme && theme.style) {
+            Ext.applyIf(style, theme.style);
+        }
 
         return style;
     },
@@ -1706,27 +1806,14 @@ Ext.define('Ext.chart.series.Series', {
     getSubStyleWithTheme: function() {
         var me = this,
             theme = me.getThemeStyle(),
-            seriesThemeSubStyle = (theme && theme.subStyle) || {},
-            subStyle = Ext.applyIf(Ext.apply({}, me.getSubStyle()), seriesThemeSubStyle);
+            subStyle = Ext.clone(me.getSubStyle());
+
+        if (theme && theme.subStyle) {
+            Ext.applyIf(subStyle, theme.subStyle);
+        }
 
         return subStyle;
     },
-
-    // getMarkerStyleWithTheme: function() {
-    //     var me = this,
-    //         theme = me.getThemeStyle(),
-    //         seriesThemeStyle = (theme && theme.style) || {},
-    //         style = Ext.applyIf(Ext.apply({}, me.getMarker()), seriesThemeStyle);
-    //     return style;
-    // },
-
-    // getMarkerSubStyleWithTheme: function() {
-    //     var me = this,
-    //         theme = me.getThemeStyle(),
-    //         seriesThemeStyle = (theme && theme.style) || {},
-    //         style = Ext.applyIf(Ext.apply({}, me.getMarkerSubStyle()), seriesThemeStyle);
-    //     return style;
-    // },
 
     getStyleByIndex: function (i) {
         var me = this,

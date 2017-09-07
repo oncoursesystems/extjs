@@ -1,7 +1,7 @@
 topSuite("Ext.Container",
     ['Ext.form.Panel', 'Ext.viewport.Default', 'Ext.layout.VBox', 'Ext.app.ViewController', 'Ext.app.ViewModel', 'Ext.Toolbar'],
 function() {
-    var ct, items;
+    var ct, items, vm;
 
     afterEach(function() {
         ct = Ext.destroy(ct);
@@ -15,8 +15,148 @@ function() {
         }
         ct = new Ext.container.Container(cfg);
         items = ct.getItems().items;
+        vm = ct.getViewModel();
         return ct;
     }
+
+    describe("bindings", function() {
+        it("should track activeItemIndex change", function() {
+            makeContainer({
+                viewModel: { },
+                renderTo: Ext.getBody(),
+                bind: {
+                    activeItemIndex: '{index}'
+                },
+                twoWayBindable: 'activeItemIndex',
+                items: [{
+                    text: {
+                        bind: 'foo {index}'
+                    }
+                }, {
+                    text: {
+                        bind: 'bar {index}'
+                    }
+                }, {
+                    text: {
+                        bind: 'bletch {index}'
+                    }
+                }]
+            });
+            ct.setActiveItemIndex(1);
+            vm.notify();
+            expect(ct.getActiveItemIndex()).toBe(1);
+            expect(ct.getActiveItem()).toBe(ct.innerItems[1]);
+        });
+
+        it("should track activeItem change", function() {
+            makeContainer({
+                viewModel: { },
+                renderTo: Ext.getBody(),
+                bind: {
+                    activeItemIndex: '{index}'
+                },
+                twoWayBindable: 'activeItemIndex',
+                items: [{
+                    text: {
+                        bind: 'foo {index}'
+                    }
+                }, {
+                    text: {
+                        bind: 'bar {index}'
+                    }
+                }, {
+                    text: {
+                        bind: 'bletch {index}'
+                    }
+                }]
+            });
+            ct.setActiveItem(ct.innerItems[1]);
+            expect(ct.getActiveItemIndex()).toBe(1);
+            expect(ct.getActiveItem()).toBe(ct.innerItems[1]);
+        });
+
+        it("should publish activeItemIndex change", function() {
+            makeContainer({
+                viewModel: { },
+                renderTo: Ext.getBody(),
+                bind: {
+                    activeItemIndex: '{index}'
+                },
+                twoWayBindable: 'activeItemIndex',
+                items: [{
+                    text: {
+                        bind: 'foo {index}'
+                    }
+                }, {
+                    text: {
+                        bind: 'bar {index}'
+                    }
+                }, {
+                    text: {
+                        bind: 'bletch {index}'
+                    }
+                }]
+            });
+            ct.setActiveItemIndex(1);
+            vm.notify();
+            expect(vm.get('index')).toBe(1);
+        });
+
+        it("should publish activeItemIndex change activeItem", function() {
+            makeContainer({
+                viewModel: { },
+                renderTo: Ext.getBody(),
+                bind: {
+                    activeItemIndex: '{index}'
+                },
+                twoWayBindable: 'activeItemIndex',
+                items: [{
+                    itemId: 'foo',
+                    weight: 3
+                }, {
+                    itemId: 'bar',
+                    weight: 2
+                }, {
+                    itemId: 'bletch',
+                    weight: 1
+                }]
+            });
+            ct.setActiveItem(ct.innerItems[1]);
+            vm.notify();
+            expect(vm.get('index')).toBe(1);
+        });
+
+        it("should change activeItem via ViewModel binding", function() {
+            makeContainer({
+                viewModel: { },
+                renderTo: Ext.getBody(),
+                bind: {
+                    activeItemIndex: '{index}'
+                },
+                twoWayBindable: 'activeItemIndex',
+                items: [{
+                    itemId: 'foo',
+                    weight: 3
+                }, {
+                    itemId: 'bar',
+                    weight: 2
+                }, {
+                    itemId: 'bletch',
+                    weight: 1
+                }]
+            });
+            vm.set('index', 1);
+            vm.notify();
+            expect(vm.get('index')).toBe(1);
+            expect(ct.getActiveItemIndex()).toBe(1);
+            expect(ct.getActiveItem()).toBe(ct.innerItems[1]);
+            vm.set('index', 2);
+            vm.notify();
+            expect(vm.get('index')).toBe(2);
+            expect(ct.getActiveItemIndex()).toBe(2);
+            expect(ct.getActiveItem()).toBe(ct.innerItems[2]);
+        });
+    });
 
     describe('configured items', function() {
         describe('weighted items', function() {
@@ -377,6 +517,49 @@ function() {
                 expect(ct.items.getAt(0)).toBe(c0);
             });
         });
+
+        describe("autoDestroy: true", function () {
+            var destroySpy;
+
+            beforeEach(function () {
+                destroySpy = spyOn(Ext.Component.prototype, 'destroy').andCallThrough();
+            });
+
+            it("should destroy the item", function () {
+                ct.remove(c0);
+
+                expect(destroySpy.callCount).toBe(1);
+                expect(destroySpy.mostRecentCall.scope).toBe(c0);
+            });
+
+            it("should not destroy the item if destroy is false", function () {
+                ct.remove(c0, false);
+
+                expect(destroySpy.callCount).toBe(0);
+            });
+        });
+
+        describe("autoDestroy: false", function () {
+            var destroySpy;
+
+            beforeEach(function () {
+                destroySpy = spyOn(Ext.Component.prototype, 'destroy').andCallThrough();
+                ct.setAutoDestroy(false);
+            });
+
+            it("should not destroy the item", function () {
+                ct.remove(c0);
+
+                expect(destroySpy.callCount).toBe(0);
+            });
+
+            it("should destroy the item if destroy is true", function () {
+                ct.remove(c0, true);
+
+                expect(destroySpy.callCount).toBe(1);
+                expect(destroySpy.mostRecentCall.scope).toBe(c0);
+            });
+        });
     });
     
     describe("removeAll", function() {
@@ -464,6 +647,49 @@ function() {
             ct.removeAt(0);
             
             expect(ct.items.getAt(0)).toBe(c1);
+        });
+
+        describe("autoDestroy: true", function () {
+            var destroySpy;
+
+            beforeEach(function () {
+                destroySpy = spyOn(Ext.Component.prototype, 'destroy').andCallThrough();
+            });
+
+            it("should destroy the item", function () {
+                ct.removeAt(0);
+
+                expect(destroySpy.callCount).toBe(1);
+                expect(destroySpy.mostRecentCall.scope).toBe(c0);
+            });
+
+            it("should not destroy the item if destroy is false", function () {
+                ct.removeAt(0, false);
+
+                expect(destroySpy.callCount).toBe(0);
+            });
+        });
+
+        describe("autoDestroy: false", function () {
+            var destroySpy;
+
+            beforeEach(function () {
+                destroySpy = spyOn(Ext.Component.prototype, 'destroy').andCallThrough();
+                ct.setAutoDestroy(false);
+            });
+
+            it("should not destroy the item", function () {
+                ct.removeAt(0);
+
+                expect(destroySpy.callCount).toBe(0);
+            });
+
+            it("should destroy the item if destroy is true", function () {
+                ct.removeAt(0, true);
+
+                expect(destroySpy.callCount).toBe(1);
+                expect(destroySpy.mostRecentCall.scope).toBe(c0);
+            });
         });
     });
     
@@ -1543,6 +1769,29 @@ function() {
                 expect(ct.lookupReference('a')).toBe(c);
 
                 vp.destroy();
+            });
+
+            describe("with a controller", function() {
+                it("should mark the container as a referenceHolder", function() {
+                    makeContainer({
+                        controller: 'controller',
+                        items: [{
+                            reference: 'child'
+                        }]
+                    });
+                    expect(ct.referenceHolder).toBe(true);
+                    var c = ct.lookup('child');
+                    expect(ct.items.first()).toBe(c);
+
+                    ct.remove(c);
+
+                    expect(ct.lookup('child')).toBeNull();
+
+                    c = ct.add({
+                        reference: 'child'
+                    });
+                    expect(ct.lookup('child')).toBe(c);
+                });
             });
         });
     });

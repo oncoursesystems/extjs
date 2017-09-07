@@ -114,6 +114,10 @@ Ext.define('Ext.toolbar.Breadcrumb', {
         selection: 'root'
     },
 
+    /**
+     * @cfg
+     * @inheritdoc
+     */
     publishes: ['selection'],
     twoWayBindable: ['selection'],
 

@@ -14,11 +14,12 @@ Ext.define('KitchenSink.view.grid.RowEditing', {
         type: 'big-data'
     },
     
-    plugins: [{
-        ptype: 'rowediting',
-        clicksToMoveEditor: 1,
-        autoCancel: false
-    }],
+    plugins: {
+        rowediting: {
+            clicksToMoveEditor: 1,
+            autoCancel: false
+        }
+    },
     
     columns: [{
         header: 'Name',

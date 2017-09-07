@@ -148,7 +148,7 @@ Ext.define('Ext.form.field.Time', {
     snapToIncrement: false,
 
     /**
-     * @cfg {String[]} valuePublishEvent
+     * @cfg {String/String[]} valuePublishEvent
      * @inheritdoc
      */
     valuePublishEvent: ['select', 'blur'],

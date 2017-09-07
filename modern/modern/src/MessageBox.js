@@ -13,7 +13,6 @@
  *     Ext.Msg.alert('Title', 'The quick brown fox jumped over the lazy dog.', Ext.emptyFn);
  *
  * Checkout {@link Ext.Msg} for more examples.
- *
  */
 Ext.define('Ext.MessageBox', {
     extend: 'Ext.Dialog',
@@ -410,6 +409,8 @@ Ext.define('Ext.MessageBox', {
      * @param {String} msgBoxOptions.value
      * The string value to set into the active textbox element if displayed.
      *
+     * @param {Object} [options] Options for {@link Ext.Panel#method!show}.
+     *
      * @return {Ext.MessageBox} this
      */
     show: function (msgBoxOptions, options) {
@@ -640,7 +641,9 @@ Ext.define('Ext.MessageBox', {
          *     @example
          *     Ext.Msg.confirm("Confirmation", "Are you sure you want to do that?", Ext.emptyFn);
          */
-        Ext.Msg = new Ext.MessageBox();
+        Ext.Msg = new Ext.MessageBox({
+            id: 'ext-messagebox'
+        });
     });
 });
 

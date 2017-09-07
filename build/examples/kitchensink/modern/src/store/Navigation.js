@@ -425,8 +425,8 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'd3-view-treemap-tooltip', text: 'Treemap Tooltip', leaf: true },
                 { id: 'd3-view-treemap-pivot-configurator', text: 'Configurable Pivot TreeMap', leaf: true },
                 { id: 'd3-view-pack', text: 'Pack', leaf: true },
-                { id: 'd3-view-words', text: 'Words', leaf: true },
-                { id: 'd3-view-sunburst', text: 'Sunburst', leaf: true },
+                { id: 'd3-view-words', text: 'Words', leaf: true, compat: !Ext.platformTags.phone },
+                { id: 'd3-view-sunburst', text: 'Sunburst', leaf: true, compat: !Ext.platformTags.phone },
                 { id: 'd3-view-sunburst-zoom', text: 'Zoomable Sunburst', leaf: true }
             ]
         };
@@ -459,7 +459,7 @@ Ext.define('KitchenSink.store.Navigation', {
 
             children: [
                 { id: 'd3-view-transitions', text: 'Transitions', leaf: true },
-                { id: 'd3-view-day-hour-heatmap', text: 'Day / Hour Heatmap', leaf: true }
+                { id: 'd3-view-day-hour-heatmap', text: 'Day / Hour Heatmap', leaf: true, compat: !Ext.platformTags.phone }
             ]
         };
     },
@@ -715,12 +715,11 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'binding-chained-stores', text: 'Chaining Stores', leaf: true},
                 { id: 'binding-combo-chaining', text: 'Chained Select', leaf: true },
                 { id: 'binding-selection', text: 'Selection', leaf: true },
-                { id: 'binding-form', text: 'Form', leaf: true },
+                { id: 'binding-form', text: 'Slider and Form Fields', leaf: true },
                 //{ id: 'binding-gridform', text: 'Grid + Form', leaf: true },
                 { id: 'binding-model-validation', text: 'Model Validation', leaf: true },
                 { id: 'binding-field-validation', text: 'Field Validation', leaf: true },
                 { id: 'binding-two-way-formulas', text: 'Two-Way Formulas', leaf: true },
-                { id: 'binding-slider-form', text: 'Slider and Form Fields', leaf: true },
                 //{ id: 'binding-child-session', text: 'Isolated Child Sessions', leaf: true },
                 { id: 'binding-algebra-binary', text: 'Binary Operators', leaf: true },
                 { id: 'binding-algebra-ternary', text: 'Ternary Operators', leaf: true },
@@ -876,7 +875,7 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'field-validation-adv', text: 'Advanced Field Validation', leaf: true },
                 { id: 'form-sliders', text: 'Sliders', leaf: true },
                 { id: 'form-placeholder', text: 'Label as Placeholder', leaf: true },
-                { id: 'form-remote-combo', text: 'Remote ComboBox', leaf: true },
+                { id: 'form-remote-combo', text: 'Remote ComboBox', leaf: true, compat: Ext.platformTags.desktop },
                 { id: 'form-interactive-combo', text: 'Interactive ComboBox',
                     compat: false, leaf: true }
             ]
@@ -895,7 +894,6 @@ Ext.define('KitchenSink.store.Navigation', {
                 //{ id: 'layout-absolute', text: 'Absolute Layout', leaf: true },
                 //{ id: 'layout-accordion', text: 'Accordion Layout', leaf: true },
                 //{ id: 'layout-border', text: 'Border Layout', leaf: true },
-                { id: 'layout-box', text: 'Box Layout', leaf: true },
                 { id: 'layout-card', text: 'Card Layout', leaf: true },
                 { id: 'layout-card-indicator', text: 'Card with Indicator', leaf: true },
                 { id: 'layout-cardtabs', text: 'Card (Tabs)', leaf: true },
@@ -945,6 +943,7 @@ Ext.define('KitchenSink.store.Navigation', {
             children: [
                 { id: 'basic-tabs', text: 'Basic Tabs', leaf: true },
                 { id: 'bottom-tabs', text: 'Bottom Tabs', leaf: true },
+                { id: 'overflow-tabs', text: 'Overflow Scroller Tabs', leaf: true },
                 //{ id: 'plain-tabs', text: 'Plain Tabs', leaf: true },
                 //{ id: 'framed-tabs', text: 'Framed Tabs', leaf: true },
                 { id: 'icon-tabs', text: 'Icon Tabs', leaf: true }
@@ -970,7 +969,7 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'basic-toolbar', text: 'Toolbar', leaf: true },
                 { id: 'docked-toolbars', text: 'Docked Toolbar', leaf: true },
                 //{ id: 'breadcrumb-toolbar', text: 'Breadcrumb Toolbar', leaf: true },
-                //{ id: 'toolbar-overflow', text: 'Toolbar Overflow', leaf: true },
+                { id: 'toolbar-overflow', text: 'Toolbar Overflow', leaf: true, compat: !Ext.platformTags.phone },
                 //{ id: 'statusbar-demo', text: 'StatusBar', leaf: true },
                 { id: 'toolbar-menus', text: 'Toolbar with Menus', leaf: true }
             ]
@@ -1004,11 +1003,12 @@ Ext.define('KitchenSink.store.Navigation', {
             id: 'grid-advanced',
             iconCls: 'icon-grid-plugins',
 
+            compat: !Ext.platformTags.phone,
             description: 'These examples show some of the most powerful features of ' +
                 'the grid working together.',
 
             children: [
-                { id: 'big-data-grid', text: 'Big Data', leaf: true, compat: !Ext.platformTags.phone },
+                { id: 'big-data-grid', text: 'Big Data', leaf: true },
                 //{ id: 'row-widget-grid', text: 'Row Widgets', leaf: true, since: '6.2.0' },
                 //{ id: 'widget-grid', text: 'Cell Widgets', leaf: true },
                 //{ id: 'expander-lockable', text: 'Row Expander, lockable columns', leaf: true },
@@ -1069,7 +1069,8 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'row-expander-grid', text: 'Row Expander', leaf: true },
                 { id: 'rowoperations-grid', text: 'Row Operations', leaf: true },
                 { id: 'summary-row-grid', text: 'Summary Row', leaf: true },
-                { id: 'view-options-grid', text: 'View Options', leaf: true }
+                { id: 'view-options-grid', text: 'View Options', leaf: true },
+                { id: 'cell-overflow-grid', text: 'Cell Overflow Tip', leaf: true }
     //            { id: 'dd-field-to-grid', text: 'Drag Field to Grid', leaf: true },
     //            { id: 'dd-grid-to-form', text: 'Drag Grid to Form', leaf: true },
     //            { id: 'dd-grid-to-grid', text: 'Drag Grid to Grid', leaf: true },

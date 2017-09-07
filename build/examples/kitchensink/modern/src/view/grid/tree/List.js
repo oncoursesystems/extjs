@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.grid.tree.List', {
     extend: 'Ext.Panel',
     xtype: 'tree-list',
     controller: 'tree-list',
-    title: 'TreeList',
+    title: 'Tree List',
 
     requires: [
         'Ext.list.Tree'
@@ -57,9 +57,6 @@ Ext.define('KitchenSink.view.grid.tree.List', {
     tbar: [{
         xtype: 'segmentedbutton',
         allowMultiple: true,
-        defaults: {
-            ui: 'default-toolbar'
-        },
         items: [{
             text: 'Nav',
             reference: 'navBtn',

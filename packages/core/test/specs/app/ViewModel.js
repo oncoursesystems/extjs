@@ -1,9 +1,11 @@
-/* global expect, jasmine, Ext, MockAjaxManager, spyOn */
+/* global describe, expect, jasmine, Ext, MockAjaxManager, spyOn */
 
-topSuite("Ext.app.ViewModel",
-    ['Ext.data.Store', 'Ext.data.validator.*', 'Ext.Container', 'Ext.app.ViewController'],
-function() {
-    
+topSuite("Ext.app.ViewModel", [
+    'Ext.data.Store',
+    'Ext.data.validator.*',
+    'Ext.Container',
+    'Ext.app.ViewController'
+], function() {
     var viewModel, scheduler, session, spy;
 
     function bindDeepNotify (key, fn, scope, vm) {
@@ -35,7 +37,7 @@ function() {
         binding.setValue(value);
         vm.notify();
     }
-    
+
     function notify() {
         viewModel.notify();
     }
@@ -104,7 +106,7 @@ function() {
         complete(data);
         notify();
     }
-    
+
     beforeEach(function() {
         Ext.data.Store.prototype.config.asynchronousLoad = false;
 
@@ -112,7 +114,7 @@ function() {
         MockAjaxManager.addMethods();
         spy = jasmine.createSpy();
     });
-    
+
     afterEach(function() {
         Ext.data.Store.prototype.config.asynchronousLoad = undefined;
 
@@ -2434,6 +2436,21 @@ function() {
                                 expectArgs(foo, bar);
                             });
                         });
+
+                        describe("two-way", function() {
+                            it("should be able to set a model property", function() {
+                                makeInlineStore();
+                                setup();
+
+                                var first = store.first(),
+                                    b = bindNotify('{store.first.name}', Ext.emptyFn);
+
+                                b.setValue('aaa');
+                                notify();
+                                expect(first.get('name')).toBe('aaa');
+                                expect(store.first()).toBe(first);
+                            });
+                        });
                     });
 
                     describe("last", function() {
@@ -2541,6 +2558,21 @@ function() {
                                 expectArgs(bar, foo);
                             });
                         });
+
+                        describe("two-way", function() {
+                            it("should be able to set a model property", function() {
+                                makeInlineStore();
+                                setup();
+
+                                var last = store.last(),
+                                    b = bindNotify('{store.last.name}', Ext.emptyFn);
+
+                                b.setValue('aaa');
+                                notify();
+                                expect(last.get('name')).toBe('aaa');
+                                expect(store.last()).toBe(last);
+                            });
+                        });
                     });
 
                     describe("loading", function() {
@@ -2615,7 +2647,7 @@ function() {
                     afterEach(function() {
                         user = null;
                     });
-                    
+
                     it("should create/load the store if it's never been loaded", function() {
                         // We don't have a reference to the store, so spy on everything here
                         var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough();
@@ -5522,10 +5554,13 @@ function() {
             });
 
             describe("for invalid fields", function() {
-                var Val = Ext.data.validator.Validator.all;
+                var V = Ext.data.validator;
+                function getMessage(T) {
+                    return T.prototype.config.message;
+                }
 
                 it('should report description too short', function () {
-                    var calls = 0, 
+                    var calls = 0,
                         value;
 
                     viewModel.bind('{theUser.validation.description}', function (v) {
@@ -5563,7 +5598,7 @@ function() {
 
                     expect(scheduler.passes).toBe(1);
                     expect(calls).toBe(1);
-                    expect(value).toBe(Val.presence.config.message);
+                    expect(value).toBe(getMessage(V.Presence));
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
@@ -5589,7 +5624,7 @@ function() {
 
                     expect(scheduler.passes).toBe(1);
                     expect(calls).toBe(1);
-                    expect(value).toEqual(Val.format.config.message);
+                    expect(value).toEqual(getMessage(V.Format));
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
@@ -5615,7 +5650,7 @@ function() {
 
                     expect(scheduler.passes).toBe(1);
                     expect(calls).toBe(1);
-                    expect(value).toEqual(Val.inclusion.config.message);
+                    expect(value).toEqual(getMessage(V.Inclusion));
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
@@ -5641,7 +5676,7 @@ function() {
 
                     expect(scheduler.passes).toBe(1);
                     expect(calls).toBe(1);
-                    expect(value).toEqual(Val.exclusion.config.message);
+                    expect(value).toEqual(getMessage(V.Exclusion));
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
@@ -5667,7 +5702,7 @@ function() {
 
                     expect(scheduler.passes).toBe(1);
                     expect(calls).toBe(1);
-                    expect(value).toEqual(Val.email.config.message);
+                    expect(value).toEqual(getMessage(V.Email));
 
                     // Now make the field valid and see if our binding is notified.
                     var rec = session.getRecord('User', 42);
@@ -8278,6 +8313,77 @@ function() {
                 }, Ext.emptyFn);
                 viewModel.destroy();
                 expect(binding.destroyed).toBe(true);
+            });
+        });
+    });
+
+    describe('idle event', function () {
+        var listener;
+
+        beforeEach(function() {
+            createViewModel();
+        });
+
+        afterEach(function () {
+            listener = Ext.destroy(listener);
+        });
+
+        it('should fire global idle after bind notification', function () {
+            var calls = [],
+                done;
+
+            listener = Ext.on({
+                destroyable: true,
+
+                idle: function () {
+                    var timer = Ext.Timer.firing;
+
+                    if (timer && timer.fn.$skipTimerCheck) {
+                        return;
+                    }
+
+                    if (timer && !timer.ours) {
+                        var s = timer.creator;
+
+                        if (timer.runner) {
+                            Ext.each(timer.runner.fired, function (task) {
+                                s += '\n-----------------------';
+                                s += 'Task:';
+                                s += task.creator;
+                                s += '\n-----------------------';
+                            });
+                        }
+
+                        expect(s).toBe('not running');
+                    }
+
+                    calls.push('idle');
+                }
+            });
+
+            viewModel.bind('{foo}', function (v) {
+                calls.push({ foo: v });
+                done = true;
+            });
+
+            viewModel.set('foo', 42);
+
+            var timer = Ext.Timer.get(viewModel.getScheduler().timer);
+            if (timer) {
+                timer.ours = true;
+            }
+
+            expect(calls).toEqual([]);
+
+            waitFor(function () {
+                return done;
+            });
+
+            runs(function () {
+                expect(calls).toEqual([
+                    { foo: 42 },
+                    'idle'
+                ]);
             });
         });
     });

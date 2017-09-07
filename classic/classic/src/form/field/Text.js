@@ -107,11 +107,14 @@ Ext.define('Ext.form.field.Text', {
     extend:'Ext.form.field.Base',
     alias: 'widget.textfield',
     requires: [
+        'Ext.layout.component.field.Text',
         'Ext.form.field.VTypes',
         'Ext.form.trigger.Trigger',
         'Ext.util.TextMetrics'
     ],
     alternateClassName: ['Ext.form.TextField', 'Ext.form.Text'],
+
+    componentLayout: 'textfield',
 
     config: {
         /**
@@ -217,7 +220,7 @@ Ext.define('Ext.form.field.Text', {
      * An initial value for the 'size' attribute on the text input element. This is only
      * used if the field has no configured {@link #width} and is not given a width by its
      * container's layout. Defaults to 20.
-     * @deprecated use {@link #width} instead.
+     * @deprecated 6.5.0 Please use {@link #width} instead.
      */
 
     /**
@@ -424,7 +427,7 @@ Ext.define('Ext.form.field.Text', {
      * @cfg {Boolean} repeatTriggerClick
      * `true` to attach a {@link Ext.util.ClickRepeater click repeater} to the trigger(s).
      * Click repeating behavior can also be configured on the individual {@link #triggers
-     * trigger instances using the trigger's {@link {Ext.form.trigger.Trigger#repeatClick
+     * trigger instances} using the trigger's {@link Ext.form.trigger.Trigger#repeatClick
      * repeatClick} config.
      */
     repeatTriggerClick: false,
@@ -435,7 +438,7 @@ Ext.define('Ext.form.field.Text', {
      */
 
     /**
-     * @cfg stateEvents
+     * @cfg {String[]} stateEvents
      * @inheritdoc Ext.state.Stateful#cfg-stateEvents
      * @localdoc By default the following stateEvents are added:
      * 
@@ -463,6 +466,7 @@ Ext.define('Ext.form.field.Text', {
     inputWrapFocusCls: Ext.baseCSSPrefix + 'form-text-wrap-focus',
     inputWrapInvalidCls: Ext.baseCSSPrefix + 'form-text-wrap-invalid',
     growCls: Ext.baseCSSPrefix + 'form-text-grow',
+    heightedCls: Ext.baseCSSPrefix + 'form-text-heighted',
 
     /* 
      * @private
@@ -678,6 +682,18 @@ Ext.define('Ext.form.field.Text', {
         return data;
     },
 
+    beforeRender: function() {
+        var me = this,
+            heighted = (me.height != null) ||
+                !!(me.ownerLayout && me.ownerLayout.getItemSizePolicy(me, me.fakeSizeModel).setsHeight);
+
+        if (heighted) {
+            me.protoEl.addCls(me.heightedCls);
+        }
+
+        me.callParent();
+    },
+
     onRender: function() {
         var me = this,
             triggers = me.getTriggers(),
@@ -845,6 +861,7 @@ Ext.define('Ext.form.field.Text', {
     /**
      * Invokes a method on all triggers.
      * @param {String} methodName
+     * @param args
      * @private
      */
     invokeTriggers: function(methodName, args) {
@@ -875,6 +892,10 @@ Ext.define('Ext.form.field.Text', {
     updateInputMask: function (inputMask, previous) {
         if (previous) {
             previous.release();
+        }
+
+        if (inputMask) {
+            this.enableKeyEvents = true;
         }
     },
 
@@ -1149,9 +1170,13 @@ Ext.define('Ext.form.field.Text', {
      */
     onBlur: function(e) {
         var me = this,
-            inputMask = me.getInputMask();
+            inputEl = me.inputEl.dom,
+            inputMask = me.getInputMask(),
+            value;
 
         me.callParent([e]);
+
+        value = inputEl && inputEl.value;
 
         me.removeCls(me.fieldFocusCls);
         me.triggerWrap.removeCls(me.triggerWrapFocusCls);
@@ -1409,7 +1434,7 @@ Ext.define('Ext.form.field.Text', {
                  * @method getTriggerWidth
                  * Get the total width of the trigger button area.
                  * @return {Number} The total trigger width
-                 * @deprecated 5.0
+                 * @deprecated 5.0 This method was removed.
                  */
                 getTriggerWidth: function() {
                     var triggers = this.getTriggers(),
@@ -1429,4 +1454,8 @@ Ext.define('Ext.form.field.Text', {
         }
     }
 
+}, function(TextField) {
+    var calculated = Ext.layout.SizeModel.calculated;
+        
+    TextField.prototype.fakeSizeModel = calculated.pairsByHeightOrdinal[calculated.ordinal];
 });

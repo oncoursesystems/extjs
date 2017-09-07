@@ -10,6 +10,7 @@ Ext.define('KitchenSink.view.grid.RowExpander', {
 
     xtype: 'row-expander-grid',
     store: 'Companies',
+    title: 'Expander Rows to show extra data',
 
     columns: [
         { text: "Company", flex: 1, dataIndex: 'name'},
@@ -31,17 +32,18 @@ Ext.define('KitchenSink.view.grid.RowExpander', {
     }],
     //</example>
 
-    plugins: [{
-        ptype: 'rowexpander',
-        rowBodyTpl : new Ext.XTemplate(
-            '<p><b>Company:</b> {name}</p>',
-            '<p><b>Change:</b> {change:this.formatChange}</p>',
-        {
-            formatChange: function(v){
-                var color = v >= 0 ? 'green' : 'red';
-                return '<span style="color: ' + color + ';">' + Ext.util.Format.usMoney(v) + '</span>';
-            }
-        })
-    }],
-    title: 'Expander Rows to show extra data'
+    plugins: {
+        rowexpander: {
+            rowBodyTpl: new Ext.XTemplate(
+                '<p><b>Company:</b> {name}</p>',
+                '<p><b>Change:</b> {change:this.formatChange}</p>',
+                {
+                    formatChange: function (v) {
+                        var color = v >= 0 ? 'green' : 'red';
+                        return '<span style="color: ' + color + ';">' +
+                            Ext.util.Format.usMoney(v) + '</span>';
+                    }
+                })
+        }
+    }
 });

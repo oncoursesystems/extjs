@@ -21,7 +21,9 @@
  * With this plugin you can create the `tabpanel` as the viewport:
  *
  *      Ext.create('Ext.tab.Panel', {
- *          plugins: 'viewport',
+ *          plugins: {
+ *              viewport: true
+ *          },
  *
  *          items: [{
  *              ...

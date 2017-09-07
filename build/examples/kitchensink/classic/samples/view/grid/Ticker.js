@@ -50,7 +50,9 @@ Ext.define('KitchenSink.view.grid.Ticker', {
         throttledUpdate: true
     },
 
-    plugins: 'cellediting',
+    plugins: {
+        cellediting: true
+    },
 
     width: 600,
     height: 500,

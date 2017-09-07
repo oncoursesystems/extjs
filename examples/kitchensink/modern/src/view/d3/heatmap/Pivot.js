@@ -23,6 +23,45 @@ Ext.define('KitchenSink.view.d3.heatmap.Pivot', {
         handler: 'onRefreshData'
     }],
 
+    profiles: {
+        defaults: {
+            padding: '20 30 70 120',
+            xTitle: {
+                attr: {
+                    'font-size': '12px'
+                }
+            },
+            yTitle: {
+                attr: {
+                    'font-size': '12px'
+                }
+            },
+            legend: {
+                docked: 'right',
+                padding: 50,
+
+                // Legend items are *not* Container items. This config is an object.
+                items: {
+                    count: 6,
+                    slice: [1],
+                    reverse: true,
+                    size: {
+                        x: 60,
+                        y: 30
+                    }
+                }
+            }
+        },
+        phone: {
+            defaults: {
+                legend: undefined,
+                padding: '20 20 40 60',
+                xTitle: undefined,
+                yTitle: undefined
+            }
+        }
+    },
+
     items: [{
         xtype: 'pivotheatmap',
         reference: 'heatmap',
@@ -47,27 +86,14 @@ Ext.define('KitchenSink.view.d3.heatmap.Pivot', {
             }
         },
 
-        padding: {
-            top: 20,
-            right: 30,
-            bottom: 70,
-            left: 120
-        },
+        padding: '${padding}',
 
         xAxis: {
-            title: {
-                attr: {
-                    'font-size': '12px'
-                }
-            }
+            title: '${xTitle}'
         },
 
         yAxis: {
-            title: {
-                attr: {
-                    'font-size': '12px'
-                }
-            }
+            title: '${yTitle}'
         },
 
         colorAxis: {
@@ -77,21 +103,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Pivot', {
             }
         },
 
-        legend: {
-            docked: 'right',
-            padding: 50,
-            
-            // Legend items are *not* Container items. This config is an object.
-            items: {
-                count: 10,
-                slice: [1],
-                reverse: true,
-                size: {
-                    x: 60,
-                    y: 30
-                }
-            }
-        },
+        legend: '${legend}',
 
         tooltip: {
             renderer: 'onTooltip'

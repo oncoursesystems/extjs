@@ -216,7 +216,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
      * @method getCount
      * This method is not supported by SpreadsheetModel.
      *
-     * To interrogate the selection use {@link #getSelected} which will return an instance of one
+     * To interrogate the selection use {@link #cfg!selected}'s getter, which will return an instance of one
      * of the three selection types, or `null` if no selection.
      *
      * The three selection types are:
@@ -250,7 +250,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
      * @method isRangeSelected
      * This method is not supported by SpreadsheetModel.
      *
-     * To interrogate the selection use {@link #getSelected} which will return an instance of one
+     * To interrogate the selection use {@link #cfg!selected}'s getter, which will return an instance of one
      * of the three selection types, or `null` if no selection.
      *
      * The three selection types are:
@@ -511,6 +511,8 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
      * @param {Ext.panel.Table} grid
      * @param {Ext.data.Store} store
      * @param {Object[]} columns
+     * @param {Ext.data.Store} oldStore
+     * @param {Object[]} oldColumns
      * @private
      */
     onBeforeReconfigure: function(grid, store, columns, oldStore, oldColumns) {
@@ -1250,7 +1252,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
         /**
          * Selects range based on mouse movements
          * @param e
-         * @param cell
+         * @param target
          * @param opts
          * @private
          */
@@ -1357,7 +1359,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
             var me = this,
                 view = opts.view,
                 lastPos = me.lastOverRecord && new Ext.grid.CellContext(view).setPosition(me.lastOverRecord, me.lastOverColumn),
-                changedCell = !lastPos || !lastPos.isEqual(me.mousedownPosition),
+                changedCell = lastPos && !lastPos.isEqual(me.mousedownPosition),
                 cell, record;
 
             me.checkCellClicked = null;

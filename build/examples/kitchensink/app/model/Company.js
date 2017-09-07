@@ -69,12 +69,14 @@ Ext.define('KitchenSink.model.Company', {
         {
             name: 'lastChange',
             type: 'date',
-            calculate: function(data) {
-                // Signal that we are dependent upon price so we get recaulculated when price changes
-                data.price;
+            depends: ['price'],
 
+            // The calculator is run whenever price changes.
+            // This field is a purely calculated value and can not be edited.
+            calculate: function() {
                 return new Date();
             }
+
         },
         {name: 'industry'},
         {name: 'desc'},
@@ -82,10 +84,18 @@ Ext.define('KitchenSink.model.Company', {
         {
             name: 'rating',
             type: 'int',
-            calculate: function(data) {
-                var pct = data.pctChange;
 
-                return (pct < 0) ? 2 : ((pct < 1) ? 1 : 0);
+            // Use a converter to only derive the value onces on record creation
+            convert: function(value, record) {
+                var data = record.data,
+                    pct = data.pctChange;
+
+                // Only calculate it first time.
+                if (!data.hasOwnProperty('rating')) {
+                    return (pct < -5) ? 2 : ((pct < 5) ? 1 : 0);
+                }
+
+                return value;
             }
         }
     ],

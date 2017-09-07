@@ -35,7 +35,9 @@ Ext.define('KitchenSink.view.tree.FilteredTree', {
     title: 'Filtered Tree',
     width: 650,
     height: 400,
-    plugins: 'gridfilters',
+    plugins: {
+        gridfilters: true
+    },
     emptyText: 'No Matching Records',
     reserveScrollbar: true,
     useArrows: true,

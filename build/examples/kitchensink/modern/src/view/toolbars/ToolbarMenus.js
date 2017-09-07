@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.toolbars.ToolbarMenus', {
     extend: 'Ext.panel.Panel',
     xtype: 'toolbar-menus',
     controller: 'toolbar-menus',
-    title: 'Panel with toolbar with diverse contents',
+    title: '${title}',
 
     requires: [
         'KitchenSink.view.toolbars.ToolbarMenusController',
@@ -35,13 +35,21 @@ Ext.define('KitchenSink.view.toolbars.ToolbarMenus', {
 
     profiles: {
         defaults: {
+            flex: undefined,
+            title: 'Panel with toolbar with diverse contents',
             height: 300,
-            width: 500
+            width: 600,
+            menuBtnText: 'Button w/ Menu',
+            toggleBtnText: 'Toggle Me'
         },
         phone: {
             defaults: {
+                title: undefined,
                 height: undefined,
-                width: undefined
+                width: undefined,
+                menuBtnText: undefined,
+                toggleBtnText: 'Toggle',
+                flex: 1
             }
         }
     },
@@ -63,7 +71,7 @@ Ext.define('KitchenSink.view.toolbars.ToolbarMenus', {
         xtype: 'toolbar',
         docked: 'top',
         items: [{
-            text: 'Button w/ Menu',
+            text: '${menuBtnText}',
             iconCls: 'x-fa fa-th',
             menu: {
                 anchor: true,
@@ -147,19 +155,24 @@ Ext.define('KitchenSink.view.toolbars.ToolbarMenus', {
                         }]
                     }
                 }]
-            }
+            },
+            flex: '${flex}'
         }, {
-            text: 'Toggle Me',
+            text: '${toggleBtnText}',
             enableToggle: true,
             handler: 'onItemToggle',
-            pressed: true
+            pressed: true,
+            flex: '${flex}',
+            minWidth: 85
         }, '->', {
             xtype: 'selectfield',
             displayField: 'state',
             valueField: 'abbr',
+            minWidth: 115,
             store: {
                 type: 'states'
-            }
+            },
+            flex: '${flex}'
         }]
     }]
 });

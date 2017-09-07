@@ -51,17 +51,20 @@ Ext.define('KitchenSink.view.grid.ExpanderLockable', {
         dataIndex: 'priceLastChange'
     }],
 
-    plugins: [{
-        ptype: 'rowexpander',
-        rowBodyTpl : new Ext.XTemplate(
-            '<p><b>Company:</b> {name}</p>',
-            '<p><b>Change:</b> {change:this.formatChange}</p><br>',
-            '<p><b>Summary:</b> {desc}</p>',
-        {
-            formatChange: function(v){
-                var color = v >= 0 ? 'green' : 'red';
-                return '<span style="color: ' + color + ';">' + Ext.util.Format.usMoney(v) + '</span>';
-            }
-        })
-    }]
+    plugins: {
+        rowexpander: {
+            rowBodyTpl: new Ext.XTemplate(
+                '<p><b>Company:</b> {name}</p>',
+                '<p><b>Change:</b> {change:this.formatChange}</p><br>',
+                '<p><b>Summary:</b> {desc}</p>',
+                {
+                    formatChange: function (v) {
+                        var color = v >= 0 ? 'green' : 'red';
+
+                        return '<span style="color: ' + color + ';">' +
+                            Ext.util.Format.usMoney(v) + '</span>';
+                    }
+                })
+        }
+    }
 });

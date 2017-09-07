@@ -939,11 +939,12 @@ Ext.define('Ext.util.Region', function() {
      * translation. If an "inside" Region is passed, the exclusion also honours
      * that constraint.
      * @param {Region} other The Region to move so that it does not intersect this Region.
-     * @param {Region} inside A Region into which the other Region must be constrained.
-     * @param {Number} [minHeight] If passed, indicates that the height may be reduced up
+     * @param {Object} options Object of options passed to exclude.
+     * @param {Region} options.inside A Region into which the other Region must be constrained.
+     * @param {Number} [options.minHeight] If passed, indicates that the height may be reduced up
      * to a point to fit the "other" region below or above the target but within the "inside" Region.
-     * @param {Boolean} [allowX=true] Pass `false` to disallow translation along the X axis.
-     * @param {Boolean} [allowY=true] Pass `false` to disallow translation along the Y axis.
+     * @param {Boolean} [options.allowX=true] Pass `false` to disallow translation along the X axis.
+     * @param {Boolean} [options.allowY=true] Pass `false` to disallow translation along the Y axis.
      * @return {Number} The edge it is now aligned to, 0=top, 1=right, 2=bottom, 3=left.
      */
     exclude: function(other, options) {
@@ -1304,13 +1305,15 @@ Ext.define('Ext.util.Region', function() {
     //<debug>
     ,highlight: function() {
         var highlightEl = Ext.getBody().createChild({
-            style: 'background-color:#52a0db;opacity:0.4;position:absolute'
+            style: 'background-color:#52a0db;opacity:0.4;position:absolute;z-index:9999999'
         });
 
         highlightEl.setBox(this);
-        setTimeout(function() {
+        
+        Ext.defer(function() {
             highlightEl.destroy();
         }, 5000);
+        
         return highlightEl;
     }
     //</debug>

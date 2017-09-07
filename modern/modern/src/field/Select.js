@@ -40,6 +40,12 @@ Ext.define('Ext.field.Select', {
     ],
 
     /**
+     * @property {Boolean} isSelectField
+     * `true` to identify an object as an instance of this class, or a subclass thereof.
+     */
+    isSelectField: true,
+
+    /**
      * @event change
      * Fires when selection has changed.
      *
@@ -68,12 +74,6 @@ Ext.define('Ext.field.Select', {
      */
 
     config: {
-        /**
-         * @cfg {Boolean} hideTrigger
-         * `true` to hide the expand trigger.
-         */
-        hideTrigger: false,
-
         /**
          * @cfg {Object|Ext.util.Collection} A {@link Ext.util.Collection} instance, or configuration object
          * used to create the collection of selected records.
@@ -235,7 +235,7 @@ Ext.define('Ext.field.Select', {
 
     edgePicker: {
         xtype: 'picker',
-        hideAnimation: 'fadeOut'
+        cover: true
     },
 
     classCls: Ext.baseCSSPrefix + 'selectfield',
@@ -244,6 +244,10 @@ Ext.define('Ext.field.Select', {
         selection: 1
     },
 
+    /**
+     * @cfg
+     * @inheritdoc
+     */
     publishes: {
         selection: 1
     },
@@ -259,6 +263,42 @@ Ext.define('Ext.field.Select', {
         valueCollection.addObserver(this);
 
         return valueCollection;
+    },
+
+    /**
+     * This method is called to create a temporary record when the value entered does not
+     * match a record in the `store` (when {@link #cfg!forceSelection} is `false`).
+     *
+     * The `data` object passed contains the typed value in both the {@link #cfg!valueField}
+     * and the {@link #cfg!displayField}.
+     *
+     * The record created and returned from this method will be the {@link #cfg!selection}
+     * value in this non-matching state.
+     *
+     * @param data The data object used to create the new record.
+     * @return {Ext.data.Model} The new record.
+     * @template
+     * @since 6.5.1
+     */
+    createSelectionRecord: function (data) {
+        var Model = this.getStore().getModel();
+
+        return new Model(data);
+    },
+
+    completeEdit: Ext.emptyFn,
+
+    /**
+     * @private
+     */
+    maybeCollapse: function(event) {
+        var record = event.to && event.to.record,
+            multi = this.getMultiSelect(),
+            selection = this.getSelection();
+
+        if (!multi && record === selection) {
+            this.collapse();
+        }
     },
 
     /**
@@ -290,7 +330,7 @@ Ext.define('Ext.field.Select', {
         // upon the value collection.
         this.setValue(null);
 
-        this.syncDefaultTriggers();
+        this.syncEmptyState();
     },
 
     /* TODO fixup these docs and move to value config
@@ -316,7 +356,7 @@ Ext.define('Ext.field.Select', {
             valueField = me.getValueField(),
             displayField = me.getDisplayField(),
             store = me.getStore(),
-            record, Model, isLoaded, pendingLoad, needsLoad, dataObj, notFoundText;
+            record, isLoaded, pendingLoad, needsLoad, dataObj, notFoundText;
 
         // We were passed a record.
         // Set the selection which updates the value from the valueField.
@@ -353,13 +393,15 @@ Ext.define('Ext.field.Select', {
             if (!record) {
                 if (isLoaded && !me.getForceSelection()) {
                     // user has typed in something that isn't in the store
-                    Model = store.getModel();
                     dataObj = {};
                     dataObj[displayField] = value;
+
                     if (valueField && displayField !== valueField) {
                         dataObj[valueField] = value;
                     }
-                    record = new Model(dataObj);
+
+                    record = me.createSelectionRecord(dataObj);
+                    
                     // mark record as entered text vs. an existing one from the store
                     record.isEntered = true;
                 }
@@ -403,7 +445,9 @@ Ext.define('Ext.field.Select', {
             // we do not report the temporary record as the selection. But we also need
             // to prevent the updateSelection process from zapping the value.
             me._ignoreSelection = true;
-            me.setSelection(null);
+            // We must go through the "front door" and clear our value collection
+            // while not disturbing the selection config.
+            me.getValueCollection().removeAll();
             me._ignoreSelection = false;
 
             me.setFieldDisplay(record);
@@ -478,7 +522,7 @@ Ext.define('Ext.field.Select', {
             ret = false;
 
         if (store) {
-            result = this.store.byText.get(value);
+            result = store.byText.get(value);
             // If there are duplicate keys, tested behaviour is to return the *first* match.
             if (result) {
                 ret = result[0] || result;
@@ -534,16 +578,18 @@ Ext.define('Ext.field.Select', {
      * from the {@link #cfg!valueCollection} which is the {@link Ext.util.Collection} at the heart
      * of the picker's {@link Ext.mixin.Selectable} persona.
      */
-    updateSelection: function(selection) {
+    updateSelection: function(selection, oldSelection) {
         if (this._ignoreSelection) {
             return;
         }
 
         var me = this,
+            multiSelect = me.getMultiSelect(),
             valueCollection = me.getValueCollection(),
             isNull = selection == null,
             spliceArgs = [0, valueCollection.getCount()],
             valueField = me.getValueField(),
+            displayField = me.getDisplayField(),
             // Only get the picker if it has been created.
             picker = me.getConfig('picker', false, true);
 
@@ -593,10 +639,28 @@ Ext.define('Ext.field.Select', {
 
         // If the picker has been created, either collapse it,
         // or scroll to the latest selection.
-        if (picker) {
-            if (!me.getMultiSelect() || me.getCollapseOnSelect() || !me.getStore().getCount()) {
-                me.collapse();
-            } else {
+        if (picker && picker.isVisible()) {
+            if (!multiSelect || me.getCollapseOnSelect() || !me.getStore().getCount()) {
+
+                // The setter's equality test cannot tell if the single selected record
+                // is in effect unchanged. We only need to collapse if a *new* value has
+                // been set, that is, the user has selected a record with a different id.
+                // We can get here when the selection is refreshed due to record add/remove
+                // when the record *instance* is renewed, but it is the same id.
+                // In that case, all we need is a refresh of the data in case the record's
+                // data payload changed.
+                //
+                // If unchanged, it's possible that other data in the record may have changed
+                // which could affect the BoundList, so refresh that
+                if (!multiSelect && selection && oldSelection && selection.id === oldSelection.id) {
+                    picker.refresh();
+                } else {
+                    me.collapse();
+                }
+            }
+
+            // If picker is visible, keep the navigated-to location synced
+            if (picker.isVisible()) {
                 me.setPickerLocation();
             }
         }
@@ -752,11 +816,11 @@ Ext.define('Ext.field.Select', {
                 displayField = this.getDisplayField(),
                 i, value, option;
 
-            // Convert an array of strings to record data objects
+            // Convert an array of primitives to record data objects
             options = Ext.Array.slice(options);
             for (i = 0; i < len; i++) {
                 value = options[i];
-                if (typeof value === 'string') {
+                if (Ext.isPrimitive(value)) {
                     options[i] = option = {};
                     option[valueField] = value;
                     if (displayField && displayField !== valueField) {
@@ -965,10 +1029,6 @@ Ext.define('Ext.field.Select', {
                 }
             });
         }
-    },
-
-    updatehHideTrigger: function(hideTrigger) {
-        this.getTriggers().expand.setVisible(!hideTrigger);
     },
 
     /**

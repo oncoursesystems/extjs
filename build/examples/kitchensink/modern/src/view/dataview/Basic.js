@@ -43,20 +43,21 @@ Ext.define('KitchenSink.view.dataview.Basic', {
                 '<div class="affiliation">{affiliation}</div>' +
             '</div>',
         store: 'Speakers',
-        plugins: [{
-            type: 'dataviewtip',
-            align: 'tl-bl',
-            maxHeight: 200,
-            width: 300,
-            scrollable: 'y',
-            delegate: '.img',
-            allowOver: true,
-            anchor: true,
-            bind: '{record}',
-            cls: 'dataview-basic',
-            tpl: '<strong>Affiliation</strong><div class="info">{affiliation}</div>' +
-                '<strong>Position</strong><div class="info">{position}</div>' +
-                '<strong>Bio</strong><div class="info">{bio:substr(0, 100)}</div>'
-        }]
+        plugins: {
+            dataviewtip: {
+                align: 'tl-bl',
+                maxHeight: 200,
+                width: 300,
+                scrollable: 'y',
+                delegate: '.img',
+                allowOver: true,
+                anchor: true,
+                bind: '{record}',
+                cls: 'dataview-basic',
+                tpl: '<strong>Affiliation</strong><div class="info">{affiliation}</div>' +
+                    '<strong>Position</strong><div class="info">{position}</div>' +
+                    '<strong>Bio</strong><div class="info">{bio:substr(0, 100)}</div>'
+            }
+        }
     }]
 });

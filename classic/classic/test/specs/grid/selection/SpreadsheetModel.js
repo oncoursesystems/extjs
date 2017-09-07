@@ -3,7 +3,7 @@
 topSuite("Ext.grid.selection.SpreadsheetModel",
     ['Ext.grid.Panel', 'Ext.app.ViewModel', 'Ext.grid.plugin.Clipboard',
      'Ext.grid.plugin.CellEditing', 'Ext.grid.selection.Replicator',
-     'Ext.toolbar.Paging', 'Ext.button.Button'],
+     'Ext.toolbar.Paging', 'Ext.button.Button', 'Ext.data.BufferedStore'],
 function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         grid, view, store, selModel, colRef,

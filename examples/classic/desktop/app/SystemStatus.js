@@ -62,7 +62,7 @@ Ext.define('Desktop.SystemStatus', {
                     delay: 100
                 },
                 destroy: function () {
-                    clearTimeout(me.updateTimer);
+                    Ext.undefer(me.updateTimer);
                     me.updateTimer = null;
                 },
                 scope: me
@@ -376,8 +376,10 @@ Ext.define('Desktop.SystemStatus', {
 
     updateCharts: function () {
         var me = this;
-        clearTimeout(me.updateTimer);
-        me.updateTimer = setTimeout(function() {
+
+        Ext.undefer(me.updateTimer);
+
+        me.updateTimer = Ext.defer(function() {
             var start = new Date().getTime();
             if (me.pass % 3 === 0) {
                 me.memoryStore.loadData(me.generateData(me.memoryArray));

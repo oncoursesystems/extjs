@@ -107,14 +107,13 @@ Ext.define('Writer.Grid', {
         'Ext.toolbar.TextItem'
     ],
 
-    initComponent: function(){
-
-        this.editing = Ext.create('Ext.grid.plugin.CellEditing');
-
+    initComponent: function () {
         Ext.apply(this, {
             iconCls: 'icon-grid',
             frame: true,
-            plugins: [this.editing],
+            plugins: {
+                cellediting: true
+            },
             dockedItems: [{
                 xtype: 'toolbar',
                 items: [{
@@ -236,10 +235,11 @@ Ext.define('Writer.Grid', {
 
     onAddClick: function(){
         var rec = new Writer.Person({
-            first: '',
-            last: '',
-            email: ''
-        }), edit = this.editing;
+                first: '',
+                last: '',
+                email: ''
+            }),
+            edit = this.findPlugin('cellediting');
 
         edit.cancelEdit();
         this.store.insert(0, rec);

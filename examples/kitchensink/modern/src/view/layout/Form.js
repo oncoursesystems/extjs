@@ -40,19 +40,20 @@ Ext.define('KitchenSink.view.layout.Form', {
     autoSize: true,
 
     defaults: {
-        autoSize: true
+        autoSize: true,
+        bodyPadding: 10
     },
 
     items: [{
         xtype: 'formpanel',
         shadow: '${shadow}',
-        bodyPadding: 20,
+        layout: 'form',
         items: [{
             xtype: 'component',
             docked: 'top',
             cls: 'demo-solid-background',
             padding: 5,
-            html: 'This form uses the default layout (vbox).'
+            html: 'The fields in this form auto-width to short labels.'
         }, {
             xtype: 'textfield',
             labelAlign: '${labelAlign}',
@@ -60,7 +61,7 @@ Ext.define('KitchenSink.view.layout.Form', {
         }, {
             xtype: 'textfield',
             labelAlign: '${labelAlign}',
-            label: 'Very Long Label Affects Other Fields'
+            label: 'Tiny'
         }]
     }, {
         xtype: 'formpanel',
@@ -72,7 +73,7 @@ Ext.define('KitchenSink.view.layout.Form', {
             docked: 'top',
             cls: 'demo-solid-background',
             padding: 5,
-            html: 'The labels in this form will auto-width to the longest label.'
+            html: 'The fields in this form auto-width to a long label.'
         }, {
             xtype: 'textfield',
             labelAlign: '${labelAlign}',
@@ -102,7 +103,7 @@ Ext.define('KitchenSink.view.layout.Form', {
         }, {
             xtype: 'textfield',
             labelAlign: '${labelAlign}',
-            label: 'Longer Label'
+            label: 'Very Long Label That Will Be Clipped'
         }]
     }]
 });

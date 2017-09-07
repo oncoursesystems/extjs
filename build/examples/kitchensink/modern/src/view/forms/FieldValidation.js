@@ -32,11 +32,16 @@ Ext.define('KitchenSink.view.forms.FieldValidation', {
     profiles: {
         defaults: {
             height: 500,
+            width: 400
+        },
+        material: {
             width: 300
         },
         phone: {
-            height: undefined,
-            width: undefined
+            defaults: {
+                height: undefined,
+                width: undefined
+            }
         }
     },
     //</example>
@@ -46,10 +51,6 @@ Ext.define('KitchenSink.view.forms.FieldValidation', {
     height: '${height}',
     scrollable: 'y',
     width: '${width}',
-
-    defaults: {
-        labelAlign: 'placeholder'
-    },
 
     buttons: [{
         text: 'Reset',
@@ -70,7 +71,6 @@ Ext.define('KitchenSink.view.forms.FieldValidation', {
     }, {
         xtype: 'datepickerfield',
         label: 'Date of Birth',
-        placeholder: 'YYYY/MM/DD',
         required: true,
         validators: 'date'
     }, {
@@ -78,8 +78,7 @@ Ext.define('KitchenSink.view.forms.FieldValidation', {
         margin: '20 0 0',
         title: 'Contact Information',
         defaults: {
-            xtype: 'textfield',
-            labelAlign: 'placeholder'
+            xtype: 'textfield'
         },
         items: [{
             xtype: 'emailfield',
@@ -90,11 +89,7 @@ Ext.define('KitchenSink.view.forms.FieldValidation', {
         }, {
             label: 'Phone Number',
             placeholder: '(xxx) xxx-xxxx',
-            required: true,
-            validators: {
-                type: 'phone',
-                message: 'Invalid phone number'
-            }
+            inputMask: '(999) 999-9999' // field is validated by this automatically
         }, {
             xtype: 'urlfield',
             label: 'Homepage',
@@ -106,8 +101,7 @@ Ext.define('KitchenSink.view.forms.FieldValidation', {
         margin: '20 0 0',
         title: 'Employment Information',
         defaults: {
-            xtype: 'textfield',
-            labelAlign: 'placeholder'
+            xtype: 'textfield'
         },
         items: [{
             label: 'Salary',
@@ -126,6 +120,7 @@ Ext.define('KitchenSink.view.forms.FieldValidation', {
         }, {
             xtype: 'numberfield',
             label: 'Rating',
+            decimals: 0,
             validators: {
                 type: 'range',
                 min: 1,

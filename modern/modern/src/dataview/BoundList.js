@@ -20,14 +20,11 @@ Ext.define('Ext.dataview.BoundList', {
     navigationModel: {
         type: 'boundlist'
     },
+    /**
+     * @cfg {'tap'} triggerEvent
+     * @hide
+     * BoundLists always use tap. This is ignored.
+     */
     onFocusEnter: Ext.emptyFn,
-    onFocusLeave: Ext.emptyFn,
-    listeners: {
-        element: 'element',
-
-        // Touch taps go "through" the list and focus the field below it.
-        tap: function(e) {
-            e.stopEvent();
-        }
-    }
+    onFocusLeave: Ext.emptyFn
 });

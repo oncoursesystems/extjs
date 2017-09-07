@@ -61,10 +61,7 @@ Ext.define('KitchenSink.view.menu.ActionSheet', {
         }, {
             text: 'Bottom',
             value: 'bottom'
-        }],
-        listeners: {
-            change: 'onSideChange'
-        }
+        }]
     }, {
         xtype: 'component',
         html: 'Menus may be shown using one of the following settings:'
@@ -78,13 +75,7 @@ Ext.define('KitchenSink.view.menu.ActionSheet', {
         }, {
             text: 'Cover',
             value: 'cover'
-        }, {
-            text: 'None',
-            value: 'none'
-        }],
-        listeners: {
-            change: 'onStyleChange'
-        }
+        }]
     }, {
         text: 'Toggle Menu',
         handler: 'toggleMenu'

@@ -1,6 +1,5 @@
 Ext.define('Admin.view.tablet.email.EmailController', {
     extend: 'Admin.view.email.EmailController',
-
     alias: 'controller.email-tablet',
 
     closeComposer: function () {
@@ -40,9 +39,9 @@ Ext.define('Admin.view.tablet.email.EmailController', {
         composer.show();
     },
 
-    onChangeFilter: function() {
+    onChangeFilter: function(sender) {
         this.hideActions();
-        this.callParent(arguments);
+        this.callParent([sender]);
     },
 
     onSwipe: function (event) {

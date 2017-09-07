@@ -79,10 +79,6 @@ Ext.onReady(function() {
         data: myData
     });
 
-    var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
-        clicksToEdit: 1
-    });
-
     // create the Grid
     var grid = Ext.create('Ext.grid.Panel', {
         store: store,
@@ -143,6 +139,10 @@ Ext.onReady(function() {
         viewConfig: {
             stripeRows: true
         },
-        plugins: [cellEditing]
+        plugins: {
+            cellediting: {
+                clicksToEdit: 1
+            }
+        }
     });
 });

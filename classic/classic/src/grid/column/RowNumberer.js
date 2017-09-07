@@ -114,7 +114,7 @@ Ext.define('Ext.grid.column.RowNumberer', {
         }
         
         if (me.renumberRows.timer) {
-            clearTimeout(me.renumberRows.timer);
+            Ext.undefer(me.renumberRows.timer);
         }
         
         me.renumberRows = null;

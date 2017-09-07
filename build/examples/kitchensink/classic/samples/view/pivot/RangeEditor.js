@@ -48,9 +48,9 @@ Ext.define('KitchenSink.view.pivot.RangeEditor', {
         type: 'spreadsheet'
     },
 
-    plugins: [{
-        ptype: 'pivotrangeeditor'
-    }],
+    plugins: {
+        pivotrangeeditor: true
+    },
 
     matrix: {
         type: 'local',

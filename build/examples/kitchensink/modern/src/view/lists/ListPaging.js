@@ -39,9 +39,9 @@ Ext.define('KitchenSink.view.lists.ListPaging', {
     itemTpl: '{id}: {name}',
     width: '${width}',
 
-    plugins: [{
-        type: 'listpaging'
-    }],
+    plugins: {
+        listpaging: true
+    },
 
     store: {
         type: 'companies',

@@ -48,13 +48,14 @@ Ext.define('KitchenSink.view.pivot.CellEditing', {
         type: 'spreadsheet'
     },
 
-    plugins: [{
-        ptype: 'pivotcellediting',
-        clicksToEdit: 1,
-        // define here the type of editing: 'overwrite', 'increment',
-        // 'percentage', 'uniform'
-        defaultUpdater: 'uniform'
-    }],
+    plugins: {
+        pivotcellediting: {
+            clicksToEdit: 1,
+            // define here the type of editing: 'overwrite', 'increment',
+            // 'percentage', 'uniform'
+            defaultUpdater: 'uniform'
+        }
+    },
 
     matrix: {
         type: 'local',

@@ -39,7 +39,7 @@ Ext.define('Desktop.AccordionWindow', {
                         tree.setLoading(true, tree.body);
                         var root = tree.getRootNode();
                         root.collapseChildren(true, false);
-                        Ext.Function.defer(function() { // mimic a server call
+                        Ext.defer(function() { // mimic a server call
                             tree.setLoading(false);
                             root.expand(true, true);
                         }, 1000);

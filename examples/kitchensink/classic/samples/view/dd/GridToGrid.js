@@ -46,12 +46,13 @@ Ext.define('KitchenSink.view.dd.GridToGrid', {
         }],
 
         viewConfig: {
-            plugins: [{
-                ptype: 'gridviewdragdrop',
-                containerScroll: true,
-                dragGroup: 'dd-grid-to-grid-group1',
-                dropGroup: 'dd-grid-to-grid-group2'
-            }],
+            plugins: {
+                gridviewdragdrop: {
+                    containerScroll: true,
+                    dragGroup: 'dd-grid-to-grid-group1',
+                    dropGroup: 'dd-grid-to-grid-group2'
+                }
+            },
             listeners: {
                 drop: 'onDropGrid1'
             }
@@ -101,18 +102,19 @@ Ext.define('KitchenSink.view.dd.GridToGrid', {
         stripeRows: true,
 
         viewConfig: {
-            plugins: [{
-                ptype: 'gridviewdragdrop',
-                containerScroll: true,
-                dragGroup: 'dd-grid-to-grid-group2',
-                dropGroup: 'dd-grid-to-grid-group1',
+            plugins: {
+                gridviewdragdrop: {
+                    containerScroll: true,
+                    dragGroup: 'dd-grid-to-grid-group2',
+                    dropGroup: 'dd-grid-to-grid-group1',
 
-                // The right hand drop zone gets special styling
-                // when dragging over it.
-                dropZone: {
-                    overClass: 'dd-over-gridview'
+                    // The right hand drop zone gets special styling
+                    // when dragging over it.
+                    dropZone: {
+                        overClass: 'dd-over-gridview'
+                    }
                 }
-            }],
+            },
 
             listeners: {
                 drop: 'onDropGrid2'

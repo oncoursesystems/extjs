@@ -51,10 +51,11 @@
  *             {header: 'Phone', dataIndex: 'phone'}
  *         ],
  *         selModel: 'cellmodel',
- *         plugins: [{
- *             ptype: 'cellediting',
- *             clicksToEdit: 1
- *         }],
+ *         plugins: {
+ *             cellediting: {
+ *                 clicksToEdit: 1
+ *             }
+ *         },
  *         height: 200,
  *         width: 400,
  *         renderTo: Ext.getBody()
@@ -545,7 +546,8 @@ Ext.define('Ext.grid.plugin.CellEditing', {
                 // Apply the field's editorCfg to the CellEditor config.
                 // See Editor#createColumnField. A Column's editor config may
                 // be used to specify the CellEditor config if it contains a field property.
-                editor = new Ext.grid.CellEditor(Ext.apply({
+                editor = Ext.widget(Ext.apply({
+                    xtype: 'celleditor',
                     floating: true,
                     editorId: editorId,
                     field: editor

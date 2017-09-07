@@ -83,6 +83,10 @@ Ext.define('Ext.panel.Table', {
         hideHeaders: null
     },
 
+    /**
+     * @cfg
+     * @inheritdoc
+     */
     publishes: ['selection'],
     twoWayBindable: ['selection'],
 
@@ -427,9 +431,19 @@ Ext.define('Ext.panel.Table', {
      * @since 5.0.0
      */
     bufferedRenderer: true,
+    
+    /**
+     * @cfg {Boolean} preciseHeight
+     * Set to `true` to ensure that measurements (such as locking grid's row-height synchronization) accurately
+     * measure rows with sub-pixel sizes. This can be an issue for some types of row content on browsers that
+     * support sub-pixel sizing. Note that setting this to `true` may cause a decrease in performance for large
+     * amounts of rendered content and therefore should only be used when needed.
+     * @since 6.5.1
+     */
+    preciseHeight : false,
 
     /**
-     * @cfg stateEvents
+     * @cfg {String[]} stateEvents
      * @inheritdoc Ext.state.Stateful#cfg-stateEvents
      * @localdoc By default the following stateEvents are added:
      * 
@@ -880,32 +894,32 @@ Ext.define('Ext.panel.Table', {
             'rowkeydown',
             /**
              * @event beforeitemkeydown
-             * @inheritdoc Ext.view.Table#beforeitemkeydown
+             * @inheritdoc Ext.view.View#event!beforeitemkeydown
              */
             'beforeitemkeydown',
             /**
              * @event itemkeydown
-             * @inheritdoc Ext.view.Table#itemkeydown
+             * @inheritdoc Ext.view.View#event!itemkeydown
              */
             'itemkeydown',
             /**
              * @event beforeitemkeyup
-             * @inheritdoc Ext.view.Table#beforeitemkeyup
+             * @inheritdoc Ext.view.View#event!beforeitemkeyup
              */
             'beforeitemkeyup',
             /**
              * @event itemkeyup
-             * @inheritdoc Ext.view.Table#itemkeyup
+             * @inheritdoc Ext.view.View#event!itemkeyup
              */
             'itemkeyup',
             /**
              * @event beforeitemkeypress
-             * @inheritdoc Ext.view.Table#beforeitemkeypress
+             * @inheritdoc Ext.view.View#event!beforeitemkeypress
              */
             'beforeitemkeypress',
             /**
              * @event itemkeypress
-             * @inheritdoc Ext.view.Table#itemkeypress
+             * @inheritdoc Ext.view.View#event!itemkeypress
              */
             'itemkeypress',
             /**
@@ -1719,6 +1733,8 @@ Ext.define('Ext.panel.Table', {
      * @param {Number} recordIndex Index of the associated Store Model (-1 if none)
      * @param {Number} cellIndex Cell index within the row
      * @param {Ext.event.Event} e Original event
+     * @param {Ext.data.Model} record
+     * @param {Object} row
      */
     processEvent: function(type, view, cell, recordIndex, cellIndex, e, record, row) {
         var header = e.position.column;
@@ -2149,8 +2165,9 @@ Ext.define('Ext.panel.Table', {
      * @param {Ext.data.Store/Object} [store] The new store instance or store config. You can 
      * pass `null` if no new store.
      * @param {Object[]} [columns] An array of column configs
+     * @param {Boolean} allowUnbind (private)
      */
-    reconfigure: function(store, columns, /* private */ allowUnbind) {
+    reconfigure: function(store, columns, allowUnbind) {
         var me = this,
             oldStore = me.store,
             headerCt = me.headerCt,
@@ -2270,6 +2287,23 @@ Ext.define('Ext.panel.Table', {
         // may still need it until the very end.
         me.unbindStore();
     },
+    
+    getElementHeight: function (el) {
+        var rect = this.preciseHeight &&
+            el.getBoundingClientRect();
+        
+        return rect ? (rect.height || (rect.bottom - rect.top)) : el.offsetHeight;
+    },
+    
+    getElementSize: function (el) {
+        var rect = this.preciseHeight &&
+            el.getBoundingClientRect();
+        
+        return {
+            width:  rect ? (rect.width  || (rect.right - rect.left)) : el.offsetWidth,
+            height: rect ? (rect.height || (rect.bottom - rect.top)) : el.offsetHeight
+        };
+    },
 
     privates: {
         // The focusable flag is set, but there is no focusable element.
@@ -2355,12 +2389,22 @@ Ext.define('Ext.panel.Table', {
                     // The whole arrangement of side by side views scrolls up and down.
                     // Each view itself scrolls horizontally.
                     if (isLocking && column) {
-                        verticalScroller.scrollIntoView(domNode, false);
-                        view.getScrollable().scrollIntoView(cell || domNode, true, animate, highlight).then(internalCallback);
+                        verticalScroller.ensureVisible(domNode, {
+                            x: false
+                        });
+
+                        view.getScrollable().ensureVisible(cell || domNode, {
+                            animation: animate,
+                            highlight: highlight
+                        }).then(internalCallback);
                     }
                     // No locking, it's simple - we just use the view's scroller
                     else {
-                        verticalScroller.scrollIntoView(cell || domNode, !!column, animate, highlight).then(internalCallback);
+                        verticalScroller.ensureVisible(cell || domNode, {
+                            animation: animate,
+                            highlight: highlight,
+                            x: !!column
+                        }).then(internalCallback);
                     }
                 }
             }

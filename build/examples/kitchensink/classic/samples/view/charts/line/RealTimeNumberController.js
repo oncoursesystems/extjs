@@ -60,7 +60,6 @@ Ext.define('KitchenSink.view.charts.line.RealTimeNumberController', {
             });
 
         } else {
-            chart.animationSuspended = true;
             xAxis.setMinimum(0);
             xAxis.setMaximum(visibleRange);
 
@@ -68,7 +67,6 @@ Ext.define('KitchenSink.view.charts.line.RealTimeNumberController', {
                 xValue: 0,
                 yValue: this.getNextValue((minY + maxY) / 2, minY, maxY)
             });
-            chart.animationSuspended = false;
         }
     }
 

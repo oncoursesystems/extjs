@@ -15,11 +15,12 @@ Ext.define('Ext.org.AlbumTree', {
     rootVisible: false,
     
     viewConfig: {
-        plugins: [{
-            ddGroup: 'organizerDD',
-            ptype  : 'treeviewdragdrop',
-            displayField: 'name'
-        }]
+        plugins: {
+            treeviewdragdrop: {
+                ddGroup: 'organizerDD',
+                displayField: 'name'
+            }
+        }
     },
     
     displayField: 'name',

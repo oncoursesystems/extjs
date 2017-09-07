@@ -31,7 +31,8 @@ Ext.define('KitchenSink.view.d3.hierarchy.Sunburst', {
         path: 'modern/src/view/d3/hierarchy/TreeViewModel.js'
     }, {
         type: 'Data',
-        path: 'data/tree/tree.json'
+        path: 'data/tree/tree.json',
+        prettyPrint: false
     }],
     // </example>
 
@@ -46,6 +47,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Sunburst', {
 
     items: [{
         xtype: 'tree',
+        selectable: 'single',
         width: 230,
         title: 'Folders',
         bind: {

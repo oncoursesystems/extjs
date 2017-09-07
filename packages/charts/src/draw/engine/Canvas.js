@@ -376,6 +376,7 @@ Ext.define('Ext.draw.engine.Canvas', {
             originalCtx = ctx.constructor.prototype;
 
         /**
+         * @cfg {Object} precisionOverrides
          * @ignore
          */
         var precisionOverrides = {

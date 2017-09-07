@@ -48,9 +48,9 @@ Ext.define('KitchenSink.view.pivot.DrillDown', {
         type: 'spreadsheet'
     },
 
-    plugins: [{
-        ptype: 'pivotdrilldown'
-    }],
+    plugins: {
+        pivotdrilldown: true
+    },
 
     matrix: {
         type: 'local',

@@ -89,7 +89,7 @@ Ext.define('Ext.grid.locking.Lockable', {
      */
 
     /**
-     * @cfg stateEvents
+     * @cfg {String[]} stateEvents
      * @inheritdoc Ext.state.Stateful#cfg-stateEvents
      * @localdoc Adds the following stateEvents:
      * 
@@ -552,7 +552,7 @@ Ext.define('Ext.grid.locking.Lockable', {
         if (el.firstChild !== locked.view.el.dom) {
             el.appendChild(locked.view.el.dom);
         }
-        locked.body.dom.style.overflowX = this.normalGrid.headerCt.tooNarrow ? 'scroll' : '';
+
         locked.body.dom.scrollTop = this.getScrollable().getPosition().y;
     },
 
@@ -566,7 +566,7 @@ Ext.define('Ext.grid.locking.Lockable', {
             this.lockedGrid.headerCt.minHeight = this.normalGrid.headerCt.minHeight = null;
         }
         this.lockedScrollbarClipper.appendChild(locked.view.el.dom);
-        this.syncLockableLayout();
+        this.doSyncLockableLayout();
     },
 
     beforeLayout: function() {
@@ -1128,10 +1128,11 @@ Ext.define('Ext.grid.locking.Lockable', {
     /**
      * Locks the activeHeader as determined by which menu is open OR a header
      * as specified.
-     * @param {Ext.grid.column.Column} [header] Header to unlock from the locked section.
+     * @param {Ext.grid.column.Column} [activeHd] Header to unlock from the locked section.
      * Defaults to the header which has the menu open currently.
      * @param {Number} [toIdx] The index to move the unlocked header to.
      * Defaults to appending as the last item.
+     * @param toCt
      * @private
      */
     lock: function(activeHd, toIdx, toCt) {
@@ -1213,6 +1214,9 @@ Ext.define('Ext.grid.locking.Lockable', {
         lockedGrid.reconfiguring = normalGrid.reconfiguring = false;
 
         activeHd.ownerCmp = null;
+        activeHd.rootHeaderCt = null;
+
+        activeHd.view = lockedView;
 
         refreshFlags = me.syncLockedWidth();
 
@@ -1244,9 +1248,10 @@ Ext.define('Ext.grid.locking.Lockable', {
     /**
      * Unlocks the activeHeader as determined by which menu is open OR a header
      * as specified.
-     * @param {Ext.grid.column.Column} [header] Header to unlock from the locked section.
+     * @param {Ext.grid.column.Column} [activeHd] Header to unlock from the locked section.
      * Defaults to the header which has the menu open currently.
      * @param {Number} [toIdx=0] The index to move the unlocked header to.
+     * @param toCt
      * @private
      */
     unlock: function(activeHd, toIdx, toCt) {
@@ -1295,9 +1300,13 @@ Ext.define('Ext.grid.locking.Lockable', {
         }
         activeHd.locked = false;
         toCt.insert(toIdx, activeHd);
+
         lockedGrid.reconfiguring = normalGrid.reconfiguring = false;
 
         activeHd.ownerCmp = null;
+        activeHd.rootHeaderCt = null;
+
+        activeHd.view = normalView;
 
         // syncLockedWidth returns visible column counts for both grids.
         // only refresh what needs refreshing

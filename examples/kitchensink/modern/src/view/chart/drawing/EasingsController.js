@@ -85,7 +85,7 @@ Ext.define('KitchenSink.view.chart.drawings.EasingsController', {
     },
 
     destroy: function () {
-        clearTimeout(this.timeoutId);
+        Ext.undefer(this.timeoutId);
 
         this.callParent();
     },

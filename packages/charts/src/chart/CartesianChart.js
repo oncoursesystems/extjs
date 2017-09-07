@@ -1,8 +1,4 @@
 /**
- * @class Ext.chart.CartesianChart
- * @extends Ext.chart.AbstractChart
- * @xtype cartesian
- *
  * Represents a chart that uses cartesian coordinates.
  * A cartesian chart has two directions, X direction and Y direction.
  * The series and axes are coordinated along these directions.
@@ -117,7 +113,7 @@ Ext.define('Ext.chart.CartesianChart', {
         }
 
         me.chartLayoutCount++;
-        me.animationSuspendCount++;
+        me.suspendAnimation();
 
         // 'chart' surface rect is the size of the chart's inner element
         // (see chart.getChartBox), i.e. the portion of the chart minus
@@ -263,9 +259,12 @@ Ext.define('Ext.chart.CartesianChart', {
             }
         }
 
+        // In certain cases 'performLayout' override is not an option without major code duplication.
+        // 'afterChartLayout' can be a cleaner solution in such cases (because of the timing of its call).
+        me.afterChartLayout(); // currently in cartesian charts only (used by Navigator)
         me.redraw();
 
-        me.animationSuspendCount--;
+        me.resumeAnimation();
         // 'resumeThicknessChanged' may trigger another layout, if the 'redraw' call above
         // resulted in a situation where an axis is no longer 'thick' enough to accommodate
         // the new labels. E.g. the labels were: 'Bob', 'Ann', 'Joe' and now they are 'Jonathan',
@@ -279,6 +278,8 @@ Ext.define('Ext.chart.CartesianChart', {
         // with layout at this point.
         me.checkLayoutEnd();
     },
+
+    afterChartLayout: Ext.emptyFn,
 
     refloatAxes: function () {
         var me = this,

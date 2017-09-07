@@ -138,14 +138,19 @@ Ext.define('Ext.app.bind.Stub', {
             parentData = me.parent.getDataObject(), // RootStub does not get here
             name = me.name,
             ret = parentData ? parentData[name] : null,
+            storeMappings = me.bindMappings.store,
             associations;
 
-        if (!ret && parentData && parentData.isEntity) {
-            // Check if the item is an association, if it is, grab it but don't load it.
-            associations = parentData.associations;
-            if (associations && name in associations) {
-                ret = parentData[associations[name].getterName]();
+        if (!ret) {
+            if (parentData && parentData.isEntity) {
+                // Check if the item is an association, if it is, grab it but don't load it.
+                associations = parentData.associations;
+                if (associations && name in associations) {
+                    ret = parentData[associations[name].getterName]();
+                }
             }
+        } else if (parentData.isStore && name in storeMappings) {
+            ret = parentData[storeMappings[name]]();
         }
 
         if (!ret || !(ret.$className || Ext.isObject(ret))) {

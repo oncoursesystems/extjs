@@ -50,7 +50,8 @@ Ext.define('KitchenSink.view.binding.AlgebraBinary', {
     },
 
     layout: {
-        type: 'hbox'
+        type: 'hbox',
+        align: 'start'
     },
 
     items: [{

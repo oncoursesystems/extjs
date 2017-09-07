@@ -1630,8 +1630,6 @@ function() {
 
             var normalView = grid.normalGrid.getView(),
                 lockedView = grid.lockedGrid.getView(),
-                lockedScroller = lockedView.getScrollable(),
-                normalScroller = normalView.getScrollable(),
                 normalRows = normalView.all,
                 lockedRows = lockedView.all,
                 navModel = normalView.getNavigationModel();
@@ -1650,7 +1648,7 @@ function() {
 
                 if (p) {
                     // Scroll only when the last scroll signal has found both views and caused them to update
-                    if (navModel.getCell() && (a === navModel.getCell().dom) && normalRows.startIndex === lockedRows.startIndex && lockedScroller.getPosition().y === normalScroller.getPosition().y) {
+                    if (navModel.getCell() && (a === navModel.getCell().dom) && normalRows.startIndex === lockedRows.startIndex) {
                         jasmine.fireKeyEvent(a, 'keydown', Ext.event.Event.PAGE_DOWN);
                     }
 

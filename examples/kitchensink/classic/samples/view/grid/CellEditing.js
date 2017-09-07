@@ -72,10 +72,11 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
         }]
     },
 
-    plugins: [{
-        ptype: 'cellediting',
-        clicksToEdit: 1
-    }],
+    plugins: {
+        cellediting: {
+            clicksToEdit: 1
+        }
+    },
 
     store: {
         model: 'KitchenSink.model.Plant',

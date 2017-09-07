@@ -17,7 +17,8 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelection', {
     controller: 'flexible-selection',
 
     requires: [
-        'KitchenSink.store.MonthlySales'
+        'KitchenSink.store.MonthlySales',
+        'Ext.grid.plugin.Clipboard'
     ],
 
     //<example>
@@ -86,9 +87,10 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelection', {
             extensible: 'y'
         },
         // Propagates numeric values when the selection is extended in the Y axis
-        plugins: [
-            'selectionreplicator'
-        ],
+        plugins: {
+            clipboard: true,
+            selectionreplicator: true
+        },
         listeners: {
             selectionchange: 'onSelectionChange'
         },
@@ -154,7 +156,8 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelection', {
                     checked: true
                 }, {
                     text: 'checkbox',
-                    fn: 'setCheckbox'
+                    fn: 'setCheckbox',
+                    checked: true
                 }]
             }
         }, {

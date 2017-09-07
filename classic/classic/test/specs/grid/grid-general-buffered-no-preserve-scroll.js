@@ -121,7 +121,8 @@ function() {
                         type: 'json',
                         rootProperty: 'data'
                     }
-                }
+                },
+                asynchronousLoad: false
             });
             store.loadPage(1);
             satisfyRequests();

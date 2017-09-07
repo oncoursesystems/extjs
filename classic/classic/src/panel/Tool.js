@@ -455,7 +455,7 @@ Ext.define('Ext.panel.Tool', {
 
     /**
      * Sets the icon class. Allows the icon to be changed.
-     * @param {String} type The new icon class. See the {@link #type} config.
+     * @param {String} iconCls The new icon class. See the {@link #type} config.
      * @return {Ext.panel.Tool} this
      */
     setIconCls: function(iconCls) {

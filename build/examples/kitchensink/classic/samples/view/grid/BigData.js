@@ -336,15 +336,14 @@ Ext.define('KitchenSink.view.grid.BigData', {
         }]
     },
 
-    plugins: [{
-        ptype: 'gridfilters'
-    }, {
-        ptype: 'rowexpander',
-
-        // dblclick invokes the row editor
-        expandOnDblClick: false,
-        rowBodyTpl: '<img src="{avatar}" height="100px" style="float:left;margin:0 10px 5px 0"><b>{name}<br></b>{dob:date}'
-    }, {
-        ptype: 'gridexporter'
-    }]
+    plugins: {
+        gridfilters: true,
+        gridexporter: true,
+        rowexpander: {
+            // dblclick invokes the row editor
+            expandOnDblClick: false,
+            rowBodyTpl: '<img src="{avatar}" height="100px" '+
+                'style="float:left;margin:0 10px 5px 0"><b>{name}<br></b>{dob:date}'
+        }
+    }
 });

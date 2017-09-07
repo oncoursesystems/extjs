@@ -18,6 +18,7 @@ Ext.define('KitchenSink.view.buttons.Basic', {
             labelPadding: '25 10 0 0',
             labelProperty: 'width',
             layout: 'hbox',
+            iconOnlyUI: undefined,
             width: 530
         },
         material: {

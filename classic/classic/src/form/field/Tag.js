@@ -4,34 +4,34 @@
  * within the picker itself. Users may easily add or remove `tags` from the 
  * display value area.
  *
- *    @example
- *    var shows = Ext.create('Ext.data.Store', {
- *        fields: ['id','show'],
- *        data: [
- *            {id: 0, show: 'Battlestar Galactica'},
- *            {id: 1, show: 'Doctor Who'},
- *            {id: 2, show: 'Farscape'},
- *            {id: 3, show: 'Firefly'},
- *            {id: 4, show: 'Star Trek'},
- *            {id: 5, show: 'Star Wars: Christmas Special'}
- *        ]
- *    });
+ *     @example
+ *     var shows = Ext.create('Ext.data.Store', {
+ *         fields: ['id','show'],
+ *         data: [
+ *             {id: 0, show: 'Battlestar Galactica'},
+ *             {id: 1, show: 'Doctor Who'},
+ *             {id: 2, show: 'Farscape'},
+ *             {id: 3, show: 'Firefly'},
+ *             {id: 4, show: 'Star Trek'},
+ *             {id: 5, show: 'Star Wars: Christmas Special'}
+ *         ]
+ *     });
  *
- *    Ext.create('Ext.form.Panel', {
- *        renderTo: Ext.getBody(),
- *        title: 'Sci-Fi Television',
- *        height: 200,
- *        width: 500,
- *        items: [{
- *            xtype: 'tagfield',
- *            fieldLabel: 'Select a Show',
- *            store: shows,
- *            displayField: 'show',
- *            valueField: 'id',
- *            queryMode: 'local',
- *            filterPickList: true
- *        }]
- *    });
+ *     Ext.create('Ext.form.Panel', {
+ *         renderTo: Ext.getBody(),
+ *         title: 'Sci-Fi Television',
+ *         height: 200,
+ *         width: 500,
+ *         items: [{
+ *             xtype: 'tagfield',
+ *             fieldLabel: 'Select a Show',
+ *             store: shows,
+ *             displayField: 'show',
+ *             valueField: 'id',
+ *             queryMode: 'local',
+ *             filterPickList: true
+ *         }]
+ *     });
  *       
  * ### History
  *
@@ -100,7 +100,7 @@ Ext.define('Ext.form.field.Tag', {
     tipTpl: undefined,
 
     /**
-     * @cfg
+     * @cfg {Boolean} forceSelection
      * @inheritdoc
      *
      * When {@link #forceSelection} is `false`, new records can be created by the user as they
@@ -999,7 +999,9 @@ Ext.define('Ext.form.field.Tag', {
     // Prevent item from receiving focus.
     // See EXTJS-17686.
     onItemMouseDown: function(e) {
-        e.preventDefault();
+        if (e.target !== this.inputEl.dom) {
+            e.preventDefault();
+        }
     },
 
     /**

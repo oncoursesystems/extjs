@@ -200,6 +200,7 @@ Ext.define('KitchenSink.view.chart.combination.Dashboard', {
             },
             defaults: {
                 xtype: 'numberfield',
+                decimals: 0,
                 labelAlign: 'top',
                 validators: {
                     type: 'range',

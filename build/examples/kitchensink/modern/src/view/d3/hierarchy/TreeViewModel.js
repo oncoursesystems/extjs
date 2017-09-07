@@ -20,4 +20,5 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeViewModel', {
     data: {
         selection: undefined
     }
+
 });

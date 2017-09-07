@@ -292,7 +292,6 @@ Ext.define('Ext.data.Model', {
         // A similar issue can occur with the hasListeners property of Observable
         // (see the constructor of Ext.mixin.Observable)
         me.data = me.data = data || (data = {});
-        me.session = session || null;
         me.internalId = internalId = modelIdentifier.generate();
 
         //<debug>
@@ -342,6 +341,11 @@ Ext.define('Ext.data.Model', {
 
             if (session) {
                 session.add(me);
+            }
+
+            // Needs to be set after the add to the session
+            if (me.phantom) {
+                me.crudStateWas = 'C';
             }
         }
 
@@ -2133,7 +2137,7 @@ Ext.define('Ext.data.Model', {
     /**
      * Merge incoming data from the server when this record exists
      * in an active session. This method is not called if this record is
-     * loaded directly via {@link #load}. The default behaviour is to use incoming
+     * loaded directly via {@link #method!load}. The default behaviour is to use incoming
      * data if the record is not {@link #dirty}, otherwise the data is
      * discarded. This method should be overridden in subclasses to
      * provide a different behavior.
@@ -2921,6 +2925,11 @@ Ext.define('Ext.data.Model', {
                     args = [me];
                 }
 
+                fn = session && session[funcName];
+                if (fn) {
+                    fn.apply(session, args);
+                }
+
                 if (joined) {
                     for (i = 0, len = joined.length; i < len; ++i) {
                         item = joined[i];
@@ -2928,11 +2937,6 @@ Ext.define('Ext.data.Model', {
                             fn.apply(item, args);
                         }
                     }
-                }
-
-                fn = session && session[funcName];
-                if (fn) {
-                    fn.apply(session, args);
                 }
             }
 
@@ -3001,6 +3005,7 @@ Ext.define('Ext.data.Model', {
         },
 
         /**
+         * @method
          * Called when the model id is changed.
          * @param {Object} id The new id.
          * @param {Object} oldId The old id.

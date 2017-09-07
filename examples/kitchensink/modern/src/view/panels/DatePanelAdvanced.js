@@ -11,12 +11,16 @@ Ext.define('KitchenSink.view.panels.DatePanelAdvanced', {
     shadow: false,
     //</example>
 
+    height: '100%',
+    width: '100%',
     layout: 'center',
+    scrollable: true,
 
     items: [{
         xtype: 'datepanel',
         shadow: true,
         panes: 3,
+        hideCaptions: false,
         showTodayButton: true,
         disabledDays: [1],
         disabledDates: [

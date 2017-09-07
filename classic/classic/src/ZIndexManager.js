@@ -601,7 +601,7 @@ Ext.define('Ext.ZIndexManager', {
             // Responsive will request animation frame on browser window resize event,
             // we do likewise here to minimize flicker.
             if (!this.containerResizeTimer) {
-                this.containerResizeTimer = Ext.Function.requestAnimationFrame(this.onContainerResize, this);
+                this.containerResizeTimer = Ext.raf(this.onContainerResize, this);
             }
         },
 

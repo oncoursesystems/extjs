@@ -2656,7 +2656,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 }, {
                     key: "copy",
                     value: function copy() {
-                        return new ColorStop(this.color, this.stop);
+                        return new ColorStop(this.color && this.color.clone(), this.stop && this.stop.clone());
                     }
                 }]);
 
@@ -2777,7 +2777,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 }, {
                     key: "copy",
                     value: function copy() {
-                        return new LinearGradient(this.position, this.stops);
+                        return new LinearGradient(this.position && this.position.clone(), this.stops && this.stops.clone());
                     }
                 }, {
                     key: "gradientPoints",

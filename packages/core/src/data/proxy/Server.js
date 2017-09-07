@@ -565,7 +565,7 @@ Ext.define('Ext.data.proxy.Server', {
      * @param {Function} callback The callback function to call when the Operation has completed
      * @param {Object} scope The scope in which to execute the callback
      */
-    doRequest: function(operation) {
+    doRequest: function(operation, callback, scope) {
         //<debug>
         Ext.raise("The doRequest function has not been implemented on your Ext.data.proxy.Server subclass. See src/data/ServerProxy.js for details");
         //</debug>

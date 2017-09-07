@@ -73,7 +73,7 @@ Ext.define('KitchenSink.view.chart.drawing.Easings', {
         docked: 'top',
         ui: 'transparent',
         items: [{
-            xtype: 'comboboxfield',
+            xtype: 'selectfield',
             cls: 'demo-solid-background',
             shadow: '${fieldShadow}',
             '${fieldProp}': '${fieldValue}',

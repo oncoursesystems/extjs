@@ -24,13 +24,13 @@
 }
 
 .icon img {
-    @include border-radius(10px);
     margin: .6em;
     width: 3.5em;
 }
 
 .temp {
     margin-top: .2em;
+    margin-bottom: .2em;
     display: block;
     font-size: 2.2em;
     line-height: .5em;
@@ -38,6 +38,6 @@
 
 .temp_low {
     display: inline;
-    font-size: .5em;
+    font-size: 1em;
     color: rgba(30, 30, 30, .5);
 }

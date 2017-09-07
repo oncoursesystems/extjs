@@ -35,9 +35,10 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
     },
 
     listeners: {
-        single: true,
-        resize: 'initButton'
+        resize: 'onResize'
     },
+
+    minWidth: 650,
 
     items: [{
         xtype: 'button',
@@ -72,79 +73,82 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
         }
     }],
 
-    bbar: {
+    tbar: {
         defaults: {
+            labelAlign: 'left',
+            labelWidth: 'auto',
             margin: '0 10 0 0'
         },
         items: [{
-            xtype: 'component',
-            html: 'Tip:'
-        }, {
-            xtype: 'segmentedbutton',
-            bind: '{tipEdge}',
-            width: 100,
-            defaults: {
-                ui: 'default-toolbar',
-                width: 25
-            },
+            xtype: 'containerfield',
+            label: 'Tip Align',
             items: [{
-                text: 'T'
-            }, {
-                text: 'R'
-            }, {
-                text: 'B'
-            }, {
-                text: 'L'
+                xtype: 'segmentedbutton',
+                bind: '{tipEdge}',
+                items: [{
+                    text: 'T'
+                }, {
+                    text: 'R'
+                }, {
+                    text: 'B'
+                }, {
+                    text: 'L'
+                }]
             }]
         }, {
             xtype: 'sliderfield',
+            label: 'Offset',
             flex: 1,
-            minWidth: 100,
             minValue: 0,
             maxValue: 100,
             bind: '{tipOffset}',
             liveUpdate: true
         }, {
-            xtype: 'component',
-            html: 'Target:'
-        }, {
-            xtype: 'segmentedbutton',
-            bind: '{targetEdge}',
-            width: 100,
-            defaults: {
-                ui: 'default-toolbar',
-                width: 25
-            },
+            xtype: 'checkboxfield',
+            label: 'Anchor',
+            bind: '{anchor}',
+            inputValue: true
+        }]
+    },
+    
+    bbar: {
+        defaults: {
+            labelAlign: 'left',
+            labelWidth: 'auto',
+            margin: '0 10 0 0'
+        },
+        items: [{
+            xtype: 'containerfield',
+            label: 'Target Align',
             items: [{
-                text: 'T'
-            }, {
-                text: 'R'
-            }, {
-                text: 'B'
-            }, {
-                text: 'L'
+                xtype: 'segmentedbutton',
+                bind: '{targetEdge}',
+                items: [{
+                    text: 'T'
+                }, {
+                    text: 'R'
+                }, {
+                    text: 'B'
+                }, {
+                    text: 'L'
+                }]
             }]
         }, {
             xtype: 'sliderfield',
+            label: 'Offset',
             flex: 1,
-            minWidth: 100,
             minValue: 0,
             maxValue: 100,
             bind: '{targetOffset}',
             liveUpdate: true
         }, {
             xtype: 'textfield',
+            label: 'Align',
+            width: 160,
             editable: false,
             bind: '{alignSpec}',
-            width: 80,
             clearable: false,
             readOnly: true
-        }, {
-            xtype: 'checkboxfield',
-            label: 'Anchor',
-            labelWidth: 60,
-            bind: '{anchor}',
-            inputValue: true
         }]
     }
 });

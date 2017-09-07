@@ -117,7 +117,9 @@ Ext.define('Ext.view.AbstractView', {
 
             // Create a task which will call flushChangeQueue in updateDelay milliseconds from the time it's invoked.
             if (!me.flushQueueTask) {
-                me.flushQueueTask = new Ext.util.DelayedTask(Ext.global.requestAnimationFrame ? Ext.Function.createAnimationFrame(me.flushChangeQueue, me) : Ext.Function.bind(me.flushChangeQueue, me), me, null, false);
+                me.flushQueueTask = new Ext.util.DelayedTask(Ext.global.requestAnimationFrame ?
+                        Ext.Function.createAnimationFrame(me.flushChangeQueue, me) :
+                        me.flushChangeQueue.bind(me), me, null, false);
             }
             if (!me.flushTimer) {
                 me.flushTimer = me.flushQueueTask.delay(Ext.view.AbstractView.updateDelay);
@@ -200,6 +202,10 @@ Ext.define('Ext.view.AbstractView', {
         }
     },
 
+    /**
+     * @cfg
+     * @inheritdoc
+     */
     publishes: ['selection'],
     twoWayBindable: ['selection'],
 
@@ -1110,7 +1116,9 @@ Ext.define('Ext.view.AbstractView', {
     },
 
     onViewScroll: function(scroller, x, y) {
-        this.fireEvent('scroll', this, x, y);
+        if (!this.destroyed) {
+            this.fireEvent('scroll', this, x, y);
+        }
     },
 
     onViewScrollEnd: function(scroller, x, y) {
@@ -1158,7 +1166,7 @@ Ext.define('Ext.view.AbstractView', {
      * (either an array if your params are numeric (i.e. {0}) or an object (i.e. {foo: 'bar'}))
      * @since 2.3.0
      */
-    prepareData: function(data, index, record) {
+    prepareData: function(data, recordIndex, record) {
         var associatedData, attr, hasCopied;
         if (record) {
             associatedData = record.getAssociatedData();
@@ -1339,7 +1347,7 @@ Ext.define('Ext.view.AbstractView', {
         var me = this,
             all = me.all,
             scroller = me.getScrollable(),
-            yPos = scroller.getPosition().y,
+            yPos = scroller && scroller.getPosition().y,
             selModel = me.getSelectionModel(),
             origStart = startIndex,
             result, item, fragment, children, oldItems, endIndex, restoreFocus;
@@ -1373,7 +1381,9 @@ Ext.define('Ext.view.AbstractView', {
             oldItems = all.removeRange(startIndex, endIndex, true);
 
             // Restore scroll position
-            scroller.scrollTo(null, yPos);
+            if (scroller) {
+                scroller.scrollTo(null, yPos);
+            }
 
             // Some subclasses do not need to do this. TableView does not need to do this.
             if (me.refreshSelmodelOnRefresh !== false) {
@@ -1592,25 +1602,33 @@ Ext.define('Ext.view.AbstractView', {
     },
 
     updateIndexes: function(startIndex, endIndex) {
-        var nodes = this.all.elements,
-            node,
-            records = this.getViewRange(),
-            i,
-            myId = this.id;
+        var me = this,
+            nodes = me.all.elements,
+            records = me.getViewRange(),
+            selModel = me.getSelectionModel(),
+            myId = me.id,
+            node, record, i;
 
         startIndex = startIndex || 0;
         endIndex = endIndex || ((endIndex === 0) ? 0 : (nodes.length - 1));
+
         for (i = startIndex; i <= endIndex; i++) {
             node = nodes[i];
+            record = records[i];
+
             node.setAttribute('data-recordIndex', i);
-            node.setAttribute('data-recordId', records[i].internalId);
+            node.setAttribute('data-recordId', record.internalId);
             node.setAttribute('data-boundView', myId);
+            if (selModel.getLastSelected()) {
+                me[selModel.isSelected(record) ? 'onItemSelect' : 'onItemDeselect'](record);
+            }
         }
     },
 
     /**
      * Changes the data store bound to this view and refreshes it.
      * @param {Ext.data.Store} store The store to bind to this view
+     * @param {Object} initial
      * @since 3.4.0
      */
     bindStore: function (store, initial) {
@@ -1939,8 +1957,8 @@ Ext.define('Ext.view.AbstractView', {
 
     /**
      * Finds the index of the passed node.
-     * @param {HTMLElement/String/Number/Ext.data.Model} nodeInfo An HTMLElement template node, index of a template node, the id of a template node
-     * or a record associated with a node.
+     * @param {HTMLElement/String/Number/Ext.data.Model} node An HTMLElement template node,
+     * index of a template node, the id of a template node or a record associated with a node.
      * @return {Number} The index of the node or -1
      * @since 2.3.0
      */

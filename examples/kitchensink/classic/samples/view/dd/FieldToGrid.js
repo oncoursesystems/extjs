@@ -66,11 +66,12 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
         store: {
             type: 'companies'
         },
-        plugins: [{
-            ptype: 'ux-cellfielddropzone',
-            ddGroup: 'dd-field-to-grid',
-            onCellDrop: 'onCellDrop'
-        }],
+        plugins: {
+            'ux-cellfielddropzone': {
+                ddGroup: 'dd-field-to-grid',
+                onCellDrop: 'onCellDrop'
+            }
+        },
 
         columns: [{
             id:'company',
@@ -107,10 +108,11 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
         title: 'Source Form',
         margin: '10 0 0 0',
         bodyPadding: 5,
-        plugins: [{
-            ptype: 'ux-panelfielddragzone',
-            ddGroup: 'dd-field-to-grid'
-        }],
+        plugins: {
+            'ux-panelfielddragzone': {
+                ddGroup: 'dd-field-to-grid'
+            }
+        },
         defaults: {
             labelWidth: 150
         },

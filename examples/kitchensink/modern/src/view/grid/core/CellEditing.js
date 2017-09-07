@@ -34,9 +34,12 @@ Ext.define('KitchenSink.view.grid.core.CellEditing', {
     height: '${height}',
     width: '${width}',
     rowNumbers: true,
+    markDirty: true,
 
     plugins: {
-        gridcellediting: true
+        gridcellediting: {
+            selectOnEdit: true
+        }
     },
 
     selectable: {
@@ -56,12 +59,7 @@ Ext.define('KitchenSink.view.grid.core.CellEditing', {
                 type: 'xml',
                 record: 'plant'
             }
-        },
-
-        sorters: [{
-            property: 'common',
-            direction: 'ASC'
-        }]
+        }
     },
 
     columns: [{

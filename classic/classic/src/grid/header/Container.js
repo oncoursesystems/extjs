@@ -584,7 +584,7 @@ Ext.define('Ext.grid.header.Container', {
             me.menu.un('hide', me.onMenuHide, me);
         }
 
-        Ext.asapCancel(me.unblockTimer);
+        Ext.unasap(me.unblockTimer);
         me.menuTask.cancel();
         
         Ext.destroy(me.visibleColumnManager, me.columnManager, me.menu);

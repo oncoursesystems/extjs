@@ -53,28 +53,12 @@ Ext.define('KitchenSink.view.chart.drawing.BounceController', {
         Ext.AnimationQueue.start(me.onRender, me);
     },
 
-    getGhostConfig: function () {
-        var me = this,
-            config;
-
-        if (!me.ghostConfig) {
-            // Can't just use the logo config,
-            // as this will result in two sprites
-            // with the same ID.
-            config = Ext.merge({}, me.logo.config);
-            delete config.id;
-            me.ghostConfig = config;
-        }
-
-        return me.ghostConfig;
-    },
-
     onRender: function () {
         var me = this,
             rect = me.surface.getRect(),
             bbox = me.logo.getBBox(true),
             bounced = false,
-            p, ghost;
+            p;
 
         if (!rect) {
             return;
@@ -95,39 +79,6 @@ Ext.define('KitchenSink.view.chart.drawing.BounceController', {
         if (bounced) {
             // A bounce gives the logo acceleration equal to velocity.
             me.acceleration.set(me.velocity);
-
-            // The ghost effect is pretty, but on mobile it's also pretty expensive.
-            if (Ext.is.Desktop) {
-                ghost = me.surface.add(me.getGhostConfig());
-
-                // Set initial state of the ghost.
-                // This change to attributes is instantaneous.
-                ghost.setAttributes({
-                    x: me.logo.attr.x,
-                    y: me.logo.attr.y,
-                    opacity: 0.3
-                });
-
-                // Configure the animation modifier of the sprite.
-                ghost.setAnimation({
-                    duration: 500,
-                    easing: 'easeOut'
-                });
-
-                // Set the target state of the ghost.
-                // This change will happen over time.
-                // The scale and opacity of the ghost will be updated on every frame
-                // automatically using the specified easing function.
-                ghost.setAttributes({
-                    scale: 2,
-                    opacity: 0
-                });
-
-                // Remove the sprite from the surface when the animation is done.
-                ghost.getAnimation().on('animationend', function () {
-                    ghost.remove();
-                });
-            }
         } else {
             // Decrease the logo's acceleration on every move after a bounce.
             if (me.acceleration.length > 1) {

@@ -13,10 +13,10 @@ Ext.define('KitchenSink.view.form.Tag', {
     exampleTitle: 'Tag Field',
     otherContent: [{
         type: 'Store',
-        path: 'classic/samples/store/States.js'
+        path: 'app/store/States.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/State.js'
+        path: 'app/model/State.js'
     }],
     //</example>
     

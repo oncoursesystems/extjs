@@ -214,7 +214,7 @@ function() {
                     var ed = colRef[2].getEditor();
 
                     // normal view context 0, 0 yields colRef[2] because 1st 2 coliumns are locked
-                    waitsForFocus(ed, 'column 0 editor to gain focus');
+                    focusAndWait(ed, undefined, 'column 0 editor to gain focus');
                     
                     runs(function() {
                         // The editor should be in the right container
@@ -225,7 +225,7 @@ function() {
                     });
 
                     // Wait for async focusing to untangle.
-                    waitsForFocus(ed, 'focus to return to the editor field after the column was locked');
+                    focusAndWait(ed, undefined, 'focus to return to the editor field after the column was locked');
 
                     runs(function() {
                         expect(plugin.editing).toBe(true);

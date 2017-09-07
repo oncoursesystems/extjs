@@ -128,7 +128,9 @@ Ext.define('Ext.data.BufferedStore', {
         viewSize: 0,
 
         /**
-         * @inheritdoc
+         * @cfg {Boolean} trackRemoved
+         * The {@link Ext.data.ProxyStore#cfg!trackRemoved trackRemoved} config is not supported
+         * by buffered stores.
          */
         trackRemoved: false
     },

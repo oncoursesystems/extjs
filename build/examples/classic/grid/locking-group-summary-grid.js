@@ -51,10 +51,6 @@ Ext.onReady(function(){
         groupField: 'project'
     });
 
-    var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
-        clicksToEdit: 1
-    });
-    var showSummary = true;
     var grid = Ext.create('Ext.grid.Panel', {
         width: 800,
         height: 450,
@@ -63,7 +59,11 @@ Ext.onReady(function(){
         iconCls: 'icon-grid',
         renderTo: document.body,
         store: store,
-        plugins: [cellEditing],
+        plugins: {
+            cellediting: {
+                clicksToEdit: 1
+            }
+        },
         selModel: {
             selType: 'cellmodel'
         },

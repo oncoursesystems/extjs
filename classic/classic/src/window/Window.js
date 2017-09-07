@@ -319,7 +319,7 @@ Ext.define('Ext.window.Window', {
     alignOnScroll: false,
 
     /**
-     * @cfg stateEvents
+     * @cfg {String[]} stateEvents
      * @inheritdoc Ext.state.Stateful#cfg-stateEvents
      * @localdoc By default the following stateEvents are added:
      *
@@ -357,6 +357,7 @@ Ext.define('Ext.window.Window', {
     tabGuard: true,
 
     /**
+     * @cfg {String} closeToolText
      * @inheritdoc
      */
     closeToolText: 'Close dialog',
@@ -816,9 +817,10 @@ Ext.define('Ext.window.Window', {
      * Fits the window within its current container and automatically replaces the {@link #maximizable 'maximize' tool
      * button} with the 'restore' tool button. Also see {@link #toggleMaximize}.
      * @param {Boolean} [animate=false] Pass `true` to animate this Window to full size.
+     * @param {Boolean} initial (private)
      * @return {Ext.window.Window} this
      */
-    maximize: function(animate, /* private */ initial) {
+    maximize: function(animate, initial) {
         var me = this,
             header = me.header,
             tools = me.tools,

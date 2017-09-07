@@ -11,6 +11,10 @@ Ext.define('KitchenSink.view.d3.SalaryViewModel', {
     stores: {
         store: {
             type: 'tree',
+            // This is required for the root node to be included
+            // into the store's 'data' in Modern toolkit, which is in turn
+            // required for the root node to be collapsible.
+            rootVisible: true,
             model: 'KitchenSink.model.Salary',
             autoLoad: true,
             root: {

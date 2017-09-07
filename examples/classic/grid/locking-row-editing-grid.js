@@ -79,11 +79,6 @@ Ext.onReady(function() {
         data: myData
     });
 
-    var rowEditing = Ext.create('Ext.grid.plugin.RowEditing', {
-        clicksToMoveEditor: 1,
-        autoCancel: false
-    });
-
     // create the Grid
     var grid = Ext.create('Ext.grid.Panel', {
         frame: true,
@@ -145,6 +140,11 @@ Ext.onReady(function() {
         viewConfig: {
             stripeRows: true
         },
-        plugins: [rowEditing]
+        plugins: {
+            rowediting: {
+                clicksToMoveEditor: 1,
+                autoCancel: false
+            }
+        }
     });
 });

@@ -166,6 +166,10 @@ Ext.define('Ext.SegmentedButton', {
         vertical: false
     },
 
+    defaults: {
+        flex: '1 1 auto'
+    },
+
     autoSize: null,
 
     /**
@@ -182,6 +186,10 @@ Ext.define('Ext.SegmentedButton', {
 
     twoWayBindable: 'value',
 
+    /**
+     * @cfg
+     * @inheritdoc
+     */
     publishes: 'value',
 
     /**

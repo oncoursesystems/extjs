@@ -39,10 +39,11 @@
  *             {header: 'Phone', dataIndex: 'phone'}
  *         ],
  *         selModel: 'rowmodel',
- *         plugins: [{
- *             ptype: 'rowediting',
- *             clicksToEdit: 1
- *         }],
+ *         plugins: {
+ *             rowediting: {
+ *                 clicksToEdit: 1
+ *             }
+ *         },
  *         height: 200,
  *         width: 400,
  *         renderTo: Ext.getBody()
@@ -204,7 +205,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
 
     /**
      * This method is called when actionable mode is requested for a cell. 
-     * @param {Ext.grid.CellContext} position The position at which actionable mode was requested.
+     * @param {Ext.grid.CellContext} pos The position at which actionable mode was requested.
      * @return {Boolean} `false` Actionable mode is *not* entered for RowEditing.
      * @protected
      */
@@ -393,7 +394,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
     /**
      * @private
      */
-    onColumnAdd: function(ct, column) {
+    onColumnAdd: function(ct, column, pos) {
         if (column.isHeader) {
             var me = this,
                 editor;
@@ -404,7 +405,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
             // so do not use getEditor which instantiates the editor if not present.
             editor = me.editor;
             if (editor) {
-                editor.onColumnAdd(column);
+                editor.onColumnAdd(column, pos);
             }
         }
     },

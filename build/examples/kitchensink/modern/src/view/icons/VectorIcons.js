@@ -12,9 +12,6 @@ Ext.define('KitchenSink.view.icons.VectorIcons', {
         type: 'Controller',
         path: 'modern/src/view/icons/VectorIconsController.js'
     }, {
-        type: 'Icons',
-        path: 'modern/src/view/icons/VectorIconsMixin.js'
-    }, {
         type: 'Sprite',
         path: 'modern/src/view/icons/XRay.js'
     }],

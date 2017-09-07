@@ -39,9 +39,9 @@
  *         title: 'DC Personnel',
  *
  *         store: store,
- *         plugins: [{
- *            type: 'gridsummaryrow'
- *         }],
+ *         plugins: {
+ *             gridsummaryrow: true
+ *         },
  *         columns: [
  *             { text: 'First Name', dataIndex: 'fname',  flex: 1 },
  *             { text: 'Last Name',  dataIndex: 'lname',  flex: 1 },

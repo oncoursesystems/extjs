@@ -37,32 +37,33 @@ Ext.define('KitchenSink.view.lists.BasicStepper', {
         height: 50
     },
 
-    plugins: [{
-        type: 'listswiper',
-        defaults: {
-            ui: 'action'
-        },
-        widget: {
-            xtype: 'listswiperstepper'
-        },
+    plugins: {
+        listswiper: {
+            defaults: {
+                ui: 'action'
+            },
+            widget: {
+                xtype: 'listswiperstepper'
+            },
 
-        left: [{
-            iconCls: 'x-fa fa-phone',
-            text: 'Call',
-            ui: 'action',
-            commit: 'onCall'
-        }],
+            left: [{
+                iconCls: 'x-fa fa-phone',
+                text: 'Call',
+                ui: 'action',
+                commit: 'onCall'
+            }],
 
-        right: [{
-            iconCls: 'x-fa fa-envelope',
-            ui: 'confirm',
-            text: 'Message',
-            commit: 'onMessage'
-        }, {
-            iconCls: 'x-fa fa-gear',
-            text: 'Settings',
-            ui: 'action',
-            commit: 'onGear'
-        }]
-    }]
+            right: [{
+                iconCls: 'x-fa fa-envelope',
+                ui: 'confirm',
+                text: 'Message',
+                commit: 'onMessage'
+            }, {
+                iconCls: 'x-fa fa-gear',
+                text: 'Settings',
+                ui: 'action',
+                commit: 'onGear'
+            }]
+        }
+    }
 });

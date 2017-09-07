@@ -291,6 +291,7 @@ Ext.define('Ext.layout.container.boxOverflow.Scroller', {
      * @private
      * Scrolls left or right by the number of pixels specified
      * @param {Number} delta Number of pixels to scroll to the right by. Use a negative number to scroll left
+     * @param {Boolean} animate
      */
     scrollBy: function(delta, animate) {
         var layout = this.layout,
@@ -420,7 +421,9 @@ Ext.define('Ext.layout.container.boxOverflow.Scroller', {
         item = this.getItem(item);
 
         if (item !== undefined) {
-            this.layout.owner.getScrollable().scrollIntoView(item.el, true, animate);
+            this.layout.owner.getScrollable().ensureVisible(item.el, {
+                animation: animate
+            });
         }
     },
 

@@ -100,5 +100,17 @@ Ext.define('KitchenSink.view.grid.BigDataController', {
         }, btn.cfg);
 
         this.getView().saveDocumentAs(cfg);
+    },
+
+    onBeforeDocumentSave: function(view){
+        view.mask({
+            xtype: 'loadmask',
+            message: 'Document is prepared for export. Please wait ...'
+        });
+    },
+
+    onDocumentSave: function(view){
+        view.unmask();
     }
+
 });

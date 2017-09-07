@@ -44,7 +44,9 @@ Ext.define('ResponsiveApp.view.main.Main', {
     defaults: {
         bodyPadding: 20,
         tabConfig: {
-            plugins: 'responsive',
+            plugins: {
+                responsive: true
+            },
             responsiveConfig: {
                 wide: {
                     iconAlign: 'left',

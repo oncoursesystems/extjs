@@ -4,7 +4,6 @@
 Ext.define('KitchenSink.view.buttons.Extra', {
     extend: 'Ext.Container',
     xtype: 'buttons-extra',
-    controller: 'buttons-extra',
 
     viewModel: {
         type: 'buttons-extra'
@@ -18,9 +17,6 @@ Ext.define('KitchenSink.view.buttons.Extra', {
 
     // <example>
     otherContent: [{
-        type: 'Controller',
-        path: 'modern/src/view/buttons/ExtraController.js'
-    }, {
         type: 'ViewModel',
         path: 'modern/src/view/buttons/ExtraModel.js'
     }],
@@ -288,31 +284,35 @@ Ext.define('KitchenSink.view.buttons.Extra', {
         items: [{
             text: 'Style',
             menu: {
+                bind: {
+                    groups: '{buttonStyle}'
+                },
                 defaults: {
                     xtype: 'menuradioitem',
-                    handler: 'onStyleSwitch',
-                    group: 'buttonstyle'
+                    group: 'value'
                 },
                 items: [
-                    {text: 'None', value: '', checked: true},
-                    {text: 'Action', value: 'action'},
-                    {text: 'Decline', value: 'decline'},
-                    {text: 'Confirm', value: 'confirm'},
-                    {text: 'Menu', value: 'menu'}
+                    { text: 'None', value: '', checked: true },
+                    { text: 'Action', value: 'action' },
+                    { text: 'Decline', value: 'decline' },
+                    { text: 'Confirm', value: 'confirm' },
+                    { text: 'Menu', value: 'menu' }
                 ]
             }
         }, {
             text: 'Type',
             menu: {
+                bind: {
+                    groups: '{buttonType}'
+                },
                 defaults: {
                     xtype: 'menuradioitem',
-                    handler: 'onTypeSwitch',
-                    group: 'buttonstyle'
+                    group: 'value'
                 },
                 items: [
-                    {text: 'Text', value: 'text', checked: true},
-                    {text: 'Icon', value: 'icon'},
-                    {text: 'Text & Icon', value: 'text-icon'}
+                    { text: 'Text', value: 'text', checked: true },
+                    { text: 'Icon', value: 'icon' },
+                    { text: 'Text & Icon', value: 'text-icon' }
                 ]
             }
         }, {

@@ -24,7 +24,9 @@ Ext.define('KitchenSink.view.chart.drawing.SpriteEvents', {
     items: [{
         xtype: 'draw',
         style: 'background: white',
-        plugins: ['spriteevents'],
+        plugins: {
+            spriteevents: true
+        },
         sprites: [{
             type: 'circle',
             fillStyle: '#7BB20C',

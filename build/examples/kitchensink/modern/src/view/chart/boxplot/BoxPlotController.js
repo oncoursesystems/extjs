@@ -48,7 +48,7 @@ Ext.define('KitchenSink.view.chart.boxplot.BoxPlotController', {
             + '<br>Q3: ' + q3
             + '<br>Median: ' + median
             + '<br>Q1: ' + q1
-            + '<br>Low : ' + low
+            + '<br>Low: ' + low
         );
     }
 

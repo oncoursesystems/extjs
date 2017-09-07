@@ -10,13 +10,13 @@ Ext.define('KitchenSink.view.binding.ComboChaining', {
         path: 'app/store/Countries.js'
     },{
         type: 'Store',
-        path: 'classic/samples/store/CountryStates.js'
+        path: 'app/store/CountryStates.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/tree/Country.js'
+        path: 'app/model/tree/Country.js'
     },{
         type: 'Model',
-        path: 'classic/samples/model/State.js'
+        path: 'app/model/State.js'
     }],
     bodyPadding: 10,
     //</example>

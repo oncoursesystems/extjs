@@ -1,7 +1,7 @@
 /* global Ext, jasmine, MockAjaxManager, expect, xit */
 
 topSuite("Ext.grid.feature.Grouping",
-    ['Ext.grid.Panel', 'Ext.grid.plugin.CellEditing', 'Ext.form.field.Text', 'Ext.grid.feature.*', 'Ext.grid.plugin.RowExpander'],
+    ['Ext.grid.Panel', 'Ext.grid.plugin.CellEditing', 'Ext.form.field.Text', 'Ext.grid.feature.*', 'Ext.grid.plugin.RowExpander', 'Ext.data.BufferedStore'],
 function() {
     var grid, view, store, menu, schema, groupingFeature,
         synchronousLoad = true,

@@ -65,6 +65,7 @@ Ext.define('KitchenSink.view.grid.addons.RowBodyGrid', {
     columns: [{
         text: 'Company',
         flex: 1,
+        minWidth: 100,
         dataIndex: 'name'
     }, {
         text: 'Price',

@@ -36,33 +36,34 @@ Ext.define('KitchenSink.view.lists.UndoableStepper', {
         height: 50
     },
 
-    plugins: [{
-        type: 'listswiper',
-        widget: {
-            xtype: 'listswiperstepper'
-        },
+    plugins: {
+        listswiper: {
+            widget: {
+                xtype: 'listswiperstepper'
+            },
 
-        right: [{
-            iconCls: 'x-fa fa-envelope',
-            text: 'Message',
-            ui: 'confirm',
-            commit: 'onMessage'
-        }, {
-            iconCls: 'x-fa fa-phone',
-            text: 'Call',
-            ui: 'action',
-            commit: 'onCall',
+            right: [{
+                iconCls: 'x-fa fa-envelope',
+                text: 'Message',
+                ui: 'confirm',
+                commit: 'onMessage'
+            }, {
+                iconCls: 'x-fa fa-phone',
+                text: 'Call',
+                ui: 'action',
+                commit: 'onCall',
 
-            undoable: true
-        }, {
-            iconCls: 'x-fa fa-trash',
-            text: 'Delete',
-            ui: 'decline',
+                undoable: true
+            }, {
+                iconCls: 'x-fa fa-trash',
+                text: 'Delete',
+                ui: 'decline',
 
-            precommit: 'onDeleteItem',
-            commit: 'onCommitDeleteItem',
-            revert: 'onUndoDeleteItem',
-            undoable: true
-        }]
-    }]
+                precommit: 'onDeleteItem',
+                commit: 'onCommitDeleteItem',
+                revert: 'onUndoDeleteItem',
+                undoable: true
+            }]
+        }
+    }
 });

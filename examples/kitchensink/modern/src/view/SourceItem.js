@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.SourceItem', {
             .replace(/</g, '&lt;')
             .replace(/\r/g, '');
 
-        return '<div class="prettyprint-ct"><pre style="line-height: 14px; padding-left: 5px" class="prettyprint">' + html + '</pre></div>';
+        return '<pre style="line-height: 14px; padding-left: 5px" class="prettyprint">' + html + '</pre>'
     },
 
     updateHtml: function(html, oldHtml) {
@@ -29,17 +29,16 @@ Ext.define('KitchenSink.view.SourceItem', {
             renderDiv = me.renderDiv,
             ct, el;
 
-        me.callParent([html, oldHtml]);
+        if (this.prettyPrint) {
+            renderDiv.innerHTML = html;
 
-        ct = me.element.down('.prettyprint-ct', true);
-        el = ct.firstChild;
-
-        renderDiv.appendChild(el.cloneNode(true));
-
-        PR.prettyPrint(function() {
-            if (!me.destroyed) {
-                ct.replaceChild(renderDiv.firstChild, el);
-            }
-        }, renderDiv);
+            PR.prettyPrint(function () {
+                if (!me.destroyed) {
+                    me.superclass.updateHtml.call(me, renderDiv.innerHTML, oldHtml);
+                }
+            }, renderDiv);
+        } else {
+            me.callParent([html, oldHtml]);
+        }
     }
 });

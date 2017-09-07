@@ -2,8 +2,11 @@
     display: table;
     // fill body width
     width: 100%;
-    // expand to fill body height when the field's main element has a height
-    height: 100%;
+
+    .#{$prefix}form-text-heighted & {
+        // expand to fill body height when the field's main element has a height
+        height: 100%;
+    }
 
     @if $include-ff {
         // https://sencha.jira.com/browse/EXTJS-13752

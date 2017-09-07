@@ -87,6 +87,8 @@ Ext.define('KitchenSink.view.grid.ProgressBarPager', {
     bbar: {
         xtype: 'pagingtoolbar',
         displayInfo: true,
-        plugins: 'ux-progressbarpager'
+        plugins: {
+            'ux-progressbarpager': true
+        }
     }
 });

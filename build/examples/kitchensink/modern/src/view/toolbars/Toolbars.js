@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.toolbars.Toolbars', {
     profiles: {
         defaults: {
             height: 300,
-            width: 400
+            width: 500
         },
         phone: {
             defaults: {

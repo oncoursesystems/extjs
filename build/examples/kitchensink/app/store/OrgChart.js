@@ -2,6 +2,10 @@ Ext.define('KitchenSink.store.OrgChart', {
     extend: 'Ext.data.TreeStore',
     alias: 'store.org-chart',
 
+    config: {
+        rootVisible: true
+    },
+
     root: {
         name: 'Cliff Capote',
         title: 'CEO',

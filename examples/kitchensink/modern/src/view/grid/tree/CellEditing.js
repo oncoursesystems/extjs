@@ -27,9 +27,9 @@ Ext.define('KitchenSink.view.grid.tree.CellEditing', {
     store: 'Files',
     width: '${width}',
 
-    plugins: [{
-        type: 'gridcellediting'
-    }],
+    plugins: {
+        gridcellediting: true
+    },
 
     columns: [{
         xtype: 'treecolumn',

@@ -44,7 +44,7 @@ Ext.define('Ext.chart.Util', {
      * are used.
      * @param {Number[]} range The range to validate. Never modified.
      * @param {Number[]} defaultRange
-     * @param {Number} [padding=1] Padding to use in case of identical min/max.
+     * @param {Number} [padding=0.5] Padding to use in case of identical min/max.
      * Range is not guaranteed to be `padding * 2` in such a case, if min/max
      * are close to MIN_SAFE_INTEGER/MAX_SAFE_INTEGER.
      * @return {Number[]}
@@ -54,9 +54,12 @@ Ext.define('Ext.chart.Util', {
             return defaultRange;
         }
         if (range[0] === range[1]) {
-            padding = padding || 1;
+            padding = padding || 0.5;
             range = [range[0] - padding, range[0] + padding];
         }
+        // In case the 'range' values are at Infinity, the expansion above by the value
+        // of 'padding' won't do us much good, so we still have to fall back to the
+        // 'defaultRange'.
         if (range[0] === range[1]) {
             return defaultRange;
         }
@@ -65,6 +68,20 @@ Ext.define('Ext.chart.Util', {
             isFinite(range[0]) ? range[0] : defaultRange[0],
             isFinite(range[1]) ? range[1] : defaultRange[1]
         ];
+    },
+
+    applyAnimation: function (animation, oldAnimation) {
+        if (!animation) {
+            animation = {
+                duration: 0
+            };
+        } else if (animation === true) {
+            animation = {
+                easing: 'easeInOut',
+                duration: 500
+            };
+        }
+        return oldAnimation ? Ext.apply({}, animation, oldAnimation) : animation;
     }
 
 });

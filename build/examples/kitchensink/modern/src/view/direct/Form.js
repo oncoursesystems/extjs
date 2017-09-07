@@ -27,6 +27,9 @@ Ext.define('KitchenSink.view.direct.Form', {
             height: 300,
             width: 500
         },
+        material: {
+            height: 350
+        },
         phone: {
             defaults: {
                 height: undefined,

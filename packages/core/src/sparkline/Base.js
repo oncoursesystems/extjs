@@ -107,7 +107,8 @@ Ext.define('Ext.sparkline.Base', {
 
     cachedConfig: {
         /**
-         * @cfg {String} [lineColor=#157fcc] The hex value for line colors in graphs which
+         * @cfg {String} lineColor
+         * The hex value for line colors in graphs which
          * display lines ({@link Ext.sparkline.Box Box},
          * {@link Ext.sparkline.Discrete Discrete} and {@link Ext.sparkline.Line Line}).
          */
@@ -280,7 +281,7 @@ Ext.define('Ext.sparkline.Base', {
             // Ensure that there is a single timer to handle all queued redraws.
             if (!me.redrawTimer) {
                 Ext.sparkline.Base.prototype.redrawTimer =
-                        Ext.Function.requestAnimationFrame(me.processRedrawQueue);
+                        Ext.raf(me.processRedrawQueue);
             }
         } else {
             me.redraw();

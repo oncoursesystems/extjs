@@ -43,11 +43,12 @@ Ext.define('SimpleTasks.view.lists.Tree', {
     ],
 
     viewConfig: {
-        plugins: [{
-            ptype: 'tasksdragdrop',
-            dragText: 'Drag to reorder',
-            ddGroup: 'task'
-        }]
+        plugins: {
+            tasksdragdrop: {
+                dragText: 'Drag to reorder',
+                ddGroup: 'task'
+            }
+        }
     },
 
     /**

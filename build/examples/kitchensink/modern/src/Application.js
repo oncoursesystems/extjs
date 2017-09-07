@@ -28,6 +28,13 @@ Ext.define('KitchenSink.Application', {
     quickTips: {
         tooltip: {
             showOnTap: true
+        },
+        overflowTip: {
+            // This means that mouseover (or a touch)
+            // cancels the auto dismiss timer to give the
+            // user an opportunity to read long text.
+            // Tap outside of the tip then closes it.
+            allowOver: true
         }
     },
 

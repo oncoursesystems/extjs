@@ -691,4 +691,305 @@ topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore']
             });
         });
     });
+
+    describe('series colors', function () {
+        var chart, layoutEnd;
+        var colors1 = ['red', 'blue', 'green', 'orange', 'yellow'];
+        var colors2 = ['gold', 'cyan', 'magenta', 'lime', 'navy'];
+        var n = colors1.length;
+        var data = (function () {
+            var data = [];
+
+            for (var i = 0; i < n; i++) {
+                var point = {
+                    x: 'cat' + (i+1)
+                };
+                for (var j = 0; j < n; j++) {
+                    point['y' + (j+1)] = j+1;
+                }
+                data.push(point);
+            }
+
+            return data;
+        })();
+
+        afterEach(function () {
+            chart = Ext.destroy(chart);
+            layoutEnd = false;
+        });
+
+
+        it('should use theme colors in a cartesian (bar) chart', function () {
+            runs(function () {
+                chart = Ext.create({
+                    xtype: 'cartesian',
+                    animation: false,
+                    renderTo: document.body,
+                    width: 400,
+                    height: 400,
+                    store: {
+                        data: data.slice()
+                    },
+                    legend: {
+                        type: 'sprite',
+                        docked: 'right'
+                    },
+                    series: [{
+                        type: 'bar',
+                        xField: 'x',
+                        yField: ['y1', 'y2', 'y3', 'y4', 'y5']
+                    }],
+                    listeners: {
+                        layout: function () {
+                            layoutEnd =  true;
+                        }
+                    }
+                });
+            });
+            waitsFor(function () {
+                return layoutEnd;
+            });
+            runs(function () {
+                var series = chart.getSeries()[0],
+                    seriesSprites = series.getSprites(),
+                    legendSprites = chart.getLegend().getSprites(),
+                    themeColors = chart.getTheme().getColors();
+
+                for (var i = 0; i < n; i++) {
+                    expect(seriesSprites[i].attr.fillStyle).toBe(themeColors[i]);
+                    expect(legendSprites[i].getMarker().attr.fillStyle).toBe(themeColors[i]);
+                }
+            });
+        });
+        it('should use theme colors in a polar (pie3d) chart', function () {
+            runs(function () {
+                chart = Ext.create({
+                    xtype: 'polar',
+                    animation: false,
+                    renderTo: document.body,
+                    width: 400,
+                    height: 400,
+                    store: {
+                        data: data.slice()
+                    },
+                    legend: {
+                        type: 'sprite',
+                        docked: 'right'
+                    },
+                    series: [{
+                        type: 'pie3d',
+                        angleField: 'y1',
+                        label: {
+                            field: 'x'
+                        }
+                    }],
+                    listeners: {
+                        layout: function () {
+                            layoutEnd =  true;
+                        }
+                    }
+                });
+            });
+            waitsFor(function () {
+                return layoutEnd;
+            });
+            runs(function () {
+                var series = chart.getSeries()[0],
+                    seriesSprites = series.getSprites(),
+                    legendSprites = chart.getLegend().getSprites(),
+                    themeColors = chart.getTheme().getColors();
+
+                for (var i = 0; i < n; i++) {
+                    expect(seriesSprites[i * series.spritesPerSlice].attr.baseColor).toBe(themeColors[i]);
+                    expect(legendSprites[i].getMarker().attr.fillStyle).toBe(themeColors[i]);
+                }
+            });
+        });
+        it('should use colors from the series "colors" config (cartesian, bar)', function () {
+            runs(function () {
+                chart = Ext.create({
+                    xtype: 'cartesian',
+                    animation: false,
+                    renderTo: document.body,
+                    width: 400,
+                    height: 400,
+                    store: {
+                        data: data.slice()
+                    },
+                    legend: {
+                        type: 'sprite',
+                        docked: 'right'
+                    },
+                    series: [{
+                        type: 'bar',
+                        xField: 'x',
+                        yField: ['y1', 'y2', 'y3', 'y4', 'y5'],
+                        colors: colors1.slice()
+                    }],
+                    listeners: {
+                        layout: function () {
+                            layoutEnd =  true;
+                        }
+                    }
+                });
+            });
+            waitsFor(function () {
+                return layoutEnd;
+            });
+            runs(function () {
+                var series = chart.getSeries()[0],
+                    seriesSprites = series.getSprites(),
+                    legendSprites = chart.getLegend().getSprites();
+
+                for (var i = 0; i < n; i++) {
+                    var hexColor = Ext.util.Color.fly(colors1[i]).toString();
+                    expect(seriesSprites[i].attr.fillStyle).toBe(hexColor);
+                    expect(legendSprites[i].getMarker().attr.fillStyle).toBe(hexColor);
+                }
+            });
+        });
+        it('should use colors from the series "colors" config (polar, pie3d)', function () {
+            runs(function () {
+                chart = Ext.create({
+                    xtype: 'polar',
+                    animation: false,
+                    renderTo: document.body,
+                    width: 400,
+                    height: 400,
+                    store: {
+                        data: data.slice()
+                    },
+                    legend: {
+                        type: 'sprite',
+                        docked: 'right'
+                    },
+                    series: [{
+                        type: 'pie3d',
+                        angleField: 'y1',
+                        label: {
+                            field: 'x'
+                        },
+                        colors: colors1.slice()
+                    }],
+                    listeners: {
+                        layout: function () {
+                            layoutEnd =  true;
+                        }
+                    }
+                });
+            });
+            waitsFor(function () {
+                return layoutEnd;
+            });
+            runs(function () {
+                var series = chart.getSeries()[0],
+                    seriesSprites = series.getSprites(),
+                    legendSprites = chart.getLegend().getSprites();
+
+                for (var i = 0; i < n; i++) {
+                    var hexColor = Ext.util.Color.fly(colors1[i]).toString();
+                    expect(seriesSprites[i * series.spritesPerSlice].attr.baseColor).toBe(hexColor);
+                    expect(legendSprites[i].getMarker().attr.fillStyle).toBe(hexColor);
+                }
+            });
+        });
+        it('should reflect dynamic changes to the series "colors" config (cartesian, bar)', function () {
+            runs(function () {
+                chart = Ext.create({
+                    xtype: 'cartesian',
+                    animation: false,
+                    renderTo: document.body,
+                    width: 400,
+                    height: 400,
+                    store: {
+                        data: data.slice()
+                    },
+                    legend: {
+                        type: 'sprite',
+                        docked: 'right'
+                    },
+                    series: [{
+                        type: 'bar',
+                        xField: 'x',
+                        yField: ['y1', 'y2', 'y3', 'y4', 'y5'],
+                        colors: colors1.slice()
+                    }],
+                    listeners: {
+                        layout: function () {
+                            layoutEnd =  true;
+                        }
+                    }
+                });
+            });
+            waitsFor(function () {
+                return layoutEnd;
+            });
+            runs(function () {
+                layoutEnd = false;
+                chart.getSeries()[0].setColors(colors2.slice());
+            });
+            waits(1);
+            runs(function () {
+                var series = chart.getSeries()[0],
+                    seriesSprites = series.getSprites(),
+                    legendSprites = chart.getLegend().getSprites();
+
+                for (var i = 0; i < n; i++) {
+                    var hexColor = Ext.util.Color.fly(colors2[i]).toString();
+                    expect(seriesSprites[i].attr.fillStyle).toBe(hexColor);
+                    expect(legendSprites[i].getMarker().attr.fillStyle).toBe(hexColor);
+                }
+            });
+        });
+        it('should reflect dynamic changes to the series "colors" config (polar, pie3d)', function () {
+            runs(function () {
+                chart = Ext.create({
+                    xtype: 'polar',
+                    animation: false,
+                    renderTo: document.body,
+                    width: 400,
+                    height: 400,
+                    store: {
+                        data: data.slice()
+                    },
+                    legend: {
+                        type: 'sprite',
+                        docked: 'right'
+                    },
+                    series: [{
+                        type: 'pie3d',
+                        angleField: 'y1',
+                        label: {
+                            field: 'x'
+                        },
+                        colors: colors1.slice()
+                    }],
+                    listeners: {
+                        layout: function () {
+                            layoutEnd =  true;
+                        }
+                    }
+                });
+            });
+            waitsFor(function () {
+                return layoutEnd;
+            });
+            runs(function () {
+                layoutEnd = false;
+                chart.getSeries()[0].setColors(colors2.slice());
+            });
+            waits(1);
+            runs(function () {
+                var series = chart.getSeries()[0],
+                    seriesSprites = series.getSprites(),
+                    legendSprites = chart.getLegend().getSprites();
+
+                for (var i = 0; i < n; i++) {
+                    var hexColor = Ext.util.Color.fly(colors2[i]).toString();
+                    expect(seriesSprites[i * series.spritesPerSlice].attr.baseColor).toBe(hexColor);
+                    expect(legendSprites[i].getMarker().attr.fillStyle).toBe(hexColor);
+                }
+            });
+        });
+    });
 });

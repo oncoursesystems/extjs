@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Sencha-Examples';
-  src:  url('fonts/Sencha-Examples.eot?2a4uuv');
-  src:  url('fonts/Sencha-Examples.eot?2a4uuv#iefix') format('embedded-opentype'),
-    url('fonts/Sencha-Examples.ttf?2a4uuv') format('truetype'),
-    url('fonts/Sencha-Examples.woff?2a4uuv') format('woff'),
-    url('fonts/Sencha-Examples.svg?2a4uuv#Sencha-Examples') format('svg');
+  src:  url('fonts/Sencha-Examples.eot?1ccqn9');
+  src:  url('fonts/Sencha-Examples.eot?1ccqn9#iefix') format('embedded-opentype'),
+    url('fonts/Sencha-Examples.ttf?1ccqn9') format('truetype'),
+    url('fonts/Sencha-Examples.woff?1ccqn9') format('woff'),
+    url('fonts/Sencha-Examples.svg?1ccqn9#Sencha-Examples') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -23,6 +23,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-cell-overflow-grid:before {
+  content: "\e992";
+}
+.icon-overflow-tabs:before {
+  content: "\e993";
+}
+.icon-toolbar-overflow:before {
+  content: "\e994";
+}
 .icon-line-real-time-date:before {
   content: "\e98f";
 }
@@ -1400,4 +1409,3 @@
 .icon-minus-circle:before {
   content: "\e901";
 }
-

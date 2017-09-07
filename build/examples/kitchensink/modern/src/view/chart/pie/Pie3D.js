@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.chart.pie.Pie3D', {
 
     requires: [
         'Ext.chart.series.Pie3D',
-        'Ext.chart.interactions.RotatePie3D'
+        'Ext.chart.interactions.Rotate'
     ],
 
     // <example>
@@ -56,11 +56,14 @@ Ext.define('KitchenSink.view.chart.pie.Pie3D', {
     layout: 'fit',
 
     items: [{
+        bind: {
+            theme: '{menuGroups.charttheme}'
+        },
         xtype: 'polar',
         shadow: '${shadow}',
         reference: 'chart',
         innerPadding: '${innerPadding}',
-        interactions: ['rotatePie3d'],
+        interactions: ['rotate'],
         animate: {
             duration: 500,
             easing: 'easeIn'
@@ -107,9 +110,11 @@ Ext.define('KitchenSink.view.chart.pie.Pie3D', {
             iconCls: 'x-fa fa-picture-o',
             arrow: false,
             menu: {
+                bind: {
+                    groups: '{menuGroups}'
+                },
                 defaults: {
                     xtype: 'menuradioitem',
-                    handler: 'onThemeSwitch',
                     group: 'charttheme'
                 },
                 items: [{

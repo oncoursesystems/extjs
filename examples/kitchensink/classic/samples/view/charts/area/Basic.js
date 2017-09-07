@@ -78,7 +78,6 @@ Ext.define('KitchenSink.view.charts.area.Basic', {
         }]
         // No 'series' config here,
         // as series are dynamically added in the controller.
-        //<example>
     }],
 
     listeners: {

@@ -65,6 +65,9 @@ Ext.define('KitchenSink.view.chart.navigator.Line', {
         xtype: 'chartnavigator',
         reference: 'chartnavigator',
         chart: {
+            bind: {
+                theme: '{menuGroups.charttheme}'
+            },
             xtype: 'cartesian',
             reference: 'chart',
             insetPadding: '${insetPadding}',
@@ -172,9 +175,11 @@ Ext.define('KitchenSink.view.chart.navigator.Line', {
             iconCls: 'x-fa fa-picture-o',
             arrow: false,
             menu: {
+                bind: {
+                    groups: '{menuGroups}'
+                },
                 defaults: {
                     xtype: 'menuradioitem',
-                    handler: 'onThemeSwitch',
                     group: 'charttheme'
                 },
                 items: [{

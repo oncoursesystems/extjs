@@ -4,7 +4,6 @@
 Ext.define('KitchenSink.view.grid.core.GroupedGrid', {
     extend: 'Ext.Container',
     xtype: 'grouped-grid',
-    controller: 'grouped-grid',
 
     requires: [
         'Ext.grid.cell.Number',
@@ -15,9 +14,6 @@ Ext.define('KitchenSink.view.grid.core.GroupedGrid', {
 
     //<example>
     otherContent: [{
-        type: 'Controller',
-        path: 'modern/src/view/grid/core/GroupedGridController.js'
-    }, {
         type: 'Model',
         path: 'app/model/Restaurant.js'
     }, {
@@ -66,8 +62,8 @@ Ext.define('KitchenSink.view.grid.core.GroupedGrid', {
         reference: 'grid',
         shadow: '${shadow}',
         title: 'Restaurants',
-        grouped: true,
 
+        grouped: true,
         groupFooter: {
             xtype: 'gridsummaryrow'
         },
@@ -103,25 +99,6 @@ Ext.define('KitchenSink.view.grid.core.GroupedGrid', {
                     tip: 'Set to {tracking:plural("Star")}'
                 }
             }
-        }]
-    }, {
-        xtype: 'toolbar',
-        docked: 'top',
-        ui: 'transparent',
-        padding: '${tbarPadding}',
-        layout: {
-            type: 'hbox',
-            align: 'stretch'
-        },
-        defaults: {
-            shadow: '${buttonShadow}',
-            ui: 'action'
-        },
-        items: [{
-            enableToggle: true,
-            pressed: true,
-            text: 'Toggle Grouping On/Off',
-            toggleHandler: 'onToggleGrouping'
         }]
     }]
 });

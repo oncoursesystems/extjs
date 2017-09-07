@@ -19,7 +19,8 @@ Ext.define('KitchenSink.view.tree.TreeGrid', {
         'Ext.data.*',
         'Ext.grid.*',
         'Ext.tree.*',
-        'Ext.grid.column.Check'
+        'Ext.grid.column.Check',
+        'Ext.grid.plugin.Exporter'
     ],    
     
     //<example>
@@ -105,5 +106,50 @@ Ext.define('KitchenSink.view.tree.TreeGrid', {
         iconCls: 'tree-grid-edit-task',
         handler: 'onEditRowAction',
         isActionDisabled: 'isRowEditDisabled'
-    }]
+    }],
+
+    header: {
+        itemPosition: 1, // after title before collapse tool
+        items: [{
+            ui: 'default-toolbar',
+            xtype: 'button',
+            text: 'Export to ...',
+            menu: {
+                defaults: {
+                    handler: 'exportTo'
+                },
+                items: [{
+                    text:   'Excel xlsx',
+                    cfg: {
+                        type: 'excel07',
+                        ext: 'xlsx'
+                    }
+                },{
+                    text: 'Excel xml',
+                    cfg: {
+                        type: 'excel03',
+                        ext: 'xml'
+                    }
+                },{
+                    text:   'CSV',
+                    cfg: {
+                        type: 'csv'
+                    }
+                },{
+                    text:   'TSV',
+                    cfg: {
+                        type: 'tsv',
+                        ext: 'csv'
+                    }
+                },{
+                    text:   'HTML',
+                    cfg: {
+                        type: 'html'
+                    }
+                }]
+            }
+        }]
+    },
+
+    plugins: 'gridexporter'
 });

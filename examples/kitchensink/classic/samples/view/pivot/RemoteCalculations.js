@@ -42,37 +42,38 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
         type: 'spreadsheet'
     },
 
-    plugins: [{
-        ptype: 'pivotdrilldown',
-        // define the columns used by the grid
-        columns: [
-            {dataIndex: 'company', text: 'Company'},
-            {dataIndex: 'continent', text: 'Continent'},
-            {dataIndex: 'country', text: 'Country'},
-            {dataIndex: 'person', text: 'Person'},
-            {dataIndex: 'date', text: 'Date', xtype: 'datecolumn'},
-            {dataIndex: 'value', text: 'Value', xtype: 'numbercolumn', align: 'right'},
-            {dataIndex: 'quantity', text: 'Qty', xtype: 'numbercolumn', align: 'right'},
-            {dataIndex: 'year', text: 'Year', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right'},
-            {dataIndex: 'month', text: 'Month', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right'}
-        ],
+    plugins: {
+        pivotdrilldown: {
+            // define the columns used by the grid
+            columns: [
+                {dataIndex: 'company', text: 'Company'},
+                {dataIndex: 'continent', text: 'Continent'},
+                {dataIndex: 'country', text: 'Country'},
+                {dataIndex: 'person', text: 'Person'},
+                {dataIndex: 'date', text: 'Date', xtype: 'datecolumn'},
+                {dataIndex: 'value', text: 'Value', xtype: 'numbercolumn', align: 'right'},
+                {dataIndex: 'quantity', text: 'Qty', xtype: 'numbercolumn', align: 'right'},
+                {dataIndex: 'year', text: 'Year', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right'},
+                {dataIndex: 'month', text: 'Month', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right'}
+            ],
 
-        // define a remote store that will be used to filter the records
-        remoteStore: {
-            model: 'KitchenSink.model.pivot.Sale',
+            // define a remote store that will be used to filter the records
+            remoteStore: {
+                model: 'KitchenSink.model.pivot.Sale',
 
-            proxy: {
-                // load using HTTP
-                type: 'ajax',
-                url: '/KitchenSink/RemoteSalesData',
-                // the return will be JSON, so lets set up a reader
-                reader: {
-                    type: 'json',
-                    rootProperty: 'data'
+                proxy: {
+                    // load using HTTP
+                    type: 'ajax',
+                    url: '/KitchenSink/RemoteSalesData',
+                    // the return will be JSON, so lets set up a reader
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'data'
+                    }
                 }
             }
         }
-    }],
+    },
 
     // Set this to false if multiple dimensions are configured on leftAxis and
     // you want to automatically expand the row groups when calculations are ready.

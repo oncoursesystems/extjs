@@ -8,6 +8,8 @@ Ext.define('KitchenSink.view.forms.RemoteCombo', {
     requires: [
         'Ext.field.ComboBox'
     ],
+    
+    controller: 'form-remote-combo',
 
     //<example>
     otherContent: [{
@@ -20,16 +22,25 @@ Ext.define('KitchenSink.view.forms.RemoteCombo', {
 
     profiles: {
         defaults: {
-            width: 300
+            alignTarget: undefined,
+            pickerMaxHeight: undefined,
+            width: 300,
+            height: 400
         },
         phone: {
-            width: undefined
+            defaults: {
+                width: undefined,
+                height: undefined,
+                alignTarget: 'el',
+                pickerMaxHeight: 1000
+            }
         }
     },
     //</example>
 
     bodyPadding: 20,
     width: '${width}',
+    height: '${height}',
     autoSize: true,
 
     items:[{
@@ -38,17 +49,20 @@ Ext.define('KitchenSink.view.forms.RemoteCombo', {
         triggerAction: 'query',
         queryMode: 'remote',
         picker: 'floated',
-        matchFieldWidth: false,
+        placeholder: 'Choose thread to open...',
+        alignTarget: '${alignTarget}',
         store: {
             type: 'form-forum-posts'
         },
         floatedPicker: {
-            maxWidth: 400,
-            minWidth: 300
+            maxHeight: '${pickerMaxHeight}'
         },
-        itemTpl: '<a class="remote-combo-search-item" href="http://www.sencha.com/forum/showthread.php?t={topicId}&p={id}" target="_blank">' +
+        itemTpl: '<div class="remote-combo-search-item">' +
                     '<h3><span>{[Ext.Date.format(values.lastPost, "M j, Y")]}<br>by {author}</span>{title}</h3>' +
                     '{excerpt}' +
-                    '</a>'
+                '</div',
+        listeners: {
+            select: 'onThreadSelect'
+        }
     }]
 });

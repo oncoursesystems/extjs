@@ -10,6 +10,8 @@
 Ext.define('KitchenSink.controller.tablet.Main', {
     extend: 'KitchenSink.controller.Main',
 
+    requires: ['Ext.fx.animation.Slide'],
+
     refs: {
         toolbar: '#mainNavigationBar',
         contentPanel1: '#contentPanel1',
@@ -46,28 +48,41 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         }
     },
 
-    setAnimate: function(direction) {
-        this.getCardPanel().getLayout().setAnimation({
-            type: 'slide',
-            direction: direction === 'forward' ? 'left' : 'right',
-            duration: 250
-        });
+    configureAnimation: function(fromNode, toNode) {
+        var layout = this.getCardPanel().getLayout(),
+            animation;
 
-        this.animateDirection = direction;
-    },
+        if (fromNode && toNode) {
+            if (fromNode.contains(toNode)) {
+                // navigating downward in the hierarchy - animate right to left
+                animation = {
+                    type: 'slide',
+                    direction: 'left',
+                    duration: 250
+                };
+            } else if (toNode.contains(fromNode)) {
+                // navigating upward in the hierarchy - animate left to right
+                animation = {
+                    type: 'slide',
+                    direction: 'right',
+                    duration: 250
+                };
+            }
+        }
 
-    /**
-     * Set animnation for moving forward (right) through the navigation hierarchy.
-     */
-    animateForward: function() {
-        this.setAnimate('forward');
-    },
+        if (!animation && fromNode) {
+            animation = {
+                type: 'slide',
+                direction: 'top',
+                duration: 250
+            };
+        }
 
-    /**
-     * Set animnation for moving backward (left) through the navigation hierarchy.
-     */
-    animateBackward: function() {
-        this.setAnimate('backward');
+        if (animation) {
+            layout.setAnimation(animation);
+        }
+
+        return layout.getAnimation();
     },
 
     updateTitle: function(node) {
@@ -87,39 +102,79 @@ Ext.define('KitchenSink.controller.tablet.Main', {
     updateBreadcrumb: function(node) {
         var me = this,
             breadcrumb = me.getBreadcrumb(),
-            path = [];
+            path = [],
+            toAdd = [],
+            items = breadcrumb.getItems().items,
+            sepCfg = {
+                xtype: 'component',
+                cls: 'x-tool',
+                _bcSeparator: true,
+                html: '<div class="' + Ext.baseCSSPrefix + 'icon-el ' + Ext.baseCSSPrefix + 'font-icon ' + Ext.baseCSSPrefix + 'tool-type-right' + '"></div>'
+            },
+            btnCfg, existing, len, i, j, focusEl;
 
-        do {
-            path.push({
+        // Build the button path
+        for (; node; node = node.parentNode) {
+            path.unshift(node);
+        }
+
+        // Update the buttons as non-destructively as possible to preserve focus if possible.
+        for (i = 0, j = 0, len = path.length; i < len; i++, j+=2) {
+            node = path[i];
+
+            btnCfg = {
+                _bcButton: true,
                 text: node.get('text'),
                 value: node.get('id'),
                 action: 'breadcrumb'
-            });
+            };
+            existing = items[j];
 
-            node = node.parentNode;
-
-            if (node) {
-                path.push({
-                    xtype: 'component',
-                    html: ' > '
+            if (existing && existing._bcButton) {
+                // Because we have non-configs in this object, we need to set strict:false
+                // to silence the warnings we would otherwise get.
+                existing.setConfig(btnCfg, {
+                    strict: false
                 });
+
+                if (i < len - 1) {
+                    existing = items[j + 1];
+                    if (!existing || !existing._bcSeparator) {
+                        toAdd.push(sepCfg);
+                    }
+                }
+            } else {
+                toAdd.push(btnCfg);
+                if (i < len - 1) {
+                    toAdd.push(sepCfg);
+                }
             }
-        } while (node);
+        }
 
-        path = path.reverse();
-        path.push.apply(path, breadcrumb.afterItems);
+        // We need to remove everything after the end of the buttons
+        breadcrumb.remove(Ext.Array.slice(items, j - 1, 100), true);
 
-        breadcrumb.removeAll(true);
-        breadcrumb.add(path);
+        // Append the afterItems to what we need to add.
+        if (breadcrumb.afterItems) {
+            Ext.Array.push(toAdd, breadcrumb.afterItems);
+        }
+        if (toAdd.length) {
+            breadcrumb.add(toAdd);
+        }
+
+        // If we have buttons, then focus the last one.
+        if (j) {
+            focusEl = breadcrumb.items.items[j - 2].getFocusEl();
+            if (focusEl) {
+                focusEl.focus();
+            }
+        }
 
         return me;
     },
 
     onBreadcrumbTap: function(button) {
-        var me = this;
-
-        me.animateBackward();
-        me.redirectTo(button.getValue());
+        this.redirectTo(button.getValue());
     },
 
     handleRoute: function(id) {
@@ -127,9 +182,10 @@ Ext.define('KitchenSink.controller.tablet.Main', {
             store = Ext.StoreMgr.get('Navigation'),
             node = store.getNodeById(id),
             cardPanel = me.getCardPanel(),
-            animation = cardPanel.getLayout().getAnimation(),
+            animation = me.configureAnimation(me.record, node),
             activeCard = cardPanel.getActiveItem(),
             cp1 = activeCard.id === 'contentPanel2',
+            currentLeafView = me.currentLeafView,
             contentPanel1, contentPanel2,
             thumbnails, thumbnails1, thumbnails2,
             cmp, thumbnailsStore, demoContent,
@@ -152,9 +208,9 @@ Ext.define('KitchenSink.controller.tablet.Main', {
             };
 
             if (!demoContent.$preventContentSize && demoContent.getWidth() === null) {
-                demoContent.setWidth('90%');
-                demoContent.setHeight('90%');
-            }
+                    demoContent.setWidth('90%');
+                    demoContent.setHeight('90%');
+                }
 
             if (demoContent.getShadow() !== false) {
                 //default to having a shadow
@@ -162,6 +218,8 @@ Ext.define('KitchenSink.controller.tablet.Main', {
             }
 
             me.currentDemo = node;
+
+            cmp = me.currentLeafView = Ext.create(cmp);
         } else {
             contentPanel1 = me.getContentPanel1();
             contentPanel2 = me.getContentPanel2();
@@ -180,24 +238,21 @@ Ext.define('KitchenSink.controller.tablet.Main', {
 
             thumbnailsStore.setData(node.childNodes);
 
-            if (animation && me.currentDemo) {
-                me.currentDemo = null;
-
-                animation.on({
-                    single: true,
-                    animationend: function() {
-                        // titlebar, breadcrumb, cardPanel1, cardPanel2, demo (demo = 4)
-                        if (cardPanel.items.length > 3) {
-                            cardPanel.removeAt(3);
-                        }
-                    }
-                });
-            }
+            me.currentDemo = me.currentLeafView = null;
 
             cmp = cp1 ? contentPanel1 : contentPanel2;
 
             // Hide owned menus - old view destruction doesn't take place until animation end.
             Ext.menu.Manager.hideAll();
+        }
+
+        if (currentLeafView) {
+            animation.on({
+                single: true,
+                animationend: function () {
+                    currentLeafView.destroy();
+                }
+            });
         }
 
         me.updateTitle(node)
@@ -209,12 +264,7 @@ Ext.define('KitchenSink.controller.tablet.Main', {
     },
 
     onThumbnailClick: function(view, location) {
-        var me = this,
-            record = location.record;
-
-        me.record = record;
-        me.animateForward();
-        me.redirectTo(record.id);
+        this.redirectTo(location.record.id);
     },
 
     getAvailableThemes: function () {

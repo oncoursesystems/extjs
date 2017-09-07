@@ -200,23 +200,25 @@ Ext.define('Ext.dataview.selection.Records', {
         var me = this,
             selection = me.getSelected(),
             view = me.view,
-            columns = view.ownerGrid.getVisibleColumnManager().getColumns(),
+            columns = view.getHeaderContainer().getVisibleColumns(),
             colCount,
             i,
             j,
-            location,
+            baseLocation, location,
             abort = false;
 
         if (columns) {
             colCount = columns.length;
-            location = new Ext.grid.Location(view);
+            baseLocation = new Ext.grid.Location(view);
 
             // Use Collection#each instead of copying the entire dataset into an array and iterating that.
             if (selection) {
                 selection.each(function(record) {
-                    location.setItem(record);
+                    location = baseLocation.clone({
+                        record: record
+                    });
                     for (i = 0; i < colCount; i++) {
-                        location.setColumn(columns[i]);
+                        location = location.cloneForColumn(columns[i]);
                         if (fn.call(scope || me, location, location.columnIndex, location.recordIndex) === false) {
                             abort = true;
                             return false;

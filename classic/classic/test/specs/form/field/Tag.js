@@ -1295,6 +1295,24 @@ function() {
                 expect(v[3]).toBe('200');
             });
         });
+
+        it("should keep values in order when adding and selecting", function() {
+                makeField({
+                    createNewOnEnter: true,
+                    filterPickList: true
+                });
+
+                clickListItem(store.getAt(0));
+                jasmine.focusAndWait(tagField.inputEl);
+
+                runs(function() {
+                    tagField.inputEl.dom.value = 'foo';
+                    jasmine.fireKeyEvent(tagField.inputEl.dom, 'keyup', Ext.event.Event.ENTER);
+                    clickListItem(store.getAt(7));
+
+                    expect(tagField.getValue()).toEqual([1, 'foo', 9]);
+                });
+            });
     });
 
     describe("allowBlank: false", function() {

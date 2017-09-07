@@ -23,16 +23,18 @@ Ext.define('KitchenSink.view.forms.ContactForm', {
 
     profiles: {
         defaults: {
+            bodyPadding: 10,
             maxDialogWidth: 550,
             nameLayout: undefined,
             nameMargin: '0 5',
             width: 500
         },
+        material: {
+            bodyPadding: 0
+        },
         phone: {
             defaults: {
                 maxDialogWidth: '80vw',
-                nameLayout: 'vbox',
-                nameMargin: undefined,
                 width: '100%'
             }
         }
@@ -51,7 +53,7 @@ Ext.define('KitchenSink.view.forms.ContactForm', {
         defaultFocus: 'textfield',
         maskTapHandler: 'onCancel',
 
-        bodyPadding: 0,
+        bodyPadding: '${bodyPadding}',
         layout: 'fit',
         maxWidth: '${maxDialogWidth}',
 
@@ -74,7 +76,7 @@ Ext.define('KitchenSink.view.forms.ContactForm', {
                 }, {
                     flex: null,
                     name: 'middleInitial',
-                    placeholder: 'Middle',
+                    placeholder: 'M.I.',
                     margin: '${nameMargin}',
                     width: 50
                 }, {
@@ -84,20 +86,27 @@ Ext.define('KitchenSink.view.forms.ContactForm', {
                 }]
             }, {
                 xtype: 'emailfield',
+                name: 'email',
                 label: 'Email',
                 allowBlank: false,
                 required: true,
                 validators: 'email'
             }, {
                 label: 'Subject',
+                name: 'subject',
                 allowBlank: false,
                 required: true
             }, {
                 xtype: 'textareafield',
+                name: 'message',
                 label: 'Message',
                 flex: 1,
                 allowBlank: false,
                 required: true
+            }, {
+                xtype:'filefield',
+                label: 'Document',
+                name: 'photo-path'
             }]
         }],
 
@@ -113,8 +122,8 @@ Ext.define('KitchenSink.view.forms.ContactForm', {
         xtype: 'component',
         margin: '0 0 20 0',
         html: 'Thank you for visiting our site! We welcome your feedback; ' +
-            'please click the button below to send us a message. We will ' +
-            'respond to your inquiry as quickly as possible.'
+        'please click the button below to send us a message. We will ' +
+        'respond to your inquiry as quickly as possible.'
     }],
 
     buttons : ['->', {

@@ -32,7 +32,7 @@ Ext.define('KitchenSink.view.grid.core.EditableGrid', {
 
     profiles: {
         defaults: {
-            priceWidth: 75,
+            priceWidth: 85,
             changeColumnWidth: 90,
             percentChangeColumnWidth: 100,
             lastUpdatedColumnWidth: 125,
@@ -72,6 +72,7 @@ Ext.define('KitchenSink.view.grid.core.EditableGrid', {
         text: 'Company',
         flex: 1,
         dataIndex: 'name',
+        minWidth: 100,
         editable: true
     }, {
         text: 'Price',
@@ -107,16 +108,7 @@ Ext.define('KitchenSink.view.grid.core.EditableGrid', {
         text: 'Last Updated',
         width: '${lastUpdatedColumnWidth}',
         dataIndex: 'lastChange',
-        formatter: 'date("m/d/Y")',
-        editable: true,
-        editor: {
-            xtype: 'datepickerfield',
-            required: true,
-            validators: {
-                type: 'date',
-                message: 'Invalid date'
-            }
-        }
+        formatter: 'date("m/d/Y")'
     }],
 
     signTpl: '<span style="' +

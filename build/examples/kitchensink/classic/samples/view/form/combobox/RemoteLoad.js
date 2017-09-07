@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.form.combobox.RemoteLoad', {
         path: 'app/model/State.js'
     }, {
         type: 'Store',
-        path: 'app/store/RemoteStates.js'
+        path: 'classic/samples/store/RemoteStates.js'
     }],
     //</example>
     

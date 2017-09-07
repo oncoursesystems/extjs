@@ -635,17 +635,20 @@ Ext.define('Ext.util.Floating', {
 
     privates: {
         onFloatDestroy: function() {
-            var me = this;
-            
+            var me = this,
+                fly = me.alignTargetFly;
+
             if (me.hierarchyEventListeners) {
                 me.hierarchyEventListeners.destroy();
                 me.hierarchyEventListeners = null;
             }
-            
+
             me.clearAlignEl();
-            
-            if (me.alignTargetFly) {
-                me.alignTargetFly.destroy();
+
+            if (fly) {
+                // We only want to destroy the instance, but leave the element intact
+                fly.detach();
+                fly.destroy();
             }
         },
 

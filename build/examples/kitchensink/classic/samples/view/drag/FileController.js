@@ -60,7 +60,7 @@ Ext.define('KitchenSink.view.drag.FileController', {
             minWidth: 400
         });
 
-        me.timer = setTimeout(function() {
+        me.timer = Ext.defer(function() {
             if (!view.destroyed) {
                 icon.removeCls('fa-spin');
                 icon.fadeOut({
@@ -76,7 +76,7 @@ Ext.define('KitchenSink.view.drag.FileController', {
     },
 
     destroy: function() {
-        clearInterval(this.timer);
+        Ext.undefer(this.timer);
         this.target = Ext.destroy(this.target);
         this.callParent();
     }

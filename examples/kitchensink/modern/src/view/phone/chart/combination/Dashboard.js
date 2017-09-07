@@ -131,7 +131,9 @@ Ext.define('KitchenSink.view.phone.chart.combination.Dashboard', {
         reference: 'grid',
         docked: 'bottom',
         height: '30%',
-        plugins: 'grideditable',
+        plugins: {
+            grideditable: true
+        },
         bind: {
             selection: '{selected}',
             store: '{dashboard}'

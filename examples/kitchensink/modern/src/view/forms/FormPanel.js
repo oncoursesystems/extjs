@@ -44,6 +44,9 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
     },
     //</example>
 
+    viewModel: {
+    },
+
     height: '${height}',
     bodyPadding: '${bodyPadding}',
     scrollable: 'y',
@@ -51,12 +54,16 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
 
     buttons: [{
         text: 'Disable fields',
+        bind: '{disabled ? "Enable fields" : "Disable fields"}',
         handler: 'onDisableTap'
     }, {
         text: 'Reset',
         handler: 'onResetTap'
     }],
 
+    bind: {
+        disabled: '{disabled}' // Will cascade down to all fields.
+    },
     items: [{
         xtype: 'fieldset',
         reference: 'fieldset1',
@@ -71,6 +78,17 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
             autoCapitalize: true,
             required: true,
             clearable: true
+        }, {
+            label: 'Salary',
+            reference: 'salary',
+            xtype: 'numberfield',
+            minValue: 0,
+            decimals: 2
+        }, {
+            xtype: 'displayfield',
+            name: 'display_field',
+            label: 'DisplayField',
+            value: 'Read only!'
         }, {
             xtype: 'passwordfield',
             revealable: true,
@@ -147,7 +165,8 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
             valueField: 'abbr',
             queryMode: 'local',
             itemTpl: '<div data-qalign="b-t" data-qanchor="true" data-qtip="{state}: {description}">{state} ({abbr})</div>',
-            clearable: true
+            clearable: true,
+            typeAhead: true
         }, {
             xtype: 'sliderfield',
             name: 'slider',

@@ -20,7 +20,7 @@ Ext.define('KitchenSink.reader.Salary', {
             parentItem;
 
         Ext.Array.each(data, function (item) {
-            if (item[fieldName] != currentValue) {
+            if (item[fieldName] !== currentValue) {
                 currentValue = item[fieldName];
                 parentItem = {};
                 parentItem[fieldName] = currentValue;
@@ -29,7 +29,7 @@ Ext.define('KitchenSink.reader.Salary', {
                     parentItem[field] = item[field];
                 });
                 parentItem.children = [];
-                tree.push(Ext.apply(parentItem));
+                tree.push(parentItem);
             }
             if (item[notBlank]) {
                 if (Ext.isEmpty(item.children)) {

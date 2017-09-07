@@ -24,27 +24,17 @@ topSuite("Ext.panel.Date", function() {
         
         jasmine.fireMouseEvent(cell, type || 'click');
     }
-    
-    function tapCell(date, type) {
-        var cell = Ext.isDate(date) ? panel.getCellByDate(date) : date;
-        
-        if (!cell) {
-            throw new Error("Cannot find cell for date " + date);
-        }
-        
-        Ext.testHelper.tap(cell);
-    }
-    
+
     function clickButton(btn, event) {
         if (typeof btn === 'string') {
             if (btn === 'today') {
-                btn = panel.down('#footer').isHidden() ? 'headerTodayButton' : 'footerTodayButton';
+                btn = panel.lookup('footer').isHidden() ? 'headerTodayButton' : 'footerTodayButton';
             }
             else {
                 btn = btn + 'Button';
             }
             
-            btn = panel.down('#' + btn);
+            btn = panel.lookup(btn);
         }
         
         if (btn) {
@@ -207,19 +197,9 @@ topSuite("Ext.panel.Date", function() {
                 });
             });
 
-            it('should handle clicking on td cell', function () {
-                var cell = panel.getCellByDate(yesterday);
-
-                clickCell(cell);
-
-                waitsForEvent(cell, 'focus');
-
-                expect(panel.getValue()).toEqual(yesterday);
-            });
-
             it('should handle clicking on inner cell', function () {
                 var cell = panel.getCellByDate(yesterday),
-                    inner = cell.child('.x-inner');
+                    inner = Ext.fly(cell).child('.x-inner');
 
                 clickCell(inner);
 
@@ -230,7 +210,7 @@ topSuite("Ext.panel.Date", function() {
         });
     });
     
-    (Ext.supports.Touch ? describe : xdescribe)("touch interaction", function() {
+    (jasmine.supportsTouch ? describe : xdescribe)("touch interaction", function() {
         beforeEach(function() {
             makePanel();
         });
@@ -238,7 +218,7 @@ topSuite("Ext.panel.Date", function() {
         it("should focus the tapped cell", function() {
             var cell = panel.getCellByDate(yesterday);
             
-            tapCell(cell);
+            clickCell(cell);
             waitsForEvent(cell, 'focus');
         });
     });

@@ -47,7 +47,7 @@ $kitchensink-thumbnail-size: 96px;
 .thumbnail-item {
     vertical-align: top;
     width: $kitchensink-thumbnail-size + 20;
-    height: $kitchensink-thumbnail-size + 60;
+    min-height: $kitchensink-thumbnail-size + 60;
     margin: 0 10px;
     cursor: pointer;
     line-height: 18px;

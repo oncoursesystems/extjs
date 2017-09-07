@@ -165,6 +165,10 @@ Ext.define('Ext.form.field.Checkbox', {
         }
     ],
 
+    /**
+     * @cfg
+     * @inheritdoc
+     */
     publishes: {
         checked: 1
     },

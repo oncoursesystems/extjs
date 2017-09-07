@@ -27,7 +27,9 @@ Ext.define('KitchenSink.view.draw.SpriteEvents', {
             width: '100%',
             height: 500,
 
-            plugins: ['spriteevents'],
+            plugins: {
+                spriteevents: true
+            },
 
             sprites: [
                 {

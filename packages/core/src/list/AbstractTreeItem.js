@@ -262,7 +262,7 @@ Ext.define('Ext.list.AbstractTreeItem', {
     /**
      * Handle this node being collapsed.
      * @param {Ext.data.TreeModel} node  The node being collapsed.
-     *
+     * @param collapsingForExpand
      * @protected
      */
     nodeCollapse: function (node, collapsingForExpand) {
@@ -427,6 +427,7 @@ Ext.define('Ext.list.AbstractTreeItem', {
 
         /**
          * @event itemclick
+         * @member Ext.list.Tree
          *
          * @param {Ext.list.Tree} sender The `treelist` that fired this event.
          *
@@ -505,7 +506,7 @@ Ext.define('Ext.list.AbstractTreeItem', {
          *
          * @private
          */
-        doNodeUpdate: function (node) {
+        doNodeUpdate: function (node, modifiedFieldNames) {
             var me = this,
                 textProperty = this.getTextProperty(),
                 iconClsProperty = this.getIconClsProperty();

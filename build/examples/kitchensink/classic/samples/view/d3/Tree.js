@@ -12,7 +12,9 @@ Ext.define('KitchenSink.view.d3.Tree', {
 
     requires: [
         'KitchenSink.view.d3.SalaryViewModel',
-        'Ext.d3.hierarchy.tree.HorizontalTree'
+        'Ext.d3.hierarchy.tree.HorizontalTree',
+        'Ext.d3.interaction.PanZoom',
+        'Ext.tip.ToolTip'
     ],
     // <example>
     // Content between example tags is omitted from code preview.

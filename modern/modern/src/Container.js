@@ -23,32 +23,27 @@
  * do this at run time too:
  *
  *     @example
- *     //this is the Panel we'll be adding below
- *     var aboutPanel = Ext.create('Ext.Panel', {
- *         html: 'About this app'
- *     });
- *
- *     //this is the Panel we'll be adding to
- *     var mainPanel = Ext.create('Ext.Panel', {
+ *     var mainPanel = Ext.create({
+ *         xtype: 'panel',
  *         fullscreen: true,
- *
  *         layout: 'hbox',
  *         defaults: {
  *             flex: 1
  *         },
- *
- *         items: {
+ *         items: [{
  *             html: 'First Panel',
- *             style: 'background-color: #5E99CC;'
- *         }
+ *             style: 'background-color: #5E99CC'
+ *         }]
  *     });
  *
- *     //now we add the first panel inside the second
- *     mainPanel.add(aboutPanel);
+ *     mainPanel.add({
+ *         xtype: 'panel',
+ *         html: 'About this App'
+ *     });
  *
- * Here we created three Panels in total. First we made the aboutPanel, which we might use to tell the user a little
- * about the app. Then we create one called mainPanel, which already contains a third Panel in its
- * {@link Ext.Container#cfg-items items} configuration, with some dummy text ("First Panel"). Finally, we add the first
+ * Here we created three Panels in total. First we create mainPanel, which
+ * already contains another Panel in its {@link Ext.Container#cfg-items items}
+ * configuration, with some dummy text ("First Panel"). Finally, we add the third
  * panel to the second by calling the {@link Ext.Container#method-add add} method on `mainPanel`.
  *
  * In this case we gave our mainPanel another hbox layout, but we also introduced some
@@ -152,7 +147,10 @@ Ext.define('Ext.Container', {
         activeItem: 0
     },
 
+
     config: {
+        activeItemIndex: null,
+
         /**
          * @cfg {Boolean} [autoSize=true]
          * May be set to `false` for improved layout performance if auto-sizing is not required.
@@ -185,6 +183,7 @@ Ext.define('Ext.Container', {
          * item's height and width are both set to `'50%'` so the child should render
          * exactly 100px by 100px in size.
          *
+         *     @example
          *     Ext.create({
          *         xtype: 'container',
          *         renderTo: Ext.getBody(),
@@ -220,23 +219,28 @@ Ext.define('Ext.Container', {
         /**
          * @cfg {Object/String} layout Configuration for this Container's layout. Example:
          *
-         *     Ext.create('Ext.Container', {
+         *     @example
+         *     Ext.create({
+         *         xtype: 'container',
          *         layout: {
          *             type: 'hbox',
          *             align: 'middle'
          *         },
-         *         items: [
-         *             {
-         *                 xtype: 'panel',
-         *                 flex: 1,
-         *                 style: 'background-color: red;'
-         *             },
-         *             {
-         *                 xtype: 'panel',
-         *                 flex: 2,
-         *                 style: 'background-color: green'
+         *         items: [{
+         *             xtype: 'panel',
+         *             flex: 1,
+         *             bodyStyle: {
+         *                 background: "#000",
+         *                 color:"#fff"
          *             }
-         *         ]
+         *         }, {
+         *            xtype: 'panel',
+         *            flex: 2,
+         *            bodyStyle: {
+         *                background: "#f00",
+         *                color:"#fff"
+         *            }
+         *         }]
          *     });
          *
          * @accessor
@@ -248,7 +252,9 @@ Ext.define('Ext.Container', {
          * events and taking some action. For example, if we had a container with a nested Disable button, and we
          * wanted to hide the Container when the Disable button is tapped, we could do this:
          *
-         *     Ext.create('Ext.Container', {
+         *     @example
+         *     Ext.create({
+         *         xtype: 'container',
          *         control: {
          *            'button[text=Disable]': {
          *                tap: 'hideMe'
@@ -274,7 +280,9 @@ Ext.define('Ext.Container', {
          * example here we can specify that each child is a panel and avoid repeating the xtype declaration for each
          * one:
          *
-         *     Ext.create('Ext.Container', {
+         *     @example
+         *     Ext.create({
+         *         xtype: 'container',
          *         defaults: {
          *             xtype: 'panel'
          *         },
@@ -297,19 +305,21 @@ Ext.define('Ext.Container', {
          * @cfg {Array/Object} items The child items to add to this Container. This is usually an array of Component
          * configurations or instances, for example:
          *
-         *     Ext.create('Ext.Container', {
-         *         items: [
-         *             {
-         *                 xtype: 'panel',
-         *                 html: 'This is an item'
-         *             }
-         *         ]
+         *     @example
+         *     Ext.create({
+         *         xtype: 'container',
+         *         items: [{
+         *             xtype: 'panel',
+         *             html: 'This is an item'
+         *         }]
          *     });
          *
          * This may also be specified as an object, the property names of which are `itemId`s, and the property values
          * are child Component config objects, for example:
          *
-         *     Ext.create('Ext.tab.Panel', {
+         *     @example
+         *     Ext.create({
+         *         xtype: 'tabpanel',
          *         items: {
          *             panel1: {
          *                 xtype: 'panel',
@@ -327,15 +337,18 @@ Ext.define('Ext.Container', {
         items: null,
 
         /**
-         * @cfg {Boolean} autoDestroy If `true`, child items will be destroyed as soon as they are {@link #method-remove removed}
+         * @cfg {Boolean} autoDestroy
+         * If `true`, child items will be destroyed as soon as they are {@link #method-remove removed}
          * from this container.
          * @accessor
          */
         autoDestroy: true,
 
-        /** @cfg {String} defaultType
-         * The default {@link Ext.Component xtype} of child Components to create in this Container when a child item
-         * is specified as a raw configuration object, rather than as an instantiated Component.
+        /**
+         * @cfg {String} [defaultType=container]
+         * The default {@link Ext.Component xtype} of child Components to create in this Container
+         * when a child item is specified as a raw configuration object, rather than as an instantiated
+         * Component.
          * @accessor
          */
         defaultType: null,
@@ -367,10 +380,16 @@ Ext.define('Ext.Container', {
          * You can optionally pass an object block with and xtype of `loadmask`, and an optional `message` value to
          * display a loading mask. Please refer to the {@link Ext.LoadMask} component to see other configurations.
          *
-         *     masked: {
-         *         xtype: 'loadmask',
-         *         message: 'My message'
-         *     }
+         *     @example
+         *     Ext.create({
+         *         xtype: 'container',
+         *         fullscreen: true,
+         *         html: 'Hello World',
+         *         masked: {
+         *             xtype: 'loadmask',
+         *             message: 'My Message'
+         *         }
+         *     });
          *
          * Alternatively, you can just call the setter at any time with `true`/`false` to show/hide the mask:
          *
@@ -718,12 +737,13 @@ Ext.define('Ext.Container', {
     /**
      * Adds one or more Components to this Container. Example:
      *
-     *     var myPanel = Ext.create('Ext.Panel', {
-     *         html: 'This will be added to a Container'
+     *     var myPanel = Ext.create({
+     *         xtype: 'panel',
+     *         html : 'This will be added to a Container'
      *     });
      *
      *     var items = myContainer.add([myPanel]); // Array returned
-     *     var item = myContainer.add(myPanel); // One item is returned
+     *     var item  = myContainer.add(myPanel);   // One item is returned
      *
      * @param {Object/Object[]/Ext.Component/Ext.Component[]} newItems The new item(s) to add
      * to the Container. Note that if an array of items to add was passed in, an array of added
@@ -1035,13 +1055,16 @@ Ext.define('Ext.Container', {
      *
      * @param {Number} index The index of the Component to remove.
      *
+     * @param {Boolean} [destroy] `true` to automatically call Component's
+     * {@link Ext.Component#method-destroy destroy} method.
+     *
      * @return {Ext.Component} The removed Component
      */
-    removeAt: function(index) {
+    removeAt: function(index, destroy) {
         var item = this.getAt(index);
 
         if (item) {
-            this.remove(item);
+            this.remove(item, destroy);
         }
 
         return item;
@@ -1463,7 +1486,9 @@ Ext.define('Ext.Container', {
         if (this.activeItemAnimation) {
             this.activeItemAnimation.destroy();
         }
+
         this.activeItemAnimation = animation = new Ext.Factory.layoutCardFx(animation);
+        
         if (animation && layout.isCard) {
             animation.setLayout(layout);
             defaultAnimation = layout.getAnimation();
@@ -1477,15 +1502,13 @@ Ext.define('Ext.Container', {
                 animation.destroy();
             }, this);
         }
+
         return this.setActiveItem(activeItem);
     },
 
-    /**
-     * @private
-     */
     updateActiveItem: function(newActiveItem, oldActiveItem) {
         delete this.pendingActiveItem;
-        
+
         if (oldActiveItem && !oldActiveItem.destroyed) {
             oldActiveItem.fireEvent('deactivate', oldActiveItem, this, newActiveItem);
         }
@@ -1493,14 +1516,19 @@ Ext.define('Ext.Container', {
         if (newActiveItem) {
             newActiveItem.fireEvent('activate', newActiveItem, this, oldActiveItem);
         }
+        this.setActiveItemIndex(this.innerItems.indexOf(newActiveItem));
+    },
+
+    updateActiveItemIndex: function (index) {
+        this.setActiveItem(this.innerItems[index]);
     },
 
     /**
-     * @private
      * Used by ComponentQuery to retrieve all of the items
      * which can potentially be considered a child of this Container.
      * This should be overridden by components which have child items
      * that are not contained in items. For example `dockedItems`, `menu`, etc
+     * @private
      */
     getRefItems: function(deep) {
         var items = this.getItems().items,
@@ -1618,7 +1646,7 @@ Ext.define('Ext.Container', {
         var delegate = this.findDefaultFocus();
         
         if (delegate) {
-            return delegate;
+            return delegate.isWidget ? delegate.getFocusEl() : delegate;
         }
         else if (this.focusable) {
             return this.focusEl;
@@ -1635,9 +1663,14 @@ Ext.define('Ext.Container', {
         var result = this.getDefaultFocus();
 
         // If we have not been configured with a Widget instance, look for a focusable
-        // by selector.
+        // by selector. Then check whether it is focusable. It may be disabled,
+        // destroying, or simply set to focusable: false, and the element could
+        // still be focusable amd therefore be focused by calling code.
         if (result && !result.isWidget) {
             result = this.down(result);
+            if (result && !result.canFocus()) {
+                return;
+            }
         }
 
         // Returning undefined is ok
@@ -1798,7 +1831,7 @@ Ext.define('Ext.Container', {
         getMaxHeightElement: function() {
             var el = this.el,
                 maxHeightElement = this.maxHeightElement,
-                selector = '.x-dock,.x-panelheader,.x-body-el,.x-body-wrap-el',
+                selector = '.x-dock,.x-panelheader,.x-body-el,.x-body-wrap-el,.x-tab-guard-el',
                 childNodes, node, i, ln;
 
             if (!maxHeightElement) {

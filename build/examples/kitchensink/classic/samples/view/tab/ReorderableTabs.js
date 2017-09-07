@@ -20,7 +20,9 @@ Ext.define('KitchenSink.view.tab.ReorderableTabs', {
     width: 600,
     height: 400,
 
-    plugins: 'tabreorderer',
+    plugins: {
+        tabreorderer: true
+    },
 
     defaults: {
         bodyPadding: 10,

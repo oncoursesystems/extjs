@@ -1,12 +1,11 @@
 Ext.define('Admin.view.forms.Finish', {
     extend: 'Ext.Panel',
     xtype: 'finishform',
-    cls: 'wizard-finish',
-
-    title: 'Finish',
-    iconCls: 'x-fa fa-heart',
 
     bodyPadding: '0 20 10 20',
+    cls: 'wizard-finish',
+    iconCls: 'x-fa fa-heart',
+    title: 'Finish',
 
     html:
         '<div class="finish-form-title">Thank You</div>' +

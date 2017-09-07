@@ -66,9 +66,9 @@ Ext.define('KitchenSink.view.pivot.DrillDown', {
         xtype: 'pivotgrid',
         shadow: '${shadow}',
         reference: 'pivotgrid',
-        plugins: [{
-            type: 'pivotdrilldown'
-        }],
+        plugins: {
+            pivotdrilldown: true
+        },
         matrix: {
             type: 'local',
             store: {

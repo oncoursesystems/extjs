@@ -48,10 +48,6 @@ Ext.define('KitchenSink.view.forms.FieldValidationAdv', {
     width: '${width}',
     autoSize: true,
 
-    defaults: {
-        labelAlign: 'placeholder'
-    },
-
     buttons: [{
         text: 'Reset',
         handler: 'reset'

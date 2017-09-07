@@ -28,7 +28,9 @@ Ext.define('KitchenSink.view.grid.GridFiltering', {
     minHeight: 200,
     //</example>
 
-    plugins: 'gridfilters',
+    plugins: {
+        gridfilters: true
+    },
 
     emptyText: 'No Matching Records',
     loadMask: true,

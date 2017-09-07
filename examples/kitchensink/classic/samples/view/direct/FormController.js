@@ -45,7 +45,7 @@ Ext.define('KitchenSink.view.direct.FormController', {
         
         // Defer loading this form to simulate the request
         // not getting batched since it exceeds enableBuffer timeout
-        Ext.Function.defer(function() {
+        Ext.defer(function() {
             locationForm.load({
                 params: {
                     uid: 6

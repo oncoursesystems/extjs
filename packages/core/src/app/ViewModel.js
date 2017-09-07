@@ -148,7 +148,9 @@
  * the any dependencies for a binding are fired before the binding itself.
  * - To batch binding firings. The scheduler runs on a short timer, so the following code will only trigger
  * a single binding (the last), the changes in between will never be triggered.
- * 
+ *
+ * Example:
+ *
  *     viewModel.bind('{val}', function(v) {
  *         console.log(v);
  *     });
@@ -254,7 +256,9 @@
  * It is possible to bind to the certain state properties of a record. The available options are:
  * - `{@link Ext.data.Model#property-dirty dirty}`
  * - `{@link Ext.data.Model#property-phantom phantom}`
- * - `{@link #Ext.data.Model#method-isValid valid}`
+ * - `{@link Ext.data.Model#method-isValid valid}`
+ *
+ * Example usage:
  *
  *     Ext.define('MyApp.model.User', {
  *         extend: 'Ext.data.Model',
@@ -403,10 +407,12 @@
  *
  * It is possible to bind to the certain state properties of the store. The available options are:
  * - `{@link Ext.data.Store#method-getCount count}`
- * - `{@link #Ext.data.Store#method-first}`
- * - `{@link #Ext.data.Store#method-last}`
- * - `{@link #Ext.data.Store#method-hasPendingLoad loading}`
- * - `{@link #Ext.data.Store#method-getTotalCount totalCount}`
+ * - `{@link Ext.data.Store#method-first}`
+ * - `{@link Ext.data.Store#method-last}`
+ * - `{@link Ext.data.Store#method-hasPendingLoad loading}`
+ * - `{@link Ext.data.Store#method-getTotalCount totalCount}`
+ *
+ * Example:
  *
  *     Ext.define('MyApp.model.User', {
  *         extend: 'Ext.data.Model',
@@ -430,12 +436,12 @@
  *         console.log(first ? first.get('name') : 'Nobody');
  *     });
  *
- *     var timer = setInterval(function() {
+ *     var timer = Ext.interval(function() {
  *         var store = viewModel.getStore('users');
  *         if (store.getCount()) {
  *             store.removeAt(0);
  *         } else {
- *             clearInterval(timer);
+ *             Ext.uninterval(timer);
  *         }
  *     }, 100);
  *
@@ -453,34 +459,34 @@
  *         stores: {
  *             users: {
  *                 model: 'MyApp.model.User',
- *               data: [{
- *                   name: 'Foo',
- *                   score: 100
- *               }, {
- *                   name: 'Bar',
- *                   score: 350
- *               }]
- *           }
- *       },
- *       formulas: {
- *           totalScore: {
- *               bind: {
- *                   bindTo: '{users}',
- *                   deep: true
- *               },
- *               get: function(store) {
- *                   return store.sum('score');
- *               }
- *           }
- *       }
- *   });
+ *                 data: [{
+ *                     name: 'Foo',
+ *                     score: 100
+ *                 }, {
+ *                     name: 'Bar',
+ *                     score: 350
+ *                 }]
+ *             }
+ *         },
+ *         formulas: {
+ *             totalScore: {
+ *                 bind: {
+ *                     bindTo: '{users}',
+ *                     deep: true
+ *                 },
+ *                 get: function(store) {
+ *                     return store.sum('score');
+ *                 }
+ *             }
+ *         }
+ *     });
  *
- *   viewModel.bind('{totalScore}', function(score) {
- *       console.log(score);
- *   });
+ *     viewModel.bind('{totalScore}', function(score) {
+ *         console.log(score);
+ *     });
  *
- *   viewModel.notify();
- *   viewModel.getStore('users').removeAll();
+ *     viewModel.notify();
+ *     viewModel.getStore('users').removeAll();
  *
  * #### Formulas
  *

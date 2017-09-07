@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Tree', {
     controller: 'd3-tree',
 
     requires: [
-        'KitchenSink.view.d3.hierarchy.TreeViewModel',
+        'KitchenSink.view.d3.SalaryViewModel',
         'Ext.d3.hierarchy.tree.HorizontalTree',
         'Ext.d3.interaction.PanZoom',
         'Ext.tip.ToolTip'

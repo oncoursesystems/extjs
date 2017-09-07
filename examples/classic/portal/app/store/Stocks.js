@@ -44,8 +44,7 @@ Ext.define('Portal.store.Stocks', {
     },
 
     onDestroy: function() {
-        //debugger;
-        clearInterval(this.timer);
+        Ext.uninterval(this.timer);
 
         this.callParent(arguments);
     },
@@ -56,7 +55,7 @@ Ext.define('Portal.store.Stocks', {
         me.callParent(arguments);
         var count = me.getCount() - 1;
 
-        me.timer = setInterval(function () {
+        me.timer = Ext.interval(function () {
             var rec = me.getAt(Ext.Number.randomInt(0, count));
             rec.addPriceTick();
         }, 100);

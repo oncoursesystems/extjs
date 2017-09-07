@@ -257,6 +257,7 @@ Ext.define('KitchenSink.controller.Main', {
             }
 
             return {
+                prettyPrint: (options.prettyPrint !== false),
                 type: options.type,
                 html: me.processText(src, info)
             };
@@ -419,9 +420,7 @@ Ext.define('KitchenSink.controller.Main', {
     beforeHandleRoute: function (id, action) {
         var me = this,
             node = Ext.StoreMgr.get('Navigation').getNodeById(id),
-            packages, promise, p, len;
-
-        me.animateDirection = me.animateDireciton || 'forward';
+            packages;
 
         if (node) {
             packages = node.get('packages');

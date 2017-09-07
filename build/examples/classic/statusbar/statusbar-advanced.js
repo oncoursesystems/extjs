@@ -58,12 +58,16 @@ Ext.onReady(function(){
                     }
                 }
             }]
-        }, 
-            Ext.create('Ext.ux.StatusBar', {
-                dock: 'bottom',
-                id: 'form-statusbar',
-                defaultText: 'Ready',
-                plugins: Ext.create('Ext.ux.statusbar.ValidationStatus', {form:'status-form'})
-            })]
+        }, {
+            xtype: 'statusbar',
+            dock: 'bottom',
+            id: 'form-statusbar',
+            defaultText: 'Ready',
+            plugins: {
+                validationstatus: {
+                    form:'status-form'
+                }
+            }
+        }]
     });
 });

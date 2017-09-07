@@ -3,12 +3,17 @@
     margin: 8px 8px 4px 8px;
 }
 
-.dataview-multisort-item h3 {
-    font-size: 12px;
-    font-weight: normal;
-    text-align: center;
-    padding-top: 5px;
-    margin: 0;
+.dataview-multisort-item {
+    h3 {
+        font-size: 12px;
+        font-weight: normal;
+        text-align: center;
+        padding-top: 5px;
+        margin: 0;
+    }
+    img {
+        -webkit-user-drag: none;
+    }
 }
 
 // These get shared by other views

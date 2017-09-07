@@ -36,27 +36,28 @@ Ext.define('KitchenSink.view.lists.BasicAccordion', {
         height: 50
     },
 
-    plugins: [{
-        type: 'listswiper',
-        defaults: {
-            ui: 'action'
-        },
+    plugins: {
+        listswiper: {
+            defaults: {
+                ui: 'action'
+            },
 
-        left: [{
-            iconCls: 'x-fa fa-phone',
-            text: 'Call',
-            commit: 'onCall'
-        }],
+            left: [{
+                iconCls: 'x-fa fa-phone',
+                text: 'Call',
+                commit: 'onCall'
+            }],
 
-        right: [{
-            iconCls: 'x-fa fa-envelope',
-            ui: 'alt confirm',
-            text: 'Message',
-            commit: 'onMessage'
-        }, {
-            iconCls: 'x-fa fa-gear',
-            text: 'Gear',
-            commit: 'onGear'
-        }]
-    }]
+            right: [{
+                iconCls: 'x-fa fa-envelope',
+                ui: 'alt confirm',
+                text: 'Message',
+                commit: 'onMessage'
+            }, {
+                iconCls: 'x-fa fa-gear',
+                text: 'Gear',
+                commit: 'onGear'
+            }]
+        }
+    }
 });

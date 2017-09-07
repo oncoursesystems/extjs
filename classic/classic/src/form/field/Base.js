@@ -152,6 +152,11 @@ Ext.define('Ext.form.field.Base', {
      * {@link Ext.dom.Element#applyStyles}. Defaults to undefined. See also the {@link #setFieldStyle} method for changing
      * the style after initialization.
      */
+    
+    /**
+     * @cfg [publishes=['rawValue', 'value', 'dirty']]
+     * @inheritdoc
+     */
 
     /**
      * @cfg {String} [focusCls='x-form-focus']
@@ -194,7 +199,7 @@ Ext.define('Ext.form.field.Base', {
 
     /**
      * @cfg {Number} checkChangeBuffer
-     * Defines a timeout in milliseconds for buffering {@link #checkChangeEvents} that fire in rapid succession.
+     * Defines a timeout in milliseconds for buffering {@link #cfg!checkChangeEvents} that fire in rapid succession.
      * Defaults to 50 milliseconds.
      */
     checkChangeBuffer: 50,
@@ -234,7 +239,7 @@ Ext.define('Ext.form.field.Base', {
      *
      * This option is superseded by {@link #ariaHelp}.
      *
-     * @deprecated 6.2.0
+     * @deprecated 6.2.0 This config is deprecated.
      * @locale
      */
 

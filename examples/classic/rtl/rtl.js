@@ -70,7 +70,9 @@ Ext.onReady(function() {
         }, {
             region: 'center',
             xtype: 'grid',
-            plugins: [new Ext.grid.plugin.RowEditing()],
+            plugins: {
+                rowediting: true
+            },
             title: '\u0645\u0631\u0643\u0632 \u0627\u0644\u0645\u0646\u0637\u0642\u0629',
             columns: [
                 { dataIndex: 'foo', text: words[0], field: edCfg},

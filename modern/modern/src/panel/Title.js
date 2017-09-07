@@ -116,21 +116,8 @@ Ext.define('Ext.panel.Title', {
     _titleSuffix: '-title',
 
     afterRender: function() {
-        var bodyElement = this.bodyElement.dom,
-            bodyStyle = bodyElement.style;
-
         if (Ext.isSafari) {
-            // When iconAlign is 'top' or 'bottom' with vertically rotated text, Safari
-            // does not initially layout the title with the correct width.  Setting the
-            // width to -webkit-min-content and back to '' with a read of offsetWidth in
-            // between forces a synchronous reflow and corrects the issue.  Unfortunately
-            // a static width or min-width in the stylesheet does not help.
-            // We use -webkit-min-content so that the next reflow after resetting the
-            // min-width to '' hopefully ends up with everything the same size as before
-            // thus minimizing the effect on the surrounding dom.
-            bodyStyle.width = '-webkit-min-content';
-            bodyElement.offsetWidth;
-            bodyStyle.width = '';
+            this.repaintBodyElement();
         }
 
         this.callParent();
@@ -191,6 +178,10 @@ Ext.define('Ext.panel.Title', {
         } else {
             el.replaceCls(horizontalCls, [verticalCls, me._rotationClasses[rotation]]);
         }
+
+        if (Ext.isSafari && this.rendered) {
+            this.repaintBodyElement();
+        }
     },
 
     updateRotateIcon: function(rotateIcon) {
@@ -217,6 +208,23 @@ Ext.define('Ext.panel.Title', {
     },
 
     privates: {
+        repaintBodyElement: function() {
+            var bodyElement = this.bodyElement.dom,
+                bodyStyle = bodyElement.style;
+
+            // When iconAlign is 'top' or 'bottom' with vertically rotated text, Safari
+            // does not initially layout the title with the correct width.  Setting the
+            // width to -webkit-min-content and back to '' with a read of offsetWidth in
+            // between forces a synchronous reflow and corrects the issue.  Unfortunately
+            // a static width or min-width in the stylesheet does not help.
+            // We use -webkit-min-content so that the next reflow after resetting the
+            // min-width to '' hopefully ends up with everything the same size as before
+            // thus minimizing the effect on the surrounding dom.
+            bodyStyle.width = '-webkit-min-content';
+            bodyElement.offsetWidth;
+            bodyStyle.width = '';
+        },
+        
         syncIconVisibility: function() {
             this.el.toggleCls(this.hasIconCls, !!(this.getIcon() || this.getIconCls()));
         }

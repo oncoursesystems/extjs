@@ -3,10 +3,18 @@ Ext.define('KitchenSink.view.forms.CheckoutModel', {
     alias: 'viewmodel.form-checkout',
 
     data: {
-        index: 0
+        index: 0,
+        step: ''
     },
 
     formulas: {
+        step: {
+            bind: '{index}',
+            get: function() {
+                return this.getView().getActiveItem().title;
+            }
+        },
+
         billing_address: {
             get: function (get) {
                 return get('sameAsShipping.checked') ?
@@ -17,6 +25,7 @@ Ext.define('KitchenSink.view.forms.CheckoutModel', {
                 this._billingAddress = value;
             }
         },
+
         billing_city: {
             get: function (get) {
                 return get('sameAsShipping.checked') ?
@@ -27,6 +36,7 @@ Ext.define('KitchenSink.view.forms.CheckoutModel', {
                 this._billingCity = value;
             }
         },
+
         billing_state: {
             get: function (get) {
                 return get('sameAsShipping.checked') ?
@@ -37,6 +47,7 @@ Ext.define('KitchenSink.view.forms.CheckoutModel', {
                 this._billingState = value;
             }
         },
+
         billing_postalcode: {
             get: function (get) {
                 return get('sameAsShipping.checked') ?

@@ -10,17 +10,13 @@ Ext.define('KitchenSink.view.chart.ChartController', {
         'Ext.chart.theme.Sky'
     ],
 
-    onThemeSwitch: function (item) {
-        var chart = this.lookup('chart');
-
-        chart.setTheme(item.getText());
-        chart.redraw();
+    init: function(view) {
+        view.lookupViewModel().set('menuGroups.charttheme', 'Default');
+        this.callParent([view]);
     },
 
     onRefresh: function () {
-        var chart = this.lookup('chart')
-            store = chart.getStore();
-
+        var store = this.lookup('chart').getStore();
         store.generateData(store.getNumRecords());
     }
 });

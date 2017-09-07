@@ -1,6 +1,6 @@
 /**
- * @private
  * @class Ext.draw.ContainerBase
+ * @private
  */
 Ext.define('Ext.draw.ContainerBase', {
     extend: 'Ext.panel.Panel',

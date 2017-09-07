@@ -27,15 +27,18 @@ Ext.define('KitchenSink.view.grid.ExporterController', {
     },
 
     onBeforeDocumentSave: function(view){
+        this.timeStarted = Date.now();
         view.mask('Document is prepared for export. Please wait ...');
+        Ext.log('export started');
     },
 
     onDocumentSave: function(view){
         view.unmask();
+        Ext.log('export finished; time passed = ' + (Date.now() - this.timeStarted));
     },
 
     onDataReady: function(){
-        Ext.log('"dataready" event fired!');
+        Ext.log('data ready; time passed = ' + (Date.now() - this.timeStarted));
     }
 
 });

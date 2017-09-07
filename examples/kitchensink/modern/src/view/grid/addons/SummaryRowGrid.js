@@ -47,7 +47,9 @@ Ext.define('KitchenSink.view.grid.addons.SummaryRowGrid', {
     //</example>
 
     height: '${height}',
-    plugins: 'gridsummaryrow',
+    plugins: {
+        gridsummaryrow: true
+    },
     store: 'Companies',
     width: '${width}',
 
@@ -59,6 +61,7 @@ Ext.define('KitchenSink.view.grid.addons.SummaryRowGrid', {
         text: 'Company',
         flex: 1,
         dataIndex: 'name',
+        minWidth: 100,
         summaryRenderer: 'summarizeCompanies'
     }, {
         text: 'Price',

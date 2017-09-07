@@ -179,7 +179,7 @@ Ext.define('Ext.form.FieldSet', {
     ],
 
     /**
-     * @cfg stateEvents
+     * @cfg {String[]} stateEvents
      * @inheritdoc Ext.state.Stateful#cfg-stateEvents
      * @localdoc By default the following stateEvents are added:
      * 

@@ -44,12 +44,13 @@ Ext.define('KitchenSink.view.dataview.MultiSort', {
     //</example>
 
     tbar: {
-        plugins: [{
-            ptype: 'boxreorderer',
-            listeners: {
-                drop: 'updateStoreSorters'
+        plugins: {
+            boxreorderer: {
+                listeners: {
+                    drop: 'updateStoreSorters'
+                }
             }
-        }],
+        },
 
         defaults: {
             listeners: {
@@ -75,9 +76,9 @@ Ext.define('KitchenSink.view.dataview.MultiSort', {
     items: {
         xtype: 'dataview',
         reference: 'dataview',
-        plugins: [{
-            ptype: 'ux-animated-dataview'
-        }],
+        plugins: {
+            'ux-animated-dataview': true
+        },
 
         itemSelector: 'div.dataview-multisort-item',
         tpl: [

@@ -344,6 +344,8 @@ Ext.define('Ext.Dialog', {
     bodyBorder: false,
     centered: true,
     floated: true,
+    focusable: false,
+    tabIndex: -1,
 
     draggable: {
         handle: '.' + Ext.baseCSSPrefix + 'draggable',
@@ -376,6 +378,8 @@ Ext.define('Ext.Dialog', {
         Ext.baseCSSPrefix + 'paneltool',
         Ext.baseCSSPrefix + 'dialogtool'
     ],
+    
+    hideMode: 'offsets',
 
     /**
      * @cfg hideAnimation
@@ -398,6 +402,18 @@ Ext.define('Ext.Dialog', {
     },
 
     //------------------------------
+    
+    initialize: function() {
+        this.callParent();
+        
+        if (this.tabGuard) {
+            this.addPlugin({
+                type: 'tabguard',
+                tabGuardBeforeIndex: this.tabGuardBeforeIndex,
+                tabGuardAfterIndex: this.tabGuardAfterIndex
+            });
+        }
+    },
 
     doDestroy: function () {
         var me = this;
@@ -559,10 +575,22 @@ Ext.define('Ext.Dialog', {
     // header
 
     updateHeader: function (header, oldHeader) {
-        this.callParent([ header, oldHeader ]);
+        var me = this,
+            beforeGuard;
+        
+        me.callParent([ header, oldHeader ]);
 
         if (header) {
-            this.syncHeaderItems();
+            me.syncHeaderItems();
+            
+            if (me.tabGuard && me.getTabGuard) {
+                beforeGuard = me.getTabGuard('before');
+                
+                // We need to keep top tab guard at the top of the DOM order
+                if (beforeGuard && beforeGuard.dom) {
+                    beforeGuard.insertBefore(header.el);
+                }
+            }
         }
     },
 
@@ -571,7 +599,7 @@ Ext.define('Ext.Dialog', {
     applyMaximizable: function (maximizable) {
         var me = this;
 
-        me.maximizeTool = Ext.Factory.widget.update(me.maximizeTool, maximizable,
+        me.maximizeTool = Ext.updateWidget(me.maximizeTool, maximizable,
             me, 'createMaximizeTool', 'maximizeTool');
 
         me.syncHeaderItems();
@@ -704,7 +732,7 @@ Ext.define('Ext.Dialog', {
     applyRestorable: function (restorable) {
         var me = this;
 
-        me.restoreTool = Ext.Factory.widget.update(me.restoreTool, restorable,
+        me.restoreTool = Ext.updateWidget(me.restoreTool, restorable,
             me, 'createRestoreTool', 'restoreTool');
 
         me.syncHeaderItems();
@@ -724,14 +752,9 @@ Ext.define('Ext.Dialog', {
     //-----------------------------------------------------------
 
     afterShow: function () {
-        var me = this,
-            focusEl;
-
-        if (me.getModal()) {
-            focusEl = me.getFocusEl();
-            if (focusEl) {
-                focusEl.focus();
-            }
+        this.callParent();
+        if (this.getModal()) {
+            this.focus();
         }
     },
 

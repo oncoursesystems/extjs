@@ -1,7 +1,4 @@
 /**
- * @class Ext.chart.series.sprite.Cartesian
- * @extends Ext.draw.sprite.Sprite
- *
  * Cartesian sprite.
  */
 Ext.define('Ext.chart.series.sprite.Cartesian', {

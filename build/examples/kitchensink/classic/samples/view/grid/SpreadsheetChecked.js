@@ -55,10 +55,10 @@ Ext.define('KitchenSink.view.grid.SpreadsheetChecked', {
     },
 
     // Enable CTRL+C/X/V hot-keys to copy/cut/paste to the system clipboard.
-    plugins: [
-        'clipboard',
-        'selectionreplicator'
-    ],
+    plugins: {
+        clipboard: true,
+        selectionreplicator: true
+    },
 
     listeners: {
         selectionchange: 'onSelectionChange'

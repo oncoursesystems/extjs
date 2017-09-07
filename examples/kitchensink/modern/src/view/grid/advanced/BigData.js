@@ -68,7 +68,49 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
             align: 'right',
             xtype: 'button',
             text: 'Export to ...',
-            handler: 'exportTo'
+            stretchMenu: true,
+            arrow: false,
+            menu: {
+                defaults: {
+                    handler: 'exportDocument'
+                },
+                indented: false,
+                items: [{
+                    text: 'Excel xlsx',
+                    cfg: {
+                        type: 'excel07',
+                        ext: 'xlsx',
+                        includeGroups: true,
+                        includeSummary: true
+                    }
+                }, {
+                    text: 'Excel xml',
+                    cfg: {
+                        type: 'excel03',
+                        ext: 'xml',
+                        includeGroups: true,
+                        includeSummary: true
+                    }
+                }, {
+                    text: 'CSV',
+                    cfg: {
+                        type: 'csv'
+                    }
+                }, {
+                    text: 'TSV',
+                    cfg: {
+                        type: 'tsv',
+                        ext: 'csv'
+                    }
+                }, {
+                    text: 'HTML',
+                    cfg: {
+                        type: 'html',
+                        includeGroups: true,
+                        includeSummary: true
+                    }
+                }]
+            }
         }]
     },
 
@@ -127,6 +169,12 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
                 cls: 'big-data-ratings-cell',
                 bind: {
                     bodyCls: '{ratingGroup:pick("under4","under5","under6","over6")}'
+                }
+            },
+            exportStyle: {
+                format: 'Standard',
+                alignment: {
+                    horizontal: 'Right'
                 }
             }
         }, {
@@ -218,6 +266,13 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
         width: 250
     }, {
         text: 'Absences',
+        defaults: {
+            exportStyle: {
+                alignment: {
+                    horizontal: 'Center'
+                }
+            }
+        },
         columns: [{
             xtype: 'numbercolumn',
             text: 'Illness',
@@ -248,6 +303,11 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
             widget: {
                 xtype: 'rating',
                 tip: 'Set to {tracking:plural("Star")}'
+            }
+        },
+        exportStyle: {
+            alignment: {
+                horizontal: 'Right'
             }
         }
     }, {

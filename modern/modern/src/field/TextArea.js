@@ -83,6 +83,6 @@ Ext.define('Ext.field.TextArea', {
 
     doKeyUp: function(me) {
         // Do not call parent - we don't want to fire action on enter key press
-        this.syncDefaultTriggers();
+        this.syncEmptyState();
     }
 });

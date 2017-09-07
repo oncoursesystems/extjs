@@ -1,6 +1,10 @@
 Ext.define('KitchenSink.BaseApplication', {
     extend: 'Ext.app.Application',
 
+    requires: [
+        'Ext.data.validator.*'
+    ],
+
     defaultToken: 'all',
 
     destroyLoader: function () {

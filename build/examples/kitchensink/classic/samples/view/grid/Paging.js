@@ -54,12 +54,12 @@ Ext.define('KitchenSink.view.grid.Paging', {
         }
     },
 
-    plugins: [{
-        ptype: 'preview',
-
-        expanded: true,
-        bodyField: 'excerpt'
-    }],
+    plugins: {
+        preview: {
+            expanded: true,
+            bodyField: 'excerpt'
+        }
+    },
 
     viewConfig: {
         trackOver: false,

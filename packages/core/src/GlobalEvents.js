@@ -228,7 +228,7 @@ Ext.define('Ext.GlobalEvents', {
             }
             else {
                 winListeners.resize.buffer = me.resizeBuffer;
-            };
+            }
             
             win.on(winListeners);
         }
@@ -246,6 +246,11 @@ Ext.define('Ext.GlobalEvents', {
 
     fireMouseDown: function(e) {
         this.fireEvent('mousedown', e);
+
+        // Synchronize floated component ordering.
+        // Note that this is an ASAP method and will complete asynchronously
+        // after this event has finished.
+        Ext.ComponentManager.handleDocumentMouseDown(e);
     },
 
     fireMouseUp: function(e) {
@@ -310,4 +315,22 @@ Ext.define('Ext.GlobalEvents', {
     Ext.fireEvent = function() {
         return GlobalEvents.fireEvent.apply(GlobalEvents, arguments);
     };
+
+    /**
+     * @member Ext
+     * @method fireIdle
+     * Fires the global `idle` event if there are any listeners registered.
+     *
+     * @since 6.5.1
+     * @private
+     */
+    Ext.fireIdle = function () {
+        if (GlobalEvents.hasListeners.idle && !Ext._suppressIdle) {
+            GlobalEvents.fireEventArgs('idle');
+        }
+
+        Ext._suppressIdle = false;
+    };
+
+    Ext._suppressIdle = false;
 });

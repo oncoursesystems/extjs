@@ -90,7 +90,7 @@ Ext.define('KitchenSink.view.form.FormGrid', {
             dataIndex: 'name',
 
             flex: 1,
-            sortabl: true
+            sortable: true
         }, {
             text: 'Price',
             dataIndex: 'price',
@@ -145,10 +145,6 @@ Ext.define('KitchenSink.view.form.FormGrid', {
             fieldLabel: '% Change',
             bind: '{theCompany.priceChangePct}'
         }, {
-            xtype: 'datefield',
-            fieldLabel: 'Last Updated',
-            bind: '{theCompany.priceLastChange}'
-        }, {
             xtype: 'radiogroup',
             fieldLabel: 'Rating',
             bind: '{theCompany.rating}',
@@ -168,6 +164,16 @@ Ext.define('KitchenSink.view.form.FormGrid', {
                 boxLabel: 'C',
                 inputValue: 2
             }]
+        }, {
+            labelAlign: 'top',
+            xtype: 'datefield',
+            fieldLabel: 'Last Updated (Not editable)',
+            labelSeparator: '',
+            bind: '{theCompany.priceLastChange}',
+
+            // This field is only set when the price changes
+            // The Model rejects set changes.
+            readOnly: true
         }]
     }]
 });

@@ -23,11 +23,13 @@ Ext.define('KitchenSink.view.forms.CustomErrorHandling', {
 
     profiles: {
         defaults: {
+            axisLockValue: undefined,
             width: 350
         },
         phone: {
             defaults: {
-                width: undefined
+                width: undefined,
+                axisLockValue: true
             }
         }
     },
@@ -58,7 +60,8 @@ Ext.define('KitchenSink.view.forms.CustomErrorHandling', {
                 '<span class="x-fa fa-check-circle" style="color: green;"> Form is valid</span>' +
             '</tpl>',
         tooltip: {
-            align: 't-bl',
+            axisLock: '${axisLockValue}',
+            align: 't-b0?',
             allowOver: false,
             anchor: true,
             autoCreate: true,
@@ -102,6 +105,7 @@ Ext.define('KitchenSink.view.forms.CustomErrorHandling', {
         xtype: 'passwordfield',
         name: 'password2',
         label: 'Repeat Password',
+        required: true,
         validators: {
             type: 'controller',
             fn: 'passwordValidator'

@@ -61,7 +61,10 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkers', {
             'itemhighlight'
         ],
         legend: {
-            position: 'bottom'
+            position: 'bottom',
+            marker: {
+                size: 20
+            }
         },
         series: [
             {

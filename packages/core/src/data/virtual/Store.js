@@ -545,6 +545,16 @@ Ext.define('Ext.data.virtual.Store', {
             }
         },
 
+        onPageDestroy: function(page) {
+            var ranges = this.activeRanges,
+                len = ranges.length,
+                i;
+
+            for (i = 0; i < len; ++i) {
+                ranges[i].onPageDestroy(page);
+            }
+        },
+
         onPageEvicted: function(page) {
             var grouper = this.getGrouper();
 

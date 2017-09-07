@@ -47,7 +47,7 @@ Ext.define('Ext.grid.cell.Widget', {
         if (widget) {
             result.push(widget);
             if (deep && widget.getRefItems) {
-                result.push.apply(result, widget.getRefItems());
+                result.push.apply(result, widget.getRefItems(deep));
             }
         }
 

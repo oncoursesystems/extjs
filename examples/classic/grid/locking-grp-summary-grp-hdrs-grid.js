@@ -56,10 +56,6 @@ Ext.onReady(function(){
         groupField: 'project'
     });
 
-    var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
-        clicksToEdit: 1
-    });
-
     var grid = Ext.create('Ext.grid.Panel', {
         width: 800,
         height: 450,
@@ -70,13 +66,14 @@ Ext.onReady(function(){
         columnLines : true,
         store: store,
         layout: 'border',
-        plugins: [
-            cellEditing,
-            {
-                ptype: 'datatip',
+        plugins: {
+            cellediting: {
+                clicksToEdit: 1
+            },
+            datatip: {
                 tpl: 'Click to edit {description}'
             }
-        ],
+        },
         listeners: {
             beforeshowtip: function(grid, tip, data) {
                 var cellNode = tip.pointerEvent.getTarget(tip.view.getCellSelector());

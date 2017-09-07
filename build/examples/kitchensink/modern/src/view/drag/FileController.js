@@ -56,7 +56,7 @@ Ext.define('KitchenSink.view.drag.FileController', {
 
         label.setHtml(s);
 
-        me.timer = setTimeout(function() {
+        me.timer = Ext.defer(function() {
             if (!view.destroyed) {
                 icon.replaceCls('fa-spin', 'drag-file-fadeout');
                 label.setHtml(me.defaultText);
@@ -67,7 +67,8 @@ Ext.define('KitchenSink.view.drag.FileController', {
     },
 
     destroy: function() {
-        clearInterval(this.timer);
+        Ext.undefer(this.timer);
+
         this.target = Ext.destroy(this.target);
         this.callParent();
     }

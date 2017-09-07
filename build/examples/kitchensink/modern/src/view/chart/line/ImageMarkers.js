@@ -66,6 +66,9 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkers', {
     layout: 'fit',
 
     items: [{
+        bind: {
+            theme: '{menuGroups.charttheme}'
+        },
         xtype: 'cartesian',
         shadow: '${shadow}',
         reference: 'chart',
@@ -95,7 +98,7 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkers', {
         legend: {
             type: 'sprite',
             marker: {
-                size: 24
+                size: 20
             }
         },
         axes: [{
@@ -210,9 +213,11 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkers', {
             iconCls: 'x-fa fa-picture-o',
             arrow: false,
             menu: {
+                bind: {
+                    groups: '{menuGroups}'
+                },
                 defaults: {
                     xtype: 'menuradioitem',
-                    handler: 'onThemeSwitch',
                     group: 'charttheme'
                 },
                 items: [{

@@ -130,7 +130,7 @@ Ext.define('Ext.form.field.Display', {
     getValue: function() {
         return this.value;
     },
-    
+
     valueToRaw: function(value) {
         if (value || value === 0 || value === false) {
             return value;

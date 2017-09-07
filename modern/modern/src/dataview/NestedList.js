@@ -84,6 +84,7 @@ Ext.define('Ext.dataview.NestedList', {
     extend: 'Ext.Container',
     xtype: 'nestedlist',
     requires: [
+        'Ext.layout.Card',
         'Ext.dataview.List',
         'Ext.TitleBar',
         'Ext.Button',
@@ -439,14 +440,31 @@ Ext.define('Ext.dataview.NestedList', {
     onDetailContainerChange: function () {
         this.isGoingTo = false;
     },
+    
+    updateLayout: function(layout, oldLayout) {
+        this.callParent([layout, oldLayout]);
+        
+        if (oldLayout) {
+            oldLayout.un({
+                beforeactiveitemchange: 'beforeLayoutActiveItemChange',
+                activeitemchange: 'onLayoutActiveItemChange',
+                scope: this
+            });
+        }
+        
+        if (layout) {
+            layout.on({
+                beforeactiveitemchange: 'beforeLayoutActiveItemChange',
+                activeitemchange: 'onLayoutActiveItemChange',
+                scope: this
+            });
+        }
+    },
 
     /**
      * Called when an list item has been tapped.
      * @param {Ext.List} list The subList the item is on.
-     * @param {Number} index The id of the item tapped.
-     * @param {Ext.Element} target The list item tapped.
-     * @param {Ext.data.Record} record The record which as tapped.
-     * @param {Ext.event.Event} e The event.
+     * @param {Number} location The id of the item tapped.
      *
      * @private
      */
@@ -540,7 +558,7 @@ Ext.define('Ext.dataview.NestedList', {
             detailCardActive = detailCard && me.getActiveItem() == detailCard,
             lastActiveList = me.getLastActiveList();
 
-        this.fireAction('back', [this, node, lastActiveList, detailCardActive], 'doBack');
+        this.fireAction('back', [this, node, lastActiveList, detailCardActive], 'doBack', null, null, 'after');
     },
 
     doBack: function (me, node, lastActiveList, detailCardActive) {
@@ -902,6 +920,22 @@ Ext.define('Ext.dataview.NestedList', {
         }
 
         return (!lastNode.contains(node) && lastNode.isAncestor(node)) ? true : false;
+    },
+    
+    beforeLayoutActiveItemChange: function() {
+        var backButton = this.getBackButton();
+        
+        if (backButton) {
+            backButton.disable();
+        }
+    },
+    
+    onLayoutActiveItemChange: function() {
+        var backButton = this.getBackButton();
+        
+        if (backButton) {
+            backButton.enable();
+        }
     },
 
     /**

@@ -45,6 +45,19 @@ Ext.define('KitchenSink.view.forms.ContactFormController', {
             // form.submit();
             this.hideDialog();
 
+            form.submit({
+                url: 'data/form/file-upload.php',
+                waitMsg: 'Uploading your photo...',
+                success: function(fp, result) {
+                    var tpl = new Ext.XTemplate(
+                        'File processed on the server.<br />',
+                        'Name: {fileName}<br />',
+                        'Size: {fileSize:fileSize}'
+                    );
+
+                    Ext.Msg.alert('Success', tpl.apply(result));
+                }
+            });
             Ext.Msg.alert(
                 'Thank you!',
                 'Your inquiry has been sent. We will respond as soon as possible.'

@@ -180,8 +180,7 @@ Ext.define('Ext.TitleBar', {
         me.on({
             scope: me,
             painted: 'refreshTitlePosition',
-            single: true,
-            scope: this
+            single: true
         });
     },
 

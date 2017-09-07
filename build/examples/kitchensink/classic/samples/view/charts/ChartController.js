@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.chart.ChartController', {
         var chart = this.getChart(),
             themeNames = this.themeNames,
             currentThemeName = Ext.getClassName(chart.getTheme()).split('.').pop(),
-            currentIndex = themeNames.indexOf(currentThemeName),
+            currentIndex = Ext.Array.indexOf(themeNames, currentThemeName),
             nextThemeName = themeNames[++currentIndex % themeNames.length];
 
         chart.setTheme(nextThemeName);

@@ -409,7 +409,7 @@ Ext.define('Ext.form.field.Picker', {
      * @protected
      * @param {Ext.form.field.Picker} field This field instance.
      * @param {Ext.form.trigger.Trigger} trigger This field's picker trigger.
-     * @param {Ext.event.Event} event The event that generated this call.
+     * @param {Ext.event.Event} e The event that generated this call.
      */
     onTriggerClick: function(field, trigger, e) {
         var me = this;

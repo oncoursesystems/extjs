@@ -117,7 +117,7 @@ Ext.define('KitchenSink.view.direct.GenericController', {
              * will make the Polling provider to go frenzy and may cause
              * the browser to hang. So guard against it here.
              */
-            if (interval) {
+            if (interval > 0) {
                 interval = interval * 1000;
 
                 /**

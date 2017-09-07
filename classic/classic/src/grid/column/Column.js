@@ -561,10 +561,11 @@ Ext.define('Ext.grid.column.Column', {
      *                 allowBlank: false
      *             }
      *         }],
-     *         plugins: [{
-     *             ptype: 'rowediting',
-     *             clicksToEdit: 1
-     *         }],
+     *         plugins: {
+     *             rowediting: {
+     *                 clicksToEdit: 1
+     *             }
+     *         },
      *         height: 200,
      *         width: 400,
      *         renderTo: document.body
@@ -863,7 +864,7 @@ Ext.define('Ext.grid.column.Column', {
 
     /**
      * @property {Boolean} isHeader
-     * @deprecated see isColumn
+     * @deprecated 6.5.0 see isColumn
      * Set in this class to identify, at runtime, instances which are not instances of the
      * HeaderContainer base class, but are in fact, the subclass: Header.
      */
@@ -1812,7 +1813,10 @@ Ext.define('Ext.grid.column.Column', {
      * and as such will *not* have the {@link #locked} flag set.
      */
     isLocked: function() {
-        return this.locked || this.getInherited().inLockedGrid;
+        if (this.locked == null) {
+            this.locked = this.getInherited().inLockedGrid;
+        }
+        return this.locked;
     },
 
     hasMultipleVisibleChildren: function(result) {

@@ -60,7 +60,7 @@ Ext.define('Ticket.view.dashboard.Dashboard', {
                 items: {
                     xtype: 'polar',
                     bind: '{ticketStatusSummary}',
-                    interactions: 'rotatePie3d',
+                    interactions: 'rotate',
                     animate: {
                         duration: 500,
                         easing: 'easeIn'

@@ -17,16 +17,16 @@ topSuite("Ext.chart.Util", ['Ext.chart.*'], function() {
             var result;
 
             result = Ext.chart.Util.validateRange(range1, defaultRange);
-            expect(result[0]).toBe(-1);
-            expect(result[1]).toBe(1);
+            expect(result[0]).toBe(-0.5);
+            expect(result[1]).toBe(0.5);
 
             result = Ext.chart.Util.validateRange(range2, defaultRange);
-            expect(result[0]).toBe(4);
-            expect(result[1]).toBe(6);
+            expect(result[0]).toBe(4.5);
+            expect(result[1]).toBe(5.5);
 
             result = Ext.chart.Util.validateRange(range3, defaultRange);
-            expect(result[0]).toBe(-6);
-            expect(result[1]).toBe(-4);
+            expect(result[0]).toBe(-5.5);
+            expect(result[1]).toBe(-4.5);
 
             result = Ext.chart.Util.validateRange(range4, defaultRange);
             expect(result[0]).toBe(0);
@@ -49,14 +49,14 @@ topSuite("Ext.chart.Util", ['Ext.chart.*'], function() {
             expect(isFinite(result[1])).toBe(true);
 
             result = Ext.chart.Util.validateRange(range8, defaultRange);
-            expect(result[0]).toBe(Ext.Number.MIN_SAFE_INTEGER - 1);
-            expect(result[1]).toBe(Ext.Number.MIN_SAFE_INTEGER);
+            expect(result[0]).toBe(0);
+            expect(result[1]).toBe(1);
             expect(isFinite(result[0])).toBe(true);
             expect(isFinite(result[1])).toBe(true);
 
             result = Ext.chart.Util.validateRange(range9, defaultRange);
-            expect(result[0]).toBe(Ext.Number.MAX_SAFE_INTEGER);
-            expect(result[1]).toBe(Ext.Number.MAX_SAFE_INTEGER + 1);
+            expect(result[0]).toBe(0);
+            expect(result[1]).toBe(1);
             expect(isFinite(result[0])).toBe(true);
             expect(isFinite(result[1])).toBe(true);
         });

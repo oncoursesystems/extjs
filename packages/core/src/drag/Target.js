@@ -17,7 +17,7 @@
  * - Neither has a group
  * - Both have one (or more) of the same group
  *
- * ### {@link #accepts Accept}
+ * ### {@link #method!accepts Accept}
  * This method is called each time a {@link Ext.drag.Source source} enters this
  * target. If the method returns `false`, the drag is not considered valid.
  *
@@ -309,6 +309,7 @@ Ext.define('Ext.drag.Target', {
         },
 
         /**
+         * @method
          * @inheritdoc
          */
         getElListeners: function() {

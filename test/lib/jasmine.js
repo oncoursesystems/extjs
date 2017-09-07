@@ -2836,7 +2836,11 @@ jasmine.Env.prototype.checkResourceLeaks = function(spec) {
         if (Ext.event.publisher.Gesture) {
             // Not sure what to do with these
             if (Ext.event.publisher.Gesture.instance.reEnterCount) {
-                jasmine.console.error('Gesture publisher: has reEnter count: ' + specName);
+                // When using synthetic events errors thrown in event handlers cannot
+                // be caught from outside the el.dipatchEvent() call.
+                // The best we can do is fail the spec - the browser typically logs the
+                // error to the console.
+                spec.fail('Unhandled exception in event handler. See log for details.');
             }
             
             items = Ext.event.publisher.Gesture.instance.activeTouches;
@@ -3002,7 +3006,12 @@ jasmine.Env.prototype.checkResourceLeaks = function(spec) {
             fail = true;
         }
 
-        if (!Ext.isModern && Ext.Component) {
+        if (Ext.isModern) {
+            if (this.checkModalMasks(spec)) {
+                fail = true;
+            }
+        }
+        else if (Ext.Component) {
             if (this.checkLayoutSuspension(spec)) {
                 fail = true;
             }
@@ -3180,6 +3189,25 @@ jasmine.Env.prototype.checkDom = function(spec) {
         }
     }
     
+    return fail;
+};
+
+jasmine.Env.prototype.checkModalMasks = function (spec) {
+    var masks = Ext.Element && Ext.Element.query('.x-mask'),
+        fail = false,
+        el, i;
+
+    if (masks) {
+        for (i = masks.length; i-- > 0; ) {
+            el = masks[i];
+
+            if (Ext.fly(el).isVisible()) {
+                spec.expect('Modal mask ' + el.id).toBe('not visible');
+                fail = true;
+            }
+        }
+    }
+
     return fail;
 };
 
@@ -4035,9 +4063,9 @@ jasmine.Matchers.prototype.toBeNull = function() {
  * Matcher that compares the actual to NaN.
  */
 jasmine.Matchers.prototype.toBeNaN = function() {
-	this.message = "Expected " + jasmine.pp(this.actual) + " to be NaN.";
+    this.message = "Expected " + jasmine.pp(this.actual) + " to be NaN.";
 
-	return (this.actual !== this.actual);
+    return (this.actual !== this.actual);
 };
 
 /**
@@ -6517,7 +6545,10 @@ jasmine.Spec.prototype.addBeforesAndAftersToQueue = function() {
 
 jasmine.Spec.prototype.finish = function(onComplete) {
     this.removeAllSpies();
-    
+
+    // Complete destruction of dead objects
+    Ext.Reaper.flush();
+
     // We run resource checks *before* reporting, so that if anything leaked
     // the spec would have a chance to fail
     if (jasmine.CHECK_LEAKS) {
@@ -6710,13 +6741,12 @@ jasmine.Block.prototype.execute = function(onComplete) {
                 // not to be optimized.
                 jasmine.debuggerStatement(e);
             }
-            
+
             spec.fail(e, func.typeName);
         }
-        finally {
-            if (!wantCallback) {
-                me.finish();
-            }
+
+        if (!wantCallback) {
+            me.finish();
         }
     }
 };
@@ -7413,7 +7443,8 @@ jasmine.env.addStartupHook(function() {
  * Utility function to fire a fake mouse event to a given target element
  */
 jasmine.fireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKey, altKey, relatedTarget) {
-    var e, doc, ret, focusable, oldActiveEl, centre;
+    var doc, ret, focusable, oldActiveEl, centre,
+        minMove = Math.ceil(Math.sqrt(Math.pow(Ext.event.gesture.Drag.$config.values.minDistance, 2) / 2));
 
     target = Ext.getDom(target && target.isComponent ? target.el : target);
     centre = Ext.fly(target, '_testFireEvent').getAnchorXY('c');
@@ -7421,7 +7452,14 @@ jasmine.fireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKey,
     if (!target) {
         throw 'Cannot fire mouse event on null element';
     }
-    
+
+    // If we are doing a move event immediately after a down event, ensure the pointer has moved by taking the
+    // down position, and moving it by the Drag Gesture's minDistance
+    if (x == null && y == null && Ext.String.endsWith(type, 'move') && Ext.String.endsWith(jasmine.lastMouseEventType, 'down')) {
+        x = jasmine.mouseX + minMove;
+        y = jasmine.mouseY + minMove;
+    }
+
     doc = target.ownerDocument || document;
     if (x == null) {
         x = centre[0];
@@ -7441,6 +7479,7 @@ jasmine.fireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKey,
     }
     jasmine.mouseX = x;
     jasmine.mouseY = y;
+    jasmine.lastMouseEventType = type;
 
     // Mousedown might lead to focus (not context menu mousedown)
     if (jasmine.focusEvents[type] && !button) {
@@ -7450,14 +7489,14 @@ jasmine.fireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKey,
 
         // Mousedown is followed by focus, unless a listener prevented default, or the focus was moved by a prior listener
         if (focusable) {
-            oldActiveEl = document.activeElement;
+            oldActiveEl = doc.activeElement;
             
             if (focusable !== oldActiveEl) {
                 Ext.getDoc().on({
                     mousedown: function(e) {
                         var fly;
                         
-                        if (!e.defaultPrevented && document.activeElement === oldActiveEl &&
+                        if (!e.defaultPrevented && doc.activeElement === oldActiveEl &&
                             (fly = Ext.fly(focusable)) && fly.isFocusable())
                         {
                             fly.focus();
@@ -7471,7 +7510,7 @@ jasmine.fireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKey,
     }
 
     if (type === 'click') {
-        Ext.testHelper.tap(target, {
+        ret = Ext.testHelper.tap(target, {
             x: x,
             y: y,
             button: button,
@@ -7481,15 +7520,20 @@ jasmine.fireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKey,
             relatedTarget: relatedTarget
         });
     } else if (type === 'dblclick') {
-        jasmine.fireMouseEvent(target, 'click', x, y, button, shiftKey, ctrlKey, altKey);
-        jasmine.fireMouseEvent(target, 'click', x, y, button, shiftKey, ctrlKey, altKey);
-        
-        // Multi-phase mouse events are done with gestures now, so ensure there's a real dblclick fired.
-        jasmine.doFireMouseEvent(target, 'dblclick', x, y, button, shiftKey, ctrlKey, altKey);
+        ret = jasmine.fireMouseEvent(target, 'click', x, y, button, shiftKey, ctrlKey, altKey);
+        if (ret !== false) {
+            ret = jasmine.fireMouseEvent(target, 'click', x, y, button, shiftKey, ctrlKey, altKey);
+
+            // Multi-phase mouse events are done with gestures now, so ensure there's a real dblclick fired.
+            // Unless the click event was cancelled
+            if (ret !== false) {
+                jasmine.doFireMouseEvent(target, 'dblclick', x, y, button, shiftKey, ctrlKey, altKey);
+            }
+        }
     } else if (type === 'contextmenu') {
-        jasmine.doFireMouseEvent(target, type, x, y, button, shiftKey, ctrlKey, altKey);
+        ret = jasmine.doFireMouseEvent(target, type, x, y, button, shiftKey, ctrlKey, altKey);
     } else {
-        Ext.testHelper.fireEvent(jasmine.mouseToTypeMap[type], target, {
+        ret = Ext.testHelper.fireEvent(jasmine.mouseToTypeMap[type], target, {
             x: x,
             y: y,
             button: button,
@@ -7505,15 +7549,15 @@ jasmine.fireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKey,
 
         // IE, CTRL+SHIFT+CLICK is contextmenu
         if (Ext.isIE) {
-            jasmine.doFireMouseEvent(target, 'click', x, y, button, true, true);
+            ret = jasmine.doFireMouseEvent(target, 'click', x, y, button, true, true);
         }
         // Other browsers support contextmenu
         else {
-            jasmine.doFireMouseEvent(target, 'contextmenu', x, y);
+            ret = jasmine.doFireMouseEvent(target, 'contextmenu', x, y);
         }
     }
 
-    return (ret === false) ? ret : e;
+    return ret;
 };
 
 jasmine.doFireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKey, altKey, relatedTarget) {
@@ -7532,7 +7576,7 @@ jasmine.doFireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKe
     }
 
     var doc = target.ownerDocument || document,
-        e, docEl = doc.documentElement, body;
+        e, docEl = doc.documentElement, body, dispatched;
 
     // Ensure the mouse position is registered at the point of contact
     if (type === 'mousedown') {
@@ -7599,8 +7643,10 @@ jasmine.doFireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKe
         if (jasmine.CAPTURE_CALL_STACK) {
             e.created = new Error().stack;
         }
-        
-        return target.dispatchEvent(e);
+
+        dispatched = target.dispatchEvent(e);
+
+        return (dispatched === false) ? dispatched : e;
     }
 };
 
@@ -7738,7 +7784,7 @@ jasmine.firePointerEvent = function(target, type, pointerId, x, y, button, shift
                 0, // rotation
                 0, // tiltX
                 0, // tiltY
-                1, // id,
+                pointerId || 1, // id,
                 pointerTypeValue, // pointerType
                 Ext.now(), // timestamp
                 true    // primary, ie: the mouse
@@ -7872,48 +7918,51 @@ jasmine.supportsPointerEventConstructor = (function () {
 })();
 
 jasmine.createTouchList = function(touchList, target) {
-    target = touchList[0].target || target;
+    var touches = [],
+        doc = target.ownerDocument || document,
+        touch, touchCfg, i, len;
 
-    var doc = document = target.ownerDocument || document,
-        touch,
-        touches = [],
-        touchCfg, i, len;
+    if (touchList && touchList.length) {
+        target = touchList[0].target || target;
 
-    for (i = 0, len = touchList.length; i < len; i++) {
-        touchCfg = touchList[i];
+        doc = target.ownerDocument || document;
 
-        // W3 standard compliant.
-        if (jasmine.supportsTouchConstructor) {
-            touch = new Touch({
-                target: target,
-                identifier: touchCfg.identifier || 1,
-                pageX: touchCfg.pageX,
-                pageY: touchCfg.pageY,
-                screenX: touchCfg.screenX || touchCfg.pageX, // use pageX/Y as the default for screenXY
-                screenY: touchCfg.screenY || touchCfg.pageY,
-                clientX: touchCfg.screenX || touchCfg.pageX, // use pageX/Y as the default for clientXY
-                clientY: touchCfg.screenY || touchCfg.pageY,
-                radiusX: 1,
-                radiusY: 1,
-                rotationAngle: 0,
-                force: 0.5
-            });
-        } else {
-            touch = doc.createTouch(
-                doc.defaultView || doc.parentWindow,
-                target,
-                // use 1 as the default ID, so that tests that are only concerned with a single
-                // touch event don't need to worry about providing an ID
-                touchCfg.identifier || 1,
-                touchCfg.pageX,
-                touchCfg.pageY,
-                touchCfg.screenX || touchCfg.pageX, // use pageX/Y as the default for screenXY
-                touchCfg.screenY || touchCfg.pageY
-            );
+        for (i = 0, len = touchList.length; i < len; i++) {
+            touchCfg = touchList[i];
+
+            // W3 standard compliant.
+            if (jasmine.supportsTouchConstructor) {
+                touch = new Touch({
+                    target: target,
+                    identifier: touchCfg.identifier || 1,
+                    pageX: touchCfg.pageX,
+                    pageY: touchCfg.pageY,
+                    screenX: touchCfg.screenX || touchCfg.pageX, // use pageX/Y as the default for screenXY
+                    screenY: touchCfg.screenY || touchCfg.pageY,
+                    clientX: touchCfg.screenX || touchCfg.pageX, // use pageX/Y as the default for clientXY
+                    clientY: touchCfg.screenY || touchCfg.pageY,
+                    radiusX: 1,
+                    radiusY: 1,
+                    rotationAngle: 0,
+                    force: 0.5
+                });
+            } else {
+                touch = doc.createTouch(
+                    doc.defaultView || doc.parentWindow,
+                    target,
+                    // use 1 as the default ID, so that tests that are only concerned with a single
+                    // touch event don't need to worry about providing an ID
+                    touchCfg.identifier || 1,
+                    touchCfg.pageX,
+                    touchCfg.pageY,
+                    touchCfg.screenX || touchCfg.pageX, // use pageX/Y as the default for screenXY
+                    touchCfg.screenY || touchCfg.pageY
+                );
+            }
+            touches.push(touch);
         }
-        touches.push(touch);
     }
-    
+
     return jasmine.supportsTouchListConstructor ? new TouchList(touches) : doc.createTouchList ? doc.createTouchList.apply(doc, touches) : touches;
 };
 
@@ -7935,7 +7984,7 @@ jasmine.createTouchList = function(touchList, target) {
  */
 jasmine.fireTouchEvent = function(target, type, touchesParam, changedTouches, targetTouches) {
     var target = Ext.getDom(target),
-        touches, e, dispatched, centre;
+        touch, touches, e, dispatched, centre;
 
     if (!target) {
         throw 'Cannot fire touch event on null element';
@@ -7953,6 +8002,8 @@ jasmine.fireTouchEvent = function(target, type, touchesParam, changedTouches, ta
     changedTouches = jasmine.createTouchList(changedTouches || touchesParam, target);
     targetTouches = jasmine.createTouchList(targetTouches || touchesParam, target);
 
+    touch = touchesParam[0];
+
     e = jasmine.createTouchEvent(type, target, {
         target: target,
         touches: touches,
@@ -7960,11 +8011,11 @@ jasmine.fireTouchEvent = function(target, type, touchesParam, changedTouches, ta
         targetTouches: targetTouches,
         bubbles: true,
         cancelable: true,
-        shiftKey: !!touchesParam[0].shiftKey,
-        ctrlKey: !!touchesParam[0].ctrlKey,
-        altKey: !!touchesParam[0].altKey
+        shiftKey: touch ? !!touch.shiftKey : false,
+        ctrlKey: touch ? !!touch.ctrlKey : false,
+        altKey: touch ? !!touch.altKey : false
     });
-    
+
     if (jasmine.CAPTURE_CALL_STACK) {
         e.created = new Error().stack;
     }
@@ -8030,7 +8081,7 @@ jasmine.createTouchEvent = function(type, target, cfg) {
  * Utility function to fire a fake key event to a given target element
  */
 jasmine.fireKeyEvent = function(target, type, key, shiftKey, ctrlKey, altKey) {
-    var doc, e;
+    var doc, e, dispatched;
     
     target = Ext.getDom(target);
     
@@ -8064,8 +8115,10 @@ jasmine.fireKeyEvent = function(target, type, key, shiftKey, ctrlKey, altKey) {
             ctrlKey: !!ctrlKey,
             altKey: !!altKey
         });
-        
-        return target.dispatchEvent(e);
+
+        dispatched = target.dispatchEvent(e);
+
+        return (dispatched === false) ? dispatched : e;
     }
 };
 
@@ -8752,14 +8805,24 @@ jasmine.addAllowedListener = function(eventName) {
 // This requires loaded Ext so needs to be done right before tests are starting
 jasmine.env.addStartupHook(function() {
     var stickyElements;
-    
+
+    // The Reaper must not fire idle events during specs.
+    // We will flush its queue after every spec.
+    // See jasmine.Spec.prototype.finish
+    Ext.Reaper.delay = 1e6;
+
+    // Prevent the iOS inactive webview watchdog timer from firing at 500ms intervals
+    // throughout the test suite and injecting spurious idle events.
+    Ext.uninterval(Ext.TaskQueue.watchdogTimer);
+    Ext.uninterval(Ext.AnimationQueue.watchdogTimer);
+
     if (Ext.isModern) {
         // all tests run in normal mode by default regardless of the device
         // it is the responsibility of the tests/suites that need to test big mode
         // to add the x-big class to the documentElement before testing and remove it when done.
         Ext.theme.getDocCls = function() {};
     }
-    
+
     if (Ext.Element) {
         jasmine._bodyRegion = new Ext.util.Region(0, window.innerWidth || document.documentElement.clientWidth, window.innerHeight || document.documentElement.clientHeight, 0);
         stickyElements = Ext.getBody().query('[data-sticky]');
@@ -8833,6 +8896,12 @@ jasmine.env.addStartupHook(function() {
         }
     }
 
+    Ext.Timer.track = true;
+    Ext.Timer.hook = function (timer) {
+        var spec = timer.spec = jasmine.env.currentSpec;
+        timer.test = spec ? spec.getFullName(true) : null;
+    };
+
     // For unit tests we want to clear properties synchronously
     Ext.define(null, {
         override: 'Ext.Component',
@@ -8865,157 +8934,7 @@ jasmine.env.addStartupHook(function() {
     // We don't want ARIA warnings to pollute the console
     Ext._ariaWarn = Ext.ariaWarn;
     Ext.ariaWarn = Ext.emptyFn;
-    
-    (function() {
-        var global = jasmine.getGlobal(),
-            lastTime = 0,
-            clock = jasmine.Clock,
-            setTimeout = jasmine._setTimeout,
-            clearTimeout = jasmine._clearTimeout,
-            realExtAsap = Ext.asap,
-            realExtAsapCancel = Ext.asapCancel,
-            requestAnimFrame = global.requestAnimationFrame || global.webkitRequestAnimationFrame ||
-                global.mozRequestAnimationFrame || global.oRequestAnimationFrame ||
-                function(callback) {
-                    var currTime = Ext.now(),
-                        timeToCall = Math.max(0, 16 - (currTime - lastTime)),
-                        id = setTimeout(function() {
-                            callback(currTime + timeToCall);
-                        }, timeToCall);
-                    lastTime = currTime + timeToCall;
-                    return id;
-                },
-            cancelAnimFrame = global.cancelAnimationFrame || global.webkitCancelAnimationFrame ||
-                global.mozCancelAnimationFrame || global.oCancelAnimationFrame ||
-                function(timerId) {
-                    clearTimeout(timerId);
-                };
-        
-        // Track animation frame requests too.
-        Ext.Function.requestAnimationFrame = function(funcToCall, scope, args) {
-            var wrapFunc = function() {
-                    delete clock.scheduledFunctions[timeoutKey];
-                    
-                    if (args && args.length) {
-                        funcToCall.apply(scope, args);
-                    }
-                    else {
-                        funcToCall.call(scope);
-                    }
-                },
-                timeoutKey = clock.nextTimeoutKey++,
-                realTimeoutKey,
-                spec = jasmine.env.currentSpec;
-            
-//             if (timeoutKey === 100009) {
-//                 debugger;
-//             }
-    
-            // Must use bind. pass passes an extra parameter on the end!
-            if (Ext.elevateFunction) {
-                wrapFunc = Ext.Function.bind(Ext.elevateFunction, null, [wrapFunc, scope, args]);
-            }
-            
-            realTimeoutKey = requestAnimFrame(wrapFunc);
-    
-            clock.scheduledFunctions[timeoutKey] = {
-                type: 'requestAnimationFrame',
-                realTimeoutKey: realTimeoutKey,
-                scheduledFn: funcToCall,
-                funcToCall: wrapFunc,
-                created: jasmine.CAPTURE_CALL_STACK ? new Error().stack : null,
-                spec: spec ? spec.getFullName(true) : null,
-                $skipTimerCheck: funcToCall.$skipTimerCheck
-            };
-            
-            return timeoutKey;
-        };
-        
-        Ext.Function.cancelAnimationFrame = function(timeoutKey) {
-            var scheduledObject = clock.scheduledFunctions[timeoutKey];
-    
-            // We can only handle it if it is one of ours
-            if (scheduledObject) {
-                delete clock.scheduledFunctions[timeoutKey];
-                cancelAnimFrame(scheduledObject.realTimeoutKey);
-            }
-        };
-        
-        // Also, for platforms which do not have setImmediate, ensure that no Ext.asap
-        // consequences leak into the next spec.
-        Ext.asap = function(funcToCall, scope, args) {
-            var wrapFunc = function() {
-                    delete clock.scheduledFunctions[timeoutKey];
-                    
-                    if (args && args.length) {
-                        funcToCall.apply(this, args);
-                    }
-                    else {
-                        funcToCall.call(this);
-                    }
-                },
-                timeoutKey = clock.nextTimeoutKey++,
-                spec = jasmine.env.currentSpec,
-                realTimeoutKey;
-            
-            // Real Ext.asap will call either window.setImmediate() or window.setTimeout(),
-            // both of which are be intercepted by jasmine.Clock. We don't need that additional
-            // layer of interception here.
-            if (global.setImmediate) {
-                global.setImmediate = jasmine._setImmediate;
-            }
-            else {
-                global.setTimeout = jasmine._setTimeout;
-            }
-            
-            realTimeoutKey = realExtAsap.call(Ext, wrapFunc, scope, args);
-            
-            if (global.setImmediate) {
-                global.setImmediate = clock.installed.setImmediate;
-            }
-            else {
-                global.setTimeout = clock.installed.setTimeout;
-            }
-    
-            clock.scheduledFunctions[timeoutKey] = {
-                type: 'asap',
-                realTimeoutKey: realTimeoutKey,
-                scheduledFn: funcToCall,
-                funcToCall: wrapFunc,
-                created: jasmine.CAPTURE_CALL_STACK ? new Error().stack : null,
-                spec: spec ? spec.getFullName(true) : null,
-                $skipTimerCheck: funcToCall.$skipTimerCheck
-            };
-            
-            return timeoutKey;
-        };
-        
-        Ext.asapCancel = function(timeoutKey) {
-            var scheduledObject = clock.scheduledFunctions[timeoutKey];
-    
-            // We can only handle it if it is one of ours
-            if (scheduledObject) {
-                delete clock.scheduledFunctions[timeoutKey];
-                
-                if (global.clearImmediate) {
-                    global.clearImmediate = jasmine._clearImmediate;
-                }
-                else {
-                    global.clearTimeout = jasmine._clearTimeout;
-                }
-                
-                realExtAsapCancel.call(Ext.Function, scheduledObject.realTimeoutKey);
-                
-                if (global.clearImmediate) {
-                    global.clearImmediate = clock.installed.clearImmediate;
-                }
-                else {
-                    global.clearTimeout = clock.installed.clearTimeout;
-                }
-            }
-        };
-    })();
-    
+
     // We would love to catch runaway Promises, too, but there's a tiny problem
     // of what to do with them when that happens. See comment in checkResourceLeaks()
 //     if (jasmine.DEBUGGING_MODE) {
@@ -9114,7 +9033,7 @@ jasmine.env.addStartupHook(function() {
             }
         });
     }
-    
+
     if (!jasmine.CHECK_LEAKS) {
         Ext.Base.prototype.clearReferencesOnDestroy = false;
     }
@@ -9137,6 +9056,7 @@ jasmine.env.addStartupHook(function() {
             
             // IE10+ F12 dev tools adds these properties when opened.
             '_IE_DEVTOOLBAR_CONSOLE_COMMAND_LINE',
+            '__BROWSERTOOLS_CONSOLE',
             '__BROWSERTOOLS_CONSOLE_BREAKMODE_FUNC',
             '__BROWSERTOOLS_CONSOLE_SAFEFUNC',
             

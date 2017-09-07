@@ -12,8 +12,7 @@ Ext.define('KitchenSink.view.grid.addons.RowBodyGridController', {
 
     renderSign: function (value, format) {
         var text = Ext.util.Format.number(value, format),
-            tpl = this.signTpl,
-            data;
+            tpl = this.signTpl;
 
         if (Math.abs(value) > 0.1) {
             if (!tpl) {

@@ -12,10 +12,15 @@ Ext.define('KitchenSink.view.tip.TipAligningController', {
         this.tooltip.setConstrainAlign(this.getView().bodyElement);
     },
 
-    initButton: function() {
-        this.button.show();
-        this.button.center();
-        this.tooltip.delayShow(this.button);
+    onResize: function() {
+        var button = this.button;
+
+        button.show();
+        button.center();
+
+        // KS animates views in. Delay the show so that the button
+        // has stopped moving!
+        this.tooltip.delayShow(button);
     },
 
     onButtonDrag: function() {

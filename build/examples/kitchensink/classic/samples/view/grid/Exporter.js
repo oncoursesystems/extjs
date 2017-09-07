@@ -32,6 +32,9 @@ Ext.define('KitchenSink.view.grid.Exporter', {
     //</example>
 
     loadMask: true,
+    plugins: {
+        gridexporter: true
+    },
 
     store: {
         type: 'products',
@@ -191,7 +194,5 @@ Ext.define('KitchenSink.view.grid.Exporter', {
                 }]
             }
         }]
-    },
-
-    plugins: 'gridexporter'
+    }
 });

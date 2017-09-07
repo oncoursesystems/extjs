@@ -56,10 +56,12 @@ Ext.onReady(function(){
             overItemCls: 'x-item-over',
             itemSelector: 'div.thumb-wrap',
             emptyText: 'No images to display',
-            plugins: [
-                Ext.create('Ext.ux.DataView.DragSelector', {}),
-                Ext.create('Ext.ux.DataView.LabelEditor', {dataIndex: 'name'})
-            ],
+            plugins: {
+                dataviewdragselector: true,
+                dataviewlabeleditor: {
+                    dataIndex: 'name'
+                }
+            },
             prepareData: function(data) {
                 Ext.apply(data, {
                     shortName: Ext.util.Format.ellipsis(data.name, 15),

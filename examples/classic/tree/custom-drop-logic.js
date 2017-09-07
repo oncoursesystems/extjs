@@ -75,22 +75,24 @@ Ext.onReady(function() {
             title: 'Source',
             store: store1,
             viewConfig: {
-                plugins: [{
-                   ptype: 'treeviewdragdrop',
-                   enableDrag: true,
-                   enableDrop: false
-                }]
+                plugins: {
+                   treeviewdragdrop: {
+                       enableDrag: true,
+                       enableDrop: false
+                   }
+                }
             }
         }, {
             title: 'Destination',
             store: store2,
             viewConfig: {
-                plugins: [{
-                   ptype: 'treeviewdragdrop',
-                   enableDrag: false,
-                   enableDrop: true,
-                   appendOnly: true
-                }],
+                plugins: {
+                   treeviewdragdrop: {
+                       enableDrag: false,
+                       enableDrop: true,
+                       appendOnly: true
+                   }
+                },
                 listeners: {
                     nodedragover: function(targetNode, position, dragData){
                         var rec = dragData.records[0],

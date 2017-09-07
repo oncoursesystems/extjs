@@ -317,7 +317,7 @@ Ext.define('Ext.grid.column.Check', {
         var me = this;
 
         if (!me.headerStateTimer) {
-            me.headerStateTimer = Ext.Function.requestAnimationFrame(me.doUpdateHeaderState, me);
+            me.headerStateTimer = Ext.raf(me.doUpdateHeaderState, me);
         }
     },
 
@@ -491,7 +491,7 @@ Ext.define('Ext.grid.column.Check', {
     },
 
     doDestroy: function() {
-        Ext.Function.cancelAnimationFrame(this.headerStateTimer);
+        Ext.unraf(this.headerStateTimer);
         this.callParent();
     },
 

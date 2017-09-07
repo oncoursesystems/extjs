@@ -65,6 +65,7 @@ Ext.define('KitchenSink.view.binding.Form', {
         items: [{
             xtype: 'numberfield',
             width: 100,
+            decimals: 0,
             bind: '{red}'
         }, {
             xtype: 'singlesliderfield',
@@ -78,6 +79,7 @@ Ext.define('KitchenSink.view.binding.Form', {
         items: [{
             xtype: 'numberfield',
             width: 100,
+            decimals: 0,
             bind: '{green}'
         }, {
             xtype: 'singlesliderfield',
@@ -91,6 +93,7 @@ Ext.define('KitchenSink.view.binding.Form', {
         items: [{
             xtype: 'numberfield',
             width: 100,
+            decimals: 0,
             bind: '{blue}'
         }, {
             xtype: 'singlesliderfield',
@@ -108,6 +111,7 @@ Ext.define('KitchenSink.view.binding.Form', {
         items: [{
             xtype: 'numberfield',
             width: 100,
+            decimals: 0,
             bind: '{opacity}',
             stepValue: 0.1
         }, {

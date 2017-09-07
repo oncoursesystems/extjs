@@ -72,7 +72,7 @@ Ext.define('KitchenSink.view.dataview.MultiSort', {
         ui: 'default',
         reference: 'dataview',
         itemTpl: '<div class="dataview-multisort-item">' +
-                    '<img src="modern/resources/images/touch-icons/{thumb}" />' +
+                    '<img draggable="false" src="modern/resources/images/touch-icons/{thumb}" />' +
                     '<h3>{name}</h3>' +
                 '</div>',
         store: {

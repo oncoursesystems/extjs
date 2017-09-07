@@ -45,6 +45,7 @@ Ext.define('KitchenSink.view.forms.Checkout', {
             paymentLabelWidthShort: undefined,
             paymentLabelWidthLong: undefined,
             width: 400,
+            height: 460,
             yearLabel: 'Year',
             yearWidth: undefined
         },
@@ -76,6 +77,12 @@ Ext.define('KitchenSink.view.forms.Checkout', {
     width: '${width}',
 
     scrollable: false,
+
+    bind: {
+        activeItemIndex: '{index}'
+    },
+    twoWayBindable: 'activeItemIndex',
+
     layout: {
         type: 'card',
         animation: {
@@ -313,6 +320,7 @@ Ext.define('KitchenSink.view.forms.Checkout', {
                 xtype: 'numberfield',
                 width: '${yearWidth}',
                 required: true,
+                decimals: 0,
                 margin: '${yearPadding}',
                 label: '${yearLabel}',
                 name: 'payment_year',

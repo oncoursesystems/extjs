@@ -20,12 +20,13 @@ Ext.define('SimpleTasks.view.tasks.Grid', {
     store: 'Tasks',
 
     viewConfig: {
-        plugins: [{
-            ptype: 'gridviewdragdrop',
-            ddGroup: 'task',
-            dragText: 'Drag task to change list',
-            enableDrop: false
-        }],
+        plugins: {
+            gridviewdragdrop: {
+                ddGroup: 'task',
+                dragText: 'Drag task to change list',
+                enableDrop: false
+            }
+        },
         getRowClass: function(record, rowIndex, rowParams, store){
             var due = record.get('due');
             if(record.get('done')) {
