@@ -111,7 +111,8 @@ Ext.define('KitchenSink.view.binding.Form', {
         items: [{
             xtype: 'numberfield',
             width: 100,
-            decimals: 0,
+            decimals: 2,
+            trim: false,
             bind: '{opacity}',
             stepValue: 0.1
         }, {

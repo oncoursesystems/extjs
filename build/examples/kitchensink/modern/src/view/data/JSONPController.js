@@ -59,7 +59,7 @@ Ext.define('KitchenSink.view.data.JSONPController', {
                 temperature: format(weather.main.temp),
                 minTemp: format(weather.main.temp_min),
                 maxTemp: format(weather.main.temp_max),
-                date: new Date(weather.dt * 1000).toLocaleDateString()
+                date: new Date(weather.dt).toLocaleDateString()
             };
 
             this.lookup('results').updateHtml(this.getTpl().applyTemplate(data));

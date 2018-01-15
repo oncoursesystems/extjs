@@ -447,6 +447,11 @@
         },
         "material": {
             "toolkit": "modern",
+            "css": [
+                {
+                    "path": "lib/prettify/prettify-dark.css"
+                }
+            ],
             "material" : {
                 "toolbar": {
                     "color": "#1976d2",

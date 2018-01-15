@@ -15,7 +15,10 @@ Ext.define('KitchenSink.view.thumbnails.Thumbnails', {
         itemSelector: '.thumbnail-item',
         itemCls: 'thumbnail-item',
         scrollable: false,
-        itemRipple: Ext.theme.is.Material ? { delegate: '.thumbnail-icon' } : false,
+        pressedDelay: 0,
+        itemButtonMode: true,
+        disableSelection: true,
+        itemRipple: Ext.theme.is.Material ? { delegate: '.thumbnail-icon-wrap',  release: false } : false,
 
         autoSize: true,
 

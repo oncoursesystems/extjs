@@ -5,12 +5,20 @@
         border-bottom: 1px solid if($theme-name == 'theme-ios', #EFEFF4, #f5f5f5);
         height: 128px;
 
+        .dark-mode & {
+            border-bottom: 1px solid if($theme-name == 'theme-ios', #EFEFF4, #232323);
+        }
+
         &:last-child {
             border-bottom: 0px;
         }
 
         &.x-focused {
             background-color: if($theme-name == 'theme-ios', #EFEFF4, #f5f5f5);
+
+            .dark-mode & {
+                background-color: if($theme-name == 'theme-ios', #EFEFF4, #232323);
+            }
         }
 
         .img {

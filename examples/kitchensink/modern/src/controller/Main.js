@@ -112,6 +112,7 @@ Ext.define('KitchenSink.controller.Main', {
     }],
 
     init: function () {
+        var darkMode = Ext.String.trim(window.getComputedStyle(document.body).getPropertyValue('--dark-mode')) === 'true';
         /**
          * In a build, the path to the `KitchenSink` namespace
          * is incorrect. Correct it here.
@@ -119,6 +120,8 @@ Ext.define('KitchenSink.controller.Main', {
         if (Ext.ClassManager.paths.KitchenSink === 'app') {
             Ext.ClassManager.paths.KitchenSink = 'modern/src';
         }
+
+        Ext.getBody().toggleCls('dark-mode', darkMode);
     },
 
     updateDetails: function(node) {
@@ -470,14 +473,19 @@ Ext.define('KitchenSink.controller.Main', {
 
             me.materialThemeMenu = materialThemeMenu;
 
-            // TODO: add dark mode toggle
-           /* items.unshift({
+            //<debug>
+            items.unshift({
                 xtype: 'togglefield',
-                bind: '{darkMode}',
+                listeners: {
+                    change: 'onDarkModeChange',
+                    scope: me
+                },
+                value: Ext.String.trim(window.getComputedStyle(document.body).getPropertyValue('--dark-mode')) === 'true',
                 boxLabel: 'Dark Mode',
                 margin: null,
                 shadow: false
-            });*/
+            });
+            //</debug>
 
             items.push({
                 text: 'Cancel',
@@ -488,6 +496,17 @@ Ext.define('KitchenSink.controller.Main', {
             });
 
             materialThemeMenu.add(items);
+        }
+    },
+
+    onDarkModeChange: function(toggle) {
+        var darkMode = toggle.getValue();
+        if (window.Fashion && Fashion.css) {
+            Fashion.css.setVariables({
+                'dark-mode': darkMode ?  'true' : 'false'
+            });
+
+            Ext.getBody().toggleCls('dark-mode', darkMode);
         }
     },
 

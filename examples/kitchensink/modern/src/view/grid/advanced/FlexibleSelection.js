@@ -60,6 +60,12 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelection', {
         }
     },
 
+    viewModel: {
+        data: {
+            isRows: true
+        }
+    },
+
     padding: '${padding}', //give room for the grid's shadow
     shadow: false,
     //</example>
@@ -69,7 +75,7 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelection', {
 
     items: [{
         xtype: 'grid',
-        reference: 'selection-grid',
+        reference: 'selectionGrid',
         shadow: '${shadow}',
         title: '${title}',
         rowNumbers: true,
@@ -141,7 +147,10 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelection', {
                 items: [{
                     text: 'rows',
                     fn: 'setRows',
-                    checked: true
+                    checked: true,
+                    bind: {
+                        checked: '{isRows}'
+                    }
                 }, {
                     text: 'cells',
                     fn: 'setCells',
@@ -157,7 +166,13 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelection', {
                 }, {
                     text: 'checkbox',
                     fn: 'setCheckbox',
-                    checked: true
+                    checked: true,
+                    bind: {
+                        checked: {
+                            bindTo: '{isRows}',
+                            twoWay: false
+                        }
+                    }
                 }]
             }
         }, {

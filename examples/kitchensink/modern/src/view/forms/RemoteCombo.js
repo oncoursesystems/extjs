@@ -51,6 +51,7 @@ Ext.define('KitchenSink.view.forms.RemoteCombo', {
         picker: 'floated',
         placeholder: 'Choose thread to open...',
         alignTarget: '${alignTarget}',
+        forceSelection: true,
         store: {
             type: 'form-forum-posts'
         },
@@ -60,9 +61,24 @@ Ext.define('KitchenSink.view.forms.RemoteCombo', {
         itemTpl: '<div class="remote-combo-search-item">' +
                     '<h3><span>{[Ext.Date.format(values.lastPost, "M j, Y")]}<br>by {author}</span>{title}</h3>' +
                     '{excerpt}' +
-                '</div',
+                '</div>',
         listeners: {
             select: 'onThreadSelect'
         }
+    }, {
+        xtype: 'component',
+        reference: 'threadDetails',
+        tpl: '<h2>Thread Details</h2>' +
+             '<div class="remote-combo-search-item">' +
+                '<h3>' +
+                    '<span>' +
+                        '{[Ext.Date.format(values.lastPost, "M j, Y")]}<br>by {author}' +
+                    '</span>' +
+                    '<a href="{url}" target="_blank">' +
+                        '{title}' +
+                    '</a>' +
+                '</h3>' +
+                '{excerpt}' +
+            '</div>'
     }]
 });

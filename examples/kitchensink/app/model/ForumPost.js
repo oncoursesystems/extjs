@@ -7,6 +7,13 @@ Ext.define('KitchenSink.model.form.ForumPost', {
         {name: 'topicId', mapping: 'topic_id'},
         {name: 'author', mapping: 'author'},
         {name: 'lastPost', mapping: 'post_time', type: 'date', dateFormat: 'timestamp'},
-        {name: 'excerpt', mapping: 'post_text'}
+        {name: 'excerpt', mapping: 'post_text'},
+        {
+            name: 'url',
+            convert: function(value, record) {
+                return 'http://www.sencha.com/forum/showthread.php?t=' +
+                    record.get('topicId') + '&p=' + record.get('postId')
+            }
+        }
     ]
 });

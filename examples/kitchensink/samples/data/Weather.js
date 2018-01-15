@@ -39,7 +39,7 @@ Ext.define('KitchenSink.data.Weather', {
                 "clouds": {
                     "all": 0
                 },
-                "dt": 1499359800,
+                "dt": new Date(),
                 "sys": {
                     "type": 1,
                     "id": 5012,
@@ -62,7 +62,7 @@ Ext.define('KitchenSink.data.Weather', {
                 data.main.temp = Math.floor(Math.random() * (to - from + 1) + from);
                 return {
                     responseText: JSON.stringify(data)
-                }
+                };
             }
         })
     });

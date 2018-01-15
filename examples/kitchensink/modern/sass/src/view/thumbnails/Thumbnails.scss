@@ -59,6 +59,12 @@ $kitchensink-thumbnail-size: 96px;
     }
 }
 
+@if ($theme-name == 'theme-material') {
+    .x-pressed .thumbnail-icon-wrap {
+        color: $base-dark-color;
+    }
+}
+
 .thumbnail-text {
     text-align: center;
     padding: 0 5px;

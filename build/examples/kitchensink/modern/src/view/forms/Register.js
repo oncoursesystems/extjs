@@ -83,6 +83,7 @@ Ext.define('KitchenSink.view.forms.Register', {
             name: 'state',
             valueField: 'abbr',
             displayField: 'state',
+            forceSelection: true,
             queryMode: 'local',
             placeholder: 'Select a state...',
             store: {

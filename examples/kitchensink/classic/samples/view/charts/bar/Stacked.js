@@ -66,6 +66,9 @@ Ext.define('KitchenSink.view.charts.bar.Stacked', {
             xField: 'month',
             yField: [ 'data1', 'data2', 'data3', 'data4' ],
             stacked: true,
+            marker: {
+                type: 'diamond'
+            },
             style: {
                 opacity: 0.80
             },

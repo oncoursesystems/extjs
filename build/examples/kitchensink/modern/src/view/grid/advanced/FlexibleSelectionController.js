@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelectionController', {
     alias: 'controller.flexible-selection',
 
     getSelectable: function () {
-        return this.lookup('selection-grid').getSelectable();
+        return this.lookup('selectionGrid').getSelectable();
     },
 
     onSelectionChange: function (grid, records, selecting, selection) {

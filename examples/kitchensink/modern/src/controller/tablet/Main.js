@@ -38,10 +38,10 @@ Ext.define('KitchenSink.controller.tablet.Main', {
 
     control: {
         '#thumbnails1 dataview': {
-            childtap: 'onThumbnailClick'
+            childtouchend: 'onThumbnailClick'
         },
         '#thumbnails2 dataview': {
-            childtap: 'onThumbnailClick'
+            childtouchend: 'onThumbnailClick'
         },
         'breadcrumbButton': {
             tap: 'onBreadcrumbTap'
@@ -264,7 +264,15 @@ Ext.define('KitchenSink.controller.tablet.Main', {
     },
 
     onThumbnailClick: function(view, location) {
-        this.redirectTo(location.record.id);
+        var point = location.event.getXY(),
+            currentItem = view.getItemFromPagePoint(point[0], point[1]);
+
+        // Confirm the touchend has occured over the item and that this item was currently
+        // being pressed.
+        // As we are handling the raw touchend event we have to manage these also
+        if (currentItem === location.item.dom && location.pressing) {
+            this.redirectTo(location.record.id);
+        }
     },
 
     getAvailableThemes: function () {

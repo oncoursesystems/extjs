@@ -25,6 +25,9 @@ Ext.define('KitchenSink.view.grid.Exporter', {
     },{
         type: 'Model',
         path: 'classic/samples/model/grid/Product.js'
+    },{
+        type: 'Controller',
+        path: 'classic/samples/view/grid/ExporterController.js'
     }],
     // Need a minHeight. Neptune resizable framed panels are overflow:visible
     // so as to enable resizing handles to be embedded in the border lines.

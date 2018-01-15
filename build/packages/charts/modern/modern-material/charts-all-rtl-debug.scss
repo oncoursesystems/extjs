@@ -1,4 +1,4 @@
-$image-search-path: '/home/teamcity/buildAgent/work/8cc7421dd8da164c/staging/build/packages/charts/modern/modern-material/resources' !default;
+$image-search-path: '/home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/build/packages/charts/modern/modern-material/resources' !default;
 $theme-name:  'theme-material' !default;
 $include-ext-abstractcomponent: dynamic(false);;
 $include-ext-abstractmanager: dynamic(false);;
@@ -1168,6 +1168,7 @@ $relative-image-path-for-uis: $theme-material-resource-path;
 @import '../../../../../modern/theme-material/sass/var/grid/plugin/PagingToolbar';
 @import '../../../../../modern/theme-material/sass/var/grid/plugin/ViewOptions';
 @import '../../../../../modern/theme-material/sass/var/menu/Separator';
+@import '../../../../../modern/theme-material/sass/var/panel/Resizer';
 @import '../../../../../modern/theme-material/sass/var/tab/Tab';
 @import '../../../../../modern/theme-material/sass/var/tab/Bar';
 @import '../../../../../modern/theme-material/sass/var/grid/cell/Tree';
