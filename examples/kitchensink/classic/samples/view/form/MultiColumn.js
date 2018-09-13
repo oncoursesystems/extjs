@@ -19,7 +19,11 @@ Ext.define('KitchenSink.view.form.MultiColumn', {
         'neptune-touch': {
             width: 700,
             height: 350
-        }
+        },
+        graphite: {
+            width: 800,
+            height: 450
+       }
     },
     //</example>
     

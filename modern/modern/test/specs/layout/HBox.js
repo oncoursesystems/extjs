@@ -465,7 +465,7 @@ describe("Ext.layout.HBox", function(){
                     });
                     
                     expect(getX(0)).toBe(0);
-                    expect(getX(1)).toBe(getWidth(0));  
+                    expect(getX(1)).toBeApprox(getWidth(0), 1);
                 });
             });
         });

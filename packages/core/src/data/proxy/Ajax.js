@@ -323,6 +323,10 @@ Ext.define('Ext.data.proxy.Ajax', {
             disableCaching      : false // explicitly set it to false, ServerProxy handles caching
         });
         
+        if (me.responseType != null && Ext.supports.XHR2) {
+            request.setResponseType(me.responseType);
+        }
+        
         if (method.toUpperCase() !== 'GET' && me.getParamsAsJson()) {
             params = request.getParams();
 

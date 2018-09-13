@@ -32,6 +32,7 @@ Ext.define('KitchenSink.view.lists.UndoableStepper', {
     itemTpl: '{firstName} {lastName}',
     store: 'List',
     width: '${width}',
+    grouped: false,
     itemConfig: {
         height: 50
     },

@@ -98,7 +98,9 @@ Ext.define('Ext.chart.series.Scatter', {
     ],
 
     config: {
-        itemInstancing: null
+        itemInstancing: null,
+
+        marker: true
     },
 
     themeMarkerCount: function() {

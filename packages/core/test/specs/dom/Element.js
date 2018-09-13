@@ -169,6 +169,95 @@ topSuite("Ext.dom.Element", function() {
                 }
             });
 
+            describe("setStyle", function() {
+                beforeEach(function() {
+                    element = addElement();
+                });
+
+                describe("2 value form", function() {
+                    it("should set a hyphenated name", function() {
+                        element.setStyle('border-width', '1px');
+                        expect(element.dom.style.borderWidth).toBe('1px');
+                    });
+
+                    it("should set a camel cased name", function() {
+                        element.setStyle('borderWidth', '1px');
+                        expect(element.dom.style.borderWidth).toBe('1px');
+                    });
+
+                    it("should overwrite an existing value", function() {
+                        element.setStyle('border-width', '1px');
+                        element.setStyle('border-width', '2px');
+                        expect(element.dom.style.borderWidth).toBe('2px');
+                    });
+
+                    it("should clear a value with null/undefined", function() {
+                        element.setStyle('border-width', '1px');
+                        element.setStyle('border-width', null);
+                        expect(element.dom.style.borderWidth).toBe('');
+
+                        element.setStyle('border-width', '1px');
+                        element.setStyle('border-width', undefined);
+                        expect(element.dom.style.borderWidth).toBe('');
+                    });
+                });
+
+                describe("object form", function() {
+                    it("should set a hyphenated name", function() {
+                        element.setStyle({
+                            'border-width': '1px'
+                        });
+                        expect(element.dom.style.borderWidth).toBe('1px');
+                    });
+
+                    it("should set a camel cased name", function() {
+                        element.setStyle({
+                            'borderWidth': '1px'
+                        });
+                        expect(element.dom.style.borderWidth).toBe('1px');
+                    });
+
+                    it("should overwrite an existing value", function() {
+                        element.setStyle('border-width', '1px');
+                        element.setStyle({
+                            'border-width': '2px'
+                        });
+                        expect(element.dom.style.borderWidth).toBe('2px');
+                    });
+
+                    it("should clear a value with null/undefined", function() {
+                        element.setStyle('border-width', '1px');
+                        element.setStyle({
+                            'border-width': null
+                        });
+                        expect(element.dom.style.borderWidth).toBe('');
+
+                        element.setStyle('border-width', '1px');
+                        element.setStyle({
+                            'border-width': undefined
+                        });
+                        expect(element.dom.style.borderWidth).toBe('');
+                    });
+
+                    it("should set multiple values at once", function() {
+                        element.setStyle({
+                            'border-width': '1px',
+                            width: '50px'
+                        });
+                        expect(element.dom.style.borderWidth).toBe('1px');
+                        expect(element.dom.style.width).toBe('50px');
+                    });
+
+                    it("should accept a chained value", function() {
+                        var o = Ext.Object.chain({
+                            borderWidth: '1px'
+                        });
+                        element.setStyle(o);
+                        expect(element.dom.style.borderWidth).toBe('1px');
+                    });
+                });
+            });
+
     
             describe('clone', function() {
                 var clone,
@@ -1128,6 +1217,10 @@ topSuite("Ext.dom.Element", function() {
                             var spy = jasmine.createSpy();
 
                             focusAndWait(child);
+
+                            if (Ext.isIE) {
+                                waits(100);
+                            }
                             
                             runs(function() {
                                 child.on('focus', spy);

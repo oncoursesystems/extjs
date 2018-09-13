@@ -18,6 +18,19 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
 
     //<example>
     //</example>
+    
+    profiles: {
+        classic: {
+            columnWidth: 165
+        },
+        neptune: {
+            columnWidth: 165
+        },
+        graphite: {
+            columnWidth: 185
+        }
+    },
+    
 
     width: 350,
 
@@ -48,7 +61,7 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
         }]
     }, {
         xtype: 'propertygrid',
-        nameColumnWidth: 165,
+        nameColumnWidth: '${columnWidth}',
         reference: 'propGrid'
     }],
 

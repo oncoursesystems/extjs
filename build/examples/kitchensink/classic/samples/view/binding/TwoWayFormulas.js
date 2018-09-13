@@ -13,10 +13,21 @@ Ext.define('KitchenSink.view.binding.TwoWayFormulas', {
     bodyPadding: 10,
     //</example>
 
+    profiles: {
+        classic: {
+            width: 450
+        },
+        neptune: {
+            width: 450
+        },
+        graphite: {
+            width: 550
+        }
+    },
     title: 'Two-Way Formulas',
 
     manageHeight: false,
-    width: 450,
+    width: '${width}',
     frame: true,
     resizable: true,
     

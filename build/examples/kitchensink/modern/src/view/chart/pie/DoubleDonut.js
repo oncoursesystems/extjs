@@ -62,7 +62,11 @@ Ext.define('KitchenSink.view.chart.pie.DoubleDonut', {
         innerPadding: '${innerPadding}',
         interactions: ['rotate', 'itemhighlight'],
         store: {
-            type: 'double-donut'
+            type: 'double-donut',
+            sorters: {
+                property: 'type',
+                direction: 'DESC'
+            }
         },
         series: [{
             // Outer ring series.

@@ -31,5 +31,33 @@ describe('Ext.field.File', function () {
 
             expect(input.type).toBe('file');
         });
+
+        it("should receive proxy configs", function() {
+            createField({
+                name: 'testFileField',
+                accept: 'image',
+                capture: 'camera',
+                multiple: true
+            });
+
+            expect(fileButton.getMultiple()).toBe(true);
+            expect(fileButton.buttonElement.getAttribute('accept')).toBe('image/*');
+            expect(fileButton.getCapture()).toBe('camera');
+        });
+    });
+
+    describe('resetFileButton', function() {
+        it('should reset file list associated with file button', function() {
+            createField({
+                name: 'testFileField',
+                accept: 'image',
+                inputValue: 'xyz.jpg',
+                _value: 'xyz.jpg',
+                readOnly: true
+            });
+            field.reset();
+            expect(field.getValue() == '').toBe(true);
+            expect(field.getInputValue() == '').toBe(true);
+        });
     });
 });

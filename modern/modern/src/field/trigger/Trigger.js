@@ -93,7 +93,7 @@ Ext.define('Ext.field.trigger.Trigger', {
         this.callParent();
     },
 
-     onClickRepeaterClick: function(clickRepeater, e) {
+    onClickRepeaterClick: function(clickRepeater, e) {
         this.onClick(e);
     },
 
@@ -108,12 +108,14 @@ Ext.define('Ext.field.trigger.Trigger', {
                 // Do not allow the default focusing behaviour to follow on *after* the
                 // hander has run and this event finishes.
                 e.preventDefault();
-
                 if (me.getFocusOnTap()) {
                     focusEl = field.getFocusTrap ? field.getFocusTrap() : field.getFocusEl();
 
                     if (focusEl.dom !== document.activeElement) {
-                        focusEl.focus();
+                        if (me.isExpandTrigger) {
+                            field.focusingFromExpandTrigger = true;
+                        }
+                        field.focus();
                     }
                 }
             }

@@ -1,10 +1,11 @@
-/* global Ext, expect, jasmine, xit */
+/* global Ext, expect, jasmine, xit, topSuite */
+/* eslint indent: off */
 topSuite("grid-celledit",
     ['Ext.tree.Panel', 'Ext.grid.plugin.CellEditing', 'Ext.grid.feature.Grouping',
      'Ext.grid.property.*', 'Ext.tree.plugin.TreeViewDragDrop', 'Ext.form.Panel',
      'Ext.form.field.*'],
 function() {
-    var webkitIt = Ext.isWebKit ? it : xit,
+    var itNotIE = Ext.isIE ? xit : it,
         grid, GridEventModel = Ext.define(null, {
             extend: 'Ext.data.Model',
             fields: [
@@ -1108,14 +1109,19 @@ function() {
             });
 
             describe("positioning", function() {
-                function getCellXY(rowIdx, colIdx) {
-                    return Ext.fly(view.getCell(store.getAt(rowIdx), colRef[colIdx])).getXY();
+                function getCellX(rowIdx, colIdx) {
+                    return Ext.fly(view.getCell(store.getAt(rowIdx), colRef[colIdx])).getX();
+                }
+                function getCellY(rowIdx, colIdx) {
+                    return Ext.fly(view.getCell(store.getAt(rowIdx), colRef[colIdx])).getY();
                 }
 
                 it("should position correctly on first render", function() {
                     makeGrid();
                     triggerCellMouseEvent('dblclick', 0, 3);
-                    expect(plugin.getActiveEditor().getXY()).toEqual(getCellXY(0, 3));
+
+                    expect(plugin.getActiveEditor().getX()).toEqual(getCellX(0, 3));
+                    expect(plugin.getActiveEditor().getY()).toBeApprox(getCellY(0, 3), 1);
                 });
 
                 it("should position correctly on subsequent shows", function() {
@@ -1123,10 +1129,12 @@ function() {
                     triggerCellMouseEvent('dblclick', 0, 3);
                     plugin.getActiveEditor().completeEdit();
                     triggerCellMouseEvent('dblclick', 0, 0);
-                    expect(plugin.getActiveEditor().getXY()).toEqual(getCellXY(0, 0));
+                    expect(plugin.getActiveEditor().getX()).toEqual(getCellX(0, 0));
+                    expect(plugin.getActiveEditor().getY()).toBeApprox(getCellY(0, 0), 1);
                     plugin.completeEdit();
                     triggerCellMouseEvent('dblclick', 2, 1);
-                    expect(plugin.getActiveEditor().getXY()).toEqual(getCellXY(2, 1));
+                    expect(plugin.getActiveEditor().getX()).toEqual(getCellX(2, 1));
+                    expect(plugin.getActiveEditor().getY()).toBeApprox(getCellY(2, 1), 1);
                 });
             });
             
@@ -1641,7 +1649,7 @@ function() {
                         { name: 'F3', dataIndex: 'field3'},
                         { name: 'F4', dataIndex: 'field4'},
                         { name: 'F5', dataIndex: 'field5'},
-                        { name: 'F6', dataIndex: 'field6'},
+                        { name: 'F6', dataIndex: 'field6'}
                     ];
 
                     grid.reconfigure(null, cols);
@@ -1775,7 +1783,14 @@ function() {
                         // locked grid's actiobPosition is null indicating that it does not contain the action position
                         // even though it is actionable mode
                         expect(grid.lockedGrid.view.actionPosition).toBeNull();
-                        expect(plugin.getActiveEditor().context.isEqual(grid.normalGrid.view.actionPosition)).toBe(true);
+
+                        waitsFor(function() {
+                            return grid.normalGrid.view.actionableMode;
+                        });
+
+                        runs(function() {
+                            expect(plugin.getActiveEditor().context.isEqual(grid.normalGrid.view.actionPosition)).toBe(true);
+                        });
                     });
                 });
             });
@@ -1862,7 +1877,7 @@ function() {
                 });
 
                 // Only Webkit is good enough to run these fast event firing tests
-                webkitIt('should not lose track of editing position during repeated tabbing', function() {
+                itNotIE('should not lose track of editing position during repeated tabbing', function() {
                     // Begin editing 1.1
 
                     triggerCellMouseEvent('dblclick', 0, 0);
@@ -1913,7 +1928,7 @@ function() {
                     });
                 }); // eo: it
 
-                webkitIt('should not lose track of editing position during repeated tabbing with a refresh on edit', function() {
+                itNotIE('should not lose track of editing position during repeated tabbing with a refresh on edit', function() {
                     // Throw in a refresh on each edit
                     grid.on({
                         edit: function() {
@@ -1978,7 +1993,7 @@ function() {
                     });
                 }); // eo: it
 
-                webkitIt('should not lose track of editing position during repeated tabbing with a store reload on edit', function() {
+                itNotIE('should not lose track of editing position during repeated tabbing with a store reload on edit', function() {
                     // Throw in a refresh on each edit
                     grid.on({
                         edit: function() {
@@ -2043,7 +2058,7 @@ function() {
                     });
                 }); // eo: it
 
-                webkitIt('should not lose track of editing position during repeated tabbing with a store reload to fewer rows than the edit row on edit', function() {
+                itNotIE('should not lose track of editing position during repeated tabbing with a store reload to fewer rows than the edit row on edit', function() {
                     // Throw in a refresh on each edit which chops the store back to ONE record
                     grid.on({
                         edit: function() {
@@ -2076,7 +2091,7 @@ function() {
                     });
                 }); // eo: it
 
-                webkitIt('should fire editor events in the correct order', function() {
+                itNotIE('should fire editor events in the correct order', function() {
                     var calls = [];
                     grid.on({
                         beforeedit: function(editor, context) {
@@ -2099,7 +2114,7 @@ function() {
                     });
                 }); // eo: it
 
-                webkitIt('should be able to veto editing', function() {
+                itNotIE('should be able to veto editing', function() {
                      grid.on({
                          beforeedit: function(editor, context) {
                              if (context.column === colRef[1]) {
@@ -2129,7 +2144,7 @@ function() {
             });
 
             describe('Autorepeat TAB in grouped grid', function() {
-                webkitIt("should not lose track of editing position when autotabbing over group headers", function() {
+                itNotIE("should not lose track of editing position when autotabbing over group headers", function() {
                     makeGrid([{
                         dataIndex: 'field1',
                         editor: 'textfield'
@@ -2170,7 +2185,52 @@ function() {
                     });
                 });
 
-                webkitIt("should not lose track of editing position when autotabbing and beforeedit causes a refresh", function() {
+                itNotIE("should not lose track of editing position when autotabbing over group headers of a locked grid", function() {
+                    makeGrid([{
+                        dataIndex: 'field1',
+                        editor: 'textfield',
+                        locked: true
+                    }, {
+                        dataIndex: 'field2',
+                        editor: 'textfield'
+                    }, {
+                        dataIndex: 'field3',
+                        editor: 'textfield'
+                    }], {}, {
+                        features: {
+                            ftype: 'grouping'
+                        }
+                    });
+                    jasmine.fireMouseEvent(findCell(0, 0), 'dblclick');
+                    
+                    waitsFor(function() {
+                        return plugin.editing;
+                    });
+                    
+                    runs(function() {
+                        plugin.getActiveEditor().setValue('Foo');
+                    });
+
+                    // To 0,1
+                    jasmine.fireKeyEvent(Ext.Element.getActiveElement(), 'keydown', TAB);
+                    waits(20);
+                    runs(function() {
+                        // To 0,2
+                        jasmine.fireKeyEvent(Ext.Element.getActiveElement(), 'keydown', TAB);
+                    });
+                    waits(20);
+                    runs(function() {
+                        // To 1,0
+                        jasmine.fireKeyEvent(Ext.Element.getActiveElement(), 'keydown', TAB);
+                    });
+                    waits(20);
+                    runs(function() {
+                        expect(plugin.getActiveColumn()).toBe(colRef[0]);
+                        expect(plugin.getActiveRecord()).toBe(store.getAt(1));
+                    });
+                });
+
+                itNotIE("should not lose track of editing position when autotabbing and beforeedit causes a refresh", function() {
                     makeGrid([{
                         dataIndex: 'field1',
                         editor: 'textfield'
@@ -2298,7 +2358,7 @@ function() {
                     return plugin.editing && plugin.activeColumn === colRef[columnIndex] && plugin.activeRecord === store.getAt(rowIndex);
                 }
 
-                webkitIt('should use the same editor for same typed cells, and not blur between edits', function() {
+                itNotIE('should use the same editor for same typed cells, and not blur between edits', function() {
                     grid = new Ext.grid.property.Grid({
                         renderTo: document.body,
                         width: 300,
@@ -2504,7 +2564,7 @@ function() {
                 Ext.destroy(tree, grid);
             });
 
-            webkitIt("should blur and hide the cell editor on focusing the tree", function() {
+            itNotIE("should blur and hide the cell editor on focusing the tree", function() {
                 var cell01_editor;
 
                 // Wait until the grid has rendered rows

@@ -11,8 +11,19 @@ Ext.define('KitchenSink.view.binding.Dynamic', {
         path: 'classic/samples/view/binding/DynamicController.js'
     }],
     //</example>
-    
-    width: 300,
+
+    profiles: {
+        classic: {
+            width: 300
+        },
+        neptune: {
+            width: 300
+        },
+        graphite: {
+            width: 400
+        }
+    },
+    width: '${width}',
     bodyPadding: 10,
     controller: 'binding-dynamic',
 

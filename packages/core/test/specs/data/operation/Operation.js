@@ -215,6 +215,26 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
             
             expect(proxy.completeOperation).not.toHaveBeenCalled();
         });
+        
+        it("should not trigger callback", function() {
+            var callback = jasmine.createSpy();
+            
+            op.setCallback(callback);
+            op.execute();
+            op.abort();
+            
+            expect(callback).not.toHaveBeenCalled();
+        });
+        
+        it("should be called when destroying", function() {
+            var spy = spyOn(op, 'abort').andCallThrough();
+            
+            op.execute();
+            op.destroy();
+            
+            expect(spy).toHaveBeenCalled();
+            expect(op.aborted).toBe(true);
+        });
     });
     
     describe("callbacks", function() {
@@ -277,6 +297,20 @@ topSuite("Ext.data.operation.Operation", ['Ext.data.ArrayStore'], function() {
             op.execute();
             op.setSuccessful(true);
             expect(callback).toHaveBeenCalledWith(op.getRecords(), op, true);
+        });
+        
+        it("should not fire callbacks when destroying", function() {
+            var callback = jasmine.createSpy('callback');
+            
+            makeOperation({
+                callback: callback
+            });
+            
+            op.execute();
+            op.destroying = true;
+            op.setSuccessful(false);
+            
+            expect(callback).not.toHaveBeenCalled();
         });
     });
     

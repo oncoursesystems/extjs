@@ -32,6 +32,7 @@ Ext.define('KitchenSink.view.lists.BasicAccordion', {
     store: 'List',
     width: '${width}',
     infinite: true,
+    grouped: false,
     itemConfig: {
         height: 50
     },

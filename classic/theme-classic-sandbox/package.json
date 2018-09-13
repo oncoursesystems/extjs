@@ -1,6 +1,10 @@
 {
-    "name": "@extjs/ext-react-classic-theme-classic-sandbox",
-    "version": "6.5.2.463",
+    "name": "@extjs/ext-classic-theme-classic-sandbox",
+    "ext-react-name": "@extjs/ext-react-classic-theme-classic-sandbox",
+    "ext-name": "@extjs/ext-classic-theme-classic-sandbox",
+    "SenchaExtName": "@sencha/ext-classic-theme-classic-sandbox",
+    "SenchaExtReactName": "@sencha/ext-react-classic-theme-classic-sandbox",
+    "version": "6.6.0.258",
     "sencha": {
         "name": "theme-classic-sandbox",
         "namespace": "Ext",
@@ -14,7 +18,7 @@
         "creator": "Sencha",
         "summary": "Ext JS Classic Sandbox Theme",
         "detailedDescription": "The same visuals as the Classic Theme but in a CSS sandbox",
-        "version": "6.5.2.463",
+        "version": "6.6.0.258",
         "compatVersion": "6.0.0",
         "format": "1",
         "output": "${workspace.subpkg.prefix}/${package.name}",

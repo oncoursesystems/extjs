@@ -88,7 +88,6 @@ Ext.define('Ext.grid.selection.Rows', {
         if (me.selectedRecords && me.selectedRecords.byInternalId.get(record.internalId)) {
             me.selectedRecords.remove(record);
             me.view.onRowDeselect(record);
-
             // Flag when selectAll called.
             // While this is set, a call to contains will add the record to the collection and return true
             me.allSelected = false;
@@ -100,8 +99,8 @@ Ext.define('Ext.grid.selection.Rows', {
 
     remove: function(record) {
         var me = this,
-            i, len,
-            ret = true;
+            ret = true,
+            i, len;
 
         if (record.isModel) {
             return me.removeOne(record);
@@ -131,9 +130,7 @@ Ext.define('Ext.grid.selection.Rows', {
 
         var me = this,
             result = false,
-            selectedRecords = me.selectedRecords,
-            recIndex,
-            dragRange;
+            selectedRecords = me.selectedRecords;
 
         // Flag set when selectAll is called in the selModel.
         // This allows buffered stores to treat all *rendered* records
@@ -149,13 +146,6 @@ Ext.define('Ext.grid.selection.Rows', {
             result = !!selectedRecords.byInternalId.get(record.internalId);
         }
 
-        // If not, check if it is within our drag range if we are in the middle of a drag select
-        if (!result && me.rangeStart != null) {
-            dragRange = me.getRange();
-            recIndex = me.view.dataSource.indexOf(record);
-            result = recIndex >= dragRange[0] && recIndex <= dragRange[1];
-        }
-
         return result;
     },
 
@@ -164,20 +154,9 @@ Ext.define('Ext.grid.selection.Rows', {
      * @return {Number} The number of records selected.
      */
     getCount: function() {
-        var me = this,
-            selectedRecords = me.selectedRecords,
-            result = selectedRecords ? selectedRecords.getCount() : 0,
-            range = me.getRange(),
-            i,
-            store = me.view.dataSource;
+        var selectedRecords = this.selectedRecords;
 
-        // If dragging, add all records in the drag that are *not* in the collection
-        for (i = range[0]; i <= range[1]; i++) {
-            if (!selectedRecords || !selectedRecords.byInternalId.get(store.getAt(i).internalId)) {
-                result++;
-            }
-        }
-        return result;
+        return (selectedRecords && selectedRecords.length) || 0;
     },
 
     /**
@@ -346,8 +325,10 @@ Ext.define('Ext.grid.selection.Rows', {
                 me.eachRow(function(record) {
                     view.onRowDeselect(record);
                 });
+
                 me.selectedRecords.clear();
             }
+            me.setRangeStart(null);
         },
 
         /**
@@ -364,34 +345,32 @@ Ext.define('Ext.grid.selection.Rows', {
         /**
          * Used during drag/shift+downarrow range selection on start.
          * @param {Number} start The start row index of the row drag selection.
+         * @param {Boolean} suppressEvent True to prevent onRowSelect from being fired.
          * @private
          */
-        setRangeStart: function(start) {
-
+        setRangeStart: function(start, suppressEvent) {
             // Flag when selectAll called.
             // While this is set, a call to contains will add the record to the collection and return true
             this.allSelected = false;
-
             this.rangeStart = this.rangeEnd = start;
-            this.view.onRowSelect(start);
+
+            if (!suppressEvent) {
+                this.view.onRowSelect(start);
+            }
         },
 
         /**
          * Used during drag/shift+downarrow range selection on change of row.
          * @param {Number} end The end row index of the row drag selection.
+         * @param {Boolean} append True if are appending to an existing selection.
          * @private
          */
-        setRangeEnd: function(end) {
+        setRangeEnd: function(end, append) {
             var me = this,
-                range,
-                lastRange,
-                rowIdx,
-                row,
                 view = me.view,
                 store = view.dataSource,
-                rows = view.all,
                 selected = me.selectedRecords,
-                rec;
+                withinRange, range, lastRange, rowIdx, rec;
 
             // Update the range as requested, then calculate the
             // range in lowest index first form
@@ -399,19 +378,25 @@ Ext.define('Ext.grid.selection.Rows', {
             range = me.getRange();
             lastRange = me.lastRange || range;
 
+            rowIdx = Math.min(range[0], lastRange[0]);
+            end = Math.max(range[1], lastRange[1]);
+
             // Loop through the union of last range and current range
-            for (rowIdx = Math.max(Math.min(range[0], lastRange[0]), rows.startIndex),
-                end = Math.min(Math.max(range[1], lastRange[1]), rows.endIndex); rowIdx <= end; rowIdx++) {
-                row = rows.item(rowIdx);
+            for (; rowIdx <= end; rowIdx++) {
+                rec = store.getAt(rowIdx);
+                withinRange = (rowIdx < range[0] || rowIdx > range[1]);
 
                 // If we are outside the current range, deselect
-                if (rowIdx < range[0] || rowIdx > range[1]) {
+                if (!append && withinRange) {
                     // If we are deselecting, also remove from collection
-                    if (selected && (rec = selected.byInternalId.get(store.getAt(rowIdx).internalId))) {
+                    if (selected && me.contains(rec)) {
                         selected.remove(rec);
                     }
                     view.onRowDeselect(rowIdx);
                 } else {
+                    if (append && withinRange) {
+                        continue;
+                    }
                     view.onRowSelect(rowIdx);
                 }
             }
@@ -435,7 +420,9 @@ Ext.define('Ext.grid.selection.Rows', {
          * It should yield the last record selected.
          */
         getLastSelected: function() {
-            return this.selectedRecords.last();
+            var sel = this.selectedRecords;
+
+            return sel && sel.last();
         },
 
         /**
@@ -507,9 +494,6 @@ Ext.define('Ext.grid.selection.Rows', {
                         selection.add.apply(selection, range);
                     }
                 });
-
-                // Clear the drag range
-                me.setRangeStart(me.lastRange = null);
             }
         },
 

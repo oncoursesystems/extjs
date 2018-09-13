@@ -230,15 +230,20 @@ Ext.define('Ext.dom.Element', function(Element) {
         inputTypeSelectionSupported = /text|password|search|tel|url/i,
         visFly, scrollFly, caFly, wrapFly, grannyFly, activeElFly;
 
-    // Cross-origin access might throw an exception
+    // We use element ID counter to prevent assigning the same id to top and nested
+    // window and document objects when Ext is running in <iframe>.
+    // Cross-origin access might throw an exception, in which case we can't
+    // reference top window. In IE8 simply getting a property does not throw
+    // but trying to set it does.
     try {
         elementIdCounter = WIN_TOP.__elementIdCounter__;
+        WIN_TOP.__elementIdCounter__ = elementIdCounter;
     }
     catch (e) {
         WIN_TOP = WIN;
     }
 
-    WIN_TOP.__elementIdCounter = elementIdCounter = (WIN_TOP.__elementIdCounter__ || 0) + 1;
+    WIN_TOP.__elementIdCounter__ = elementIdCounter = (WIN_TOP.__elementIdCounter__ || 0) + 1;
     windowId = 'ext-window-' + elementIdCounter;
     documentId = 'ext-document-' + elementIdCounter;
 
@@ -783,6 +788,11 @@ Ext.define('Ext.dom.Element', function(Element) {
                 9: 1 // DOCUMENT_NODE
             },
 
+            namespaceURIs: {
+                html: 'http://www.w3.org/1999/xhtml',
+                svg: 'http://www.w3.org/2000/svg'
+            },
+
             selectableCls: Ext.baseCSSPrefix + 'selectable',
             unselectableCls: Ext.baseCSSPrefix + 'unselectable',
 
@@ -855,7 +865,7 @@ Ext.define('Ext.dom.Element', function(Element) {
              */
             create: function(attributes, domNode) {
                 var me = this,
-                    classes, element, elementStyle, tag, value, name, i, ln, tmp;
+                    classes, element, elementStyle, tag, value, name, i, ln, tmp, ns;
 
                 attributes = attributes || {};
                 if (attributes.isElement) {
@@ -874,8 +884,10 @@ Ext.define('Ext.dom.Element', function(Element) {
                     tag = 'div';
                 }
 
-                if (attributes.namespace) {
-                    element = DOC.createElementNS(attributes.namespace, tag);
+                ns = attributes.namespace;
+
+                if (ns) {
+                    element = DOC.createElementNS(me.namespaceURIs[ns] || ns, tag);
                 } else {
                     element = DOC.createElement(tag);
                 }
@@ -893,9 +905,7 @@ Ext.define('Ext.dom.Element', function(Element) {
                                 }
                                 else {
                                     for (i in value) {
-                                        if (value.hasOwnProperty(i)) {
-                                            elementStyle[i] = value[i];
-                                        }
+                                        elementStyle[i] = value[i];
                                     }
                                 }
                                 break;
@@ -3250,6 +3260,9 @@ Ext.define('Ext.dom.Element', function(Element) {
                 }
                 //<feature legacyBrowser>
                 else if (dom.createTextRange) {
+                    if (start > end) {
+                        start = end;
+                    }
                     range = dom.createTextRange();
                     range.moveStart('character', start);
                     range.moveEnd('character', -(len - end));
@@ -5134,21 +5147,19 @@ Ext.define('Ext.dom.Element', function(Element) {
                 }
             } else {
                 for (name in prop) {
-                    if (prop.hasOwnProperty(name)) {
-                        hook = hooks[name];
-                        if (!hook) {
-                            hooks[name] = hook = { name: Element.normalize(name) };
-                        }
-                        value = prop[name];
-                        value = (value == null) ? '' : value; // map null && undefined to ''
-                        if (hook.set) {
-                            hook.set(dom, value, me);
-                        } else {
-                            style[hook.name] = value;
-                        }
-                        if (hook.afterSet) {
-                            hook.afterSet(dom, value, me);
-                        }
+                    hook = hooks[name];
+                    if (!hook) {
+                        hooks[name] = hook = { name: Element.normalize(name) };
+                    }
+                    value = prop[name];
+                    value = (value == null) ? '' : value; // map null && undefined to ''
+                    if (hook.set) {
+                        hook.set(dom, value, me);
+                    } else {
+                        style[hook.name] = value;
+                    }
+                    if (hook.afterSet) {
+                        hook.afterSet(dom, value, me);
                     }
                 }
             }
@@ -7289,7 +7300,13 @@ Ext.define('Ext.dom.Element', function(Element) {
         if (Ext.isSafari9) {
             bodyCls.push(Ext.baseCSSPrefix + 'safari9');
         }
-        if (Ext.browser.is.Safari && Ext.browser.version.isLessThan(9)) {
+        if (Ext.isSafari10) {
+            bodyCls.push(Ext.baseCSSPrefix + 'safari10');
+        }
+        if (Ext.isSafari11) {
+            bodyCls.push(Ext.baseCSSPrefix + 'safari11');
+        }
+        if (Ext.isSafari && Ext.browser.version.isLessThan(9)) {
             bodyCls.push(Ext.baseCSSPrefix + 'safari8m');
         }
         if (Ext.isChrome) {
@@ -7332,6 +7349,10 @@ Ext.define('Ext.dom.Element', function(Element) {
         if (Ext.os.is.iOS && Ext.browser.is.WebView && !Ext.browser.is.Standalone) {
             // ios cordova app
             bodyCls.push(Ext.baseCSSPrefix + 'ios-native');
+        }
+
+        if (Ext.supports.FlexBoxBasisBug) {
+            bodyCls.push(Ext.baseCSSPrefix + 'has-flexbasis-bug');
         }
 
         Ext.getBody().addCls(bodyCls);

@@ -64,6 +64,17 @@ Ext.define('Ext.chart.legend.Legend', {
                 }
             }
         }
+    },
+
+    onResize: function (width, height, oldWidth, oldHeight) {
+        var me = this,
+            chart = me.chart;
+
+        if (!me.isConfiguring) {
+            if (chart) {
+                chart.scheduleLayout();
+            }
+        }
     }
 
 });

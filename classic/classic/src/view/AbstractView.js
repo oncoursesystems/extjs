@@ -921,9 +921,6 @@ Ext.define('Ext.view.AbstractView', {
     /**
      * Refreshes the view by reloading the data from the store and re-rendering the template.
      *
-     * **Note:** This method should only be used when `bufferedRenderer` is set to `false`.  BufferedRender
-     * has its own methods for managing its data's state.
-     *
      * @since 2.3.0
      */
     refresh: function() {

@@ -168,18 +168,11 @@ Ext.define('Ext.grid.selection.Cells', {
          */
         setRangeEnd: function (endCell) {
             var me = this,
-                range,
-                lastRange,
-                rowStart,
-                rowEnd,
-                colStart,
-                colEnd,
-                rowIdx,
-                colIdx,
                 view = me.view,
                 rows = view.all,
                 cell = new Ext.grid.CellContext(view),
-                maxColIdx = view.getVisibleColumnManager().getColumns().length - 1;
+                maxColIdx = view.getVisibleColumnManager().getColumns().length - 1,
+                range, lastRange, rowStart, rowEnd, colStart, colEnd, rowIdx, colIdx;
 
             me.endCell = endCell.clone();
             range = me.getRange();
@@ -220,6 +213,18 @@ Ext.define('Ext.grid.selection.Cells', {
                 me.startCell = me.startCell.setPosition(me.getFirstRowIndex(), me.getFirstColumnIndex());
                 me.setRangeEnd(extensionVector.end);
                 me.view.getNavigationModel().setPosition(extensionVector.end);
+            }
+        },
+
+        reduceRange: function(extensionVector) {
+            var me = this,
+                newEndCell;
+
+            if (extensionVector[extensionVector.type] < 0) {
+                newEndCell = extensionVector.end.clone();
+                me.startCell = extensionVector.start.clone();
+                me.setRangeEnd(newEndCell);
+                me.view.getNavigationModel().setPosition(extensionVector.start);
             }
         },
 

@@ -5,6 +5,7 @@ Ext.define('Ext.route.Mixin', {
     extend: 'Ext.Mixin',
 
     requires: [
+        'Ext.route.Handler',
         'Ext.route.Router'
     ],
 
@@ -193,6 +194,8 @@ Ext.define('Ext.route.Mixin', {
          *             store.on('load', action.resume, action, { single: true });
          *         }
          *     }
+         *
+         * The valid options are configurations from {@link Ext.route.Handler} and {@link Ext.route.Route}.
          */
         routes: null
     },
@@ -201,42 +204,23 @@ Ext.define('Ext.route.Mixin', {
         Ext.route.Router.disconnect(this);
     },
 
-    updateRoutes: function(routes, oldRoutes) {
-         var me = this,
-            Router = Ext.route.Router,
-            url, config, method;
-
-        if (oldRoutes) {
-            for (url in oldRoutes) {
-                config = oldRoutes[url];
-
-                if (Ext.isString(config)) {
-                    config = {
-                        action: config,
-                        name: url
-                    };
-                }
-
-                Router.disconnect(me, config);
-            }
-        }
+    applyRoutes: function (routes, oldRoutes) {
+        var Router = Ext.route.Router,
+            url;
 
         if (routes) {
             for (url in routes) {
-                config = routes[url];
-
-                if (Ext.isString(config)) {
-                    config = {
-                        action : config
-                    };
-                }
-
-                method = config.action;
-
-                //connect the route config to the Router
-                Router.connect(url, config, me);
+                routes[url] = Router.connect(url, routes[url], this);
             }
         }
+
+        if (oldRoutes) {
+            for (url in oldRoutes) {
+                Router.disconnect(this, oldRoutes[url]);
+            }
+        }
+
+        return routes;
     },
 
     /**

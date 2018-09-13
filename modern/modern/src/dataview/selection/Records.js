@@ -200,11 +200,7 @@ Ext.define('Ext.dataview.selection.Records', {
             selection = me.getSelected(),
             view = me.view,
             columns = view.getHeaderContainer().getVisibleColumns(),
-            colCount,
-            i,
-            j,
-            baseLocation, location,
-            abort = false;
+            colCount, i, baseLocation, location;
 
         if (columns) {
             colCount = columns.length;
@@ -219,7 +215,6 @@ Ext.define('Ext.dataview.selection.Records', {
                     for (i = 0; i < colCount; i++) {
                         location = location.cloneForColumn(columns[i]);
                         if (fn.call(scope || me, location, location.columnIndex, location.recordIndex) === false) {
-                            abort = true;
                             return false;
                         }
                     }
@@ -274,23 +269,54 @@ Ext.define('Ext.dataview.selection.Records', {
         },
 
         addRecordRange: function(start, end) {
-            var tmp = end;
+            var me = this, 
+                view = me.view,
+                store = view.getStore(),
+                tmp = end,
+                range;
+
+            if (start && start.isGridLocation) {
+                start = start.recordIndex;
+            } 
+
+            if (end && end.isGridLocation) {
+                end = tmp = end.recordIndex;
+            } 
 
             if (start > end) {
                 end = start;
                 start = tmp;
             }
-            this.getSelected().add(this.view.getStore().getRange(start, end || start));
+
+            range = store.getRange(start, end || start);
+
+            me.getSelected().add(range);
         },
 
         removeRecordRange: function(start, end) {
-            var tmp = end;
+            var me = this, 
+                view = me.view,
+                store = view.getStore(),
+                tmp = end,
+                range;
+            
+            if (start && start.isGridLocation) {
+                start = start.recordIndex;
+            } 
+
+            if (end && end.isGridLocation) {
+                end = tmp = end.recordIndex;
+                tmp = end;
+            } 
 
             if (start > end) {
                 end = start;
                 start = tmp;
             }
-            this.getSelected().remove(this.view.getStore().getRange(start, end || start));
+
+            range = store.getRange(start, end || start);
+
+            this.getSelected().remove(range);
         },
 
         onSelectionFinish: function() {

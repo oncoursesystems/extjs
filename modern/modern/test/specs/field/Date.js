@@ -314,6 +314,85 @@ topSuite("Ext.field.Date", [
                 runIt('floated');
             });
         });
+
+        describe("DatePickerFocus", function() {
+            var focusSpy;
+
+            afterEach(function() {
+                focusSpy = null;
+            });
+
+            beforeEach(function() {
+                makeField();
+                focusSpy = jasmine.createSpy('focus');
+            });
+
+            it("should focus onto edge picker", function() {
+                var date = new Date();
+                field.on({
+                    focus: focusSpy
+                }); 
+                date.setHours(0);
+                date.setMinutes(0);
+                date.setSeconds(0);
+                date.setMilliseconds(0);
+
+                Ext.platformTags.phone = true;
+
+                field.setValue(date);
+                jasmine.fireMouseEvent(field.getTriggers().expand.el, 'click');
+                runs(function() {
+                    expect(focusSpy).toHaveBeenCalled();
+                    expect(field).toHaveCls('x-focused');
+                });
+            });
+        });
+        
+        describe("year picker", function() {
+            beforeEach(function() {
+                makeField({
+                    picker: 'floated'
+                });
+                
+                field.showPicker();
+            });
+            
+            it("should not close date panel when year picker is clicked", function() {
+                var datePicker = field.getPicker(),
+                    yearPicker = datePicker.getYearPicker(),
+                    showSpy = jasmine.createSpy('year picker show'),
+                    hideSpy = jasmine.createSpy('year picker hide');
+                
+                expect(datePicker.isVisible(true)).toBe(true);
+                
+                yearPicker.on({
+                    show: showSpy,
+                    hide: hideSpy
+                });
+                
+                datePicker.toggleYearPicker(true);
+                
+                waitForSpy(showSpy);
+                
+                runs(function() {
+                    var rec, item;
+                    
+                    expect(yearPicker.isVisible(true)).toBe(true);
+                    
+                    rec = yearPicker.getStore().find('year', new Date().getFullYear() + 1);
+                    item = yearPicker.getItem(rec);
+                    
+                    jasmine.fireMouseEvent(item.el, 'click');
+                });
+                
+                waitForSpy(hideSpy);
+                
+                runs(function() {
+                    expect(yearPicker.isVisible(true)).toBe(false);
+                    expect(datePicker.isVisible(true)).toBe(true);
+                });
+            });
+        });
     });
 
     describe('validate', function () {

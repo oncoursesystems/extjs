@@ -154,7 +154,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
 
         it("should hide the tooltip after a delay", function() {
             runs(function() {
-                createTip({showDelay: 1, dismissDelay: 15});
+                createTip({showDelay: 1, dismissDelay: Ext.isIE8 ? 200 : 15});
                 mouseOverTarget();
             });
             waitsFor(function() {

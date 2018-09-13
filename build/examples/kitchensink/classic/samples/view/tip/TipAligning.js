@@ -26,9 +26,35 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
         path: 'app/view/tip/TipAligningModel.js'
     }],
     //</example>
-
-    height: 500,
-    width: 750,
+    profiles: {
+        classic: {
+            width: 750,
+            height: 500,
+            Slider1Width: 100,
+            Slider2Width: 100,
+            textFieldWidth: 80,
+            checkboxfieldWidth: 80
+            
+        },
+        neptune: {
+            width: 750,           
+            height: 500,
+            Slider1Width: 100,
+            Slider2Width: 100,
+            textFieldWidth: 80,
+            checkboxfieldWidth: 80
+        },
+        graphite: {
+            width: 1050,
+            height: 550,
+            Slider1Width: 110,
+            Slider2Width: 110,
+            textFieldWidth: 100,
+            checkboxfieldWidth: 100   
+        }
+    },
+    height: '${height}',
+    width: '${width}',
     title: 'Draggable button with configurable tooltip',
     bodyBorder: true,
 
@@ -79,7 +105,7 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
             }]
         }, {
             xtype: 'slider',
-            width: 100,
+            width: '${Slider1Width}',
             minValue: 0,
             maxValue: 100,
             bind: '{tipOffset}',
@@ -101,7 +127,7 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
             }]
         }, {
             xtype: 'slider',
-            width: 100,
+            width: '${Slider1Width}',
             minValue: 0,
             maxValue: 100,
             bind: '{targetOffset}',
@@ -110,13 +136,13 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
             xtype: 'textfield',
             editable: false,
             bind: '{alignSpec}',
-            width: 80
+            width: '${textFieldWidth}'
         }, {
             xtype: 'checkboxfield',
             boxLabel: 'Anchor',
             bind: '{anchor}',
             inputValue: true,
-            width: 80
+            width: '${checkboxfieldWidth}'
         }]
     }
 });

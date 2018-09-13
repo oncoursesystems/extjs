@@ -37,6 +37,35 @@ Ext.define('KitchenSink.view.grid.Ticker', {
         path: 'app/data/Company.js'
     }],
     //</example>
+    profiles: {
+        classic: {
+            width: 600,
+            trendWidth: 100,
+            priceWidth: 95,
+            pricechangeWidth: 90,
+            percentChangeColumnWidth: 100,
+            lastUpdatedColumnWidth: 115,
+            labelWidth: 100
+        },
+        neptune: {
+            width: 600,
+            trendWidth: 100,
+            priceWidth: 95,
+            pricechangeWidth: 90,
+            percentChangeColumnWidth: 100,
+            lastUpdatedColumnWidth: 115,
+            labelWidth: 100
+        },
+        graphite: {
+            width: 1000,
+            trendWidth: 150,
+            priceWidth: 130,
+            pricechangeWidth: 150,
+            percentChangeColumnWidth: 180,
+            lastUpdatedColumnWidth: 165,
+            labelWidth: 120
+        }
+    },
 
     viewModel: {
         data: {
@@ -54,7 +83,7 @@ Ext.define('KitchenSink.view.grid.Ticker', {
         cellediting: true
     },
 
-    width: 600,
+    width: '${width}',
     height: 500,
     columns: [{
         text: 'Company',
@@ -66,7 +95,7 @@ Ext.define('KitchenSink.view.grid.Ticker', {
         }
     }, {
         text: 'Price',
-        width: 95,
+        width: '${priceWidth}',
         formatter: 'usMoney',
         dataIndex: 'price',
         align: 'right',
@@ -74,7 +103,7 @@ Ext.define('KitchenSink.view.grid.Ticker', {
         sortable: false
     }, {
         text: 'Trend',
-        width: 100,
+        width: '${trendWidth}',
         dataIndex: 'trend',
         xtype: 'widgetcolumn',
         widget: {
@@ -84,7 +113,7 @@ Ext.define('KitchenSink.view.grid.Ticker', {
         sortable: false
     }, {
         text: 'Change',
-        width: 90,
+        width: '${pricechangeWidth}',
         producesHTML: true,
         renderer: 'renderChange',
         updater: 'updateChange',
@@ -93,7 +122,7 @@ Ext.define('KitchenSink.view.grid.Ticker', {
         sortable: false
     }, {
         text: '% Change',
-        width: 100,
+        width: '${percentChangeColumnWidth}',
         renderer: 'renderChangePercent',
         updater: 'updateChangePercent',
         dataIndex: 'priceChangePct',
@@ -102,7 +131,7 @@ Ext.define('KitchenSink.view.grid.Ticker', {
     }, {
         text: 'Last Updated',
         hidden: true,
-        width: 115,
+        width: '${lastUpdatedColumnWidth}',
         sortable: true,
         formatter: 'date("m/d/Y H:i:s")',
         dataIndex: 'priceLastChange',
@@ -121,6 +150,7 @@ Ext.define('KitchenSink.view.grid.Ticker', {
             minValue: 200,
             maxValue: 2000,
             increment: 10,
+            labelWidth: '${labelWidth}',
             bind: '{tickDelay}',
             liveUpdate: true,
             listeners: {

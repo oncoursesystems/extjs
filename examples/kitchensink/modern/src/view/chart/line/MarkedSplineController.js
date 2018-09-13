@@ -16,13 +16,6 @@ Ext.define('KitchenSink.view.chart.bar.MarkedSplineController', {
 
     onColumnRender: function (v) {
         return v + '%';
-    },
-
-    onRefresh: function() {
-        var chart = this.lookup('chart'),
-            store = chart.getStore();
-
-        store.generateData(store.getNumRecords());
     }
 
 });

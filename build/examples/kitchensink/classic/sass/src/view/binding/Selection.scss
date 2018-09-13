@@ -99,6 +99,12 @@
 	display: none;
 }
 
+@if $theme-name == 'theme-graphite' {
+    .binding-selection-view .customer .indicator.rtl {
+        margin-top: 7px;
+    }
+}
+
 .binding-selection-view .customer .indicator.rtl:after {
 	display: none;
 }
@@ -148,4 +154,14 @@
 
 .x-ie9 .x-rtl .binding-selection-view .customer.x-item-selected .indicator {
 	background-color: #FFB073;
+}
+
+@if $theme-name == 'theme-graphite' {
+    .binding-selection-view h1 {
+        color: #fff;
+    }
+
+    .binding-selection-view .customer {
+        width: 180px;
+    }
 }

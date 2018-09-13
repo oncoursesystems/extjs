@@ -122,7 +122,8 @@ Ext.define('Ext.data.Request', {
         // for being able to retrieve them after the request comes back from the server.
         directFn: null,
         args: null,
-        useDefaultXhrHeader: null
+        useDefaultXhrHeader: null,
+        responseType: null
     },
 
     /**

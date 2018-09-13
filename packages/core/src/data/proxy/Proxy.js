@@ -174,8 +174,13 @@ Ext.define('Ext.data.proxy.Proxy', {
                 if (model) {
                     me.setModel(model);
                 }
-            } else {
+            }
+            else {
                 reader.setModel(model);
+            }
+            
+            if (reader.responseType != null) {
+                me.responseType = reader.responseType;
             }
         }
     },
@@ -299,7 +304,7 @@ Ext.define('Ext.data.proxy.Proxy', {
      *
      * @return {Ext.data.Batch} The newly created Batch
      */
-    batch: function (options, listeners) {
+    batch: function(options, listeners) {
         var me = this,
             useBatch = me.getBatchActions(),
             batch,
@@ -338,6 +343,8 @@ Ext.define('Ext.data.proxy.Proxy', {
             single: true,
             priority: 1000
         });
+        
+        batch.$destroyOwner = options.$destroyOwner;
 
         actions = me.getBatchOrder().split(',');
         aLen    = actions.length;
@@ -391,6 +398,13 @@ Ext.define('Ext.data.proxy.Proxy', {
         if (Ext.isFunction(batchOptions.callback)) {
             Ext.callback(batchOptions.callback, scope, [batch, batchOptions]);
         }
+        
+        // In certain cases when the batch was created by a ProxyStore we need to
+        // defer destruction until the store can process the batch results.
+        // The store will then destroy the batch.
+        if (!batch.$destroyOwner) {
+            batch.destroy();
+        }
     },
     
     createOperation: function(action, config) {
@@ -421,6 +435,8 @@ Ext.define('Ext.data.proxy.Proxy', {
             if (op && op.isRunning()) {
                 op.abort();
             }
+            
+            op.destroy();
         }
         
         this.pendingOperations = null;

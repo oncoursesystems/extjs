@@ -1,7 +1,9 @@
-/* global Ext, jasmine, MockAjaxManager, expect, xit */
+/* global Ext, jasmine, MockAjaxManager, expect, xit, topSuite */
+/* eslint indent: off */
 
 topSuite("Ext.grid.feature.Grouping",
-    ['Ext.grid.Panel', 'Ext.grid.plugin.CellEditing', 'Ext.form.field.Text', 'Ext.form.field.Number', 'Ext.grid.feature.*', 'Ext.grid.plugin.RowExpander', 'Ext.data.BufferedStore'],
+    ['Ext.grid.Panel', 'Ext.grid.plugin.CellEditing', 'Ext.form.field.Text', 'Ext.form.field.Number', 
+    'Ext.grid.feature.*', 'Ext.grid.plugin.RowExpander', 'Ext.data.BufferedStore'],
 function() {
     var grid, view, store, menu, schema, groupingFeature,
         synchronousLoad = true,
@@ -591,7 +593,7 @@ function() {
                 {projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 103, description: 'Extend Store with grouping functionality', estimate: 4, rate: 100, due:'07/04/2007'},
                 {projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 121, description: 'Default CSS Styling', estimate: 2, rate: 100, due:'07/05/2007'},
                 {projectId: 101, project: 'Ext Grid: Single-level Grouping', taskId: 104, description: 'Testing and debugging', estimate: 6, rate: 100, due:'07/06/2007'},
-                {projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 105, description: 'Ext Grid plugin integration', estimate: 4, rate: 125, due:'07/01/2007'},
+                {projectId: 102, project: 'Ext Grid: Summary Rows', taskId: 105, description: 'Ext Grid plugin integration', estimate: 4, rate: 125, due:'07/01/2007'}
             ],
             lockedGridStore,
             showSummary,
@@ -735,6 +737,8 @@ function() {
         // TAB should navigate round the grid searching for the next actionable
         // cell, but give up when it returns to the start cell, refocus that and
         // stop
+        // TODO This test suffers heavily from IE "cannot focus input element" problem
+        TODO(Ext.isIE8).
         it('should TAB from the sole expanded group row and wrap back round and refocus the same editor', function() {
             var inputField,
                 focusLeaveSpy,
@@ -753,8 +757,12 @@ function() {
                     focusEnterSpy = spyOn(inputField, 'onFocusEnter');
                     return true;
                 }
+            }, 'cell editor to become focused', 500);
+            
+            runs(function() {
+                expect(document.activeElement).toBe(cellEditingPlugin.activeEditor.field.inputEl.dom);
             });
-
+            
             runs(function() {
                 jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.TAB);
             });
@@ -764,7 +772,7 @@ function() {
             // no other actionable cells to settle on, it should refocus.
             waitsFor(function() {
                 return (focusLeaveSpy.callCount === 1 &&  focusEnterSpy.callCount === 1);
-            });
+            }, 'focusEnter/focusLeave call count', 500);
 
             // We should end up focused on the sole editable cell in the whole grid.
             runs(function() {
@@ -815,6 +823,33 @@ function() {
                 text: 'Foo'
             }]);
             expect(grouping.dataSource).toBe(ds);
+        });
+
+        it("should work when binding a BufferedStore", function() {
+            grid.destroy();
+
+            expect(function() {
+                grid = new Ext.grid.Panel({
+                    renderTo: Ext.getBody(),
+                    features : [new Ext.grid.feature.Grouping({})],
+                    viewModel: {
+                        stores: {
+                            foo: {
+                                type:'buffered',
+                                proxy: {
+                                    type: 'ajax',
+                                    url: 'fakeurl'
+                                }
+                            }
+                        }
+                    },
+                    bind: {
+                        store: '{foo}'
+                    }
+                });
+
+                grid.getViewModel().notify();
+            }).not.toThrow();
         });
 
         it("should not call the Grouping's dataSource (GroupStore) bindStore method when reconfigured with a new store", function () {

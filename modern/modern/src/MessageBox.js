@@ -308,7 +308,7 @@ Ext.define('Ext.MessageBox', {
             this.add(newPrompt);
         }
 
-        if (oldPrompt) {
+        if (oldPrompt && !oldPrompt.destroyed) {
             this.remove(oldPrompt);
         }
     },

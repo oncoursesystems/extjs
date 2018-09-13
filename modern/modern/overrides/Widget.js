@@ -895,9 +895,11 @@ Ext.define('Ext.overrides.Widget', {
         me.syncFloatedState(floated, oldFloated, me.rendered && oldFloated === false);
     },
         
-    applyUi: function(ui, oldUi) {
+    applyUi: function(ui) {
         var me = this,
             inheritedUi = me._inheritedUi;
+
+        ui = me.callParent([ui]);
 
         if (inheritedUi) {
             // if some of our UI's are inherited from our parent, let's not remove those
@@ -1489,8 +1491,17 @@ Ext.define('Ext.overrides.Widget', {
         },
         
         updateAlwaysOnTop: function(alwaysOnTop) {
-            this.getFloatWrap().getData().alwaysOnTop = Number(alwaysOnTop);
-            this.syncAlwaysOnTop();
+            var me = this;
+            
+            me.getFloatWrap().getData().alwaysOnTop = Number(alwaysOnTop);
+
+            if (!me.floatParentNode) {
+                me.findFloatParent();
+            }
+
+            if (!me.isConfiguring) {
+                me.syncAlwaysOnTop();
+            }
         },
 
         /**
@@ -1505,26 +1516,25 @@ Ext.define('Ext.overrides.Widget', {
                 parentEl = me.floatParentNode,
                 nodes = parentEl.dom.childNodes,
                 len = nodes.length,
-                i, startIdx,
                 alwaysOnTop = Number(me.getAlwaysOnTop()),
                 range = me.statics().range,
-                refNode, isTopModal;
+                maskCls = Ext.Mask.prototype.baseCls,
+                i, startIdx, nodeEl, refNode, isTopModal, currentAlwaysOnTop;
 
-            // If already at end, no node movement necessary
+            // Start from 1.
+            // All elements if floatRoot are considered, The first element in child floatWraps
+            // is the child floated which owns that floatWrap.
+            startIdx = parentEl === Ext.floatRoot ? 0 : 1;
+            
+            // Fastest way of seeing whether we need to move the modal mask
+            // to just below our positionEl.
+            isTopModal = me.getModal() && positionEl.previousSibling && Ext.fly(positionEl.previousSibling).hasCls(maskCls);
+
             if (positionEl.nextSibling) {
-
-                // Fastest way of seeing whether we need to move the modal mask
-                // to just below our positionEl.
-                isTopModal = me.getModal() && positionEl.previousSibling && Ext.fly(positionEl.previousSibling).hasCls(Ext.Mask.prototype.baseCls);
-
-                // Start from 1.
-                // All elements if floatRoot are considered, The first element in child floatWraps
-                // is the child floated which owns that floatWrap.
-                startIdx = parentEl === Ext.floatRoot ? 0 : 1;
                 for (i = len - 1; i >= startIdx; i--) {
-                    // Do not include shim elements in the comparison
-                    // Do not include our own element in the comparison.
-                    if (!Ext.fly(nodes[i]).is('.' + me.shimCls) && nodes[i] !== positionEl) {
+                    nodeEl = Ext.fly(nodes[i]);
+                    // Do not include shim elements, modal masks and our own element in the comparison.
+                    if (!nodeEl.hasCls(me.shimCls) && !nodeEl.hasCls(maskCls) && nodes[i] !== positionEl) {
                         // If we've gone back to find a node that should be below us,
                         // grab its next sibling as the refNode to insertBefore.
                         if (alwaysOnTop >= (Ext.get(nodes[i]).getData().alwaysOnTop || 0)) {
@@ -1556,15 +1566,34 @@ Ext.define('Ext.overrides.Widget', {
                 } else {
                     parentEl.dom.insertBefore(positionEl, refNode);
                 }
-
-                // Keep shims in line.
-                if (isTopModal) {
-                    me.showModalMask();
+            } else if (positionEl.previousSibling) {
+                for (i = len - 2; i >= startIdx; i--) {
+                    // Do not include shim elements in the comparison
+                    // Do not include our own element in the comparison.
+                    if (!Ext.fly(nodes[i]).is('.' + me.shimCls) && nodes[i] !== positionEl) {
+                        // If we've gone back to find a node that should be above us,
+                        // grab it and insert after us
+                        currentAlwaysOnTop = (Ext.get(nodes[i]).getData().alwaysOnTop);
+                        if (alwaysOnTop < currentAlwaysOnTop) {
+                            refNode = nodes[i];
+                            parentEl.dom.insertBefore(refNode, null);
+                            if (nodes[i - 1] && Ext.fly(nodes[i-1]).hasCls(maskCls)) {
+                                parentEl.dom.insertBefore(nodes[i-1], refNode);
+                                i -= 1;
+                            }
+                            alwaysOnTop = currentAlwaysOnTop;
+                        }
+                    }
                 }
-                me.syncShim();
             }
 
-            if (refNode) {
+            // Keep shims in line.
+            if (isTopModal) {
+                me.showModalMask();
+            }
+            me.syncShim();
+
+            if (refNode && !Ext.fly(refNode).hasCls(maskCls)) {
                 Ext.Component.from(refNode).syncShim();
             } else {
                 return true;

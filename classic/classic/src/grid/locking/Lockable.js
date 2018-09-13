@@ -909,6 +909,8 @@ Ext.define('Ext.grid.locking.Lockable', {
             // Synchronize the scrollTop positions of the two views
             scrollTop = normalView.getScrollY();
             lockedView.setScrollY(scrollTop);
+
+            me.syncRowHeightOnNextLayout = false;
         }
     },
 
@@ -1392,7 +1394,7 @@ Ext.define('Ext.grid.locking.Lockable', {
             // binding mask to new store
             loadMask = me.view.loadMask;
             if (loadMask && loadMask.isLoadMask) {
-               loadMask.bindStore(store);
+                loadMask.bindStore(store);
             }
             me.view.bindStore(normalGrid.view.dataSource, false, 'dataSource');
             lockedGrid.view.blockRefresh = normalGrid.view.blockRefresh = false;

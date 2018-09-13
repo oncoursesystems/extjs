@@ -41,6 +41,7 @@ Ext.define('KitchenSink.view.lists.DisclosureList', {
     itemTpl: '{firstName} {lastName}',
     store: 'List',
     width: '${width}',
+    grouped: false,
 
     onItemDisclosure: 'onDisclosureTap'
 });

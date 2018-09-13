@@ -2313,7 +2313,11 @@ Ext.define('Ext.form.field.ComboBox', {
         me.setRawValue(displayValue);
         me.refreshEmptyText();
         me.checkChange();
-        
+
+        if (!me.lastSelectedRecords && selectedRecords.length) {
+            me.lastSelectedRecords = selectedRecords;
+        }
+
         if (inputEl && me.typeAhead && me.hasFocus) {
             // if typeahead is configured, deselect any partials
             me.selectText(displayValue.length);

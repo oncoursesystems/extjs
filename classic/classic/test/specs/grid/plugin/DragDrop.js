@@ -1,6 +1,6 @@
 describe("Ext.grid.plugin.DragDrop", function() {
-    var grid1,
-        grid2;
+    var dragThresh = Ext.dd.DragDropManager.clickPixelThresh + 1,
+        grid1, grid2;
 
     var Model = Ext.define(null, {
         extend: 'Ext.data.Model',
@@ -12,6 +12,20 @@ describe("Ext.grid.plugin.DragDrop", function() {
             row: rowIdx,
             column: cellIdx
         }, true);
+    }
+
+    function buildData(columns, rowNum) {
+        var data = [],
+            row;
+        for (var i = 0; i < rowNum; i++) {
+            row = {};
+            for (var j = 0; j < columns.length; j++) {
+                row[columns[j]] = columns[j] + ' - row #' + i;
+            }
+            data.push(row);
+        }
+
+        return data;
     }
 
     function triggerCellMouseEvent(grid, type, rowIdx, cellIdx, button, x, y) {
@@ -26,19 +40,17 @@ describe("Ext.grid.plugin.DragDrop", function() {
         return target;
     }
 
-    function dragAndDrop(fromEl, fromX, fromY, toEl, toX, toY) {
-        var dragThresh = Ext.dd.DragDropManager.clickPixelThresh + 1;
-
-        runs(function() {
-            jasmine.fireMouseEvent(fromEl, 'mouseover', fromX, fromY);
-            jasmine.fireMouseEvent(fromEl, 'mousedown', fromX, fromY);
-        });
+    function dragStart(fromEl, fromX, fromY) {
+        jasmine.fireMouseEvent(fromEl, 'mouseover', fromX, fromY);
+        jasmine.fireMouseEvent(fromEl, 'mousedown', fromX, fromY);
 
         // Longpress starts drag
         if (jasmine.supportsTouch) {
             waits(1000);
         }
+    }
 
+    function dragMove(fromEl, fromX, fromY, toEl, toX, toY) {
         runs(function() {
             jasmine.fireMouseEvent(fromEl, 'mousemove', fromX + dragThresh, fromY);
 
@@ -49,6 +61,11 @@ describe("Ext.grid.plugin.DragDrop", function() {
             jasmine.fireMouseEvent(toEl, 'mouseover', toX, toY);
             jasmine.fireMouseEvent(toEl, 'mousemove', toX - dragThresh, toY);
             jasmine.fireMouseEvent(toEl, 'mousemove', toX, toY);
+        });
+    }
+
+    function dragEnd(fromEl, fromX, fromY, toEl, toX, toY) {
+        runs(function() {
             jasmine.fireMouseEvent(toEl, 'mouseup', toX, toY);
             jasmine.fireMouseEvent(toEl, 'mouseout', fromX, fromY);
 
@@ -58,6 +75,12 @@ describe("Ext.grid.plugin.DragDrop", function() {
                 jasmine.fireMouseEvent(fromEl, 'mousemove', fromX, fromY);
             }
         });
+    }
+
+    function dragAndDrop(fromEl, fromX, fromY, toEl, toX, toY) {
+        dragStart(fromEl, fromX, fromY);
+        dragMove(fromEl, fromX, fromY, toEl, toX, toY);
+        dragEnd(fromEl, fromX, fromY, toEl, toX, toY);
     }
 
     afterEach(function() {
@@ -89,6 +112,74 @@ describe("Ext.grid.plugin.DragDrop", function() {
             }]
         }, cfg));
     }
+
+    describe("drop indicator", function() {
+        it("should be positioned correctly", function() {
+            var data = buildData(['foo', 'bar'], 5),
+                dragEl, box, startX, startY, dropEl, endX, endY, indicator;
+
+            grid1 = makeGrid(undefined, data, {
+                columns: [
+                    {dataIndex: 'foo'}, 
+                    {dataIndex: 'bar'}
+                ]
+            });
+
+            dragEl = findCell(grid1, 0, 0);
+            box = Ext.fly(dragEl).getBox();
+            startX = box.left + 1;
+            startY = box.top + 1;
+            dropEl = grid1.getView().getNodes()[3];
+            box = Ext.fly(dropEl).getBox();
+            endX = box.left + 20;
+            endY = box.top + 20;
+
+            dragStart(dragEl, startX, startY);
+            dragMove(dragEl, startX, startY, dropEl, endX, endY);
+
+            waitsFor(function() {
+                return indicator = Ext.get(Ext.DomQuery.selectNode('.x-grid-drop-indicator'));
+            });
+
+            runs(function() {
+                expect(indicator.getBox().top).toBeApprox(136, 2);
+                dragEnd(dragEl, startX, startY, dropEl, endX, endY);
+            });
+        });
+
+        it("should be positioned correctly when the view is scrollable", function() {
+            var data = buildData(['foo', 'bar'], 1000),
+                dragEl, box, startX, startY, dropEl, endX, endY, indicator;
+
+            grid1 = makeGrid(undefined, data, {
+                columns: [
+                    {dataIndex: 'foo'}, 
+                    {dataIndex: 'bar'}
+                ]
+            });
+
+            dragEl = findCell(grid1, 0, 0);
+            box = Ext.fly(dragEl).getBox();
+            startX = box.left + 1;
+            startY = box.top + 1;
+            dropEl = grid1.getView().getNodes()[3];
+            box = Ext.fly(dropEl).getBox();
+            endX = box.left + 20;
+            endY = box.top + 20;
+
+            dragStart(dragEl, startX, startY);
+            dragMove(dragEl, startX, startY, dropEl, endX, endY);
+
+            waitsFor(function() {
+                return indicator = Ext.get(Ext.DomQuery.selectNode('.x-grid-drop-indicator'));
+            });
+
+            runs(function() {
+                expect(indicator.getBox().top).toBeApprox(136, 2);
+                dragEnd(dragEl, startX, startY, dropEl, endX, endY);
+            });
+        });
+    });
 
     describe("with checkbox selModel", function() {
         var cell, checkCell, checkbox, view, store;

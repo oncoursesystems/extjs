@@ -903,6 +903,20 @@ topSuite("Ext.field.Select", ['Ext.data.ArrayStore', 'Ext.viewport.Default', 'Ex
             
             expect(field.getValue()).toBe(2);
         });
+
+        it("should not deselect value when the selected item is clicked", function() {
+            field.expand();
+            
+            picker = field.getPicker();
+            picker.refresh();
+            item = picker.getViewItems()[1];
+
+            jasmine.fireMouseEvent(item.el, 'click');
+            field.expand();
+            jasmine.fireMouseEvent(item.el, 'click');
+
+            expect(field.getValue()).toBe(2);
+        });
     });
 
     describe("binding", function() {

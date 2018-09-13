@@ -30,17 +30,32 @@ Ext.define('KitchenSink.view.pivot.DrillDown', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            sumColumnWidth: 85,
+            companyWidth: 100,
+            countryWidth: 100
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 350,
+            sumColumnWidth: 85,
+            companyWidth: 100,
+            countryWidth: 100
+        },
+        graphite: {
+            width: 750,
+            height: 600,
+            sumColumnWidth: 130,
+            companyWidth: 150,
+            countryWidth: 200
         }
     },
     //</example>
 
     title: 'Pivot Grid with DrillDown plugin',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -63,18 +78,20 @@ Ext.define('KitchenSink.view.pivot.DrillDown', {
             dataIndex: 'value',
             header: 'Total',
             aggregator: 'sum',
-            width: 85
+            width: '${sumColumnWidth}'
         }],
 
         // Configure the left axis dimensions that will be used to generate
         // the grid rows
         leftAxis: [{
             dataIndex: 'company',
-            header: 'Company'
+            header: 'Company',
+            width: '${companyWidth}'
         }, {
             dataIndex: 'country',
             header: 'Country',
-            direction: 'DESC'
+            direction: 'DESC',
+            width: '${countryWidth}'
         }],
 
         /**

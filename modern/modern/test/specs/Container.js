@@ -1,3 +1,6 @@
+/* global expect, Ext, jasmine, topSuite */
+/* eslint indent: off */
+
 topSuite("Ext.Container",
     ['Ext.form.Panel', 'Ext.viewport.Default', 'Ext.layout.VBox', 'Ext.app.ViewController', 'Ext.app.ViewModel', 'Ext.Toolbar'],
 function() {
@@ -249,7 +252,7 @@ function() {
                             items: [
                                 { itemId: 'a', weight: 3 },
                                 { itemId: 'b', weight: 2 },
-                                { itemId: 'c', weight: 1 },
+                                { itemId: 'c', weight: 1 }
                             ]
                         });
                         expectOrder(['c', 'b', 'a']);
@@ -261,7 +264,7 @@ function() {
                             items: [
                                 { itemId: 'a', weight: 1 },
                                 { itemId: 'b', weight: -1 },
-                                { itemId: 'c' },
+                                { itemId: 'c' }
                             ]
                         });
                         expectOrder(['b', 'c', 'a']);
@@ -273,7 +276,7 @@ function() {
                             items: [
                                 { itemId: 'a', weight: 3 },
                                 { itemId: 'b', weight: 1 },
-                                { itemId: 'c', weight: 1 },
+                                { itemId: 'c', weight: 1 }
                             ]
                         });
                         expectOrder(['b', 'c', 'a']);
@@ -285,7 +288,7 @@ function() {
                             items: [
                                 { itemId: 'a' },
                                 { itemId: 'b' },
-                                { itemId: 'c' },
+                                { itemId: 'c' }
                             ]
                         });
                         expectOrder(['a', 'b', 'c']);
@@ -374,7 +377,7 @@ function() {
                         ct.add([
                             { itemId: 'd', weight: 7 },
                             { itemId: 'e', weight: -3 },
-                            { itemId: 'f', weight: 2 },
+                            { itemId: 'f', weight: 2 }
                         ]);
                         expectOrder(['e', 'a', 'f', 'b', 'c', 'd']);
                     });
@@ -3106,6 +3109,15 @@ function() {
                     }
                 });
             });
+        });
+    });
+
+    describe("activeItem", function() {
+        it("should set the activeItem from a component config", function() {
+           makeContainer([{html: 'Item 1'}]);
+           ct.setActiveItem({html: 'Item 2'});
+
+           expect(ct.getActiveItem()).toBe(items[items.length - 1]);
         });
     });
 });

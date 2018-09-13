@@ -25,10 +25,10 @@ topSuite("Ext.chart.series.Bar", ['Ext.chart.*', 'Ext.data.ArrayStore'], functio
                     },
                     axes: [{
                         type: 'numeric',
-                        position: 'left',
+                        position: 'left'
                     }, {
                         type: 'category',
-                        position: 'bottom',
+                        position: 'bottom'
                     }],
                     series: {
                         type: 'bar',
@@ -78,10 +78,10 @@ topSuite("Ext.chart.series.Bar", ['Ext.chart.*', 'Ext.data.ArrayStore'], functio
                     },
                     axes: [{
                         type: 'numeric',
-                        position: 'left',
+                        position: 'left'
                     }, {
                         type: 'category',
-                        position: 'bottom',
+                        position: 'bottom'
                     }],
                     series: {
                         type: 'bar',
@@ -125,10 +125,10 @@ topSuite("Ext.chart.series.Bar", ['Ext.chart.*', 'Ext.data.ArrayStore'], functio
                     },
                     axes: [{
                         type: 'numeric',
-                        position: 'left',
+                        position: 'left'
                     }, {
                         type: 'category',
-                        position: 'bottom',
+                        position: 'bottom'
                     }],
                     series: {
                         type: 'bar',

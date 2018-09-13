@@ -14,16 +14,16 @@
         "browserName": "internet explorer",
         "version": "11",
         "enablePersistentHover": false,
-        "chunks": 10
+        "chunks": 7
     },
     {
         "platformName": "iOS",
         "browserName": "Safari",
-        "platformVersion": "9.3",
-        "appiumVersion": "1.6.4",
-        "deviceName": "iPad Retina Simulator",
+        "platformVersion": "11.2",
+        "appiumVersion": "1.8.0",
+        "deviceName": "iPad Simulator",
         "deviceOrientation": "landscape",
-        "displayName": "iOS 9.3@Safari",
+        "displayName": "iOS 11.2@Safari",
         "chunks": 10
     },
     {
@@ -39,12 +39,12 @@
         "version": "9",
         "chunks": 5
     },
-//    {
-//        "platform": "OS X 10.12",
-//        "browserName": "safari",
-//        "version": "10",
-//        "chunks": 7
-//    },
+    {
+        "platform": "OS X 10.12",
+        "browserName": "safari",
+        "version": "11",
+        "chunks": 7
+    },
     {
         "platform": "Windows 10",
         "browserName": "firefox",

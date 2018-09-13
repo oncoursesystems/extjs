@@ -1,7 +1,7 @@
 /*
-This file is part of Ext JS 6.5.2.463
+This file is part of Ext JS 6.6.0.258
 
-Copyright (c) 2011-2017 Sencha Inc
+Copyright (c) 2011-2018 Sencha Inc
 
 license: http://www.sencha.com/legal/sencha-software-license-agreement
 Contact: http://www.sencha.com/contact
@@ -14,7 +14,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Version: 6.5.2.463 Build date: 2017-09-20 22:14:45 (697f26b680e91e60429534bea3ccbd667d2c6422)
+Version: 6.6.0.258 Build date: 2018-06-19 05:16:53 (a26fc5ffb54acf6e1afd5f18c467b14161985898)
 
 */
 // @tag core
@@ -2065,6 +2065,7 @@ var Ext = Ext || {};
         Timer: {
             all: {},
             track: false,
+            captureStack: true,
             created: function(kind, id, info) {
                 if (!Ext.Timer.track) {
                     return null;
@@ -2074,7 +2075,7 @@ var Ext = Ext || {};
                         id: id,
                         done: false,
                         firing: false,
-                        creator: new Error().stack,
+                        creator: Ext.Timer.captureStack ? new Error().stack : null,
                         tick: Ext.Timer.tick,
                         tock: Ext.Timer.tock
                     }, info);
@@ -4132,7 +4133,7 @@ Ext.Date = (function() {
             g: {
                 g: 1,
                 c: "h = parseInt(results[{0}], 10);\n",
-                s: "(1[0-2]|[0-9])"
+                s: "(1[0-2]|[1-9])"
             },
             
             G: {
@@ -4532,7 +4533,11 @@ Ext.Date = (function() {
                         };
                         break;
                     case utilDate.DAY:
-                        d.setDate(d.getDate() + value);
+                        if (preventDstAdjust) {
+                            d.setDate(d.getDate() + value);
+                        } else {
+                            d.setTime(d.getTime() + value * 24 * 60 * 60 * 1000);
+                        };
                         break;
                     case utilDate.MONTH:
                         day = date.getDate();
@@ -7119,8 +7124,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '6.5.2.463');
-        Ext.setVersion('core', '6.5.2.463');
+        Ext.setVersion('ext', '6.6.0.258');
+        Ext.setVersion('core', '6.6.0.258');
     }
 })(Ext.manifest);
 
@@ -8912,6 +8917,15 @@ Ext.Base = (function(flexSetter) {
             
             if (Object.setPrototypeOf) {
                 if (me.clearPrototypeOnDestroy && !me.$vetoClearingPrototypeOnDestroy) {
+                    props = me.$preservePrototypeProperties;
+                    if (props) {
+                        for (i = 0 , len = props.length; i < len; i++) {
+                            prop = props[i];
+                            if (!me.hasOwnProperty(prop)) {
+                                me[prop] = me[prop];
+                            }
+                        }
+                    }
                     Object.setPrototypeOf(me, null);
                 }
             }
@@ -10818,13 +10832,15 @@ Ext.ClassManager = (function(Class, alias, arraySlice, arrayFrom, global) {
         browserName = browserNames.safari;
         engineName = engineNames.webkit;
     }
-    if (userAgent.match(/Android.*Chrome/g)) {
+    
+    else if (userAgent.match(/Android.*Chrome/g)) {
         browserName = 'ChromeMobile';
-    }
-    if (userAgent.match(/OPR/)) {
-        browserName = 'Opera';
+    } else {
         browserMatch = userAgent.match(/OPR\/(\d+.\d+)/);
-        browserVersion = new Ext.Version(browserMatch[1]);
+        if (browserMatch) {
+            browserName = 'Opera';
+            browserVersion = new Ext.Version(browserMatch[1]);
+        }
     }
     Ext.apply(this, {
         engineName: engineName,
@@ -12117,15 +12133,14 @@ Ext.feature = {
         {
             name: 'CSSVariables',
             ready: false,
-            fn: function(doc) {
+            fn: function() {
                 
                 
                 if (!window.getComputedStyle) {
                     return false;
                 }
                 
-                var style = window.getComputedStyle(doc.documentElement);
-                return style.getPropertyValue && !!style.getPropertyValue('--x-supports-variables');
+                return window.CSS && window.CSS.supports && window.CSS.supports('--test-var', 0);
             }
         },
         {
@@ -12156,6 +12171,17 @@ Ext.feature = {
             fn: function(doc, div) {
                 div.innerHTML = '<div style="position: relative; overflow: auto; height: 200px; width: 200px;">' + '<div>' + '<div style="transform: translateY(260px); width: 50px;">a</div>' + '</div>' + '</div>';
                 return div.firstChild.scrollWidth > div.firstChild.clientWidth;
+            }
+        },
+        {
+            
+            name: 'FlexBoxBasisBug',
+            ready: true,
+            fn: function() {
+                if (Ext.isIE11 || (Ext.os.is.iOS && Ext.os.version.major <= 10) || (Ext.isSafari && Ext.browser.version.isLessThan(11)) || (Ext.os.is.Android && Ext.os.version.isLessThan(6))) {
+                    return true;
+                }
+                return false;
             }
         },
         {
@@ -13994,18 +14020,18 @@ Ext.define('Ext.util.Event', function() {
         },
         createBuffered: function(handler, listener, o, scope, wrapped) {
             listener.task = new Ext.util.DelayedTask();
-            
-            if (Ext.Timer.track) {
-                o.$delayedTask = listener.task;
-            }
-            
-            
             return function() {
                 
                 
                 
                 if (listener.task) {
                     var fireInfo;
+                    
+                    if (Ext.Timer.track) {
+                        o.$delayedTask = listener.task;
+                    }
+                    
+                    
                     if (!wrapped) {
                         fireInfo = listener.ev.getFireInfo(listener, true);
                         handler = fireInfo.fn;
@@ -16886,17 +16912,23 @@ Ext.define('Ext.data.request.Ajax', {
     statics: {
         
         parseStatus: function(status, response) {
-            var len;
+            var type, len;
             if (response) {
                 
-                if (response.responseType === 'arraybuffer') {
+                type = response.responseType;
+                if (type === 'arraybuffer') {
                     len = response.byteLength;
-                } else if (response.responseText) {
+                } else if (type === 'blob') {
+                    len = response.response.size;
+                } else if (type === 'json' || type === 'document') {
+                    len = 0;
+                } else if ((type === 'text' || type === '' || !type) && response.responseText) {
                     len = response.responseText.length;
                 }
             }
             
             status = status == 1223 ? 204 : status;
+            
             var success = (status >= 200 && status < 300) || status == 304 || (status == 0 && Ext.isNumber(len)),
                 isException = false;
             if (!success) {
@@ -17017,6 +17049,9 @@ Ext.define('Ext.data.request.Ajax', {
             }
         }
         
+        if (options.responseType) {
+            xhr.responseType = options.responseType;
+        }
         if (options.withCredentials || me.withCredentials) {
             xhr.withCredentials = true;
         }
@@ -17029,7 +17064,6 @@ Ext.define('Ext.data.request.Ajax', {
         if (options.binaryData) {
             
             if (window.Uint8Array) {
-                
                 xhr = me.getXhrInstance();
             } else {
                 
@@ -17103,36 +17137,9 @@ Ext.define('Ext.data.request.Ajax', {
         return xdr;
     },
     
-    getXhrInstance: (function() {
-        var options = [
-                function() {
-                    return new XMLHttpRequest();
-                },
-                function() {
-                    return new ActiveXObject('MSXML2.XMLHTTP.3.0');
-                },
-                
-                function() {
-                    return new ActiveXObject('MSXML2.XMLHTTP');
-                },
-                
-                function() {
-                    return new ActiveXObject('Microsoft.XMLHTTP');
-                }
-            ],
-            
-            i = 0,
-            len = options.length,
-            xhr;
-        for (; i < len; ++i) {
-            try {
-                xhr = options[i];
-                xhr();
-                break;
-            } catch (e) {}
-        }
-        return xhr;
-    }()),
+    getXhrInstance: function() {
+        return new XMLHttpRequest();
+    },
     processXdrRequest: function(request, xhr) {
         var me = this;
         
@@ -17275,12 +17282,23 @@ Ext.define('Ext.data.request.Ajax', {
         if (me.binary) {
             response.responseBytes = me.getByteArray(xhr);
         } else {
-            
-            
-            
-            
-            response.responseText = xhr.responseText;
-            response.responseXML = xhr.responseXML;
+            if (xhr.responseType) {
+                response.responseType = xhr.responseType;
+            }
+            if (xhr.responseType === 'blob') {
+                response.responseBlob = xhr.response;
+            } else if (xhr.responseType === 'json') {
+                response.responseJson = xhr.response;
+            } else if (xhr.responseType === 'document') {
+                response.responseXML = xhr.response;
+            } else {
+                
+                
+                
+                
+                response.responseText = xhr.responseText;
+                response.responseXML = xhr.responseXML;
+            }
         }
         return response;
     },
@@ -18837,6 +18855,7 @@ Ext.define('Ext.ComponentManager', {
     Ext.iidToCmp = function(iid) {
         return ComponentManager.byInstanceId[iid] || null;
     };
+    
     Ext.doEv = function(node, e) {
         var cmp, method, event;
         
@@ -19978,7 +19997,7 @@ Ext.define('Ext.util.Positionable', {
     },
     getAlignToRegion: function(alignToEl, posSpec, offset, minHeight) {
         var me = this,
-            inside, newRegion;
+            inside, newRegion, bodyScroll;
         alignToEl = Ext.fly(alignToEl.el || alignToEl);
         if (!alignToEl || !alignToEl.dom) {
             
@@ -20003,6 +20022,13 @@ Ext.define('Ext.util.Positionable', {
                 inside = me.constrainTo || me.container || me.el.parent();
             }
             inside = Ext.fly(inside.el || inside).getConstrainRegion();
+        }
+        if (alignToEl === Ext.getBody()) {
+            bodyScroll = alignToEl.getScroll();
+            offset = [
+                bodyScroll.left,
+                bodyScroll.top
+            ];
         }
         newRegion = me.getRegion().alignTo({
             target: alignToEl.getRegion(),
@@ -25228,12 +25254,17 @@ Ext.define('Ext.dom.Element', function(Element) {
         inputTypeSelectionSupported = /text|password|search|tel|url/i,
         visFly, scrollFly, caFly, wrapFly, grannyFly, activeElFly;
     
+    
+    
+    
+    
     try {
         elementIdCounter = WIN_TOP.__elementIdCounter__;
+        WIN_TOP.__elementIdCounter__ = elementIdCounter;
     } catch (e) {
         WIN_TOP = WIN;
     }
-    WIN_TOP.__elementIdCounter = elementIdCounter = (WIN_TOP.__elementIdCounter__ || 0) + 1;
+    WIN_TOP.__elementIdCounter__ = elementIdCounter = (WIN_TOP.__elementIdCounter__ || 0) + 1;
     windowId = 'ext-window-' + elementIdCounter;
     documentId = 'ext-document-' + elementIdCounter;
     
@@ -25402,6 +25433,10 @@ Ext.define('Ext.dom.Element', function(Element) {
                 9: 1
             },
             
+            namespaceURIs: {
+                html: 'http://www.w3.org/1999/xhtml',
+                svg: 'http://www.w3.org/2000/svg'
+            },
             selectableCls: Ext.baseCSSPrefix + 'selectable',
             unselectableCls: Ext.baseCSSPrefix + 'unselectable',
             
@@ -25440,7 +25475,7 @@ Ext.define('Ext.dom.Element', function(Element) {
             
             create: function(attributes, domNode) {
                 var me = this,
-                    classes, element, elementStyle, tag, value, name, i, ln, tmp;
+                    classes, element, elementStyle, tag, value, name, i, ln, tmp, ns;
                 attributes = attributes || {};
                 if (attributes.isElement) {
                     return domNode ? attributes.dom : attributes;
@@ -25454,8 +25489,9 @@ Ext.define('Ext.dom.Element', function(Element) {
                 if (!tag) {
                     tag = 'div';
                 }
-                if (attributes.namespace) {
-                    element = DOC.createElementNS(attributes.namespace, tag);
+                ns = attributes.namespace;
+                if (ns) {
+                    element = DOC.createElementNS(me.namespaceURIs[ns] || ns, tag);
                 } else {
                     element = DOC.createElement(tag);
                 }
@@ -25469,9 +25505,7 @@ Ext.define('Ext.dom.Element', function(Element) {
                                     element.setAttribute(name, value);
                                 } else {
                                     for (i in value) {
-                                        if (value.hasOwnProperty(i)) {
-                                            elementStyle[i] = value[i];
-                                        }
+                                        elementStyle[i] = value[i];
                                     }
                                 };
                                 break;
@@ -26963,6 +26997,9 @@ Ext.define('Ext.dom.Element', function(Element) {
                 }
                 
                 else if (dom.createTextRange) {
+                    if (start > end) {
+                        start = end;
+                    }
                     range = dom.createTextRange();
                     range.moveStart('character', start);
                     range.moveEnd('character', -(len - end));
@@ -28009,24 +28046,22 @@ Ext.define('Ext.dom.Element', function(Element) {
                 }
             } else {
                 for (name in prop) {
-                    if (prop.hasOwnProperty(name)) {
-                        hook = hooks[name];
-                        if (!hook) {
-                            hooks[name] = hook = {
-                                name: Element.normalize(name)
-                            };
-                        }
-                        value = prop[name];
-                        value = (value == null) ? '' : value;
-                        
-                        if (hook.set) {
-                            hook.set(dom, value, me);
-                        } else {
-                            style[hook.name] = value;
-                        }
-                        if (hook.afterSet) {
-                            hook.afterSet(dom, value, me);
-                        }
+                    hook = hooks[name];
+                    if (!hook) {
+                        hooks[name] = hook = {
+                            name: Element.normalize(name)
+                        };
+                    }
+                    value = prop[name];
+                    value = (value == null) ? '' : value;
+                    
+                    if (hook.set) {
+                        hook.set(dom, value, me);
+                    } else {
+                        style[hook.name] = value;
+                    }
+                    if (hook.afterSet) {
+                        hook.afterSet(dom, value, me);
                     }
                 }
             }
@@ -29510,7 +29545,13 @@ Ext.define('Ext.dom.Element', function(Element) {
         if (Ext.isSafari9) {
             bodyCls.push(Ext.baseCSSPrefix + 'safari9');
         }
-        if (Ext.browser.is.Safari && Ext.browser.version.isLessThan(9)) {
+        if (Ext.isSafari10) {
+            bodyCls.push(Ext.baseCSSPrefix + 'safari10');
+        }
+        if (Ext.isSafari11) {
+            bodyCls.push(Ext.baseCSSPrefix + 'safari11');
+        }
+        if (Ext.isSafari && Ext.browser.version.isLessThan(9)) {
             bodyCls.push(Ext.baseCSSPrefix + 'safari8m');
         }
         if (Ext.isChrome) {
@@ -29550,6 +29591,9 @@ Ext.define('Ext.dom.Element', function(Element) {
         if (Ext.os.is.iOS && Ext.browser.is.WebView && !Ext.browser.is.Standalone) {
             
             bodyCls.push(Ext.baseCSSPrefix + 'ios-native');
+        }
+        if (Ext.supports.FlexBoxBasisBug) {
+            bodyCls.push(Ext.baseCSSPrefix + 'has-flexbasis-bug');
         }
         Ext.getBody().addCls(bodyCls);
         theme = Ext.theme;
@@ -29618,7 +29662,7 @@ Ext.define('Ext.GlobalEvents', {
         if (component) {
             me.pressedScrollStart = Ext.on({
                 scrollstart: function() {
-                    me.setPressedComponent(null);
+                    me.setPressedComponent(null, e);
                 },
                 destroyable: true
             });
@@ -29675,7 +29719,7 @@ Ext.define('Ext.GlobalEvents', {
     },
     fireMouseUp: function(e) {
         this.fireEvent('mouseup', e);
-        this.setPressedComponent(null);
+        this.setPressedComponent(null, e);
     },
     fireResize: function() {
         var me = this,
@@ -29773,7 +29817,7 @@ Ext.define('Ext.Glyph', {
 });
 
 
-Ext.USE_NATIVE_JSON = false;
+Ext.USE_NATIVE_JSON = true;
 
 Ext.JSON = (new (function() {
     
@@ -29809,8 +29853,8 @@ Ext.JSON = (new (function() {
             }
             
             
-            else if (o.toJSON) {
-                return o.toJSON();
+            else if (typeof o.toJSON === 'function') {
+                return doEncode(o.toJSON());
             } else if (Ext.isArray(o)) {
                 return encodeArray(o, newline);
             } else if (Ext.isObject(o)) {
@@ -31405,8 +31449,25 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) {
                     return existingKeyMap || null;
                 },
                 getKeyName: function(event) {
-                    var code = event.isEvent ? event.keyCode || event.charCode : event;
-                    return Ext.event.Event.keyCodes[code] || String.fromCharCode(code);
+                    var keyCode;
+                    if (event.isEvent) {
+                        keyCode = event.keyCode || event.charCode;
+                        event = event.browserEvent;
+                        
+                        
+                        if (keyCode === 229 && 'code' in event) {
+                            if (Ext.String.startsWith(event.code, 'Key')) {
+                                return event.key.substr(3);
+                            }
+                            if (Ext.String.startsWith(event.code, 'Digit')) {
+                                return event.key.substr(5);
+                            }
+                        }
+                    } else {
+                        keyCode = event;
+                    }
+                    
+                    return Ext.event.Event.keyCodes[keyCode] || String.fromCharCode(keyCode);
                 },
                 matchEntry: function(entry, e) {
                     var ev = e.browserEvent,
@@ -32110,6 +32171,8 @@ Ext.define('Ext.mixin.Focusable', {
     var keyboardModeCls = Ext.baseCSSPrefix + 'keyboard-mode',
         keyboardMode = false;
     
+    Ext.enableKeyboardMode = Ext.isModern || !Ext.os.is.Desktop;
+    
     
     Ext.setKeyboardMode = Ext.setKeyboardMode || function(keyboardMode) {
         Ext.keyboardMode = keyboardMode;
@@ -32118,7 +32181,11 @@ Ext.define('Ext.mixin.Focusable', {
     Ext.isTouchMode = function() {
         return (Ext.now() - Ext.lastTouchTime) < 500;
     };
-    function syncKeyboardMode(e) {
+    
+    Ext.syncKeyboardMode = function(e) {
+        if (!Ext.enableKeyboardMode) {
+            return;
+        }
         var type = e.type;
         if (type === 'pointermove') {
             
@@ -32131,20 +32198,39 @@ Ext.define('Ext.mixin.Focusable', {
             Ext.lastTouchTime = e.pointerType === 'touch' && Ext.now();
             Ext.setKeyboardMode(keyboardMode);
         }
+    };
+    function keyboardModeFocusHandler() {
+        
+        if (keyboardMode !== Ext.getBody().hasCls(keyboardModeCls)) {
+            Ext.setKeyboardMode(keyboardMode);
+        }
     }
+    Ext.getEnableKeyboardMode = function() {
+        return Ext.enableKeyboardMode;
+    };
+    Ext.setEnableKeyboardMode = function(enable) {
+        var listeners = {
+                pointerdown: Ext.syncKeyboardMode,
+                pointermove: Ext.syncKeyboardMode,
+                keydown: Ext.syncKeyboardMode,
+                capture: true,
+                delegated: false
+            };
+        Ext.enableKeyboardMode = !!enable;
+        if (Ext.enableKeyboardMode) {
+            Ext.getWin().on(listeners);
+            Ext.on('focus', keyboardModeFocusHandler);
+        } else {
+            Ext.getWin().un(listeners);
+            Ext.un('focus', keyboardModeFocusHandler);
+        }
+    };
     Ext.onReady(function() {
-        Ext.getWin().on({
-            pointerdown: syncKeyboardMode,
-            pointermove: syncKeyboardMode,
-            keydown: syncKeyboardMode,
-            capture: true,
-            delegated: false
-        });
-        Ext.on('focus', function() {
-            if (keyboardMode !== Ext.getBody().hasCls(keyboardModeCls)) {
-                Ext.setKeyboardMode(keyboardMode);
-            }
-        });
+        
+        if (!Ext.enableKeyboardMode) {
+            Ext.getBody().addCls(keyboardModeCls);
+        }
+        Ext.setEnableKeyboardMode(Ext.enableKeyboardMode);
     });
 });
 
@@ -32759,6 +32845,9 @@ Ext.define('Ext.Widget', {
     applyCls: function(cls) {
         return cls && Ext.dom.Element.splitCls(cls);
     },
+    applyUi: function(ui) {
+        return this.parseUi(ui, true);
+    },
     
     removeCls: function(cls, prefix, suffix) {
         if (!this.destroyed) {
@@ -33245,18 +33334,24 @@ Ext.define('Ext.Widget', {
             }
             return elementConfig;
         },
+        parseUi: function(ui, asString) {
+            ui = Ext.String.splitWords(ui);
+            if (asString) {
+                ui = ui.join(' ');
+            }
+            return ui;
+        },
         addUi: function(ui) {
             this.setUi(this.doAddUi(ui, this.getUi()));
         },
         doAddUi: function(ui, oldUi) {
             var me = this,
-                spaceRe = me.spaceRe,
                 newUi = null,
                 i, u, len;
             if (ui) {
-                ui = ui.split(spaceRe);
+                ui = me.parseUi(ui);
                 len = ui.length;
-                oldUi = (oldUi && oldUi.split(spaceRe)) || [];
+                oldUi = me.parseUi(oldUi);
                 for (i = 0; i < len; i++) {
                     u = ui[i];
                     if (Ext.Array.indexOf(oldUi, u) === -1) {
@@ -33272,13 +33367,12 @@ Ext.define('Ext.Widget', {
         },
         doRemoveUi: function(ui, oldUi) {
             var me = this,
-                spaceRe = me.spaceRe,
                 newUi = null,
                 i, u, index, len;
             if (ui) {
-                ui = ui.split(spaceRe);
+                ui = me.parseUi(ui);
                 len = ui.length;
-                oldUi = (oldUi && oldUi.split(spaceRe)) || [];
+                oldUi = me.parseUi(oldUi);
                 for (i = 0; i < len; i++) {
                     u = ui[i];
                     index = Ext.Array.indexOf(oldUi, u);
@@ -33330,7 +33424,7 @@ Ext.define('Ext.Widget', {
                 classClsListLen = classClsList ? classClsList.length : 0,
                 uiCls, uiLen, refName, refEl, cls, suffix, uiSuffix, i, j;
             if (ui) {
-                ui = ui.split(' ');
+                ui = me.parseUi(ui);
                 uiLen = ui.length;
             }
             for (refName in uiReferences) {
@@ -34282,7 +34376,7 @@ Ext.define('Ext.Template', {
     
     disableFormats: false,
     
-    tokenRe: /\{(?:(?:(\d+)|([a-z_][\w\-]*))(?::([a-z_\.]+)(?:\(([^\)]*?)?\))?)?)\}/gi,
+    tokenRe: /\{(?:(?:(\d+)|([a-z_$][\w\-$]*))(?::([a-z_\.]+)(?:\(([^\)]*?)?\))?)?)\}/gi,
     
     apply: function(values) {
         var me = this;
@@ -37752,6 +37846,36 @@ Ext.define('Ext.app.domain.Global', {
 });
 
 
+Ext.define('Ext.route.Handler', {
+    
+    
+    
+    lazy: false,
+    
+    
+    
+    
+    
+    statics: {
+        
+        fromRouteConfig: function(config, scope) {
+            var handler = {
+                    action: config.action,
+                    before: config.before,
+                    lazy: config.lazy,
+                    exit: config.exit,
+                    scope: scope,
+                    single: config.single
+                };
+            return new this(handler);
+        }
+    },
+    constructor: function(config) {
+        Ext.apply(this, config);
+    }
+});
+
+
 Ext.define('Ext.route.Action', {
     config: {
         
@@ -37807,15 +37931,22 @@ Ext.define('Ext.route.Action', {
         var me = this,
             actions = me.getActions(),
             befores = me.getBefores(),
-            urlParams = me.getUrlParams().slice(),
-            config, ret;
+            urlParams = me.getUrlParams(),
+            config, ret, args;
+        if (Ext.isArray(urlParams)) {
+            args = urlParams.slice();
+        } else {
+            args = [
+                urlParams
+            ];
+        }
         if (me.stopped || (befores ? !befores.length : true) && (actions ? !actions.length : true)) {
             me.done();
         } else {
             if (befores && befores.length) {
                 config = befores.shift();
-                urlParams.push(me);
-                ret = Ext.callback(config.fn, config.scope, urlParams);
+                args.push(me);
+                ret = Ext.callback(config.fn, config.scope, args);
                 if (ret && ret.then) {
                     ret.then(function(arg) {
                         me.resume(arg);
@@ -37825,7 +37956,7 @@ Ext.define('Ext.route.Action', {
                 }
             } else if (actions && actions.length) {
                 config = actions.shift();
-                Ext.callback(config.fn, config.scope, urlParams);
+                Ext.callback(config.fn, config.scope, args);
                 me.next();
             } else {
                 
@@ -37927,6 +38058,7 @@ Ext.define('Ext.route.Action', {
 
 Ext.define('Ext.route.Route', {
     
+    
     config: {
         
         name: null,
@@ -37935,16 +38067,73 @@ Ext.define('Ext.route.Route', {
         
         allowInactive: false,
         
+        conditions: {},
+        
         caseInsensitive: false,
         
-        handlers: []
+        handlers: [],
+        
+        types: {
+            cached: true,
+            $value: {
+                alpha: {
+                    re: '([a-zA-Z]+)'
+                },
+                alphanum: {
+                    re: '([a-zA-Z0-9]+|[0-9]+(?:\\.[0-9]+)?|[0-9]*(?:\\.[0-9]+){1})',
+                    parse: function(value) {
+                        var test;
+                        if (value && this.numRe.test(value)) {
+                            test = parseFloat(value);
+                            if (!isNaN(test)) {
+                                value = test;
+                            }
+                        }
+                        return value;
+                    }
+                },
+                num: {
+                    
+                    re: '([0-9]+(?:\\.[0-9]+)?|[0-9]*(?:\\.[0-9]+){1})',
+                    parse: function(value) {
+                        if (value) {
+                            value = parseFloat(value);
+                        }
+                        return value;
+                    }
+                },
+                '...': {
+                    re: '(.+)?',
+                    split: '/',
+                    parse: function(values) {
+                        var length, i, value;
+                        if (values) {
+                            length = values.length;
+                            for (i = 0; i < length; i++) {
+                                value = parseFloat(values[i]);
+                                if (!isNaN(value)) {
+                                    values[i] = value;
+                                }
+                            }
+                        }
+                        return values;
+                    }
+                }
+            }
+        }
     },
-    
     
     defaultMatcher: '([%a-zA-Z0-9\\-\\_\\s,]+)',
     
     
-    paramMatchingRegex: /:([0-9A-Za-z\_]*)/g,
+    numRe: /^[0-9]*(?:\.[0-9]*)?$/,
+    
+    typeParamRegex: /:{([0-9A-Za-z\_]+)(?::?([0-9A-Za-z\_]+|.{3})?)}/g,
+    
+    optionalGroupRegex: /\((.+?)\)/g,
+    
+    paramMatchingRegex: /:([0-9A-Za-z\_]+)/g,
+    
     
     
     isRoute: true,
@@ -37952,32 +38141,181 @@ Ext.define('Ext.route.Route', {
         var me = this,
             url;
         this.initConfig(config);
-        Ext.apply(me, config, {
-            conditions: {}
+        url = me.getUrl().replace(me.optionalGroupRegex, function(match, middle) {
+            return '(?:' + middle + ')?';
         });
-        url = me.getUrl();
+        if (url.match(me.typeParamRegex)) {
+            me.handleNamedPattern(url);
+        } else {
+            me.handlePositionalPattern(url);
+        }
+    },
+    
+    handlePositionalPattern: function(url) {
+        var me = this;
         me.paramsInMatchString = url.match(me.paramMatchingRegex) || [];
         me.matcherRegex = me.createMatcherRegex(url);
+        me.mode = 'positional';
+    },
+    
+    handleNamedPattern: function(url) {
+        var me = this,
+            typeParamRegex = me.typeParamRegex,
+            conditions = me.getConditions(),
+            types = me.getTypes(),
+            defaultMatcher = me.defaultMatcher,
+            params = {},
+            re = url.replace(typeParamRegex, function(match, param, typeMatch) {
+                var type = typeMatch && types[typeMatch],
+                    matcher = conditions[param] || type || defaultMatcher;
+                
+                if (params[param]) {
+                    Ext.raise('"' + param + '" already defined in route "' + url + '"');
+                }
+                if (typeMatch && !type) {
+                    Ext.raise('Unknown parameter type "' + typeMatch + '" in route "' + url + '"');
+                }
+                
+                if (Ext.isObject(matcher)) {
+                    matcher = matcher.re;
+                }
+                params[param] = {
+                    matcher: matcher,
+                    type: typeMatch
+                };
+                return matcher;
+            });
+        
+        if (re.search(me.paramMatchingRegex) !== -1) {
+            Ext.raise('URL parameter mismatch. Positional url parameter found while in named mode.');
+        }
+        
+        me.paramsInMatchString = params;
+        me.matcherRegex = new RegExp('^' + re + '$', me.getCaseInsensitive() ? 'i' : '');
+        me.mode = 'named';
     },
     
     recognize: function(url) {
         var me = this,
             recognized = me.recognizes(url),
-            matches, urlParams;
-        if (url === me.lastToken) {
-            
-            return true;
-        }
+            handlers, length, hasHandler, i, handler, matches, urlParams, arg, params;
         if (recognized) {
+            handlers = me.getHandlers();
+            length = handlers.length;
+            for (i = 0; i < length; i++) {
+                handler = handlers[i];
+                if (handler.lastToken !== url) {
+                    
+                    hasHandler = true;
+                    break;
+                }
+            }
+            if (!hasHandler && url === me.lastToken) {
+                
+                return true;
+            }
+            
             matches = me.matchesFor(url);
-            urlParams = url.match(me.matcherRegex);
-            urlParams.shift();
+            urlParams = me.getUrlParams(url);
             return Ext.applyIf(matches, {
                 historyUrl: url,
                 urlParams: urlParams
             });
         }
         return false;
+    },
+    
+    getUrlParams: function(url) {
+        if (this.mode === 'named') {
+            return this.getNamedUrlParams(url);
+        } else {
+            return this.getPositionalUrlParams(url);
+        }
+    },
+    
+    getPositionalUrlParams: function(url) {
+        var params = [],
+            conditions = this.getConditions(),
+            keys = this.paramsInMatchString,
+            values = url.match(this.matcherRegex),
+            length = keys.length,
+            i, key, type, value;
+        
+        values.shift();
+        for (i = 0; i < length; i++) {
+            key = keys[i];
+            value = values[i];
+            if (conditions[key]) {
+                type = conditions[key];
+            } else if (key[0] === ':') {
+                key = key.substr(1);
+                if (conditions[key]) {
+                    type = conditions[key];
+                }
+            }
+            value = this.parseValue(value, type);
+            if (Ext.isDefined(value) && value !== '') {
+                if (Ext.isArray(value)) {
+                    params.push.apply(params, value);
+                } else {
+                    params.push(value);
+                }
+            }
+        }
+        return params;
+    },
+    
+    getNamedUrlParams: function(url) {
+        var conditions = this.getConditions(),
+            types = this.getTypes(),
+            params = {},
+            keys = this.paramsInMatchString,
+            values = url.match(this.matcherRegex),
+            name, obj, value, type, condition;
+        
+        values.shift();
+        for (name in keys) {
+            obj = keys[name];
+            value = values.shift();
+            condition = conditions[name];
+            type = types[obj.type];
+            if (condition || type) {
+                type = Ext.merge({}, condition, types[obj.type]);
+            }
+            params[name] = this.parseValue(value, type);
+        }
+        return params;
+    },
+    
+    parseValue: function(value, type) {
+        if (type) {
+            if (value && type.split) {
+                value = value.split(type.split);
+                
+                
+                
+                
+                if (!value[0]) {
+                    value.shift();
+                }
+                
+                
+                
+                
+                if (!value[value.length - 1]) {
+                    value.pop();
+                }
+            }
+            if (type.parse) {
+                value = type.parse.call(this, value);
+            }
+        }
+        if (!value && Ext.isString(value)) {
+            
+            
+            value = undefined;
+        }
+        return value;
     },
     
     recognizes: function(url) {
@@ -37993,77 +38331,94 @@ Ext.define('Ext.route.Route', {
             befores = [],
             actions = [],
             urlParams = (argConfig && argConfig.urlParams) || [],
-            i, handler, scope, action, promises;
+            i, handler, scope, action, promises, single, remover;
         me.lastToken = token;
         if (!queue) {
             promises = [];
         }
         return new Ext.Promise(function(resolve, reject) {
-            for (i = 0; i < length; i++) {
-                handler = handlers[i];
-                scope = handler.scope;
-                if (!allowInactive && scope.isActive && !scope.isActive()) {
-                    
-                    continue;
+            if (argConfig === false) {
+                reject();
+            } else {
+                if (queue) {
+                    action = new Ext.route.Action({
+                        urlParams: urlParams
+                    });
+                }
+                for (i = 0; i < length; i++) {
+                    handler = handlers[i];
+                    if (token != null && handler.lastToken === token) {
+                        
+                        
+                        continue;
+                    }
+                    scope = handler.scope;
+                    handler.lastToken = token;
+                    if (!allowInactive && scope.isActive && !scope.isActive()) {
+                        
+                        continue;
+                    }
+                    if (!queue) {
+                        action = new Ext.route.Action({
+                            urlParams: urlParams
+                        });
+                    }
+                    single = handler.single;
+                    if (handler.before) {
+                        action.before(handler.before, scope);
+                    }
+                    if (handler.action) {
+                        action.action(handler.action, scope);
+                    }
+                    if (single) {
+                        remover = Ext.bind(me.removeHandler, me, [
+                            null,
+                            handler
+                        ]);
+                        if (single === true) {
+                            if (handler.action) {
+                                action.action(remover, me);
+                            } else {
+                                action.before(function() {
+                                    remover();
+                                    return Ext.Promise.resolve();
+                                }, me);
+                            }
+                        } else {
+                            
+                            
+                            
+                            action.before(single === 'before', function() {
+                                remover();
+                                return Ext.Promise.resolve();
+                            }, me);
+                        }
+                    }
+                    if (!queue) {
+                        if (Ext.fireEvent('beforeroute', action, me) === false) {
+                            action.destroy();
+                        } else {
+                            promises.push(action.run());
+                        }
+                    }
                 }
                 if (queue) {
-                    if (handler.before) {
-                        befores.push({
-                            fn: handler.before,
-                            scope: scope
-                        });
-                    }
-                    if (handler.action) {
-                        actions.push({
-                            fn: handler.action,
-                            scope: scope
-                        });
-                    }
-                } else {
-                    action = {
-                        urlParams: urlParams
-                    };
-                    if (handler.before) {
-                        action.befores = {
-                            fn: handler.before,
-                            scope: scope
-                        };
-                    }
-                    if (handler.action) {
-                        action.actions = {
-                            fn: handler.action,
-                            scope: scope
-                        };
-                    }
-                    action = new Ext.route.Action(action);
                     if (Ext.fireEvent('beforeroute', action, me) === false) {
                         action.destroy();
+                        reject();
                     } else {
-                        promises.push(action.run());
+                        action.run().then(resolve, reject);
                     }
-                }
-            }
-            if (queue) {
-                action = new Ext.route.Action({
-                    actions: actions,
-                    befores: befores,
-                    urlParams: urlParams
-                });
-                if (Ext.fireEvent('beforeroute', action, me) === false) {
-                    action.destroy();
-                    reject();
                 } else {
-                    action.run().then(resolve, reject);
+                    Ext.Promise.all(promises).then(resolve, reject);
                 }
-            } else {
-                Ext.Promise.all(promises).then(resolve, reject);
             }
         });
     },
     
     matchesFor: function(url) {
         var params = {},
-            keys = this.paramsInMatchString,
+            keys = this.mode === 'named' ? Ext.Object.getKeys(this.paramsInMatchString) : this.paramsInMatchString,
             values = url.match(this.matcherRegex),
             length = keys.length,
             i;
@@ -38078,20 +38433,34 @@ Ext.define('Ext.route.Route', {
     createMatcherRegex: function(url) {
         
         
-        var paramsInMatchString = this.paramsInMatchString,
-            conditions = this.conditions,
-            defaultMatcher = this.defaultMatcher,
+        var me = this,
+            paramsInMatchString = me.paramsInMatchString,
+            conditions = me.getConditions(),
+            defaultMatcher = me.defaultMatcher,
             length = paramsInMatchString.length,
-            modifiers = this.getCaseInsensitive() ? 'i' : '',
-            i, params, matcher;
+            modifiers = me.getCaseInsensitive() ? 'i' : '',
+            i, param, matcher;
         if (url === '*') {
             
             url = url.replace('*', '\\*');
         } else {
             for (i = 0; i < length; i++) {
-                params = paramsInMatchString[i];
-                matcher = conditions[params] || defaultMatcher;
-                url = url.replace(new RegExp(params), matcher);
+                param = paramsInMatchString[i];
+                
+                
+                if (conditions[param]) {
+                    matcher = conditions[param];
+                }
+                
+                else if (param[0] === ':' && conditions[param.substr(1)]) {
+                    matcher = conditions[param.substr(1)];
+                } else {
+                    matcher = defaultMatcher;
+                }
+                if (Ext.isObject(matcher)) {
+                    matcher = matcher.re;
+                }
+                url = url.replace(new RegExp(param), matcher || defaultMatcher);
             }
         }
         
@@ -38100,27 +38469,73 @@ Ext.define('Ext.route.Route', {
     
     addHandler: function(handler) {
         var handlers = this.getHandlers();
+        if (!handler.isInstance) {
+            handler = new Ext.route.Handler(handler);
+        }
         handlers.push(handler);
-        return this;
+        return handler.route = this;
     },
     
-    removeHandler: function(scope, config) {
+    removeHandler: function(scope, handler) {
         var handlers = this.getHandlers(),
             length = handlers.length,
             newHandlers = [],
-            i, handler;
+            i, item;
         for (i = 0; i < length; i++) {
-            handler = handlers[i];
-            if (handler.scope === scope) {
-                if (!config || (Ext.isDefined(config.action) ? handler.action === config.action : true && Ext.isDefined(config.before) ? handler.before === config.before : true)) {
-                    
-                    continue;
+            item = handlers[i];
+            if (handler) {
+                if (item !== handler) {
+                    newHandlers.push(item);
                 }
+            } else if (item.scope !== scope) {
+                newHandlers.push(item);
             }
-            newHandlers.push(handler);
         }
         this.setHandlers(newHandlers);
         return this;
+    },
+    
+    clearLastTokens: function() {
+        var handlers = this.getHandlers(),
+            length = handlers.length,
+            i;
+        for (i = 0; i < length; i++) {
+            handlers[i].lastToken = null;
+        }
+        this.lastToken = null;
+    },
+    
+    onExit: function() {
+        var me = this,
+            handlers = me.getHandlers(),
+            allowInactive = me.getAllowInactive(),
+            length = handlers.length,
+            action = new Ext.route.Action({
+                urlParams: [
+                    me.lastToken
+                ]
+            }),
+            i, handler, scope;
+        
+        
+        
+        me.clearLastTokens();
+        for (i = 0; i < length; i++) {
+            handler = handlers[i];
+            if (handler.exit) {
+                scope = handler.scope;
+                if (!allowInactive && scope.isActive && !scope.isActive()) {
+                    
+                    continue;
+                }
+                action.action(handler.exit, scope);
+            }
+        }
+        if (Ext.fireEvent('beforerouteexit', action, me) === false) {
+            action.destroy();
+        } else {
+            action.run();
+        }
     }
 });
 
@@ -38164,7 +38579,7 @@ Ext.define('Ext.util.History', {
     },
     
     getHash: function() {
-        return this.win.location.hash.replace(this.hashRe, '');
+        return (this.win.location.hash || '').replace(this.hashRe, '');
     },
     
     setHash: function(hash, replace) {
@@ -38358,7 +38773,7 @@ Ext.define('Ext.route.Router', {
                         
                         route.execute(token, recognize).then(null, Ext.bind(me.onRouteRejection, me, [
                             route
-                        ]));
+                        ], 0));
                     }
                     Ext.Array.remove(unmatched, route);
                     if (!matched[name]) {
@@ -38379,22 +38794,22 @@ Ext.define('Ext.route.Router', {
         i = 0;
         length = unmatched.length;
         for (; i < length; i++) {
-            route = unmatched[i];
-            
-            
-            
-            route.lastToken = null;
+            unmatched[i].onExit();
         }
     },
     
-    onRouteRejection: function(route) {
-        Ext.fireEvent('routereject', route);
+    onRouteRejection: function(route, error) {
+        Ext.fireEvent('routereject', route, error);
+        if (error) {
+            Ext.raise(error);
+        }
     },
     
     connect: function(url, config, instance) {
         var routes = this.routes,
+            delimiter = this.getMultipleToken(),
             name = config.name || url,
-            route, name;
+            handler, route;
         if (url[0] === '!') {
             
             if (!Ext.util.History.hashbang) {
@@ -38409,28 +38824,39 @@ Ext.define('Ext.route.Router', {
         }
         if (Ext.isString(config)) {
             config = {
-                action: config,
-                scope: instance
+                action: config
             };
-        } else {
-            config.scope = instance;
         }
+        handler = Ext.route.Handler.fromRouteConfig(config, instance);
         route = routes[name];
         if (!route) {
-            route = routes[name] = new Ext.route.Route({
-                conditions: config.conditions || {},
-                name: name,
-                url: url
-            });
+            config.name = name;
+            config.url = url;
+            route = routes[name] = new Ext.route.Route(config);
         }
-        route.addHandler(config);
+        route.addHandler(handler);
+        if (handler.lazy) {
+            var currentHash = Ext.util.History.getToken(),
+                tokens = currentHash.split(delimiter),
+                length = tokens.length,
+                matched = [],
+                i, token;
+            for (i = 0; i < length; i++) {
+                token = tokens[i];
+                if (Ext.Array.indexOf(matched, token) === -1 && route.recognize(token)) {
+                    matched.push(token);
+                }
+            }
+            this.onStateChange(matched.join(delimiter));
+        }
+        return handler;
     },
     
     disconnect: function(instance, config) {
         var routes = this.routes,
             route, name;
         if (config) {
-            route = this.getByName(config.name || config.url);
+            route = config.route || this.getByName(config.name || config.url);
             if (route) {
                 route.removeHandler(instance, config);
             }
@@ -38480,7 +38906,7 @@ Ext.define('Ext.route.Router', {
         for (name in routes) {
             route = routes[name];
             if (!token || route.recognize(token)) {
-                route.lastToken = null;
+                route.clearLastTokens();
             }
         }
     },
@@ -38530,35 +38956,20 @@ Ext.define('Ext.route.Mixin', {
     destroyRouterable: function() {
         Ext.route.Router.disconnect(this);
     },
-    updateRoutes: function(routes, oldRoutes) {
-        var me = this,
-            Router = Ext.route.Router,
-            url, config, method;
-        if (oldRoutes) {
-            for (url in oldRoutes) {
-                config = oldRoutes[url];
-                if (Ext.isString(config)) {
-                    config = {
-                        action: config,
-                        name: url
-                    };
-                }
-                Router.disconnect(me, config);
-            }
-        }
+    applyRoutes: function(routes, oldRoutes) {
+        var Router = Ext.route.Router,
+            url;
         if (routes) {
             for (url in routes) {
-                config = routes[url];
-                if (Ext.isString(config)) {
-                    config = {
-                        action: config
-                    };
-                }
-                method = config.action;
-                
-                Router.connect(url, config, me);
+                routes[url] = Router.connect(url, routes[url], this);
             }
         }
+        if (oldRoutes) {
+            for (url in oldRoutes) {
+                Router.disconnect(this, oldRoutes[url]);
+            }
+        }
+        return routes;
     },
     
     redirectTo: function(hash, opt) {
@@ -46170,11 +46581,17 @@ Ext.define('Ext.data.operation.Operation', {
     
     abort: function() {
         var me = this,
-            request = me.request;
+            request = me.request,
+            proxy;
+        me.aborted = true;
         if (me.running && request) {
-            me.getProxy().abort(request);
+            proxy = me.getProxy();
+            if (proxy && !proxy.destroyed) {
+                proxy.abort(request);
+            }
             me.request = null;
         }
+        me.running = false;
     },
     process: function(resultSet, request, response, autoComplete) {
         var me = this;
@@ -46251,10 +46668,17 @@ Ext.define('Ext.data.operation.Operation', {
     
     setCompleted: function() {
         var me = this,
-            proxy = me.getProxy();
+            proxy;
         me.complete = true;
         me.running = false;
-        me.triggerCallbacks();
+        if (!me.destroying) {
+            me.triggerCallbacks();
+        }
+        
+        if (me.destroyed) {
+            return;
+        }
+        proxy = me.getProxy();
         
         if (proxy && !proxy.destroyed) {
             proxy.completeOperation(me);
@@ -46281,6 +46705,10 @@ Ext.define('Ext.data.operation.Operation', {
         
         if (callback) {
             callback.call(me.getInternalScope() || me, me);
+            
+            if (me.destroyed) {
+                return;
+            }
             me.setInternalCallback(null);
             me.setInternalScope(null);
         }
@@ -46288,6 +46716,9 @@ Ext.define('Ext.data.operation.Operation', {
         if (callback = me.getCallback()) {
             
             callback.call(me.getScope() || me, me.getRecords(), me, me.wasSuccessful());
+            if (me.destroyed) {
+                return;
+            }
             me.setCallback(null);
             me.setScope(null);
         }
@@ -46325,6 +46756,18 @@ Ext.define('Ext.data.operation.Operation', {
     
     allowWrite: function() {
         return true;
+    },
+    destroy: function() {
+        var me = this;
+        me.destroying = true;
+        if (me.running) {
+            me.abort();
+        }
+        
+        me._params = me._callback = me._scope = me._resultSet = me._response = null;
+        me.request = me._request = me._records = me._proxy = me._batch = null;
+        me._recordCreator = me._internalCallback = me._internalScope = null;
+        me.callParent();
     }
 });
 
@@ -48204,8 +48647,10 @@ Ext.define('Ext.data.Model', {
             }
             
             me.idField = proto.idField = idField = fieldsMap[proto.idProperty];
-            idField.allowNull = idField.critical = idField.identifier = true;
-            idField.defaultValue = null;
+            if (idField) {
+                idField.allowNull = idField.critical = idField.identifier = true;
+                idField.defaultValue = null;
+            }
             
             
             me.initializeFn = me.rankedFields = me.transientFields = me.criticalFields = null;
@@ -48266,8 +48711,12 @@ Ext.define('Ext.data.Model', {
                     }
                     
                     
-                    defaults = me.schema.constructProxy(me);
-                    proxy = proxy ? Ext.merge(defaults, proxy) : defaults;
+                    defaults = Ext.merge(me.schema.constructProxy(me), proxy);
+                    if (proxy && proxy.type) {
+                        proxy = proxy.schema === false ? proxy : defaults;
+                    } else {
+                        proxy = defaults;
+                    }
                 }
                 proxy = me.setProxy(proxy);
             }
@@ -48655,7 +49104,7 @@ Ext.define('Ext.data.Model', {
                     superFields = proto.fields,
                     versionProperty = data.versionProperty || proto.versionProperty,
                     idProperty = cls.idProperty,
-                    idField, field, i, length, name, ordinal, reference, superIdField, superIdFieldName, idDeclared;
+                    idField, field, i, length, name, ordinal, reference, superIdField, superIdFieldName, superIdDeclared, idDeclared;
                 
                 
                 cls.fields = proto.fields = fields;
@@ -48708,6 +49157,9 @@ Ext.define('Ext.data.Model', {
                         if (name === idProperty) {
                             idDeclared = field;
                         }
+                        if (name === superIdFieldName) {
+                            superIdDeclared = true;
+                        }
                     }
                 }
                 
@@ -48728,7 +49180,7 @@ Ext.define('Ext.data.Model', {
                     idField.definedBy = cls;
                     idField.ordinal = ordinal;
                     idField.generated = true;
-                } else if (idDeclared && superIdField && superIdField.generated) {
+                } else if (idDeclared && !superIdDeclared && superIdField && superIdField.generated) {
                     
                     
                     
@@ -49333,7 +49785,7 @@ Ext.define('Ext.data.reader.Reader', {
         var data, result, responseText;
         if (response) {
             responseText = response.responseText;
-            if (responseText) {
+            if (response.responseType || responseText) {
                 result = this.getResponseData(response);
                 if (result && result.__$isError) {
                     return new Ext.data.ResultSet({
@@ -49971,6 +50423,9 @@ Ext.define('Ext.data.proxy.Proxy', {
             } else {
                 reader.setModel(model);
             }
+            if (reader.responseType != null) {
+                me.responseType = reader.responseType;
+            }
         }
     },
     applyWriter: function(writer) {
@@ -50035,6 +50490,7 @@ Ext.define('Ext.data.proxy.Proxy', {
             single: true,
             priority: 1000
         });
+        batch.$destroyOwner = options.$destroyOwner;
         actions = me.getBatchOrder().split(',');
         aLen = actions.length;
         for (a = 0; a < aLen; a++) {
@@ -50087,6 +50543,12 @@ Ext.define('Ext.data.proxy.Proxy', {
                 batchOptions
             ]);
         }
+        
+        
+        
+        if (!batch.$destroyOwner) {
+            batch.destroy();
+        }
     },
     createOperation: function(action, config) {
         var operation = Ext.createByAlias('data.operation.' + action, config);
@@ -50108,6 +50570,7 @@ Ext.define('Ext.data.proxy.Proxy', {
             if (op && op.isRunning()) {
                 op.abort();
             }
+            op.destroy();
         }
         this.pendingOperations = null;
         this.callParent();
@@ -50508,7 +50971,9 @@ Ext.define('Ext.data.ProxyStore', {
             me.resumeEvents();
         }
         me.isSyncing = false;
-        batch.destroy();
+        if (batch.$destroyOwner === me) {
+            batch.destroy();
+        }
         me.fireEvent('datachanged', me);
     },
     
@@ -50576,7 +51041,8 @@ Ext.define('Ext.data.ProxyStore', {
             options = options || {};
             me.proxy.batch(Ext.apply(options, {
                 operations: operations,
-                listeners: me.getBatchListeners()
+                listeners: me.getBatchListeners(),
+                $destroyOwner: me
             }));
         }
         return me;
@@ -51324,7 +51790,7 @@ Ext.define('Ext.data.proxy.Server', {
     
     processResponse: function(success, operation, request, response) {
         var me = this,
-            exception, reader, resultSet, meta;
+            exception, reader, resultSet, meta, destroyOp;
         
         
         if (me.destroying || me.destroyed) {
@@ -51348,6 +51814,10 @@ Ext.define('Ext.data.proxy.Server', {
                     recordCreator: operation.getRecordCreator() || reader.defaultRecordCreatorFromServer
                 });
             }
+            if (!operation.$destroyOwner) {
+                operation.$destroyOwner = me;
+                destroyOp = true;
+            }
             operation.process(resultSet, request, response);
             exception = !operation.wasSuccessful();
         } else {
@@ -51357,6 +51827,9 @@ Ext.define('Ext.data.proxy.Server', {
         
         
         if (me.destroyed) {
+            if (!operation.destroyed && destroyOp && operation.$destroyOwner === me) {
+                operation.destroy();
+            }
             return;
         }
         if (exception) {
@@ -51371,6 +51844,9 @@ Ext.define('Ext.data.proxy.Server', {
         }
         
         if (me.destroyed) {
+            if (!operation.destroyed && destroyOp && operation.$destroyOwner === me) {
+                operation.destroy();
+            }
             return;
         }
         me.afterRequest(request, success);
@@ -51378,6 +51854,9 @@ Ext.define('Ext.data.proxy.Server', {
         
         
         me.fireEvent('endprocessresponse', me, response, operation);
+        if (!operation.destroyed && destroyOp && operation.$destroyOwner === me) {
+            operation.destroy();
+        }
     },
     
     setException: function(operation, response) {
@@ -51599,6 +52078,9 @@ Ext.define('Ext.data.proxy.Ajax', {
             disableCaching: false
         });
         
+        if (me.responseType != null && Ext.supports.XHR2) {
+            request.setResponseType(me.responseType);
+        }
         if (method.toUpperCase() !== 'GET' && me.getParamsAsJson()) {
             params = request.getParams();
             if (params) {
@@ -51675,6 +52157,8 @@ Ext.define('Ext.data.reader.Json', {
         
         preserveRawData: false
     },
+    
+    responseType: 'json',
     updateRootProperty: function() {
         this.forceBuildExtractors();
     },
@@ -51684,6 +52168,9 @@ Ext.define('Ext.data.reader.Json', {
     
     getResponseData: function(response) {
         var error;
+        if (typeof response.responseJson === 'object') {
+            return response.responseJson;
+        }
         try {
             return Ext.decode(response.responseText);
         } catch (ex) {
@@ -51751,7 +52238,7 @@ Ext.define('Ext.data.reader.Json', {
             }
             if (simple === true || operatorIndex < 0) {
                 result = function(raw) {
-                    return raw[expr];
+                    return raw == null ? null : raw[expr];
                 };
             } else {
                 
@@ -54270,6 +54757,7 @@ Ext.define('Ext.app.Application', {
         glyphFontFamily: null,
         
         quickTips: true,
+        
         router: null
     },
     onClassExtended: function(cls, data, hooks) {
@@ -56893,13 +57381,26 @@ Ext.define('Ext.data.Batch', {
     
     start: function(index) {
         var me = this;
-        if (!me.operations.length || me.running) {
+        if (me.destroyed || !me.operations.length || me.running) {
             return me;
         }
         me.exceptions.length = 0;
         me.exception = false;
         me.running = true;
         return me.runOperation(Ext.isDefined(index) ? index : me.current + 1);
+    },
+    abort: function() {
+        var me = this,
+            op;
+        if (me.running) {
+            op = me.getCurrent();
+            if (!op.destroyed) {
+                op.abort();
+            }
+        }
+        me.running = false;
+        me.aborted = true;
+        me.current = undefined;
     },
     
     retry: function() {
@@ -56982,6 +57483,26 @@ Ext.define('Ext.data.Batch', {
             me.fireEvent('operationcomplete', me, operation);
             me.runNextOperation();
         }
+    },
+    destroy: function() {
+        var me = this,
+            operations = me.operations,
+            op, i, len;
+        if (me.running) {
+            me.abort();
+        }
+        for (i = 0 , len = me.operations.length; i < len; i++) {
+            op = operations[i];
+            if (op) {
+                if (!op.destroyed && !op.$destroyOwner) {
+                    op.destroy();
+                }
+                op[i] = null;
+            }
+        }
+        
+        me.operations = me.exceptions = null;
+        me.callParent();
     }
 });
 
@@ -62125,10 +62646,15 @@ Ext.define('Ext.app.ViewModel', {
             this.setupStore(store, key);
         },
         setupStore: function(store, key) {
+            var me = this,
+                obj = {};
             
-            store.resolveListenerScope = this.listenerScopeFn;
-            this.storeInfo[key] = store;
-            this.set(key, store);
+            me.getData();
+            
+            store.resolveListenerScope = me.listenerScopeFn;
+            me.storeInfo[key] = store;
+            obj[key] = store;
+            me.setData(obj);
         },
         applyFormulas: function(formulas) {
             var me = this,
@@ -66206,7 +66732,8 @@ Ext.define('Ext.data.Request', {
         
         directFn: null,
         args: null,
-        useDefaultXhrHeader: null
+        useDefaultXhrHeader: null,
+        responseType: null
     },
     
     constructor: function(config) {
@@ -66640,12 +67167,11 @@ Ext.define('Ext.data.TreeStore', {
             
             if (children || (node.phantom && !node.isRoot())) {
                 
-                if (children) {
-                    me.fillNode(node, reader.extractData(children, {
-                        model: node.childType,
-                        recordCreator: me.recordCreator
-                    }));
-                }
+                
+                me.fillNode(node, reader.extractData(children || [], {
+                    model: node.childType,
+                    recordCreator: me.recordCreator
+                }));
                 callbackArgs = [
                     node.childNodes
                 ];
@@ -68198,7 +68724,7 @@ Ext.define('Ext.dom.Helper', function() {
             return fragment;
         },
         
-        createDom: function(o, parentNode) {
+        createDom: function(o) {
             var me = this,
                 markup = me.markup(o),
                 div = me.detachedDiv,
@@ -69329,8 +69855,8 @@ Ext.define('Ext.dom.Query', function() {
 
 
 Ext.define('Ext.data.reader.Xml', {
-    alternateClassName: 'Ext.data.XmlReader',
     extend: Ext.data.reader.Reader,
+    alternateClassName: 'Ext.data.XmlReader',
     alias: 'reader.xml',
     config: {
         
@@ -69338,6 +69864,8 @@ Ext.define('Ext.data.reader.Xml', {
         
         namespace: ''
     },
+    
+    responseType: 'document',
     
     createAccessor: function(expr) {
         if (Ext.isEmpty(expr)) {
@@ -69764,6 +70292,8 @@ Ext.define('Ext.data.proxy.WebStorage', {
         if (me.isHierarchical === undefined) {
             
             
+            
+            
             me.isHierarchical = !!records[0].isNode;
             if (me.isHierarchical) {
                 me.getStorageObject().setItem(me.getTreeKey(), true);
@@ -69870,6 +70400,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
             record = records[i];
             this.setRecord(record);
             record.commit();
+            
             
             
             id = record.getId();
@@ -73393,6 +73924,13 @@ Ext.define('Ext.dom.Fly', {
                 fly = Ext.cache[dom.id];
                 
                 if (!fly || fly.dom !== dom) {
+                    
+                    
+                    
+                    
+                    if (named === 'constructor') {
+                        named = '$constructor';
+                    }
                     fly = flyweights[named] || (flyweights[named] = new Fly());
                     fly.dom = dom;
                     data = fly.peekData();
@@ -83518,7 +84056,10 @@ Ext.define('Ext.sparkline.Bar', {
         me.stacked = stacked;
         me.regionShapes = {};
         me.totalBarWidth = barWidth + barSpacing;
-        me.width = (values.length * barWidth) + ((values.length - 1) * barSpacing);
+        
+        if (values.length) {
+            me.width = (values.length * barWidth) + ((values.length - 1) * barSpacing);
+        }
         if (chartRangeClip) {
             clipMin = chartRangeMin == null ? -Infinity : chartRangeMin;
             clipMax = chartRangeMax == null ? Infinity : chartRangeMax;
@@ -84906,8 +85447,6 @@ Ext.define('Ext.util.DelimitedValue', {
     lineBreak: '\n',
     
     quote: '"',
-    parseREs: {},
-    quoteREs: {},
     lineBreakRe: /\r?\n/g,
     
     lastLineBreakRe: /(\r?\n|\r)$/,
@@ -84915,9 +85454,11 @@ Ext.define('Ext.util.DelimitedValue', {
         if (config) {
             Ext.apply(this, config);
         }
+        this.parseREs = {};
+        this.quoteREs = {};
     },
     
-    decode: function(input, delimiter) {
+    decode: function(input, delimiter, quoteChar) {
         if (!input) {
             return [];
         }
@@ -84929,17 +85470,19 @@ Ext.define('Ext.util.DelimitedValue', {
             result = [
                 row
             ],
-            quote = me.quote,
+            quote = quoteChar !== undefined ? quoteChar : me.quote,
             quoteREs = me.quoteREs,
             parseREs = me.parseREs,
-            
-            
-            parseRE = parseREs[delim] || (parseREs[delim] = new RegExp(
-            "(\\" + delim + "|\\r?\\n|\\r|^)" + 
-            "(?:\\" + quote + "([^\\" + quote + "]*(?:\\" + quote + "\\" + quote + "[^\\" + quote + "]*)*)\\" + quote + "|" + 
-            "([^\"\\" + delim + "\\r\\n]*))", "gi")),
-            dblQuoteRE = quoteREs[quote] || (quoteREs[quote] = new RegExp('\\' + quote + '\\' + quote, 'g')),
-            arrMatches, strMatchedDelimiter, strMatchedValue;
+            parseRE, dblQuoteRE, arrMatches, strMatchedDelimiter, strMatchedValue;
+        
+        
+        parseRE = quote === me.quote ? parseREs[delim] : null;
+        parseRE = parseRE || new RegExp(
+        "(\\" + delim + "|\\r?\\n|\\r|^)" + 
+        "(?:" + (quote === null ? '()' : "\\" + quote + "([^\\" + quote + "]*(?:\\" + quote + "\\" + quote + "[^\\" + quote + "]*)*)\\" + quote + "|") + 
+        "([^" + (quote === null ? '' : quote) + delim + "\\r\\n]*))", "gi");
+        dblQuoteRE = quote === me.quote ? quoteREs[quote] : null;
+        dblQuoteRE = dblQuoteRE || new RegExp('\\' + quote + '\\' + quote, 'g');
         input = input.replace(me.lastLineBreakRe, '');
         
         
@@ -84964,7 +85507,7 @@ Ext.define('Ext.util.DelimitedValue', {
             if (arrMatches[2]) {
                 
                 
-                strMatchedValue = arrMatches[2].replace(dblQuoteRE, '"');
+                strMatchedValue = arrMatches[2].replace(dblQuoteRE, quote);
             } else {
                 
                 strMatchedValue = arrMatches[3];
@@ -84974,11 +85517,11 @@ Ext.define('Ext.util.DelimitedValue', {
         return result;
     },
     
-    encode: function(input, delimiter) {
+    encode: function(input, delimiter, quoteChar) {
         var me = this,
             delim = delimiter || me.delimiter,
             dateFormat = me.dateFormat,
-            quote = me.quote,
+            quote = quoteChar !== undefined ? quoteChar : me.quote,
             twoQuotes = quote + quote,
             rowIndex = input.length,
             lineBreakRe = me.lineBreakRe,
@@ -84994,7 +85537,7 @@ Ext.define('Ext.util.DelimitedValue', {
                     
                     col = '';
                 } else if (typeof col === 'string') {
-                    if (col) {
+                    if (col && quote !== null) {
                         
                         if (col.indexOf(quote) > -1) {
                             col = quote + col.split(quote).join(twoQuotes) + quote;
@@ -85725,10 +86268,13 @@ Ext.define('Ext.util.Spans', {
 });
 
 
-Ext.define('Ext.util.TSV', {
+Ext.define('Ext.util.TsvDecoder', {
     extend: Ext.util.DelimitedValue,
-    singleton: true,
+    alternateClassName: 'Ext.util.TSV',
     delimiter: '\t'
+}, function(TSVClass) {
+    
+    Ext.util.TSV = new TSVClass();
 });
 
 
@@ -86019,6 +86565,7 @@ Ext.ClassManager.addNameAlternateMappings({
   ],
   "Ext.Sheet": [],
   "Ext.Spacer": [],
+  "Ext.SplitButton": [],
   "Ext.TaskQueue": [],
   "Ext.Template": [],
   "Ext.Title": [],
@@ -86421,6 +86968,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.field.TextArea": [
     "Ext.form.TextArea"
   ],
+  "Ext.field.Time": [],
   "Ext.field.Toggle": [
     "Ext.form.Toggle"
   ],
@@ -86438,6 +86986,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.field.trigger.Search": [],
   "Ext.field.trigger.SpinDown": [],
   "Ext.field.trigger.SpinUp": [],
+  "Ext.field.trigger.Time": [],
   "Ext.field.trigger.Trigger": [],
   "Ext.form.Borders": [],
   "Ext.form.FieldSet": [],
@@ -86616,6 +87165,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.overrides.Widget": [],
   "Ext.overrides.app.Application": [],
   "Ext.overrides.dom.Element": [],
+  "Ext.overrides.drag.proxy.Placeholder": [],
   "Ext.overrides.list.Tree": [],
   "Ext.overrides.list.TreeItem": [],
   "Ext.panel.Collapser": [],
@@ -86626,6 +87176,9 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.panel.Header": [],
   "Ext.panel.Resizable": [],
   "Ext.panel.Resizer": [],
+  "Ext.panel.Time": [],
+  "Ext.panel.TimeHeader": [],
+  "Ext.panel.TimeView": [],
   "Ext.panel.Title": [],
   "Ext.panel.YearPicker": [],
   "Ext.parse.Parser": [],
@@ -86659,6 +87212,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.promise.Deferred": [],
   "Ext.promise.Promise": [],
   "Ext.route.Action": [],
+  "Ext.route.Handler": [],
   "Ext.route.Mixin": [],
   "Ext.route.Route": [],
   "Ext.route.Router": [],
@@ -86753,10 +87307,12 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.util.Sorter": [],
   "Ext.util.SorterCollection": [],
   "Ext.util.Spans": [],
-  "Ext.util.TSV": [],
   "Ext.util.TextMetrics": [],
   "Ext.util.TranslatableGroup": [],
   "Ext.util.TranslatableList": [],
+  "Ext.util.TsvDecoder": [
+    "Ext.util.TSV"
+  ],
   "Ext.util.Wrapper": [],
   "Ext.util.XTemplateCompiler": [],
   "Ext.util.XTemplateParser": [],
@@ -86856,6 +87412,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.Spacer": [
     "widget.spacer"
+  ],
+  "Ext.SplitButton": [
+    "widget.splitbutton"
   ],
   "Ext.TaskQueue": [],
   "Ext.Template": [],
@@ -87422,6 +87981,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.field.TextArea": [
     "widget.textareafield"
   ],
+  "Ext.field.Time": [
+    "widget.timefield"
+  ],
   "Ext.field.Toggle": [
     "widget.togglefield"
   ],
@@ -87468,6 +88030,10 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.field.trigger.SpinUp": [
     "trigger.spinup",
     "widget.spinuptrigger"
+  ],
+  "Ext.field.trigger.Time": [
+    "trigger.time",
+    "widget.timetrigger"
   ],
   "Ext.field.trigger.Trigger": [
     "trigger.trigger",
@@ -87819,6 +88385,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.overrides.Widget": [],
   "Ext.overrides.app.Application": [],
   "Ext.overrides.dom.Element": [],
+  "Ext.overrides.drag.proxy.Placeholder": [],
   "Ext.overrides.list.Tree": [],
   "Ext.overrides.list.TreeItem": [],
   "Ext.panel.Collapser": [],
@@ -87837,6 +88404,15 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.panel.Resizable": [],
   "Ext.panel.Resizer": [],
+  "Ext.panel.Time": [
+    "widget.timepanel"
+  ],
+  "Ext.panel.TimeHeader": [
+    "widget.analogtimeheader"
+  ],
+  "Ext.panel.TimeView": [
+    "widget.analogtime"
+  ],
   "Ext.panel.Title": [
     "widget.paneltitle"
   ],
@@ -87880,6 +88456,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.promise.Deferred": [],
   "Ext.promise.Promise": [],
   "Ext.route.Action": [],
+  "Ext.route.Handler": [],
   "Ext.route.Mixin": [],
   "Ext.route.Route": [],
   "Ext.route.Router": [],
@@ -87986,10 +88563,10 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.util.Sorter": [],
   "Ext.util.SorterCollection": [],
   "Ext.util.Spans": [],
-  "Ext.util.TSV": [],
   "Ext.util.TextMetrics": [],
   "Ext.util.TranslatableGroup": [],
   "Ext.util.TranslatableList": [],
+  "Ext.util.TsvDecoder": [],
   "Ext.util.Wrapper": [],
   "Ext.util.XTemplateCompiler": [],
   "Ext.util.XTemplateParser": [],

@@ -8,7 +8,7 @@
  *
  * Every component has a specific xtype, which is its Ext-specific type name, along with
  * methods for checking the xtype like {@link #getXType} and {@link #isXType}. See the
- * [Component Guide](../../../guides/core_concepts/components.html) for more information on xtypes
+ * [Component Guide](../guides/core_concepts/components.html) for more information on xtypes
  * and the Component hierarchy.
  *
  * ## Finding components
@@ -35,7 +35,7 @@
  * All user-developed visual widgets that are required to participate in automated
  * life cycle and size management should subclass Component.
  *
- * See the Creating new UI controls chapter in [Component Guide](../../../guides/core_concepts/components.html)
+ * See the Creating new UI controls chapter in [Component Guide](../guides/core_concepts/components.html)
  * for details on how and to either extend or augment Ext JS base classes to create custom Components.
  *
  * ## The Ext.Component class by itself
@@ -664,7 +664,7 @@ Ext.define('Ext.Component', {
      * within which this component must be constrained when positioning or sizing.
      * example:
      *
-     *    constraintInsets: '10 10 10 10' // Constrain with 10px insets from parent
+     *     constraintInsets: '10 10 10 10' // Constrain with 10px insets from parent
      */
 
     /**
@@ -3611,6 +3611,7 @@ Ext.define('Ext.Component', {
             height = me.height,
             typeofWidth, typeofHeight,
             hasPixelWidth, hasPixelHeight,
+            hasWidthStyle, hasHeightStyle,
             heightModel, ownerLayout, policy, shrinkWrap, topLevel, widthModel,
 
             // floating === a floating Component, floated === a border layout's slideout view of a region.
@@ -3660,9 +3661,12 @@ Ext.define('Ext.Component', {
             if (topLevel && shrinkWrap) {
                 if (width && typeofWidth === 'string') {
                     shrinkWrap &= 2; // percentage, "30em" or whatever - not width shrinkWrap
+                    hasWidthStyle = true;
                 }
+                
                 if (height && typeofHeight === 'string') {
                     shrinkWrap &= 1; // percentage, "30em" or whatever - not height shrinkWrap
+                    hasHeightStyle = true;
                 }
             }
 
@@ -3677,7 +3681,7 @@ Ext.define('Ext.Component', {
             }
 
             if (!widthModel) {
-                if (!policy.setsWidth) {
+                if (!policy.setsWidth && !(me.frame && hasWidthStyle)) {
                     if (hasPixelWidth) {
                         widthModel = models.configured;
                     } else {
@@ -3696,7 +3700,7 @@ Ext.define('Ext.Component', {
             }
 
             if (!heightModel) {
-                if (!policy.setsHeight) {
+                if (!policy.setsHeight && !(me.frame && hasHeightStyle)) {
                     if (hasPixelHeight) {
                         heightModel = models.configured;
                     } else {

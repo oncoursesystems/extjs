@@ -11,13 +11,30 @@ Ext.define('KitchenSink.view.window.MessageBox', {
         type: 'Controller',
         path: 'classic/samples/view/window/MessageBoxController.js'
     }],
+    profiles: {
+        classic: {
+            width: 420,
+            labelWidth: 120,
+            comboboxWidth: 250
+        },
+        neptune: {
+            width: 420,
+            labelWidth: 120,
+            comboboxWidth: 250
+        },
+        graphite: {
+            width: 500,
+            labelWidth: 180,
+            comboboxWidth: 300
+        }
+    },
     //</example>
     layout: {
         type: 'vbox',
         align: 'stretch'
     },
     controller: 'window-messagebox',
-    width: 400,
+    width: '${width}',
     title: 'Message Box Variations',
 
     bodyPadding: 15,
@@ -82,7 +99,7 @@ Ext.define('KitchenSink.view.window.MessageBox', {
     }, {
         margin: '30 0 0 0',
         xtype: 'checkboxfield',
-        labelWidth: 120,
+        labelWidth: '${labelWidth}',
         fieldLabel: 'Hide on mask click',
         reference: 'hideOnMaskClick'
     }, {
@@ -96,7 +113,7 @@ Ext.define('KitchenSink.view.window.MessageBox', {
             forceSelection: true,
             editable: false,
             value: 'error',
-            width: 250,
+            width: '${comboboxWidth}',
             store: [
                 ['error', 'Error'], 
                 ['info', 'Informational'], 

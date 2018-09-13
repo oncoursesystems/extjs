@@ -3,6 +3,8 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkersController', {
     alias: 'controller.line-imagemarkers',
 
     init: function (view) {
+        this.callParent([view]);
+
         if (!Ext.supports.Touch) {
             /**
              * Touch devices do not need the toggle buttons

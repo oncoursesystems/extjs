@@ -713,13 +713,12 @@ Ext.define('Ext.data.TreeStore', {
             // Load locally if there are local children, or it's a phantom (client side only) node.
             // Ensure that programmatically added new root nodes which could be phantom are able to kick off remote requests.
             if (children || (node.phantom && !node.isRoot())) {
+                // If node is expanded when children are not set, pass an empty array. See EXTJS-26086
                 // Extract records from the raw data. Allow the node being expanded to dictate its child type
-                if (children) {
-                    me.fillNode(node, reader.extractData(children, {
-                        model: node.childType,
-                        recordCreator : me.recordCreator
-                    }));
-                }
+                me.fillNode(node, reader.extractData(children || [], {
+                    model: node.childType,
+                    recordCreator: me.recordCreator
+                }));
 
                 callbackArgs = [node.childNodes];
 
@@ -1859,7 +1858,7 @@ Ext.define('Ext.data.TreeStore', {
          * @param {Ext.data.TreeStore} this
          * @param {Ext.data.TreeModel[]} records An array of records.
          * @param {Boolean} successful True if the operation was successful.
-         * @param {Ext.data.Operation} operation The operation that triggered this load.
+         * @param {Ext.data.operation.Operation} operation The operation that triggered this load.
          * @param {Ext.data.NodeInterface} node The node that was loaded.
          */
         

@@ -46,15 +46,15 @@ Ext.define('Ext.field.FileButton', {
     preventDefaultAction: false,
     keyHandlersAdded: true,
 
-    eventHandlers: {
-        change: 'onChange'
-    },
-
     getButtonTemplate: function() {
         var template = this.callParent();
 
         template.tag = 'input';
-        template.onchange = 'return Ext.doEv(this, event);';
+        template.listeners = template.listeners || {};
+        template.listeners.change = {
+            fn: 'onChange',
+            delegated: false
+        };
 
         return template;
     },

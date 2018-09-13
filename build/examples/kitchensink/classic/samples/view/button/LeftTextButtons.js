@@ -10,8 +10,21 @@ Ext.define('KitchenSink.view.button.LeftTextButtons', {
     controller: 'buttons',
 
     layout: 'vbox',
-    width: 680,
-
+    width: '${width}',
+    profiles: {
+        classic: {
+            width: 680,
+            buttonWidth: 150
+        },
+        neptune: {
+            width: 680,
+            buttonWidth: 150
+        },
+        graphite: {
+            width: 880,
+            buttonWidth: 200
+        }
+    },
     //<example>
     otherContent: [{
         type: 'Controller',
@@ -34,7 +47,7 @@ Ext.define('KitchenSink.view.button.LeftTextButtons', {
             tdAttrs: { style: 'padding: 5px 10px;' }
         },
         defaults: {
-            width: 150,
+            width: '${buttonWidth}',
             textAlign: 'left'
         },
 

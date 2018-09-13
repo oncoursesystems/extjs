@@ -1319,10 +1319,11 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
 
         (Ext.isIE8 ? xdescribe : describe)("constraints", function() {
             function expectInputHeight(h, offset) {
+                var inputPadding = component.inputEl.getPadding('tb');
                 offset = offset || 0;
                 h -= component.inputWrap.getBorderWidth('tb') + offset;
 
-                expect(component.inputEl.getHeight()).toBe(h);
+                expect(component.inputEl.getHeight()).toBeApprox(h, inputPadding);
             }
 
             it("should stretch the input element with minHeight", function() {

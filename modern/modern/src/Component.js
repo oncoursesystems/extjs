@@ -1890,7 +1890,7 @@ Ext.define('Ext.Component', {
     preprocessShow: function(component, alignment, options) {
         var me = this,
             hideMode = me.getHideMode(),
-            hidden, newlyRendered;
+            hidden;
 
         // This is needed if we are going through a setHidden(false) during configuration.
         //
@@ -1920,7 +1920,6 @@ Ext.define('Ext.Component', {
             else {
                 hidden = hidden !== false;
                 me.findFloatParent(hidden);
-                newlyRendered = true;
             }
 
             // Note: If aligning, we have to ensure the final shape is set by flushing
@@ -1942,13 +1941,10 @@ Ext.define('Ext.Component', {
                 me.showModalMask();
             }
 
-            // If we just rendered it, it will be appended, so don't waste time
-            if (!newlyRendered) {
-                if (me.getToFrontOnShow()) {
-                    me.toFront();
-                } else {
-                    me.syncAlwaysOnTop();
-                }
+            if (me.getToFrontOnShow()) {
+                me.toFront();
+            } else {
+                me.syncAlwaysOnTop();
             }
 
             if (hidden) {
@@ -2019,10 +2015,19 @@ Ext.define('Ext.Component', {
      *
      * @param {Ext.Component} component The target component to show this component by.
      * @param {String} [alignment] The alignment string, eg: `'tl-bl'`.
-     * @param {Object} [options] An object containing options for the {@link Ext.util.Region#alignTo} method.
+     * @param {Object/Array} [options] An object containing options for the {@link Ext.util.Region#alignTo} method, if an Array
+     * is used, it will be assumed to be the offset.
      */
     showBy: function(component, alignment, options) {
-        var me = this;
+        var me = this,
+            offset;
+
+        if (Ext.isArray(options)) {
+            offset = options;
+            options = {
+                offset: offset
+            };
+        }
 
         // We may be called while visible, just for repositioning.
         if (me.isVisible()) {

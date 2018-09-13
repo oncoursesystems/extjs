@@ -5,8 +5,6 @@ Ext.define('KitchenSink.view.form.ContactFormWindow', {
     reference: 'popupWindow',
     
     title: 'Contact Us',
-    width: 400,
-    height: 500,
     minWidth: 300,
     minHeight: 380,
     layout: 'fit',
@@ -15,6 +13,20 @@ Ext.define('KitchenSink.view.form.ContactFormWindow', {
     defaultFocus: 'firstName',
     closeAction: 'hide',
     
+    profiles: {
+        classic: {
+            height: 500
+        },
+        neptune: {
+            height: 500
+        },
+        graphite: {
+            height: 600
+        }
+    },
+    
+    width: 400,
+
     items: [{
         xtype: 'form',
         reference: 'windowForm',

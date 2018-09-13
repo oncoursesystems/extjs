@@ -22,6 +22,17 @@ Ext.define('KitchenSink.view.form.combobox.CustomTemplate', {
     }],
     //</example>
     
+    profiles: {
+        classic: {
+            labelWidth: 110
+        },
+        neptune: {
+            labelWidth: 110
+        },
+        graphite: {
+            labelWidth: 140
+        }
+    },
     title: 'Custom Template  ComboBox',
     width: 500,
     layout: 'form',
@@ -30,6 +41,9 @@ Ext.define('KitchenSink.view.form.combobox.CustomTemplate', {
     items: [{
         xtype: 'fieldset',
         layout: 'anchor',
+        fieldDefaults: {
+            labelWidth: '${labelWidth}'
+        },
         items: [{
             xtype: 'component',
             anchor: '100%',

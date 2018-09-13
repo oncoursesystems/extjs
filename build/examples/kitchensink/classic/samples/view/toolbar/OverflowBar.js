@@ -30,7 +30,8 @@ Ext.define('KitchenSink.view.toolbar.OverflowBar', {
         text: 'Format'
     }, {
         iconCls: 'toolbar-overflow-bold',
-        text: 'Bold'
+        text: 'Bold',
+        enableToggle: true
     }, {
         iconCls: 'toolbar-overflow-underline',
         text: 'Underline',

@@ -30,12 +30,38 @@ Ext.define('KitchenSink.view.grid.RowWidget', {
         text: 'Phone',
         dataIndex: 'phone'
     }],
-    width: 750,
+    width: '${width}',
     height: 450,
     leadingBufferZone: 8,
     trailingBufferZone: 8,
 
     //<example>
+    profiles: {
+        classic: {
+            width: 750,
+            orderWidth: 75,
+            productCodeWidth: 265,
+            quantityWidth: 100,
+            dateColumnWidth: 120,
+            shippedWidth: 75
+        },
+        neptune: {
+            width: 750,
+            orderWidth: 75,
+            productCodeWidth: 265,
+            quantityWidth: 100,
+            dateColumnWidth: 120,
+            shippedWidth: 75
+        },
+        graphite: {
+            width: 900,
+            orderWidth: 100,
+            productCodeWidt: 350,
+            quantityWidth: 150,
+            dateColumnWidth: 150,
+            shippedWidth: 100          
+        }
+    },
     otherContent: [{
         type: 'Store',
         path: 'app/store/Companies.js'
@@ -70,28 +96,28 @@ Ext.define('KitchenSink.view.grid.RowWidget', {
                 columns: [{
                     text: 'Order Id',
                     dataIndex: 'id',
-                    width: 75
+                    width: '${orderWidth}'
                 }, {
                     text: 'Procuct code',
                     dataIndex: 'productCode',
-                    width: 265
+                    width: '${productCodeWidth}'
                 }, {
                     text: 'Quantity',
                     dataIndex: 'quantity',
                     xtype: 'numbercolumn',
-                    width: 100,
+                    width: '${quantityWidth}',
                     align: 'right'
                 }, {
                     xtype: 'datecolumn',
                     format: 'Y-m-d',
-                    width: 120,
+                    width: '${dateColumnWidth}',
                     text: 'Date',
                     dataIndex: 'date'
                 }, {
                     text: 'Shipped',
                     xtype: 'checkcolumn',
                     dataIndex: 'shipped',
-                    width: 75
+                    width: '${shippedWidth}'
                 }]
             }
         }

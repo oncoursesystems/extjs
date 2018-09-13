@@ -14,9 +14,23 @@ Ext.define('KitchenSink.view.form.CustomFields', {
     //<example>
     //</example>
     
+    profiles: {
+        classic: {
+            width: 600,
+            labelWidth: 50
+        },
+        neptune: {
+            width: 600,
+            labelWidth: 50
+        },
+        graphite: {
+            width: 750,
+            labelWidth: 60
+        }
+    },
     title: 'Forum Search',
     height: 600,
-    width: 600,
+    width: '${width}',
 
     layout: 'fit',
 
@@ -51,7 +65,7 @@ Ext.define('KitchenSink.view.form.CustomFields', {
     tbar: [{
         width: 400,
         fieldLabel: 'Search',
-        labelWidth: 50,
+        labelWidth: '${labelWidth}',
         xtype: 'searchfield',
         store: 'form-forum-posts'
     }],

@@ -1,6 +1,10 @@
 {
-    "name": "@extjs/ext-react-classic-theme-crisp",
-    "version": "6.5.2.463",
+    "name": "@extjs/ext-classic-theme-crisp",
+    "ext-react-name": "@extjs/ext-react-classic-theme-crisp",
+    "ext-name": "@extjs/ext-classic-theme-crisp",
+    "SenchaExtName": "@sencha/ext-classic-theme-crisp",
+    "SenchaExtReactName": "@sencha/ext-react-classic-theme-crisp",
+    "version": "6.6.0.258",
     "sencha": {
         "name": "theme-crisp",
         "namespace": "Ext",
@@ -14,7 +18,7 @@
         "creator": "Sencha",
         "summary": "Ext JS Crisp Theme",
         "detailedDescription": "The Crisp theme builds upon Neptune, adding a light, clean look and feel.",
-        "version": "6.5.2.463",
+        "version": "6.6.0.258",
         "compatVersion": "6.0.0",
         "format": "1",
         "output": "${workspace.subpkg.prefix}/${package.name}",

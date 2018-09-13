@@ -4,7 +4,9 @@ topSuite("grid-widgets",
      'Ext.slider.Widget', 'Ext.sparkline.*', 'Ext.Button'],
 function() {
 
-    var grid, view, store, testIt = Ext.isWebKit ? it : xit,
+    var testIt = Ext.isWebKit ? it : xit,
+        itNotIE8 = !Ext.isIE8 ? it : xit,
+        grid, view, store, 
         GridModel = Ext.define(null, {
             extend: 'Ext.data.Model',
             fields: [
@@ -218,9 +220,8 @@ function() {
     });
 
     describe("buffered rendering", function() {
-        it('should not create new widgets when scrolling', function() {
+        itNotIE8('should not create new widgets when scrolling', function() {
             var widgetCount,
-                lockedView,
                 normalView,
                 lastRow,
                 timer,
@@ -234,7 +235,6 @@ function() {
             runs(function() {
                 widgetCount = Ext.Object.getSize(Ext.ComponentMgr.all);
                 normalView = grid.normalGrid.getView();
-                lockedView = grid.lockedGrid.getView();
                 lastRow = normalView.bufferedRenderer.getLastVisibleRowIndex();
             });
             

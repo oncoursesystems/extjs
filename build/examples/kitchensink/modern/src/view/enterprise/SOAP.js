@@ -62,6 +62,7 @@ Ext.define('KitchenSink.view.enterprise.SOAP', {
         dataIndex: 'Author'
     }, {
         text: 'Title',
+        minWidth: 125,
         flex: 1,
         dataIndex: 'Title'
     }, {

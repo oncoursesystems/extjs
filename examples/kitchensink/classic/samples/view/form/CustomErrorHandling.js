@@ -29,11 +29,26 @@ Ext.define('KitchenSink.view.form.CustomErrorHandling', {
         path: 'classic/samples/view/form/CustomErrorHandlingController.js'
     }],
     //</example>
+    profiles: {
+        classic: {
+            width: 350,
+            labelWidth: 110
+        },
+        neptune: {
+            width: 350,
+            labelWidth: 110
+        },
+        graphite: {
+            width: 450,
+            labelWidth: 150
+        }
+    },
     
     frame: true,
-    width: 350,
+    width: '${width}',
     bodyPadding: 10,
     bodyBorder: true,
+    
     title: 'Account Registration',
 
     defaults: {
@@ -41,7 +56,7 @@ Ext.define('KitchenSink.view.form.CustomErrorHandling', {
     },
     
     fieldDefaults: {
-        labelWidth: 110,
+        labelWidth: '${labelWidth}',
         labelAlign: 'left',
         msgTarget: 'none',
         invalidCls: '' //unset the invalidCls so individual fields do not get styled as invalid
@@ -89,7 +104,8 @@ Ext.define('KitchenSink.view.form.CustomErrorHandling', {
             setErrors: function(errors) {
                 var me = this,
                     tpl = me.tipTpl,
-                    tip = me.tip;
+                    tip = me.tip,
+                    position = Ext.theme.name === 'Graphite' ? 'left-top' : 'top';
                 
                 if (!me.tipTpl.isTemplate) {
                     tpl = me.tipTpl = new Ext.XTemplate(tpl);
@@ -101,7 +117,7 @@ Ext.define('KitchenSink.view.form.CustomErrorHandling', {
                         title: 'Error Details:',
                         minWidth: 200,
                         autoHide: false,
-                        anchor: 'top',
+                        anchor: position,
                         mouseOffset: [-11, -2],
                         closable: true,
                         constrainPosition: false,

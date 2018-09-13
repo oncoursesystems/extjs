@@ -2759,7 +2759,10 @@ function() {
                             height: 400
                         });
                         
-                        expect(grid.getView().getScrollable().getX()).toBe(false);
+                        // Safari is always scrollable
+                        if (!Ext.isSafari) {
+                            expect(grid.getView().getScrollable().getX()).toBe(false);
+                        }
                         
                         grid.reconfigure(null, columnsB);
 

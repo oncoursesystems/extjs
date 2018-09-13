@@ -20,6 +20,17 @@ Ext.define('KitchenSink.view.draw.Easings', {
     }],
     // </example>
 
+    profiles: {
+        classic: {
+            strokeStyle: 'black'
+        },
+        neptune: {
+            strokeStyle: 'black'
+        },
+        graphite: {
+            strokeStyle: '#fff'
+        }
+    },
     layout: 'fit',
     width: 650,
 
@@ -52,12 +63,14 @@ Ext.define('KitchenSink.view.draw.Easings', {
                 cy: 100
             }, {
                 type: 'line',
+                strokeStyle: '${strokeStyle}',
                 fromX: 250,
                 fromY: 100,
                 toX: 400,
                 toY: 100
             }, {
                 type: 'line',
+                strokeStyle: '${strokeStyle}',
                 fromX: 250,
                 fromY: 400,
                 toX: 400,

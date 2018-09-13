@@ -579,8 +579,9 @@ Ext.define('Ext.data.reader.Reader', {
         if (response) {
             responseText = response.responseText;
             
-            if (responseText) {
+            if (response.responseType || responseText) {
                 result = this.getResponseData(response);
+                
                 if (result && result.__$isError) {
                     return new Ext.data.ResultSet({
                         total  : 0,
@@ -589,10 +590,12 @@ Ext.define('Ext.data.reader.Reader', {
                         success: false,
                         message: result.msg
                     });
-                } else {
+                }
+                else {
                     data = this.readRecords(result, readOptions);
                 }
-            } else if (responseText !== '') {
+            }
+            else if (responseText !== '') {
                 data = this.readRecords(response, readOptions);
             }
         }

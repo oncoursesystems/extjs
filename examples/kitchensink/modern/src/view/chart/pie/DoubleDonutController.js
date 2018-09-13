@@ -2,37 +2,33 @@ Ext.define('KitchenSink.view.chart.pie.DoubleDonutController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.pie-double-donut',
 
-    init: function () {
+    init: function (view) {
+        this.callParent([view]);
+
         var chart = this.lookup('chart'),
             series = chart.getSeries(),
             outerSeries = series[0],
             store = outerSeries.getStore(),
             dataMap = {},
             dataList = [],
-            rec, innerStore;
-
-        store.sort('type', 'DESC');
+            rec;
 
         store.each(function () {
-            var name = this.get('type'),
-                value = dataMap[name];
+            var type = this.get('type'),
+                value = dataMap[type];
 
             if (!value) {
-                dataMap[name] = value = {};
-                value.type = name;
-                value.usage = this.get('usage');
-            } else {
-                value.usage += this.get('usage');
+                dataMap[type] = value = {
+                    type: type,
+                    usage: 0
+                };
             }
+            value.usage += this.get('usage');
         });
 
         for (rec in dataMap) {
             dataList.push(dataMap[rec]);
         }
-
-        innerStore = Ext.create('Ext.data.Store', {
-            data: dataList
-        });
 
         chart.setSeries([{
             type: 'pie',
@@ -41,7 +37,9 @@ Ext.define('KitchenSink.view.chart.pie.DoubleDonutController', {
                 field: 'type',
                 display: 'inside'
             },
-            store: innerStore,
+            store: {
+                data: dataList
+            },
             radiusFactor: 70,
             donut: 20,
             tooltip: {

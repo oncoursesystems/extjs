@@ -1,3 +1,17 @@
+/**
+ * @class Ext.dom.Element
+ * @override Ext.dom.Element
+ */
+Ext.define('Ext.overrides.dom.Element', {
+    override: 'Ext.dom.Element',
+    /**
+         * @property  {Number/Boolean} rippleShowTimeout
+         * The amount of time take by ripple to completely shown.
+         * Settings this to `true` defaults to 300ms.
+         */
+    rippleShowTimeout: 300
+});
+
 Ext.define('Ext.theme.material.Widget', {
     override: 'Ext.Widget',
     statics: {
@@ -76,6 +90,55 @@ Ext.define('Ext.theme.material.field.Text', {
     config: {
         labelAlign: 'placeholder',
         animateUnderline: true
+    }
+});
+
+Ext.define('Ext.theme.material.menu.Item', {
+    override: 'Ext.menu.Item',
+    config: {
+        ripple: {
+            delegate: '.' + Ext.baseCSSPrefix + 'body-el'
+        }
+    },
+    shouldRipple: function() {
+        var me = this,
+            rippleDelay = me.el.rippleShowTimeout;
+        //To delay menu hide(closing of menu) after menu item is clicked. RippleDelayis used to show ripple effect on menu items. Max(clickHideDelay,rippleDelay) should be used
+        me.clickHideDelay = me.clickHideDelay > rippleDelay ? me.clickHideDelay : rippleDelay;
+        return this.getRipple();
+    }
+});
+
+Ext.define('Ext.theme.material.menu.Menu', {
+    override: 'Ext.menu.Menu',
+    config: {
+        indented: false
+    }
+});
+
+Ext.define('Ext.theme.material.SplitButton', {
+    override: 'Ext.SplitButton',
+    /**
+         * @private
+         * @cfg {Number/Boolean} menuShowDelay
+         * The amount of delay between the `tap` or `onClick` and the moment the
+         * split menu button shows the menu.
+         */
+    config: {
+        splitRipple: {
+            delegate: '.x-splitInner-el'
+        },
+        arrowRipple: {
+            delegate: '.x-splitArrow-el'
+        }
+    },
+    menuShowDelay: 0,
+    doDestroy: function() {
+        var me = this;
+        if (me.hasOwnProperty('menuShowTimeout')) {
+            Ext.undefer(me.menuShowTimeout);
+        }
+        me.callParent();
     }
 });
 
@@ -632,7 +695,7 @@ Ext.define('Ext.theme.Material', {
         }
     },
     hasFashion: function() {
-        return !!Fashion.css && Fashion.css.setVariables;
+        return !!window.Fashion && !!Fashion.css && Fashion.css.setVariables;
     },
     setAutoUpdateMeta: function(value) {
         this._autoUpdateMeta = value;
@@ -678,9 +741,8 @@ Ext.define('Ext.theme.Material', {
             accentColor = this._colors[colorsConfig.accent],
             obj = {};
         if (baseColor) {
-            baseColor = baseColor[colorsConfig.baseWeight];
-            if (baseColor) {
-                obj['base-color'] = baseColor;
+            if (baseColor[colorsConfig.baseWeight]) {
+                obj['base-color-name'] = colorsConfig.base;
                 if (this.getAutoUpdateMeta()) {
                     this.updateMetaThemeColor(colorsConfig.base, colorsConfig.baseWeight);
                 }
@@ -691,9 +753,8 @@ Ext.define('Ext.theme.Material', {
             Ext.Logger.warn("Base color: " + colorsConfig.base + " is not a valid material color", this);
         }
         if (accentColor) {
-            accentColor = accentColor[colorsConfig.accentWeight];
-            if (accentColor) {
-                obj['accent-color'] = accentColor;
+            if (accentColor[colorsConfig.accentWeight]) {
+                obj['accent-color-name'] = colorsConfig.accent;
             } else {
                 Ext.Logger.warn("Accent color weight: " + colorsConfig.accentWeight + " is not a valid weight", this);
             }

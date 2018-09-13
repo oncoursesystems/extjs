@@ -13,7 +13,18 @@ Ext.define('KitchenSink.view.binding.AlgebraUnary', {
 
     title: 'Unary operators',
 
-    width: 370,
+    width: '${width}',
+    profiles: {
+        classic: {
+            width: 370
+        },
+        neptune: {
+            width: 370
+        },
+        graphite: {
+            width: 430
+        }
+    },
     bodyPadding: '10 20',
     frame: true,
     layout: 'form',

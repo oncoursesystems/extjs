@@ -93,6 +93,25 @@ topSuite('Ext.tab.Panel', ['Ext.Panel'], function() {
 
             expect(panel.getActiveItem()).toBe(panel.getInnerItems()[1]);
         });
+
+        it("should be able to set the active item from a selector", function() {
+            makePanel({
+                activeItem: '#bar'
+            });
+
+            expect(panel.getActiveItem()).toBe(panel.getInnerItems()[1]);
+        });
+
+        it("should be able to set the active item from a component instance", function() {
+            makePanel({
+                activeItem: 0
+            });
+
+            var item = panel.getInnerItems()[1];
+            panel.setActiveItem(item);
+
+            expect(panel.getActiveItem()).toBe(item);
+        });
     });
     
     describe("closable tabs", function() {
@@ -102,8 +121,70 @@ topSuite('Ext.tab.Panel', ['Ext.Panel'], function() {
                 title: 'foo',
                 closable: true
             });
-            
+
             expect(panel.getActiveItem()).toBe(panel.getInnerItems()[0]);
+        });
+    });
+
+    describe('tabBar', function () {
+        it('should allow non-tab items', function () {
+            makePanel({
+                tabBar: {
+                    items: [{
+                        xtype: 'button',
+                        text: 'Test'
+                    }]
+                }
+            });
+
+            var tabBar = panel.getTabBar();
+
+            expect(panel.getActiveItem()).toBe(panel.getInnerItems()[0]);
+            expect(tabBar.getActiveTab()).toBe(tabBar.getInnerItems()[0]);
+        });
+
+        it('should not change tabs on non-tab click', function () {
+            makePanel({
+                layout: {
+                    animation: false
+                },
+                tabBar: {
+                    items: [{
+                        xtype: 'button',
+                        text: 'Test'
+                    }]
+                }
+            });
+
+            var tabBar = panel.getTabBar(),
+                button = tabBar.child('button[text=Test]');
+
+            jasmine.fireMouseEvent(button.el, 'click');
+
+            expect(panel.getActiveItem()).toBe(panel.getInnerItems()[0]);
+            expect(tabBar.getActiveTab()).toBe(tabBar.getInnerItems()[0]);
+        });
+
+        it('should change tabs on tab click', function () {
+            makePanel({
+                layout: {
+                    animation: false
+                },
+                tabBar: {
+                    items: [{
+                        xtype: 'button',
+                        text: 'Test'
+                    }]
+                }
+            });
+
+            var tabBar = panel.getTabBar(),
+                tab    = tabBar.getComponent(1);
+
+            jasmine.fireMouseEvent(tab.el, 'click');
+
+            expect(panel.getActiveItem()).toBe(panel.getInnerItems()[1]);
+            expect(tabBar.getActiveTab()).toBe(tabBar.getInnerItems()[1]);
         });
     });
 });

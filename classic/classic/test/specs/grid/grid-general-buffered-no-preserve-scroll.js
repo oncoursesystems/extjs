@@ -202,7 +202,7 @@ function() {
                 height: 300,
                 border: false,
                 viewConfig: {
-                    preserveScrollOnReload: false,
+                    preserveScrollOnReload: false
                 },
                 renderTo: document.body
             });

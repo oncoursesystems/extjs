@@ -26,6 +26,17 @@ Ext.define('KitchenSink.view.charts.combination.Pareto', {
     // </example>
     width: 650,
 
+    profiles: {
+        classic: {
+            columnWidth: 100
+        },
+        neptune: {
+            columnWidth: 100
+        },
+        graphite: {
+            columnWidth: 150
+        }
+    },
     dockedItems: [{
         xtype: 'toolbar',
         dock: 'top',
@@ -130,7 +141,7 @@ Ext.define('KitchenSink.view.charts.combination.Pareto', {
             items: [
                 { text: 'Complaint', dataIndex: 'complaint', width: 175 },
                 { text: 'Count', dataIndex: 'count' },
-                { text: 'Cumulative', dataIndex: 'cumnumber' },
+                { text: 'Cumulative', dataIndex: 'cumnumber', width: '${columnWidth}' },
                 { text: 'Cumulative %', dataIndex: 'cumpercent', width: 175, renderer: 'onPercentRender' }
             ]
         },

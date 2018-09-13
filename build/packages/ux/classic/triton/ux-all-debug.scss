@@ -1,4 +1,4 @@
-$image-search-path: '/home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/build/packages/ux/classic/triton/resources' !default;
+$image-search-path: '/home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/build/packages/ux/classic/triton/resources' !default;
 $theme-name:  'theme-triton' !default;
 $include-ext-abstractcomponent: dynamic(false);;
 $include-ext-abstractcontainer: dynamic(false);;
@@ -710,6 +710,7 @@ $include-ext-resizer-resizer: dynamic(false);;
 $include-ext-resizer-splitter: dynamic(false);;
 $include-ext-resizer-splittertracker: dynamic(false);;
 $include-ext-route-action: dynamic(false);;
+$include-ext-route-handler: dynamic(false);;
 $include-ext-route-mixin: dynamic(false);;
 $include-ext-route-route: dynamic(false);;
 $include-ext-route-router: dynamic(false);;
@@ -899,6 +900,7 @@ $include-ext-util-taprepeater: dynamic(false);;
 $include-ext-util-taskmanager: dynamic(false);;
 $include-ext-util-taskrunner: dynamic(false);;
 $include-ext-util-textmetrics: dynamic(false);;
+$include-ext-util-tsvdecoder: dynamic(false);;
 $include-ext-util-xtemplatecompiler: dynamic(false);;
 $include-ext-util-xtemplateparser: dynamic(false);;
 $include-ext-util-paintmonitor-abstract: dynamic(false);;
@@ -985,6 +987,13 @@ $include-ext-ux-form-fileuploadfield: dynamic(false);;
 $include-ext-ux-form-itemselector: dynamic(true);;
 $include-ext-ux-form-multiselect: dynamic(true);;
 $include-ext-ux-form-searchfield: dynamic(true);;
+$include-ext-ux-gauge-gauge: dynamic(true);;
+$include-ext-ux-gauge-needle-abstract: dynamic(true);;
+$include-ext-ux-gauge-needle-arrow: dynamic(true);;
+$include-ext-ux-gauge-needle-diamond: dynamic(true);;
+$include-ext-ux-gauge-needle-rectangle: dynamic(true);;
+$include-ext-ux-gauge-needle-spike: dynamic(true);;
+$include-ext-ux-gauge-needle-wedge: dynamic(true);;
 $include-ext-ux-grid-subtable: dynamic(true);;
 $include-ext-ux-grid-transformgrid: dynamic(true);;
 $include-ext-ux-grid-plugin-autoselector: dynamic(true);;
@@ -1257,7 +1266,7 @@ $ux-resource-path: 'images' !default;
 $current-package: 'ux';
 $current-resource-root: $ux-resource-root;
 $relative-image-path-for-uis: $ux-resource-path;
-@import '../../../../../packages/ux/sass/var/Gauge';
+@import '../../../../../packages/ux/sass/var/gauge/Gauge';
 @import '../../../../../packages/ux/sass/var/rating/Picker';
 
 /* including package ux */
@@ -1266,7 +1275,7 @@ $ux-resource-path: 'images' !default;
 $current-package: 'ux';
 $current-resource-root: $ux-resource-root;
 $relative-image-path-for-uis: $ux-resource-path;
-@import '../../../../../packages/ux/classic/sass/var/Gauge';
+@import '../../../../../packages/ux/classic/sass/var/gauge/Gauge';
 @import '../../../../../packages/ux/classic/sass/var/layout/ResponsiveColumn';
 
 
@@ -1278,7 +1287,7 @@ $ux-resource-path: 'images' !default;
 $current-package: 'ux';
 $current-resource-root: $ux-resource-root;
 $relative-image-path-for-uis: $ux-resource-path;
-@import '../../../../../packages/ux/sass/src/Gauge';
+@import '../../../../../packages/ux/sass/src/gauge/Gauge';
 @import '../../../../../packages/ux/sass/src/rating/Picker';
 
 /* including package ux */

@@ -26,7 +26,14 @@
         background-image: url(get-resource-path('images/square-dark.gif', 'toolkit')) !important;
     }
 }
-
+@if $theme-name == 'theme-graphite' {
+    #content-panel-body {
+        background-image: url(get-resource-path('images/square-dark.gif', 'toolkit')) !important;
+    }
+    .content-panel-body {
+        background: #a1a0a0;
+    }
+}
 #content-panel-innerCt {
     padding: 20px;
     vertical-align: middle;
@@ -34,4 +41,3 @@
         margin: auto;
     }
 }
-

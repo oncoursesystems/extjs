@@ -24,8 +24,19 @@ Ext.define('KitchenSink.view.charts.column3d.Renderer', {
         path: 'app/store/Browsers.js'
     }],
     // </example>
-    width: 650,
+    width: '${width}',
 
+    profiles: {
+        classic: {
+            width: 650
+        },
+        neptune: {
+            width: 650
+        },
+        graphite: {
+            width: 900
+        }
+    },
     items: [{
         xtype: 'cartesian',
         width: '100%',

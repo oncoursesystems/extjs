@@ -1,6 +1,6 @@
 /**
  * A plugin for use in grids which use the {@link Ext.grid.selection.SpreadsheetModel spreadsheet} selection model,
- * with {@link Ext.grid.selection.SpreadsheetModel#extensible extensible} configured as `true` or `"y"`, meaning that
+ * with {@link Ext.grid.selection.Model#extensible extensible} configured as `true` or `"y"`, meaning that
  * the selection may be extended up or down using a draggable extension handle.
  *
  * This plugin propagates values from the selection into the extension area.

@@ -2510,7 +2510,7 @@ Ext.define('Ext.panel.Panel', {
                 state.collapsed = true;
             }
 
-            me.callParent(arguments);
+            me.callParent([state]);
         }
     },
 
@@ -3162,7 +3162,7 @@ Ext.define('Ext.panel.Panel', {
             collapseDir = me.collapsed,
             expandTool = me.placeholder.expandTool,
             floatCls = Ext.panel.Panel.floatCls,
-            center = me.ownerLayout ? me.ownerLayout.centerRegion: null,
+            center = me.ownerLayout ? me.ownerLayout.centerRegion : null,
             finalPos, floatedPos;
 
         // Layouts suspended - don't bother with animation shenanigans
@@ -3177,7 +3177,7 @@ Ext.define('Ext.panel.Panel', {
             me.slideOutFloatedPanelEnd();
             me.floated = false;
         }
-        
+
         // We assume that if expand was caused by keyboard action on focused
         // placeholder expand tool, the logical focus transition is to the
         // panel header's collapse tool.
@@ -3186,7 +3186,6 @@ Ext.define('Ext.panel.Panel', {
         // sudden jumps.
         if (expandTool && Ext.ComponentManager.getActiveComponent() === expandTool) {
             me.focusHeaderCollapseTool = true;
-            
             // There is an odd issue with JAWS screen reader: when expanding a panel,
             // it will announce Expand tool again before focus is forced to Collapse
             // tool. I'm not sure why that happens since focus does not move from
@@ -3207,22 +3206,20 @@ Ext.define('Ext.panel.Panel', {
             me.el.show();
             me.collapsed = false;
             me.setHiddenState(false);
-
             // Stop the center region from moving when laid out without the placeholder there.
             // Unless we are expanding from a floated out situation. In that case, it's laid out immediately.
             if (center && !floatedPos) {
                 center.hidden = true;
             }
-
             Ext.resumeLayouts(true);
-            center.hidden = false;
 
+            if (center) {
+                center.hidden = false;
+            }
             if (!me.floatedFromCollapse) {
                 me.fireEvent('beginfloat', me);
             }
-
             me.el.addCls(floatCls);
-
             // At this point, this Panel is arranged in its correct, expanded layout.
             // The center region has not been affected because it has been flagged as hidden.
             //
@@ -3233,9 +3230,7 @@ Ext.define('Ext.panel.Panel', {
             // If we are proceeding from fully collapsed, the center region has *not* been relayed out because
             // the UI look and feel dictates that it stays stable until the expanding panel has slid in all the
             // way, and *then* it snaps into place.
-
             me.isCollapsingOrExpanding = 2;
-
             // Floated, move it back to the floated pos, and thence into the correct place
             if (floatedPos) {
                 finalPos = me.getXY();
@@ -3246,7 +3241,6 @@ Ext.define('Ext.panel.Panel', {
                         scope: me,
                         afteranimate: function() {
                             var me = this;
-                            
                             me.el.removeCls(floatCls);
                             me.isCollapsingOrExpanding = 0;
                             me.fireEvent('expand', me);
@@ -3272,12 +3266,10 @@ Ext.define('Ext.panel.Panel', {
                     }
                 });
             }
-        }
-        else {
+        } else {
             me.floated = me.collapsed = false;
             me.doPlaceholderExpand(true);
         }
-
         return me;
     },
     

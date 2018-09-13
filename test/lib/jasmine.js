@@ -3232,7 +3232,7 @@ jasmine.Env.prototype.checkGlobalListeners = function(spec) {
     var events = Ext.GlobalEvents.events,
         allowedListeners, allowedComponents, eventNames, eventName, event,
         eventName, event, listeners, referenceListeners, scope, fail, leaks,
-        leaksFound, evCtr, evLen, i, len;
+        listener, leaksFound, evCtr, evLen, i, len;
     
     eventNames = jasmine.object.keys(events);
     evLen = eventNames.length;
@@ -3261,12 +3261,15 @@ jasmine.Env.prototype.checkGlobalListeners = function(spec) {
                 leaksFound = false;
                 
                 for (i = 0, len = listeners.length; i < len; i++) {
-                    if (listeners[i] !== referenceListeners[i]) {
-                        scope = listeners[i].scope;
-                        
-                        if (scope && !allowedComponents[scope.id]) {
+                    listener = listeners[i];
+                    if (listener !== referenceListeners[i]) {
+                        scope = listener.scope;
+
+                        // Check for anonymous or dissallowed components that
+                        // have caused a leak
+                        if (!scope || (scope && !allowedComponents[scope.id])) {
                             leaksFound = true;
-                            leaks.push(listeners[i]);
+                            leaks.push(listener);
                         }
                         
                         scope = null;
@@ -7466,8 +7469,12 @@ jasmine.env.addStartupHook(function() {
  * Utility function to fire a fake mouse event to a given target element
  */
 jasmine.fireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKey, altKey, relatedTarget) {
-    var doc, ret, focusable, oldActiveEl, centre,
+    var doc, ret, focusable, oldActiveEl, centre, targetCmp,
         minMove = Math.ceil(Math.sqrt(Math.pow(Ext.event.gesture.Drag.$config.values.minDistance, 2) / 2));
+    
+    if (target && target.isComponent) {
+        targetCmp = target;
+    }
 
     target = Ext.getDom(target && target.isComponent ? target.el : target);
     centre = Ext.fly(target, '_testFireEvent').getAnchorXY('c');
@@ -7508,7 +7515,13 @@ jasmine.fireMouseEvent = function(target, type, x, y, button, shiftKey, ctrlKey,
     if (jasmine.focusEvents[type] && !button) {
         // Find a click target which is potentially focusable.
         // Not immediately tabbable; the mousedown handling might MAKE it tabbable.
-        focusable = Ext.fly(target).findParent(function(e) {return Ext.fly(e).isFocusable();}, null);
+        // Certain components like Modern buttons might have focusable elmement *inside*
+        // the target so going from parent up yields entirely wrong result
+        if (targetCmp && !targetCmp.isContainer) {
+            focusable = Ext.getDom(targetCmp.getFocusEl());
+        }
+        
+        focusable = focusable || Ext.fly(target).findParent(function(e) {return Ext.fly(e).isFocusable();}, null);
 
         // Mousedown is followed by focus, unless a listener prevented default, or the focus was moved by a prior listener
         if (focusable) {
@@ -8127,7 +8140,9 @@ jasmine.fireKeyEvent = function(target, type, key, shiftKey, ctrlKey, altKey) {
             altKey: !!altKey
         });
         
-        return target.fireEvent('on' + type, e);
+        dispatched = target.fireEvent('on' + type, e);
+        
+        return (dispatched === false) ? dispatched : e;
     }
     else {
         e = doc.createEvent("Events");
@@ -8149,6 +8164,8 @@ jasmine.fireKeyEvent = function(target, type, key, shiftKey, ctrlKey, altKey) {
 // real Tab key presses (if at all possible), it doesn't make sense to go
 // any further than this.
 jasmine.simulateTabKey = jasmine.syncPressTabKey = function(from, forward) {
+    var ev;
+    
     function getNextTabTarget(currentlyFocused, forward) {
         var selector = 'a[href],button,iframe,input,select,textarea,[tabindex],[contenteditable="true"]',
             body = Ext.getBody(),
@@ -8227,7 +8244,13 @@ jasmine.simulateTabKey = jasmine.syncPressTabKey = function(from, forward) {
     // and activeElement could have changed as well, so we have to
     // compute the next target *after* firing successful keydown.
     // Whoa that escalates quickly!
-    if (jasmine.fireKeyEvent(from, 'keydown', 9, !forward)) {
+    ev = jasmine.fireKeyEvent(from, 'keydown', 9, !forward);
+    
+    if (ev) {
+        if (Ext.isIE9m) {
+            Ext.syncKeyboardMode(ev);
+        }
+        
         var to = getNextTabTarget(document.activeElement || from, forward);
         
         if (to) {
@@ -8739,6 +8762,8 @@ MockAjax.prototype.onreadystatechange = function() {
  * Method for triggering a response completion
  */
 MockAjax.prototype.complete = function(response) {
+    delete this.responseType;
+    
     this.responseText = response.responseText || '';
     this.status = response.status;
     this.statusText = response.statusText;
@@ -8863,9 +8888,6 @@ jasmine.env.addStartupHook(function() {
         };
     }
 
-    // In case some tests which access the Ext.EventObject are invoked before the first DOM event.
-//         Ext.EventObject = new Ext.event.Event({});
-
     // ensures the body begins absolutely empty (some browsers have a default text node)
     document.body.innerHTML = '';
 
@@ -8928,6 +8950,11 @@ jasmine.env.addStartupHook(function() {
         var spec = timer.spec = jasmine.env.currentSpec;
         timer.test = spec ? spec.getFullName(true) : null;
     };
+    
+    // Capturing call stack is VERY expensive and is meaningless in CI anyway
+    if (jasmine.CI_ENVIRONMENT) {
+        Ext.Timer.captureStack = false;
+    }
 
     // For unit tests we want to clear properties synchronously
     Ext.define(null, {
@@ -8948,6 +8975,14 @@ jasmine.env.addStartupHook(function() {
             override: 'Ext.Base',
             
             clearPrototypeOnDestroy: true
+        });
+        
+        Ext.define(null, {
+            override: 'Ext.data.operation.Operation',
+            $preservePrototypeProperties: [
+                '$className',
+                'isOperation'
+            ]
         });
     }
     
@@ -9278,10 +9313,11 @@ jasmine.env.addStartupHook(function() {
             // This warrants an additional check because Component might not be loaded
             // if we're only testing Widgets!
             if (Ext.Component && Ext.ComponentMgr.installFocusListener) {
+                jasmine.addAllowedComponent(Ext.ComponentMgr);
                 Ext.ComponentMgr.installFocusListener();
             }
         }
-        
+
         env.rootSuite.it('There should be no resource leaks before test suite start', function() {
             var allowedComponents = this.env.allowedComponents,
                 leaks = [],

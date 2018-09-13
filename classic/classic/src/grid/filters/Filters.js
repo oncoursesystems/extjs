@@ -175,18 +175,22 @@ Ext.define('Ext.grid.filters.Filters', {
             menucreate: me.onMenuCreate
         });
 
+        // if menu is already created before filter is initialized
+        if (headerCt.menu && !headerCt.menu.destroyed) {
+            this.onMenuCreate(headerCt, headerCt.menu);
+        }
+
         me.gridListeners = grid.on({
             destroyable: true,
             scope: me,
             reconfigure: me.onReconfigure
         });
 
-        me.bindStore(store);
-
-        if (grid.stateful) {
-            store.statefulFilters = true;
+        if (store.isEmptyStore) {
+            return;
         }
 
+        me.bindStore(store);
         me.initColumns();
     },
 
@@ -268,9 +272,17 @@ Ext.define('Ext.grid.filters.Filters', {
      * Handle creation of the grid's header menu.
      */
     onMenuCreate: function (headerCt, menu) {
-        menu.on({
-            beforeshow: this.onMenuBeforeShow,
-            scope: this
+        var me = this;
+
+        if (me.headerMenuListeners) {
+            Ext.destroy(me.headerMenuListeners);
+            me.headerMenuListeners = null;
+        }
+
+        me.headerMenuListeners = menu.on({
+            beforeshow: me.onMenuBeforeShow,
+            destroyable: true,
+            scope: me
         });
     },
 
@@ -344,7 +356,7 @@ Ext.define('Ext.grid.filters.Filters', {
             filterMenuItem = me.filterMenuItem,
             item;
 
-        Ext.destroy(me.headerCtListeners, me.gridListeners);
+        Ext.destroy(me.headerCtListeners, me.gridListeners, me.headerMenuListeners);
 
         me.bindStore(null);
         me.sep = Ext.destroy(me.sep);
@@ -363,8 +375,13 @@ Ext.define('Ext.grid.filters.Filters', {
     },
 
     onBindStore: function(store, initial, propName) {
-        this.local = !store.getRemoteFilter();
-        store.getFilters().on('remove', this.onFilterRemove, this);
+        var me = this;
+        me.local = !store.getRemoteFilter();
+        store.getFilters().on('remove', me.onFilterRemove, me);
+
+        if (me.grid.stateful && store.initialConfig.statefulFilters !== false) {
+            store.statefulFilters = true;
+        }
     },
 
     onFilterRemove: function (filterCollection, list) {

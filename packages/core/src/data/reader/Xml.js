@@ -81,7 +81,7 @@
  * are nested as descendant nodes of other records, then this lenient behaviour must be overridden by using a more specific
  * child node selector as your {@link #record} selector which will not select all descendants, such as:
  *
- *    record: '>user'
+ *     record: '>user'
  *
  * # Response metadata
  *
@@ -126,8 +126,8 @@
  * otherwise.
  */
 Ext.define('Ext.data.reader.Xml', {
-    alternateClassName: 'Ext.data.XmlReader',
     extend: 'Ext.data.reader.Reader',
+    alternateClassName: 'Ext.data.XmlReader',
     alias: 'reader.xml',
     
     requires: [
@@ -146,7 +146,7 @@ Ext.define('Ext.data.reader.Xml', {
         * then only first generation child nodes of the root element must be selected, so the record selector must be
         * specified with a more specific selector which will not select all descendants. For example:
         *
-        *    record: '>node'
+        *     record: '>node'
         *
         */
         record: '',
@@ -171,6 +171,11 @@ Ext.define('Ext.data.reader.Xml', {
         */
         namespace: ''
     },
+    
+    /**
+     * @private
+     */
+    responseType: 'document',
 
     /**
      * Creates a function to return some particular key of data from a response. The

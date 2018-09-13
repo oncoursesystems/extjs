@@ -919,4 +919,62 @@ function() {
             });
         });
     });
+    
+    describe("Menu with modal window and MessageBox", function () {
+        it("should render the menu after the MessageBox has been closed", function () {
+            var container = Ext.create('Ext.Container', {
+                    items: [{
+                        xtype: 'button',
+                        itemId: 'menu-button',
+                        text: 'Menu',
+                        menu: {
+                            xtype : 'menu',
+                            items : [{
+                                text : 'Foo'
+                            }]
+                        }
+                    }, {
+                        xtype: 'button',
+                        itemId: 'modal-button',
+                        text: 'Open modal',
+                        handler: function () {
+                            msg = Ext.Msg.alert('Foo', 'Bar');
+                        }
+                    }],
+                    
+                    renderTo: document.body,
+                    width: 300
+                }),
+                msg, menuBtn, modalBtn;
+            
+            menuBtn = container.getComponent('menu-button');
+            modalBtn = container.getComponent('modal-button');
+    
+            // necessary for having another ZIndex'd component in the stack
+            var win = Ext.create('Ext.window.Window', {
+                title: 'MyWindow',
+                width: 100,
+                height: 100
+            }).show();
+            
+            // click the menu to expand and then button to display the MessageBox,
+            // then click the first visible button to close
+            runs(function () {
+                jasmine.fireMouseEvent(menuBtn.el, 'click');
+                jasmine.fireMouseEvent(modalBtn.el, 'click');
+                
+                var btn = Ext.Array.findBy(msg.msgButtons, function (btn) { return btn.isVisible(); });
+                jasmine.fireMouseEvent(btn.el, 'click');
+            });
+            waits(500);
+            
+            // clicking the menu again should make it visible in the stack
+            runs(function () {
+                jasmine.fireMouseEvent(menuBtn.el, 'click');
+                expect(menuBtn.menu.isVisible()).toBe(true);
+                
+                container = win = Ext.destroy(container, win);
+            });
+        });
+    });
 });

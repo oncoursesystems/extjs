@@ -34,7 +34,8 @@ Ext.define('KitchenSink.view.ProfileSwitcher', {
                 'crisp-touch': 'Crisp Touch',
                 classic: 'Classic',
                 gray: 'Gray',
-                aria: 'ARIA'
+                aria: 'ARIA',
+                graphite: 'Graphite'
             },
             menu, profileId;
 

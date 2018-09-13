@@ -154,11 +154,16 @@ Ext.define('Ext.field.Picker', {
     },
 
     onFocus: function (e) {
-        this.callParent([e]);
+        var me = this;
+        me.callParent([e]);
 
         if (Ext.isTouchMode()) {
-            this.getFocusTrap().focus();
-            this.expand();
+            me.getFocusTrap().focus();
+            if (!me.focusingFromExpandTrigger) {
+                me.expand();
+            } else {
+                me.focusingFromExpandTrigger = false;
+            }
         }
     },
 
@@ -287,7 +292,7 @@ Ext.define('Ext.field.Picker', {
 
         if (type) {
             if (type === 'auto') {
-                type = Ext.platformTags.phone ? 'edge' : 'floated';
+                type = me.getAutoPickerType();
             }
 
             if (type === 'edge') {
@@ -325,6 +330,10 @@ Ext.define('Ext.field.Picker', {
 
         picker.on(pickerListeners);
         return picker;
+    },
+
+    getAutoPickerType: function() {
+        return Ext.platformTags.phone ? 'edge' : 'floated';
     },
 
     updatePicker: function (picker) {
@@ -442,8 +451,7 @@ Ext.define('Ext.field.Picker', {
     showPicker: function () {
         var me = this,
             alignTarget = me[me.alignTarget],
-            picker = me.getPicker(),
-            value;
+            picker = me.getPicker();
 
         // TODO: what if virtual keyboard is present
 

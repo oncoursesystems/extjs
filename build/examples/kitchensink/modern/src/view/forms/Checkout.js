@@ -123,6 +123,10 @@ Ext.define('KitchenSink.view.forms.Checkout', {
         handler: 'onReset'
     }],
 
+    defaults: {
+        scrollable: Ext.is.Phone
+    },
+
     items: [{
         padding: '${padding}',
         title: 'Contact Information',

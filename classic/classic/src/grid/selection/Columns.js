@@ -144,6 +144,7 @@ Ext.define('Ext.grid.selection.Columns', {
                 me.selectedColumns = [];
                 me.refreshColumns.apply(me, prevSelection);
             }
+            me.setRangeStart(null);
         },
 
         setRangeStart: function(startColumn) {
@@ -151,9 +152,12 @@ Ext.define('Ext.grid.selection.Columns', {
                 prevSelection = me.getColumns();
 
             me.startColumn = startColumn;
-            me.selectedColumns = [startColumn];
-            prevSelection.push(startColumn);
-            me.refreshColumns.apply(me, prevSelection);
+
+            if (startColumn != null) {
+                me.selectedColumns = [startColumn];
+                prevSelection.push(startColumn);
+                me.refreshColumns.apply(me, prevSelection);
+            }
         },
 
         setRangeEnd: function(endColumn) {
@@ -267,6 +271,20 @@ Ext.define('Ext.grid.selection.Columns', {
 
             for (i = extensionVector.start.colIdx; i <=  extensionVector.end.colIdx; i++) {
                 me.add(columns[i]);
+            }
+        },
+
+        reduceRange: function(extensionVector) {
+            var me = this,
+                columns = me.view.getVisibleColumnManager().getColumns(),
+                startIdx = extensionVector.start.colIdx,
+                endIdx = extensionVector.end.colIdx,
+                reduceTo = Math.abs(startIdx - endIdx) + 1,
+                diff = me.selectedColumns.length - reduceTo,
+                i;
+
+            for (i = diff; i > 0; i--) {
+                me.remove(columns[endIdx + i]);
             }
         },
 

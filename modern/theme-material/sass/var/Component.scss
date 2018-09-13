@@ -57,6 +57,7 @@ $base-highlight-color: dynamic(material-color($base-color-name, '300'));
 $base-light-color: dynamic(material-color($base-color-name, '100'));
 $base-dark-color: dynamic(material-color($base-color-name, '700'));
 $base-pressed-color: dynamic(if($dark-mode, darken($base-color, 15%), lighten($base-color, 15%)));
+$base-focused-color: dynamic(material-color($base-color-name, '400'));
 $base-invisible-color: dynamic(rgba($base-color, 0));
 $base-foreground-color: dynamic(material-foreground-color($base-color-name));
 
@@ -78,6 +79,7 @@ $reverse-color: dynamic(if($dark-mode, #222, #fff));
 
 $highlight-color: dynamic(rgba($color, .54));
 $disabled-color: dynamic(rgba($color, .38));
+$reverse-disabled-color: dynamic(rgba($reverse-color, .38));
 $divider-color: dynamic(mix($color, $reverse-color, 12%));
 
 $selected-background-color: dynamic(if($dark-mode, $base-dark-color, material-color('grey', '300')));
@@ -85,8 +87,6 @@ $hovered-background-color: dynamic(if($dark-mode, #4d4d4d, material-color('grey'
 
 $header-background-color: dynamic(if($dark-mode, material-color('grey', '800'), material-color('grey', '100')));
 
-
-$reverse-disabled-color: dynamic(rgba($reverse-color, .38));
 
 $faded-color: dynamic(if($dark-mode, #4d4d4d, #e1e1e1));
 

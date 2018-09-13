@@ -21,12 +21,5 @@ Ext.define('KitchenSink.view.chart.bar.Stacked100Controller', {
 
     onColumnRender: function (v) {
         return v + '%';
-    },
-
-    onRefresh: function() {
-        var chart = this.lookup('chart'),
-            store = chart.getStore();
-
-        store.generateData(store.getNumRecords());
     }
 });

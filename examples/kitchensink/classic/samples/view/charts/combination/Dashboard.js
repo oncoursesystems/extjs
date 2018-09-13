@@ -30,12 +30,26 @@ Ext.define('KitchenSink.view.charts.combination.Dashboard', {
         path: 'app/store/Dashboard.js'
     }],
     // </example>
-    width: 700,
+    profiles: {
+        classic: {
+            width: 700,
+            height: 535
+        },
+        neptune: {
+            width: 700,
+            height: 535
+        },
+        graphite: {
+            width: 800,
+            height: 635
+        }
+    },
+    width: '${width}',
 
     items: [{
         xtype: 'panel',
         width: '100%',
-        height: 535,
+        height: '${height}',
         bodyPadding: 10,
 
         layout: {

@@ -255,7 +255,7 @@ Ext.define('Ext.tab.Bar', {
     parseActiveTab: function(tab) {
         //we need to call getItems to initialize the items, otherwise they will not exist yet.
         if (typeof tab == 'number') {
-			return this.getItems().items[tab];
+			return this.query('> tab')[tab];
         }
         else if (typeof tab == 'string') {
             tab = this.getComponent(tab) || Ext.getCmp(tab);

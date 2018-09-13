@@ -48,10 +48,6 @@ Ext.define('Ext.field.Input', {
     ariaEl: 'inputElement',
     inputTabIndex: 0,
 
-    eventHandlers: {
-        input: 'onInput'
-    },
-
     getBodyTemplate: function () {
         return [this.getInputTemplate()];
     },
@@ -61,8 +57,7 @@ Ext.define('Ext.field.Input', {
             tag: this.tag,
             reference: 'inputElement',
             tabindex: this.inputTabIndex,
-            cls: Ext.baseCSSPrefix + 'input-el',
-            oninput: 'return Ext.doEv(this, event);'
+            cls: Ext.baseCSSPrefix + 'input-el'
         };
     },
 

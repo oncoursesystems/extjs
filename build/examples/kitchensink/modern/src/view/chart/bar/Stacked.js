@@ -4,7 +4,7 @@
 Ext.define('KitchenSink.view.chart.bar.Stacked', {
     extend: 'Ext.Container',
     xtype: 'bar-stacked',
-    controller: 'bar-stacked',
+    controller: 'chart',
 
     requires: [
         'Ext.chart.CartesianChart',

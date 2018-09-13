@@ -138,10 +138,6 @@ Ext.define('Ext.field.Checkbox', {
          * @private
          */
     },
-    
-    eventHandlers: {
-        change: 'onChange'
-    },
 
     inputType: 'checkbox',
 
@@ -170,7 +166,11 @@ Ext.define('Ext.field.Checkbox', {
     getInputTemplate: function() {
         var template = this.callParent();
         
-        template.onchange = 'return Ext.doEv(this, event);';
+        template.listeners = template.listeners || {};
+        template.listeners.change = {
+            fn: 'onChange',
+            delegated: false
+        };
         
         return template;
     },

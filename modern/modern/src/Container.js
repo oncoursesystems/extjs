@@ -138,9 +138,11 @@ Ext.define('Ext.Container', {
 
     eventedConfig: {
         /**
-         * @cfg {Object/String/Number} activeItem The item from the {@link #cfg-items} collection that will be active first. This is
+         * @cfg {Ext.Component/Object/String/Number} activeItem The item from the {@link #cfg-items} collection that will be active first. This is
          * usually only meaningful in a {@link Ext.layout.Card card layout}, where only one item can be active at a
-         * time. If passes a string, it will be assumed to be a {@link Ext.ComponentQuery} selector.
+         * time. If passed a string, it will be assumed to be a {@link Ext.ComponentQuery} selector. A number will reference an
+         * index or a {@link Ext.Component Component} instance may be passed as well. An object config will be created as a new
+         * component.
          * @accessor
          * @evented
          */
@@ -1441,16 +1443,17 @@ Ext.define('Ext.Container', {
             //ComponentQuery selector?
             if (typeof activeItem == 'string') {
                 item = me.child(activeItem);
-
-                activeItem = {
-                    xtype: activeItem
-                };
-            }
-
-            if (!item || !item.isComponent) {
-                activeItem.$initParent = me;
+            } else if (activeItem.isComponent) {
+                item = activeItem;
+            } else {
+                activeItem = Ext.apply({$initParent: me}, activeItem);
                 item = me.factoryItem(activeItem);
             }
+
+            if (!item) {
+                return null;
+            }
+
             me.pendingActiveItem = item;
 
             //<debug>

@@ -31,21 +31,37 @@ Ext.define('KitchenSink.view.form.FormGrid', {
             width: 750,
             gridWidth: 0.6,
             formWidth: 0.4,
+            priceWidth: 75,
+            pricechangeWidth: 80,
             percentChangeColumnWidth: 75,
             lastUpdatedColumnWidth: 85,
             ratingColumnWidth: 30,
-            green: 'green',
-            red: 'red'
+            gainColor: 'green',
+            lossColor: 'red'
         },
         neptune: {
             width: 880,
             gridWidth: 0.65,
             formWidth: 0.35,
+            priceWidth: 75,
+            pricechangeWidth: 80,
             percentChangeColumnWidth: 100,
             lastUpdatedColumnWidth: 115,
             ratingColumnWidth: 60,
-            green: '#73b51e',
-            red: '#cf4c35'
+            gainColor: '#73b51e',
+            lossColor: '#cf4c35'
+        },
+        graphite: {
+            width: 1150,
+            gridWidth: 0.65,
+            formWidth: 0.35,
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 130,
+            lastUpdatedColumnWidth: 155,
+            ratingColumnWidth: 90,
+            gainColor: 'unset',
+            lossColor: 'unset'
         }
     },
     //</example>
@@ -56,7 +72,7 @@ Ext.define('KitchenSink.view.form.FormGrid', {
     bodyPadding: 5,
     layout: 'column',
     signTpl: '<span style="' +
-            'color:{value:sign(\'${red}\',\'${green}\')}"' +
+            'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +
         '>{text}</span>',
 
     viewModel: {
@@ -95,13 +111,13 @@ Ext.define('KitchenSink.view.form.FormGrid', {
             text: 'Price',
             dataIndex: 'price',
 
-            width: 75,
+            width: '${priceWidth}',
             sortable: true
         }, {
             text: 'Change',
             dataIndex: 'priceChange',
 
-            width: 80,
+            width: '${pricechangeWidth}',
             sortable: true,
             renderer: 'renderChange'
         }, {

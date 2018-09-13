@@ -211,6 +211,7 @@ Ext.define('Ext.grid.feature.GroupStore', {
     expandGroup: function(group) {
         var me = this,
             groupingFeature = me.groupingFeature,
+            lockingPartner = groupingFeature.lockingPartner,
             metaGroup, placeholder, startIdx, items;
 
         if (typeof group === 'string') {
@@ -226,6 +227,9 @@ Ext.define('Ext.grid.feature.GroupStore', {
         if (items.length && (startIdx = me.data.indexOf(placeholder)) !== -1) {
             // Any event handlers must see the new state
             metaGroup.isCollapsed = false;
+            if (lockingPartner) {
+                lockingPartner.getMetaGroup(group).isCollapsed = false;
+            }
             me.isExpandingOrCollapsing = 1;
 
             // Remove the collapsed group placeholder record
@@ -245,6 +249,7 @@ Ext.define('Ext.grid.feature.GroupStore', {
     collapseGroup: function(group) {
         var me = this,
             groupingFeature = me.groupingFeature,
+            lockingPartner = groupingFeature.lockingPartner,
             startIdx,
             placeholder,
             len, items;
@@ -261,6 +266,9 @@ Ext.define('Ext.grid.feature.GroupStore', {
 
             // Any event handlers must see the new state
             groupingFeature.getMetaGroup(group).isCollapsed = true;
+            if (lockingPartner) {
+                lockingPartner.getMetaGroup(group).isCollapsed = true;
+            }
             me.isExpandingOrCollapsing = 2;
 
             // Remove the group child records

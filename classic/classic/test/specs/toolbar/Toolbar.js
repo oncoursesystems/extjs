@@ -1,7 +1,7 @@
 /* global expect, Ext, jasmine, it */
 
 topSuite("Ext.toolbar.Toolbar",
-    ['Ext.Button', 'Ext.button.Segmented', 'Ext.form.field.Text', 'Ext.form.field.Radio',
+    ['Ext.button.Split', 'Ext.button.Segmented', 'Ext.form.field.Text', 'Ext.form.field.Radio',
      'Ext.slider.Single', 'Ext.layout.container.boxOverflow.Menu'],
 function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,

@@ -51,12 +51,27 @@ Ext.define('Ext.button.Split', {
      * @cfg {String} arrowTooltip
      * The title attribute of the arrow.
      */
+    
+    /**
+     * @cfg {Boolean} [separateArrowStyling=false] If enabled, arrow element mouseover,
+     * click, and focus events will be handled separately from main element and
+     * corresponding hover, pressed, and focused states will be added separately
+     * to main element and arrow element, respectively.
+     *
+     * This requires theme support for extended states (see Graphite theme).
+     *
+     * @since 6.6.0
+     * @private
+     */
+    separateArrowStyling: false,
 
     /**
      * @private
      */
     arrowCls: 'split',
     split: true,
+    
+    componentCls: Ext.baseCSSPrefix + 'split-button',
 
     /**
      * @event arrowclick
@@ -154,6 +169,54 @@ Ext.define('Ext.button.Split', {
     setArrowHandler: function(handler, scope) {
         this.arrowHandler = handler;
         this.scope = scope;
+    },
+    
+    onMouseDown: function(e) {
+        var me = this;
+        
+        if (me.separateArrowStyling && !me.disabled && e.button === 0 && 
+            me.isWithinTrigger(e)) {
+            e.preventDefault();
+            me.arrowEl.focus();
+            
+            Ext.button.Manager.onButtonMousedown(me, e);
+            me.addCls(me._arrowPressedCls);
+        }
+        else {
+            me.callParent([e]);
+        }
+    },
+    
+    onMouseUp: function(e) {
+        var me = this;
+        
+        if (me.separateArrowStyling && !me.destroyed && e.button === 0 && 
+            me.isWithinTrigger(e)) {
+            me.removeCls(me._arrowPressedCls);
+        }
+        else {
+            me.callParent([e]);
+        }
+    },
+    
+    onMenuTriggerOver: function(e) {
+        var me = this;
+        
+        if (me.separateArrowStyling && !me.disabled) {
+            me.addCls(me._arrowOverCls);
+        }
+        
+        me.callParent([e]);
+    },
+    
+    onMenuTriggerOut: function(e) {
+        var me = this;
+        
+        if (me.separateArrowStyling && !me.disabled) {
+            me.removeCls(me._arrowOverCls);
+        }
+        
+        me.callParent([e]);
     },
 
     /**

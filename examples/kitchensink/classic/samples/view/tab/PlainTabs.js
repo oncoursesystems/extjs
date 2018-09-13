@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.tab.PlainTabs', {
     exampleTitle: 'Plain Tabs',
     //</example>
     
-    width: 400,
+    width: 500,
     height: 300,
     plain: true,
     defaults: {
@@ -30,6 +30,10 @@ Ext.define('KitchenSink.view.tab.PlainTabs', {
     }, {
         title: 'Inactive Tab',
         html: KitchenSink.DummyText.extraLongText
+    }, {
+        title: 'Closable Tab',
+        html: 'Closable',
+        closable: true
     }, {
         title: 'Disabled Tab',
         disabled: true

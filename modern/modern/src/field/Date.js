@@ -213,6 +213,8 @@ Ext.define('Ext.field.Date', {
     },
 
     updateValue: function(value, oldValue) {
+        // Used picker directly instead of using getter as getter will create picker if it does not exist. 
+        //We don't want to create the picker in value updater, this might lead to bugs as well as performance challenges.
         var picker = this._picker;
 
         if (picker && picker.isPicker && Ext.isDate(value)) {
@@ -295,13 +297,14 @@ Ext.define('Ext.field.Date', {
     },
 
     applyPicker: function(picker, oldPicker) {
-        var me = this,
-            type;
+        var me = this;
 
         picker = me.callParent([picker, oldPicker]);
 
-        me.pickerType = type = picker.xtype === 'datepicker' ? 'edge' : 'floated';
-        picker.ownerCmp = me;
+        if (picker) {
+            me.pickerType = picker.xtype === 'datepicker' ? 'edge' : 'floated';
+            picker.ownerCmp = me;
+        }
 
         return picker;
     },
@@ -316,8 +319,8 @@ Ext.define('Ext.field.Date', {
             maxDate = this.getMaxDate();
 
         return Ext.merge({
-            yearFrom: minDate ? minDate.getFullyear() : (new Date().getFullYear() - 20),
-            yearTo: maxDate ? maxDate.getFullyear() : (new Date().getFullYear() + 20)
+            yearFrom: minDate ? minDate.getFullYear() : (new Date().getFullYear() - 20),
+            yearTo: maxDate ? maxDate.getFullYear() : (new Date().getFullYear() + 20)
         }, me.getEdgePicker());
     },
 

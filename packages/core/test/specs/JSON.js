@@ -154,6 +154,36 @@ topSuite("Ext.JSON", function() {
                 })).toBe('{"prop":undefined}');
             });
         });
+        
+        describe("toJSON", function() {
+            it("should not call toJSON property if it is not a function", function() {
+                expect(function() {
+                    encode({
+                        toJSON: 'foo'
+                    });
+                }).not.toThrow();
+            });
+            
+            it("should call toJSON property if it is a function", function() {
+                expect(encode({
+                    toJSON: function() {
+                        return '{blerg:"throbbe"}';
+                    }
+                })).toBe('"{blerg:\\"throbbe\\"}"');
+            });
+            
+            it("should encode values returned by toJSON property", function() {
+                expect(encode({
+                    toJSON: function() {
+                        return {
+                            foo: {
+                                bar: 'qux'
+                            }
+                        };
+                    }
+                })).toBe('{"foo":{"bar":"qux"}}');
+            });
+        });
 
         describe('encodeDate', function() {
             var date;

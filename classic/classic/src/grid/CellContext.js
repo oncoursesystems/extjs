@@ -53,7 +53,7 @@ Ext.define('Ext.grid.CellContext', {
     
     generation: 0,
 
-     /**
+    /**
       * Creates a new CellContext which references a {@link Ext.view.Table GridView}
       * @param {Ext.view.Table} view The {@link Ext.view.Table GridView} for which the cell context is needed.
       *
@@ -123,7 +123,7 @@ Ext.define('Ext.grid.CellContext', {
             oldRecord = me.record,
             count;
         
-        if (row !== undefined) {
+        if (row != undefined) {
             // Row index passed, < 0 meaning count from the tail (-1 is the last, etc)
             if (typeof row === 'number') {
                 count = dataSource.getCount();
@@ -160,7 +160,7 @@ Ext.define('Ext.grid.CellContext', {
         // We MUST NOT update the context view with the column's view because this context
         // may be for an Ext.locking.View which spans two grid views, and a column references
         // its local grid view.
-        if (col !== undefined) {
+        if (col != undefined) {
             if (typeof col === 'number') {
                 me.colIdx = col;
                 me.column = colMgr.getHeaderAtIndex(col);

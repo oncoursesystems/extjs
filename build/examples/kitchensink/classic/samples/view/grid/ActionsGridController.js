@@ -5,9 +5,9 @@ Ext.define('KitchenSink.view.grid.ActionsGridController', {
     renderChange: function(val) {
         var out = Ext.util.Format.number(val, '0.00');
         if (val > 0) {
-            return '<span style="color:' + this.getView().profileInfo.green + ';">' + out + '</span>';
+            return '<span style="color:' + this.getView().profileInfo.gainColor + ';">' + out + '</span>';
         } else if (val < 0) {
-            return '<span style="color:' + this.getView().profileInfo.red + ';">' + out + '</span>';
+            return '<span style="color:' + this.getView().profileInfo.lossColor + ';">' + out + '</span>';
         }
         return out;
     },
@@ -15,9 +15,9 @@ Ext.define('KitchenSink.view.grid.ActionsGridController', {
     renderPctChange: function(val) {
         var out = Ext.util.Format.number(val, '0.00%');
         if (val > 0) {
-            return '<span style="color:' + this.getView().profileInfo.green + ';">' + out + '</span>';
+            return '<span style="color:' + this.getView().profileInfo.gainColor + ';">' + out + '</span>';
         } else if (val < 0) {
-            return '<span style="color:' + this.getView().profileInfo.red + ';">' + out + '</span>';
+            return '<span style="color:' + this.getView().profileInfo.lossColor + ';">' + out + '</span>';
         }
         return out;
     },

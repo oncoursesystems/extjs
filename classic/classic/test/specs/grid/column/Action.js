@@ -1,4 +1,5 @@
-/* global Ext, jasmine, expect, spyOn */
+/* global Ext, jasmine, expect, spyOn, topSuite */
+/* eslint indent: off */
 
 topSuite("Ext.grid.column.Action",
     ['Ext.grid.Panel', 'Ext.window.MessageBox'],
@@ -175,6 +176,61 @@ function() {
             waitsFor(function() {
                 return Ext.Element.getActiveElement() === actionItemEl;
             }, 'focus to return to the action item');
+        });
+    });
+
+    describe("quicktips", function() {
+        it("should be able to render html", function() {
+            makeGrid({
+                columns: [{
+                    dataIndex: 'text',
+                    header: 'Text'
+                }, {
+                    xtype: 'actioncolumn',
+                    dataIndex: 'actionCls',
+                    header: 'Action',
+                    renderer: Ext.emptyFn,
+                    items: [{
+                        iconCls: 'x-fa fa-cog',
+                        getTip: function (value, metadata, record) {
+                            return record.get('tip');
+                        }
+                    }]
+                }]
+            }, {
+                data: [{
+                    text: 'foo',
+                    tip: '<b>foo</b>'
+                }]
+            });
+
+            expect(getActionItem(0,1).getAttribute('data-qtip')).toBe('<b>foo</b>');
+        });
+
+        it("should not render encoded html as html", function() {
+            makeGrid({
+                columns: [{
+                    dataIndex: 'text',
+                    header: 'Text'
+                }, {
+                    xtype: 'actioncolumn',
+                    dataIndex: 'actionCls',
+                    header: 'Action',
+                    items: [{
+                        iconCls: 'x-fa fa-cog',
+                        getTip: function (value, metadata, record) {
+                            return record.get('tip');
+                        }
+                    }]
+                }]
+            }, {
+                data: [{
+                    text: 'foo',
+                    tip: '&lt;b&gt;foo&lt;/b&gt;'
+                }]
+            });
+
+            expect(getActionItem(0,1).getAttribute('data-qtip')).toBe('&lt;b&gt;foo&lt;/b&gt;');
         });
     });
 

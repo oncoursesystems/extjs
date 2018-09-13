@@ -425,7 +425,7 @@ Ext.define('Ext.grid.column.Check', {
             prop = me.property;
 
         // Only proceed if we NEED to change
-        if (prop ? record[prop] : record.get(me.dataIndex) != checked) {
+        if ((prop ? record[prop] : record.get(me.dataIndex)) != checked) {
             if (prop) {
                 record[prop] = checked;
                 me.updater(cell, checked);

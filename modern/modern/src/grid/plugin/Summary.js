@@ -66,7 +66,11 @@ Ext.define('Ext.grid.plugin.Summary', {
         'Ext.mixin.Bufferable',
         'Ext.mixin.StoreWatcher'
     ],
-
+	
+    requires: [
+        'Ext.grid.SummaryRow'
+    ],
+	
     config: {
         /**
          * @cfg {Ext.grid.SummaryRow/Object} row

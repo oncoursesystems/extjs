@@ -205,7 +205,7 @@ Ext.define('Ext.grid.Location', {
             delete ret.sourceElement;
         }
 
-        if (record) {
+        if (record != null) {
             delete me.source;
             me.superclass.attach.call(ret, record);
             ret.row = ret.item;
@@ -215,7 +215,7 @@ Ext.define('Ext.grid.Location', {
             ret.rowBody = me.rowBody;
         }
 
-        if (column) {
+        if (column != null) {
             ret._setColumn(column);
         } else {
             ret.cell = cell = me.cell;
@@ -259,9 +259,9 @@ Ext.define('Ext.grid.Location', {
             // recordIndex and column identity.
 
             // We'll always have a recordIndex (even if it's -1 due to virtual stores).
-            // Therefore it's valid to check both record indices.
-            // If they differ, the locations can never be equal.
-            if (me.recordIndex !== other.recordIndex) {
+            // Therefore it's valid to check both record indices. If they differ, the locations can never be equal.
+            // And if index is the same but records are different, our location needs to be updated.
+            if ((me.recordIndex !== other.recordIndex) || me.record !== other.record) {
                 return false;
             }
 

@@ -83,7 +83,7 @@
  * see the changes on-screen.
  * 
  * For information on configuring a sprite with an initial transformation see 
- * {@link #scaling}, {@link rotation}, and {@link translation}.
+ * {@link #scaling}, {@link #rotation}, and {@link #translation}.
  * 
  * For information on applying a transformation to an existing sprite see the 
  * Ext.draw.Matrix class.

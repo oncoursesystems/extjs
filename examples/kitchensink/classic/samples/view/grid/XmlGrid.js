@@ -19,10 +19,22 @@ Ext.define('KitchenSink.view.grid.XmlGrid', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            tittleWidth: 180,
+            manufacturerWidth: 115,
+            productGroupWidth: 100
         },
         neptune: {
-            width: 650
+            width: 650,
+            tittleWidth: 180,
+            manufacturerWidth: 115,
+            productGroupWidth: 100
+        },
+        graphite: {
+            width: 900,
+            tittleWidth: 300,
+            manufacturerWidth: 170,
+            productGroupWidth: 150
         }
     },
     //</example>
@@ -48,22 +60,18 @@ Ext.define('KitchenSink.view.grid.XmlGrid', {
     columns: [{
         text: "Author",
         dataIndex: 'Author',
-
         flex: 1
     }, {
         text: "Title",
         dataIndex: 'Title',
-
-        width: 180
+        width: '${tittleWidth}'
     }, {
         text: "Manufacturer",
         dataIndex: 'Manufacturer',
-
-        width: 115
+        width: '${manufacturerWidth}'
     }, {
         text: "Product Group",
         dataIndex: 'ProductGroup',
-
-        width: 100
+        width: '${productGroupWidth}'
     }]
 });

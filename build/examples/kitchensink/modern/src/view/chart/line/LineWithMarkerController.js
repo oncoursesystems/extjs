@@ -3,6 +3,8 @@ Ext.define('KitchenSink.view.chart.line.LineWithMarkerController', {
     alias: 'controller.line-marked',
 
     init: function (view) {
+        this.callParent([view]);
+
         if (!Ext.supports.Touch) {
             /**
              * Touch devices do not need the toggle buttons

@@ -1,4 +1,5 @@
-/* global Ext, jasmine, expect, spyOn, it */
+/* global Ext, jasmine, expect, spyOn, it, topSuite */
+/* eslint indent: off */
 
 topSuite("Ext.grid.plugin.RowWidget",
     ['Ext.grid.Panel', 'Ext.Button', 'Ext.app.ViewModel', 'Ext.grid.column.*'],
@@ -83,13 +84,13 @@ function() {
         });
         Ext.define('spec.RowWidgetOrder', {
             extend: 'Ext.data.Model',
-    
-    requires: [
-        'Ext.data.proxy.Memory',
-        'Ext.data.reader.Json'
-    ],
-    
-    fields: [
+
+            requires: [
+                'Ext.data.proxy.Memory',
+                'Ext.data.reader.Json'
+            ],
+
+            fields: [
                 { name: 'id' },
                 // Declare an association with Company.
                 // Each Company record will be decorated with
@@ -1027,6 +1028,29 @@ function() {
                     });
                 }
 
+                it("should be able to focus a component in the normal view", function() {
+                    makeLockedGrid(false);
+
+                    expander.toggleRow(1, store.getAt(1));
+                    widget = expander.getWidget(grid.normalGrid.view, store.getAt(1));
+
+                    waitsFor(function() {
+                        return widget.rendered;
+                    });
+
+                    runs(function() {
+                        jasmine.fireMouseEvent(widget, 'click');
+                    });
+
+                    waitsFor(function() {
+                        return widget.hasFocus;
+                    });
+
+                    runs(function() {
+                        expect(Ext.fly(widget.ownerCmp.getRow(1)).selectNode('.x-grid-cell')).not.toHaveCls('x-grid-item-focused');
+                    });
+                });
+
                 it("should use the lockedWidget content (when it is taller) to determine scroll distance", function() {
                     var viewBottom, rowBottom;
 
@@ -1186,6 +1210,8 @@ function() {
                     var expanders = grid.view.el.query('.x-grid-row-expander'),
                         lockedView = grid.lockedGrid.view,
                         normalView = grid.normalGrid.view,
+                        lockedBR = lockedView.bufferedRenderer,
+                        normalBR = normalView.bufferedRenderer,
                         item0CollapsedHeight = lockedView.all.item(0, true).offsetHeight,
                         item0ExpandedHeight;
 
@@ -1204,11 +1230,32 @@ function() {
 
                     waits(500);
                     runs(function() {
+                        // Everything must be in sync
+                        expect(normalBR.bodyTop).toBe(lockedBR.bodyTop);
+                        expect(normalBR.scrollTop).toBe(lockedBR.scrollTop);
+                        expect(normalBR.position).toBe(lockedBR.position);
+                        expect(normalBR.rowHeight).toBe(lockedBR.rowHeight);
+                        expect(normalBR.bodyHeight).toBe(lockedBR.bodyHeight);
+                        expect(normalBR.viewClientHeight).toBe(lockedBR.viewClientHeight);
+
                         normalView.setScrollY(0);
                     });
 
                     waits(500);
                     runs(function() {
+                        // We must be at position zero
+                        expect(lockedBR.bodyTop).toBe(0);
+                        expect(lockedBR.scrollTop).toBe(0);
+                        expect(lockedBR.position).toBe(0);
+
+                        // Everything must be in sync
+                        expect(normalBR.bodyTop).toBe(lockedBR.bodyTop);
+                        expect(normalBR.scrollTop).toBe(lockedBR.scrollTop);
+                        expect(normalBR.position).toBe(lockedBR.position);
+                        expect(normalBR.rowHeight).toBe(lockedBR.rowHeight);
+                        expect(normalBR.bodyHeight).toBe(lockedBR.bodyHeight);
+                        expect(normalBR.viewClientHeight).toBe(lockedBR.viewClientHeight);
+
                         // We scrolled the normal view, and the locked view should have had its newly rendered row 0 height synced
                         expect(lockedView.all.item(0, true).offsetHeight).toBe(item0ExpandedHeight);
                     });

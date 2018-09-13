@@ -37,7 +37,7 @@ Ext.define('KitchenSink.view.direct.Form', {
     
     title: 'My Profile',
     width: 500,
-    height: 400,
+    height: 500,
     
     layout: 'accordion',
     

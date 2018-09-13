@@ -24,6 +24,9 @@ Ext.define('KitchenSink.view.form.SliderField', {
         },
         'neptune-touch': {
             labelWidth: 150
+        },
+        graphite: {
+            labelWidth: 160
         }
     },
     //</example>
@@ -56,6 +59,11 @@ Ext.define('KitchenSink.view.form.SliderField', {
         fieldLabel: 'Interface Sounds',
         value: 25,
         name: 'iface'
+    }, {
+        fieldLabel: 'Space Sounds',
+        value: 40,
+        name: 'space',
+        disabled: true
     }],
 
     bbar: [{

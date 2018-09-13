@@ -25,7 +25,19 @@ Ext.define('KitchenSink.view.charts.bar.Basic', {
     }],
     // </example>
 
-    width: 650,
+    width: '${width}',
+    
+    profiles: {
+        classic: {
+            width: 650
+        },
+        neptune: {
+            width: 650
+        },
+        graphite: {
+            width: 800
+        }
+    },
 
     items: [{
         xtype: 'cartesian',

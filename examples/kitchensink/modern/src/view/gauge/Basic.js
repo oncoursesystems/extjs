@@ -3,7 +3,7 @@ Ext.define('KitchenSink.view.gauge.Basic', {
     xtype: 'default-gauge',
 
     requires: [
-        'Ext.ux.Gauge'
+        'Ext.ux.gauge.Gauge'
     ],
 
     // <example>
@@ -28,6 +28,7 @@ Ext.define('KitchenSink.view.gauge.Basic', {
     cls: 'demo-solid-background',
     // </example>
 
+    title: 'Basic',
     width: '${width}',
     height: '${height}',
     padding: 20,

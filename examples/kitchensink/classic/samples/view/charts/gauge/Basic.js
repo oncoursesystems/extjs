@@ -23,6 +23,18 @@ Ext.define('KitchenSink.view.charts.gauge.Basic', {
     // </example>
     width: 650,
 
+    profiles: {
+        classic: {
+            insetPadding: 20
+        },
+        neptune: {
+            insetPadding: 20
+        },
+        graphite: {
+            insetPadding: 25
+        }
+    },
+    
     tbar: [
         '->',
         {
@@ -64,7 +76,7 @@ Ext.define('KitchenSink.view.charts.gauge.Basic', {
                 xtype: 'polar',
                 height: 240,
                 width: 300,
-                insetPadding: 20,
+                insetPadding: '${insetPadding}',
                 captions: {
                     title: {
                         text: 'Fuel',
@@ -116,7 +128,7 @@ Ext.define('KitchenSink.view.charts.gauge.Basic', {
                 height: 240,
                 width: 300,
                 padding: '10 0 0 0',
-                insetPadding: 20,
+                insetPadding: '${insetPadding}',
                 captions: {
                     title: {
                         text: 'Temp',
@@ -144,7 +156,7 @@ Ext.define('KitchenSink.view.charts.gauge.Basic', {
                 height: 240,
                 width: 300,
                 padding: '10 0 0 10',
-                insetPadding: 20,
+                insetPadding:'${insetPadding}',
                 captions: {
                     title: {
                         text: 'RPM',

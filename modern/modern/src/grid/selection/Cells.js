@@ -172,6 +172,7 @@ Ext.define('Ext.grid.selection.Cells', {
             // Must clone them. Users might use one instance and reconfigure it to navigate.
             this.startCell = (this.endCell = startCell.clone()).clone();
             this.view.onCellSelect(startCell);
+            this.fireCellSelection();
         },
 
         /**
@@ -213,6 +214,7 @@ Ext.define('Ext.grid.selection.Cells', {
                 }
             }
             me.lastRange = range;
+            me.fireCellSelection();
         },
 
         extendRange: function(extensionVector) {
@@ -227,15 +229,51 @@ Ext.define('Ext.grid.selection.Cells', {
                 });
                 me.startCell = extensionVector.start.clone();
                 me.setRangeEnd(newEndCell);
-                me.view.getNavigationModel().setLocation(extensionVector.start);
+                view.getNavigationModel().setLocation({
+                    column: extensionVector.start.columnIndex,
+                    record: extensionVector.start.record
+                });
             } else {
                 me.startCell = new Ext.grid.Location(view, {
                     record: me.getFirstRowIndex(),
                     column: me.getFirstColumnIndex()
                 });
                 me.setRangeEnd(extensionVector.end);
-                me.view.getNavigationModel().setLocation(extensionVector.end);
+
+                view.getNavigationModel().setLocation({
+                    column: extensionVector.end.columnIndex,
+                    record: extensionVector.end.record
+                });
             }
+        },
+
+        reduceRange: function(extensionVector) {
+            var me = this,
+                view = me.view,
+                newEndCell;
+
+            if (extensionVector.type === 'rows') {
+                newEndCell = new Ext.grid.Location(view, {
+                    record: extensionVector.end.recordIndex - 1,
+                    column: extensionVector.end.columnIndex
+                });
+                me.setRangeEnd(newEndCell);
+                view.getNavigationModel().setLocation({
+                    column: extensionVector.end.columnIndex,
+                    record: me.view.getStore().getAt(extensionVector.end.recordIndex - 1)
+                });
+            } else {
+                newEndCell = new Ext.grid.Location(view, {
+                    record: extensionVector.end.recordIndex,
+                    column: extensionVector.end.columnIndex
+                });
+                me.setRangeEnd(newEndCell);
+                view.getNavigationModel().setLocation({
+                    column: extensionVector.end.columnIndex,
+                    record: me.view.getStore().getAt(extensionVector.end.recordIndex)
+                });
+            }
+            
         },
 
         /**
@@ -280,6 +318,14 @@ Ext.define('Ext.grid.selection.Cells', {
             var range = this.getRange();
 
             return (range[1][0] - range[0][0] + 1) * (range[1][1] - range[0][1] + 1);
+        },
+
+        fireCellSelection: function() {
+            var me = this,
+                selModel = me.getSelectionModel(),
+                view = selModel.getView();
+
+            view.fireEvent('cellselection', view, me.getRange());
         },
 
         /**

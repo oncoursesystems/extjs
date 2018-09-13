@@ -280,7 +280,7 @@ Ext.define('Ext.data.proxy.Server', {
      */
     processResponse: function(success, operation, request, response) {
         var me = this,
-            exception, reader, resultSet, meta;
+            exception, reader, resultSet, meta, destroyOp;
         
         // Async callback could have landed at any time, including during and after
         // destruction. We don't want to unravel the whole response chain in such case.
@@ -310,6 +310,11 @@ Ext.define('Ext.data.proxy.Server', {
                 });
             }
 
+            if (!operation.$destroyOwner) {
+                operation.$destroyOwner = me;
+                destroyOp = true;
+            }
+            
             operation.process(resultSet, request, response);
             exception = !operation.wasSuccessful();
         } else {
@@ -320,6 +325,10 @@ Ext.define('Ext.data.proxy.Server', {
         // It is possible that exception callback destroyed the store and owning proxy,
         // in which case we can't do nothing except punt.
         if (me.destroyed) {
+            if (!operation.destroyed && destroyOp && operation.$destroyOwner === me) {
+                operation.destroy();
+            }
+            
             return;
         }
         
@@ -337,6 +346,10 @@ Ext.define('Ext.data.proxy.Server', {
 
         // Ditto
         if (me.destroyed) {
+            if (!operation.destroyed && destroyOp && operation.$destroyOwner === me) {
+                operation.destroy();
+            }
+            
             return;
         }
 
@@ -346,6 +359,10 @@ Ext.define('Ext.data.proxy.Server', {
         // It will fire its endupdate event which will cause interested views to 
         // resume layouts.
         me.fireEvent('endprocessresponse', me, response, operation);
+        
+        if (!operation.destroyed && destroyOp && operation.$destroyOwner === me) {
+            operation.destroy();
+        }
     },
     
     /**

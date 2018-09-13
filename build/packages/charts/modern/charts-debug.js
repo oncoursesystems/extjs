@@ -852,7 +852,7 @@ Ext.define('Ext.draw.sprite.AttributeDefinition', {
          *         size: 'size'   // Use comma-separated values here if multiple updaters have to be called.
          *     }                  // Note that the order is _not_ guaranteed.
          *
-         * If any of the updaters to be called (triggered by the {@link Ext.draw.sprite.Sprite#setAttributes call)
+         * If any of the updaters to be called (triggered by the {@link Ext.draw.sprite.Sprite#setAttributes} call)
          * set attributes themselves and those attributes have triggers defined for them,
          * then their updaters will be called after all current updaters finish execution.
          *
@@ -3394,7 +3394,7 @@ Ext.define('Ext.draw.modifier.Highlight', {
  * see the changes on-screen.
  * 
  * For information on configuring a sprite with an initial transformation see 
- * {@link #scaling}, {@link rotation}, and {@link translation}.
+ * {@link #scaling}, {@link #rotation}, and {@link #translation}.
  * 
  * For information on applying a transformation to an existing sprite see the 
  * Ext.draw.Matrix class.
@@ -15381,6 +15381,12 @@ Ext.define('Ext.chart.series.Series', {
          *
          * Note that tooltips are shown for series markers and won't work
          * if the {@link #marker} is not configured.
+         *
+         * You can also configure
+         * {@link Ext.chart.interactions.ItemHighlight#multiTooltips}
+         * to display multiple tooltips for adjacent or overlapping Line series
+         * data points within {@link Ext.chart.series.Line#selectionTolerance} radius.
+         *
          * @cfg {Object} tooltip.scope The scope to use when the renderer function is 
          * called.  Defaults to the Series instance.
          * @cfg {Function} tooltip.renderer An 'interceptor' method which can be used to 
@@ -15698,7 +15704,7 @@ Ext.define('Ext.chart.series.Series', {
                     20,
                     20
                 ],
-                trackmouse: true
+                trackMouse: true
             }, tooltip);
         return Ext.create(config);
     },
@@ -16876,7 +16882,7 @@ Ext.define('Ext.chart.interactions.Abstract', {
      * Find and return all series items corresponding to the given event.
      * @param {Event} e
      * @return {Array} array of matching item objects
-     * @protected
+     * @private
      * @deprecated 6.5.2 This method is deprecated
      */
     getItemsForEvent: function(e) {
@@ -19302,6 +19308,7 @@ Ext.define('Ext.chart.axis.Axis', {
          * If {@link #majorTickSteps}, {@link #minimum} or {@link #maximum}
          * configs have been set, this config will be ignored.
          * Defaults to 'true'.
+         * Note: this config has no effect if the axis is {@link #hidden}.
          */
         adjustByMajorUnit: true,
         /**
@@ -19452,6 +19459,9 @@ Ext.define('Ext.chart.axis.Axis', {
             oldTitle.setAttributes(title);
         }
         return oldTitle;
+    },
+    getAdjustByMajorUnit: function() {
+        return !this.getHidden() && this.callParent();
     },
     applyFloating: function(floating, oldFloating) {
         if (floating === null) {
@@ -20427,6 +20437,15 @@ Ext.define('Ext.chart.legend.Legend', {
                     // This will trigger AbstractChart.onLegendStoreUpdate.
                     record.set('disabled', !disabled);
                 }
+            }
+        }
+    },
+    onResize: function(width, height, oldWidth, oldHeight) {
+        var me = this,
+            chart = me.chart;
+        if (!me.isConfiguring) {
+            if (chart) {
+                chart.scheduleLayout();
             }
         }
     }
@@ -24023,6 +24042,7 @@ Ext.define('Ext.chart.AbstractChart', {
         return result;
     },
     /**
+     * @private
      * Given an x/y point relative to the chart, find and return all series items that match that point.
      * @param {Number} x
      * @param {Number} y
@@ -24041,7 +24061,7 @@ Ext.define('Ext.chart.AbstractChart', {
         for (; i >= 0; i--) {
             series = seriesList[i];
             item = series.getItemForPoint(x, y);
-            if (item && item.category === 'items') {
+            if (item && (item.category === 'items' || item.category === 'markers')) {
                 items.push(item);
             }
         }
@@ -24176,6 +24196,7 @@ Ext.define('Ext.chart.AbstractChart', {
             series = me.getSeries(),
             axes = me.getAxes(),
             interaction = me.getInteractions(),
+            legend = me.getLegend(),
             ans = [],
             i, ln;
         for (i = 0 , ln = series.length; i < ln; i++) {
@@ -24195,6 +24216,9 @@ Ext.define('Ext.chart.AbstractChart', {
             if (interaction[i].getRefItems) {
                 ans.push.apply(ans, interaction[i].getRefItems(deep));
             }
+        }
+        if (legend) {
+            ans.push(legend);
         }
         return ans;
     }
@@ -26174,7 +26198,7 @@ Ext.define('Ext.chart.interactions.CrossZoom', {
         }
     },
     getSurface: function() {
-        return this.getChart() && this.getChart().getSurface('main');
+        return this.getChart() && this.getChart().getSurface('overlay');
     },
     setSeriesOpacity: function(opacity) {
         var surface = this.getChart() && this.getChart().getSurface('series');
@@ -26882,14 +26906,36 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
          * Series items will only be highlighted/unhighlighted on mouse click.
          * This config has no effect on touch devices.
          */
-        sticky: false
+        sticky: false,
+        /**
+         * @cfg {Boolean} [multiTooltips=false]
+         * Enable displaying multiple tooltips for overlapping or adjacent series items within
+         * {@link Ext.chart.series.Line#selectionTolerance} radius.
+         * Default is to display a tooltip only for the last series item rendered.
+         * When multiple tooltips are displayed, they may overlap partially or completely;
+         * it is up to the developer to ensure tooltip positioning is satisfactory.
+         * 
+         * @since 6.6.0
+         */
+        multiTooltips: false
     },
-    stickyHighlightItem: null,
+    constructor: function(config) {
+        this.callParent([
+            config
+        ]);
+        this.stickyHighlightItem = null;
+        this.tooltipItems = [];
+    },
+    destroy: function() {
+        this.stickyHighlightItem = this.tooltipItems = null;
+        this.callParent();
+    },
     onMouseMoveGesture: function(e) {
         var me = this,
-            oldItem = me.oldItem,
+            tooltipItems = me.tooltipItems,
             isMousePointer = e.pointerType === 'mouse',
-            item, tooltip;
+            tooltips = [],
+            item, oldItem, items, tooltip, oldTooltip, i, len, j, jLen;
         if (me.getSticky()) {
             return true;
         }
@@ -26898,40 +26944,67 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
             me.highlight(null);
         }
         if (me.isDragging) {
-            if (oldItem && isMousePointer) {
-                oldItem.series.hideTooltip(oldItem);
-                me.oldItem = null;
+            if (tooltipItems.length && isMousePointer) {
+                me.hideTooltips(tooltipItems);
+                tooltipItems.length = 0;
             }
         } else if (!me.stickyHighlightItem) {
-            item = me.getItemForEvent(e);
-            if (item !== me.getChart().getHighlightItem()) {
-                me.highlight(item);
-                me.sync();
+            if (me.getMultiTooltips()) {
+                items = me.getItemsForEvent(e);
+            } else {
+                item = me.getItemForEvent(e);
+                items = item ? [
+                    item
+                ] : [];
+            }
+            for (i = 0 , len = items.length; i < len; i++) {
+                item = items[i];
+                // Items are returned top to down, so first item is the top one.
+                // Chart can only have one highlighted item.
+                if (i === 0 && item !== me.getChart().getHighlightItem()) {
+                    me.highlight(item);
+                    me.sync();
+                }
+                tooltip = item.series.getTooltip();
+                if (tooltip) {
+                    tooltips.push(tooltip);
+                }
             }
             if (isMousePointer) {
                 // If we detected a mouse hit, show/refresh the tooltip
-                if (item) {
-                    tooltip = item.series.getTooltip();
-                    if (tooltip) {
-                        // If there was a different previously active item, ask it to hide its tooltip.
-                        // Unless it's the same tooltip instance that we are about to show.
-                        // In which case, we are just going to reposition it.
-                        if (oldItem && oldItem !== item && oldItem.series.getTooltip() !== tooltip) {
-                            oldItem.series.hideTooltip(oldItem, true);
+                if (items.length) {
+                    for (i = 0 , len = items.length; i < len; i++) {
+                        item = items[i];
+                        tooltip = item.series.getTooltip();
+                        if (tooltip) {
+                            // If there were different previously active items
+                            // that are not going to be included in current active items,
+                            // ask them to hide their tooltips. Unless those are
+                            // the same tooltip instances that we are about to show,
+                            // in which case we are just going to reposition them.
+                            for (j = 0 , jLen = tooltipItems.length; j < jLen; j++) {
+                                oldItem = tooltipItems[j];
+                                if (!Ext.Array.contains(items, oldItem)) {
+                                    oldTooltip = oldItem.series.getTooltip();
+                                    if (!Ext.Array.contains(tooltips, oldTooltip)) {
+                                        oldItem.series.hideTooltip(oldItem, true);
+                                    }
+                                }
+                            }
+                            if (tooltip.getTrackMouse()) {
+                                item.series.showTooltip(item, e);
+                            } else {
+                                me.showUntracked(item);
+                            }
                         }
-                        if (tooltip.getTrackMouse()) {
-                            item.series.showTooltip(item, e);
-                        } else {
-                            me.showUntracked(item);
-                        }
-                        me.oldItem = item;
                     }
-                }
-                // No mouse hit - schedule a hide for hideDelay ms.
+                    me.tooltipItems = items;
+                } else // No mouse hit - schedule a hide for hideDelay ms.
                 // If pointer enters another item within that time,
                 // there will be no flickery reshow.
-                else if (oldItem) {
-                    oldItem.series.hideTooltip(oldItem);
+                {
+                    me.hideTooltips(tooltipItems);
+                    tooltipItems.length = 0;
                 }
             }
             return false;
@@ -26945,7 +27018,7 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
     },
     showTooltip: function(e, item) {
         item.series.showTooltip(item, e);
-        this.oldItem = item;
+        Ext.Array.include(this.tooltipItems, item);
     },
     showUntracked: function(item) {
         var marker = item.sprite.getMarker(item.category),
@@ -26999,6 +27072,20 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
         // toggle
         me.stickyHighlightItem = item;
         me.highlight(item);
+    },
+    privates: {
+        hideTooltips: function(items, force) {
+            var item, i, len;
+            items = Ext.isArray(items) ? items : [
+                items
+            ];
+            for (i = 0 , len = items.length; i < len; i++) {
+                item = items[i];
+                if (item && item.series && !item.series.destroyed) {
+                    item.series.hideTooltip(item, force);
+                }
+            }
+        }
     }
 });
 
@@ -29075,6 +29162,7 @@ Ext.define('Ext.chart.plugin.ItemEvents', {
         this.chart = chart;
         chart.addElementListener({
             click: handleEvent,
+            tap: handleEvent,
             dblclick: handleEvent,
             mousedown: handleEvent,
             mousemove: handleEvent,
@@ -37113,7 +37201,8 @@ Ext.define('Ext.chart.series.Scatter', {
         'Ext.chart.series.sprite.Scatter'
     ],
     config: {
-        itemInstancing: null
+        itemInstancing: null,
+        marker: true
     },
     themeMarkerCount: function() {
         return 1;

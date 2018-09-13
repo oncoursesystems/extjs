@@ -222,6 +222,50 @@ topSuite("Ext.panel.Date", function() {
                 expect(spy).not.toHaveBeenCalled();
             });
         });
+        
+        describe("year picker", function() {
+            var picker, showSpy;
+            
+            beforeEach(function() {
+                showSpy = jasmine.createSpy('picker show');
+                makePanel();
+                picker = panel.getYearPicker();
+                picker.on('show', showSpy);
+            });
+            
+            afterEach(function() {
+                showSpy = picker = null;
+            });
+            
+            it("should open year picker when clicked on the year", function() {
+                jasmine.fireMouseEvent(panel.getHeader().getTitle().yearElement, 'click');
+                
+                waitForSpy(showSpy);
+                
+                runs(function() {
+                    expect(picker.isVisible(true)).toBe(true);
+                });
+            });
+            
+            it("should set the year and close picker when picker item is clicked", function() {
+                panel.toggleYearPicker(true);
+                
+                waitForSpy(showSpy);
+                
+                runs(function() {
+                    var wantYear = today.getFullYear() + 1,
+                        rec, item;
+                    
+                    rec = picker.getStore().find('year', wantYear);
+                    item = picker.getItem(rec);
+                    
+                    jasmine.fireMouseEvent(item.el, 'click');
+                    
+                    expect(panel.getValue().getFullYear()).toBe(wantYear);
+                    expect(picker.isVisible(true)).toBe(false);
+                });
+            });
+        });
     });
     
     (jasmine.supportsTouch ? describe : xdescribe)("touch interaction", function() {

@@ -58,7 +58,7 @@ Ext.define('Ext.grid.column.Check', {
          *
          * Clicking the checkbox will check/uncheck all records.
          */
-        headerCheckbox: null
+        headerCheckbox: false
     },
 
     /**
@@ -241,7 +241,7 @@ Ext.define('Ext.grid.column.Check', {
             grid = me.getGrid();
 
         me.el.toggleCls(me.noHeaderCheckboxCls, !headerCheckbox);
-        me.setSortable(!headerCheckbox);
+        me.setSortable(me.getSortable() && !headerCheckbox);
 
         // May be called in initialization before we are added to a grid.
         if (grid) {

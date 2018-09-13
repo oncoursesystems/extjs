@@ -34,7 +34,7 @@ Ext.define('Ext.field.File', {
      */
     isFile: true,
 
-    proxyConfigs: {
+    proxyConfig: {
         fileButton: [
             /**
              * @cfg multiple
@@ -86,7 +86,7 @@ Ext.define('Ext.field.File', {
             if (multiple && name.substr(-2, 2) !== "[]") {
                 name += "[]";
             } else if ((!multiple) && name.substr(-2, 2) === "[]") {
-                name = name.substr(0, name.length - 2)
+                name = name.substr(0, name.length - 2);
             }
         }
         return name;
@@ -121,6 +121,22 @@ Ext.define('Ext.field.File', {
 
     getFileButton: function() {
         return this.getTriggers().file.getComponent();
+    },
+
+    /**
+     * Resets the fileField values & input values
+     * Along with fileButton dom files.
+     */
+    reset: function() {
+        var me = this, 
+            original = me.originalValue;
+
+        if (original == null) {
+            me.setInputValue('');
+            me._value = '';
+        }
+        
+        me.getFileButton().buttonElement.dom.value = '';
     },
 
     /**

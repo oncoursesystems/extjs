@@ -8,23 +8,31 @@ Ext.define('KitchenSink.view.form.LoginForm', {
     //<example>
     profiles: {
         classic: {
-            labelWidth: 100
+            labelWidth: 100,
+            width: 320
         },
         neptune: {
-            labelWidth: 120
+            labelWidth: 120,
+            width: 320
         },
         gray: {
-            labelWidth: 100
+            labelWidth: 100,
+            width: 320
         },
         "neptune-touch": {
-            labelWidth: 120
+            labelWidth: 120,
+            width: 320
+        },
+         graphite: {
+            labelWidth: 150,
+            width: 420
         }
     },
     //</example>
     
     title: 'Login',
     frame:true,
-    width: 320,
+    width: '${width}',
     bodyPadding: 10,
     
     defaultType: 'textfield',

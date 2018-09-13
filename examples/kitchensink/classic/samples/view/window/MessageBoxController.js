@@ -124,6 +124,7 @@ Ext.define('KitchenSink.view.window.MessageBoxController', {
         Ext.MessageBox.show({
             title: 'What, really?',
             msg: 'Are you sure?',
+            width: Ext.theme.name === "Graphite" ? 300 : 250,
             buttons: Ext.MessageBox.YESNO,
             buttonText:{ 
                 yes: "Definitely!", 

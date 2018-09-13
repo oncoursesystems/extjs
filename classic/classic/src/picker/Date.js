@@ -478,16 +478,17 @@ Ext.define('Ext.picker.Date', {
             me.cacheWidth();
         }
 
-        me.monthBtn = new Ext.button.Split({
+        me.monthBtn = new Ext.button.Button({
             ownerCt: me,
             ownerLayout: me.getComponentLayout(),
             text: '',
             tooltip: me.monthYearText,
             tabIndex: -1,
             ariaRole: 'presentation',
+            showEmptyMenu: false,
+            menu: [],
             listeners: {
                 click: me.doShowMonthPicker,
-                arrowclick: me.doShowMonthPicker,
                 scope: me
             }
         });

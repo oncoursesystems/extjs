@@ -42,9 +42,40 @@ Ext.define('KitchenSink.view.grid.BigData', {
     //</example>
 
     title: 'Editable Big Data Grid',
-    width: 910,
-    height: 400,
-
+    width: '${width}',
+    height: '${height}',
+    profiles: {
+        classic: {
+            width: 910,
+            height: 400,
+            employeeGridWidth: 325,
+            idColumnWidth: 80,
+            nameColumnWidth: 140,
+            dobColumnWidth: 115,
+            emailColumnWidth: 200,
+            fieldStyle: ''
+        },
+        neptune: {
+            width: 910,
+            height: 400,
+            employeeGridWidth: 325,
+            idColumnWidth: 80,
+            nameColumnWidth: 140,
+            dobColumnWidth: 115,
+            emailColumnWidth: 200,
+            fieldStyle: ''
+        },
+        graphite: {
+            width: 1000,
+            height: 500,
+            employeeGridWidth: 395,
+            idColumnWidth: 100,
+            nameColumnWidth: 190,
+            dobColumnWidth: 145,
+            emailColumnWidth: 290,
+            fieldStyle: 'background-color: #aeaeae;'
+        }
+    },
     store: 'BigData',
     columnLines: true,
     multiColumnSort: true,
@@ -66,7 +97,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
         title: 'Employees',
         header: false,
         collapsible: true,
-        width: 325,
+        width: '${employeeGridWidth}',
         minWidth: 290,
         forceFit: true
     },
@@ -93,7 +124,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
         sortable: true,
         dataIndex: 'employeeNo',
         groupable: false,
-        width: 80,
+        width: '${idColumnWidth}',
         locked: true,
         editRenderer: 'bold'
     }, {
@@ -104,7 +135,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
             sorterFn: 'nameSorter' // set controller
         },
 
-        width: 140,
+        width: '${nameColumnWidth}',
         groupable: false,
 
         layout: 'hbox',
@@ -115,6 +146,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
         },
         items: {
             xtype: 'textfield',
+            fieldStyle: '${fieldStyle}',
             reference: 'nameFilterField',
             flex : 1,
             margin: 2,
@@ -139,7 +171,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
         dataIndex: 'dob',
         xtype: 'datecolumn',
         groupable: false,
-        width: 115,
+        width: '${dobColumnWidth}',
         filter: {
 
         },
@@ -188,7 +220,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
         text: 'Email address',
         dataIndex: 'email',
 
-        width: 200,
+        width: '${emailColumnWidth}',
         groupable: false,
         renderer: 'renderMailto',
         editor: {

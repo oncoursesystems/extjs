@@ -10,6 +10,17 @@ Ext.define('KitchenSink.view.layout.Table', {
     exampleTitle: 'Table Layout',
     //</example>
 
+    profiles: {
+        classic: {
+            bodyStyle: ''
+        },
+        neptune: {
+            bodyStyle: ''
+        },
+        graphite: {
+            bodyStyle: 'background-color: #6d6d6d'
+        }
+    },
     xtype: 'layout-table',
     width: 500,
     height: 400,
@@ -28,7 +39,8 @@ Ext.define('KitchenSink.view.layout.Table', {
     
     defaults: {
         bodyPadding: '15 20',
-        border: true
+        border: true,
+        bodyStyle: '${bodyStyle}'
     },
     
     items: [

@@ -167,6 +167,54 @@ topSuite("Ext.data.TreeStore", function() {
         });
     });
 
+    describe("expand node when children not set", function() {
+        it("should expand node without any error if filter function is applied", function() {
+            var node;
+
+            store = new Ext.data.TreeStore({
+                model: NodeModel,
+                root: {
+                    expanded: true,
+                    id: 0,
+                    name: 'Root Node',
+                    children: [{
+                        text: 'Leaf Node',
+                        leaf: true
+                    }, {
+                        text: 'node with chlidren not set',
+                        expanded: false
+                    }, {
+                        text: 'node with children set',
+                        expanded: false,
+                        children: []
+                    }]
+                },
+                filters: function(rec) {
+                    if (rec.get('text').indexOf('.txt') > -1) {
+                        return false;
+                    }
+                    return true;
+                }
+            });
+
+            node = store.getAt(1);
+            
+            expect(function() {
+                node.expand();
+            }).not.toThrow();
+            
+            expect(node.isExpanded()).toBe(true);
+            
+            node = store.getAt(2);
+            
+            expect(function() {
+                node.expand();
+            }).not.toThrow();
+            
+            expect(node.isExpanded()).toBe(true);
+        });
+    });
+
     describe('reload of a TreeStore after a node load', function() {
         it('should pass the root\'s id', function() {
             var lastLoadedId;

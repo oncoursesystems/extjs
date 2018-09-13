@@ -514,6 +514,12 @@ Ext.define('Ext.chart.series.Series', {
          *
          * Note that tooltips are shown for series markers and won't work
          * if the {@link #marker} is not configured.
+         *
+         * You can also configure
+         * {@link Ext.chart.interactions.ItemHighlight#multiTooltips}
+         * to display multiple tooltips for adjacent or overlapping Line series
+         * data points within {@link Ext.chart.series.Line#selectionTolerance} radius.
+         *
          * @cfg {Object} tooltip.scope The scope to use when the renderer function is 
          * called.  Defaults to the Series instance.
          * @cfg {Function} tooltip.renderer An 'interceptor' method which can be used to 
@@ -877,7 +883,7 @@ Ext.define('Ext.chart.series.Series', {
             autoHide: true,
             hideDelay: 200,
             mouseOffset: [20, 20],
-            trackmouse: true
+            trackMouse: true
         }, tooltip);
 
         return Ext.create(config);

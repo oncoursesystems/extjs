@@ -27,7 +27,19 @@ Ext.define('KitchenSink.view.d3.heatmap.Purchases', {
     ],
     // </example>
 
-    width: 960,
+    profiles: {
+        classic: {
+            width: 960
+            
+        },
+        neptune: {
+            width: 960
+        },
+        graphite: {
+            width: 1100  
+        }
+    },
+    width: '${width}',
     height: 700,
 
     layout: 'fit',
@@ -42,7 +54,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Purchases', {
             top: 20,
             right: 30,
             bottom: 20,
-            left: 80
+            left: 90
         },
 
         xAxis: {

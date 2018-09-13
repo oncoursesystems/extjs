@@ -27,6 +27,17 @@ Ext.define('KitchenSink.view.toolbar.ToolbarMenus', {
         path: 'classic/samples/view/toolbar/ToolbarMenusController.js'
     }],
     //</example>
+    profiles: {
+        classic: {
+            width: 135
+        },
+        neptune: {
+            width: 135
+        },
+        graphite: {
+            width: 180
+        }
+    },
 
     title: 'Panel with toolbar with diverse contents',
     frame: true,
@@ -51,7 +62,7 @@ Ext.define('KitchenSink.view.toolbar.ToolbarMenus', {
                     triggerAction: 'all',
                     emptyText: 'Select a state...',
                     selectOnFocus: true,
-                    width: 135,
+                    width: '${width}',
                     indent: true
                 }, {
                     text: 'I like Ext',
@@ -197,7 +208,7 @@ Ext.define('KitchenSink.view.toolbar.ToolbarMenus', {
             triggerAction: 'all',
             emptyText: 'Select a state...',
             selectOnFocus: true,
-            width: 135,
+            width: '${width}',
             indent: true
         }]
     }

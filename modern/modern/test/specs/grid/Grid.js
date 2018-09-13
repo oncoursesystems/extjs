@@ -1,4 +1,5 @@
-/* global Ext, jasmine, expect */
+/* global Ext, jasmine, expect, topSuite */
+/* eslint indent: off */
 
 topSuite("Ext.grid.Grid",
     [
@@ -2063,6 +2064,7 @@ function() {
                                     expectSizes();
                                     grid.on('columnresize', spy);
                                     colMap.colf1.setFlex(3);
+                                    refreshColSizes();
 
                                     waitsFor(function() {
                                         return spy.callCount === 2;
@@ -2122,6 +2124,7 @@ function() {
                                     colMap.colf1.setFlex(1);
                                     colMap.colf1.el.dom.getBoundingClientRect();
                                     colMap.colf2.el.dom.getBoundingClientRect();
+                                    refreshColSizes();
 
                                     waitsFor(function() {
                                         return spy.callCount >= 1;
@@ -2256,6 +2259,7 @@ function() {
                                     grid.on('columnresize', spy);
                                     colMap.colf1.setWidth(300);
                                     colMap.colf1.setFlex(null);
+                                    refreshColSizes();
 
                                     // We are expecting nothing to happen
                                     waits(100);
@@ -2281,6 +2285,7 @@ function() {
                                     grid.on('columnresize', spy);
                                     colMap.colf1.setWidth(400);
                                     colMap.colf1.setFlex(null);
+                                    refreshColSizes();
 
                                     waitsFor(function() {
                                         return spy.callCount >= 2;
@@ -2805,6 +2810,15 @@ function() {
             expect(location.get()).toBe(grid.down('gridcell'));
         });
 
+        it("should update the Location if the current record is removed", function() {
+            expect(location.record).toBe(store.getAt(0));
+            store.remove(store.getAt(0));
+
+            expect(location.recordIndex).toBe(0);
+            expect(location.columnIndex).toBe(0);
+            expect(navigationModel.getLocation().record).toBe(store.getAt(0));
+        });
+
         describe('navigation', function() {
             var newLocation;
 
@@ -2999,8 +3013,8 @@ function() {
                     // Location must be null
                     expectLocation();
 
-                    // Click the OK button
-                    Ext.testHelper.tap(Ext.Msg.down('#ok').getFocusEl());
+                    // Hit the OK button
+                    jasmine.fireKeyEvent(Ext.Msg.down('#ok').getFocusEl(), 'keydown', Ext.event.Event.SPACE);
                 });
 
                 // Wait for the animation
@@ -3703,6 +3717,87 @@ function() {
                 expect(cells[1].getValue()).toBe('f18');
                 expect(cells[2].getValue()).toBe('f17');
 
+            });
+        });
+
+        describe("when grid is re-initialized", function() {
+            beforeEach(function() {
+                makeGrid([{
+                    dataIndex: 'f1',
+                    width: 100,
+                    text: 'F1',
+                    itemId: 'colf1'
+                }, {
+                    dataIndex: 'f2',
+                    width: 100,
+                    text: 'F2',
+                    itemId: 'colf2'
+                }, {
+                    dataIndex: 'f3',
+                    width: 100,
+                    text: 'F3',
+                    itemId: 'colf3'
+                }, {
+                    dataIndex: 'f4',
+                    width: 100,
+                    text: 'F4',
+                    itemId: 'colf4'
+                }, {
+                    dataIndex: 'f5',
+                    width: 100,
+                    text: 'F5',
+                    itemId: 'colf5'
+                }], null, {
+                    renderTo: document.body,
+
+                    store: makeStore(null, {
+                        sorters: {
+                            property: 'f1',
+                            direction: 'ASC'
+                        }
+                    })
+                });
+            });
+
+            it("Grid should stay grouped when it is re-initialized with the grouped store", function() {
+                var colf1 = colMap.colf1,
+                    cells = getCells(colf1);
+                colf1.onGroupByThis();
+                grid = Ext.destroy(grid);
+                expect(grid).toBeNull();
+
+                makeGrid([{
+                    dataIndex: 'f1',
+                    width: 100,
+                    text: 'F1',
+                    itemId: 'colf1'
+                }, {
+                    dataIndex: 'f2',
+                    width: 100,
+                    text: 'F2',
+                    itemId: 'colf2'
+                }, {
+                    dataIndex: 'f3',
+                    width: 100,
+                    text: 'F3',
+                    itemId: 'colf3'
+                }, {
+                    dataIndex: 'f4',
+                    width: 100,
+                    text: 'F4',
+                    itemId: 'colf4'
+                }, {
+                    dataIndex: 'f5',
+                    width: 100,
+                    text: 'F5',
+                    itemId: 'colf5'
+                }], null, {
+                    renderTo: document.body,
+
+                    store: store
+                });
+
+                expect(grid.getGrouped()).toBeTruthy();
             });
         });
 

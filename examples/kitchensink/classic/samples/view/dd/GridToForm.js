@@ -23,9 +23,29 @@ Ext.define('KitchenSink.view.dd.GridToForm', {
     }],
     //</example>
     
-    width: 650,
+    width: '${width}',
     height: 300,
 
+    profiles: {
+        classic: {
+            width: 650,
+            gridWidth: 325,
+            columnTwoWidth: 80,
+            columnThreeWidth: 80
+        },
+        neptune: {
+            width: 650,
+            gridWidth: 325,
+            columnOneWidth: 80,
+            columnTwoWidth: 80
+        },
+        graphite: {
+            width: 790,
+            gridWidth: 365,
+            columnOneWidth: 100,
+            columnTwoWidth: 100
+        }
+    },
     bodyPadding: 5,
 
     layout: {
@@ -39,7 +59,7 @@ Ext.define('KitchenSink.view.dd.GridToForm', {
         reference: 'grid',
 
         enableDragDrop: true,
-        width: 325,
+        width: '${gridWidth}',
         margin: '0 5 0 0',
 
         viewConfig: {
@@ -88,20 +108,20 @@ Ext.define('KitchenSink.view.dd.GridToForm', {
             header: 'column1',
             dataIndex: 'column1',
             
-            width: 80,
+            width: '${columnOneWidth}',
             sortable: true
         }, {
             header: 'column2',
             dataIndex: 'column2',
 
-            width: 80,
+            width: '${columnTwoWidth}',
             sortable: true
         }]
     }, {
         xtype: 'form',
         title: 'Generic Form Panel',
         reference: 'form',
-
+		width:300,
         flex: 1,
         bodyPadding: 10,
         labelWidth: 100,

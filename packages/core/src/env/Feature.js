@@ -1527,16 +1527,14 @@ Ext.feature = {
     {
         name: 'CSSVariables',
         ready: false,
-        fn: function(doc) {
+        fn: function() {
             //<feature legacyBrowser>
             // Legacy browsers do not have this method.
             if (!window.getComputedStyle) {
                 return false;
             }
             //</feature>
-            var style = window.getComputedStyle(doc.documentElement);
-
-            return style.getPropertyValue && !!style.getPropertyValue('--x-supports-variables');
+            return window.CSS && window.CSS.supports && window.CSS.supports('--test-var', 0);
         }
     },
     {
@@ -1589,7 +1587,31 @@ Ext.feature = {
 
             return div.firstChild.scrollWidth > div.firstChild.clientWidth;
         }
-    }, {
+    }, 
+    {
+        /**
+         * @property FlexBoxBasisBug
+         * @private
+         * @type {Boolean}
+         * Allows align: stretch to align items to the height of the tallest item
+         * in an auto-heighted hbox layout.
+         * can't use flex-basis: auto everywhere because it breaks percentage-sized children
+         * https://bugs.chromium.org/p/chromium/issues/detail?id=680484
+         */
+        name: 'FlexBoxBasisBug',
+        ready: true,
+        fn: function () {
+            if (Ext.isIE11 || 
+                (Ext.os.is.iOS && Ext.os.version.major <= 10)  ||
+                (Ext.isSafari && Ext.browser.version.isLessThan(11)) ||
+                (Ext.os.is.Android && Ext.os.version.isLessThan(6))
+            ) {
+                return true;
+            }
+            return false;
+        }
+    },
+    {
         /**
          * @property PercentageSizeFlexBug
          * @private

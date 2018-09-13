@@ -68,7 +68,7 @@ Ext.define('Ext.util.History', {
      * @private
      */
     getHash: function() {
-        return this.win.location.hash.replace(this.hashRe, '');
+        return (this.win.location.hash || '').replace(this.hashRe, '');
     },
 
     /**

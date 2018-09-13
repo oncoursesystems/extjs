@@ -14,10 +14,26 @@ Ext.define('KitchenSink.view.form.VBoxLayoutForm', {
     
     exampleTitle: 'VBox Layout Form',
     //</example>
-    
+    profiles: {
+        classic: {
+            width: 500,
+            height: 300,
+            labelWidth: 60
+        },
+        neptune: {
+            width: 500,
+            height: 300,
+            labelWidth: 60
+        },
+        graphite: {
+            width: 600,
+            height: 400,
+            labelWidth: 80
+        }
+    },
     title: 'Resize Me',
-    width: 500,
-    height: 300,
+    width: '${width}',
+    height: '${height}',
     minWidth: 300,
     minHeight: 220,
     layout: 'fit',
@@ -28,7 +44,7 @@ Ext.define('KitchenSink.view.form.VBoxLayoutForm', {
 
         defaultType: 'textfield',
         fieldDefaults: {
-            labelWidth: 60
+            labelWidth: '${labelWidth}'
         },
         
         layout: {

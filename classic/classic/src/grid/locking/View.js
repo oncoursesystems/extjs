@@ -339,7 +339,6 @@ Ext.define('Ext.grid.locking.View', {
     onDataRefresh: function() {
         Ext.suspendLayouts();
         this.relayFn('onDataRefresh', arguments);
-        this.ownerGrid.view.refreshView();
         Ext.resumeLayouts(true);
     },
 

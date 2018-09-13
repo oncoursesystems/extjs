@@ -13,7 +13,8 @@ function (C) {
             'neptune-touch': 'neptune',
             'crisp': 'neptune',
             'triton': 'neptune',
-            'aria': 'neptune'
+            'aria': 'neptune',
+            'graphite': 'triton'
         };
 
     //<debug>

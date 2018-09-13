@@ -349,6 +349,7 @@ Ext.define('Ext.Widget', {
          * @cfg {Object} eventHandlers A map of event type to the corresponding handler method
          * name. This is used internally by native event handling mechanism.
          * @private
+         * @deprecated 6.6.0 Inline event handlers are deprecated
          */
         eventHandlers: {
             focus: 'handleFocusEvent',
@@ -1277,6 +1278,10 @@ Ext.define('Ext.Widget', {
         return cls && Ext.dom.Element.splitCls(cls);
     },
 
+    applyUi: function (ui) {
+        return this.parseUi(ui, true);
+    },
+
     /**
      * Removes the given CSS class(es) from this widget's primary element.
      * @param {String/String[]} cls The class(es) to remove.
@@ -1940,21 +1945,30 @@ Ext.define('Ext.Widget', {
             return elementConfig;
         },
 
+        parseUi: function (ui, asString) {
+            ui = Ext.String.splitWords(ui);
+
+            if (asString) {
+                ui = ui.join(' ');
+            }
+
+            return ui;
+        },
+
         addUi: function(ui) {
             this.setUi(this.doAddUi(ui, this.getUi()));
         },
 
         doAddUi: function(ui, oldUi) {
             var me = this,
-                spaceRe = me.spaceRe,
                 newUi = null,
                 i, u, len;
 
             if (ui) {
-                ui = ui.split(spaceRe);
+                ui = me.parseUi(ui);
                 len = ui.length;
 
-                oldUi = (oldUi && oldUi.split(spaceRe)) || [];
+                oldUi = me.parseUi(oldUi);
 
                 for (i = 0; i < len; i++) {
                     u = ui[i];
@@ -1975,15 +1989,14 @@ Ext.define('Ext.Widget', {
 
         doRemoveUi: function (ui, oldUi) {
             var me = this,
-                spaceRe = me.spaceRe,
                 newUi = null,
                 i, u, index, len;
 
             if (ui) {
-                ui = ui.split(spaceRe);
+                ui = me.parseUi(ui);
                 len = ui.length;
 
-                oldUi = (oldUi && oldUi.split(spaceRe)) || [];
+                oldUi = me.parseUi(oldUi);
 
                 for (i = 0; i < len; i++) {
                     u = ui[i];
@@ -2058,7 +2071,7 @@ Ext.define('Ext.Widget', {
                 uiCls, uiLen, refName, refEl, cls, suffix, uiSuffix, i, j;
 
             if (ui) {
-                ui = ui.split(' ');
+                ui = me.parseUi(ui);
                 uiLen = ui.length;
             }
 

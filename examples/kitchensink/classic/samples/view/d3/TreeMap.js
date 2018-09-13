@@ -38,8 +38,23 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
     ],
     // </example>
 
-    width: 930,
+    width: '${width}',
     height: 600,
+
+    profiles: {
+        classic: {
+            width: 930,
+            companyPanelWidth: 215
+        },
+        neptune: {
+            width: 930,
+            companyPanelWidth: 215
+        },
+        graphite: {
+            width: 1000,
+            companyPanelWidth: 300
+        }
+    },
 
     layout: 'border',
 
@@ -56,7 +71,7 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
             splitterResize: false,
             collapsible: true,
             minWidth: 100,
-            width: 215,
+            width: '${companyPanelWidth}',
             useArrows: true,
             displayField: 'name',
             rootVisible: false,

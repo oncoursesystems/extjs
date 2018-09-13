@@ -476,7 +476,6 @@ Ext.define('Ext.dataview.listswiper.Accordion', {
             if (me.animating || state === 'undo') {
                 return;
             }
-
             e.claimGesture();
             me.initialOffset = me.offset || 0;
             me.startX = e.getX() - me.el.getX() - me.initialOffset;
@@ -485,6 +484,10 @@ Ext.define('Ext.dataview.listswiper.Accordion', {
         },
 
         onDragMove: function (e) {
+            // Additonal check for undo state so that it will not create multiple undo buttons 
+            if ((this.getState()) === 'undo') {
+                return;
+            }
             e.preventDefault();
             this.syncState(e.deltaX);
         },
@@ -492,13 +495,15 @@ Ext.define('Ext.dataview.listswiper.Accordion', {
         onDragEnd: function (e) {
             var me = this,
                 state = me.getState();
-
             e.preventDefault();
             me.isDragging = false;
             if (state === 'dragcommit') {
                 me.commit(e);
             } else if (state === 'dragopen') {
                 me.open();
+            } else if (state === 'undo') {
+                // avoid calling snapback in case it is already in undo state
+                return;
             } else {
                 me.snapback(true);
             }

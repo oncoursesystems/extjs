@@ -147,15 +147,20 @@ Ext.define('Ext.grid.cell.Widget', {
         }
     },
 
-    onWidgetChange: function (widget) {
+    onWidgetChange: function(widget) {
         if (!this.refreshContext) {
             var me = this,
                 record = me.getRecord(),
                 defaultBindCfg = me.defaultBindCfg,
-                dataIndex = me.dataIndex;
+                dataIndex = me.dataIndex,
+                value;
 
-            if (record && !record.isSummaryRecord && dataIndex && defaultBindCfg) {
-                record.set(dataIndex, widget[defaultBindCfg.names.get]());
+            if (defaultBindCfg) {
+                value = widget[defaultBindCfg.names.get]();
+                this.setValue(value);
+                if (record && !record.isSummaryRecord && dataIndex) {
+                    record.set(dataIndex, value);
+                }
             }
         }
     },

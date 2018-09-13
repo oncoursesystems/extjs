@@ -1,10 +1,28 @@
 topSuite("Ext.data.virtual.Store", function() {
-
-    var idBase, pageMap, proxySpy, store, pageSize, total, range, dataMaker;
+    var oldJasmineCaptureStack, oldTimerCaptureStack,
+        idBase, pageMap, proxySpy, store, pageSize, total, range, dataMaker;
 
     var M = Ext.define(null, {
         extend: 'Ext.data.Model',
         fields: ['id', 'group', 'rate']
+    });
+    
+    beforeAll(function() {
+        Ext.data.operation.Operation.prototype.clearPrototypeOnDestroy = false;
+        Ext.data.operation.Operation.prototype.clearPropertiesOnDestroy = false;
+        
+        // Stack capture is expensive
+        oldJasmineCaptureStack = jasmine.CAPTURE_CALL_STACK;
+        oldTimerCaptureStack = Ext.Timer.captureStack;
+        jasmine.CAPTURE_CALL_STACK = false;
+        Ext.Timer.captureStack = false;
+    });
+    
+    afterAll(function() {
+        delete Ext.data.operation.Operation.prototype.clearPrototypeOnDestroy;
+        delete Ext.data.operation.Operation.prototype.clearPropertiesOnDestroy;
+        jasmine.CAPTURE_CALL_STACK = oldJasmineCaptureStack;
+        Ext.timer.captureStack = oldTimerCaptureStack;
     });
 
     function getLatestOperation() {

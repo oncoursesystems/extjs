@@ -277,6 +277,7 @@ Ext.define('Ext.chart.axis.Axis', {
          * If {@link #majorTickSteps}, {@link #minimum} or {@link #maximum}
          * configs have been set, this config will be ignored.
          * Defaults to 'true'.
+         * Note: this config has no effect if the axis is {@link #hidden}.
          */
         adjustByMajorUnit: true,
 
@@ -445,6 +446,10 @@ Ext.define('Ext.chart.axis.Axis', {
             oldTitle.setAttributes(title);
         }
         return oldTitle;
+    },
+
+    getAdjustByMajorUnit: function () {
+        return !this.getHidden() && this.callParent();
     },
 
     applyFloating: function (floating, oldFloating) {

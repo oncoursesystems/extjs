@@ -438,6 +438,7 @@ var TemplateClass = function(){},
 
     /**
      * Merges any number of objects recursively without referencing them or their children.
+     * Note: It will reference arrays if they are only present in one of the objects being merged.
      *
      *     var extjs = {
      *         companyName: 'Ext JS',

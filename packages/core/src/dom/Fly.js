@@ -140,6 +140,13 @@ Ext.define('Ext.dom.Fly', {
 
                 // If there's no Element cached, or the element cached is for another DOM node, return a Fly
                 if (!fly || fly.dom !== dom) {
+                    // Since the `flyweights` map is simply an object, it has the `constructor`
+                    // property, just like any object, so to prevent the `Ext.fly` from failing
+                    // when it's called from the `constructor` method, we use the `$constructor`
+                    // as the key.
+                    if (named === 'constructor') {
+                        named = '$constructor';
+                    }
                     fly = flyweights[named] || (flyweights[named] = new Fly());
                     fly.dom = dom;
                     data = fly.peekData();

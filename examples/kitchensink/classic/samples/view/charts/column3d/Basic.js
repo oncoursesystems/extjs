@@ -24,8 +24,19 @@ Ext.define('KitchenSink.view.charts.column3d.Basic', {
     layout: 'fit',
     // </example>
 
-    width: 650,
+    width: '${width}',
     height: 500,
+    profiles: {
+        classic: {
+            width: 650
+        },
+        neptune: {
+            width: 650
+        },
+        graphite: {
+            width: 800
+        }
+    },
 
     tbar: [
         '->',

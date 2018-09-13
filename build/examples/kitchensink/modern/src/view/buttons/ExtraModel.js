@@ -4,7 +4,8 @@ Ext.define('KitchenSink.view.buttons.ExtraModel', {
     data: {
         style: '',
         type: 'text',
-        round: false
+        round: false,
+        disabled : false
     },
 
     icons: [
@@ -31,6 +32,21 @@ Ext.define('KitchenSink.view.buttons.ExtraModel', {
             var type = getter('type');
 
             return type.indexOf('text') !== -1 ? 'Normal' : null;
+        },
+        smallText: function (getter) {
+            var type = getter('type');
+
+            return type.indexOf('text') !== -1 ? 'Small' : null;
+        },
+        mediumText: function (getter) {
+            var type = getter('type');
+
+            return type.indexOf('text') !== -1 ? 'Medium' : null;
+        },
+        largeText: function (getter) {
+            var type = getter('type');
+
+            return type.indexOf('text') !== -1 ? 'Large' : null;
         },
         badgeText: function (getter) {
             var type = getter('type');

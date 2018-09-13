@@ -3,6 +3,8 @@ Ext.define('KitchenSink.view.chart.line.CrossZoomController', {
     alias: 'controller.line-crosszoom',
 
     init: function (view) {
+        this.callParent([view]);
+
         var chart = view.lookup('chart'),
             toolbar = view.lookup('toolbar'),
             interaction = chart.getInteraction('crosszoom'),

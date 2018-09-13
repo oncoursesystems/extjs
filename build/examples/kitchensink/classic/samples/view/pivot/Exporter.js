@@ -28,17 +28,29 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            companyWidth: 100,
+            totalWidth: 100
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 350,
+            companyWidth: 100,
+            totalWidth: 100
+        },
+        graphite: {
+            width: 750,
+            height: 600,
+            companyWidth: 120,
+            totalWidth: 120
         }
     },
     //</example>
 
     title: 'Pivot Grid with Exporter plugin',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -180,6 +192,7 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
             dataIndex: 'value',
             header: 'Total',
             aggregator: 'sum',
+            width: '${totalWidth}',
             exportStyle: [{
                 format: 'Currency',
                 alignment: {
@@ -215,6 +228,7 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
         }, {
             dataIndex: 'company',
             header: 'Company',
+            width: '${companyWidth}',
             sortable: false
         }],
 

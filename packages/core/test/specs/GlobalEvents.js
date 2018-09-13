@@ -164,6 +164,45 @@ function() {
         });
     });
     
+    TODO(Ext.isClassic).
+    describe("pressedComponent", function() {
+        var button;
+        
+        beforeEach(function() {
+            button = new Ext.Button({
+                renderTo: Ext.getBody(),
+                text: 'foo'
+            });
+        });
+        
+        afterEach(function() {
+            button = Ext.destroy(button);
+        });
+        
+        it("should capture the pressed component on mousedown", function() {
+            jasmine.fireMouseEvent(button.el, 'mousedown');
+            
+            expect(Ext.GlobalEvents.pressedComponent).toBe(button);
+            
+            jasmine.fireMouseEvent(button.el, 'mouseup');
+        });
+        
+        it("should call onRelease method when mouse is released", function() {
+            var event,
+                spy = spyOn(button, 'onRelease');
+            
+            spy.andCallFake(function(e) {
+                event = e;
+            });
+            
+            jasmine.fireMouseEvent(button.el, 'click');
+            
+            expect(spy).toHaveBeenCalled();
+            expect(event.type).toBe('mouseup');
+            expect(event.target).toBe(button.el.dom);
+        });
+    });
+    
     describe('scroll event', function() {
         var stretcher,
             scrollingPanel,

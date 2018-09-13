@@ -844,7 +844,7 @@ Ext.define('Ext.window.MessageBox', {
      * @param {Number} [cfg.width]
      * The width of the dialog in pixels
      *
-     * @cfg {String} [cfg.maskClickAction=focus]
+     * @param {String} [cfg.maskClickAction=focus]
      * The method to call when the window's modal mask is clicked or tapped:
      *
      * - **`'{@link #method-focus}'`** :

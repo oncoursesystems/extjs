@@ -297,6 +297,30 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Grid', 'Ext.data.ArrayStore', 'Ext.
             waits(100);
         });
 
+        it("should be false by default", function() {
+            grid.destroy();
+            makeGrid([{
+                xtype: 'checkcolumn',
+                text: 'Checked',
+                dataIndex: 'val'
+            }]);
+
+            expect(col.getHeaderCheckbox()).toBe(false);
+        });
+
+        it("should allow sortable false when disabled", function() {
+            grid.destroy();
+            makeGrid([{
+                xtype: 'checkcolumn',
+                headerCheckbox: false,
+                text: 'Checked',
+                dataIndex: 'val',
+                sortable: false
+            }]);
+
+            expect(col.getSortable()).toBe(false);
+        });
+
         it('should toggle all on header checkbox click', function() {
             var headercheckchangeCount = 0;
 

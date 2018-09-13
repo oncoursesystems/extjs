@@ -1,4 +1,5 @@
-/* global expect, Ext, MockAjaxManager, xit */
+/* global expect, Ext, MockAjaxManager, xit, topSuite */
+/* eslint indent: off */
 
 topSuite("Ext.grid.feature.Summary",
     ['Ext.grid.Panel', 'Ext.grid.feature.*'],
@@ -490,6 +491,57 @@ function() {
 
                         expect(content).toBe('59');
                     });
+
+                    it("should include the summaryBar in the columnSizer array", function() {
+                        var columns;
+
+                        createGrid({
+                            columns: [{
+                                dataIndex: 'student',
+                                locked: withLocking,
+                                text: 'Name',
+                                summaryType: 'count',
+                                summaryRenderer: function (value, summaryData, dataIndex) {
+                                    return Ext.String.format('{0} power{1}', value, value !== 1 ? 's' : '');
+                                }
+                            }, {
+                                dataIndex: 'mark',
+                                text: 'Total',
+                                summaryType: function(arr) {
+                                    return Ext.Array.reduce(arr, function(a, b) {
+                                        if (a && a.get) {
+                                            a = a.get('mark');
+                                        }
+                                        if (b && b.get) {
+                                            b = b.get('mark');
+                                        } 
+
+                                        if (a === null) {
+                                            return b;
+                                        }
+
+                                        return Math.pow(a,b);
+                                    }, null);
+                                }
+                            }]
+                        }, 
+                        null, null, 
+                        [ 
+                            {student: 'Power 1', mark: 2}, 
+                            {student: 'Power 2', mark: 3}, 
+                            {student: 'Power 3', mark: 3}, 
+                            {student: 'Power 4', mark: 3},
+                            {student: 'Power 5', mark: 1}
+                        ]);
+
+                        columns = grid.getColumns();
+                        for (var i =0; i < columns.length; i++) {
+                            columns[i].autoSize();
+                        }
+
+                        expect(columns[0].getWidth()).toBeApprox(57, 2);
+                        expect(columns[1].getWidth()).toBeApprox(67, 2);
+                    })
                 });
             });
             

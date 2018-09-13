@@ -1,4 +1,5 @@
-/* global Ext, expect, spyOn, jasmine, xit, MockAjaxManager, it */
+/* global Ext, expect, spyOn, jasmine, xit, MockAjaxManager, it, topSuite */
+/* eslint indent: off */
 
 topSuite("grid-general-locking",
     [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore', 'Ext.layout.container.Border',
@@ -188,31 +189,80 @@ function() {
                                 });
 
                                 it("should retain column width", function () {
-                                    grid[partner].columnManager.getColumns()[0].setWidth(250);
-                                    saveAndRecreate(stateId);
+                                    var columnManager = grid[partner].columnManager;
+                                    waitsFor(function(){
+                                        return columnManager.getColumns()[0];
+                                    });
+                                    runs(function() {
+                                        columnManager.getColumns()[0].setWidth(250);
+                                        saveAndRecreate(stateId);
+                                        columnManager = grid[partner].columnManager;
+                                    });
+                                    
+                                    waitsFor(function() {
+                                        return columnManager.getColumns()[0];
+                                    });
 
-                                    expect(grid[partner].columnManager.getColumns()[0].getWidth()).toBe(250);
+                                    runs(function() {
+                                        expect(columnManager.getColumns()[0].getWidth()).toBe(250);
+                                    });
+                                    
                                 });
 
                                 it("should retain column visibility", function () {
-                                    grid[partner].columnManager.getColumns()[0].hide();
-                                    saveAndRecreate(stateId);
+                                    var columnManager = grid[partner].columnManager;
 
-                                    expect(grid[partner].columnManager.getColumns()[0].hidden).toBe(true);
+                                    waitsFor(function(){
+                                        return columnManager.getColumns()[0];
+                                    });
+
+                                    runs(function() {
+                                        columnManager.getColumns()[0].hide();
+                                        saveAndRecreate(stateId);
+                                        columnManager = grid[partner].columnManager;
+                                    });
+                                    
+                                    waitsFor(function() {
+                                        return columnManager.getColumns()[0];
+                                    });
+
+                                    runs(function() {
+                                        expect(columnManager.getColumns()[0].hidden).toBe(true);
+                                    });
                                 });
 
                                 it("should retain the column sort", function () {
-                                    var column = grid[partner].columnManager.getColumns()[0];
+                                    var columnManager = grid[partner].columnManager,
+                                        column;
 
-                                    column.sort();
-                                    expect(column.sortState).toBe('ASC');
+                                    waitsFor(function(){
+                                        return columnManager.getColumns()[0];
+                                    });
 
-                                    // Let's sort again.
-                                    column.sort();
+                                    runs(function() {
+                                        column = columnManager.getColumns()[0];
+                                        column.sort();
+                                    });
 
-                                    saveAndRecreate(stateId);
+                                    waitsFor(function(){
+                                        return column.sortState;
+                                    });
 
-                                    expect(grid[partner].columnManager.getColumns()[0].sortState).toBe('DESC');
+                                    runs(function() {
+                                        expect(column.sortState).toBe('ASC');
+                                        // Let's sort again.
+                                        column.sort();
+                                        saveAndRecreate(stateId);
+                                        columnManager = grid[partner].columnManager;
+                                    });
+
+                                    waitsFor(function(){
+                                        return columnManager.getColumns()[0] && columnManager.getColumns()[0].sortState;
+                                    });
+
+                                    runs(function() {
+                                        expect(columnManager.getColumns()[0].sortState).toBe('DESC');
+                                    });
                                 });
 
                                 it("should restore state when columns are moved between sides", function() {
@@ -321,6 +371,7 @@ function() {
                 makeGrid(0, {
                     enableLocking: true
                 });
+
                 expect(grid.lockedGrid.isVisible()).toBe(false);
 
                 // Because the locked side is collapsible, it gets a header with the collapse tool
@@ -339,19 +390,13 @@ function() {
                 waitsForSpy(spyOnEvent(lockedGrid, 'collapse'));
 
                 runs(function() {
-                    jasmine.fireMouseEvent(grid.lockedGrid.placeholder.el, 'click');
-                });
-
-                waitsForSpy(spyOnEvent(lockedGrid, 'float'));
-
-                runs(function() {
-                    grid.lock(grid.columns[1]);
-                    
                     grid.lockedGrid.expand();
                 });
+
                 waitsForSpy(spyOnEvent(lockedGrid, 'expand'));
 
                 runs(function() {
+                    grid.lock(grid.columns[1]);
                     // Width should exactly shrinkwrap the columns
                     expect(grid.lockedGrid.getWidth()).toBe(grid.lockedGrid.headerCt.getTableWidth() + grid.lockedGrid.gridPanelBorderWidth);
 

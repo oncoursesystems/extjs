@@ -1,4 +1,5 @@
-/* global Ext, jasmine, expect */
+/* global Ext, jasmine, expect, topSuite */
+/* eslint indent: off */
 
 topSuite("grid-grouping",
     [false, 'Ext.grid.Panel', 'Ext.grid.feature.GroupingSummary', 'Ext.data.BufferedStore'],
@@ -1010,10 +1011,19 @@ function() {
                     // scroll into view upon a refresh caused by the collapse;
                     grid.getSelectionModel().select(0);
                     grid.scrollByDeltaY(2000);
-                    grouping.collapse('t4');
-                    var el = grid.getView().el.dom;
+
+                    waitsFor(function() {
+                        return !buffered || grid.bufferedRenderer.scrollTop;
+                    });
+
+                    runs(function() {
+                        var el;
+
+                        grouping.collapse('t4');
+                        el = grid.getView().el.dom;
                              
-                    expect(el.scrollTop).toBe(el.scrollHeight - el.clientHeight);
+                        expect(el.scrollTop).toBe(el.scrollHeight - el.clientHeight);
+                    });
                 });  
                 
                 it("should not focus the selected row when expanding a group", function() {
@@ -1162,6 +1172,23 @@ function() {
                         triggerHeaderClick('t1');
                         triggerHeaderClick('t1');
                     }).not.toThrow();
+                });
+
+                it("should be able to collapse and expand from the normal side", function() {
+                    makeGrid(false, {
+                        columns: [{
+                            locked: true,
+                            itemId: 'locked',
+                            dataIndex: 'name'
+                        }, {
+                            dataIndex: 'name'
+                        }]
+                    });
+
+                    triggerHeaderClick('t2');
+                    expect(grouping.isExpanded('t2')).toBe(false);
+                    triggerHeaderClick('t2');
+                    expect(grouping.isExpanded('t2')).toBe(true);
                 });
 
                 // https://sencha.jira.com/browse/EXTJS-18047

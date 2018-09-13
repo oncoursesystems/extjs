@@ -16,10 +16,10 @@
             When a release is made edit the queries below to adjust for the next release.
             -->
             <div class="release">
-                <h1>Release Notes for Ext JS 6.5.2</h1>
+                <h1>Release Notes for Ext JS 6.6.0</h1>
                 <p class="notes">
-                    Release Date: Wed Sep 20 2017<br>
-                    Version Number: 6.5.2.463
+                    Release Date: Thu Jun 14 2018<br>
+                    Version Number: 6.6.0.258
                 </p>
 <!--                
                 <h2>Noteworthy</h2>
@@ -27,10 +27,76 @@
                 
                 <h2>New Features</h2>
                 <ul>
-<li class="component">Misc (1)
+<li class="component">App (5)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-22458</span>&#160;<span class="ticket-notes">ColorPicker UX should accept and display values in RGB(A) format</span>
+<span class="ticket-number">EXTJS-25100</span>&#160;<span class="ticket-notes">Router should have an exit action that runs when navigating away</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-26146</span>&#160;<span class="ticket-notes">Routes should support named parameters with optional type specifiers</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-26199</span>&#160;<span class="ticket-notes">Routes should support optional patterns</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-26147</span>&#160;<span class="ticket-notes">Routes should be able to execute when connected</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-26148</span>&#160;<span class="ticket-notes">Routes should provide a "single" config to disconnect after first use</span>
+</li>
+</ul>
+</li>
+<li class="component">Charts (1)
+<ul class="tickets">
+<li class="ticket">
+<span class="ticket-number">EXTJS-26440</span>&#160;<span class="ticket-notes">Chart should display multiple tooltips for adjacent Line data points</span>
+</li>
+</ul>
+</li>
+<li class="component">Data (1)
+<ul class="tickets">
+<li class="ticket">
+<span class="ticket-number">EXTJS-18128</span>&#160;<span class="ticket-notes">Memory and performance optimizations in data package</span>
+</li>
+</ul>
+</li>
+<li class="component">Documentation (1)
+<ul class="tickets">
+<li class="ticket">
+<span class="ticket-number">EXTJS-3885</span>&#160;<span class="ticket-notes">Ext Direct guide should provide more information</span>
+</li>
+</ul>
+</li>
+<li class="component">Grid (1)
+<ul class="tickets">
+<li class="ticket">
+<span class="ticket-number">EXTJS-22605</span>&#160;<span class="ticket-notes">Spreadsheet SelectionExtender should be able to reduce the selection</span>
+</li>
+</ul>
+</li>
+<li class="component">Misc (5)
+<ul class="tickets">
+<li class="ticket">
+<span class="ticket-number">EXT-522</span>&#160;<span class="ticket-notes">Gauge component should support different needle shapes</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXT-646</span>&#160;<span class="ticket-notes">Focus styling should be enabled by default on desktop devices in Classic toolkit</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXT-469</span>&#160;<span class="ticket-notes">Modern toolkit should provide locale support</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXT-616</span>&#160;<span class="ticket-notes">New Graphite theme with improved accessibility in Classic toolkit</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXT-146</span>&#160;<span class="ticket-notes">Modern toolkit should provide a Time Field</span>
+</li>
+</ul>
+</li>
+<li class="component">Tabs (1)
+<ul class="tickets">
+<li class="ticket">
+<span class="ticket-number">EXTJS-26219</span>&#160;<span class="ticket-notes">Modern Tab Bar should allow non-tab items</span>
 </li>
 </ul>
 </li>
@@ -38,382 +104,307 @@
 
                 <h2>Bugs Fixed</h2>
                 <ul>
+<li class="component">Accessibility (2)
+<ul class="tickets">
+<li class="ticket">
+<span class="ticket-number">EXTJS-26495</span>&#160;<span class="ticket-notes">TreePanel accessible widget structure is incorrect</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-25873</span>&#160;<span class="ticket-notes">Button focus is only shown with x-keyboard-mode</span>
+</li>
+</ul>
+</li>
 <li class="component">App (1)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-25985</span>&#160;<span class="ticket-notes">Window with destroy listener throws uncaught Controller error when closing window</span>
+<span class="ticket-number">EXTJS-26125</span>&#160;<span class="ticket-notes">JavaScript errors in route handlers are not shown in the console</span>
 </li>
 </ul>
 </li>
-<li class="component">Bind (3)
+<li class="component">Button (2)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26211</span>&#160;<span class="ticket-notes">Store binding publishes count as null between load request and response</span>
+<span class="ticket-number">EXTJS-26965</span>&#160;<span class="ticket-notes">Modern SplitButton should use capital case for button text</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25417</span>&#160;<span class="ticket-notes">Binding for associated record is not triggered if the key setting causes a change</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25971</span>&#160;<span class="ticket-notes">Strings in bind templates cannot contain literal "{" characters (escape mechanism needed)</span>
+<span class="ticket-number">EXTJS-26674</span>&#160;<span class="ticket-notes">Modern Button should conform to Material design guidelines in disabled state</span>
 </li>
 </ul>
 </li>
-<li class="component">Button (1)
+<li class="component">Calendar (2)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26023</span>&#160;<span class="ticket-notes">Ext.Button Missing callParent Method on initialize method</span>
+<span class="ticket-number">EXTJS-26729</span>&#160;<span class="ticket-notes">Unexpected pop up is coming up in Calendar edit event for Android 7</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-24466</span>&#160;<span class="ticket-notes">All day events the week after the beginning or end of DST span multiple days</span>
 </li>
 </ul>
 </li>
-<li class="component">Charts (10)
+<li class="component">Charts (6)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26344</span>&#160;<span class="ticket-notes">Drag and drop markers make error in console and won't move</span>
+<span class="ticket-number">EXTJS-26367</span>&#160;<span class="ticket-notes">Scatter series should have the 'marker' config default to 'true'</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26223</span>&#160;<span class="ticket-notes">modern Line Chart doesn't load on iOS9 tablet</span>
+<span class="ticket-number">EXTJS-26045</span>&#160;<span class="ticket-notes">Improve item highlighting in various chart series</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25914</span>&#160;<span class="ticket-notes">No visible change after changing the template of the Instancing sprite</span>
+<span class="ticket-number">EXTJS-26381</span>&#160;<span class="ticket-notes">Charts should support itemtap event</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26117</span>&#160;<span class="ticket-notes">Axis range is miscalculated when one bound series has values that are all the same, and data in others deviates by less than 0.5</span>
+<span class="ticket-number">EXTJS-26375</span>&#160;<span class="ticket-notes">Outlying observation is missing in Box Plot chart</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26064</span>&#160;<span class="ticket-notes">Bar Chart with 2 columns renders incorrectly</span>
+<span class="ticket-number">EXTJS-26585</span>&#160;<span class="ticket-notes">Chart DOM legend does not render any data items</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26024</span>&#160;<span class="ticket-notes">Chart navigator can't resolve chart listeners to a controller</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25850</span>&#160;<span class="ticket-notes">Should be able to dynamically configure series 'marker' config.</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-26014</span>&#160;<span class="ticket-notes">Hiding marker in series hides it in legend as well</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25904</span>&#160;<span class="ticket-notes">Scatter series: can't change the type of marker dynamically</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-26074</span>&#160;<span class="ticket-notes">Theme is not applied to a chart with no series</span>
+<span class="ticket-number">EXTJS-26311</span>&#160;<span class="ticket-notes">Chart Axis Calculation/Layout Bug with hidden axis label</span>
 </li>
 </ul>
 </li>
-<li class="component">Core (5)
+<li class="component">Core (10)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26163</span>&#160;<span class="ticket-notes">alignTo method no longer works with element id</span>
+<span class="ticket-number">EXTJS-27042</span>&#160;<span class="ticket-notes">Error in IE8 when Ext JS application is opened in an IFRAME</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26185</span>&#160;<span class="ticket-notes">Exceptions in IE8 while feature detecting TouchAction</span>
+<span class="ticket-number">EXTJS-27113</span>&#160;<span class="ticket-notes">Ext.Date.parse should invalidate value of 0 hours in 'g' time format</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26020</span>&#160;<span class="ticket-notes">Component does not update correctly when changing tpl</span>
+<span class="ticket-number">EXTJS-26349</span>&#160;<span class="ticket-notes">Ext.fly fails if called from class constructor</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25990</span>&#160;<span class="ticket-notes">Weighted container incorrectly adds a single object after construction</span>
+<span class="ticket-number">EXTJS-26439</span>&#160;<span class="ticket-notes">Child ViewModel store overrides store in parent ViewModel</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25784</span>&#160;<span class="ticket-notes">ESC does not hit the Dialog's onEscape when its buttons are focused</span>
+<span class="ticket-number">EXTJS-20930</span>&#160;<span class="ticket-notes">JSON.decode error when JSON includes Line Separator character</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-18443</span>&#160;<span class="ticket-notes">JSON decoder should throw exception on invalid syntax</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-25761</span>&#160;<span class="ticket-notes">Breadcrumb does not work after opening a Window and MessageBox</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-13511</span>&#160;<span class="ticket-notes">Potential XSS attack on Ext.JSON.decode</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-26361</span>&#160;<span class="ticket-notes">Widget styles defined with an object on the class are not inherited properly</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-5545</span>&#160;<span class="ticket-notes">Ext.JSON.decode cannot handle certain Unicode characters</span>
 </li>
 </ul>
 </li>
 <li class="component">D3 (1)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26248</span>&#160;<span class="ticket-notes">D3 Zoomable Sunburst - cannot expand chart</span>
+<span class="ticket-number">EXTJS-26306</span>&#160;<span class="ticket-notes">Setting a hierarchy component store to null does not remove the rendered nodes</span>
 </li>
 </ul>
 </li>
-<li class="component">Data (4)
+<li class="component">Data (3)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26208</span>&#160;<span class="ticket-notes">Adding filters and/or sorters to a Virtual Store causes it to break</span>
+<span class="ticket-number">EXTJS-14223</span>&#160;<span class="ticket-notes">Remove non-native XMLHttpRequest object support</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25989</span>&#160;<span class="ticket-notes">Ext.data.request.Form.onComplete produces JSON that cannot be parsed when Ext.USE_NATIVE_JSON true</span>
+<span class="ticket-number">EXTJS-26507</span>&#160;<span class="ticket-notes">Grouping feature using VM buffered store throws error upon binding</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26107</span>&#160;<span class="ticket-notes">Data reader should not explicitly set phantom state unless data is coming from a proxy</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-26270</span>&#160;<span class="ticket-notes">Memory leak through usage of Ext.data.Batch</span>
+<span class="ticket-number">EXTJS-26358</span>&#160;<span class="ticket-notes">Implicitly declared id field gets deleted in subclass when gets again as non-id field</span>
 </li>
 </ul>
 </li>
-<li class="component">DataView (1)
+<li class="component">Documentation (1)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26048</span>&#160;<span class="ticket-notes">CTRL/A to select all doesn't work in dataviews and grids.</span>
+<span class="ticket-number">EXTJS-27146</span>&#160;<span class="ticket-notes">Object created with Ext.Object.merge continues to reference the source object</span>
 </li>
 </ul>
 </li>
-<li class="component">Dialog (1)
+<li class="component">Drag (1)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26008</span>&#160;<span class="ticket-notes">Dialog close uses showAnimation when initialized with displayed: true</span>
+<span class="ticket-number">EXTJS-26239</span>&#160;<span class="ticket-notes">Drag proxy uses incorrect font in iOS</span>
 </li>
 </ul>
 </li>
-<li class="component">Distribution (2)
+<li class="component">Events (1)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-25974</span>&#160;<span class="ticket-notes">Framework ext-*.js builds should not use transpiler</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-26229</span>&#160;<span class="ticket-notes">Build errors in KitchenSink are not failing the overall build</span>
+<span class="ticket-number">EXTJS-26166</span>&#160;<span class="ticket-notes">focusEnter and focusLeave (global) do not receive the correct event type</span>
 </li>
 </ul>
 </li>
-<li class="component">Documentation (9)
+<li class="component">Examples (3)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-25793</span>&#160;<span class="ticket-notes">Calendar configs are incorrectly determined to be properties</span>
+<span class="ticket-number">EXTJS-26709</span>&#160;<span class="ticket-notes">Email text field is accepting invalid input</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26029</span>&#160;<span class="ticket-notes">Ext.concat not visible in the docs</span>
+<span class="ticket-number">EXTJS-26365</span>&#160;<span class="ticket-notes">Box plot chart caption is not fully displayed on phones</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-24923</span>&#160;<span class="ticket-notes">Wrong description of Ext.grid.column.Action.menuText</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-26123</span>&#160;<span class="ticket-notes">Modern Component - beforeflexchange and flexchange events are not documented</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25340</span>&#160;<span class="ticket-notes">Textarea should indicate growMin/growMax should be used with grow, as opposed to height</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25072</span>&#160;<span class="ticket-notes">Ext.MessageBox docs for "show" method not as expected</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25954</span>&#160;<span class="ticket-notes">Incorrect default labelAlign layout in Ext.field.Text</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-24919</span>&#160;<span class="ticket-notes">Incorrect default closeAction displayed for MessageBox</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25944</span>&#160;<span class="ticket-notes">Missing config name causing incorrect output ...</span>
+<span class="ticket-number">EXTJS-19346</span>&#160;<span class="ticket-notes">XSS vulnerability in restful example</span>
 </li>
 </ul>
 </li>
-<li class="component">Exporter (2)
+<li class="component">Forms (4)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26195</span>&#160;<span class="ticket-notes">Excel Export Sheet name as Excel Title</span>
+<span class="ticket-number">EXTJS-25532</span>&#160;<span class="ticket-notes">Combobox forceSelection does not clear the field on blur when you enter an invalid value    </span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26203</span>&#160;<span class="ticket-notes">Ext.exporter.file.Style#interior corrupts the generated download</span>
+<span class="ticket-number">EXTJS-26647</span>&#160;<span class="ticket-notes">Input mask is not applied when data is pasted into the textfield</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-26451</span>&#160;<span class="ticket-notes">Modern field does not focus when tapped on trigger</span>
+</li>
+<li class="ticket">
+<span class="ticket-number">EXTJS-26118</span>&#160;<span class="ticket-notes">Native Select/Combo does not open when tapping trigger</span>
 </li>
 </ul>
 </li>
-<li class="component">Forms (16)
+<li class="component">Grid (24)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26283</span>&#160;<span class="ticket-notes">Item in selectfield or combobox is picked by selecting and picker is closed</span>
+<span class="ticket-number">EXTJS-26839</span>&#160;<span class="ticket-notes">Cannot Expand Grid Grouper from Unlocked Side in locked grid</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25448</span>&#160;<span class="ticket-notes"> Load record does not set radiogroup field in inactive tab correctly if it has a default value checked</span>
+<span class="ticket-number">EXTJS-26960</span>&#160;<span class="ticket-notes">Checkbox should work when column does not have a dataIndex</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26359</span>&#160;<span class="ticket-notes">When scroll combobox, items are moved in iOS theme</span>
+<span class="ticket-number">EXTJS-26928</span>&#160;<span class="ticket-notes">Filters ignore stateful filters flag on store</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25982</span>&#160;<span class="ticket-notes">Calling setValue on focused field won't update it's value until blur</span>
+<span class="ticket-number">EXTJS-26910</span>&#160;<span class="ticket-notes">Navigation Location is not updated when records are shifted</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25997</span>&#160;<span class="ticket-notes">Hidden field should default hidden: true</span>
+<span class="ticket-number">EXTJS-26217</span>&#160;<span class="ticket-notes">Locked Grid editor is shown on column with no editor defined</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25957</span>&#160;<span class="ticket-notes">Query selector returns duplicate components for a carousel wrapped in a form</span>
+<span class="ticket-number">EXTJS-26581</span>&#160;<span class="ticket-notes">Filters are lost after reordering stateful grid group child columns</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25889</span>&#160;<span class="ticket-notes">User can end up with open edge picker and open virtual keyboard</span>
+<span class="ticket-number">EXTJS-25743</span>&#160;<span class="ticket-notes">Grid DragDrop can incorrectly drop when using selection model with mode: 'MULTI'</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26158</span>&#160;<span class="ticket-notes">DateField does not accept value as an object with year/month/day</span>
+<span class="ticket-number">EXTJS-27072</span>&#160;<span class="ticket-notes">Spreadsheet selection model with checkbox selection enabled doesn't function when multiple cells are selected.</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25967</span>&#160;<span class="ticket-notes">ComboBox minChars is not honored when queryMode is 'remote'</span>
+<span class="ticket-number">EXTJS-26691</span>&#160;<span class="ticket-notes">Docked summary row ignores column hide/show</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25829</span>&#160;<span class="ticket-notes">TextField with grow: true doesn't use padding in the autoSize calculation</span>
+<span class="ticket-number">EXTJS-26422</span>&#160;<span class="ticket-notes">Cannot focus editor with locked column using rowWidget</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25921</span>&#160;<span class="ticket-notes">ComboBox attempts to scroll before items are rendered and get promise rejection</span>
+<span class="ticket-number">EXTJS-26845</span>&#160;<span class="ticket-notes">Grid with a docked summary doesn't autoSize columns correctly</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26366</span>&#160;<span class="ticket-notes">Chained combo - value is not changed when switch first combo</span>
+<span class="ticket-number">EXTJS-26416</span>&#160;<span class="ticket-notes">Context menu click in scroll bar throws an error</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26362</span>&#160;<span class="ticket-notes">Error thrown when Chained comboBox example is loaded</span>
+<span class="ticket-number">EXTJS-26419</span>&#160;<span class="ticket-notes">Exception thrown closing window with grid cell editing active</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26010</span>&#160;<span class="ticket-notes">Invalid datefield cannot be reset</span>
+<span class="ticket-number">EXTJS-23161</span>&#160;<span class="ticket-notes">Sort indicator is reversed on custom sort from menu</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26019</span>&#160;<span class="ticket-notes">TextArea with minHeight doesn't stretch the inputEl correctly</span>
+<span class="ticket-number">EXTJS-23387</span>&#160;<span class="ticket-notes">Cannot prevent sort on checkcolumn if header checkbox is hidden</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25910</span>&#160;<span class="ticket-notes">Using iOS, inputs with emptyText fail to open keyboard on tap</span>
-</li>
-</ul>
-</li>
-<li class="component">Grid (15)
-<ul class="tickets">
-<li class="ticket">
-<span class="ticket-number">EXTJS-26240</span>&#160;<span class="ticket-notes">Grouped widgets in a grid with locked column does not render</span>
+<span class="ticket-number">EXTJS-24039</span>&#160;<span class="ticket-notes">SHIFT selection incorrect on large grid with Spreadsheet SelModel and RowSelect enabled</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26206</span>&#160;<span class="ticket-notes">Checkcolumn tooltip not encoded correctly</span>
+<span class="ticket-number">EXTJS-20980</span>&#160;<span class="ticket-notes">Classic grouped grid scrolls back to focused cell when user expands row</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26207</span>&#160;<span class="ticket-notes">CheckboxModel throws error when updating checked cell using checkOnly: true</span>
+<span class="ticket-number">EXTJS-25962</span>&#160;<span class="ticket-notes">Modern Grid selection events are not fired</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26251</span>&#160;<span class="ticket-notes">Data are missing in XML Grid - IE 8</span>
+<span class="ticket-number">EXTJS-26216</span>&#160;<span class="ticket-notes">Locked grouping does not show widget after expand</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25996</span>&#160;<span class="ticket-notes">Navigation issues when grouping feature and cell edting and record updating are combined</span>
+<span class="ticket-number">EXTJS-19300</span>&#160;<span class="ticket-notes">Store state is not applied when store binding is used</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26091</span>&#160;<span class="ticket-notes">Grid mask target differs for locked and unlocked grids</span>
+<span class="ticket-number">EXTJS-26805</span>&#160;<span class="ticket-notes">Error when filtering  rows in the SpreadsheetModel with selection and BufferedStore</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25909</span>&#160;<span class="ticket-notes">Column renderer gets passed the groupPlaceholder record instead of the first record for renderedGroupValue</span>
+<span class="ticket-number">EXTJS-24622</span>&#160;<span class="ticket-notes">Drag indicator not aligned after view scrolled</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26058</span>&#160;<span class="ticket-notes">Grid with buffered renderer will jump when record dragged from it</span>
+<span class="ticket-number">EXTJS-26499</span>&#160;<span class="ticket-notes">Grid with locking, grouping and cellediting has navigation issues</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26087</span>&#160;<span class="ticket-notes">Grid's columnsort event is never fired</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-26113</span>&#160;<span class="ticket-notes">Grid focuses on all cells while cycling to next row when using cell editing</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25691</span>&#160;<span class="ticket-notes">Reconfiguring grid with ALL locked columns renders no rows</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25958</span>&#160;<span class="ticket-notes">RTL grid does not display row editor correctly</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-24698</span>&#160;<span class="ticket-notes">Grid view is blank after store reload</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-26031</span>&#160;<span class="ticket-notes">Re-ordering grouped header with inner items throws error</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-26295</span>&#160;<span class="ticket-notes">Empty text visible even when one of containers is shown</span>
+<span class="ticket-number">EXTJS-26786</span>&#160;<span class="ticket-notes">Grid tries to maintain selection when loading store again with selected record </span>
 </li>
 </ul>
 </li>
 <li class="component">Layouts (2)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26191</span>&#160;<span class="ticket-notes">Viewport sized incorrectly with Chrome iOS and breaks scroliling</span>
+<span class="ticket-number">EXTJS-24162</span>&#160;<span class="ticket-notes">Changing card layout from rowwidget throws recursive exception</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26132</span>&#160;<span class="ticket-notes">Incorrect viewport layout on Android when zoomed</span>
+<span class="ticket-number">EXTJS-26355</span>&#160;<span class="ticket-notes">Modern Card layout incorrectly renders active item when container is not rendered</span>
 </li>
 </ul>
 </li>
 <li class="component">Menu (1)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26145</span>&#160;<span class="ticket-notes">Menuitem target set on incorrect element</span>
+<span class="ticket-number">EXTJS-26449</span>&#160;<span class="ticket-notes">ZIndexManager should put topmost floating component to the front</span>
 </li>
 </ul>
 </li>
-<li class="component">Misc (3)
+<li class="component">Misc (2)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26105</span>&#160;<span class="ticket-notes">DatePanel: disabledDays doesn't prevent selection.</span>
+<span class="ticket-number">EXTJS-14433</span>&#160;<span class="ticket-notes">Ext.JSON.encode differs from native JSON.stringify</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-25923</span>&#160;<span class="ticket-notes">Remote ComboBox is not editable</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25194</span>&#160;<span class="ticket-notes">Dialog with displayed: true doesn't display unless the displayed config is changed</span>
+<span class="ticket-number">EXTJS-26380</span>&#160;<span class="ticket-notes">Fieldset legend is not visible in Safari 11</span>
 </li>
 </ul>
 </li>
-<li class="component">Panel (4)
+<li class="component">PivotGrid (2)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26032</span>&#160;<span class="ticket-notes">Panel throws exception on null buttons config</span>
+<span class="ticket-number">EXTJS-27000</span>&#160;<span class="ticket-notes">Pivot grid exporting produces empty grouping cell</span>
 </li>
 <li class="ticket">
-<span class="ticket-number">EXTJS-26040</span>&#160;<span class="ticket-notes">Panel with no items and bound to collapsed isn't actually collapsed</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25960</span>&#160;<span class="ticket-notes">collapseMode:'mini' expander doesn't render when initially collapsed</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25816</span>&#160;<span class="ticket-notes">Changing panel header to left throws exception in IE8, IE9</span>
-</li>
-</ul>
-</li>
-<li class="component">PivotGrid (1)
-<ul class="tickets">
-<li class="ticket">
-<span class="ticket-number">EXTJS-26278</span>&#160;<span class="ticket-notes">Error thrown during key navigation in locked pivot grid in certain cases</span>
-</li>
-</ul>
-</li>
-<li class="component">Tabs (1)
-<ul class="tickets">
-<li class="ticket">
-<span class="ticket-number">EXTJS-26079</span>&#160;<span class="ticket-notes">Tab panel does not destroy tools for overflow scrolling</span>
+<span class="ticket-number">EXTJS-26443</span>&#160;<span class="ticket-notes">Row sub-totals of pivot grid are blank</span>
 </li>
 </ul>
 </li>
 <li class="component">Templates (1)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26000</span>&#160;<span class="ticket-notes">Coworkee app throws error when reloading dataview </span>
+<span class="ticket-number">EXTJS-26868</span>&#160;<span class="ticket-notes">Ext.Template fails to expand tokens containing $ character</span>
 </li>
 </ul>
 </li>
-<li class="component">Theme (4)
+<li class="component">ToolTips (1)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26081</span>&#160;<span class="ticket-notes">Triton split button icons are horizontally misaligned when the button has no text</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-26022</span>&#160;<span class="ticket-notes">FieldSet top border is in triton theme doesn't use correct variable</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-26027</span>&#160;<span class="ticket-notes">Widget ripple config wrongly processes release property for ripple-on-release</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25170</span>&#160;<span class="ticket-notes">Opacity should not be used to lighten colors that are used as borders or backgrounds</span>
-</li>
-</ul>
-</li>
-<li class="component">ToolTips (2)
-<ul class="tickets">
-<li class="ticket">
-<span class="ticket-number">EXTJS-26011</span>&#160;<span class="ticket-notes">6.5.0 Modern - Various tooltip errors</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-24917</span>&#160;<span class="ticket-notes">Tooltip not showing in correct position after view scroll</span>
+<span class="ticket-number">EXTJS-26864</span>&#160;<span class="ticket-notes">XSS Issue - quicktip decodes html encoded content</span>
 </li>
 </ul>
 </li>
 <li class="component">Tree (1)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-25817</span>&#160;<span class="ticket-notes">Fails to load XML Tree example on IE9</span>
+<span class="ticket-number">EXTJS-26086</span>&#160;<span class="ticket-notes">Tree data with children not set throws error</span>
 </li>
 </ul>
 </li>
-<li class="component">Window (2)
+<li class="component">Window (1)
 <ul class="tickets">
 <li class="ticket">
-<span class="ticket-number">EXTJS-26016</span>&#160;<span class="ticket-notes">Window is sent to back when clicking the close tool while tooltip is visible</span>
-</li>
-<li class="ticket">
-<span class="ticket-number">EXTJS-25919</span>&#160;<span class="ticket-notes">Window z-index changes after closing windows</span>
+<span class="ticket-number">EXTJS-26534</span>&#160;<span class="ticket-notes">Windows not centred in client view when the view is scrolled down.</span>
 </li>
 </ul>
 </li>

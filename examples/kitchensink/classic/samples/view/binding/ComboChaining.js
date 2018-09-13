@@ -21,7 +21,19 @@ Ext.define('KitchenSink.view.binding.ComboChaining', {
     bodyPadding: 10,
     //</example>
 
-    width: 350,
+    profiles: {
+        classic: {
+            width: 350
+        },
+        neptune: {
+            width: 350
+        },
+        graphite: {
+            width: 480
+        }
+    },
+
+    width: '${width}',
     layout: 'anchor',
     defaults: { anchor: '-30' },
 

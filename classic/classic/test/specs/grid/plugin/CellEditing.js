@@ -1,13 +1,14 @@
-/* global Ext, MockAjaxManager, expect, jasmine, spyOn, xit */
+/* global Ext, MockAjaxManager, expect, jasmine, spyOn, xit, topSuite */
+/* eslint indent: off */
 
 topSuite("Ext.grid.plugin.CellEditing",
     ['Ext.grid.Panel', 'Ext.grid.column.Widget', 'Ext.Button', 'Ext.Window',
      'Ext.form.field.*', 'Ext.form.FieldSet', 'Ext.EventManager'],
 function() {
-    var store, plugin, grid, view, navModel, record, column, field,
-        TAB = 9,
+    var TAB = 9,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
+        store, plugin, grid, view, node, record, column, field,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
             if (synchronousLoad) {
@@ -69,7 +70,6 @@ function() {
         }, gridCfg));
 
         view = grid.view;
-        navModel = grid.getNavigationModel();
         return grid;
     }
 
@@ -414,7 +414,7 @@ function() {
             var selModel;
 
             function fireEvent(rowNum, eventName, shift) {
-                jasmine.fireMouseEvent(view.getNode(rowNum).getElementsByTagName('td')[0],eventName, null, null, null, !!shift);
+                jasmine.fireMouseEvent(findCell(rowNum, 0),eventName, null, null, null, !!shift);
             }
 
             function expectSelected(rec) {
@@ -432,53 +432,52 @@ function() {
                 }
             }
 
+            function selectRange(eventName) {
+                describe('MULTI, on event: ' + eventName, function () {
+                    beforeEach(function () {
+                        makeGrid({
+                            clicksToEdit: eventName === 'click' ? 1: 2
+                        }, {
+                            selModel: {
+                                type: 'rowmodel',
+                                mode: 'MULTI'
+                            }
+                        });
+                        selModel = grid.selModel;
+                    });
+
+                    it('should select a range if we have a selection start point and shift is pressed', function () {
+                        fireEvent(0, eventName);
+                        fireEvent(3, eventName, true);
+                        expectSelected(0, 1, 2, 3);
+                    });
+
+                    it('should maintain selection with a complex sequence', function() {
+                        fireEvent(0, eventName);
+                        expectSelected(0);
+                        fireEvent(2, eventName, true);
+                        expectSelected(0, 1, 2);
+                        fireEvent(3, eventName);
+                        expectSelected(3);
+                        fireEvent(1, eventName, true);
+                        expectSelected(1, 2, 3);
+
+                        fireEvent(2, eventName);
+                        expectSelected(2);
+                        fireEvent(0, eventName, true);
+                        expectSelected(0, 1, 2);
+                        fireEvent(3, eventName, true);
+                        expectSelected(2, 3);
+                    });
+                });
+            }
+
             afterEach(function () {
                 selModel = null;
             });
 
             // No SHIFT+touch on tablets, and this test uses shiftKey: true
             if (!jasmine.supportsTouch) {
-                function selectRange(eventName) {
-                    describe('MULTI, on event: ' + eventName, function () {
-                        beforeEach(function () {
-                            makeGrid({
-                                clicksToEdit: eventName === 'click' ? 1: 2
-                            }, {
-                                selModel: {
-                                    type: 'rowmodel',
-                                    mode: 'MULTI'
-                                }
-                            });
-
-                            selModel = grid.selModel;
-                        });
-
-                        it('should select a range if we have a selection start point and shift is pressed', function () {
-                            fireEvent(0, eventName);
-                            fireEvent(3, eventName, true);
-                            expectSelected(0, 1, 2, 3);
-                        });
-
-                        it('should maintain selection with a complex sequence', function() {
-                            fireEvent(0, eventName);
-                            expectSelected(0);
-                            fireEvent(2, eventName, true);
-                            expectSelected(0, 1, 2);
-                            fireEvent(3, eventName);
-                            expectSelected(3);
-                            fireEvent(1, eventName, true);
-                            expectSelected(1, 2, 3);
-
-                            fireEvent(2, eventName);
-                            expectSelected(2);
-                            fireEvent(0, eventName, true);
-                            expectSelected(0, 1, 2);
-                            fireEvent(3, eventName, true);
-                            expectSelected(2, 3);
-                        });
-                    });
-                }
-
                 selectRange('click');
                 selectRange('dblclick');
             }
@@ -1120,7 +1119,7 @@ function() {
                 });
 
                 waitsFor(function() {
-                    return field.hasFocus && field.getRegion().top === Ext.fly(plugin.activeEditor.container).getRegion().top;
+                    return field.hasFocus && Math.abs(field.getRegion().top - Ext.fly(plugin.activeEditor.container).getRegion().top) < 2;
                 }, 'something funky to happen', 1000);
             });
 
@@ -1465,24 +1464,9 @@ function() {
     });
 
     describe('selectOnFocus', function () {
-        // I could not get the following spec to pass in the following browsers, although the test case does work.
-        // The dom.select() method in FF seems to be asynchronous (possibly for Opera as well), and IE 11 and Edge always
-        // returned an empty string for the text selection even though it claims to support window.getSelection().
-        ((Ext.isGecko || Ext.isOpera || Ext.isIE11 || Ext.isEdge || jasmine.supportsTouch) ? xit : it)('should select the text in the cell when initiating an edit', function () {
+        it('should select the text in the cell when initiating an edit', function () {
             // See EXTJS-12364.
             var node;
-
-            function getSelectionText() {
-                var text;
-
-                if (!Ext.isIE) {
-                    text = window.getSelection().toString();
-                } else if (document.selection) {
-                    text = document.selection.createRange().text;
-                }
-
-                return text;
-            }
 
             makeGrid(null, {
                 columns: [
@@ -1505,8 +1489,13 @@ function() {
 
             node = grid.view.getNode(grid.store.getAt(1));
             jasmine.fireMouseEvent(node.getElementsByTagName('td')[0], 'dblclick');
+            var inputEl = plugin.getActiveEditor().field;
 
-            expect(getSelectionText()).toBe('Bart');
+            // focus is async in some browsers so adding a delay here
+            waits(10);
+            runs(function() {
+                expect(inputEl.getTextSelection().slice(0,2)).toEqual([0, 4]);
+            });
         });
     });
 
@@ -1549,6 +1538,40 @@ function() {
                 triggerEditorKey(ed.field.inputEl, 27);
 
                 expect(plugin.context).toBe(context);
+            });
+        });
+
+        // https://sencha.jira.com/browse/EXTJS-26419
+        describe("don't cache if celleditor is still detaching", function() {
+            var win;
+
+            beforeEach(function() {
+                makeGrid({ clicksToEdit: 1 }, { renderTo: null });
+
+                win = Ext.create('Ext.window.Window', {
+                    title: 'Hello',
+                    height: 300,
+                    width: 400,
+                    layout: 'fit',
+                    items: [grid]
+                }).show();
+            });
+
+            afterEach(function() {
+                win = Ext.destroy(win);
+            });
+
+            /* NotFoundError: Failed to execute 'appendChild' on
+            * 'Node': The node to be removed is no longer 
+            * a child of this node. Perhaps it was moved in a 'blur' 
+            * event handler?
+            */
+            it('should not throw error when window is closed while editing', function() {
+                startEdit(0,1);
+                expect(function(){
+                    win.close();
+                }).not.toThrow();
+                expect(grid.destroyed).toBe(true);
             });
         });
     });

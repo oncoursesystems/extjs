@@ -18,6 +18,20 @@ Ext.define('KitchenSink.view.grid.MultipleSorting', {
         path: 'classic/samples/view/grid/MultipleSortingController.js'
     }],
     //</example>
+    profiles: {
+        classic: {
+            joindateWidth: 125,
+            salaryWidth: 125
+        },
+        neptune: {
+            joindateWidth: 125,
+            salaryWidth: 125
+        },
+        graphite: {
+            joindateWidth: 150,
+            salaryWidth: 150
+        }
+    },
 
     title: 'Multiple Sort Grid',
     height: 350,
@@ -43,12 +57,12 @@ Ext.define('KitchenSink.view.grid.MultipleSorting', {
         text: 'Join Date',
         dataIndex: 'joinDate',
 
-        width: 125
+        width: '${joindateWidth}'
     }, {
         text: 'Salary',
         dataIndex: 'salary',
         
-        width: 125,
+        width: '${salaryWidth}',
         align: 'right',
         formatter: 'usMoney'
     }],

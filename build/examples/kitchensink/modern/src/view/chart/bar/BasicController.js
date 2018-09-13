@@ -27,12 +27,5 @@ Ext.define('KitchenSink.view.chart.bar.BasicController', {
 
     onColumnRender: function (v) {
         return Ext.util.Format.usMoney(v * 1000);
-    },
-
-    onRefresh: function() {
-        var chart = this.lookup('chart'),
-            store = chart.getStore();
-
-        store.generateData(store.getNumRecords());
     }
 });

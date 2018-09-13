@@ -22,7 +22,6 @@
  *          xtype: 'list',
  *          fullscreen: true,
  *          itemTpl: '<div class="contact">{firstName} <b>{lastName}</b></div>',
- *          grouped: true,
  *
  *          store: {
  *              grouper: {
@@ -115,12 +114,11 @@ Ext.define('Ext.dataview.List', {
         disclosureProperty: 'disclosure',
 
         /**
-         * @cfg {Boolean} [grouped=false]
-         * Set to `true` to show the {@link #groupHeader headers} and
-         * {@link #groupFooter footers} for each group in the `store`. This setting is
-         * only meaningful if the underlying `store` has a `grouper`.
+         * @cfg {Boolean} [grouped=true]
+         * Set to `false` turn off all grouping.
+         * This setting is only meaningful if the underlying `store` has a `grouper`.
          */
-        grouped: null,
+        grouped: true,
 
         /**
          * @cfg {Object/Ext.dataview.ItemHeader} groupFooter
@@ -830,7 +828,9 @@ Ext.define('Ext.dataview.List', {
     },
 
     onStoreRemove: function (store, records, index) {
-        var me = this;
+        var me = this,
+            navModel = this.getNavigationModel(),
+            location;
 
         if (me.infinite) {
             if (me.getVisibleHeight()) {
@@ -842,6 +842,11 @@ Ext.define('Ext.dataview.List', {
         } else {
             me.refreshGroupIndices();
             me.callParent([ store, records, index ]);
+        }
+
+        if (navModel.location) {
+            location = navModel.location.refresh();
+            navModel.setLocation(location);
         }
     },
 
@@ -1334,7 +1339,7 @@ Ext.define('Ext.dataview.List', {
             this.adjustScrollDockHeight(item.scrollDock, height);
         },
 
-        onStoreGroupChange: function() {
+        onStoreGroupChange: function () {
             if (this.initialized) {
                 this.refreshGrouping();
                 this.syncRows();
@@ -2092,8 +2097,9 @@ Ext.define('Ext.dataview.List', {
          * @private
          */
         getScrollableClientRegion: function() {
-            return this.callParent().adjust(this.getPinnedHeaderHeight()||0, 0,
-                                            -(this.getPinnedFooterHeight()||0), 0);
+            return this.callParent().adjust(
+                this.getPinnedHeaderHeight() || 0, 0, -(this.getPinnedFooterHeight() || 0), 0
+            );
         },
 
         getItemTop: function(item) {

@@ -1,5 +1,5 @@
 /**
- * @property {Boolean} [USE_NATIVE_JSON=false]
+ * @property {Boolean} [USE_NATIVE_JSON=true]
  * @member Ext
  * Indicates whether to use native browser parsing for JSON methods.
  * This option is ignored if the browser does not support native JSON methods.
@@ -7,7 +7,7 @@
  * **Note:** Native JSON methods will not work with objects that have functions.
  * Also, property names must be quoted, otherwise the data will not parse.
  */
-Ext.USE_NATIVE_JSON = false;
+Ext.USE_NATIVE_JSON = true;
 
 /**
  * Modified version of [Douglas Crockford's JSON.js][dc] that doesn't
@@ -45,15 +45,15 @@ var me = this,
                 return me.encodeString(o);
             }
         } else if (typeof o === "number") {
-            //don't use isNumber here, since finite checks happen inside isNumber
+            // don't use isNumber here, since finite checks happen inside isNumber
             return isFinite(o) ? String(o) : "null";
         } else if (Ext.isBoolean(o)) {
             return String(o);
         }
-        // Allow custom zerialization by adding a toJSON method to any object type.
+        // Allow custom serialization by adding a toJSON method to any object type.
         // Date/String have a toJSON in some environments, so check these first.
-        else if (o.toJSON) {
-            return o.toJSON();
+        else if (typeof o.toJSON === 'function') {
+            return doEncode(o.toJSON());
         } else if (Ext.isArray(o)) {
             return encodeArray(o, newline);
         } else if (Ext.isObject(o)) {

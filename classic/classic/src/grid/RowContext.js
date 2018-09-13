@@ -26,7 +26,7 @@ Ext.define('Ext.grid.RowContext', {
         }
     },
 
-    free: function() {
+    free: function(view) {
         var me = this,
             widgets = me.widgets,
             widgetId,
@@ -44,6 +44,10 @@ Ext.define('Ext.grid.RowContext', {
         // and moved into the detached body to save them from garbage collection.
         for (widgetId in widgets) {
             widget = widgets[widgetId];
+            // if the view is being refresh only remove widgets owned by this view
+            if (view && view.refreshing && !view.el.contains(widget.el)) {
+                continue;
+            }
 
             // Focusables in a grid must not be tabbable by default when they get put back in.
             focusEl = widget.getFocusEl();

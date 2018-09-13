@@ -1,8 +1,9 @@
-/* global Ext, expect, jasmine */
+/* global Ext, expect, jasmine, topSuite, MockAjaxManager */
+/* eslint indent: off */
 
 topSuite("Ext.grid.Panel",
     ['Ext.data.ArrayStore', 'Ext.ux.PreviewPlugin', 'Ext.grid.feature.*', 'Ext.form.field.Text',
-     'Ext.container.Viewport'],
+     'Ext.container.Viewport', 'Ext.data.BufferedStore', 'Ext.grid.filters.Filters'],
 function(){
     var itShowsScrollbars = Ext.getScrollbarSize().width ? it : xit,
         synchronousLoad = true,
@@ -14,28 +15,6 @@ function(){
             }
             return this;
         };
-
-    function completeWithData(theData) {
-        Ext.Ajax.mockComplete({
-            status: 200,
-            responseText: Ext.encode(theData)
-        });
-    }
-
-    function makeData(n) {
-        var i = 0,
-            recs = [];
-
-        for (n = n || 50; i < n; i++) {
-            recs.push({
-                name: 'Name ' + i,
-                email: 'dev_' + i + '@sencha.com',
-                phone: '1-717-' + i
-            });
-        }
-
-        return recs;
-    }
 
     function findCell(rowIdx, cellIdx) {
         return grid.getView().getCellInclusive({
@@ -1807,28 +1786,107 @@ function(){
 
     describe('statefulness', function () {
         // State will use a MemoryProvider by default because we do not need run-to-run state persistence
-        var rawData, data;
-
         beforeEach(function () {
-            rawData = [
-                { name: 'Homer', sex: 'Male', email: 'homer@simpsons.com', phone: '555-222-1244', isSprog: false },
-                { name: 'Bart', sex: 'Male', email: 'bart@simpsons.com', phone: '555-222-1234', isSprog: true },
-                { name: 'Marge', sex: 'Female', email: 'marge@simpsons.com', phone: '555-222-1254', isSprog: false },
-                { name: 'Lisa', sex: 'Female', email: 'lisa@simpsons.com', phone: '555-111-1224', isSprog: true }
-            ];
-
-            data = {
-                items: rawData
-            };
-
             MockAjaxManager.addMethods();
         });
             
         afterEach(function () {
-            Ext.state.Manager.set(grid.getStateId(), null);
+            if (grid) {
+                Ext.state.Manager.set(grid.getStateId(), null);
+            }
             MockAjaxManager.removeMethods();
             Ext.state.Manager.clear('foo');
-            rawData = data = null;
+        });
+
+        describe("store binding", function() {
+            var data = [
+                { name: 'Lisa', email: 'lisa@simpsons.com', phone: '555-111-1224' },
+                { name: 'Bart', email: 'bart@simpsons.com', phone: '555-222-1234' },
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
+            ];
+            it("should restore sort and filters", function () {
+                createGrid(null, {
+                        stateful: true,
+                        stateId: 'withBinding',
+                        plugins: [{
+                            ptype: 'gridfilters'
+                        }],
+                        viewModel: {
+                            stores: {
+                                simpsonsStore: {
+                                    statefulFilters: true,
+                                    saveStatefulFilters: true,
+                                    fields: ['name', 'email', 'phone'],
+                                    data: data
+                                }
+                            }
+                        },
+                        bind: {
+                            store: '{simpsonsStore}'
+                        },
+                        columns: [{
+                            dataIndex:'name',
+                            filter: {
+                                type: 'string'
+                            }
+                        }, {
+                            dataIndex: 'email'
+                        }]
+                    });
+                waitsFor(function() {
+                    return !grid.store.isEmptyStore;
+                });
+
+                runs(function() {
+                    jasmine.fireMouseEvent(grid.headerCt.items.getAt(0).el, 'click');
+                    grid.getColumns()[0].filter.setValue('ar');
+
+                    expect(grid.getStore().isSorted()).toBe(true);
+                    expect(grid.getStore().isFiltered()).toBe(true);
+
+                    grid.saveState();
+                    grid.destroy();
+                    createGrid(null, {
+                        stateful: true,
+                        stateId: 'withBinding',
+                        plugins: [{
+                            ptype: 'gridfilters'
+                        }],
+                        viewModel: {
+                            stores: {
+                                simpsonsStore: {
+                                    statefulFilters: true,
+                                    saveStatefulFilters: true,
+                                    fields: ['name', 'email', 'phone'],
+                                    data: data
+                                }
+                            }
+                        },
+                        bind: {
+                            store: '{simpsonsStore}'
+                        },
+                        columns: [{
+                            dataIndex:'name',
+                            filter: {
+                                type: 'string'
+                            }
+                        }, {
+                            dataIndex: 'email'
+                        }]
+                    });
+                });
+
+                waitsFor(function() {
+                    return !grid.store.isEmptyStore;
+                });
+
+                runs(function() {
+                    expect(grid.getStore().isSorted()).toBe(true);
+                    expect(grid.getStore().isFiltered()).toBe(true);
+                    expect(grid.getColumns()[0].filter.active).toBe(true);
+                });
+            });
         });
         
         describe ('locked column state', function() {
@@ -3102,23 +3160,6 @@ function(){
         });
 
         it('should successfully render the data', function() {
-            function makeRows(n, total) {
-                var data = [],
-                    i = 1;
-
-                for (i = 1; i <= n; ++i) {
-                    data.push({
-                        id: i,
-                        title: 'Title' + i
-                    });
-                }
-
-                return {
-                    data: data,
-                    totalCount: total
-                };
-            }
-
             // create the Data Store
             var store = new Ext.data.BufferedStore({
                 model: ForumThread,

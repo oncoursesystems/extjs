@@ -2,9 +2,11 @@ Ext.define('KitchenSink.view.chars.area.NegativeController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.area-negative',
 
-    init: function () {
+    init: function (view) {
         var me = this,
-            chart = me.lookupReference('chart');
+            chart = me.lookup('chart');
+
+        me.callParent([view]);
 
         chart.setSeries([
             me.getSeriesConfig('phone',     'Phone Hardware'),

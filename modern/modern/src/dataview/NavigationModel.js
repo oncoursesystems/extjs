@@ -117,7 +117,7 @@ Ext.define('Ext.dataview.NavigationModel', {
                     child.isStyle('display', 'inline-block') ||
                     childFloatStyle === 'left' || childFloatStyle === 'right' ||
                     (itemContainer.isStyle('display', 'flex') && itemContainer.isStyle('flex-direction', 'row')
-                );
+                    );
             }
 
             // Use explicit scrolling rather than relying on the browser's focus behaviour.
@@ -636,4 +636,4 @@ Ext.define('Ext.dataview.NavigationModel', {
             }
         }
     }
- });
+});

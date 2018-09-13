@@ -31,6 +31,7 @@ Ext.define('KitchenSink.view.lists.UndoableAccordion', {
     itemTpl: '{firstName} {lastName}',
     store: 'List',
     width: '${width}',
+    grouped: false,
     itemConfig: {
         height: 50
     },

@@ -33,6 +33,7 @@ Ext.define('KitchenSink.view.lists.BasicStepper', {
     store: 'List',
     width: '${width}',
     infinite: true,
+    grouped: false,
     itemConfig: {
         height: 50
     },

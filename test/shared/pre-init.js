@@ -46,8 +46,7 @@
         }
     }
     
-    if (options.ci) {
-        jasmine.DEBUGGING_MODE = false;
+    if (options.ci || options['cmd-test-reporter']) {
         jasmine.CI_ENVIRONMENT = true;
     }
 

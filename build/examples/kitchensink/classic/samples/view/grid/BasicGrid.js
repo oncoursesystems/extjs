@@ -34,19 +34,30 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
         classic: {
             width: 600,
             priceWidth: 75,
+            pricechangeWidth: 80,
             percentChangeColumnWidth: 75,
             lastUpdatedColumnWidth: 85,
-            green: 'green',
-            red: 'red'
+            gainColor: 'green',
+            lossColor: 'red'
         },
         neptune: {
             width: 750,
             priceWidth: 95,
+            pricechangeWidth: 80,
             percentChangeColumnWidth: 100,
             lastUpdatedColumnWidth: 115,
-            green: '#73b51e',
-            red: '#cf4c35'
-        }
+            gainColor: '#73b51e',
+            lossColor: '#cf4c35'
+        }, 
+        graphite: {
+            width: 750,
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 150,
+            gainColor: 'unset',
+            lossColor: 'unset'
+        }       
     },
     //</example>
 
@@ -76,7 +87,7 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
         dataIndex: 'price'
     }, {
         text: 'Change',
-        width: 80,
+        width: '${pricechangeWidth}',
         renderer: 'renderChange',
         dataIndex: 'priceChange'
     }, {
@@ -105,6 +116,6 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
     }],
 
     signTpl: '<span style="' +
-            'color:{value:sign(\'${red}\',\'${green}\')}"' +
+            'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +
         '>{text}</span>'
 });

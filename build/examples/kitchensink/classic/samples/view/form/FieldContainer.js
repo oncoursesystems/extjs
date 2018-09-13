@@ -28,13 +28,41 @@ Ext.define('KitchenSink.view.form.FieldContainer', {
         path: 'classic/samples/view/form/FieldContainerController.js'
     }],
     //</example>
-
+    profiles: {
+        classic: {
+            width: 600,
+            phone1Width: 45,
+            phone2Width: 45,           
+            phone3Width: 60,
+            titleWidth: 75,
+            empLabelWidth: 100,
+            detailsLabelWidth: 90
+        },
+        neptune: {
+            width: 600,           
+            phone1Width: 45,
+            phone2Width: 45,           
+            phone3Width: 60,
+            titleWidth: 75,
+            empLabelWidth: 100,
+            detailsLabelWidth: 90
+        },
+        graphite: {
+            width: 800,
+            phone1Width: 55,
+            phone2Width: 55,           
+            phone3Width: 70,
+            titleWidth: 100,
+            empLabelWidth: 130,
+            detailsLabelWidth: 120
+        }
+    },
     title: 'Employee Information',
-    width: 600,
+    width: '${width}',
     bodyPadding: 10,
     defaults: {
         anchor: '100%',
-        labelWidth: 100
+        labelWidth: '${empLabelWidth}'
     },
     items: [{
         xtype: 'textfield',
@@ -70,7 +98,7 @@ Ext.define('KitchenSink.view.form.FieldContainer', {
         title: 'Details',
         collapsible: true,
         defaults: {
-            labelWidth: 90,
+            labelWidth: '${detailsLabelWidth}',
             anchor: '100%',
             layout: 'hbox'
         },
@@ -86,11 +114,11 @@ Ext.define('KitchenSink.view.form.FieldContainer', {
             },
             items: [
                 {xtype: 'displayfield', value: '(', margin: '0 2 0 0'},
-                {xtype: 'textfield',    fieldLabel: 'Phone 1', name: 'phone-1', width: 45, allowBlank: false, maxLength: 3},
+                {xtype: 'textfield',    fieldLabel: 'Phone 1', name: 'phone-1', width: '${phone1Width}', allowBlank: false, maxLength: 3},
                 {xtype: 'displayfield', value: ')', margin: '0 5 0 2'},
-                {xtype: 'textfield',    fieldLabel: 'Phone 2', name: 'phone-2', width: 45, allowBlank: false, margin: '0 5 0 0', maxLength: 3},
+                {xtype: 'textfield',    fieldLabel: 'Phone 2', name: 'phone-2', width: '${phone2Width}', allowBlank: false, margin: '0 5 0 0', maxLength: 3},
                 {xtype: 'displayfield', value: '-'},
-                {xtype: 'textfield',    fieldLabel: 'Phone 3', name: 'phone-3', width: 60, allowBlank: false, margin: '0 0 0 5', maxLength: 4}
+                {xtype: 'textfield',    fieldLabel: 'Phone 3', name: 'phone-3', width: '${phone3Width}', allowBlank: false, margin: '0 0 0 5', maxLength: 4}
             ]
         }, {
             xtype: 'fieldcontainer',
@@ -131,7 +159,7 @@ Ext.define('KitchenSink.view.form.FieldContainer', {
             items: [{
                 //the width of this field in the HBox layout is set directly
                 //the other 2 items are given flex: 1, so will share the rest of the space
-                width: 75,
+                width: '${titleWidth}',
                 xtype: 'combo',
                 queryMode: 'local',
                 value: 'mrs',

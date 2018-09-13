@@ -28,13 +28,14 @@ Ext.define('KitchenSink.view.phone.Main', {
 
         items: [{
             align: 'right',
+            id: 'materialThemeMenuButton',
+            hidden:true,
             menu: {
                 itemId: 'materialThemeMenu',
                 xtype: 'actionsheet',
                 hideOnMaskTap: true
             },
             iconCls: 'palette',
-            hidden: !(Ext.theme.is.Material && window.Fashion && Fashion.css && Fashion.css.setVariables),
             arrow: false
         }, {
             xtype: 'button',

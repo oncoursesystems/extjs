@@ -1,4 +1,5 @@
-/* global expect, Ext, jasmine */
+/* global expect, Ext, jasmine, topSuite */
+/* eslint indent: off */
 
 topSuite("grid-columns",
     [false, 'Ext.grid.Panel', 'Ext.grid.column.*', 'Ext.data.ArrayStore',
@@ -1268,6 +1269,81 @@ function() {
                     expect(sorters.getCount()).toBe(1);
                     expect(sorters.first().getProperty()).toBe('field0');
                     expect(sorters.first().getDirection()).toBe('ASC');
+                });
+
+                it("should be able to initally sort a custom sorter with direction DESC", function() {
+                    makeGrid([{
+                        dataIndex: 'field0',
+                        sorter: {
+                            sorterFn: function (a, b) {
+                                a = a.get("field0");
+                                b = b.get("field0");
+                                return a > b ? 1 : (a === b) ? 0 : -1;
+
+
+                            },
+                            direction: "ASC"
+                        }
+                    }]);
+
+                    colRef[0].sort('DESC');
+
+                    expect(colRef[0].getSorter().getDirection()).toBe('DESC');
+                });
+
+                it("should be able sort to any direction when switching sorters", function() {
+                    makeGrid([{
+                        dataIndex: 'field0',
+                        sorter: {
+                            sorterFn: function (a, b) {
+                                a = a.get("field0");
+                                b = b.get("field0");
+                                return a > b ? 1 : (a === b) ? 0 : -1;
+
+
+                            },
+                            direction: "ASC"
+                        }
+                    }, {
+                        dataIndex: 'field1'
+                    }]);
+
+                    colRef[0].sort('DESC');
+                    expect(colRef[0].getSorter().getDirection()).toBe('DESC');
+
+                    colRef[1].sort('ASC');
+
+                    colRef[0].sort('ASC');
+                    expect(colRef[0].getSorter().getDirection()).toBe('ASC');
+                });
+
+                it("should not lose track of direction when sorting via header and menu with a custom sorter", function() {
+                    makeGrid([{
+                        dataIndex: 'field0',
+                        sorter: {
+                            sorterFn: function (a, b) {
+                                a = a.get("field0");
+                                b = b.get("field0");
+                                return a > b ? 1 : (a === b) ? 0 : -1;
+
+
+                            },
+                            direction: "ASC"
+                        }
+                    }]);
+                    clickHeader(colRef[0]);
+                    var sorters = store.getSorters();
+                    expect(sorters.getCount()).toBe(1);
+                    expect(sorters.first().getDirection()).toBe('ASC');
+                    
+                    Ext.testHelper.showHeaderMenu(colRef[0]);
+
+                    runs(function() {
+                        var menu = colRef[0].activeMenu;
+
+                        jasmine.fireMouseEvent(menu.items.getByKey('ascItem').el, 'click');
+                        expect(sorters.first().getDirection()).toBe('ASC');
+                    });
                 });
 
                 it("should not sort when configured with sortable false", function() {

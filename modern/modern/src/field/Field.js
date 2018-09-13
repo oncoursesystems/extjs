@@ -180,7 +180,7 @@ Ext.define('Ext.field.Field', {
          * * A regexp - if the field fails to match the regexp, it is invalid.
          * * A function - the function will be called to validate the field; it should return false if invalid.`
          * * An object - an object with a member fn that is a function to be called to validate the field.
-         * * An instantiated Validator {@link  Ext.data.validator}
+         * * An instantiated Validator {@link  Ext.data.validator.Validator}
          */
         validators: null,
 

@@ -1,4 +1,7 @@
-topSuite("Ext.panel.Table", ['Ext.grid.Panel'], function() {
+topSuite("Ext.panel.Table", ['Ext.grid.Panel',
+                'Ext.layout.container.Card',
+                'Ext.grid.plugin.RowWidget',
+                'Ext.button.Button'], function() {
     var createGrid = function (storeCfg, gridCfg) {
         store = Ext.create('Ext.data.Store', Ext.apply({
             storeId:'simpsonsStore',
@@ -93,4 +96,63 @@ topSuite("Ext.panel.Table", ['Ext.grid.Panel'], function() {
             }).not.toThrow();
         });
     });
+
+    describe('tablepanel focus', function(){
+        var card;
+
+        afterEach(function() {
+            card = Ext.destroy(card);
+        });
+
+        // https://sencha.jira.com/browse/EXTJS-24162
+        it('should not focus if the table view is not visible', function() {
+            card = Ext.create({
+                xtype: 'container',
+                layout: 'card',
+                itemId: 'cards',
+                items: [{
+                    xtype: 'grid',
+                    store: [1,2,3],
+                    columns: [{
+                        dataIndex: 'field1',
+                        flex: 1
+                    }],
+                    plugins: {
+                        ptype: 'rowwidget',
+                        selectRowOnExpand: true,
+                        widget: {
+                            xtype: 'grid',
+                            store: ['X'],
+                            columns: [{
+                                dataIndex: 'field1',
+                                flex: 1
+                            }],
+                            listeners: {
+                                cellclick: function () {
+                                    
+                                    this.up('#cards').setActiveItem(1);
+                                }
+                            }
+                        }
+                    }
+                }, {
+                    xtype: 'container',
+                    items: [{
+                        xtype: 'button',
+                        text: 'back',
+                        handler: function () {
+                            this.up('#cards').setActiveItem(0);
+                        }
+                    }]
+                }],
+                renderTo: Ext.getBody()
+            });
+
+            expect(function(){
+                jasmine.fireMouseEvent(card.down('grid').el.dom.querySelector('.x-grid-row-expander'), 'click', null, null, true);
+                card.down('grid').el.dom.querySelectorAll('tr .x-grid-cell')[3].click();
+                card.down('button').el.dom.click();    
+            }).not.toThrow();
+        })
+    })
 });

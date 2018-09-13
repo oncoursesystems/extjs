@@ -128,15 +128,10 @@ Ext.define('Ext.menu.CheckItem', {
 
     element: {
         reference: 'element',
+        tabindex: Ext.is.iOS ? -1: null,
         cls: Ext.baseCSSPrefix + 'unselectable ' +
             // The checkbox always occupies the "left" icon space
-            Ext.baseCSSPrefix + 'has-left-icon',
-        onmousedown: 'return Ext.doEv(this, event);'
-    },
-
-    eventHandlers: {
-        change: 'onCheckboxChange',
-        mousedown: 'onCheckboxMousedown'
+            Ext.baseCSSPrefix + 'has-left-icon'
     },
 
     focusEl: 'checkboxElement',
@@ -154,15 +149,29 @@ Ext.define('Ext.menu.CheckItem', {
             tag: 'input',
             type: 'checkbox',
             reference: 'checkboxElement',
-            cls: Ext.baseCSSPrefix + 'checkbox-el',
-            onchange: 'return Ext.doEv(this, event);'
+            cls: Ext.baseCSSPrefix + 'checkbox-el'
         });
 
         return template;
     },
 
-    initialize: function () {
-        this.callParent();
+    initialize: function() {
+        var me = this;
+        
+        me.callParent();
+        
+        me.element.on({
+            mousedown: 'onCheckboxMousedown',
+            translate: false,
+            scope: me
+        });
+        
+        me.checkboxElement.on({
+            change: 'onCheckboxChange',
+            delegated: false,
+            scope: me
+        });
+        
         this.syncCheckboxCls();
     },
 

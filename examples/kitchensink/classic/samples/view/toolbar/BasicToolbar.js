@@ -46,6 +46,9 @@ Ext.define('KitchenSink.view.toolbar.BasicToolbar', {
         },
         'neptune-touch': {
             width: 620
+        },
+         graphite: {
+            width: 800
         }
     },
     //</example>

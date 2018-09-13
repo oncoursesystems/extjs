@@ -67,7 +67,10 @@ Ext.define('KitchenSink.view.chart.boxplot.BoxPlot', {
         reference: 'chart',
         captions: {
             title: {
-                text: 'Age of Nobel Prize winners by field\n1901 to 2014'
+                text: 'Age of Nobel Prize winners by field\n1901 to 2014',
+                style: {
+                    fontSize: 17
+                }
             }
         },
         store: {

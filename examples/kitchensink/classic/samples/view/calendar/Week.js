@@ -9,9 +9,23 @@ Ext.define('KitchenSink.view.calendar.Week', {
         'Ext.button.Segmented'
     ],
 
-    width: 1000,
+    width: '${width}',
     height: 600,
 
+    profiles: {
+        classic: {
+            width: 1000,
+            calendarWidth: 150
+        },
+        neptune: {
+            width: 1000,
+            calendarWidth: 150
+        },
+        graphite: {
+            width: 1200,
+            calendarWidth: 180
+        }
+    },
     viewModel: {
         data: {
             value: new Date(),
@@ -62,7 +76,7 @@ Ext.define('KitchenSink.view.calendar.Week', {
         region: 'west',
         title: 'Calendars',
         ui: 'light',
-        width: 150,
+        width: '${calendarWidth}',
         bodyPadding: 5,
         collapsible: true,
         items: {

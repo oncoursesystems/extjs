@@ -153,8 +153,14 @@ Ext.define('Ext.route.Action', {
         var me = this,
             actions = me.getActions(),
             befores = me.getBefores(),
-            urlParams = me.getUrlParams().slice(),
-            config, ret;
+            urlParams = me.getUrlParams(),
+            config, ret, args;
+
+        if (Ext.isArray(urlParams)) {
+            args = urlParams.slice();
+        } else {
+            args = [urlParams];
+        }
 
         if (
             me.stopped ||
@@ -166,9 +172,9 @@ Ext.define('Ext.route.Action', {
             if (befores && befores.length) {
                 config = befores.shift();
 
-                urlParams.push(me);
+                args.push(me);
 
-                ret = Ext.callback(config.fn, config.scope, urlParams);
+                ret = Ext.callback(config.fn, config.scope, args);
 
                 if (ret && ret.then) {
                     ret.then(function (arg) { me.resume(arg) }, function (arg) { me.stop(arg); });
@@ -176,7 +182,7 @@ Ext.define('Ext.route.Action', {
             } else if (actions && actions.length) {
                 config = actions.shift();
 
-                Ext.callback(config.fn, config.scope, urlParams);
+                Ext.callback(config.fn, config.scope, args);
 
                 me.next();
             } else {

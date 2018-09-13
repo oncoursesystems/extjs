@@ -140,26 +140,26 @@ Ext.define('Ext.Template', {
      *
      * Finds the following expressions within a format string
      *
-     *                     {AND?}
-     *                     /   \
-     *                   /       \
-     *                 /           \
-     *               /               \
-     *            OR                  AND?
-     *           /  \                 / \
-     *          /    \               /   \
-     *         /      \             /     \
-     *    (\d+)  ([a-z_][\w\-]*)   /       \
-     *     index       name       /         \
-     *                           /           \
-     *                          /             \
-     *                   \:([a-z_\.]*)   (?:\((.*?)?\))?
-     *                      formatFn           args
+     *                      {AND?}
+     *                      /   \
+     *                    /       \
+     *                  /           \
+     *                /               \
+     *             OR                  AND?
+     *            /  \                 / \
+     *           /    \               /   \
+     *          /      \             /     \
+     *     (\d+)  ([a-z_][\w\-]*)   /       \
+     *      index       name       /         \
+     *                            /           \
+     *                           /             \
+     *                    \:([a-z_\.]*)   (?:\((.*?)?\))?
+     *                       formatFn           args
      *
      * Numeric index or (name followed by optional formatting function and args)
      * @private
      */
-    tokenRe: /\{(?:(?:(\d+)|([a-z_][\w\-]*))(?::([a-z_\.]+)(?:\(([^\)]*?)?\))?)?)\}/gi,
+    tokenRe: /\{(?:(?:(\d+)|([a-z_$][\w\-$]*))(?::([a-z_\.]+)(?:\(([^\)]*?)?\))?)?)\}/gi,
 
     /**
      * Returns an HTML fragment of this template with the specified values applied.

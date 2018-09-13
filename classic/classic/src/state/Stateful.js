@@ -29,9 +29,9 @@ Ext.define('Ext.state.Stateful', {
          *
          * To set the state provider for the current page:
          *
-         *    Ext.state.Manager.setProvider(new Ext.state.CookieProvider({
-         *        expires: new Date(new Date().getTime()+(1000*60*60*24*7)), //7 days from now
-         *    }));
+         *     Ext.state.Manager.setProvider(new Ext.state.CookieProvider({
+         *         expires: new Date(new Date().getTime()+(1000*60*60*24*7)), //7 days from now
+         *     }));
          *
          * A stateful object attempts to save state when one of the events
          * listed in the {@link #stateEvents} configuration fires.

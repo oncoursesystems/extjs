@@ -40,7 +40,7 @@ Ext.define('Ext.data.AbstractStore', {
          *
          * Individual filters can be specified as an `Ext.util.Filter` instance, a config
          * object for `Ext.util.Filter` or simply a function that will be wrapped in a
-         * instance with its {@Ext.util.Filter#filterFn filterFn} set.
+         * instance with its {@link Ext.util.Filter#filterFn filterFn} set.
          *
          * For fine grain control of the filters collection, call `getFilters` to return
          * the `Ext.util.Collection` instance that holds this store's filters.
@@ -242,7 +242,7 @@ Ext.define('Ext.data.AbstractStore', {
          * @event remove
          * Fired when one or more records have been removed from this Store.
          *
-         * **The signature for this event has changed in 5.0: **
+         * **The signature for this event has changed in 5.0:**
          *
          * @param {Ext.data.Store} store The Store object
          * @param {Ext.data.Model[]} records The records that were removed. In previous
@@ -412,9 +412,9 @@ Ext.define('Ext.data.AbstractStore', {
      *
      * When store is filtered, finds records only within filter.
      *
-     * **IMPORTANT
+     * **IMPORTANT**
      *
-     * If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
+     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
      * This will be parts of the dataset around the currently visible zone, or recently visited zones if the pages
      * have not yet been purged from the cache.**
      *
@@ -448,9 +448,9 @@ Ext.define('Ext.data.AbstractStore', {
      *
      * When store is filtered, finds records only within filter.
      *
-     * **IMPORTANT
+     * **IMPORTANT**
      *
-     * If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
+     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
      * This will be parts of the dataset around the currently visible zone, or recently visited zones if the pages
      * have not yet been purged from the cache.**
      *
@@ -476,9 +476,9 @@ Ext.define('Ext.data.AbstractStore', {
      *
      * When store is filtered, finds records only within filter.
      *
-     * **IMPORTANT
+     * **IMPORTANT**
      *
-     * If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
+     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
      * This will be parts of the dataset around the currently visible zone, or recently visited zones if the pages
      * have not yet been purged from the cache.**
      *
@@ -499,9 +499,9 @@ Ext.define('Ext.data.AbstractStore', {
      *
      * When store is filtered, finds records only within filter.
      *
-     * **IMPORTANT
+     * **IMPORTANT**
      *
-     * If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
+     * **If this store is {@link Ext.data.BufferedStore Buffered}, this can ONLY find records which happen to be cached in the page cache.
      * This will be parts of the dataset around the currently visible zone, or recently visited zones if the pages
      * have not yet been purged from the cache.**
      *

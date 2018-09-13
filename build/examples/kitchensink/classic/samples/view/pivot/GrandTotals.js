@@ -26,17 +26,29 @@ Ext.define('KitchenSink.view.pivot.GrandTotals', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            totalColumnWidth: 85,
+            companyColumnWidth: 100
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 400,
+            totalColumnWidth: 85,
+            companyColumnWidth: 100
+        },
+        graphite: {
+            width: 750,
+            height: 600,
+            totalColumnWidth: 120,
+            companyColumnWidth: 120
         }
     },
     //</example>
 
     title: 'Pivot Grid with custom grand totals',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
 
     matrix: {
@@ -50,14 +62,15 @@ Ext.define('KitchenSink.view.pivot.GrandTotals', {
             dataIndex: 'value',
             header: 'Total',
             aggregator: 'sum',
-            width: 85
+            width: '${totalColumnWidth}'
         }],
 
         // Configure the left axis dimensions that will be used to generate
         // the grid rows
         leftAxis: [{
             dataIndex: 'company',
-            header: 'Company'
+            header: 'Company',
+            width: '${companyColumnWidth}'
         }, {
             dataIndex: 'country',
             header: 'Country',

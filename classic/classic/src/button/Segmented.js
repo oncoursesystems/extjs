@@ -5,7 +5,7 @@
  * menu, tooltip, etc.  You can see usages of the various configuration
  * possibilities in the example below.
  *
- *     @example @preview 
+ *     @example preview 
  *     Ext.create('Ext.button.Segmented', {            
  *          renderTo: Ext.getBody(),
  *          allowMultiple: true,

@@ -22,12 +22,37 @@ Ext.define('KitchenSink.view.form.RatingForm', {
         path: 'classic/samples/model/grid/Employee.js'
     }],
     //</example>
-    
+    profiles: {
+        classic: {
+            width: 520,
+            lastYearWidth: 100,
+            yearWidth: 100,
+            idWidth: 80,
+            height: 500,
+            labelWidth: 105
+        },
+        neptune: {
+            width: 520,
+            lastYearWidth: 100,
+            yearWidth: 100,
+            idWidth: 80,
+            height: 500,
+            labelWidth: 105
+        },
+        graphite: {
+            width: 700,
+            lastYearWidth: 120,
+            yearWidth: 120,
+            idWidth: 100,
+            height: 650,
+            labelWidth: 140
+        }
+    },
     title: 'Rating Form',
     viewModel: true,
 
-    width: 520,
-    height: 500,
+    width: '${width}',
+    height: '${height}',
     minHeight: 400,
     resizable: true,
     frame: true,
@@ -61,7 +86,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
             sortable: true,
             dataIndex: 'employeeNo',
             groupable: false,
-            width: 80
+            width: '${idWidth}'
         }, {
             text: 'Name',
             sortable: true,
@@ -73,7 +98,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
             columns: [{
                 xtype: 'widgetcolumn',
                 text: 'Last Year',
-                width: 100,
+                width: '${yearWidth}',
                 dataIndex: 'ratingLastYear',
                 widget: {
                     xtype: 'rating',
@@ -82,7 +107,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
             },{
                 xtype: 'widgetcolumn',
                 text: 'This Year',
-                width: 100,
+                width: '${lastYearWidth}',
                 dataIndex: 'ratingThisYear',
                 widget: {
                     xtype: 'rating',
@@ -120,6 +145,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
         padding: 10,
         items: [{
             fieldLabel: 'First Name',
+            labelWidth: '${labelWidth}',
             emptyText: 'First Name',
             bind: {
                 disabled: '{!employeeGrid.selection}',
@@ -127,6 +153,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
             }
         }, {
             fieldLabel: 'Last Name',
+            labelWidth: '${labelWidth}',
             emptyText: 'Last Name',
             bind: {
                 disabled: '{!employeeGrid.selection}',
@@ -134,6 +161,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
             }
         }, {
             fieldLabel: 'Email',
+            labelWidth: '${labelWidth}',
             vtype: 'email',
             bind: {
                 disabled: '{!employeeGrid.selection}',
@@ -142,6 +170,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
         }, {
             xtype: 'datefield',
             fieldLabel: 'Date of Birth',
+            labelWidth: '${labelWidth}',
             allowBlank: false,
             maxValue: new Date(),
             bind: {
@@ -151,6 +180,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
         }, {
             xtype: 'fieldcontainer',
             fieldLabel: 'Current\u00a0Rating',
+            labelWidth: '${labelWidth}',
             bind: {
                 disabled: '{!employeeGrid.selection}'
             },

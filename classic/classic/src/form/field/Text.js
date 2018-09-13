@@ -551,6 +551,13 @@ Ext.define('Ext.form.field.Text', {
      * @param {Ext.event.Event} e
      */
 
+    /**
+     * @event paste
+     * Fires when this field is pasted. This event only fires if **{@link #enableKeyEvents}** is set to true.
+     * @param {Ext.form.field.Text} this This text field
+     * @param {Ext.event.Event} e
+     */
+
     initComponent: function () {
         var me = this,
             emptyCls = me.emptyCls;
@@ -604,7 +611,8 @@ Ext.define('Ext.form.field.Text', {
                 scope: me,
                 keyup: me.onKeyUp,
                 keydown: me.onKeyDown,
-                keypress: me.onKeyPress
+                keypress: me.onKeyPress,
+                paste: me.onPaste
             });
         }
     },
@@ -622,8 +630,15 @@ Ext.define('Ext.form.field.Text', {
      * If grow=true, invoke the autoSize method when the field's value is changed.
      */
     onChange: function(newVal, oldVal) {
-        this.callParent([newVal, oldVal]);
-        this.autoSize();
+        var me = this,
+            inputMask = me.getInputMask();
+
+        me.callParent([newVal, oldVal]);
+        me.autoSize();
+
+        if (inputMask) {
+            inputMask.onChange(me, newVal, oldVal);
+        }
     },
 
     getSubTplData: function(fieldData) {
@@ -1023,6 +1038,17 @@ Ext.define('Ext.form.field.Text', {
         me.fireEvent('keypress', me, event);
     },
 
+    onPaste: function (e) {
+        var me = this,
+            inputMask = me.getInputMask();
+
+        if (inputMask) {
+            inputMask.onPaste(me, me.getValue(), e);
+        }
+
+        me.fireEvent('paste', me, e);
+    },
+
     /**
      * Returns the value of this field's {@link #cfg-emptyText}
      * @return {String} The value of this field's emptyText
@@ -1346,10 +1372,15 @@ Ext.define('Ext.form.field.Text', {
      * @chainable
      */
     selectText: function (start, end, direction) {
-        if (!this.destroyed) {
-            this.inputEl.selectText(start, end, direction);
-            return this;
-        }
+        var me = this;
+        
+        Ext.defer(function() {
+            if (!me.destroyed && me.inputEl.isVisible(true)) {
+                me.inputEl.selectText(start, end, direction);
+            }
+        }, Ext.isIE ? 10: 0);
+
+        return me;
     },
 
     // Template method, override in Combobox.

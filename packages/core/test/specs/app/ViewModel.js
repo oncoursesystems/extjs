@@ -6629,6 +6629,157 @@ topSuite("Ext.app.ViewModel", [
         });
     });
 
+    describe("Inherited Stores from nested ViewModels", function() {
+        var childViewModel;
+
+        beforeEach(function() {
+            viewModel = new Ext.app.ViewModel({
+                stores: {
+                    nav: {
+                        autoDestroy: true,
+                        type: 'array',
+                        storeId: 'nav1',
+                        fields: ['id', 'text'],
+                        data: [
+                            [1, 'A'],
+                            [2, 'B'],
+                            [3, 'C']
+                        ]
+                    }
+                },
+                data: {
+                    fromParent: 'From parent',
+                    local: 'local 1'
+                }
+            });
+
+            childViewModel = new Ext.app.ViewModel({
+                // Parent ViewModel.
+                parent: viewModel,
+                data: {
+                    // Local value in ViewModel b.
+                    local: 'local 2'
+                }
+            });
+
+        });
+
+        afterEach(function() {
+            if (childViewModel) {
+                childViewModel.destroy();
+                childViewModel = null;
+            }
+        });
+
+        it("should not inherit parent Store checking storeId", function() {
+            expect(childViewModel.get('nav').getStoreId()).toEqual(viewModel.get('nav').getStoreId());
+
+            childViewModel.setStores({
+                // Local value in ViewModel b.
+                nav: {
+                    type: 'array',
+                    autoDestroy: true,
+                    storeId: 'nav2',
+                    fields: ['id', 'text'],
+                    data: [
+                        [91, 'X'],
+                        [92, 'Y'],
+                        [93, 'Z']
+                    ]
+                }
+            });
+
+            expect(childViewModel.get('nav').getStoreId()).not.toEqual(viewModel.get('nav').getStoreId());            
+        });
+
+        it("should not inherit parent Store checking Store Reference", function() {
+            expect(childViewModel.get('nav')).toEqual(viewModel.get('nav'));
+            expect(childViewModel.get('nav') === viewModel.get('nav')).toBe(true);
+
+            childViewModel.setStores({
+                // Local value in ViewModel b.
+                nav: {
+                    type: 'array',
+                    autoDestroy: true,
+                    storeId: 'nav2',
+                    fields: ['id', 'text'],
+                    data: [
+                        [91, 'X'],
+                        [92, 'Y'],
+                        [93, 'Z']
+                    ]
+                }
+            });
+
+            expect(childViewModel.get('nav')).not.toEqual(viewModel.get('nav'));
+            expect(childViewModel.get('nav') === viewModel.get('nav')).toBe(false);          
+        });
+    });
+
+    describe("Child viewModel should not destroy parent store", function() {
+        var parentVm, childVm, parentViewModel, childViewModel;
+
+        beforeEach(function() {
+            parentVm = Ext.define('spec.ParentVM', {
+                alias: 'viewmodel.parentvm',
+                extend: 'Ext.app.ViewModel',
+                stores: {
+                    emps: {
+                        fields: ['name'],
+                        data: [{
+                            name: 'John'
+                        }]
+                    }
+                }
+            });
+
+            childVm = Ext.define('spec.ChildVM', {
+                extend: 'Ext.app.ViewModel',
+                alias: 'viewmodel.childvm',
+                stores: {
+                    emps: {
+                        fields: ['name'],
+                        data: [{
+                            name: 'Paul'
+                        }]
+                    }
+                }
+            });
+        });
+
+        afterEach(function() {
+            Ext.undefine('spec.ParentVM');
+            parentVm = null;
+            Ext.undefine('spec.ChildVM');
+            childVm = null;
+            Ext.destroy(parentViewModel);
+            parentViewModel = null;
+            Ext.destroy(childViewModel);
+            childViewModel = null;
+        });
+
+        it("should not destroy parent Store", function() {
+            //After destoying childViewModel parentVieModel store should not be destroyed
+            parentViewModel = Ext.create(parentVm);
+            childViewModel = new Ext.app.ViewModel({
+                parent: parentViewModel,
+                stores: {
+                    emps: {
+                        fields: ['name'],
+                        data: {
+                            name: 'Paul'
+                        }
+                    }
+                }
+            });
+
+            Ext.destroy(childViewModel);
+            childViewModel = null;
+
+            expect(parentViewModel.get('emps')).not.toBeNull();
+        });
+});
+
     describe("stores", function() {
         var User;
         beforeEach(function() {

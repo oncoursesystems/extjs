@@ -21,13 +21,13 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
     ],
 
     width: 700,
-    height: 450,
+    height: 550,
     layout: {
         type: 'vbox',
         align: 'stretch'
     },
     signTpl: '<span style="' +
-            'color:{value:sign(\'${red}\',\'${green}\')}"' +
+            'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +
         '>{text}</span>',
 
     //<example>
@@ -43,16 +43,28 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
     }],
     profiles: {
         classic: {
+            priceWidth: 75,
+            pricechangeWidth: 80,
             percentChangeColumnWidth: 75,
             lastUpdatedColumnWidth: 85,
-            green: 'green',
-            red: 'red'
+            gainColor: 'green',
+            lossColor: 'red'
         },
         neptune: {
+            priceWidth: 75,
+            pricechangeWidth: 80,
             percentChangeColumnWidth: 100,
             lastUpdatedColumnWidth: 115,
-            green: '#73b51e',
-            red: '#cf4c35'
+            gainColor: '#73b51e',
+            lossColor: '#cf4c35'
+        },
+        graphite: {
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 150,
+            gainColor: 'unset',
+            lossColor: 'unset'
         }
     },
     //</example>
@@ -81,14 +93,14 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
             flex: 1
         }, {
             header: 'Price',
-            width: 75,
+            width: '${priceWidth}',
             sortable: true,
             formatter: 'usMoney',
             dataIndex: 'price'
         }, {
             header: 'Change',
             dataIndex: 'priceChange',
-            width: 80,
+            width:'${pricechangeWidth}',
             sortable: true,
             renderer: 'renderChange'
         }, {

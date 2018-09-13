@@ -223,6 +223,11 @@ Ext.define('Ext.ZIndexManager', {
         me.front = topFocusable;
         me.topModal = topModal;
         me.topMost = topMost;
+    
+        // Ensure the top-most component is the front
+        if (!me.front && me.topMost) {
+            me.front = me.topMost;
+        }
 
         return zIndex;
     },

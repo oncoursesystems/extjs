@@ -5,7 +5,8 @@ topSuite("Ext.data.Model", [
     'Ext.data.identifier.*',
     'Ext.data.validator.*', 
     'Ext.data.summary.*',
-    'Ext.data.Session'
+    'Ext.data.Session',
+    'Ext.data.proxy.*'
 ], function() {
     
     beforeEach(function() {
@@ -738,6 +739,25 @@ topSuite("Ext.data.Model", [
                                 expect(spec.A.idField.name).toBe('id');
                                 expect(spec.B.idField.name).toBe('customId');
                             });
+
+                            it("should keep a redefined id field", function() {
+                                defineA([]);
+                                defineB(['customId', 'id'], {idProperty: 'customId'});
+
+                                var fields = spec.A.getFields();
+                                expect(fields.length).toBe(1);
+                                expect(fields[0].name).toBe('id');
+
+                                fields = spec.B.getFields();
+                                expect(fields.length).toBe(2);
+                                expect(fields[0].name).toBe('id');
+                                expect(fields[1].name).toBe('customId');
+
+                                expect(spec.B.getField('id')).toBe(fields[0]);
+
+                                expect(spec.A.idField.name).toBe('id');
+                                expect(spec.B.idField.name).toBe('customId');
+                            });
                         });
 
                         describe("id not declared as a field", function() {
@@ -1037,6 +1057,49 @@ topSuite("Ext.data.Model", [
                 defineA('custom');
                 expect(A.getProxy().getReader().$className).toBe('spec.CustomReader');
                 Ext.undefine('spec.CustomReader');
+                Ext.undefine('spec.CustomProxy');
+            });
+
+            it("should inherit the type from the proxy instance and url from the schema", function() {
+                Ext.define('spec.CustomProxy', {
+                    extend: 'Ext.data.proxy.Rest',
+                    alias: 'proxy.custom'
+                });
+
+                defineA('custom');
+                expect(A.getProxy() instanceof Ext.data.proxy.Rest).toBe(true);
+                expect(A.getProxy().getUrl()).toBe('/A');
+                Ext.undefine('spec.CustomProxy');
+            });
+    
+            it("should inherit the type and url from the proxy instance when the schema isn't used", function() {
+                Ext.define('spec.CustomProxy', {
+                    extend: 'Ext.data.proxy.Rest',
+                    alias: 'proxy.custom',
+                    url: 'foo.bar'
+                });
+        
+                defineA({
+                    type: 'custom',
+                    schema: false
+                });
+                expect(A.getProxy() instanceof Ext.data.proxy.Rest).toBe(true);
+                expect(A.getProxy().getUrl()).toBe('foo.bar');
+                Ext.undefine('spec.CustomProxy');
+            });
+    
+            it("should only inherit the type from the proxy when the schema is used", function() {
+                Ext.define('spec.CustomProxy', {
+                    extend: 'Ext.data.proxy.Rest',
+                    alias: 'proxy.custom',
+                    url: 'foo.bar'
+                });
+        
+                defineA({
+                    type: 'custom'
+                });
+                expect(A.getProxy() instanceof Ext.data.proxy.Rest).toBe(true);
+                expect(A.getProxy().getUrl()).toBe('/A');
                 Ext.undefine('spec.CustomProxy');
             });
             

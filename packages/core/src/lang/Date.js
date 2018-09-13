@@ -1156,7 +1156,7 @@ utilDate = {
         g: {
             g:1,
             c:"h = parseInt(results[{0}], 10);\n",
-            s:"(1[0-2]|[0-9])" //  12-hr format of an hour without leading zeroes (1 - 12)
+            s:"(1[0-2]|[1-9])" //  12-hr format of an hour without leading zeroes (1 - 12)
         },
         G: {
             g:1,
@@ -1434,10 +1434,10 @@ utilDate = {
      * is the numeric day index within the week (0-6) which can be used in conjunction with
      * the {@link #monthNames} array to retrieve the textual day name.
      *
-     *    var dt = new Date('1/10/2007'),
-     *        firstDay = Ext.Date.getFirstDayOfMonth(dt);
+     *     var dt = new Date('1/10/2007'),
+     *         firstDay = Ext.Date.getFirstDayOfMonth(dt);
      *
-     *    console.log(Ext.Date.dayNames[firstDay]); // output: 'Monday'
+     *     console.log(Ext.Date.dayNames[firstDay]); // output: 'Monday'
      *
      * @param {Date} date The date
      * @return {Number} The day number (0-6).
@@ -1452,10 +1452,10 @@ utilDate = {
      * is the numeric day index within the week (0-6) which can be used in conjunction with
      * the {@link #monthNames} array to retrieve the textual day name.
      *
-     *    var dt = new Date('1/10/2007'),
-     *        lastDay = Ext.Date.getLastDayOfMonth(dt);
+     *     var dt = new Date('1/10/2007'),
+     *         lastDay = Ext.Date.getLastDayOfMonth(dt);
      *
-     *    console.log(Ext.Date.dayNames[lastDay]); // output: 'Wednesday'
+     *     console.log(Ext.Date.dayNames[lastDay]); // output: 'Wednesday'
      *
      * @param {Date} date The date
      * @return {Number} The day number (0-6).
@@ -1691,7 +1691,11 @@ utilDate = {
                     }
                     break;
                 case utilDate.DAY:
-                    d.setDate(d.getDate() + value);
+                    if (preventDstAdjust) {
+                        d.setDate(d.getDate() + value);
+                    } else {
+                        d.setTime(d.getTime() + value * 24 * 60 * 60 * 1000);
+                    }
                     break;
                 case utilDate.MONTH:
                     day = date.getDate();

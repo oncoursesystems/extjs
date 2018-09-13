@@ -4,7 +4,7 @@
 Ext.define('KitchenSink.view.chart.gauge.Gauge', {
     extend: 'Ext.Container',
     xtype: 'gauge-basic',
-    controller: 'gauge-chart',
+    controller: 'chart',
 
     requires: [
         'Ext.chart.PolarChart',
@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.chart.gauge.Gauge', {
     // <example>
     otherContent: [{
         type: 'Controller',
-        path: 'modern/src/view/chart/gauge/GaugeController.js'
+        path: 'modern/src/view/chart/ChartController.js'
     }, {
         type: 'Store',
         path: 'app/store/Pie.js'

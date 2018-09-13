@@ -118,9 +118,7 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
                 clearSelectionOnListChange: false,
                 listConfig: {
                     triggerEvent: null,
-                    bufferSize: 1,
                     infinite: true,
-                    minimumBufferSize: 1,
                     mode: 'MULTI',
                     variableHeights: true,
                     plugins: {

@@ -59,7 +59,7 @@ Ext.define('Ext.panel.Table', {
 
     config: {
         /**
-         * @cfg {Ext.grid.CellContext/Ext.data.Model/Number} record
+         * @cfg {Ext.grid.CellContext/Ext.data.Model/Number} focused
          * The focused cell, model or index. Typically used with {@link #bind binding}.
          *
          * If bound to a record (such as a selection), the first cell will be focused.
@@ -179,7 +179,7 @@ Ext.define('Ext.panel.Table', {
      * {@link Ext.view.Table} can be specified here. This option is ignored if {@link #view} is specified.
      */
 
-     /**
+    /**
      * @cfg {String/Object} rowViewModel
      * The type or a config object specifying the type of the ViewModel to instantiate when creating ViewModels for records
      * to which {@link Ext.grid.column.Widget widgets in widget columns}, and widgets in a
@@ -748,7 +748,7 @@ Ext.define('Ext.panel.Table', {
              * @event beforeitemlongpress
              * @inheritdoc Ext.view.View#beforeitemlongpress
              */
-             'beforeitemlongpress',
+            'beforeitemlongpress',
             /**
              * @event beforeitemmousedown
              * @inheritdoc Ext.view.View#beforeitemmousedown
@@ -1317,9 +1317,15 @@ Ext.define('Ext.panel.Table', {
 
     focus: function() {
         // TablePanel is not focusable, but allow a call to delegate into the view
-        this.getView().focus();
+        var view = this.getView();
+        
+        if (!view.isVisible(true)) {
+            return false;
+        }
+        
+        view.focus();
     },
-    
+
     /**
      * Disables interaction with, and masks this grid's column headers.
      */
@@ -1431,11 +1437,15 @@ Ext.define('Ext.panel.Table', {
 
         // Ensure superclass has applied *its* state.
         // Component saves dimensions (and anchor/flex) plus collapsed state.
-        me.callParent(arguments);
+        me.callParent([state]);
 
         if (columns) {
             // Column state restoration needs to examine store state
             me.headerCt.applyColumnsState(columns, storeState);
+        }
+
+        if (store.isEmptyStore) {
+            return;
         }
 
         // Old stored sort state. Deprecated and will die out.
@@ -1458,12 +1468,9 @@ Ext.define('Ext.panel.Table', {
     },
 
     buildColumnHash: function(columns) {
-        var len = columns.length,
-            columnState,
-            i,
-            result;
+        var len, columnState, i, result;
 
-        // Create a useable state lookup hash from which each column
+        // Create a usable state lookup hash from which each column
         // may look up its state based upon its stateId
         // {
         //      col_name: {
@@ -1564,7 +1571,7 @@ Ext.define('Ext.panel.Table', {
             // We may have already been informed about the removal of this item
             // by the opposite locking partner
             if (context) {
-                context.free();
+                context.free(view);
                 freeRowContexts.push(context);
                 delete liveRowContexts[id];
             }
@@ -1876,7 +1883,7 @@ Ext.define('Ext.panel.Table', {
      * Fires the TablePanel's viewready event when the view declares that its internal DOM is ready
      */
     onViewReady: function() {
-         this.fireEvent('viewready', this);   
+        this.fireEvent('viewready', this);
     },
 
     /**
@@ -2201,7 +2208,7 @@ Ext.define('Ext.panel.Table', {
             lockable = me.lockable,
             oldColumns = headerCt ? headerCt.items.getRange() : me.columns,
             view = me.getView(),
-            scroller, block, refreshCounter, storeChanged, columnsChanged, restoreFocus;
+            scroller, block, refreshCounter, storeChanged, columnsChanged, state, stateId, restoreFocus;
 
         // Allow optional store argument to be fully omitted, and the columns argument to be solo
         if (arguments.length === 1 && Ext.isArray(store)) {
@@ -2260,6 +2267,15 @@ Ext.define('Ext.panel.Table', {
             refreshCounter = view.refreshCounter;
         }
 
+        if (me.stateful) {
+            stateId = me.getStateId();
+            state = stateId && Ext.state.Manager.get(stateId);
+
+            if (state) {
+                me.applyState(state);
+            }
+        }
+
         Ext.resumeLayouts(true);
         me.reconfiguring = false;
         if (lockable) {
@@ -2304,9 +2320,11 @@ Ext.define('Ext.panel.Table', {
         }
         
         // Need to destroy plugins here because they may have listeners on the View
-        Ext.destroy(me.rowContextParent, me.plugins, me.focusEnterLeaveListeners,
-                    me.freeRowContents, Ext.Object.getValues(me.liveRowContexts),
-                    me.lhsMarker, me.rhsMarker);
+        Ext.destroy(
+            me.rowContextParent, me.plugins, me.focusEnterLeaveListeners,
+            me.freeRowContents, Ext.Object.getValues(me.liveRowContexts),
+            me.lhsMarker, me.rhsMarker
+        );
         
         me.callParent();
         

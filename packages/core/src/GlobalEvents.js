@@ -192,16 +192,18 @@ Ext.define('Ext.GlobalEvents', {
         if (pressedComponent && pressedComponent.onRelease) {
             pressedComponent.onRelease(e);
         }
+        
         me.pressedComponent = component;
 
         if (component) {
             me.pressedScrollStart = Ext.on({
                 scrollstart: function () {
-                    me.setPressedComponent(null);
+                    me.setPressedComponent(null, e);
                 },
                 destroyable: true
             });
-        } else {
+        }
+        else {
             me.pressedScrollStart = Ext.destroy(me.pressedScrollStart);
         }
     },
@@ -267,7 +269,7 @@ Ext.define('Ext.GlobalEvents', {
 
     fireMouseUp: function(e) {
         this.fireEvent('mouseup', e);
-        this.setPressedComponent(null);
+        this.setPressedComponent(null, e);
     },
 
     fireResize: function() {

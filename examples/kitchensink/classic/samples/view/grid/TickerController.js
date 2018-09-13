@@ -44,12 +44,18 @@ Ext.define('KitchenSink.view.grid.TickerController', {
 
     renderPositiveNegative: function (val, format) {
         var out = Ext.util.Format.number(val, '0.00'),
-            s = '<span';
-
-        if (val > 0) {
-            s += ' style="color:#73b51e;"';
-        } else if (val < 0) {
-            s += ' style="color:#cf4c35;"';
+            s = '<span',
+            theme = Ext.theme.name;
+            
+        if(theme === "Graphite"){
+            s += ' style="color:unset;"';
+        }
+        else{
+            if (val > 0) {
+                s += ' style="color:#73b51e;"';
+            } else if (val < 0) {
+                s += ' style="color:#cf4c35;"';
+            }
         }
 
         return s + '>' + out + '</span>';

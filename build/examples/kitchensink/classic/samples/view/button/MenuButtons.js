@@ -28,6 +28,9 @@ Ext.define('KitchenSink.view.button.MenuButtons', {
         },
         'neptune-touch': {
             width: 670
+        },
+        graphite: {
+            width: 760
         }
     },
     //</example>

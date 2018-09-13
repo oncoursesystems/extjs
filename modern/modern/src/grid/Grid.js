@@ -530,6 +530,8 @@ Ext.define('Ext.grid.Grid', {
      *     that only clicks on the checkbox affect row selected state.
      *     - extensible `true` to enable the selection to be extended either in the `X` or `Y` axis
      *     or `'x'` or `'y'` to configure
+     *     - reducible `true` to enable the selection to be reduced according to the extensible config.
+     *     This is only valid when extensible is enabled.
      */
 
     /**

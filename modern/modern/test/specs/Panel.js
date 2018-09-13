@@ -375,6 +375,20 @@ topSuite("Ext.Panel", ['Ext.app.ViewModel', 'Ext.Button'], function() {
                 expect(panel.el.getX()).toBe(byCmp.el.getAnchorXY('b')[0] - panel.el.getWidth() / 2);
                 expect(panel.el.getY()).toBe(byCmp.el.getRegion().bottom);
             });
+
+            it('should use the third parameter as offset if it\'s an array', function() {
+                createPanel({
+                    title: 'The title',
+                    html: 'content',
+                    floated: true
+                });
+
+                panel.showBy(byCmp, 'tl-bl', [10, 10]);
+                
+                expect(panel.el.getX()).toBe(byCmp.el.getX() + 10);
+                expect(panel.el.getY()).toBe(byCmp.el.getY() + byCmp.el.getHeight() + 10);
+
+            });
         });
     });
 

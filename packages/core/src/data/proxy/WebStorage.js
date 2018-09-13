@@ -72,10 +72,13 @@ Ext.define('Ext.data.proxy.WebStorage', {
             id, record, i, identifier;
 
         if (me.isHierarchical === undefined) {
-            // if the storage object does not yet contain any data, this is the first point at which we can determine whether or not this proxy deals with hierarchical data.
-            // it cannot be determined during initialization because the Model is not decorated with NodeInterface until it is used in a TreeStore
+            // if the storage object does not yet contain any data, this is the first point
+            // at which we can determine whether or not this proxy deals with hierarchical data.
+            // it cannot be determined during initialization because the Model is not decorated
+            // with NodeInterface until it is used in a TreeStore
             me.isHierarchical = !!records[0].isNode;
-            if(me.isHierarchical) {
+            
+            if (me.isHierarchical) {
                 me.getStorageObject().setItem(me.getTreeKey(), true);
             }
         }
@@ -205,13 +208,16 @@ Ext.define('Ext.data.proxy.WebStorage', {
             this.setRecord(record);
             record.commit();
 
-            //we need to update the set of ids here because it's possible that a non-phantom record was added
-            //to this proxy - in which case the record's id would never have been added via the normal 'create' call
+            // we need to update the set of ids here because it's possible that
+            // a non-phantom record was added to this proxy - in which case the record's
+            // id would never have been added via the normal 'create' call
             id = record.getId();
+            
             if (id !== undefined && Ext.Array.indexOf(ids, id) === -1) {
                 ids.push(id);
             }
         }
+        
         this.setIds(ids);
         operation.setSuccessful(true);
     },
@@ -234,9 +240,10 @@ Ext.define('Ext.data.proxy.WebStorage', {
             Ext.apply(removedHash, me.removeRecord(records[i]));
         }
 
-        for(i = 0; i < idLength; i++) {
+        for (i = 0; i < idLength; i++) {
             id = ids[i];
-            if(!removedHash[id]) {
+            
+            if (!removedHash[id]) {
                 newIds.push(id);
             }
         }
@@ -256,7 +263,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
             cache = me.cache,
             data = !cache[id] ? Ext.decode(me.getStorageObject().getItem(me.getRecordKey(id))) : cache[id];
 
-        if(!data) {
+        if (!data) {
             return null;
         }
 
@@ -295,7 +302,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
             field = fields[i];
             name  = field.name;
 
-            if(field.persist) {
+            if (field.persist) {
                 value = rawData[name];
                 if (field.isDateField && field.dateFormat && Ext.isDate(value)) {
                     value = Ext.Date.format(value, field.dateFormat);
@@ -310,7 +317,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
         delete data[model.prototype.idProperty];
 
         // if the record is a tree node and it's a direct child of the root node, do not store the parentId
-        if(record.isNode && record.get('depth') === 1) {
+        if (record.isNode && record.get('depth') === 1) {
             delete data.parentId;
         }
 
@@ -341,9 +348,9 @@ Ext.define('Ext.data.proxy.WebStorage', {
         me.getStorageObject().removeItem(me.getRecordKey(id));
         delete me.cache[id];
 
-        if(record.childNodes) {
+        if (record.childNodes) {
             childNodes = record.childNodes;
-            for(i = childNodes.length; i--;) {
+            for (i = childNodes.length; i--;) {
                 Ext.apply(records, me.removeRecord(childNodes[i]));
             }
         }
@@ -446,7 +453,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
 
         obj.setItem(key, id);
 
-        if(isString) {
+        if (isString) {
             id = id + '';
         }
 
@@ -470,7 +477,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
             idProperty = Model.prototype.idProperty,
             rootLength, record, parent, parentId, children, id;
 
-        for(; i < length; i++) {
+        for (; i < length; i++) {
             id = ids[i];
             // get the record for each id
             record = me.getRecord(id);
@@ -478,7 +485,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
             records.push(record);
             // add the record to the record hash so it can be easily retrieved by id later
             recordHash[id] = record;
-            if(!record.parentId) {
+            if (!record.parentId) {
                 // push records that are at the root level (those with no parent id) into the "root" array
                 root.push(record);
             }
@@ -490,10 +497,10 @@ Ext.define('Ext.data.proxy.WebStorage', {
         Ext.Array.sort(records, me.sortByParentId);
 
         // append each record to its parent, starting after the root node(s), since root nodes do not need to be attached to a parent
-        for(i = rootLength; i < length; i++) {
+        for (i = rootLength; i < length; i++) {
             record = records[i];
             parentId = record.parentId;
-            if(!parent || parent[idProperty] !== parentId) {
+            if (!parent || parent[idProperty] !== parentId) {
                 // if this record has a different parent id from the previous record, we need to look up the parent by id.
                 parent = recordHash[parentId];
                 parent.children = children = [];
@@ -503,7 +510,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
             children.push(record);
         }
 
-        for(i = length; i--;) {
+        for (i = length; i--;) {
             record = records[i];
             if (!record.children && !record.leaf) {
                 // set non-leaf nodes with no children to loaded so the proxy won't try to dynamically load their contents when they are expanded
@@ -512,7 +519,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
         }
 
         // Create model instances out of all the "root-level" nodes.
-        for(i = rootLength; i--;) {
+        for (i = rootLength; i--;) {
             record = root[i];
             root[i] = new Model(record);
         }
@@ -543,7 +550,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
             id = me.getId();
 
         storageObject.setItem(id, storageObject.getItem(id) || "");
-        if(storageObject.getItem(me.getTreeKey())) {
+        if (storageObject.getItem(me.getTreeKey())) {
             me.isHierarchical = true;
         }
 

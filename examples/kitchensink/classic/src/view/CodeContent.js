@@ -4,6 +4,7 @@ Ext.define('KitchenSink.view.CodeContent', {
     scrollable: true,
     
     cls: 'code-content',
+    bodyCls: 'content-panel-body',
     
     afterRender: function() {
         this.callParent(arguments);

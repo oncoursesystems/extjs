@@ -89,6 +89,7 @@ Ext.define('Ext.chart.plugin.ItemEvents', {
 
         chart.addElementListener({
             click: handleEvent,
+            tap: handleEvent,
             dblclick: handleEvent,
             mousedown: handleEvent,
             mousemove: handleEvent,

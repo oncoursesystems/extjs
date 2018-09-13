@@ -30,8 +30,8 @@ Ext.define('KitchenSink.view.grid.WidgetGrid', {
     xtype: 'widget-grid',
     store: 'Widgets',
     collapsible: true,
-    height: 350,
-    width: 1050,
+    height: '${height}',
+    width: '${width}',
     title: 'Widget Grid',
     viewConfig: {
         stripeRows: true,
@@ -41,6 +41,23 @@ Ext.define('KitchenSink.view.grid.WidgetGrid', {
     trackMouseOver: false,
     disableSelection: true,
     //<example>
+    profiles: {
+        classic: {
+            width: 1050,
+            height: 350,
+            buttonWidth: 120
+        },
+        neptune: {
+            width: 1050,
+            height: 350,
+            buttonWidth: 120
+        },
+        graphite: {
+            width: 1150,
+            height: 450,
+            buttonWidth: 190
+        }
+    },
     otherContent: [{
         type: 'Store',
         path: 'classic/samples/store/Widgets.js'
@@ -52,7 +69,7 @@ Ext.define('KitchenSink.view.grid.WidgetGrid', {
     
     columns: [{
         text: 'Button',
-        width: 120,
+        width: '${buttonWidth}',
         xtype: 'widgetcolumn',
         widget: {
             textAlign: 'left',

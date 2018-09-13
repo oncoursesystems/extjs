@@ -33,7 +33,7 @@
  *
  * To leverage the `{@link Ext.data.Model#proxy proxy}` facilities defined by each Model
  * class, there is the `getSaveBatch` method. That method returns an `Ext.data.Batch`
- * object populated with the necessary `create`, `update` and `destory` operations to
+ * object populated with the necessary `create`, `update` and `destroy` operations to
  * save all of the changes in the Session.
  *
  * ## Conflicts

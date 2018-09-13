@@ -21,9 +21,29 @@ Ext.define('KitchenSink.view.dd.GridToGrid', {
     }],
     //</example>
     
-    width: 650,
+    width: '${width}',
     height: 300,
 
+    profiles: {
+        classic: {
+            width: 650,
+            gridWidth: 325,
+            columnTwoWidth: 80,
+            columnThreeWidth: 80
+        },
+        neptune: {
+            width: 650,
+            gridWidth: 325,
+            columnOneWidth: 80,
+            columnTwoWidth: 80
+        },
+        graphite: {
+            width: 730,
+            gridWidth: 365,
+            columnOneWidth: 100,
+            columnTwoWidth: 100
+        }
+    },
     layout: {
         type: 'hbox',
         align: 'stretch'
@@ -33,7 +53,7 @@ Ext.define('KitchenSink.view.dd.GridToGrid', {
         xtype: 'grid',
         title: 'First Grid',
         reference: 'grid1',
-        
+        width: '${gridWidth}',
         flex: 1,
         
         multiSelect: true,
@@ -84,20 +104,20 @@ Ext.define('KitchenSink.view.dd.GridToGrid', {
             text: 'column1',
             dataIndex: 'column1',
 
-            width: 80,
+            width: '${columnOneWidth}',
             sortable: true
         }, {
             text: 'column2',
             dataIndex: 'column2',
 
-            width: 80,
+            width: '${columnTwoWidth}',
             sortable: true
         }]
     }, {
         xtype: 'grid',
         title: 'Second Grid',
         reference: 'grid2',
-
+        width: '${gridWidth}',
         flex: 1,
         stripeRows: true,
 
@@ -135,13 +155,13 @@ Ext.define('KitchenSink.view.dd.GridToGrid', {
             text: 'column1',
             dataIndex: 'column1',
 
-            width: 80,
+            width: '${columnOneWidth}',
             sortable: true
         }, {
             text: 'column2',
             dataIndex: 'column2',
 
-            width: 80,
+            width: '${columnTwoWidth}',
             sortable: true
         }]
     }]

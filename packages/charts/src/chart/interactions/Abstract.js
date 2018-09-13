@@ -116,7 +116,7 @@ Ext.define('Ext.chart.interactions.Abstract', {
      * Find and return all series items corresponding to the given event.
      * @param {Event} e
      * @return {Array} array of matching item objects
-     * @protected
+     * @private
      * @deprecated 6.5.2 This method is deprecated
      */
     getItemsForEvent: function (e) {

@@ -1,4 +1,4 @@
-/* global expect, jasmine, Ext */
+/* global expect, jasmine, Ext, topSuite, spec */
 
 topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template'], function() {
     var itNotIE9 = Ext.isIE9 ? xit : it,
@@ -250,7 +250,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             it("should not fire fire checkchange if beforecheckchange returns false", function() {
                 var called = false;
                 makeGrid();
-                col.on('checkchange', function(a, b, c) {
+                col.on('checkchange', function() {
                     called = true;
                 });
                 col.on('beforecheckchange', function() {
@@ -270,6 +270,17 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             expect(store.getAt(2).get('val')).toBe(true);
             expect(hasCls(getCellImg(2), 'x-grid-checkcolumn-checked')).toBe(true);
         });
+
+        it("should toggle when using property without a dataIndex", function() {
+            makeGrid([{
+                xtype: 'checkcolumn',
+                property: 'foo'
+            }], ['bar']);
+
+            triggerCellMouseEvent(col.triggerEvent, 0);
+            expect(store.getAt(0).foo).toBe(true);
+        });
+
         it("should toggle the record value with invert: true", function() {
             invert = true;
             makeGrid();

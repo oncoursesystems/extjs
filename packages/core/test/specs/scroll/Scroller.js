@@ -1816,6 +1816,7 @@ topSuite("Ext.scroll.Scroller", function() {
                     waitsForSpy(endSpy);
                 });
 
+                TODO(Ext.isIE8 && x && y && !negative).
                 it("should fire as deltas go positive to negative", function() {
                     var count = 0,
                         offset,

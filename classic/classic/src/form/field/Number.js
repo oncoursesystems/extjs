@@ -281,7 +281,7 @@ Ext.define('Ext.form.field.Number', {
             num;
 
         if (value.length < 1) { // if it's blank and textfield didn't flag it then it's valid
-             return errors;
+            return errors;
         }
 
         value = String(value).replace(me.decimalSeparator, '.');
@@ -349,6 +349,7 @@ Ext.define('Ext.form.field.Number', {
                 ariaDom.removeAttribute('aria-valuenow');
             }
         }
+        
     },
     
     toggleSpinners: function(){
@@ -378,7 +379,7 @@ Ext.define('Ext.form.field.Number', {
     setMinValue: function(value) {
         var me = this,
             ariaDom = me.ariaEl.dom,
-            minValue, allowed, ariaDom;
+            minValue, allowed;
         
         me.minValue = minValue = Ext.Number.from(value, Number.NEGATIVE_INFINITY);
         me.toggleSpinners();

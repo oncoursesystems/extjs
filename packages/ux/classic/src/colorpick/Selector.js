@@ -474,12 +474,14 @@ Ext.define('Ext.ux.colorpick.Selector', {
                 xtype   : 'button',
                 text    : 'OK',
                 margin  : '10 0 0 0',
+                padding : '10 0 10 0',
                 handler : 'onOK'
             },
             {
                 xtype   : 'button',
                 text    : 'Cancel',
                 margin  : '10 0 0 0',
+                padding : '10 0 10 0',
                 handler : 'onCancel'
             });
         }

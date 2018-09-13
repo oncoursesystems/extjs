@@ -36,11 +36,10 @@ Ext.define('Ext.draw.ContainerBase', {
     },
 
     removeElementListener: function () {
-        var me = this,
-            args = arguments;
+        var me = this;
 
         if (me.rendered) {
-            me.el.un.apply(me.el, args);
+            me.el.un.apply(me.el, arguments);
         }
     },
 

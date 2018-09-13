@@ -141,6 +141,11 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
                 yearFrom: 1990
             }
         }, {
+            xtype: 'timefield',
+            label: 'Time Field',
+            name: 'time',
+            value: '3:42 PM'
+        }, {
             xtype: 'selectfield',
             name: 'rank',
             label: 'Rank',

@@ -24,17 +24,26 @@ Ext.define('KitchenSink.view.pivot.Widgets', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            performanceWidth: 90
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 350,
+            performanceWidth: 90
+        },
+        graphite: {
+            width: 750,
+            height: 600,
+            performanceWidth: 150
         }
     },
     //</example>
 
     title: 'Widgets in pivot grid',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -60,7 +69,7 @@ Ext.define('KitchenSink.view.pivot.Widgets', {
             dataIndex: 'value',
             header: 'Performance',
             aggregator: 'getPerformance',
-            width: 90,
+            width: '${performanceWidth}',
 
             // Define here column specific configs for all columns
             // generated for this aggregate dimension

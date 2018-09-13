@@ -37,11 +37,18 @@ Ext.define('KitchenSink.view.tree.TreeGrid', {
     profiles: {
         classic: {
             width: 500,
-            colWidth: 40
+            colWidth: 40,
+            exportOptionWidth: 124
         },
         neptune: {
             width: 600,
-            colWidth: 55
+            colWidth: 55,
+            exportOptionWidth: 124
+        },
+        graphite: {
+            width: 800,
+            colWidth: 75,
+            exportOptionWidth: 154
         }
     },
     //</example>
@@ -116,7 +123,8 @@ Ext.define('KitchenSink.view.tree.TreeGrid', {
             text: 'Export to ...',
             menu: {
                 defaults: {
-                    handler: 'exportTo'
+                    handler: 'exportTo',
+                    width: '${exportOptionWidth}'
                 },
                 items: [{
                     text:   'Excel xlsx',

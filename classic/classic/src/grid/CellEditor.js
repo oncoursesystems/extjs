@@ -174,8 +174,10 @@ Ext.define('Ext.grid.CellEditor', {
     },
 
     cacheElement: function(force) {
-        if ((!this.editing || force) && !this.destroyed) {
+        if ((!this.editing || force) && !this.destroyed && !this.isDetaching) {
+            this.isDetaching = true;
             this.detachFromBody();
+            this.isDetaching = false;
         }
     },
 

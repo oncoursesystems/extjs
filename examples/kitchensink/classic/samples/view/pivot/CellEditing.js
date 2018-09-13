@@ -30,17 +30,26 @@ Ext.define('KitchenSink.view.pivot.CellEditing', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            columnWidth: 100
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 400,
+            columnWidth: 100
+        },
+        graphite: {
+            width: 780,
+            height: 600,
+            columnWidth: 130
         }
     },
     //</example>
 
     title: 'Pivot Grid with CellEditing plugin',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -68,6 +77,7 @@ Ext.define('KitchenSink.view.pivot.CellEditing', {
             dataIndex: 'value',
             header: 'Sum of value',
             aggregator: 'sum',
+            width: '${columnWidth}',
             // if you want an aggregate dimension to be editable you need to
             // specify its editor
             editor: 'numberfield'

@@ -54,6 +54,9 @@ topSuite("Ext.util.Positionable", 'Ext.Component', function() {
     function createSuite(isComponent) {
         var suiteType = isComponent ? "Components" : "Elements";
         
+        // iOS viewport body scrolls in a different way (body grows and panning is used)
+        // so scrolling viewport tests fail.
+        TODO(Ext.isiOS).
         describe("aligning " + suiteType, function() {
             var positions = [ 'tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br' ],
                 alignToPositions = {
@@ -111,6 +114,17 @@ topSuite("Ext.util.Positionable", 'Ext.Component', function() {
                         expect(xy[1]).toBe(alignToPositions[alignToPos][1] + alignPositions[pos][1]);
                     });
                 });
+            });
+
+            it("should respect scrolling when align to body", function() {
+                var positions = positionable.el.getAlignToRegion(Ext.getBody()),
+                    positionsAfter;
+
+                alignToEl.setHeight(2000);
+                Ext.getViewportScroller().scrollBy(0, 100);
+
+                positionsAfter = positionable.el.getAlignToRegion(Ext.getBody());
+                expect(positions.top).toBe(positionsAfter.top - 100);
             });
         });
 

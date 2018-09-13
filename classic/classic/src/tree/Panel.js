@@ -298,6 +298,12 @@ Ext.define('Ext.tree.Panel', {
     },
 
     /**
+     * @property ariaRole
+     * @inheritdoc
+     */
+    ariaRole: 'treegrid',
+
+    /**
      * @cfg {Boolean} animate
      * True to enable animated expand/collapse. Defaults to the value of {@link Ext#enableFx}.
      */

@@ -13,14 +13,28 @@ Ext.define('KitchenSink.view.form.Number', {
     exampleTitle: 'Number Field',
     //</example>
     
+    profiles: {
+        classic: {
+            width: 340,
+            labelWidth: 110
+        },
+        neptune: {
+            width: 340,
+            labelWidth: 110
+        },
+        graphite: {
+            width: 450,
+            labelWidth: 170
+        }
+    },
     title: 'Number fields with spinner',
     bodyPadding: 5,
     frame: true,
-    width: 340,
+    width: '${width}',
     defaultType: 'numberfield',
     
     fieldDefaults: {
-        labelWidth: 110,
+        labelWidth: '${labelWidth}',
         anchor: '100%'
     },
     

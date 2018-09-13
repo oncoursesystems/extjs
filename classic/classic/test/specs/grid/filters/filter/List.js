@@ -235,8 +235,10 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                                     value: value
                                 }, null, getGridCfg());
 
+
                                 grid.getViewModel().notify();
-                                expect(listFilter.gridStoreListeners).toBeDefined();
+                                listFilter = filterCol.filter;
+                                expect(listFilter.gridStoreListeners).toBeUndefined();
                             });
                         }
 
@@ -259,6 +261,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                             value: 'baz'
                         }, null, getGridCfg());
                         grid.getViewModel().notify();
+                        listFilter = filterCol.filter;
                         expect(listFilter.gridStoreListeners).toBeDefined();
                     });
                 });
@@ -275,10 +278,6 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                             }
 
                             clickItem(1);
-                        });
-
-                        it("should bind the listeners on menu show when not configured with a value", function () {
-                            expect(listFilter.gridStoreListeners).toBeDefined();
                         });
 
                         it("should not have bound the listeners to the empty store", function () {

@@ -33,17 +33,29 @@ Ext.define('KitchenSink.view.pivot.Collapsible', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            companyWidth: 100,
+            totalWidth: 90
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 400,
+            companyWidth: 100,
+            totalWidth: 90
+        },
+        graphite: {
+            width: 750,
+            height: 600,
+            companyWidth: 120,
+            totalWidth: 180
         }
     },
     //</example>
 
     title: 'Collapsible results',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -82,7 +94,7 @@ Ext.define('KitchenSink.view.pivot.Collapsible', {
             dataIndex: 'value',
             header: 'Total',
             aggregator: 'sum',
-            width: 90
+            width: '${totalWidth}'
         }],
 
         // Configure the left axis dimensions that will be used to generate
@@ -92,7 +104,8 @@ Ext.define('KitchenSink.view.pivot.Collapsible', {
             header: 'Person'
         }, {
             dataIndex: 'company',
-            header: 'Company'
+            header: 'Company',
+            width: '${companyWidth}'
         },{
             dataIndex: 'year',
             header: 'Year'

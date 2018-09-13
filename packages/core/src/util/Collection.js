@@ -1149,8 +1149,8 @@ Ext.define('Ext.util.Collection', {
      * property value. This comparison can be further tuned with the `anyMatch` and
      * `caseSensitive` (optional) arguments.
      *
-     *    // Create a new Collection containing only the items where age == 24
-     *    var middleAged = people.createFiltered('age', 24);
+     *     // Create a new Collection containing only the items where age == 24
+     *     var middleAged = people.createFiltered('age', 24);
      *
      * Alternatively you can apply `filters` to this Collection by calling `setFilters`
      * or modifying the filter collection returned by `getFilters`.
@@ -3376,18 +3376,18 @@ Ext.define('Ext.util.Collection', {
      * @param {String} [mode="replace"] Where to put new sorters in the collection. This
      * should be one the following values:
      *
-     * * `**replace**` : The new sorter(s) become the sole sorter set for this Sortable.
+     * - **`replace`** : The new sorter(s) become the sole sorter set for this Sortable.
      *   This is the most useful call mode to programmatically sort by multiple fields.
      *
-     * * `**prepend**` : The new sorters are inserted as the primary sorters. The sorter
+     * - **`prepend`** : The new sorters are inserted as the primary sorters. The sorter
      *   collection length must be controlled by the developer.
      *
-     * * `**multi**` : Similar to `**prepend**` the new sorters are inserted at the front
+     * - **`multi`** : Similar to **`prepend`** the new sorters are inserted at the front
      *   of the collection of sorters. Following the insertion, however, this mode trims
      *   the sorter collection to enforce the `multiSortLimit` config. This is useful for
      *   implementing intuitive "Sort by this" user interfaces.
      *
-     * * `**append**` : The new sorters are added at the end of the collection.
+     * - **`append`** : The new sorters are added at the end of the collection.
      * @return {Ext.util.Collection} This instance.
      */
     sort: function (property, direction, mode) {

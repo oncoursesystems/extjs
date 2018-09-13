@@ -16,13 +16,27 @@ Ext.define('KitchenSink.view.form.CheckboxGroupForm', {
     }],
     //</example>
     
+    profiles: {
+        classic: {
+            width: 650,
+            labelWidth: 120
+        },
+        neptune: {
+            width: 650,
+            labelWidth: 120
+        },
+        graphite: {
+            width: 750,
+            labelWidth: 150
+        }
+    },
     title: 'Checkbox Group Example',
     frame: true,
-    width: 650,
+    width: '${width}',
     bodyPadding: 10,
     
     fieldDefaults: {
-        labelWidth: 120
+        labelWidth: '${labelWidth}'
     },
     
     items: [{
@@ -196,20 +210,20 @@ Ext.define('KitchenSink.view.form.CheckboxGroupForm', {
             layout: 'column',
             defaultType: 'container',
             items: [{
-                columnWidth: .25,
+                columnWidth: 0.25,
                 items: [
                     {xtype: 'component', html: 'Heading 1', cls:'x-form-check-group-label'},
                     {xtype: 'checkboxfield', boxLabel: 'Item 1', name: 'cb-cust-1'},
                     {xtype: 'checkboxfield', boxLabel: 'Item 2', name: 'cb-cust-2'}
                 ]
             },{
-                columnWidth: .4,
+                columnWidth: 0.5,
                 items: [
                     {xtype: 'component', html: 'Heading 2', cls:'x-form-check-group-label'},
                     {xtype: 'checkboxfield', boxLabel: 'A long item just for fun', name: 'cb-cust-3'}
                 ]
             },{
-                columnWidth: .25,
+                columnWidth: 0.25,
                 items: [
                     {xtype: 'component', html: 'Heading 3', cls:'x-form-check-group-label'},
                     {xtype: 'checkboxfield', boxLabel: 'Item 4', name: 'cb-cust-4'},

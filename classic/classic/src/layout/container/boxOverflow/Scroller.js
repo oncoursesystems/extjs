@@ -237,8 +237,15 @@ Ext.define('Ext.layout.container.boxOverflow.Scroller', {
     },
 
     onMouseWheel: function(e) {
-        e.stopEvent();
-        this.scrollBy(this.getWheelDelta(e) * this.wheelIncrement * -1, false);
+        var cmp = Ext.Component.from(e.target),
+            cmpScroller = cmp.getScrollable && cmp.getScrollable();
+
+        // Only stop the event if we are not scrolling a scrollable component
+        // inside this container.
+        if (!cmpScroller || (cmpScroller === this.layout.owner.getScrollable())) {
+            e.stopEvent();
+            this.scrollBy(this.getWheelDelta(e) * this.wheelIncrement * -1, false);
+        }
     },
 
     getWheelDelta: function (e) {

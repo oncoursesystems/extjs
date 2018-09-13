@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.tab.BasicTabs', {
     }],
     exampleTitle: 'Basic Tabs',
     //</example>
-    width: 400,
+    width: 500,
     height: 300,
     defaults: {
         bodyPadding: 10,

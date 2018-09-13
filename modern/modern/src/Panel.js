@@ -102,7 +102,8 @@
  * with `{@link #closeAction closeAction}: 'hide'`.
  */
 Ext.define('Ext.Panel', function (Panel) {
-    var mac = Ext.platformTags.ios || Ext.platformTags.mac;
+    var platformTags = Ext.platformTags,
+        isMacOrAndroid = platformTags.ios || platformTags.mac || platformTags.android;
 
 return { // do not indent :)
     extend: 'Ext.Container',
@@ -252,51 +253,51 @@ return { // do not indent :)
         standardButtons: {
             ok: {
                 text: 'OK',
-                weight: mac ? 120 : 10
+                weight: isMacOrAndroid ? 120 : 10
             },
             abort: {
                 text: 'Abort',
-                weight: mac ? 110 : 20
+                weight: isMacOrAndroid ? 110 : 20
             },
             retry: {
                 text: 'Retry',
-                weight: mac ? 100 : 30
+                weight: isMacOrAndroid ? 100 : 30
             },
             ignore: {
                 text: 'Ignore',
-                weight: mac ? 90 : 40
+                weight: isMacOrAndroid ? 90 : 40
             },
             yes: {
                 text: 'Yes',
-                weight: mac ? 80 : 50
+                weight: isMacOrAndroid ? 80 : 50
             },
             no: {
                 text: 'No',
-                weight: mac ? 70 : 60
+                weight: isMacOrAndroid ? 70 : 60
             },
             cancel: {
                 text: 'Cancel',
-                weight: mac ? 60 : 70
+                weight: isMacOrAndroid ? 60 : 70
             },
             apply: {
                 text: 'Apply',
-                weight: mac ? 50 : 80
+                weight: isMacOrAndroid ? 50 : 80
             },
             save: {
                 text: 'Save',
-                weight: mac ? 40 : 90
+                weight: isMacOrAndroid ? 40 : 90
             },
             submit: {
                 text: 'Submit',
-                weight: mac ? 30 : 100
+                weight: isMacOrAndroid ? 30 : 100
             },
             help: {
                 text: 'Help',
-                weight: mac ? 10 : 110
+                weight: isMacOrAndroid ? 10 : 110
             },
             close: {
                 text: 'Close',
-                weight: mac ? 20 : 120
+                weight: isMacOrAndroid ? 20 : 120
             }
         },
 
@@ -1059,6 +1060,18 @@ return { // do not indent :)
     applyBbar: function (toolbar, previous) {
         return this.normalizeDockedBars(toolbar, previous, 'bottom');
     },
+    
+    updateButtonAlign: function(buttonAlign) {
+        var pack;
+        
+        if (buttonAlign && this._buttons) {
+            pack = this._packButtonAlign[buttonAlign];
+            
+            if (pack) {
+                this._buttons.getLayout().setPack(pack);
+            }
+        }
+    },
 
     applyButtons: function (buttons, oldButtons) {
         var me = this,
@@ -1303,7 +1316,7 @@ return { // do not indent :)
         if (header) {
             // Header is logically and visually the first item, so
             // header, then header items are *prepended* to results.
-            if (deep) {
+            if (deep && header.getRefItems) {
                 items.unshift.apply(items, header.getRefItems(deep));
             }
             items.unshift(header);

@@ -26,17 +26,23 @@ Ext.define('KitchenSink.view.pivot.ChartIntegration', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 450
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 450
+        },
+        graphite: {
+            width: 750,
+            height: 600
         }
     },
     //</example>
 
     title: 'Pivot Grid with chart integration',
     width: '${width}',
-    height: 450,
+    height: '${height}',
     collapsible: true,
     layout: 'border',
 

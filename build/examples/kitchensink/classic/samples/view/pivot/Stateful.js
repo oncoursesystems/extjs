@@ -31,17 +31,23 @@ Ext.define('KitchenSink.view.pivot.Stateful', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 400
+        },
+        graphite: {
+            width: 750,
+            height: 600
         }
     },
     //</example>
 
     title: 'Stateful Pivot Grid',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 

@@ -547,7 +547,11 @@ Ext.define('Ext.data.ProxyStore', {
         }
 
         me.isSyncing = false;
-        batch.destroy();
+        
+        if (batch.$destroyOwner === me) {
+            batch.destroy();
+        }
+        
         me.fireEvent('datachanged', me);
     },
 
@@ -695,7 +699,8 @@ Ext.define('Ext.data.ProxyStore', {
 
             me.proxy.batch(Ext.apply(options, {
                 operations: operations,
-                listeners: me.getBatchListeners()
+                listeners: me.getBatchListeners(),
+                $destroyOwner: me
             }));
         }
 

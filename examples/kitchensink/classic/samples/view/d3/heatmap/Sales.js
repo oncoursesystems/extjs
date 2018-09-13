@@ -57,7 +57,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Sales', {
             top: 20,
             right: 30,
             bottom: 70,
-            left: 120
+            left: 135
         },
 
         xAxis: {

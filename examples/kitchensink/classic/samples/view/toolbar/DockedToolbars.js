@@ -9,6 +9,8 @@ Ext.define('KitchenSink.view.toolbar.DockedToolbars', {
     //<example>
     profiles: {
         classic: {
+            panelHeight: 220,
+            panelWidth: 220,
             listCls: 'list',
             closeCls: 'close',
             pasteCls: 'paste',
@@ -19,6 +21,8 @@ Ext.define('KitchenSink.view.toolbar.DockedToolbars', {
             editGlyph: null
         },
         neptune: {
+            panelHeight: 220,
+            panelWidth: 220,
             listCls: null,
             closeCls: null,
             pasteCls: null,
@@ -27,6 +31,10 @@ Ext.define('KitchenSink.view.toolbar.DockedToolbars', {
             closeGlyph: 88,
             pasteGlyph: 70,
             editGlyph: 47
+        },
+        graphite: {
+            panelHeight: 300,
+            panelWidth: 300   
         }
     },
     //</example>
@@ -40,8 +48,8 @@ Ext.define('KitchenSink.view.toolbar.DockedToolbars', {
 
     defaults: {
         xtype: 'panel',
-        height: 220,
-        width: 220,
+        height: '${panelHeight}',
+        width: '${panelWidth}',
         bodyPadding: 10
     },
 

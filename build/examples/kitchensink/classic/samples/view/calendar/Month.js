@@ -8,8 +8,23 @@ Ext.define('KitchenSink.view.calendar.Month', {
         'Ext.calendar.List'
     ],
 
-    width: 1000,
+    width: '${width}',
     height: 600,
+
+    profiles: {
+        classic: {
+            width: 1000,
+            calendarWidth: 150
+        },
+        neptune: {
+            width: 1000,
+            calendarWidth: 150
+        },
+        graphite: {
+            width: 1200,
+            calendarWidth: 180
+        }
+    },
 
     viewModel: {
         data: {
@@ -36,7 +51,7 @@ Ext.define('KitchenSink.view.calendar.Month', {
         region: 'west',
         title: 'Calendars',
         ui: 'light',
-        width: 150,
+        width: '${calendarWidth}',
         bodyPadding: 5,
         collapsible: true,
         items: {

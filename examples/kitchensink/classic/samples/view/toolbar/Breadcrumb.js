@@ -21,6 +21,9 @@ Ext.define('KitchenSink.view.toolbar.Breadcrumb', {
         },
         'neptune-touch': {
             width: 620
+        },
+        graphite: {
+            width: 710
         }
     },
     //</example>
@@ -36,6 +39,33 @@ Ext.define('KitchenSink.view.toolbar.Breadcrumb', {
         showIcons: true,
         store: {
             type: 'files'
-        }
+        },
+        
+        items: [{
+            xtype: 'component',
+            html: 'Split buttons:',
+            style: {
+                'margin-left': '10px',
+                'margin-right': '10px'
+            }
+        }]
+    }],
+    
+    bbar: [{
+        xtype: 'breadcrumb',
+        showIcons: true,
+        useSplitButtons: false,
+        store: {
+            type: 'files'
+        },
+        
+        items: [{
+            xtype: 'component',
+            html: 'Normal buttons:',
+            style: {
+                'margin-left': '10px',
+                'margin-right': '10px'
+            }
+        }]
     }]
 });

@@ -1265,6 +1265,16 @@ Ext.define('Ext.form.field.Tag', {
         }
     },
 
+    getValue: function () {
+        var value = this.callParent();
+
+        if (value) {
+            value = Ext.Array.from(value);
+        }
+
+        return value;
+    },
+
     /**
      * Sets the specified value(s) into the field. The following value formats are recognized:
      *

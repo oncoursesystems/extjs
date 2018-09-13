@@ -1685,7 +1685,7 @@ Ext.define('Ext.scroll.Scroller', {
                     // enough to capture the async scroll events, anything after that
                     // we re-enable.
                     if (!me.restoreTimer) {
-                            me.restoreTimer = Ext.defer(function() {
+                        me.restoreTimer = Ext.defer(function() {
                             me.restoreTimer = null;
                         }, 50);
                     }

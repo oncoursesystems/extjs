@@ -183,7 +183,11 @@ Ext.define('Ext.sparkline.Bar', {
         me.stacked = stacked;
         me.regionShapes = {};
         me.totalBarWidth = barWidth + barSpacing;
-        me.width = (values.length * barWidth) + ((values.length - 1) * barSpacing);
+
+        //set width only while expanding the widget in grouped grid REF#EXTJS-26216
+        if (values.length) {
+            me.width = (values.length * barWidth) + ((values.length - 1) * barSpacing);
+        }
 
         if (chartRangeClip) {
             clipMin = chartRangeMin == null ? -Infinity : chartRangeMin;

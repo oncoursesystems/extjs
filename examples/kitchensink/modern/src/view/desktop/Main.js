@@ -24,11 +24,12 @@ Ext.define('KitchenSink.view.desktop.Main', {
             style: 'padding-right: 10px'
         }, {
             align: 'right',
+            id: 'materialThemeMenuButton',
+            hidden: true,
             menu: {
                 itemId: 'materialThemeMenu'
             },
             iconCls: 'palette',
-            hidden: !(Ext.theme.is.Material && window.Fashion && Fashion.css && Fashion.css.setVariables),
             arrow: false
         }, {
             align: 'right',

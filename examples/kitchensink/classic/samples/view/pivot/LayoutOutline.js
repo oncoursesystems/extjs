@@ -27,17 +27,29 @@ Ext.define('KitchenSink.view.pivot.LayoutOutline', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            sumWidth: 90,
+            companyColWidth: 80
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 350,
+            sumWidth: 90,
+            companyColWidth: 80
+        },
+        graphite: {
+            width: 900,
+            height: 600,
+            sumWidth: 160,
+            companyColWidth: 110
         }
     },
     //</example>
 
     title: 'Outline layout',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -64,7 +76,7 @@ Ext.define('KitchenSink.view.pivot.LayoutOutline', {
             dataIndex: 'value',
             header: 'Total',
             aggregator: 'sum',
-            width: 90
+            width: '${sumWidth}'
         }],
 
         // Configure the left axis dimensions that will be used to generate
@@ -77,7 +89,7 @@ Ext.define('KitchenSink.view.pivot.LayoutOutline', {
             dataIndex: 'company',
             header: 'Company',
             sortable: false,
-            width: 80
+            width: '${companyColWidth}'
         }],
 
         /**

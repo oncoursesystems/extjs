@@ -385,7 +385,9 @@ Ext.define('Ext.layout.Card', {
 
         showItem: function(item) {
             item.show();
-            item.setRendered(true, true);
+            if (this.getContainer().rendered) {
+                item.setRendered(true, true);
+            }
         }
     }
 });

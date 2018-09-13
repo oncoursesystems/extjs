@@ -4085,13 +4085,16 @@ topSuite("Ext.Widget", ['Ext.app.ViewController', 'Ext.Container'], function() {
             });
 
             widget.addUi('def ghi jkl');
+            widget.addUi(['mno', 'pqr']);
 
-            expect(widget.getUi()).toBe('abc def ghi jkl');
+            expect(widget.getUi()).toBe('abc def ghi jkl mno pqr');
 
             expect(widget.element).toHaveCls('foo-abc');
             expect(widget.element).toHaveCls('foo-def');
             expect(widget.element).toHaveCls('foo-ghi');
             expect(widget.element).toHaveCls('foo-jkl');
+            expect(widget.element).toHaveCls('foo-mno');
+            expect(widget.element).toHaveCls('foo-pqr');
         });
 
         it("should remove UIs", function() {
@@ -4101,10 +4104,11 @@ topSuite("Ext.Widget", ['Ext.app.ViewController', 'Ext.Container'], function() {
             });
 
             widget = new Foo({
-                ui: 'abc def ghi jkl'
+                ui: 'abc def ghi jkl mno pqr'
             });
 
             widget.removeUi('def jkl');
+            widget.removeUi(['mno', 'pqr']);
 
             expect(widget.getUi()).toBe('abc ghi');
 
@@ -4112,6 +4116,37 @@ topSuite("Ext.Widget", ['Ext.app.ViewController', 'Ext.Container'], function() {
             expect(widget.element).not.toHaveCls('foo-def');
             expect(widget.element).toHaveCls('foo-ghi');
             expect(widget.element).not.toHaveCls('foo-jkl');
+            expect(widget.element).not.toHaveCls('foo-mno');
+            expect(widget.element).not.toHaveCls('foo-pqr');
+        });
+
+        it("should add UIs provided as an Array", function() {
+            var Foo = Ext.define(null, {
+                extend: 'Ext.Widget',
+                classCls: 'foo'
+            });
+
+            widget = new Foo({
+                ui: ['abc', 'def']
+            });
+
+            expect(widget.element).toHaveCls('foo-abc');
+            expect(widget.element).toHaveCls('foo-def');
+        });
+
+        it("should normalize the UIs to a String", function() {
+            var Foo = Ext.define(null, {
+                extend: 'Ext.Widget',
+                classCls: 'foo'
+            });
+
+            widget = new Foo({
+                ui: ['abc', 'def']
+            });
+            expect(widget.getUi()).toBe('abc def');
+
+            widget.setUi('ghi jkl');
+            expect(widget.getUi()).toBe('ghi jkl');
         });
     });
 
@@ -4300,6 +4335,17 @@ topSuite("Ext.Widget", ['Ext.app.ViewController', 'Ext.Container'], function() {
             expect(function () {
                 widget.getStyle();
             }).toThrow("'style' is a write-only config.  To query element styles use the Ext.dom.Element API.");
+        });
+
+        it("should support a style declared on a subclass", function() {
+            Widget = Ext.define(null, {
+                extend: 'Ext.Widget',
+                style: {
+                    borderWidth: '1px'
+                }
+            });
+            createWidget();
+            expect(widget.element.dom.style.borderWidth).toBe('1px');
         });
     });
 

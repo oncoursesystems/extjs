@@ -610,7 +610,9 @@ Ext.define('KitchenSink.store.Navigation', {
                 'its value in a circular form. The gauge is similar to a gauge chart ' +
                 'except that there is no axis.',
             children: [
-                { id: 'default-gauge', iconCls: 'icon-gauge-basic', text: 'Gauge', leaf: true }
+                { id: 'default-gauge', iconCls: 'icon-gauge-basic', text: 'Basic Gauge', leaf: true },
+                { id: 'needle-gauge', iconCls: 'icon-gauge-basic', text: 'Needle Gauge', leaf: true },
+                { id: 'custom-needle-gauge', iconCls: 'icon-gauge-basic', text: 'Custom Needle Gauge', leaf: true }
             ],
 
             compat: !Ext.isIE8

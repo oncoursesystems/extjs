@@ -1,17 +1,28 @@
 (function() {
-    var jasmine = this.jasmine,
+    // Local runner hooks into window.Cmd object as well
+    var isNativeCmd = window.Cmd && window.Cmd['native'],
+        jasmine = this.jasmine,
         env = jasmine.getEnv();
     
     if (!/local\-reporter=false/i.test(top.location.search)) {
         env.addReporter(parent.Test.SandBox.reporter);
     }
     
-    // Local runner hooks into window.Cmd object as well
-    if (window.Cmd && window.Cmd['native']) {
-        top.Cmd = Cmd;
-        
+    if (isNativeCmd) {
         jasmine.CI_ENVIRONMENT = true;
+    }
+    
+    if (jasmine.CI_ENVIRONMENT || isNativeCmd) {
         jasmine.DEBUGGING_MODE = false;
+        jasmine.VERBOSE = false;
+        jasmine.CATCH_EXCEPTIONS = true;
+        jasmine.DEFAULT_WATCHDOG_INTERVAL = 90000;
+        jasmine.CAPTURE_CALL_STACK = false;
+        jasmine.KEEP_PASSED_RESULTS = false;
+    }
+    
+    if (isNativeCmd) {
+        top.Cmd = Cmd;
         
         // Android does not have maxTouchPoints, so it will fail feature detection.
         // We can't use presence of methods because they are there on desktop browsers.

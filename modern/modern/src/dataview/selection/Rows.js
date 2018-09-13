@@ -354,7 +354,7 @@ Ext.define('Ext.dataview.selection.Rows', {
 
                 // This is just theoretical for now - we are simply defining a range, not adding to the collection.
                 // So we have to programatically sync the view state.
-                this.view.onItemSelect(start);
+                this.view.onItemSelect(start, true);
             }
         },
 
@@ -365,12 +365,14 @@ Ext.define('Ext.dataview.selection.Rows', {
          */
         setRangeEnd: function(end) {
             var me = this,
-                dragRange = me.dragRange,
-                oldEnd = dragRange[1] || 0,
+                dragRange = me.dragRange || (me.dragRange = [0, end]),
+                oldEnd = dragRange[1],
                 start = dragRange[0],
                 view = me.view,
                 renderInfo = view.renderInfo,
                 tmp = dragRange[1] = end,
+                removeRange = [],
+                addRange = false,
                 rowIdx, limit;
 
             // Ranges retain whatever start end end point, regardless of order
@@ -380,21 +382,27 @@ Ext.define('Ext.dataview.selection.Rows', {
                 start = tmp;
             }
 
-            // Loop through the union of previous range and newly set range
-            for (rowIdx = Math.max(Math.min(dragRange[0], start, oldEnd, end), renderInfo.indexTop),
-                limit = Math.min(Math.max(dragRange[0], start, oldEnd, end), renderInfo.indexBottom - 1); rowIdx <= limit; rowIdx++) {
+            rowIdx = Math.max(Math.min(dragRange[0], start, oldEnd, end), renderInfo.indexTop);
+            limit = Math.min(Math.max(dragRange[1], start, oldEnd, end), renderInfo.indexBottom - 1);
 
+            // Loop through the union of previous range and newly set range
+            for (; rowIdx <= limit; rowIdx++) {
                 // If we are outside the current dragRange, deselect
                 if (rowIdx < start || rowIdx > end) {
-                    // If we are deselecting - swiping back towards the start, the record index must be genuinely deselected
-                    me.removeRowRange(rowIdx, rowIdx);
-
-                    // This is just theoretical for now - we are simply defining a dragRange, not adding to the collection.
-                    // So we have to programatically sync the view state.
                     view.onItemDeselect(rowIdx);
+                    removeRange[removeRange.length ? 1 : 0] = rowIdx;
                 } else {
-                    view.onItemSelect(rowIdx);
+                    view.onItemSelect(rowIdx, true);
+                    addRange = true;
                 }
+            }
+
+            if (addRange) {
+                me.addRange(true);
+            }
+
+            if (removeRange.length) {
+                me.removeRecordRange(removeRange[0], removeRange[1]);
             }
 
             me.lastSelectedIndex = end;
@@ -425,6 +433,13 @@ Ext.define('Ext.dataview.selection.Rows', {
             // Subclass's add API uses records, not indices.
             // the recordRange API always uses indices/
             this.addRecordRange(extensionVector.start, extensionVector.end);
+        },
+
+        reduceRange: function(extensionVector) {
+            // Must use addRecordRange.
+            // Subclass's add API uses records, not indices.
+            // the recordRange API always uses indices/
+            this.removeRecordRange(extensionVector.start, extensionVector.end);
         },
 
         /**

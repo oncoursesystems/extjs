@@ -291,6 +291,9 @@ Ext.define('Ext.form.field.Date', {
      * @private
      */
     rawDateText: '',
+    
+    // Date field should validate on focusleave not blur
+    validateOnFocusLeave: true,
 
     initComponent: function() {
         var me = this,

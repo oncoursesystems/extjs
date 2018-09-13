@@ -3387,7 +3387,11 @@ topSuite("Ext.tree.Panel", [
         
         describe("role", function() {
             it("should have treegrid role", function() {
-                expect(view).toHaveAttr('role', 'treegrid');
+                expect(tree).toHaveAttr('role', 'treegrid');
+            });
+
+            it("should have rowgroup role", function() {
+                expect(view).toHaveAttr('role', 'rowgroup');
             });
         });
         

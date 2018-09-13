@@ -27,17 +27,26 @@ Ext.define('KitchenSink.view.pivot.LayoutCompact', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            totalColumnWidth: 90
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 350,
+            totalColumnWidth: 90
+        },
+        graphite: {
+            width: 750,
+            height: 600,
+            totalColumnWidth: 120
         }
     },
     //</example>
 
     title: 'Compact layout',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -71,7 +80,7 @@ Ext.define('KitchenSink.view.pivot.LayoutCompact', {
             dataIndex: 'value',
             header: 'Total',
             aggregator: 'sum',
-            width: 90
+            width: '${totalColumnWidth}'
         }],
 
         // Configure the left axis dimensions that will be used to generate

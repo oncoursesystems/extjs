@@ -794,8 +794,8 @@ function() {
                             height: 250
                         });
                         win.restore();
-                        expect(win.getWidth()).toBe(250);
-                        expect(win.getHeight()).toBe(250);
+                        expect(win.getWidth()).toBeApprox(250, 1);
+                        expect(win.getHeight()).toBeApprox(250, 1);
                     });
 
                     it("should restore to a configured position", function() {
@@ -929,8 +929,8 @@ function() {
                         });
                         waitsForAnim();
                         runs(function() {
-                            expect(win.getWidth()).toBe(250);
-                            expect(win.getHeight()).toBe(250);
+                            expect(win.getWidth()).toBeApprox(250, 1);
+                            expect(win.getHeight()).toBeApprox(250,1);
                         });
                     });
 

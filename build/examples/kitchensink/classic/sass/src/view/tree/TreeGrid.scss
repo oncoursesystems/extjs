@@ -22,5 +22,12 @@
         font: 16px/1 FontAwesome;
         content: $fa-var-pencil-square-o;
     }
+    @if $theme-name == 'theme-graphite' {
+        .tree-grid-task:before {
+            font: 16px/1 FontAwesome;
+            color: #ffffff;
+            content: $fa-var-cog;
+        }
+    }
 }
 

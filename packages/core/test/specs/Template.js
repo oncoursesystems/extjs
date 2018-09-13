@@ -171,6 +171,12 @@ topSuite("Ext.Template", ["Ext.dom.Element"], function() {
                 it("should apply the supplied value and return an HTML fragments", function() {
                     expect(simpleTpl.apply(appliedArr)).toEqual('<div class="template">Hello world.</div>');
                 });
+                
+                it("should expand tokens with $ characters", function() {
+                    var result = new Ext.Template('foo {$foo$}').apply({ $foo$: 'bar' });
+                    
+                    expect(result).toBe('foo bar');
+                });
             });
 
             describe("with a complex template", function() {

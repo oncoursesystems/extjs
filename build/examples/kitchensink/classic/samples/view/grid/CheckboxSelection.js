@@ -12,11 +12,26 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
     }],
     profiles: {
         classic: {
-            width: 700
+            width: 700,
+            priceWidth: 100,
+            pricechangeWidth: 100,
+            percentChangeColumnWidth: 100,
+            lastUpdatedColumnWidth: 120
         },
         neptune: {
-            width: 750
-        }
+            width: 750,
+            priceWidth: 100,
+            pricechangeWidth: 100,
+            percentChangeColumnWidth: 100,
+            lastUpdatedColumnWidth: 120
+        },
+         graphite: {
+            width: 950,
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 170
+        }    
     },
     //</example>
 
@@ -42,24 +57,25 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
         columns: [{
             text: "Company",
             dataIndex: 'name',
-    
             flex: 1
         }, {
             text: "Price",
             dataIndex: 'price',
-    
+            width: '${priceWidth}',       
             formatter: 'usMoney'
         }, {
             text: "Change",
+            width: '${pricechangeWidth}',
             dataIndex: 'priceChange'
         }, {
             text: "% Change",
+            width: '${percentChangeColumnWidth}',
             dataIndex: 'priceChangePct'
         }, {
             text: "Last Updated",
+            width: '${lastUpdatedColumnWidth}',
             dataIndex: 'priceLastChange',
     
-            width: 120,
             formatter: 'date("m/d/Y")'
         }]
     }, {
@@ -77,24 +93,26 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
         columns: [{
             text: "Company",
             dataIndex: 'name',
-    
             flex: 1
         }, {
             text: "Price",
+            width: '${priceWidth}',
             dataIndex: 'price',
     
             formatter: 'usMoney'
         }, {
             text: "Change",
+            width: '${pricechangeWidth}',
             dataIndex: 'priceChange'
         }, {
             text: "% Change",
+            width: '${percentChangeColumnWidth}',
             dataIndex: 'priceChangePct'
         }, {
             text: "Last Updated",
+            width: '${lastUpdatedColumnWidth}',
             dataIndex: 'priceLastChange',
     
-            width: 120,
             formatter: 'date("m/d/Y")'
         }]
     }]

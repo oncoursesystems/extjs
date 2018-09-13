@@ -19,6 +19,8 @@ Ext.define('KitchenSink.view.tab.AdvancedTabs', {
     }],
     profiles: {
         classic: {
+            height: 400,
+            width: 580,
             buttonUI: 'default',
             glyph1: null,
             glyph2: null,
@@ -27,10 +29,11 @@ Ext.define('KitchenSink.view.tab.AdvancedTabs', {
             icon1: 'classic/resources/images/icons/fam/cog.gif',
             icon2: 'classic/resources/images/icons/fam/user.gif',
             icon3: 'classic/resources/images/icons/fam/accept.gif',
-            iconAdd: 'classic/resources/images/icons/fam/add.gif',
-            width: 580
+            iconAdd: 'classic/resources/images/icons/fam/add.gif'           
         },
         neptune: {
+            height: 400,
+            width: 580,
             buttonUI: 'default-toolbar',
             glyph1: 42,
             glyph2: 70,
@@ -39,20 +42,25 @@ Ext.define('KitchenSink.view.tab.AdvancedTabs', {
             icon1: null,
             icon2: null,
             icon3: null,
-            iconAdd: null,
-            width: 620
+            iconAdd: null          
         },
         'neptune-touch': {
-            width: 740
+            width: 740,
+            height: 400
         },
         triton: {
-            width: 700
+            width: 700,
+            height: 400
+        },
+          graphite: {
+            width: 1025,
+            height: 450
         }
     },
     //</example>
 
     width: '${width}',
-    height: 400,
+    height: '${height}',
     layout: 'fit',
     viewModel: true,
 

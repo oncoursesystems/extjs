@@ -21,13 +21,22 @@ Ext.define('KitchenSink.view.layout.Accordion', {
     profiles: {
         classic: {
             width: 600,
-            green: 'green',
-            red: 'red'
+            height: 500,
+            gainColor: 'green',
+            lossColor: 'red'
         },
         neptune: {
             width: 700,
-            green: '#73b51e',
-            red: '#cf4c35'
+            height: 500,
+            gainColor: '#73b51e',
+            lossColor: '#cf4c35'
+        
+        },
+        graphite: {
+            width: 700,
+            height: 650,
+            gainColor: 'unset',
+            lossColor: 'unset'
         }
     },
     //</example>
@@ -35,7 +44,7 @@ Ext.define('KitchenSink.view.layout.Accordion', {
     title: 'Accordion Layout',
     layout: 'accordion',
     width: '${width}',
-    height: 500,
+    height: '${height}',
     defaults: {
         bodyPadding: 10
     },

@@ -3,6 +3,8 @@ Ext.define('KitchenSink.view.chart.column3d.StackedController', {
     alias: 'controller.column-stacked-3d',
 
     init: function (view) {
+        this.callParent([view]);
+
         if (Ext.platformTags.phone) {
             var toolbar = view.child('toolbar');
 

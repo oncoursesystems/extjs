@@ -1871,6 +1871,18 @@ var noArgs = [],
             // because that may lead to accessing nulled properties and resulting exceptions.
             if (Object.setPrototypeOf) {
                 if (me.clearPrototypeOnDestroy && !me.$vetoClearingPrototypeOnDestroy) {
+                    props = me.$preservePrototypeProperties;
+                    
+                    if (props) {
+                        for (i = 0, len = props.length; i < len; i++) {
+                            prop = props[i];
+                            
+                            if (!me.hasOwnProperty(prop)) {
+                                me[prop] = me[prop];
+                            }
+                        }
+                    }
+                    
                     Object.setPrototypeOf(me, null);
                 }
             }

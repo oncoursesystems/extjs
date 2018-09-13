@@ -87,7 +87,7 @@ Ext.define('Ext.selection.Model', {
      * {Ext.util.Collection} instead of {Ext.util.Bag} to maintain insertion order.
      * @private
      */
-     ordered: false,
+    ordered: false,
 
     /**
      * @property {Ext.util.Bag/Ext.util.Collection} selected
@@ -1147,7 +1147,7 @@ Ext.define('Ext.selection.Model', {
             prune = me.pruneRemovedOnRefresh(),
             items, length, i, selectedRec, rec,
             lastSelectedChanged;
-            
+
         if (store && store.isBufferedStore) {
             return;
         }

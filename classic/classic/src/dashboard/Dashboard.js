@@ -55,11 +55,11 @@ Ext.define('Ext.dashboard.Dashboard', {
      * An array designating the width of columns in your dashboard's default state as described
      * by the {@link #cfg-defaultContent} property. For example:
      *
-     *    columnWidths: [
-     *       0.35,
-     *       0.40,
-     *       0.25
-     *    ]
+     *     columnWidths: [
+     *        0.35,
+     *        0.40,
+     *        0.25
+     *     ]
      *    
      * As you can see, this array contains the default widths for the 3 columns in the dashboard's 
      * initial view. The column widths should total to an integer value, typically 1 as shown

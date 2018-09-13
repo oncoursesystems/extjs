@@ -1233,7 +1233,7 @@ Ext.define('Ext.app.ViewModel', {
      * Get a value from the data for this viewmodel.
      * @param {String} path The path of the data to retrieve.
      *
-     *    var value = vm.get('theUser.address.city');
+     *     var value = vm.get('theUser.address.city');
      *
      * @return {Object} The data stored at the passed path.
      */
@@ -1615,10 +1615,18 @@ Ext.define('Ext.app.ViewModel', {
         },
 
         setupStore: function (store, key) {
+            var me = this,
+                obj = {};
+            
+            // Force data object creation
+            me.getData();
+            
             // May have been given a store instance
-            store.resolveListenerScope = this.listenerScopeFn;
-            this.storeInfo[key] = store;
-            this.set(key, store);
+            store.resolveListenerScope = me.listenerScopeFn;
+            me.storeInfo[key] = store;
+            
+            obj[key] = store;
+            me.setData(obj);
         },
 
         applyFormulas: function (formulas) {

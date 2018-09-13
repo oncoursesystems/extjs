@@ -23,7 +23,8 @@ Ext.define('KitchenSink.controller.Main', {
     refs: {
         cardPanel: '#cardPanel',
         contentPanel: 'contentPanel',
-        sourceOverlay: 'sourceoverlay'
+        sourceOverlay: 'sourceoverlay',
+        materialThemeMenuButton: '#materialThemeMenuButton'
     },
 
     control: {
@@ -32,6 +33,12 @@ Ext.define('KitchenSink.controller.Main', {
         },
         '#materialThemeMenu': {
             beforeShow: 'beforeMaterialThemeMenuShow'
+        },
+        '#mainNavigationBar': {
+            painted: {
+                single: true,
+                fn: 'onNavigationBarPainted'
+            }
         }
     },
 
@@ -71,6 +78,15 @@ Ext.define('KitchenSink.controller.Main', {
     }, {
         name: 'Neptune',
         profile: 'modern-neptune'
+    }],
+
+    availableLocales: [{
+        separator: true,
+        name: 'English',
+        locale: 'en'
+    }, {
+        name: 'French',
+        locale: 'fr'
     }],
 
     materialThemes: [{
@@ -146,6 +162,24 @@ Ext.define('KitchenSink.controller.Main', {
         }
 
         return me;
+    },
+
+    changeLocale: function (item) {
+        var params = Ext.Object.fromQueryString(location.search);
+
+        if (item.locale) {
+            params.locale = item.locale;
+        } else {
+            delete params.locale;
+        }
+
+        params = '?' + Ext.Object.toQueryString(params).replace('modern=', 'modern');
+
+        if (location.search === params) {
+            location.reload();
+        } else {
+            location.search = params;
+        }
     },
 
     changeProfile: function (item) {
@@ -466,6 +500,13 @@ Ext.define('KitchenSink.controller.Main', {
         }
     },
 
+    onNavigationBarPainted: function () {
+        var materialThemeMenuButton = this.getMaterialThemeMenuButton();
+        if (materialThemeMenuButton && Ext.supports.CSSVariables && Ext.theme.is.Material && window.Fashion && Fashion.css && !!Fashion.css.setVariables) {
+            materialThemeMenuButton.show();
+        }
+    },
+
     beforeMaterialThemeMenuShow: function (materialThemeMenu) {
         if (!this.materialThemeMenu) {
             var me = this,
@@ -473,7 +514,6 @@ Ext.define('KitchenSink.controller.Main', {
 
             me.materialThemeMenu = materialThemeMenu;
 
-            //<debug>
             items.unshift({
                 xtype: 'togglefield',
                 listeners: {
@@ -485,13 +525,13 @@ Ext.define('KitchenSink.controller.Main', {
                 margin: null,
                 shadow: false
             });
-            //</debug>
 
             items.push({
                 text: 'Cancel',
                 ui: 'decline',
-                handler: materialThemeMenu.hide,
-                scope: materialThemeMenu,
+                handler: function() {
+                    materialThemeMenu.hide();
+                },
                 separator: true
             });
 
@@ -500,14 +540,11 @@ Ext.define('KitchenSink.controller.Main', {
     },
 
     onDarkModeChange: function(toggle) {
-        var darkMode = toggle.getValue();
-        if (window.Fashion && Fashion.css) {
-            Fashion.css.setVariables({
-                'dark-mode': darkMode ?  'true' : 'false'
-            });
+        var me = this,
+            darkMode = toggle.getValue();
 
-            Ext.getBody().toggleCls('dark-mode', darkMode);
-        }
+        me.updateMaterialTheme(darkMode);
+        Ext.getBody().toggleCls('dark-mode', darkMode);
     },
 
     getAvailableThemes: function () {
@@ -522,6 +559,9 @@ Ext.define('KitchenSink.controller.Main', {
             text: 'Auto Detect Theme'
         });
 
+        // TODO: Turn this back if we actually have a translated KS
+        // mobile apps will still need View Source button
+        // return items.concat(me.getAvailableLocales());
         return items;
     },
 
@@ -548,15 +588,47 @@ Ext.define('KitchenSink.controller.Main', {
     },
 
     onMaterialThemeClick: function (item) {
-        if (window.Fashion && Fashion.css) {
-            Fashion.css.setVariables({
-                'base-color-name': item.baseColor,
-                'accent-color-name': item.accentColor
-            });
+        var me = this;
+        var darkMode = Ext.String.trim(window.getComputedStyle(document.body).getPropertyValue('--dark-mode')) === 'true';
+        me.updateMaterialTheme(darkMode, item.baseColor, item.accentColor);
+    },
 
-            if (Ext.theme.Material) {
-                Ext.theme.Material.updateMetaThemeColor(item.baseColor);
-            }
+    updateMaterialTheme: function(darkMode, base, accent) {
+        var me = this;
+        if (Ext.theme.Material) {
+            Ext.theme.Material.setColors({
+                'darkMode': darkMode,
+                'base': base || me._materialBaseColor,
+                'accent': accent || me._materialAccentColor
+            });
         }
+
+        if (base) {
+            me._materialBaseColor = base;
+        }
+
+        if (accent) {
+            me._materialAccentColor = accent;
+        }
+    },
+
+    getAvailableLocales: function () {
+        var me = this,
+            items = me.availableLocales.map(me.parseAvailableLocales(me));
+
+        return items;
+    },
+
+    parseAvailableLocales: function (me) {
+        return function (locale) {
+            locale.xtype = 'menuradioitem';
+            locale.checked = KitchenSink.locale === locale.locale;
+            locale.group = 'theme_chooser';
+            locale.handler = me.changeLocale;
+            locale.scope = me;
+            locale.text = locale.name;
+
+            return locale;
+        };
     }
 });

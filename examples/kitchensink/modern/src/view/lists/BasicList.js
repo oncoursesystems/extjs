@@ -33,5 +33,6 @@ Ext.define('KitchenSink.view.lists.BasicList', {
     height: '${height}',
     width: '${width}',
     itemTpl: '{firstName} {lastName}',
-    store: 'List'
+    store: 'List',
+    grouped: false
 });

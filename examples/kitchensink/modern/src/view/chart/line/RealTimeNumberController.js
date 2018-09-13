@@ -2,20 +2,9 @@ Ext.define('KitchenSink.view.chart.line.RealTimeNumberController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.line-real-time-number',
 
-    currentTheme: 0,
+    init: function (view) {
+        this.callParent([view]);
 
-    themes: [
-        'default',
-        'blue',
-        'green',
-        'midnight',
-        'muted',
-        'red',
-        'sky',
-        'yellow'
-    ],
-
-    init: function () {
         //put this here for onActiveItemChange to start
         this.numberChartTask = Ext.TaskManager.start({
             run: this.addNewData,

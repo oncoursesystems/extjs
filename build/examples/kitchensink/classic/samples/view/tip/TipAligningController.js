@@ -19,12 +19,12 @@ Ext.define('KitchenSink.view.tip.TipAligningController', {
 
     initToolTip: function() {
         var button = this.lookupReference('button');
-
+        var width = Ext.theme.name === "Graphite" ? 300 : 250;
         this.tooltip = new Ext.tip.ToolTip({
             constrainTo: this.getView().getTargetEl(),
             defaultAlign: 't-b',
             target: button,
-            minWidth: 250,
+            minWidth: width,
             title: 'Confirm selection of destination',
             html: '<ul><li>Condition one.</li><li>Condition two</li><li>Condition three</li></ul>',
             anchor: true,

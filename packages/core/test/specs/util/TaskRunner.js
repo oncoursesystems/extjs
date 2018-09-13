@@ -45,6 +45,9 @@ topSuite("Ext.util.TaskRunner", [
         });
         
         // https://sencha.jira.com/browse/EXTJS-19133
+        // IE8 does not allow capturing stack trace so always fails
+        // TODO is for fixing the test expectations
+        TODO(Ext.isIE8).
         it("it should not fire idle event when configured", function() {
             runs(function() {
                 runner = new Ext.util.TaskRunner({

@@ -4,12 +4,12 @@
 Ext.define('KitchenSink.view.chart.column3d.Column', {
     extend: 'Ext.Container',
     xtype: 'column-basic-3d',
-    controller: 'column-basic-3d',
+    controller: 'chart',
 
     // <example>
     otherContent: [{
         type: 'Controller',
-        path: 'modern/src/view/chart/column3d/ColumnController.js'
+        path: 'modern/src/view/chart/ChartController.js'
     }, {
         type: 'Store',
         path: 'modern/src/store/OrderItems.js'

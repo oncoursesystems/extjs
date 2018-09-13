@@ -498,6 +498,8 @@ Ext.define('Ext.button.Button', {
     _arrowElCls: Ext.baseCSSPrefix + 'btn-arrow-el',
     _focusCls: Ext.baseCSSPrefix + 'btn-focus',
     _arrowFocusCls: Ext.baseCSSPrefix + 'arrow-focus',
+    _arrowOverCls: Ext.baseCSSPrefix + 'arrow-over',
+    _arrowPressedCls: Ext.baseCSSPrefix + 'arrow-pressed',
 
     // We have to keep "unselectable" attribute on all elements because it's not inheritable.
     // Without it, clicking anywhere on a button disrupts current selection and cursor position
@@ -1539,8 +1541,6 @@ Ext.define('Ext.button.Button', {
 
         // Allow toggle to be vetoed in case a toggle group needs to enforce a mimimum pressed state
         if (me.fireEvent('beforetoggle', me, state) !== false) {
-
-
             if (state !== me.pressed) {
                 me[state ? 'addCls': 'removeCls'](me._pressedCls);
                 me.pressed = state;
@@ -1559,6 +1559,7 @@ Ext.define('Ext.button.Button', {
                 }
             }
         }
+        
         return me;
     },
 
@@ -1933,7 +1934,7 @@ Ext.define('Ext.button.Button', {
         var me = this,
             activeEl;
 
-        if (Ext.isIE || e.pointerType === 'touch') {
+        if (Ext.isIE || Ext.isEdge || e.pointerType === 'touch') {
             // In IE the use of unselectable on the button's elements causes the element
             // to not receive focus, even when it is directly clicked.
             // On Touch devices, we need to explicitly focus on touchstart.
@@ -1964,6 +1965,7 @@ Ext.define('Ext.button.Button', {
 
         if (!me.disabled && e.button === 0) {
             Ext.button.Manager.onButtonMousedown(me, e);
+            me.removeCls(me._arrowPressedCls);
             me.addCls(me._pressedCls);
         }
     },

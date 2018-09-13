@@ -295,12 +295,12 @@ Ext.define('Ext.view.TableLayout', {
             return;
         }
 
-        ownerContext.target.syncRowHeightFinish(flusher.synchronizer,
-                                                flusher.otherSynchronizer);
+        ownerContext.target.syncRowHeightFinish(flusher.synchronizer, flusher.otherSynchronizer);
 
         flusher.flushed = true;
 
         ownerContext.syncRowHeights = true;
+        
         if (!me.pending) {
             ownerContext.context.queueLayout(me);
         }
@@ -330,10 +330,12 @@ Ext.define('Ext.view.TableLayout', {
         }
 
         if (scroller && !scroller.isScrolling) {
-            // BufferedRenderer only sets nextRefreshStartIndex to zero
-            // when preserveScrollOnReload is false.
-            if (buffered && buffered.nextRefreshStartIndex === 0) {
-                return;
+            // BufferedRenderer only sets nextRefreshStartIndex to zero when preserveScrollOnReload is false.
+            // And if variableRowHeight is true, restoring the scroller will be handled by the bufferedRenderer
+            if (buffered) {
+                if (buffered.nextRefreshStartIndex === 0 || me.owner.hasVariableRowHeight()) {
+                    return;
+                }
             }
             scroller.restoreState();
         }

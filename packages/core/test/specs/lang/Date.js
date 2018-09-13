@@ -261,6 +261,18 @@ topSuite("Ext.Date", function() {
            expect(Ext.Date.parse("2011-02-31", "Y-m-d", true)).toBeNull();
         });
 
+        it("should return null when parsing an invalid date like 0 hours in 'g' format", function() {
+            var date = Ext.Date.parse('1970-01-01 0:12 am', 'Y-m-d g:i a');
+            
+            expect(date).toBe(null);
+        });
+
+        it("should return null when parsing an invalid date like 0 hours in 'h' format", function() {
+            var date = Ext.Date.parse('1970-01-01 00:32 pm', 'Y-m-d h:i a');
+            
+            expect(date).toBe(null);
+        });
+
         it("should read am/pm", function() {
             var date = Ext.Date.parse('2010/01/01 12:45 am', 'Y/m/d G:i a'),
                 expectedDate = new Date();
@@ -288,7 +300,7 @@ topSuite("Ext.Date", function() {
             expectedDate.setMilliseconds(0);
             expect(date).toEqual(expectedDate);
         });
-
+        
         it("should parse time format", function(){
             // Can't use a static date because the timezone of the
             // local machine will change the result

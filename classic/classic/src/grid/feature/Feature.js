@@ -128,6 +128,14 @@ Ext.define('Ext.grid.feature.Feature', {
      */
     grid: null,
 
+    /**
+     * @property {Element} columnSizer
+     * Contains a reference to the element which define the width of a column.
+     *
+     * This is used by the {@link Ext.view.TableLayout} when resizing columns.
+     */
+    columnSizer: null,
+
     constructor: function(config) {
         this.initialConfig = config;
         this.callParent(arguments);

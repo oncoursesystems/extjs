@@ -285,6 +285,11 @@ Ext.define('Ext.app.Application', {
         // Docs will go in subclasses
         quickTips: true,
 
+        /**
+         * @cfg {Object} router
+         * A configuration object to apply onto the {@link Ext.route.Router Router}.
+         * @since 6.5.0
+         */
         router: null
     },
 

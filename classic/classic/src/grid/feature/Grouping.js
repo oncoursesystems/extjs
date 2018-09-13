@@ -1,6 +1,5 @@
 /**
  * This feature allows to display the grid rows aggregated into groups as specified by the {@link Ext.data.Store#grouper grouper}
- *
  * underneath. The groups can also be expanded and collapsed.
  *
  * ## Extra Events
@@ -481,7 +480,7 @@ Ext.define('Ext.grid.feature.Grouping', {
         var me = this,
             view = me.view,
             store = me.gridStore = grid.getStore(),
-            lockPartner, dataSource;
+            dataSource;
 
         view.isGrouping = store.isGrouped();
 
@@ -509,15 +508,8 @@ Ext.define('Ext.grid.feature.Grouping', {
             me.collapsible = false;
         }
         // If it's a local store we can build a grouped store for use as the view's dataSource
-        else {
-
-            // Share the GroupStore between both sides of a locked grid
-            lockPartner = me.lockingPartner;
-            if (lockPartner && lockPartner.dataSource) {
-                me.dataSource = view.dataSource = dataSource = lockPartner.dataSource;
-            } else {
-                me.dataSource = view.dataSource = dataSource = new Ext.grid.feature.GroupStore(me, store);
-            }
+        else if (!store.isEmptyStore) {
+            dataSource = me.createDataSource();
         }
 
         grid = grid.ownerLockable || grid;
@@ -537,7 +529,9 @@ Ext.define('Ext.grid.feature.Grouping', {
 
         me.groupRenderInfo = {};
 
-        if (dataSource) {
+        if (store.isEmptyStore) {
+            return;
+        } else if (dataSource) {
             // Listen to dataSource groupchange so it has a chance to do any processing
             // before we react to it
             dataSource.on('groupchange', me.onGroupChange, me);
@@ -1285,34 +1279,32 @@ Ext.define('Ext.grid.feature.Grouping', {
      */
     onGroupClick: function(view, rowElement, groupName, e) {
         var me = this,
-            metaGroupCache = me.getCache(),
-            groupIsCollapsed = !me.isExpanded(groupName),
-            g;
+            metaGroupCache, groupIsCollapsed, g;
 
-        if (me.collapsible) {
-            // CTRL means collapse all others.
-            if (e.ctrlKey) {
-                Ext.suspendLayouts();
+        if (!me.collapsible) {
+            return;
+        }
 
-                for (g in metaGroupCache) {
-                    if (g === groupName) {
-                        if (groupIsCollapsed) {
-                            me.expand(groupName);
-                        }
-                    } else if (!metaGroupCache[g].isCollapsed) {
-                        me.doCollapseExpand(true, g, false);
+        metaGroupCache = me.getCache();
+        groupIsCollapsed = !me.isExpanded(groupName);
+
+        // CTRL means collapse all others.
+        if (e.ctrlKey) {
+            Ext.suspendLayouts();
+
+            for (g in metaGroupCache) {
+                if (g === groupName) {
+                    if (groupIsCollapsed) {
+                        me.expand(groupName);
                     }
+                } else if (!metaGroupCache[g].isCollapsed) {
+                    me.doCollapseExpand(true, g, false);
                 }
-
-                Ext.resumeLayouts(true);
-                return;
             }
 
-            if (groupIsCollapsed) {
-               me.expand(groupName);
-            } else {
-                me.collapse(groupName);
-            }
+            Ext.resumeLayouts(true);
+        } else {
+            me[groupIsCollapsed ? 'expand' : 'collapse'](groupName);
         }
     },
 
@@ -1473,7 +1465,6 @@ Ext.define('Ext.grid.feature.Grouping', {
             store = me.getGridStore(),
             filters = store.getFilters(),
             groups = store.getGroups().items,
-            reader = store.getProxy().getReader(),
             groupField = me.getGroupField(),
             lockingPartner = me.lockingPartner,
             updateSummaryRow = me.updateSummaryRow,
@@ -1606,25 +1597,58 @@ Ext.define('Ext.grid.feature.Grouping', {
         var me = this,
             view = me.view,
             dataSource = me.dataSource,
+            bufferedRenderer = view.bufferedRenderer,
             bufferedStore;
 
         if (store && store !== oldStore) {
             me.gridStore = store;
             bufferedStore = store.isBufferedStore;
 
-            if (!dataSource) {
+            if (me.storeListeners) {
                 Ext.destroy(me.storeListeners);
-                me.setupStoreListeners(store);
             }
 
             // Grouping involves injecting a dataSource in early
-            if (bufferedStore !== oldStore.isBufferedStore) {
+            if (!oldStore.isEmptyStore && bufferedStore !== oldStore.isBufferedStore) {
                 Ext.raise('Cannot reconfigure grouping switching between buffered and non-buffered stores');
             }
 
-            view.isGrouping = !!store.getGrouper();
-            dataSource.bindStore(store);
+            if (!dataSource) {
+                if (bufferedStore) {
+                    me.collapsible = false;
+                    me.setupStoreListeners(store);
+                } else {
+                    dataSource = me.createDataSource();
+                    dataSource.on('groupchange', me.onGroupChange, me);
+                    if (bufferedRenderer) {
+                        bufferedRenderer.bindStore(dataSource);
+                    }
+                }
+            }
+
+            if (!bufferedStore) {
+                view.isGrouping = !!store.getGrouper();
+                dataSource.bindStore(store);
+            }
+
+            me.mixins.summary.bindStore.call(me, grid, store);
         }
+    },
+
+    createDataSource: function() {
+        var me = this,
+            view = me.view,
+            lockPartner = me.lockingPartner,
+            dataSource;
+
+        // Share the GroupStore between both sides of a locked grid
+        if (lockPartner && lockPartner.dataSource) {
+            me.dataSource = view.dataSource = dataSource = lockPartner.dataSource;
+        } else {
+            me.dataSource = view.dataSource = dataSource = new Ext.grid.feature.GroupStore(me, me.gridStore);
+        }
+
+        return dataSource;
     },
 
     populateRecord: function (group, metaGroup, remoteData) {
@@ -1714,5 +1738,5 @@ Ext.define('Ext.grid.feature.Grouping', {
                 destroyable: true
             });
         }
-     }
+    }
 });

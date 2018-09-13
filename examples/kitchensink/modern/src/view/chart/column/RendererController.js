@@ -42,7 +42,7 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
         var store = rendererData.store,
             storeItems = store.getData().items,
             record = storeItems[index],
-            diff = record && (record.data['g2'] - record.data['g1']),
+            diff = record && (record.get('g2') - record.get('g1')),
             last = storeItems.length - 1,
             surface = sprite.getParent(),
             changes = {},
@@ -57,7 +57,7 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
         changes.fillStyle = (diff > 0 ? 'tomato' : 'palegreen');
 
         // Make the first and last columns larger.
-        if (index == 0 || index == last) {
+        if (index === 0 || index == last) {
             changes.x = config.x - config.width * 0.2;
             changes.y = config.y;
             changes.width = config.width * 1.4;
@@ -75,11 +75,11 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
                 });
             }
 
-            if (index == 0) {
+            if (index === 0) {
                 surface.myFirstColumnConfig = Ext.clone(changes);
             } else if (index == last) {
-                firstData = storeItems[0].data['g1'];
-                lastData = storeItems[last].data['g1'];
+                firstData = storeItems[0].get('g1');
+                lastData = storeItems[last].get('g1');
                 firstColumnConfig = surface.myFirstColumnConfig;
 
                 var x1 = firstColumnConfig.x + firstColumnConfig.width,
@@ -123,7 +123,7 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
             storeItems = store.getData().items,
             last = storeItems.length - 1,
             record = storeItems[index],
-            diff = record && Math.round(record.data['g2'] - record.data['g1']),
+            diff = record && Math.round(record.get('g2') - record.get('g1')),
             surface = sprite.getParent(),
             textSprites, textSprite, rectSprite;
 
@@ -193,12 +193,5 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
         }
 
         return null;
-    },
-
-    onRefresh: function () {
-        var chart = this.lookup('chart'),
-            store = chart.getStore();
-
-        store.generateData(store.getNumRecords());
     }
 });

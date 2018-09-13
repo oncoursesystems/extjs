@@ -274,8 +274,6 @@ Ext.define('Ext.field.Text', {
          */
         editable: true,
 
-        bubbleEvents: ['action'],
-
         /**
          * @cfg bodyAlign
          * @hide
@@ -311,6 +309,8 @@ Ext.define('Ext.field.Text', {
          */
         parseValidator: null
     },
+
+    bubbleEvents: ['action'],
 
     /**
      * @cfg {String} badFormatMessage
@@ -404,6 +404,10 @@ Ext.define('Ext.field.Text', {
             keypress: 'onKeyPress',
             paste: 'onPaste',
             mousedown: 'onMouseDown',
+            input: {
+                fn: 'onInput',
+                delegated: false
+            },
             scope: me
         });
 

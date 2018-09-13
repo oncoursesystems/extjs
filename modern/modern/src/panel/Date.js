@@ -1531,18 +1531,18 @@ Ext.define('Ext.panel.Date', {
             } else {
                 visible = !this.pickerVisible;
             }
-            this.togglePicker(visible);
+            this.toggleYearPicker(visible);
         },
 
         onYearPickerTap: function(picker, year) {
-            this.togglePicker(false);
+            this.toggleYearPicker(false);
             var d = Ext.Date.clone(this.getFocusableDate());
             d.setFullYear(year);
             this.setValue(d);
         },
 
         onYearTitleTap: function() {
-            this.togglePicker(!this.pickerVisible);
+            this.toggleYearPicker(!this.pickerVisible);
         },
 
         refreshPanes: function() {
@@ -1622,7 +1622,7 @@ Ext.define('Ext.panel.Date', {
             }
         },
 
-        togglePicker: function(visible) {
+        toggleYearPicker: function(visible) {
             var me = this,
                 picker = me.getYearPicker();
 

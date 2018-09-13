@@ -112,15 +112,16 @@ Ext.define('Ext.form.field.Checkbox', {
     stretchInputElFixed: false,
 
     /**
+     * @property {Ext.dom.Element} boxLabelEl
+     * A reference to the label element created for the {@link #boxLabel}. Only present if the component has been
+     * rendered and has a boxLabel configured.
+     */
+
+    /**
      * @cfg childEls
      * @inheritdoc
      */
     childEls: [
-        /**
-         * @property {Ext.dom.Element} boxLabelEl
-         * A reference to the label element created for the {@link #boxLabel}. Only present if the component has been
-         * rendered and has a boxLabel configured.
-         */
         'boxLabelEl',
         'innerWrapEl',
         'displayEl'

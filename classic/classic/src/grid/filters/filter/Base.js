@@ -146,8 +146,8 @@ Ext.define('Ext.grid.filters.filter.Base', {
 
     addStoreFilter: function (filter) {
         var filters = this.getGridStore().getFilters(),
-        idx = filters.indexOf(filter),
-        existing = idx !== -1 ? filters.getAt(idx) : null;
+            idx = filters.indexOf(filter),
+            existing = idx !== -1 ? filters.getAt(idx) : null;
 
         // If the filter being added doesn't exist in the collection we should add it.
         // But if there is a filter with the same id (indexOf tests for the same id), we should

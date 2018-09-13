@@ -202,7 +202,7 @@ Ext.define('Ext.route.Router', {
                         // is was matched but we should not execute the route again.
                         route
                             .execute(token, recognize)
-                            .then(null, Ext.bind(me.onRouteRejection, me, [route]));
+                            .then(null, Ext.bind(me.onRouteRejection, me, [route], 0));
                     }
 
                     Ext.Array.remove(unmatched, route);
@@ -229,13 +229,7 @@ Ext.define('Ext.route.Router', {
         length = unmatched.length;
 
         for (; i < length; i++) {
-            route = unmatched[i];
-
-
-             // Need to reset route's `lastToken` so that when a token
-             // is added to the document fragment it will not be falsely
-             // matched.
-            route.lastToken = null;
+            unmatched[i].onExit();
         }
     },
 
@@ -243,8 +237,12 @@ Ext.define('Ext.route.Router', {
      * @private
      * Called when a route was rejected.
      */
-    onRouteRejection: function (route) {
-        Ext.fireEvent('routereject', route);
+    onRouteRejection: function (route, error) {
+        Ext.fireEvent('routereject', route, error);
+
+        if (error) {
+            Ext.raise(error);
+        }
     },
 
     /**
@@ -256,11 +254,13 @@ Ext.define('Ext.route.Router', {
      * matched.
      * @param {Ext.Base} instance The class instance associated with the
      * {@link Ext.route.Route}
+     * @return {Ext.route.Handler} The handler that was added.
      */
     connect: function (url, config, instance) {
         var routes = this.routes,
+            delimiter = this.getMultipleToken(),
             name = config.name || url,
-            route, name;
+            handler, route;
 
         if (url[0] === '!') {
             //<debug>
@@ -279,40 +279,59 @@ Ext.define('Ext.route.Router', {
 
         if (Ext.isString(config)) {
             config = {
-                action: config,
-                scope: instance
+                action: config
             };
-        } else {
-            config.scope = instance;
         }
 
+        handler = Ext.route.Handler.fromRouteConfig(config, instance);
         route = routes[name];
 
         if (!route) {
-            route = routes[name] = new Ext.route.Route({
-                conditions: config.conditions || {},
-                name: name,
-                url: url
-            });
+            config.name = name;
+            config.url = url;
+
+            route = routes[name] = new Ext.route.Route(config);
         }
 
-        route.addHandler(config);
+        route.addHandler(handler);
+
+        if (handler.lazy) {
+            var currentHash = Ext.util.History.getToken(),
+                tokens = currentHash.split(delimiter),
+                length = tokens.length,
+                matched = [],
+                i, token;
+
+            for (i = 0; i < length; i++) {
+                token = tokens[i];
+
+                if (Ext.Array.indexOf(matched, token) === -1 && route.recognize(token)) {
+                    matched.push(token);
+                }
+            }
+
+            this.onStateChange(matched.join(delimiter));
+        }
+
+        return handler;
     },
 
     /**
      * Disconnects all route handlers for a class instance.
      *
      * @param {Ext.Base} instance The class instance to disconnect route handlers from.
-     * @param {Object} config An optional config object to match a handler for. This will check
-     * all route handlers connected to the instance for match based on the action and before
-     * configurations.
+     * @param {Object/Ext.route.Handler} [config]
+     * An optional config object to match a handler for. This will check all route
+     * handlers connected to the instance for match based on the action and before
+     * configurations. This can also be the actual {@link Ext.route.Handler handler}
+     * instance.
      */
     disconnect: function (instance, config) {
         var routes = this.routes,
             route, name;
 
         if (config) {
-            route = this.getByName(config.name || config.url);
+            route = config.route || this.getByName(config.name || config.url);
 
             if (route) {
                 route.removeHandler(instance, config);
@@ -398,7 +417,7 @@ Ext.define('Ext.route.Router', {
             route = routes[name];
 
             if (!token || route.recognize(token)) {
-                route.lastToken = null;
+                route.clearLastTokens();
             }
         }
     },

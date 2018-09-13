@@ -39,6 +39,9 @@ Ext.define('KitchenSink.view.dataview.MultiSort', {
         },
         neptune: {
             height: 620
+        },
+        graphite: {
+            height: 700
         }
     },
     //</example>

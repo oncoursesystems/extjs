@@ -394,13 +394,16 @@
     "modern": {
         "slicer": null,
         "requires": [
-            "package-loader"
+            "locale",
+            "package-loader",
+            "pivot-locale"
         ],
         "uses": [
             "kitchensink-google"
         ],
         "locales": [
-            "en"
+            "en",
+            "fr"
         ]
     },
 
@@ -436,6 +439,10 @@
         "aria": {
             "toolkit": "classic",
             "theme": "theme-aria"
+        },
+        "graphite": {
+            "toolkit": "classic",
+            "theme": "theme-graphite"
         },
         "modern-triton": {
             "toolkit": "modern",

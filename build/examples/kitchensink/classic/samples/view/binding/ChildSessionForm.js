@@ -15,13 +15,30 @@ Ext.define('KitchenSink.view.binding.ChildSessionForm', {
     title: 'Edit', // needed for bind/title - should fix setTitle
     //</example>
 
+    profiles: {
+        classic: {
+            height: 430,
+            removeWidth: 90,
+            idWidth: 50
+        },
+        neptune: {
+            height: 430,
+            removeWidth: 90,
+            idWidth: 50
+        },
+        graphite: {
+            height: 530,
+            removeWidth: 150,
+            idWidth: 80
+        }
+    },
     bind: {
         title: '{title}'
     },
     layout: 'fit',
     modal: true,
     width: 500,
-    height: 430,
+    height: '${height}',
     closable: true,
 
     items: {
@@ -62,7 +79,7 @@ Ext.define('KitchenSink.view.binding.ChildSessionForm', {
             columns: [{
                 text: 'Id',
                 dataIndex: 'id',
-                width: 50,
+                width: '${idWidth}',
                 renderer: 'renderOrderId'
             }, {
                 xtype: 'datecolumn',
@@ -76,7 +93,7 @@ Ext.define('KitchenSink.view.binding.ChildSessionForm', {
                 dataIndex: 'shipped'
             }, {
                xtype: 'widgetcolumn',
-                width: 90,
+                width: '${removeWidth}',
                 widget: {
                     xtype: 'button',
                     text: 'Remove',

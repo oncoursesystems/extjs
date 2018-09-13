@@ -68,6 +68,37 @@ topSuite("Ext.dataview.List", [
         });
     }
 
+    describe("constructor", function() {
+        it("should transform the data object into a store", function() {
+            makeList({
+                store: undefined,
+                data: [
+                { name: 'foo' },
+                { name: 'bar' }
+                ]
+            });
+
+            expect(list.getStore()).not.toBeNull();
+            expect(list.getStore().getAt(0).get('name')).toBe('foo');
+            expect(list.getStore().getAt(1).get('name')).toBe('bar');
+        });
+
+        it("should apply the store to the current selection model", function() {
+            makeList({
+                store: undefined,
+                data: [
+                { name: 'foo' },
+                { name: 'bar' }
+                ],
+                selectable: { 
+                    mode: 'multi'
+                }
+            });
+
+            expect(list.getSelectable().getStore()).not.toBeNull();
+        });
+    });
+
     describe("dataMap", function() {
         describe("at the root level", function() {
             beforeEach(function() {
@@ -288,6 +319,38 @@ topSuite("Ext.dataview.List", [
             expect(groupInfo.footers.indices).toEqual([0, 2]);
 
             expect(store.removeAll.bind(store)).not.toThrow();
+        });
+
+        it('should stay grouped when it is re-initialized with the grouped store', function() {
+            makeList({
+                store: {
+                    data: [
+                        { name: 'item1' },
+                        { name: 'item2' },
+                        { name: 'item6' },
+                        { name: 'item8' },
+                        { name: 'item2' },
+                        { name: 'item3' },
+                        { name: 'item1' },
+                        { name: 'item5' },
+                        { name: 'item1' },
+                        { name: 'item4' }
+                    ]
+                }
+            });
+            var store = list.getStore();
+
+            store.setGrouper('name');
+            expect(list.getGrouped()).toBeTruthy();
+
+            list = Ext.destroy(list);
+            makeList({
+                store: store
+            });
+
+            expect(list.getGrouped()).toBeTruthy();
+
+            expect(store.getGrouper()).not.toBeNull();
         });
     });
 
@@ -574,7 +637,7 @@ topSuite("Ext.dataview.List", [
                         list.hide();
                         store.insert(0, { id: 5, name: 'Item5' });
                         list.show();
-                    expectContent();
+                        expectContent();
                     });
                 });
 
@@ -714,8 +777,15 @@ topSuite("Ext.dataview.List", [
                                 store.loadData(makeData(100, 100));
                                 list.show();
                                 expect(scrollable.getPosition().y).toBe(pos);
-                                expect(list.mapToItem(store.first())).toBeNull();
-                                checkFilled();
+                                // Wait for it to resume the scroll position and update the rendered block
+                                // to remove the first record's item
+                                waitsFor(function() {
+                                    return list.mapToItem(store.first()) == null;
+                                });
+
+                                runs(function() {
+                                    checkFilled();
+                                });
                             });
                         });
                     });

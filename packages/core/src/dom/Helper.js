@@ -356,10 +356,9 @@ Ext.define('Ext.dom.Helper', function() {
         /**
          * Creates new DOM element(s) without inserting them to the document.
          * @param {Object/String} o The DOM object spec (and children) or raw HTML blob
-         * @param {HTMLElement} parentNode
          * @return {HTMLElement} The new un-inserted node
          */
-        createDom: function(o, parentNode){
+        createDom: function(o){
             var me = this,
                 markup = me.markup(o),
                 div = me.detachedDiv,

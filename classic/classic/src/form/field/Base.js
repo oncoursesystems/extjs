@@ -250,12 +250,29 @@ Ext.define('Ext.form.field.Base', {
      */
 
     /**
-     * @cfg {Boolean} validateOnBlur
+     * @cfg {Boolean} [validateOnBlur=true]
      * Whether the field should validate when it loses focus. This will cause fields to be validated
      * as the user steps through the fields in the form regardless of whether they are making changes to those fields
      * along the way. See also {@link #validateOnChange}.
      */
     validateOnBlur: true,
+    
+    /**
+     * @cfg {Boolean} [validateOnFocusLeave=false] Set to `true` to validate the field
+     * when focus leaves the field's component hierarchy entirely.
+     *
+     * The difference between  {@link #validateOnBlur} and this option is that the former
+     * will happen when field's _input element_ blurs. In complex fields such as ComboBox
+     * or Date focus may leave the input element to the drop-down picker, which will cause
+     * {@link #validateOnBlur} to happen prematurely.
+     *
+     * Using this option is recommended for accessible applications. The default value
+     * is `false` for backwards compatibility; this option and {@link #validateOnBlur}
+     * are mutually exclusive.
+     *
+     * @since 6.5.3
+     */
+    validateOnFocusLeave: false,
     
     /**
      * @cfg {String} formatText
@@ -272,7 +289,7 @@ Ext.define('Ext.form.field.Base', {
     /**
      * @private
      */
-    hasFocus : false,
+    hasFocus: false,
 
     /**
      * @cfg baseCls
@@ -305,6 +322,7 @@ Ext.define('Ext.form.field.Base', {
      * @inheritdoc
      */
     ariaEl: 'inputEl',
+    
     /**
      * @property focusEl
      * @inheritdoc
@@ -364,6 +382,12 @@ Ext.define('Ext.form.field.Base', {
         me.initLabelable();
         me.initField();
         me.initDefaultName();
+        
+        // validateOnBlur and validateOnFocusLeave are mutually exclusive,
+        // with latter taking precedence
+        if (me.validateOnFocusLeave) {
+            me.validateOnBlur = false;
+        }
 
         // Add to protoEl before render
         if (me.readOnly) {
@@ -566,6 +590,10 @@ Ext.define('Ext.form.field.Base', {
     },
 
     onFocusLeave: function(e) {
+        if (this.validateOnFocusLeave) {
+            this.validate();
+        }
+        
         this.callParent([e]);
         this.completeEdit();
     },

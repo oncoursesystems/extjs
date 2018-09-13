@@ -39,12 +39,6 @@ Ext.define('Ext.tree.View', {
     nodeAnimWrapCls: Ext.baseCSSPrefix + 'tree-animator-wrap',
 
     /**
-     * @property ariaRole
-     * @inheritdoc
-     */
-    ariaRole: 'treegrid',
-
-    /**
      * @cfg loadMask
      * @inheritdoc
      */

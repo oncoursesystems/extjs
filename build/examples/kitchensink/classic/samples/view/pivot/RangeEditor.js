@@ -30,17 +30,26 @@ Ext.define('KitchenSink.view.pivot.RangeEditor', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            totalColumnWidth: 100
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 400,
+            totalColumnWidth: 100
+        },
+        graphite: {
+            width: 780,
+            height: 600,
+            totalColumnWidth: 130
         }
     },
     //</example>
 
     title: 'Pivot Grid with RangeEditor plugin',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -62,7 +71,8 @@ Ext.define('KitchenSink.view.pivot.RangeEditor', {
         aggregate: [{
             dataIndex: 'value',
             header: 'Total',
-            aggregator: 'sum'
+            aggregator: 'sum',
+            width: '${totalColumnWidth}'
         }],
 
         // Configure the left axis dimensions that will be used to generate

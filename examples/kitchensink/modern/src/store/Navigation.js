@@ -488,7 +488,7 @@ Ext.define('KitchenSink.store.Navigation', {
             children: [
                 { id: 'nestedloading', text: 'Nested Loading', leaf: true },
                 { id: 'jsonp', text: 'JSONP', leaf: true },
-                { id: 'yql', text: 'YQL', leaf: true },
+                // { id: 'yql', text: 'YQL', leaf: true },
                 { id: 'ajax', text: 'Ajax', leaf: true }
             ]
         };
@@ -634,7 +634,9 @@ Ext.define('KitchenSink.store.Navigation', {
                          'its value in a circular form. The gauge is similar to a gauge chart ' +
                          'except that there is no axis.',
             children: [
-                { id: 'default-gauge', iconCls: 'icon-gauge-basic', text: 'Gauge', leaf: true }
+                { id: 'default-gauge', iconCls: 'icon-gauge-basic', text: 'Basic Gauge', leaf: true },
+                { id: 'needle-gauge', iconCls: 'icon-gauge-basic', text: 'Needle Gauge', leaf: true },
+                { id: 'custom-needle-gauge', iconCls: 'icon-gauge-basic', text: 'Custom Needle Gauge', leaf: true }
             ]
         };
     },
@@ -646,7 +648,10 @@ Ext.define('KitchenSink.store.Navigation', {
             description: '',
             children: [
                 { id: 'buttons-basic', iconCls: 'icon-buttons', text: 'Basic Buttons', leaf: true },
-                { id: 'buttons-extra', iconCls: 'icon-buttons', text: 'Extra Buttons', leaf: true }
+                { id: 'buttons-extra', iconCls: 'icon-buttons', text: 'Extra Buttons', leaf: true },
+                { id: 'buttons-split', iconCls: 'icon-buttons', text: 'Split Buttons', leaf: true },
+                { id: 'buttons-split-bottom', iconCls: 'icon-buttons', text: 'Split Bottom Buttons', leaf: true },
+                { id: 'buttons-segmented', iconCls: 'icon-buttons', text: 'Segmented Buttons', leaf: true }
             ]
         };
     },
@@ -691,6 +696,7 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'panel-headerposition', text: 'Header Position', leaf: true },
                 { id: 'panel-collapsible', text: 'Collapsible', leaf: true },
                 { id: 'panel-complex-collapsible', text: 'Complex Collapsible', leaf: true, compat: !Ext.platformTags.phone },
+                { id: 'panel-time', text: 'Time Panel', leaf: true },
                 { id: 'panel-date', text: 'Basic Date Panel', leaf: true },
                 { id: 'panel-date-adv', text: 'Advanced Date Panel', leaf: true, compat: !Ext.platformTags.phone }
             ]

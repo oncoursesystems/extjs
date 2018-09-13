@@ -19,6 +19,17 @@ Ext.define('KitchenSink.view.form.FileUploads', {
     }],
     //</example>
     
+    profiles: {
+        classic: {
+            labelWidth: 70
+        },
+        neptune: {
+            labelWidth: 70
+        },
+        graphite: {
+            labelWidth: 120
+        }
+    },
     width: 600,
     layout: {
         type: 'vbox',
@@ -88,7 +99,7 @@ Ext.define('KitchenSink.view.form.FileUploads', {
             anchor: '100%',
             allowBlank: false,
             msgTarget: 'side',
-            labelWidth: 50
+            labelWidth: 60
         },
 
         items: [{
@@ -122,7 +133,7 @@ Ext.define('KitchenSink.view.form.FileUploads', {
             anchor: '100%',
             allowBlank: false,
             msgTarget: 'side',
-            labelWidth: 70
+            labelWidth: '${labelWidth}'
         },
 
         items: [{

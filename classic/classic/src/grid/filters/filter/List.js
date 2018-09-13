@@ -252,11 +252,10 @@ Ext.define('Ext.grid.filters.filter.List', {
         //  3. (Re)loading the store
         //  4. Updating a model
         //
-        // Note we need to make sure it's not the empty store (if it is, the store is being bound to a VM).
         if (!me.store && !me.options) {
             gridStore = me.getGridStore();
 
-            if (me.value != null && me.active && !gridStore.isEmptyStore) {
+            if (me.value != null && me.active) {
                 me.gridStoreListeners = gridStore.on(Ext.apply({
                     scope: me,
                     destroyable: true

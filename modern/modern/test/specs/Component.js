@@ -1,4 +1,5 @@
-/* global Ext, expect */
+/* global Ext, expect, topSuite */
+/* eslint indent: off */
 
 topSuite("Ext.Component",
     ['Ext.Container', 'Ext.app.ViewModel', 'Ext.layout.HBox',
@@ -14,7 +15,6 @@ function() {
     afterEach(function() {
         component = Ext.destroy(component);
     });
-
 
     describe("userSelectable", function() {
         var userSelect,
@@ -32,7 +32,7 @@ function() {
                     return false;
                 }
             });
-            if (userSelect === '-moz-user-select') {
+            if (userSelect === '-moz-user-select' || userSelect === 'user-select') {
                 userSelectAuto = 'auto';
             }
             else if (userSelect === '-ms-user-select') {
@@ -89,6 +89,7 @@ function() {
 
             expect(component.el.getStyle(userSelect)).toBe(userSelectAuto);
         });
+
         it("should allow child component to override userSelectable of parent", function() {
             component = new Ext.Container({
                 userSelectable: true,
@@ -2294,8 +2295,13 @@ function() {
 
             makeSuite('maxHeight');
             makeSuite('maxWidth');
-            makeSuite('minHeight');
-            makeSuite('minWidth');
+
+            // IE has known issue with flex-basis: auto and containers with
+            // different types of sizing set (this case auto and minHeight/minWidth)
+            if (!Ext.isIE11) {
+                makeSuite('minHeight');
+                makeSuite('minWidth');
+            }
         });
     });
 

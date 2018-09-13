@@ -11,15 +11,34 @@ Ext.define('KitchenSink.view.grid.RowExpander', {
     xtype: 'row-expander-grid',
     store: 'Companies',
     title: 'Expander Rows to show extra data',
-
+    profiles: {
+        classic: {
+            width: 600,
+            pricechangeWidth: 100,
+            percentChangeColumnWidth: 100,
+            lastUpdatedColumnWidth: 100
+        },
+        neptune: {
+            width: 600,
+            pricechangeWidth: 100,
+            percentChangeColumnWidth: 100,
+            lastUpdatedColumnWidth: 100
+        },
+        graphite: {
+            width: 750,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 150          
+        }
+    },
     columns: [
         { text: "Company", flex: 1, dataIndex: 'name'},
-        { text: "Price", formatter: 'usMoney', dataIndex: 'price'},
-        { text: "Change", dataIndex: 'priceChange'},
-        { text: "% Change", dataIndex: 'priceChangePct'},
-        { text: "Last Updated", formatter: 'date("m/d/Y")', dataIndex: 'priceLastChange'}
+        { text: "Price", formatter: 'usMoney', dataIndex: 'price', width: 100},
+        { text: "Change", dataIndex: 'priceChange', width: '${pricechangeWidth}'},
+        { text: "% Change", dataIndex: 'priceChangePct', width: '${percentChangeColumnWidth}'},
+        { text: "Last Updated", formatter: 'date("m/d/Y")', dataIndex: 'priceLastChange', width: '${lastUpdatedColumnWidth}'}
     ],
-    width: 600,
+    width: '${width}',
     height: 300,
 
     //<example>

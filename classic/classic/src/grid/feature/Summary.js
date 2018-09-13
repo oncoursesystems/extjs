@@ -115,7 +115,7 @@ Ext.define('Ext.grid.feature.Summary', {
 
             if (!me.disabled && me.showSummaryRow && !view.addingRows && view.store.isLast(values.record)) {
                 if (bufferedRenderer && !me.dock) {
-                     bufferedRenderer.variableRowHeight = true;
+                    bufferedRenderer.variableRowHeight = true;
                 }
                 me.outputSummaryRecord((record && record.isModel) ? record : me.createSummaryRecord(view), values, out, parent);
             }
@@ -153,12 +153,15 @@ Ext.define('Ext.grid.feature.Summary', {
             view = me.view,
             dock = me.dock;
 
-        me.callParent(arguments);
+        me.callParent([grid]);
 
         if (dock) {
             grid.addBodyCls(me.panelBodyCls + dock);
             grid.headerCt.on({
                 add: me.onStoreUpdate,
+                // we need to fire onStoreUpdate afterlayout for docked items
+                // to re-run the renderSummaryRow on show/hide columns.
+                afterlayout: me.onStoreUpdate,
                 remove: me.onStoreUpdate,
                 scope: me
             });
@@ -192,6 +195,7 @@ Ext.define('Ext.grid.feature.Summary', {
                 afterrender: function() {
                     grid.getView().getScrollable().addPartner(me.summaryBar.getScrollable(), 'x');
                     me.onStoreUpdate();
+                    me.columnSizer = me.summaryBar.el;
                 },
                 single: true
             });
@@ -209,7 +213,7 @@ Ext.define('Ext.grid.feature.Summary', {
         grid.headerCt.on({
             afterlayout: me.afterHeaderCtLayout,
             scope: me
-        })
+        });
 
         grid.ownerGrid.on({
             beforereconfigure: me.onBeforeReconfigure,
@@ -244,7 +248,7 @@ Ext.define('Ext.grid.feature.Summary', {
     renderSummaryRow: function(values, out, parent) {
         var view = values.view,
             me = view.findFeature('summary'),
-            record, rows;
+            record;
 
         // If we get to here we won't be buffered
         if (!me.disabled && me.showSummaryRow && !view.addingRows && !view.updatingRows) {
@@ -328,7 +332,7 @@ Ext.define('Ext.grid.feature.Summary', {
                 id: view.id + '-summary-record'
             })),
             colCount = columns.length, i, column,
-            dataIndex, summaryValue, modelData;
+            dataIndex, summaryValue;
 
         // Set the summary field values
         summaryRecord.beginEdit();

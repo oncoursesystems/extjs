@@ -47,7 +47,9 @@ Ext.define('Ext.tab.Tab', {
         }, {
             reference: 'closeIconElement',
             cls: Ext.baseCSSPrefix + 'close-icon-el ' + Ext.baseCSSPrefix + 'font-icon ' + Ext.baseCSSPrefix + 'no-ripple' ,
-            onclick: 'return Ext.doEv(this, event);'
+            listeners: {
+                click: 'onClick'
+            }
         });
 
         return template;

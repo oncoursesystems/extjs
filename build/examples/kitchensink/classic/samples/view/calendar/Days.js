@@ -11,6 +11,18 @@ Ext.define('KitchenSink.view.calendar.Days', {
     width: 1000,
     height: 700,
 
+    profiles: {
+        classic: {
+            calendarWidth: 150
+        },
+        neptune: {
+            calendarWidth: 150
+        },
+        graphite: {
+            calendarWidth: 180
+        }
+    },
+
     viewModel: {
         data: {
             value: new Date()
@@ -39,7 +51,7 @@ Ext.define('KitchenSink.view.calendar.Days', {
         region: 'west',
         title: 'Calendars',
         ui: 'light',
-        width: 150,
+        width: '${calendarWidth}',
         bodyPadding: 5,
         collapsible: true,
         items: {

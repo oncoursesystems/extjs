@@ -253,11 +253,11 @@ Ext.define('Ext.tab.Panel', {
         }
     },
 
-    onItemAdd: function(card) {
+    onItemAdd: function (card, index) {
         var me = this;
 
         if (!card.isInnerItem()) {
-            return me.callParent(arguments);
+            return me.callParent([card, index]);
         }
 
         var tabBar = me.getTabBar(),
@@ -273,9 +273,9 @@ Ext.define('Ext.tab.Panel', {
             tabBadgeText = (card.getBadgeText) ? card.getBadgeText() : initialConfig.badgeText,
             innerItems = me.getInnerItems(),
             index = innerItems.indexOf(card),
-            tabs = tabBar.getItems(),
+            tabs = tabBar.query('> tab'),
             activeTab = tabBar.getActiveTab(),
-            currentTabInstance = (tabs.length >= innerItems.length) && tabs.getAt(index),
+            currentTabInstance = (tabs.length >= innerItems.length) && tabs[index],
             header = card.getConfig('header', false, true),
             tabInstance;
 
@@ -334,10 +334,10 @@ Ext.define('Ext.tab.Panel', {
             header.setHidden(true);
         }
 
-        me.callParent(arguments);
+        me.callParent([card, index]);
 
         if (!activeTab && activeTab !== 0) {
-            tabBar.setActiveTab(tabBar.getActiveItem());
+            tabBar.setActiveTab(tabInstance);
         }
     },
 

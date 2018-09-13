@@ -27,18 +27,29 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
             height: 300,
             indoorWidth: 55,
             priceWidth: 70,
-            availableWidth: 95
+            availableWidth: 95,
+            lightWidth: 130
         },
         neptune: {
             width: 680,
             height: 350,
             indoorWidth: 90,
             priceWidth: 70,
-            availableWidth: 95
+            availableWidth: 95,
+            lightWidth: 130
+        },
+        graphite: {
+            width: 800,
+            height: 600,
+            indoorWidth: 150,
+            priceWidth: 110,
+            availableWidth: 150,
+            lightWidth: 150
         },
         'neptune-touch': {
             priceWidth: 115,
-            availableWidth: 120
+            availableWidth: 120,
+            lightWidth: 130
         }
     },
     //</example>
@@ -109,7 +120,7 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
         header: 'Light',
         dataIndex: 'light',
 
-        width: 130,
+        width: '${lightWidth}',
         editor: {
             xtype: 'combo',
             typeAhead: true,

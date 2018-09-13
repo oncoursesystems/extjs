@@ -439,8 +439,9 @@ Ext.define('Ext.form.field.Picker', {
 
     privates: {
         onGlobalScroll: function (scroller) {
+            var scrollEl = scroller.getElement();
             // Collapse if the scroll is anywhere but inside the picker
-            if (!this.picker.owns(scroller.getElement())) {
+            if (!this.picker.owns(scrollEl) && scrollEl.isAncestor(this.el)) {
                 this.collapse();
             }
         }

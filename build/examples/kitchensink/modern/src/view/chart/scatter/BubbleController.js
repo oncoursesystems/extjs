@@ -8,13 +8,14 @@ Ext.define('KitchenSink.view.chart.scatter.BubbleController', {
 
     seed: 1.3,
 
-    init: function () {
+    init: function (view) {
+        this.callParent([view]);
         this.onRefresh();
     },
 
     random: function () {
         this.seed *= 7.3;
-        this.seed -= Math.floor(this.seed)
+        this.seed -= Math.floor(this.seed);
 
         return this.seed;
     },

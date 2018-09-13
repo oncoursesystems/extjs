@@ -58,6 +58,7 @@ Ext.define('Ext.grid.column.Action', {
 
     requires: [
         'Ext.grid.column.ActionProxy',
+        'Ext.util.Format',
         'Ext.Glyph'
     ],
 
@@ -118,7 +119,7 @@ Ext.define('Ext.grid.column.Action', {
      * any possible floating window (like a message box) raised in the handler. This will prevent closing the
      * window when pressing the Escape button since it will no longer contain a focused component.
      */
-     stopSelection: true,
+    stopSelection: true,
     /**
      * @cfg {Function} getClass
      * A function which returns the CSS class to apply to the icon image.
@@ -502,7 +503,7 @@ Ext.define('Ext.grid.column.Action', {
                 (disabled ? me.disabledCls + ' ' : ' ') +
                 (item.hidden ? Ext.baseCSSPrefix + 'hidden-display ' : '') +
                 (item.getClass ? Ext.callback(item.getClass, item.scope || me.origScope, arguments, undefined, me) : (item.iconCls || me.iconCls || '')) + '"' +
-                (tooltip ? ' data-qtip="' + tooltip + '"' : '') + (icon ? '/>' : glyph ? (' style="font-family:' + glyph.fontFamily + '">' + glyph.character + '</div>') : '></div>');
+                (tooltip ? ' data-qtip="' + Ext.util.Format.htmlEncode(tooltip) + '"' : '') + (icon ? '/>' : glyph ? (' style="font-family:' + glyph.fontFamily + '">' + glyph.character + '</div>') : '></div>');
         }
         
         return ret;

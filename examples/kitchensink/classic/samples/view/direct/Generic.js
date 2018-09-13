@@ -36,8 +36,23 @@ Ext.define('KitchenSink.view.direct.Generic', {
     //</example>
     
     title: 'Remote Call Log',
-    width: 600,
+    width: '${width}',
     height: 300,
+
+    profiles: {
+        classic: {
+            width: 600,
+            fieldWidth: 90
+        },
+        neptune: {
+            width: 600,
+            fieldWidth: 90
+        },
+        graphite: {
+            width: 660,
+            fieldWidth: 120
+        }
+    },
     
     scrollable: true,
     bodyPadding: 5,
@@ -94,7 +109,7 @@ Ext.define('KitchenSink.view.direct.Generic', {
             xtype: 'textfield',
             reference: 'fieldMultiply',
             hideLabel: true,
-            width: 90,
+            width: '${fieldWidth}',
             directAction: 'doMultiply',
             emptyText: 'Multiply x 8',
             listeners: {

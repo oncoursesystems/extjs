@@ -23,6 +23,30 @@ function() {
             return this;
         };
 
+    function dragStart(el) {
+        var box = el.getBox(),
+            startX = box.left + 1,
+            startY = box.top + 1;
+        jasmine.fireMouseEvent(el, 'mouseover', startX, startY);
+        jasmine.fireMouseEvent(el, 'mousedown', startX, startY);
+    }
+
+    function dragMove(toEl) {
+        var box = toEl.getBox(),
+            toX = box.left + 1,
+            toY = box.top + 1;
+
+        jasmine.fireMouseEvent(toEl, 'mousemove', toX, toY);
+    }
+
+    function dragEnd(toEl) {
+        var box = toEl.getBox(),
+            toX = box.left + 1,
+            toY = box.top + 1;
+
+        jasmine.fireMouseEvent(toEl, 'mouseup', toX, toY);
+    }
+
     function triggerCellMouseEvent(type, rowIdx, cellIdx, button, x, y) {
         var target = findCell(rowIdx, cellIdx);
         jasmine.fireMouseEvent(target, type, x, y, button);
@@ -375,9 +399,8 @@ function() {
             // Extender handle must be visible
             expect(selModel.getExtensible().handle.isVisible()).toBe(true);
 
-            jasmine.fireMouseEvent(colRef[1].el.dom, 'click');
-
-            // Should have deselected all cells
+            // Ctrl click should deselect the column
+            jasmine.fireMouseEvent(colRef[1].el.dom, 'click', null, null, null, null, true);
             expect(view.el.query('.' + view.selectedCls).length).toBe(0);
 
             // Extender handle must be hidden
@@ -629,6 +652,214 @@ function() {
             expect(sel.startCell.columnIndex).toBe(1);
             expect(sel.endCell.recordIndex).toBe(4);
             expect(sel.endCell.columnIndex).toBe(3);
+        });
+    });
+
+    smDescribe("resuming selection with SHIFT", function () {
+        describe("expanding selection", function() {
+            describe("cellSelect", function() {
+                beforeEach(function() {
+                    makeGrid(null, null, {
+                        cells: true,
+                        rows: false,
+                        columns: false
+                    });
+                });
+
+                itNotTouch("should allow SHIFT select once you already have items selected", function() {
+                    var c1 = findCell(1, 1),
+                        c2 = findCell(2, 3),
+                        c3 = findCell(4, 3),
+                        sel;
+
+                    jasmine.fireMouseEvent(c1, 'click');
+                    Ext.testHelper.tap(c2, {shiftKey: true});
+
+                    // Restarting selection pressing shift
+                    jasmine.fireMouseEvent(c2, 'mousedown', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c2, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c3, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c3, 'mouseup', null, null, null, true); // SHIFT
+                    
+                    sel = selModel.getSelection();
+
+                    expect(sel.isCells).toBe(true);
+                    expect(sel.startCell.recordIndex).toBe(1);
+                    expect(sel.startCell.columnIndex).toBe(1);
+                    expect(sel.endCell.recordIndex).toBe(4);
+                    expect(sel.endCell.columnIndex).toBe(3);
+                });
+            });
+
+            describe("rowSelect", function() {
+                beforeEach(function() {
+                    makeGrid(null, null, {
+                        cells: false,
+                        rows: true,
+                        columns: false
+                    });
+                });
+
+                itNotTouch("should allow SHIFT select once you already have items selected", function() {
+                    var c1 = findCell(2, 1),
+                        c2 = findCell(4, 1),
+                        c3 = findCell(6, 1),
+                        sel;
+
+                    jasmine.fireMouseEvent(c1, 'click');
+                    Ext.testHelper.tap(c2, {shiftKey: true});
+
+                    // Restarting selection pressing shift
+                    jasmine.fireMouseEvent(c2, 'mousedown', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c2, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c3, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c3, 'mouseup', null, null, null, true); // SHIFT
+                    
+                    sel = selModel.getSelection();
+
+                    expect(sel.isRows).toBe(true);
+
+                    expect(sel.dragRange[0]).toBe(2);
+                    expect(sel.dragRange[1]).toBe(6);
+                    expect(sel.getSelected().length).toBe(5);
+                });
+            });
+
+            describe("columnSelect", function() {
+                beforeEach(function() {
+                    makeGrid(null, null, {
+                        cells: false,
+                        rows: false,
+                        columns: true
+                    });
+                });
+
+                itNotTouch("should allow SHIFT select once you already have items selected", function() {
+                    var c1 = findCell(1, 1),
+                        c2 = findCell(1, 2),
+                        c3 = findCell(1, 4),
+                        sel;
+
+                    jasmine.fireMouseEvent(c1, 'click');
+                    Ext.testHelper.tap(c2, {shiftKey: true});
+
+                    // Restarting selection pressing shift
+                    jasmine.fireMouseEvent(c2, 'mousedown', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c2, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c3, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c3, 'mouseup', null, null, null, true); // SHIFT
+                    
+                    sel = selModel.getSelection();
+
+                    expect(sel.isColumns).toBe(true);
+
+                    expect(sel.startColumn).toBe(colRef[1]);
+                    expect(sel.selectedColumns.length).toBe(4);
+                });
+            });
+        });
+
+        describe("reducing selection", function() {
+            describe("cellSelect", function() {
+                beforeEach(function() {
+                    makeGrid(null, null, {
+                        cells: true,
+                        rows: false,
+                        columns: false
+                    });
+                });
+
+                itNotTouch("should allow SHIFT select once you already have items selected", function() {
+                    var c1 = findCell(0, 1),
+                        c2 = findCell(1, 3),
+                        c3 = findCell(4, 3),
+                        sel;
+
+                    jasmine.fireMouseEvent(c1, 'click');
+                    Ext.testHelper.tap(c3, {shiftKey: true});
+
+                    // Restarting selection pressing shift
+                    jasmine.fireMouseEvent(c3, 'mousedown', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c3, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c2, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c2, 'mouseup', null, null, null, true); // SHIFT
+                    
+                    sel = selModel.getSelection();
+
+                    expect(sel.isCells).toBe(true);
+                    expect(sel.startCell.recordIndex).toBe(0);
+                    expect(sel.startCell.columnIndex).toBe(1);
+                    expect(sel.endCell.recordIndex).toBe(1);
+                    expect(sel.endCell.columnIndex).toBe(3);
+                });
+            });
+
+            describe("rowSelect", function() {
+                beforeEach(function() {
+                    makeGrid(null, null, {
+                        cells: false,
+                        rows: true,
+                        columns: false
+                    });
+                });
+
+                itNotTouch("should allow SHIFT select once you already have items selected", function() {
+                    var c1 = findCell(2, 1),
+                        c2 = findCell(4, 1),
+                        c3 = findCell(6, 1),
+                        sel;
+
+                    jasmine.fireMouseEvent(c1, 'click');
+                    Ext.testHelper.tap(c3, {shiftKey: true});
+
+                    // Restarting selection pressing shift
+                    jasmine.fireMouseEvent(c3, 'mousedown', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c3, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c2, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c2, 'mouseup', null, null, null, true); // SHIFT
+                    
+                    sel = selModel.getSelection();
+
+                    expect(sel.isRows).toBe(true);
+
+                    expect(sel.dragRange[0]).toBe(2);
+                    expect(sel.dragRange[1]).toBe(4);
+                    expect(sel.getSelected().length).toBe(3);
+                });
+            });
+
+            describe("columnSelect", function() {
+                beforeEach(function() {
+                    makeGrid(null, null, {
+                        cells: false,
+                        rows: false,
+                        columns: true
+                    });
+                });
+
+                itNotTouch("should allow SHIFT select once you already have items selected", function() {
+                    var c1 = findCell(1, 1),
+                        c2 = findCell(1, 2),
+                        c3 = findCell(1, 4),
+                        sel;
+
+                    jasmine.fireMouseEvent(c1, 'click');
+                    Ext.testHelper.tap(c3, {shiftKey: true});
+
+                    // Restarting selection pressing shift
+                    jasmine.fireMouseEvent(c3, 'mousedown', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c3, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c2, 'mousemove', null, null, null, true); // SHIFT
+                    jasmine.fireMouseEvent(c2, 'mouseup', null, null, null, true); // SHIFT
+                    
+                    sel = selModel.getSelection();
+
+                    expect(sel.isColumns).toBe(true);
+
+                    expect(sel.startColumn).toBe(colRef[1]);
+                    expect(sel.selectedColumns.length).toBe(2);
+                });
+            });
         });
     });
 
@@ -1775,10 +2006,11 @@ function() {
 
             // Should have selected all cells under column 1, 2, 3 and 4
             expect(view.el.query('.'+view.selectedCls).length).toBe(
-                    view.el.query(colRef[1].cellSelector).length +
-                    view.el.query(colRef[2].cellSelector).length +
-                    view.el.query(colRef[3].cellSelector).length +
-                    view.el.query(colRef[4].cellSelector).length);
+                view.el.query(colRef[1].cellSelector).length +
+                view.el.query(colRef[2].cellSelector).length +
+                view.el.query(colRef[3].cellSelector).length +
+                view.el.query(colRef[4].cellSelector).length
+            );
 
             // All four columns should be selected
             expect(isColumnSelected(1)).toBe(true);
@@ -1802,6 +2034,23 @@ function() {
 
             expect(document.body.querySelectorAll(Ext.baseCSSPrefix + 'ssm-extender-drag-handle').length).toBe(0);
             expect(selModel.getExtensible()).toBeUndefined();
+        });
+    });
+
+    describe("reducible", function() {
+        it("should allow to disable reducible", function() {
+            makeGrid(null, {
+                plugins: 'selectionreplicator'
+            }, {
+                extensible: true,
+            }, {
+                numeric: true
+            });
+
+            jasmine.fireMouseEvent(findCell(1, 0), 'click');
+            expect(selModel.getExtensible().allowReduceSelection).toBe(true);
+            selModel.setReducible(false);
+            expect(selModel.getExtensible().allowReduceSelection).toBe(false);
         });
     });
 
@@ -1859,15 +2108,82 @@ function() {
                 expect(have).toBeWithin(2, handleX + 100);
             });
         });
+
+        itNotTouch("should extend the selection when moving the handle", function() {
+            var initialCell = Ext.get(findCell(1, 1));
+            jasmine.fireMouseEvent(initialCell, 'click');
+
+            waitsForSpy(focusEnterSpy);
+
+            runs(function() {
+                var handle = selModel.getExtensible().handle,
+                    toCell = Ext.get(findCell(3, 1));
+
+                dragStart(handle);
+                dragMove(toCell);
+                dragEnd(toCell);
+
+                expect(isCellSelected(1,1) && isCellSelected(2,1) && isCellSelected(3,1)).toBe(true);
+            });
+        });
+
+        itNotTouch("should reduce the selection when moving the handle", function() {
+            jasmine.fireMouseEvent(findCell(1, 1), 'click');
+
+            waitsForSpy(focusEnterSpy);
+
+            runs(function() {
+                var handle = selModel.getExtensible().handle,
+                    initialCell = Ext.get(findCell(1, 1)),
+                    endCell = Ext.get(findCell(3, 1));
+
+                dragStart(handle);
+                dragMove(endCell);
+                dragEnd(endCell);
+
+                dragStart(handle);
+                dragMove(initialCell);
+                dragEnd(initialCell);
+
+                expect(isCellSelected(1,1)).toBe(true);
+                expect(isCellSelected(2,1) && isCellSelected(3,1)).toBe(false);
+            });
+        });
+
+        itNotTouch("should not reduce the selection if when moving the handle if reducible is false", function() {
+            jasmine.fireMouseEvent(findCell(1, 1), 'click');
+
+            waitsForSpy(focusEnterSpy);
+
+            runs(function(){
+                var handle = selModel.getExtensible().handle,
+                    initialCell = Ext.get(findCell(1, 1)),
+                    endCell = Ext.get(findCell(3, 1));
+
+                selModel.setReducible(false);
+
+                dragStart(handle);
+                dragMove(endCell);
+                dragEnd(endCell);
+
+                expect(isCellSelected(2,1) && isCellSelected(3,1)).toBe(true);
+
+                dragStart(handle);
+                dragMove(initialCell);
+                dragEnd(initialCell);
+
+                expect(isCellSelected(2,1) && isCellSelected(3,1)).toBe(true);
+            });
+        });
         
         it('should hide the replicator when cell has been deselected', function () {
-           jasmine.fireMouseEvent(findCell(1, 1), 'click');
+            jasmine.fireMouseEvent(findCell(1, 1), 'click');
 
-           waitsForSpy(focusEnterSpy);
-           runs(function () {
-               selModel.deselectAll();
-               expect(selModel.getExtensible().handle.isVisible()).toBe(false);
-           });
+            waitsForSpy(focusEnterSpy);
+            runs(function () {
+                selModel.deselectAll();
+                expect(selModel.getExtensible().handle.isVisible()).toBe(false);
+            });
            
         });
     

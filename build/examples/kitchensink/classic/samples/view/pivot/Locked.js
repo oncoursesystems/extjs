@@ -27,17 +27,29 @@ Ext.define('KitchenSink.view.pivot.Locked', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            totalColumnWidth: 90,
+            companyColumnWidth: 80
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 350,
+            totalColumnWidth: 90,
+            companyColumnWidth: 80
+        },
+        graphite: {
+            width: 750,
+            height: 600,
+            totalColumnWidth: 130,
+            companyColumnWidth: 110
         }
     },
     //</example>
 
     title: 'Locked pivot',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -66,7 +78,7 @@ Ext.define('KitchenSink.view.pivot.Locked', {
             dataIndex: 'value',
             header: 'Total',
             aggregator: 'sum',
-            width: 90
+            width: '${totalColumnWidth}'
         }],
 
         // Configure the left axis dimensions that will be used to generate
@@ -79,7 +91,7 @@ Ext.define('KitchenSink.view.pivot.Locked', {
             dataIndex: 'company',
             header: 'Company',
             sortable: false,
-            width: 80
+            width: '${companyColumnWidth}'
         }],
 
         /**

@@ -799,6 +799,7 @@ topSuite("Ext.event.publisher.Gesture", function() {
             expect(tap).not.toHaveBeenCalled();
         });
 
+        TODO(Ext.isIE8).
         it("should cancel gesture recognition when stopPropagation is called on the move event", function () {
             var dragstart = jasmine.createSpy(),
                 drag = jasmine.createSpy(),
@@ -837,6 +838,7 @@ topSuite("Ext.event.publisher.Gesture", function() {
             expect(dragend.callCount).toBe(0);
         });
 
+        TODO(Ext.isIE8).
         it("should cancel gesture recognition when stopPropagation is called on the end event", function () {
             var dragstart = jasmine.createSpy(),
                 drag = jasmine.createSpy(),

@@ -29,9 +29,22 @@ Ext.define('KitchenSink.view.charts.financial.OHLC', {
         path: 'classic/samples/store/StockPrice.js'
     }],
     // </example>
+    profiles: {
+        classic: {
+            width: 650,
+            itemWidth: 270
+        },
+        neptune: {
+            width: 650,
+            itemWidth: 270
+        },
+        graphite: {
+            width: 800,
+            itemWidth: 400
+        }
+    },
     layout: 'fit',
-    width: 650,
-
+    width:' ${width}',
     tbar: [
         '->',
         {
@@ -40,7 +53,7 @@ Ext.define('KitchenSink.view.charts.financial.OHLC', {
         },
         {
             xtype: 'segmentedbutton',
-            width: 270,
+            width: '${itemWidth}',
             defaults: {
                 ui: 'default-toolbar'
             },
@@ -65,7 +78,6 @@ Ext.define('KitchenSink.view.charts.financial.OHLC', {
             handler: 'onPanZoomReset'
         }
     ],
-
     items: [{
         xtype: 'cartesian',
         reference: 'chart',

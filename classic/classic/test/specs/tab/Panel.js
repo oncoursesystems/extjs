@@ -1491,7 +1491,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
         it('should add to the number of tabs', function () {
             createPanel();
             tabPanel.loader.load();
-            mockComplete("[{title: 'Tab 3'}, {title: 'Tab 4'}]");
+            mockComplete('[{"title": "Tab 3"}, {"title": "Tab 4"}]');
             expect(tabPanel.tabBar.items.length).toEqual(4);
         });
 
@@ -1502,7 +1502,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     spyOn(tabPanel, 'setActiveTab');
 
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 3'}, {title: 'Tab 4'}]");
+                    mockComplete('[{"title": "Tab 3"}, {"title": "Tab 4"}]');
 
                     expect(tabPanel.setActiveTab).not.toHaveBeenCalled();
                 });
@@ -1514,7 +1514,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     spyOn(tabPanel, 'setActiveTab');
 
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 3'}, {title: 'Tab 4'}]");
+                    mockComplete('[{"title": "Tab 3"}, {"title": "Tab 4"}]');
 
                     expect(tabPanel.setActiveTab).not.toHaveBeenCalled();
                 });
@@ -1529,7 +1529,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     spyOn(tabPanel, 'setActiveTab');
 
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 1'}, {title: 'Tab 2'}]");
+                    mockComplete('[{"title": "Tab 1"}, {"title": "Tab 2"}]');
 
                     expect(tabPanel.tabBar.items.length).toEqual(2);
                     expect(tabPanel.setActiveTab).toHaveBeenCalled();
@@ -1543,7 +1543,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     spyOn(tabPanel, 'setActiveTab');
 
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 3'}, {title: 'Tab 4'}]");
+                    mockComplete('[{"title": "Tab 3"}, {"title": "Tab 4"}]');
 
                     expect(tabPanel.setActiveTab).not.toHaveBeenCalled();
                 });
@@ -1563,19 +1563,19 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     expect(tabPanel.getActiveTab()).not.toBeNull();
 
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 1'}, {title: 'Tab 2'}]");
+                    mockComplete('[{"title": "Tab 1"}, {"title": "Tab 2"}]');
                 });
 
                 it('should set the activeTab as undefined', function () {
                     expect(tabPanel.getActiveTab()).toBeUndefined();
 
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 1'}, {title: 'Tab 2'}]");
+                    mockComplete('[{"title": "Tab 1"}, {"title": "Tab 2"}]');
                 });
 
                 it('should set a default tab as active when load returns', function () {
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 1'}, {title: 'Tab 2'}]");
+                    mockComplete('[{"title": "Tab 1"}, {"title": "Tab 2"}]');
 
                     expect(tabPanel.getActiveTab()).toBeDefined();
                 });
@@ -1589,7 +1589,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 });
 
                 tabPanel.loader.load();
-                mockComplete("[{title: 'Tab 3'}, {title: 'Tab 4'}]");
+                mockComplete('[{"title": "Tab 3"}, {"title": "Tab 4"}]');
 
                 //expect(tabPanel.layout.getActiveItem()).toBe(null);
                 expect(tabPanel.layout.getActiveItem() === null).toBe(true);
@@ -1602,7 +1602,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 });
 
                 tabPanel.loader.load();
-                mockComplete("[{title: 'Tab 1'}, {title: 'Tab 2'}]");
+                mockComplete('[{"title": "Tab 1"}, {"title": "Tab 2"}]');
 
                 expect(tabPanel.layout.getActiveItem() === null).toBe(true);
             });
@@ -1624,7 +1624,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     }, this);
 
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 3'}, {title: 'Tab 4'}]");
+                    mockComplete('[{"title": "Tab 3"}, {"title": "Tab 4"}]');
 
                     expect(called).toBe(false);
                 });
@@ -1639,7 +1639,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     }, this);
 
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 3'}, {title: 'Tab 4'}]");
+                    mockComplete('[{"title": "Tab 3"}, {"title": "Tab 4"}]');
 
                     expect(called).toBe(false);
                 });
@@ -1656,7 +1656,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     }, this);
 
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 1'}, {title: 'Tab 2'}]");
+                    mockComplete('[{"title": "Tab 1"}, {"title": "Tab 2"}]');
 
                     expect(tabPanel.tabBar.items.length).toEqual(2);
                     expect(called).toBe(true);
@@ -1673,7 +1673,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     }, this);
 
                     tabPanel.loader.load();
-                    mockComplete("[{title: 'Tab 3'}, {title: 'Tab 4'}]");
+                    mockComplete('[{"title": "Tab 3"}, {"title": "Tab 4"}]');
 
                     expect(called).toBe(false);
                 });

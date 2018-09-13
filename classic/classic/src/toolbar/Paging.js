@@ -276,6 +276,8 @@ Ext.define('Ext.toolbar.Paging', {
      * @inheritdoc
      */
     defaultBindProperty: 'store',
+    
+    _pagingToolbarCls: Ext.baseCSSPrefix + 'grid-paging-toolbar',
 
     /**
      * Gets the standard paging items in the toolbar
@@ -399,6 +401,12 @@ Ext.define('Ext.toolbar.Paging', {
         this.callParent(arguments);
 
         this.updateBarInfo();
+    },
+    
+    afterRender: function() {
+        this.callParent();
+        
+        this.el.addCls(this._pagingToolbarCls);
     },
 
     onAdded: function (owner) {

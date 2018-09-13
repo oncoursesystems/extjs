@@ -995,29 +995,55 @@ Ext.define('Ext.mixin.Focusable', {
 }, function() {
     var keyboardModeCls = Ext.baseCSSPrefix + 'keyboard-mode',
         keyboardMode = false;
-
+    
+    /**
+     * @cfg {Boolean} enableKeyboardMode
+     * When set to `true`, focus styling will be applied to focused elements based on the
+     * user interaction mode: when keyboard was used to focus an element, focus styling
+     * will be visible but not when element was focused otherwise (e.g. with mouse, touch,
+     * or programmatically). The {@link #keyboardMode} property will then reflect the last
+     * user interaction mode.
+     * Setting this option to `false` disables keyboard mode tracking and results in focus
+     * styling always being applied to focused elements, which is pre-Ext JS 6.5 behavior.
+     *
+     * Defaults to `false` in desktop environments, `true` on mobile devices.
+     * @member Ext
+     * @bindable
+     * @since 6.6.0
+     */
+    Ext.enableKeyboardMode = Ext.isModern || !Ext.os.is.Desktop;
+    
     /**
      * @property {Boolean} keyboardMode
      * @member Ext
      * A flag which indicates that the last UI interaction from the user was a keyboard gesture
+     * @since 6.5.0
      */
 
     /**
      * @property {Boolean} touchMode
      * @member Ext
      * A flag which indicates that the last UI interaction from the user was a touch gesture
+     * @since 6.5.0
      */
 
     Ext.setKeyboardMode = Ext.setKeyboardMode || function (keyboardMode) {
         Ext.keyboardMode = keyboardMode;
         Ext.getBody().toggleCls(keyboardModeCls, keyboardMode);
     };
-
+    
     Ext.isTouchMode = function () {
         return (Ext.now() - Ext.lastTouchTime) < 500;
     };
 
-    function syncKeyboardMode(e) {
+    /**
+     * @private
+     */
+    Ext.syncKeyboardMode = function(e) {
+        if (!Ext.enableKeyboardMode) {
+            return;
+        }
+        
         var type = e.type;
 
         if (type === 'pointermove') {
@@ -1026,26 +1052,52 @@ Ext.define('Ext.mixin.Focusable', {
             // occurs or the focus changes.  This accomodates menus which change focus
             // based on mouseenter of a menu item
             keyboardMode = false;
-        } else {
+        }
+        else {
             keyboardMode = (type === 'keydown');
             Ext.lastTouchTime = e.pointerType === 'touch' && Ext.now();
             Ext.setKeyboardMode(keyboardMode);
         }
+    };
+    
+    function keyboardModeFocusHandler() {
+        // NOT Ext.keyboardMode here; closing over variable local to class callback fn
+        if (keyboardMode !== Ext.getBody().hasCls(keyboardModeCls)) {
+            Ext.setKeyboardMode(keyboardMode);
+        }
     }
+    
+    Ext.getEnableKeyboardMode = function() {
+        return Ext.enableKeyboardMode;
+    };
 
-    Ext.onReady(function() {
-        Ext.getWin().on({
-            pointerdown: syncKeyboardMode,
-            pointermove: syncKeyboardMode,
-            keydown: syncKeyboardMode,
+    Ext.setEnableKeyboardMode = function(enable) {
+        var listeners = {
+            pointerdown: Ext.syncKeyboardMode,
+            pointermove: Ext.syncKeyboardMode,
+            keydown: Ext.syncKeyboardMode,
             capture: true,
             delegated: false
-        });
+        };
 
-        Ext.on('focus', function() {
-            if (keyboardMode !== Ext.getBody().hasCls(keyboardModeCls)) {
-                Ext.setKeyboardMode(keyboardMode);
-            }
-        });
+        Ext.enableKeyboardMode = !!enable;
+
+        if (Ext.enableKeyboardMode) {
+            Ext.getWin().on(listeners);
+            Ext.on('focus', keyboardModeFocusHandler);
+        }
+        else {
+            Ext.getWin().un(listeners);
+            Ext.un('focus', keyboardModeFocusHandler);
+        }
+    };
+
+    Ext.onReady(function() {
+        // Add the CSS class once upfront if enableKeyboardMode is disabled
+        if (!Ext.enableKeyboardMode) {
+            Ext.getBody().addCls(keyboardModeCls);
+        }
+
+        Ext.setEnableKeyboardMode(Ext.enableKeyboardMode);
     });
 });

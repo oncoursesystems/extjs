@@ -19,9 +19,21 @@ Ext.define('KitchenSink.view.enterprise.AmfGrid', {
         type: 'Data',
         path: 'data/enterprise/amf0-pangrams.amf'
     }],
+
+    profiles: {
+        classic: {
+            height: 200
+        },
+        neptune: {
+            height: 200
+        },
+        graphite: {
+            height: 400
+        }
+    },
     //</example>
     defaults: {
-        height: 200,
+        height: '${height}',
         width: 600
     },
 

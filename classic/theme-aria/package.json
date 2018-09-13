@@ -1,6 +1,10 @@
 {
-    "name": "@extjs/ext-react-classic-theme-aria",
-    "version": "6.5.2.463",
+    "name": "@extjs/ext-classic-theme-aria",
+    "ext-react-name": "@extjs/ext-react-classic-theme-aria",
+    "ext-name": "@extjs/ext-classic-theme-aria",
+    "SenchaExtName": "@sencha/ext-classic-theme-aria",
+    "SenchaExtReactName": "@sencha/ext-react-classic-theme-aria",
+    "version": "6.6.0.258",
     "sencha": {
         "name": "theme-aria",
         "namespace": "Ext",
@@ -14,7 +18,7 @@
         "creator": "Sencha",
         "summary": "Ext JS Aria Theme",
         "detailedDescription": "A high-contrast accessibility theme based on Neptune",
-        "version": "6.5.2.463",
+        "version": "6.6.0.258",
         "compatVersion": "6.0.0",
         "format": "1",
         "output": "${workspace.subpkg.prefix}/${package.name}",

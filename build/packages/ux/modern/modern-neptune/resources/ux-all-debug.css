@@ -1,17 +1,17 @@
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/Gauge.scss:1 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/gauge/Gauge.scss:1 */
 .x-gauge svg {
     display: block;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/Gauge.scss:6 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/gauge/Gauge.scss:6 */
 .x-gauge-text {
     position: absolute;
     text-align: center;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/var/Gauge.scss:28 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/var/gauge/Gauge.scss:39 */
 .x-gauge svg {
     display: block;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/var/Gauge.scss:31 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/var/gauge/Gauge.scss:42 */
 .x-gauge .x-gauge-track {
     fill: #f0f0f0;
     fill-opacity: 1;
@@ -19,7 +19,7 @@
     stroke-opacity: 1;
     stroke-width: 1;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/var/Gauge.scss:39 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/var/gauge/Gauge.scss:50 */
 .x-gauge .x-gauge-value {
     fill: #157fcc;
     fill-opacity: 1;
@@ -27,7 +27,15 @@
     stroke-opacity: 1;
     stroke-width: 1;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/rating/Picker.scss:1 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/var/gauge/Gauge.scss:58 */
+.x-gauge .x-gauge-needle {
+    fill: #6e6e6e;
+    fill-opacity: 1;
+    stroke: none;
+    stroke-opacity: 1;
+    stroke-width: 1;
+}
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/rating/Picker.scss:1 */
 .ux-rating-picker {
     overflow: hidden;
     color: #ccc;
@@ -37,7 +45,7 @@
     vertical-align: top;
     line-height: 1;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/rating/Picker.scss:15 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/rating/Picker.scss:15 */
 .ux-rating-picker-inner {
     position: relative;
     overflow: hidden;
@@ -46,24 +54,24 @@
     cursor: pointer;
     white-space: nowrap;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/rating/Picker.scss:28 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/rating/Picker.scss:28 */
 .ux-rating-picker-over.ux-rating-picker-track-over {
     color: #ccc;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/rating/Picker.scss:31 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/rating/Picker.scss:31 */
 .ux-rating-picker-over.ux-rating-picker-track-over > * > .ux-rating-picker-value {
     display: none;
     width: 0;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/rating/Picker.scss:36 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/rating/Picker.scss:36 */
 .ux-rating-picker-over.ux-rating-picker-track-over > * > .ux-rating-picker-value:hover {
     color: inherit;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/rating/Picker.scss:40 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/rating/Picker.scss:40 */
 .ux-rating-picker-over.ux-rating-picker-track-over > * > .ux-rating-picker-tracker {
     display: inline-block;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/rating/Picker.scss:45 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/rating/Picker.scss:45 */
 .ux-rating-picker-value,
 .ux-rating-picker-tracker {
     overflow: hidden;
@@ -74,11 +82,11 @@
     height: 100%;
     color: #ffe850;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/rating/Picker.scss:58 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/rating/Picker.scss:58 */
 .ux-rating-picker-tracker {
     display: none;
 }
-/* /home/teamcity/buildAgent/work/47e72153b7b97580/sencha/ext/packages/ux/sass/src/rating/Picker.scss:62 */
+/* /home/teamcity/buildAgent/work/15430dba7b3c92a0/sencha/ext/packages/ux/sass/src/rating/Picker.scss:62 */
 .ux-rating-picker-over {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
     opacity: 1;

@@ -28,17 +28,29 @@ Ext.define('KitchenSink.view.pivot.Configurator', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            columnWidth: 100,
+            menuWidth: 100
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 350,
+            columnWidth: 100,
+            menuWidth: 100
+        },
+        graphite: {
+            width: 950,
+            height: 600,
+            columnWidth: 120,
+            menuWidth: 120
         }
     },
     //</example>
 
     title: 'Pivot Grid with Configurator plugin',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -166,7 +178,8 @@ Ext.define('KitchenSink.view.pivot.Configurator', {
         aggregate: [{
             dataIndex: 'value',
             header: 'Value',
-            aggregator: 'avg'
+            aggregator: 'avg',
+            width: '${columnWidth}'
         }],
 
         // Configure the left axis dimensions that will be used to generate
@@ -177,7 +190,8 @@ Ext.define('KitchenSink.view.pivot.Configurator', {
         }, {
             dataIndex: 'company',
             header: 'Company',
-            sortable: false
+            sortable: false,
+            width: '${columnWidth}'
         }],
 
         /**
@@ -214,6 +228,7 @@ Ext.define('KitchenSink.view.pivot.Configurator', {
                     group:  'docking',
                     checkHandler: 'changeDock'
                 },
+                width: '${menuWidth}',
                 items: [{
                     text: 'Top'
                 },{

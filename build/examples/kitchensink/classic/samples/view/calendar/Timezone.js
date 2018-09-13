@@ -11,6 +11,17 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
     width: 1000,
     height: 700,
 
+    profiles: {
+        classic: {
+            comboBoxWidth: 200
+        },
+        neptune: {
+            comboBoxWidth: 200
+        },
+        graphite: {
+            comboBoxWidth: 230
+        }
+    },
     referenceHolder: true,
     viewModel: {
         data: {
@@ -41,7 +52,7 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
         reference: 'tzSelector',
         forceSelection: true,
         editable: false,
-        width: 200,
+        width: '${comboBoxWidth}',
         valueField: 'offset',
         displayField: 'label',
         value: 0,

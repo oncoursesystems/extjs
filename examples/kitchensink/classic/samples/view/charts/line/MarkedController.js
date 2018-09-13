@@ -3,7 +3,7 @@ Ext.define('KitchenSink.view.charts.line.MarkedController', {
     alias: 'controller.line-marked',
 
     onAxisLabelRender: function (axis, label, layoutContext) {
-        return label.toFixed(label < 10 ? 1: 0) + '%';
+        return label.toFixed(label < 10 ? 1 : 0) + '%';
     },
 
     onSeriesTooltipRender: function (tooltip, record, item) {

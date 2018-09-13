@@ -27,8 +27,10 @@ function() {
                 };
                 
                 Ext.applyIf(cmpCfg.element, {
-                    onfocus: 'return Ext.doEv(this, event);',
-                    onblur: 'return Ext.doEv(this, event);'
+                    listeners: {
+                        focus: 'handleFocusEvent',
+                        blur: 'handleBlurEvent'
+                    }
                 });
             
                 delete cmpCfg.autoEl;
@@ -1244,4 +1246,148 @@ function() {
     
     makeSuite('Widget');
     makeSuite('Component');
+    
+    describe("keyboardMode", function() {
+        var cls = Ext.baseCSSPrefix + 'keyboard-mode',
+            body, oldMode;
+
+        beforeAll(function() {
+            // It's just a convenience ref, no need to clean up
+            body = Ext.getBody();
+        });
+
+        beforeEach(function() {
+            oldMode = Ext.getEnableKeyboardMode();
+        });
+
+        afterEach(function() {
+            Ext.setEnableKeyboardMode(oldMode);
+        });
+
+        describe("defaults", function() {
+            (!Ext.isModern && Ext.os.is.Desktop ? describe : xdescribe)("Classic desktop devices", function() {
+                it("enableKeyboardMode config should be disabled", function() {
+                    expect(Ext.enableKeyboardMode).toBe(false);
+                });
+
+                it("document body should have keyboardModeCls applied", function() {
+                    expect(body).toHaveCls(cls);
+                });
+            });
+
+            (Ext.isModern || !Ext.os.is.Desktop ? describe : xdescribe)("Modern or Classic non-desktop devices", function() {
+                it("enableKeyboardMode should be enabled", function() {
+                    expect(Ext.enableKeyboardMode).toBe(true);
+                });
+
+                it("document body should not have keyboardModeCls applied", function() {
+                    expect(body).not.toHaveCls(cls);
+                });
+            });
+        });
+
+        describe("focus style handling", function() {
+            var button1, button2;
+
+            beforeEach(function() {
+                button1 = new Ext.Button({
+                    text: 'foo',
+                    renderTo: body
+                });
+
+                button2 = new Ext.Button({
+                    text: 'bar',
+                    renderTo: body
+                });
+            });
+
+            afterEach(function() {
+                button1 = button2 = Ext.destroy(button1, button2);
+            });
+
+            (!Ext.isModern && Ext.os.is.Desktop ? describe : xdescribe)("with keyboardMode disabled", function() {
+                beforeEach(function() {
+                    Ext.setEnableKeyboardMode(false);
+
+                    focusAndWait(button1);
+                });
+
+                it("body should have keyboardModeCls when button1 is focused", function() {
+                    expect(body).toHaveCls(cls);
+                });
+
+                it("body should have keyboardModeCls when button2.focus() is called", function() {
+                    button2.focus();
+
+                    waitForFocus(button2);
+
+                    runs(function() {
+                        expect(body).toHaveCls(cls);
+                    });
+                });
+
+                it("body should have keyboardModeCls when button2 is clicked", function() {
+                    jasmine.fireMouseEvent(button2, 'click');
+
+                    waitForFocus(button2);
+
+                    runs(function() {
+                        expect(body).toHaveCls(cls);
+                    });
+                });
+
+                it("body should have keyboardModeCls when button2 is tabbed to", function() {
+                    pressTabKey(button1);
+
+                    waitForFocus(button2);
+
+                    runs(function() {
+                        expect(body).toHaveCls(cls);
+                    });
+                });
+            });
+
+            (Ext.isModern || Ext.os.is.Desktop ? describe : xdescribe)("with keyboardMode enabled", function() {
+                beforeEach(function() {
+                    Ext.setEnableKeyboardMode(true);
+
+                    focusAndWait(button1);
+                });
+
+                it("body should not have keyboardModeCls when button1 is focused", function() {
+                    expect(body).not.toHaveCls(cls);
+                });
+                
+                it("body should not have keyboardModeCls when button2.focus() is called", function() {
+                    button2.focus();
+                    
+                    waitForFocus(button2);
+                    
+                    runs(function() {
+                        expect(body).not.toHaveCls(cls);
+                    });
+                });
+                
+                it("body should not have keyboardModeCls when button2 is clicked", function() {
+                    jasmine.fireMouseEvent(button2, 'click');
+                    
+                    waitForFocus(button2);
+                    
+                    runs(function() {
+                        expect(body).not.toHaveCls(cls);
+                    });
+                });
+                
+                it("body should have keyboardModeCls when button2 is tabbed to", function() {
+                    pressTabKey(button1);
+                    
+                    waitForFocus(button2);
+                    
+                    runs(function() {
+                        expect(body).toHaveCls(cls);
+                    });
+                });
+            });
+        });
+    });
 });

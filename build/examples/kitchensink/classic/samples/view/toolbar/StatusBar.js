@@ -23,6 +23,17 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
     //</example>
 
     // Base container layout using a <center> tag gives us centering.
+    profiles: {
+        classic: {
+            width: 600
+        },
+        neptune: {
+            width: 600
+        },
+        graphite: {
+            width: 850
+        }
+    },
     layout: 'container',
     autoEl: 'center',
     defaults: {
@@ -31,7 +42,7 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
     items: [{
         xtype: 'panel',
         title: 'Basic StatusBar',
-        width: 600,
+        width: '${width}',
         manageHeight: false,
         bodyPadding: 10,
         bodyStyle: 'text-align:left',
@@ -73,7 +84,7 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
     }, {
         xtype: 'form',
         title: 'StatusBar with Integrated Form Validation',
-        width: 600,
+        width: '${width}',
         autoHeight: true,
         reference: 'status-form',
         labelWidth: 75,
@@ -115,7 +126,7 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
         }]
     }, {
         title: 'Ext Word Processor',
-        width: 600,
+        width: '${width}',
         bodyPadding: 5,
         layout: 'fit',
         bbar: {

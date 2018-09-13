@@ -265,7 +265,8 @@ Ext.define('Ext.toolbar.Breadcrumb', {
                         isCrumb: true,
                         xtype: me.getUseSplitButtons() ? 'splitbutton' : 'button',
                         ui: me.getButtonUI(),
-                        cls: me._btnCls + ' ' + me._btnCls + '-' + me.ui,
+                        componentCls: me._btnCls + ' ' + me._btnCls + '-' + me.ui,
+                        separateArrowStyling: false,
                         text: text,
                         showEmptyMenu: true,
                         // begin with an empty menu - items are populated on beforeshow

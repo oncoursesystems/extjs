@@ -1,6 +1,10 @@
 {
     "name": "@extjs/ext-react-classic-theme-neutral",
-    "version": "6.5.2.463",
+    "ext-react-name": "@extjs/ext-react-classic-theme-neutral",
+    "ext-name": "@extjs/ext-classic-theme-neutral",
+    "SenchaExtName": "@sencha/ext-classic-theme-neutral",
+    "SenchaExtReactName": "@sencha/ext-react-classic-theme-neutral",
+    "version": "6.6.0.258",
     "sencha": {
         "name": "theme-neutral",
         "namespace": "Ext",
@@ -14,7 +18,7 @@
         "creator": "Sencha",
         "summary": "Ext JS Neutral Theme",
         "detailedDescription": "The neutral theme is a highly configurable, abstract base theme for the Ext JS classic toolkit",
-        "version": "6.5.2.463",
+        "version": "6.6.0.258",
         "compatVersion": "6.0.0",
         "format": "1",
         "output": "${workspace.subpkg.prefix}/${package.name}",

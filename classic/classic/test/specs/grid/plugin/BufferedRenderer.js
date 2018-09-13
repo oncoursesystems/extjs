@@ -3,7 +3,7 @@
 topSuite("Ext.grid.plugin.BufferedRenderer",
     ['Ext.grid.Panel', 'Ext.tree.Panel', 'Ext.grid.feature.Grouping',
      'Ext.grid.column.Widget', 'Ext.ProgressBarWidget', 'Ext.tab.Panel',
-     'Ext.window.Window', 'Ext.data.BufferedStore'],
+     'Ext.window.Window', 'Ext.data.BufferedStore', 'Ext.sparkline.Bar'],
 function() {
     var itNotIE8 = Ext.isIE8 ? xit : it,
         store, grid, tree, view, scroller, plugin,
@@ -332,7 +332,13 @@ function() {
                     normal.scrollTo(500);
 
                     expect(normal.onRangeFetched).toHaveBeenCalled();
-                    expect(locked.onRangeFetched).toHaveBeenCalled();
+
+                    // Mirroring of onRangeFetched directly manipulates partner view
+                    expect(locked.onRangeFetched).not.toHaveBeenCalled();
+
+                    // And locked must stay in sync.
+                    expect(locked.view.all.startIndex).toBe(normal.view.all.startIndex);
+                    expect(locked.view.all.endIndex).toBe(normal.view.all.endIndex);
                 });
 
                 it('should sync the view els', function () {
@@ -1706,7 +1712,8 @@ function() {
                         textTpl: ['{percent:number("0")}% capacity']
                     }
                 }],
-                nodeCache;
+                nodeCache,
+                margin = (Ext.isIE || Ext.isEdge) ? 2 : 0;
 
                 makeGrid({
                     columns: columns
@@ -1735,7 +1742,8 @@ function() {
                         grid.reconfigure(null, columns);
                     }
 
-                    expect(Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight()).toBe(Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight());
+                    // MS browsers show innacuracies sometimes, so use approx for them
+                    expect(Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight()).toBeApprox(Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight(), margin);
                 });
             }
 
@@ -1799,12 +1807,14 @@ function() {
                     expect(lockedSize).toBe(normalSize);
 
                     for (i = 0; allEqual && i < lockedSize; i++) {
-                        allEqual = allEqual && normalItems[i].offsetHeight === lockedItems[i].offsetHeight;
+                        // Allow for 1px margin for Microsoft browser's innacuracies.
+                        allEqual = allEqual && Math.abs(normalItems[i].offsetHeight - lockedItems[i].offsetHeight) < 2;
                     }
                     // All rows must be same size
                     expect(allEqual).toBe(true);
                     bufferedRendererInvocationCount++;
-                };
+                },
+                margin = (Ext.isIE || Ext.isEdge) ? 2 : 0;
 
                 // Make grid with small buffer zones.
                 makeGrid({
@@ -1837,7 +1847,9 @@ function() {
                 // Must have invoked the row syncher and the two body heights must be the same
                 runs(function () {
                     expect(bufferedRendererInvocationCount).toBeGreaterThan(0);
-                    expect(view.el.down('.x-grid-item-container', true).offsetHeight).toBe(view.lockingPartner.el.down('.x-grid-item-container', true).offsetHeight);
+
+                    // Allow for 2px margin for Microsoft browser's innacuracies.
+                    expect(view.el.down('.x-grid-item-container', true).offsetHeight).toBeApprox(view.lockingPartner.el.down('.x-grid-item-container', true).offsetHeight, margin);
                     bufferedRendererInvocationCount = 0;
                 });
 
@@ -1870,8 +1882,9 @@ function() {
                     
                     var mainHeight = Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight(),
                         partnerHeight = Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight();
-                    
-                    expect(partnerHeight).toBe(mainHeight);
+
+                    // Allow for 1px margin for Microsoft browser's innacuracies.
+                    expect(partnerHeight).toBeApprox(mainHeight, 1);
                     bufferedRendererInvocationCount = 0;
                 });
             });
@@ -1926,12 +1939,14 @@ function() {
                     expect(lockedSize).toBe(normalSize);
 
                     for (i = 0; allEqual && i < lockedSize; i++) {
-                        allEqual = allEqual && normalItems[i].offsetHeight === lockedItems[i].offsetHeight;
+                        // Allow for 1px margin for Microsoft browser's innacuracies.
+                        allEqual = allEqual && Math.abs(normalItems[i].offsetHeight - lockedItems[i].offsetHeight) < 2;
                     }
                     // All rows must be same size
                     expect(allEqual).toBe(true);
                     bufferedRendererInvocationCount++;
-                };
+                },
+                margin = (Ext.isIE || Ext.isEdge) ? 2 : 0;
 
                 // Make grid with small buffer zones.
                 makeGrid({
@@ -1968,7 +1983,9 @@ function() {
                 // Must have invoked the row syncher and the two body heights must be the same
                 runs(function () {
                     expect(bufferedRendererInvocationCount).toBeGreaterThan(0);
-                    expect(Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight()).toBe(Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight());
+
+                    // Allow for 2px margin for Microsoft browser's innacuracies.
+                    expect(Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight()).toBeApprox(Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight(), margin);
                     bufferedRendererInvocationCount = 0;
                 });
 
@@ -1997,10 +2014,117 @@ function() {
                     
                     var mainHeight = Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight(),
                         partnerHeight = Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight();
-                    
-                    expect(partnerHeight).toBe(mainHeight);
+
+                    // Allow for 1px margin for Microsoft browser's innacuracies.
+                    expect(partnerHeight).toBeApprox(mainHeight, 1);
                     bufferedRendererInvocationCount = 0;
                 });
+            });
+        });
+
+        describe("locked grid with groping having Sparkline bar widget in a column", function() {
+            TODO(Ext.isIE8).
+            it("should be visible after user collapse and expands Grouped Grid", function() {
+                var groupers, gridView, sparklineWidget, sparklinebarWidth,
+                    barArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+                makeGrid({
+                    columns: [{
+                            header: 'Name',
+                            dataIndex: 'name',
+                            editor: 'textfield',
+                            locked: true
+                        },
+                        {
+                            header: 'Department',
+                            dataIndex: 'department',
+                            editor: 'textfield'
+                        },
+                        {
+                            header: 'Email',
+                            dataIndex: 'email',
+                            flex: 1,
+                            editor: {
+                                xtype: 'textfield',
+                                allowBlank: false
+                            }
+                        },
+                        {
+                            header: 'Phone',
+                            dataIndex: 'phone',
+                            editor: 'textfield'
+                        },
+                        {
+                            header: 'Bar',
+                            width: 100,
+                            xtype: 'widgetcolumn',
+                            widget: {
+                                xtype: 'sparklinebar',
+                                values: barArray
+                            }
+                        }
+                    ],
+                    width: 800,
+                    height: 800,
+                    features: [{
+                        ftype: 'grouping'
+                    }],
+                    renderTo: Ext.getBody()
+                }, {
+                    fields: ['name', 'email', 'phone', 'department'],
+                    groupField: 'department',
+                    autoDestroy: true,
+                    data: [{
+                            'name': 'Lisa',
+                            'email': 'lisa@simpsons.com',
+                            'phone': '555-111-1224',
+                            'age': 14,
+                            'department': 'A'
+                        },
+                        {
+                            'name': 'Lisa',
+                            'email': 'aunt_lisa@simpsons.com',
+                            'phone': '555-111-1274',
+                            'age': 34,
+                            'department': 'A'
+                        },
+                        {
+                            'name': 'Bart',
+                            'email': 'bart@simpsons.com',
+                            'phone': '555-222-1234',
+                            'age': 12,
+                            'department': 'A'
+                        },
+                        {
+                            'name': 'Homer',
+                            'email': 'homer@simpsons.com',
+                            'phone': '555-222-1244',
+                            'age': 44,
+                            'department': 'B'
+                        },
+                        {
+                            'name': 'Marge',
+                            'email': 'marge@simpsons.com',
+                            'phone': '555-222-1254',
+                            'age': 41,
+                            'department': 'B'
+                        }
+                    ]
+                });
+
+                //TO collapse and expand the groups
+                groupers = grid.lockedGrid.features[0];
+                groupers.collapse('A');
+                groupers.expand('A');
+
+                gridView = grid.getColumns()[4].getView();
+                sparklineWidget = gridView.getRow(0).getElementsByTagName('canvas');
+                sparklinebarWidth = sparklineWidget.length > 0 ? sparklineWidget.item(0).width : undefined;
+
+                expect(sparklinebarWidth).toBeDefined();
+                
+                // TODO This expectation matches even when sparklinebarWidth is not defined.
+                expect(sparklinebarWidth).not.toBeLessThan(0);
             });
         });
 
@@ -2991,4 +3115,3 @@ function() {
         });
     });
 });
-

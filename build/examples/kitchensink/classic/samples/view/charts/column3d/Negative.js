@@ -21,7 +21,19 @@ Ext.define('KitchenSink.view.charts.column3d.Negative', {
     // </example>
 
     width: 650,
-    height: 500,
+    height: '${height}',
+
+    profiles: {
+        classic: {
+            height: 500
+        },
+        neptune: {
+            height: 500
+        },
+        graphite: {
+            height: 650
+        }
+    },
 
     tbar: [
         '->',

@@ -12,10 +12,25 @@ Ext.define('KitchenSink.view.grid.ExpanderLockable', {
     }],
     profiles: {
         classic: {
-            width: 700
+            width: 700,
+            priceWidth: 100,
+            pricechangeWidth: 100,
+            percentChangeColumnWidth: 100,
+            lastUpdatedColumnWidth: 120
         },
         neptune: {
-            width: 750
+            width: 750,
+            priceWidth: 100,
+            pricechangeWidth: 100,
+            percentChangeColumnWidth: 100,
+            lastUpdatedColumnWidth: 120
+        },
+        graphite: {
+            width: 750,
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 150          
         }
     },
     //</example>
@@ -37,16 +52,19 @@ Ext.define('KitchenSink.view.grid.ExpanderLockable', {
     }, {
         text: "Price",
         formatter: 'usMoney',
+        width: '${priceWidth}',
         dataIndex: 'price'
     }, {
         text: "Change",
+        width: '${pricechangeWidth}',
         dataIndex: 'priceChange'
     }, {
         text: "% Change",
+        width: '${percentChangeColumnWidth}',
         dataIndex: 'priceChangePct'
     }, {
         text: "Last Updated",
-        width: 120,
+        width: '${lastUpdatedColumnWidth}',
         formatter: 'date("m/d/Y")',
         dataIndex: 'priceLastChange'
     }],

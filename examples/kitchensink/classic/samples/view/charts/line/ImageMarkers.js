@@ -17,6 +17,17 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkers', {
     ],
     // <example>
     // Content between example tags is omitted from code preview.
+    profiles: {
+        classic: {
+            width: 650
+        },
+        neptune: {
+            width: 650
+        },
+        graphite: {
+            width: 750
+        }
+    },
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/charts/line/ImageMarkersController.js'
@@ -28,7 +39,7 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkers', {
 
     layout: 'fit',
 
-    width: 650,
+    width: '${width}',
 
     tbar: {
         reference: 'toolbar',

@@ -2,20 +2,8 @@ Ext.define('KitchenSink.view.chart.line.RealTimeDateController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.line-real-time-date',
 
-    currentTheme: 0,
-
-    themes: [
-        'default',
-        'blue',
-        'green',
-        'midnight',
-        'muted',
-        'red',
-        'sky',
-        'yellow'
-    ],
-
-    init: function () {
+    init: function (view) {
+        this.callParent([view]);
         //put this here for onActiveItemChange to start
         this.timeChartTask = Ext.TaskManager.start({
             run: this.addNewData,

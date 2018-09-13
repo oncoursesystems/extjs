@@ -3173,6 +3173,94 @@ function() {
         });
     });
 
+    describe("the Filters menu item", function () {
+        afterEach(function () {
+            MockAjaxManager.removeMethods();
+            grid = filtersPlugin = filter = Ext.destroy(grid);
+            store = Ext.destroy(store);
+            data = null;
+        });
+
+        it("should be present in grid header menu after reordering columns and refreshing", function() {
+            // Pass a reference to the cmp not an index!
+            function dragColumn(from, to, onRight) {
+                var fromBox = from.titleEl.getBox(),
+                    fromMx = fromBox.x + fromBox.width/2,
+                    fromMy = fromBox.y + fromBox.height/2,
+                    toBox = to.titleEl.getBox(),
+                    toMx = onRight ? toBox.right - 10 : toBox.left + 10,
+                    toMy = toBox.y + toBox.height/2,
+                    dragThresh = onRight ? Ext.dd.DragDropManager.clickPixelThresh + 1 : -Ext.dd.DragDropManager.clickPixelThresh - 1;
+
+                // Mousedown on the header to drag
+                jasmine.fireMouseEvent(from.el.dom, 'mouseover', fromMx, fromMy);
+                jasmine.fireMouseEvent(from.titleEl.dom, 'mousedown', fromMx, fromMy);
+
+                // The initial move which tiggers the start of the drag
+                jasmine.fireMouseEvent(from.el.dom, 'mousemove', fromMx + dragThresh, fromMy);
+
+                // The move to left of the centre of the target element
+                jasmine.fireMouseEvent(to.el.dom, 'mousemove', toMx, toMy);
+
+                // Drop to left of centre of target element
+                jasmine.fireMouseEvent(to.el.dom, 'mouseup', toMx, toMy);
+            }
+
+            var columns = [{
+                text: 'Name',
+                dataIndex: 'name'
+            }, {
+                text: 'Contact',
+                columns: [{
+                    text: 'E-Mail',
+                    dataIndex: 'email',
+                    filter: 'string'
+                },{
+                    text: 'Phone',
+                    dataIndex: 'phone',
+                    filter: 'string'
+                }]
+            }];
+
+            createGrid({
+                statefulFilters: true
+            }, {
+                stateful: true,
+                stateId: 'gridSave',
+                columns: columns
+            });
+
+            var visibleColumns = grid.visibleColumnManager.getColumns(),
+                column, menu;
+
+            //moving column index 2 to 1
+            dragColumn(visibleColumns[2], visibleColumns[1]);
+
+            grid.saveState();
+            Ext.destroy(grid, store);
+
+            createGrid({
+                statefulFilters: true
+            }, {
+                stateful: true,
+                stateId: 'gridSave',
+                columns: columns
+            });
+
+            column = grid.getColumns()[1];
+            Ext.testHelper.showHeaderMenu(column);
+
+            waitsFor(function() {
+                menu = column.activeMenu;
+                return menu && menu.isVisible();
+            });
+
+            runs(function() {
+                expect(grid.headerCt.menu.items.getByKey('filters')).toBeDefined();
+            });
+        });
+    });
+
     // TODO: this should be in TriFilter specs.
     xdescribe("hasActiveFilter", function () {
         it("should return false if there are no active filters", function () {
@@ -3475,7 +3563,6 @@ function() {
                 });
             });
         });
-
 
         describe("columns", function () {
             function runSpecs(locked) {

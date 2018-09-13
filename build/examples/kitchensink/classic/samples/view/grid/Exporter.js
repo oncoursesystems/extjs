@@ -15,8 +15,23 @@ Ext.define('KitchenSink.view.grid.Exporter', {
     title: 'Export grid content',
     collapsible: true,
     frame: true,
-    width: 700,
+    width: '${width}',
     height: 500,
+
+    profiles: {
+        classic: {
+            width: 700,
+            priceWidth: 90
+        },
+        neptune: {
+            width: 700,
+            priceWidth: 90
+        },
+        graphite: {
+            width: 900,
+            priceWidth: 120
+        }
+    },
     resizable: true,
     //<example>
     otherContent: [{
@@ -80,7 +95,7 @@ Ext.define('KitchenSink.view.grid.Exporter', {
         columns: [{
             dataIndex: 'price',
             text: 'Price',
-            width: 90,
+            width: '${priceWidth}',
             formatter: 'usMoney',
             summaryType: 'sum',
             summaryFormatter: 'usMoney',

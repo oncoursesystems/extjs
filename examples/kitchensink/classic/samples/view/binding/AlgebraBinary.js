@@ -8,10 +8,24 @@ Ext.define('KitchenSink.view.binding.AlgebraBinary', {
 
     title: 'Binary operators',
 
-    width: 470,
+    width: '${width}',
     layout: 'hbox',
     bodyPadding: '10 20',
     frame: true,
+    profiles: {
+        classic: {
+            width: 470,
+            labelWidth: 105
+        },
+        neptune: {
+            width: 470,
+            labelWidth: 105
+        },
+        graphite: {
+            width: 600,
+            labelWidth: 150
+        }
+    },
 
     viewModel: {
         data: {
@@ -21,6 +35,9 @@ Ext.define('KitchenSink.view.binding.AlgebraBinary', {
     },
 
     items: [{
+        defaults: {
+            labelWidth: '${labelWidth}'
+        },
         items: [{
             fieldLabel: 'x + y',
             bind: '{x + y}'
@@ -44,6 +61,9 @@ Ext.define('KitchenSink.view.binding.AlgebraBinary', {
             bind: '{x > y && y >= 10}'
         }]
     }, {
+        defaults: {
+            labelWidth: '${labelWidth}'
+        },
         items: [{
             fieldLabel: 'x - y',
             bind: '{x - y}'

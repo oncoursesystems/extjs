@@ -1626,7 +1626,7 @@ Ext.define('Ext.dataview.Abstract', {
 
         if (child && child.dom !== relatedTarget) {
             if (me.doHover) {
-               me.toggleHoverCls(false);
+                me.toggleHoverCls(false);
             }
 
             if (!itemButtonMode) {
@@ -1743,10 +1743,12 @@ Ext.define('Ext.dataview.Abstract', {
         var store = this.store;
 
         if (!store) {
+            this.settingStoreFromData = true;
             this.setStore({
                 data: data,
                 autoDestroy: true
             });
+            this.settingStoreFromData = false;
         } else {
             store.loadData(data);
         }
@@ -1963,7 +1965,7 @@ Ext.define('Ext.dataview.Abstract', {
         }
 
         // Bind/unbind the selection model if we are rebinding to a new store.
-        if (!me.isConfiguring) {
+        if (!me.isConfiguring || me.settingStoreFromData) {
             me.getSelectable().setStore(newStore);
         }
 

@@ -636,7 +636,8 @@ Ext.define('Ext.field.Select', {
                 selectable: {
                     selected: me.getValueCollection(),
                     selectedRecord: me.getSelection(),
-                    mode: 'single'
+                    mode: 'single',
+                    deselectable: false
                 },
                 itemTpl: me.getItemTpl()
             }, me.getFloatedPicker());

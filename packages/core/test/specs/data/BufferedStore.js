@@ -288,7 +288,7 @@ topSuite("Ext.data.BufferedStore", function() {
                     expect(Ext.isArray(args)).toBe(true);
                 }
 
-                expect(args[1].getAction()).toBe('read');
+                expect(args[1].action).toBe('read');
                 expect(args[1].$className).toBe('Ext.data.operation.Read');
 
                 expect(args[2]).toBe(true);

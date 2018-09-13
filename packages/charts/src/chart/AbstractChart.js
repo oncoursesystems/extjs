@@ -1947,6 +1947,7 @@ Ext.define('Ext.chart.AbstractChart', {
     },
 
     /**
+     * @private
      * Given an x/y point relative to the chart, find and return all series items that match that point.
      * @param {Number} x
      * @param {Number} y
@@ -1966,7 +1967,7 @@ Ext.define('Ext.chart.AbstractChart', {
         for (; i >= 0; i--) {
             series = seriesList[i];
             item = series.getItemForPoint(x, y);
-            if (item && item.category === 'items') {
+            if (item && (item.category === 'items' || item.category === 'markers')) {
                 items.push(item);
             }
         }
@@ -2117,6 +2118,7 @@ Ext.define('Ext.chart.AbstractChart', {
             series = me.getSeries(),
             axes = me.getAxes(),
             interaction = me.getInteractions(),
+            legend = me.getLegend(),
             ans = [], i, ln;
 
         for (i = 0, ln = series.length; i < ln; i++) {
@@ -2140,7 +2142,10 @@ Ext.define('Ext.chart.AbstractChart', {
             }
         }
 
+        if (legend) {
+            ans.push(legend);
+        }
+
         return ans;
     }
-
 });

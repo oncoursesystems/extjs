@@ -399,31 +399,6 @@ topSuite("Ext.Widget.floated", [false, 'Ext.Panel'], function() {
             expect(otherFloatedPanel.floatWrap.dom.childNodes[3]).toBe(otherFloatedPanelSecondChild.floatWrap.dom);
         });
 
-        it('should give alwaysOnTop floated components a higher z-index', function() {
-            // Initial conditions
-            expect(otherFloatedPanel.floatWrap.dom.firstChild).toBe(otherFloatedPanel.getShim().el.dom);
-            expect(otherFloatedPanel.floatWrap.dom.childNodes[1]).toBe(otherFloatedPanel.el.dom);
-            expect(otherFloatedPanel.floatWrap.dom.childNodes[2]).toBe(otherFloatedPanelChild.floatWrap.dom);
-            expect(otherFloatedPanel.floatWrap.dom.childNodes[3]).toBe(otherFloatedPanelSecondChild.floatWrap.dom);
-
-            otherFloatedPanelChild.setAlwaysOnTop(true);
-
-            // otherFloatedPanelChild must be the last element in the stack
-            expect(otherFloatedPanel.floatWrap.dom.firstChild).toBe(otherFloatedPanel.getShim().el.dom);
-            expect(otherFloatedPanel.floatWrap.dom.childNodes[1]).toBe(otherFloatedPanel.el.dom);
-            expect(otherFloatedPanel.floatWrap.dom.childNodes[2]).toBe(otherFloatedPanelSecondChild.floatWrap.dom);
-            expect(otherFloatedPanel.floatWrap.dom.childNodes[3]).toBe(otherFloatedPanelChild.floatWrap.dom);
-
-            // This should have no effect
-            otherFloatedPanelSecondChild.toFront();
-
-            // otherFloatedPanelChild must STILL be the last element in the stack
-            expect(otherFloatedPanel.floatWrap.dom.firstChild).toBe(otherFloatedPanel.getShim().el.dom);
-            expect(otherFloatedPanel.floatWrap.dom.childNodes[1]).toBe(otherFloatedPanel.el.dom);
-            expect(otherFloatedPanel.floatWrap.dom.childNodes[2]).toBe(otherFloatedPanelSecondChild.floatWrap.dom);
-            expect(otherFloatedPanel.floatWrap.dom.childNodes[3]).toBe(otherFloatedPanelChild.floatWrap.dom);
-        });
-
         it('should destroy correctly, removing all traces from the DOM', function() {
             floatedPanel.destroy();
             otherFloatedPanel.destroy();
@@ -524,6 +499,50 @@ topSuite("Ext.Widget.floated", [false, 'Ext.Panel'], function() {
 
             // So the mask ust be stashed safely in the detached body
             expect(mask.dom.parentNode).toBe(Ext.getDetachedBody().dom);
+        });
+        
+        describe("alwaysOnTop", function() {
+            it('should give alwaysOnTop floated components a higher z-index', function() {
+                // Initial conditions
+                expect(otherFloatedPanel.floatWrap.dom.firstChild).toBe(otherFloatedPanel.getShim().el.dom);
+                expect(otherFloatedPanel.floatWrap.dom.childNodes[1]).toBe(otherFloatedPanel.el.dom);
+                expect(otherFloatedPanel.floatWrap.dom.childNodes[2]).toBe(otherFloatedPanelChild.floatWrap.dom);
+                expect(otherFloatedPanel.floatWrap.dom.childNodes[3]).toBe(otherFloatedPanelSecondChild.floatWrap.dom);
+
+                otherFloatedPanelChild.setAlwaysOnTop(true);
+
+                // otherFloatedPanelChild must be the last element in the stack
+                expect(otherFloatedPanel.floatWrap.dom.firstChild).toBe(otherFloatedPanel.getShim().el.dom);
+                expect(otherFloatedPanel.floatWrap.dom.childNodes[1]).toBe(otherFloatedPanel.el.dom);
+                expect(otherFloatedPanel.floatWrap.dom.childNodes[2]).toBe(otherFloatedPanelSecondChild.floatWrap.dom);
+                expect(otherFloatedPanel.floatWrap.dom.childNodes[3]).toBe(otherFloatedPanelChild.floatWrap.dom);
+
+                // This should have no effect
+                otherFloatedPanelSecondChild.toFront();
+
+                // otherFloatedPanelChild must STILL be the last element in the stack
+                expect(otherFloatedPanel.floatWrap.dom.firstChild).toBe(otherFloatedPanel.getShim().el.dom);
+                expect(otherFloatedPanel.floatWrap.dom.childNodes[1]).toBe(otherFloatedPanel.el.dom);
+                expect(otherFloatedPanel.floatWrap.dom.childNodes[2]).toBe(otherFloatedPanelSecondChild.floatWrap.dom);
+                expect(otherFloatedPanel.floatWrap.dom.childNodes[3]).toBe(otherFloatedPanelChild.floatWrap.dom);
+            });
+
+            it("should display component with alwaysOnTop in front of components without", function() {
+                floatedPanelChild.setAlwaysOnTop(true);
+                floatedPanelSecondChild.toFront();
+
+                expect(floatedPanel.floatWrap.dom.childNodes[2]).toBe(floatedPanelChild.floatWrap.dom);
+            });
+
+            it("should respect the alwaysOnTop number value", function() {
+                floatedPanelChild.setAlwaysOnTop(10);
+                floatedPanelSecondChild.setAlwaysOnTop(5);
+
+                expect(floatedPanel.floatWrap.dom.childNodes[2]).toBe(floatedPanelChild.floatWrap.dom);
+
+                floatedPanelSecondChild.setAlwaysOnTop(11);
+                expect(floatedPanel.floatWrap.dom.childNodes[2]).toBe(floatedPanelSecondChild.floatWrap.dom);
+            });
         });
     });
 

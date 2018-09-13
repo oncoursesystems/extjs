@@ -658,10 +658,11 @@ Ext.define('Ext.grid.HeaderContainer', {
             var grid = this.getGrid(),
                 store   = grid.getStore(),
                 columns = grid.getColumns(),
+                isGrouped = store.isGrouped(),
                 len = columns && columns.length,
                 sorters = store.getSorters(),
                 grouper = store.getGrouper(),
-                i, header, sorter;
+                i, header, isGroupedHeader, sorter;
 
             for (i = 0; i < len; i++) {
                 header = columns[i];
@@ -671,12 +672,24 @@ Ext.define('Ext.grid.HeaderContainer', {
                 // by the updater.
                 sorter = header.sorter;
 
+                // Is this column being used to group this grid
+                isGroupedHeader = store.getGroupField() === header.getDataIndex();
+
                 if (sorter) {
-                    // If the column was configured with a sorter, we must check that the
+                    // FIRST: If the grid is grouped and this is not the column being used to group
+                    // it there is no sorting to be done here. You can only sort by the column
+                    // that is grouping the grid.
+                    // SECOND: If the grid is grouped and this is the column being used to group it
+                    // we need to use the grouper as the sorter to update the UI to the correct state.
+                    // THIRD: If the column was configured with a sorter, we must check that the
                     // sorter is part of the store's sorter collection to update the UI
                     // to the correct state. The store may not actually BE sorted by that
                     // sorter.
-                    if (!(sorters.contains(sorter) || grouper === sorter)) {
+                    if (isGrouped && !isGroupedHeader){
+                        sorter = null;
+                    } else if (isGrouped && isGroupedHeader) {
+                        sorter = grouper;
+                    } else if (!(sorters.contains(sorter) || grouper === sorter)) {
                         sorter = null;
                     }
                 }

@@ -49,6 +49,7 @@ Ext.define('Ext.panel.YearPicker', {
     onChildTap: function(location) {
         var rec = location.record;
         if (rec) {
+            location.event.stopEvent();
             this.fireEvent('yeartap', this, rec.id);
         }
     },

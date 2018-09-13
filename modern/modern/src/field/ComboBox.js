@@ -304,16 +304,15 @@ Ext.define('Ext.field.ComboBox', {
      * @event select
      * Fires when the user has selected an item from the associated picker.
      * @param {Ext.field.ComboBox} this This field
-     * @param {String} newValue The new value
-     * @param {String} oldValue The original value
+     * @param {Ext.data.Model} newValue The corresponding record for the new value
      */
 
     /**
      * @event change
      * Fires when the field is changed, or if forceSelection is false, on keystroke.
      * @param {Ext.field.ComboBox} this This field
-     * @param {String} newValue The new value
-     * @param {String} oldValue The original value
+     * @param {Ext.data.Model} newValue The new value
+     * @param {Ext.data.Model} oldValue The original value
      */
 
     // Start with value on prototype.

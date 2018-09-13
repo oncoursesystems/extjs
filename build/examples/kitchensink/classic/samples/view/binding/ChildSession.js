@@ -32,10 +32,27 @@ Ext.define('KitchenSink.view.binding.ChildSession', {
     }],
     //</example>
 
+    profiles: {
+        classic: {
+            width: 420,
+            height: 320,
+            editWidth: 90
+        },
+        neptune: {
+            width: 420,
+            height: 320,
+            editWidth: 90
+        },
+        graphite: {
+            width: 500,
+            height: 450,
+            editWidth: 120
+        }
+    },
     title: 'All Companies',
     frame: true,
-    width: 420,
-    height: 320,
+    width: '${width}',
+    height: '${height}',
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -65,7 +82,7 @@ Ext.define('KitchenSink.view.binding.ChildSession', {
             text: 'Phone'
         }, {
             xtype: 'widgetcolumn',
-            width: 90,
+            width: '${editWidth}',
             widget: {
                 xtype: 'button',
                 text: 'Edit',

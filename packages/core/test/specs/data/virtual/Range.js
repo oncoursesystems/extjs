@@ -2,11 +2,30 @@ topSuite("Ext.data.virtual.Range", [
     'Ext.data.proxy.Ajax',
     'Ext.data.virtual.Store'
 ], function() {
-    var range, store, pageMap, proxySpy, callbackSpy,
+    var oldJasmineCaptureStack, oldTimerCaptureStack,
+        range, store, pageMap, proxySpy, callbackSpy,
         total, pageSize;
 
     var Model = Ext.define(null, {
         extend: 'Ext.data.Model'
+    });
+    
+    beforeAll(function() {
+        Ext.data.operation.Operation.prototype.clearPrototypeOnDestroy = false;
+        Ext.data.operation.Operation.prototype.clearPropertiesOnDestroy = false;
+        
+        // Stack capture is expensive
+        oldJasmineCaptureStack = jasmine.CAPTURE_CALL_STACK;
+        oldTimerCaptureStack = Ext.Timer.captureStack;
+        jasmine.CAPTURE_CALL_STACK = false;
+        Ext.Timer.captureStack = false;
+    });
+    
+    afterAll(function() {
+        delete Ext.data.operation.Operation.prototype.clearPrototypeOnDestroy;
+        delete Ext.data.operation.Operation.prototype.clearPropertiesOnDestroy;
+        jasmine.CAPTURE_CALL_STACK = oldJasmineCaptureStack;
+        Ext.timer.captureStack = oldTimerCaptureStack;
     });
 
     function completeWithData (data, theTotal) {
@@ -101,20 +120,32 @@ topSuite("Ext.data.virtual.Range", [
 
     function expectRecords(begin, end) {
         var records = range.records,
+            pass = true,
             i;
 
         for (i = begin; i < end; ++i) {
-            expect(records[i].id).toBe(i + 1);
+            if (records[i].id !== i + 1) {
+                pass = false;
+                break;
+            }
         }
+        
+        expect(pass).toBe(true);
     }
 
     function expectEmpty(begin, end) {
         var records = range.records,
+            pass = true,
             i;
 
         for (i = begin; i < end; ++i) {
-            expect(records[i]).toBeFalsy();
+            if (records[i]) {
+                pass = false;
+                break;
+            }
         }
+        
+        expect(pass).toBe(true);
     }
 
     function makePageRange(start, end) {

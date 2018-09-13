@@ -3,10 +3,13 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
     
     function makeOperation(type, cfg) {
         type = Ext.String.capitalize(type || 'create');
+        
         var o = new Ext.data.operation[type](cfg);
-        o.doExecute = function() {
+        
+        o.doExecute = jasmine.createSpy('doExecute').andCallFake(function() {
             return new Ext.data.Request();
-        };
+        });
+        
         return o;
     }
     
@@ -15,6 +18,7 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
     }
     
     afterEach(function() {
+        Ext.destroy(op1, op2, op3, batch);
         batch = op1 = op2 = op3 = ops = null;
     });
 
@@ -368,6 +372,135 @@ topSuite("Ext.data.Batch", ['Ext.data.operation.*', 'Ext.data.Request'], functio
             spyOn(op1, 'execute');
             batch.retry();
             expect(op1.execute).toHaveBeenCalled();    
+        });
+    });
+    
+    describe("abort", function() {
+        beforeEach(function() {
+            makeBatch();
+            
+            batch.add(op1 = makeOperation());
+            batch.add(op2 = makeOperation());
+            batch.add(op3 = makeOperation());
+            
+            spyOn(op1, 'abort').andCallThrough();
+            spyOn(op2, 'abort').andCallThrough();
+            spyOn(op3, 'abort').andCallThrough();
+        });
+        
+        describe("before starting", function() {
+            beforeEach(function() {
+                batch.abort();
+            });
+            
+            it("should not execute any operation", function() {
+                expect(op1.doExecute).not.toHaveBeenCalled();
+                expect(op2.doExecute).not.toHaveBeenCalled();
+                expect(op3.doExecute).not.toHaveBeenCalled();
+            });
+            
+            it("should not abort any operation", function() {
+                expect(op1.abort).not.toHaveBeenCalled();
+                expect(op2.abort).not.toHaveBeenCalled();
+                expect(op3.abort).not.toHaveBeenCalled();
+            });
+        });
+        
+        describe("after starting 1st operation", function() {
+            beforeEach(function() {
+                batch.start();
+                batch.abort();
+            });
+            
+            it("should execute 1st operation", function() {
+                expect(op1.doExecute).toHaveBeenCalled();
+            });
+            
+            it("should call abort on 1st operation", function() {
+                expect(op1.abort).toHaveBeenCalled();
+            });
+            
+            it("should not execute 2nd and 3rd operation", function() {
+                expect(op2.doExecute).not.toHaveBeenCalled();
+                expect(op3.doExecute).not.toHaveBeenCalled();
+            });
+            
+            it("should not call abort on 2nd and 3rd operation", function() {
+                expect(op2.abort).not.toHaveBeenCalled();
+                expect(op3.abort).not.toHaveBeenCalled();
+            });
+        });
+        
+        describe("after starting 2nd operation", function() {
+            beforeEach(function() {
+                batch.start();
+                op1.setSuccessful(true);
+                batch.abort();
+            });
+            
+            it("should complete 1st operation", function() {
+                expect(op1.complete).toBe(true);
+            });
+            
+            it("should not call abort on 1st operation", function() {
+                expect(op1.abort).not.toHaveBeenCalled();
+            });
+            
+            it("should execute 2nd operation", function() {
+                expect(op2.doExecute).toHaveBeenCalled();
+            });
+            
+            it("should abort 2nd operation", function() {
+                expect(op2.abort).toHaveBeenCalled();
+            });
+            
+            it("should not execute 3rd operation", function() {
+                expect(op3.doExecute).not.toHaveBeenCalled();
+            });
+            
+            it("should not abort 3rd operation", function() {
+                expect(op3.abort).not.toHaveBeenCalled();
+            });
+        });
+        
+        describe("after completing the sequence", function() {
+            beforeEach(function() {
+                batch.start();
+                op1.setSuccessful(true);
+                op2.setSuccessful(true);
+                op3.setSuccessful(true);
+            });
+            
+            it("should not call abort on any operation", function() {
+                expect(op1.abort).not.toHaveBeenCalled();
+                expect(op2.abort).not.toHaveBeenCalled();
+                expect(op3.abort).not.toHaveBeenCalled();
+            });
+        });
+    });
+    
+    describe("destruction", function() {
+        beforeEach(function() {
+            makeBatch();
+            
+            batch.add(op1 = makeOperation());
+            batch.add(op2 = makeOperation());
+            batch.add(op3 = makeOperation());
+        });
+        
+        it("should abort before destruction", function() {
+            batch.start();
+            batch.destroy();
+            
+            expect(batch.aborted).toBe(true);
+        });
+        
+        it("should destroy every operation", function() {
+            batch.destroy();
+            
+            expect(op1.destroyed).toBe(true);
+            expect(op2.destroyed).toBe(true);
+            expect(op3.destroyed).toBe(true);
         });
     });
 });

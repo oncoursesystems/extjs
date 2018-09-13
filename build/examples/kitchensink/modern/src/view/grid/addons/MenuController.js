@@ -47,8 +47,9 @@ Ext.define('KitchenSink.view.grid.addons.MenuController', {
             e.stopEvent();
 
             item = Ext.getCmp(target.id);
-
-            this.updateMenu(item.getRecord(), item.el, e, 't-b?');
+            if (item) {
+                this.updateMenu(item.getRecord(), item.el, e, 't-b?');
+            }
         }
     },
 

@@ -352,16 +352,15 @@
     if (userAgent.match(/FB/) && browserName === 'Other') {
         browserName = browserNames.safari;
         engineName = engineNames.webkit;
-    }
-
-    if (userAgent.match(/Android.*Chrome/g)) {
+    // Detect chrome first as Chrome in Android 8.0 introduced OPR in the user agent
+    } else if (userAgent.match(/Android.*Chrome/g)) {
         browserName = 'ChromeMobile';
-    }
-
-    if (userAgent.match(/OPR/)) {
-        browserName = 'Opera';
+    } else {
         browserMatch = userAgent.match(/OPR\/(\d+.\d+)/);
-        browserVersion = new Ext.Version(browserMatch[1]);
+        if (browserMatch) {
+            browserName = 'Opera';
+            browserVersion = new Ext.Version(browserMatch[1]);
+        }
     }
 
     Ext.apply(this, {

@@ -300,15 +300,7 @@ Ext.define('Ext.Button', {
          * the menu will override this.
          * @since 6.5.1
          */
-        stretchMenu: false,
-
-        /**
-         * @cfg eventHandlers
-         * @inheritdoc
-         */
-        eventHandlers: {
-            click: 'onClick'
-        }
+        stretchMenu: false
     },
 
     config: {
@@ -512,7 +504,9 @@ Ext.define('Ext.Button', {
      */
     element: {
         reference: 'element',
-        onclick: 'return Ext.doEv(this, event);'
+        listeners: {
+            click: 'onClick'
+        }
     },
 
     /**
@@ -589,7 +583,7 @@ Ext.define('Ext.Button', {
      * Returns a for an absolutely positioned transparent button element that overlays the
      * entire component and captures tabs and clicks for accessibility purposes.
      *
-     * Overridden by {@link Ext.field.FileButton} to replace the `<button` element with
+     * Overridden by {@link Ext.field.FileButton} to replace the `<button>` element with
      * an `<input type="file">` element.
      */
     getButtonTemplate: function() {
@@ -597,8 +591,10 @@ Ext.define('Ext.Button', {
             tag: 'button',
             reference: 'buttonElement',
             cls: Ext.baseCSSPrefix + 'button-el',
-            onfocus: 'return Ext.doEv(this, event);',
-            onblur: 'return Ext.doEv(this, event);'
+            listeners: {
+                focus: 'handleFocusEvent',
+                blur: 'handleBlurEvent'
+            }
         };
     },
 
@@ -848,9 +844,16 @@ Ext.define('Ext.Button', {
     /**
      * @private
      */
+    findEventTarget: function(e) {
+        return this.element;
+    },
+
+    /**
+     * @private
+     */
     onPress: function(e) {
         var me = this,
-            element = me.element,
+            element = this.findEventTarget(e),
             pressedDelay = me.getPressedDelay(),
             pressingCls = me.pressingCls;
 
@@ -883,12 +886,16 @@ Ext.define('Ext.Button', {
      * @private
      */
     doRelease: function(me, e) {
+        var element = me.findEventTarget(e);
+
         if (!me.getDisabled()) {
             if (me.hasOwnProperty('pressedTimeout')) {
                 Ext.undefer(me.pressedTimeout);
                 delete me.pressedTimeout;
             } else {
-                me.element.removeCls(me.pressingCls);
+                if (element) {
+                    element.removeCls(me.pressingCls);
+                }
             }
         }
     },

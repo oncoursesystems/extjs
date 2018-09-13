@@ -2,9 +2,12 @@ Ext.define('KitchenSink.view.grid.PagingController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.paging-grid',
 
-    topicFmt:
-        '<b><a href="http://sencha.com/forum/showthread.php?t={2}" target="_blank">{0}</a></b> ' +
-        '<a href="http://sencha.com/forum/forumdisplay.php?f={3}" target="_blank">{1} Forum</a>',
+    topicFmt: [
+        '<b>',
+            '<a href="http://sencha.com/forum/showthread.php?t={2}" target="_blank">{0}</a>',
+        '</b> ',
+        '<a href="http://sencha.com/forum/forumdisplay.php?f={3}" target="_blank">{1} Forum</a>'
+    ].join(''),
 
     onToggleExpanded: function (btn, pressed) {
         var view = this.getView(),

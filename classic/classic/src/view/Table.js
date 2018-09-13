@@ -2896,6 +2896,9 @@ Ext.define('Ext.view.Table', {
 
     /**
      * Refreshes the grid view. Sets the sort state and focuses the previously focused row.
+     *
+     * **Note:** This method should only be used when `bufferedRenderer` is set to `false`.  BufferedRender
+     * has its own methods for managing its data's state.
      */
     refresh: function() {
         var me = this;
@@ -3136,14 +3139,13 @@ Ext.define('Ext.view.Table', {
      */
     getMaxContentWidth: function(header) {
         var me = this,
-            cells = me.el.query(header.getCellInnerSelector()),
+            cells = me.getHeaderCells(header),
             originalWidth = header.getWidth(),
-            i = 0,
+            columnSizers = me.getColumnResizers(header),
             ln = cells.length,
-            columnSizer = me.body.select(me.getColumnSizerSelector(header)),
             max = Math.max,
             widthAdjust = 0,
-            maxWidth;
+            i, maxWidth;
 
         if (ln > 0) {
             if (Ext.supports.ScrollWidthInlinePaddingBug) {
@@ -3155,7 +3157,9 @@ Ext.define('Ext.view.Table', {
         }
 
         // Set column width to 1px so we can detect the content width by measuring scrollWidth
-        columnSizer.setWidth(1);
+        for (i = 0; i < columnSizers.length; i++) {
+            columnSizers[i].setWidth(1);
+        }
 
         // We are about to measure the offsetWidth of the textEl to determine how much
         // space the text occupies, but it will not report the correct width if the titleEl
@@ -3175,7 +3179,7 @@ Ext.define('Ext.view.Table', {
             display: ''
         });
 
-        for (; i < ln; i++) {
+        for (i = 0; i < ln; i++) {
             maxWidth = max(maxWidth, cells[i].scrollWidth);
         }
 
@@ -3187,9 +3191,44 @@ Ext.define('Ext.view.Table', {
         maxWidth = max(maxWidth + 1, 40);
 
         // Set column width back to original width
-        columnSizer.setWidth(originalWidth);
+        for (i = 0; i < columnSizers.length; i++) {
+            columnSizers[i].setWidth(originalWidth);
+        }
 
         return maxWidth;
+    },
+
+    getColumnResizers: function(header) {
+        var me = this,
+            features = me.features || [],
+            resizers = [me.body.select(me.getColumnSizerSelector(header))],
+            featureSizer, i;
+
+        for (i = 0; i < features.length; i++) {
+            featureSizer = features[i].columnSizer;
+            if (featureSizer) {
+                resizers.push(featureSizer.select(me.getColumnSizerSelector(header)));
+            }
+        }
+
+        return resizers;
+    },
+
+    getHeaderCells: function(header) {
+        var me = this,
+            features = me.features || [],
+            headerCells = me.el.query(header.getCellInnerSelector()),
+            featureSizer,
+            i;
+
+        for (i = 0; i < features.length; i++) {
+            featureSizer = features[i].columnSizer;
+            if (featureSizer) {
+                headerCells = headerCells.concat(featureSizer.query(header.getCellInnerSelector()));
+            }
+        }
+
+        return headerCells;
     },
 
     getPositionByEvent: function(e) {
@@ -3599,6 +3638,11 @@ Ext.define('Ext.view.Table', {
             // Do not leave the element in tht state in case refresh fails, and restoration
             // closure not called.
             activeElement.resumeFocusEvents();
+            
+            // if the store is expanding or collapsing, we should never scroll the view.
+            if (store.isExpandingOrCollapsing) {
+                return Ext.emptyFn;
+            }
 
             // The following function will attempt to refocus back in the same mode to the same cell
             // as it was at before based upon the previous record (if it's still in the store), or the row index.
@@ -3622,7 +3666,7 @@ Ext.define('Ext.view.Table', {
 
                     // Maybe there are no cells. eg: all groups collapsed.
                     if (focusPosition.getCell(true)) {
-                        if (actionableMode && !store.isExpandingOrCollapsing) {
+                        if (actionableMode) {
                             me.resumeActionableMode(focusPosition);
                         } else {
                             // Pass "preventNavigation" as true so that that does not cause selection.

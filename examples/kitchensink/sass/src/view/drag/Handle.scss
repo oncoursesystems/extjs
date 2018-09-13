@@ -21,6 +21,11 @@
     }
 }
 
+@if $theme-name == 'theme-graphite' {
+    .handle-source {
+        height: 140px;     
+    }
+}
 
 .handle-proxy {
     color: #FFF;

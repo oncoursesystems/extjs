@@ -1,10 +1,12 @@
-/* global expect, jasmine, Ext, xit, it */
+/* global expect, jasmine, Ext, xit, it, topSuite */
+/* eslint indent: off */
 
 topSuite("grid-rowedit",
     [false, 'Ext.grid.Panel', 'Ext.data.ArrayStore', 'Ext.grid.plugin.RowEditing',
      'Ext.form.field.ComboBox', 'Ext.form.FieldContainer', 'Ext.grid.column.Action',
      'Ext.form.field.Trigger'],
 function() {
+    var itNotIE8 = Ext.isIE8 ? xit : it;
     function createSuite(buffered) {
         describe(buffered ? "with buffered rendering" : "without buffered rendering", function() {
             var ENTER = 13,
@@ -379,19 +381,18 @@ function() {
                         plugin.startEdit(rec, colRef[4]);
                     });
 
-                    // We fudge the scrol because it scrolls just the required editor's
+                    // We fudge the scroll because it scrolls just the required editor's
                     // element *just* into view, and then syncs the view to match that.
                     runs(function() {
-                        expect(view.getScrollX()).toBeApproximately(x, 3);
+                        expect(view.getScrollX()).toBeApprox(x, 3);
                         plugin.cancelEdit();
                         // expects the grid not to scroll when cancelling the edit
-                        expect(view.getScrollX()).toBeApproximately(x, 3);
+                        expect(view.getScrollX()).toBeApprox(x, 3);
                         plugin.startEdit(rec, colRef[0]);
                     });
-                    
-                    runs(function() {
-                        // expects the grid to scroll left when editing the first field
-                        expect(view.getScrollX()).toBeApproximately(0, 3);
+
+                    waitsFor(function() {
+                        return view.getScrollX() <= 3;
                     });
                 });
 
@@ -1975,7 +1976,7 @@ function() {
             });
 
             describe('using a textarea as an editor', function() {
-                it('should align to the bottom of the editor when at the end', function() {
+                itNotIE8('should align to the bottom of the editor when at the end', function() {
                     store = Ext.create('Ext.data.Store', {
                         storeId: 'simpsonsStore',
                         fields:[ 'name', 'email', 'phone'],

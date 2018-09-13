@@ -11,7 +11,7 @@
  * to edit a date, it would be useful to specify {@link Ext.form.field.Date} as the editor.
  *
  * If the `editor` config on a column contains a `field` property, then the `editor` config is used to create
- * the wrapping {@link Ext.grid.CellEditorCellEditor}, and the `field` property is used to create the editing 
+ * the wrapping {@link Ext.grid.CellEditor CellEditor}, and the `field` property is used to create the editing 
  * input field.
  *
  * ## Example
@@ -355,7 +355,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
         // If the events fired above ('beforeedit' and potentially 'edit') triggered any destructive operations
         // regather the context using the ordinal position.
         if (context.cell !== context.getCell(true)) {
-            context = me.getEditingContext(context.rowIdx, context.colIdx);
+            context = me.getEditingContext(context.rowIdx, context.colIdx, null, context.view);
             position.setPosition(context);
         }
 
@@ -638,7 +638,9 @@ Ext.define('Ext.grid.plugin.CellEditing', {
         // Only update the record if the new value is different than the
         // startValue. When the view refreshes its el will gain focus
         if (!record.isEqual(value, startValue)) {
+            view.skipSaveFocusState = true;
             record.set(context.column.dataIndex, value);
+            view.skipSaveFocusState = false;
             // Changing the record may impact the position
             context.rowIdx = view.indexOf(record);
         }

@@ -12,7 +12,24 @@ Ext.define('KitchenSink.view.direct.Grid', {
     requires: [
         'KitchenSink.view.direct.GridController'
     ],
-    
+
+    profiles: {
+        classic: {
+            columnWidth: 140,
+            labelWidth: 100,
+            width: 250
+        },
+        neptune: {
+            columnWidth: 140,
+            labelWidth: 100,
+            width: 250
+        },
+        graphite: {
+            columnWidth: 220,
+            labelWidth: 150,
+            width: 370
+        }
+    },
     //<example>
     exampleTitle: 'Grid with Ext Direct back end',
     exampleDescription: [
@@ -63,7 +80,7 @@ Ext.define('KitchenSink.view.direct.Grid', {
     }, {
         dataIndex: 'revenue',
         align: 'right',
-        width: 140,
+        width: '${columnWidth}',
         text: 'Annual revenue',
         renderer: Ext.util.Format.usMoney
     }],
@@ -72,12 +89,14 @@ Ext.define('KitchenSink.view.direct.Grid', {
         items: [{
             xtype: 'combobox',
             fieldLabel: 'Choose table',
+            labelWidth: '${labelWidth}',
             queryMode: 'local',
             displayField: 'desc',
             valueField: 'table',
             forceSelection: true,
             editable: false,
             value: 'companies',
+            width: '${width}',
             store: {
                 fields: ['table', 'desc'],
                 data: [

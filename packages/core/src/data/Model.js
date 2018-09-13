@@ -666,6 +666,29 @@ Ext.define('Ext.data.Model', {
     /**
      * @cfg {String/Object/Ext.data.proxy.Proxy} proxy
      * The {@link Ext.data.proxy.Proxy proxy} to use for this class.
+     *
+     * By default, the proxy is configured from the {@link Ext.data.schema.Schema schema}.
+     * You can ignore the schema defaults by setting `schema: false` on the `proxy` config.
+     *
+     *      Ext.define('MyApp.data.CustomProxy', {
+     *          extend: 'Ext.data.proxy.Ajax',
+     *          alias: 'proxy.customproxy',
+     *
+     *          url: 'users.json'
+     *      });
+     *
+     *      Ext.define('MyApp.models.CustomModel', {
+     *          extend: 'Ext.data.Model',
+     *
+     *          fields: ['name'],
+     *          proxy: {
+     *              type: 'customproxy,
+     *              schema: false
+     *          }
+     *      });
+     *
+     * With `schema: false`, the `url` of the proxy will be used instead of what has been defined
+     * on the schema.
      */
     proxy: undefined,
 
@@ -2516,8 +2539,11 @@ Ext.define('Ext.data.Model', {
 
             // The idField could have been replaced, so reacquire it.
             me.idField = proto.idField = idField = fieldsMap[proto.idProperty];
-            idField.allowNull = idField.critical = idField.identifier = true;
-            idField.defaultValue = null;
+            
+            if (idField) {
+                idField.allowNull = idField.critical = idField.identifier = true;
+                idField.defaultValue = null;
+            }
 
             // In case we've created the initializer we need to zap it so we recreate it
             // next time. Likewise with field ranking.
@@ -2631,8 +2657,13 @@ Ext.define('Ext.data.Model', {
                     }
                     // We have nothing or a config for the proxy. Get some defaults from
                     // the Schema and smash anything we've provided over the top.
-                    defaults = me.schema.constructProxy(me);
-                    proxy = proxy ? Ext.merge(defaults, proxy) : defaults;
+                    defaults = Ext.merge(me.schema.constructProxy(me), proxy);
+                    
+                    if (proxy && proxy.type) {
+                        proxy = proxy.schema === false ? proxy : defaults;
+                    } else {
+                        proxy = defaults;
+                    }
                 }
 
                 proxy = me.setProxy(proxy);
@@ -3235,8 +3266,9 @@ Ext.define('Ext.data.Model', {
                     superFields = proto.fields,
                     versionProperty = data.versionProperty || proto.versionProperty,
                     idProperty = cls.idProperty,
-                    idField, field, i, length, name, ordinal, 
-                    reference, superIdField, superIdFieldName, idDeclared;
+                    idField, field, i, length, name, ordinal,
+                    reference, superIdField, superIdFieldName,
+                    superIdDeclared, idDeclared;
 
                 // Process any inherited fields to produce a fields [] and ordinals {} for
                 // this class:
@@ -3294,6 +3326,10 @@ Ext.define('Ext.data.Model', {
                         if (name === idProperty) {
                             idDeclared = field;
                         }
+
+                        if (name === superIdFieldName) {
+                            superIdDeclared = true;
+                        }
                     }
                 }
 
@@ -3315,7 +3351,7 @@ Ext.define('Ext.data.Model', {
                     idField.definedBy = cls;
                     idField.ordinal = ordinal;
                     idField.generated = true;
-                } else if (idDeclared && superIdField && superIdField.generated) {
+                } else if (idDeclared && !superIdDeclared && superIdField && superIdField.generated) {
                     // If we're declaring the id as a field in our fields array and it's different to
                     // the super id field that has been generated, pull it out and fix up the ordinals. This
                     // likely won't happen often, to do it earlier we would need to know the contents of the fields

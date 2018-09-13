@@ -132,6 +132,7 @@ Ext.define('Ext.grid.selection.Columns', {
             selModel.updateHeaderState();
             if (!suppressEvent) {
                 selModel.fireSelectionChange();
+                me.fireColumnSelection();
             }
         },
 
@@ -149,6 +150,7 @@ Ext.define('Ext.grid.selection.Columns', {
                 selModel.updateHeaderState();
                 if (!suppressEvent) {
                     selModel.fireSelectionChange();
+                    me.fireColumnSelection();
                 }
             }
         },
@@ -157,10 +159,10 @@ Ext.define('Ext.grid.selection.Columns', {
             var me = this,
                 prevSelection = me.getColumns();
 
-            me.startColumn = startColumn;
-            me.selectedColumns = [startColumn];
             prevSelection.push(startColumn);
-            me.refreshColumns.apply(me, prevSelection);
+            me.clear(true);
+            me.startColumn = startColumn;
+            me.add(startColumn);
         },
 
         setRangeEnd: function(endColumn) {
@@ -185,6 +187,7 @@ Ext.define('Ext.grid.selection.Columns', {
                 prevSelection.push(columns[i]);
             }
             me.refreshColumns.apply(me, prevSelection);
+            me.fireColumnSelection();
         },
 
         /**
@@ -238,7 +241,8 @@ Ext.define('Ext.grid.selection.Columns', {
          * @private
          */
         remove: function(column, suppressEvent) {
-            var selModel = this.getSelectionModel();
+            var me = this,
+                selModel = me.getSelectionModel();
 
             //<debug>
             if (!column.isGridColumn) {
@@ -246,19 +250,28 @@ Ext.define('Ext.grid.selection.Columns', {
             }
             //</debug>
 
-            if (this.selectedColumns) {
-                Ext.Array.remove(this.selectedColumns, column);
+            if (me.selectedColumns) {
+                Ext.Array.remove(me.selectedColumns, column);
 
                 // Might be being called because of column removal/hiding.
                 // In which case the view will have selected cells removed, so no refresh needed.
                 if (column.getGrid() && column.isVisible()) {
-                    this.refreshColumns(column);
+                    me.refreshColumns(column);
                     selModel.updateHeaderState();
                     if (!suppressEvent) {
                         selModel.fireSelectionChange();
+                        me.fireColumnSelection();
                     }
                 }
             }
+        },
+
+        fireColumnSelection: function() {
+            var me = this,
+                selModel = me.getSelectionModel(),
+                view = selModel.getView();
+
+            view.fireEvent('columnselection', view, me.selectedColumns);
         },
 
         /**
@@ -283,14 +296,30 @@ Ext.define('Ext.grid.selection.Columns', {
             }
         },
 
+        reduceRange: function(extensionVector) {
+            var me = this,
+                columns = me.view.getHeaderContainer().getVisibleColumns(),
+                startIdx = extensionVector.start.columnIndex,
+                endIdx = extensionVector.end.columnIndex,
+                reduceTo = Math.abs(startIdx - endIdx) + 1,
+                diff = me.selectedColumns.length - reduceTo,
+                i;
+
+            for (i = diff; i > 0; i--) {
+                me.remove(columns[endIdx + i]);
+            }
+        },
+
         onSelectionFinish: function() {
             var me = this,
-                range = me.getContiguousSelection();
+                range = me.getContiguousSelection(),
+                start, end;
 
             if (range) {
-                me.getSelectionModel().onSelectionFinish(me,
-                    new Ext.grid.Location(me.view, {record: 0, column: range[0]}),
-                    new Ext.grid.Location(me.view, {record: me.view.getStore().getCount() - 1, column: range[1]}));
+                start = new Ext.grid.Location(me.view, {record: 0, column: range[0]});
+                end = new Ext.grid.Location(me.view, {record: me.view.getStore().getCount() - 1, column: range[1]});
+
+                me.getSelectionModel().onSelectionFinish(me, start, end);
             } else {
                 me.getSelectionModel().onSelectionFinish(me);
             }

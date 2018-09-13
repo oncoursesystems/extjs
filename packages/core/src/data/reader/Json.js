@@ -191,14 +191,13 @@
  */
 Ext.define('Ext.data.reader.Json', {
     extend: 'Ext.data.reader.Reader',
-    
+    alternateClassName: 'Ext.data.JsonReader',
+    alias: 'reader.json',
+
     requires: [
         'Ext.JSON'
     ],
     
-    alternateClassName: 'Ext.data.JsonReader',
-    alias : 'reader.json',
-
     config: {
         /**
         * @cfg {String} record The optional location within the JSON response that the record data itself can be found at.
@@ -237,6 +236,11 @@ Ext.define('Ext.data.reader.Json', {
         preserveRawData: false
     },
     
+    /**
+     * @private
+     */
+    responseType: 'json',
+    
     updateRootProperty: function() {
         this.forceBuildExtractors();    
     },
@@ -256,6 +260,10 @@ Ext.define('Ext.data.reader.Json', {
 
     getResponseData: function(response) {
         var error;
+        
+        if (typeof response.responseJson === 'object') {
+            return response.responseJson;
+        }
 
         try {
             return Ext.decode(response.responseText);
@@ -353,7 +361,7 @@ Ext.define('Ext.data.reader.Json', {
             
             if (simple === true || operatorIndex < 0) {
                 result = function(raw) {
-                    return raw[expr];
+                    return raw == null ? null : raw[expr];
                 };
             } else {
                 // The purpose of this part is to generate a "safe" accessor for any complex 

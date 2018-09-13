@@ -29,8 +29,8 @@ Ext.define('Ext.view.DropZone', {
         me.callParent([me.view.el]);
     },
 
-//  Fire an event through the client DataView. Lock this DropZone during the event processing so that
-//  its data does not become corrupted by processing mouse events.
+    //  Fire an event through the client DataView. Lock this DropZone during the event processing so that
+    //  its data does not become corrupted by processing mouse events.
     fireViewEvent: function() {
         var me = this,
             result;
@@ -45,8 +45,8 @@ Ext.define('Ext.view.DropZone', {
         var node = e.getTarget(this.view.getItemSelector()),
             mouseY, nodeList, testNode, i, len, box;
 
-//      Not over a row node: The content may be narrower than the View's encapsulating element, so return the closest.
-//      If we fall through because the mouse is below the nodes (or there are no nodes), we'll get an onContainerOver call.
+        // Not over a row node: The content may be narrower than the View's encapsulating element, so return the closest.
+        // If we fall through because the mouse is below the nodes (or there are no nodes), we'll get an onContainerOver call.
         if (!node) {
             mouseY = e.getY();
             for (i = 0, nodeList = this.view.getNodes(), len = nodeList.length; i < len; i++) {
@@ -117,7 +117,7 @@ Ext.define('Ext.view.DropZone', {
             pos = me.getPosition(e, node),
             overRecord = view.getRecord(node),
             draggingRecords = data.records,
-            indicatorY, scrollable, scrollableEl, container;
+            indicatorY, scrollable, scrollableEl, container, containerY;
 
         if (!Ext.Array.contains(draggingRecords, overRecord) && (
             pos === 'before' && !me.containsRecordAtOffset(draggingRecords, overRecord, -1) ||
@@ -126,11 +126,12 @@ Ext.define('Ext.view.DropZone', {
             me.valid = true;
 
             if (me.overRecord !== overRecord || me.currentPosition !== pos) {
-                scrollable =  me.view.getScrollable();
+                scrollable = me.view.getScrollable();
                 scrollableEl = scrollable && scrollable.getElement();
 
-                container = (scrollableEl && !scrollableEl.isScrollable()) ? scrollableEl : Ext.fly(view.getNodeContainer());
-                indicatorY = Ext.fly(node).getY() - container.getY() - 1;
+                container = (scrollableEl && scrollableEl.isScrollable()) ? scrollableEl : Ext.fly(view.getNodeContainer());
+                containerY = container.getY();
+                indicatorY = Ext.fly(node).getY() - containerY - 1;
                 if (pos === 'after') {
                     indicatorY += Ext.fly(node).getHeight();
                 }
@@ -168,7 +169,7 @@ Ext.define('Ext.view.DropZone', {
     notifyOut: function(node, dragZone, e, data) {
         var me = this;
 
-        me.callParent(arguments);
+        me.callParent([node, dragZone, e, data]);
         me.overRecord = me.currentPosition = null;
         me.valid = false;
         if (me.indicator) {

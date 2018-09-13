@@ -8,7 +8,8 @@ Ext.define('KitchenSink.view.AnchoredToolTipsController', {
             html: 'A simple tooltip'
         }, {
             target: this.lookup('ajax').el,
-            width: 200,
+            // Removing width so that it will take default width of tool tip.
+            // width: 200,
             loader: {
                 url: '/KitchenSink/ToolTipsSimple',
                 loadOnRender: true

@@ -1633,7 +1633,29 @@ topSuite("Ext.dataview.DataView", ['Ext.data.ArrayStore'], function() {
                     expectData(['Item7', 'Item6', 'Item5', 'Item4', 'Item3', 'Item2', 'Item1']);
                 });
             });
-
+			
+            describe("selection while sorted", function() {
+                it("should save the item selection when list is sorted", function() {
+                    store = makeStore(5);
+                    makeView({
+                        store: store,
+                        selection: store.getAt(4)
+                    });
+                    store.getSorters().add({
+                        property: 'name',
+                        direction: 'ASC'
+                    });
+                    view.getStore().sort(store.getSorters().items);
+                    view.select(2);
+                    view.select(1);
+                    expect(getElement(view.getItemAt(0))).not.toHaveCls('x-selected');
+                    expect(getElement(view.getItemAt(1))).toHaveCls('x-selected');
+                    expect(getElement(view.getItemAt(2))).not.toHaveCls('x-selected');
+                    expect(getElement(view.getItemAt(3))).not.toHaveCls('x-selected');
+                    expect(getElement(view.getItemAt(4))).not.toHaveCls('x-selected');
+                });
+            });
+			
             describe("filtering", function() {
                 function filter(rec) {
                     return rec.id % 2 === 0;

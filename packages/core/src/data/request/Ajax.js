@@ -12,7 +12,6 @@ Ext.define('Ext.data.request.Ajax', {
     ],
 
     statics: {
-
         /**
          * Checks if the response status was successful
          * @param {Number} status The status code
@@ -21,13 +20,22 @@ Ext.define('Ext.data.request.Ajax', {
          * @private
          */
         parseStatus: function(status, response) {
-            var len;
+            var type, len;
 
             if (response) {
-                //We have to account for binary response type
-                if (response.responseType === 'arraybuffer') {
+                // We have to account for binary and other response types
+                type = response.responseType;
+                
+                if (type === 'arraybuffer') {
                     len = response.byteLength;
-                } else if (response.responseText) {
+                }
+                else if (type === 'blob') {
+                    len = response.response.size;
+                }
+                else if (type === 'json' || type === 'document') {
+                    len = 0;
+                }
+                else if ((type === 'text' || type === '' || !type) && response.responseText) {
                     len = response.responseText.length;
                 }
             }
@@ -35,7 +43,9 @@ Ext.define('Ext.data.request.Ajax', {
             // see: https://prototype.lighthouseapp.com/projects/8886/tickets/129-ie-mangles-http-response-status-code-204-to-1223
             status = status == 1223 ? 204 : status;
 
-            var success = (status >= 200 && status < 300) || status == 304 || (status == 0 && Ext.isNumber(len)),
+            // Status can be 0 for file:/// requests
+            var success = (status >= 200 && status < 300) || status == 304 ||
+                (status == 0 && Ext.isNumber(len)),
                 isException = false;
 
             if (!success) {
@@ -192,6 +202,10 @@ Ext.define('Ext.data.request.Ajax', {
             //</debug>
             }
         }
+        
+        if (options.responseType) {
+            xhr.responseType = options.responseType;
+        }
 
         if (options.withCredentials || me.withCredentials) {
             xhr.withCredentials = true;
@@ -212,7 +226,6 @@ Ext.define('Ext.data.request.Ajax', {
         if (options.binaryData) {
             // This is a binary data request. Handle submission differently for differnet browsers
             if (window.Uint8Array) {
-                // On browsers that support this, use the native XHR object
                 xhr = me.getXhrInstance();
             }
             else {
@@ -318,32 +331,12 @@ Ext.define('Ext.data.request.Ajax', {
     },
 
     /**
-     * Creates the appropriate XHR transport for this browser.
      * @private
+     * Do not remove this method. This is where Ajax simulator injects request stubs.
      */
-    getXhrInstance: (function() {
-        var options = [function() {
-            return new XMLHttpRequest();
-        }, function() {
-            return new ActiveXObject('MSXML2.XMLHTTP.3.0'); // jshint ignore:line
-        }, function() {
-            return new ActiveXObject('MSXML2.XMLHTTP'); // jshint ignore:line
-        }, function() {
-            return new ActiveXObject('Microsoft.XMLHTTP'); // jshint ignore:line
-        }], i = 0,
-            len = options.length,
-            xhr;
-
-        for (; i < len; ++i) {
-            try {
-                xhr = options[i];
-                xhr();
-                break;
-            } catch(e) {
-            }
-        }
-        return xhr;
-    }()),
+    getXhrInstance: function() {
+        return new XMLHttpRequest();
+    },
 
     processXdrRequest: function(request, xhr) {
         var me = this;
@@ -520,12 +513,27 @@ Ext.define('Ext.data.request.Ajax', {
             response.responseBytes = me.getByteArray(xhr);
         }
         else {
-            // an error is thrown when trying to access responseText or responseXML
-            // on an xhr object with responseType of 'arraybuffer', so only attempt
-            // to set these properties in the response if we're not dealing with
-            // binary data
-            response.responseText = xhr.responseText;
-            response.responseXML = xhr.responseXML;
+            if (xhr.responseType) {
+                response.responseType = xhr.responseType;
+            }
+            
+            if (xhr.responseType === 'blob') {
+                response.responseBlob = xhr.response;
+            }
+            else if (xhr.responseType === 'json') {
+                response.responseJson = xhr.response;
+            }
+            else if (xhr.responseType === 'document') {
+                response.responseXML = xhr.response;
+            }
+            else {
+                // an error is thrown when trying to access responseText or responseXML
+                // on an xhr object with responseType with any value but "text" or "",
+                // so only attempt to set these properties in the response if we're not
+                // dealing with other specified response types
+                response.responseText = xhr.responseText;
+                response.responseXML = xhr.responseXML;
+            }
         }
 
         return response;

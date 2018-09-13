@@ -515,7 +515,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         * @param {Object} options (optional) If the `ename` parameter was an event name, this is the
         * {@link Ext.util.Observable#addListener addListener} options.
         * @param {Boolean} noDestroy (private)
-        * @return {Object} **Only when the `destroyable` option is specified. **
+        * @return {Object} **Only when the `destroyable` option is specified.**
         *
         *  A `Destroyable` object. An object which implements the `destroy` method which removes all listeners added in this call. For example:
         *
@@ -1084,7 +1084,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
          *         delegate: 'h1.myTitle'
          *      });
          *
-         * @return {Object} **Only when the `destroyable` option is specified. **
+         * @return {Object} **Only when the `destroyable` option is specified.**
          *
          *  A `Destroyable` object. An object which implements the `destroy` method which removes 
          *  all listeners added in this call. For example:

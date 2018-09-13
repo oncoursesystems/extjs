@@ -699,4 +699,57 @@ topSuite("Ext.chart.AbstractChart", ['Ext.chart.*', 'Ext.data.ArrayStore'], func
             expect(fillStyle.getStops()[0].color).toBe('#000000');
         });
     });
+
+    describe('legend render checking if legend is getting rendered along with Chart', function () {
+
+        afterEach(function() {
+            chart = Ext.destroy(chart);
+        });
+
+        it("legend should be rendered", function () {
+            runs(function () {
+                chart = Ext.create({
+                    xtype: 'cartesian',
+                    renderTo: Ext.getBody(),
+                    width: 400,
+                    height: 400,
+                    innerPadding: 10,
+                    store: {
+                        fields: ['name', 'data1'],
+                        data: [[{
+                            age: '0',
+                            value: 400
+                        }, {
+                            age: '2',
+                            value: 150
+                        }, {
+                            age: '4',
+                            value: 120
+                        }, {
+                            age: '6',
+                            value: 100
+                        }, {
+                            age: '8',
+                            value: 1500
+                        }]]
+                    },
+                    legend: {
+                        type: 'dom',
+                        docked: 'right'
+                    },
+                    series: {
+                        type: 'pie',
+                        highlight: true,
+                        angleField: 'data1',
+                        donut: 30
+                    }
+                });
+            });
+
+            runs(function () {
+                var legend = chart.getLegend();
+                expect(legend.rendered).toBe(true);
+            });
+        });
+    });
 });

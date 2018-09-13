@@ -34,12 +34,19 @@ Ext.define('KitchenSink.view.grid.LockingGrid', {
     }],
     profiles: {
         classic: {
-            green: 'green',
-            red: 'red'
+            gainColor: 'green',
+            lossColor: 'red',
+            percentageChangeWidth: 105
         },
         neptune: {
-            green: '#73b51e',
-            red: '#cf4c35'
+            gainColor: '#73b51e',
+            lossColor: '#cf4c35',
+            percentageChangeWidth: 105
+        },
+        graphite: {
+            gainColor: 'unset',
+            lossColor: 'unset',
+            percentageChangeWidth: 135
         }
     },
     //</example>
@@ -53,7 +60,7 @@ Ext.define('KitchenSink.view.grid.LockingGrid', {
     // There is no asymmetric data, we do not need to go to the expense of synching row heights
     syncRowHeight: false,
     signTpl: '<span style="' +
-            'color:{value:sign(\'${red}\',\'${green}\')}"' +
+            'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +
         '>{text}</span>',
 
     columns: [{
@@ -94,7 +101,7 @@ Ext.define('KitchenSink.view.grid.LockingGrid', {
         text: '% Change',
         dataIndex: 'priceChangePct',
 
-        width: 105,
+        width: '${percentageChangeWidth}',
         sortable: true,
         renderer: 'renderChange'
     }, {

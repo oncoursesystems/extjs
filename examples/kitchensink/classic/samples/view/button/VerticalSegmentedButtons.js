@@ -23,6 +23,9 @@ Ext.define('KitchenSink.view.button.VerticalSegmentedButtons', {
         },
         'neptune-touch': {
             width: 585
+        },
+        graphite: {
+            width: 650
         }
     },
     //</example>

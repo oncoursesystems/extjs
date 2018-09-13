@@ -35,6 +35,58 @@ describe("Ext.layout.Card", function() {
         animation = layout.getAnimation();
     }
 
+    describe("rendering", function() {
+        it("should not render when adding the first child until the container is rendered", function() {
+            createContainer({
+                renderTo: null,
+                items: null
+            });
+
+            var c1 = ct.add({
+                xtype: 'component'
+            });
+
+            var c2 = ct.add({
+                xtype: 'component'
+            });
+            expect(c1.rendered).toBe(false);
+            expect(c2.rendered).toBe(false);
+            ct.render(Ext.getBody());
+            expect(c1.rendered).toBe(true);
+            expect(c2.rendered).toBe(false);
+        });
+
+        it("should defer viewmodel creation until render", function() {
+            createContainer({
+                renderTo: null,
+                items: null
+            });
+
+            var c = ct.add({
+                xtype: 'component',
+                viewModel: {},
+                bind: '{text}'
+            });
+
+            expect(c.getHtml()).not.toBe('New');
+
+            var outerCt = new Ext.Container({
+                renderTo: Ext.getBody(),
+                items: [ct],
+                viewModel: {
+                    data: {
+                        text: 'New'
+                    }
+                }
+            });
+
+            outerCt.getViewModel().notify();
+            expect(c.getHtml()).toBe('New');
+
+            outerCt.destroy();
+        });
+    });
+
     describe("deferRender", function() {
         var fields;
 

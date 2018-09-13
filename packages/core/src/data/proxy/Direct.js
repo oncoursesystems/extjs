@@ -416,7 +416,7 @@ Ext.define('Ext.data.proxy.Direct', {
     /**
      * Aborts a running request by operation.
      *
-     * @param {Ext.data.Operation} operation The operation to abort. This parameter
+     * @param {Ext.data.operation.Operation} operation The operation to abort. This parameter
      * is mandatory.
      */
     abort: function(operation) {

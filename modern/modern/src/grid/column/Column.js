@@ -1279,7 +1279,6 @@ Ext.define('Ext.grid.column.Column', {
         if (grouper) {
             store.setGrouper(grouper);
         }
-        grid.setGrouped(true);
     },
 
     /**
@@ -1360,7 +1359,6 @@ Ext.define('Ext.grid.column.Column', {
         var grid = this.getGrid(),
             store = grid.getStore();
 
-        grid.setGrouped(false);
         store.setGrouper(null);
     },
 

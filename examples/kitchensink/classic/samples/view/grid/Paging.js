@@ -25,20 +25,32 @@ Ext.define('KitchenSink.view.grid.Paging', {
     profiles: {
         classic: {
             width: 700,
+            height: 500,
+            repliesWidth: 70,
             percentChangeColumnWidth: 75,
-            lastUpdatedColumnWidth: 85
+            lastUpdatedColumnWidth: 85,
+            lastpostWidth: 150
         },
         neptune: {
             width: 760,
+            height: 500,
             percentChangeColumnWidth: 100,
-            lastUpdatedColumnWidth: 115
+            lastUpdatedColumnWidth: 115,
+            repliesWidth: 70,
+            lastpostWidth: 150
+        },
+        graphite: {
+            width: 1000,
+            height: 600,
+            repliesWidth: 150,
+            lastpostWidth: 250	
         }
     },
     //</example>
 
     title: 'Browse Forums',
     width: '${width}',
-    height: 500,
+    height: '${height}',
 
     autoLoad: true,
     frame: true,
@@ -84,14 +96,14 @@ Ext.define('KitchenSink.view.grid.Paging', {
         text: "Replies",
         dataIndex: 'replycount',
 
-        width: 70,
+        width: '${repliesWidth}',
         align: 'right',
         sortable: true
     },{
         text: "Last Post",
         dataIndex: 'lastpost',
 
-        width: 150,
+        width: '${lastpostWidth}',
         sortable: true,
         renderer: 'renderLast'
     }],

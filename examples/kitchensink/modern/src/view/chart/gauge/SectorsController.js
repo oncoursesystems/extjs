@@ -2,25 +2,18 @@ Ext.define('KitchenSink.view.chart.gauge.SectorsController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.gauge-sectors',
 
-    init: function () {
+    init: function (view) {
+        this.callParent([view]);
         this.onRefresh();
     },
 
-    onRefresh: function () {
-        var chart = this.lookup('chart'),
-            store = chart.getStore();
-
-        store.generateData(store.getNumRecords());
-    },
-
     seriesRenderer: function (sprite, config, rendererData, index) {
-        var surface = sprite.getParent(),
-            chart = rendererData.series.getChart(),
+        var chart = rendererData.series.getChart(),
             mainRect = chart.getMainRect(),
             width = mainRect[2],
             height = mainRect[3],
             bigChart = (width >= 250 && height >= 150),
-            changes, fontSize;
+            changes;
 
         // This renderer function draws the "Temp." label in big white letters,
         // the "Cold" label in blue, and the "Hot" label in red.

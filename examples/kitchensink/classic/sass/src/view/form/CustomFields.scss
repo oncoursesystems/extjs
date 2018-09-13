@@ -35,3 +35,19 @@
     display: block;
     clear: none;
 }
+
+@if $theme-name == 'theme-graphite' {
+    .search-item {
+        a, a:visited {
+            color: #fff;
+        }
+    }
+    
+    .search-item p {
+        color: #fff;
+    }
+    
+    .search-item h3 span {
+        color: #fff;
+    }
+}

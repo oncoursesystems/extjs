@@ -65,12 +65,10 @@ Ext.define('KitchenSink.view.chart.scatter.Scatter', {
         },
         axes: [{
             type: 'numeric',
-            position: 'left',
-            fields: ['g1', 'g2', 'g3', 'g4']
+            position: 'left'
         }, {
             type: 'category',
-            position: 'bottom',
-            fields: 'id'
+            position: 'bottom'
         }],
         series: [{
             type: 'scatter',

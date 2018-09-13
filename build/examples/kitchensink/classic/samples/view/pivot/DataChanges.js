@@ -24,10 +24,16 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 550
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 600
+        },
+        graphite: {
+            width: 950,
+            height: 600
         }
     },
     //</example>
@@ -36,7 +42,7 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
 
     title: 'Data changes',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 

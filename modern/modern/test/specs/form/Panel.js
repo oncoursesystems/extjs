@@ -1,5 +1,5 @@
 topSuite("Ext.form.Panel",
-    ['Ext.field.*', 'Ext.layout.VBox', 'Ext.direct.RemotingProvider'],
+    ['Ext.field.*', 'Ext.layout.VBox', 'Ext.direct.RemotingProvider', 'Ext.data.validator.*'],
 function() {
     var field, panel,
         create = function(config) {
@@ -1124,6 +1124,40 @@ function() {
                 panel.submit();
 
                 waitsForSpy(spy, 'form to submit');
+            });
+        });
+
+        it("should submit when submitOnAction is 'true'", function () {
+            var fieldSpy = jasmine.createSpy(),
+                formSpy = jasmine.createSpy(),
+                submitSpy = jasmine.createSpy().andCallFake(function () {return false;});
+
+            create({
+                renderTo: document.body,
+                submitOnAction: true,
+                items: [{
+                    xtype: 'textfield',
+                    listeners: {
+                        action: fieldSpy
+                    }
+                }],
+
+                listeners: {
+                    action: formSpy,
+                    beforesubmit: submitSpy
+                }
+            });
+
+            field = panel.down('textfield');
+            field.focus();
+
+            waitsForFocus(field);
+            runs(function () {
+                jasmine.fireKeyEvent(field.inputElement, 'keyup', Ext.event.Event.ENTER);
+
+                expect(fieldSpy).toHaveBeenCalled();
+                expect(formSpy).toHaveBeenCalled();
+                expect(submitSpy).toHaveBeenCalled();
             });
         });
     });

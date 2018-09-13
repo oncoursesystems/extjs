@@ -36,16 +36,32 @@ Ext.define('KitchenSink.view.form.XmlForm', {
         path: 'data/form/xml-form-errors.xml'
     }],
     //</example>
-    
+    profiles: {
+        classic: {
+            width: 340,
+            fieldsetWidth: 280,
+            labelWidth: 85
+        },
+        neptune: {
+            width: 340,
+            fieldsetWidth: 280,
+            labelWidth: 85
+        },
+        graphite: {
+            width: 440,
+            fieldsetWidth: 380,
+            labelWidth: 115
+        }
+    },
     title:'XML Form',
     frame: true,
-    width: 340,
+    width: '${width}',
     bodyPadding: 5,
     waitMsgTarget: true,
 
     fieldDefaults: {
         labelAlign: 'right',
-        labelWidth: 85,
+        labelWidth: '${labelWidth}',
         msgTarget: 'side'
     },
 
@@ -70,7 +86,7 @@ Ext.define('KitchenSink.view.form.XmlForm', {
         title: 'Contact Information',
         defaultType: 'textfield',
         defaults: {
-            width: 280
+            width: '${fieldsetWidth}'
         },
         items: [{
             fieldLabel: 'First Name',

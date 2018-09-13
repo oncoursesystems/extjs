@@ -91,7 +91,8 @@ Ext.onReady(function(){
             sortable: true,
             dataIndex: 'email',
             field: {
-                xtype: 'textfield'
+                xtype: 'textfield',
+                vtype: 'email'
             }
         }, {
             header: 'First',
@@ -100,6 +101,9 @@ Ext.onReady(function(){
             dataIndex: 'first',
             field: {
                 xtype: 'textfield'
+            },
+            renderer: function(v) {
+                return Ext.String.htmlEncode(v);
             }
         }, {
             text: 'Last',
@@ -108,6 +112,9 @@ Ext.onReady(function(){
             dataIndex: 'last',
             field: {
                 xtype: 'textfield'
+            },
+            renderer: function(v) {
+                return Ext.String.htmlEncode(v);
             }
         }],
         dockedItems: [{

@@ -17,14 +17,27 @@ Ext.define('KitchenSink.view.form.RadioGroupForm', {
         path: 'classic/samples/view/form/CheckboxGroupFormController.js'
     }],
     //</example>
-    
+    profiles: {
+        classic: {
+            width: 650,
+            labelWidth: 120
+        },
+        neptune: {
+            width: 650,
+            labelWidth: 120
+        },
+        graphite: {
+            width: 750,
+            labelWidth: 150
+        }
+    },
     title: 'Radio Group Example',
     frame: true,
-    width: 650,
+    width: '${width}',
     bodyPadding: 10,
     
     fieldDefaults: {
-        labelWidth: 120
+        labelWidth: '${labelWidth}'
     },
     
     items: [{
@@ -194,20 +207,20 @@ Ext.define('KitchenSink.view.form.RadioGroupForm', {
             layout: 'column',
             defaultType: 'container',
             items: [{
-                columnWidth: .25,
+                columnWidth: 0.25,
                 items: [
                     {xtype: 'component', html: 'Heading 1', cls:'x-form-check-group-label'},
                     {xtype: 'radiofield', boxLabel: 'Item 1', name: 'rb-cust', inputValue: 1},
                     {xtype: 'radiofield', boxLabel: 'Item 2', name: 'rb-cust', inputValue: 2}
                 ]
             },{
-                columnWidth: .4,
+                columnWidth: 0.5,
                 items: [
                     {xtype: 'component', html: 'Heading 2', cls:'x-form-check-group-label'},
                     {xtype: 'radiofield', boxLabel: 'A long item just for fun', name: 'rb-cust', inputValue: 3}
                 ]
             },{
-                columnWidth: .25,
+                columnWidth: 0.25,
                 items: [
                     {xtype: 'component', html: 'Heading 3', cls:'x-form-check-group-label'},
                     {xtype: 'radiofield', boxLabel: 'Item 4', name: 'rb-cust', inputValue: 4},

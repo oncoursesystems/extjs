@@ -28,6 +28,24 @@ Ext.define('KitchenSink.view.binding.ChainedStores', {
     }],
     //</example>
 
+    profiles: {
+        classic: {
+            removeWidth: 110,
+            labelWidth: 105,
+            width: 300
+        },
+        neptune: {
+            removeWidth: 110,
+            labelWidth: 105,
+            width: 300
+        },
+        graphite: {
+            removeWidth: 140,
+            labelWidth: 150,
+            width: 345
+        }
+    },
+
     width: 680,
     height: 600,
     layout: {
@@ -67,7 +85,7 @@ Ext.define('KitchenSink.view.binding.ChainedStores', {
             field: 'textfield'
         }, {
             xtype: 'widgetcolumn',
-            width: 110,
+            width: '${removeWidth}',
             widget: {
                 xtype: 'button',
                 text: 'Remove',
@@ -93,7 +111,8 @@ Ext.define('KitchenSink.view.binding.ChainedStores', {
         tbar: [{
             xtype: 'slider',
             fieldLabel: 'Minimum Age',
-            width: 300,
+            width: '${width}',
+            labelWidth: '${labelWidth}',
             bind: '{minimumAge}'
         }],
         columns: [{

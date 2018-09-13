@@ -3,6 +3,8 @@ Ext.define('KitchenSink.view.chart.column.StackedController', {
     alias: 'controller.column-stacked',
 
     init: function (view) {
+        this.callParent([view]);
+
         var toolbar = view.child('toolbar');
 
         if (Ext.supports.Touch) {

@@ -12,8 +12,27 @@ Ext.define('KitchenSink.view.layout.Column', {
     exampleTitle: 'Column Layout',
     //</example>
 
-    width: 500,
-    height: 400,
+
+    profiles: {
+        classic: {
+            width: 500,
+            height: 400,
+            titleWidth: 150
+        },
+        neptune: {
+            height: 400,
+            width: 500,
+            titleWidth: 150
+        },
+        graphite: {
+            height: 500,
+            width: 650,
+            titleWidth: 220
+        }
+    },
+
+    width: '${width}',
+    height: '${height}',
     
     layout: 'column',
 
@@ -36,7 +55,7 @@ Ext.define('KitchenSink.view.layout.Column', {
         },
         {
             title: 'Width = 150px',
-            width: 150,
+            width: '${titleWidth}',
             html: 'Not much here!'
         }
     ]

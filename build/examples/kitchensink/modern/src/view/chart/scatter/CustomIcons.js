@@ -74,7 +74,6 @@ Ext.define('KitchenSink.view.chart.scatter.CustomIcons', {
         axes: [{
             type: 'numeric',
             position: 'left',
-            fields: ['g1', 'g2', 'g3', 'g4'],
             label: {
                 rotate: {
                     degrees: -30
@@ -82,8 +81,7 @@ Ext.define('KitchenSink.view.chart.scatter.CustomIcons', {
             }
         }, {
             type: 'category',
-            position: 'bottom',
-            fields: 'id'
+            position: 'bottom'
         }],
         series: [{
             type: 'scatter',

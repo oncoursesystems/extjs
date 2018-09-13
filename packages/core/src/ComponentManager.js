@@ -454,7 +454,11 @@ function () {
     Ext.iidToCmp = function (iid) {
         return ComponentManager.byInstanceId[iid] || null;
     };
-
+    
+    /**
+     * @private
+     * @deprecated 6.6.0 Inline event handlers are deprecated
+     */
     Ext.doEv = function(node, e) {
         var cmp, method, event;
 

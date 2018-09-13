@@ -1180,6 +1180,7 @@ var Ext = Ext || {}; // jshint ignore:line
         Timer: {
             all: {},
             track: false,
+            captureStack: true,
 
             created: function (kind, id, info) {
                 if (!Ext.Timer.track) {
@@ -1191,7 +1192,7 @@ var Ext = Ext || {}; // jshint ignore:line
                     id: id,
                     done: false,
                     firing: false,
-                    creator: new Error().stack,
+                    creator: Ext.Timer.captureStack ? new Error().stack : null,
                     tick: Ext.Timer.tick,
                     tock: Ext.Timer.tock
                 }, info);

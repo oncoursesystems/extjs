@@ -24,17 +24,29 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
     }],
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            height: 350,
+            totalColumnWidth: 90,
+            companyColumnWidth: 80
         },
         neptune: {
-            width: 750
+            width: 750,
+            height: 400,
+            totalColumnWidth: 90,
+            companyColumnWidth: 80
+        },
+        graphite: {
+            width: 750,
+            height: 600,
+            totalColumnWidth: 120,
+            companyColumnWidth: 120
         }
     },
     //</example>
 
     title: 'Remote calculations',
     width: '${width}',
-    height: 350,
+    height: '${height}',
     collapsible: true,
     multiSelect: true,
 
@@ -100,7 +112,7 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
             dataIndex: 'value',
             header: 'Total',
             aggregator: 'sum',
-            width: 90
+            width: '${totalColumnWidth}'
         }, {
             // id was provided for a better understanding of the JSON response
             id: 'countAgg',
@@ -124,7 +136,7 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
             dataIndex: 'company',
             header: 'Company',
             sortable: false,
-            width: 80
+            width: '${companyColumnWidth}'
         }],
 
         /**

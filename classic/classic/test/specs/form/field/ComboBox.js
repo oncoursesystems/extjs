@@ -1,4 +1,5 @@
-/* global Ext, xit, jasmine, expect, spyOn, MockAjaxManager, xdescribe */
+/* global Ext, xit, jasmine, expect, spyOn, MockAjaxManager, xdescribe, topSuite */
+/* eslint indent: off */
 
 topSuite("Ext.form.field.ComboBox",
     ['Ext.app.ViewModel', 'Ext.window.Window', 'Ext.form.Panel', 'Ext.grid.Panel',
@@ -57,30 +58,6 @@ function() {
             config.store = store;
         }
         component = new Ext.form.field.ComboBox(config);
-    }
-
-    function getTextSelectionIndices (field) {
-        var indices = [];
-        if (document.selection) {
-            var range = document.selection.createRange(),
-                stored = range.duplicate(),
-                start, len;
-
-            stored.expand('textedit');
-            stored.setEndPoint('EndToEnd', range);
-
-            len = range.text.length;
-            start = stored.text.length - len;
-
-            indices.push(start);
-            indices.push(start + len);
-        }
-        else {
-            indices.push(field.selectionStart);
-            indices.push(field.selectionEnd);
-        }
-
-        return indices;
     }
 
     beforeEach(function() {
@@ -2209,6 +2186,22 @@ function() {
             runs(function() {
                 expect(component.inputEl.dom.value).toBe('text 1');
             });
+        });
+
+        it("should not clear the lastSelectedRecords when calling setValue", function() {
+            makeComponent({
+                displayField: 'text',
+                valueField: 'val',
+                forceSelection: true,
+                queryMode: 'local',
+                renderTo: Ext.getBody()
+            });
+
+            component.setValue('value 2');
+
+            component.setValue('value 2');
+
+            expect(component.lastSelectedRecords).not.toBe(null);
         });
 
         describe("setting value to a value not in the Store with forceSelection: false", function() {
@@ -5200,12 +5193,12 @@ function() {
 
             // The typeahead setting will extend the raw value with a text selection
             waitsFor(function() {
-                return component.getRawValue() === 'text 1';
+                return component.getRawValue() === 'text 1' && component.getTextSelection()[0] === 3;
             });
             
             runs(function() {
                 // get initial selection indicies
-                indices = getTextSelectionIndices(component.inputEl.dom);
+                indices = component.getTextSelection();
                 // The typeahead "t 1" should be selected - 3 to 6 *exclusive*
                 expect(indices[0]).toBe(3);
                 expect(indices[1]).toBe(6);
@@ -5252,19 +5245,26 @@ function() {
 
             // The typeahead setting will extend the raw value with a text selection
             waitsFor(function() {
-                return component.getRawValue() === 'text 1';
+                return component.getRawValue() === 'text 1' && component.getTextSelection()[0] === 3;
             });
-            
+
             runs(function() {
                 // get initial selection indicies
-                indices = getTextSelectionIndices(component.inputEl.dom);
-                // The typeahead "text 1" should be selected - 3 to 6 *exclusive*
+                indices = component.getTextSelection();
+               // The typeahead "text 1" should be selected - 3 to 6 *exclusive*
                 expect(indices[0]).toBe(3);
                 expect(indices[1]).toBe(6);
                 // type ahead is complete; select the correct record matched by the typeAhead
                 component.picker.getSelectionModel().select([store.findRecord('text', 'text 1')]);
+            });
+
+            waitsFor(function() {
+                return component.getTextSelection()[0] === 6;
+            });
+
+            runs(function() {
                 // get indicies again
-                indices = getTextSelectionIndices(component.inputEl.dom);
+                indices = component.getTextSelection();
                 // selection is done; check raw value
                 expect(component.getRawValue()).toBe('text 1');
                 // previous text selection should be cleared and cursor placed at the end of the raw value

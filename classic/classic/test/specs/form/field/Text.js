@@ -1,3 +1,5 @@
+/* eslint indent: off */
+
 topSuite("Ext.form.field.Text",
     ['Ext.form.field.Display', 'Ext.form.field.Checkbox', 'Ext.Panel',
      'Ext.app.ViewModel', 'Ext.Button', 'Ext.data.validator.*', 'Ext.field.InputMask'],
@@ -122,8 +124,8 @@ function() {
         });
     });
 
-    describe('inputMask', function () {
-        it('should create an InputMask', function () {
+    describe("inputMask", function () {
+        it("should create an InputMask", function () {
             makeComponent({
                 inputMask: '(999) 999-9999'
             });
@@ -131,7 +133,7 @@ function() {
             expect(component.getInputMask().getPattern()).toBe('(999) 999-9999');
         });
 
-        it('should add the mask on focus', function() {
+        it("should add the mask on focus", function() {
             makeComponent({
                 inputMask: '(999) 999-9999',
                 renderTo: document.body
@@ -144,7 +146,7 @@ function() {
             });
         });
 
-        it('should clear the field on blur', function () {
+        it("should clear the field on blur", function () {
             makeComponent({
                 inputMask: '(999) 999-9999',
                 renderTo: document.body
@@ -157,9 +159,91 @@ function() {
                 expect(component.inputEl.dom.value).toBe('');
             });
         });
+
+        describe("paste", function() {
+            TODO(Ext.isIE8).
+            it("should format value", function() {
+                makeComponent({
+                    inputMask: '(999) 999-9999',
+                    enableKeyEvents: true,
+                    renderTo: document.body
+                });
+
+                jasmine.focusAndWait(component.inputEl);
+
+                var e = {
+                    browserEvent:{
+                        clipboardData: { 
+                            getData: function() {
+                                return '1234567890';
+                            }
+                        }
+                    },
+                    preventDefault: Ext.emptyFn
+                };
+
+                runs(function() {
+                    component.inputEl.fireEvent('paste', e);
+                    expect(component.inputEl.dom.value).toBe('(123) 456-7890');
+                });
+            });
+
+            TODO(Ext.isIE8).
+            it("should not change a formatted value", function() {
+                makeComponent({
+                    inputMask: '(999) 999-9999',
+                    enableKeyEvents: true,
+                    renderTo: document.body
+                });
+
+                jasmine.focusAndWait(component.inputEl);
+
+                var e = {
+                    browserEvent:{
+                        clipboardData: { 
+                            getData: function() {
+                                return '(123) 456-7890';
+                            }
+                        }
+                    },
+                    preventDefault: Ext.emptyFn
+                };
+
+                runs(function() {
+                    component.inputEl.fireEvent('paste', e);
+                    expect(component.inputEl.dom.value).toBe('(123) 456-7890');
+                });
+            });
+
+            it("should not format invalid values", function() {
+                makeComponent({
+                    inputMask: '(999) 999-9999',
+                    enableKeyEvents: true,
+                    renderTo: document.body
+                });
+
+                jasmine.focusAndWait(component.inputEl);
+
+                var e = {
+                    browserEvent:{
+                        clipboardData: { 
+                            getData: function() {
+                                return 'abcd';
+                            }
+                        }
+                    },
+                    preventDefault: Ext.emptyFn
+                };
+
+                runs(function() {
+                    component.inputEl.fireEvent('paste', e);
+                    expect(component.inputEl.dom.value).toBe('(___) ___-____');
+                });
+            });
+        });
     });
 
-    it("should encode the input value in the template", function(){
+    it("should encode the input value in the template", function() {
         makeComponent({
             renderTo: Ext.getBody(),
             value: 'test "  <br/> test'
@@ -202,11 +286,11 @@ function() {
                 component.destroy();
             });
 
-            describe('afterSubEl', function () {
-                it('should exist', function () {
+            describe("afterSubEl", function () {
+                it("should exist", function () {
                     expect(component.afterSubEl.dom.tagName.toUpperCase()).toBe('H1');
                 });
-                it('should have proper id', function () {
+                it("should have proper id", function () {
                     expect(component.afterSubEl.id).toBe(component.id + '-afterSubEl');
                 });
             });
@@ -375,15 +459,17 @@ function() {
                             expect(fields[1].inputWrap.getHeight()).toBe(fields[0].inputWrap.getHeight());
                         });
 
+                        TODO(Ext.isIE8).
                         it("should respect the configured height", function() {
-                            var margins = 80 - diff, innerCt = panel.el.down('[data-ref=innerCt]'); // 20px for each field
+                            var margins = 80 - diff,
+                                innerCt = panel.el.down('[data-ref=innerCt]'); // 20px for each field
 
                             expect(fields[2].inputWrap.getHeight()).toBe(200 + diff);
                             
                             if (Ext.isIE8) {
                                 waitsFor(function() {
                                     return fields[3].inputWrap.getHeight() > 100;
-                                });
+                                }, 'layout to run', 100);
                             }
 
                             runs(function() {
@@ -1487,10 +1573,9 @@ function() {
     describe("selectText method", function() {
         // utility to get the begin and end of the selection range across browsers
         function getSelectedText() {
-            var el = component.inputEl.dom;
-            return el.setSelectionRange ?
-                   el.value.substring(el.selectionStart, el.selectionEnd) : //Standard
-                   document.selection.createRange().text; //IE<9
+            var selection = component.getTextSelection();
+
+            return component.inputEl.dom.value.substring(selection[0], selection[1]);
         }
 
         beforeEach(function() {
@@ -1500,17 +1585,32 @@ function() {
         it("should select the entire value by default", function() {
             component.setValue('field value');
             component.selectText();
-            expect(getSelectedText()).toEqual('field value');
+            if (Ext.isIE) {
+                waits(10);
+            }
+            runs(function() {
+                expect(getSelectedText()).toEqual('field value');
+            });
         });
         it("should select from the 'start' argument", function() {
             component.setValue('field value');
             component.selectText(3);
-            expect(getSelectedText()).toEqual('ld value');
+            if (Ext.isIE) {
+                waits(10);
+            }
+            runs(function() {
+                expect(getSelectedText()).toEqual('ld value');
+            });
         });
         it("should select to the 'end' argument", function() {
             component.setValue('field value');
             component.selectText(3, 8);
-            expect(getSelectedText()).toEqual('ld va');
+            if (Ext.isIE) {
+                waits(10);
+            }
+            runs(function() {
+                expect(getSelectedText()).toEqual('ld va');
+            });
         });
     });
 
@@ -3407,6 +3507,10 @@ function() {
                 create(true);
 
                 jasmine.focusAndWait(component);
+
+                if (Ext.isIE) {
+                    waits(10);
+                }
 
                 runs(function() {
                     indices = getTextSelectionIndices(component.inputEl.dom);

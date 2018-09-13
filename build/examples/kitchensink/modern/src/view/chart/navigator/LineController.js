@@ -3,6 +3,8 @@ Ext.define('KitchenSink.view.chart.navigator.LineController', {
     alias: 'controller.navigator-line',
 
     init: function (view) {
+        this.callParent([view]);
+
         if (!Ext.supports.Touch) {
             /**
              * Touch devices do not need the toggle buttons

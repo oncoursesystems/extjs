@@ -1,7 +1,8 @@
-/* global Ext, expect, jasmine, xit */
+/* global Ext, expect, jasmine, xit, topSuite */
+/* eslint indent: off */
 topSuite("Ext.grid.plugin.CellEditing",
     ['Ext.grid.Grid', 'Ext.grid.Tree', 'Ext.grid.plugin.CellEditing', 'Ext.form.Panel',
-     'Ext.field.*'],
+     'Ext.data.ChainedStore', 'Ext.field.*'],
 function() {
     var webkitIt = Ext.isWebKit ? it : xit,
         grid, store, plugin, navigationModel, GridEventModel = Ext.define(null, {

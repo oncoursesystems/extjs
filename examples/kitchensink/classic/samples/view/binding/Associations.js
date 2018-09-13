@@ -6,8 +6,22 @@
 Ext.define('KitchenSink.view.binding.Associations', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.binding-associations',
-    width: 500,
+    width: '${width}',
     height: 300,
+    profiles: {
+        classic: {
+            width: 500,
+            flexValue: 0
+        },
+        neptune: {
+            width: 500,
+            flexValue: 0
+        },
+        graphite: {
+            width: 600,
+            flexValue: 1
+        }
+    },
     referenceHolder: true,
     layout: {
         type: 'hbox',
@@ -47,7 +61,7 @@ Ext.define('KitchenSink.view.binding.Associations', {
         columns: [{
             text: 'Name', dataIndex: 'name', flex: 1
         }, {
-            text: 'Phone', dataIndex: 'phone'
+            text: 'Phone', dataIndex: 'phone', flex: '${flexValue}'
         }]
     }, {
         title: 'Orders',

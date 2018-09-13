@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.binding.FieldValidation', {
     }],
 
     defaults: {
-        labelWidth: 50
+        labelWidth: 60
     },
     width: 300,
     bodyPadding: 10,

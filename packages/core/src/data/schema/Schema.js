@@ -511,7 +511,7 @@ Ext.define('Ext.data.schema.Schema', {
      * @param {String} matrixName The name of the matrix association.
      *
      * @param {String} [relation] A base name for the matrix. For information about the
-     * meaning of this see {@link Ext.data.Schema#ManyToMany}.
+     * meaning of this see {@link Ext.data.schema.Schema#ManyToMany}.
      * 
      * @param {Object} left The descriptor for the "left" of the matrix.
      * @param {String} left.type The type of the entity on the "left" of the matrix.
