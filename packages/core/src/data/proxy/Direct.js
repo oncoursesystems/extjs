@@ -274,7 +274,7 @@ Ext.define('Ext.data.proxy.Direct', {
          * See also {@link #directFn}.
          */
         api: undefined,
-        
+
         /**
          * @cfg {Object/Array} metadata
          * Optional set of fixed parameters to send with every Proxy request, similar to
@@ -290,17 +290,17 @@ Ext.define('Ext.data.proxy.Direct', {
      * @private
      */
     paramOrderRe: /[\s,|]/,
-    
+
     constructor: function(config) {
         this.callParent([config]);
         this.canceledOperations = {};
     },
-    
+
     applyParamOrder: function(paramOrder) {
         if (Ext.isString(paramOrder)) {
             paramOrder = paramOrder.split(this.paramOrderRe);
         }
-        
+
         return paramOrder;
     },
 
@@ -311,37 +311,37 @@ Ext.define('Ext.data.proxy.Direct', {
     updateDirectFn: function() {
         this.methodsResolved = false;
     },
-    
+
     resolveMethods: function() {
         var me = this,
             fn = me.getDirectFn(),
             api = me.getApi(),
             method;
-        
+
         if (fn) {
             me.setDirectFn(method = Ext.direct.Manager.parseMethod(fn));
-            
+
             if (!Ext.isFunction(method)) {
                 Ext.raise('Cannot resolve directFn ' + fn);
             }
         }
-        
+
         if (api) {
             api = Ext.direct.Manager.resolveApi(api, me);
             me.setApi(api);
         }
-        
+
         me.methodsResolved = true;
     },
 
     doRequest: function(operation) {
         var me = this,
             writer, request, action, params, args, api, fn;
-        
+
         if (!me.methodsResolved) {
             me.resolveMethods();
         }
-        
+
         request = me.buildRequest(operation);
         action = request.getAction();
         api = me.getApi();
@@ -349,9 +349,9 @@ Ext.define('Ext.data.proxy.Direct', {
         if (api) {
             fn = api[action];
         }
-        
+
         fn = fn || me.getDirectFn();
-        
+
         //<debug>
         if (!fn || !fn.directCfg) {
             Ext.raise({
@@ -359,7 +359,7 @@ Ext.define('Ext.data.proxy.Direct', {
                 proxy: me
             });
         }
-        
+
         // This might lead to exceptions so bail out early
         if (!me.paramOrder && fn.directCfg.method.len > 1) {
             Ext.raise({
@@ -368,13 +368,13 @@ Ext.define('Ext.data.proxy.Direct', {
             });
         }
         //</debug>
-        
+
         writer = me.getWriter();
 
         if (writer && operation.allowWrite()) {
             request = writer.write(request);
         }
-        
+
         // The weird construct below is due to historical way of handling extraParams;
         // they were mixed in with request data in ServerProxy.buildRequest() and were
         // inseparable after that point. This does not work well with CUD operations
@@ -389,7 +389,7 @@ Ext.define('Ext.data.proxy.Direct', {
         else {
             params = request.getJsonData();
         }
-        
+
         args = fn.directCfg.method.getArgs({
             params: params,
             allowSingle: writer.getAllowSingle(),
@@ -400,20 +400,20 @@ Ext.define('Ext.data.proxy.Direct', {
             callback: me.createRequestCallback(request, operation),
             scope: me
         });
-        
+
         request.setConfig({
             args: args,
             directFn: fn
         });
-        
+
         fn.apply(window, args);
-        
+
         // Store expects us to return something to indicate that the request
         // is pending; not doing so will make a buffered Store repeat the
         // requests over and over.
         return request;
     },
-    
+
     /**
      * Aborts a running request by operation.
      *
@@ -422,17 +422,17 @@ Ext.define('Ext.data.proxy.Direct', {
      */
     abort: function(operation) {
         var id;
-        
+
         // Assume this can be called with request instead of operation, a la Ajax proxy
         if (operation && operation.isDataRequest) {
             operation = operation.getOperation();
         }
-        
+
         // Check definedness again, the above could have returned null
         if (operation && operation.isOperation) {
             id = operation.id;
         }
-        
+
         // We cannot abort a running request but we can ignore the data when it comes back.
         if (id != null) {
             this.canceledOperations[id] = true;
@@ -452,7 +452,7 @@ Ext.define('Ext.data.proxy.Direct', {
             if (!me.canceledOperations[operation.id]) {
                 me.processResponse(event.status, operation, request, event);
             }
-            
+
             delete me.canceledOperations[operation.id];
         };
     },

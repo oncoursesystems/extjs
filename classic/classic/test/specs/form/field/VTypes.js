@@ -200,7 +200,7 @@ topSuite("Ext.form.field.VTypes", function() {
             it("should allow for it to be wrapped by double quotes", function() {
                 expect(VTYPES.email('"dev"@extjs.com')).toEqual(true);
             });
-            
+
             it("should not allow a single white space at the beginning", function() {
                 expect(VTYPES.email(' dev@extjs.com')).toEqual(false);
             });

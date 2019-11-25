@@ -6,10 +6,10 @@
  * 2010-Mar-10 update by Volker Grabsch
  */
 Ext.onReady(function() {
-    
+
     if (Ext.Date) {
         Ext.Date.monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-        
+
         Ext.Date.defaultFormat = 'd.m.Y';
 
         Ext.Date.getShortMonthName = function(month) {

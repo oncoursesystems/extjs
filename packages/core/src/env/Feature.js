@@ -170,14 +170,14 @@ Ext.feature = {
             '</div>' +
             '<div style="position: absolute; left: 10%; top: 10%;"></div>' +
             '<div style="float:left; background-color:transparent;"></div>';
-        
+
         if (isReady) {
             doc.body.appendChild(div);
         }
         //</feature>
 
         vector = me.preDetected[Ext.browser.identity] || [];
-        
+
         while (n--) {
             test = toRun[n];
             value = vector[n];
@@ -250,9 +250,9 @@ Ext.feature = {
         name: 'CloneNodeCopiesExpando',
         fn: function() {
             var el = document.createElement('div');
-            
+
             el.expandoProp = {};
-            
+
             return el.cloneNode().expandoProp === el.expandoProp;
         }
     }, {
@@ -315,7 +315,7 @@ Ext.feature = {
         name: 'Canvas',
         fn: function() {
             var element = this.getTestElement('canvas');
-            
+
             return !!(element && element.getContext && element.getContext('2d'));
         }
     }, {
@@ -358,7 +358,7 @@ Ext.feature = {
         fn: function() {
             // IE10 uses a vendor-prefixed maxTouchPoints property
             var maxTouchPoints = navigator.msMaxTouchPoints || navigator.maxTouchPoints;
-            
+
             // if the browser has touch events we can be reasonably sure the device has
             // a touch screen
             // browsers that use pointer event have maxTouchPoints > 1 if the
@@ -438,7 +438,7 @@ Ext.feature = {
             if (!window.getComputedStyle) {
                 return 0;
             }
-            
+
             var values = ['pan-x', 'pan-y', 'pinch-zoom', 'double-tap-zoom'],
                 flags = [1, 2, 4, 8],
                 ln = values.length,
@@ -541,7 +541,7 @@ Ext.feature = {
         name: 'CreateContextualFragment',
         fn: function() {
             var range = !!document.createRange ? document.createRange() : false;
-            
+
             return range && !!range.createContextualFragment;
         }
     }, {
@@ -566,9 +566,9 @@ Ext.feature = {
         name: 'Css3dTransforms',
         fn: function() {
             // See https://sencha.jira.com/browse/TOUCH-1544
-            
+
             return this.has('CssTransforms') && this.isStyleSupported('perspective');
-            
+
             // TODO - double check vs Ext JS flavor:
             /* eslint-disable-next-line max-len */
             // return (typeof WebKitCSSMatrix != 'undefined' && new WebKitCSSMatrix().hasOwnProperty('m41'));
@@ -643,10 +643,10 @@ Ext.feature = {
                 if ('localStorage' in window && window['localStorage'] !== null) {
                     // this should throw an error in private browsing mode in iOS as well
                     localStorage.setItem('sencha-localstorage-test', 'test success');
-                    
+
                     // clean up if setItem worked
                     localStorage.removeItem('sencha-localstorage-test');
-                    
+
                     return true;
                 }
             }
@@ -667,7 +667,7 @@ Ext.feature = {
         fn: function() {
             var xmlString = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?><root></root>',
                 xmlDoc;
-            
+
             // IE10 doesn't create IXMLDOMDocument via DOMParser
             if (window.ActiveXObject) {
                 xmlDoc = new ActiveXObject("Microsoft.xmlDOM"); // eslint-disable-line no-undef
@@ -676,10 +676,10 @@ Ext.feature = {
             }
             else if (window.DOMParser) {
                 var parser = new DOMParser();
-                
+
                 xmlDoc = parser.parseFromString(xmlString, 'text/xml');
             }
-            
+
             return xmlDoc ? !!xmlDoc.lastChild.querySelector : false;
         }
     }, {
@@ -705,13 +705,13 @@ Ext.feature = {
         name: 'XHRUploadProgress',
         fn: function() {
             var xhr;
-            
+
             if (window.XMLHttpRequest && !Ext.browser.is.AndroidStock) {
                 xhr = new XMLHttpRequest();
-                
+
                 return xhr && ('upload' in xhr) && ('onprogress' in xhr.upload);
             }
-            
+
             return false;
         }
     }, {
@@ -758,7 +758,7 @@ Ext.feature = {
         ready: true,
         fn: function(doc, div) {
             var view = doc.defaultView;
-            
+
             /* eslint-disable-next-line max-len */
             return !(view && view.getComputedStyle(div.firstChild.firstChild, null).marginRight !== '0px');
         }
@@ -778,7 +778,7 @@ Ext.feature = {
         name: 'DisplayChangeInputSelectionBug',
         fn: function() {
             var webKitVersion = Ext.webKitVersion;
-            
+
             // WebKit but older than Safari 5 or Chrome 6:
             return 0 < webKitVersion && webKitVersion < 533;
         }
@@ -828,7 +828,7 @@ Ext.feature = {
         ready: true,
         fn: function(doc, div, view) {
             view = doc.defaultView;
-            
+
             /* eslint-disable-next-line max-len */
             return !(view && view.getComputedStyle(div.lastChild, null).backgroundColor !== 'transparent');
         }
@@ -845,7 +845,7 @@ Ext.feature = {
         ready: true,
         fn: function(doc, div, view) {
             view = doc.defaultView;
-            
+
             return !!(view && view.getComputedStyle);
         }
     }, {
@@ -874,13 +874,13 @@ Ext.feature = {
                                'WebkitBorderRadius', 'OBorderRadius', 'KhtmlBorderRadius'],
                 pass = false,
                 i;
-            
+
             for (i = 0; i < domPrefixes.length; i++) {
                 if (doc.documentElement.style[domPrefixes[i]] !== undefined) {
                     pass = true;
                 }
             }
-            
+
             return pass && !Ext.isIE9;
         }
     }, {
@@ -940,9 +940,9 @@ Ext.feature = {
             if (Ext.isIE8) {
                 return false;
             }
-            
+
             div.firstChild.style.cssText = 'opacity:0.73';
-            
+
             return div.firstChild.style.opacity == '0.73'; // eslint-disable-line eqeqeq
         }
     }, {
@@ -1035,7 +1035,7 @@ Ext.feature = {
             el.innerHTML = '<div>a</div>';
             child = el.firstChild;
             el.innerHTML = '<div>b</div>';
-            
+
             return child.innerHTML !== 'a';
         }
     }, {
@@ -1113,13 +1113,13 @@ Ext.feature = {
                     '</div>'
                 ].join('');
                 /* eslint-enable indent */
-                
+
                 doc.body.appendChild(el);
-                
+
                 if (el.firstChild.offsetHeight === 50) {
                     hasBug = true;
                 }
-                
+
                 doc.body.removeChild(el);
             }
 
@@ -1186,13 +1186,13 @@ Ext.feature = {
 
             el.innerHTML =
                 '<span style="display:inline-block;zoom:1;height:60px;width:60px;"></span>';
-                
+
             doc.body.appendChild(el);
-            
+
             if (el.scrollWidth === 70) {
                 hasBug = true;
             }
-            
+
             doc.body.removeChild(el);
 
             return hasBug;
@@ -1252,6 +1252,7 @@ Ext.feature = {
 
             // This issue seems to require a repaint to measure correctly
             style.position = 'absolute';
+            // eslint-disable-next-line no-unused-expressions
             outerBox.offsetHeight;
             style.position = pos;
 
@@ -1262,10 +1263,10 @@ Ext.feature = {
         fn: function() {
             if (Ext.isIE8m) {
                 Ext.Object.defineProperty = Ext.emptyFn;
-                
+
                 return false;
             }
-            
+
             return true;
         }
     }, {
@@ -1276,7 +1277,7 @@ Ext.feature = {
             }
 
             // Apply a polyfill:
-            
+
             XMLHttpRequest = function() { // eslint-disable-line no-global-assign
                 try {
                     // eslint-disable-next-line no-undef
@@ -1286,7 +1287,7 @@ Ext.feature = {
                     return null;
                 }
             };
-            
+
             return false;
         }
     }, {
@@ -1334,7 +1335,7 @@ Ext.feature = {
             // Note that IE8 in IE7 compatibility mode reports true for 'onhashchange' in window,
             // so also test documentMode
             var docMode = document.documentMode;
-            
+
             return 'onhashchange' in window && (docMode === undefined || docMode > 7);
         }
     }, {
@@ -1354,7 +1355,7 @@ Ext.feature = {
                 // IE8 incorrectly detects that we have this bug.
                 return false;
             }
-            
+
             var outer = document.createElement('div'),
                 inner = document.createElement('div'),
                 width;
@@ -1366,7 +1367,8 @@ Ext.feature = {
             document.body.appendChild(outer);
 
             // must poke offsetWidth to trigger a reflow before setting width
-            outer.offsetWidth; // jshint ignore:line
+            // eslint-disable-next-line no-unused-expressions
+            outer.offsetWidth;
 
             outer.style.width = '25px';
 
@@ -1520,7 +1522,7 @@ Ext.feature = {
                 return false;
             }
             //</feature>
-            
+
             var body = doc.body,
                 div = document.createElement('div'),
                 style = div.currentStyle || div.style,
@@ -1531,13 +1533,13 @@ Ext.feature = {
             Ext.apply(style, { width: '50vw' });
 
             width = parseInt(window.innerWidth / 2, 10);
-            
+
             // eslint-disable-next-line max-len
             divWidth = parseInt((window.getComputedStyle ? getComputedStyle(div, null) : div.currentStyle).width, 10);
 
             body.removeChild(div);
             div = null;
-            
+
             return width === divWidth;
         }
     }, {
@@ -1550,7 +1552,7 @@ Ext.feature = {
                 return false;
             }
             //</feature>
-            
+
             return window.CSS && window.CSS.supports && window.CSS.supports('--test-var', 0);
         }
     }, {
@@ -1623,7 +1625,7 @@ Ext.feature = {
             ) {
                 return true;
             }
-            
+
             return false;
         }
     }, {
@@ -1640,7 +1642,7 @@ Ext.feature = {
             if (Ext.isIE9m) {
                 return false;
             }
-            
+
             var style = div.style;
 
             style.display = 'flex';
@@ -1719,7 +1721,7 @@ Ext.feature = {
         fn: function(doc, div) {
             var supportsPassive = false,
                 options;
-            
+
             try {
                 options = Object.defineProperty({}, 'passive', {
                     get: function() { // eslint-disable-line getter-return
@@ -1732,7 +1734,7 @@ Ext.feature = {
             catch (e) {
                 // ignore
             }
-            
+
             return supportsPassive;
         }
     }, {
@@ -1773,7 +1775,7 @@ Ext.feature = {
 
                 bd.removeChild(el);
             }
-            
+
             return ret;
         }
     }, {

@@ -17,13 +17,13 @@ topSuite("Ext.form.field.Hidden", function() {
 
         component = makeComponent = null;
     });
-    
+
     it("should not take up any height", function() {
         var ct = new Ext.container.Container({
             renderTo: Ext.getBody(),
             items: makeComponent()
         });
-    
+
         expect(ct.getHeight()).toBe(0);
         ct.destroy();
     });
@@ -33,7 +33,7 @@ topSuite("Ext.form.field.Hidden", function() {
         expect(component instanceof Ext.form.field.Hidden).toBe(true);
         expect(Ext.getClass(component).xtype).toBe("hiddenfield");
     });
-    
+
     it("should render as input hidden", function() {
         makeComponent({
             name: 'test',
@@ -63,5 +63,5 @@ topSuite("Ext.form.field.Hidden", function() {
             expect(component.getModelData()).toEqual({ myname: '' });
         });
     });
-    
+
 });

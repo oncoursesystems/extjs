@@ -7,7 +7,7 @@ Ext.define('Ext.mixin.Queryable', {
     mixinId: 'queryable',
 
     isQueryable: true,
-    
+
     /**
      * Retrieves all descendant components which match the passed selector.
      * Executes an Ext.ComponentQuery.query using this container as its root.
@@ -17,10 +17,10 @@ Ext.define('Ext.mixin.Queryable', {
      */
     query: function(selector) {
         selector = selector || '*';
-        
+
         return Ext.ComponentQuery.query(selector, this.getQueryRoot());
     },
-    
+
     /**
      * Retrieves all descendant components which match the passed function.
      * The function should return false for components that are to be
@@ -37,18 +37,18 @@ Ext.define('Ext.mixin.Queryable', {
             i = 0,
             len = items.length,
             item;
-            
+
         for (; i < len; ++i) {
             item = items[i];
-            
+
             if (fn.call(scope || item, item) !== false) {
                 out.push(item);
             }
         }
-        
+
         return out;
     },
-    
+
     /**
      * Finds a component at any level under this container matching the id/itemId.
      * This is a shorthand for calling ct.down('#' + id);
@@ -83,10 +83,10 @@ Ext.define('Ext.mixin.Queryable', {
         if (children.length) {
             return children[0];
         }
-        
+
         return null;
     },
-    
+
     /**
      * Retrieves the first descendant of this container which matches the passed selector.
      * The passed in selector must comply with an Ext.ComponentQuery selector, or it can be
@@ -103,10 +103,10 @@ Ext.define('Ext.mixin.Queryable', {
         }
 
         selector = selector || '';
-        
+
         return this.query(selector)[0] || null;
     },
-    
+
     /**
      * Traverses the tree rooted at this node in pre-order mode, calling the passed function
      * on the nodes at each level. That is the function is called upon each node **before**
@@ -156,7 +156,7 @@ Ext.define('Ext.mixin.Queryable', {
     getRefItems: function() {
         return [];
     },
-    
+
     getQueryRoot: function() {
         return this;
     },
@@ -165,15 +165,15 @@ Ext.define('Ext.mixin.Queryable', {
         matchById: function(items, id) {
             var len = items.length,
                 i, item;
- 
+
             for (i = 0; i < len; ++i) {
                 item = items[i];
-                
+
                 if (item.getItemId() === id) {
                     return item;
                 }
             }
-            
+
             return null;
         }
     }

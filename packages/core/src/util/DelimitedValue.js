@@ -73,7 +73,7 @@ Ext.define('Ext.util.DelimitedValue', {
         if (config) {
             Ext.apply(this, config);
         }
-        
+
         this.parseREs = {};
         this.quoteREs = {};
     },
@@ -112,12 +112,11 @@ Ext.define('Ext.util.DelimitedValue', {
         if (!input) {
             return [];
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             // Check to see if the column delimiter is defined. If not,
             // then default to comma.
-            delim = delimiter || me.delimiter,
             row = [],
             result = [row],
             quote = quoteChar !== undefined ? quoteChar : me.quote,
@@ -125,29 +124,23 @@ Ext.define('Ext.util.DelimitedValue', {
             parseREs = me.parseREs,
             parseRE, dblQuoteRE, arrMatches, strMatchedDelimiter, strMatchedValue;
 
+        delimiter = delimiter || me.delimiter;
         // Create a regular expression to parse the CSV values unless we already have
         // one for this delimiter/quoteChar.
-        parseRE = quote === me.quote ? parseREs[delim] : null;
-        parseRE = parseRE || new RegExp(
+        parseRE = parseREs[delimiter] || new RegExp(
             // Delimiters.
-            "(\\" + delim + "|\\r?\\n|\\r|^)" +
+            '(\\' + delimiter + '|\\r?\\n|\\r|^)' +
 
                 // (Optionally) Quoted fields.
-                "(?:" +
-                    (quote === null
-                        ? '()'
-                        : "\\" + quote + "([^\\" + quote + "]*(?:\\" + quote + "\\" +
-                          quote + "[^\\" + quote + "]*)*)\\" + quote + "|"
-                    ) +
+                '(?:\\' + quote + '([^\\' + quote + ']*(?:\\' + quote + '\\' + quote +
+                    '[^\\' + quote + ']*)*)\\' + quote + '|' +
 
                 // Standard fields.
-                "([^" + (quote === null ? '' : quote) + delim + "\\r\\n]*))",
-            "gi");
+                '([^\\' + delimiter + '\\r\\n]*))',
+            'gi');
 
-        dblQuoteRE = quote === me.quote ? quoteREs[quote] : null;
-        dblQuoteRE = dblQuoteRE || new RegExp('\\' + quote + '\\' + quote, 'g');
-
-        input = input.replace(me.lastLineBreakRe, '');
+        dblQuoteRE = quoteREs[quote] ||
+            (quoteREs[quote] = new RegExp('\\' + quote + '\\' + quote, 'g'));
 
         // Keep looping over the regular expression matches
         // until we can no longer find a match.
@@ -158,14 +151,14 @@ Ext.define('Ext.util.DelimitedValue', {
             // (is not the start of string) and if it matches
             // field delimiter. If id does not, then we know
             // that this delimiter is a row delimiter.
-            if (strMatchedDelimiter.length && strMatchedDelimiter !== delim) {
+            if (strMatchedDelimiter.length && strMatchedDelimiter !== delimiter) {
                 // Since we have reached a new row of data,
                 // add an empty row to our data array.
                 result.push(row = []);
             }
 
             // we need to account for the first value being empty
-            if (!arrMatches.index && arrMatches[0].charAt(0) === delim) {
+            if (!arrMatches.index && arrMatches[0].charAt(0) === delimiter) {
                 row.push('');
             }
 

@@ -16,7 +16,7 @@ Ext.define('Ext.grid.selection.Selection', {
             Ext.raise('Selection must be created for a given TableView or LockingView');
         }
         //</debug>
-        
+
         // We use the topmost (possible Ext.locking.View) view
         this.view = view.ownerGrid.view;
     }

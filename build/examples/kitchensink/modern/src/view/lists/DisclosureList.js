@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.lists.DisclosureList', {
     xtype: 'disclosure-list',
     controller: 'disclosure-list',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/lists/DisclosureListController.js'
@@ -35,7 +35,7 @@ Ext.define('KitchenSink.view.lists.DisclosureList', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     itemTpl: '{firstName} {lastName}',

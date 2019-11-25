@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.drag.Constraint', {
     xtype: 'drag-constraint',
     controller: 'drag-constraint',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/drag/ConstraintController.js'
@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.drag.Constraint', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     height: '${height}',
     padding: 5,

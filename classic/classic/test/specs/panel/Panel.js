@@ -136,7 +136,7 @@ topSuite("Ext.panel.Panel", [
 
                     expect(docked.destroyed).toBe(true);
                 });
-                
+
                 it("should not destroy the component with destroy: false", function() {
                     panel.removeDocked(docked, false);
 
@@ -682,13 +682,13 @@ topSuite("Ext.panel.Panel", [
                     expect(panel.down('toolbar').vertical).toBe(true);
                 });
             });
-            
+
             describe("fbar", function() {
                 it("should use footer ui", function() {
                     makePanel({
                         fbar: [{ text: 'foo' }]
                     });
-                    
+
                     expect(panel.down('toolbar').ui).toBe('footer');
                 });
 
@@ -700,7 +700,7 @@ topSuite("Ext.panel.Panel", [
                     });
                     expect(panel.down('toolbar')).toBe(bar);
                 });
-                
+
                 it("should respect a specified xtype", function() {
                     makePanel({
                         fbar: {
@@ -737,22 +737,22 @@ topSuite("Ext.panel.Panel", [
                     });
                     expect(o.xtype).toBeUndefined();
                 });
-                
+
                 it("should not disable focusable container behavior", function() {
                     makePanel({
                         fbar: [{ text: 'blerg' }]
                     });
-                    
+
                     expect(panel.down('toolbar').focusableContainer).toBe(true);
                 });
             });
-            
+
             describe("buttons", function() {
                 it("should disable focusable container behavior", function() {
                     makePanel({
                         buttons: [{ text: 'throbbe' }]
                     });
-                    
+
                     expect(panel.down('toolbar').focusableContainer).toBe(false);
                 });
             });
@@ -783,7 +783,7 @@ topSuite("Ext.panel.Panel", [
             expect(panel.child('[title=Bottom Inner Panel]').el.dom.style.width).toEqual('75%');
         });
     });
-    
+
     describe("collapsible", function() {
 
         describe("placeholderCollapse", function() {
@@ -1312,9 +1312,9 @@ topSuite("Ext.panel.Panel", [
                 makeCollapseSuite(true);
             });
         });
-        
+
         describe("animation", function() {
-        
+
             // https://sencha.jira.com/browse/EXTJSIV-8095
             it("should honor numeric animCollapse value", function() {
                 var collapseSpy;
@@ -1331,14 +1331,14 @@ topSuite("Ext.panel.Panel", [
 
                 collapseSpy = spyOnEvent(panel, 'collapse');
                 panel.collapse();
-                
+
                 waitsForSpy(collapseSpy, 'panel to collapse');
-                
+
                 runs(function() {
                     expect(panel.collapsed).toBe('top');
                 });
             });
-            
+
             // https://sencha.jira.com/browse/EXTJS-19791
             it("should save numeric animCollapse duration to use with Accordion layouts", function() {
                 makePanel({
@@ -1350,20 +1350,20 @@ topSuite("Ext.panel.Panel", [
                     y: 100,
                     html: '<p>World!</p>'
                 });
-                
+
                 panel.animCollapse = false;
-                
+
                 var props = panel.getAnimationProps();
-                
+
                 expect(props.duration).toBe(50);
             });
-            
+
             // https://sencha.jira.com/browse/EXTJS-6924
             it("should expand if created collapsed", function() {
                 var inner, spy;
-                
+
                 spy = jasmine.createSpy('expand');
-                
+
                 // Key here is that we collapse inner panel that participates
                 // in the parent container layout.
                 makePanel({
@@ -1374,7 +1374,7 @@ topSuite("Ext.panel.Panel", [
                     bodyStyle: {
                         'background-color': 'green'
                     },
-                    
+
                     items: [{
                         xtype: 'panel',
                         itemId: 'inner',
@@ -1390,19 +1390,19 @@ topSuite("Ext.panel.Panel", [
                         }
                     }]
                 });
-                
+
                 inner = panel.down('#inner');
                 inner.expand();
-                
+
                 waitForSpy(spy);
-                
+
                 runs(function() {
                     expect(inner.collapsed).toBe(false);
                 });
             });
         });
     });
-    
+
     describe("tools", function() {
         it("should add tools from the config", function() {
             makePanel({
@@ -1448,14 +1448,14 @@ topSuite("Ext.panel.Panel", [
             expect(Ext.Object.getKeys(t2).length).toBe(1);
         });
     });
-    
+
     describe('autoHeight with dock bottom item', function() {
         var failedLayouts = Ext.failedLayouts;
 
         beforeEach(function() {
             failedLayouts = Ext.failedLayouts;
         });
-        
+
         it('should work', function() {
             makePanel({
                 frame: true,
@@ -1516,7 +1516,7 @@ topSuite("Ext.panel.Panel", [
             // Child not rendered
             expect(panel.child('#paneldockedchild').rendered).toBe(false);
         });
-        
+
         it("should be able to modify during rendering", function() {
             panel = new Ext.panel.Panel({
                 renderTo: Ext.getBody(),
@@ -1532,10 +1532,10 @@ topSuite("Ext.panel.Panel", [
             expect(panel.getEl().hasCls(panel.disabledCls)).toBe(true);
         });
     });
-    
+
     describe("header", function() {
         var fooIcon = 'resources/images/foo.gif';
-        
+
         it("should create a header if a header config is passed", function() {
             makePanel({
                 header: {
@@ -1547,21 +1547,21 @@ topSuite("Ext.panel.Panel", [
             expect(header.isHeader).toBe(true);
             expect(header.getTitle().getText()).toBe('Foo');
         });
-        
+
         it("should create a header when specifying a title", function() {
             makePanel({
                 title: 'Foo'
             });
             expect(panel.header.isHeader).toBe(true);
         });
-            
+
         it("should create a header when specifying an icon", function() {
             makePanel({
                 icon: fooIcon
             });
             expect(panel.header.isHeader).toBe(true);
         });
-            
+
         it("should create a header when specifying a iconCls", function() {
             makePanel({
                 iconCls: 'Foo'
@@ -1577,7 +1577,7 @@ topSuite("Ext.panel.Panel", [
             });
             expect(panel.header.isHeader).toBe(true);
         });
-            
+
         it("should create a header when specifying collapsible", function() {
             makePanel({
                 collapsible: true
@@ -1609,7 +1609,7 @@ topSuite("Ext.panel.Panel", [
                 });
                 expect(panel.header).toBe(false);
             });
-            
+
             it("should not create a header with header: false when specifying an icon", function() {
                 makePanel({
                     header: false,
@@ -1617,7 +1617,7 @@ topSuite("Ext.panel.Panel", [
                 });
                 expect(panel.header).toBe(false);
             });
-            
+
             it("should not create a header with header: false when specifying a iconCls", function() {
                 makePanel({
                     header: false,
@@ -1635,7 +1635,7 @@ topSuite("Ext.panel.Panel", [
                 });
                 expect(panel.header).toBe(false);
             });
-            
+
             it("should not create a header with header: false when specifying collapsible", function() {
                 makePanel({
                     header: false,
@@ -1644,16 +1644,16 @@ topSuite("Ext.panel.Panel", [
                 expect(panel.header).toBe(false);
             });
         });
-        
+
         describe("changing position", function() {
             var positions = ['top', 'right', 'bottom', 'left'],
                 vertical = { left: true, right: true };
-            
+
             function makeSuite(startPosition, frame) {
                 describe("initial: " + startPosition + ", frame: " + frame, function() {
                     var remaining = Ext.Array.remove(Ext.Array.clone(positions), startPosition),
                         i, len, pos;
-                    
+
                     beforeEach(function() {
                         makePanel({
                             x: 10,
@@ -1666,10 +1666,10 @@ topSuite("Ext.panel.Panel", [
                             html: 'Lorem ipsum'
                         });
                     });
-                    
+
                     for (i = 0, len = remaining.length; i < len; i++) {
                         pos = remaining[i];
-                        
+
                         (function(from, to) {
                             it("should switch from " + from + " to " + to, function() {
                                 panel.setHeaderPosition(to);
@@ -1680,16 +1680,16 @@ topSuite("Ext.panel.Panel", [
                     }
                 });
             }
-            
+
             for (var p = 0; p < positions.length; p++) {
                 makeSuite(positions[p], false);
-                
+
                 // With frame is especially important in IE8/9
                 makeSuite(positions[p], true);
             }
         });
     });
-    
+
     describe("shared panel and header config setters", function() {
         describe("updating placeholder", function() {
             beforeEach(function() {
@@ -1816,7 +1816,7 @@ topSuite("Ext.panel.Panel", [
     });
 
     describe("setTitle", function() {
-        
+
         describe("before render", function() {
             describe("with no title", function() {
                 it("should update the title when rendered", function() {
@@ -1836,7 +1836,7 @@ topSuite("Ext.panel.Panel", [
                     panel.render(Ext.getBody());
                     expect(panel.header.getTitle().textEl.dom).hasHTML('123');
                 });
-                
+
                 it("should not modify the tools when setting the title", function() {
                     makePanel({
                         renderTo: null,
@@ -1897,7 +1897,7 @@ topSuite("Ext.panel.Panel", [
                     panel.render(Ext.getBody());
                     expect(panel.header.getTitle().textEl.dom).hasHTML('123');
                 });
-                
+
                 it("should not modify the tools when setting the title", function() {
                     makePanel({
                         renderTo: null,
@@ -1941,7 +1941,7 @@ topSuite("Ext.panel.Panel", [
                 });
             });
         });
-        
+
         describe("after render", function() {
             describe("with no title", function() {
                 it("should create the title when rendered", function() {
@@ -1999,7 +1999,7 @@ topSuite("Ext.panel.Panel", [
             });
         });
     });
-    
+
     describe("body styling", function() {
 
         var makeUnrenderedPanel = function(cfg) {
@@ -2193,7 +2193,7 @@ topSuite("Ext.panel.Panel", [
             ct.destroy();
         });
     });
-    
+
     describe("minButtonWidth", function() {
         it("should apply minButtonWidth to button configs", function() {
             makePanel({
@@ -2211,7 +2211,7 @@ topSuite("Ext.panel.Panel", [
             expect(panel.down('#a').minWidth).toBe(75);
             expect(panel.down('#b').minWidth).toBe(75);
         });
-        
+
         it("should apply minButtonWidth to button instances", function() {
             makePanel({
                 minButtonWidth: 75,
@@ -2228,13 +2228,13 @@ topSuite("Ext.panel.Panel", [
             expect(panel.down('#a').minWidth).toBe(75);
             expect(panel.down('#b').minWidth).toBe(75);
         });
-        
+
         it("should apply minButtonWidth to button subclass configs", function() {
             Ext.define('spec.CustomButton', {
                 extend: 'Ext.button.Button',
                 alias: 'widget.mybutton'
             });
-            
+
             makePanel({
                 minButtonWidth: 75,
                 width: 400,
@@ -2253,7 +2253,7 @@ topSuite("Ext.panel.Panel", [
             expect(panel.down('#b').minWidth).toBe(75);
             Ext.undefine('spec.CustomButton');
         });
-        
+
         it("should not apply minButtonWidth to non-button components", function() {
             makePanel({
                 minButtonWidth: 75,
@@ -2273,7 +2273,7 @@ topSuite("Ext.panel.Panel", [
             expect(panel.down('#b').minWidth).not.toBe(75);
         });
     });
-    
+
     describe('draggable', function() {
         var makePanel = function(cfg) {
             panel = new Ext.panel.Panel(cfg);
@@ -2331,7 +2331,7 @@ topSuite("Ext.panel.Panel", [
                 makePanel({
                     draggable: false
                 });
-                
+
                 spy = spyOn(panel, 'initDraggable');
                 panel.render(Ext.getBody());
 
@@ -2480,7 +2480,7 @@ topSuite("Ext.panel.Panel", [
                 placeholder = westRegion.placeholder;
 
                 jasmine.fireMouseEvent(placeholder.getEl(), 'click');
-                
+
                 expect(placeholder.hidden).toBe(true);
                 expect(westRegion.collapsed).toBe(false);
             });
@@ -2519,7 +2519,7 @@ topSuite("Ext.panel.Panel", [
 
                 panel.collapse();
                 reExpander = panel.reExpander;
-                
+
                 jasmine.fireMouseEvent(reExpander.getEl(), 'click');
 
                 expect(reExpander.hidden).toBe(false);
@@ -2593,7 +2593,7 @@ topSuite("Ext.panel.Panel", [
                     expect(centerRegion.getWidth()).toBe(viewport.getWidth());
                 });
             });
-            
+
             // https://sencha.jira.com/browse/EXTJS-21507
             it("should not set display:none on the placeholder when removed while collapsing", function() {
                 createViewport({
@@ -2612,16 +2612,16 @@ topSuite("Ext.panel.Panel", [
                 }, false);
 
                 var collapseSpy = spyOn(westRegion, 'doPlaceholderCollapse').andCallThrough();
-                
+
                 // Start collapsing but don't let the animation kick off yet
                 westRegion.collapse();
-                
+
                 // Remove but don't destroy
                 viewport.remove(westRegion, false);
-                
+
                 // Async from now on
                 waitForSpy(collapseSpy);
-                
+
                 runs(function() {
                     // It's invisible because it's detached - should NOT be display:none
                     expect(westRegion.placeholder.el.dom.style.display).not.toBe('none');
@@ -2701,26 +2701,26 @@ topSuite("Ext.panel.Panel", [
                     }
                 });
             });
-    
+
             afterEach(function() {
                 Ext.undefine('spec.foo1');
             });
-    
+
             it("should not throw candidate.isXType is not a function error", function() {
                 var testPanel, buttons,
                     errorSpy = jasmine.createSpy();
-    
+
                 window.onerror = errorSpy;
-    
+
                 testPanel = Ext.create('spec.foo1', {
                     renderTo: Ext.getBody()
-                }),
+                });
                 buttons = testPanel.query('button');
-    
+
                 // No errors must have been caught
                 expect(errorSpy.callCount).toBe(0);
                 Ext.destroy(testPanel);
-    
+
             });
         });
     });
@@ -2789,13 +2789,13 @@ topSuite("Ext.panel.Panel", [
                         { type: 'close' }
                     ]
                 });
-                
+
                 panel.setTitlePosition(1);
 
                 expect(panel.header.titlePosition).toBe(1);
             });
         });
-        
+
         describe("placeholder", function() {
             it("should be in identical position when used in placeholder", function() {
                 var viewport = new Ext.container.Viewport({
@@ -2824,7 +2824,7 @@ topSuite("Ext.panel.Panel", [
                 Ext.destroy(viewport, westRegion, placeholder);
             });
         });
-        
+
         describe("maintainTitlePosition", function() {
             it("should be 0 when used in rexpander and collapseDirection=left and maintainTitlePosition=true", function() {
                 makePanel({
@@ -2884,7 +2884,7 @@ topSuite("Ext.panel.Panel", [
             else {
                 expect(titleEl.vertical).toBeFalsy();
             }
-            
+
             expect(titleEl.styleHooks).toBe(hooks[angle]);
         }
 
@@ -3384,13 +3384,13 @@ topSuite("Ext.panel.Panel", [
                 width: 100,
                 height: 100
             }, cfg));
-            
+
             ct = panel;
         }
-        
+
         describe("with defaultFocus", function() {
             var fooCmp, barCmp;
-            
+
             beforeEach(function() {
                 makeCt({
                     items: [{
@@ -3402,44 +3402,44 @@ topSuite("Ext.panel.Panel", [
                         html: 'bar'
                     }]
                 });
-                
+
                 fooCmp = ct.items.getAt(0);
                 barCmp = ct.items.getAt(1);
             });
-            
+
             it("should return foo", function() {
                 ct.defaultFocus = 'component';
-                
+
                 var focusEl = ct.getFocusEl();
-                
+
                 expect(focusEl).toBe(fooCmp);
             });
-            
+
             it("should return bar", function() {
                 ct.defaultFocus = '#bar';
-                
+
                 var focusEl = ct.getFocusEl();
-                
+
                 expect(focusEl).toBe(barCmp);
             });
         });
-        
+
         describe("no defaultFocus", function() {
             beforeEach(function() {
                 makeCt();
             });
-            
+
             it("should return targetEl when focusable", function() {
                 ct.focusable = true;
-                
+
                 var focusEl = ct.getFocusEl();
-                
+
                 expect(focusEl).toBe(ct.getTargetEl());
             });
-            
+
             it("should return undefined when not focusable", function() {
                 var focusEl = ct.getFocusEl();
-                
+
                 expect(focusEl).toBe(undefined);
             });
         });
@@ -3449,7 +3449,7 @@ topSuite("Ext.panel.Panel", [
         var pressKey = jasmine.pressKey,
             okSpy, cancelSpy, keydownSpy, fooInput, barInput, okButton, cancelButton,
             event;
-        
+
         function setupPanel(config) {
             config = Ext.apply({
                 renderTo: undefined,
@@ -3475,24 +3475,24 @@ topSuite("Ext.panel.Panel", [
                     text: 'Cancel'
                 }]
             }, config);
-            
+
             makePanel(config);
 
             fooInput = panel.down('[reference=fooInput]');
             barInput = panel.down('[reference=barInput]');
             okButton = panel.down('[reference=okButton]');
             cancelButton = panel.down('[reference=cancelButton]');
-            
+
             panel.on('boxready', function() {
                 this.el.on('keydown', keydownSpy);
             });
-            
+
             if (okSpy) {
                 okSpy.andCallFake(function(btn, e) {
                     event = e;
                 });
             }
-            
+
             if (keydownSpy) {
                 keydownSpy.andCallFake(function(e) {
                     event = e;
@@ -3544,164 +3544,164 @@ topSuite("Ext.panel.Panel", [
                 cancelSpy = jasmine.createSpy('Cancel button handler');
                 keydownSpy = jasmine.createSpy('Panel keydown');
             });
-            
+
             afterEach(function() {
                 if (panel && panel.el) {
                     panel.el.un('keydown', keydownSpy);
                 }
-                
+
                 okSpy = cancelSpy = keydownSpy = fooInput = barInput = cancelButton = null;
                 event = null;
             });
-            
+
             describe("w/ referenceHolder == true", function() {
                 beforeEach(function() {
                     setupPanel({
                         referenceHolder: true
                     });
-                    
+
                     okButton.on('click', okSpy);
                     cancelButton.on('click', cancelSpy);
                 });
-                
+
                 describe("no defaultButton", function() {
                     beforeEach(function() {
                         panel.defaultButton = undefined;
                         panel.render(Ext.getBody());
                     });
-                    
+
                     it("should not fire OK handler", function() {
                         pressKey(fooInput, 'enter');
-                        
+
                         waitForSpy(keydownSpy);
-                        
+
                         runs(function() {
                             expect(okSpy).not.toHaveBeenCalled();
                         });
                     });
-                    
+
                     it("should not have stopped the keydown event", function() {
                         pressKey(barInput, 'enter');
-                        
+
                         waitForSpy(keydownSpy);
-                        
+
                         runs(function() {
                             expect(event.stopped).toBeFalsy();
                         });
                     });
                 });
-                
+
                 describe("with defaultButton", function() {
                     beforeEach(function() {
                         panel.render(Ext.getBody());
                     });
-                    
+
                     it("should fire OK handler in fooInput", function() {
                         pressKey(fooInput, 'enter');
-                        
+
                         waitForSpy(okSpy);
-                        
+
                         runs(function() {
                             expect(okSpy).toHaveBeenCalled();
                         });
                     });
-                    
+
                     it("should fire OK handler in barInput", function() {
                         pressKey(barInput, 'enter');
-                        
+
                         waitForSpy(okSpy);
-                        
+
                         runs(function() {
                             expect(okSpy).toHaveBeenCalled();
                         });
                     });
-                    
+
                     it("should not fire OK handler on Cancel button", function() {
                         pressKey(cancelButton, 'enter');
-                        
+
                         waitForSpy(cancelSpy);
-                        
+
                         runs(function() {
                             expect(okSpy).not.toHaveBeenCalled();
                         });
                     });
-                    
+
                     it("should have stopped the keydown event", function() {
                         pressKey(fooInput, 'enter');
-                        
+
                         waitForSpy(okSpy);
-                        
+
                         runs(function() {
                             expect(event.stopped).toBeTruthy();
                         });
                     });
-                    
+
                     it("should not have reached main el keydown listener", function() {
                         pressKey(barInput, 'enter');
-                        
+
                         waitForSpy(okSpy);
-                        
+
                         runs(function() {
                             expect(keydownSpy).not.toHaveBeenCalled();
                         });
                     });
                 });
-                
+
                 describe("with defaultButton and defaultButtonTarget", function() {
                     beforeEach(function() {
                         panel.defaultButtonTarget = 'el';
                         panel.render(Ext.getBody());
                     });
-                    
+
                     it("should fire OK handler in fooInput", function() {
                         pressKey(fooInput, 'enter');
-                        
+
                         waitForSpy(okSpy);
-                        
+
                         runs(function() {
                             expect(okSpy).toHaveBeenCalled();
                         });
                     });
-                    
+
                     it("should fire OK handler in barInput", function() {
                         pressKey(barInput, 'enter');
-                        
+
                         waitForSpy(okSpy);
-                        
+
                         runs(function() {
                             expect(okSpy).toHaveBeenCalled();
                         });
                     });
-                    
+
                     it("should NOT fire OK handler on Cancel button", function() {
                         pressKey(cancelButton, 'enter');
-                        
+
                         waitForSpy(cancelSpy);
-                        
+
                         runs(function() {
                             expect(okSpy).not.toHaveBeenCalled();
                         });
                     });
-                    
+
                     it("should have stopped the keydown event", function() {
                         pressKey(fooInput, 'enter');
-                        
+
                         waitForSpy(okSpy);
-                        
+
                         runs(function() {
                             expect(event.stopped).toBeTruthy();
                         });
                     });
                 });
-                
+
                 describe("nested panel", function() {
                     var nestedPanel, nestedInput, nestedOk, nestedCancel,
                         nestedOkSpy, nestedCancelSpy;
-                    
+
                     beforeEach(function() {
                         nestedOkSpy = jasmine.createSpy('Nested OK handler');
                         nestedCancelSpy = jasmine.createSpy('Nested Cancel handler');
-                        
+
                         nestedPanel = panel.add({
                             xtype: 'panel',
                             title: 'nested',
@@ -3720,145 +3720,145 @@ topSuite("Ext.panel.Panel", [
                                 handler: nestedCancelSpy
                             }]
                         });
-                        
+
                         nestedInput = panel.lookupReference('nestedInput');
                         nestedOk = panel.lookupReference('nestedOk');
                         nestedCancel = panel.lookupReference('nestedCancel');
-                        
+
                         nestedOkSpy.andCallFake(function(btn, e) {
                             event = e;
                         });
-                        
+
                         nestedCancelSpy.andCallFake(function(btn, e) {
                             event = e;
-                            
+
                             e.stopEvent();
-                            
+
                             return false;
                         });
                     });
-                    
+
                     afterEach(function() {
                         nestedOkSpy = nestedCancelSpy = null;
                         nestedInput = nestedOk = nestedCancel = null;
                     });
-                    
+
                     describe("no defaultButton config", function() {
                         beforeEach(function() {
                             panel.render(Ext.getBody());
                         });
-                        
+
                         it("should fire outer OK handler on nested input", function() {
                             pressKey(nestedInput, 'enter');
-                            
+
                             waitForSpy(okSpy);
-                            
+
                             runs(function() {
                                 expect(okSpy).toHaveBeenCalled();
                             });
                         });
-                        
+
                         it("should NOT fire outer OK handler on nested OK button", function() {
                             pressKey(nestedOk, 'enter');
-                            
+
                             waitForSpy(nestedOkSpy);
-                            
+
                             runs(function() {
                                 expect(okSpy).not.toHaveBeenCalled();
                             });
                         });
-                        
+
                         it("should NOT fire outer OK handler on nested Cancel button", function() {
                             pressKey(nestedCancel, 'enter');
-                            
+
                             waitForSpy(nestedCancelSpy);
-                            
+
                             runs(function() {
                                 expect(okSpy).not.toHaveBeenCalled();
                             });
                         });
                     });
-                    
+
                     describe("with defaultButton config", function() {
                         beforeEach(function() {
                             nestedPanel.defaultButton = 'nestedOk';
                             panel.render(Ext.getBody());
                         });
-                        
+
                         describe("on nested input", function() {
                             beforeEach(function() {
                                 pressKey(nestedInput, 'enter');
-                            
+
                                 waitForSpy(nestedOkSpy);
                             });
-                            
+
                             it("should fire nested OK handler", function() {
                                 expect(nestedOkSpy).toHaveBeenCalled();
                             });
-                            
+
                             it("should NOT fire outer OK handler", function() {
                                 // Check that OUTER spy hasn't been fired;
                                 // we can only get there if the above waitForSpy()
                                 // didn't timeout
                                 expect(okSpy).not.toHaveBeenCalled();
                             });
-                            
+
                             it("should have stopped the event", function() {
                                 expect(event.stopped).toBeTruthy();
                             });
-                            
+
                             it("should not have reached outer keydown handler", function() {
                                 expect(keydownSpy).not.toHaveBeenCalled();
                             });
                         });
-                        
+
                         describe("on nested OK button", function() {
                             beforeEach(function() {
                                 pressKey(nestedOk, 'enter');
-                                
+
                                 waitForSpy(nestedOkSpy);
                             });
-                            
+
                             it("should fire nested OK handler", function() {
                                 expect(nestedOkSpy).toHaveBeenCalled();
                             });
-                            
+
                             it("should NOT fire outer OK handler", function() {
                                 expect(okSpy).not.toHaveBeenCalled();
                             });
-                            
+
                             it("should have stopped the event", function() {
                                 expect(event.stopped).toBeTruthy();
                             });
-                            
+
                             it("should not have reached outer keydown handler", function() {
                                 expect(keydownSpy).not.toHaveBeenCalled();
                             });
                         });
-                        
+
                         describe("on nested Cancel button", function() {
                             beforeEach(function() {
                                 pressKey(nestedCancel, 'enter');
-                                
+
                                 waitForSpy(nestedCancelSpy);
                             });
-                            
+
                             it("should fire nested Cancel handler", function() {
                                 expect(nestedCancelSpy).toHaveBeenCalled();
                             });
-                            
+
                             it("should NOT fire nested OK handler", function() {
                                 expect(nestedOkSpy).not.toHaveBeenCalled();
                             });
-                            
+
                             it("should NOT fire outer OK handler", function() {
                                 expect(okSpy).not.toHaveBeenCalled();
                             });
-                            
+
                             it("should have not reached outer keydown handler", function() {
                                 expect(keydownSpy).not.toHaveBeenCalled();
                             });
-                            
+
                             it("should have stopped the event", function() {
                                 expect(event.stopped).toBeTruthy();
                             });
@@ -3866,10 +3866,10 @@ topSuite("Ext.panel.Panel", [
                     });
                 });
             });
-            
+
             describe("nested w/ parent ViewController", function() {
                 var outerPanel;
-                
+
                 beforeEach(function() {
                     setupPanel({
                         buttons: [{
@@ -3885,14 +3885,14 @@ topSuite("Ext.panel.Panel", [
                                 click: 'onCancelButton'
                             }
                         }],
-                        
+
                         controller: {
                             xclass: 'Ext.app.ViewController',
                             onOkButton: okSpy,
                             onCancelButton: cancelSpy
                         }
                     });
-                    
+
                     outerPanel = new Ext.panel.Panel({
                         renderTo: Ext.getBody(),
                         x: 10,
@@ -3900,75 +3900,75 @@ topSuite("Ext.panel.Panel", [
                         width: 400,
                         height: 400,
                         items: [panel],
-                        
+
                         // Having the outer ViewController triggers the issue
                         controller: {
                             xclass: 'Ext.app.ViewController'
                         }
                     });
                 });
-                
+
                 afterEach(function() {
                     panel.el.un('keydown', keydownSpy);
-                    
+
                     outerPanel.destroy();
                     outerPanel = null;
                 });
-                
+
                 it("should fire OK handler in fooInput", function() {
                     pressKey(fooInput, 'enter');
-                    
+
                     waitForSpy(okSpy);
-                    
+
                     runs(function() {
                         expect(okSpy).toHaveBeenCalled();
                     });
                 });
-                
+
                 it("should fire OK handler in barInput", function() {
                     pressKey(barInput, 'enter');
-                    
+
                     waitForSpy(okSpy);
-                    
+
                     runs(function() {
                         expect(okSpy).toHaveBeenCalled();
                     });
                 });
-                
+
                 it("should not fire OK handler on Cancel button", function() {
                     pressKey(cancelButton, 'enter');
-                    
+
                     waitForSpy(cancelSpy);
-                    
+
                     runs(function() {
                         expect(okSpy).not.toHaveBeenCalled();
                     });
                 });
-                
+
                 it("should have stopped the keydown event", function() {
                     pressKey(fooInput, 'enter');
-                    
+
                     waitForSpy(okSpy);
-                    
+
                     runs(function() {
                         expect(event.stopped).toBeTruthy();
                     });
                 });
-                
+
                 it("should not have reached main el keydown listener", function() {
                     pressKey(barInput, 'enter');
-                    
+
                     waitForSpy(okSpy);
-                    
+
                     runs(function() {
                         expect(keydownSpy).not.toHaveBeenCalled();
                     });
                 });
             });
-            
+
             describe('keyMap config', function() {
                 var outerPanel;
-                
+
                 afterEach(function() {
                     Ext.destroy(outerPanel);
                 });
@@ -4012,7 +4012,7 @@ topSuite("Ext.panel.Panel", [
                                 handleE: jasmine.createSpy()
                             }
                         });
-                        
+
                     outerPanel = new Ext.panel.Panel({
                         items: middlePanel,
                         renderTo: document.body,
@@ -4064,13 +4064,13 @@ topSuite("Ext.panel.Panel", [
                                 handleA: jasmine.createSpy()
                             }
                         });
-                        
+
                         outerPanel = new Ext.panel.Panel({
                             items: [new InnerPanel({
                             })],
                             renderTo: document.body
                         });
-                        
+
                     panel = outerPanel.down('panel');
                     controller = panel.controller;
 
@@ -4089,7 +4089,7 @@ topSuite("Ext.panel.Panel", [
                                 handleA: jasmine.createSpy()
                             }
                         });
-                        
+
                         outerPanel = new Ext.panel.Panel({
                             items: [new InnerPanel({
                                 keyMap: {
@@ -4098,7 +4098,7 @@ topSuite("Ext.panel.Panel", [
                             })],
                             renderTo: document.body
                         });
-                        
+
                     panel = outerPanel.down('panel');
                     controller = panel.controller;
 
@@ -4116,7 +4116,7 @@ topSuite("Ext.panel.Panel", [
                                 A: 'handleA'           // Resolved to controller
                             }
                         });
-                        
+
                         outerPanel = new Ext.panel.Panel({
                             items: [new InnerPanel({
                                 controller: {
@@ -4126,7 +4126,7 @@ topSuite("Ext.panel.Panel", [
                             })],
                             renderTo: document.body
                         });
-                        
+
                     panel = outerPanel.down('panel');
                     controller = panel.controller;
 
@@ -4556,7 +4556,7 @@ topSuite("Ext.panel.Panel", [
 
                     makeDockPanel();
                     expect(panel.removeDocked(other)).toBe(other);
-                    
+
                     other.destroy();
                 });
             });
@@ -4651,73 +4651,73 @@ topSuite("Ext.panel.Panel", [
             });
         });
     });
-    
+
     describe("ARIA", function() {
         describe("attributes", function() {
             describe("ariaEl", function() {
                 beforeEach(function() {
                     makePanel();
                 });
-                
+
                 it("should be main el", function() {
                     expect(panel.ariaEl).toBe(panel.el);
                 });
             });
-            
+
             describe("main el", function() {
                 describe("static roles", function() {
                     beforeEach(function() {
                         makePanel();
                     });
-                    
+
                     it("should have presentation role by default", function() {
                         expect(panel).toHaveAttr('role', 'presentation');
                     });
                 });
-                
+
                 describe("explicit widget role", function() {
                     describe("in general", function() {
                         beforeEach(function() {
                             makePanel({ ariaRole: 'foo' });
                         });
-                        
+
                         it("should set el role to ariaRole", function() {
                             expect(panel).toHaveAttr('role', 'foo');
                         });
-                        
+
                         it("should not set ariaRole on the body el", function() {
                             expect(panel.body).toHaveAttr('role', 'presentation');
                         });
-                        
+
                         it("should not have aria-expanded", function() {
                             expect(panel).not.toHaveAttr('aria-expanded');
                         });
                     });
-                    
+
                     describe("no header no title", function() {
                         beforeEach(function() {
                             makePanel({
                                 ariaRole: 'throbbe'
                             });
                         });
-                        
+
                         it("should not have aria-label", function() {
                             expect(panel).not.toHaveAttr('aria-label');
                         });
-                        
+
                         it("should not have aria-labelledby", function() {
                             expect(panel).not.toHaveAttr('aria-labelledby');
                         });
-                        
+
                         it("should replace aria-labelledby", function() {
                             panel.ariaEl.dom.setAttribute('aria-labelledby', 'foo');
-                            
+
                             panel.setTitle('blerg');
-                            
+
                             expect(panel).toHaveAttr('aria-labelledby', panel.header.titleCmp.textEl.id);
                         });
                     });
-                    
+
                     describe("no header with title", function() {
                         beforeEach(function() {
                             makePanel({
@@ -4726,31 +4726,31 @@ topSuite("Ext.panel.Panel", [
                                 header: false
                             });
                         });
-                        
+
                         it("should not have aria-labelledby", function() {
                             expect(panel).not.toHaveAttr('aria-labelledby');
                         });
-                        
+
                         // https://sencha.jira.com/browse/EXTJS-18939
                         xit("should have aria-label", function() {
                             expect(panel).toHaveAttr('aria-label', 'blerg');
                         });
-                        
+
                         it("should not remove aria-labelledby", function() {
                             panel.ariaEl.dom.setAttribute('aria-labelledby', 'xyzzy');
-                            
+
                             panel.setTitle('throbbe');
-                            
+
                             expect(panel).toHaveAttr('aria-labelledby', 'xyzzy');
                         });
-                        
+
                         it("should strip HTML markup from title", function() {
                             panel.setTitle('<span style="background-color: red">foo</span>');
-                            
+
                             expect(panel).toHaveAttr('aria-label', 'foo');
                         });
                     });
-                    
+
                     describe("with header", function() {
                         beforeEach(function() {
                             makePanel({
@@ -4758,31 +4758,31 @@ topSuite("Ext.panel.Panel", [
                                 title: 'frob'
                             });
                         });
-                        
+
                         it("should have aria-labelledby", function() {
                             expect(panel).toHaveAttr('aria-labelledby', panel.header.titleCmp.textEl.id);
                         });
-                        
+
                         it("should not have aria-label", function() {
                             expect(panel).not.toHaveAttr('aria-label');
                         });
-                        
+
                         it("should have presentation role on the header with no tools", function() {
                             expect(panel.header).toHaveAttr('role', 'presentation');
                         });
-                        
+
                         it("should have presentation role on titleCmp", function() {
                             expect(panel.header.titleCmp).toHaveAttr('role', 'presentation');
                         });
-                        
+
                         it("should not remove aria-labelledby", function() {
                             panel.setTitle('bonzo');
-                            
+
                             expect(panel).toHaveAttr('aria-labelledby', panel.header.titleCmp.textEl.id);
                         });
                     });
                 });
-                
+
                 describe("region role", function() {
                     beforeEach(function() {
                         makePanel({
@@ -4790,16 +4790,16 @@ topSuite("Ext.panel.Panel", [
                             title: 'foo'
                         });
                     });
-                    
+
                     it("should have aria-labelledby", function() {
                         expect(panel).toHaveAttr('aria-labelledby', panel.headingEl.id);
                     });
-                    
+
                     it("should not have aria-label", function() {
                         expect(panel).not.toHaveAttr('aria-label');
                     });
                 });
-                
+
                 // This one is special with regards to aria-labelledby
                 describe("tabpanel role", function() {
                     beforeEach(function() {
@@ -4808,19 +4808,19 @@ topSuite("Ext.panel.Panel", [
                             title: 'foo'
                         });
                     });
-                    
+
                     // TabPanel sets it
                     it("should not set aria-labelledby", function() {
                         expect(panel).not.toHaveAttr('aria-labelledby');
                     });
-                    
+
                     // This would get in the way
                     it("should not set aria-label", function() {
                         expect(panel).not.toHaveAttr('aria-label');
                     });
                 });
             });
-            
+
             describe("body el", function() {
                 describe("static roles", function() {
                     beforeEach(function() {
@@ -4830,16 +4830,16 @@ topSuite("Ext.panel.Panel", [
                             }
                         });
                     });
-                    
+
                     it("should have presentation role by default", function() {
                         expect(panel.body).toHaveAttr('role', 'presentation');
                     });
-                    
+
                     it("should not render body ARIA attributes", function() {
                         expect(panel.body).not.toHaveAttr('aria-foo');
                     });
                 });
-                
+
                 describe("widget roles", function() {
                     beforeEach(function() {
                         makePanel({
@@ -4849,27 +4849,27 @@ topSuite("Ext.panel.Panel", [
                             }
                         });
                     });
-                    
+
                     it("should set role to bodyAriaRole", function() {
                         expect(panel.body).toHaveAttr('role', 'frob');
                     });
-                    
+
                     it("should render body ARIA attributes", function() {
                         expect(panel.body).toHaveAttr('aria-disabled', 'bonzo');
                     });
-                    
+
                     it("should not set bodyAriaRole on the main el", function() {
                         expect(panel).toHaveAttr('role', 'presentation');
                     });
                 });
             });
-            
+
             // The purpose of tool tests is to make sure the attribute munging
             // we're doing for certain cases does not spread beyond these cases.
             // Look for Accordion in Panel to see more.
             describe("standard tools", function() {
                 var closeTool, collapseTool, expandTool;
-                
+
                 beforeEach(function() {
                     makePanel({
                         title: 'foo',
@@ -4877,127 +4877,127 @@ topSuite("Ext.panel.Panel", [
                         collapsible: true,
                         animCollapse: false
                     });
-                    
+
                     closeTool = panel.down('tool[type=close]');
                     collapseTool = panel.collapseTool;
                     expandTool = panel.expandTool;
                 });
-                
+
                 afterEach(function() {
                     closeTool = collapseTool = expandTool = null;
                 });
-                
+
                 describe("close tool", function() {
                     // Not tabbable here; panel header is a FocusableContainer!
                     it("should be focusable", function() {
                         expect(closeTool.el.isFocusable()).toBe(true);
                     });
-                    
+
                     it("should have button role", function() {
                         expect(closeTool).toHaveAttr('role', 'button');
                     });
-                    
+
                     it("should have aria-label", function() {
                         expect(closeTool).toHaveAttr('aria-label', 'Close panel');
                     });
                 });
-                
+
                 describe("collapse tool", function() {
                     it("should be focusable", function() {
                         expect(collapseTool.el.isFocusable()).toBe(true);
                     });
-                    
+
                     it("should have button role", function() {
                         expect(collapseTool).toHaveAttr('role', 'button');
                     });
-                    
+
                     it("should have aria-label", function() {
                         expect(collapseTool).toHaveAttr('aria-label', 'Collapse panel');
                     });
                 });
-                
+
                 describe("expand tool", function() {
                     beforeEach(function() {
                         panel.collapse();
                     });
-                    
+
                     it("should be focusable", function() {
                         expect(expandTool.el.isFocusable()).toBe(true);
                     });
-                    
+
                     it("should have button role", function() {
                         expect(expandTool).toHaveAttr('role', 'button');
                     });
-                    
+
                     it("should have aria-label", function() {
                         expect(expandTool).toHaveAttr('aria-label', 'Expand panel');
                     });
                 });
             });
         }); // attributes
-        
+
         describe("regions", function() {
             beforeEach(function() {
                 Ext.ariaWarn = Ext._ariaWarn;
             });
-            
+
             afterEach(function() {
                 Ext.ariaWarn = Ext.emptyFn;
             });
-            
+
             describe("automagic ariaRole", function() {
                 it("should work when isViewportBorderChild", function() {
                     makePanel({ isViewportBorderChild: true, title: 'bonzo' });
-                    
+
                     expect(panel.ariaRole).toBe('region');
                 });
-                
+
                 it("should not work when isViewportBorderChild and has ariaRole", function() {
                     makePanel({
                         isViewportBorderChild: true,
                         ariaRole: 'plugh',
                         title: 'xyzzy'
                     });
-                    
+
                     expect(panel.ariaRole).toBe('plugh');
                 });
-                
+
                 it("should warn when isViewportBorderChild && !title", function() {
                     spyOn(Ext.log, 'warn');
-                    
+
                     makePanel({ isViewportBorderChild: true });
-                    
+
                     var warn = Ext.log.warn.mostRecentCall.args[0];
-                    
+
                     expect(warn.msg).toMatch(/does not have a title/);
                 });
-                
+
                 it("should warn when ariaRole == region && !title", function() {
                     spyOn(Ext.log, 'warn');
-                    
+
                     makePanel({ ariaRole: 'region' });
-                    
+
                     var warn = Ext.log.warn.mostRecentCall.args[0];
-                    
+
                     expect(warn.msg).toMatch(/does not have a title/);
                 });
             });
-            
+
             describe("headingEl", function() {
                 describe("creation", function() {
                     it("should be created when isViewportBorderChild", function() {
                         makePanel({ isViewportBorderChild: true, title: 'throbbe' });
-                        
+
                         expect(panel.headingEl).toBeDefined();
                     });
-                    
+
                     it("should be created when ariaRole == region", function() {
                         makePanel({ ariaRole: 'region', title: 'foobaroo' });
-                        
+
                         expect(panel.headingEl).toBeDefined();
                     });
                 });
-                
+
                 describe("position and content", function() {
                     beforeEach(function() {
                         makePanel({
@@ -5005,60 +5005,60 @@ topSuite("Ext.panel.Panel", [
                             title: 'frobbe'
                         });
                     });
-                    
+
                     it("should be docked above the header", function() {
                         var dom = panel.el.dom.childNodes[0];
-                        
+
                         expect(dom.getAttribute('role')).toBe('heading');
                     });
-                    
+
                     it("should have innerHTML set to the title", function() {
                         expect(panel.headingEl.getHtml()).toBe('frobbe');
                     });
-                    
+
                     it("should have innerHTML updated when title changes", function() {
                         panel.setTitle('vita voom');
-                        
+
                         expect(panel.headingEl.getHtml()).toBe('vita voom');
                     });
                 });
-                
+
                 describe("destruction", function() {
                     var headingEl;
-                    
+
                     beforeEach(function() {
                         makePanel({
                             ariaRole: 'region',
                             title: 'blerg'
                         });
-                        
+
                         headingEl = panel.headingEl;
-                        
+
                         // The warning is expected
                         spyOn(Ext.log, 'warn');
-                        
+
                         panel.setTitle(null);
                         panel.header = false;
                         panel.updateHeader();
                     });
-                    
+
                     it("should be removed from docked items", function() {
                         var els = panel.el.query('[role=heading]');
-                        
+
                         expect(els.length).toBe(0);
                     });
-                    
+
                     it("should be destroyed", function() {
                         expect(headingEl.destroyed).toBe(true);
                     });
-                    
+
                     it("should be nulled out", function() {
                         expect(panel.headingEl).toBe(null);
                     });
                 });
             });
         }); // regions
-        
+
         describe("state", function() {
             describe("aria-expanded", function() {
                 function makeSuite(animate) {
@@ -5073,69 +5073,69 @@ topSuite("Ext.panel.Panel", [
                                     renderTo: undefined
                                 });
                             });
-                            
+
                             describe("collapsed = false", function() {
                                 beforeEach(function() {
                                     panel.collapsed = false;
                                 });
-                                
+
                                 it("should set aria-expanded to true by default", function() {
                                     panel.render(Ext.getBody());
-                                    
+
                                     expect(panel).toHaveAttr('aria-expanded', 'true');
                                 });
-                                
+
                                 it("should set aria-expanded to false after collapsing", function() {
                                     panel.collapse();
                                     panel.render(Ext.getBody());
-                                    
+
                                     expect(panel).toHaveAttr('aria-expanded', 'false');
                                 });
-                                
+
                                 it("should set aria-expanded to true after expanding", function() {
                                     panel.collapse();
                                     panel.expand();
                                     panel.render(Ext.getBody());
-                                    
+
                                     expect(panel).toHaveAttr('aria-expanded', 'true');
                                 });
                             });
-                            
+
                             describe("collapsed = true", function() {
                                 beforeEach(function() {
                                     panel.collapsed = true;
                                 });
-                                
+
                                 it("should set aria-expanded to false by default", function() {
                                     panel.render(Ext.getBody());
-                                    
+
                                     expect(panel).toHaveAttr('aria-expanded', 'false');
                                 });
-                                
+
                                 it("should set aria-expanded to true after expanding", function() {
                                     panel.expand();
                                     panel.render(Ext.getBody());
-                                    
+
                                     expect(panel).toHaveAttr('aria-expanded', 'true');
                                 });
-                                
+
                                 it("should set aria-expanded to false after collapsing", function() {
                                     panel.expand();
                                     panel.collapse();
                                     panel.render(Ext.getBody());
-                                    
+
                                     expect(panel).toHaveAttr('aria-expanded', 'false');
                                 });
                             });
                         });
-                        
+
                         describe("after rendering", function() {
                             var collapseSpy, expandSpy;
-                            
+
                             beforeEach(function() {
                                 collapseSpy = jasmine.createSpy('collapse');
                                 expandSpy = jasmine.createSpy('expand');
-                                
+
                                 makePanel({
                                     ariaRole: 'splurge',
                                     title: 'foo',
@@ -5147,36 +5147,36 @@ topSuite("Ext.panel.Panel", [
                                     }
                                 });
                             });
-                            
+
                             it("should set aria-expanded to true by default", function() {
                                 expect(panel).toHaveAttr('aria-expanded', 'true');
                             });
-                            
+
                             it("should set aria-expanded to false after collapsing", function() {
                                 runs(function() {
                                     panel.collapse();
                                 });
-                                
+
                                 waitsForSpy(collapseSpy, 'collapse', 1000);
-                                
+
                                 runs(function() {
                                     expect(panel).toHaveAttr('aria-expanded', 'false');
                                 });
                             });
-                            
+
                             it("should set aria-expanded to true after expanding", function() {
                                 runs(function() {
                                     panel.collapse();
                                 });
-                                
+
                                 waitsForSpy(collapseSpy, 'collapse', 1000);
-                                
+
                                 runs(function() {
                                     panel.expand();
                                 });
-                                
+
                                 waitsForSpy(expandSpy, 'expand', 1000);
-                                
+
                                 runs(function() {
                                     expect(panel).toHaveAttr('aria-expanded', 'true');
                                 });
@@ -5184,22 +5184,22 @@ topSuite("Ext.panel.Panel", [
                         });
                     });
                 }
-                
+
                 makeSuite(100);
                 makeSuite(false);
             }); // aria-expanded
         }); // state
-        
+
         describe("collapsible", function() {
             var ct, west;
-            
+
             function makeContainer(itemConfig, ctConfig) {
                 ctConfig = Ext.apply({
                     renderTo: Ext.getBody(),
                     width: 600,
                     height: 600,
                     layout: 'border',
-                    
+
                     items: [Ext.apply({
                         xtype: 'panel',
                         title: 'West',
@@ -5211,18 +5211,18 @@ topSuite("Ext.panel.Panel", [
                         region: 'center'
                     }]
                 }, ctConfig);
-                
+
                 ct = new Ext.container.Container(ctConfig);
-                
+
                 west = ct.down('[region=west]');
-                
+
                 west.collapse();
             }
-            
+
             afterEach(function() {
                 ct = Ext.destroy(ct);
             });
-            
+
             describe("reexpander", function() {
                 it("should copy focusableContainer config", function() {
                     makeContainer({
@@ -5230,41 +5230,41 @@ topSuite("Ext.panel.Panel", [
                             focusableContainer: false
                         }
                     });
-                    
+
                     expect(west.reExpander.focusableContainer).toBe(false);
                 });
-                
+
                 it("should copy inactiveChildTabIndex", function() {
                     makeContainer({
                         header: {
                             inactiveChildTabIndex: -10
                         }
                     });
-                    
+
                     expect(west.reExpander.inactiveChildTabIndex).toBe(-10);
                 });
-                
+
                 it("should copy allowFocusingDisabledChildren", function() {
                     makeContainer({
                         header: {
                             allowFocusingDisabledChildren: true
                         }
                     });
-                    
+
                     expect(west.reExpander.allowFocusingDisabledChildren).toBe(true);
                 });
-                
+
                 it("should set tabIndex to the reExpander tool", function() {
                     makeContainer({
                         header: {
                             activeChildTabIndex: 42
                         }
                     });
-                    
+
                     expect(west.reExpander.down('tool')).toHaveAttr('tabIndex', 42);
                 });
             });
-            
+
             describe("placeholder", function() {
                 it("should copy focusableContainer config", function() {
                     makeContainer({
@@ -5273,10 +5273,10 @@ topSuite("Ext.panel.Panel", [
                             focusableContainer: false
                         }
                     });
-                    
+
                     expect(west.placeholder.focusableContainer).toBe(false);
                 });
-                
+
                 it("should copy inactiveChildTabIndex", function() {
                     makeContainer({
                         collapseMode: 'placeholder',
@@ -5284,10 +5284,10 @@ topSuite("Ext.panel.Panel", [
                             inactiveChildTabIndex: -2
                         }
                     });
-                    
+
                     expect(west.placeholder.inactiveChildTabIndex).toBe(-2);
                 });
-                
+
                 it("should copy allowFocusingDisabledChildren", function() {
                     makeContainer({
                         collapseMode: 'placeholder',
@@ -5295,10 +5295,10 @@ topSuite("Ext.panel.Panel", [
                             allowFocusingDisabledChildren: true
                         }
                     });
-                    
+
                     expect(west.placeholder.allowFocusingDisabledChildren).toBe(true);
                 });
-                
+
                 it("should set tabIndex on the placeholder tool", function() {
                     makeContainer({
                         collapseMode: 'placeholder',
@@ -5306,7 +5306,7 @@ topSuite("Ext.panel.Panel", [
                             activeChildTabIndex: 42
                         }
                     });
-                    
+
                     expect(west.placeholder.down('tool')).toHaveAttr('tabIndex', 42);
                 });
             });
@@ -5326,11 +5326,11 @@ topSuite("Ext.panel.Panel", [
                 expect(children[0].id).toBe(panel.tabGuardBeforeEl.id);
                 expect(children[1].id).toBe(panel.bodyWrap.id);
                 expect(children[2].id).toBe(panel.tabGuardAfterEl.id);
-                
+
                 children = panel.bodyWrap.dom.childNodes;
-                
+
                 expect(children.length).toBe(1);
-                
+
                 expect(children[0].id).toBe(panel.body.id);
             });
 
@@ -5359,11 +5359,11 @@ topSuite("Ext.panel.Panel", [
                 expect(children[1].id).toBe(panel.header.id);
                 expect(children[2].id).toBe(panel.bodyWrap.id);
                 expect(children[3].id).toBe(panel.tabGuardAfterEl.id);
-                
+
                 children = panel.bodyWrap.dom.childNodes;
-                
+
                 expect(children.length).toBe(3);
-                
+
                 // Header is docked at 0!
                 expect(children[0].id).toBe(docked.getAt(1).id);
                 expect(children[1].id).toBe(panel.body.id);
@@ -5393,11 +5393,11 @@ topSuite("Ext.panel.Panel", [
                 expect(children[0].id).toBe(panel.tabGuardBeforeEl.id);
                 expect(children[1].id).toBe(panel.bodyWrap.id);
                 expect(children[2].id).toBe(panel.tabGuardAfterEl.id);
-                
+
                 children = panel.bodyWrap.dom.childNodes;
-                
+
                 expect(children.length).toBe(3);
-                
+
                 expect(children[0].id).toBe(docked.getAt(0).id);
                 expect(children[1].id).toBe(panel.body.id);
                 expect(children[2].id).toBe(docked.getAt(1).id);
@@ -5417,16 +5417,16 @@ topSuite("Ext.panel.Panel", [
                 var docked = panel.dockedItems;
 
                 expect(elChildren.length).toBe(4);
-                
+
                 expect(elChildren[0].id).toBe(panel.tabGuardBeforeEl.id);
                 expect(elChildren[1].id).toBe(panel.header.id);
                 expect(elChildren[2].id).toBe(panel.bodyWrap.id);
                 expect(elChildren[3].id).toBe(panel.tabGuardAfterEl.id);
-                
+
                 expect(wrapChildren.length).toBe(1);
-                
+
                 expect(wrapChildren[0].id).toBe(panel.body.id);
-                
+
                 var tbar = panel.addDocked({
                     xtype: 'toolbar',
                     dock: 'top',
@@ -5451,9 +5451,9 @@ topSuite("Ext.panel.Panel", [
                 expect(elChildren[1].id).toBe(panel.header.id);
                 expect(elChildren[2].id).toBe(panel.bodyWrap.id);
                 expect(elChildren[3].id).toBe(panel.tabGuardAfterEl.id);
-                
+
                 expect(wrapChildren.length).toBe(3);
-                
+
                 // Header is docked at index 0!
                 expect(wrapChildren[0].id).toBe(docked.getAt(1).id);
                 expect(wrapChildren[0].id).toBe(tbar[0].id);
@@ -5505,9 +5505,9 @@ topSuite("Ext.panel.Panel", [
                 expect(elChildren[1].id).toBe(panel.header.id);
                 expect(elChildren[2].id).toBe(panel.bodyWrap.id);
                 expect(elChildren[3].id).toBe(panel.tabGuardAfterEl.id);
-                
+
                 expect(wrapChildren.length).toBe(3);
-                
+
                 // Header is docked at index 0!
                 expect(wrapChildren[0].id).toBe(docked.getAt(2).id);
                 expect(wrapChildren[0].id).toBe(tbar[0].id);
@@ -5577,7 +5577,7 @@ topSuite("Ext.panel.Panel", [
                 expect(elChildren[1].id).toBe(panel.header.id);
                 expect(elChildren[2].id).toBe(panel.bodyWrap.id);
                 expect(elChildren[3].id).toBe(panel.tabGuardAfterEl.id);
-                
+
                 expect(wrapChildren.length).toBe(5);
 
                 // Header is docked at index 0!
@@ -5654,7 +5654,7 @@ topSuite("Ext.panel.Panel", [
         });
 
     });
-    
+
     describe("stateful", function() {
         describe("getState", function() {
             describe("basic", function() {
@@ -5666,12 +5666,12 @@ topSuite("Ext.panel.Panel", [
                         html: 'throbbe'
                     });
                 });
-                    
+
                 it("should return empty object", function() {
                     expect(panel.getState()).toEqual({});
                 });
             });
-            
+
             describe("collapsible", function() {
                 describe("via header", function() {
                     describe("vertical", function() {
@@ -5684,10 +5684,10 @@ topSuite("Ext.panel.Panel", [
                                 height: 300,
                                 html: 'gurgle'
                             });
-        
+
                             panel.collapse();
                         });
-                        
+
                         it("should populate properties", function() {
                             expect(panel.getState()).toEqual({
                                 collapsed: {
@@ -5700,7 +5700,7 @@ topSuite("Ext.panel.Panel", [
                             });
                         });
                     });
-                    
+
                     describe("horizontal", function() {
                         beforeEach(function() {
                             makePanel({
@@ -5712,10 +5712,10 @@ topSuite("Ext.panel.Panel", [
                                 height: 300,
                                 html: 'gurgle'
                             });
-        
+
                             panel.collapse();
                         });
-                        
+
                         it("should populate properties", function() {
                             expect(panel.getState()).toEqual({
                                 collapsed: {
@@ -5729,14 +5729,14 @@ topSuite("Ext.panel.Panel", [
                         });
                     });
                 });
-                
+
                 describe("placeholder", function() {
                     var ct, p;
-                    
+
                     afterEach(function() {
                         ct = p = Ext.destroy(ct);
                     });
-                    
+
                     describe("vertical", function() {
                         beforeEach(function() {
                             ct = new Ext.container.Container({
@@ -5754,12 +5754,12 @@ topSuite("Ext.panel.Panel", [
                                     region: 'center'
                                 }]
                             });
-                            
+
                             p = ct.items.first();
-                            
+
                             p.collapse();
                         });
-                        
+
                         it("should populate properties", function() {
                             expect(p.getState()).toEqual({
                                 collapsed: {},
@@ -5767,7 +5767,7 @@ topSuite("Ext.panel.Panel", [
                             });
                         });
                     });
-                    
+
                     describe("horizontal", function() {
                         beforeEach(function() {
                             ct = new Ext.container.Container({
@@ -5785,12 +5785,12 @@ topSuite("Ext.panel.Panel", [
                                     region: 'center'
                                 }]
                             });
-                            
+
                             p = ct.items.first();
-                            
+
                             p.collapse();
                         });
-                        
+
                         it("should populate properties", function() {
                             expect(p.getState()).toEqual({
                                 collapsed: {},

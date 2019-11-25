@@ -10,7 +10,7 @@ Ext.define('Ext.tree.ViewDropZone', {
      * that will become a sibling of the parent when dropped.
      */
     allowParentInserts: false,
- 
+
     /**
      * @cfg {Boolean} allowContainerDrops
      * True if drops on the tree container (outside of a specific tree node) are allowed.
@@ -86,7 +86,7 @@ Ext.define('Ext.tree.ViewDropZone', {
         }
 
         fragment = (region.bottom - region.top) / (noAppend ? 2 : 3);
-        
+
         if (y >= region.top && y < (region.top + fragment)) {
             return 'before';
         }
@@ -125,7 +125,7 @@ Ext.define('Ext.tree.ViewDropZone', {
                 return false;
             }
         }
-        
+
         // Respect the allowDrop field on Tree nodes
         if (position === 'append' && targetNode.get('allowDrop') === false) {
             return false;
@@ -138,7 +138,7 @@ Ext.define('Ext.tree.ViewDropZone', {
         if (Ext.Array.contains(draggedRecords, targetNode)) {
             return false;
         }
-        
+
         return view.fireEvent('nodedragover', targetNode, position, data, e) !== false;
     },
 
@@ -152,14 +152,13 @@ Ext.define('Ext.tree.ViewDropZone', {
 
         // auto node expand check
         this.cancelExpand();
-        
+
         if (position === 'append' && !this.expandProcId &&
             !Ext.Array.contains(data.records, targetNode) && !targetNode.isLeaf() &&
             !targetNode.isExpanded()) {
             this.queueExpand(targetNode);
         }
-            
-            
+
         if (this.isValidDropPoint(node, position, dragZone, e, data)) {
             this.valid = true;
             this.currentPosition = position;
@@ -178,7 +177,7 @@ Ext.define('Ext.tree.ViewDropZone', {
                 returnCls = targetNode.isFirst()
                     ? Ext.baseCSSPrefix + 'tree-drop-ok-above'
                     : Ext.baseCSSPrefix + 'tree-drop-ok-between';
-                
+
                 indicator.showAt(0, indicatorY);
                 dragZone.proxy.show();
             }
@@ -186,7 +185,7 @@ Ext.define('Ext.tree.ViewDropZone', {
                 returnCls = targetNode.isLast()
                     ? Ext.baseCSSPrefix + 'tree-drop-ok-below'
                     : Ext.baseCSSPrefix + 'tree-drop-ok-between';
-                
+
                 indicatorY += Ext.fly(node).getHeight();
                 indicator.showAt(0, indicatorY);
                 dragZone.proxy.show();
@@ -230,7 +229,7 @@ Ext.define('Ext.tree.ViewDropZone', {
             this.onNodeDrop(this.overRecord, dragZone, e, data);
         }
     },
-    
+
     notifyOut: function() {
         this.callParent(arguments);
         this.cancelExpand();
@@ -296,7 +295,7 @@ Ext.define('Ext.tree.ViewDropZone', {
             insertionMethod = targetNode.appendChild;
             argList = [null];
         }
-        
+
         // A function to transfer the data into the destination tree
         transferData = function() {
             var color,
@@ -328,9 +327,9 @@ Ext.define('Ext.tree.ViewDropZone', {
             if (me.sortOnDrop) {
                 targetNode.sort(targetNode.getTreeStore().getSorters().sortFn);
             }
-            
+
             Ext.resumeLayouts(true);
-            
+
             // Focus the dropped node.
             record = data.records[0];
             targetView.ownerGrid.ensureVisible(record);

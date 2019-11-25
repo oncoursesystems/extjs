@@ -24,9 +24,13 @@ Ext.define('KitchenSink.view.binding.AlgebraFormatters', {
         graphite: {
             width: 470,
             footerWidth: 150
+        },
+        'classic-material': {
+            width: 350,
+            footerWidth: 150
         }
     },
-    
+
     title: 'Formatters',
 
     width: '${width}',

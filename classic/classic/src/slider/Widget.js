@@ -33,13 +33,13 @@ Ext.define('Ext.slider.Widget', {
          * One more values for the position of the slider's thumb(s).
          */
         value: 0,
-        
+
         /**
          * @cfg {Number} minValue
          * The minimum value for any slider thumb.
          */
         minValue: 0,
-        
+
         /**
          * @cfg {Number} maxValue
          * The maximum value for any slider thumb.
@@ -106,7 +106,7 @@ Ext.define('Ext.slider.Widget', {
 
         if (Ext.isArray(value)) {
             value = Ext.Array.from(value);
-            
+
             for (i = 0, len = value.length; i < len; ++i) {
                 me.setThumbValue(i, value[i] = me.normalizeValue(value[i]), animate, true);
             }
@@ -115,7 +115,7 @@ Ext.define('Ext.slider.Widget', {
             value = me.normalizeValue(value);
             me.setThumbValue(0, value, animate, true);
         }
-        
+
         return value;
     },
 
@@ -146,13 +146,13 @@ Ext.define('Ext.slider.Widget', {
                 cls: me.thumbCls,
                 style: {}
             };
-            
+
             thumbConfig['data-thumbIndex'] = ordinal;
             result = me.thumbs[ordinal] = me.innerEl.createChild(thumbConfig);
             touchAction[panDisable] = false;
             result.setTouchAction(touchAction);
         }
-        
+
         return result;
     },
 
@@ -208,11 +208,11 @@ Ext.define('Ext.slider.Widget', {
         if (!isNaN(value)) {
             newValue = Math[compareType](value, rangeValue);
         }
-        
+
         if (newValue !== undefined) {
             this.setValue(newValue);
         }
-        
+
         this.update();
     },
 
@@ -248,7 +248,7 @@ Ext.define('Ext.slider.Widget', {
             else {
                 if (me.getClickToChange()) {
                     trackPoint = me.getTrackpoint(trackPoint);
-                    
+
                     if (trackPoint != null) {
                         me.onClickChange(trackPoint);
                     }
@@ -276,7 +276,7 @@ Ext.define('Ext.slider.Widget', {
         thumb = me.getNearest(trackPoint);
         index = parseInt(thumb.getAttribute('data-thumbIndex'), 10);
         value = Ext.util.Format.round(me.reversePixelValue(trackPoint), me.decimalPrecision);
-        
+
         if (index) {
             me.setThumbValue(index, value, undefined, true);
         }
@@ -311,7 +311,7 @@ Ext.define('Ext.slider.Widget', {
                 nearestDistance = dist;
             }
         }
-        
+
         return nearest;
     },
 
@@ -371,7 +371,7 @@ Ext.define('Ext.slider.Widget', {
 
     onMouseUp: function(e, thumb) {
         var me = this;
-        
+
         me.doMouseMove(e, thumb, true);
         Ext.getDoc().un({
             scope: me,
@@ -443,11 +443,11 @@ Ext.define('Ext.slider.Widget', {
                     thumb, me.calculateThumbPosition(value),
                     Ext.isDefined(animate) ? animate !== false : me.animate
                 );
-                
+
                 me.fireEvent('change', me, value, thumb);
             }
         }
-        
+
         return me;
     },
 
@@ -569,10 +569,10 @@ Ext.define('Ext.slider.Widget', {
             positionProperty = me.horizontalProp;
             trackLength = sliderTrack.getWidth();
         }
-        
+
         xy = me.transformTrackPoints(sliderTrack.translatePoints(xy));
         result = Ext.Number.constrain(xy[positionProperty], 0, trackLength);
-        
+
         return vertical ? trackLength - result : result;
     },
 
@@ -649,7 +649,7 @@ Ext.define('Ext.slider.Widget', {
         // Funnel mousemove events and the final mouseup event back into the gadget
         Ext.getDoc().on(listeners);
     },
-    
+
     doDestroy: function() {
         Ext.destroy(this.thumbs);
         this.callParent();

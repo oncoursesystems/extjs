@@ -47,6 +47,11 @@ Ext.define('KitchenSink.view.binding.ChildSession', {
             width: 500,
             height: 450,
             editWidth: 120
+        },
+        'classic-material': {
+            width: 500,
+            height: 450,
+            editWidth: 120
         }
     },
     title: 'All Companies',

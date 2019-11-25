@@ -36,7 +36,7 @@ Ext.define('Ext.chart.modifier.Callout', {
             rotationRads = 'rotationRads' in changes
                 ? origin.rotationRads = changes.rotationRads
                 : origin.rotationRads;
-            
+
             x = 'x' in changes ? (origin.x = changes.x) : origin.x;
             y = 'y' in changes ? (origin.y = changes.y) : origin.y;
             calloutPlaceX = 'calloutPlaceX' in changes ? changes.calloutPlaceX : attr.calloutPlaceX;
@@ -67,13 +67,11 @@ Ext.define('Ext.chart.modifier.Callout', {
 
             changes.rotationRads = rotationRads;
 
-
             // Placing a label in the middle of a pie slice (x/y)
             // if callout doesn't exists (callout=0),
             // or outside the pie slice (calloutPlaceX/Y) if it does (callout=1).
             changes.x = x * (1 - callout) + calloutPlaceX * callout;
             changes.y = y * (1 - callout) + calloutPlaceY * callout;
-
 
             dx = calloutPlaceX - x;
             dy = calloutPlaceY - y;

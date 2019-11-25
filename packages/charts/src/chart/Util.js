@@ -75,7 +75,7 @@ Ext.define('Ext.chart.Util', {
      */
     validateRange: function(range, defaultRange, padding) {
         var isFin0, isFin1;
-        
+
         defaultRange = defaultRange || this.defaultRange.slice();
 
         if (!(padding === 0 || padding > 0)) {
@@ -109,7 +109,7 @@ Ext.define('Ext.chart.Util', {
                 return defaultRange;
             }
         }
-        
+
         // Same sign infinities are ruled out at this point.
 
         isFin0 = isFinite(range[0]);
@@ -128,7 +128,7 @@ Ext.define('Ext.chart.Util', {
             range[0] = range[1] +
                        Ext.Number.sign(range[0]) * (defaultRange[1] - defaultRange[0]);
         }
-        
+
         // All infinities are ruled out at this point.
 
         return [

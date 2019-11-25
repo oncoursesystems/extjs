@@ -269,7 +269,7 @@ Ext.define('Ext.grid.filters.filter.List', {
                 scope: me,
                 destroyable: true
             });
-            
+
             me.inferOptionsFromGridStore = true;
         }
     },
@@ -291,7 +291,7 @@ Ext.define('Ext.grid.filters.filter.List', {
 
             me.store = null;
         }
-        
+
         Ext.destroy(me.gridStoreListeners, me.gridListeners);
 
         me.callParent();
@@ -372,11 +372,11 @@ Ext.define('Ext.grid.filters.filter.List', {
                     case 'array':
                         storeData.push(value);
                         break;
-                    
+
                     case 'object':
                         storeData.push(value);
                         break;
-                    
+
                     default:
                         if (value != null) {
                             o = {};
@@ -524,16 +524,16 @@ Ext.define('Ext.grid.filters.filter.List', {
         // List filter needs to have its value set immediately or else could will fail
         // when filtering since its _value would be undefined.
         var value = config.value;
-        
+
         if (Ext.isEmpty(value)) {
             value = [];
         }
         else if (!Ext.isArray(value)) {
             value = [value];
         }
-        
+
         config.value = value;
-        
+
         return this.callParent([config, key]);
     },
 
@@ -615,7 +615,7 @@ Ext.define('Ext.grid.filters.filter.List', {
             this.bindMenuStore(store);
         }
     },
-    
+
     setActive: function(active) {
         if (this.active !== active) {
             // The store filter will be updated, but we don't want to recreate the list store
@@ -688,7 +688,7 @@ Ext.define('Ext.grid.filters.filter.List', {
 
     show: function() {
         var store = this.store;
-        
+
         if (this.loadOnShow && !this.loaded && !store.hasPendingLoad()) {
             store.load();
         }

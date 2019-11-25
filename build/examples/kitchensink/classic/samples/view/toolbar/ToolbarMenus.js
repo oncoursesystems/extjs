@@ -36,6 +36,9 @@ Ext.define('KitchenSink.view.toolbar.ToolbarMenus', {
         },
         graphite: {
             width: 180
+        },
+        'classic-material': {
+            width: 130
         }
     },
 
@@ -45,7 +48,7 @@ Ext.define('KitchenSink.view.toolbar.ToolbarMenus', {
     tbar: {
         overflowHandler: 'menu',
         items: [{
-            text:'Button w/ Menu',
+            text: 'Button w/ Menu',
             iconCls: 'x-fa fa-th',
             menu: {
                 id: 'mainMenu',
@@ -97,7 +100,7 @@ Ext.define('KitchenSink.view.toolbar.ToolbarMenus', {
                             }
                         ]
                     }
-                },{
+                }, {
                     text: 'Choose a Date',
                     iconCls: 'x-fa fa-calendar',
                     menu: {
@@ -160,11 +163,11 @@ Ext.define('KitchenSink.view.toolbar.ToolbarMenus', {
             text: 'Split Button',
             handler: 'onButtonClick',
             tooltip: {
-                text:'This is a an example QuickTip for a toolbar item',
-                title:'Tip Title'
+                text: 'This is a an example QuickTip for a toolbar item',
+                title: 'Tip Title'
             },
             iconCls: 'x-fa fa-th-list',
-            menu : {
+            menu: {
                 items: [{
                     text: '<b>Bold</b>', handler: 'onItemClick'
                 }, {

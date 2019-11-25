@@ -318,7 +318,7 @@ Ext.define('Ext.data.TreeStore', {
                 Ext.global.console.warn('Ext.data.TreeStore: nodeParameter has been deprecated. ' +
                                         'Please use nodeParam instead.');
             }
-            
+
             me.nodeParam = me.nodeParameter;
             delete me.nodeParameter;
         }
@@ -346,7 +346,7 @@ Ext.define('Ext.data.TreeStore', {
                 });
             }
         }
-        
+
         me.callParent([fields, oldFields]);
     },
 
@@ -364,7 +364,7 @@ Ext.define('Ext.data.TreeStore', {
             Ext.raise('You can\'t group a TreeStore');
         }
         //</debug>
-        
+
         return null;
     },
 
@@ -436,7 +436,7 @@ Ext.define('Ext.data.TreeStore', {
             if (me.needsIndexSort && result === 0) {
                 result = node1.data.index - node2.data.index;
             }
-            
+
             return result || sortersSortFn(node1, node2);
         };
     },
@@ -473,7 +473,7 @@ Ext.define('Ext.data.TreeStore', {
                     prevVisibleNodeIndex = node.previousSibling
                         ? me.indexOfPreviousVisibleNode(node.previousSibling)
                         : (parentNode ? me.indexOf(parentNode) : -1);
-                    
+
                     me.insert(prevVisibleNodeIndex + 1, toAdd);
                 }
             }
@@ -490,13 +490,13 @@ Ext.define('Ext.data.TreeStore', {
         else if (me.getRoot() && me.needsLocalFilter()) {
             me.onFilterEndUpdate(me.getFilters());
         }
-        
+
         me.callParent([node, modifiedFieldNames]);
     },
 
     afterReject: function(record) {
         var me = this;
-        
+
         // Must pass the 5th param (modifiedFieldNames) as null, otherwise the
         // event firing machinery appends the listeners "options" object to the arg list
         // which may get used as the modified fields array by a handler.
@@ -510,11 +510,11 @@ Ext.define('Ext.data.TreeStore', {
 
     afterCommit: function(record, modifiedFieldNames) {
         var me = this;
-        
+
         if (!modifiedFieldNames) {
             modifiedFieldNames = null;
         }
-        
+
         if (me.contains(record)) {
             me.onUpdate(record, Ext.data.Model.COMMIT, modifiedFieldNames);
             me.fireEvent('update', me, record, Ext.data.Model.COMMIT, modifiedFieldNames);
@@ -527,7 +527,7 @@ Ext.define('Ext.data.TreeStore', {
 
         if (rootNode) {
             data = this.getData();
-            
+
             if (rootVisible) {
                 data.insert(0, rootNode);
             }
@@ -539,7 +539,7 @@ Ext.define('Ext.data.TreeStore', {
 
     updateTrackRemoved: function(trackRemoved) {
         this.callParent(arguments);
-        
+
         this.removedNodes = this.removed;
         this.removed = null;
     },
@@ -552,7 +552,7 @@ Ext.define('Ext.data.TreeStore', {
 
     updateProxy: function(proxy) {
         var reader;
-        
+
         // The proxy sets a parameter to carry the entity ID based upon the Operation's id
         // That parameter name defaults to "id".
         // TreeStore however uses a nodeParam configuration to specify the entity id
@@ -564,7 +564,7 @@ Ext.define('Ext.data.TreeStore', {
             // Readers in a TreeStore's proxy have to use a special rootProperty which defaults
             // to "children"
             reader = proxy.getReader();
-            
+
             if (Ext.isEmpty(reader.getRootProperty())) {
                 reader.setRootProperty(this.getDefaultRootProperty());
             }
@@ -579,7 +579,7 @@ Ext.define('Ext.data.TreeStore', {
 
     updateModel: function(model) {
         var isNode;
-        
+
         if (model) {
             isNode = model.prototype.isNode;
 
@@ -618,14 +618,14 @@ Ext.define('Ext.data.TreeStore', {
                     }
                 });
             }
-            
+
             if (length) {
                 filteredNodes = [];
                 childNodes = root.childNodes;
-                
+
                 for (i = 0, length = childNodes.length; i < length; i++) {
                     childNode = childNodes[i];
-                    
+
                     if (childNode.get('visible')) {
                         filteredNodes.push(childNode);
                     }
@@ -634,7 +634,7 @@ Ext.define('Ext.data.TreeStore', {
             else {
                 filteredNodes = root.childNodes;
             }
-            
+
             me.onNodeFilter(root, filteredNodes);
             root.fireEvent('filterchange', root, filteredNodes);
 
@@ -697,22 +697,22 @@ Ext.define('Ext.data.TreeStore', {
         // This will also expand phantom nodes with childNodes.
         if (node.isLoaded()) {
             callbackArgs = [node.childNodes];
-            
+
             if (args) {
                 callbackArgs.push.apply(callbackArgs, args);
             }
-            
+
             Ext.callback(callback, scope || node, callbackArgs);
         }
         // The node is loading
         else if (node.isLoading()) {
             me.on('load', function() {
                 callbackArgs = [node.childNodes];
-                
+
                 if (args) {
                     callbackArgs.push.apply(callbackArgs, args);
                 }
-                
+
                 Ext.callback(callback, scope || node, callbackArgs);
             }, me, {
                 single: true,
@@ -772,15 +772,15 @@ Ext.define('Ext.data.TreeStore', {
                         // it may be re-used on reload
                         delete me.lastOptions.onChildNodesAvailable;
                         callbackArgs = [node.childNodes];
-                        
+
                         if (args) {
                             callbackArgs.push.apply(callbackArgs, args);
                         }
-                        
+
                         Ext.callback(callback, scope || node, callbackArgs);
                     }
                 });
-                
+
                 // Requests for node expansion must be immediate
                 me.flushLoad();
             }
@@ -880,7 +880,7 @@ Ext.define('Ext.data.TreeStore', {
             // Remove the whole collapsed node set.
             me.removeAt(collapseIndex, lastNodeIndexPlus - collapseIndex);
         }
-        
+
         Ext.callback(callback, scope);
     },
 
@@ -1036,7 +1036,7 @@ Ext.define('Ext.data.TreeStore', {
         if (!Ext.isArray(childNodes)) {
             childNodes = [ childNodes ];
         }
-        
+
         /* eslint-disable-next-line vars-on-top */
         var me = this,
             len = childNodes.length,
@@ -1200,7 +1200,7 @@ Ext.define('Ext.data.TreeStore', {
 
             // The reaction to collection add joins the node to this Store
             me.insert(storeInsertionPoint + 1, node);
-            
+
             if (!node.isLeaf() && node.isExpanded()) {
                 if (node.isLoaded()) {
                     // Take a shortcut
@@ -1238,7 +1238,7 @@ Ext.define('Ext.data.TreeStore', {
             reader = nodeReader && nodeReader.initialConfig.rootProperty ? nodeReader : storeReader;
 
             dataRoot = reader.getRoot(data);
-            
+
             if (dataRoot) {
                 me.fillNode(node, reader.extractData(dataRoot, {
                     model: node.childType,
@@ -1246,7 +1246,7 @@ Ext.define('Ext.data.TreeStore', {
                 }));
             }
         }
-        
+
         me.endUpdate();
     },
 
@@ -1280,7 +1280,7 @@ Ext.define('Ext.data.TreeStore', {
         if (includeChildren === true) {
             children = node.childNodes;
             length = children.length;
-            
+
             for (i = 0; i < length; i++) {
                 me.registerNode(children[i], true);
             }
@@ -1299,11 +1299,11 @@ Ext.define('Ext.data.TreeStore', {
             children, length, i;
 
         delete me.byIdMap[node.id];
-        
+
         if (includeChildren === true) {
             children = node.childNodes;
             length = children.length;
-            
+
             for (i = 0; i < length; i++) {
                 me.unregisterNode(children[i], true);
             }
@@ -1361,7 +1361,7 @@ Ext.define('Ext.data.TreeStore', {
                 parentId: null,
                 allowDrag: false
             }, newRoot);
-            
+
             // Ensure the root has the default root id if it has no id.
             if (defaultRootId && newRoot[idProperty] === undefined) {
                 newRoot[idProperty] = defaultRootId;
@@ -1387,7 +1387,7 @@ Ext.define('Ext.data.TreeStore', {
         // We do not want an add event to fire. This is a refresh operation.
         // A refresh will be fired after the new root is set.
         me.suspendEvent('add', 'remove');
-        
+
         if (initial) {
             me.suspendEvent('refresh', 'datachanged');
         }
@@ -1402,11 +1402,11 @@ Ext.define('Ext.data.TreeStore', {
             else {
                 toRemove = oldRoot.childNodes;
             }
-            
+
             me.beforeNodeRemove(null, toRemove, false, removeRange);
             oldRoot.set('root', false);
             me.onNodeRemove(null, toRemove, false, removeRange);
-            
+
             oldRoot.fireEvent('remove', null, oldRoot, false);
             oldRoot.fireEvent('rootchange', null);
             oldRoot.clearListeners();
@@ -1430,7 +1430,7 @@ Ext.define('Ext.data.TreeStore', {
             else {
                 // The passed node was a childNode somewhere else; remove it from there.
                 oldOwner = newRoot.parentNode;
-                
+
                 if (oldOwner) {
                     // The removeChild operation can be vetoed by beforeremove event handler,
                     // and returns false if so.
@@ -1455,7 +1455,7 @@ Ext.define('Ext.data.TreeStore', {
                 newRoot.store = newRoot.treeStore = me;
 
                 newRoot.set('root', true);
-                
+
                 // root node should never be phantom or dirty, so commit it
                 newRoot.updateInfo(true, {
                     isFirst: true,
@@ -1495,7 +1495,7 @@ Ext.define('Ext.data.TreeStore', {
             // to the onNodeExpand callback.
             if (newRoot.isLoaded()) {
                 me.onNodeExpand(newRoot, newRoot.childNodes);
-                
+
                 if (!initial) {
                     me.fireEvent('datachanged', me);
                     me.fireEvent('refresh', me);
@@ -1522,7 +1522,7 @@ Ext.define('Ext.data.TreeStore', {
 
         // Inform views that the entire structure has changed.
         me.resumeEvent('add', 'remove');
-        
+
         if (initial) {
             me.resumeEvent('refresh', 'datachanged');
         }
@@ -1683,7 +1683,7 @@ Ext.define('Ext.data.TreeStore', {
     findNode: function(fieldName, value, startsWith, endsWith, ignoreCase) {
         var result = null,
             regex;
-        
+
         if (Ext.isEmpty(value, false)) {
             return result;
         }
@@ -1692,17 +1692,17 @@ Ext.define('Ext.data.TreeStore', {
         if (fieldName === this.model.idProperty && arguments.length < 3) {
             return this.byIdMap[value];
         }
-        
+
         regex = Ext.String.createRegex(value, startsWith, endsWith, ignoreCase);
 
         Ext.Object.eachValue(this.byIdMap, function(node) {
             if (node && regex.test(node.get(fieldName))) {
                 result = node;
-                
+
                 return false;
             }
         });
-        
+
         return result;
     },
 
@@ -1744,7 +1744,7 @@ Ext.define('Ext.data.TreeStore', {
                 expanded: true,
                 autoRoot: true
             });
-            
+
             return;
         }
 
@@ -1752,7 +1752,7 @@ Ext.define('Ext.data.TreeStore', {
         if (node.isLoading()) {
             return;
         }
-        
+
         return this.callParent([options]);
     },
 
@@ -1764,10 +1764,10 @@ Ext.define('Ext.data.TreeStore', {
 
         // A reload implies root load
         o.node = this.getRoot();
-        
+
         return this.load(o);
     },
-        
+
     /**
      * Called when the event handler which called the {@link #method-load} method exits.
      */
@@ -1780,13 +1780,13 @@ Ext.define('Ext.data.TreeStore', {
         // If it gets called programmatically before the timer fired, the listener
         // will need cancelling.
         me.clearLoadTask();
-        
+
         if (!options) {
             return;
         }
 
         node = options.node || me.getRoot();
-        
+
         // If we are loading the root, then it is a whole store reload.
         // This is handled efficiently in onProxyLoad by firing the refresh event
         // which will completely refresh any dependent views as would be expected
@@ -1806,7 +1806,7 @@ Ext.define('Ext.data.TreeStore', {
             if (clearOnLoad) {
                 node.data.expanded = false;
             }
-            
+
             options.callback = function(loadedNodes, operation, success) {
                 // If newly loaded nodes are to be added to the existing child node set, then
                 // we have to collapse first so that they get removed from the NodeStore,
@@ -1814,7 +1814,7 @@ Ext.define('Ext.data.TreeStore', {
                 if (!clearOnLoad) {
                     node.collapse();
                 }
-                
+
                 node.expand();
 
                 // Call the original callback (if any)
@@ -1857,7 +1857,7 @@ Ext.define('Ext.data.TreeStore', {
                 if (me.getClearRemovedOnLoad()) {
                     me.removedNodes.length = 0;
                 }
-                
+
                 if (clearOnLoad) {
                     // Unregister all descendants, but immediately re-register the root
                     // It is NOT being tipped out by this load operation
@@ -1874,18 +1874,18 @@ Ext.define('Ext.data.TreeStore', {
                     // set loaded: false so that the eventual response will trigger the UI update
                     node.data.loaded = false;
                 }
-                
+
                 if (me.getTrackRemoved() && me.getClearRemovedOnLoad()) {
                     // clear from the removed array any nodes that were descendants of the node
                     // being reloaded so that they do not get saved on next sync.
                     me.clearRemoved(node);
                 }
-                
+
                 if (clearOnLoad) {
                     node.removeAll(false);
                 }
             }
-        
+
             // Silently set loading state if the node doesn't already exist so the UI displays
             // the load icon but doesn't attempt other UI updates
             if (me.loading && node) {
@@ -1895,7 +1895,7 @@ Ext.define('Ext.data.TreeStore', {
 
             if (doClear) {
                 me.clearData(true);
-                
+
                 // Read the root we just cleared, since we're reloading it
                 if (me.getRootVisible()) {
                     me.suspendEvents();
@@ -1926,10 +1926,10 @@ Ext.define('Ext.data.TreeStore', {
 
         me.loading = false;
         node.set('loading', false);
-        
+
         if (successful) {
             ++me.loadCount;
-            
+
             if (!me.getClearOnLoad()) {
                 records = me.cleanRecords(node, records);
             }
@@ -1938,14 +1938,14 @@ Ext.define('Ext.data.TreeStore', {
             if (me.getParentIdProperty()) {
                 records = me.treeify(node, records);
             }
-            
+
             if (isRootLoad) {
                 me.suspendEvent('add', 'update');
             }
-            
+
             records = me.fillNode(node, records);
         }
-        
+
         // The load event has an extra node parameter
         // (differing from the load event described in AbstractStore)
         /**
@@ -1957,9 +1957,9 @@ Ext.define('Ext.data.TreeStore', {
          * @param {Ext.data.operation.Operation} operation The operation that triggered this load.
          * @param {Ext.data.NodeInterface} node The node that was loaded.
          */
-        
+
         Ext.callback(options.onChildNodesAvailable, scope, args);
-        
+
         if (isRootLoad) {
             me.resumeEvent('add', 'update');
             me.callObservers('BeforePopulate');
@@ -1967,7 +1967,7 @@ Ext.define('Ext.data.TreeStore', {
             me.fireEvent('refresh', me);
             me.callObservers('AfterPopulate');
         }
-        
+
         me.fireEvent('load', me, records, successful, operation, node);
     },
 
@@ -1990,7 +1990,7 @@ Ext.define('Ext.data.TreeStore', {
         if (node === me.getRoot()) {
             // if the passed node is the root node, just reset the removed array
             me.removedNodes.length = 0;
-            
+
             return;
         }
 
@@ -2003,7 +2003,7 @@ Ext.define('Ext.data.TreeStore', {
         for (i = removedLength; i--;) {
             removedNode = removed[i];
             targetNode = removedNode;
-            
+
             while (targetNode && targetNode.getId() !== id) {
                 // walk up the parent hierarchy until we find the passed node or until
                 // we get to the root node lastParentId is set in nodes which have been removed.
@@ -2011,7 +2011,7 @@ Ext.define('Ext.data.TreeStore', {
                 targetNode = targetNode.parentNode || me.getNodeById(targetId) ||
                              removedHash[targetId];
             }
-            
+
             if (targetNode) {
                 // removed node was previously a descendant of the passed node - add it
                 // to the records to clear from "removed" later
@@ -2022,7 +2022,7 @@ Ext.define('Ext.data.TreeStore', {
         // create a new removed array containing only the records that are not in recordsToClear
         for (i = 0; i < removedLength; i++) {
             removedNode = removed[i];
-            
+
             if (!recordsToClear[removedNode.getId()]) {
                 newRemoved.push(removedNode);
             }
@@ -2046,7 +2046,7 @@ Ext.define('Ext.data.TreeStore', {
         if (++me.bulkUpdate === 1) {
             me.suspendEvent('datachanged');
         }
-        
+
         if (newNodeCount) {
             me.setupNodes(newNodes);
             node.appendChild(newNodes, undefined, true);
@@ -2062,11 +2062,11 @@ Ext.define('Ext.data.TreeStore', {
                 node.data.loaded = true;
             }
         }
-        
+
         if (!--me.bulkUpdate) {
             me.resumeEvent('datachanged');
         }
-        
+
         // No need to call registerNode here, because each child will register itself as it joins
         return newNodes;
     },
@@ -2096,7 +2096,7 @@ Ext.define('Ext.data.TreeStore', {
             if (performLocalFilter) {
                 me.doFilter(node1);
             }
-            
+
             needsIndexSort = node1.data.index !== node2.data.index;
         }
 
@@ -2149,7 +2149,7 @@ Ext.define('Ext.data.TreeStore', {
                     me.fireEvent('add', me, fillArray[i], index);
                 }
             }
-            
+
             me.fillArray = null;
             me.endUpdate();
         }
@@ -2217,7 +2217,7 @@ Ext.define('Ext.data.TreeStore', {
                     Ext.raise('Ext.data.TreeStore, Invalid parentId "' + parentId + '"');
                 }
                 //</debug>
-                
+
                 parent = nodeMap[parentId];
                 parent.$children = parent.$children || [];
                 parent.$children.push(node);
@@ -2228,13 +2228,13 @@ Ext.define('Ext.data.TreeStore', {
         for (id in nodeMap) {
             node = nodeMap[id];
             children = node.$children;
-            
+
             if (children) {
                 delete node.$children;
                 me.setupNodes(children);
                 node.appendChild(children);
             }
-            
+
             me.registerNode(node);
         }
 
@@ -2258,7 +2258,7 @@ Ext.define('Ext.data.TreeStore', {
 
         for (i = 0, len = records.length; i < len; ++i) {
             rec = records[i];
-            
+
             if (!nodeHash[rec.getId()]) {
                 out.push(rec);
             }
@@ -2268,15 +2268,24 @@ Ext.define('Ext.data.TreeStore', {
     },
 
     removeAll: function() {
-        this.suspendEvents();
-        this.setRoot(null);
-        this.resumeEvents();
-        this.callParent();
+        var me = this,
+            root = me.getRoot(),
+            ln = me.getData().length;
+
+        me.suspendEvents();
+        me.setRoot(null);
+        me.resumeEvents();
+        me.callParent();
+
+        if (ln) {
+            me.fireEvent('clear', me);
+            me.fireEvent('rootchange', root, null);
+        }
     },
 
     doSort: function(sorterFn) {
         var me = this;
-        
+
         if (me.getRemoteSort()) {
             // the load function will pick up the new sorters and request the sorted data
             // from the proxy
@@ -2287,7 +2296,7 @@ Ext.define('Ext.data.TreeStore', {
             me.fireEvent('datachanged', me);
             me.fireEvent('refresh', me);
         }
-        
+
         me.fireEvent('sort', me, me.sorters.getRange());
     },
 
@@ -2308,7 +2317,7 @@ Ext.define('Ext.data.TreeStore', {
             visible = parentNode.data.expanded && parentNode.data.visible;
             parentNode = parentNode.parentNode;
         }
-        
+
         // The passed node is visible if we ended up at the root node, and it is visible.
         // UNLESS it's the root node, and we are configured with rootVisible:false
         return visible && !(node === root && !this.getRootVisible());
@@ -2341,7 +2350,7 @@ Ext.define('Ext.data.TreeStore', {
      */
     setRootNode: function(root) {
         this.setRoot(root);
-        
+
         return this.getRoot();
     },
 
@@ -2349,7 +2358,7 @@ Ext.define('Ext.data.TreeStore', {
         fireChangeEvent: function(record) {
             return !!this.byIdMap[record.id];
         },
-        
+
         /**
          * @private
          * Returns the array of nodes which have been removed since the last time this store
@@ -2431,14 +2440,14 @@ Ext.define('Ext.data.TreeStore', {
                     /* eslint-disable-next-line max-len */
                     matchingChildren = me.filterNodes(childNodes[i], filterFn, match || bottomUpFiltering) || matchingChildren;
                 }
-                
+
                 if (bottomUpFiltering) {
                     match = matchingChildren || match;
                 }
             }
 
             node.set("visible", match, me._silentOptions);
-            
+
             return match;
         },
 
@@ -2454,7 +2463,7 @@ Ext.define('Ext.data.TreeStore', {
             var data = this.getData();
 
             data.setFilters(null);
-            
+
             if (filters) {
                 filters.on('endupdate', this.onFilterEndUpdate, this);
             }
@@ -2468,7 +2477,7 @@ Ext.define('Ext.data.TreeStore', {
             var data = this.getData();
 
             data.setSorters(null);
-            
+
             if (sorters) {
                 sorters.on('endupdate', this.onSorterEndUpdate, this);
             }

@@ -119,7 +119,7 @@ Ext.define('Ext.toolbar.Paging', {
     xtype: 'pagingtoolbar',
 
     alternateClassName: 'Ext.PagingToolbar',
-    
+
     requires: [
         'Ext.toolbar.TextItem',
         'Ext.form.field.Number'
@@ -282,7 +282,7 @@ Ext.define('Ext.toolbar.Paging', {
      * @inheritdoc
      */
     defaultBindProperty: 'store',
-    
+
     _pagingToolbarCls: Ext.baseCSSPrefix + 'grid-paging-toolbar',
 
     /**
@@ -403,10 +403,10 @@ Ext.define('Ext.toolbar.Paging', {
 
         this.updateBarInfo();
     },
-    
+
     afterRender: function() {
         this.callParent();
-        
+
         this.el.addCls(this._pagingToolbarCls);
     },
 
@@ -431,7 +431,7 @@ Ext.define('Ext.toolbar.Paging', {
             }
 
             store = owner && owner.store;
-            
+
             if (store) {
                 listener = owner.on({
                     destroyable: true,
@@ -454,7 +454,7 @@ Ext.define('Ext.toolbar.Paging', {
 
     updateBarInfo: function() {
         var me = this;
-        
+
         if (!me.store.isLoading()) {
             me.calledInternal = true;
             me.onLoad();
@@ -474,7 +474,7 @@ Ext.define('Ext.toolbar.Paging', {
 
         if (displayItem) {
             count = store.getCount();
-            
+
             if (count === 0) {
                 msg = me.emptyMsg;
             }
@@ -486,7 +486,7 @@ Ext.define('Ext.toolbar.Paging', {
                     pageData.total
                 );
             }
-            
+
             displayItem.setText(msg);
         }
     },
@@ -500,7 +500,7 @@ Ext.define('Ext.toolbar.Paging', {
 
         count = me.store.getCount();
         isEmpty = count === 0;
-        
+
         if (!isEmpty) {
             pageData = me.getPageData();
             currPage = pageData.currentPage;
@@ -517,7 +517,7 @@ Ext.define('Ext.toolbar.Paging', {
                 else {
                     me.getInputItem().reset();
                 }
-                
+
                 return;
             }
 
@@ -531,25 +531,25 @@ Ext.define('Ext.toolbar.Paging', {
 
         Ext.suspendLayouts();
         item = me.child('#afterTextItem');
-        
+
         if (item) {
             item.update(afterText);
         }
-        
+
         item = me.getInputItem();
-        
+
         if (item) {
             item.setDisabled(isEmpty).setValue(currPage);
         }
-        
+
         me.setChildDisabled('#first', currPage === 1 || isEmpty);
         me.setChildDisabled('#prev', currPage === 1 || isEmpty);
         me.setChildDisabled('#next', currPage === pageCount || isEmpty);
         me.setChildDisabled('#last', currPage === pageCount || isEmpty);
         me.setChildDisabled('#refresh', false);
-        
+
         me.updateInfo();
-        
+
         Ext.resumeLayouts(true);
 
         if (!me.calledInternal) {
@@ -559,7 +559,7 @@ Ext.define('Ext.toolbar.Paging', {
 
     setChildDisabled: function(selector, disabled) {
         var item = this.child(selector);
-        
+
         if (item) {
             item.setDisabled(disabled);
         }
@@ -573,7 +573,7 @@ Ext.define('Ext.toolbar.Paging', {
             totalCount = store.getTotalCount(),
             pageCount = Math.ceil(totalCount / store.pageSize),
             toRecord = Math.min(store.currentPage * store.pageSize, totalCount);
-       
+
         return {
             total: totalCount,
             currentPage: store.currentPage,
@@ -605,14 +605,14 @@ Ext.define('Ext.toolbar.Paging', {
         if (inputItem) {
             v = inputItem.getValue();
             pageNum = parseInt(v, 10);
-            
+
             if (!v || isNaN(pageNum)) {
                 inputItem.setValue(pageData.currentPage);
 
                 return false;
             }
         }
-        
+
         return pageNum;
     },
 
@@ -646,10 +646,10 @@ Ext.define('Ext.toolbar.Paging', {
         if (key === e.RETURN) {
             e.stopEvent();
             pageNum = me.readPageFromInput(pageData);
-            
+
             if (pageNum !== false) {
                 pageNum = Math.min(Math.max(1, pageNum), pageData.pageCount);
-                
+
                 if (pageNum !== pageData.currentPage &&
                     me.fireEvent('beforechange', me, pageNum) !== false) {
                     me.store.loadPage(pageNum);
@@ -664,14 +664,14 @@ Ext.define('Ext.toolbar.Paging', {
         else if (key === e.UP || key === e.PAGE_UP || key === e.DOWN || key === e.PAGE_DOWN) {
             e.stopEvent();
             pageNum = me.readPageFromInput(pageData);
-            
+
             if (pageNum) {
                 if (key === e.DOWN || key === e.PAGE_DOWN) {
                     increment *= -1;
                 }
-                
+
                 pageNum += increment;
-                
+
                 if (pageNum >= 1 && pageNum <= pageData.pageCount) {
                     field.setValue(pageNum);
                 }

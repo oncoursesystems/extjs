@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.lists.PullRefreshList', {
         'Ext.dataview.pullrefresh.PullRefresh'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Store',
         path: 'app/store/Companies.js'
@@ -32,7 +32,7 @@ Ext.define('KitchenSink.view.lists.PullRefreshList', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     itemTpl: '{name}',

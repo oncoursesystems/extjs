@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.lists.BasicStepper', {
         'Ext.dataview.listswiper.Stepper'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/lists/BasicSwiperController.js'
@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.lists.BasicStepper', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     itemTpl: '{firstName} {lastName}',
@@ -60,7 +60,7 @@ Ext.define('KitchenSink.view.lists.BasicStepper', {
                 text: 'Message',
                 commit: 'onMessage'
             }, {
-                iconCls: 'x-fa fa-gear',
+                iconCls: 'x-fa fa-cog',
                 text: 'Settings',
                 ui: 'action',
                 commit: 'onGear'

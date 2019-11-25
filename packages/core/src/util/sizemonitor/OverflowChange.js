@@ -85,11 +85,11 @@ Ext.define('Ext.util.sizemonitor.OverflowChange', {
 
         Ext.TaskQueue.requestRead('refresh', this);
     },
-    
+
     destroy: function() {
         // These are closures so Base destructor won't null them
         this.onExpand = this.onShrink = null;
-        
+
         this.callParent();
     }
 });

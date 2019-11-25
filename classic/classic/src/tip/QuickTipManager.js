@@ -95,7 +95,7 @@ Ext.define('Ext.tip.QuickTipManager', {
     alternateClassName: 'Ext.QuickTips',
 
     requires: ['Ext.tip.QuickTip'],
-    
+
     disabled: false,
 
     /**
@@ -125,7 +125,7 @@ Ext.define('Ext.tip.QuickTipManager', {
                     // tell the spec runner to ignore this element when checking if the dom is clean
                     sticky: true,
                     //</debug>
-                    
+
                     disabled: me.disabled,
                     id: 'ext-quicktips-tip'
                 }, config),
@@ -155,7 +155,7 @@ Ext.define('Ext.tip.QuickTipManager', {
             }
 
             me.tip = Ext.create(className || 'Ext.tip.QuickTip', tipConfig);
-            
+
             // Prevent the tip from being accidentally destroyed.
             // It should stick around pretty much forever.
             me.tip.destroy = Ext.emptyFn;
@@ -172,14 +172,14 @@ Ext.define('Ext.tip.QuickTipManager', {
      */
     destroy: function() {
         var tip = this.tip;
-        
+
         // The tip should only be destroyed by the Manager
         if (tip) {
             delete tip.destroy;
             tip.destroy();
             this.tip = null;
         }
-        
+
         Ext.quickTipsActive = false;
 
         // Don't callparent here, we're a singleton

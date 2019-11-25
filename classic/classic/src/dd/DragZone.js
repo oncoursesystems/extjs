@@ -69,11 +69,11 @@ Ext.define('Ext.dd.DragZone', {
     constructor: function(el, config) {
         var me = this,
             scroll;
-        
+
         me.callParent([el, config]);
-        
+
         scroll = me.containerScroll;
-        
+
         if (scroll) {
             el = me.scrollEl || el;
             el = Ext.get(el);
@@ -92,7 +92,7 @@ Ext.define('Ext.dd.DragZone', {
      * drag operations.
      * A {@link Ext.dd.ScrollManager} configuration may also be passed.
      */
-    
+
     /**
      * @cfg {String/HTMLElement/Ext.dom.Element} scrollEl
      * An element to register with the ScrollManager if {@link #containerScroll}

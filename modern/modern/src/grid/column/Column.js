@@ -67,7 +67,6 @@
  *    displayed in the grid.
  */
 Ext.define('Ext.grid.column.Column', {
-/* eslint-enable max-len */
     extend: 'Ext.grid.HeaderContainer',
     alternateClassName: 'Ext.grid.column.Template',
 
@@ -87,6 +86,10 @@ Ext.define('Ext.grid.column.Column', {
         'Ext.mixin.Toolable'
     ],
 
+    requires: [
+        'Ext.util.TextMetrics'
+    ],
+
     /**
      * @property {Boolean} isLeafHeader
      * This will be set to `true` if the column has no child columns.
@@ -96,7 +99,6 @@ Ext.define('Ext.grid.column.Column', {
      * @property {Boolean} isHeaderGroup
      * This will be set to `true` if the column has child columns.
      */
-    
 
     config: {
         /**
@@ -128,9 +130,8 @@ Ext.define('Ext.grid.column.Column', {
          * This config can be used with Locking Grid
          * Determines whether the column is locked or not.
          * Configure as `true` to lock the column to default locked region 
-         * {@link Ext.grid.LockedGrid LockedGrid}
+         * {@link Ext.grid.locked.Grid LockedGrid}
          * String values contains one of the defined locking regions - "left", "right" or "center"
-         * {@link Ext.grid.LockedGrid LockedGrid}
         */
         locked: null,
 
@@ -260,7 +261,7 @@ Ext.define('Ext.grid.column.Column', {
          * implied scope on which "foo" is found is the `scope` config for the column.
          *
          * If the `scope` is not given, or implied using a prefix of `"this"`, then either the
-         * {@link #method-getController ViewController} or the closest ancestor component
+         * {@link #method!getController ViewController} or the closest ancestor component
          * configured as {@link #defaultListenerScope} is assumed to be the object with the
          * method.
          * @since 6.2.0
@@ -293,13 +294,63 @@ Ext.define('Ext.grid.column.Column', {
 
         /**
          * @cfg {Object/Ext.field.Field} defaultEditor
-         * An optional config object that should not really be modified. This is used to
-         * create a default editor used by the {@link Ext.grid.plugin.Editable grideditable}
-         * plugin when no {@link #editor} is specified.
+         * An optional config object used to create a default editor for values in this
+         * column when no {@link #editor} is specified. This config is typically defined
+         * by derived column classes such as {@link Ext.grid.column.Date datecolumn} to
+         * tune the default editor.
+         *
+         * This value is augmented by the {@link #cfg!editorDefaults editorDefaults}
+         * config.
          */
         defaultEditor: {
             lazy: true,
             $value: {}
+        },
+
+        /**
+         * @cfg {Object} editorDefaults
+         * This object holds default config objects for creating the column's `editor`.
+         * The keys of this object are {@link Ext.data.field.Field#cfg!type field type}
+         * values (such as `'date'` or `'int'`). These keys can also be a comma-separated
+         * list of such type names.
+         *
+         * These defaults are applied when producing an `editor` based on the field of
+         * {@link #cfg!store store's} {@link Ext.data.Store#cfg!model model} identified
+         * by the {@link #cfg!dataIndex dataIndex}.
+         *
+         * See {@link #ensureEditor ensureEditor}.
+         * @since 7.0
+         */
+        editorDefaults: {
+            cached: true,
+            $value: {
+                default: {
+                    xtype: 'textfield',
+                    autoComplete: false,
+                    textAlign: undefined
+                },
+
+                'bool,boolean': {
+                    xtype: 'checkboxfield',
+                    bodyAign: undefined
+                },
+
+                date: {
+                    xtype: 'datefield',
+                    textAlign: undefined
+                },
+
+                'float,number': {
+                    xtype: 'numberfield',
+                    textAlign: undefined
+                },
+
+                'int,integer': {
+                    xtype: 'numberfield',
+                    decimals: 0,
+                    textAlign: undefined
+                }
+            }
         },
 
         /**
@@ -748,7 +799,7 @@ Ext.define('Ext.grid.column.Column', {
             lockedGrid, key, targetRegion;
 
         if (region) {
-            lockedGrid = region.lockedGrid,
+            lockedGrid = region.lockedGrid;
             key = lockedGrid.getRegionKey(v);
             targetRegion = lockedGrid.getRegion(key);
 
@@ -914,6 +965,7 @@ Ext.define('Ext.grid.column.Column', {
         });
         me.resizerElement.on({
             tap: 'onResizerTap',
+            doubletap: 'onResizerDoubleTap',
             scope: this
         });
 
@@ -951,6 +1003,30 @@ Ext.define('Ext.grid.column.Column', {
     onAdded: function(parent, instanced) {
         this.visibleIndex = null;
         this.callParent([parent, instanced]);
+    },
+
+    /**
+     * This method returns the {@link #cfg!editor editor} for this column. If an `editor`
+     * is not explicitly configured and `editable` is `true`, then `defaultEditor` and
+     * `editorDefaults` configs are used to produce an appropriate editor based on the
+     * column's derived type and/or the `dataIndex` of the associated model.
+     * @return {Ext.Component}
+     * @since 7.0
+     */
+    ensureEditor: function() {
+        var me = this,
+            editable = me.getEditable(),
+            editor = editable !== false && me.getEditor(),
+            cfg;
+
+        if (!editor && editable) {
+            cfg = me.getDefaultEditor();
+            editor = Ext.create(cfg);
+
+            me.setEditor(editor);
+        }
+
+        return editor;
     },
 
     /**
@@ -1305,6 +1381,11 @@ Ext.define('Ext.grid.column.Column', {
         }
     },
 
+    onResizerDoubleTap: function(e) {
+        e.claimGesture();
+        Ext.asap(this.autoSize, this);
+    },
+
     onColumnLongPress: function(e) {
         this.fireEvent('longpress', this, e);
     },
@@ -1564,45 +1645,55 @@ Ext.define('Ext.grid.column.Column', {
         return value;
     },
 
-    applyDefaultEditor: function(editor) {
-        var dataIndex = this.getDataIndex(),
-            model, field;
+    applyEditorDefaults: function(defaults) {
+        var ret = {},
+            i, key, keys;
 
-        if (dataIndex && !editor.isInstance) {
-            // We mutate the config
-            editor = Ext.clone(editor);
+        if (defaults) {
+            for (key in defaults) {
+                keys = key.split(',');
 
-            // Infer default xtype from data field type
-            if (!editor.isInstance && !editor.xtype) {
-                model = this.getGrid().getStore().getModel();
-                field = model.getField(dataIndex);
-
-                if (field) {
-                    switch (field.type) {
-                        case 'date':
-                            editor.xtype = 'datefield';
-                            break;
-                        case 'int':
-                        case 'integer':
-                            editor.xtype = 'numberfield';
-                            editor.decimals = 0;
-                            break;
-                        case 'float':
-                        case 'number':
-                            editor.xtype = 'numberfield';
-                            break;
-                        case 'boolean':
-                        case 'bool':
-                            editor.xtype = 'checkboxfield';
-                            break;
-                        default:
-                            editor.xtype = 'textfield';
-                    }
-                }
-                else {
-                    editor.xtype = 'textfield';
+                for (i = 0; i < keys.length; ++i) {
+                    ret[keys[i]] = defaults[key];
                 }
             }
+        }
+
+        return ret;
+    },
+
+    applyDefaultEditor: function(editor) {
+        var me = this,
+            dataIndex = me.getDataIndex(),
+            bodyAlign = 'bodyAlign',
+            textAlign = 'textAlign',
+            defaults, model, field, undef;
+
+        if (dataIndex) {
+            model = me.getGrid().store.getModel();
+            field = model.getField(dataIndex);
+
+            if (!editor.isInstance) {
+                // We mutate the config
+                editor = Ext.clone(editor);
+
+                // Infer default xtype from data field type
+                if (!editor.xtype) {
+                    defaults = me.getEditorDefaults();
+                    defaults = Ext.clone((field && defaults[field.type]) || defaults.default);
+
+                    if (textAlign in defaults && defaults[textAlign] === undef) {
+                        defaults[textAlign] = me.getAlign();
+                    }
+                    else if (bodyAlign in defaults && defaults[bodyAlign] === undef) {
+                        defaults[bodyAlign] = me.getAlign();
+                    }
+
+                    Ext.applyIf(editor, defaults);
+                }
+            }
+
+            editor._validationField = field;
         }
 
         return editor;
@@ -1614,6 +1705,10 @@ Ext.define('Ext.grid.column.Column', {
         // the field that is now a child of the cell editor
         if (oldEditor && (!editor || (editor.isCellEditor && editor.getField() !== oldEditor))) {
             oldEditor.destroy();
+        }
+
+        if (editor) {
+            editor.$column = this;
         }
     },
 
@@ -1942,16 +2037,104 @@ Ext.define('Ext.grid.column.Column', {
 
     printValue: function(value) {
         var me = this,
-            rows = me.getGrid().dataItems,
+            row = me.getGrid().dataItems[0],
             cell;
 
-        if (rows.length) {
-            cell = rows[0].getCellByColumn(me);
+        if (row && row.isGridRow) {
+            cell = row.getCellByColumn(me);
         }
 
         cell = (cell && cell.printValue) ? cell : me.getScratchCell();
 
         return cell.printValue(value);
+    },
+
+    /**
+     * Sizes this Column to fit the max content width of records.
+     * @since 7.0
+     */
+    autoSize: function() {
+        var me = this,
+            max = Math.max,
+            textMatrics = new Ext.util.TextMetrics(),
+            widthAdjust = 0,
+            maxWidth = 0,
+            innerCells = me.getCells(),
+            grid = me.getGrid(),
+            columnIndex, textWidth, rec, store, len, i,
+            records, idx, paddedWidth, cellElement;
+
+        if (!me.getResizable()) {
+            return;
+        }
+
+        store = grid.getStore();
+
+        columnIndex = me.getDataIndex();
+
+        if (store && columnIndex) {
+            if (store.isVirtualStore) {
+                records = store.pageMap.pages;
+            }
+            else {
+                records = store.getData() && store.getData().items;
+            }
+
+            // Calculate size through store records
+            if (columnIndex && Ext.isArray(records)) {
+                len = records.length;
+
+                for (i = 0; i < len; i++) {
+                    textWidth = textMatrics.getWidth(records[i].get(columnIndex));
+                    maxWidth = max(maxWidth, textWidth);
+                }
+            }
+            else if (Ext.isObject(records)) {
+                // Calculate size for virtual store records
+                for (idx in records) {
+                    rec = records[idx].records;
+                    len = rec && rec.length;
+
+                    for (i = 0; i < len; i++) {
+                        textWidth = textMatrics.getWidth(rec[i].get(columnIndex));
+                        maxWidth = max(maxWidth, textWidth);
+                    }
+                }
+            }
+        }
+
+        // Allow for padding round text of header
+        paddedWidth = me.textElement.dom.offsetWidth + me.titleElement.getPadding('lr');
+        maxWidth = max(maxWidth, paddedWidth);
+
+        // Calculate size for grid cells
+        if (innerCells.length) {
+            // Calculate cell text size
+            len = innerCells.length;
+            cellElement = innerCells[0].element;
+
+            for (i = 0; i < len; i++) {
+                maxWidth = max(maxWidth, innerCells[i].element.getTextWidth());
+            }
+
+            if (Ext.supports.ScrollWidthInlinePaddingBug) {
+                widthAdjust += cellElement.getPadding('r');
+            }
+
+            if (grid.getColumnLines()) {
+                widthAdjust += cellElement.getBorderWidth('lr');
+            }
+
+            // in some browsers, the "after" padding is not accounted for in the scrollWidth
+            maxWidth += widthAdjust;
+        }
+
+        // check for minimum column width
+        // One extra pixel added. EXACT width shrinkwrap of text causes ellipsis to appear.
+        maxWidth = max(maxWidth + 1, me.getMinWidth());
+
+        me.setWidth(maxWidth);
+        textMatrics.destroy();
     },
 
     privates: {

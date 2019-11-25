@@ -110,7 +110,7 @@ Ext.define('Ext.util.CSS', function() {
                     imports = ss.imports,
                     len = imports ? imports.length : 0,
                     rule, j;
-                    
+
                 // Old IE has a different way of handling imports
                 for (j = 0; j < len; ++j) {
                     CSS.cacheStyleSheet(imports[j]);
@@ -134,7 +134,7 @@ Ext.define('Ext.util.CSS', function() {
 
         cacheRule: function(cssRule, styleSheet) {
             var selectorText, selectorCount, j;
-            
+
             // If it's an @import rule, import its stylesheet
             if (cssRule.styleSheet) {
                 return CSS.cacheStyleSheet(cssRule.styleSheet);
@@ -177,7 +177,7 @@ Ext.define('Ext.util.CSS', function() {
 
             return result;
         },
-        
+
         /**
          * Refresh the rule cache if you have dynamically added stylesheets
          * @return {Object} An object (hash) of rules indexed by selector

@@ -15,7 +15,7 @@ Ext.define('Admin.view.tablet.email.Compose', {
     title: 'Compose',
 
     tools: [{
-        iconCls: 'x-fa fa-close',
+        iconCls: 'x-fa fa-times',
         handler: 'onCloseMessage'
     }],
 
@@ -24,7 +24,7 @@ Ext.define('Admin.view.tablet.email.Compose', {
         items: [{
             ui: 'header',
             margin: '0 12 0 0',
-            iconCls: 'x-fa fa-floppy-o'
+            iconCls: 'x-far fa-save'
         }, {
             ui: 'header',
             margin: '0 0 0 12',

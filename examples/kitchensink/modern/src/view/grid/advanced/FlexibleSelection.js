@@ -25,10 +25,10 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelection', {
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/grid/advanced/FlexibleSelectionController.js'
-    },{
+    }, {
         type: 'Store',
         path: 'app/store/MonthlySales.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/MonthlySales.js'
     }],
@@ -66,7 +66,7 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelection', {
         }
     },
 
-    padding: '${padding}', //give room for the grid's shadow
+    padding: '${padding}', // give room for the grid's shadow
     shadow: false,
     //</example>
 
@@ -101,19 +101,19 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelection', {
             selectionchange: 'onSelectionChange'
         },
         columns: [
-            {text: 'Year', dataIndex: 'year', flex: 1, minWidth: 75},
-            {text: 'Jan', dataIndex: 'jan', width: 75},
-            {text: 'Feb', dataIndex: 'feb', width: 75},
-            {text: 'Mar', dataIndex: 'mar', width: 75},
-            {text: 'Apr', dataIndex: 'apr', width: 75},
-            {text: 'May', dataIndex: 'may', width: 75},
-            {text: 'Jun', dataIndex: 'jun', width: 75},
-            {text: 'Jul', dataIndex: 'jul', width: 75},
-            {text: 'Aug', dataIndex: 'aug', width: 75},
-            {text: 'Sep', dataIndex: 'sep', width: 75},
-            {text: 'Oct', dataIndex: 'oct', width: 75},
-            {text: 'Nov', dataIndex: 'nov', width: 75},
-            {text: 'Dec', dataIndex: 'dec', width: 75}
+            { text: 'Year', dataIndex: 'year', flex: 1, minWidth: 75 },
+            { text: 'Jan', dataIndex: 'jan', width: 75 },
+            { text: 'Feb', dataIndex: 'feb', width: 75 },
+            { text: 'Mar', dataIndex: 'mar', width: 75 },
+            { text: 'Apr', dataIndex: 'apr', width: 75 },
+            { text: 'May', dataIndex: 'may', width: 75 },
+            { text: 'Jun', dataIndex: 'jun', width: 75 },
+            { text: 'Jul', dataIndex: 'jul', width: 75 },
+            { text: 'Aug', dataIndex: 'aug', width: 75 },
+            { text: 'Sep', dataIndex: 'sep', width: 75 },
+            { text: 'Oct', dataIndex: 'oct', width: 75 },
+            { text: 'Nov', dataIndex: 'nov', width: 75 },
+            { text: 'Dec', dataIndex: 'dec', width: 75 }
         ],
         items: [{
             xtype: 'component',

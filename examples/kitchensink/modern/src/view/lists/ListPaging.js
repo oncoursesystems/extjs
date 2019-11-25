@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.lists.ListPaging', {
         'Ext.dataview.plugin.ListPaging'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/lists/ListPagingController.js'
@@ -33,7 +33,7 @@ Ext.define('KitchenSink.view.lists.ListPaging', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     itemTpl: '{id}: {name}',

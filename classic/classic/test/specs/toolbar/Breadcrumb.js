@@ -5,7 +5,7 @@ topSuite("Ext.toolbar.Breadcrumb", ['Ext.app.ViewModel'], function() {
         // ARIA warnings and errors are expected
         spyOn(Ext.log, 'warn');
         spyOn(Ext.log, 'error');
-        
+
         breadcrumbBar = Ext.widget(Ext.apply({
             xtype: 'breadcrumb',
             renderTo: Ext.getBody(),
@@ -740,7 +740,7 @@ topSuite("Ext.toolbar.Breadcrumb", ['Ext.app.ViewModel'], function() {
 
     describe("showIcons", function() {
         var barIcon = 'resources/images/bar.gif';
-        
+
         beforeEach(function() {
             store = new Ext.data.TreeStore({
                 root: {

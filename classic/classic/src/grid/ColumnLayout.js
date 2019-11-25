@@ -26,7 +26,7 @@ Ext.define('Ext.grid.ColumnLayout', {
         this.callParent();
 
         if (this.scrollbarWidth === undefined) {
-            this.self.prototype.scrollbarWidth = Ext.getScrollbarSize().width;
+            this.self.prototype.scrollbarWidth = Ext.scrollbar.width();
         }
     },
 
@@ -74,7 +74,7 @@ Ext.define('Ext.grid.ColumnLayout', {
             // In a locking grid, the scrollbar is only managed on the normal side.
             me.determineScrollbarWidth(ownerContext);
         }
-        
+
         if (!me.scrollbarWidth) {
             // By default Mac OS X has overlay scrollbars that do not take space, but also
             // the RTL override may have set this to 0... so make sure we don't try to
@@ -107,7 +107,7 @@ Ext.define('Ext.grid.ColumnLayout', {
                 before = nextSibling;
             }
         }
-        
+
         return this.callParent([item, before]);
     },
 
@@ -164,14 +164,14 @@ Ext.define('Ext.grid.ColumnLayout', {
                 if (me.convertWidthsToFlexes(ownerContext)) {
                     me.cacheFlexes(ownerContext);
                     me.done = false;
-                    
+
                     ownerContext.invalidate({
                         state: {
                             reflexed: true,
                             scrollbarAdjustment: me.getScrollbarAdjustment(ownerContext)
                         }
                     });
-                    
+
                     return;
                 }
             }
@@ -207,11 +207,11 @@ Ext.define('Ext.grid.ColumnLayout', {
                     // Since we start with the assumption that we will need the scrollbar,
                     // we now need to wait to see if our guess was correct.
                     viewOverflowY = viewContext.getProp('viewOverflowY');
-                    
+
                     if (viewOverflowY === undefined) {
                         // The TableLayout has not determined this yet, so park it.
                         me.done = false;
-                        
+
                         return;
                     }
 
@@ -226,9 +226,9 @@ Ext.define('Ext.grid.ColumnLayout', {
                             lockingPartnerContext.invalidate();
                             lockingPartnerContext.headerContext.invalidate();
                         }
-                        
+
                         viewContext.invalidate();
-                        
+
                         ownerContext.invalidate({
                             state: {
                                 // Pass a 0 adjustment on into our next life. If this is
@@ -251,7 +251,7 @@ Ext.define('Ext.grid.ColumnLayout', {
 
     finishedLayout: function(ownerContext) {
         this.callParent([ ownerContext ]);
-        
+
         if (this.owner.ariaRole === 'rowgroup') {
             this.innerCt.dom.setAttribute('role', 'row');
         }
@@ -338,11 +338,11 @@ Ext.define('Ext.grid.ColumnLayout', {
                 ++needed;
                 width = ownerContext.getProp('innerWidth');
                 gotWidth = (typeof width === 'number');
-                
+
                 if (gotWidth) {
                     ++got;
                     width -= padding.width;
-                    
+
                     if (width < 0) {
                         width = 0;
                     }
@@ -353,11 +353,11 @@ Ext.define('Ext.grid.ColumnLayout', {
                 ++needed;
                 height = ownerContext.getProp('innerHeight');
                 gotHeight = (typeof height === 'number');
-                
+
                 if (gotHeight) {
                     ++got;
                     height -= padding.height;
-                    
+
                     if (height < 0) {
                         height = 0;
                     }

@@ -24,20 +24,20 @@ Ext.define('Ext.app.bind.Stub', {
 
         me.callParent([ owner, name ]);
         me.boundValue = null;
-        
+
         if (parent) {
             parent.add(me);
-            
+
             if (!parent.isRootStub) {
                 path = parent.path + '.' + name;
             }
-            
+
             me.checkHadValue();
         }
-        
+
         me.path = path;
     },
-    
+
     destroy: function() {
         var me = this,
             formula = me.formula,
@@ -46,19 +46,19 @@ Ext.define('Ext.app.bind.Stub', {
         if (formula) {
             formula.destroy();
         }
-        
+
         if (storeBinding) {
             storeBinding.destroy();
         }
-        
+
         me.detachBound();
-        
+
         me.callParent();
     },
 
     bindValidation: function(callback, scope) {
         var parent = this.parent;
-        
+
         return parent && parent.descend([this.validationKey, this.name]).bind(callback, scope);
     },
 
@@ -71,11 +71,11 @@ Ext.define('Ext.app.bind.Stub', {
         if (parent) {
             ret = parent.bind(function(value) {
                 var field = null;
-                
+
                 if (value && value.isModel) {
                     field = value.getField(name);
                 }
-                
+
                 if (lateBound) {
                     scope[callback](field, value, this);
                 }
@@ -121,7 +121,7 @@ Ext.define('Ext.app.bind.Stub', {
         }
         else {
             ret = me.inspectValue(parentData);
-            
+
             if (!ret) {
                 if (parentData.isEntity) {
                     // If we get here, we know it's not an association
@@ -137,14 +137,14 @@ Ext.define('Ext.app.bind.Stub', {
                 }
                 else {
                     ret = parentData[name];
-                    
+
                     if (ret === undefined && me.hadValue) {
                         ret = null;
                     }
                 }
             }
         }
-        
+
         return ret;
     },
 
@@ -160,7 +160,7 @@ Ext.define('Ext.app.bind.Stub', {
             if (parentData && parentData.isEntity) {
                 // Check if the item is an association, if it is, grab it but don't load it.
                 associations = parentData.associations;
-                
+
                 if (associations && name in associations) {
                     ret = parentData[associations[name].getterName]();
                 }
@@ -172,10 +172,10 @@ Ext.define('Ext.app.bind.Stub', {
 
         if (!ret || !(ret.$className || Ext.isObject(ret))) {
             parentData[name] = ret = {};
-            
+
             // We're implicitly setting a value on the object here
             me.hadValue = true;
-            
+
             // If we're creating the parent data object, invalidate the dirty
             // flag on our children.
             me.invalidate(true, true);
@@ -203,7 +203,7 @@ Ext.define('Ext.app.bind.Stub', {
         if (parent) {
             parent.children[name] = replacement;
         }
-        
+
         if (children) {
             for (i in children) {
                 children[i].parent = replacement;
@@ -216,7 +216,7 @@ Ext.define('Ext.app.bind.Stub', {
 
         ret = me.callParent([ replacement ]);
         ret.invalidate(true, true);
-        
+
         return ret;
     },
 
@@ -252,7 +252,7 @@ Ext.define('Ext.app.bind.Stub', {
 
     isReadOnly: function() {
         var formula = this.formula;
-        
+
         return !!(formula && !formula.set);
     },
 
@@ -266,22 +266,22 @@ Ext.define('Ext.app.bind.Stub', {
 
         if (formula && !formula.settingValue && formula.set) {
             formula.setValue(value);
-            
+
             return;
         }
         else if (me.isLinkStub) {
             formulaStub = me.getLinkFormulaStub();
             formula = formulaStub ? formulaStub.formula : null;
-            
+
             if (formula) {
                 //<debug>
                 if (formulaStub.isReadOnly()) {
                     Ext.raise('Cannot setValue on a readonly formula');
                 }
                 //</debug>
-                
+
                 formula.setValue(value);
-                
+
                 return;
             }
         }
@@ -295,11 +295,11 @@ Ext.define('Ext.app.bind.Stub', {
             if (associations && (name in associations)) {
                 association = associations[name];
                 setterName = association.setterName;
-                
+
                 if (setterName) {
                     parentData[setterName](value);
                 }
-                
+
                 // We may be setting a record here, force the value to recalculate
                 me.invalidate(true);
             }
@@ -324,7 +324,7 @@ Ext.define('Ext.app.bind.Stub', {
                 }
 
                 me.inspectValue(parentData);
-                
+
                 // We have children, but we're overwriting the value with something else, so
                 // we need to schedule our children
                 me.invalidate(true);
@@ -386,13 +386,13 @@ Ext.define('Ext.app.bind.Stub', {
             // trigger them regardless
             for (key in bindMappings) {
                 child = children[key];
-                
+
                 if (child) {
                     child.invalidate();
                 }
             }
         }
-        
+
         this.invalidate();
     },
 
@@ -419,17 +419,17 @@ Ext.define('Ext.app.bind.Stub', {
         for (stub = me; stub; stub = stub.parent) {
             if (stub.isLinkStub) {
                 link = stub;
-                
+
                 if (n) {
                     for (path = [], i = 0, stub = me; stub !== link; stub = stub.parent) {
                         ++i;
                         path[n - i] = stub.name;
                     }
                 }
-                
+
                 break;
             }
-            
+
             ++n;
         }
 
@@ -438,7 +438,7 @@ Ext.define('Ext.app.bind.Stub', {
         if (link) {
             root = link.parent;
             name = link.name;
-            
+
             if (!root.shouldClimb(name)) {
                 // Write to root, descend to stub
                 stub = root.insertChild(name);
@@ -455,12 +455,12 @@ Ext.define('Ext.app.bind.Stub', {
             if (path) {
                 stub = stub.descend(path);
             }
-            
+
             stub.set(value);
-            
+
             ret = true;
         }
-        
+
         return ret;
 
     },
@@ -488,12 +488,12 @@ Ext.define('Ext.app.bind.Stub', {
             if (bound.isValidation) {
                 bound.refresh();
                 generation = bound.generation;
-                
+
                 // Don't react if we haven't changed
                 if (me.lastValidationGeneration === generation) {
                     return;
                 }
-                
+
                 me.lastValidationGeneration = generation;
             }
             else if (bound.isModel) {
@@ -533,11 +533,11 @@ Ext.define('Ext.app.bind.Stub', {
                 name = me.name,
                 available = !!(parent && parent.checkAvailability(isLoading)),
                 associations, parentValue, value, availableSet;
-            
+
             if (available) {
                 parentValue = me.getParentValue();
                 value = me.inspectValue(parentValue);
-                
+
                 // If we get a value back, it's something we can ask for the loading state
                 if (value) {
                     if (isLoading) {
@@ -564,7 +564,7 @@ Ext.define('Ext.app.bind.Stub', {
                             }
                             else {
                                 associations = parentValue.associations;
-                                
+
                                 // At this point, we know the value is not a record or a store,
                                 // otherwise something would have been returned from inspectValue.
                                 // We also check here that we are not a defined association,
@@ -604,7 +604,7 @@ Ext.define('Ext.app.bind.Stub', {
                 result = me.callParent(),
                 storeBinding = me.storeBinding ? 1 : 0,
                 formula = me.formula ? 1 : 0;
-            
+
             return result + storeBinding + formula;
         },
 
@@ -613,24 +613,24 @@ Ext.define('Ext.app.bind.Stub', {
             // formula. So we climb the hierarchy until we find the rootStub
             // and set it there if it be a formula.
             var stub = this;
-            
+
             while (stub.isLinkStub) {
                 stub = stub.binding.stub;
             }
-            
+
             return stub.formula ? stub : null;
         },
-        
+
         getParentValue: function() {
             var me = this;
-            
+
             // Cache the value of the parent here. Inside onSchedule we clear the value
             // because it may be invalidated.
             if (me.dirty) {
                 me.parentValue = me.parent.getValue();
                 me.dirty = false;
             }
-            
+
             return me.parentValue;
         },
 
@@ -647,20 +647,20 @@ Ext.define('Ext.app.bind.Stub', {
 
             if (parentData && parentData.isEntity) {
                 associations = parentData.associations;
-                
+
                 if (associations && (name in associations)) {
                     boundValue = parentData[associations[name].getterName]();
                 }
                 else if (name === me.validationKey) {
                     boundValue = parentData.getValidation();
-                    
+
                     // Binding a new one, reset the generation
                     me.lastValidationGeneration = null;
                 }
             }
             else if (parentData) {
                 raw = parentData[name];
-                
+
                 if (raw && (raw.isModel || raw.isStore)) {
                     boundValue = raw;
                 }
@@ -669,7 +669,7 @@ Ext.define('Ext.app.bind.Stub', {
             // Check if we have a current binding that changed. If so, we need
             // to detach ourselves from it
             changed = current !== boundValue;
-            
+
             if (changed) {
                 if (current) {
                     me.detachBound();
@@ -683,17 +683,17 @@ Ext.define('Ext.app.bind.Stub', {
                         // Only want to trigger automatic loading if we've come from an association.
                         // Otherwise leave the user in charge of that.
                         associatedEntity = boundValue.associatedEntity;
-                        
+
                         if (associatedEntity && boundValue.autoLoad !== false &&
                             !boundValue.complete && !boundValue.hasPendingLoad()) {
                             boundValue.load();
                         }
-                        
+
                         // We only want to listen for the first load, since the actual
                         // store object won't change from then on
                         boundValue.on({
                             scope: me,
-                            
+
                             // Capture beginload/load so we can bind to the loading state
                             // of the store. We need load because a load may be unsuccessful
                             // which means datachanged won't fire beginload is used because
@@ -709,10 +709,10 @@ Ext.define('Ext.app.bind.Stub', {
                         });
                     }
                 }
-                
+
                 me.boundValue = boundValue;
             }
-            
+
             return boundValue;
         },
 
@@ -735,7 +735,7 @@ Ext.define('Ext.app.bind.Stub', {
                 }
             }
         },
-        
+
         onDestroyBound: function() {
             if (!this.owner.destroying) {
                 this.set(null);
@@ -749,7 +749,7 @@ Ext.define('Ext.app.bind.Stub', {
                 storeBinding = me.storeBinding;
 
             me.callParent();
-        
+
             if (storeBinding) {
                 scheduler.sortItem(storeBinding);
             }

@@ -126,7 +126,7 @@ Ext.define('Ext.Img', {
     },
 
     afterShow: function() {
-        this.callParent(arguments);
+        this.callParent();
 
         if (this.hiddenSrc) {
             this.setSrc(this.hiddenSrc);

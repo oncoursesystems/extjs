@@ -36,7 +36,7 @@ Ext.define('Ext.layout.container.SegmentedButton', {
 
     onDestroy: function() {
         var targetEl, row;
-        
+
         // The items of a Segmented Button create an Ext.dom.Element reference
         // to their "container" element (see Ext.util.Renderable#finishRender)
         // for vertical Segmented Buttons this container ends up being the

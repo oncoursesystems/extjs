@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.chart.drawing.Easings', {
         'Ext.draw.Component'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/drawing/EasingsController.js'
@@ -40,9 +40,9 @@ Ext.define('KitchenSink.view.chart.drawing.Easings', {
         }
     },
 
-    padding: '${padding}', //give room for the draw component's shadow
+    padding: '${padding}', // give room for the draw component's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 

@@ -11,24 +11,24 @@ Ext.define('Ext.data.request.Form', {
         var me = this,
             options = me.options,
             requestOptions = me.requestOptions;
-        
+
         // Parent will set the timeout
         me.callParent([data]);
-        
+
         me.form = me.upload(options.form, requestOptions.url, requestOptions.data, options);
-        
+
         return me;
     },
 
     abort: function(force) {
         var me = this,
             frame;
-        
+
         if (me.isLoading()) {
-            
+
             try {
                 frame = me.frame.dom;
-                
+
                 if (frame.stop) {
                     frame.stop();
                 }
@@ -40,33 +40,33 @@ Ext.define('Ext.data.request.Form', {
                 // ignore
             }
         }
-        
+
         me.callParent([force]);
-        
+
         me.onComplete();
         me.cleanup();
     },
-    
+
     /*
      * Clean up any left over information from the form submission.
      */
     cleanup: function() {
         var me = this,
             frame = me.frame;
-        
+
         if (frame) {
             // onComplete hasn't fired yet if frame != null so need to clean up
             frame.un('load', me.onComplete, me);
             Ext.removeNode(frame);
         }
-        
+
         me.frame = me.form = null;
     },
-    
+
     isLoading: function() {
         return !!this.frame;
     },
-    
+
     /**
      * Uploads a form using a hidden iframe.
      * @param {String/HTMLElement/Ext.dom.Element} form The form to upload
@@ -139,10 +139,10 @@ Ext.define('Ext.data.request.Form', {
             for (name in obj) {
                 if (obj.hasOwnProperty(name)) {
                     value = obj[name];
-                    
+
                     if (Ext.isArray(value)) {
                         vLen = value.length;
-                        
+
                         for (v = 0; v < vLen; v++) {
                             addField(name, value[v]);
                         }
@@ -153,9 +153,9 @@ Ext.define('Ext.data.request.Form', {
                 }
             }
         }
-        
+
         this.frame = frame;
-        
+
         frame.on({
             load: this.onComplete,
             scope: this,
@@ -203,12 +203,12 @@ Ext.define('Ext.data.request.Form', {
             owner = me.owner,
             options = me.options,
             callback, doc, success, contentNode, response;
-        
+
         // Nulled out frame means onComplete was fired already
         if (!frame) {
             return;
         }
-        
+
         if (me.aborted || me.timedout) {
             me.result = response = me.createException();
             response.responseXML = null;
@@ -216,7 +216,7 @@ Ext.define('Ext.data.request.Form', {
                 success: false,
                 message: Ext.String.trim(response.statusText)
             });
-           
+
             response.request = me;
             callback = options.failure;
             success = false;
@@ -224,14 +224,14 @@ Ext.define('Ext.data.request.Form', {
         else {
             try {
                 doc = me.getDoc();
-                
+
                 // bogus response object
                 me.result = response = {
                     responseText: '',
                     responseXML: null,
                     request: me
                 };
-                
+
                 // Opera will fire an extraneous load event on about:blank
                 // We want to ignore this since the load event will be fired twice
                 if (doc) {
@@ -239,7 +239,7 @@ Ext.define('Ext.data.request.Form', {
                     if (Ext.isOpera && doc.location === Ext.SSL_SECURE_URL) {
                         return;
                     }
-                    
+
                     if (doc.body) {
                         // Response sent as Content-Type: text/json or text/plain.
                         // Browser will embed it in a <pre> element.
@@ -261,7 +261,7 @@ Ext.define('Ext.data.request.Form', {
                             response.responseText = doc.body.textContent || doc.body.innerText;
                         }
                     }
-                    
+
                     // in IE the document may still have a body even if returns XML.
                     // TODO What is this about?
                     response.responseXML = doc.XMLDocument || doc;
@@ -276,7 +276,7 @@ Ext.define('Ext.data.request.Form', {
             }
             catch (e) {
                 me.result = response = me.createException();
-                
+
                 // Report any error in the message property
                 response.status = 400;
                 response.statusText = (e.message || e.description) + '';
@@ -285,7 +285,7 @@ Ext.define('Ext.data.request.Form', {
                     message: Ext.String.trim(response.statusText)
                 });
                 response.responseXML = null;
-                
+
                 callback = options.failure;
                 success = false;
             }
@@ -298,15 +298,15 @@ Ext.define('Ext.data.request.Form', {
 
         Ext.callback(callback, options.scope, [response, options]);
         Ext.callback(options.callback, options.scope, [options, success, response]);
-        
+
         owner.onRequestComplete(me);
-        
+
         // Must defer slightly to permit full exit from load event before destruction
         Ext.asap(frame.destroy, frame);
 
         me.callParent();
     },
-    
+
     destroy: function() {
         this.cleanup();
         this.callParent();

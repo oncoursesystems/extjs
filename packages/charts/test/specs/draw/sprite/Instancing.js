@@ -3,7 +3,7 @@ topSuite("Ext.draw.sprite.Instancing", ['Ext.draw.*'], function() {
         // Silence warnings regarding Sencha download server
         spyOn(Ext.log, 'warn');
     });
-    
+
     describe("'template' config", function() {
         it("should set the template's parent to the instancing sprite", function() {
             var template = new Ext.draw.sprite.Rect(),

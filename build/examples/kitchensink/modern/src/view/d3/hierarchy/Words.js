@@ -19,7 +19,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Words', {
         'Ext.d3.hierarchy.Pack'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/d3/hierarchy/WordsController.js'
@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Words', {
         type: 'Styles',
         path: 'modern/sass/src/view/d3/hierarchy/Words.scss'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -38,11 +38,11 @@ Ext.define('KitchenSink.view.d3.hierarchy.Words', {
         padding: 0,
         nodeText: 'word',
         textPadding: [-8, 0],
-        nodeValue: function (node) {
+        nodeValue: function(node) {
             // Instead of using `nodeValue: 'count'` as a config,
             // take a qubic root of the 'count' to downplay
             // differences in the relative size of nodes.
-            return Math.pow(node.data.count, 1/3);
+            return Math.pow(node.data.count, 1 / 3);
         },
         colorAxis: {
             // For this example, we want all nodes to have the same color.

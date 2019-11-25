@@ -554,16 +554,9 @@ Ext.define('Ext.grid.HeaderContainer', {
     },
 
     doDestroy: function() {
-        var me = this,
-            task = me.spacerTask;
+        this.setGrid(null);
 
-        if (task) {
-            task.cancel();
-            me.spacerTask = null;
-        }
-
-        me.setGrid(null);
-        me.callParent();
+        this.callParent();
     },
 
     afterRender: function() {

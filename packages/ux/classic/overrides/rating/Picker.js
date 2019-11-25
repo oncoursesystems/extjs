@@ -30,7 +30,7 @@ Ext.define('Ext.ux.overrides.rating.Picker', {
             // the tooltip text directly.
             target = tip && tip.activeTarget;
             target = target && target.el;
-            
+
             if (target && innerEl.contains(target)) {
                 tip.update(text);
             }

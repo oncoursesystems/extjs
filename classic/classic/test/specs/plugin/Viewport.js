@@ -233,11 +233,12 @@ function() {
                 afterEach(function() {
                     document.documentElement.style.height = document.documentElement.style.overflow = '';
                 });
-                
+
                 it('should only fire one global scroll event per scroll', function() {
                     c.scrollTo(null, 500);
 
                     // Read to force synchronous layout
+                    // eslint-disable-next-line no-unused-expressions
                     document.body.offsetHeight;
 
                     // Wait for potentially asynchronous scroll events to fire.
@@ -269,7 +270,7 @@ function() {
                     document.documentElement.style.overflow = 'auto';
 
                     Ext.on('scroll', incrementFn);
-                    
+
                     makeComponent({
                         scrollable: true,
                         items: {
@@ -284,7 +285,7 @@ function() {
                     document.documentElement.style.height = document.documentElement.style.overflow = '';
                     Ext.un('scroll', incrementFn);
                 });
-                
+
                 it('should only fire one global scroll event per scroll', function() {
                     c.scrollTo(null, 500);
 

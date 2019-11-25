@@ -161,9 +161,9 @@ Ext.define('Ext.data.schema.Schema', {
         // Method used for testing to clear cache for custom instances.
         clearInstance: function(id) {
             var schema = this.instances[id];
-            
+
             delete this.instances[id];
-            
+
             if (schema) {
                 schema.clear(true);
                 schema.destroy();
@@ -199,7 +199,7 @@ Ext.define('Ext.data.schema.Schema', {
                 if (config.isSchema) {
                     return config;
                 }
-                
+
                 id = isString ? config : (config.id || id);
             }
 
@@ -255,19 +255,19 @@ Ext.define('Ext.data.schema.Schema', {
                     if (ret && (!ret.prototype || !ret.prototype.isEntity)) {
                         ret = null;
                     }
-                    
+
                     if (!ret) {
                         for (name in instances) {
                             schema = instances[name];
                             match = schema.getEntity(entity);
-                            
+
                             if (match) {
                                 if (ret) {
                                     Ext.raise('Ambiguous entity name "' + entity +
                                         '". Defined by schema "' + ret.schema.type +
                                         '" and "' + name + '"');
                                 }
-                                
+
                                 ret = match;
                             }
                         }
@@ -380,18 +380,18 @@ Ext.define('Ext.data.schema.Schema', {
 
     applyNamer: function(namer) {
         var ret = Ext.data.schema.Namer.create(namer);
-        
+
         ret.schema = this;
-        
+
         return ret;
     },
 
     applyNamespace: function(namespace) {
         var end;
-        
+
         if (namespace) {
             end = namespace.length - 1;
-            
+
             if (namespace.charAt(end) !== '.') {
                 namespace += '.';
             }
@@ -442,7 +442,7 @@ Ext.define('Ext.data.schema.Schema', {
      */
     getAssociation: function(name) {
         var entry = this.associations[name];
-        
+
         return entry || null;
     },
 
@@ -453,10 +453,10 @@ Ext.define('Ext.data.schema.Schema', {
      */
     getEntity: function(name) {
         var entry = this.entityClasses[name] || this.entities[name];
-        
+
         return (entry && entry.cls) || null;
     },
-    
+
     /**
      * Get the entity name taking into account the {@link #namespace}.
      * @param {String/Ext.data.Model} cls The model class or name of the class.
@@ -465,7 +465,7 @@ Ext.define('Ext.data.schema.Schema', {
     getEntityName: function(cls) {
         var ns = this.getNamespace(),
             index, name;
-            
+
         if (typeof cls === 'string') {
             name = cls;
         }
@@ -476,7 +476,7 @@ Ext.define('Ext.data.schema.Schema', {
         if (name) { // if (not anonymous class)
             if (ns) {
                 index = ns.length;
-                
+
                 if (name.substring(0, index) !== ns) {
                     return name;
                 }
@@ -489,7 +489,7 @@ Ext.define('Ext.data.schema.Schema', {
 
         return name;
     },
-    
+
     /**
      * Checks if the passed entity has attached associations that need to be read when
      * using nested loading.
@@ -499,10 +499,10 @@ Ext.define('Ext.data.schema.Schema', {
      */
     hasAssociations: function(name) {
         name = name.entityName || name;
-        
+
         return !!this.associationEntityMap[name];
     },
-    
+
     /**
      * Checks if an entity is defined
      * @param {String/Ext.data.Model} entity The name or model
@@ -510,7 +510,7 @@ Ext.define('Ext.data.schema.Schema', {
      */
     hasEntity: function(entity) {
         var name = this.getEntityName(entity);
-        
+
         return !!(this.entities[name] || this.entityClasses[name]);
     },
 
@@ -579,7 +579,7 @@ Ext.define('Ext.data.schema.Schema', {
                     (entities[rightType] = { cls: null, name: rightType, associations: {} });
 
         ++me.assocCount;
-        
+
         associations[matrixName] = matrix = new Ext.data.schema.ManyToMany({
             name: matrixName,
             schema: me,
@@ -707,7 +707,7 @@ Ext.define('Ext.data.schema.Schema', {
                     ' (collides with ' +
                     associations[association].definedBy.entityName + ')');
         }
-        
+
         if (referenceField && referenceField.definedBy === entities[rightType]) {
             Ext.raise('ForeignKey reference should not be owned by the target model');
         }
@@ -720,7 +720,7 @@ Ext.define('Ext.data.schema.Schema', {
 
         // as a field w/reference we are always "left":
         T = unique ? Ext.data.schema.OneToOne : Ext.data.schema.ManyToOne;
-        
+
         association = new T({
             name: association,
             // Note: "parent" or "child" can be strings so don't assume otherwise
@@ -749,7 +749,7 @@ Ext.define('Ext.data.schema.Schema', {
         // we store the associations in the entry):
         entityType.associations[rightRole] = association.right;
         entry.associations[leftRole] = association.left;
-        
+
         if (referenceField) {
             // Store the role on the FK field. This "upgrades" legacy associations to the
             // new "field.reference" form.
@@ -759,13 +759,13 @@ Ext.define('Ext.data.schema.Schema', {
 
         ++me.assocCount;
         me.associationEntityMap[entityName] = true;
-        
+
         if (entry.cls) {
             me.associationEntityMap[entry.cls.entityName] = true;
         }
-        
+
         associations[association.name] = association;
-        
+
         if (association.right.cls) {
             me.decorateModel(association);
         }
@@ -801,7 +801,7 @@ Ext.define('Ext.data.schema.Schema', {
             //</debug>
             else {
                 associations = entry.associations;
-                
+
                 for (name in associations) {
                     // the associations collection describes the types to which this entity is
                     // related, but the inverse descriptors need this entityType:
@@ -823,7 +823,7 @@ Ext.define('Ext.data.schema.Schema', {
 
             for (i = 0, length = fields.length; i < length; ++i) {
                 field = fields[i];
-                
+
                 if (field.reference) {
                     me.addReferenceDescr(entityType, field);
                 }
@@ -952,7 +952,7 @@ Ext.define('Ext.data.schema.Schema', {
                          */
                         left = Ext.apply({ type: entityName }, left); // User
                     }
-                    
+
                     right = matrixDef;  // Group
                 }
                 else {
@@ -982,7 +982,7 @@ Ext.define('Ext.data.schema.Schema', {
                          */
                         right = Ext.apply({ type: entityName }, right); // Group
                     }
-                    
+
                     left = matrixDef; // User
                 }
             }
@@ -1074,7 +1074,7 @@ Ext.define('Ext.data.schema.Schema', {
             foreignKey = assoc.foreignKey || (assoc.type.toLowerCase() + '_id');
             referenceField = entityType.getField(foreignKey);
             assoc.fromSingle = true;
-            
+
             if (referenceField) {
                 referenceField.$reference = assoc;
                 referenceField.unique = true;
@@ -1084,7 +1084,7 @@ Ext.define('Ext.data.schema.Schema', {
                              'See Ext.data.field.Field.reference');
                 //</debug>
             }
-            
+
             this.addReference(entityType, referenceField, assoc, unique);
         },
 
@@ -1102,7 +1102,7 @@ Ext.define('Ext.data.schema.Schema', {
             name = assoc.type;
             target = entities[name];
             cls = target && target.cls;
-            
+
             if (cls) {
                 name = entityType.entityName;
                 foreignKey = assoc.foreignKey || (name.toLowerCase() + '_id');
@@ -1121,14 +1121,14 @@ Ext.define('Ext.data.schema.Schema', {
                 }, declaredInverse);
 
                 child = inverseOptions.child;
-                
+
                 if (child) {
                     delete inverseOptions.child;
                     assoc.parent = name;
                 }
 
                 referenceField = cls.getField(foreignKey);
-                
+
                 if (referenceField) {
                     referenceField.$reference = assoc;
                     assoc.legacy = true;
@@ -1165,14 +1165,14 @@ Ext.define('Ext.data.schema.Schema', {
                 if (!pending[name]) {
                     pending[name] = [];
                 }
-                
+
                 pending[name].push([entityType, assoc]);
             }
         },
 
         checkLegacyAssociation: function(entityType, assoc) {
             var name;
-            
+
             if (Ext.isString(assoc)) {
                 assoc = {
                     type: assoc
@@ -1189,7 +1189,7 @@ Ext.define('Ext.data.schema.Schema', {
             }
 
             name = assoc.associatedName || assoc.name;
-            
+
             if (name) {
                 // TODO: warn
                 delete assoc.associatedName;
@@ -1210,7 +1210,7 @@ Ext.define('Ext.data.schema.Schema', {
                 for (i = 0, len = mine.length; i < len; ++i) {
                     this.addHasMany.apply(this, mine[i]);
                 }
-                
+
                 delete pending[name];
             }
         },
@@ -1233,7 +1233,7 @@ Ext.define('Ext.data.schema.Schema', {
             me.entityClasses = {};
             me.pending = {};
             me.assocCount = me.entityCount = 0;
-            
+
             if (clearNamespace) {
                 me.setNamespace(null);
             }
@@ -1270,7 +1270,7 @@ Ext.define('Ext.data.schema.Schema', {
                 if (!(getterName = role.getterName)) {
                     role.getterName = getterName = namer.getterName(role);
                 }
-                
+
                 proto[getterName] = role.createGetter();
 
                 // Not all associations will create setters
@@ -1278,7 +1278,7 @@ Ext.define('Ext.data.schema.Schema', {
                     if (!(setterName = role.setterName)) {
                         role.setterName = setterName = namer.setterName(role);
                     }
-                    
+
                     proto[setterName] = role.createSetter();
                 }
             }
@@ -1327,7 +1327,7 @@ Ext.define('Ext.data.schema.Schema', {
             if (!keyCheckQueue) {
                 me.keyCheckQueue = keyCheckQueue = [];
             }
-            
+
             keyCheckQueue.push({
                 record: record,
                 role: role
@@ -1384,7 +1384,7 @@ Ext.define('Ext.data.schema.Schema', {
 
             for (roleName in associations) {
                 role = associations[roleName];
-                
+
                 // The role describes the thing to which entityType is associated, so we
                 // want to know about *this* type and whether it has a foreign-key to the
                 // associated type. The left side is the FK owner so if the associated
@@ -1394,7 +1394,7 @@ Ext.define('Ext.data.schema.Schema', {
                     // This entityType has a foreign-key to the associated type, so add
                     // that type first.
                     associatedType = role.cls;
-                    
+
                     if (!associatedType.rank) {
                         this.rankEntity(associatedType);
                     }

@@ -47,7 +47,7 @@
 Ext.define('Ext.form.Label', {
     extend: 'Ext.Component',
     alias: 'widget.label',
-    
+
     requires: ['Ext.util.Format'],
 
     autoEl: 'label',
@@ -57,7 +57,7 @@ Ext.define('Ext.form.Label', {
      * The plain text to display within the label. If you need to include HTML
      * tags within the label's innerHTML, use the {@link #html} config instead.
      */
-    
+
     /**
      * @cfg {String} forId
      * The id of the input element to which this label will be bound via the standard HTML 'for'
@@ -66,21 +66,21 @@ Ext.define('Ext.form.Label', {
      * so you should make sure this matches the {@link Ext.form.field.Base#inputId inputId}
      * of that field.
      */
-    
+
     /**
      * @cfg {String} [html='']
      * An HTML fragment that will be used as the label's innerHTML.
      * Note that if {@link #text} is specified it will take precedence and this value
      * will be ignored.
      */
-    
+
     maskOnDisable: false,
 
     getElConfig: function() {
         var me = this;
 
         me.html = me.text ? Ext.util.Format.htmlEncode(me.text) : (me.html || '');
-        
+
         return Ext.apply(me.callParent(), {
             htmlFor: me.forId || ''
         });
@@ -96,9 +96,9 @@ Ext.define('Ext.form.Label', {
      */
     setText: function(text, encode) {
         var me = this;
-        
+
         encode = encode !== false;
-        
+
         if (encode) {
             me.text = text;
             delete me.html;
@@ -107,12 +107,12 @@ Ext.define('Ext.form.Label', {
             me.html = text;
             delete me.text;
         }
-        
+
         if (me.rendered) {
             me.el.dom.innerHTML = encode !== false ? Ext.util.Format.htmlEncode(text) : text;
             me.updateLayout();
         }
-        
+
         return me;
     }
 });

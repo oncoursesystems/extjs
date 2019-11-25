@@ -64,7 +64,7 @@ Ext.define('Ext.ux.ajax.XmlSimlet', {
 
         ret.responseText = xml;
         ret.responseXML = doc;
-        
+
         return ret;
     }
 });

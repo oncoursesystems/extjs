@@ -162,6 +162,6 @@ Ext.define('Ext.event.gesture.EdgeSwipe', {
     }
 }, function(EdgeSwipe) {
     var gestures = Ext.manifest.gestures;
-    
+
     EdgeSwipe.instance = new EdgeSwipe(gestures && gestures.edgeSwipe);
 });

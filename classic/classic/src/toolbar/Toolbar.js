@@ -397,12 +397,12 @@ Ext.define('Ext.toolbar.Toolbar', {
 
         if (deep && (me.enableOverflow || (me.overflowHandler === 'menu'))) {
             handler = layout.overflowHandler;
-            
+
             if (handler && handler.menu) {
                 items = items.concat(handler.menu.getRefItems(deep));
             }
         }
-        
+
         return items;
     },
 
@@ -507,7 +507,7 @@ Ext.define('Ext.toolbar.Toolbar', {
 
     onAdd: function(component) {
         var me = this;
-        
+
         // If we encounter a child component that needs to handle arrow keys
         // (input fields, sliders) we opt out of FocusableContainer behavior
         // because it becomes highly confusing for the keyboard users. We also
@@ -524,7 +524,7 @@ Ext.define('Ext.toolbar.Toolbar', {
             me.focusableContainer = false;
             me.ariaRole = 'group';
         }
-        
+
         me.callParent(arguments);
         me.trackMenu(component);
     },
@@ -533,7 +533,7 @@ Ext.define('Ext.toolbar.Toolbar', {
         this.callParent(arguments);
         this.trackMenu(c, true);
     },
-    
+
     privates: {
         /**
          * @private
@@ -542,7 +542,7 @@ Ext.define('Ext.toolbar.Toolbar', {
             if (!Ext.isString(c)) {
                 c = this.callParent(arguments);
             }
-            
+
             return c;
         },
 

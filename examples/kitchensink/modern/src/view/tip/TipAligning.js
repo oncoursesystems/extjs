@@ -110,7 +110,7 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
             inputValue: true
         }]
     },
-    
+
     bbar: {
         defaults: {
             labelAlign: 'left',

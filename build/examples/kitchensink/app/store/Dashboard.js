@@ -4,31 +4,33 @@ Ext.define('KitchenSink.store.Dashboard', {
 
     fields: [
         { name: 'name' },
-        { name: 'price',   type: 'float' },
+        { name: 'price', type: 'float' },
         { name: 'revenue', type: 'float' },
-        { name: 'growth',  type: 'float' },
+        { name: 'growth', type: 'float' },
         { name: 'product', type: 'float' },
-        { name: 'market',  type: 'float' }
+        { name: 'market', type: 'float' }
     ],
 
-    data: (function () {
+    data: (function() {
         var data = [
-            ['3M Co'],
-            ['AT&T Inc'],
-            ['Boeing Co.'],
-            ['Citigroup, Inc.'],
-            ['Coca-Cola'],
-            ['General Motors'],
-            ['IBM'],
-            ['Intel'],
-            ['McDonald\'s'],
-            ['Microsoft'],
-            ['Verizon'],
-            ['Wal-Mart']
-        ];
+                ['3M Co'],
+                ['AT&T Inc'],
+                ['Boeing Co.'],
+                ['Citigroup, Inc.'],
+                ['Coca-Cola'],
+                ['General Motors'],
+                ['IBM'],
+                ['Intel'],
+                ['McDonald\'s'],
+                ['Microsoft'],
+                ['Verizon'],
+                ['Wal-Mart']
+            ],
+            i, l, item, rand;
 
-        for (var i = 0, l = data.length, rand = Math.random; i < l; i++) {
-            var item = data[i];
+        for (i = 0, l = data.length, rand = Math.random; i < l; i++) {
+            item = data[i];
+
             item[1] = Ext.util.Format.number(((rand() * 10000) >> 0) / 100, '0');
             item[2] = ((rand() * 10000) >> 0) / 100;
             item[3] = ((rand() * 10000) >> 0) / 100;

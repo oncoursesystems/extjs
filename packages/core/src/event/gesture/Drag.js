@@ -283,6 +283,6 @@ Ext.define('Ext.event.gesture.Drag', {
     }
 }, function(Drag) {
     var gestures = Ext.manifest.gestures;
-    
+
     Drag.instance = new Drag(gestures && gestures.drag);
 });

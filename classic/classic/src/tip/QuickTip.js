@@ -71,9 +71,9 @@ Ext.define('Ext.tip.QuickTip', {
         hideAction: 'hideAction',
         anchorTarget: 'anchorTarget'
     },
-    
+
     isQuickTip: true,
-    
+
     /**
      * @cfg shrinkWrapDock
      * @inheritdoc
@@ -89,16 +89,16 @@ Ext.define('Ext.tip.QuickTip', {
 
         me.target = me.target || Ext.getDoc();
         me.targets = me.targets || {};
-        
+
         me.header = me.header || {};
         me.header.focusableContainer = false;
-        
+
         me.callParent();
     },
 
     setTagConfig: function(cfg) {
         this.tagConfig = Ext.apply({}, cfg);
-        
+
         // Let attr get recomputed
         delete this.tagConfig.attr;
     },
@@ -185,7 +185,7 @@ Ext.define('Ext.tip.QuickTip', {
             me.clearTimer('show');
         }
     },
-    
+
     delegate: function(target) {
         var me = this,
             cfg = me.tagConfig,
@@ -338,7 +338,7 @@ Ext.define('Ext.tip.QuickTip', {
 
         return (active && active.align) || this.callParent();
     },
-    
+
     getAlignRegion: function() {
         var me = this,
             activeTarget = me.activeTarget,
@@ -358,7 +358,7 @@ Ext.define('Ext.tip.QuickTip', {
 
         // Return currentTarget to correctness for pointer event processing
         me.currentTarget.attach(currentTargetDom);
-        
+
         return result;
     },
 
@@ -456,7 +456,7 @@ Ext.define('Ext.tip.QuickTip', {
             me.update(target.text);
             me.autoHide = target.autoHide;
             dismiss = target.dismissDelay;
-            
+
             me.dismissDelay = Ext.isNumber(dismiss) ? dismiss : me.dismissDelay;
 
             cls = me.lastCls;
@@ -479,7 +479,7 @@ Ext.define('Ext.tip.QuickTip', {
             me.resumeLayouts(true);
         }
     },
-    
+
     /**
      * @method hide
      * @inheritdoc

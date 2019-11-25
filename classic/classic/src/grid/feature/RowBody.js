@@ -114,7 +114,7 @@ Ext.define('Ext.grid.feature.RowBody', {
             rowValues.rowBodyColspan = columns.length;
             rowValues.rowBodyCls = me.rowBodyCls;
             rowValues.rowIdCls = me.rowIdCls;
-            
+
             if (rowExpanderCol && rowExpanderCol.getView() === view) {
                 view.grid.removeCls(Ext.baseCSSPrefix + 'grid-hide-row-expander-spacer');
                 rowValues.addSpacerCell = true;
@@ -172,7 +172,7 @@ Ext.define('Ext.grid.feature.RowBody', {
 
                 if (rowBody.doSync) {
                     destRowBody = Ext.fly(destRow).down(rowBody.eventSelector, true);
-                    
+
                     // Sync the heights of row body elements in each row if they need it.
                     if (destRowBody && (sourceRowBody = Ext.fly(sourceRow).down(rowBody.eventSelector, true))) {
                         Ext.fly(destRowBody).syncContent(sourceRowBody);
@@ -189,12 +189,12 @@ Ext.define('Ext.grid.feature.RowBody', {
         var me = this,
             view = me.view = grid.getView();
 
-        // <debug>
+        //<debug>
         if (!me.rowExpander && grid.findPlugin('rowexpander')) {
             Ext.raise('The RowBody feature shouldn\'t be manually added when the grid' +
                       'has a RowExpander.');
         }
-        // </debug>
+        //</debug>
 
         // The extra data means variableRowHeight
         grid.variableRowHeight = view.variableRowHeight = true;
@@ -204,20 +204,20 @@ Ext.define('Ext.grid.feature.RowBody', {
             columnschanged: me.onColumnsChanged,
             scope: me
         });
-        
+
         view.addTpl(me.outerTpl).rowBody = me;
         view.addRowTpl(Ext.XTemplate.getTpl(this, 'extraRowTpl')).rowBody = me;
-        
+
         me.callParent(arguments);
     },
 
     getSelectedRow: function(view, rowIndex) {
         var selectedRow = view.getNode(rowIndex);
-        
+
         if (selectedRow) {
             return Ext.fly(selectedRow).down(this.eventSelector);
         }
-        
+
         return null;
     },
 
@@ -262,7 +262,7 @@ Ext.define('Ext.grid.feature.RowBody', {
      * @return {Object} An object containing additional variables for use in the grid 
      * view's template
      */
-    
+
     /*
      * @private
      */
@@ -271,7 +271,7 @@ Ext.define('Ext.grid.feature.RowBody', {
             Ext.apply(rowValues, this.getAdditionalData(record.data, rowIndex, record, rowValues));
         }
     }
-    
+
     /**
      * @event beforerowbodymousedown
      * @preventable
@@ -338,7 +338,7 @@ Ext.define('Ext.grid.feature.RowBody', {
      * 
      * @inheritdoc #beforerowbodymousedown
      */
-    
+
     /**
      * @event beforerowbodylongpress
      * @preventable
@@ -445,7 +445,7 @@ Ext.define('Ext.grid.feature.RowBody', {
      * 
      * @inheritdoc #beforerowbodymousedown
      */
-    
+
     /**
      * @event rowbodylongpress
      * @member Ext.view.Table

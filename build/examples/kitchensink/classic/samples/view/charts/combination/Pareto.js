@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.charts.combination.Pareto', {
     xtype: 'combination-pareto',
     controller: 'combination-pareto',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.charts.combination.Pareto', {
         type: 'Store',
         path: 'app/store/Pareto.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     profiles: {
@@ -133,7 +133,7 @@ Ext.define('KitchenSink.view.charts.combination.Pareto', {
     }, {
         style: 'padding-top: 10px;',
         xtype: 'gridpanel',
-        columns : {
+        columns: {
             defaults: {
                 sortable: false,
                 menuDisabled: true

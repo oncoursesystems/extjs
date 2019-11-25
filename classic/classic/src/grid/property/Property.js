@@ -32,7 +32,7 @@ Ext.define('Ext.grid.property.Property', {
     }, {
         name: 'value'
     }],
-    
+
     idProperty: 'name',
 
     constructor: function(data, value) {
@@ -42,7 +42,7 @@ Ext.define('Ext.grid.property.Property', {
                 value: value
             };
         }
-        
+
         this.callParent([data]);
     }
 });

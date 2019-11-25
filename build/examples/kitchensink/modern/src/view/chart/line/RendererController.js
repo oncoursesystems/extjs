@@ -13,9 +13,9 @@ Ext.define('KitchenSink.view.chart.line.RendererController', {
         var store = rendererData.store,
             storeItems = store.getData().items,
             currentRecord = storeItems[index],
-            previousRecord = (index > 0 ? storeItems[index-1] : currentRecord),
-            current = currentRecord && currentRecord.data['g1'],
-            previous = previousRecord && previousRecord.data['g1'],
+            previousRecord = (index > 0 ? storeItems[index - 1] : currentRecord),
+            current = currentRecord && currentRecord.data.g1,
+            previous = previousRecord && previousRecord.data.g1,
             isUp = current >= previous,
             changes = {};
 

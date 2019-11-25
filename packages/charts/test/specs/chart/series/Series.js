@@ -18,7 +18,7 @@ function() {
 
             return this;
         };
-        
+
         // Silence warnings regarding Sencha download server
         spyOn(Ext.log, 'warn');
     });
@@ -313,7 +313,6 @@ function() {
                 });
             });
 
-
             describe('chart controller, no chart container controller', function() {
                 var chart, series,
                     container, chartController;
@@ -368,7 +367,6 @@ function() {
                     expect(testScope).toBe(chartController);
                 });
             });
-
 
             describe('chart controller, chart container controller', function() {
                 var chart, container, series,
@@ -748,7 +746,6 @@ function() {
                 });
             });
 
-
             describe('chart controller, no chart container controller', function() {
                 var chart, series,
                     container, chartController;
@@ -797,7 +794,6 @@ function() {
                     expect(testScope).toBe(chartController);
                 });
             });
-
 
             describe('chart controller, chart container controller', function() {
                 var chart, container, series,
@@ -1098,7 +1094,7 @@ function() {
         afterEach(function() {
             Ext.destroy(chart);
         });
-        
+
         it('should update series range as more related series get coordinated', function() {
             // The issue with this was that when multiple series bound to the same
             // axis were coordinated in the axis direction, the range of each series

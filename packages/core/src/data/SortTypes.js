@@ -39,35 +39,35 @@
  */
 Ext.define('Ext.data.SortTypes', function() {
     var me;
-    
+
     return {
         singleton: true,
-        
+
         constructor: function() {
             me = this;
         },
-        
+
         /**
          * Default sort that does nothing
          * @param {Object} s The value being converted
          * @return {Object} The comparison value
          */
         none: Ext.identityFn,
-        
+
         /**
          * The regular expression used to strip commas
          * @type {RegExp}
          * @property
          */
         stripCommasRe: /,/g,
-        
+
         /**
          * The regular expression used to strip tags
          * @type {RegExp}
          * @property
          */
         stripTagsRE: /<\/?[^>]+>/gi,
-        
+
         /**
          * Strips all HTML tags to sort on text only
          * @param {Object} s The value being converted
@@ -77,7 +77,7 @@ Ext.define('Ext.data.SortTypes', function() {
             // If allowNull, return the Unicode null character.
             return (s != null) ? String(s).replace(me.stripTagsRE, '') : '\u0000';
         },
-        
+
         /**
          * Strips all HTML tags to sort on text only - Case insensitive
          * @param {Object} s The value being converted
@@ -88,7 +88,7 @@ Ext.define('Ext.data.SortTypes', function() {
             /* eslint-disable-next-line newline-per-chained-call */
             return (s != null) ? String(s).toUpperCase().replace(me.stripTagsRE, '') : '\u0000';
         },
-        
+
         /**
          * Case insensitive string
          * @param {Object} s The value being converted
@@ -98,7 +98,7 @@ Ext.define('Ext.data.SortTypes', function() {
             // If allowNull, return the Unicode null character.
             return (s != null) ? String(s).toUpperCase() : '\u0000';
         },
-        
+
         /**
          * Date sorting
          * @param {Object} s The value being converted
@@ -108,14 +108,14 @@ Ext.define('Ext.data.SortTypes', function() {
             if (!s) {
                 return 0;
             }
-            
+
             if (Ext.isDate(s)) {
                 return s.getTime();
             }
-            
+
             return Date.parse(String(s));
         },
-        
+
         /**
          * Float sorting
          * @param {Object} s The value being converted
@@ -123,10 +123,10 @@ Ext.define('Ext.data.SortTypes', function() {
          */
         asFloat: function(s) {
             var val = parseFloat(String(s).replace(me.stripCommasRe, ''));
-            
+
             return isNaN(val) ? 0 : val;
         },
-        
+
         /**
          * Integer sorting
          * @param {Object} s The value being converted
@@ -134,7 +134,7 @@ Ext.define('Ext.data.SortTypes', function() {
          */
         asInt: function(s) {
             var val = parseInt(String(s).replace(me.stripCommasRe, ''), 10);
-            
+
             return isNaN(val) ? 0 : val;
         }
     };

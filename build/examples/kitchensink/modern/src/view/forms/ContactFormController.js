@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.forms.ContactFormController', {
         this.callParent();
     },
 
-    hideDialog: function () {
+    hideDialog: function() {
         var dialog = this.dialog;
 
         if (dialog) {
@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.forms.ContactFormController', {
         }
     },
 
-    showDialog: function () {
+    showDialog: function() {
         var dialog = this.dialog,
             view;
 
@@ -33,11 +33,11 @@ Ext.define('KitchenSink.view.forms.ContactFormController', {
         dialog.show();
     },
 
-    onCancel: function () {
+    onCancel: function() {
         this.hideDialog();
     },
 
-    onOK: function () {
+    onOK: function() {
         var form = this.lookup('form');
 
         if (form.validate()) {

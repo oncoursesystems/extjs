@@ -46,14 +46,14 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
 
     constructor: function(config) {
         this.callParent([config]);
-        
+
         this.stickyHighlightItem = null;
         this.tooltipItems = [];
     },
-    
+
     destroy: function() {
         this.stickyHighlightItem = this.tooltipItems = null;
-        
+
         this.callParent();
     },
 
@@ -87,19 +87,19 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
                 item = me.getItemForEvent(e);
                 items = item ? [item] : [];
             }
-            
+
             for (i = 0, len = items.length; i < len; i++) {
                 item = items[i];
-                
+
                 // Items are returned top to down, so first item is the top one.
                 // Chart can only have one highlighted item.
                 if (i === 0 && item !== me.getChart().getHighlightItem()) {
                     me.highlight(item);
                     me.sync();
                 }
-                
+
                 tooltip = item.series.getTooltip();
-                
+
                 if (tooltip) {
                     tooltips.push(tooltip);
                 }
@@ -120,10 +120,10 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
                             // in which case we are just going to reposition them.
                             for (j = 0, jLen = tooltipItems.length; j < jLen; j++) {
                                 oldItem = tooltipItems[j];
-                                
+
                                 if (!Ext.Array.contains(items, oldItem)) {
                                     oldTooltip = oldItem.series.getTooltip();
-                                    
+
                                     if (!Ext.Array.contains(tooltips, oldTooltip)) {
                                         oldItem.series.hideTooltip(oldItem, true);
                                     }
@@ -138,7 +138,7 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
                             }
                         }
                     }
-                    
+
                     me.tooltipItems = items;
                 }
                 // No mouse hit - schedule a hide for hideDelay ms.
@@ -237,16 +237,16 @@ Ext.define('Ext.chart.interactions.ItemHighlight', {
         me.stickyHighlightItem = item;
         me.highlight(item);
     },
-    
+
     privates: {
         hideTooltips: function(items, force) {
             var item, i, len;
-            
+
             items = Ext.isArray(items) ? items : [items];
-            
+
             for (i = 0, len = items.length; i < len; i++) {
                 item = items[i];
-                
+
                 if (item && item.series && !item.series.destroyed) {
                     item.series.hideTooltip(item, force);
                 }

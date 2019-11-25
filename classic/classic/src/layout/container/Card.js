@@ -149,13 +149,13 @@ Ext.define('Ext.layout.container.Card', {
             // If they veto the activate, we have no active item
             if (activeItem.hasListeners.beforeactivate &&
                 activeItem.fireEvent('beforeactivate', activeItem) === false) {
- 
+
                 // We must null our activeItem reference, AND the one in our owning Container.
                 // Because upon layout invalidation, renderChildren will use this.getActiveItem
                 // which uses this.activeItem || this.owner.activeItem
                 activeItem = me.activeItem = me.owner.activeItem = null;
             }
-            
+
             // Item is to be the active one. Fire event after it is first layed out
             else if (activeItem.hasListeners.activate) {
                 activeItem.on({
@@ -298,7 +298,7 @@ Ext.define('Ext.layout.container.Card', {
         var wrap = arguments[0],
             items = this.getLayoutItems(),
             index = Ext.Array.indexOf(items, this.activeItem);
-            
+
         return items[index + 1] || (wrap ? items[0] : false);
     },
 
@@ -321,7 +321,7 @@ Ext.define('Ext.layout.container.Card', {
         var wrap = arguments[0],
             items = this.getLayoutItems(),
             index = Ext.Array.indexOf(items, this.activeItem);
-            
+
         return items[index - 1] || (wrap ? items[items.length - 1] : false);
     },
 

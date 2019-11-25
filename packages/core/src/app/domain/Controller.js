@@ -19,15 +19,15 @@ Ext.define('Ext.app.domain.Controller', {
 
     constructor: function() {
         var me = this;
-        
+
         me.callParent();
         me.monitor(Ext.app.BaseController);
     },
-    
+
     match: function(target, selector) {
         var result = false,
             alias = target.alias;
-        
+
         if (selector === '*') {
             result = true;
         }
@@ -40,7 +40,7 @@ Ext.define('Ext.app.domain.Controller', {
         else if (alias) {
             result = Ext.Array.indexOf(alias, this.prefix + selector) > -1;
         }
-        
+
         return result;
     }
 });

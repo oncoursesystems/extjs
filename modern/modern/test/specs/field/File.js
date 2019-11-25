@@ -1,17 +1,17 @@
-topSuite('Ext.field.File', function () {
+topSuite('Ext.field.File', function() {
     var field, fileButton;
 
-    function createField (cfg) {
+    function createField(cfg) {
         field = new Ext.field.File(cfg);
         fileButton = field.getFileButton();
     }
 
-    afterEach(function () {
+    afterEach(function() {
         field = fileButton = Ext.destroy(field);
     });
 
-    describe('fileButton', function () {
-        it('should set buttonElement as an input', function () {
+    describe('fileButton', function() {
+        it('should set buttonElement as an input', function() {
             createField({
                 name: 'testFileField'
             });
@@ -24,7 +24,7 @@ topSuite('Ext.field.File', function () {
             expect(input.name).toBe('testFileField');
         });
 
-        it('should set type of input to file', function () {
+        it('should set type of input to file', function() {
             createField();
 
             var input = fileButton.buttonElement.dom;

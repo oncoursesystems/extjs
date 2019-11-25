@@ -34,7 +34,7 @@ Ext.define('Ext.fx.Manager', {
         me.items = new Ext.util.MixedCollection();
         me.targetArr = {};
         me.mixins.queue.constructor.call(me);
-        
+
         // Do not use fireIdleEvent: false. Each tick of the TaskRunner needs to fire the idleEvent
         // in case an animation callback/listener adds a listener.
         me.taskRunner = new Ext.util.TaskRunner();
@@ -130,7 +130,7 @@ Ext.define('Ext.fx.Manager', {
                 interval: me.interval,
                 scope: me
             };
-            
+
             me.taskRunner.start(task);
         }
     },
@@ -143,9 +143,9 @@ Ext.define('Ext.fx.Manager', {
         var me = this,
             items = me.items,
             task = me.task;
-                
+
         items.removeAtKey(anim.id);
-        
+
         // Stop the timer if there are no more managed Anims
         if (task && !items.length) {
             me.taskRunner.stop(task);
@@ -168,7 +168,7 @@ Ext.define('Ext.fx.Manager', {
 
         // Single timestamp for all animations this interval
         me.timestamp = new Date();
-        
+
         // Loop to start any new animations first before looping to
         // execute running animations (which will also include all animations
         // started in this loop). This is a subtle difference from simply
@@ -181,15 +181,15 @@ Ext.define('Ext.fx.Manager', {
         // interdependent, which is often the case with certain Element fx.
         for (; i < len; i++) {
             anim = items[i];
-            
+
             if (anim.isReady()) {
                 me.startAnim(anim);
             }
         }
-        
+
         for (i = 0; i < len; i++) {
             anim = items[i];
-            
+
             if (anim.isRunning()) {
                 me.runAnim(anim);
             }
@@ -197,7 +197,7 @@ Ext.define('Ext.fx.Manager', {
 
         // Apply all the pending changes to their targets
         me.applyPendingAttrs();
-        
+
         // Avoid retaining target references after we are finished with anims
         me.targetArr = null;
     },
@@ -218,21 +218,21 @@ Ext.define('Ext.fx.Manager', {
         if (!anim) {
             return;
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             useCSS3 = me.useCSS3 && anim.target.type === 'element',
             elapsedTime = me.timestamp - anim.startTime,
             lastFrame = (elapsedTime >= anim.duration),
             target, o;
-            
+
         if (forceEnd) {
             elapsedTime = anim.duration;
             lastFrame = true;
         }
 
         target = me.collectTargetData(anim, elapsedTime, useCSS3, lastFrame);
-        
+
         // For CSS3 animation, we need to immediately set the first frame's attributes
         // without any transition to get a good initial state, then add the transition
         // properties and set the final attributes.
@@ -260,10 +260,10 @@ Ext.define('Ext.fx.Manager', {
             o.single = true;
             target.on(o);
         }
-        
+
         return target;
     },
-    
+
     jumpToEnd: function(anim) {
         var me = this,
             target, clear;
@@ -297,7 +297,7 @@ Ext.define('Ext.fx.Manager', {
     collectTargetData: function(anim, elapsedTime, useCSS3, isLastFrame) {
         var targetId = anim.target.getId(),
             target = this.targetArr[targetId];
-        
+
         if (!target) {
             // Create a thin wrapper around the target so that we can create a link between the
             // target element and its associated animations. This is important later when applying
@@ -330,10 +330,10 @@ Ext.define('Ext.fx.Manager', {
                 attrs: anim.runAnim(elapsedTime)
             }]
         };
-        
+
         return target;
     },
-    
+
     // Duplicating this code for performance reasons. We only want to apply the anims
     // to a single animation because we're hitting the end. It may be out of sequence from
     // the runner timer.
@@ -342,14 +342,14 @@ Ext.define('Ext.fx.Manager', {
 
         if (animWrap.attributes && anim.isRunning()) {
             target.el.setAttr(animWrap.attributes, false, animWrap.isLastFrame);
-                            
+
             // If this particular anim is at the last frame end it
             if (animWrap.isLastFrame) {
                 anim.lastFrame();
             }
         }
     },
-    
+
     /**
      * @private
      * Apply all pending attribute changes to their targets
@@ -357,22 +357,22 @@ Ext.define('Ext.fx.Manager', {
     applyPendingAttrs: function() {
         var targetArr = this.targetArr,
             target, targetId, animWrap, anim, animId;
-        
+
         // Loop through each target
         for (targetId in targetArr) {
             if (targetArr.hasOwnProperty(targetId)) {
                 target = targetArr[targetId];
-                
+
                 // Each target could have multiple associated animations, so iterate those
                 for (animId in target.anims) {
                     if (target.anims.hasOwnProperty(animId)) {
                         animWrap = target.anims[animId];
                         anim = animWrap.anim;
-                        
+
                         // If the animation has valid attributes, set them on the target
                         if (animWrap.attributes && anim.isRunning()) {
                             target.el.setAttr(animWrap.attributes, false, animWrap.isLastFrame);
-                            
+
                             // If this particular anim is at the last frame end it
                             if (animWrap.isLastFrame) {
                                 anim.lastFrame();
@@ -383,7 +383,7 @@ Ext.define('Ext.fx.Manager', {
             }
         }
     },
-    
+
     clear: function() {
         var me = this;
 

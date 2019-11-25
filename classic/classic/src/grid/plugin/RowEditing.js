@@ -71,7 +71,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
      * Note that this option is mutually exclusive with {@link #autoUpdate}.
      */
     autoCancel: true,
-    
+
     /**
      * @cfg {Boolean} [autoUpdate=false]
      * Set this to `true` to automatically confirm any pending changes when the row editor
@@ -100,7 +100,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
      * in the row editor. Set to false to prevent the tooltip from showing.
      */
     errorSummary: true,
-    
+
     /**
      * @cfg {String} [formAriaLabel="'Editing row {0}'"]
      * The ARIA label template for screen readers to announce when row editing starts.
@@ -109,7 +109,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
      * @locale
      */
     formAriaLabel: 'Editing row {0}',
-    
+
     /**
      * @cfg {Number} [formAriaLabelRowBase=2]
      * Screen readers will announce grid column header as first row of the ARIA table,
@@ -131,7 +131,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
 
         me.autoCancel = !!me.autoCancel;
         me.autoUpdate = !!me.autoUpdate;
-        
+
         if (me.autoUpdate) {
             me.autoCancel = false;
         }
@@ -155,12 +155,12 @@ Ext.define('Ext.grid.plugin.RowEditing', {
         Ext.destroy(this.editor);
         this.callParent();
     },
-    
+
     onBeforeReconfigure: function() {
         this.callParent(arguments);
         this.cancelEdit();
     },
-    
+
     onReconfigure: function(grid, store, columns) {
         var ed = this.editor;
 
@@ -189,7 +189,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
         var me = this,
             editor = me.getEditor(),
             context;
-            
+
         if (Ext.isEmpty(columnHeader)) {
             columnHeader = me.grid.getTopLevelVisibleColumnManager().getHeaderAtIndex(0);
         }
@@ -343,7 +343,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
     initEditor: function() {
         return new Ext.grid.RowEditor(this.initEditorConfig());
     },
-    
+
     initEditorConfig: function() {
         var me = this,
             grid = me.grid,
@@ -459,7 +459,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
     onColumnResize: function(ct, column, width) {
         var me = this,
             editor;
-        
+
         if (column.isHeader) {
             editor = me.getEditor();
 
@@ -543,11 +543,11 @@ Ext.define('Ext.grid.plugin.RowEditing', {
         }
 
         field = this.callParent([column, defaultField || def]);
-        
+
         if (field) {
             field.skipLabelForAttribute = true;
             field.ariaAttributes = field.ariaAttributes || {};
-            
+
             if (this.grid.hideHeaders) {
                 field.ariaAttributes['aria-label'] = column.text;
             }
@@ -555,7 +555,7 @@ Ext.define('Ext.grid.plugin.RowEditing', {
                 field.ariaAttributes['aria-labelledby'] = column.id;
             }
         }
-        
+
         return field;
     }
 });

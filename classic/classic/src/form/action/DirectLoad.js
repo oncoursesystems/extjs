@@ -53,11 +53,11 @@ Ext.define('Ext.form.action.DirectLoad', {
     extend: 'Ext.form.action.Load',
     alternateClassName: 'Ext.form.Action.DirectLoad',
     alias: 'formaction.directload',
-    
+
     requires: [
         'Ext.direct.Manager'
     ],
-    
+
     mixins: [
         'Ext.form.action.DirectAction'
     ],
@@ -70,9 +70,9 @@ Ext.define('Ext.form.action.DirectLoad', {
             metadata = me.metadata || form.metadata,
             timeout = me.timeout || form.timeout,
             args, fn;
-        
+
         fn = me.resolveMethod('load');
-        
+
         args = fn.directCfg.method.getArgs({
             params: me.getParams(),
             paramOrder: form.paramOrder,
@@ -82,7 +82,7 @@ Ext.define('Ext.form.action.DirectLoad', {
             callback: me.onComplete,
             scope: me
         });
-        
+
         fn.apply(window, args);
     },
 

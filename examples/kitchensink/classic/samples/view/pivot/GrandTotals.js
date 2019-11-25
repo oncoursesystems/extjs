@@ -17,10 +17,10 @@ Ext.define('KitchenSink.view.pivot.GrandTotals', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/GrandTotalsController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
@@ -29,19 +29,29 @@ Ext.define('KitchenSink.view.pivot.GrandTotals', {
             width: 600,
             height: 350,
             totalColumnWidth: 85,
-            companyColumnWidth: 100
+            companyColumnWidth: 100,
+            columnLines: true
         },
         neptune: {
             width: 750,
             height: 400,
             totalColumnWidth: 85,
-            companyColumnWidth: 100
+            companyColumnWidth: 100,
+            columnLines: true
         },
         graphite: {
             width: 750,
             height: 600,
             totalColumnWidth: 120,
-            companyColumnWidth: 120
+            companyColumnWidth: 120,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 750,
+            height: 600,
+            totalColumnWidth: 120,
+            companyColumnWidth: 120,
+            columnLines: false
         }
     },
     //</example>
@@ -50,6 +60,7 @@ Ext.define('KitchenSink.view.pivot.GrandTotals', {
     width: '${width}',
     height: '${height}',
     collapsible: true,
+    columnLines: '${columnLines}',
 
     matrix: {
         type: 'local',

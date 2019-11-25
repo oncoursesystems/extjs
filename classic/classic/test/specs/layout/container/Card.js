@@ -158,7 +158,7 @@ function() {
             expect(comp.items.items[0].getWidth()).toEqual(100);
             expect(comp.items.items[0].getHeight()).toEqual(100);
         });
-        
+
         it("should size the child using height and shrinkWrap width", function() {
             createCardContainer({
                 height: 100,
@@ -186,7 +186,7 @@ function() {
             expect(comp.getHeight()).toEqual(200);
         });
     });
-    
+
     describe('Deferred render', function() {
         it("should render all children", function() {
             createCardContainer({
@@ -214,7 +214,7 @@ function() {
             expect(comp.items.items[1].el).toBeDefined();
         });
     });
-    
+
     describe('Events', function() {
         it("should fire beforeactivate and activate on item 1", function() {
             var comp1BeforeActivated, comp1Activated;
@@ -675,7 +675,6 @@ function() {
 
             expect(comp.xtype).toBe(xtype);
         }
-
 
         afterEach(function() {
             item = scrollable = scrollPosition = null;

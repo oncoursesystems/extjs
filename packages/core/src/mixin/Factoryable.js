@@ -156,7 +156,7 @@ Ext.Factory.prototype = {
             if (!(suffix = suffix || defaultType || me.defaultType)) {
                 klass = me.defaultClass;
             }
-            
+
             //<debug>
             if (!suffix && !klass) {
                 Ext.raise('No type specified for ' + me.type + '.create');
@@ -171,7 +171,7 @@ Ext.Factory.prototype = {
                 if (!(klass = className && Manager.get(className))) {
                     return Manager.instantiateByAlias(alias, config);
                 }
-                
+
                 cache[suffix] = klass;
             }
         }
@@ -183,7 +183,7 @@ Ext.Factory.prototype = {
     fixNameFn: function(match) {
         return match.substring(1).toUpperCase();
     },
-    
+
     clearCache: function() {
         this.cache = {};
         this.instanceCache = {};
@@ -312,7 +312,7 @@ Ext.Factory.prototype = {
                         // they won't be created when using them):
                         if (aliases.hasOwnProperty('alias')) {
                             aliases = aliases.alias;
-                            
+
                             if (aliases) {
                                 reuse = aliases === type || aliases.indexOf(type) > -1;
                             }
@@ -331,7 +331,7 @@ Ext.Factory.prototype = {
 
             if (reuse) {
                 instance.setConfig(config);
-                
+
                 return instance;
             }
 
@@ -353,7 +353,7 @@ Ext.Factory.prototype = {
             }
 
             creatorMethod = creatorMethod || me.creator;
-            
+
             if (creator[creatorMethod]) {
                 config = creator[creatorMethod](config);
 
@@ -481,7 +481,7 @@ Ext.Factory.clearCaches = function() {
     for (key in Factory) {
         item = Factory[key];
         item = item.instance;
-        
+
         if (item) {
             item.clearCache();
         }
@@ -550,7 +550,7 @@ Ext.define('Ext.mixin.Factoryable', {
             dot, createFn;
 
         alias = alias && alias.length && alias[0];
-        
+
         if (alias && (dot = alias.lastIndexOf('.')) > 0) {
             config.type = alias.substring(0, dot);
             config.defaultType = alias.substring(dot + 1);

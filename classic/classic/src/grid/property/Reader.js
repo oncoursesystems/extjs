@@ -24,7 +24,7 @@ Ext.define('Ext.grid.property.Reader', {
         for (propName in dataObject) {
             if (dataObject.hasOwnProperty(propName)) {
                 val = dataObject[propName];
-                
+
                 if (this.isEditableValue(val)) {
                     result.records.push(new Model({
                         name: propName,
@@ -33,9 +33,9 @@ Ext.define('Ext.grid.property.Reader', {
                 }
             }
         }
-        
+
         result.total = result.count = result.records.length;
-        
+
         return new Ext.data.ResultSet(result);
     },
 

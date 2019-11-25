@@ -327,7 +327,7 @@ Ext.define('Ext.grid.filters.Filters', {
             }
 
             menuItem.setVisible(!!filter);
-            
+
             if (me.sep) {
                 me.sep.setVisible(!!filter);
             }
@@ -369,7 +369,7 @@ Ext.define('Ext.grid.filters.Filters', {
         for (item in filterMenuItem) {
             filterMenuItem[item].destroy();
         }
-        
+
         this.callParent();
     },
 
@@ -398,7 +398,6 @@ Ext.define('Ext.grid.filters.Filters', {
         var len = list.items.length,
             columnManager = this.grid.columnManager,
             i, item, header, filter;
-
 
         for (i = 0; i < len; i++) {
             item = list.items[i];

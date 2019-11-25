@@ -21,11 +21,11 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
             }
         }, cfg));
     }
-    
+
     function createLargeProxy(page) {
         var largeDataSet = [],
             i;
-            
+
         for (i = 1; i <= 100; ++i) {
             largeDataSet.push({
                 id: i,
@@ -39,7 +39,7 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
             enablePaging: page
         });
     }
-    
+
     function createOperation() {
         operation = new Ext.data.operation.Read({
         });
@@ -65,24 +65,24 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
         beforeEach(function() {
             createSmallProxy();
             createOperation();
-        
+
             proxy.read(operation);
             records = operation.getRecords();
         });
-    
+
         it("should read the records correctly", function() {
             expect(records.length).toEqual(2);
-        
+
             expect(records[0].get('phone')).toEqual('555 1234');
         });
-        
+
         it("should keep raw data by default", function() {
             var reader = proxy.getReader();
-            
+
             expect(reader.rawData).toBeDefined();
         });
     });
-    
+
     describe("filtering", function() {
         it("should filter data", function() {
             createLargeProxy();
@@ -92,11 +92,11 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
                     return rec.getId() % 2 === 0;
                 }
             })]);
-            
+
             proxy.read(operation);
             expect(operation.getRecords().length).toBe(50);
         });
-        
+
         it("should filter with paging", function() {
             createLargeProxy();
             createOperation();
@@ -107,7 +107,7 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
             })]);
             operation.setStart(0);
             operation.setLimit(20);
-            
+
             proxy.read(operation);
             expect(operation.getRecords().length).toBe(9);
             expect(operation.getResultSet().getTotal()).toBe(9);
@@ -116,7 +116,7 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
         it('should call onCollectionAdd on receipt of autoLoad data from synchronous proxies', function() {
             var StoreSubclass = Ext.define(null, {
                 extend: 'Ext.data.Store',
-                
+
                 onCollectionAddCallCount: 0,
 
                 onCollectionAdd: function() {
@@ -135,7 +135,7 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
             expect(store.onCollectionAddCallCount).toBe(1);
         });
     });
-    
+
     describe("sorting", function() {
         it("should apply sorting", function() {
             createLargeProxy();
@@ -145,12 +145,12 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
                 property: 'id',
                 direction: 'DESC'
             })]);
-            
+
             proxy.read(operation);
             expect(operation.getRecords()[0].getId()).toBe(100);
         });
     });
-    
+
     describe("paging", function() {
         it("should page the data", function() {
             createLargeProxy(true);
@@ -158,14 +158,14 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
             operation.setStart(0);
             operation.setLimit(20);
             proxy.read(operation);
-            
+
             records = operation.getRecords();
             expect(operation.getResultSet().getTotal()).toBe(100);
             expect(records[0].getId()).toBe(1);
             expect(records[records.length - 1].getId()).toBe(20);
         });
     });
-    
+
     describe("with a store", function() {
         var store;
 
@@ -174,12 +174,12 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
                 model: 'spec.User'
             }, cfg));
         }
-        
+
         afterEach(function() {
             store.destroy();
             store = null;
         });
-        
+
         it("should load the store with correctly paged data", function() {
             createLargeProxy(true);
             createStore({
@@ -204,7 +204,7 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
             store.load();
             expect(store.getCount()).toBe(25);
         });
-        
+
         it("should load sorted data", function() {
             createSmallProxy();
             createStore({
@@ -236,7 +236,7 @@ topSuite("Ext.data.proxy.Memory", ['Ext.data.ArrayStore'], function() {
                 }
             });
             expect(store.getCount()).toBe(25);
-            
+
             store.removeAll();
             expect(store.getCount()).toBe(0);
 

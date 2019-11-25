@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.charts.line.MarkedSpline', {
     xtype: 'line-marked-spline',
     controller: 'line-marked-spline',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.charts.line.MarkedSpline', {
         type: 'Store',
         path: 'app/store/Spline.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     tbar: [

@@ -38,7 +38,7 @@ Ext.define('Ext.data.ErrorCollection', {
             if (field.validate && !field.validate.$nullFn) {
                 before = me.length;
                 msg = field.validate(val, null, me, record);
-                
+
                 if (before === me.length && msg !== true) {
                     me.add(name, msg);
                 }
@@ -72,11 +72,11 @@ Ext.define('Ext.data.ErrorCollection', {
         }
 
         current = me.get(key);
-        
+
         if (current) {
             if (Ext.isArray(current)) {
                 current.push(obj);
-                
+
                 return current;
             }
 

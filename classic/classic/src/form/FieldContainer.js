@@ -99,7 +99,7 @@ Ext.define('Ext.form.FieldContainer', {
     requires: [
         'Ext.layout.component.field.FieldContainer'
     ],
-    
+
     mixins: {
         labelable: 'Ext.form.Labelable',
         fieldAncestor: 'Ext.form.FieldAncestor'
@@ -108,7 +108,7 @@ Ext.define('Ext.form.FieldContainer', {
     componentLayout: 'fieldcontainer',
     componentCls: Ext.baseCSSPrefix + 'form-fieldcontainer',
     shrinkWrap: true,
-    
+
     autoEl: {
         tag: 'div',
         role: 'presentation'
@@ -143,7 +143,7 @@ Ext.define('Ext.form.FieldContainer', {
     combineErrors: false,
 
     maskOnDisable: false,
-    
+
     // If we allow this to mark with the invalidCls it will cascade to all
     // child fields, let them handle themselves
     invalidCls: '',
@@ -168,7 +168,7 @@ Ext.define('Ext.form.FieldContainer', {
         // Init mixins
         me.initLabelable();
         me.initFieldAncestor();
-        
+
         me.callParent();
         me.initMonitor();
     },
@@ -184,27 +184,27 @@ Ext.define('Ext.form.FieldContainer', {
             me.layout.type === 'absolute' && !me.hideLabel && me.labelAlign !== 'top') {
             labelItem.x += (me.labelWidth + me.labelPad);
         }
-        
+
         me.callParent(arguments);
-        
+
         if (labelItem.isLabelable && me.combineLabels) {
             labelItem.oldHideLabel = labelItem.hideLabel;
             labelItem.hideLabel = true;
         }
-        
+
         me.updateLabel();
     },
 
     onRemove: function(labelItem, isDestroying) {
         var me = this;
-        
+
         me.callParent(arguments);
-        
+
         if (!isDestroying) {
             if (labelItem.isLabelable && me.combineLabels) {
                 labelItem.hideLabel = labelItem.oldHideLabel;
             }
-            
+
             me.updateLabel();
         }
     },
@@ -215,13 +215,13 @@ Ext.define('Ext.form.FieldContainer', {
 
         data.containerElCls = me.containerElCls;
         data = Ext.applyIf(data, me.getLabelableRenderData());
-        
+
         if (me.labelAlign === 'top' || me.msgTarget === 'under') {
             data.extraFieldBodyCls += ' ' + Ext.baseCSSPrefix + 'field-container-body-vertical';
         }
-        
+
         data.tipAnchorTarget = me.id + '-containerEl';
-        
+
         return data;
     },
 
@@ -234,13 +234,13 @@ Ext.define('Ext.form.FieldContainer', {
      */
     getFieldLabel: function() {
         var label = this.fieldLabel || '';
-        
+
         if (!label && this.combineLabels) {
             label = Ext.Array.map(this.query('[isFieldLabelable]'), function(field) {
                 return field.getFieldLabel();
             }).join(this.labelConnector);
         }
-        
+
         return label;
     },
 
@@ -248,7 +248,7 @@ Ext.define('Ext.form.FieldContainer', {
         var ret = this.initRenderData();
 
         Ext.apply(ret, this.subTplData);
-        
+
         return ret;
     },
 
@@ -262,7 +262,7 @@ Ext.define('Ext.form.FieldContainer', {
         }
 
         html = tpl.apply(me.getSubTplData(fieldData));
-        
+
         return html;
     },
 
@@ -273,12 +273,11 @@ Ext.define('Ext.form.FieldContainer', {
     updateLabel: function() {
         var me = this,
             label = me.labelEl;
-            
+
         if (label) {
             me.setFieldLabel(me.getFieldLabel());
         }
     },
-
 
     /**
      * @private
@@ -352,11 +351,11 @@ Ext.define('Ext.form.FieldContainer', {
 
         initRenderTpl: function() {
             var me = this;
-            
+
             if (!me.hasOwnProperty('renderTpl')) {
                 me.renderTpl = me.lookupTpl('labelableRenderTpl');
             }
-            
+
             return me.callParent();
         }
     }

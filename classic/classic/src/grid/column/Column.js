@@ -688,7 +688,7 @@ Ext.define('Ext.grid.column.Column', {
      * **Note:** The {@link Ext.form.field.HtmlEditor HtmlEditor} field is not a
      * supported editor field type.
      */
-    
+
     /**
      * @cfg {String} [dirtyText="Cell value has been edited"]
      * This text will be announced by Assistive Technologies such as screen readers when
@@ -962,7 +962,7 @@ Ext.define('Ext.grid.column.Column', {
             if (me.dataIndex) {
                 Ext.raise('Ext.grid.column.Column: Group header may not accept a dataIndex');
             }
-            
+
             if ((me.width && me.width !== Ext.grid.header.Container.prototype.defaultWidth)) {
                 Ext.raise('Ext.grid.column.Column: Group header does not support ' +
                           'setting explicit widths. A group header either shrinkwraps ' +
@@ -988,7 +988,7 @@ Ext.define('Ext.grid.column.Column', {
                 me.minWidth = me.minWidth || Ext.grid.plugin.HeaderResizer.prototype.minColWidth;
             }
         }
-        
+
         me.addCls(Ext.baseCSSPrefix + 'column-header-align-' + me.getMappedAlignment(me.align));
 
         // Set up the renderer types: 'renderer', 'editRenderer', and 'summaryRenderer'
@@ -999,7 +999,7 @@ Ext.define('Ext.grid.column.Column', {
         // Initialize as a HeaderContainer
         me.callParent();
     },
-    
+
     beforeLayout: function() {
         var me = this,
             items = me.items,
@@ -1395,11 +1395,11 @@ Ext.define('Ext.grid.column.Column', {
         if (me.rendered) {
             grid = me.getView().ownerGrid;
             me.textInnerEl.setHtml(text);
-            
+
             me.titleEl.toggleCls(
                 Ext.baseCSSPrefix + 'column-header-inner-empty', me.isEmptyText(text)
             );
-            
+
             grid.syncHeaderVisibility();
         }
     },
@@ -1529,7 +1529,7 @@ Ext.define('Ext.grid.column.Column', {
     doDestroy: function() {
         // force destroy on the textEl, IE reports a leak
         Ext.destroy(this.field, this.editor);
-        
+
         this.callParent();
     },
 
@@ -1651,7 +1651,7 @@ Ext.define('Ext.grid.column.Column', {
         // Tap on the resize zone triggers the menu
         if (e.pointerType === 'touch') {
             prevSibling = me.previousSibling(':not([hidden])');
-            
+
             // Tap on right edge, activate this header
             if (!me.menuDisabled) {
                 tapMargin = parseInt(me.triggerEl.getStyle('width'), 10);
@@ -1738,7 +1738,7 @@ Ext.define('Ext.grid.column.Column', {
         // Suspend layouts in case multiple views depend upon this grid's store
         // (eg lockable assemblies)
         Ext.suspendLayouts();
-        
+
         if (sorter) {
             currentDirection = sorter.getDirection();
 
@@ -2307,7 +2307,7 @@ Ext.define('Ext.grid.column.Column', {
      * this column.  Returns false if there is no field associated with the
      * {@link Ext.grid.column.Column Column}.
      */
-    
+
     /**
      * @method setEditor
      * Sets the form field to be used for editing.

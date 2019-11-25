@@ -144,7 +144,7 @@ Ext.define('Ext.drag.Source', {
          * longpress. See {@link Ext.event.Event#pointerType} for available types.
          */
         activateOnLongPress: false,
-        
+
         /**
          * @cfg {String} activeCls
          * A css class to add to the {@link #element} while dragging is
@@ -204,7 +204,7 @@ Ext.define('Ext.drag.Source', {
      * @param {Ext.drag.Info} info The drag info.
      * @param {Ext.event.Event} event The event.
      */
-    
+
     /**
      * @event dragstart
      * Fires when the drag starts on this source.
@@ -213,7 +213,7 @@ Ext.define('Ext.drag.Source', {
      * @param {Ext.drag.Info} info The drag info.
      * @param {Ext.event.Event} event The event.
      */
-    
+
     /**
      * @event dragmove
      * Fires continuously as this source is dragged.
@@ -222,7 +222,7 @@ Ext.define('Ext.drag.Source', {
      * @param {Ext.drag.Info} info The drag info.
      * @param {Ext.event.Event} event The event.
      */
-    
+
     /**
      * @event dragend
      * Fires when the drag ends on this source.
@@ -231,7 +231,7 @@ Ext.define('Ext.drag.Source', {
      * @param {Ext.drag.Info} info The drag info.
      * @param {Ext.event.Event} event The event.
      */
-    
+
     /**
      * @event dragcancel
      * Fires when a drag is cancelled.
@@ -240,7 +240,7 @@ Ext.define('Ext.drag.Source', {
      * @param {Ext.drag.Info} info The drag info.
      * @param {Ext.event.Event} event The event.
      */
-    
+
     /**
      * @property {Boolean} dragging
      * `true` if this source is currently dragging.
@@ -347,7 +347,7 @@ Ext.define('Ext.drag.Source', {
         if (typeof activateOnLongPress === 'string') {
             activateOnLongPress = [activateOnLongPress];
         }
-        
+
         return activateOnLongPress;
     },
 
@@ -359,7 +359,7 @@ Ext.define('Ext.drag.Source', {
 
     updateActiveCls: function(cls, oldCls) {
         var el;
-        
+
         if (this.dragging) {
             el = this.getElement();
 
@@ -379,14 +379,14 @@ Ext.define('Ext.drag.Source', {
                     element: constrain
                 };
             }
-            
+
             constrain = Ext.apply({
                 source: this
             }, constrain);
-            
+
             constrain = Ext.Factory.dragConstraint(constrain);
         }
-        
+
         return constrain;
     },
 
@@ -402,7 +402,7 @@ Ext.define('Ext.drag.Source', {
                 panX: false,
                 panY: false
             });
-            
+
             // Suppress translation and delegation for this to avoid event firing on
             // synthetic dragstart published by Gesture from pointermove. We need the
             // native event here.
@@ -422,7 +422,7 @@ Ext.define('Ext.drag.Source', {
         if (proxy) {
             proxy = Ext.Factory.dragproxy(proxy);
         }
-        
+
         return proxy;
     },
 
@@ -430,7 +430,7 @@ Ext.define('Ext.drag.Source', {
         if (oldProxy) {
             oldProxy.destroy();
         }
-        
+
         if (proxy) {
             proxy.setSource(this);
         }
@@ -453,7 +453,7 @@ Ext.define('Ext.drag.Source', {
         me.manager = me.initialEvent = null;
         me.setConstrain(null);
         me.setProxy(null);
-        
+
         me.callParent();
     },
 
@@ -485,7 +485,7 @@ Ext.define('Ext.drag.Source', {
 
         canActivateOnLongPress: function(e) {
             var activate = this.getActivateOnLongPress();
-            
+
             /* eslint-disable-next-line max-len */
             return !!(activate && (activate === true || Ext.Array.contains(activate, e.pointerType)));
         },
@@ -509,7 +509,7 @@ Ext.define('Ext.drag.Source', {
             if (proxyEl) {
                 proxyEl.removeCls(me.draggingCls);
             }
-            
+
             proxy.cleanup(info);
 
             me.dragging = false;
@@ -536,11 +536,11 @@ Ext.define('Ext.drag.Source', {
                     delegate: handle
                 };
             }
-            
+
             if (this.getActivateOnLongPress()) {
                 o.longpress = 'handleLongPress';
             }
-            
+
             return o;
         },
 
@@ -558,9 +558,9 @@ Ext.define('Ext.drag.Source', {
             if (manager) {
                 manager.onDragCancel(info, e);
             }
-            
+
             me.onDragCancel(info);
-            
+
             if (me.hasListeners.dragcancel) {
                 me.fireEvent('dragcancel', me, info, e);
             }
@@ -593,17 +593,17 @@ Ext.define('Ext.drag.Source', {
             if (manager) {
                 manager.onDragEnd(info, e);
             }
-            
+
             me.onDragEnd(info);
-            
+
             if (me.hasListeners.dragend) {
                 me.fireEvent('dragend', me, info, e);
             }
-            
+
             Ext.fireEvent('dragend', me, info, e);
 
             proxy = proxy.instance;
-            
+
             if (revert && proxy) {
                 proxy.dragRevert(info, me.revertCls, revert, function() {
                     me.dragCleanup(info);
@@ -633,13 +633,13 @@ Ext.define('Ext.drag.Source', {
             e.claimGesture();
 
             info.update(e);
-            
+
             if (manager) {
                 manager.onDragMove(info, e);
             }
-            
+
             me.onDragMove(info);
-            
+
             if (me.hasListeners.dragmove) {
                 me.fireEvent('dragmove', me, info, e);
             }
@@ -687,38 +687,38 @@ Ext.define('Ext.drag.Source', {
 
             if (cancel) {
                 me.dragCleanup();
-                
+
                 return false;
             }
 
             e.claimGesture();
             me.dragging = true;
-        
+
             cls = me.getActiveCls();
             el = me.getElement();
-            
+
             if (cls) {
                 el.addCls(cls);
             }
-            
+
             proxyEl = info.proxy.element;
-            
+
             if (proxyEl) {
                 proxyEl.addCls(me.draggingCls);
             }
 
             info.update(e);
-            
+
             if (manager) {
                 manager.onDragStart(info, e);
             }
-            
+
             me.onDragStart(info);
-            
+
             if (hasListeners.dragstart) {
                 me.fireEvent('dragstart', me, info, e);
             }
-            
+
             Ext.fireEvent('dragstart', me, info, e);
         },
 

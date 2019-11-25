@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.charts.bar3d.Negative', {
     xtype: 'bar-negative-3d',
     requires: ['Ext.chart.theme.Muted'],
     controller: 'bar-negative-3d',
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.charts.bar3d.Negative', {
     }],
     bodyStyle: 'background: transparent !important',
     layout: 'fit',
-    // </example>
+    //</example>
 
     width: 650,
     height: 600,

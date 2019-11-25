@@ -8,13 +8,13 @@ Ext.define('KitchenSink.view.d3.hierarchy.WordsController', {
 
     textUrl: 'data/treasure_island.txt',
 
-    init: function () {
+    init: function() {
         var me = this,
             pack = me.lookup('pack');
 
         Ext.Ajax.request({
             url: me.textUrl
-        }).then(function (response) {
+        }).then(function(response) {
             var text = response
                     .responseText
                     .replace(/[,|.|:|;|_|!|?|\n|"]/g, ' ') // replace unwanted characters with spaces
@@ -38,7 +38,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.WordsController', {
         });
     },
 
-    countWords: function (words, previous) {
+    countWords: function(words, previous) {
         var ln = words.length - 1, // last word doesn't count :p
             map = {},
             i, word, entry;
@@ -53,7 +53,8 @@ Ext.define('KitchenSink.view.d3.hierarchy.WordsController', {
                 if (!previous) {
                     entry.nextList.push(words[i + 1]);
                 }
-            } else {
+            }
+            else {
                 entry = map[word] = {
                     word: previous && previous.hasOwnProperty(word) ? previous[word] : word,
                     count: 1
@@ -72,10 +73,11 @@ Ext.define('KitchenSink.view.d3.hierarchy.WordsController', {
     // in the following format: { <word>: Entry }, where the Entry is:
     //
     // Entry {
-    //     word: String              // the word
-    //     count: Number             // how often the word occurs in the text
-    //     topNextWord: Object       // most popular next word (in the same format as in the 'nextMap')
-    //     nextList: String[         // array of all words that follow this word (can contain duplicates)
+    //     word: String          // the word
+    //     count: Number         // how often the word occurs in the text
+    //     topNextWord: Object   // most popular next word (in the same format as in the 'nextMap')
+    //     // array of all words that follow this word (can contain duplicates)
+    //     nextList: String[
     //         <nextWord>,
     //         <nextWord>,
     //         ...
@@ -88,7 +90,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.WordsController', {
     //     }
     // }
 
-    getTopWords: function (map, count) {
+    getTopWords: function(map, count) {
         var words = [],
             word, top, i, ln,
             nextMap, nextKey, nextValue,
@@ -98,7 +100,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.WordsController', {
             words.push(map[word]);
         }
 
-        words.sort(function (w1, w2) {
+        words.sort(function(w1, w2) {
             return w2.count - w1.count;
         });
 
@@ -114,7 +116,8 @@ Ext.define('KitchenSink.view.d3.hierarchy.WordsController', {
 
                 if (top.indexOf(nextValue.word) === -1) {
                     delete nextMap[nextKey];
-                } else {
+                }
+                else {
                     if (nextValue.count > max) {
                         max = nextValue.count;
                         topNextWord = nextValue;
@@ -128,7 +131,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.WordsController', {
         return top;
     },
 
-    onTooltip: function (component, tooltip, node, element, event) {
+    onTooltip: function(component, tooltip, node, element, event) {
         var me = this,
             store = component.getStore(),
             record = node.data,
@@ -138,10 +141,11 @@ Ext.define('KitchenSink.view.d3.hierarchy.WordsController', {
             nodes = me.nodes || (me.nodes = pack.getRenderedNodes()),
             nextMap = record.data.nextMap,
             topNextWord = record.data.topNextWord,
-            tip = 'The word <strong>' + word + '</strong> is used ' + count + ' times.'
-                + '<br>It is most often followed by the <strong>' + topNextWord.word.word + '</strong> word'
-                + '<br>for a total of ' + topNextWord.count + ' times.',
-            nextKey, nextValue, entry, record;
+            tip = 'The word <strong>' + word + '</strong> is used ' +
+                   count + ' times.' + '<br>It is most often followed ' +
+                   'by the <strong>' + topNextWord.word.word + '</strong> word' +
+                '<br>for a total of ' + topNextWord.count + ' times.',
+            nextKey, nextValue, entry;
 
         // Create a color scale that will give us a shade of pink depending on how
         // often a given word follows the howevered word.

@@ -3,11 +3,11 @@
  */
 Ext.define('Ext.mixin.Focusable', {
     mixinId: 'focusable',
-    
+
     $isFocusableEntity: true,
-    
+
     // tabIndex config is now defined in Ext.Component
-    
+
     /**
      * @property {Boolean} focusable
      * @readonly
@@ -30,7 +30,7 @@ Ext.define('Ext.mixin.Focusable', {
      * @readonly
      */
     hasFocus: false,
-    
+
     /**
      * @property {Boolean} containsFocus `true` if this currently focused element
      * is within this Component's or Container's hierarchy. This property is set separately
@@ -58,13 +58,13 @@ Ext.define('Ext.mixin.Focusable', {
      * @readonly
      */
     containsFocus: false,
-    
+
     /**
      * @cfg {String} [focusCls='x-focused'] CSS class that will be added to focused
      * component's {@link #focusClsEl}, and removed when component blurs.
      */
     focusCls: Ext.baseCSSPrefix + 'focused',
-    
+
     /**
      * @property {Ext.dom.Element} focusEl The element that will be focused
      * when {@link #method!focus} method is called on this component. Usually this is
@@ -72,12 +72,12 @@ Ext.define('Ext.mixin.Focusable', {
      * Tab key.
      */
     focusEl: 'el',
-    
+
     /**
      * @property {Ext.dom.Element} focusClsEl The element that will have the
      * {@link #focusCls} applied when component's {@link #focusEl} is focused.
      */
-    
+
     /**
      * @event focus
      * Fires when this Component's {@link #focusEl} receives focus.
@@ -91,21 +91,21 @@ Ext.define('Ext.mixin.Focusable', {
      * @param {Ext.Component} this
      * @param {Ext.event.Event} event The blur event.
      */
-    
+
     /**
      * @event focusenter
      * Fires when focus enters this Component's hierarchy.
      * @param {Ext.Component} this
      * @param {Ext.event.Event} event The focusenter event.
      */
-    
+
     /**
      * @event focusleave
      * Fires when focus leaves this Component's hierarchy.
      * @param {Ext.Component} this
      * @param {Ext.event.Event} event The focusleave event.
      */
-    
+
     /**
      * Returns the main focus holder element associated with this Focusable, i.e.
      * the element that will be focused when Focusable's {@link #method!focus} method is
@@ -116,10 +116,10 @@ Ext.define('Ext.mixin.Focusable', {
      */
     getFocusEl: function(/* private e */) {
         var focusEl = this.focusEl;
-        
+
         return focusEl && focusEl.dom ? focusEl : null;
     },
-    
+
     /**
      * Returns the element used to apply focus styling CSS class when Focusable's
      * {@link #focusEl} becomes focused. By default it is {@link #focusEl}.
@@ -134,14 +134,14 @@ Ext.define('Ext.mixin.Focusable', {
     getFocusClsEl: function() {
         return this.getFocusEl();
     },
-    
+
     /**
      * Template method to do any Focusable related initialization that
      * does not involve event listeners creation.
      * @protected
      */
     initFocusable: Ext.emptyFn,
-    
+
     /**
      * Template method to do any event listener initialization for a Focusable.
      * This generally happens after the focusEl is available.
@@ -154,10 +154,10 @@ Ext.define('Ext.mixin.Focusable', {
     },
 
     enableFocusable: Ext.emptyFn,
-    
+
     disableFocusable: function() {
         var me = this;
-        
+
         // If this is disabled while focused, by default, focus would return to document.body.
         // This must be avoided, both for the convenience of keyboard users, and also
         // for when focus is tracked within a tree, such as below an expanded ComboBox.
@@ -170,13 +170,13 @@ Ext.define('Ext.mixin.Focusable', {
 
     destroyFocusable: function() {
         var me = this;
-        
+
         Ext.destroy(me.focusListeners);
-        
+
         me.focusListeners = me.focusEnterEvent = me.focusTask = null;
         me.focusEl = me.ariaEl = null;
     },
-    
+
     /**
      * Determine if this Focusable can receive focus at this time.
      *
@@ -193,13 +193,13 @@ Ext.define('Ext.mixin.Focusable', {
     isFocusable: function(deep) {
         var me = this,
             focusEl;
-        
+
         if (!me.focusable && (!me.isContainer || !deep)) {
             return false;
         }
-        
+
         focusEl = me.getFocusEl();
-        
+
         if (focusEl && me.canFocus()) {
 
             // getFocusEl might return a Component if a Container wishes to
@@ -207,7 +207,7 @@ Ext.define('Ext.mixin.Focusable', {
             // implement isFocusable, so always ask that.
             return focusEl && !focusEl.destroyed && focusEl.isFocusable(deep);
         }
-        
+
         return false;
     },
 
@@ -220,13 +220,13 @@ Ext.define('Ext.mixin.Focusable', {
      */
     isDestructing: function() {
         var c;
-        
+
         for (c = this; c; c = c.getRefOwner()) {
             if (c.destroying || c.destroyed) {
                 return true;
             }
         }
-        
+
         return false;
     },
 
@@ -235,7 +235,7 @@ Ext.define('Ext.mixin.Focusable', {
             ownerFC = me.ownerFocusableContainer,
             focusableIfDisabled = ownerFC && ownerFC.allowFocusingDisabledChildren,
             canFocus;
-        
+
         // Containers may have focusable children while being non-focusable
         // themselves; this is why we only account for me.focusable for
         // ordinary Components here and below.
@@ -244,10 +244,10 @@ Ext.define('Ext.mixin.Focusable', {
                 (me.isContainer || me.focusable) &&
                 (!me.isDisabled() || focusableIfDisabled) &&
                 (skipVisibility || me.isVisible(true));
-        
+
         return canFocus || (includeFocusTarget && !!me.findFocusTarget());
     },
-    
+
     /**
      * Try to focus this component.
      *
@@ -268,7 +268,7 @@ Ext.define('Ext.mixin.Focusable', {
         if ((!me.focusable && !me.isContainer) || me.destroyed || me.destroying) {
             return false;
         }
-        
+
         // Assignment in conditional here to fall through to else block
         // if me.canFocus() returns true but there is no focus target
         if (me.canFocus() && (focusTarget = me.getFocusEl())) {
@@ -313,7 +313,7 @@ Ext.define('Ext.mixin.Focusable', {
             // This must be avoided, both for the convenience of keyboard users, and also
             // for when focus is tracked within a tree, such as below an expanded ComboBox.
             focusTarget = me.findFocusTarget();
-            
+
             if (focusTarget && focusTarget !== me) {
                 return focusTarget.focus.apply(focusTarget, arguments);
             }
@@ -331,27 +331,27 @@ Ext.define('Ext.mixin.Focusable', {
     onBlur: function(e) {
         var me = this,
             container = me.ownerFocusableContainer;
-        
+
         me.hasFocus = false;
-        
+
         if (me.beforeBlur && !me.beforeBlur.$emptyFn) {
             me.beforeBlur(e);
         }
-        
+
         if (container) {
             container.beforeFocusableChildBlur(me, e);
         }
-        
+
         me.removeFocusCls(e);
-        
+
         if (me.hasListeners.blur) {
             me.fireEvent('blur', me, e);
         }
-        
+
         if (me.postBlur && !me.postBlur.$emptyFn) {
             me.postBlur(e);
         }
-        
+
         if (container) {
             container.afterFocusableChildBlur(me, e);
         }
@@ -368,28 +368,28 @@ Ext.define('Ext.mixin.Focusable', {
             if (me.beforeFocus && !me.beforeFocus.$emptyFn) {
                 me.beforeFocus(e);
             }
-            
+
             if (container) {
                 container.beforeFocusableChildFocus(me, e);
             }
-            
+
             me.addFocusCls(e);
-            
+
             if (!me.hasFocus) {
                 me.hasFocus = true;
                 me.fireEvent('focus', me, e);
             }
-            
+
             if (me.postFocus && !me.postFocus.$emptyFn) {
                 me.postFocus(e);
             }
-            
+
             if (container) {
                 container.afterFocusableChildFocus(me, e);
             }
         }
     },
-    
+
     /**
      * Return the actual tabIndex for this Focusable.
      *
@@ -398,25 +398,25 @@ Ext.define('Ext.mixin.Focusable', {
     getTabIndex: function() {
         var me = this,
             el, index;
-        
+
         if (!me.focusable) {
             return;
         }
-        
+
         el = me.getFocusEl();
-        
+
         if (el) {
             // getFocusEl may return a child Widget or Component
             if (el.$isFocusableEntity) {
                 index = el.getTabIndex();
             }
-            
+
             else if (el.isElement && el.dom) {
                 // We can't query el.dom.tabIndex because IE8 will return 0
                 // when tabIndex attribute is not present, and Chrome will
                 // return -1. Can't trust a browser to do a simplest thing. :/
                 index = el.dom.getAttribute('tabIndex');
-                
+
                 // This contraption is here because we can't simply coerce
                 // the returned attribute value to a number. If the attribute
                 // is not present, the value returned will be null, and coercing
@@ -425,7 +425,7 @@ Ext.define('Ext.mixin.Focusable', {
                     index -= 0;
                 }
             }
-            
+
             // A component can be configured with el: '#id' to look up
             // its main element from the DOM rather than render it; in
             // such case getTabIndex() may happen to be called before
@@ -434,14 +434,14 @@ Ext.define('Ext.mixin.Focusable', {
                 return;
             }
         }
-        
+
         if (typeof index !== 'number') {
             index = me.tabIndex;
         }
-        
+
         return index;
     },
-    
+
     /**
      * Set the tabIndex property for this Focusable. If the focusEl
      * is available, set tabIndex attribute on it, too.
@@ -455,14 +455,14 @@ Ext.define('Ext.mixin.Focusable', {
             focusableIfDisabled = ownerFC && ownerFC.allowFocusingDisabledChildren,
             wasFocusable = me.focusable,
             el;
-        
+
         // See comments for definition of forceTabIndex as to why this is needed
         // Return early if not focusable unless we are either forcing the tabIndex to
         // be set, or we are removing the tabIndex attribute.
         if (!wasFocusable && !(me.forceTabIndex || newTabIndex == null)) {
             return;
         }
-        
+
         me.tabIndex = newTabIndex;
 
         // We must not do this if we are destroyed, or if we are incapable of being focused.
@@ -477,13 +477,13 @@ Ext.define('Ext.mixin.Focusable', {
         me.focusable = true;
         el = focusEl || me.getFocusEl();
         me.focusable = wasFocusable;
-        
+
         if (el) {
             // getFocusEl may return a child Widget or Component
             if (el.$isFocusableEntity) {
                 el.setTabIndex(newTabIndex);
             }
-            
+
             // Or if a component is configured with el: '#id', it may
             // still be a string by the time setTabIndex is called from
             // owner FocusableContainer.
@@ -493,7 +493,7 @@ Ext.define('Ext.mixin.Focusable', {
             }
         }
     },
-    
+
     /**
      * @template
      * @protected
@@ -511,7 +511,7 @@ Ext.define('Ext.mixin.Focusable', {
      */
     onFocusEnter: function(e) {
         var me = this;
-        
+
         // We DO NOT check if `me` is focusable here. The reason is that
         // non-focusable containers need to track focus entering their
         // children so that revertFocus would work if these children
@@ -524,7 +524,7 @@ Ext.define('Ext.mixin.Focusable', {
         // we can do appropriate things when asked to revertFocus
         me.focusEnterEvent = e;
         me.containsFocus = true;
-        
+
         if (me.hasListeners.focusenter) {
             me.fireEvent('focusenter', me, e);
         }
@@ -551,7 +551,7 @@ Ext.define('Ext.mixin.Focusable', {
 
         me.focusEnterEvent = null;
         me.containsFocus = false;
-        
+
         if (me.hasListeners.focusleave) {
             me.fireEvent('focusleave', me, e);
         }
@@ -583,7 +583,7 @@ Ext.define('Ext.mixin.Focusable', {
         // Arguably, a non-focusable widget probably shouldn't retain a tab index
         // if it's explicitly configured.
         forceTabIndex: false,
-        
+
         /**
          * Returns focus to the Component or element found in the cached
          * focusEnterEvent.
@@ -622,7 +622,7 @@ Ext.define('Ext.mixin.Focusable', {
                 // If focus was from the body, try to keep it closer than that
                 if (focusTarget === document.body) {
                     fromComponent = me.findFocusTarget();
-                    
+
                     if (fromComponent) {
                         focusTarget = fromComponent.getFocusEl();
                     }
@@ -633,7 +633,7 @@ Ext.define('Ext.mixin.Focusable', {
                         focusTarget.focus();
                     }
                 }
-                
+
                 // If the element is in the document and focusable, then we're good. The owning
                 // component will handle it.
                 else if (Ext.getDoc().contains(focusTarget) && Ext.fly(focusTarget).isFocusable()) {
@@ -702,7 +702,7 @@ Ext.define('Ext.mixin.Focusable', {
         findFocusTarget: function() {
             var me = this,
                 parentAxis, candidate, len, i, focusTargets, focusIndex;
-            
+
             if (me.preventRefocus) {
                 return null;
             }
@@ -723,7 +723,7 @@ Ext.define('Ext.mixin.Focusable', {
             // are potential sources of focus targets.
             for (i = 0, len = parentAxis.length; i < len; i++) {
                 candidate = parentAxis[i];
-                
+
                 if (candidate.destroying || !candidate.isVisible()) {
                     parentAxis.length = i;
                     break;
@@ -741,7 +741,7 @@ Ext.define('Ext.mixin.Focusable', {
                 // Non-Container Components may still have ownership relationships with
                 // other Components. eg: BoundList with PagingToolbar
                 focusTargets = Ext.ComponentQuery.query(':canfocus()', candidate);
-                
+
                 if (focusTargets.length) {
                     // eslint-disable-next-line max-len
                     focusIndex = Ext.Array.indexOf(focusTargets, Ext.ComponentManager.getActiveComponent());
@@ -759,7 +759,7 @@ Ext.define('Ext.mixin.Focusable', {
                 }
             }
         },
-    
+
         /**
          * Sets up the focus listener on this Component's {@link #getFocusEl focusEl} if it has one.
          *
@@ -783,7 +783,7 @@ Ext.define('Ext.mixin.Focusable', {
                 if (tabIndex != null && (force || me.canFocus(true))) {
                     me.setTabIndex(tabIndex, focusEl);
                 }
-                
+
                 // This attribute is a shortcut to look up a Component by its Elements
                 // It only makes sense on focusable elements, so we set it here unless
                 // our focusEl is delegated to the focusEl of an owned Component and it
@@ -793,46 +793,46 @@ Ext.define('Ext.mixin.Focusable', {
                 }
             }
         },
-        
+
         addFocusCls: function(e) {
             var focusCls = this.focusCls,
                 el;
-            
+
             el = this.getFocusClsEl();
-            
+
             if (focusCls) {
                 el = this.getFocusClsEl(e);
-                
+
                 if (el) {
                     el.addCls(focusCls);
                 }
             }
         },
-        
+
         removeFocusCls: function(e) {
             var focusCls = this.focusCls,
                 el;
-            
+
             if (focusCls) {
                 el = this.getFocusClsEl(e);
-                
+
                 if (el) {
                     el.removeCls(focusCls);
                 }
             }
         },
-        
+
         /**
          * @private
          */
         handleFocusEvent: function(info) {
             var me = this,
                 event;
-            
+
             if (!me.focusable || me.destroying || me.destroyed) {
                 return;
             }
-            
+
             // handleFocusEvent and handleBlurEvent are called by ComponentManager
             // passing the normalized element event that might or might not cause
             // component focus or blur. The component itself makes the decision
@@ -844,18 +844,18 @@ Ext.define('Ext.mixin.Focusable', {
                 event.type = 'focus';
                 event.relatedTarget = info.fromElement;
                 event.target = info.toElement;
-                
+
                 me.onFocus(event);
             }
         },
-        
+
         /**
          * @private
          */
         handleBlurEvent: function(info) {
             var me = this,
                 event;
-            
+
             if (!me.focusable || me.destroying || me.destroyed) {
                 return;
             }
@@ -869,17 +869,17 @@ Ext.define('Ext.mixin.Focusable', {
                 event.type = 'blur';
                 event.target = info.fromElement;
                 event.relatedTarget = info.toElement;
-                
+
                 me.onBlur(event);
             }
         },
-        
+
         /**
          * @private
          */
         isFocusing: function(e) {
             var focusEl = this.getFocusEl();
-        
+
             if (focusEl) {
                 if (focusEl.isFocusing) {
                     return focusEl.isFocusing(e);
@@ -892,16 +892,16 @@ Ext.define('Ext.mixin.Focusable', {
                            e.toElement === focusEl.dom && e.fromElement !== e.toElement;
                 }
             }
-            
+
             return false;
         },
-        
+
         /**
          * @private
          */
         isBlurring: function(e) {
             var focusEl = this.getFocusEl();
-        
+
             if (focusEl) {
                 if (focusEl.isFocusing) {
                     return focusEl.isBlurring(e);
@@ -914,21 +914,21 @@ Ext.define('Ext.mixin.Focusable', {
                            e.fromElement === focusEl.dom && e.fromElement !== e.toElement;
                 }
             }
-            
+
             return false;
         },
-        
+
         /**
          * @private
          */
         blur: function() {
             var me = this,
                 focusEl;
-            
+
             if (!me.focusable || !me.canFocus()) {
                 return;
             }
-            
+
             focusEl = me.getFocusEl();
 
             if (focusEl) {
@@ -937,47 +937,47 @@ Ext.define('Ext.mixin.Focusable', {
                 delete me.blurring;
             }
         },
-        
+
         isTabbable: function() {
             var me = this,
                 focusEl;
-            
+
             if (me.focusable) {
                 focusEl = me.getFocusEl();
-                
+
                 if (focusEl && focusEl.isTabbable()) {
                     return focusEl.isTabbable();
                 }
             }
-            
+
             return false;
         },
-        
+
         disableTabbing: function() {
             var me = this,
                 el = me.el,
                 focusEl;
-            
+
             // We DO NOT check for me.focusable here, because this should work
             // for containers with focus delegates, too!
             if (me.destroying || me.destroyed) {
                 return;
             }
-            
+
             // We're disabling tabbability for all elements of a given Component;
             // focusEl might be outside of the hierarchy which is checked below.
             if (el) {
                 el.saveTabbableState();
             }
-            
+
             focusEl = me.getFocusEl();
-            
+
             if (focusEl) {
                 // focusEl may happen to be a focus delegate for a container
                 if (focusEl.$isFocusableEntity) {
                     focusEl.disableTabbing();
                 }
-                
+
                 // Alternatively focusEl may happen to be outside of the main el,
                 // or else it can be a string reference to an element that
                 // has not been resolved yet
@@ -986,20 +986,20 @@ Ext.define('Ext.mixin.Focusable', {
                 }
             }
         },
-        
+
         enableTabbing: function(reset) {
             var me = this,
                 el = me.el,
                 focusEl;
-            
+
             // We DO NOT check for me.focusable here, because this should work
             // for containers with focus delegates, too!
             if (me.destroying || me.destroyed) {
                 return;
             }
-            
+
             focusEl = me.getFocusEl();
-            
+
             if (focusEl) {
                 if (focusEl.$isFocusableEntity) {
                     focusEl.enableTabbing();
@@ -1008,7 +1008,7 @@ Ext.define('Ext.mixin.Focusable', {
                     focusEl.restoreTabbableState();
                 }
             }
-            
+
             if (el) {
                 el.restoreTabbableState({ reset: reset });
             }
@@ -1017,7 +1017,7 @@ Ext.define('Ext.mixin.Focusable', {
 }, function() {
     var keyboardModeCls = Ext.baseCSSPrefix + 'keyboard-mode',
         keyboardMode = false;
-    
+
     /**
      * @cfg {Boolean} enableKeyboardMode
      * When set to `true`, focus styling will be applied to focused elements based on the
@@ -1034,7 +1034,7 @@ Ext.define('Ext.mixin.Focusable', {
      * @since 6.6.0
      */
     Ext.enableKeyboardMode = Ext.isModern || !Ext.os.is.Desktop;
-    
+
     /**
      * @property {Boolean} keyboardMode
      * @member Ext
@@ -1053,7 +1053,7 @@ Ext.define('Ext.mixin.Focusable', {
         Ext.keyboardMode = keyboardMode;
         Ext.getBody().toggleCls(keyboardModeCls, keyboardMode);
     };
-    
+
     Ext.isTouchMode = function() {
         return (Ext.now() - Ext.lastTouchTime) < 500;
     };
@@ -1063,11 +1063,11 @@ Ext.define('Ext.mixin.Focusable', {
      */
     Ext.syncKeyboardMode = function(e) {
         var type;
-        
+
         if (!Ext.enableKeyboardMode) {
             return;
         }
-        
+
         type = e.type;
 
         if (type === 'pointermove') {
@@ -1083,14 +1083,14 @@ Ext.define('Ext.mixin.Focusable', {
             Ext.setKeyboardMode(keyboardMode);
         }
     };
-    
+
     function keyboardModeFocusHandler() {
         // NOT Ext.keyboardMode here; closing over variable local to class callback fn
         if (keyboardMode !== Ext.getBody().hasCls(keyboardModeCls)) {
             Ext.setKeyboardMode(keyboardMode);
         }
     }
-    
+
     Ext.getEnableKeyboardMode = function() {
         return Ext.enableKeyboardMode;
     };

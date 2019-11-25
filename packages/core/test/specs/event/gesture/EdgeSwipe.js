@@ -24,7 +24,7 @@
     beforeEach(function() {
         originalMaxDuration = recognizer.getMaxDuration();
         recognizer.setMaxDuration(maxDuration);
-        
+
         targetEl = Ext.getBody().createChild({});
         swipeHandler = jasmine.createSpy();
         edgeSwipeStartHandler = jasmine.createSpy();
@@ -48,9 +48,9 @@
         runs(function() {
             start({ id: 1, x: 2, y: 10 });
         });
-        
+
         wait(halfDuration);
-        
+
         runs(function() {
             move({ id: 1, x: 100, y: 10 });
         });
@@ -60,9 +60,9 @@
         runs(function() {
             end({ id: 1, x: 200, y: 10 });
         });
-        
+
         waitsForAnimation();
-        
+
         runs(function() {
             expect(swipeHandler).toHaveBeenCalled();
             expect(edgeSwipeStartHandler).toHaveBeenCalled();
@@ -74,15 +74,15 @@
         runs(function() {
             start({ id: 1, x: 10, y: 10 });
         });
-        
+
         wait(halfDuration);
-        
+
         runs(function() {
             end({ id: 1, x: 10, y: 10 });
         });
-        
+
         waitsForAnimation();
-        
+
         runs(function() {
             expect(swipeHandler).not.toHaveBeenCalled();
             expect(edgeSwipeStartHandler).not.toHaveBeenCalled();

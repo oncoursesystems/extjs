@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.chart.column.Column', {
         'Ext.chart.axis.Category'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/column/ColumnController.js'
@@ -50,15 +50,15 @@ Ext.define('KitchenSink.view.chart.column.Column', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
     tbar: ['->', {
         text: 'Reload',
-        iconCls: 'x-fa fa-refresh',
+        iconCls: 'x-fa fa-sync',
         handler: 'onRefresh'
     }],
 
@@ -103,7 +103,7 @@ Ext.define('KitchenSink.view.chart.column.Column', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {
@@ -130,7 +130,7 @@ Ext.define('KitchenSink.view.chart.column.Column', {
             }
         }, {
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }]
     }]

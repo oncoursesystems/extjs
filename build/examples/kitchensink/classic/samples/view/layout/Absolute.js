@@ -34,12 +34,21 @@ Ext.define('KitchenSink.view.layout.Absolute', {
             panel1yAxis: 55,
             panel2xAxis: 155,
             panel2yAxis: 155
+        },
+        'classic-material': {
+            panelWidth: 300,
+            panelHeight: 150,
+            panel1xAxis: 55,
+            panel1yAxis: 55,
+            panel2xAxis: 155,
+            panel2yAxis: 155
         }
     },
     layout: 'absolute',
     width: 500,
     height: 400,
-    
+    cls: Ext.baseCSSPrefix + 'shadow',
+
     defaults: {
         bodyPadding: 15,
         width: '${panelWidth}',
@@ -47,7 +56,7 @@ Ext.define('KitchenSink.view.layout.Absolute', {
         frame: true
     },
 
-    items:[
+    items: [
         {
             title: 'Panel 1',
             x: '${panel1xAxis}',

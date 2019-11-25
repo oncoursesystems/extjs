@@ -3,21 +3,21 @@
  */
 Ext.define('Ext.ux.form.MultiSelect', {
     extend: 'Ext.form.FieldContainer',
-    
+
     mixins: [
         'Ext.util.StoreHolder',
         'Ext.form.field.Field'
     ],
-    
+
     alternateClassName: 'Ext.ux.Multiselect',
     alias: ['widget.multiselectfield', 'widget.multiselect'],
-    
+
     requires: ['Ext.panel.Panel', 'Ext.view.BoundList', 'Ext.layout.container.Fit'],
-    
+
     uses: ['Ext.view.DragZone', 'Ext.view.DropZone'],
-    
+
     layout: 'anchor',
-    
+
     /**
      * @cfg {String} [dragGroup=""] The ddgroup name for the MultiSelect DragZone.
      */
@@ -25,11 +25,11 @@ Ext.define('Ext.ux.form.MultiSelect', {
     /**
      * @cfg {String} [dropGroup=""] The ddgroup name for the MultiSelect DropZone.
      */
-    
+
     /**
      * @cfg {String} [title=""] A title for the underlying panel.
      */
-    
+
     /**
      * @cfg {Boolean} [ddReorder=false] Whether the items in the MultiSelect list are drag/drop
      * reorderable.
@@ -86,7 +86,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
      * The {0} token will be replaced by the value of {@link #minSelections}.
      */
     minSelectionsText: 'Minimum {0} item(s) required',
-    
+
     /**
      * @cfg {String} [maxSelectionsText="Maximum {0}item(s) allowed"] 
      * Validation message displayed when {@link #maxSelections} is not met
@@ -101,7 +101,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
      * delimited parameter, set this to `null`.
      */
     delimiter: ',',
-    
+
     /**
      * @cfg {String} [dragText="{0} Item{1}"] The text to show while dragging items.
      * {0} will be replaced by the number of items. {1} will be replaced by the plural
@@ -126,7 +126,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
      * {@link #displayField text}.
      * </div></li></ul></div></li></ul></div>
      */
-    
+
     ignoreSelectChange: 0,
 
     /**
@@ -140,7 +140,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
      * @cfg {Number} [pageSize=10] The number of items to advance on pageUp and pageDown
      */
     pageSize: 10,
-    
+
     initComponent: function() {
         var me = this;
 
@@ -154,7 +154,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
 
     setupItems: function() {
         var me = this;
-        
+
         me.boundList = new Ext.view.BoundList(Ext.apply({
             anchor: 'none 100%',
             border: 1,
@@ -167,7 +167,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
                 type: 'default'
             }
         }, me.listConfig));
-        
+
         me.boundList.getNavigationModel().addKeyBindings({
             pageUp: me.onKeyPageUp,
             pageDown: me.onKeyPageDown,
@@ -187,7 +187,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
 
         // Wrap to add a title
         me.boundList.border = false;
-        
+
         return {
             xtype: 'panel',
             isAriaRegion: false,
@@ -205,11 +205,11 @@ Ext.define('Ext.ux.form.MultiSelect', {
             this.setValue(selections);
         }
     },
-    
+
     getSelected: function() {
         return this.boundList.getSelectionModel().getSelection();
     },
-    
+
     // compare array values
     isEqual: function(v1, v2) {
         var fromArray = Ext.Array.from,
@@ -232,11 +232,11 @@ Ext.define('Ext.ux.form.MultiSelect', {
 
         return true;
     },
-    
+
     afterRender: function() {
         var me = this,
             boundList, scrollable, records, panel;
-        
+
         me.callParent();
 
         boundList = me.boundList;
@@ -253,7 +253,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
 
             delete me.toSelect;
         }
-        
+
         if (me.ddReorder && !me.dragGroup && !me.dropGroup) {
             me.dragGroup = me.dropGroup = 'MultiselectDD-' + Ext.id();
         }
@@ -293,59 +293,58 @@ Ext.define('Ext.ux.form.MultiSelect', {
                 }
             });
         }
-        
+
         panel = me.down('panel');
-        
+
         if (panel && boundList) {
             boundList.ariaEl.dom.setAttribute('aria-labelledby', panel.header.id + '-title-textEl');
         }
     },
-    
+
     onKeyPageUp: function(e) {
         var me = this,
             pageSize = me.pageSize,
             boundList = me.boundList,
             nm = boundList.getNavigationModel(),
             oldIdx, newIdx;
-        
+
         oldIdx = nm.recordIndex;
-        
+
         // Unlike up arrow, pgUp does not wrap but goes to the first item
         newIdx = oldIdx > pageSize ? oldIdx - pageSize : 0;
-        
+
         nm.setPosition(newIdx, e);
     },
-    
+
     onKeyPageDown: function(e) {
         var me = this,
             pageSize = me.pageSize,
             boundList = me.boundList,
             nm = boundList.getNavigationModel(),
             count, oldIdx, newIdx;
-        
+
         count = boundList.getStore().getCount();
         oldIdx = nm.recordIndex;
-        
+
         // Unlike down arrow, pgDown does not wrap but goes to the last item
         newIdx = oldIdx < (count - pageSize) ? oldIdx + pageSize : count - 1;
-        
+
         nm.setPosition(newIdx, e);
     },
-    
+
     isValid: function() {
         var me = this,
             disabled = me.disabled,
             validate = me.forceValidation || !disabled;
-            
-        
+
         return validate ? me.validateValue(me.value) : disabled;
     },
-    
+
     validateValue: function(value) {
         var me = this,
             errors = me.getErrors(value),
             isValid = Ext.isEmpty(errors);
-            
+
         if (!me.preventMark) {
             if (isValid) {
                 me.clearInvalid();
@@ -357,7 +356,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
 
         return isValid;
     },
-    
+
     markInvalid: function(errors) {
         // Save the message and fire the 'invalid' event
         var me = this,
@@ -389,7 +388,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
             me.updateLayout();
         }
     },
-    
+
     getSubmitData: function() {
         var me = this,
             data = null,
@@ -416,14 +415,14 @@ Ext.define('Ext.ux.form.MultiSelect', {
         var me = this,
             delimiter = me.delimiter,
             val = me.getValue();
-        
+
         return Ext.isString(delimiter) ? val.join(delimiter) : val;
     },
-    
+
     getValue: function() {
         return this.value || [];
     },
-    
+
     getRecordsForValue: function(value) {
         var me = this,
             records = [],
@@ -434,20 +433,20 @@ Ext.define('Ext.ux.form.MultiSelect', {
             rec,
             j,
             valueLen;
-            
+
         for (valueLen = value.length; i < valueLen; ++i) {
             for (j = 0; j < allLen; ++j) {
                 rec = all[j];
-   
+
                 if (rec.get(valueField) === value[i]) {
                     records.push(rec);
                 }
             }
         }
-            
+
         return records;
     },
-    
+
     setupValue: function(value) {
         var delimiter = this.delimiter,
             valueField = this.valueField,
@@ -455,7 +454,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
             out,
             len,
             item;
-            
+
         if (Ext.isDefined(value)) {
             if (delimiter && Ext.isString(value)) {
                 value = value.split(delimiter);
@@ -463,7 +462,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
             else if (!Ext.isArray(value)) {
                 value = [value];
             }
-        
+
             for (len = value.length; i < len; ++i) {
                 item = value[i];
 
@@ -480,7 +479,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
 
         return out;
     },
-    
+
     setValue: function(value) {
         var me = this,
             selModel = me.boundList.getSelectionModel(),
@@ -498,7 +497,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
 
         value = me.setupValue(value);
         me.mixins.field.setValue.call(me, value);
-        
+
         if (me.rendered) {
             ++me.ignoreSelectChange;
             selModel.deselectAll();
@@ -513,11 +512,11 @@ Ext.define('Ext.ux.form.MultiSelect', {
             me.selectOnRender = true;
         }
     },
-    
+
     clearValue: function() {
         this.setValue([]);
     },
-    
+
     onEnable: function() {
         var list = this.boundList;
 
@@ -527,7 +526,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
             list.enable();
         }
     },
-    
+
     onDisable: function() {
         var list = this.boundList;
 
@@ -537,7 +536,7 @@ Ext.define('Ext.ux.form.MultiSelect', {
             list.disable();
         }
     },
-    
+
     getErrors: function(value) {
         var me = this,
             format = Ext.String.format,
@@ -561,15 +560,15 @@ Ext.define('Ext.ux.form.MultiSelect', {
 
         return errors;
     },
-    
+
     doDestroy: function() {
         var me = this;
-        
+
         me.bindStore(null);
         Ext.destroy(me.dragZone, me.dropZone, me.keyNav);
         me.callParent();
     },
-    
+
     onBindStore: function(store) {
         var me = this,
             boundList = this.boundList;

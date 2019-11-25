@@ -157,7 +157,7 @@ Ext.define('Ext.overrides.Widget', {
          * @since 6.2.0
          */
         relative: null,
-        
+
         /**
          * @cfg {Number} [x=0]
          * *Only valid when a component is `{@link #cfg-floated}`*
@@ -166,7 +166,7 @@ Ext.define('Ext.overrides.Widget', {
          * But if there is a `{@link #relative}: true` ancestor, it will be relative to that.
          */
         x: null,
-        
+
         /**
          * @cfg {Number} [y=0]
          * *Only valid when a component is `{@link #cfg-floated}`*
@@ -249,7 +249,7 @@ Ext.define('Ext.overrides.Widget', {
         constrainAlign: null,
 
         /**
-         * @cfg {String} [selfAlign]
+         * @cfg {String} [alignSelf]
          * Specifies the self alignment of this widget in a box layout
          */
         alignSelf: null
@@ -295,7 +295,7 @@ Ext.define('Ext.overrides.Widget', {
      * @readonly
      */
     noShadowCls: Ext.baseCSSPrefix + 'no-shadow',
-    
+
     /**
      * @property {String} [floatWrapCls="x-float-wrap"] The CSS class to add to this component's
      * floatWrap when it's created.
@@ -303,7 +303,7 @@ Ext.define('Ext.overrides.Widget', {
      * @readonly
      */
     floatWrapCls: Ext.baseCSSPrefix + 'float-wrap',
-    
+
     /**
      * @property {String} [shimCls="x-shim"] The CSS class to add to this component's shim element
      * if enabled.
@@ -372,7 +372,7 @@ Ext.define('Ext.overrides.Widget', {
         if (parent && parent.remove) {
             parent.remove(me, false);
         }
-        
+
         me.setShim(false);
         Ext.destroy(me.getTranslatable());
 
@@ -435,7 +435,7 @@ Ext.define('Ext.overrides.Widget', {
                 return !!hidden;
             }
         }
-        
+
         return me.callParent([deep]);
     },
 
@@ -486,7 +486,7 @@ Ext.define('Ext.overrides.Widget', {
             this.isInner = isInner;
 
             parent = this.initialized && this.getParent();
-            
+
             if (parent) {
                 parent.onItemInnerStateChange(this, isInner);
             }
@@ -511,13 +511,13 @@ Ext.define('Ext.overrides.Widget', {
     toFront: function(fromMousedown) {
         var me = this,
             floatParent;
-        
+
         //<debug>
         if (!this.getFloated()) {
             Ext.raise('Cannot use toFront on a non-floated component');
         }
         //</debug>
-        
+
         floatParent = me.getFloatParent();
 
         if (!me.hasListeners.beforetofront || me.fireEvent('beforetofront', me) !== false) {
@@ -937,7 +937,7 @@ Ext.define('Ext.overrides.Widget', {
         // the DOM, so rendered will be passed in as false
         me.syncFloatedState(floated, oldFloated, me.rendered && oldFloated === false);
     },
-        
+
     applyUi: function(ui) {
         var me = this,
             inheritedUi = me._inheritedUi;
@@ -958,7 +958,7 @@ Ext.define('Ext.overrides.Widget', {
 
         me.callParent([ui, oldUi]);
 
-        if (me.$inheritUiCount) {
+        if (me.$inheritUiCount && !me.destroying) {
             refItems = me.getRefItems();
 
             for (i = 0, n = refItems.length; i < n; i++) {
@@ -1470,7 +1470,7 @@ Ext.define('Ext.overrides.Widget', {
                 floatRoot = Ext.getFloatRoot(),
                 floatParentNode = me.floatParentNode,
                 data, mask;
-            
+
             // If we're hidden there may not be a parent node
             if (floatParentNode) {
                 data = floatParentNode.getData();
@@ -1486,6 +1486,10 @@ Ext.define('Ext.overrides.Widget', {
                     mask = mask.dom;
                     Ext.getDetachedBody().appendChild(mask);
                 }
+            }
+
+            if (Ext.Viewport) {
+                Ext.Viewport.enableTabbing();
             }
         },
 
@@ -1550,6 +1554,10 @@ Ext.define('Ext.overrides.Widget', {
                 if (parent && parent.getFloated() && !parent.getRelative()) {
                     parent.syncXYPosition();
                 }
+
+                if (Ext.Viewport) {
+                    Ext.Viewport.disableTabbing();
+                }
             }
         },
 
@@ -1568,10 +1576,10 @@ Ext.define('Ext.overrides.Widget', {
                 }
             }
         },
-        
+
         updateAlwaysOnTop: function(alwaysOnTop) {
             var me = this;
-            
+
             me.getFloatWrap().getData().alwaysOnTop = Number(alwaysOnTop);
 
             if (!me.floatParentNode) {
@@ -1604,10 +1612,10 @@ Ext.define('Ext.overrides.Widget', {
             // All elements if floatRoot are considered, The first element in child floatWraps
             // is the child floated which owns that floatWrap.
             startIdx = parentEl === Ext.floatRoot ? 0 : 1;
-            
+
             // Fastest way of seeing whether we need to move the modal mask
             // to just below our positionEl.
-            isTopModal = me.getModal() && positionEl.previousSibling &&
+            isTopModal = me.getModal && me.getModal() && positionEl.previousSibling &&
                 Ext.fly(positionEl.previousSibling).hasCls(maskCls);
 
             if (positionEl.nextSibling) {
@@ -1774,7 +1782,7 @@ Ext.define('Ext.overrides.Widget', {
         }
     }
 }, function(Widget) {
-    
+
     this.borrow(Ext.util.Positionable, ['clipTo', 'clearClip']);
 
     // Convenience shorthand sibling traverse methods.
@@ -1823,7 +1831,7 @@ Ext.define('Ext.overrides.Widget', {
             //<debug>
             fp.$skipResourceCheck = true;
             //</debug>
-            
+
             Ext.floatRoot = fp;
         }
 

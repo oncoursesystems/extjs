@@ -165,16 +165,16 @@ Ext.define('Ext.chart.CartesianChart', {
                 case 'top':
                     axisSurface.setRect([left, top + shrinkBox.top + 1, width, thickness]);
                     break;
-                
+
                 case 'bottom':
                     axisSurface.setRect([left, top + height - (shrinkBox.bottom + thickness),
                                          width, thickness]);
                     break;
-                
+
                 case 'left':
                     axisSurface.setRect([left + shrinkBox.left, top, thickness, height]);
                     break;
-                
+
                 case 'right':
                     axisSurface.setRect([left + width - (shrinkBox.right + thickness), top,
                                          thickness, height]);

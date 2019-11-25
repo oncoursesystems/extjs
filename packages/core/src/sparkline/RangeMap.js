@@ -16,7 +16,7 @@ Ext.define('Ext.sparkline.RangeMap', {
                 rangelist.push(range);
             }
         }
-        
+
         this.map = map;
         this.rangelist = rangelist || false;
     },
@@ -28,11 +28,11 @@ Ext.define('Ext.sparkline.RangeMap', {
         if ((result = this.map[value]) !== undefined) {
             return result;
         }
-        
+
         if (rangelist) {
             for (i = rangelist.length; i--;) {
                 range = rangelist[i];
-                
+
                 if (range[0] <= value && range[1] >= value) {
                     return range[2];
                 }

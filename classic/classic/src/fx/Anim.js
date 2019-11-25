@@ -74,7 +74,7 @@ Ext.define('Ext.fx.Anim', {
      * @cfg {Object} scope
      * The scope that the {@link #callback} function will be called with
      */
-    
+
     /**
      * @cfg {Boolean} remove
      * `true` to remove the target when the animation is complete, using the appropriate removal
@@ -196,7 +196,7 @@ Ext.define('Ext.fx.Anim', {
      * Number of times to execute the animation.
      */
     iterations: 1,
-    
+
     /**
      * @cfg {Boolean} autoEnd
      * `true` to immediately force this animation to its final state. This can be useful
@@ -298,20 +298,20 @@ Ext.define('Ext.fx.Anim', {
     constructor: function(config) {
         var me = this,
             curve;
-            
+
         config = config || {};
-        
+
         // If keyframes are passed, they really want an Animator instead.
         if (config.keyframes) {
             return new Ext.fx.Animator(config);
         }
-        
+
         Ext.apply(me, config);
-        
+
         if (me.from === undefined) {
             me.from = {};
         }
-        
+
         me.propHandlers = {};
         me.config = config;
         me.target = Ext.fx.Manager.createTarget(me.target);
@@ -321,20 +321,20 @@ Ext.define('Ext.fx.Anim', {
         // If not a pre-defined curve, try a cubic-bezier
         if (!me.easingFn) {
             me.easingFn = String(me.easing).match(me.bezierRE);
-            
+
             if (me.easingFn && me.easingFn.length === 5) {
                 curve = me.easingFn;
                 me.easingFn =
                     Ext.fx.CubicBezier.cubicBezier(+curve[1], +curve[2], +curve[3], +curve[4]);
             }
         }
-        
+
         me.id = Ext.id(null, 'ext-anim-');
 
         me.mixins.observable.constructor.call(me);
-        
+
         Ext.fx.Manager.addAnim(me);
-        
+
         if (config.autoEnd) {
             me.running = true;
             me.jumpToEnd();
@@ -365,7 +365,7 @@ Ext.define('Ext.fx.Anim', {
             if (to.hasOwnProperty(attr)) {
                 start = me.target.getAttr(attr, from[attr]);
                 end = to[attr];
-                
+
                 // Use default (numeric) property handler
                 if (!Ext.fx.PropertyHandler[attr]) {
                     if (Ext.isObject(end)) {
@@ -379,11 +379,11 @@ Ext.define('Ext.fx.Anim', {
                 else {
                     propHandler = me.propHandlers[attr] = Ext.fx.PropertyHandler[attr];
                 }
-                
+
                 out[attr] = propHandler.get(start, end, me.damper, initialFrom[attr], attr);
             }
         }
-        
+
         me.currentAttrs = out;
     },
 
@@ -396,16 +396,16 @@ Ext.define('Ext.fx.Anim', {
             delay = me.delay,
             delayStart = me.delayStart,
             delayDelta;
-        
+
         if (delay) {
             if (!delayStart) {
                 me.delayStart = startTime;
-                
+
                 return;
             }
             else {
                 delayDelta = startTime - delayStart;
-                
+
                 if (delayDelta < delay) {
                     return;
                 }
@@ -415,30 +415,30 @@ Ext.define('Ext.fx.Anim', {
                 }
             }
         }
-        
+
         if (me.fireEvent('beforeanimate', me) !== false) {
             me.startTime = startTime;
-            
+
             if (!me.paused && !me.currentAttrs) {
                 me.initAttrs();
             }
-            
+
             me.running = true;
             me.frameCount = 0;
         }
     },
-    
+
     /**
      * Immediately force this animation to its final state.
      */
     jumpToEnd: function(suppressEvent) {
         var me = this;
-        
+
         if (!me.endWasCalled) {
             if (!me.currentAttrs) {
                 me.initAttrs();
             }
-            
+
             Ext.fx.Manager.jumpToEnd(me);
             me.end(suppressEvent);
         }
@@ -462,7 +462,7 @@ Ext.define('Ext.fx.Anim', {
             elapsedTime = duration;
             lastFrame = true;
         }
-        
+
         if (me.reverse) {
             elapsedTime = duration - elapsedTime;
         }
@@ -474,9 +474,9 @@ Ext.define('Ext.fx.Anim', {
                 ret[attr] = propHandlers[attr].set(values, easing);
             }
         }
-        
+
         me.frameCount++;
-            
+
         return ret;
     },
 
@@ -491,15 +491,15 @@ Ext.define('Ext.fx.Anim', {
             iterCount = me.currentIteration;
 
         iterCount++;
-        
+
         if (iterCount < iter) {
             if (me.alternate) {
                 me.reverse = !me.reverse;
             }
-            
+
             me.startTime = new Date();
             me.currentIteration = iterCount;
-            
+
             // Turn off paused for CSS3 Transitions
             me.paused = false;
         }
@@ -519,30 +519,30 @@ Ext.define('Ext.fx.Anim', {
      */
     end: function(suppressEvent) {
         var me = this;
-        
+
         if (me.endWasCalled++) {
             return;
         }
-        
+
         me.startTime = 0;
         me.paused = false;
         me.running = false;
         Ext.fx.Manager.removeAnim(me);
-        
+
         if (!suppressEvent) {
             me.fireEvent('afteranimate', me, me.startTime);
             Ext.callback(me.callback, me.scope, [me, me.startTime]);
         }
-        
+
         if (me.remove) {
             me.target.destroy();
         }
     },
-    
+
     isReady: function() {
         return this.paused === false && this.running === false && this.iterations > 0;
     },
-    
+
     isRunning: function() {
         return this.paused === false && this.running === true && this.isAnimator !== true;
     }

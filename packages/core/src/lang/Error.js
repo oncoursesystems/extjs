@@ -95,7 +95,7 @@
         if (cls) {
             method = method ? (cls + '.' + method) : cls;
         }
-        
+
         return method || msg || '';
     }
 
@@ -146,7 +146,7 @@
                 msg, name;
 
             err = err || {};
-            
+
             if (Ext.isString(err)) {
                 err = { msg: err };
             }
@@ -154,12 +154,12 @@
             if (method === Ext.raise) {
                 method = method.caller;
             }
-            
+
             if (method) {
                 if (!err.sourceMethod && (name = method.$name)) {
                     err.sourceMethod = name;
                 }
-                
+
                 if (!err.sourceClass && (name = method.$owner) && (name = name.$className)) {
                     err.sourceClass = name;
                 }
@@ -228,7 +228,7 @@ Ext.deprecated = function(suggestion) {
 
     return fail;
     //</debug>
-    
+
     return Ext.emptyFn; // eslint-disable-line no-unreachable
 };
 
@@ -291,28 +291,28 @@ Ext.raise = function() {
             // Put log counters to the status bar (for most browsers):
             if (n && last !== n) {
                 msg = [];
-                
+
                 if (cnt.error) {
                     msg.push('Errors: ' + cnt.error);
                 }
-                
+
                 if (cnt.warn) {
                     msg.push('Warnings: ' + cnt.warn);
                 }
-                
+
                 if (cnt.info) {
                     msg.push('Info: ' + cnt.info);
                 }
-                
+
                 if (cnt.log) {
                     msg.push('Log: ' + cnt.log);
                 }
-                
+
                 window.status = '*** ' + msg.join(' -- ');
                 last = n;
             }
         };
-    
+
     // Allow unit tests to skip this when checking for dangling timers
     notify.$skipTimerCheck = true;
 

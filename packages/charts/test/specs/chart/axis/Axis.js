@@ -6,7 +6,7 @@ function() {
         // Tons of warnings regarding Sencha download server
         spyOn(Ext.log, 'warn');
     });
-    
+
     describe('getRange', function() {
         it("linked axes should always return the range of the master axis", function() {
             var chartConfig = {
@@ -102,12 +102,12 @@ function() {
             axisProto.getRange = getRange;
 
             var verticalNumericChart = new Ext.chart.CartesianChart(verticalNumeric);
-            
+
             verticalNumericChart.performLayout();
             verticalNumericChart.destroy();
 
             var horizontalNumericChart = new Ext.chart.CartesianChart(horizontalNumeric);
-            
+
             horizontalNumericChart.performLayout();
             horizontalNumericChart.destroy();
 
@@ -309,7 +309,6 @@ function() {
                 });
             });
 
-
             describe('chart controller, no chart container controller', function() {
                 var chart, axis,
                     container, chartController;
@@ -364,7 +363,6 @@ function() {
                     expect(testScope).toBe(chartController);
                 });
             });
-
 
             describe('chart controller, chart container controller', function() {
                 var chart, container, axis,
@@ -745,7 +743,6 @@ function() {
                 });
             });
 
-
             describe('chart controller, no chart container controller', function() {
                 var chart, axis,
                     container, chartController;
@@ -794,7 +791,6 @@ function() {
                     expect(testScope).toBe(chartController);
                 });
             });
-
 
             describe('chart controller, chart container controller', function() {
                 var chart, container, axis,

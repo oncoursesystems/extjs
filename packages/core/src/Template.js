@@ -48,7 +48,7 @@
 Ext.define('Ext.Template', {
 // @define Ext.String.format
 // @define Ext.util.Format.format
-    
+
     requires: [
         'Ext.util.Format'
     ],
@@ -92,7 +92,7 @@ Ext.define('Ext.Template', {
             i, value;
 
         me.initialConfig = {};
-        
+
         // Allow an array to be passed here so we can
         // pass an array of strings and an object
         // at the end
@@ -306,14 +306,14 @@ Ext.define('Ext.Template', {
                       .replace(me.compileBRe, '\\n')
                       .replace(me.compileCRe, "\\'")
                       .replace(me.tokenRe, me.regexReplaceFn.bind(me));
-        
+
         code = (this.disableFormats !== true ? 'var fm=Ext.util.Format;' : '') +
                 (me.useEval ? '$=' : 'return') +
                 " function(v){return ['" + code + "'];};";
 
         me.fn = me.useEval ? me.evalCompiled(code) : (new Function('Ext', code))(Ext);
         me.compiled = true;
-        
+
         return me;
     },
 
@@ -490,7 +490,7 @@ Ext.define('Ext.Template', {
 
         return formatFn.apply(this, arguments);
     };
-    
+
     Ext.String.formatEncode = function() {
         return Ext.String.htmlEncode(Ext.String.format.apply(this, arguments));
     };

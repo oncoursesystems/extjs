@@ -248,12 +248,11 @@ Ext.define('Ext.Component', {
      * It serves as a shortcut to the full component name. For example, the component
      * `Ext.button.Button` has an xtype of `button`.
      *
-     * You can define your own xtype on a custom {@link Ext.Component component} by specifying the
-     * {@link Ext.Class#alias alias} config option with a prefix of `widget`. For example:
+     * You can define your own xtype on a custom {@link Ext.Component component} like so:
      *
      *     Ext.define('PressMeButton', {
      *         extend: 'Ext.button.Button',
-     *         alias: 'widget.pressmebutton',
+     *         xtype: 'pressmebutton',
      *         text: 'Press Me'
      *     });
      *
@@ -293,14 +292,6 @@ Ext.define('Ext.Component', {
     xtype: 'component',
 
     cachedConfig: {
-        /**
-         * @cfg {Number/String} margin
-         * The margin to use on this Component. Can be specified as a number (in which
-         * case all edges get the same margin) or a CSS string like '5 10 10 10'
-         * @accessor
-         */
-        margin: null,
-
         /**
          * @cfg {Number/String} padding
          * The padding to use on this Component. Can be specified as a number (in which
@@ -663,7 +654,7 @@ Ext.define('Ext.Component', {
          * Set to true to allow users to select text within this component.
          *
          * Can also be any valid value for the CSS3
-         * [user-select](https://developer.mozilla.org/en-US/docs/Web/CSS/user-select user-select) property.
+         * [user-select](https://developer.mozilla.org/en-US/docs/Web/CSS/user-select) property.
          *
          * A value of true implies `auto`, while false implies `none`.
          *
@@ -1253,13 +1244,22 @@ Ext.define('Ext.Component', {
      * @private
      */
     onInitialized: function(fn, scope, args) {
-        var listeners = this.onInitializedListeners;
+        var me = this,
+            listeners = me.onInitializedListeners;
 
         if (!scope) {
-            scope = this;
+            scope = me;
         }
 
-        if (this.initialized) {
+        if (args) {
+            args = args.slice();
+            args.unshift(me);
+        }
+        else {
+            args = [me];
+        }
+
+        if (me.initialized) {
             if (typeof fn === 'string') {
                 scope[fn].apply(scope, args);
             }
@@ -1364,10 +1364,6 @@ Ext.define('Ext.Component', {
 
     updatePadding: function(padding) {
         this.bodyElement.setPadding(padding);
-    },
-
-    updateMargin: function(margin) {
-        this.element.setMargin(margin);
     },
 
     updateWeight: function(weight, oldWeight) {

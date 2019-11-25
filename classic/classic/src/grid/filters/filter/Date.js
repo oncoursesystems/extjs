@@ -222,7 +222,7 @@ Ext.define('Ext.grid.filters.filter.Date', {
             // the top-level menu item if it's been determined that Date* doesn't have any filters.
             v = {};
             v[filter.getOperator()] = null;
-            
+
             this.setValue(v);
         }
     },

@@ -64,6 +64,15 @@ Ext.define('KitchenSink.view.grid.Ticker', {
             percentChangeColumnWidth: 180,
             lastUpdatedColumnWidth: 165,
             labelWidth: 120
+        },
+        'classic-material': {
+            width: 1000,
+            trendWidth: 150,
+            priceWidth: 130,
+            pricechangeWidth: 150,
+            percentChangeColumnWidth: 180,
+            lastUpdatedColumnWidth: 165,
+            labelWidth: 120
         }
     },
 
@@ -132,7 +141,6 @@ Ext.define('KitchenSink.view.grid.Ticker', {
         text: 'Last Updated',
         hidden: true,
         width: '${lastUpdatedColumnWidth}',
-        sortable: true,
         formatter: 'date("m/d/Y H:i:s")',
         dataIndex: 'priceLastChange',
         producesHTML: false,

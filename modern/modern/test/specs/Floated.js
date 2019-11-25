@@ -12,6 +12,7 @@ topSuite('Ext.Widget.floated', [
         w = Ext.create(Ext.apply({
             hidden: false
         }, cfg));
+
         return w;
     }
 
@@ -20,6 +21,7 @@ topSuite('Ext.Widget.floated', [
             el = el.element;
         }
         var box = Ext.fly(el).getBox();
+
         expect(box.x).toBe(x);
         expect(box.y).toBe(y);
     }
@@ -227,6 +229,7 @@ topSuite('Ext.Widget.floated', [
             if (wasRendered) {
                 wasRendered = Ext.Msg.setRendered(false);
             }
+
             wasRendered = false;
         });
 
@@ -505,7 +508,7 @@ topSuite('Ext.Widget.floated', [
             // So the mask ust be stashed safely in the detached body
             expect(mask.dom.parentNode).toBe(Ext.getDetachedBody().dom);
         });
-        
+
         describe("alwaysOnTop", function() {
             it('should give alwaysOnTop floated components a higher z-index', function() {
                 // Initial conditions

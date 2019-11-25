@@ -5,16 +5,16 @@ Ext.define('KitchenSink.view.buttons.ExtraModel', {
         style: '',
         type: 'text',
         round: false,
-        disabled : false
+        disabled: false
     },
 
     icons: [
         'fa-home', 'fa-cog',
         'fa-archive', 'fa-heart',
-        'fa-trash', 'fa-wrench'
+        'fa-trash-alt', 'fa-wrench'
     ],
 
-    getIcon: function () {
+    getIcon: function() {
         var icons = this.icons,
             idx = Math.floor(Math.random() * icons.length);
 
@@ -26,47 +26,47 @@ Ext.define('KitchenSink.view.buttons.ExtraModel', {
             return getter('buttonType.value');
         },
         style: function(getter) {
-            return  getter('buttonStyle.value');
+            return getter('buttonStyle.value');
         },
-        normalText: function (getter) {
+        normalText: function(getter) {
             var type = getter('type');
 
             return type.indexOf('text') !== -1 ? 'Normal' : null;
         },
-        smallText: function (getter) {
+        smallText: function(getter) {
             var type = getter('type');
 
             return type.indexOf('text') !== -1 ? 'Small' : null;
         },
-        mediumText: function (getter) {
+        mediumText: function(getter) {
             var type = getter('type');
 
             return type.indexOf('text') !== -1 ? 'Medium' : null;
         },
-        largeText: function (getter) {
+        largeText: function(getter) {
             var type = getter('type');
 
             return type.indexOf('text') !== -1 ? 'Large' : null;
         },
-        badgeText: function (getter) {
+        badgeText: function(getter) {
             var type = getter('type');
 
             return type.indexOf('text') !== -1 ? 'Badge' : null;
         },
-        disabledText: function (getter) {
+        disabledText: function(getter) {
             var type = getter('type');
 
             return type.indexOf('text') !== -1 ? 'Disabled' : null;
         },
-        icon: function (getter) {
+        icon: function(getter) {
             var type = getter('type');
 
             return type.indexOf('icon') !== -1 ? this.getIcon() : '';
         },
-        menu: function (getter) {
+        menu: function(getter) {
             var style = getter('style');
 
-            return style === 'menu' ? [{text: 'Menu Item'}] : null;
+            return style === 'menu' ? [{ text: 'Menu Item' }] : null;
         }
     }
 });

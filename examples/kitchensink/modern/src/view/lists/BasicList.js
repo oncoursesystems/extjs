@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.lists.BasicList', {
     extend: 'Ext.dataview.List',
     xtype: 'basic-list',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Store',
         path: 'modern/src/store/List.js'
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.lists.BasicList', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     width: '${width}',

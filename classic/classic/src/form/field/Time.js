@@ -42,7 +42,7 @@ Ext.define('Ext.form.field.Time', {
     extend: 'Ext.form.field.ComboBox',
     alias: 'widget.timefield',
     alternateClassName: ['Ext.form.TimeField', 'Ext.form.Time'],
-    
+
     requires: [
         'Ext.form.field.Date',
         'Ext.picker.Time',
@@ -197,15 +197,15 @@ Ext.define('Ext.form.field.Time', {
         var me = this,
             min = me.minValue,
             max = me.maxValue;
-        
+
         if (min) {
             me.setMinValue(min);
         }
-        
+
         if (max) {
             me.setMaxValue(max);
         }
-        
+
         /* eslint-disable indent, max-len */
         me.displayTpl = new Ext.XTemplate(
             '<tpl for=".">' +
@@ -225,12 +225,12 @@ Ext.define('Ext.form.field.Time', {
         // TimePicker does this on create.
         me.getPicker();
     },
-    
+
     afterQuery: function(queryPlan) {
         var me = this;
 
         me.callParent([queryPlan]);
-        
+
         // Check the field for null value (TimeField returns null for invalid dates).
         // If value is null and a rawValue is present, then we we should manually
         // validate the field to display errors.
@@ -271,9 +271,9 @@ Ext.define('Ext.form.field.Time', {
     setMinValue: function(value) {
         var me = this,
             picker = me.picker;
-            
+
         me.setLimit(value, true);
-        
+
         if (picker) {
             picker.setMinValue(me.minValue);
         }
@@ -286,9 +286,9 @@ Ext.define('Ext.form.field.Time', {
     setMaxValue: function(value) {
         var me = this,
             picker = me.picker;
-        
+
         me.setLimit(value, false);
-        
+
         if (picker) {
             picker.setMaxValue(me.maxValue);
         }
@@ -302,14 +302,14 @@ Ext.define('Ext.form.field.Time', {
     setLimit: function(value, isMin) {
         var me = this,
             d, val;
-        
+
         if (Ext.isString(value)) {
             d = me.parseDate(value);
         }
         else if (Ext.isDate(value)) {
             d = value;
         }
-        
+
         if (d) {
             val = me.getInitDate();
             val.setHours(d.getHours(), d.getMinutes(), d.getSeconds(), d.getMilliseconds());
@@ -318,10 +318,10 @@ Ext.define('Ext.form.field.Time', {
         else {
             val = null;
         }
-        
+
         me[isMin ? 'minValue' : 'maxValue'] = val;
     },
-    
+
     getInitDate: function(hours, minutes, seconds) {
         var parts = this.initDateParts;
 
@@ -361,20 +361,20 @@ Ext.define('Ext.form.field.Time', {
 
                 if (!date) {
                     errors.push(format(me.invalidText, item, Ext.Date.unescapeFormat(me.format)));
-                    
+
                     continue;
                 }
             }
         }
         else if (raw.length) {
             date = me.parseDate(raw);
-            
+
             if (!date) {
                 // If we don't have any data & a rawValue, it means an invalid time was entered.
                 errors.push(format(me.invalidText, raw, Ext.Date.unescapeFormat(me.format)));
             }
         }
-        
+
         // if we have a valid date, we need to check if it's within valid range
         // this is out of the loop because as the user types a date/time, the value
         // needs to be converted before it can be compared to min/max value
@@ -382,12 +382,12 @@ Ext.define('Ext.form.field.Time', {
             if (minValue && date < minValue) {
                 errors.push(format(me.minText, me.formatDate(minValue)));
             }
-            
+
             if (maxValue && date > maxValue) {
                 errors.push(format(me.maxText, me.formatDate(maxValue)));
             }
         }
-        
+
         return errors;
     },
 
@@ -423,7 +423,7 @@ Ext.define('Ext.form.field.Time', {
             if (!val && altFormats) {
                 altFormatsArray = altFormatsArray || altFormats.split('|');
                 len = altFormatsArray.length;
-                
+
                 for (; i < len && !val; ++i) {
                     val = me.safeParse(value, altFormatsArray[i]);
                 }
@@ -434,7 +434,7 @@ Ext.define('Ext.form.field.Time', {
         if (val && me.snapToIncrement) {
             val = new Date(Ext.Number.snap(val.getTime(), me.increment * 60 * 1000));
         }
-        
+
         return val;
     },
 
@@ -452,12 +452,12 @@ Ext.define('Ext.form.field.Time', {
             // Use our initial safe date
             parsedDate =
                 utilDate.parse(me.initDate + ' ' + value, me.initDateFormat + ' ' + format);
-            
+
             if (parsedDate) {
                 result = parsedDate;
             }
         }
-        
+
         return result;
     },
 
@@ -489,7 +489,7 @@ Ext.define('Ext.form.field.Time', {
             format: me.format,
             maxHeight: me.pickerMaxHeight
         }, me.listConfig);
-        
+
         return me.callParent();
     },
 
@@ -514,7 +514,7 @@ Ext.define('Ext.form.field.Time', {
         if (typeof value === 'string') {
             value = this.parseDate(value);
         }
-        
+
         return this.callParent([value]);
     },
 

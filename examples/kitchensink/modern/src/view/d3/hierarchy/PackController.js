@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.PackController', {
         'Ext.util.Format'
     ],
 
-    onTooltip: function (component, tooltip, node, element, event) {
+    onTooltip: function(component, tooltip, node, element, event) {
         var record = node.data,
             size = record.get('size'),
             n = record.childNodes.length,
@@ -14,8 +14,9 @@ Ext.define('KitchenSink.view.d3.hierarchy.PackController', {
 
         if (size) {
             html += Ext.util.Format.fileSize(size);
-        } else {
-            html += n + ' file' + (n === 1 ? '' : 's') + ' inside.'
+        }
+        else {
+            html += n + ' file' + (n === 1 ? '' : 's') + ' inside.';
         }
 
         tooltip.setHtml(html);

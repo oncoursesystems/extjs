@@ -447,7 +447,7 @@ Ext.define('Ext.ComponentQuery', {
                 length = items.length,
                 candidate,
                 deep = mode !== '>';
-                
+
             for (; i < length; i++) {
                 candidate = items[i];
 
@@ -487,10 +487,10 @@ Ext.define('Ext.ComponentQuery', {
                     i = 0,
                     length = items.length,
                     candidate;
-                
+
                 for (; i < length; i++) {
                     candidate = items[i];
-                    
+
                     if (!candidate.destroyed && candidate.isXType(xtype, shallow)) {
                         result.push(candidate);
                     }
@@ -529,7 +529,7 @@ Ext.define('Ext.ComponentQuery', {
                 // CQ can be used to filter raw Objects.
                 config = candidate.self && candidate.self.getConfigurator &&
                          candidate.self.$config.configs[property];
-                
+
                 if (config) {
                     propValue = candidate[config.names.get]();
                 }
@@ -622,11 +622,11 @@ Ext.define('Ext.ComponentQuery', {
                              ' use "' + selector.replace(/^\./, '') +
                              '" without the leading dot instead');
                 //</debug>
-                
+
                 if (args[1] !== undefined) {
                     args[1] = args[1].replace(unescapeRe, '$1');
                 }
-                
+
                 return args.slice(1);
             }
         }, {
@@ -647,7 +647,7 @@ Ext.define('Ext.ComponentQuery', {
                     operator = args[2],
                     compareTo = args[4],
                     compareRe;
-                
+
                 // Unescape the attribute value matcher first
                 if (compareTo !== undefined) {
                     compareTo = compareTo.replace(unescapeRe, '$1');
@@ -662,7 +662,7 @@ Ext.define('Ext.ComponentQuery', {
                               "attribute value, escape the quote character in your pattern: " +
                               "(\\{1})",
                         match;
-                    
+
                     /* eslint-disable-next-line no-cond-assign */
                     if (match = /^(['"]).*?[^'"]$/.exec(compareTo)) {
                         Ext.log.warn(format(msg, selector, match[1], 'beginning'));
@@ -673,7 +673,7 @@ Ext.define('Ext.ComponentQuery', {
                     }
                     //</debug>
                 }
-                
+
                 if (operator === '/=') {
                     compareRe = regexCache.get(compareTo);
 
@@ -684,7 +684,7 @@ Ext.define('Ext.ComponentQuery', {
                         compareTo = regexCache.add(compareTo, new RegExp(compareTo));
                     }
                 }
-                
+
                 return [property, operator, compareTo];
             }
         }, {
@@ -701,7 +701,7 @@ Ext.define('Ext.ComponentQuery', {
                 if (args[2] !== undefined) {
                     args[2] = args[2].replace(unescapeRe, '$1');
                 }
-                
+
                 return args.slice(1);
             }
         }, {
@@ -717,7 +717,7 @@ Ext.define('Ext.ComponentQuery', {
             cfg = cfg || {};
             Ext.apply(this, cfg);
         },
-        
+
         // Executes this Query upon the selected root.
         // The root provides the initial source of candidate Component matches which are
         // progressively filtered by iterating through this Query's operations cache.
@@ -730,16 +730,16 @@ Ext.define('Ext.ComponentQuery', {
             var operations = this.operations,
                 result = [],
                 op, i, len;
-            
+
             for (i = 0, len = operations.length; i < len; i++) {
                 op = operations[i];
-                
+
                 result = result.concat(this._execute(root, op));
             }
-            
+
             return result;
         },
-        
+
         _execute: function(root, operations) {
             var i = 0,
                 length = operations.length,
@@ -795,29 +795,29 @@ Ext.define('Ext.ComponentQuery', {
                 result = false,
                 len = operations.length,
                 op, i;
-            
+
             if (len === 0) {
                 return true;
             }
-            
+
             for (i = 0; i < len; i++) {
                 op = operations[i];
-                
+
                 result = this._is(component, root, op);
-                
+
                 if (result) {
                     return result;
                 }
             }
-            
+
             return false;
         },
-        
+
         _is: function(component, root, operations) {
             var len = operations.length,
                 active = [component],
                 operation, i, j, mode, items, item;
-                
+
             // Loop backwards, since we're going up the hierarchy
             for (i = len - 1; i >= 0; --i) {
                 operation = operations[i];
@@ -880,11 +880,11 @@ Ext.define('Ext.ComponentQuery', {
 
             return true;
         },
-        
+
         getMatches: function(components, operations) {
             var len = operations.length,
                 i;
-                
+
             for (i = 0; i < len; ++i) {
                 components = filterItems(components, operations[i]);
 
@@ -992,7 +992,7 @@ Ext.define('Ext.ComponentQuery', {
             "nth-child": function(c, a) {
                 var result = [],
                     m, f, i, len, n, nodeIndex;
-                
+
                 m = nthRe.exec(a === "even" && "2n" || a === "odd" && "2n+1" ||
                                !nthRe2.test(a) && "n+" + a || a);
                 f = (m[1] || 1) - 0;
@@ -1001,7 +1001,7 @@ Ext.define('Ext.ComponentQuery', {
                 /* eslint-disable-next-line no-cond-assign */
                 for (i = 0; n = c[i]; i++) {
                     nodeIndex = i + 1;
-                    
+
                     if (f === 1) {
                         if (len === 0 || nodeIndex === len) {
                             result.push(n);
@@ -1038,7 +1038,7 @@ Ext.define('Ext.ComponentQuery', {
                     c;
 
                 deep = deep === 'true';
-                
+
                 for (; i < len; i++) {
                     c = cmps[i];
 
@@ -1074,7 +1074,7 @@ Ext.define('Ext.ComponentQuery', {
             if (!selector) {
                 return Ext.ComponentManager.getAll();
             }
-            
+
             /* eslint-disable-next-line vars-on-top */
             var results = [],
                 noDupResults = [],
@@ -1085,9 +1085,9 @@ Ext.define('Ext.ComponentQuery', {
             if (!query) {
                 query = cq.cache.add(selector, cq.parse(selector));
             }
-            
+
             results = query.execute(root);
-            
+
             // multiple selectors, potential to find duplicates
             // lets filter them out.
             if (query.isMultiMatch()) {
@@ -1188,7 +1188,7 @@ Ext.define('Ext.ComponentQuery', {
             if (extraArgs) {
                 Ext.Array.push(callArgs, extraArgs);
             }
-            
+
             if (preOrder) {
                 if (rootMatch) {
                     if (fn.apply(scope || root, callArgs) === false) {
@@ -1196,7 +1196,7 @@ Ext.define('Ext.ComponentQuery', {
                     }
                 }
             }
-            
+
             for (i = 0; i < len; i++) {
                 /* eslint-disable-next-line max-len */
                 if (cq._visit.call(cq, preOrder, selector, children[i], fn, scope, extraArgs) === false) {
@@ -1226,7 +1226,7 @@ Ext.define('Ext.ComponentQuery', {
          */
         is: function(component, selector, root) {
             var query;
-            
+
             if (!selector) {
                 return true;
             }
@@ -1248,13 +1248,13 @@ Ext.define('Ext.ComponentQuery', {
         parse: function(selector) {
             var operations = [],
                 selectors, sel, i, len;
-            
+
             selectors = Ext.splitAndUnescape(selector, ',');
-            
+
             for (i = 0, len = selectors.length; i < len; i++) {
                 // Trim the whitespace as the parser expects it.
                 sel = Ext.String.trim(selectors[i]);
-                
+
                 // Usually, a dangling comma at the end of a selector means a typo.
                 // In that case, the last sel value will be an empty string; the parser
                 // will silently ignore it which is not good, so we throw an error here.
@@ -1263,7 +1263,7 @@ Ext.define('Ext.ComponentQuery', {
                     Ext.raise('Invalid ComponentQuery selector: ""');
                 }
                 //</debug>
-                
+
                 operations.push(cq._parse(sel));
             }
 
@@ -1273,7 +1273,7 @@ Ext.define('Ext.ComponentQuery', {
                 operations: operations
             });
         },
-        
+
         _parse: function(selector) {
             var operations = [],
                 trim = Ext.String.trim,
@@ -1344,7 +1344,7 @@ Ext.define('Ext.ComponentQuery', {
                             else {
                                 args = selectorMatch.slice(1);
                             }
-                            
+
                             operations.push({
                                 method: Ext.isString(matcher.method)
                                     // Turn a string method into a function by formatting the
@@ -1357,13 +1357,13 @@ Ext.define('Ext.ComponentQuery', {
                                     : matcher.method,
                                 args: args
                             });
-                            
+
                             selector = selector.replace(selectorMatch[0], '')
                                                .replace(stripLeadingSpaceRe, '$1');
-                            
+
                             break; // Break on match
                         }
-                        
+
                         // Exhausted all matches: It's an error
                         if (i === (length - 1)) {
                             Ext.raise('Invalid ComponentQuery selector: "' + arguments[0] + '"');
@@ -1379,12 +1379,12 @@ Ext.define('Ext.ComponentQuery', {
                     operations.push({
                         mode: modeMatch[2] || modeMatch[1]
                     });
-                    
+
                     // When we have consumed the mode character, clean up leading spaces
                     selector = selector.replace(modeMatch[0], '').replace(stripLeadingSpaceRe, '');
                 }
             }
-            
+
             return operations;
         }
     });

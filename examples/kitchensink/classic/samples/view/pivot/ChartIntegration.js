@@ -17,25 +17,33 @@ Ext.define('KitchenSink.view.pivot.ChartIntegration', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/ChartIntegrationController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
     profiles: {
         classic: {
             width: 600,
-            height: 450
+            height: 450,
+            columnLines: true
         },
         neptune: {
             width: 750,
-            height: 450
+            height: 450,
+            columnLines: true
         },
         graphite: {
             width: 750,
-            height: 600
+            height: 600,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 750,
+            height: 600,
+            columnLines: false
         }
     },
     //</example>
@@ -50,6 +58,7 @@ Ext.define('KitchenSink.view.pivot.ChartIntegration', {
         xtype: 'pivotgrid',
         region: 'center',
         flex: 1,
+        columnLines: '${columnLines}',
 
         selModel: {
             type: 'cellmodel'

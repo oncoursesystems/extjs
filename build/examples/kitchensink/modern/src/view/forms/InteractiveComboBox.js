@@ -38,25 +38,25 @@ Ext.define('KitchenSink.view.forms.InteractiveComboBox', {
 
         stores: {
             myStore: {
-                data : [
-                    {"abbr":"AL", "name":"Alabamax"},
-                    {"abbr":"AK", "name":"Alaskax"},
-                    {"abbr":"AZ", "name":"Arizonax"}
+                data: [
+                    { "abbr": "AL", "name": "Alabamax" },
+                    { "abbr": "AK", "name": "Alaskax" },
+                    { "abbr": "AZ", "name": "Arizonax" }
                 ]
             }
         }
     },
 
-    items:[{
+    items: [{
         xtype: 'containerfield',
         label: '!forceSelection',
         items: [{
             xtype: 'combobox',
             reference: 'freeTextCombo',
             store: [
-                {"abbr":"AL", "name":"Alabama"},
-                {"abbr":"AK", "name":"Alaska"},
-                {"abbr":"AZ", "name":"Arizona"}
+                { "abbr": "AL", "name": "Alabama" },
+                { "abbr": "AK", "name": "Alaska" },
+                { "abbr": "AZ", "name": "Arizona" }
             ],
             queryMode: 'local',
             displayField: 'name',
@@ -81,9 +81,9 @@ Ext.define('KitchenSink.view.forms.InteractiveComboBox', {
             xtype: 'combobox',
             reference: 'forcedSelectCombo',
             store: [
-                {"abbr":"AL", "name":"Alabama"},
-                {"abbr":"AK", "name":"Alaska"},
-                {"abbr":"AZ", "name":"Arizona"}
+                { "abbr": "AL", "name": "Alabama" },
+                { "abbr": "AK", "name": "Alaska" },
+                { "abbr": "AZ", "name": "Arizona" }
             ],
             queryMode: 'local',
             displayField: 'name',
@@ -107,9 +107,9 @@ Ext.define('KitchenSink.view.forms.InteractiveComboBox', {
             xtype: 'combobox',
             reference: 'autoClearCombo',
             store: [
-                {"abbr":"AL", "name":"Alabama"},
-                {"abbr":"AK", "name":"Alaska"},
-                {"abbr":"AZ", "name":"Arizona"}
+                { "abbr": "AL", "name": "Alabama" },
+                { "abbr": "AK", "name": "Alaska" },
+                { "abbr": "AZ", "name": "Arizona" }
             ],
             queryMode: 'local',
             displayField: 'name',

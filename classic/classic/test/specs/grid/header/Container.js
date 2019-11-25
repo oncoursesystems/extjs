@@ -17,7 +17,7 @@ topSuite('Ext.grid.header.Container', ['Ext.grid.Panel', 'Ext.form.field.Text'],
                     }
                 }
             }, storeCfg));
-    
+
             grid = Ext.create('Ext.grid.Panel', Ext.apply({
                 title: 'Simpsons',
                 store: store,
@@ -71,18 +71,18 @@ topSuite('Ext.grid.header.Container', ['Ext.grid.Panel', 'Ext.form.field.Text'],
                 jasmine.fireMouseEvent(col.titleEl, 'mousedown');
                 expect(menu.isVisible()).toBe(false);
             });
-            
+
             waitsForFocus(col);
-            
+
             runs(function() {
                 // Opening the menu with down arrow focuses it
                 jasmine.fireKeyEvent(col.el.dom, 'keydown', Ext.event.Event.DOWN);
             });
 
             waitsForFocus(menu);
-            
+
             expectFocused(menu.down('menuitem'));
-            
+
             runs(function() {
                 jasmine.fireMouseEvent(col.titleEl, 'mouseup');
             });
@@ -311,10 +311,10 @@ topSuite('Ext.grid.header.Container', ['Ext.grid.Panel', 'Ext.form.field.Text'],
             });
         });
     });
-    
+
     describe("keyboard events", function() {
         var headerCt;
-        
+
         beforeEach(function() {
             createGrid(null, {
                 columns: [{
@@ -325,21 +325,21 @@ topSuite('Ext.grid.header.Container', ['Ext.grid.Panel', 'Ext.form.field.Text'],
                     header: 'Phone', dataIndex: 'phone', flex: 1
                 }]
             });
-            
+
             headerCt = grid.headerCt;
-            
+
             focusAndWait(headerCt.down('[dataIndex=email]'));
         });
-        
+
         afterEach(function() {
             headerCt = null;
         });
-        
+
         it("should focus first column header on Home key", function() {
             jasmine.syncPressKey(headerCt.el, 'home');
             expectFocused(headerCt.gridVisibleColumns[0]);
         });
-        
+
         it("should focus last column header on End key", function() {
             jasmine.syncPressKey(headerCt.el, 'end');
             expectFocused(headerCt.gridVisibleColumns[2]);
@@ -350,7 +350,7 @@ topSuite('Ext.grid.header.Container', ['Ext.grid.Panel', 'Ext.form.field.Text'],
         beforeEach(function() {
             createGrid();
         });
-        
+
         it('should disable hiding the last visible column', function() {
             var menu,
                 col = grid.columns[0],
@@ -361,7 +361,7 @@ topSuite('Ext.grid.header.Container', ['Ext.grid.Panel', 'Ext.form.field.Text'],
 
             // Open the header menu and mouseover the "Columns" item.
             Ext.testHelper.showHeaderMenu(col);
-            
+
             runs(function() {
                 menu = col.activeMenu;
                 colItem = menu.child('#columnItem');
@@ -375,7 +375,7 @@ topSuite('Ext.grid.header.Container', ['Ext.grid.Panel', 'Ext.form.field.Text'],
 
                 return colMenu && colMenu.isVisible();
             }, 'column hiding menu to show');
-            
+
             // Hide the "Name" column, leaving only the "Email" column visible
             runs(function() {
                 nameItem = colMenu.child('[text=Name]');
@@ -390,31 +390,31 @@ topSuite('Ext.grid.header.Container', ['Ext.grid.Panel', 'Ext.form.field.Text'],
             }, 'last column hiding item to be disabled');
         });
     });
-    
+
     describe("reconfiguring parent grid", function() {
         it("should activate container after adding columns", function() {
             createGrid({}, { columns: [] });
-            
+
             expect(grid.headerCt.isFocusableContainerActive()).toBeFalsy();
-            
+
             grid.reconfigure(null, [
                 { header: 'Name',  dataIndex: 'name', width: 100 },
                 { header: 'Email', dataIndex: 'email', flex: 1 },
                 { header: 'Phone', dataIndex: 'phone', flex: 1, hidden: true }
             ]);
-            
+
             expect(grid.headerCt.isFocusableContainerActive()).toBeTruthy();
             expect(grid.headerCt.down('gridcolumn')).toHaveAttr('tabIndex', 0);
         });
-        
+
         it("should deactivate container after removing all columns", function() {
             createGrid();
-            
+
             expect(grid.headerCt.isFocusableContainerActive()).toBeTruthy();
             expect(grid.headerCt.down('gridcolumn')).toHaveAttr('tabIndex', 0);
-            
+
             grid.reconfigure(null, []);
-            
+
             expect(grid.headerCt.isFocusableContainerActive()).toBeFalsy();
         });
     });

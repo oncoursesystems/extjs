@@ -152,7 +152,7 @@ Ext.define('Ext.app.bind.Template', {
 
         for (i = 0; i < length; ++i) {
             slot = slots[i];
-            
+
             if (slot) {
                 buffer[i] = slot(values, scope);
             }
@@ -240,7 +240,7 @@ Ext.define('Ext.app.bind.Template', {
                 else if (c === lit && prev === lit && !lastEscaped) {
                     current = current.slice(0, -1);
                     current += text.substring(i + 1);
-                    
+
                     break;
                 }
                 else if (c === '{') {
@@ -248,15 +248,15 @@ Ext.define('Ext.app.bind.Template', {
                         buffer[pos++] = current;
                         current = '';
                     }
-                    
+
                     // parse expression
                     parser.reset(text, i + 1);
                     i = me.parseExpression(parser, pos);
                     ++pos;
-                    
+
                     continue;
                 }
-                
+
                 current += c;
                 ++i;
                 prev = c;
@@ -275,7 +275,7 @@ Ext.define('Ext.app.bind.Template', {
 
         parseExpression: function(parser, pos) {
             var i;
-            
+
             this.slots[pos] = parser.compileExpression(this.tokens, this.tokensMap);
 
             i = parser.token.at + 1; // skip over the "}" token

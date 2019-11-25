@@ -18,7 +18,7 @@ Ext.define('Ext.view.TableLayout', {
             context = ownerContext.context,
             scrollable = ownerGrid.getScrollable(),
             partnerVisible;
-        
+
         partnerVisible = partner && partner.grid.isVisible() &&
                          !(partner.grid.collapsed || partner.grid.floatedFromCollapse);
 
@@ -28,7 +28,7 @@ Ext.define('Ext.view.TableLayout', {
         // is configured not to for general row rendering.
         ownerContext.doSyncRowHeights =
             partnerVisible && (ownerGrid.syncRowHeight || ownerGrid.syncRowHeightOnNextLayout);
-        
+
         // The reason for checking .config here is that by setting the overflow on the context, it
         // overwrites the value in the scrollable. As such, all we're trying to do here is capture
         // the initial intent to see if the user configured the scroller as x: false.
@@ -57,13 +57,13 @@ Ext.define('Ext.view.TableLayout', {
                     partnerContext.lockingPartnerContext = ownerContext;
                 }
             }
-            
+
             if (ownerContext.doSyncRowHeights) {
                 if (partnerContext && !partnerContext.rowHeightSynchronizer) {
                     partnerContext.rowHeightSynchronizer =
                         partnerContext.target.syncRowHeightBegin();
                 }
-                
+
                 ownerContext.rowHeightSynchronizer = me.owner.syncRowHeightBegin();
             }
         }
@@ -101,7 +101,7 @@ Ext.define('Ext.view.TableLayout', {
         if (!owner.all.getCount() && (!bodyDom || !owner.body.child('table', true))) {
             ownerContext.setProp('viewOverflowY', false);
             me.callParent([ ownerContext ]);
-            
+
             return;
         }
 
@@ -113,7 +113,7 @@ Ext.define('Ext.view.TableLayout', {
         if (columnsChanged === undefined) {
             // We cannot proceed when we have rows but no columnWidths determined...
             me.done = false;
-            
+
             return;
         }
 
@@ -135,7 +135,7 @@ Ext.define('Ext.view.TableLayout', {
                 // We have queued the columns to be written, but they are still pending, so
                 // we cannot proceed.
                 me.done = false;
-                
+
                 return;
             }
         }
@@ -156,7 +156,7 @@ Ext.define('Ext.view.TableLayout', {
 
                 if (!(otherSynchronizer = lockingPartnerContext.getProp('rowHeights'))) {
                     me.done = false;
-                    
+
                     return;
                 }
 
@@ -174,7 +174,7 @@ Ext.define('Ext.view.TableLayout', {
 
             if (!rowHeightFlusher.flushed) {
                 me.done = false;
-                
+
                 return;
             }
         }
@@ -188,15 +188,15 @@ Ext.define('Ext.view.TableLayout', {
                 // consult its containerSize when we are not shrink-wrapping to see if our
                 // content will overflow vertically.
                 ctSize = ownerCtContext.target.layout.getContainerSize(ownerCtContext);
-                
+
                 if (!ctSize.gotHeight) {
                     me.done = false;
-                    
+
                     return;
                 }
 
                 bodyHeight = bodyDom.offsetHeight;
-                
+
                 if (bodyHeight > ctSize.height) {
                     overflowY = true;
                 }
@@ -214,8 +214,8 @@ Ext.define('Ext.view.TableLayout', {
         // If no locking, then if there is no horizontal overflow, we set overflow-x: hidden
         // This avoids "pantom" scrollbars which are only caused by the presence of another
         // scrollbar.
-        scrollbarHeight = Ext.getScrollbarSize().height;
-        
+        scrollbarHeight = Ext.scrollbar.height();
+
         if (me.done && ownerContext.allowScrollX && scrollbarHeight) {
             // No locking sides, ensure X scrolling is on if there is overflow,
             // but not if there is no overflow
@@ -228,7 +228,7 @@ Ext.define('Ext.view.TableLayout', {
                 else {
                     overflowX = !!ownerContext.headerContext.state.boxPlan.tooNarrow;
                 }
-                
+
                 ownerContext.setProp('overflowX', overflowX);
             }
 
@@ -261,7 +261,7 @@ Ext.define('Ext.view.TableLayout', {
         // This will have been figured out by now because the columnWidths have been
         // published...
         if (ownerContext.headerContext.state.boxPlan.tooNarrow) {
-            bodyHeight += Ext.getScrollbarSize().height;
+            bodyHeight += Ext.scrollbar.height();
         }
 
         return bodyHeight;
@@ -298,7 +298,7 @@ Ext.define('Ext.view.TableLayout', {
             // Enable the next go-round of headerCt's ColumnLayout change check to
             // read true, flushed lastBox widths that are in the Table
             lastBox = column.lastBox;
-            
+
             if (lastBox) {
                 lastBox.width = colWidth;
             }
@@ -326,7 +326,7 @@ Ext.define('Ext.view.TableLayout', {
         flusher.flushed = true;
 
         ownerContext.syncRowHeights = true;
-        
+
         if (!me.pending) {
             ownerContext.context.queueLayout(me);
         }
@@ -347,11 +347,11 @@ Ext.define('Ext.view.TableLayout', {
 
         // Inform any buffered renderer about completion of the layout of its view
         buffered = me.owner.bufferedRenderer;
-        
+
         if (buffered) {
             buffered.afterTableLayout(ownerContext);
         }
-        
+
         if (ownerGrid) {
             ownerGrid.syncRowHeightOnNextLayout = false;
         }
@@ -365,7 +365,7 @@ Ext.define('Ext.view.TableLayout', {
                     return;
                 }
             }
-            
+
             scroller.restoreState();
         }
     },

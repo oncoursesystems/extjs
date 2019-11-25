@@ -8,17 +8,17 @@ Ext.define('KitchenSink.view.d3.heatmap.Pivot', {
         'Ext.pivot.d3.HeatMap'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/d3/heatmap/PivotController.js'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
 
     tbar: ['->', {
-        iconCls: 'x-fa fa-refresh',
+        iconCls: 'x-fa fa-sync',
         text: 'Refresh Data',
         handler: 'onRefreshData'
     }],

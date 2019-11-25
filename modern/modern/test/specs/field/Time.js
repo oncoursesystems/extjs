@@ -137,14 +137,14 @@ topSuite("Ext.field.Time", [
             ["G:i:s", ["11:01:00", "11:01:00", 661]],
             ["G:i:s", ["14:59:20", "14:59:00", 899]]
         ];
-    
+
     jasmine.usesViewport();
 
     function makeField(cfg) {
         cfg = Ext.apply({
             renderTo: Ext.getBody()
         }, cfg);
-        
+
         field = new Ext.field.Time(cfg);
     }
 
@@ -157,11 +157,11 @@ topSuite("Ext.field.Time", [
     afterEach(function() {
         field = Ext.destroy(field);
     });
-    
+
     describe("init", function() {
         it("should have default format matching Ext.Date.defaultTimeFormat", function() {
             makeField();
-            
+
             expect(field.getFormat()).toBe(Ext.Date.defaultTimeFormat);
         });
     });
@@ -179,7 +179,7 @@ topSuite("Ext.field.Time", [
                     var date = Ext.Date.parse('1/1/1970' + ' ' + timeVal[0], 'j/n/Y' + ' ' + format);
 
                     field.setValue(timeVal[0]);
-                    
+
                     expect(field.inputElement.dom.value).toBe(timeVal[1]);
                     expect(field.validate()).toBe(true);
                     expect(field.getValue().getTime()).toBe(date.getTime());
@@ -187,7 +187,7 @@ topSuite("Ext.field.Time", [
 
                 it("should clear the text field and value should be null when specifying null", function() {
                     field.setValue(null);
-                    
+
                     expect(field.inputElement.dom.value).toBe('');
                     expect(field.getValue()).toBeNull();
                 });
@@ -232,7 +232,7 @@ topSuite("Ext.field.Time", [
 
                 it('should set current time on floated picker when setting field to be null', function() {
                     field.setValue(timeVal[0]);
-                    
+
                     expect(field.getPicker().getValue()).toBe(timeVal[2]);
 
                     field.setValue(null);
@@ -242,7 +242,7 @@ topSuite("Ext.field.Time", [
 
                 it('should set current time on floated picker when clear field', function() {
                     field.setValue(timeVal[0]);
-                    
+
                     expect(field.getPicker().getValue()).toBe(timeVal[2]);
 
                     field.inputElement.dom.value = '';
@@ -293,15 +293,15 @@ topSuite("Ext.field.Time", [
 
     function makeValidAltFormatSuite(altFormatsTests) {
         describe("AltFormats validation tests", function() {
-            altFormatsTests.forEach(function (value) {
+            altFormatsTests.forEach(function(value) {
                 makeValidAltFormatTest(value, 'H:i');
                 makeValidAltFormatTest(value, 'g:i:s A');
-            })
+            });
         });
     }
 
     function makeValidAltFormatTest(value, format) {
-        describe(value + " should be valid due using display format '"+format+"' when using default altformats", function() {
+        describe(value + " should be valid due using display format '" + format + "' when using default altformats", function() {
             var pickerInitialValue;
 
             beforeEach(function() {
@@ -379,7 +379,8 @@ topSuite("Ext.field.Time", [
     }
 
     describe('Validate full date for all formats', function() {
-        var i, formats = ['g:i A', 'g:i:s A', 'h:i A', 'h:i:s A', 'H', 'H:i', 'H:i:s A'];
+        var i,
+formats = ['g:i A', 'g:i:s A', 'h:i A', 'h:i:s A', 'H', 'H:i', 'H:i:s A'];
 
         for (var i = 0; i < formats.size; i++) {
             testFullDate(formats[i]);
@@ -388,6 +389,7 @@ topSuite("Ext.field.Time", [
         function testFullDate(input, output) {
             it("should set full date as value for format " + format, function() {
                 var date = new Date();
+
                 makeField({
                     format: format
                 });

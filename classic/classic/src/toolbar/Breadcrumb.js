@@ -18,7 +18,7 @@ Ext.define('Ext.toolbar.Breadcrumb', {
     ],
 
     isBreadcrumb: true,
-    
+
     /**
      * @cfg baseCls
      * @inheritdoc
@@ -128,7 +128,7 @@ Ext.define('Ext.toolbar.Breadcrumb', {
      * @inheritdoc
      */
     publishes: ['selection'],
-    
+
     /**
      * @cfg twoWayBindable
      * @inheritdoc
@@ -139,7 +139,7 @@ Ext.define('Ext.toolbar.Breadcrumb', {
     _btnCls: Ext.baseCSSPrefix + 'breadcrumb-btn',
     _folderIconCls: Ext.baseCSSPrefix + 'breadcrumb-icon-folder',
     _leafIconCls: Ext.baseCSSPrefix + 'breadcrumb-icon-leaf',
-    
+
     /**
      * @cfg focusableContainer
      * @inheritdoc
@@ -182,7 +182,7 @@ Ext.define('Ext.toolbar.Breadcrumb', {
     doDestroy: function() {
         Ext.destroy(this._buttons);
         this.setStore(null);
-        
+
         this.callParent();
     },
 
@@ -219,14 +219,14 @@ Ext.define('Ext.toolbar.Breadcrumb', {
 
     applySelection: function(node) {
         var store = this.getStore();
-        
+
         if (store) {
             node = (node === 'root') ? this.getStore().getRoot() : node;
         }
         else {
             node = null;
         }
-        
+
         return node;
     },
 
@@ -364,7 +364,7 @@ Ext.define('Ext.toolbar.Breadcrumb', {
          * @param {Ext.data.TreeModel} prevNode The previously selected node.
          */
         me.fireEvent('selectionchange', me, node, prevNode);
-        
+
         if (me._shouldFireChangeEvent) {
             /**
              * @event change
@@ -388,7 +388,7 @@ Ext.define('Ext.toolbar.Breadcrumb', {
             Ext.raise("Cannot reconfigure 'useSplitButtons' config of Ext.toolbar.Breadcrumb " +
                       "after initial render");
         }
-        
+
         return useSplitButtons;
     },
 

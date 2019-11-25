@@ -1,5 +1,5 @@
 topSuite("Ext.dom.Element", function() {
-    
+
     function underlayHidden(underlayEl) {
         return !Ext.getBody().contains(underlayEl) || !underlayEl.isVisible();
     }
@@ -70,14 +70,14 @@ topSuite("Ext.dom.Element", function() {
         it("should throw error if the Element has an invalid id", function() {
             function expectError(id) {
                 var dom = document.createElement('div');
-                
+
                 dom.id = id;
                 document.body.appendChild(dom);
-                
+
                 expect(function() {
                     new Ext.Element(dom);
                 }).toThrow('Invalid Element "id": "' + id + '"');
-                
+
                 document.body.removeChild(dom);
             }
 
@@ -88,12 +88,12 @@ topSuite("Ext.dom.Element", function() {
             expectError('<12345/>');
             expectError('1<>234.567');
         });
-        
+
         it("should not call initConfig", function() {
             spyOn(Ext.dom.Element.prototype, 'initConfig').andCallThrough();
-            
+
             element = new Ext.dom.Element(domEl);
-            
+
             expect(Ext.dom.Element.prototype.initConfig).not.toHaveBeenCalled();
         });
     });
@@ -163,7 +163,7 @@ topSuite("Ext.dom.Element", function() {
 
                 return fly ? Ext.fly(domEl) : Ext.get(domEl);
             }
-            
+
             afterEach(function() {
                 if (element) {
                     // Prevent console warnings
@@ -263,11 +263,10 @@ topSuite("Ext.dom.Element", function() {
                 });
             });
 
-    
             describe('clone', function() {
                 var clone,
                     domElInnerHTML = '<span class="bar" style="color:red">Some Text</span>';
-                
+
                 afterEach(function() {
                     if (domEl) {
                         Ext.fly(domEl).destroy();
@@ -289,7 +288,7 @@ topSuite("Ext.dom.Element", function() {
                     // deep != true, so it should not have cloned descendants
                     expect(clone.dom.innerHTML).toBe('');
                 });
-                
+
                 describe('deep', function() {
                     // Comparing innerHTML does not work in all browsers:
                     //    Expected '<SPAN style="COLOR: red" class=bar _extData="null">Some Text</SPAN>'
@@ -1027,7 +1026,6 @@ topSuite("Ext.dom.Element", function() {
 
                     element.set({ align: "center" }, false);
 
-
                     expect(element.dom.align).toEqual("center");
                 });
 
@@ -1070,7 +1068,7 @@ topSuite("Ext.dom.Element", function() {
                         expect(element.dom.focus).toHaveBeenCalled();
                     });
                 });
-                
+
                 if (Ext.isIE8) {
                     it("should ignore any exception", function() {
                         element.dom.focus = function() {
@@ -1094,7 +1092,6 @@ topSuite("Ext.dom.Element", function() {
 
                     expect(element.dom.blur).toHaveBeenCalled();
                 });
-
 
                 it("should ignore any exception", function() {
                     element.dom.blur = function() {
@@ -1174,7 +1171,7 @@ topSuite("Ext.dom.Element", function() {
                         afterEach(function() {
                             Ext.fly(wrap).destroy();
                         });
-                        
+
                         it("should place the element in the element match the selector", function() {
                             wrap = element.wrap({
                                 cls: 'foo',
@@ -1194,11 +1191,11 @@ topSuite("Ext.dom.Element", function() {
 
                     describe("focus", function() {
                         var child;
-                        
+
                         afterEach(function() {
                             child = Ext.destroy(child);
                         });
-                        
+
                         it("should keep focus if the active element is inside the wrapped element", function() {
                             child = element.createChild({
                                 tag: 'a',
@@ -1207,13 +1204,13 @@ topSuite("Ext.dom.Element", function() {
                             });
 
                             focusAndWait(child);
-                            
+
                             runs(function() {
                                 wrap = element.wrap();
                             });
-                            
+
                             waitsForFocus(child);
-                            
+
                             runs(function() {
                                 expect(Ext.dom.Element.getActiveElement()).toBe(child.dom);
                             });
@@ -1225,7 +1222,7 @@ topSuite("Ext.dom.Element", function() {
                                 html: 'Foo',
                                 tabIndex: '0'
                             });
-                            
+
                             var spy = jasmine.createSpy();
 
                             focusAndWait(child);
@@ -1233,16 +1230,16 @@ topSuite("Ext.dom.Element", function() {
                             if (Ext.isIE) {
                                 waits(100);
                             }
-                            
+
                             runs(function() {
                                 child.on('focus', spy);
                                 child.on('blur', spy);
                                 wrap = element.wrap();
                             });
-                            
+
                             // Nothing must happen, there's nothing to wait for
                             waits(100);
-                            
+
                             runs(function() {
                                 expect(spy).not.toHaveBeenCalled();
                             });
@@ -1250,22 +1247,22 @@ topSuite("Ext.dom.Element", function() {
 
                         it("should not cause an exception when the focused element is not in the element cache", function() {
                             var newId = Ext.id();
-                            
+
                             element.dom.innerHTML = '<a tabIndex="0" id="' + newId + '">Foo</a>';
 
                             child = element.dom.firstChild;
 
                             focusAndWait(child);
-                            
+
                             runs(function() {
                                 expect(function() {
                                     wrap = element.wrap();
                                 }).not.toThrow();
                                 expect(Ext.cache[newId]).toBeUndefined();
                             });
-                            
+
                             waitsForFocus(child);
-                            
+
                             runs(function() {
                                 expect(Ext.dom.Element.getActiveElement()).toBe(child);
                             });
@@ -1295,13 +1292,13 @@ topSuite("Ext.dom.Element", function() {
                             });
 
                             focusAndWait(child);
-                            
+
                             runs(function() {
                                 element.unwrap();
                             });
-                            
+
                             waitsForFocus(child);
-                            
+
                             runs(function() {
                                 expect(Ext.dom.Element.getActiveElement()).toBe(child.dom);
                             });
@@ -1313,19 +1310,19 @@ topSuite("Ext.dom.Element", function() {
                                 html: 'Foo',
                                 tabIndex: '0'
                             });
-                            
+
                             var spy = jasmine.createSpy();
 
                             focusAndWait(child);
-                            
+
                             runs(function() {
                                 child.on('focus', spy);
                                 child.on('blur', spy);
                                 element.unwrap();
                             });
-                            
+
                             waitsForFocus(child);
-                            
+
                             runs(function() {
                                 expect(spy).not.toHaveBeenCalled();
                             });
@@ -1339,16 +1336,16 @@ topSuite("Ext.dom.Element", function() {
                             child = element.dom.firstChild;
 
                             focusAndWait(child);
-                            
+
                             runs(function() {
                                 expect(function() {
                                     element.unwrap();
                                 }).not.toThrow();
                                 expect(Ext.cache[newId]).toBeUndefined();
                             });
-                            
+
                             waitsForFocus(child);
-                            
+
                             runs(function() {
                                 expect(Ext.dom.Element.getActiveElement()).toBe(child);
                             });
@@ -1381,7 +1378,7 @@ topSuite("Ext.dom.Element", function() {
 
                 xdescribe('deprecated (EventManager)', function() {
                     var fakeScope = {};
-                    
+
                     describe("addListener", function() {
                         beforeEach(function() {
                             element = addElement('div');
@@ -1433,11 +1430,11 @@ topSuite("Ext.dom.Element", function() {
 
                             expect(Ext.EventManager.purgeElement).toHaveBeenCalledWith(element);
                         });
-                        
+
                         // https://sencha.jira.com/browse/EXTJSIV-6713
                         it("should work with images", function() {
                             element = addElement('img');
-                            
+
                             expect(function() { element.purgeAllListeners(); }).not.toThrow();
                             element.destroy();
                         });
@@ -1469,7 +1466,7 @@ topSuite("Ext.dom.Element", function() {
 
             describe("destroy", function() {
                 var id, dom;
-                
+
                 beforeEach(function() {
                     element = addElement('div');
                     id = element.id;
@@ -1487,7 +1484,7 @@ topSuite("Ext.dom.Element", function() {
                 it("should should remove the cache entry", function() {
                     expect(id in Ext.cache).toBe(false);
                 });
-                
+
                 // IE8 does element destruction differently, see below
                 if (!Ext.isIE8) {
                     it("should remove the element from the dom", function() {
@@ -1495,34 +1492,34 @@ topSuite("Ext.dom.Element", function() {
                     });
                 }
             });
-            
+
             if (Ext.isIE8) {
                 describe("destroy (IE8)", function() {
                     var dom;
-                    
+
                     beforeEach(function() {
                         element = addElement('div');
                         dom = element.dom;
                     });
-                    
+
                     it("should schedule element for garbage collection", function() {
                         var queue = Ext.Element.destroyQueue,
                             len = queue.length;
-                        
+
                         element.destroy();
-                        
+
                         expect(queue.length).toBe(len + 1);
                         expect(queue[len]).toBe(dom);
                     });
-                    
+
                     it("should finally destroy the element after a timeout", function() {
                         runs(function() {
                             element.destroy();
                         });
-                        
+
                         // The timeout is hardcoded in Element override
                         waits(32);
-                        
+
                         runs(function() {
                             expect(dom.parentNode).toBeFalsy();
                         });
@@ -1645,31 +1642,31 @@ topSuite("Ext.dom.Element", function() {
                     });
                 });
             });
-            
+
             describe("getAttributes", function() {
                 it("should return an empty object for element with no attributes", function() {
                     var empty = document.createElement('div');
-                    
+
                     var attrs = Ext.fly(empty).getAttributes();
-                    
+
                     expect(attrs).toEqual({});
-                    
+
                     Ext.fly(empty).destroy();
                 });
-                
+
                 it("should return all attributes", function() {
                     var el = Ext.getBody().createChild({
                         tag: 'div',
                         role: 'foo'
                     });
-                    
+
                     var attrs = el.getAttributes();
-                    
+
                     expect(attrs).toEqual({
                         role: 'foo',
                         id: el.id
                     });
-                    
+
                     el.destroy();
                 });
             });
@@ -1712,43 +1709,43 @@ topSuite("Ext.dom.Element", function() {
             describe("visibilityMode", function() {
                 var modes = ['DISPLAY', 'VISIBILITY', 'OFFSETS', 'CLIP'],
                     i;
-                
+
                 beforeEach(function() {
                     element = addElement('div');
                 });
-                
+
                 describe("setVisibilityMode and getVisibilityMode", function() {
                     function makeSpec(mode) {
                         it("should work with " + mode, function() {
                             var modeValue = Ext.dom.Element[mode];
-                            
+
                             element.setVisibilityMode(modeValue);
-                            
+
                             expect(element.getVisibilityMode()).toBe(modeValue);
                         });
                     }
-                    
+
                     for (i = 0; i < modes.length; i++) {
                         makeSpec(modes[i]);
                     }
                 });
-                
+
                 describe("visibility mode on flyweights", function() {
                     function makeSpec(mode) {
                         it("should retain " + mode, function() {
                             var modeValue = Ext.dom.Element[mode];
-                            
+
                             Ext.fly(element.dom).setVisibilityMode(modeValue);
                             expect(Ext.fly(element.dom).getVisibilityMode()).toBe(modeValue);
                         });
                     }
-                    
+
                     for (i = 0; i < modes.length; i++) {
                         makeSpec(modes[i]);
                     }
                 });
             });
-            
+
             // The classic toolkit does things differently; see Ext.overrides.dom.Element
             // test suite for inline style tests
             (Ext.toolkit === 'modern' ? describe : xdescribe)("setVisible", function() {
@@ -1760,47 +1757,47 @@ topSuite("Ext.dom.Element", function() {
                         CLIP: Ext.baseCSSPrefix + 'hidden-clip'
                     },
                     i;
-                
+
                 beforeEach(function() {
                     element = addElement('div');
                 });
-                
+
                 function makeSuite(mode) {
                     describe("hiding with " + mode, function() {
                         var modeValue = Ext.dom.Element[mode],
                             rightCls = classes[mode],
                             wrongModes = Ext.Array.difference(modes, [mode]),
                             wrongCls, j;
-                        
+
                         beforeEach(function() {
                             element.setVisibilityMode(modeValue);
                             element.setVisible(false);
                         });
-                        
+
                         it("should assign " + rightCls, function() {
                             expect(element.hasCls(rightCls)).toBe(true);
                         });
-                        
+
                         for (j = 0; j < wrongModes.length; j++) {
                             wrongCls = classes[wrongModes[j]];
-                            
+
                             it("should remove " + wrongCls, function() {
                                 expect(element.hasCls(wrongCls)).toBe(false);
                             });
                         }
-                        
+
                         describe("showing with " + mode, function() {
                             beforeEach(function() {
                                 element.setVisible(true);
                             });
-                            
+
                             it("should remove " + rightCls, function() {
                                 expect(element.hasCls(rightCls)).toBe(false);
                             });
-                            
+
                             for (j = 0; j < wrongModes.length; j++) {
                                 wrongCls = classes[wrongModes[j]];
-                                
+
                                 it("should not add " + wrongCls, function() {
                                     expect(element.hasCls(wrongCls)).toBe(false);
                                 });
@@ -1808,12 +1805,12 @@ topSuite("Ext.dom.Element", function() {
                         });
                     });
                 }
-                
+
                 for (i = 0; i < modes.length; i++) {
                     makeSuite(modes[i]);
                 }
             });
-            
+
             describe("visibility", function() {
                 var child, grandChild,
                     modes = [Ext.dom.Element.DISPLAY, Ext.dom.Element.VISIBILITY];
@@ -2079,14 +2076,14 @@ topSuite("Ext.dom.Element", function() {
                     expect(Ext.get(element)).toBe(element);
                 });
             });
-            
+
             describe("passing a Ext.dom.FlyWeight as first argument", function() {
                 it("should return Ext.dom.Element", function() {
                     var result = Ext.get(Ext.fly(domEl));
 
                     expect(result).toBe(element);
                     expect(result.isFly).toBeUndefined();
-                    
+
                 });
             });
 
@@ -2355,7 +2352,7 @@ topSuite("Ext.dom.Element", function() {
             });
         });
     });
-    
+
     describe("getXY", function() {
         var unAttached;
 
@@ -4150,7 +4147,7 @@ topSuite("Ext.dom.Element", function() {
                         expect(handler.mostRecentCall.args[0].target).toBe(grandchild);
                         expect(handler.mostRecentCall.args[1]).toBe(child);
                     });
-                    
+
                     if (delegated) {
                         // https://sencha.jira.com/browse/EXTJS-18435
                         it("should add capture listeners for direct events with delegate selector", function() {
@@ -4158,9 +4155,9 @@ topSuite("Ext.dom.Element", function() {
                                 delegate: '.child',
                                 mouseenter: handler
                             });
-                            
+
                             var event = element.events.mouseenter;
-                            
+
                             // We don't have to test the propagation mechanism here,
                             // just the fact that listener was added to directCaptures
                             expect(event.directCaptures.observable.dom).toBe(element.dom);
@@ -4339,7 +4336,6 @@ topSuite("Ext.dom.Element", function() {
                         expect(handler2.callCount).toBe(1);
                     });
 
-
                     it("should remove a single event listener", function() {
                         addListener({ single: true });
                         removeListener();
@@ -4458,7 +4454,7 @@ topSuite("Ext.dom.Element", function() {
             afterEach(function() {
                 target.destroy();
             });
-            
+
             fire = function(type, useMouseEvents) {
                 if (useMouseEvents) {
                     jasmine.doFireMouseEvent(target, Ext.testHelper.mouseEvents[type]);
@@ -4483,7 +4479,7 @@ topSuite("Ext.dom.Element", function() {
                 expect(listeners.pointerdown.mostRecentCall.args[0].type).toBe('pointerdown');
                 expect(listeners.touchstart.mostRecentCall.args[0].type).toBe('touchstart');
                 expect(listeners.mousedown.mostRecentCall.args[0].type).toBe('mousedown');
-                
+
                 // Release gestures
                 Ext.testHelper.fireEvent('end', target);
             });
@@ -4673,7 +4669,6 @@ topSuite("Ext.dom.Element", function() {
                         child2 = Ext.get('child2'),
                         child1_1 = Ext.get('child1_1'),
                         order = [];
-
 
                     root.on('click', function() { order.push('root'); }, null, { delegate: '.foo' });
                     child1.on('click', function() { order.push('child1'); }, null, { delegate: '.foo' });
@@ -5348,16 +5343,16 @@ topSuite("Ext.dom.Element", function() {
     describe('miscellaneous', function() {
         // classic
         (Ext.toolkit === 'classic' ? describe : xdescribe)('classic toolkit', function() {
-            
+
             // EXTJS-20524
             describe('syncContent', function() {
                 it('should not throw an exception when syncing node content', function() {
                     var el1 = Ext.fly(document.createElement('div')),
                         el2 = Ext.fly(document.createElement('div'));
-                    
+
                     el1.dom.innerHTML = '<!--comment--> foo';
                     el2.dom.innerHTML = '<!--comment--> bar';
-    
+
                     expect(function() { el1.syncContent(el2); }).not.toThrow();
                     expect(el1.dom.innerHTML).toEqual(
                         (Ext.isIE8 ? '' : '<!--comment--> ') + 'bar'
@@ -5365,10 +5360,10 @@ topSuite("Ext.dom.Element", function() {
                 });
             });
         });
-        
+
         // modern
         (Ext.toolkit === 'modern' ? describe : xdescribe)('modern toolkit', function() {
-        
+
         });
     });
 });

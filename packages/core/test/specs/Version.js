@@ -53,7 +53,7 @@ topSuite("Ext.Version", function() {
         it("should be greater than 1.2.3alpha", function() {
             expect(version.isGreaterThan("1.2.3alpha")).toBeTruthy();
         });
-        
+
         it("should not be greater than 1.2.3RC", function() {
             expect(version.isGreaterThan("1.2.3RC")).toBeFalsy();
         });
@@ -63,7 +63,7 @@ topSuite("Ext.Version", function() {
         it("should not be smaller than 1.2.3alpha", function() {
             expect(version.isLessThan("1.2.3alpha")).toBeFalsy();
         });
-        
+
         it("should be smaller than 1.2.3RC", function() {
             expect(version.isLessThan("1.2.3RC")).toBeTruthy();
         });
@@ -97,7 +97,7 @@ topSuite("Ext.Version", function() {
                     compareTo('2.3', '^2.3', -1);
                     compareTo('2.3', '^2', -1);
                 });
-                
+
                 it('should be greater than', function() {
                     compareTo('2.3', '^2.2', 1);
                     compareTo('2.3', '^1', 1);
@@ -110,13 +110,13 @@ topSuite("Ext.Version", function() {
                     compareTo('2.3', '~2.4', -1);
                     compareTo('2.3', '~3', -1);
                 });
-                
+
                 it('should be equal', function() {
                     compareTo('2.3', '~2', 0);
                     compareTo('2.3', '~2.3', 0);
                     compareTo('2.3', '~2.3.0', 0);
                 });
-                
+
                 it('should be greater than', function() {
                     compareTo('2.3', '~2.2', 1);
                     compareTo('2.3', '~1', 1);
@@ -130,7 +130,7 @@ topSuite("Ext.Version", function() {
                     compareTo('^2.3', '2.4', -1);
                     compareTo('^2.3', '3', -1);
                 });
-                
+
                 it('should be greater than', function() {
                     compareTo('^2.3', '1', 1);
                     compareTo('^2.3', '2', 1);
@@ -145,11 +145,11 @@ topSuite("Ext.Version", function() {
                     compareTo('^2.3', '^2.4', -1);
                     compareTo('^2.3', '^3', -1);
                 });
-                
+
                 it('should be equal', function() {
                     compareTo('^2.3', '^2.3', 0);
                 });
-                
+
                 it('should be greater than', function() {
                     compareTo('^2.3', '^2.2', 1);
                     compareTo('^2.3', '^1', 1);
@@ -161,12 +161,12 @@ topSuite("Ext.Version", function() {
                     compareTo('^2.3', '~2.4', -1);
                     compareTo('^2.3', '~3', -1);
                 });
-                
+
                 it('should be equal', function() {
                     compareTo('^2.3', '~2.3', 0);
                     compareTo('^2.3', '~2', 0);
                 });
-                
+
                 it('should be greater than', function() {
                     compareTo('^2.3', '~2.2', 1);
                     compareTo('^2.3', '~1', 1);
@@ -180,13 +180,13 @@ topSuite("Ext.Version", function() {
                     compareTo('~2.3', '2.4', -1);
                     compareTo('~2.3', '3', -1);
                 });
-                
+
                 it('should be equal', function() {
                     compareTo('~2.3', '2.3.4.5', 0);
                     compareTo('~2.3', '2.3.4', 0);
                     compareTo('~2.3', '2.3', 0);
                 });
-                
+
                 it('should be greater than', function() {
                     compareTo('~2.3', '2.2', 1);
                     compareTo('~2.3', '2', 1);
@@ -199,12 +199,12 @@ topSuite("Ext.Version", function() {
                     compareTo('~2.3', '^2.4', -1);
                     compareTo('~2.3', '^2', -1);
                 });
-                
+
                 it('should be equal', function() {
                     compareTo('~2.3', '^2.3.4', 0);
                     compareTo('~2.3', '^2.3', 0);
                 });
-                
+
                 it('should be greater than', function() {
                     compareTo('~2.3', '^2.2', 1);
                     compareTo('~2.3', '^2.1', 1);
@@ -217,13 +217,13 @@ topSuite("Ext.Version", function() {
                     compareTo('~2.3', '~2.4', -1);
                     compareTo('~2.3', '~3', -1);
                 });
-                
+
                 it('should be equal', function() {
                     compareTo('~2.3', '~2.3.4', 0);
                     compareTo('~2.3', '~2.3', 0);
                     compareTo('~2.3', '~2', 0);
                 });
-                
+
                 it('should be greater than', function() {
                     compareTo('~2.3', '~2.2', 1);
                     compareTo('~2.3', '~1', 1);
@@ -236,27 +236,27 @@ topSuite("Ext.Version", function() {
         it("should match integer 1", function() {
             expect(version.match(1)).toBeTruthy();
         });
-        
+
         it("should match float 1.2", function() {
             expect(version.match(1.2)).toBeTruthy();
         });
-        
+
         it("should match string 1.2.3", function() {
             expect(version.match("1.2.3")).toBeTruthy();
         });
-        
+
         it("should not match string 1.2.3alpha", function() {
             expect(version.match("1.2.3alpha")).toBeFalsy();
         });
     });
-    
+
    describe("setVersion", function() {
         it("should return an instance of Ext.Version", function() {
             Ext.setVersion("test", "1.0.1");
             expect(Ext.getVersion("test") instanceof Ext.Version).toBe(true);
         });
     });
-    
+
     describe("statics", function() {
         describe("getComponentValue", function() {
             it("should return 0", function() {
@@ -322,7 +322,7 @@ topSuite("Ext.Version", function() {
         afterEach(function() {
             Ext.versions = oldVers;
         });
-        
+
         beforeEach(function() {
             Ext.versions = versions1;
         });

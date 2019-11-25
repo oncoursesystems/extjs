@@ -64,7 +64,7 @@ Ext.define('KitchenSink.view.grid.addons.GridTools', {
                 // Tools can also be configured using an object.
                 gear: {
                     handler: 'onGear',
-                    //tooltip: 'Change settings...',
+                    // tooltip: 'Change settings...',
 
                     // Cells offer a start or end "zone" for tools:
                     zone: 'end',
@@ -99,9 +99,9 @@ Ext.define('KitchenSink.view.grid.addons.GridTools', {
 
     helperTpl: [
         '<ul>',
-            '<tpl for="group.items">',
-                '<li>{data.name:htmlEncode}</li>',
-            '</tpl>',
+        '<tpl for="group.items">',
+        '<li>{data.name:htmlEncode}</li>',
+        '</tpl>',
         '</ul>'
     ]
 });

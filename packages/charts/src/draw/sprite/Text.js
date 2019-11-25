@@ -167,9 +167,8 @@ return {
                 fontFamily: 'string',
 
                 /**
-                 * @cfg {String} [textAlign='start']
+                 * @cfg {"left"/"right"/"center"/"start"/"end"} [textAlign='start']
                  * The alignment of the text displayed.
-                 * {left, right, center, start, end}
                  */
                 textAlign: function(n) {
                     return textAlignments[n] || 'center';
@@ -184,14 +183,15 @@ return {
                     return textBaselines[n] || 'alphabetic';
                 },
 
+                //<debug>
+                debug: 'default',
+                //</debug>
+
                 /**
                  * @cfg {String} [font='10px sans-serif']
                  * The font displayed.
                  */
-                font: 'string',
-                //<debug>
-                debug: 'default'
-                //</debug>
+                font: 'string'
             },
             aliases: {
                 'font-size': 'fontSize',
@@ -247,7 +247,7 @@ return {
 
     constructor: function(config) {
         var key;
-        
+
         if (config && config.font) {
             config = Ext.clone(config);
 
@@ -639,7 +639,7 @@ return {
                 ctx.strokeText(lines[i], x + (dx[i] || 0), y + lineHeight * i);
             }
         }
-        
+
         //<debug>
         // eslint-disable-next-line vars-on-top
         var debug = attr.debug || this.statics().debug || Ext.draw.sprite.Sprite.debug;
@@ -649,7 +649,10 @@ return {
             // If it is, we need to re-apply transformations.
             // But the bounding box is already transformed, so we remove the transformation.
             this.attr.inverseMatrix.toContext(ctx);
-            debug.bbox && me.renderBBox(surface, ctx);
+
+            if (debug.bbox) {
+                me.renderBBox(surface, ctx);
+            }
         }
         //</debug>
     }

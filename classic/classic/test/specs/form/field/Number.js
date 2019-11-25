@@ -1,6 +1,6 @@
 topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
     var component, makeComponent;
-    
+
     beforeEach(function() {
         makeComponent = function(config) {
             config = config || {};
@@ -73,34 +73,34 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
         it("should have autoStripChars = false", function() {
             expect(component.autoStripChars).toBe(false);
         });
-        
+
         describe("rendered", function() {
             beforeEach(function() {
                 component.render(Ext.getBody());
             });
-            
+
             it("should have spinbutton role", function() {
                 expect(component).toHaveAttr('role', 'spinbutton');
             });
-            
+
             it("should not have aria-valuemin", function() {
                 expect(component).not.toHaveAttr('aria-valuemin');
             });
-            
+
             it("should not have aria-valuemax", function() {
                 expect(component).not.toHaveAttr('aria-valuemax');
             });
-            
+
             it("should not have aria-valuenow", function() {
                 expect(component).not.toHaveAttr('aria-valuenow');
             });
-            
+
             it("should not have aria-valuetext", function() {
                 expect(component).not.toHaveAttr('aria-valuetext');
             });
         });
     });
-    
+
     describe("ARIA attributes", function() {
         beforeEach(function() {
             makeComponent({
@@ -110,15 +110,15 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
                 value: 50
             });
         });
-        
+
         it("should have aria-valuemin", function() {
             expect(component).toHaveAttr('aria-valuemin', '1');
         });
-        
+
         it("should have aria-valuemax", function() {
             expect(component).toHaveAttr('aria-valuemax', '100');
         });
-        
+
         it("should have aria-valuenow", function() {
             expect(component).toHaveAttr('aria-valuenow', '50');
         });
@@ -142,7 +142,7 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             component.setMinValue('foobar');
             expect(component.minValue).toEqual(Number.NEGATIVE_INFINITY);
         });
-        
+
         it("should recalculate any maskRe/stripCharsRe", function() {
             makeComponent({
                 renderTo: Ext.getBody(),
@@ -151,24 +151,24 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             });
             var maskRe = component.maskRe,
                 stripCharsRe = component.stripCharsRe;
-                
+
             component.setMinValue(-1);
             expect(component.maskRe).not.toBe(maskRe);
             expect(component.stripCharsRe).not.toBe(stripCharsRe);
         });
-        
+
         it("should update aria-valuemin", function() {
             makeComponent({
                 renderTo: Ext.getBody(),
                 minValue: -10
             });
-            
+
             component.setMinValue(-1);
-            
+
             expect(component).toHaveAttr('aria-valuemin', '-1');
         });
     });
-    
+
     describe("setMaxValue", function() {
         beforeEach(function() {
             makeComponent({
@@ -185,10 +185,10 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             component.setMaxValue('foobar');
             expect(component.maxValue).toEqual(Number.MAX_VALUE);
         });
-        
+
         it("should update aria-valuemax", function() {
             component.setMaxValue(25);
-            
+
             expect(component).toHaveAttr('aria-valuemax', '25');
         });
     });
@@ -198,7 +198,7 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             makeComponent();
             expect(component.getValue()).toBeNull();
         });
-        
+
         it("should be null if configured with an invalid value", function() {
             makeComponent({
                 value: "foo"
@@ -220,15 +220,15 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
                 expect(component.inputEl.dom.value).toEqual('15');
             });
         });
-        
+
         it("should remove aria-valuenow", function() {
             makeComponent({
                 renderTo: Ext.getBody(),
                 value: 10
             });
-            
+
             component.setValue('fubar');
-            
+
             expect(component).not.toHaveAttr('aria-valuenow');
         });
     });
@@ -238,61 +238,61 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             makeComponent({
                 allowDecimals: false
             });
-            
+
             component.setValue(1.2345);
             expect(component.getValue()).toEqual(1);
-            
+
             component.setValue(7.9);
             expect(component.getValue()).toEqual(8);
-            
+
             component.setValue(2);
             expect(component.getValue()).toEqual(2);
         });
-        
+
         it("should round any decimals when decimalPrecision is 0", function() {
             makeComponent({
                 decimalPrecision: 0
             });
-            
+
             component.setValue(3.14);
             expect(component.getValue()).toEqual(3);
-            
+
             component.setValue(19);
             expect(component.getValue()).toEqual(19);
         });
-        
+
         it("should round values correctly", function() {
             makeComponent({
                 decimalPrecision: 3
             });
-            
+
             component.setValue(3.14159);
             expect(component.getValue()).toEqual(3.142);
-            
+
             component.decimalPrecision = 1;
             component.setValue(1.94430194859);
             expect(component.getValue()).toEqual(1.9);
         });
     });
-    
+
     describe("respecting decimalSeparator", function() {
         it("should parse values containing the separator", function() {
             makeComponent({
                 decimalSeparator: ",",
                 decimalPrecision: 2
             });
-            
+
             component.setValue("1,3");
             expect(component.getValue()).toEqual(1.3);
-        
+
             component.setValue(4);
             expect(component.getValue()).toEqual(4);
-        
+
             component.setValue("1,728");
             expect(component.getValue()).toEqual(1.73);
         });
     });
-    
+
     describe("submitLocaleSeparator", function() {
         it("should use the locale separator by default", function() {
             makeComponent({
@@ -301,7 +301,7 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             });
             expect(component.getSubmitValue()).toBe('0,4');
         });
-        
+
         it("should replace the separator with the default number", function() {
             makeComponent({
                 decimalSeparator: ',',
@@ -310,7 +310,7 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             });
             expect(component.getSubmitValue()).toBe('0.4');
         });
-        
+
         it("should have no effect if we specify no custom separator", function() {
             makeComponent({
                 value: 0.4
@@ -318,34 +318,34 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             expect(component.getSubmitValue()).toBe('0.4');
         });
     });
-    
+
     describe("validation", function() {
         it("should have an error when the number is outside the bounds", function() {
             makeComponent({
                 minValue: 5,
                 maxValue: 30
             });
-            
+
             expect(component.getErrors(3)).toContain("The minimum value for this field is 5");
-            
+
             expect(component.getErrors(100)).toContain("The maximum value for this field is 30");
-            
+
             expect(component.getErrors(7.2)).toEqual([]);
         });
-        
+
         it("should have an error when the number is invalid", function() {
             makeComponent();
-            
+
             expect(component.getErrors("foo")).toContain("foo is not a valid number");
-            
+
             expect(component.getErrors(17).length).toEqual(0);
         });
-        
+
         it("should have an error if the value is negative and minValue is 0", function() {
             makeComponent({
                 minValue: 0
             });
-            
+
             expect(component.getErrors(-3)).toContain("The value cannot be negative");
         });
     });
@@ -358,12 +358,12 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
                 renderTo: Ext.getBody()
             });
         });
-        
+
         it("should remove non-numeric characters from the input's raw value", function() {
             component.inputEl.dom.value = '123abc45de';
             expect(component.getValue()).toEqual(12345);
         });
-        
+
         it("should support scientific number notation", function() {
             jasmine.focusAndWait(component);
             runs(function() {
@@ -376,7 +376,7 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             });
         });
     });
-    
+
     describe("enforceMaxLength", function() {
         beforeEach(function() {
             makeComponent({
@@ -390,7 +390,7 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
             component.spinUp();
             expect(component.getValue()).toBe(99);
         });
-        
+
         it("should enforce the max length when spinning down", function() {
             component.setValue(-9);
             component.spinDown();
@@ -408,12 +408,12 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
                     maxValue: 8
                 });
             });
-            
+
             it("should increment the value by the step config", function() {
                 component.onSpinUp();
                 expect(component.getValue()).toEqual(7);
             });
-            
+
             it("should not increment past the maxValue", function() {
                 component.onSpinUp();
                 component.onSpinUp();
@@ -421,17 +421,17 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
                 component.onSpinUp();
                 expect(component.getValue()).toEqual(8);
             });
-            
+
             it("should disable the up button when at the maxValue", function() {
                 component.onSpinUp();
                 expect(component.spinUpEnabled).toBe(true);
                 component.onSpinUp();
                 expect(component.spinUpEnabled).toBe(false);
             });
-            
+
             it("should update aria-valuenow", function() {
                 component.onSpinUp();
-                
+
                 expect(component).toHaveAttr('aria-valuenow', '7');
             });
         });
@@ -445,12 +445,12 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
                     minValue: 2
                 });
             });
-            
+
             it("should decrement the value by the step config", function() {
                 component.onSpinDown();
                 expect(component.getValue()).toEqual(3);
             });
-            
+
             it("should not decrement past the minValue", function() {
                 component.onSpinDown();
                 component.onSpinDown();
@@ -458,17 +458,17 @@ topSuite("Ext.form.field.Number", ['Ext.app.ViewModel'], function() {
                 component.onSpinDown();
                 expect(component.getValue()).toEqual(2);
             });
-            
+
             it("should disable the down button when at the minValue", function() {
                 component.onSpinDown();
                 expect(component.spinDownEnabled).toBe(true);
                 component.onSpinDown();
                 expect(component.spinDownEnabled).toBe(false);
             });
-            
+
             it("should update aria-valuenow", function() {
                 component.onSpinDown();
-                
+
                 expect(component).toHaveAttr('aria-valuenow', '3');
             });
         });

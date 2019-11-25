@@ -97,17 +97,17 @@ Ext.define('Ext.form.action.Load', {
         var result = this.processResponse(response),
             form = this.form,
             formActive = form && !form.destroying && !form.destroyed;
-        
+
         if (result === true || !result.success || !result.data) {
             this.failureType = Ext.form.action.Action.LOAD_FAILURE;
-            
+
             if (formActive) {
                 form.afterAction(this, false);
             }
-            
+
             return;
         }
-        
+
         if (formActive) {
             form.clearInvalid();
             form.setValues(result.data);

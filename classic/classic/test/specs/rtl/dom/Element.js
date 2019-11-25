@@ -24,7 +24,7 @@ topSuite("Ext.rtl.dom.Element", function() {
                 }]
             }]
         });
-        
+
         el = Ext.fly(wrap.first(null, true)).first();
     });
 

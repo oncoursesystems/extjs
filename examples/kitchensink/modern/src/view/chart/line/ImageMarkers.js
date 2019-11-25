@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkers', {
         'Ext.chart.axis.Time',
         'Ext.chart.interactions.ItemHighlight'
     ],
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/charts/line/ImageMarkersController.js'
@@ -29,7 +29,7 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkers', {
             buttonShadow: true,
             insetPadding: '20 20 0 0',
             padding: 8,
-            panIcon: 'x-fa fa-arrows',
+            panIcon: 'x-fa fa-arrows-alt',
             panText: 'Pan',
             refreshText: 'Refresh',
             resetText: 'Reset pan/zoom',
@@ -59,9 +59,9 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkers', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -210,7 +210,7 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkers', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {
@@ -237,7 +237,7 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkers', {
             }
         }, {
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }, {
             text: '${resetText}',

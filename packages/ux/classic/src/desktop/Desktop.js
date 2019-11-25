@@ -432,7 +432,7 @@ Ext.define('Ext.ux.desktop.Desktop', {
 
         me.windows.each(function(win) {
             var w;
-            
+
             if (win.isVisible() && !win.maximized) {
                 w = win.el.getWidth();
 

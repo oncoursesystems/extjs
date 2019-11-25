@@ -38,7 +38,9 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
             percentChangeColumnWidth: 75,
             lastUpdatedColumnWidth: 85,
             gainColor: 'green',
-            lossColor: 'red'
+            lossColor: 'red',
+            headerBorder: false,
+            actionColumnWidth: 50
         },
         neptune: {
             width: 750,
@@ -47,8 +49,10 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
             percentChangeColumnWidth: 100,
             lastUpdatedColumnWidth: 115,
             gainColor: '#73b51e',
-            lossColor: '#cf4c35'
-        }, 
+            lossColor: '#cf4c35',
+            headerBorder: false,
+            actionColumnWidth: 50
+        },
         graphite: {
             width: 750,
             priceWidth: 100,
@@ -56,8 +60,21 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
             percentChangeColumnWidth: 120,
             lastUpdatedColumnWidth: 150,
             gainColor: 'unset',
-            lossColor: 'unset'
-        }       
+            lossColor: 'unset',
+            headerBorder: false,
+            actionColumnWidth: 50
+        },
+        'classic-material': {
+            width: 750,
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 150,
+            gainColor: '#4caf50',
+            lossColor: '#f44336',
+            headerBorder: true,
+            actionColumnWidth: 80
+        }
     },
     //</example>
 
@@ -70,7 +87,7 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
     collapsible: true,
     multiSelect: true,
     stateId: 'stateGrid',
-    headerBorders: false,
+    headerBorders: '${headerBorder}',
 
     viewConfig: {
         enableTextSelection: true
@@ -102,12 +119,11 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
         dataIndex: 'priceLastChange'
     }, {
         xtype: 'actioncolumn',
-        width: 50,
+        width: '${actionColumnWidth}',
         menuDisabled: true,
         sortable: false,
-
         items: [{
-            iconCls: 'x-fa fa-check green',
+            iconCls: 'x-fa fa-check green icon-margin',
             handler: 'onApprove'
         }, {
             iconCls: 'x-fa fa-ban red',
@@ -116,6 +132,6 @@ Ext.define('KitchenSink.view.grid.BasicGrid', {
     }],
 
     signTpl: '<span style="' +
-            'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +
+        'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +
         '>{text}</span>'
 });

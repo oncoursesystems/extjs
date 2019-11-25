@@ -128,11 +128,11 @@ Ext.define('Ext.ux.CellDragDrop', {
         if (me.dragZone) {
             me.dragZone.unlock();
         }
-        
+
         if (me.dropZone) {
             me.dropZone.unlock();
         }
-        
+
         me.callParent();
     },
 
@@ -142,11 +142,11 @@ Ext.define('Ext.ux.CellDragDrop', {
         if (me.dragZone) {
             me.dragZone.lock();
         }
-        
+
         if (me.dropZone) {
             me.dropZone.lock();
         }
-        
+
         me.callParent();
     },
 
@@ -180,7 +180,7 @@ Ext.define('Ext.ux.CellDragDrop', {
                         );
 
                         header = view.getHeaderByCell(cell);
-                        
+
                         return {
                             event: new Ext.EventObjectImpl(e),
                             ddel: dragEl,
@@ -208,7 +208,7 @@ Ext.define('Ext.ux.CellDragDrop', {
                     Ext.fly(self.ddel).update(el.textContent || el.innerText);
                     self.proxy.update(self.ddel);
                     self.onStartDrag(x, y);
-                    
+
                     return true;
                 }
             });
@@ -245,7 +245,7 @@ Ext.define('Ext.ux.CellDragDrop', {
                 onNodeEnter: function(target, dd, e, dragData) {
                     var self = this,
                         destType, sourceType;
-                    
+
                     destType = target.record.getField(target.columnName).type.toUpperCase();
                     sourceType = dragData.record.getField(dragData.columnName).type.toUpperCase();
 
@@ -311,11 +311,11 @@ Ext.define('Ext.ux.CellDragDrop', {
                         target.record.set(
                             target.columnName, dragData.record.get(dragData.columnName)
                         );
-                        
+
                         if (me.applyEmptyText) {
                             dragData.record.set(dragData.columnName, me.emptyText);
                         }
-                        
+
                         return true;
                     }
                 },

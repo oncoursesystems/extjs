@@ -37,23 +37,23 @@ Ext.define('Ext.form.field.Base', {
     extend: 'Ext.Component',
     alternateClassName: ['Ext.form.Field', 'Ext.form.BaseField'],
     xtype: 'field',
-    
+
     requires: [
         'Ext.util.DelayedTask',
         'Ext.XTemplate'
     ],
-    
+
     mixins: [
         'Ext.form.Labelable',
         'Ext.form.field.Field'
     ],
-    
+
     /**
      * @property focusable
      * @inheritdoc
      */
     focusable: true,
-    
+
     /**
      * @cfg shrinkWrap
      * @inheritdoc
@@ -93,7 +93,7 @@ Ext.define('Ext.form.field.Base', {
      * @inheritdoc
      */
     defaultBindProperty: 'value',
-    
+
     /**
      * @cfg autoEl
      * @inheritdoc
@@ -183,7 +183,7 @@ Ext.define('Ext.form.field.Base', {
      * Should be a valid argument to {@link Ext.dom.Element#applyStyles}. Defaults to undefined.
      * See also the {@link #setFieldStyle} method for changing the style after initialization.
      */
-    
+
     /**
      * @cfg [publishes=['rawValue', 'value', 'dirty']]
      * @inheritdoc
@@ -230,7 +230,7 @@ Ext.define('Ext.form.field.Base', {
         ? ['change', 'propertychange', 'keyup']
         : ['change', 'input', 'textInput', 'keyup', 'dragdrop'],
     // While input is supported in IE9, we use attachEvent for events, so we need to fall back here
-                        
+
     ignoreChangeRe: /data-errorqtip|style\.|className/,
 
     /**
@@ -273,7 +273,7 @@ Ext.define('Ext.form.field.Base', {
      * changes to those fields along the way. See also {@link #validateOnChange}.
      */
     validateOnBlur: true,
-    
+
     /**
      * @cfg {Boolean} [validateOnFocusLeave=false] Set to `true` to validate the field
      * when focus leaves the field's component hierarchy entirely.
@@ -290,7 +290,7 @@ Ext.define('Ext.form.field.Base', {
      * @since 6.5.3
      */
     validateOnFocusLeave: false,
-    
+
     /**
      * @cfg {String} formatText
      * Helpful text describing acceptable format for field values. This text will be
@@ -327,26 +327,26 @@ Ext.define('Ext.form.field.Base', {
      * @inheritdoc
      */
     maskOnDisable: false,
-    
+
     // Instructs the layout to stretch the inputEl to 100% width when laying
     // out under fixed conditions. Defaults to true for all fields except check/radio
     // Doesn't seem worth it to introduce a whole new layout class just for this flag
     stretchInputElFixed: true,
-    
+
     // Form fields render their ARIA attributes to the inputEl
     /**
      * @property ariaEl
      * @inheritdoc
      */
     ariaEl: 'inputEl',
-    
+
     /**
      * @property focusEl
      * @inheritdoc
      */
     focusEl: 'inputEl',
     renderAriaElements: true,
-    
+
     /**
      * @event specialkey
      * Fires when any key related to navigation (arrows, tab, enter, esc, etc.) is pressed.
@@ -400,7 +400,7 @@ Ext.define('Ext.form.field.Base', {
         me.initLabelable();
         me.initField();
         me.initDefaultName();
-        
+
         // validateOnBlur and validateOnFocusLeave are mutually exclusive,
         // with latter taking precedence
         if (me.validateOnFocusLeave) {
@@ -411,7 +411,7 @@ Ext.define('Ext.form.field.Base', {
         if (me.readOnly) {
             me.addCls(me.readOnlyCls);
         }
-        
+
         me.addCls(Ext.baseCSSPrefix + 'form-type-' + me.inputType);
 
         // formatText is superseded by ariaHelp but we still apply it for compatibility
@@ -419,13 +419,13 @@ Ext.define('Ext.form.field.Base', {
             me.ariaHelp = Ext.String.format(me.formatText, me.format);
         }
     },
-    
+
     /**
      * @private
      */
     initDefaultName: function() {
         var me = this;
-        
+
         // Default name to inputId
         if (!me.name) {
             me.name = me.getInputId();
@@ -479,17 +479,17 @@ Ext.define('Ext.form.field.Base', {
             fixCls: fixCls,
             ariaEl: me.ariaEl
         }, me.subTplData);
-        
+
         if (me.ariaRole) {
             ariaAttr = {};
-            
+
             if (!me.ariaStaticRoles[me.ariaRole]) {
                 // When ARIA attributes are rendered they should always reflect
                 // component's state. This contrasts with the standard HTML attributes
                 // like disabled and readonly, which are only present when enabled.
                 ariaAttr['aria-hidden'] = !!me.hidden;
                 ariaAttr['aria-disabled'] = !!me.disabled;
-                
+
                 // For most of the fields ariaEl === inputEl but certain types like Combo boxes
                 // and their descendants are compound widgets and need to have ARIA attributes
                 // on different elements.
@@ -498,16 +498,16 @@ Ext.define('Ext.form.field.Base', {
                     'aria-invalid': false,
                     'aria-readonly': !!me.readOnly
                 };
-                
+
                 // aria-label is not present by default, and aria-labelledby
                 // generally should not be used for fields' inputEls since usually
                 // they are referenced by their respective <label> elements.
                 if (me.ariaLabel) {
                     ariaAttr['aria-label'] = Ext.String.htmlEncode(me.ariaLabel);
                 }
-                
+
                 ariaAttr = Ext.apply(ariaAttr, me.getAriaAttributes());
-                
+
                 // If aria-describedby was set explicitly, don't override. Note that
                 // describedby applies to inputEl since most often that's the focusable
                 // element.
@@ -520,25 +520,25 @@ Ext.define('Ext.form.field.Base', {
                         inputElAttr['aria-describedby'] = id + '-ariaStatusEl';
                     }
                 }
-                
+
                 data.inputElAriaAttributes = inputElAttr;
             }
-            
+
             if (me.ariaRole !== 'native') {
                 ariaAttr.role = me.ariaRole;
             }
-            
+
             // aria-label is not present by default, and aria-labelledby
             // generally should not be used for fields' inputEls since usually
             // they are referenced by their respective <label> elements.
             if (me.ariaLabel) {
                 ariaAttr['aria-label'] = me.ariaLabel;
             }
-            
+
             if (me.format && me.formatText && !data.title) {
                 ariaAttr.title = Ext.String.formatEncode(me.formatText, me.format);
             }
-            
+
             data.ariaElAttributes = ariaAttr;
         }
 
@@ -605,7 +605,7 @@ Ext.define('Ext.form.field.Base', {
         this.mixins.labelable.self.initTip();
         this.renderActiveError();
     },
-    
+
     beforeBlur: function(e) {
         if (this.validateOnBlur) {
             this.validate();
@@ -616,7 +616,7 @@ Ext.define('Ext.form.field.Base', {
         if (this.validateOnFocusLeave) {
             this.validate();
         }
-        
+
         this.callParent([e]);
         this.completeEdit();
     },
@@ -717,7 +717,7 @@ Ext.define('Ext.form.field.Base', {
 
         return value;
     },
-    
+
     /**
      * @method
      * Transform the raw value before it is set
@@ -812,17 +812,17 @@ Ext.define('Ext.form.field.Base', {
         var me = this;
 
         me.callParent(arguments);
-        
+
         if (me.setReadOnlyOnBoxReady) {
             me.setReadOnly(me.readOnly);
         }
-            
+
     },
 
     onDisable: function() {
         var me = this,
             inputEl = me.inputEl;
-            
+
         me.callParent();
 
         if (inputEl) {
@@ -848,7 +848,7 @@ Ext.define('Ext.form.field.Base', {
             inputEl = me.inputEl,
             mark = me.preventMark,
             valid;
-            
+
         me.callParent();
 
         if (inputEl) {
@@ -879,7 +879,7 @@ Ext.define('Ext.form.field.Base', {
         readOnly = !!readOnly;
         me[readOnly ? 'addCls' : 'removeCls'](me.readOnlyCls);
         me.readOnly = readOnly;
-        
+
         if (inputEl) {
             inputEl.dom.readOnly = readOnly;
             inputEl.dom.setAttribute('aria-readonly', readOnly);
@@ -1016,7 +1016,7 @@ Ext.define('Ext.form.field.Base', {
         var me = this,
             disabled = me.disabled,
             validate = me.forceValidation || !disabled;
-            
+
         return validate ? me.validateValue(me.processRawValue(me.getRawValue())) : disabled;
     },
 
@@ -1056,13 +1056,13 @@ Ext.define('Ext.form.field.Base', {
         var me = this,
             oldMsg = me.getActiveError(),
             active;
-            
+
         me.setActiveErrors(Ext.Array.from(errors));
         active = me.getActiveError();
 
         if (oldMsg !== active) {
             me.setError(active);
-            
+
             if (!me.ariaStaticRoles[me.ariaRole] && me.inputEl) {
                 me.inputEl.dom.setAttribute('aria-invalid', true);
             }
@@ -1081,20 +1081,20 @@ Ext.define('Ext.form.field.Base', {
         // Clear the message and fire the 'valid' event
         var me = this,
             hadError = me.hasActiveError();
-            
+
         delete me.hadErrorOnDisable;
-        
+
         me.unsetActiveError();
-        
+
         if (hadError) {
             me.setError('');
-            
+
             if (!me.ariaStaticRoles[me.ariaRole] && me.inputEl) {
                 me.inputEl.dom.setAttribute('aria-invalid', false);
             }
         }
     },
-    
+
     /**
      * Set the current error state
      * @private
@@ -1104,7 +1104,7 @@ Ext.define('Ext.form.field.Base', {
         var me = this,
             msgTarget = me.msgTarget,
             prop;
-            
+
         if (me.rendered) {
             if (msgTarget === 'title' || msgTarget === 'qtip') {
                 prop = msgTarget === 'qtip' ? 'data-errorqtip' : 'title';
@@ -1144,10 +1144,10 @@ Ext.define('Ext.form.field.Base', {
         if (task) {
             task.cancel();
         }
-        
+
         Ext.destroy(me.bindNotifyListener);
         me.cleanupField();
-        
+
         me.callParent();
     },
 
@@ -1241,7 +1241,7 @@ Ext.define('Ext.form.field.Base', {
             }
         }
     },
-    
+
     deprecated: {
         "5": {
             methods: {

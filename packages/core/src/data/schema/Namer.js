@@ -50,11 +50,11 @@ Ext.define('Ext.data.schema.Namer', {
      */
     fieldRole: function(name) {
         var match = name.match(this.endsWithIdRe, '');
-        
+
         if (match) {
             name = name.substr(0, name.length - (match[1] || match[2]).length);
         }
-        
+
         return this.apply('uncapitalize', name);
     },
 
@@ -74,7 +74,7 @@ Ext.define('Ext.data.schema.Namer', {
     pluralize: function(name) {
         return Ext.util.Inflector.pluralize(name);
     },
-    
+
     readerRoot: function(roleName) {
         return this.apply('uncapitalize', roleName);
     },
@@ -101,7 +101,7 @@ Ext.define('Ext.data.schema.Namer', {
 
     undotted: function(name) {
         var parts, index;
-        
+
         if (name.indexOf('.') < 0) {
             return name;
         }
@@ -186,7 +186,7 @@ Ext.define('Ext.data.schema.Namer', {
 
     matrixRole: function(relation, entityType) {
         var ret = this.apply(relation ? 'multiRole,capitalize' : 'multiRole', entityType);
-        
+
         return relation ? relation + ret : ret;
     },
 
@@ -198,7 +198,7 @@ Ext.define('Ext.data.schema.Namer', {
     setterName: function(role) {
         return 'set' + this.apply('capitalize', role.role);
     },
-    
+
     //-------------------------------------------------------------------------
     // Private
 
@@ -220,7 +220,7 @@ Ext.define('Ext.data.schema.Namer', {
             else {
                 length = (operations = operation.split(',')).length;
                 ret = name;
-                
+
                 for (i = 0; i < length; ++i) {
                     ret = me.apply(operations[i], ret);
                 }

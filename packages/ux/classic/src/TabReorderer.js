@@ -9,7 +9,7 @@ Ext.define('Ext.ux.TabReorderer', {
 
     init: function(tabPanel) {
         var me = this;
-        
+
         me.callParent([tabPanel.getTabBar()]);
 
         // Ensure reorderable property is copied into dynamically added tabs
@@ -25,7 +25,7 @@ Ext.define('Ext.ux.TabReorderer', {
         // Copy reorderable property from card into tab
         for (tabs = this.container.items.items, len = tabs.length; i < len; i++) {
             tab = tabs[i];
-            
+
             if (tab.card) {
                 tab.reorderable = tab.card.reorderable;
             }

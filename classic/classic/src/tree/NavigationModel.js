@@ -10,7 +10,7 @@
 Ext.define('Ext.tree.NavigationModel', {
     extend: 'Ext.grid.NavigationModel',
     alias: 'view.navigation.tree',
-    
+
     initKeyNav: function(view) {
         var me = this,
             columns = me.view.ownerGrid.columns;
@@ -45,7 +45,6 @@ Ext.define('Ext.tree.NavigationModel', {
         this.isTreeGrid = this.view.ownerGrid.getVisibleColumnManager().getColumns().length > 1;
     },
 
-
     onCellClick: function(view, cell, cellIndex, record, row, recordIndex, clickEvent) {
         this.callParent([view, cell, cellIndex, record, row, recordIndex, clickEvent]);
 
@@ -72,7 +71,7 @@ Ext.define('Ext.tree.NavigationModel', {
         // (don't attempt to focus hidden root).
         else {
             record = record.parentNode;
-            
+
             if (record && !(record.isRoot() && !view.rootVisible)) {
                 me.setPosition(record, null, keyEvent);
             }
@@ -96,7 +95,7 @@ Ext.define('Ext.tree.NavigationModel', {
             }
             else if (record.isExpanded()) {
                 record = record.childNodes[0];
-                
+
                 if (record) {
                     me.setPosition(record);
                 }

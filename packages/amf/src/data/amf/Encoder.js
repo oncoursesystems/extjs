@@ -125,7 +125,7 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.raise("Unsupported AMF format: " + protocol_version +
                       ". Only '3' (AMF3) is supported at this point.");
             //</debug>
-            
+
             return; // return nothing
         }
     },
@@ -144,7 +144,7 @@ Ext.define('Ext.data.amf.Encoder', {
      */
     writeObject: function(item) {
         var t = typeof(item);
-        
+
         if (t === "undefined") {
             this.writeUndefined();
         }
@@ -229,8 +229,8 @@ Ext.define('Ext.data.amf.Encoder', {
         if (typeof(item) !== "boolean") {
             Ext.log.warn("Encoder: writeBoolean argument is not a boolean. Coercing.");
         }
-        // </debug>
-        
+        //</debug>
+
         if (item) {
             this.writeByte(0x03); // AMF3 true
         }
@@ -249,8 +249,8 @@ Ext.define('Ext.data.amf.Encoder', {
         if (typeof(item) !== "boolean") {
             Ext.log.warn("Encoder: writeBoolean argument is not a boolean. Coercing.");
         }
-        // </debug>
-        
+        //</debug>
+
         this.writeByte(0x01); // AMF0 boolean marker
 
         if (item) {
@@ -315,7 +315,7 @@ Ext.define('Ext.data.amf.Encoder', {
         if (typeof(item) !== "number" && !(item instanceof Number)) {
             Ext.log.warn("Encoder: writeNumber argument is not numeric. Can't coerce.");
         }
-        // </debug>
+        //</debug>
 
         // switch to the primitive value for handling:
         if (item instanceof Number) {
@@ -329,10 +329,10 @@ Ext.define('Ext.data.amf.Encoder', {
             // get an unsigned value to work with - we only care about 29 bits.
             item = item & maxInt;
             data = this.encode29Int(item);
-            
+
             // And, mark it as an integer
             data.unshift(0x04); // AMF3 integer marker
-            
+
             // write it!
             this.writeBytes(data);
 
@@ -356,7 +356,7 @@ Ext.define('Ext.data.amf.Encoder', {
         if (typeof(item) !== "number" && !(item instanceof Number)) {
             Ext.log.warn("Encoder: writeNumber argument is not numeric. Can't coerce.");
         }
-        // </debug>
+        //</debug>
 
         // switch to the primitive value for handling:
         if (item instanceof Number) {
@@ -366,7 +366,7 @@ Ext.define('Ext.data.amf.Encoder', {
         // In AMF0 numbers are always serialized as double-float values.
         data = this.encodeDouble(item);
         data.unshift(0x00); // AMF0 double marker
-        
+
         this.writeBytes(data);
     },
 
@@ -387,7 +387,7 @@ Ext.define('Ext.data.amf.Encoder', {
             //</debug>
         }
         //</debug>
-        
+
         if (c <= 0x7F) {
             // One byte UTF8
             data.push(c);
@@ -459,7 +459,7 @@ Ext.define('Ext.data.amf.Encoder', {
             // For now we only pass values:
             len = len << 1;
             len = len | 1; // mark as value
-            
+
             // push length value to the array
             data = this.encode29Int(len);
         }
@@ -479,13 +479,13 @@ Ext.define('Ext.data.amf.Encoder', {
      */
     write3String: function(item) {
         var utf8Data, lenData;
-        
+
         //<debug>
         if (!Ext.isString(item)) {
             Ext.log.warn("Encoder: writString argument is not a string.");
         }
-        // </debug>
-        
+        //</debug>
+
         if (item === "") { // special case for the empty string
             this.writeByte(0x06); // AMF3 string marker
             this.writeByte(0x01); // zero length string
@@ -527,13 +527,13 @@ Ext.define('Ext.data.amf.Encoder', {
      */
     write0String: function(item) {
         var utf8Data, lenData, encoding;
-        
+
         //<debug>
         if (!Ext.isString(item)) {
             Ext.log.warn("Encoder: writString argument is not a string.");
         }
-        // </debug>
-        
+        //</debug>
+
         if (item === "") { // special case for the empty string
             this.writeByte(0x02); // AMF0 short string marker
             this.writeBytes([0x00, 0x00]); // zero length string
@@ -567,7 +567,7 @@ Ext.define('Ext.data.amf.Encoder', {
      */
     write3XmlWithType: function(xml, amfType) {
         var xmlStr, utf8Data, lenData;
-        
+
         //<debug>
         // We accept XML Documents, or strings
         if (amfType !== 0x07 && amfType !== 0x0B) {
@@ -577,8 +577,8 @@ Ext.define('Ext.data.amf.Encoder', {
         if (!this.isXmlDocument(xml)) {
             Ext.log.warn("Encoder: write3XmlWithType argument is not an xml document.");
         }
-        // </debug>
-        
+        //</debug>
+
         xmlStr = this.convertXmlToString(xml);
 
         if (xmlStr === "") { // special case for the empty string
@@ -623,14 +623,14 @@ Ext.define('Ext.data.amf.Encoder', {
      */
     write0Xml: function(xml) {
         var xmlStr, utf8Data, lenData;
-        
+
         //<debug>
         // We accept XML Documents, or strings
         if (!this.isXmlDocument(xml)) {
             Ext.log.warn("Encoder: write0Xml argument is not an xml document.");
         }
-        // </debug>
-        
+        //</debug>
+
         xmlStr = this.convertXmlToString(xml);
 
         this.writeByte(0x0F); // AMF0 XML marker
@@ -655,7 +655,7 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.raise("Serializing a non-date object as date: " + date);
         }
         //</debug>
-        
+
         // For now, we don't use object references to just encode the date.
         this.writeByte(0x08); // AMF3 date marker
         // mark this as a date value - we don't support references yet
@@ -674,11 +674,11 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.raise("Serializing a non-date object as date: " + date);
         }
         //</debug>
-        
+
         // For now, we don't use object references to just encode the date.
         this.writeByte(0x0B); // AMF0 date marker
         this.writeBytes(this.encodeDouble(new Number(date)));
-        
+
         // placeholder for timezone, standard says to keep 0, flash actually writes data here
         this.writeBytes([0x00, 0x00]);
     },
@@ -691,7 +691,7 @@ Ext.define('Ext.data.amf.Encoder', {
      */
     write3Array: function(arr) {
         var len;
-        
+
         //<debug>
         if (!Ext.isArray(arr)) {
             Ext.raise("Serializing a non-array object as array: " + arr);
@@ -701,7 +701,7 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.raise("Array size too long to encode in AMF3: " + arr.length);
         }
         //</debug>
-        
+
         // For now, we don't use object references to just encode the array.
         this.writeByte(0x09); // AMF3 array marker
 
@@ -728,19 +728,19 @@ Ext.define('Ext.data.amf.Encoder', {
      */
     write0ObjectProperty: function(key, value) {
         var utf8Data, lenData;
-        
+
         if (!(key instanceof String) && (typeof(key) !== "string")) {
             // coerce to a string
             key = key + "";
         }
-        
+
         // first encode the key to a short UTF-8.
         utf8Data = this.encodeUtf8String(key);
         lenData = this.encodeXInt(utf8Data.length, 2);
-        
+
         this.writeBytes(lenData);
         this.writeBytes(utf8Data);
-        
+
         // and now write out the object
         this.writeObject(value);
     },
@@ -774,7 +774,7 @@ Ext.define('Ext.data.amf.Encoder', {
          */
         // Use ECMA (associative) array type
         this.writeByte(0x08); // AMF0 ECMA-array marker
-        
+
         // we need to know the length of the array before we write the serialized data
         // to the array. Better to traverse it twice than to copy all the byte data afterwards
         total = 0;
@@ -803,7 +803,7 @@ Ext.define('Ext.data.amf.Encoder', {
      */
     write0StrictArray: function(arr) {
         var len;
-        
+
         //<debug>
         if (!Ext.isArray(arr)) {
             Ext.raise("Serializing a non-array object as array: " + arr);
@@ -824,7 +824,6 @@ Ext.define('Ext.data.amf.Encoder', {
         }, this);
     },
 
-
     /**
      * Write a byte array in AMF3 format. This function is never called directly
      * by writeObject since there's no way to distinguish a regular array from a
@@ -833,7 +832,7 @@ Ext.define('Ext.data.amf.Encoder', {
      */
     write3ByteArray: function(arr) {
         var len;
-    
+
         //<debug>
         if (!Ext.isArray(arr)) {
             Ext.raise("Serializing a non-array object as array: " + arr);
@@ -843,7 +842,7 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.raise("Array size too long to encode in AMF3: " + arr.length);
         }
         //</debug>
-        
+
         this.writeByte(0x0c); // Byte array marker
 
         // for now no support for references, so just dump the length and data
@@ -854,7 +853,7 @@ Ext.define('Ext.data.amf.Encoder', {
         len = len << 1; // right-most bit marks this as size
         len = len | 0x1; // mark it a size
         this.writeBytes(this.encode29Int(len));
-        
+
         // and finally, dump the byte data
         this.writeBytes(arr);
     },
@@ -874,10 +873,10 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.raise("Serializing a non-object object: " + obj);
         }
         //</debug>
-        
+
         // For now, we don't use object references so just encode the object.
         this.writeByte(0x0A); // AMF3 object marker
-        
+
         // The following 29-int is marked as follows (LSb to MSb) to signify a
         // "U29O-traits":
         // 1 - LSb marks an object value (1) or an object reference (0) which
@@ -892,7 +891,7 @@ Ext.define('Ext.data.amf.Encoder', {
         //     we pass 0 since all data is passed as dynamic fields
         oType = 0x0b; // binary 1011
         this.writeByte(oType);
-        
+
         // Next we pass the class name, which is the empty string for anonymous objects
         this.writeByte(0x01);
 
@@ -907,7 +906,7 @@ Ext.define('Ext.data.amf.Encoder', {
                 Ext.raise("Can't encode non-string field name: " + name);
             }
             //</debug>
-            
+
             nameData = (this.encodeUtf8String(name));
 
             this.writeBytes(this.encode3Utf8StringLen(name));
@@ -934,7 +933,7 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.raise("Serializing a non-object object: " + obj);
         }
         //</debug>
-        
+
         // For now, we don't use object references so just encode the object.
         // if the object is typed, the ID changes and we need to send the type ahead of the data
         typed = !!obj.$flexType;
@@ -969,7 +968,7 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.Error.raise('ERROR: Value being written outside byte range: ' + b);
         }
         //</debug>
-        
+
         Ext.Array.push(this.bytes, b);
     },
 
@@ -992,7 +991,7 @@ Ext.define('Ext.data.amf.Encoder', {
             }
         }
         //</debug>
-        
+
         Ext.Array.push(this.bytes, b);
     },
 
@@ -1016,7 +1015,6 @@ Ext.define('Ext.data.amf.Encoder', {
 
         return str;
     },
-
 
     /**
      * Tries to determine if an object is an XML document
@@ -1183,10 +1181,10 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.raise("messages is not an array: " + messages);
         }
         //</debug>
-        
+
         // Write Packet marker
         this.writeBytes([0x00, 0x00]); // AMF 0 version for this packet.
-        
+
         // Write header count
         this.writeBytes(this.encodeXInt(headers.length, 2));
 
@@ -1197,7 +1195,7 @@ Ext.define('Ext.data.amf.Encoder', {
                 Ext.raise("targetURI is not a string: " + headers[i].targetUri);
             }
             //</debug>
-            
+
             this.writeAmfHeader(headers[i].name, headers[i].mustUnderstand, headers[i].value);
         }
 
@@ -1220,7 +1218,7 @@ Ext.define('Ext.data.amf.Encoder', {
      */
     writeAmfHeader: function(headerName, mustUnderstand, value) {
         var mu;
-        
+
         //<debug>
         if (this.config.format !== 0) {
             Ext.raise("Trying to write a header on an AMF3 Encoder. Only AMF0 is supported!");
@@ -1230,10 +1228,10 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.raise("mustUnderstand is not a boolean value: " + mustUnderstand);
         }
         //</debug>
-        
+
         // write header name
         this.write0ShortUtf8String(headerName);
-        
+
         // write must understand byte
         mu = mustUnderstand ? 0x01 : 0x00;
 
@@ -1269,16 +1267,16 @@ Ext.define('Ext.data.amf.Encoder', {
             Ext.raise("body is not an array: " + typeof(body));
         }
         //</debug>
-        
+
         // write target URI
         this.write0ShortUtf8String(targetUri);
-        
+
         // write response URI
         this.write0ShortUtf8String(responseUri);
-        
+
         // next write the message length of -1 (undetermined) to the stream
         this.writeBytes(this.encodeXInt(-1, 4));
-        
+
         // write the paramters
         this.write0StrictArray(body);
     }

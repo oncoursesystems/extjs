@@ -11,7 +11,7 @@ Ext.onReady(function() {
     if (Ext.Updater) {
         Ext.Updater.defaults.indicatorText = '<div class="loading-indicator">Pemuatan...</div>';
     }
-    
+
     if (Ext.Date) {
         Ext.Date.monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
@@ -63,7 +63,7 @@ Ext.onReady(function() {
             dateFormat: 'd/m/Y'
         });
     }
-    
+
 });
 
 Ext.define("Ext.locale.id.view.View", {

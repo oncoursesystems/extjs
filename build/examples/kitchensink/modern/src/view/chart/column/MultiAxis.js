@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.chart.column.MultiAxis', {
         'Ext.chart.interactions.CrossZoom'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/column/MultiAxisController.js'
@@ -50,9 +50,9 @@ Ext.define('KitchenSink.view.chart.column.MultiAxis', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -156,7 +156,7 @@ Ext.define('KitchenSink.view.chart.column.MultiAxis', {
         },
         items: [{
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }]
     }]

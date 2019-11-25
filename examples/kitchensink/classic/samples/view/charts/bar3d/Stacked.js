@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked', {
     xtype: 'bar-stacked-3d',
     controller: 'bar-stacked-3d',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked', {
         type: 'Store',
         path: 'app/store/Browsers.js'
     }],
-    // </example>
+    //</example>
 
     width: 650,
     bodyStyle: 'background: transparent;',
@@ -35,12 +35,14 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked', {
         legend: {
             docked: 'right'
         },
-        store: {type: 'browsers'},
+        store: { type: 'browsers' },
         flipXY: true,
-        animation: Ext.isIE8 ? false : {
-            easing: 'backOut',
-            duration: 500
-        },
+        animation: Ext.isIE8
+            ? false
+            : {
+                easing: 'backOut',
+                duration: 500
+            },
         captions: {
             title: 'Bar Charts - Stacked Bars',
             credits: {
@@ -76,7 +78,7 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked', {
         xtype: 'gridpanel',
         style: 'margin-top: 10px;',
         height: 150,
-        columns : {
+        columns: {
             defaults: {
                 sortable: false,
                 menuDisabled: true,
@@ -90,6 +92,6 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked', {
                 { text: 'Safari', dataIndex: 'data4' }
             ]
         },
-        store: {type: 'browsers'}
+        store: { type: 'browsers' }
     }]
 });

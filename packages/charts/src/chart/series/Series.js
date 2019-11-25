@@ -1914,7 +1914,7 @@ Ext.define('Ext.chart.series.Series', {
 
     updateColors: function(colors) {
         var chart;
-        
+
         this.updateThemeColors(colors);
 
         if (!this.isConfiguring) {

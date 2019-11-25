@@ -77,7 +77,7 @@
 Ext.define('Ext.grid.plugin.CellEditing', {
     alias: 'plugin.cellediting',
     extend: 'Ext.grid.plugin.Editing',
-    
+
     requires: [
         'Ext.grid.CellEditor',
         'Ext.util.DelayedTask'
@@ -101,7 +101,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
      *  @param {Boolean} context.cancel Set this to `true` to cancel the edit or return false
      * from your handler.
      */
-    
+
     /**
      * @event edit
      * Fires after a cell is edited. Usage example:
@@ -124,7 +124,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
      *  @param {Number} context.colIdx The index of the column being edited.
      *  @param {Mixed} context.originalValue The original value before being edited.
      */
-    
+
     /**
      * @event validateedit
      * Fires after a cell is edited, but before the value is set in the record.
@@ -188,7 +188,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
      * @param {Boolean} context.cancel Set this to `true` to cancel the edit or return false
      * from your handler (see the method description for additional details).
      */
-    
+
     /**
      * @event canceledit
      * Fires when the user started editing a cell but then cancelled the edit.
@@ -254,7 +254,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
     onReconfigure: function(grid, store, columns) {
         // Only reconfigure editors if passed a new set of columns
         if (columns) {
-            this.editors.clear();
+            this.destroyEditors();
         }
 
         this.callParent();
@@ -263,10 +263,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
     destroy: function() {
         var me = this;
 
-        if (me.editors) {
-            me.editors.each(Ext.destroy, Ext);
-            me.editors.clear();
-        }
+        me.destroyEditors();
 
         if (me.restartEvent) {
             me.restartEvent = me.cachedEditorValue = Ext.destroy(me.restartEvent);
@@ -331,7 +328,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
         if (!context || !column.getEditor(record)) {
             return;
         }
-        
+
         // Activating a new cell while editing.
         // Complete the edit, and cache the editor in the detached body.
         if (prevEditor && prevEditor.editing) {
@@ -400,7 +397,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
             }
             else {
                 p = editor.el.dom.parentNode;
-                
+
                 if (p !== cell.dom) {
                     // This can sometimes throw an error
                     // https://code.google.com/p/chromium/issues/detail?id=432392
@@ -410,11 +407,11 @@ Ext.define('Ext.grid.plugin.CellEditing', {
                     catch (e) {
                         // ignore
                     }
-                    
+
                     if (editor.container && editor.container.dom !== cell.dom) {
                         editor.container.collect();
                     }
-                    
+
                     editor.container = cell;
                     cell.dom.appendChild(editor.el.dom, cell.dom.firstChild);
                 }
@@ -436,7 +433,6 @@ Ext.define('Ext.grid.plugin.CellEditing', {
             // Ensure that the focusing defaults to false.
             // It may veto, and return with the editing flag false.
             editor.startEdit(cell, context.value, (doFocus && !isResuming) || false, isResuming);
-
 
             // Set contextual information if we began editing (can be vetoed by events)
             if (editor.editing) {
@@ -612,19 +608,19 @@ Ext.define('Ext.grid.plugin.CellEditing', {
     getEditor: function(record, column) {
         return this.getCachedEditor(column.getItemId(), record, column);
     },
-    
+
     getCachedEditor: function(editorId, record, column) {
         var me = this,
             editors = me.editors,
             editor = editors.getByKey(editorId);
-        
+
         if (!editor) {
             editor = column.getEditor(record);
 
             if (!editor) {
                 return false;
             }
-            
+
             // Allow them to specify a CellEditor in the Column
             if (!(editor instanceof Ext.grid.CellEditor)) {
                 // Apply the field's editorCfg to the CellEditor config.
@@ -637,12 +633,12 @@ Ext.define('Ext.grid.plugin.CellEditing', {
                     field: editor
                 }, editor.editorCfg));
             }
-            
+
             // Add the Editor as a floating child of the grid
             // Prevent this field from being included in an Ext.form.Basic
             // collection, if the grid happens to be used inside a form
             editor.field.excludeForm = true;
-            
+
             // If the editor is new to this grid, then add it to the grid, and ensure
             // it tells us about its life cycle.
             if (editor.column !== column) {
@@ -652,24 +648,24 @@ Ext.define('Ext.grid.plugin.CellEditing', {
 
             editors.add(editor);
         }
-        
+
         // Inject an upward link to its owning grid even though it is not an added child.
         editor.ownerCmp = me.grid.ownerGrid;
-        
+
         if (column.isTreeColumn) {
             editor.isForTree = column.isTreeColumn;
             editor.addCls(Ext.baseCSSPrefix + 'tree-cell-editor');
         }
-        
+
         // Set the owning grid.
         // This needs to be kept up to date because in a Lockable assembly, an editor
         // needs to swap sides if the column is moved across.
         editor.setGrid(me.grid);
-        
+
         // Keep upward pointer correct for each use - editors are shared between locking sides
         editor.editingPlugin = me;
         editor.collectContainerElement = true;
-        
+
         return editor;
     },
 
@@ -791,7 +787,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
             cm = me.grid.getColumnManager(),
             index,
             activeEditor = me.getActiveEditor();
-            
+
         // If a raw {row:0, column:0} object passed.
         // The historic API is that column indices INCLUDE hidden columns, so use getColumnManager.
         if (!position.isCellContext) {
@@ -799,7 +795,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
                 position.row, me.grid.getColumnManager().getColumns()[position.column]
             );
         }
-        
+
         // Coerce the edit column to the closest visible column. This typically
         // only needs to be done when called programatically, since the position
         // is handled by walkCells, which is called before this is invoked.
@@ -830,7 +826,7 @@ Ext.define('Ext.grid.plugin.CellEditing', {
                 me.activateRow(me.view.all.item(position.rowIdx, true));
 
                 activeEditor = me.getEditor(position.record, position.column);
-                
+
                 if (activeEditor) {
                     activeEditor.field.focus();
                 }
@@ -839,6 +835,16 @@ Ext.define('Ext.grid.plugin.CellEditing', {
         else {
             // Enter actionable mode at the requested position
             return me.grid.setActionableMode(true, position);
+        }
+    },
+
+    destroyEditors: function() {
+        var me = this,
+            editors = me.editors;
+
+        if (editors) {
+            editors.each(Ext.destroy, Ext);
+            editors.clear();
         }
     }
 });

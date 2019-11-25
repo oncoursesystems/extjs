@@ -10,14 +10,14 @@ Ext.define('Ext.dd.Registry', {
         this.handles = {};
         this.autoIdSeed = 0;
     },
-    
+
     getId: function(el, autogen) {
         var id;
-        
+
         if (typeof el === "string") {
             return el;
         }
-        
+
         id = el.id;
 
         if (!id && autogen !== false) {
@@ -27,7 +27,7 @@ Ext.define('Ext.dd.Registry', {
 
         return id;
     },
-    
+
     /**
      * Registers a drag drop element.
      *
@@ -43,7 +43,7 @@ Ext.define('Ext.dd.Registry', {
      */
     register: function(el, data) {
         var hs, i, len;
-        
+
         data = data || {};
 
         if (typeof el === "string") {

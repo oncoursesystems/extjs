@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.charts.scatter.Basic', {
     requires: [
         'Ext.chart.theme.Muted'
     ],
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.charts.scatter.Basic', {
         type: 'Store',
         path: 'classic/samples/store/LifeExpectancy.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     tbar: {
@@ -79,7 +79,7 @@ Ext.define('KitchenSink.view.charts.scatter.Basic', {
                         text: 'OECD average',
                         fontWeight: 'bold'
                     },
-                    lineDash: [2,2]
+                    lineDash: [2, 2]
                 }
             }
         }, {
@@ -94,7 +94,7 @@ Ext.define('KitchenSink.view.charts.scatter.Basic', {
                         text: 'OECD average',
                         fontWeight: 'bold'
                     },
-                    lineDash: [2,2]
+                    lineDash: [2, 2]
                 }
             }
         }],

@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.grid.advanced.BigDataController', {
         'Ext.exporter.excel.Xlsx'
     ],
 
-    nameSorter: function (rec1, rec2) {
+    nameSorter: function(rec1, rec2) {
         // Sort prioritizing surname over forename as would be expected.
         var rec1Name = rec1.get('surname') + rec1.get('forename'),
             rec2Name = rec2.get('surname') + rec2.get('forename');
@@ -19,13 +19,15 @@ Ext.define('KitchenSink.view.grid.advanced.BigDataController', {
         if (rec1Name > rec2Name) {
             return 1;
         }
+
         if (rec1Name < rec2Name) {
             return -1;
         }
+
         return 0;
     },
 
-    destroy: function(){
+    destroy: function() {
         Ext.destroy(this.menuExport);
     },
 
@@ -33,7 +35,7 @@ Ext.define('KitchenSink.view.grid.advanced.BigDataController', {
         return Ext.util.Format.usMoney(value);
     },
 
-    onVerifyAllTap: function (button) {
+    onVerifyAllTap: function(button) {
         var row = button.up('gridrow'),
             group = row.getGroup(),
             view = this.getView(),
@@ -46,19 +48,19 @@ Ext.define('KitchenSink.view.grid.advanced.BigDataController', {
         else {
             count = store.getCount();
         }
-        
+
         Ext.Msg.confirm('Verify All',
-            'Are you sure you want to verify all ' + count + ' items?',
-            function (answer) {
-                if (answer === 'yes') {
-                    (group || store).each(function (rec) {
-                        rec.set('verified', true);
-                    });
-                }
-            });
+                        'Are you sure you want to verify all ' + count + ' items?',
+                        function(answer) {
+                            if (answer === 'yes') {
+                                (group || store).each(function(rec) {
+                                    rec.set('verified', true);
+                                });
+                            }
+                        });
     },
 
-    onVerifyTap: function (btn) {
+    onVerifyTap: function(btn) {
         var cell = btn.up(),
             rec = cell.getRecord();
 
@@ -66,7 +68,7 @@ Ext.define('KitchenSink.view.grid.advanced.BigDataController', {
         Ext.Msg.alert('Verify', 'Verify ' + rec.get('forename') + ' ' + rec.get('surname'));
     },
 
-    exportDocument: function(btn){
+    exportDocument: function(btn) {
         var cfg = Ext.merge({
             title: 'Grid export demo',
             fileName: 'GridExport' + '.' + (btn.cfg.ext || btn.cfg.type)
@@ -75,14 +77,14 @@ Ext.define('KitchenSink.view.grid.advanced.BigDataController', {
         this.getView().saveDocumentAs(cfg);
     },
 
-    onBeforeDocumentSave: function(view){
+    onBeforeDocumentSave: function(view) {
         view.mask({
             xtype: 'loadmask',
             message: 'Document is prepared for export. Please wait ...'
         });
     },
 
-    onDocumentSave: function(view){
+    onDocumentSave: function(view) {
         view.unmask();
     },
 

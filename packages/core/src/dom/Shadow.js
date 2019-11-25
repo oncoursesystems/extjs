@@ -47,7 +47,7 @@ Ext.define('Ext.dom.Shadow', {
         offset = me.offset;
         rad = Math.floor(offset / 2);
         me.opacity = 50;
-        
+
         switch (me.mode.toLowerCase()) {
             case "drop":
                 outerOffsets = {
@@ -56,7 +56,7 @@ Ext.define('Ext.dom.Shadow', {
                     w: offset,
                     h: offset
                 };
-                
+
                 if (Ext.supports.CSS3BoxShadow) {
                     offsets = {
                         x: offset,
@@ -73,9 +73,9 @@ Ext.define('Ext.dom.Shadow', {
                         w: -rad
                     };
                 }
-                
+
                 break;
-            
+
             case "sides":
                 outerOffsets = {
                     x: -offset,
@@ -83,7 +83,7 @@ Ext.define('Ext.dom.Shadow', {
                     w: offset * 2,
                     h: offset
                 };
-                
+
                 if (Ext.supports.CSS3BoxShadow) {
                     offsets = {
                         x: 0,
@@ -100,9 +100,9 @@ Ext.define('Ext.dom.Shadow', {
                         w: rad - 1
                     };
                 }
-                
+
                 break;
-            
+
             case "frame":
                 outerOffsets = {
                     x: -offset,
@@ -110,7 +110,7 @@ Ext.define('Ext.dom.Shadow', {
                     w: offset * 2,
                     h: offset * 2
                 };
-                
+
                 if (Ext.supports.CSS3BoxShadow) {
                     offsets = {
                         x: 0,
@@ -127,9 +127,9 @@ Ext.define('Ext.dom.Shadow', {
                         w: offset - rad - 1
                     };
                 }
-                
+
                 break;
-            
+
             case "bottom":
                 outerOffsets = {
                     x: -offset,
@@ -137,7 +137,7 @@ Ext.define('Ext.dom.Shadow', {
                     w: offset * 2,
                     h: offset
                 };
-                
+
                 if (Ext.supports.CSS3BoxShadow) {
                     offsets = {
                         x: 0,
@@ -154,7 +154,7 @@ Ext.define('Ext.dom.Shadow', {
                         w: 0
                     };
                 }
-                
+
                 break;
         }
 
@@ -187,15 +187,14 @@ Ext.define('Ext.dom.Shadow', {
         // There are only offsets if the shadow element is present.
         if (me.el && mode !== 'frame') {
             result[0] = 0;
-            
+
             if (mode === 'drop') {
                 result[3] = 0;
             }
         }
-        
+
         return result;
     },
-
 
     /**
      * @private
@@ -251,9 +250,9 @@ Ext.define('Ext.dom.Shadow', {
             if (Ext.isIE && !Ext.supports.CSS3BoxShadow) {
                 opacity = Math.floor(opacity * 100 / 2) / 100;
             }
-            
+
             this.opacity = opacity;
-            
+
             el.setOpacity(opacity);
         }
     }

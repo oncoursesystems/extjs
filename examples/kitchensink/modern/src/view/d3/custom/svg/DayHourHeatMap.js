@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.d3.custom.svg.DayHourHeatMap', {
         'Ext.d3.svg.Svg'
     ],
 
-    // <example>
+    //<example>
     otherContent: [
         {
             type: 'Controller',
@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.d3.custom.svg.DayHourHeatMap', {
             path: 'modern/sass/src/view/d3/custom/svg/DayHourHeatMap.scss'
         }
     ],
-    // </example>
+    //</example>
 
     width: 960,
     height: 520,

@@ -6,7 +6,6 @@ topSuite('Ext.draw.modifier.Highlight', ['Ext.draw.*'], function() {
             Ext.destroy(draw);
         });
 
-
         // A visual test should be the most robust way to test this.
         // It's engine specific, but the Canvas engine is used by default on almost every platform,
         // except for IE8 and old (pre-Chrome) Android.

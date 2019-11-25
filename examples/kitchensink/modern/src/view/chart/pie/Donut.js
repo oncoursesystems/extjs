@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.chart.pie.Donut', {
     xtype: 'pie-donut',
     controller: 'pie-donut',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/pie/DonutController.js'
@@ -45,9 +45,9 @@ Ext.define('KitchenSink.view.chart.pie.Donut', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -101,7 +101,7 @@ Ext.define('KitchenSink.view.chart.pie.Donut', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

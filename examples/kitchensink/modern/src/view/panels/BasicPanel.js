@@ -86,7 +86,7 @@ Ext.define('KitchenSink.view.panels.BasicPanel', {
             title: 'Built in Tools',
             html: Ext.os.is.Phone ? KitchenSink.DummyText.shortText : KitchenSink.DummyText.mediumText,
             tools: [
-                // <example>
+                //<example>
                 /*
                     { type: 'close'},
                     { type: 'minimize'},
@@ -116,12 +116,12 @@ Ext.define('KitchenSink.view.panels.BasicPanel', {
                     { type: 'resize'},
                     { type: 'move'}
                     */
-                // </example>
-                {type: 'minimize'},
-                {type: 'refresh'},
-                {type: 'search'},
-                {type: 'save'},
-                {type: 'menu'}
+                //</example>
+                { type: 'minimize' },
+                { type: 'refresh' },
+                { type: 'search' },
+                { type: 'save' },
+                { type: 'menu' }
             ]
         }, {
             xtype: 'panel',
@@ -131,9 +131,9 @@ Ext.define('KitchenSink.view.panels.BasicPanel', {
             html: Ext.os.is.Phone ? KitchenSink.DummyText.shortText : KitchenSink.DummyText.mediumText,
             autoSize: true,
             tools: [
-                {iconCls: 'x-fa fa-wrench'},
-                {iconCls: 'x-fa fa-reply'},
-                {iconCls: 'x-fa fa-reply-all'}
+                { iconCls: 'x-fa fa-wrench' },
+                { iconCls: 'x-fa fa-reply' },
+                { iconCls: 'x-fa fa-reply-all' }
             ]
         }]
     }]

@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.charts.gauge.Basic', {
         type: 'gauge-basic'
     },
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.charts.gauge.Basic', {
         type: 'Controller',
         path: 'classic/samples/view/charts/gauge/BasicController.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     profiles: {
@@ -32,9 +32,12 @@ Ext.define('KitchenSink.view.charts.gauge.Basic', {
         },
         graphite: {
             insetPadding: 25
+        },
+        'classic-material': {
+            insetPadding: 25
         }
     },
-    
+
     tbar: [
         '->',
         {
@@ -156,7 +159,7 @@ Ext.define('KitchenSink.view.charts.gauge.Basic', {
                 height: 240,
                 width: 300,
                 padding: '10 0 0 10',
-                insetPadding:'${insetPadding}',
+                insetPadding: '${insetPadding}',
                 captions: {
                     title: {
                         text: 'RPM',

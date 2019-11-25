@@ -3,10 +3,10 @@ topSuite("Ext.chart.axis.Time", ['Ext.chart.*', 'Ext.data.ArrayStore'], function
         // Silence Sencha download server warnings
         spyOn(Ext.log, 'warn');
     });
-    
+
     describe('renderer', function() {
         var chart;
-        
+
         afterEach(function() {
             Ext.destroy(chart);
         });
@@ -50,7 +50,7 @@ topSuite("Ext.chart.axis.Time", ['Ext.chart.*', 'Ext.data.ArrayStore'], function
                     }
                 ]
             });
-            
+
             layoutEndSpy = spyOn(chart, 'onLayoutEnd').andCallThrough();
 
             waitsForSpy(layoutEndSpy, "chart layout to finish");
@@ -102,5 +102,5 @@ topSuite("Ext.chart.axis.Time", ['Ext.chart.*', 'Ext.data.ArrayStore'], function
             });
         });
     });
-    
+
 });

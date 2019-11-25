@@ -25,7 +25,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     setup(o.items[i], o);
                 }
             }
-            
+
             Ext.apply(o, {
                 $iid: ++Ext.$nextIid,
                 getItemId: function() {
@@ -41,40 +41,40 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                         len = items.length,
                         i = 0,
                         item;
-            
+
                     if (deep) {
                         for (; i < len; i++) {
                             item = items[i];
-                            
+
                             if (item.getRefItems) {
                                 items = items.concat(item.getRefItems(true));
                             }
                         }
                     }
-                    
+
                     return items;
                 },
 
                 getReference: function() {
                     return null;
                 },
-                
+
                 getRefOwner: function() {
                     return this.ownerCt;
                 },
-                
+
                 hasCls: function(cls) {
                     return this.cls == cls; // eslint-disable-line eqeqeq
                 },
-                
+
                 isHidden: function() {
                     return this.hidden;
                 },
-                
+
                 isXType: function(type) {
                     return EA.contains(this.type.split('/'), type);
                 },
-                
+
                 ownerCt: parent,
 
                 self: {
@@ -83,22 +83,22 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     }
                 }
             });
-            
+
             cm.register(o);
         };
-        
+
     function expectChildren() {
         var args = Array.prototype.slice.apply(arguments),
             result = args.shift(),
             len = args.length,
             i, expected, actual;
-        
+
         expect(result.length).toBe(len);
-        
+
         for (i = 0, len = args.length; i < len; i++) {
             expected = args[i];
             actual   = result[i];
-            
+
             expect(actual.id).toBe(expected.id);
         }
     }
@@ -107,7 +107,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         cq = Ext.ComponentQuery;
         cm = Ext.ComponentManager;
         EA = Ext.Array;
-        
+
         realComponentMgrAll = cm.all;
         realComponentMgrByInstanceId = cm.byInstanceId;
         realComponentMgrCount = cm.count;
@@ -198,117 +198,117 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
         cm.byInstanceId = realComponentMgrByInstanceId;
         cm.count = realComponentMgrCount;
     });
-    
+
     describe("parser", function() {
         it("should blow up if the intra-selector comma is escaped", function() {
             expect(function() {
                 cq.query('#child3\\,F', root);
             }).toThrow('Invalid ComponentQuery selector: ",F"');
         });
-        
+
         it("should blow up if a selector ends with unescaped comma", function() {
             expect(function() {
                 cq.query('#child3,', root);
             }).toThrow('Invalid ComponentQuery selector: ""');
         });
-        
+
         it("should blow up if a selector ends with an escaped comma", function() {
             expect(function() {
                 cq.query('#child3\\,', root);
             }).toThrow('Invalid ComponentQuery selector: ","');
         });
-        
+
         describe("missing quotes", function() {
             var warning;
-            
+
             beforeEach(function() {
                 spyOn(Ext.log, 'warn').andCallFake(function(msg) {
                     warning = msg;
                 });
-                
+
                 warning = null;
             });
-            
+
             it("should warn on missing opening double quote", function() {
                 cq.query('[foo=bar"]');
                 expect(warning).toMatch(/^ComponentQuery selector.*?unescaped \("\).*?end/);
             });
-            
+
             it("should warn on missing closing double quote", function() {
                 cq.query('[foo="bar]');
                 expect(warning).toMatch(/^ComponentQuery selector.*?unescaped \("\).*?beginning/);
             });
-            
+
             it("should warn on missing opening single quote", function() {
                 cq.query("[foo=bar']");
                 expect(warning).toMatch(/^ComponentQuery selector.*?unescaped \('\).*end/);
             });
-            
+
             it("should warn on missing closing single quote", function() {
                 cq.query("[foo='bar]");
                 expect(warning).toMatch(/^ComponentQuery selector.*?unescaped \('\).*beginning/);
             });
         });
     });
-    
+
     describe("Query object", function() {
         describe("is", function() {
             it("should return true if the selector is empty", function() {
                 var q = cq.parse('');
-                
+
                 expect(q.is(root)).toBe(true);
             });
         });
     });
-    
+
     describe("is", function() {
         var item;
-        
+
         beforeEach(function() {
            item = Ext.getCmp('root');
         });
-        
+
         afterEach(function() {
             item = null;
         });
-        
+
         it("should return true if there is no selector", function() {
             expect(cq.is(root)).toBe(true);
         });
-        
+
         it("should return true if component matches the selector", function() {
             expect(cq.is(root, '[type=A]')).toBe(true);
         });
-        
+
         it("should return true if component matches any selector", function() {
             expect(cq.is(root, 'button, #foo, #root, [type=A]')).toBe(true);
         });
-        
+
         it("should return false if the component doesn't match the selector", function() {
             expect(cq.is(root, '#foo')).toBe(false);
         });
-        
+
         it("should work with the :not pseudo", function() {
             var comp = new Ext.Component({
                 foo: 1
             });
-            
+
             expect(comp.is('[foo]:not([bar])')).toBe(true);
         });
-        
+
         describe("hierarchy selectors", function() {
             it("should match a direct child", function() {
                 expect(cq.is(child6, '#child4 > #child6')).toBe(true);
             });
-            
+
             it("should return false if it's not a direct child", function() {
                 expect(cq.is(child6, '#child3 > #child6')).toBe(false);
             });
-            
+
             it("should match deep children", function() {
                 expect(cq.is(child6, '#child3 #child6')).toBe(true);
             });
-            
+
             it("should match an upward selector", function() {
                 expect(cq.is(child3, '#child6 ^ #child3')).toBe(true);
             });
@@ -352,31 +352,31 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
     describe("query with no selector", function() {
         it("should return all components", function() {
             var result = cq.query();
-            
+
             expect(result.length).toBe(13);
         });
     });
-    
+
     describe("simple query by xtype", function() {
         it("should select all six items of type G", function() {
             result = cq.query('G', root);
             expect(result.length).toEqual(6);
             expect(result[2].id).toEqual(child6.id);
         });
-        
+
         it("should allow escaped dots in xtype selector", function() {
             result = cq.query('E\\.2-E\\.4', root);
             expect(result.length).toBe(1);
             expect(result[0].id).toBe(child12.id);
         });
     });
-    
+
     describe("simple query by xtype prefixed with dot", function() {
         beforeEach(function() {
             // Silence console warnings
             spyOn(Ext.log, 'warn');
         });
-        
+
         it("should select all six items of type G", function() {
             result = cq.query('.G', root);
             expect(result.length).toEqual(6);
@@ -389,7 +389,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expect(result[0].id).toBe(child12.id);
         });
     });
-    
+
     describe("attributes starting with $", function() {
         it("should match $className variable", function() {
             result = cq.query('[$className=Foo]');
@@ -403,31 +403,31 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expectChildren(result, child2);
         });
     });
-    
+
     describe("query by id", function() {
         it("should select the second child", function() {
             result = cq.query('G#child2', root);
             expect(result.length).toEqual(1);
             expect(result[0].id).toEqual(child2.id);
         });
-        
+
         it("should select the fifth child", function() {
             result = cq.query('#child5', root);
             expect(result.length).toEqual(1);
             expect(result[0].id).toEqual(child5.id);
         });
-        
+
         it("should allow escaped dots in query-by-id selectors", function() {
             result = cq.query('#child\\.11', root);
             expectChildren(result, child11);
         });
-        
+
         it("should allow multiple escaped commas in #itemId selectors", function() {
             result = cq.query('#bobby\\.brown\\.goes\\.down', root);
             expectChildren(result, child12);
         });
     });
-    
+
     describe("query by property", function() {
         it("should select the second child", function() {
             result = cq.query('G[cls=child2-cls]', root);
@@ -440,41 +440,41 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expect(result.length).toEqual(1);
             expect(result[0].id).toEqual(child6.id);
         });
-        
+
         describe("property value quotes", function() {
             it("should allow single quoted value", function() {
                 result = cq.query("[id='child.12']", root);
                 expectChildren(result, child12);
             });
-            
+
             it("should allow double quoted value", function() {
                 result = cq.query('[id="child.12"]', root);
                 expectChildren(result, child12);
             });
-            
+
             it("should allow double quotes in single quoted value", function() {
                 result = cq.query('[dq=\'"double" "quotes"\']', root);
                 expectChildren(result, child12);
             });
-            
+
             it("should allow single quotes in double quoted value", function() {
                 result = cq.query("[sq=\"'single' 'quotes'\"]", root);
                 expectChildren(result, child12);
             });
         });
-        
+
         describe("matchers", function() {
             it("should select the tenth child", function() {
                 result = cq.query('[cls~=my-foo-cls]', root);
                 expect(result.length).toEqual(1);
                 expect(result[0].id).toEqual(child10.id);
             });
-            
+
             it("should select items where id starts with child1", function() {
                 result = cq.query('[id^=child1]', root);
                 expectChildren(result, child1, child10);
             });
-            
+
             it("should select items where cls ends with 9-cls", function() {
                 result = cq.query('[cls$=9-cls]', root);
                 expect(result.length).toBe(1);
@@ -486,46 +486,46 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                 expect(result.length).toEqual(1);
                 expect(result[0].id).toEqual(child1.id);
             });
-        
+
             it("should allow multiple escaped commas", function() {
                 result = cq.query('[bar=foo\\,bar\\,baz]', root);
                 expectChildren(result, child2);
             });
-        
+
             it("should allow escaped metacharacters", function() {
                 result = cq.query('[foo=\\[foo\\(bar\\)\\!baz\\#qux\\\\fred\\*\\]]', root);
                 expectChildren(result, child12);
             });
-            
+
             describe("regexen", function() {
                 it("should match everything with an empty regex", function() {
                     result = cq.query('[cls/=]');
                     expect(result.length).toBe(12);
                 });
-                
+
                 describe("simple regexen", function() {
                     it("should match regexen with text as pattern", function() {
                          result = cq.query('[cls/=my-foo]');
                          expectChildren(result, child10, child11);
                     });
-                    
+
                     it("should match regexen with simple alternation", function() {
                         result = cq.query('[cls/=child3-cls|child4-cls|child5-cls]');
                         expectChildren(result, child5, child4, child3);
                     });
                 });
-                
+
                 describe("complex regexen", function() {
                     it("should match regexen with pattern quantifiers", function() {
                         result = cq.query('[cls/="child.{2}-cls"]');
                         expectChildren(result, child10, child11);
                     });
-                
+
                     it("should match regexen with grouping and alternating", function() {
                         result = cq.query('[cls/="child(?:7|8)-cls"]');
                         expectChildren(result, child7, child8);
                     });
-                
+
                     it("should match regexen with character classes", function() {
                         result = cq.query('[cls/="child\\[5-7\\]-cls"]');
                         expectChildren(result, child7, child5, child6);
@@ -534,7 +534,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             });
         });
     });
-    
+
     describe("query using mode ^", function() {
         it("should select the fourth child", function() {
             result = cq.query('G[cls=child8-cls]^#child4', root);
@@ -575,13 +575,13 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     c,
                     i = 0,
                     l = items.length;
-                
+
                 for (; i < l; i++) {
                     if ((c = items[i]).layout === 'card') {
                         result.push(c);
                     }
                 }
-                
+
                 return result;
             };
         });
@@ -592,21 +592,21 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expect(result.length).toEqual(1);
             expect(result[0].id).toEqual(child3.id);
         });
-        
+
         it("should not select the sixth child which is filtered by :not()", function() {
             result = cq.query(':not([hidden])', root);
-            
+
             var all = root.getRefItems(true),
                 getId = function(o) { return o.id; },
                 allIds = EA.map(all, getId),
                 resultIds = EA.map(result, getId),
                 diffIds = EA.difference(allIds, resultIds);
-            
+
             expect(result.length).toEqual(all.length - 1);
             expect(diffIds.length).toEqual(1);
             expect(diffIds[0]).toEqual(child6.id);
         });
-        
+
         it("should accept back-to-back pseudo-class selectors with cumulative results", function() {
             result = cq.query(':not(G):not(F)', root);
             expect(result.length).toEqual(5);
@@ -616,21 +616,21 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expect(result[3].id).toEqual(child11.id);
             expect(result[4].id).toEqual(child12.id);
         });
-        
+
         it("should accept member expression selectors", function() {
             result = cq.query(':not({isHidden()})', root);
-            
+
             var all = root.getRefItems(true),
                 getId = function(o) { return o.id; },
                 allIds = EA.map(all, getId),
                 resultIds = EA.map(result, getId),
                 diffIds = EA.difference(allIds, resultIds);
-            
+
             expect(result.length).toEqual(all.length - 1);
             expect(diffIds.length).toEqual(1);
             expect(diffIds[0]).toEqual(child6.id);
         });
-        
+
         describe("focusable", function() {
             // https://sencha.jira.com/browse/EXTJS-16758
             it("should not blow up when card item is not a component", function() {
@@ -638,18 +638,18 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     renderTo: Ext.getBody(),
                     items: [new Ext.Widget()]
                 });
-                
+
                 expect(function() {
                     container.query(':focusable');
                 }).not.toThrow();
-                
+
                 container.destroy();
             });
         });
-        
+
         describe("first/last", function() {
             var items;
-            
+
             beforeEach(function() {
                 items = [
                     new Ext.Component({
@@ -674,93 +674,93 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     })
                 ];
             });
-            
+
             afterEach(function() {
                 Ext.Array.forEach(items, function(item) {
                     item.destroy();
                 });
-                
+
                 items = null;
             });
-            
+
             describe("first", function() {
                 it("should return an empty array if no items match", function() {
                     var result = cq.query('button:first', items);
-                    
+
                     expect(result).toEqual([]);
                 });
-                
+
                 it("should return the first matching component by type", function() {
                     var result = cq.query('container:first', items);
-                    
+
                     expect(result).toEqual([items[1]]);
                 });
-                
+
                 it("should return the last matching component by attribute", function() {
                     var result = cq.query('[action=type2]:first', items);
-                    
+
                     expect(result).toEqual([items[2]]);
                 });
-                
+
                 it("should return the first component", function() {
                     var result = cq.query('*:first', items);
-                    
+
                     expect(result).toEqual([items[0]]);
                 });
-                
+
                 describe("no items/single item", function() {
                     it("should return an empty array if there are no items", function() {
                         var result = cq.query('*:first', []);
-                        
+
                         expect(result).toEqual([]);
                     });
-                    
+
                     it("should return an a single item if it matches", function() {
                         var c = new Ext.Component(),
                             result = cq.query('component:first', [c]);
-                        
+
                         expect(result).toEqual([c]);
                         c.destroy();
                     });
                 });
             });
-        
+
             describe("last", function() {
                 it("should return an empty array if no items match", function() {
                     var result = cq.query('button:last', items);
-                    
+
                     expect(result).toEqual([]);
                 });
-                
+
                 it("should return the last matching component by type", function() {
                     var result = cq.query('component:last', items);
-                    
+
                     expect(result).toEqual([items[4]]);
                 });
-                
+
                 it("should return the first matching component by attribute", function() {
                     var result = cq.query('[action=type1]:last', items);
-                    
+
                     expect(result).toEqual([items[1]]);
                 });
-                
+
                 it("should return the first component", function() {
                     var result = cq.query('*:last', items);
-                    
+
                     expect(result).toEqual([items[4]]);
                 });
-                
+
                 describe("no items/single item", function() {
                     it("should return an empty array if there are no items", function() {
                         var result = cq.query('*:last', []);
-                        
+
                         expect(result).toEqual([]);
                     });
-                    
+
                     it("should return an a single item if it matches", function() {
                         var c = new Ext.Component(),
                             result = cq.query('component:last', [c]);
-                        
+
                         expect(result).toEqual([c]);
                         c.destroy();
                     });
@@ -836,7 +836,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expect(cq.query('[att4=undefined]', candidates)).toBe(candidates[1]);
         });
     });
-    
+
     describe('ownProperty tests', function() {
         var TestClass = Ext.define(null, {
                 extend: 'Ext.Component',
@@ -844,7 +844,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                 bletch: 0
             }),
             candidates;
-            
+
         beforeEach(function() {
             // Only candidates[1] has *ownProperties* foo and bletch
             // And the value of bletch is zero, so by [bletch] will never match.
@@ -854,7 +854,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                 bletch: 0
             })];
         });
-        
+
         afterEach(function() {
             Ext.destroy(candidates[0], candidates[1]);
             candidates = null;
@@ -880,10 +880,10 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expect(Ext.ComponentQuery.is(candidates[1], '[?bletch]')).toBe(true);
         });
     });
-    
+
     describe('Querying floating descendants', function() {
         var c;
-            
+
         beforeEach(function() {
             c = new Ext.container.Container({
                 items: {
@@ -1040,48 +1040,48 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     expect(result[0].action).toBe('selectVendors');
                 });
             });
-            
+
             describe("id matching expressions", function() {
                 it("should trim leading spaces", function() {
                     result = cq.query(' #child9', root);
-                
+
                     expect(result.length).toBe(1);
                     expect(result[0].id).toBe(child9.id);
                 });
-                
+
                 it("should trim trailing spaces", function() {
                     result = cq.query('#child9 ', root);
-                    
+
                     expect(result.length).toBe(1);
                     expect(result[0].id).toBe(child9.id);
                 });
-                
+
                 it("should trim spaces on both sides", function() {
                     result = cq.query('   #child9       ', root);
-                    
+
                     expect(result.length).toBe(1);
                     expect(result[0].id).toBe(child9.id);
                 });
             });
-            
+
             describe("descendancy expressions", function() {
                 it("should trim leading spaces", function() {
                     result = cq.query(' [layout=card]    [type=B/G/H]', root);
-                    
+
                     expect(result.length).toBe(1);
                     expect(result[0].id).toBe(child7.id);
                 });
-                
+
                 it("should trim trailing spaces", function() {
                     result = cq.query('[type=B/G/J]   ^ [layout=hbox]   ', root);
-                    
+
                     expect(result.length).toBe(1);
                     expect(result[0].id).toBe(child4.id);
                 });
-                
+
                 it("should trim spaces on both sides", function() {
                     result = cq.query('     #child4      >       [type=B/C/F]        ', root);
-                    
+
                     expect(result.length).toBe(1);
                     expect(result[0].id).toBe(child5.id);
                 });
@@ -1162,7 +1162,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
                     return 'customBarGetter';
                 }
             });
-            
+
             bletch = new spec.Bletch();
 
         });
@@ -1201,7 +1201,7 @@ topSuite("Ext.ComponentQuery", ["Ext.Container"], function() {
             expect(result[0]).toBe(bletch);
         });
     });
-    
+
     describe('querying non Ext classes', function() {
         it('should be able to query on raw objects', function() {
             var target = { foo: 'bar' },

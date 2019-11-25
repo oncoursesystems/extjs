@@ -2,14 +2,14 @@
 
 topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
     var component, makeComponent, makeRange;
-    
+
     beforeEach(function() {
         makeComponent = function(config) {
             component = new Ext.picker.Date(Ext.apply({
                 renderTo: Ext.getBody()
             }, config));
         };
-        
+
         makeRange = function(min, max) {
             var out = [],
                 i = min;
@@ -21,7 +21,7 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
             return out;
         };
     });
-    
+
     afterEach(function() {
         if (component) {
             component.destroy();
@@ -29,7 +29,7 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
 
         component = makeComponent = makeRange = null;
     });
-    
+
     describe("alternate class name", function() {
         it("should have Ext.DatePicker as the alternate class name", function() {
             expect(Ext.picker.Date.prototype.alternateClassName).toEqual("Ext.DatePicker");
@@ -45,7 +45,7 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
             makeComponent({
                 showToday: false
             });
-            
+
             expect(component.footerEl).toBeFalsy();
         });
 
@@ -88,34 +88,34 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 expect(component.getValue()).toEqual(new Date(2017, 6, 1));
             });
         });
-        
+
         describe("startDay", function() {
             var weekStart;
-            
+
             beforeEach(function() {
                 weekStart = Ext.Date.firstDayOfWeek;
                 Ext.Date.firstDayOfWeek = 1;
             });
-            
+
             afterEach(function() {
                 Ext.Date.firstDayOfWeek = weekStart;
             });
-            
+
             it("should default to Ext.Date.firstDayOfWeek", function() {
                 makeComponent();
-                
+
                 var th = component.eventEl.down('th', true);
-                
+
                 expect(th.firstChild.innerHTML).toBe('M');
             });
-            
+
             it("should take config option", function() {
                 makeComponent({
                     startDay: 2
                 });
-                
+
                 var th = component.eventEl.down('th', true);
-                
+
                 expect(th.firstChild.innerHTML).toBe('T');
             });
         });
@@ -181,10 +181,10 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
             });
         });
     });
-    
+
     describe("restrictions", function() {
         var isDisabled;
-        
+
         beforeEach(function() {
             isDisabled = function(range, title) {
                 var i = 0,
@@ -192,7 +192,7 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                     len = range.length,
                     cell, cellTitle,
                     checkTitle = title !== null;
-                    
+
                 for (; i < len; ++i) {
                     cell = cells[range[i]];
                     cellTitle = cell.getAttribute('data-qtip');
@@ -205,66 +205,66 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 return true;
             };
         });
-        
+
         afterEach(function() {
             isDisabled = null;
         });
-        
+
         describe("max date", function() {
             it("should not have any max date set if not specified", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4) // 4th Nov 2010
                 });
-                
+
                 // go way into the future
                 for (var i = 0; i < 10; ++i) {
                     component.showNextYear();
                 }
-                
+
                 expect(component.el.select('td[title="' + component.maxText + '"]').getCount()).toEqual(0);
-                
+
             });
-            
+
             it("should set the class and title on elements over the max date 1", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4), // 4th Nov 2010
                     maxDate: new Date(2010, 10, 18) // 18th Nov, 2010
                 });
-                    
+
                 expect(isDisabled(makeRange(19, 41), component.maxText)).toBeTruthy();
             });
-            
+
             it("should set the class and title on elements over the max date 2", function() {
                 makeComponent({
                     value: new Date(2007, 4, 3), // 3rd May 2017
                     maxDate: new Date(2007, 4, 7) // 7th May 2007
                 });
-                
+
                 expect(isDisabled(makeRange(9, 41), component.maxText)).toBeTruthy();
             });
-            
+
             it("should not set the class/title if the max date isn't on the current page", function() {
                 makeComponent({
                     value: new Date(2007, 4, 3), // 3rd May 2007
                     maxDate: new Date(2010, 4, 7) // 7th May 2010
                 });
-                
+
                 var cells = component.cells,
                     len = cells.getCount(),
                     i = 0;
-                    
+
                 for (; i < len; ++i) {
                     expect(cells.item(i).dom.title).not.toEqual(component.maxText);
                     expect(cells.item(i).dom.className).not.toEqual(component.disabledCellCls);
                 }
             });
-            
+
             it("should update the class/title if required when changing the active 'page'", function() {
                 makeComponent({
                     value: new Date(2007, 4, 3), // 3rd May 2007
                     maxDate: new Date(2007, 5, 15) // 15th Jun 2007
                 });
-                
+
                 component.showNextMonth();
                 expect(isDisabled(makeRange(20, 41), component.maxText)).toBeTruthy();
             });
@@ -278,62 +278,62 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 expect(component.getValue()).toEqual(component.maxDate);
             });
         });
-        
+
         describe("min date", function() {
             it("should not have any min date set if not specified", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4) // 4th Nov 2010
                 });
-                
+
                 // go way into the future
                 for (var i = 0; i < 10; ++i) {
                     component.showPrevYear();
                 }
-                
+
                 expect(component.el.select('td[title="' + component.minText + '"]').getCount()).toEqual(0);
-                
+
             });
-            
+
             it("should set the class and title on elements under the min date 1", function() {
                 makeComponent({
                     value: new Date(2010, 8, 18), // 18th Sep 2010
                     minDate: new Date(2010, 8, 4) // 4th Sep, 2010
                 });
-                
+
                 expect(isDisabled(makeRange(0, 5), component.minText)).toBeTruthy();
             });
-            
+
             it("should set the class and title on elements over the min date 2", function() {
                 makeComponent({
                     value: new Date(2006, 2, 3), // 3rd Mar 2006
                     minDate: new Date(2006, 2, 7) // 7th Mar 2006
                 });
-                
+
                 expect(isDisabled(makeRange(0, 8), component.minText)).toBeTruthy();
             });
-            
+
             it("should not set the class/title if the min date isn't on the current page", function() {
                 makeComponent({
                     minDate: new Date(2007, 2, 3), // 3rd Mar 2007
                     value: new Date(2010, 2, 7) // 7th Mar 2010
                 });
-                
+
                 var cells = component.cells,
                     len = cells.getCount(),
                     i = 0;
-                    
+
                 for (; i < len; ++i) {
                     expect(cells.item(i).dom.title).not.toEqual(component.minText);
                     expect(cells.item(i).dom.className).not.toEqual(component.disabledCellCls);
                 }
             });
-            
+
             it("should update the class/title if required when changing the active 'page'", function() {
                 makeComponent({
                     minDate: new Date(2007, 4, 3), // 3rd May 2017
                     value: new Date(2007, 5, 15) // 15th Jun 2007
                 });
-                
+
                 component.showPrevMonth();
                 expect(isDisabled(makeRange(0, 3), component.minText)).toBeTruthy();
             });
@@ -347,32 +347,32 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 expect(component.getValue()).toEqual(component.minDate);
             });
         });
-        
+
         describe("disabledDays", function() {
             it("should not disabled anything if there any no disabledDays", function() {
                 makeComponent();
                 expect(component.el.select('.' + component.disabledCellCls).getCount()).toEqual(0);
             });
-            
+
             it("should disable the appropriate days 1", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4),
                     disabledDays: [0, 6] // sat, sun
                 });
-                
+
                 expect(isDisabled([0, 6, 7, 13, 14, 20, 21, 27, 28, 34, 35], component.disabledDaysText)).toBeTruthy();
             });
-            
+
             it("should disable the appropriate days 2", function() {
                 makeComponent({
                     value: new Date(2010, 10, 4),
                     disabledDays: [1, 5] // mon, fri
                 });
-                
+
                 expect(isDisabled([1, 5, 8, 12, 15, 19, 22, 26, 29, 33, 36, 40], component.disabledDaysText)).toBeTruthy();
             });
         });
-        
+
         describe("disabledDates", function() {
             it("should disabled specific dates", function() {
                 makeComponent({
@@ -380,21 +380,21 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                     format: 'Y/m/d',
                     disabledDates: ['2010/11/07', '2010/11/14']
                 });
-                
+
                 expect(isDisabled([7, 14], null)).toBeTruthy();
             });
-            
+
             it("should disabled specific dates according to regex - year", function() {
-                
+
                 var date = new Date(2010, 10, 4),
                     range = makeRange(0, 41);
-                
+
                 makeComponent({
                     value: date,
                     format: 'Y/m/d',
                     disabledDates: ['2010/*']
                 });
-                
+
                 while (date.getFullYear() === 2010) {
                     if (date.getMonth() > 0) {
                         expect(isDisabled(range, null)).toBeTruthy();
@@ -402,33 +402,33 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                     else {
                         expect(isDisabled(makeRange(5, 41), null)).toBeTruthy();
                     }
-                    
+
                     date = Ext.Date.add(date, Ext.Date.MONTH, -1);
                     component.showPrevMonth();
                 }
             });
-            
+
             it("should disabled specific dates according to regex - month", function() {
-                
+
                 makeComponent({
                     value: new Date(2010, 10, 4),
                     format: 'Y/m/d',
                     disabledDates: ['2010/11/*']
                 });
-                
+
                 expect(isDisabled(makeRange(1, 30), null)).toBeTruthy();
                 component.showPrevMonth();
                 expect(isDisabled(makeRange(0, 35), null)).toBeFalsy();
             });
-            
+
             it("should disabled specific dates according to regex - day", function() {
-                
+
                 makeComponent({
                     value: new Date(2010, 10, 4),
                     format: 'Y/m/d',
                     disabledDates: ['2010/11/1*']
                 });
-                
+
                 expect(isDisabled(makeRange(14, 23), null)).toBeTruthy();
             });
         });
@@ -566,33 +566,33 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
                 });
             });
         });
-        
+
     });
-    
+
     describe('showing month picker', function() {
         var df, picker;
-        
+
         beforeEach(function() {
             df = new Ext.form.field.Date({
                 renderTo: Ext.getBody(),
                 disableAnim: true
             });
-            
+
             df.focus();
-            
+
             jasmine.waitForFocus(df);
         });
-        
+
         afterEach(function() {
             df.destroy();
             df = picker = null;
         });
-        
+
         it('should show the month picker on click of the button', function() {
             runs(function() {
                 df.expand();
                 picker = df.getPicker();
-                
+
                 jasmine.fireMouseEvent(picker.monthBtn.el, 'click');
             });
 
@@ -603,240 +603,240 @@ topSuite("Ext.picker.Date", ['Ext.form.field.Date'], function() {
             // https://sencha.jira.com/browse/EXTJS-15968
             // MonthPicker AND DatePicker hid slightly after completing show animation
             waits(100);
-            
+
             runs(function() {
                 expect(picker.isVisible()).toBe(true);
                 expect(picker.monthPicker.isVisible()).toBe(true);
             });
         });
     });
-    
+
     // Space, Enter, Escape, and Tab keys are tested in Date field suite
     describe("keyboard interaction", function() {
         var eDate = Ext.Date,
             focusAndWait = jasmine.focusAndWait,
             today = eDate.clearTime(new Date()),
             spy, event;
-        
+
         function expectDate(date) {
             var activeDate = Ext.Date.clearTime(new Date(component.activeCell.firstChild.dateValue));
-            
+
             expect(activeDate.toString()).toBe(date.toString());
         }
-        
+
         function pressKey(key, options) {
             component.eventEl.on('keydown', spy);
             jasmine.syncPressKey(component, key, options);
             component.eventEl.un('keydown', spy);
-            
+
             event = spy.mostRecentCall.args[0];
         }
-        
+
         beforeEach(function() {
             spy = jasmine.createSpy('keydown');
-            
+
             makeComponent();
-            
+
             focusAndWait(component);
         });
-        
+
         afterEach(function() {
             spy = event = null;
         });
-        
+
         describe("left arrow", function() {
             beforeEach(function() {
                 pressKey('left');
             });
-            
+
             it("should select the day before", function() {
                 expectDate(eDate.add(today, eDate.DAY, -1));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("ctrl-left arrow", function() {
             beforeEach(function() {
                 pressKey('left', { ctrlKey: true });
             });
-            
+
             it("should select same day of the previous month", function() {
                 expectDate(eDate.add(today, eDate.MONTH, -1));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("right arrow", function() {
             beforeEach(function() {
                 pressKey('right');
             });
-            
+
             it("should select the next day", function() {
                 expectDate(eDate.add(today, eDate.DAY, 1));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("ctrl-right arrow", function() {
             beforeEach(function() {
                 pressKey('right', { ctrlKey: true });
             });
-            
+
             it("should select same day of the next month", function() {
                 expectDate(eDate.add(today, eDate.MONTH, 1));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("up arrow", function() {
             beforeEach(function() {
                 pressKey('up');
             });
-            
+
             it("should select the day a week ago", function() {
                 expectDate(eDate.add(today, eDate.DAY, -7, true));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         // This is non-standard historical behavior
         describe("ctrl-up arrow", function() {
             beforeEach(function() {
                 pressKey('up', { ctrlKey: true });
             });
-            
+
             it("should select the same day of the next year", function() {
                 expectDate(eDate.add(today, eDate.YEAR, 1));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("down arrow", function() {
             beforeEach(function() {
                 pressKey('down');
             });
-            
+
             it("should select the day a week ahead", function() {
                 expectDate(eDate.add(today, eDate.DAY, 7));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         // This is non-standard historical behavior
         describe("ctrl-down arrow", function() {
             beforeEach(function() {
                 pressKey('down', { ctrlKey: true });
             });
-            
+
             it("should select the same day a year before", function() {
                 expectDate(eDate.add(today, eDate.YEAR, -1));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("pageUp", function() {
             beforeEach(function() {
                 pressKey('page_up');
             });
-            
+
             it("should select the same day of the previous month", function() {
                 expectDate(eDate.add(today, eDate.MONTH, -1));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("ctrl-pageUp", function() {
             beforeEach(function() {
                 pressKey('page_up', { ctrlKey: true });
             });
-            
+
             it("should select the same day of the previous year", function() {
                 expectDate(eDate.add(today, eDate.YEAR, -1));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("pageDown", function() {
             beforeEach(function() {
                 pressKey('page_down');
             });
-            
+
             it("should select the same day of the next month", function() {
                 expectDate(eDate.add(today, eDate.MONTH, 1));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("ctrl-pageDown", function() {
             beforeEach(function() {
                 pressKey('page_down', { ctrlKey: true });
             });
-            
+
             it("should select the same day of the next year", function() {
                 expectDate(eDate.add(today, eDate.YEAR, 1));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("home key", function() {
             beforeEach(function() {
                 pressKey('home');
             });
-            
+
             it("should select the first day of the current month", function() {
                 expectDate(eDate.getFirstDateOfMonth(today));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         describe("end key", function() {
             beforeEach(function() {
                 pressKey('end');
             });
-            
+
             it("should select the last day of the current month", function() {
                 expectDate(eDate.getLastDateOfMonth(today));
             });
-            
+
             it("should prevent default on the event", function() {
                 expect(event.defaultPrevented).toBe(true);
             });

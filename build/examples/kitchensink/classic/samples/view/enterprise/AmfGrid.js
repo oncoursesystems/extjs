@@ -10,12 +10,12 @@ Ext.define('KitchenSink.view.enterprise.AmfGrid', {
     xtype: 'amf-grid',
 
     width: 600,
-    
+
     //<example>
     otherContent: [{
         type: 'Model',
         path: 'classic/samples/model/Pangram.js'
-    },{
+    }, {
         type: 'Data',
         path: 'data/enterprise/amf0-pangrams.amf'
     }],
@@ -28,6 +28,9 @@ Ext.define('KitchenSink.view.enterprise.AmfGrid', {
             height: 200
         },
         graphite: {
+            height: 400
+        },
+        'classic-material': {
             height: 400
         }
     },

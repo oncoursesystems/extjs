@@ -132,10 +132,10 @@ Ext.define('Ext.dashboard.Dashboard', {
     /**
      * @event drop
      */
-    
+
     initComponent: function() {
         var me = this;
-        
+
         me.callParent();
         me.addStateEvents('remove');
     },
@@ -151,7 +151,7 @@ Ext.define('Ext.dashboard.Dashboard', {
 
         for (id in parts) {
             part = parts[id];
-            
+
             if (Ext.isString(part)) {
                 part = {
                     type: part
@@ -171,7 +171,7 @@ Ext.define('Ext.dashboard.Dashboard', {
      */
     getPart: function(type) {
         var parts = this.getParts();
-        
+
         return parts.getByKey(type);
     },
 
@@ -224,7 +224,7 @@ Ext.define('Ext.dashboard.Dashboard', {
         }
 
         column = me.createColumn();
-        
+
         if (columnWidths) {
             column.columnWidth = columnWidths[index] || (columnWidths[index] = 1);
         }
@@ -241,7 +241,7 @@ Ext.define('Ext.dashboard.Dashboard', {
 
     createColumn: function(config) {
         var cycle = this.cycleLayout;
-        
+
         return Ext.apply({
             items: [],
             bubbleEvents: ['add', 'childmove', 'resize'],
@@ -265,18 +265,18 @@ Ext.define('Ext.dashboard.Dashboard', {
 
         view.bubbleEvents = Ext.Array.from(view.bubbleEvents).concat(['expand', 'collapse']);
         view.stateful = me.stateful;
-        
+
         view.listeners = {
             removed: this.onItemRemoved,
             scope: this
         };
-        
+
         return view;
     },
 
     initEvents: function() {
         this.callParent();
-        
+
         this.dd = new Ext.dashboard.DropZone(this, this.dropConfig);
     },
 
@@ -292,7 +292,7 @@ Ext.define('Ext.dashboard.Dashboard', {
         if (this.dd) {
             Ext.destroy(this.dd);
         }
-        
+
         this.callParent();
     },
 
@@ -301,7 +301,7 @@ Ext.define('Ext.dashboard.Dashboard', {
 
     applyState: function(state) {
         delete state.items;
-        
+
         this.callParent([state]);
 
         // eslint-disable-next-line vars-on-top
@@ -340,7 +340,7 @@ Ext.define('Ext.dashboard.Dashboard', {
 
         state.idSeed = me.idSeed;
         state.items = me.serializeItems();
-        
+
         // only overwrite column widths if they are defined in the state
         if (columnWidths.length) {
             state.columnWidths = me.columnWidths = columnWidths;
@@ -388,7 +388,7 @@ Ext.define('Ext.dashboard.Dashboard', {
                 columns[columnIndex] = column = me.createColumn();
 
                 columnWidth = columnWidths && columnWidths[columnIndex];
-                
+
                 if (columnWidth) {
                     column.columnWidth = columnWidth;
                 }

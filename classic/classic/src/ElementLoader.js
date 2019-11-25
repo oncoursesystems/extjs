@@ -29,7 +29,7 @@ Ext.define('Ext.ElementLoader', {
                     response.responseText, active.scripts === true, active.callback,
                     active.rendererScope
                 );
-                
+
                 return true;
             }
         }
@@ -136,7 +136,7 @@ Ext.define('Ext.ElementLoader', {
      * - The response
      * - The active request
      */
-    
+
     /**
      * @cfg {Object} rendererScope
      * The scope to execute the {@link #renderer} function in.
@@ -177,7 +177,7 @@ Ext.define('Ext.ElementLoader', {
     constructor: function(config) {
         var me = this,
             autoLoad;
-        
+
         //<debug>
         me.callParent([config]);
         //</debug>
@@ -188,11 +188,11 @@ Ext.define('Ext.ElementLoader', {
 
         if (me.autoLoad) {
             autoLoad = me.autoLoad;
-            
+
             if (autoLoad === true) {
                 autoLoad = null;
             }
-            
+
             me.load(autoLoad);
         }
     },
@@ -227,14 +227,14 @@ Ext.define('Ext.ElementLoader', {
      */
     abort: function() {
         var active = this.active;
-        
+
         if (active !== undefined) {
             Ext.Ajax.abort(active.request);
-            
+
             if (active.mask) {
                 this.removeMask();
             }
-            
+
             delete this.active;
         }
     },
@@ -266,7 +266,7 @@ Ext.define('Ext.ElementLoader', {
         if (this.destroying || this.destroyed) {
             return;
         }
-        
+
         //<debug>
         if (!this.target) {
             Ext.raise('A valid target is required when loading content for ' + this.id);
@@ -323,7 +323,7 @@ Ext.define('Ext.ElementLoader', {
             renderer: options.renderer || me.renderer,
             scripts: Ext.isDefined(options.scripts) ? options.scripts : me.scripts
         };
-        
+
         me.active.request = Ext.Ajax.request(options);
         me.setOptions(me.active, options);
     },
@@ -355,7 +355,7 @@ Ext.define('Ext.ElementLoader', {
         if (active) {
             scope = active.scope;
             rendererScope = active.rendererScope;
-            
+
             if (success) {
                 // eslint-disable-next-line max-len
                 success = me.getRenderer(active.renderer).call(rendererScope, me, response, active) !== false;
@@ -369,9 +369,9 @@ Ext.define('Ext.ElementLoader', {
                 Ext.callback(active.failure, scope, [me, response, options]);
                 me.fireEvent('exception', me, response, options);
             }
-            
+
             Ext.callback(active.callback, scope, [me, success, response, options]);
-            
+
             if (active.mask) {
                 me.removeMask();
             }
@@ -390,7 +390,7 @@ Ext.define('Ext.ElementLoader', {
         if (Ext.isFunction(renderer)) {
             return renderer;
         }
-        
+
         return this.statics().Renderer.Html;
     },
 
@@ -402,9 +402,9 @@ Ext.define('Ext.ElementLoader', {
      */
     startAutoRefresh: function(interval, options) {
         var me = this;
-        
+
         me.stopAutoRefresh();
-        
+
         me.autoRefresh = Ext.interval(function() {
             me.load(options);
         }, interval);
@@ -431,10 +431,10 @@ Ext.define('Ext.ElementLoader', {
      */
     destroy: function() {
         var me = this;
-        
+
         me.stopAutoRefresh();
         me.abort();
-        
+
         me.callParent();
     }
 });

@@ -96,7 +96,7 @@ Ext.define('Ext.chart.series.Bar', {
 
     getItemForPoint: function(x, y) {
         var chart, padding, isRtl;
-    
+
         if (this.getSprites().length) {
             chart = this.getChart();
             padding = chart.getInnerPadding();
@@ -118,7 +118,7 @@ Ext.define('Ext.chart.series.Bar', {
                       "Please refer to the bar series docs.");
         }
         //</debug>
-        
+
         xAxis.setExpandRangeBy(0.5);
         this.callParent(arguments);
     },

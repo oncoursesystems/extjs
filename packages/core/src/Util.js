@@ -38,6 +38,64 @@ Ext.apply(Ext, {
         }
     },
 
+    scrollbar: {
+        _size: null,
+
+        /**
+         * @member Ext.scrollbar
+         * Returns the size of the browser scrollbars. This can differ depending on
+         * operating system settings, such as the theme or font size.
+         * @param {Boolean} [force] Pass `true` to force a recalculation of scrollbar size.
+         * @return {Object} An object containing scrollbar sizes.
+         * @return {Number} return.width The width of the vertical scrollbar.
+         * @return {Number} return.height The height of the horizontal scrollbar.
+         */
+        size: function(force) {
+            var scrollbar = Ext.scrollbar,
+                size = scrollbar._size;
+
+            //<debug>
+            if (!Ext.isDomReady) {
+                Ext.raise("Ext.scrollbar.size() called before DomReady");
+            }
+            //</debug>
+
+            if (force || !size) {
+                /* eslint-disable-next-line vars-on-top */
+                var db = document.body,
+                    div = document.createElement('div'),
+                    h, w;
+
+                div.style.width = div.style.height = '100px';
+                div.style.overflow = 'scroll';
+                div.style.position = 'absolute';
+
+                db.appendChild(div); // now we can measure the div...
+
+                // at least in iE9 the div is not 100px - the scrollbar size is removed!
+                scrollbar._size = size = {
+                    width: w = div.offsetWidth - div.clientWidth,
+                    height: h = div.offsetHeight - div.clientHeight
+                };
+
+                size.reservedWidth = w ? 'calc(100% - ' + w + 'px)' : '';
+                size.reservedHeight = h ? 'calc(100% - ' + h + 'px)' : '';
+
+                db.removeChild(div);
+            }
+
+            return size;
+        },
+
+        height: function(force) {
+            return Ext.scrollbar.size(force).height;
+        },
+
+        width: function(force) {
+            return Ext.scrollbar.size(force).width;
+        }
+    },
+
     escapeId: (function() {
         /* eslint-disable-next-line no-useless-escape */
         var validIdRe = /^[a-zA-Z_][a-zA-Z0-9_\-]*$/i,
@@ -127,7 +185,7 @@ Ext.apply(Ext, {
         /* eslint-disable-next-line vars-on-top */
         var namedScope = (scope in Ext._namedScopes),
             ret;
-        
+
         if (callback.charAt) { // if (isString(fn))
             // Custom components cannot often use declarative method resolution when
             // they need to allow the user to supply declarative method names that can
@@ -146,7 +204,7 @@ Ext.apply(Ext, {
                 if (callback.substr(0, 2) !== 'up') {
                     Ext.raise('Invalid callback method name "' + callback + '"');
                 }
-                
+
                 if (scope) {
                     Ext.raise('Callback "up" syntax is incompatible with scopes');
                 }
@@ -167,7 +225,7 @@ Ext.apply(Ext, {
             if (!scope || !Ext.isObject(scope)) {
                 Ext.raise('Named method "' + callback + '" requires a scope object');
             }
-            
+
             if (!Ext.isFunction(scope[callback])) {
                 Ext.raise('No method named "' + callback + '" on ' +
                                 (scope.$className || 'scope object'));
@@ -228,30 +286,30 @@ Ext.apply(Ext, {
             switch (toType) {
                 case 'string':
                     return String(from);
-                
+
                 case 'number':
                     return Number(from);
-                
+
                 case 'boolean':
                     // See http://ecma262-5.com/ELS5_HTML.htm#Section_11.9.3 as to why '0'.
                     // TL;DR => ('0' == 0), so if given string '0', we must return boolean false.
                     return isString && (!from || from === 'false' || from === '0')
                         ? false
                         : Boolean(from);
-                
+
                 case 'null':
                     return isString && (!from || from === 'null') ? null : false;
-                
+
                 case 'undefined':
                     return isString && (!from || from === 'undefined') ? undefined : false;
-                
+
                 case 'date':
                     return isString && isNaN(from)
                         ? Ext.Date.parse(from, Ext.Date.defaultFormat)
                         : Date(Number(from));
             }
         }
-        
+
         return from;
     },
 
@@ -282,7 +340,7 @@ Ext.apply(Ext, {
      */
     copyTo: function(dest, source, names, usePrototypeKeys) {
         var name, i, n;
-        
+
         if (typeof names === 'string') {
             names = names.split(Ext.propertyNameSplitRe);
         }
@@ -297,7 +355,7 @@ Ext.apply(Ext, {
 
         return dest;
     },
-    
+
     /**
      * @method copy
      * @member Ext
@@ -322,7 +380,7 @@ Ext.apply(Ext, {
      */
     copy: function(dest, source, names, usePrototypeKeys) {
         var name, i, n;
-        
+
         if (typeof names === 'string') {
             names = names.split(Ext.propertyNameSplitRe);
         }
@@ -368,7 +426,7 @@ Ext.apply(Ext, {
      */
     copyToIf: function(destination, source, names) {
         var name, i, n;
-        
+
         if (typeof names === 'string') {
             names = names.split(Ext.propertyNameSplitRe);
         }
@@ -405,7 +463,7 @@ Ext.apply(Ext, {
      */
     copyIf: function(destination, source, names) {
         var name, i, n;
-        
+
         if (typeof names === 'string') {
             names = names.split(Ext.propertyNameSplitRe);
         }
@@ -442,7 +500,7 @@ Ext.apply(Ext, {
                     if (!o.hasOwnProperty(m)) {
                         continue;
                     }
-                    
+
                     this[m] = o[m];
                 }
             };
@@ -452,7 +510,7 @@ Ext.apply(Ext, {
             if (Ext.isObject(superclass)) {
                 overrides = superclass;
                 superclass = subclass;
-                
+
                 subclass = overrides.constructor !== objectConstructor
                     ? overrides.constructor
                     : function() {
@@ -493,7 +551,7 @@ Ext.apply(Ext, {
             subclassProto.proto = subclassProto;
 
             subclass.override(overrides);
-            
+
             subclass.extend = function(o) {
                 return Ext.extend(subclass, o);
             };
@@ -582,7 +640,7 @@ Ext.apply(Ext, {
 
         if (url && url.charAt(0) === '<') {
             m = Ext._resourcePoolRe.exec(url);
-            
+
             if (m) {
                 ret = Ext.getResourcePath(m[3], m[1], m[2]);
             }
@@ -632,41 +690,10 @@ Ext.apply(Ext, {
      * @return {Object} An object containing scrollbar sizes.
      * @return {Number} return.width The width of the vertical scrollbar.
      * @return {Number} return.height The height of the horizontal scrollbar.
+     * @deprecated 7.0 Use `Ext.scrollbar.size` instead.
      */
     getScrollbarSize: function(force) {
-        var scrollbarSize = Ext._scrollbarSize;
-
-        //<debug>
-        if (!Ext.isDomReady) {
-            Ext.raise("getScrollbarSize called before DomReady");
-        }
-        //</debug>
-
-        if (force || !scrollbarSize) {
-            /* eslint-disable-next-line vars-on-top */
-            var db = document.body,
-                div = document.createElement('div'),
-                h, w;
-
-            div.style.width = div.style.height = '100px';
-            div.style.overflow = 'scroll';
-            div.style.position = 'absolute';
-
-            db.appendChild(div); // now we can measure the div...
-
-            // at least in iE9 the div is not 100px - the scrollbar size is removed!
-            Ext._scrollbarSize = scrollbarSize = {
-                width: w = div.offsetWidth - div.clientWidth,
-                height: h = div.offsetHeight - div.clientHeight
-            };
-
-            scrollbarSize.reservedWidth = w ? 'calc(100% - ' + w + 'px)' : '';
-            scrollbarSize.reservedHeight = h ? 'calc(100% - ' + h + 'px)' : '';
-
-            db.removeChild(div);
-        }
-
-        return scrollbarSize;
+        return Ext.scrollbar.size(force);
     },
 
     /**
@@ -723,7 +750,7 @@ Ext.apply(Ext, {
             }
 
             ret = toStringTypes[typeToString = toString.call(value)];
-            
+
             if (ret) {
                 return ret;
             }
@@ -811,7 +838,7 @@ Ext.apply(Ext, {
                 Ext.raise('[Ext.factory] Cannot determine type of class to create');
             }
             //</debug>
-            
+
             return instance || Ext.create(classReference);
         }
 
@@ -904,6 +931,12 @@ Ext.apply(Ext, {
         }
 
         return items;
+    },
+
+    sortByWeight: function(items) {
+        if (items) {
+            Ext.Array.sort(items, Ext.weightSortFn);
+        }
     },
 
     /**
@@ -1007,7 +1040,7 @@ Ext.apply(Ext, {
              * @return {String} The string with the contents of the object
              */
             var primitiveRe = /string|number|boolean/;
-            
+
             function dumpObject(object, level, maxLevel, withFunctions) {
                 var member, type, value, name, prefix, suffix,
                     members = [];
@@ -1020,17 +1053,17 @@ Ext.apply(Ext, {
                     prefix = '{';
                     suffix = '}';
                 }
-                
+
                 if (!maxLevel) {
                     maxLevel = 3;
                 }
-                
+
                 if (level > maxLevel) {
                     return prefix + '...' + suffix;
                 }
 
                 level = level || 1;
-                
+
                 /* eslint-disable-next-line vars-on-top */
                 var spacer = (new Array(level)).join('    ');
 
@@ -1040,12 +1073,12 @@ Ext.apply(Ext, {
                         value = object[name];
 
                         type = typeof value;
-                        
+
                         if (type === 'function') {
                             if (!withFunctions) {
                                 continue;
                             }
-                            
+
                             member = type;
                         }
                         else if (type === 'undefined') {
@@ -1063,15 +1096,15 @@ Ext.apply(Ext, {
                         else {
                             member = type;
                         }
-                        
+
                         members.push(spacer + name + ': ' + member); // or Ext.encode(name)
                     }
                 }
-                
+
                 if (members.length) {
                     return prefix + '\n    ' + members.join(',\n    ') + '\n' + spacer + suffix;
                 }
-                
+
                 return prefix + suffix;
             }
 
@@ -1117,7 +1150,7 @@ Ext.apply(Ext, {
                 message = indent
                     ? Ext.String.repeat(' ', log.indentSize * indent) + message
                     : message;
-                
+
                 // w/o console, all messages are equal, so munge the level into the message:
                 if (level !== 'log') {
                     message = '[' + level.charAt(0).toUpperCase() + '] ' + message;

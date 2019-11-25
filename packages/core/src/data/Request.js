@@ -5,7 +5,7 @@
  */
 Ext.define('Ext.data.Request', {
     isDataRequest: true,
-    
+
     config: {
         /**
          * @cfg {String} action
@@ -107,7 +107,7 @@ Ext.define('Ext.data.Request', {
          * @accessor
          */
         password: null,
-        
+
         /**
         * @cfg {Boolean} binary
         * True to request binary data from the server.  This feature requires
@@ -135,7 +135,7 @@ Ext.define('Ext.data.Request', {
     constructor: function(config) {
         this.initConfig(config);
     },
-    
+
     /**
      * Gets a single param from the {@link #params}.
      * @param {String} key The key for the param.
@@ -144,14 +144,14 @@ Ext.define('Ext.data.Request', {
     getParam: function(key) {
         var params = this.getParams(),
             val;
-            
+
         if (params) {
             return params[key];
         }
-        
+
         return val;
     },
-    
+
     /**
      * Sets a single param value in the {@link #params}.
      * @param {String} key The key to set.
@@ -159,9 +159,9 @@ Ext.define('Ext.data.Request', {
      */
     setParam: function(key, value) {
         var params = this.getParams() || {};
-        
+
         params[key] = value;
-        
+
         this.setParams(params);
     }
 });

@@ -80,7 +80,7 @@ Ext.define('Ext.list.TreeItem', {
 
     constructor: function(config) {
         var toolDom;
-        
+
         this.callParent([config]);
 
         toolDom = this.toolElement.dom;
@@ -105,7 +105,7 @@ Ext.define('Ext.list.TreeItem', {
 
     isSelectionEvent: function(e) {
         var owner = this.getOwner();
-        
+
         return (!this.isToggleEvent(e) || !owner.getExpanderOnly() || owner.getSelectOnExpander());
     },
 
@@ -284,10 +284,10 @@ Ext.define('Ext.list.TreeItem', {
     updateSelectedParent: function(selectedParent) {
         var me = this,
             tool;
-        
+
         me.element.toggleCls(me.selectedParentCls, selectedParent);
         tool = me.getToolElement();
-        
+
         if (tool) {
             tool.toggleCls(me.selectedCls, selectedParent);
         }

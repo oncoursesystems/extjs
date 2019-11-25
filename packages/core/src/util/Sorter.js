@@ -234,7 +234,7 @@ Ext.define('Ext.util.Sorter', {
 
         return (lhs > rhs) ? 1 : (lhs < rhs ? -1 : 0);
     },
-    
+
     applyDirection: function(direction) {
         return direction ? direction : 'ASC';
     },
@@ -280,7 +280,7 @@ Ext.define('Ext.util.Sorter', {
         if (me._id) {
             result.id = me._id;
         }
-        
+
         return result;
     },
 

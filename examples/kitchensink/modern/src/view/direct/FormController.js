@@ -61,7 +61,7 @@ Ext.define('KitchenSink.view.direct.FormController', {
                     uid: 43
                 },
                 failure: function(panel, result) {
-                    panel.setErrors(result.result.errors)
+                    panel.setErrors(result.result.errors);
                 }
             });
         }

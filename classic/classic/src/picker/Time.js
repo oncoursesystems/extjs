@@ -22,7 +22,7 @@
 Ext.define('Ext.picker.Time', {
     extend: 'Ext.view.BoundList',
     alias: 'widget.timepicker',
-    
+
     requires: [
         'Ext.data.Store',
         'Ext.Date'
@@ -49,7 +49,7 @@ Ext.define('Ext.picker.Time', {
                 initDate = this.prototype.initDate,
                 times = [],
                 min, max;
-                
+
             min = clearTime(new Date(initDate[0], initDate[1], initDate[2]));
             max = dateUtil.add(
                 clearTime(new Date(initDate[0], initDate[1], initDate[2])), 'mi', (24 * 60) - 1
@@ -60,7 +60,7 @@ Ext.define('Ext.picker.Time', {
                     disp: dateUtil.dateFormat(min, format),
                     date: min
                 });
-                
+
                 min = dateUtil.add(min, 'mi', increment);
             }
 
@@ -193,7 +193,7 @@ Ext.define('Ext.picker.Time', {
             max = me.normalizeDate(me.maxValue || me.absMax),
             filters = me.getStore().getFilters(),
             filter = me.rangeFilter;
-        
+
         filters.beginUpdate();
 
         if (filter) {

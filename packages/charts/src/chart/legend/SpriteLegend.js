@@ -206,7 +206,7 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
 
     updateHidden: function(hidden) {
         var surface;
-        
+
         this.getChart(); // 'chart' updater will set the surface
 
         surface = this.getSurface();
@@ -225,7 +225,7 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
      */
     layoutChart: function() {
         var chart;
-        
+
         if (!this.isConfiguring) {
             chart = this.getChart();
 
@@ -245,7 +245,7 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
      */
     computeRect: function(chartRect) {
         var rect, docked, size, height, width;
-        
+
         if (this.getHidden()) {
             return null;
         }
@@ -264,21 +264,21 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
                 chartRect[1] += height;
                 chartRect[3] -= height;
                 break;
-            
+
             case 'bottom':
                 chartRect[3] -= height;
                 rect[1] = chartRect[3];
                 rect[2] = chartRect[2];
                 rect[3] = height;
                 break;
-            
+
             case 'left':
                 chartRect[0] += width;
                 chartRect[2] -= width;
                 rect[2] = width;
                 rect[3] = chartRect[3];
                 break;
-            
+
             case 'right':
                 chartRect[2] -= width;
                 rect[0] = chartRect[2];
@@ -963,7 +963,7 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
         if (!this.getToggleable() || !sprite.isLegendItem) {
             return;
         }
-        
+
         store = this.getStore();
 
         if (store) {

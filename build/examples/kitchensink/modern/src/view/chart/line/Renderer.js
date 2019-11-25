@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.chart.line.Renderer', {
     xtype: 'line-renderer',
     controller: 'line-renderer',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/line/RendererController.js'
@@ -40,9 +40,9 @@ Ext.define('KitchenSink.view.chart.line.Renderer', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -96,7 +96,7 @@ Ext.define('KitchenSink.view.chart.line.Renderer', {
         },
         items: [{
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }]
     }]

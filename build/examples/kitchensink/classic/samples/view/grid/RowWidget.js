@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.grid.RowWidget', {
     columns: [{
         text: 'Id',
         dataIndex: 'id'
-    },{
+    }, {
         text: 'Name',
         dataIndex: 'name',
         flex: 1,
@@ -59,7 +59,15 @@ Ext.define('KitchenSink.view.grid.RowWidget', {
             productCodeWidt: 350,
             quantityWidth: 150,
             dateColumnWidth: 150,
-            shippedWidth: 100          
+            shippedWidth: 100
+        },
+        'classic-material': {
+            width: 900,
+            orderWidth: 100,
+            productCodeWidt: 350,
+            quantityWidth: 150,
+            dateColumnWidth: 150,
+            shippedWidth: 100
         }
     },
     otherContent: [{

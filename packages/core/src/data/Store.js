@@ -236,13 +236,13 @@ Ext.define('Ext.data.Store', {
          * above for details.
          */
         data: undefined, // undefined so the applier is always called
-        
+
         /**
          * @cfg {Boolean} [clearRemovedOnLoad=true]
          * `true` to clear anything in the {@link #removed} record collection when the store loads.
          */
         clearRemovedOnLoad: true,
-       
+
         /**
         * @cfg {Boolean} [clearOnPageLoad=true]
         * True to empty the store when loading another page via {@link #loadPage},
@@ -372,7 +372,7 @@ Ext.define('Ext.data.Store', {
 
         // See applyData for the details.
         data = me.inlineData;
-        
+
         if (data) {
             delete me.inlineData;
             me.loadInlineData(data);
@@ -406,7 +406,7 @@ Ext.define('Ext.data.Store', {
      * @param {Ext.data.Model[]/Object[]} data Array of data to load. Any non-model instances
      * will be cast into model instances first.
      */
-    
+
     applyData: function(data, dataCollection) {
         // We bring up the Collection for records which forms the bottom of the config
         // dependency graph. The appliers for "filters" and "sorters" depend on "data"
@@ -494,7 +494,7 @@ Ext.define('Ext.data.Store', {
      * @method insert
      * @inheritdoc Ext.data.LocalStore#insert
      */
-    
+
     onCollectionAdd: function(collection, info) {
         this.loadCount = this.loadCount || 1;
         this.onCollectionAddItems(collection, info.items, info);
@@ -532,16 +532,16 @@ Ext.define('Ext.data.Store', {
             if (session) {
                 session.adopt(record);
             }
-            
+
             // If ignoring, we don't want to do anything other than pull
             // the added records into the session    
             if (!ignoreAdd) {
                 record.join(me);
-                
+
                 if (removed && removed.length) {
                     Ext.Array.remove(removed, record);
                 }
-                
+
                 sync = sync || record.phantom || record.dirty;
             }
         }
@@ -560,7 +560,7 @@ Ext.define('Ext.data.Store', {
 
             me.setMoving(replacedItems, true);
         }
-        
+
         if (info) {
             // If this is a replacement operation, there will have been a
             // previous call to onCollectionRemove which will have fired no
@@ -574,7 +574,7 @@ Ext.define('Ext.data.Store', {
             }
             else {
                 me.fireEvent('add', me, records, info.at);
-                
+
                 // If there is a next property, that means there is another range that needs
                 // to be removed after this. Wait until everything is gone before firing
                 // datachanged since it should be a bulk operation
@@ -664,13 +664,13 @@ Ext.define('Ext.data.Store', {
             remote = me.getRemoteSort(),
             data = me.getData(),
             index;
-        
+
         if (remote) {
             data.setSorters(me.getSorters());
         }
-        
+
         index = data.findInsertionIndex(record);
-        
+
         if (remote) {
             data.setSorters(null);
         }
@@ -706,7 +706,7 @@ Ext.define('Ext.data.Store', {
             }
             else {
                 toRemove = [];
-                
+
                 for (i = 0, len = records.length; i < len; ++i) {
                     record = records[i];
 
@@ -734,7 +734,7 @@ Ext.define('Ext.data.Store', {
         me.removeIsSilent = silent;
         data.remove(toRemove);
         me.removeIsSilent = false;
-        
+
         return toRemove;
     },
 
@@ -755,7 +755,7 @@ Ext.define('Ext.data.Store', {
             lastChunk = !info.next,
             data = me.getDataSource(),
             i, record;
-        
+
         if (me.ignoreCollectionRemove) {
             return;
         }
@@ -763,7 +763,7 @@ Ext.define('Ext.data.Store', {
         if (replacement) {
             me.setMoving(replacement.items, true);
         }
-        
+
         for (i = len - 1; i >= 0; i--) {
             record = records[i];
 
@@ -791,7 +791,7 @@ Ext.define('Ext.data.Store', {
                 }
             }
         }
-        
+
         if (!silent) {
             // If this removal is just the first part of a replacement operation,
             // do not fire the events now.
@@ -804,7 +804,7 @@ Ext.define('Ext.data.Store', {
             // incorrect focus..
             if (!replacement || !replacement.items.length) {
                 me.fireEvent('remove', me, records, index, isMove);
-                
+
                 // If there is a next property, that means there is another range that needs
                 // to be removed after this. Wait until everything is gone before firing datachanged
                 // since it should be a bulk operation
@@ -821,7 +821,7 @@ Ext.define('Ext.data.Store', {
 
     onFilterEndUpdate: function() {
         var me = this;
-        
+
         if (me.destroying || me.destroyed) {
             return;
         }
@@ -880,15 +880,15 @@ Ext.define('Ext.data.Store', {
             me.callObservers('BeforeRemoveAll');
             data.removeAll();
             me.removeIsSilent = false;
-            
+
             if (!silent) {
                 me.fireEvent('clear', me, records);
                 me.fireEvent('datachanged', me);
             }
-            
+
             me.callObservers('AfterRemoveAll', [!!silent]);
         }
-        
+
         return records;
     },
 
@@ -903,7 +903,7 @@ Ext.define('Ext.data.Store', {
         var count = this.getCount();
 
         ++this.loadCount;
-        
+
         if (count) {
             this.getData().splice(0, count, records);
         }
@@ -958,7 +958,7 @@ Ext.define('Ext.data.Store', {
         if (me.hasListeners.load) {
             me.fireEvent('load', me, records, successful, operation);
         }
-        
+
         me.callObservers('AfterLoad', [records, successful, operation]);
     },
 
@@ -966,7 +966,7 @@ Ext.define('Ext.data.Store', {
         if (operation.wasSuccessful()) {
             this.attachSummaryRecord(operation.getResultSet());
         }
-        
+
         this.callParent([operation]);
     },
 
@@ -1047,7 +1047,7 @@ Ext.define('Ext.data.Store', {
         var me = this,
             session = me.getSession(),
             result, records, success;
-            
+
         /* eslint-disable-next-line max-len */
         result = me.getProxy().getReader().read(data, session ? { recordCreator: session.recordCreator } : undefined);
         records = result.getRecords();
@@ -1057,7 +1057,7 @@ Ext.define('Ext.data.Store', {
             me.totalCount = result.getTotal();
             me.loadRecords(records, append ? me.addRecordsOptions : undefined);
         }
-        
+
         return success;
     },
 
@@ -1118,15 +1118,15 @@ Ext.define('Ext.data.Store', {
             ++me.loadCount;
             me.complete = true;
         }
-        
+
         if (me.hasListeners.datachanged) {
             me.fireEvent('datachanged', me);
         }
-        
+
         if (me.hasListeners.refresh) {
             me.fireEvent('refresh', me);
         }
-        
+
         me.callObservers('AfterPopulate');
     },
 
@@ -1189,17 +1189,17 @@ Ext.define('Ext.data.Store', {
         // here and below.
         if (data) {
             records = data.items;
-            
+
             for (i = 0, len = records.length; i < len; ++i) {
                 record = records[i];
-                
+
                 if (needsUnjoinCheck && Ext.Array.contains(removed, record)) {
                     continue;
                 }
-                
+
                 record.unjoin(me);
             }
-            
+
             me.ignoreCollectionRemove = true;
             me.callObservers('BeforeClear');
             data.removeAll();
@@ -1214,7 +1214,7 @@ Ext.define('Ext.data.Store', {
 
     onIdChanged: function(rec, oldId, newId) {
         this.getData().updateKey(rec, oldId);
-        
+
         // This event is used internally
         this.fireEvent('idchanged', this, rec, oldId, newId);
     },
@@ -1232,7 +1232,7 @@ Ext.define('Ext.data.Store', {
 
         Ext.suspendLayouts();
         me.beginUpdate();
-        
+
         for (; i < len; i++) {
             recs[i].commit();
         }
@@ -1275,10 +1275,10 @@ Ext.define('Ext.data.Store', {
 
         Ext.suspendLayouts();
         me.beginUpdate();
-        
+
         for (i = 0; i < len; i++) {
             rec = recs[i];
-            
+
             if (rec.phantom) {
                 toRemove = toRemove || [];
                 toRemove.push(rec);
@@ -1290,7 +1290,7 @@ Ext.define('Ext.data.Store', {
 
         if (toRemove) {
             me.remove(toRemove);
-            
+
             for (i = 0, len = toRemove.length; i < len; ++i) {
                 toRemove[i].reject();
             }
@@ -1298,7 +1298,7 @@ Ext.define('Ext.data.Store', {
 
         // Restore removed records back to their original positions.
         recs = me.getRawRemovedRecords();
-        
+
         if (recs) {
             len = recs.length;
             sorted = !me.getRemoteSort() && me.isSorted();
@@ -1331,7 +1331,7 @@ Ext.define('Ext.data.Store', {
             // need to unjoin the store
             recs.length = 0;
         }
-        
+
         me.endUpdate();
         Ext.resumeLayouts(true);
 
@@ -1352,17 +1352,17 @@ Ext.define('Ext.data.Store', {
             task = me.loadTask,
             data = me.getData(),
             source = data.getSource();
-        
+
         // clearData ensures everything is unjoined
         me.clearData();
         me.setSession(null);
         me.observers = null;
-        
+
         if (task) {
             task.cancel();
             me.loadTask = null;
         }
-        
+
         if (source) {
             source.destroy();
         }
@@ -1379,7 +1379,7 @@ Ext.define('Ext.data.Store', {
             if (!resultSet) {
                 return;
             }
-            
+
             /* eslint-disable-next-line vars-on-top */
             var me = this,
                 summary = resultSet.getSummaryData(),
@@ -1400,17 +1400,17 @@ Ext.define('Ext.data.Store', {
 
             if (grouper) {
                 summary = resultSet.getGroupData();
-                
+
                 if (summary) {
                     groups = me.getGroups();
-                    
+
                     for (i = 0, len = summary.length; i < len; ++i) {
                         rec = summary[i];
                         group = groups.getItemGroup(rec);
-                        
+
                         if (group) {
                             current = group.summaryRecord;
-                            
+
                             if (current) {
                                 current.set(rec.data, commitOptions);
                             }
@@ -1433,12 +1433,12 @@ Ext.define('Ext.data.Store', {
          */
         fetch: function(options) {
             var operation;
-            
+
             options = Ext.apply({}, options);
 
             this.setLoadOptions(options);
             operation = this.createOperation('read', options);
-            
+
             operation.execute();
         },
 
@@ -1454,19 +1454,19 @@ Ext.define('Ext.data.Store', {
             if (filters) {
                 this.getData().setFilters(remoteFilter ? null : filters);
             }
-            
+
             this.callParent([filters, remoteFilter]);
         },
 
         onRemoteSortSet: function(sorters, remoteSort) {
             var data = this.getData();
-            
+
             if (sorters) {
                 data.setSorters(remoteSort ? null : sorters);
             }
-            
+
             data.setAutoGroup(!remoteSort);
-            
+
             this.callParent([sorters, remoteSort]);
         },
 
@@ -1501,7 +1501,7 @@ Ext.define('Ext.data.Store', {
                     moving = getMap ? map : this.moveMapCount;
                 }
             }
-            
+
             return moving;
         },
 
@@ -1513,7 +1513,7 @@ Ext.define('Ext.data.Store', {
 
             if (me.getRemoteSort() && !options.grouper) {
                 grouper = me.getGrouper();
-                
+
                 if (grouper) {
                     options.grouper = grouper;
                 }
@@ -1521,11 +1521,11 @@ Ext.define('Ext.data.Store', {
 
             if (pageSize || 'start' in options || 'limit' in options || 'page' in options) {
                 options.page = options.page != null ? options.page : me.currentPage;
-                
+
                 options.start = (options.start !== undefined)
                     ? options.start
                     : (options.page - 1) * pageSize;
-                
+
                 options.limit = options.limit != null ? options.limit : pageSize;
 
                 me.currentPage = options.page;
@@ -1535,12 +1535,12 @@ Ext.define('Ext.data.Store', {
 
             if (!options.recordCreator) {
                 session = me.getSession();
-                
+
                 if (session) {
                     options.recordCreator = session.recordCreator;
                 }
             }
-            
+
             me.callParent([options]);
         },
 
@@ -1552,7 +1552,7 @@ Ext.define('Ext.data.Store', {
 
             for (i = 0; i < len; ++i) {
                 id = records[i].id;
-                
+
                 if (isMoving) {
                     if (map[id]) {
                         ++map[id];
@@ -1582,7 +1582,7 @@ Ext.define('Ext.data.Store', {
             if (associatedEntity) {
                 records = me.getRole().processLoad(me, associatedEntity, records, me.getSession());
             }
-            
+
             return records;
         }
     }

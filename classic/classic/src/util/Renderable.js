@@ -141,7 +141,7 @@ Ext.define('Ext.util.Renderable', {
 
     _layerCls: Ext.baseCSSPrefix + 'layer',
     _fixedLayerCls: Ext.baseCSSPrefix + 'fixed-layer',
-    
+
     // Some components will have such roles that do not actively participate
     // in user interaction, and thus do not need their ARIA attributes updated
     ariaStaticRoles: {
@@ -159,12 +159,12 @@ Ext.define('Ext.util.Renderable', {
         contentinfo: true,
         navigation: true,
         search: true,
-        
+
         // When a role is not defined it is akin to static
         'undefined': true,
         'null': true
     },
-    
+
     statics: {
         makeRenderSetter: function(cfg, renderState) {
             var name = cfg.name;
@@ -225,11 +225,11 @@ Ext.define('Ext.util.Renderable', {
                 if (body.beforeRenderConfig) {
                     this.processRenderConfig(body, 'beforeRenderConfig', 1);
                 }
-                
+
                 if (body.renderConfig) {
                     this.processRenderConfig(body, 'renderConfig', 3);
                 }
-                
+
                 override.call(this, body);
             },
             processClass = function(theClass, classBody) {
@@ -242,7 +242,7 @@ Ext.define('Ext.util.Renderable', {
                 if (classBody.beforeRenderConfig) {
                     theClass.processRenderConfig(classBody, 'beforeRenderConfig', 1);
                 }
-                
+
                 if (classBody.renderConfig) {
                     theClass.processRenderConfig(classBody, 'renderConfig', 3);
                 }
@@ -291,28 +291,28 @@ Ext.define('Ext.util.Renderable', {
         }
 
         protoEl.writeTo(data);
-        
+
         // Here we apply any styles that were set on the protoEl during the rendering phase
         // A majority of times this will not happen, but we still need to handle it
-        
+
         item = data.removed;
-        
+
         if (item) {
             target.removeCls(item);
         }
-        
+
         item = data.cls;
-        
+
         if (item.length) {
             target.addCls(item);
         }
-        
+
         item = data.style;
-        
+
         if (data.style) {
             target.setStyle(item);
         }
-        
+
         me.protoEl = null;
 
         // If this is the outermost Container, lay it out as soon as it is rendered.
@@ -330,13 +330,13 @@ Ext.define('Ext.util.Renderable', {
         if (me.disableOnRender) {
             me.onDisable();
         }
-        
+
         controller = me.controller;
-        
+
         if (controller && controller.afterRender) {
             controller.afterRender(me);
         }
-        
+
         if (me.focusableContainer && me.initFocusableContainer) {
             me.initFocusableContainer();
         }
@@ -363,11 +363,11 @@ Ext.define('Ext.util.Renderable', {
         if (me.floating && !me.preventDefaultAlign && (!hasX || !hasY)) {
             if (me.floatParent) {
                 pos = me.floatParent.getTargetEl().getViewRegion();
-                
+
                 xy = me.el.getAlignToXY(
                     me.alignTarget || me.floatParent.getTargetEl(), alignSpec, alignOffset
                 );
-                
+
                 pos.x = xy[0] - pos.x;
                 pos.y = xy[1] - pos.y;
             }
@@ -375,7 +375,7 @@ Ext.define('Ext.util.Renderable', {
                 xy = me.el.getAlignToXY(me.alignTarget || me.container, alignSpec, alignOffset);
                 pos = me.el.translateXY(xy[0], xy[1]);
             }
-            
+
             x = hasX ? x : pos.x;
             y = hasY ? y : pos.y;
             hasX = hasY = true;
@@ -388,7 +388,7 @@ Ext.define('Ext.util.Renderable', {
         me.onBoxReady(width, height);
 
         controller = me.controller;
-        
+
         if (controller && controller.boxReady) {
             controller.boxReady(me, width, height);
         }
@@ -412,18 +412,18 @@ Ext.define('Ext.util.Renderable', {
             controller;
 
         me._renderState = 1;
-        
+
         me.ariaUsesMainElement = me.ariaEl === 'el';
 
         controller = me.controller;
-        
+
         if (controller && controller.beforeRender) {
             controller.beforeRender(me);
         }
 
         // Force bindings to be created
         me.initBindable();
-        
+
         if (me.renderConfigs) {
             me.flushRenderConfigs();
         }
@@ -436,7 +436,7 @@ Ext.define('Ext.util.Renderable', {
             me.addCls(me.fixed ? me._fixedLayerCls : me._layerCls);
 
             cls = floating.cls;
-            
+
             if (cls) {
                 me.addCls(cls);
             }
@@ -493,16 +493,16 @@ Ext.define('Ext.util.Renderable', {
             frameData;
 
         me.initStyles(protoEl);
-        
+
         // If we're not framing, then just add to the element, otherwise we need to add
         // it to the frameBody, since it's our targetEl, but we don't have a handle on it yet.
         if (layoutTargetCls && !frameInfo) {
             protoEl.addCls(layoutTargetCls);
         }
-        
+
         protoEl.writeTo(config);
         protoEl.flush();
-        
+
         if (autoEl) {
             if (Ext.isString(autoEl)) {
                 config.tag = autoEl;
@@ -511,24 +511,24 @@ Ext.define('Ext.util.Renderable', {
                 Ext.apply(config, autoEl);
             }
         }
-        
+
         if (ariaRole && me.ariaUsesMainElement) {
             config.role = ariaRole;
-            
+
             if (!me.ariaStaticRoles[ariaRole]) {
                 config['aria-hidden'] = !!me.hidden;
                 config['aria-disabled'] = !!me.disabled;
-                
+
                 // ariaLabelledBy takes precedence
                 if (me.ariaLabel && !me.ariaLabelledBy) {
                     config['aria-label'] = me.ariaLabel;
                 }
-                
+
                 // We don't want to handle collapsibleness in subclasses
                 if (me.collapsible) {
                     config['aria-expanded'] = !me.collapsed;
                 }
-                
+
                 // In some cases we need to force some ARIA attributes
                 // to be rendered on the ariaEl upfront, e.g. certain
                 // state and decorator attributes. It is not semantically
@@ -538,7 +538,7 @@ Ext.define('Ext.util.Renderable', {
                 if (me.ariaRenderAttributes) {
                     Ext.apply(config, me.ariaRenderAttributes);
                 }
-                
+
                 if (me.config.ariaAttributes) {
                     Ext.apply(config, me.getAriaAttributes());
                 }
@@ -560,7 +560,7 @@ Ext.define('Ext.util.Renderable', {
                 config.tplData = me.initRenderData();
             }
         }
-        
+
         // After we have gathered all rendering information, this is no longer needed.
         me.ariaRenderAttributes = null;
 
@@ -640,40 +640,40 @@ Ext.define('Ext.util.Renderable', {
             childElCls: '', // overridden in RTL
             ariaEl: me.ariaEl
         }, me.renderData);
-        
+
         // This code is similar (in fact, almost identical) to the one in getElConfig;
         // we duplicate it for performance reasons.
         if (ariaRole && !me.ariaUsesMainElement) {
             ariaAttr = {
                 role: ariaRole
             };
-            
+
             if (!me.ariaStaticRoles[ariaRole]) {
                 ariaAttr['aria-hidden'] = !!me.hidden;
                 ariaAttr['aria-disabled'] = !!me.disabled;
-                
+
                 // ariaLabelledBy takes precedence
                 if (me.ariaLabel && !me.ariaLabelledBy) {
                     ariaAttr['aria-label'] = me.ariaLabel;
                 }
-                
+
                 // We don't want to handle collapsibleness in subclasses
                 if (me.collapsible) {
                     ariaAttr['aria-expanded'] = !me.collapsed;
                 }
-                
+
                 if (me.ariaRenderAttributes) {
                     Ext.apply(ariaAttr, me.ariaRenderAttributes);
                 }
-                
+
                 if (me.config.ariaAttributes) {
                     Ext.apply(ariaAttr, me.getAriaAttributes());
                 }
             }
-            
+
             data.ariaAttributes = ariaAttr;
         }
-        
+
         return data;
     },
 
@@ -736,11 +736,11 @@ Ext.define('Ext.util.Renderable', {
         if (x != null) {
             lastBox = { x: x };
         }
-        
+
         if (y != null) {
             (lastBox = lastBox || {}).y = y;
         }
-        
+
         // Framed components need their width/height to apply to the frame, which is
         // best handled in layout at present.
         if (!me.getFrameInfo()) {
@@ -751,7 +751,7 @@ Ext.define('Ext.util.Renderable', {
                 lastBox = lastBox || {};
                 lastBox.width = width;
             }
-            
+
             if (typeof height === 'number') {
                 lastBox = lastBox || {};
                 lastBox.height = height;
@@ -796,7 +796,7 @@ Ext.define('Ext.util.Renderable', {
             me.wrapPrimaryEl(el); // ensure me.el is wrapped
             el = me.el;
         }
-        
+
         if (!me.skipLayout) {
             Ext.suspendLayouts();
         }
@@ -822,7 +822,7 @@ Ext.define('Ext.util.Renderable', {
                 }
 
                 me.wrapPrimaryEl(el);
-                
+
                 // Just rendered a bunch of stuff so fill up the cache with those els we will need.
                 me.cacheRefEls(el);
             }
@@ -830,7 +830,7 @@ Ext.define('Ext.util.Renderable', {
         else {
             if (!me.hasListeners.beforerender || me.fireEvent('beforerender', me) !== false) {
                 me.beforeRender();
-                
+
                 // We're simulating the above block here as much as possible, but we're already
                 // given an el, so we don't need to create it. We still need to initialize
                 // the renderTpl later.
@@ -839,7 +839,7 @@ Ext.define('Ext.util.Renderable', {
 
                 // Set configured styles on pre-rendered Component's element
                 me.initStyles(el);
-                
+
                 if (me.allowDomMove !== false) {
                     if (nextSibling) {
                         container.dom.insertBefore(el.dom, nextSibling);
@@ -857,7 +857,7 @@ Ext.define('Ext.util.Renderable', {
         if (el && !vetoed) {
             me.finishRender(position);
         }
-        
+
         if (!me.skipLayout) {
             Ext.resumeLayouts(!me.hidden && !container.isDetachedBody);
         }
@@ -880,11 +880,11 @@ Ext.define('Ext.util.Renderable', {
         if (comp.container.isDetachedBody) {
             comp.container = body = Ext.getBody();
             body.appendChild(comp.el.dom);
-            
+
             if (runLayout) {
                 comp.updateLayout();
             }
-            
+
             if (typeof comp.x === 'number' || typeof comp.y === 'number') {
                 comp.setPosition(comp.x, comp.y);
             }
@@ -907,12 +907,12 @@ Ext.define('Ext.util.Renderable', {
                 query, selector;
 
             me.attachChildEls(el);
-            
+
             // Cache focusEl as a property for speedier lookups
             if (typeof me.focusEl === 'string') {
                 me.focusEl = me[me.focusEl];
             }
-            
+
             // For the majority of Components, their ariaEl is going to be their main el.
             me.ariaEl = me[me.ariaEl] || me.el;
 
@@ -922,7 +922,7 @@ Ext.define('Ext.util.Renderable', {
             if (selectors) {
                 for (selector in selectors) {
                     query = selectors[selector];
-                    
+
                     if (query) {
                         me[selector] = el.selectNode(query, false);
                     }
@@ -950,7 +950,7 @@ Ext.define('Ext.util.Renderable', {
 
             for (i = 0; i < len; i++) {
                 ref = refs[i];
-                
+
                 if (!cache[ref.id]) {
                     new El(ref);
                 }
@@ -966,7 +966,7 @@ Ext.define('Ext.util.Renderable', {
          */
         doAutoRender: function() {
             var me = this;
-            
+
             if (!me.rendered) {
                 if (me.floating) {
                     me.render(me.renderTo || document.body);
@@ -1001,18 +1001,18 @@ Ext.define('Ext.util.Renderable', {
                 }
             }
         },
-        
+
         doRenderFramingTabGuard: function(out, renderData, position) {
             // Careful! This method is bolted on to the frameTpl so all we get for context is
             // the renderData! The "this" pointer is the frameTpl instance!
-            
+
             // Container layout implements doRenderTabGuard(), *not* Component itself!
             var layout = renderData.$comp.layout;
-            
+
             // The "renderData" property is placed in scope for the renderTpl, but we don't
             // want to render tab guards at that level in addition to the framing level:
             renderData.renderData.$skipTabGuards = true;
-            
+
             if (layout && layout.doRenderTabGuard) {
                 layout.doRenderTabGuard.call(this, out, renderData, position);
             }
@@ -1027,7 +1027,7 @@ Ext.define('Ext.util.Renderable', {
             if (configs) {
                 for (i = 0; i <= state; ++i) {
                     bucket = configs[i];
-                    
+
                     if (bucket) {
                         configs[i] = null;
 
@@ -1119,7 +1119,7 @@ Ext.define('Ext.util.Renderable', {
                 // need to generate the proper DOM. Insert first because the layout system
                 // insists that child Component elements indices match the Component indices.
                 tpl = me.initRenderTpl();
-                
+
                 if (tpl) {
                     data = me.initRenderData();
                     tpl.insertFirst(me.getTargetEl(), data);
@@ -1164,11 +1164,11 @@ Ext.define('Ext.util.Renderable', {
             }
 
             me.afterRender(); // this can cause a layout
-            
+
             if (me.hasListeners.afterrender) {
                 me.fireEvent('afterrender', me);
             }
-            
+
             me.initEvents();
 
             if (me.hidden) {
@@ -1356,7 +1356,7 @@ Ext.define('Ext.util.Renderable', {
          */
         getStyleProxy: function(cls) {
             var result;
-            
+
             result = this.styleProxyEl ||
                     (Ext.Component.prototype.styleProxyEl = Ext.getBody().createChild({
                         //<debug>
@@ -1372,7 +1372,7 @@ Ext.define('Ext.util.Renderable', {
                     }, null, true));
 
             result.className = cls;
-            
+
             return result;
         },
 
@@ -1393,7 +1393,7 @@ Ext.define('Ext.util.Renderable', {
                 container = me.el.dom.parentNode;
                 me.allowDomMove = false;
             }
-            
+
             me.container = container.dom ? container : Ext.get(container);
 
             return me.container;
@@ -1490,10 +1490,10 @@ Ext.define('Ext.util.Renderable', {
             // First off, render the new frameTpl to an off-document element.
             div = document.createElement('div');
             frameData = me.getFrameRenderData();
-            
+
             // If the container was configured with tab guards, they were already rendered.
             frameData.hasTabGuard = false;
-            
+
             frameTpl = me.getFrameTpl(frameInfo.table);
             frameTpl.insertFirst(div, frameData);
 
@@ -1506,7 +1506,7 @@ Ext.define('Ext.util.Renderable', {
             for (first = oldFrameBodyDom; first.parentNode !== dom;) {
                 first = first.parentNode;
             }
-            
+
             while (div.firstChild) {
                 dom.insertBefore(div.firstChild, first);
             }
@@ -1518,16 +1518,16 @@ Ext.define('Ext.util.Renderable', {
 
             // Remove the old frame elements, except for frameBody of course:
             childEls = me.getChildEls();
-            
+
             if (frameTable) {
                 frameTable.destroy();
                 me.frameTable = null;
             }
-            
+
             for (childElName in childEls) {
                 if (childEls[childElName].frame) {
                     el = me[childElName];
-                    
+
                     if (el && el !== oldFrameBody) {
                         el.destroy();
                         me[childElName] = null;
@@ -1538,7 +1538,7 @@ Ext.define('Ext.util.Renderable', {
             // Now we are free to acquire the childEls to the new elements:
             for (i = newFrameEls.length; i--;) {
                 childElName = (frameDom = newFrameEls[i]).getAttribute('data-ref');
-                
+
                 if (childElName !== 'frameBody') {
                     me[childElName] = new Ext.dom.Element(frameDom);
                 }

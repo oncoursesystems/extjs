@@ -144,7 +144,7 @@ Ext.define('Ext.plugin.Viewport', {
                     // In addition, stamp on the data-componentid so lookups using Component's
                     // from will work.
                     el.setAttribute('data-componentid', me.id);
-                    
+
                     if (!me.ariaStaticRoles[me.ariaRole]) {
                         el.setAttribute('role', me.ariaRole);
                     }
@@ -163,11 +163,11 @@ Ext.define('Ext.plugin.Viewport', {
 
                     // Get the DOM disruption over with before the Viewport renders
                     // and begins a layout
-                    Ext.getScrollbarSize();
+                    Ext.scrollbar.size();
 
                     // Clear any dimensions, we will size later on in onRender
                     me.width = me.height = undefined;
-                    
+
                     // ... but take the measurements now because doing that in onRender
                     // will cause a costly reflow which we just forced with getScrollbarSize()
                     me.initialViewportHeight = Ext.Element.getViewportHeight();
@@ -210,7 +210,7 @@ Ext.define('Ext.plugin.Viewport', {
                     // causing a reflow.
                     me.width = me.initialViewportWidth;
                     me.height = me.initialViewportHeight;
-                    
+
                     me.initialViewportWidth = me.initialViewportHeight = null;
                 },
 
@@ -262,7 +262,7 @@ Ext.define('Ext.plugin.Viewport', {
                     me.removeUIFromElement();
                     me.el.removeCls(me.baseCls);
                     Ext.fly(document.body.parentNode).removeCls(me.viewportCls);
-                    
+
                     me.callParent();
                 },
 
@@ -278,7 +278,7 @@ Ext.define('Ext.plugin.Viewport', {
                     // override here to prevent an extraneous warning
                     applyTargetCls: function(targetCls) {
                         var el = this.el;
-                        
+
                         if (el === this.getTargetEl()) {
                             this.el.addCls(targetCls);
                         }
@@ -286,21 +286,21 @@ Ext.define('Ext.plugin.Viewport', {
                             this.callParent([targetCls]);
                         }
                     },
-                    
+
                     // Override here to prevent tabIndex set/reset on the body
                     disableTabbing: function() {
                         var el = this.el;
-                        
+
                         if (el) {
                             el.saveTabbableState({
                                 skipSelf: true
                             });
                         }
                     },
-                    
+
                     enableTabbing: function() {
                         var el = this.el;
-                        
+
                         if (el) {
                             el.restoreTabbableState({ skipSelf: true });
                         }
@@ -316,7 +316,7 @@ Ext.define('Ext.plugin.Viewport', {
                         this.handleViewportResize();
                         this.callParent();
                     }
-    
+
                 }
             });
         }

@@ -97,6 +97,7 @@ Ext.define('Ext.grid.plugin.ColumnResizing', {
 
     onContainerTouchStart: function(e) {
         var me = this,
+            gridHeader = me.getGrid().getHeaderContainer(),
             target = e.getTarget(me.columnSelector),
             resizer = e.getTarget(me.resizerSelector),
             column;
@@ -111,8 +112,9 @@ Ext.define('Ext.grid.plugin.ColumnResizing', {
                 me._resizeColumn = column;
                 me._startX = e.getX();
                 column.addCls(me.resizingCls);
+
                 // Prevent drag and longpress gestures being triggered by this mousedown
-                e.claimGesture();
+                gridHeader.renderElement.suspendEvent('drag', 'longpress');
 
                 if (!this.getRealtime()) {
                     me._resizeMarker.show();
@@ -166,6 +168,8 @@ Ext.define('Ext.grid.plugin.ColumnResizing', {
                 );
             }
 
+            column.resizing = true;
+
             e.claimGesture();
         }
     },
@@ -198,7 +202,14 @@ Ext.define('Ext.grid.plugin.ColumnResizing', {
 
             if (me.currentColumnWidth) {
                 column.setFlex(null);
-                column.setWidth(me.currentColumnWidth);
+
+                if (column.resizing) {
+                    column.setWidth(me.currentColumnWidth);
+                    column.resizing = false;
+                }
+                else if (me._resizeColumn.getWidth() === me._startColumnWidth) {
+                    column.setWidth(me._startColumnWidth);
+                }
             }
 
             column.removeCls(me.resizingCls);

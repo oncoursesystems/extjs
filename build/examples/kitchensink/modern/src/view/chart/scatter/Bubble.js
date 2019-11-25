@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.chart.scatter.Bubble', {
     xtype: 'scatter-bubble',
     controller: 'scatter-bubble',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/ChartController.js'
@@ -40,9 +40,9 @@ Ext.define('KitchenSink.view.chart.scatter.Bubble', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -109,7 +109,7 @@ Ext.define('KitchenSink.view.chart.scatter.Bubble', {
         },
         items: [{
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }]
     }]

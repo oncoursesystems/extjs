@@ -43,7 +43,7 @@ Ext.define('KitchenSink.view.data.JSONPController', {
     },
 
     kelvinToFahrenheit: function(k) {
-        return Math.round(9/5 * (k - 273) + 32);
+        return Math.round(9 / 5 * (k - 273) + 32);
     },
 
     loadCallback: function(success, result) {
@@ -64,7 +64,8 @@ Ext.define('KitchenSink.view.data.JSONPController', {
 
             this.lookup('results').updateHtml(this.getTpl().applyTemplate(data));
 
-        } else {
+        }
+        else {
             Ext.Msg.alert('Error', 'There was an error retrieving the weather.');
         }
 

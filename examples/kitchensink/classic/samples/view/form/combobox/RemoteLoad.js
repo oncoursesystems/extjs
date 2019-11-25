@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.form.combobox.RemoteLoad', {
         'KitchenSink.model.State',
         'KitchenSink.store.RemoteStates'
     ],
-    
+
     exampleTitle: 'Remote loaded ComboBox',
     otherContent: [{
         type: 'Model',
@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.form.combobox.RemoteLoad', {
         path: 'classic/samples/store/RemoteStates.js'
     }],
     //</example>
-    
+
     profiles: {
         classic: {
             labelWidth: 110
@@ -31,13 +31,17 @@ Ext.define('KitchenSink.view.form.combobox.RemoteLoad', {
         },
         graphite: {
             labelWidth: 140
+        },
+        'classic-material': {
+            labelWidth: 140
         }
     },
     title: 'Remote loaded ComboBox',
     width: 500,
     layout: 'form',
+    cls: 'simple-combo',
     viewModel: {},
-    
+
     items: [{
         xtype: 'fieldset',
         layout: 'anchor',
@@ -75,14 +79,14 @@ Ext.define('KitchenSink.view.form.combobox.RemoteLoad', {
             queryMode: 'local',
             tpl: [
                 '<ul class="x-list-plain">',
-                    '<tpl for=".">',
-                        '<li class="',
-                            Ext.baseCSSPrefix, 'grid-group-hd ',
-                            Ext.baseCSSPrefix, 'grid-group-title">{abbr}</li>',
-                        '<li class="x-boundlist-item">',
-                            '{state}, {description}',
-                        '</li>',
-                    '</tpl>',
+                '<tpl for=".">',
+                '<li class="',
+                Ext.baseCSSPrefix, 'grid-group-hd ',
+                Ext.baseCSSPrefix, 'grid-group-title">{abbr}</li>',
+                '<li class="x-boundlist-item">',
+                '{state}, {description}',
+                '</li>',
+                '</tpl>',
                 '</ul>'
             ]
         }]

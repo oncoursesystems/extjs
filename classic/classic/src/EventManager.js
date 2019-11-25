@@ -78,7 +78,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager is deprecated. " +
                      "Use Ext.dom.Element#addListener to attach an event listener.");
         //</debug>
-        
+
         Ext.get(element).addListener(eventName, fn, scope, options);
     },
 
@@ -97,7 +97,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager is deprecated. " +
                      "Use Ext.on('resize', fn) to attach a window resize listener.");
         //</debug>
-        
+
         Ext.GlobalEvents.on('resize', fn, scope, options);
     },
 
@@ -114,7 +114,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager is deprecated. " +
                      "Use Ext.getWin().on('unload', fn) to attach a window unload listener.");
         //</debug>
-        
+
         Ext.getWin().on('unload', fn, scope, options);
     },
 
@@ -132,7 +132,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager is deprecated. " +
                      "Call clearListeners() on a Ext.dom.Element to remove all listeners.");
         //</debug>
-        
+
         Ext.get(element).clearListeners();
     },
 
@@ -148,7 +148,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager is deprecated. " +
                      "Call clearListeners() on a Ext.dom.Element to remove all listeners.");
         //</debug>
-        
+
         Ext.get(element).clearListeners();
     },
 
@@ -173,7 +173,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager is deprecated. " +
                      "Use Ext.dom.Element#removeListener to remove an event listener.");
         //</debug>
-        
+
         Ext.get(element).removeListener(eventName, fn, scope, options);
     },
 
@@ -188,7 +188,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager is deprecated. " +
                      "Use Ext.on('resize', fn) to detach a window resize listener.");
         //</debug>
-        
+
         Ext.GlobalEvents.un('resize', fn, scope);
     },
 
@@ -203,7 +203,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager is deprecated. " +
                      "Use Ext.getWin().un('unload', fn) to detach a window unload listener.");
         //</debug>
-        
+
         Ext.getWin().un('unload', fn, scope);
     },
 
@@ -217,7 +217,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager.stopEvent() is deprecated. " +
                      "Call stopEvent() directly on the Ext.event.Event instance instead.");
         //</debug>
-        
+
         this.stopPropagation(event);
         this.preventDefault(event);
     },
@@ -232,9 +232,9 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager.stopPropagation() is deprecated. " +
                      "Call stopPropagation() directly on the Ext.event.Event instance instead.");
         //</debug>
-        
+
         event = event.browserEvent || event;
-        
+
         if (event.stopPropagation) {
             event.stopPropagation();
         }
@@ -253,15 +253,15 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager.preventDefault() is deprecated. " +
                      "Call preventDefault() directly on the Ext.event.Event instance instead.");
         //</debug>
-        
+
         event = event.browserEvent || event;
-        
+
         if (event.preventDefault) {
             event.preventDefault();
         }
         else {
             event.returnValue = false;
-            
+
             // Some keys events require setting the keyCode to -1 to be prevented
             try {
                 // all ctrl + X and F1 -> F12
@@ -287,9 +287,9 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager.getId() is deprecated. " +
                      "Call Ext.get() to assign ids to elements.");
         //</debug>
-        
+
         element = Ext.get(element);
-        
+
         return element.id;
     },
 
@@ -301,15 +301,15 @@ Ext.define('Ext.EventManager', {
      */
     getRelatedTarget: function(event) {
         var target;
-        
+
         //<debug>
         Ext.log.warn("Ext.EventManager.getRelatedTarget() is deprecated. " +
                      "Call getRelatedTarget() directly on the Ext.event.Event instance instead.");
         //</debug>
-        
+
         event = event.browserEvent || event;
         target = event.relatedTarget;
-        
+
         if (!target) {
             if (this.mouseLeaveRe.test(event.type)) {
                 target = event.toElement;
@@ -318,7 +318,7 @@ Ext.define('Ext.EventManager', {
                 target = event.fromElement;
             }
         }
-        
+
         return this.resolveTextNode(target);
     },
 
@@ -333,7 +333,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager.getPageX() is deprecated. " +
                      "Call getX() directly on the Ext.event.Event instance instead.");
         //</debug>
-        
+
         return this.getPageXY(event)[0];
     },
 
@@ -348,9 +348,9 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager.getPageXY() is deprecated. " +
                      "Call getXY() directly on the Ext.event.Event instance instead.");
         //</debug>
-        
+
         event = event.browserEvent || event;
-        
+
         // eslint-disable-next-line vars-on-top
         var x = event.pageX,
             y = event.pageY,
@@ -364,7 +364,7 @@ Ext.define('Ext.EventManager', {
             y = event.clientY + (docEl && docEl.scrollTop || body && body.scrollTop || 0) -
                 (docEl && docEl.clientTop || body && body.clientTop || 0);
         }
-        
+
         return [x, y];
     },
 
@@ -379,7 +379,7 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager.getPageY() is deprecated. " +
                      "Call getY() directly on the Ext.event.Event instance instead.");
         //</debug>
-        
+
         return this.getPageXY(event)[1];
     },
 
@@ -394,9 +394,9 @@ Ext.define('Ext.EventManager', {
         Ext.log.warn("Ext.EventManager.getTarget() is deprecated. " +
                      "Call getTarget() directly on the Ext.event.Event instance instead.");
         //</debug>
-        
+
         event = event.browserEvent || event;
-        
+
         return Ext.EventManager.resolveTextNode(event.target || event.srcElement);
     },
 
@@ -414,11 +414,11 @@ Ext.define('Ext.EventManager', {
     resolveTextNode: Ext.isGecko
         ? function(node) {
             var s;
-            
+
             if (node) {
                 // work around firefox bug, https://bugzilla.mozilla.org/show_bug.cgi?id=101197
                 s = HTMLElement.prototype.toString.call(node);
-                
+
                 if (s !== '[xpconnect wrapped native prototype]' && s !== '[object XULElement]') {
                     return node.nodeType === 3 ? node.parentNode : node;
                 }

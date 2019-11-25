@@ -59,10 +59,10 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
             if (arguments[1].isObservable) {
                 this.managedListeners = true;
             }
-            
+
             this.args = arraySlice.call(arguments, 1);
         },
-        
+
         // These properties should not be nulled during Base destroy(),
         // we will take care of them in destroyObservable()
         protectedProps = ['events', 'hasListeners', 'managedListeners', 'eventedBeforeEventNames'];
@@ -86,7 +86,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                                  observable.referenceList.join("', '") + "'", observable);
             }
             //</debug>
-            
+
             observable = observable[elementName];
         }
 
@@ -94,7 +94,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         if (!observable.destroyed) {
             observable[me.managedListeners ? 'mun' : 'un'].apply(observable, me.args);
         }
-        
+
         me.destroy = Ext.emptyFn;
     };
 
@@ -143,10 +143,10 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 var newFn = function(eventName, args) {
                     return fn.apply(scope, [eventName].concat(args));
                 };
-                
+
                 this.captureArgs(o, newFn, scope);
             },
-            
+
             /**
              * @method
              * @private
@@ -180,12 +180,12 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                         Ext.applyIf(cls, new this());
                         this.captureArgs(cls.prototype, cls.fireEventArgs, cls);
                     }
-                    
+
                     if (Ext.isObject(listeners)) {
                         cls.on(listeners);
                     }
                 }
-                
+
                 return cls;
             },
 
@@ -234,13 +234,13 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                     // and allow addListener to handle scope:'controller' declared on
                     // inner objects of the listeners config.
                     scope = targetListeners.scope;
-                    
+
                     if (!scope) {
                         targetListeners.scope = 'self';
                     }
                     else {
                         namedScope = Ext._namedScopes[scope];
-                        
+
                         if (namedScope && namedScope.isController) {
                             targetListeners.scope = 'self.controller';
                         }
@@ -272,14 +272,14 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                     // (which is also the class-level "hasListeners" instance).
                     HasListeners.prototype = T.hasListeners = new SuperHL();
                 }
-                
+
                 // Reusing a variable here
                 scope = T.prototype.$noClearOnDestroy || {};
-                
+
                 for (i = 0, len = protectedProps.length; i < len; i++) {
                     scope[protectedProps[i]] = true;
                 }
-                
+
                 T.prototype.$noClearOnDestroy = scope;
             }
         },
@@ -328,7 +328,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
          * thereof.
          */
         isObservable: true,
-        
+
         /**
          * @private
          * We don't want the base destructor to clear the prototype because
@@ -336,7 +336,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
          * of the prototype after completing Observable destruction sequence.
          */
         $vetoClearingPrototypeOnDestroy: true,
-        
+
         /**
          * @private
          * Initial suspended call count. Incremented when {@link #suspendEvents} is called,
@@ -375,7 +375,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
             if (me.$observableInitialized) {
                 return;
             }
-            
+
             me.$observableInitialized = true;
 
             // This double assignment is intentional - it works around a strange JIT
@@ -393,7 +393,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
             me.events = me.events || {};
 
             declaredListeners = self.listeners;
-            
+
             if (declaredListeners && !me._addDeclaredListeners(declaredListeners)) {
                 // Nulling out declared listeners allows future instances to avoid
                 // recursing into the declared listeners arrays if the first instance
@@ -558,7 +558,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         addManagedListener: function(item, ename, fn, scope, options, noDestroy) {
             var me = this,
                 config, passedOptions;
-            
+
             me.managedListeners = me.managedListeners || [];
 
             if (typeof ename !== 'string') {
@@ -569,11 +569,11 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 passedOptions = arguments.length > 4 ? options : ename;
 
                 options = ename;
-                
+
                 for (ename in options) {
                     if (options.hasOwnProperty(ename)) {
                         config = options[ename];
-                        
+
                         if (!item.$eventOptions[ename]) {
                             // recurse, but pass the noDestroy parameter as true so that lots
                             // of individual Destroyables are not created.
@@ -584,7 +584,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                         }
                     }
                 }
-                
+
                 if (options && options.destroyable) {
                     return new ListenerRemover(me, item, options);
                 }
@@ -617,18 +617,18 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         removeManagedListener: function(item, ename, fn, scope) {
             var me = this,
                 options, config, managedListeners, length, i;
-            
+
             if (item.$observableDestroyed) {
                 return;
             }
 
             if (typeof ename !== 'string') {
                 options = ename;
-                
+
                 for (ename in options) {
                     if (options.hasOwnProperty(ename)) {
                         config = options[ename];
-                        
+
                         if (!item.$eventOptions[ename]) {
                             me.removeManagedListener(item, ename, config.fn || config,
                                                      config.scope || options.scope || scope);
@@ -663,7 +663,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         fireEvent: function(eventName) {
             return this.fireEventArgs(eventName, arraySlice.call(arguments, 1));
         },
-        
+
         /**
          * Gets the default scope for firing late bound events (string names with
          * no scope attached) at runtime.
@@ -673,7 +673,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
          */
         resolveListenerScope: function(defaultScope) {
             var namedScope = Ext._namedScopes[defaultScope];
-            
+
             if (namedScope) {
                 //<debug>
                 if (namedScope.isController) {
@@ -686,7 +686,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                     defaultScope = null;
                 }
             }
-            
+
             return defaultScope || this;
         },
 
@@ -710,13 +710,13 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
 
             eventName = Ext.canonicalEventName(eventName);
             event = events && events[eventName];
-            
+
             // Only continue firing the event if there are listeners to be informed.
             // Bubbled events will always have a listener count, so will be fired.
             if (me.hasListeners[eventName]) {
                 ret = me.doFireEvent(eventName, args || emptyArray, event ? event.bubble : false);
             }
-            
+
             return ret;
         },
 
@@ -755,7 +755,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
             if (typeof fn === 'string' && !scope) {
                 fn = this[fn];
             }
-            
+
             // chain options to avoid mutating the user's options object
             options = options ? Ext.Object.chain(options) : {};
             options.single = true;
@@ -782,7 +782,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 if (! --me._paused) {
                     if (fn) {
                         args = Ext.Array.slice(fnArgs || me.args);
-                        
+
                         if (fnArgs === false) {
                             // Passing false will remove the first item (typically the owner)
                             args.shift();
@@ -872,12 +872,12 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                     if ((queue = target.eventQueue)) {
                         queue.push([eventName, args]);
                     }
-                    
+
                     return ret;
                 }
                 else {
                     event = target.events && target.events[eventName];
-                    
+
                     // Continue bubbling if event exists and it is `true` or the handler
                     // didn't returns false and it configure to bubble.
                     if (event && event !== true) {
@@ -887,7 +887,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                     }
                 }
             } while (bubbles && (target = target.getBubbleParent()));
-            
+
             return ret;
         },
 
@@ -900,11 +900,11 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         getBubbleParent: function() {
             var me = this,
                 parent = me.getBubbleTarget && me.getBubbleTarget();
-            
+
             if (parent && parent.isObservable) {
                 return parent;
             }
-            
+
             return null;
         },
 
@@ -1178,7 +1178,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
 
                 for (eventName in options) {
                     config = options[eventName];
-                    
+
                     if (!eventOptions[eventName]) {
                         /* This would be an API change so check removed until https://sencha.jira.com/browse/EXTJSIV-7183 is fully implemented in 4.2
                         // Test must go here as well as in the simple form because of
@@ -1192,7 +1192,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                         */
 
                         innerScope = config.scope;
-                        
+
                         // for proper scope resolution, scope:'controller' specified on an
                         // inner object, must be translated to 'self.controller' if the
                         // listeners object was declared on the class body.
@@ -1200,7 +1200,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                         // Ext.mixin.Inheritable#resolveListenerScope
                         if (innerScope && isClassListener) {
                             namedScope = namedScopes[innerScope];
-                            
+
                             if (namedScope && namedScope.isController) {
                                 innerScope = 'self.controller';
                             }
@@ -1211,7 +1211,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                     }
 
                 }
-                
+
                 if (options && options.destroyable) {
                     return new ListenerRemover(me, options);
                 }
@@ -1223,7 +1223,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                     return new ListenerRemover(me, eventName, fn, scope, options);
                 }
             }
-            
+
             return me;
         },
 
@@ -1280,15 +1280,15 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
 
             if (typeof eventName !== 'string') {
                 options = eventName;
-                
+
                 // give subclasses the opportunity to switch the valid eventOptions
                 // (Ext.Component uses this when the "element" option is used)
                 eventOptions = eventOptions || me.$eventOptions;
-                
+
                 for (eventName in options) {
                     if (options.hasOwnProperty(eventName)) {
                         config = options[eventName];
-                        
+
                         if (!me.$eventOptions[eventName]) {
                             me.doRemoveListener(eventName, config.fn || config,
                                                 config.scope || options.scope);
@@ -1369,21 +1369,21 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         addBeforeListener: function() {
             return this.onBefore.apply(this, arguments);
         },
-        
+
         /**
          * Alias for {@link #onAfter}.
          */
         addAfterListener: function() {
             return this.onAfter.apply(this, arguments);
         },
-        
+
         /**
          * Alias for {@link #unBefore}.
          */
         removeBeforeListener: function() {
             return this.unBefore.apply(this, arguments);
         },
-        
+
         /**
          * Alias for {@link #unAfter}.
          */
@@ -1405,14 +1405,14 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 for (key in events) {
                     if (events.hasOwnProperty(key)) {
                         event = events[key];
-                        
+
                         if (event.isEvent) {
                             delete hasListeners[key];
                             event.clearListeners();
                         }
                     }
                 }
-                
+
                 me.events = null;
             }
 
@@ -1425,7 +1425,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 Ext.global.console.warn('Observable: purgeListeners has been deprecated. ' +
                                         'Please use clearListeners.');
             }
-            
+
             return this.clearListeners.apply(this, arguments);
         },
         //</debug>
@@ -1443,11 +1443,11 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 // to remove the listener it is removing. It iterates the array to find a match,
                 // and splices it.
                 me.managedListeners = null;
-                
+
                 for (i = 0, len = managedListeners.length; i < len; i++) {
                     me.removeManagedListenerItem(true, managedListeners[i]);
                 }
-                
+
                 managedListeners.length = 0;
             }
 
@@ -1476,7 +1476,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                                                           managedListener.scope,
                                                           managedListener.options);
                 }
-                
+
                 if (!isClear) {
                     Ext.Array.remove(this.managedListeners, managedListener);
                 }
@@ -1489,11 +1489,11 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 Ext.global.console.warn('Observable: purgeManagedListeners has been deprecated. ' +
                                         'Please use clearManagedListeners.');
             }
-            
+
             return this.clearManagedListeners.apply(this, arguments);
         },
         //</debug>
-        
+
         /**
          * Checks to see if this object has any listeners for a specified event, or whether
          * the event bubbles. The answer indicates whether the event needs firing or not.
@@ -1503,10 +1503,10 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
          */
         hasListener: function(eventName) {
             eventName = Ext.canonicalEventName(eventName);
-            
+
             return !!this.hasListeners[eventName];
         },
-        
+
         /**
          * Checks if all events, or a specific event, is suspended.
          * @param {String} [event] The name of the specific event to check
@@ -1515,15 +1515,15 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         isSuspended: function(event) {
             var suspended = this.eventsSuspended > 0,
                 events = this.events;
-                
+
             if (!suspended && event && events) {
                 event = events[event];
-                
+
                 if (event && event.isEvent) {
                     return event.isSuspended();
                 }
             }
-            
+
             return suspended;
         },
 
@@ -1535,7 +1535,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
          */
         suspendEvents: function(queueSuspended) {
             ++this.eventsSuspended;
-            
+
             if (queueSuspended && !this.eventQueue) {
                 this.eventQueue = [];
             }
@@ -1563,12 +1563,12 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 ename = arguments[i];
                 ename = Ext.canonicalEventName(ename);
                 event = events[ename];
-                
+
                 // we need to spin up the Event instance so it can hold the suspend count
                 if (!event || !event.isEvent) {
                     event = me._initEvent(ename);
                 }
-                
+
                 event.suspend();
             }
         },
@@ -1592,7 +1592,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
             for (i = 0; i < len; i++) {
                 ename = Ext.canonicalEventName(arguments[i]);
                 event = events[ename];
-                
+
                 // If it exists, and is an Event object (not still a boolean placeholder), resume it
                 if (event && event.resume) {
                     event.resume();
@@ -1619,7 +1619,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
 
                 if (!discardQueue && queued) {
                     qLen = queued.length;
-                    
+
                     for (q = 0; q < qLen; q++) {
                         // Important to call fireEventArgs here so MVC can hook in
                         me.fireEventArgs.apply(me, queued[q]);
@@ -1691,7 +1691,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                     relayers[oldName] = me.createRelayer(prefix ? prefix + oldName : oldName);
                 }
             }
-            
+
             // Add the relaying listeners as ManagedListeners so that they are removed when
             // this.clearListeners is called (usually when _this_ is destroyed)
             // Explicitly pass options as undefined so that the listener does not get
@@ -1712,7 +1712,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
          */
         createRelayer: function(newName, beginEnd) {
             var me = this;
-            
+
             return function() {
                 // eslint-disable-next-line max-len
                 return me.fireEventArgs.call(me, newName, beginEnd ? arraySlice.apply(arguments, beginEnd) : arguments);
@@ -1784,7 +1784,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 }
             }
         },
-        
+
         /**
          * @private
          * Destructor for classes that extend Observable.
@@ -1798,15 +1798,15 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         destroyObservable: function(skipClearListeners) {
             var me = this,
                 clearPropertiesOnDestroy = me.clearPropertiesOnDestroy;
-            
+
             if (me.$observableDestroyed) {
                 return;
             }
-            
+
             if (!skipClearListeners) {
                 me.clearListeners();
             }
-            
+
             // This method is called after the Base destructor, and most of the instances
             // should be already destroyed at this point. However Classic Components are
             // conditionally destructible and so can possibly *not* be destroyed before
@@ -1817,7 +1817,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                     if (clearPropertiesOnDestroy === true && !me.$nulled) {
                         me.$reap();
                     }
-                    
+
                     // At this point we can safely assume that the instance is completely
                     // destroyed and should not be able to fire events anymore. We don't
                     // want to do this when the prototype is going to be cleared below,
@@ -1827,14 +1827,14 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                         me.fireEvent = me.fireEventArgs = me.fireAction = me.fireEventedAction =
                             Ext.emptyFn;
                     }
-                    
+
                     // We do not null hasListeners reference since it's a) very special,
                     // and b) can't possibly lead to significant leaks. (In theory, right).
                     me.events = me.managedListeners = me.eventedBeforeEventNames = null;
-                    
+
                     me.$observableDestroyed = true;
                 }
-                
+
                 //<debug>
                 // Due to the way Observable mixin installs the after handler,
                 // this can be called twice in a row. Doing that the second time
@@ -1876,7 +1876,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 //</debug>
 
                 event = (me.events || (me.events = {}))[ename];
-                
+
                 if (!event || !event.isEvent) {
                     event = me._initEvent(ename);
                 }
@@ -1888,7 +1888,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                     if (!manager && (scope && scope.isObservable && (scope !== me))) {
                         manager = scope;
                     }
-                    
+
                     if (event.addListener(fn, scope, options, caller, manager)) {
                         // If a new listener has been added (Event.addListener rejects
                         // duplicates of the same fn+scope)
@@ -1946,7 +1946,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         HasListeners = function() {},
         prepareMixin = function(T) {
             var proto = T.prototype;
-            
+
             if (!T.HasListeners) {
                 // Keep track of whether we were added via a mixin or not, this becomes
                 // important later when discovering merged listeners on the class.
@@ -1958,7 +1958,9 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 // and prepare them also.
                 T.onExtended(function(U, data) {
                     //<debug>
-                    Ext.classSystemMonitor && Ext.classSystemMonitor('extend mixin', arguments);
+                    if (Ext.classSystemMonitor) {
+                        Ext.classSystemMonitor('extend mixin', arguments);
+                    }
                     //</debug>
 
                     Observable.prepareClass(U, null, data);
@@ -1998,7 +2000,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
             if (count == null) {
                 count = 1;
             }
-            
+
             if (!(this[ev] -= count)) {
                 // Delete this entry, since 0 does not mean no one is listening, just
                 // that no one is *directly* listening. This allows the eventBus or
@@ -2011,7 +2013,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 // if we already have listeners at this level, just increment the count...
                 ++this[ev];
             }
-            
+
             else {
                 // otherwise, start the count at 1 (which hides whatever is in our prototype
                 // chain)...
@@ -2080,11 +2082,11 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
 
             makeCall = function(fn, scope, args) {
                 scope = scope || me;
-                
+
                 if (typeof fn === 'string') {
                     fn = scope[fn];
                 }
-                
+
                 if ((v = fn.apply(scope, args)) !== undefined) {
                     if (typeof v === 'object') {
                         if (v.returnValue !== undefined) {
@@ -2093,7 +2095,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                         else {
                             returnValue = v;
                         }
-                        
+
                         cancel = !!v.cancel;
                     }
                     else if (v === false) {
@@ -2109,20 +2111,20 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
                 var args = Array.prototype.slice.call(arguments, 0),
                     argsLen = args.length,
                     b, i, len;
-                
+
                 returnValue = v = undefined;
                 cancel = false;
 
                 for (i = 0, len = event.before.length; i < len; i++) {
                     b = event.before[i];
-                    
+
                     if (b.extraArgs) {
                         args.push.apply(args, b.extraArgs);
                     }
 
                     makeCall(b.fn, b.scope, args);
                     args.length = argsLen;
-                    
+
                     if (cancel || b.preventDefault) {
                         return returnValue;
                     }
@@ -2134,23 +2136,23 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
 
                 for (i = 0, len = event.after.length; i < len; i++) {
                     b = event.after[i];
-                    
+
                     if (b.extraArgs) {
                         args.push.apply(args, b.extraArgs);
                     }
 
                     makeCall(b.fn, b.scope, args);
                     args.length = argsLen;
-                    
+
                     if (cancel || b.preventDefault) {
                         return returnValue;
                     }
                 }
-                
+
                 return returnValue;
             };
         }
-        
+
         return event;
     }
 
@@ -2180,21 +2182,21 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
         removeMethodListener: function(method, fn, scope) {
             var e = getMethodEvent.call(this, method),
                 i, len;
-            
+
             for (i = 0, len = e.before.length; i < len; i++) {
                 // eslint-disable-next-line eqeqeq
                 if (e.before[i].fn == fn && e.before[i].scope == scope) {
                     Ext.Array.erase(e.before, i, 1);
-                    
+
                     return;
                 }
             }
-            
+
             for (i = 0, len = e.after.length; i < len; i++) {
                 // eslint-disable-next-line eqeqeq
                 if (e.after[i].fn == fn && e.after[i].scope == scope) {
                     Ext.Array.erase(e.after, i, 1);
-                    
+
                     return;
                 }
             }

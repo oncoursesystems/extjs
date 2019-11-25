@@ -60,7 +60,7 @@ Ext.define('Ext.panel.Time', {
                  * When `auto`, Time header will be set based on the orientation of the device.
                  */
                 'vertical',
-                
+
                 /**
                  * @cfg {Boolean} [confirmable=false]
                  * When set to `true`, Time panel will have OK and Cancel buttons in
@@ -97,7 +97,7 @@ Ext.define('Ext.panel.Time', {
                  * @cfg {String} buttonAlign
                  * @inheritdoc
                  */
-                
+
                 /**
                  * @cfg {Object} defaultButtons
                  * Configuration of the buttons to add to the Time panel if
@@ -112,10 +112,31 @@ Ext.define('Ext.panel.Time', {
                  * @private
                  * Default mode for Time Panel. values can be 'hour' or 'minute'
                  */
-                'mode'
+                'mode',
+
+                /**
+                 * @cfg {Boolean} meridiem
+                 * Defaults to true for 12 hour format for Time Panel.
+                 */
+                'meridiem',
+
+                /**
+                 * @cfg {Boolean} alignPMInside
+                 * Default false.
+                 */
+                'alignPMInside',
+
+                /**
+                  * @cfg {string} hourDisplayFormat
+                  * Accepted values are `G` or `H`
+                  * Default G
+                  * See {@link Ext.Date} for details. 
+                  * @since 7.0
+                  */
+                'hourDisplayFormat'
             ],
-            
-            methods: ['getHours', 'getMinutes', 'getMeridiem', 'updateField']
+
+            methods: ['getHours', 'getMinutes', 'updateField']
         }
     },
 
@@ -123,14 +144,14 @@ Ext.define('Ext.panel.Time', {
 
     initialize: function() {
         var me = this;
-        
+
         me.callParent();
-        
+
         if (me.getFloated()) {
             me.el.dom.setAttribute('tabIndex', -1);
             me.el.on('mousedown', me.onMouseDown, me);
         }
-        
+
         me.relayEvents(me.getView(), ['collapsePanel', 'select']);
     },
 
@@ -146,14 +167,14 @@ Ext.define('Ext.panel.Time', {
         if (oldView) {
             Ext.destroy(oldView);
         }
-        
+
         this.add(view);
     },
-    
+
     updateButtonAlign: function(align) {
         this.getView().setButtonAlign(align);
     },
-    
+
     onMouseDown: function(e) {
         e.preventDefault();
     }

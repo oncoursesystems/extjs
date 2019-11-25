@@ -22,7 +22,6 @@ Ext.define('Ext.chart.axis.segmenter.Names', {
         return Math.floor(value);
     },
 
-
     add: function(value, step, unit) {
         return value + step;
     },

@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
         '#998baa'
     ],
 
-    onColumnRender: function (sprite, config, data, index) {
+    onColumnRender: function(sprite, config, data, index) {
         return {
             fillStyle: this.colors[index],
             strokeStyle: index % 2 ? 'none' : 'black',
@@ -25,11 +25,11 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
         };
     },
 
-    onTooltipRender: function (tooltip, record, item) {
+    onTooltipRender: function(tooltip, record, item) {
         tooltip.setHtml(record.get('month') + ': ' + record.get('data3') + '%');
     },
 
-    onAxisLabelRender: function (axis, label, layoutContext) {
+    onAxisLabelRender: function(axis, label, layoutContext) {
         // Custom renderer overrides the native axis label renderer.
         // Since we don't want to do anything fancy with the value
         // ourselves except appending a '%' sign, but at the same time
@@ -38,7 +38,7 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
         return layoutContext.renderer(label) + '%';
     },
 
-    seriesG1Renderer: function (sprite, config, rendererData, index) {
+    seriesG1Renderer: function(sprite, config, rendererData, index) {
         var store = rendererData.store,
             storeItems = store.getData().items,
             record = storeItems[index],
@@ -46,7 +46,8 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
             last = storeItems.length - 1,
             surface = sprite.getParent(),
             changes = {},
-            lineSprites, firstColumnConfig, firstData, lastData, growth, string;
+            lineSprites, firstColumnConfig, firstData, lastData, growth, string,
+            x1, y1, x2, y2;
 
         if (!record) {
             return;
@@ -57,7 +58,7 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
         changes.fillStyle = (diff > 0 ? 'tomato' : 'palegreen');
 
         // Make the first and last columns larger.
-        if (index === 0 || index == last) {
+        if (index === 0 || index === last) {
             changes.x = config.x - config.width * 0.2;
             changes.y = config.y;
             changes.width = config.width * 1.4;
@@ -77,15 +78,16 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
 
             if (index === 0) {
                 surface.myFirstColumnConfig = Ext.clone(changes);
-            } else if (index == last) {
+            }
+            else if (index === last) {
                 firstData = storeItems[0].get('g1');
                 lastData = storeItems[last].get('g1');
                 firstColumnConfig = surface.myFirstColumnConfig;
 
-                var x1 = firstColumnConfig.x + firstColumnConfig.width,
-                    y1 = firstColumnConfig.y,
-                    x2 = changes.x,
-                    y2 = changes.y;
+                x1 = firstColumnConfig.x + firstColumnConfig.width;
+                y1 = firstColumnConfig.y;
+                x2 = changes.x;
+                y2 = changes.y;
 
                 lineSprites[0].setAttributes({
                     lineWidth: 1,
@@ -111,14 +113,15 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
                     rotate: -90
                 });
             }
-        } else {
+        }
+        else {
             changes.lineWidth = 2;
         }
 
         return changes;
     },
 
-    seriesG2Renderer: function (sprite, config, rendererData, index) {
+    seriesG2Renderer: function(sprite, config, rendererData, index) {
         var store = rendererData.store,
             storeItems = store.getData().items,
             last = storeItems.length - 1,
@@ -152,14 +155,15 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
                 rectSprite = textSprite.rectSprite = surface.add({
                     type: 'rect'
                 });
-            } else {
+            }
+            else {
                 rectSprite = textSprite.rectSprite;
                 textSprite.show();
                 rectSprite.show();
             }
 
             rectSprite.setAttributes({
-                x: config.x + (index == last ? -18 : 20),
+                x: config.x + (index === last ? -18 : 20),
                 y: config.y - 36,
                 width: 36 + (diff >= 10 ? (diff >= 100 ? (diff >= 1000 ? 30 : 20) : 10) : 0),
                 height: 22,
@@ -172,14 +176,15 @@ Ext.define('KitchenSink.view.chart.column.RendererController', {
 
             textSprite.setAttributes({
                 text: "+ " + diff,
-                x: config.x + (index == last ? -12 : 28),
+                x: config.x + (index === last ? -12 : 28),
                 y: config.y - 20,
                 fill: 'black',
                 fontSize: 16,
                 zIndex: 10001,
                 scalingY: -1
             });
-        } else {
+        }
+        else {
             textSprites = surface.myTextSprites;
 
             if (textSprites) {

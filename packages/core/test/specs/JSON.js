@@ -62,7 +62,7 @@ topSuite("Ext.JSON", function() {
             it("should convert empty array", function() {
                 expect(encode([])).toEqual("[]");
             });
-            
+
             it("should convert array of numbers to string", function() {
                 expect(encode([1, 2, 3])).toEqual("[1,2,3]");
             });
@@ -122,39 +122,39 @@ topSuite("Ext.JSON", function() {
             it("should convert empty object", function() {
                 expect(encode({})).toEqual("{}");
             });
-            
+
             it("should ignore undefined properties", function() {
                 expect(encode({
                     foo: "bar",
                     bar: undefined
                 })).toEqual("{\"foo\":\"bar\"}");
             });
-            
+
             it("should convert empty object with null property", function() {
                 expect(encode({
                     foo: "bar",
                     bar: null
                 })).toEqual("{\"foo\":\"bar\",\"bar\":null}");
             });
-            
+
             it("should ignore function properties", function() {
                 expect(encode({
                     foo: "bar",
                     bar: Ext.emptyFn
                 })).toEqual("{\"foo\":\"bar\"}");
             });
-            
+
             it("should not encode dom object", function() {
                expect(encode(document.body)).toBe('undefined');
             });
-            
+
             it("should handle encoding unknown child objects", function() {
                 expect(encode({
                     prop: document.body
                 })).toBe('{"prop":undefined}');
             });
         });
-        
+
         describe("toJSON", function() {
             it("should not call toJSON property if it is not a function", function() {
                 expect(function() {
@@ -163,7 +163,7 @@ topSuite("Ext.JSON", function() {
                     });
                 }).not.toThrow();
             });
-            
+
             it("should call toJSON property if it is a function", function() {
                 expect(encode({
                     toJSON: function() {
@@ -171,7 +171,7 @@ topSuite("Ext.JSON", function() {
                     }
                 })).toBe('"{blerg:\\"throbbe\\"}"');
             });
-            
+
             it("should encode values returned by toJSON property", function() {
                 expect(encode({
                     toJSON: function() {
@@ -187,20 +187,20 @@ topSuite("Ext.JSON", function() {
 
         describe('encodeDate', function() {
             var date;
-            
+
             it("should encode a date object", function() {
                 date = new Date("October 13, 1983 04:04:00");
-    
+
                 expect(encode(date)).toEqual("\"1983-10-13T04:04:00\"");
             });
-            
+
             it("should format integers to have at least two digits", function() {
                 date = new Date("August 9, 1983 06:03:02");
-                
+
                 expect(encode(date)).toEqual("\"1983-08-09T06:03:02\"");
             });
         });
-        
+
         describe("mix all possibilities", function() {
             it("should encode data", function() {
                  expect(encode({
@@ -224,26 +224,26 @@ topSuite("Ext.JSON", function() {
                     }
             });
         });
-        
+
         it("should raise an Ext.Error with invalid data", function() {
             expect(function() {
                 Ext.decode('{foo:"bar", x}');
             }).toThrow();
         });
-            
+
         describe("with safe param", function() {
             it("should decode valid data", function() {
                 expect(Ext.decode("{\"foo\":\"bar\"}", true)).toEqual({
                     foo: "bar"
                 });
             });
-            
+
             it("should return null with invalid data", function() {
                 expect(Ext.decode('{foo+"bar"}', true)).toBeNull();
             });
         });
     });
-    
+
     it('should encode and decode an object', function() {
         var object = {
             a: [0, 1, 2],
@@ -269,7 +269,7 @@ topSuite("Ext.JSON", function() {
 
         expect(Ext.JSON.decode(Ext.JSON.encode(object))).toEqual(object);
     });
-    
+
     describe("aliases", function() {
         it("should alias Ext.JSON.decode with Ext.decode", function() {
             expect(Ext.decode).toBe(Ext.JSON.decode);

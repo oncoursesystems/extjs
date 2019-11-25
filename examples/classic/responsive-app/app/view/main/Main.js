@@ -9,7 +9,7 @@ Ext.define('ResponsiveApp.view.main.Main', {
     requires: [
         'Ext.Responsive'
     ],
-    
+
     xtype: 'app-main',
 
     ui: 'navigation',

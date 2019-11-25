@@ -286,7 +286,7 @@ Ext.define('Ext.draw.engine.Canvas', {
      */
     createCanvas: function() {
         var canvas, overrides, ctx, name;
-        
+
         canvas = Ext.Element.create({
             tag: 'canvas',
             cls: Ext.baseCSSPrefix + 'surface-canvas'
@@ -633,7 +633,7 @@ Ext.define('Ext.draw.engine.Canvas', {
                  */
                 createLinearGradient: function(x0, y0, x1, y1) {
                     var grad;
-                    
+
                     this.updatePrecisionCompensateRect();
                     grad = originalCtx.createLinearGradient.call(this, x0 * xx + dx, y0 * yy + dy,
                                                                  x1 * xx + dx, y1 * yy + dy);
@@ -652,7 +652,7 @@ Ext.define('Ext.draw.engine.Canvas', {
                  */
                 createRadialGradient: function(x0, y0, r0, x1, y1, r1) {
                     var grad;
-                    
+
                     this.updatePrecisionCompensateRect();
                     grad = originalCtx.createLinearGradient.call(this, x0 * xx + dx, y0 * xx + dy,
                                                                  r0 * xx, x1 * xx + dx,

@@ -60,7 +60,7 @@ Ext.define('Ext.overrides.event.Event', {
                     var event = doc.createEvent('HTMLEvents');
 
                     event.initEvent(type, bubbles, cancelable);
-                    
+
                     return event;
                 },
 
@@ -100,7 +100,7 @@ Ext.define('Ext.overrides.event.Event', {
                         view = doc.defaultView || window;
 
                     event.initUIEvent(type, bubbles, cancelable, view, detail);
-                    
+
                     return event;
                 },
 
@@ -115,10 +115,10 @@ Ext.define('Ext.overrides.event.Event', {
             API = {
                 createHtmlEvent: function(doc, type, bubbles, cancelable) {
                     var event = doc.createEventObject();
-                    
+
                     event.bubbles = bubbles;
                     event.cancelable = cancelable;
-                    
+
                     return event;
                 },
 
@@ -126,7 +126,7 @@ Ext.define('Ext.overrides.event.Event', {
                     doc, type, bubbles, cancelable, detail, clientX, clientY, ctrlKey, altKey,
                     shiftKey, metaKey, button, relatedTarget) {
                     var event = doc.createEventObject();
-                    
+
                     event.bubbles = bubbles;
                     event.cancelable = cancelable;
                     event.detail = detail;
@@ -140,16 +140,16 @@ Ext.define('Ext.overrides.event.Event', {
                     event.metaKey = metaKey;
                     event.button = crazyIEButtons[button] || button;
                     event.relatedTarget = relatedTarget; // cannot assign to/fromElement
-                    
+
                     return event;
                 },
 
                 createUIEvent: function(doc, type, bubbles, cancelable, detail) {
                     var event = doc.createEventObject();
-                    
+
                     event.bubbles = bubbles;
                     event.cancelable = cancelable;
-                    
+
                     return event;
                 },
 
@@ -176,10 +176,10 @@ Ext.define('Ext.overrides.event.Event', {
             function(name, value) {
                 var bubbles = value[0],
                     cancelable = value[1];
-                
+
                 dispatchers[name] = function(targetEl, srcEvent) {
                     var e = API.createHtmlEvent(name, bubbles, cancelable);
-                    
+
                     API.fireEvent(targetEl, name, e);
                 };
             }
@@ -190,11 +190,11 @@ Ext.define('Ext.overrides.event.Event', {
 
         function createMouseEventDispatcher(type, detail) {
             var cancelable = (type !== 'mousemove');
-            
+
             return function(targetEl, srcEvent) {
                 var xy = srcEvent.getXY(),
                     e;
-                
+
                 e = API.createMouseEvent(targetEl.ownerDocument, type, true, cancelable,
                                          detail, xy[0], xy[1], srcEvent.ctrlKey, srcEvent.altKey,
                                          srcEvent.shiftKey, srcEvent.metaKey, srcEvent.button,
@@ -224,10 +224,10 @@ Ext.define('Ext.overrides.event.Event', {
             function(name, value) {
                 var bubbles = value[0],
                     cancelable = value[1];
-                
+
                 dispatchers[name] = function(targetEl, srcEvent) {
                     var e = API.createUIEvent(targetEl.ownerDocument, name, bubbles, cancelable, 1);
-                    
+
                     API.fireEvent(targetEl, name, e);
                 };
             });
@@ -296,14 +296,14 @@ Ext.define('Ext.overrides.event.Event', {
                 if (event.type === 'mousedown') {
                     target = event.target;
                     unselectable = target.getAttribute('unselectable');
-                    
+
                     if (unselectable !== 'on') {
                         target.setAttribute('unselectable', 'on');
-                        
+
                         fn = function() {
                             target.setAttribute('unselectable', unselectable);
                         };
-                        
+
                         // This function is hard to track, with a potential to be called
                         // for any HtmlElement in the document. It may be a Fly, it may
                         // not belong to any Component, and it may even be created by
@@ -314,14 +314,14 @@ Ext.define('Ext.overrides.event.Event', {
                         //<debug>
                         fn.$skipTimerCheck = true;
                         //</debug>
-                        
+
                         Ext.defer(fn, 1);
                     }
                 }
-                
+
                 // IE9 and earlier do not support preventDefault
                 event.returnValue = false;
-                
+
                 // Some keys events require setting the keyCode to -1 to be prevented
                 // all ctrl + X and F1 -> F12
                 if (event.ctrlKey || event.keyCode > 111 && event.keyCode < 124) {
@@ -388,7 +388,7 @@ Ext.define('Ext.overrides.event.Event', {
 
             constructor: function(event, info, touchesMap, identifiers) {
                 var me = this;
-                
+
                 me.callParent([event, info, touchesMap, identifiers]);
                 me.button = btnMap[event.button];
 
@@ -423,14 +423,14 @@ Ext.define('Ext.overrides.event.Event', {
 
                 if (!me.relatedTarget) {
                     type = me.type;
-                    
+
                     if (me.mouseLeaveRe.test(type)) {
                         target = me.toElement;
                     }
                     else if (me.mouseEnterRe.test(type)) {
                         target = me.fromElement;
                     }
-                    
+
                     if (target) {
                         me.relatedTarget = me.self.resolveTextNode(target);
                     }
@@ -445,7 +445,7 @@ Ext.define('Ext.overrides.event.Event', {
         // between keydown/keyup pair.
         document.attachEvent('onkeydown', Ext.event.Event.globalTabKeyDown);
         document.attachEvent('onkeyup', Ext.event.Event.globalTabKeyUp);
-        
+
         window.attachEvent('onunload', function() {
             document.detachEvent('onkeydown', Ext.event.Event.globalTabKeyDown);
             document.detachEvent('onkeyup', Ext.event.Event.globalTabKeyUp);

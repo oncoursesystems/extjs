@@ -163,7 +163,7 @@ function() {
 
         return spy;
     }
-    
+
     function makeTreeGrid(cfg, storeCfg) {
         tree = new Ext.tree.Panel(Ext.apply({
             animate: false,
@@ -230,7 +230,7 @@ function() {
             });
         });
     });
-    
+
     describe('Model mutation', function() {
         it('should not have to render a whole row, it should update innerHTML of cell', function() {
             var createRowSpy;
@@ -251,7 +251,7 @@ function() {
             expect(createRowSpy).not.toHaveBeenCalled();
         });
     });
-    
+
     describe('locking and variableRowHeight', function() {
         beforeEach(function() {
             makeTreeGrid({
@@ -282,7 +282,7 @@ function() {
             });
             tree.expandAll();
         });
-        
+
         it('should synchronize row heights', function() {
             var lockedTree = tree.lockedGrid,
                 normalGrid = tree.normalGrid,
@@ -298,7 +298,7 @@ function() {
 
                 return rect.height || (rect.bottom - rect.top);
             }
-                
+
             record = store.findRecord('f1', '3.3');
             regNode = normalView.getNode(record);
             lockedNode = lockedView.getNode(record);
@@ -309,19 +309,19 @@ function() {
             runs(function() {
                 regNodeHeight = getRectHeight(regNode);
                 lockedNodeHeight = getRectHeight(lockedNode);
-    
+
                 // This may be calculated differently between different rows that are
                 // actually the "same height" despite deviation of a few thousandths
                 // of a pixel, specifically in IE/Edge. Fix the value so it's within
                 // 1/10th of a pixel.
                 regNodeHeight = Ext.Number.toFixed(regNodeHeight, 1);
                 lockedNodeHeight = Ext.Number.toFixed(lockedNodeHeight, 1);
-                
+
                 expect(regNodeHeight).toBe(lockedNodeHeight);
             });
         });
     });
-    
+
     describe('autoloading', function() {
         it('should not autoload the store if the root is visible', function() {
             var loadCount = 0;
@@ -451,7 +451,7 @@ function() {
             runs(function() {
                 expect(tree.view.getScrollable().getPosition().y).toBe(40);
             });
-            
+
             runs(function() {
                 tree.getRootNode().childNodes[1].expand();
             });
@@ -466,7 +466,7 @@ function() {
                 expect(tree.view.getScrollY()).toEqual(40);
             });
         });
-        
+
         it("should not not scroll horizontally upon node toggle", function() {
             // MUST be no scroll so that the non buffered rendering pathway is used
             // and the row count changes and a layout is triggered.
@@ -486,7 +486,7 @@ function() {
             runs(function() {
                 expect(tree.view.getScrollable().getPosition().x).toBe(40);
             });
-            
+
             runs(function() {
                 tree.getRootNode().childNodes[1].expand();
             });
@@ -789,7 +789,7 @@ function() {
             expect(rt.childNodes[1].data.new_url).toEqual('new-url2');
             expect(rt.childNodes[1].childNodes[0].data.new_task).toEqual('new-task2.1');
             expect(rt.childNodes[1].childNodes[0].data.new_url).toEqual('new-url2.1');
-            
+
             myTree.destroy();
             Ext.undefine('ReconfigureTestTask');
             Ext.undefine('ReconfigureTestNewTask');

@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.direct.Generic', {
             interval: 3
         },
         formulas: {
-            intervalText: function (get) {
+            intervalText: function(get) {
                 var interval = get('interval');
 
                 return interval ? interval + ' sec' : 'Paused';
@@ -58,7 +58,7 @@ Ext.define('KitchenSink.view.direct.Generic', {
         }
     },
 
-    padding: '${padding}', //give room for the grid's shadow
+    padding: '${padding}', // give room for the grid's shadow
     shadow: false,
     //</example>
 
@@ -83,7 +83,7 @@ Ext.define('KitchenSink.view.direct.Generic', {
             type: 'hbox',
             align: 'stretch'
         },
-        defaults: function (cfg) {
+        defaults: function(cfg) {
             cfg = Ext.apply({
                 shadow: '${tbarShadow}',
                 margin: '0 10 0 0'
@@ -109,7 +109,7 @@ Ext.define('KitchenSink.view.direct.Generic', {
                     group: 'interval',
                     text: 'Pause',
                     value: null
-                }].concat((function (i, length, cfg) {
+                }].concat((function(i, length, cfg) {
                     var items = [],
                         item;
 
@@ -121,7 +121,8 @@ Ext.define('KitchenSink.view.direct.Generic', {
 
                         if (i === 1) {
                             item.separator = true;
-                        } else if (i === 3) {
+                        }
+                        else if (i === 3) {
                             item.checked = true;
                         }
 

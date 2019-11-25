@@ -9,17 +9,17 @@ Ext.define('KitchenSink.view.form.Tag', {
     requires: [
         'Ext.form.field.Tag'
     ],
-    
+
     exampleTitle: 'Tag Field',
     otherContent: [{
         type: 'Store',
         path: 'app/store/States.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/State.js'
     }],
     //</example>
-    
+
     title: 'Select State(s)',
     bodyPadding: 5,
     frame: true,

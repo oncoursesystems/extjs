@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.chart.financial.CandlestickController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.candlestick-financial',
 
-    doToggle: function (crosshair, panzoom) {
+    doToggle: function(crosshair, panzoom) {
         var chart = this.lookup('chart'),
             panzoomInteraction = chart.getInteraction('panzoom'),
             crosshairInteraction = chart.getInteraction('crosshair');
@@ -15,15 +15,15 @@ Ext.define('KitchenSink.view.chart.financial.CandlestickController', {
         }
     },
 
-    onCrosshair: function () {
+    onCrosshair: function() {
         this.doToggle(true, false);
     },
 
-    onPan: function () {
+    onPan: function() {
         this.doToggle(false, 'pan');
     },
 
-    onZoom: function () {
+    onZoom: function() {
         this.doToggle(false, 'zoom');
     }
 });

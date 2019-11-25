@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.chart.drawing.HitTestComponent', {
         mouseMove: 'onMouseEvent'
     },
 
-    onMouseEvent: function (e) {
+    onMouseEvent: function(e) {
         var me = this,
             surface = me.getSurface(),
             hitResult = surface.hitTestEvent(e),

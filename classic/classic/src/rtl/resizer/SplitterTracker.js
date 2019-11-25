@@ -13,7 +13,6 @@ Ext.define('Ext.rtl.resizer.SplitterTracker', {
             : this.callParent(arguments);
     },
 
-
     getVertNextConstrainLeft: function(o) {
         return (!this.splitter.getInherited().rtl !== !Ext.rootInheritedState.rtl)
             ? o.nextBox.x + (o.nextCmp.minWidth || o.defaultMin)
@@ -28,11 +27,11 @@ Ext.define('Ext.rtl.resizer.SplitterTracker', {
 
     getResizeOffset: function() {
         var offset = this.getOffset('dragTarget');
-        
+
         if (!this.splitter.getInherited().rtl !== !Ext.rootInheritedState.rtl) {
             offset[0] = -offset[0];
         }
-        
+
         return offset;
     }
 });

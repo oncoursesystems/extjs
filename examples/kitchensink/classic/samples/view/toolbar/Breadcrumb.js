@@ -24,6 +24,9 @@ Ext.define('KitchenSink.view.toolbar.Breadcrumb', {
         },
         graphite: {
             width: 710
+        },
+        'classic-material': {
+            width: 710
         }
     },
     //</example>
@@ -33,14 +36,14 @@ Ext.define('KitchenSink.view.toolbar.Breadcrumb', {
     overflowHandler: 'scroller',
     bodyPadding: 20,
     html: KitchenSink.DummyText.longText,
-    
+
     tbar: [{
         xtype: 'breadcrumb',
         showIcons: true,
         store: {
             type: 'files'
         },
-        
+
         items: [{
             xtype: 'component',
             html: 'Split buttons:',
@@ -50,7 +53,7 @@ Ext.define('KitchenSink.view.toolbar.Breadcrumb', {
             }
         }]
     }],
-    
+
     bbar: [{
         xtype: 'breadcrumb',
         showIcons: true,
@@ -58,7 +61,7 @@ Ext.define('KitchenSink.view.toolbar.Breadcrumb', {
         store: {
             type: 'files'
         },
-        
+
         items: [{
             xtype: 'component',
             html: 'Normal buttons:',

@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.data.YQLController', {
         return Ext.XTemplate.get(tpl);
     },
 
-    onLoad: function () {
+    onLoad: function() {
         this.getView().setMasked({
             xtype: 'loadmask',
             message: 'Loading...'
@@ -27,19 +27,20 @@ Ext.define('KitchenSink.view.data.YQLController', {
             url: 'http://query.yahooapis.com/v1/public/yql',
             callbackKey: 'callback',
             params: {
-                env : 'store://datatables.org/alltableswithkeys',
+                env: 'store://datatables.org/alltableswithkeys',
                 format: 'json',
                 q: 'select * from rss where url="http://feeds.feedburner.com/sencha" limit 5'
             }
         });
     },
 
-    loadCallback: function (success, response) {
+    loadCallback: function(success, response) {
         var results = success && response.query && response.query.results;
 
         if (results) {
             this.lookup('results').setHtml(this.getTpl().apply(results));
-        } else {
+        }
+        else {
             Ext.Msg.alert('Error', 'There was an error retrieving the YQL request.');
         }
 

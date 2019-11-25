@@ -17,30 +17,30 @@ Ext.define('Ext.sparkline.Discrete', {
          * graph height.
          */
         lineHeight: 'auto',
-        
+
         /**
          * @cfg {String} thresholdColor Colour to use in combination with {@link #thresholdValue}
          */
         thresholdColor: null,
-        
+
         /**
          * @cfg {Number} thresholdValue Values less than this value will be drawn using
          * {@link #thresholdColor} instead of lineColor
          */
         thresholdValue: 0,
-        
+
         /**
          * @cfg {Number} [chartRangeMax] The maximum value to use for the range of Y values
          * of the chart - Defaults to the maximum value supplied.
          */
         chartRangeMax: null,
-        
+
         /**
          * @cfg {Number} [chartRangeMin] The minimum value to use for the range of Y values
          * of the chart - Defaults to the minimum value supplied.
          */
         chartRangeMin: null,
-        
+
         /**
          * @cfg {Boolean} chartRangeClip If true then the y values supplied to plot will be clipped
          * to fall between {@link #chartRangeMin} and {@link #chartRangeMax} - By default
@@ -122,7 +122,7 @@ Ext.define('Ext.sparkline.Discrete', {
         val = Ext.Number.constrain(values[valuenum], min, max);
         x = valuenum * interval;
         ytop = Math.round(pheight - pheight * ((val - min) / range));
-        
+
         color = (thresholdColor && val < me.getThresholdValue())
             ? thresholdColor
             : me.getLineColor();

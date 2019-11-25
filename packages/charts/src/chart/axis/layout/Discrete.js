@@ -89,7 +89,7 @@ Ext.define('Ext.chart.axis.layout.Discrete', {
     snapEnds: function(context, min, max, estStepSize) {
         var data = context.data,
             steps;
-        
+
         estStepSize = Math.ceil(estStepSize);
         steps = Math.floor((max - min) / estStepSize);
 

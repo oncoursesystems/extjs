@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.layout.CardTabs', {
 
     items: [{
         title: 'Tab 1',
-        html:   'Note that the Ext.tab.Panel (TabPanel) component uses an internal CardLayout -- it is not ' +
+        html: 'Note that the Ext.tab.Panel (TabPanel) component uses an internal CardLayout -- it is not ' +
                 'something you have to explicitly configure.  However, it is still a perfect ' +
                 'example of how this layout style can be used in a complex component.'
     }, {

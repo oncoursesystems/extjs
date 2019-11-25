@@ -9,51 +9,51 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
         'Ext.form.field.Text',
         'Ext.ux.statusbar.StatusBar'
     ],
-    
+
     /**
      * @private
      * search value initialization
      */
     searchValue: null,
-    
+
     /**
      * @private
      * The matched positions from the most recent search
      */
     matches: [],
-    
+
     /**
      * @private
      * The current index matched.
      */
     currentIndex: null,
-    
+
     /**
      * @private
      * The generated regular expression used for searching.
      */
     searchRegExp: null,
-    
+
     /**
      * @private
      * Case sensitive mode.
      */
     caseSensitive: false,
-    
+
     /**
      * @private
      * Regular expression mode.
      */
     regExpMode: false,
-    
+
     /**
      * @cfg {String} matchCls
      * The matched string css classe.
      */
     matchCls: 'x-livesearch-match',
-    
+
     defaultStatusText: 'Nothing Found',
-    
+
     // Component initialization override: adds the top and bottom toolbars and setup
     // headers renderer.
     initComponent: function() {
@@ -101,10 +101,10 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
             defaultText: me.defaultStatusText,
             name: 'searchStatusBar'
         });
-        
+
         me.callParent(arguments);
     },
-    
+
     // afterRender override: it adds textfield and statusbar reference and start monitoring
     // keydown events in textfield input 
     afterRender: function() {
@@ -126,10 +126,10 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
 
     // detects html tag
     tagsRe: /<[^>]*>/gm,
-    
+
     // DEL ASCII code
     tagsProtect: '\x0f',
-    
+
     /**
      * In normal mode it returns the value with protected regexp characters.
      * In regular expression mode it returns the raw value except if the regexp is invalid.
@@ -139,7 +139,7 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
     getSearchValue: function() {
         var me = this,
             value = me.textField.getValue();
-            
+
         if (value === '') {
             return null;
         }
@@ -168,7 +168,7 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
 
         return value;
     },
-    
+
     /**
      * Finds all strings that matches the searched value in each grid cells.
      * @private
@@ -249,7 +249,7 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
             me.textField.focus();
         }
     },
-    
+
     /**
      * Selects the previous row containing a match.
      * @private
@@ -265,7 +265,7 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
             me.gotoCurrent();
         }
     },
-    
+
     /**
      * Selects the next row containing a match.
      * @private
@@ -281,7 +281,7 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
             me.gotoCurrent();
         }
     },
-    
+
     /**
      * Switch to case sensitive mode.
      * @private
@@ -290,7 +290,7 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
         this.caseSensitive = checked;
         this.onTextFieldChange();
     },
-    
+
     /**
      * Switch to regular expression mode
      * @private

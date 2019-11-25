@@ -159,7 +159,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                     byteLength: me.readUInt(4),
                     value: me.readValue()
                 });
-                
+
                 // reset references (reference indices are local to each header)
                 strings = me.strings = [];
                 objects = me.objects = [];
@@ -174,7 +174,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                     byteLength: me.readUInt(4),
                     body: me.readValue()
                 });
-                
+
                 // reset references (reference indices are local to each message)
                 strings = me.strings = [];
                 objects = me.objects = [];
@@ -183,14 +183,13 @@ Ext.define('Ext.data.amf.Packet', function() {
 
             // reset the pointer
             pos = 0;
-            
+
             // null the bytes array and reference arrays to free up memory.
             bytes = strings = objects = traits =
                 me.bytes = me.strings = me.objects = me.traits = null;
 
             return me;
         },
-
 
         /**
          * Decodes an AMF3 byte array and that has one value and returns it.
@@ -234,8 +233,6 @@ Ext.define('Ext.data.amf.Packet', function() {
             // read one value and return it
             return me.readValue();
         },
-
-
 
         /**
          * Parses an xml string and returns an xml document
@@ -327,7 +324,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                 // remaining 1-28 bits are used to encode the length of the
                 // dense portion of the array.
                 count = (header >> 1);
-                
+
                 // First read the associative portion of the array (if any).  If
                 // there is an associative portion, the array will be read as a
                 // javascript object, otherwise it will be a javascript array.
@@ -420,13 +417,13 @@ Ext.define('Ext.data.amf.Packet', function() {
                 if (headerLast3Bits === 3) {
                     // If the 3 least significant bits of the header are "011"
                     // then trait information follows.
-                    
+
                     className = me.readAmf3String();
                     // A 1 in the header's 4th least significant byte position
                     // indicates that dynamic members may follow the sealed
                     // members.
                     dynamic = !!(header & 0x08);
-                    
+
                     // Shift off the 4 least significant bits, and the remaining
                     // 1-25 bits encode the number of sealed member names. Read
                     // as many strings from the byte array as member names.
@@ -441,7 +438,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                         dynamic: dynamic,
                         members: members
                     };
-                    
+
                     // An objects traits are cached in the traits array enabling
                     // the traits for a given class to only be encoded once for
                     // a series of instances.
@@ -580,13 +577,13 @@ Ext.define('Ext.data.amf.Packet', function() {
                 // If the first (low) bit is a 1, this is a ByteArray instance.
                 // The remaining 1-28 bits encode the ByteArray's byte-length.
                 end = pos + (header >> 1);
-                
+
                 // Depending on the browser, "bytes" may be either a Uint8Array
                 // or an Array.  Uint8Arrays don't have Array methods, so
                 // we have to use Array.prototype.slice to get the byteArray
                 byteArray = Array.prototype.slice.call(bytes, pos, end);
                 objects.push(byteArray);
-                
+
                 // move the pointer to the first byte after the byteArray that
                 // was just read
                 pos = end;
@@ -611,7 +608,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                 // We read this bit by shifting the 7 least significant bits of
                 // byte1 off to the right.
                 sign = (byte1 >> 7) ? -1 : 1,
-                
+
                 // the exponent takes up the next 11 bits.
                 exponent =
                     // extract the 7 least significant bits from byte1 and then
@@ -621,11 +618,11 @@ Ext.define('Ext.data.amf.Packet', function() {
                      // add the 4 most significant bits from byte 2 to complete
                      // the exponent
                      (byte2 >> 4)),
-                
+
                 // the remaining 52 bits make up the significand. read the 4
                 // least significant bytes of byte 2 to begin the significand
                 significand = (byte2 & 0x0F),
-                
+
                 // The most significant bit of the significand is always 1 for
                 // a normalized number, therefore it is not stored. This bit is
                 // referred to as the "hidden bit". The true bit width of the
@@ -670,7 +667,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                 // representation with the zero offset being 0x3FF (1023),
                 // so we have to subtract 0x3FF to get the true exponent
                 Math.pow(2, exponent - 0x3FF) *
-                
+
                 // convert the significand to its decimal value by multiplying
                 // it by 2^52 and then add the hidden bit
                 (hiddenBit + twoPowN52 * significand);
@@ -762,7 +759,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                 klass, instance, modified;
 
             klass = Ext.ClassManager.getByAlias('amf.' + className);
-            
+
             // if there is no klass, mark the classname for easier parsing of returned results
             instance = klass ? new klass() : { $className: className };
 
@@ -826,7 +823,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                 // if the high order bit of the first byte is a 1, the next byte
                 // is also part of this integer.
                 nextByte = bytes[pos++];
-                
+
                 // remove the high order bit from both bytes before combining them
                 value = ((value & 0x7F) << 7) | (nextByte & 0x7F);
 
@@ -834,7 +831,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                     // if the high order byte of the 2nd byte is a 1, then
                     // there is a 3rd byte
                     nextByte = bytes[pos++];
-                    
+
                     // remove the high order bit from the 3rd byte before
                     // adding it to the value
                     value = (value << 7) | (nextByte & 0x7F);
@@ -842,7 +839,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                     if (nextByte & 0x80) {
                         // 4th byte is also part of the integer
                         nextByte = bytes[pos++];
-                        
+
                         // use all 8 bits of the 4th byte
                         value = (value << 8) | nextByte;
                     }
@@ -921,7 +918,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                         // a leading-byte value greater than 239 means this is a
                         // 4-byte character
                         byteCount = 4;
-                        
+
                         // Use only the 3 least-significant bits of the leading
                         // byte of a 4-byte character. This is achieved by
                         // applying the following bit mask:
@@ -935,7 +932,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                         // a leading-byte value greater than 223 but less than
                         // 240 means this is a 3-byte character
                         byteCount = 3;
-                        
+
                         // Use only the 4 least-significant bits of the leading
                         // byte of a 3-byte character. This is achieved by
                         // applying the following bit mask:
@@ -949,7 +946,7 @@ Ext.define('Ext.data.amf.Packet', function() {
                         // a leading-byte value less than 224 but (implicitly)
                         // greater than 191 means this is a 2-byte character
                         byteCount = 2;
-                        
+
                         // Use only the 5 least-significant bits of the first
                         // byte of a 2-byte character. This is achieved by
                         // applying the following bit mask:

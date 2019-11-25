@@ -9,6 +9,8 @@ Ext.define('Ext.scroll.NativeScroller', {
     ],
 
     config: {
+        monitorScroll: null,
+
         /**
          * @cfg {Ext.dom.Element}
          * @private
@@ -119,7 +121,7 @@ Ext.define('Ext.scroll.NativeScroller', {
             dom = element.dom;
 
             if (x || y) {
-                scrollbarSize = Ext.getScrollbarSize();
+                scrollbarSize = Ext.scrollbar.size();
             }
 
             if (x === 'scroll') {
@@ -563,7 +565,7 @@ Ext.define('Ext.scroll.NativeScroller', {
             if (deltaX || deltaY) {
                 // if we have an event here, it was caused by DOM changes
                 if (e) {
-                    if (!me.getX() && !me.getY()) {
+                    if (!me.getX() && !me.getY() && !me.getMonitorScroll()) {
                         e.preventDefault();
 
                         return;
@@ -576,11 +578,11 @@ Ext.define('Ext.scroll.NativeScroller', {
                 if (!me.isScrolling) {
                     me.setPrimary(true);
 
-                    me.callPartners('onPartnerScrollStart', x, y, deltaX, deltaY);
+                    me.callPartners('onPartnerScrollStart', x, y);
 
                     me.fireScrollStart(x, y, deltaX, deltaY);
 
-                    me.callPartners('fireScrollStart', x, y, deltaX, deltaY);
+                    me.callPartners('fireScrollStart', x, y);
                 }
 
                 if (me.isPrimary) {
@@ -588,7 +590,7 @@ Ext.define('Ext.scroll.NativeScroller', {
 
                     me.fireScroll(x, y, deltaX, deltaY);
 
-                    me.callPartners('fireScroll', x, y, deltaX, deltaY);
+                    me.callPartners('fireScroll', x, y);
 
                     me.onScrollEnd(x, y);
                 }

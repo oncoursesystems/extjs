@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.d3.custom.svg.TransitionsController', {
         [3, 7, 2, 40]
     ],
 
-    onSceneSetup: function (component, scene) {
+    onSceneSetup: function(component, scene) {
         var me = this,
             view = me.getView(),
             width = view.getWidth(),
@@ -61,27 +61,31 @@ Ext.define('KitchenSink.view.d3.custom.svg.TransitionsController', {
             .enter()
                 .append('circle')
                 .attr('r', '5')
-                .style('fill', function (d, i) {
+                .style('fill', function(d, i) {
                     return d3.hsl(i / steps * 360, 1, 0.5);
                 })
                 .call(position);
 
         resetProgress();
 
-        timer = d3.interval(function () {
+        timer = d3.interval(function() {
             if (view.isDestroyed) {
                 timer.stop();
+
                 return;
             }
+
             if (datasetIndex < me.datasets.length - 1) {
                 datasetIndex++;
-            } else {
+            }
+            else {
                 datasetIndex = 0;
             }
+
             scene.selectAll('circle').data(me.datasets[datasetIndex])
                 .transition()
                 .duration(1000)
-                .delay(function (d, i) {
+                .delay(function(d, i) {
                     return i * 10;
                 })
                 .ease(easings[Math.floor(Math.random() * easings.length)])
@@ -93,10 +97,10 @@ Ext.define('KitchenSink.view.d3.custom.svg.TransitionsController', {
 
         function position(selection) {
             selection
-                .attr('cx', function (d) {
+                .attr('cx', function(d) {
                     return d[0];
                 })
-                .attr('cy', function (d) {
+                .attr('cy', function(d) {
                     return d[1];
                 });
         }
@@ -107,7 +111,7 @@ Ext.define('KitchenSink.view.d3.custom.svg.TransitionsController', {
         }
 
         function progress(selection) {
-            selection.attr('width', function (d) {
+            selection.attr('width', function(d) {
                 return d;
             });
         }

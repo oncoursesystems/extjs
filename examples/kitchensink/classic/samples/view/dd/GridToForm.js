@@ -22,7 +22,7 @@ Ext.define('KitchenSink.view.dd.GridToForm', {
         path: 'classic/samples/model/dd/Simple.js'
     }],
     //</example>
-    
+
     width: '${width}',
     height: 300,
 
@@ -40,6 +40,12 @@ Ext.define('KitchenSink.view.dd.GridToForm', {
             columnTwoWidth: 80
         },
         graphite: {
+            width: 790,
+            gridWidth: 365,
+            columnOneWidth: 100,
+            columnTwoWidth: 100
+        },
+        'classic-material': {
             width: 790,
             gridWidth: 365,
             columnOneWidth: 100,
@@ -72,42 +78,42 @@ Ext.define('KitchenSink.view.dd.GridToForm', {
         },
 
         tools: [{
-            glyph: 'xf021@FontAwesome',
+            glyph: 'xf021@\'Font Awesome 5 Free\'',
             tooltip: 'Reset example',
             handler: 'onResetClick'
         }],
-        
+
         selModel: {
             selType: 'rowmodel',
-            singleSelect : true
+            singleSelect: true
         },
-        
+
         store: {
             model: 'KitchenSink.model.dd.Simple',
             data: [
-                { name : 'Record 0', column1 : '0', column2 : '0' },
-                { name : 'Record 1', column1 : '1', column2 : '1' },
-                { name : 'Record 2', column1 : '2', column2 : '2' },
-                { name : 'Record 3', column1 : '3', column2 : '3' },
-                { name : 'Record 4', column1 : '4', column2 : '4' },
-                { name : 'Record 5', column1 : '5', column2 : '5' },
-                { name : 'Record 6', column1 : '6', column2 : '6' },
-                { name : 'Record 7', column1 : '7', column2 : '7' },
-                { name : 'Record 8', column1 : '8', column2 : '8' },
-                { name : 'Record 9', column1 : '9', column2 : '9' }
+                { name: 'Record 0', column1: '0', column2: '0' },
+                { name: 'Record 1', column1: '1', column2: '1' },
+                { name: 'Record 2', column1: '2', column2: '2' },
+                { name: 'Record 3', column1: '3', column2: '3' },
+                { name: 'Record 4', column1: '4', column2: '4' },
+                { name: 'Record 5', column1: '5', column2: '5' },
+                { name: 'Record 6', column1: '6', column2: '6' },
+                { name: 'Record 7', column1: '7', column2: '7' },
+                { name: 'Record 8', column1: '8', column2: '8' },
+                { name: 'Record 9', column1: '9', column2: '9' }
             ]
         },
 
         columns: [{
             header: 'Record Name',
             dataIndex: 'name',
-            
-            flex:  1,
+
+            flex: 1,
             sortable: true
         }, {
             header: 'column1',
             dataIndex: 'column1',
-            
+
             width: '${columnOneWidth}',
             sortable: true
         }, {
@@ -121,7 +127,7 @@ Ext.define('KitchenSink.view.dd.GridToForm', {
         xtype: 'form',
         title: 'Generic Form Panel',
         reference: 'form',
-		width:300,
+        width: 300,
         flex: 1,
         bodyPadding: 10,
         labelWidth: 100,

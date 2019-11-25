@@ -2,13 +2,13 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkersController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.line-markers',
 
-    onRefresh: function () {
+    onRefresh: function() {
         var store = this.getChart().getStore();
 
         store.refreshData();
     },
 
-    onPanZoomReset: function () {
+    onPanZoomReset: function() {
         var chart = this.lookup('chart'),
             axes = chart.getAxes();
 
@@ -17,20 +17,25 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkersController', {
         chart.redraw();
     },
 
-    onAxisRangeChange: function (axis, range) {
+    onAxisRangeChange: function(axis, range) {
+        var max;
+
         if (!range) {
             return;
         }
+
         // expand the range slightly to make sure markers aren't clipped
-        var max = range[1];
+        max = range[1];
+
         if (max >= 1000) {
             range[1] = max - max % 100 + 100;
-        } else {
+        }
+        else {
             range[1] = max - max % 50 + 50;
         }
     },
 
-    onAfterRender: function () {
+    onAfterRender: function() {
         var chart = this.lookup('chart'),
             toolbar = this.lookup('toolbar'),
             panzoom = chart.getInteractions()[0];

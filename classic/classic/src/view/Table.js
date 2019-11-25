@@ -15,7 +15,7 @@ Ext.define('Ext.view.Table', {
     extend: 'Ext.view.View',
     xtype: [ 'tableview', 'gridview' ],
     alternateClassName: 'Ext.grid.View',
-    
+
     requires: [
         'Ext.grid.CellContext',
         'Ext.view.TableLayout',
@@ -63,7 +63,7 @@ Ext.define('Ext.view.Table', {
             "beforeselect",
             "selectionchange"
         ],
-        
+
         // These events are relayed from both views because they are fired independently.
         /**
          * @private
@@ -201,7 +201,7 @@ Ext.define('Ext.view.Table', {
     positionBody: true,
     positionCells: false,
     stripeOnUpdate: null,
-    
+
     /**
      * @property {Boolean} actionableMode
      * This value is `true` when the grid has been set to actionable mode by the user.
@@ -321,7 +321,7 @@ Ext.define('Ext.view.Table', {
             '%}',
             '{[view.renderTFoot(values, out, parent)]}',
         '</div>',
-        
+
         // This template is shared on the Ext.view.Table prototype, so we have to
         // clean up the closed over variables. Otherwise we'll retain the last values
         // of the template execution!
@@ -408,7 +408,7 @@ Ext.define('Ext.view.Table', {
         itemClasses: [],
         rowClasses: []
     },
-    
+
     cellValues: {
         classes: [
             // for styles shared between cell and rowwrap
@@ -643,7 +643,7 @@ Ext.define('Ext.view.Table', {
      * @param {Ext.grid.CellContext} e.position A CellContext object which defines
      * the target row.
      */
-   
+
     /**
      * @event beforerowexit
      * Fired when View is asked to exit Actionable mode in the current row,
@@ -662,7 +662,7 @@ Ext.define('Ext.view.Table', {
         if (config.grid.isTree) {
             config.baseCls = Ext.baseCSSPrefix + 'tree-view';
         }
-        
+
         this.callParent([config]);
     },
 
@@ -674,7 +674,7 @@ Ext.define('Ext.view.Table', {
      */
     hasVariableRowHeight: function(fromLockingPartner) {
         var me = this;
-        
+
         return me.variableRowHeight || me.store.isGrouped() ||
                me.getVisibleColumnManager().hasVariableRowHeight() ||
                // If not already called from a locking partner, and there is a locking partner,
@@ -689,7 +689,7 @@ Ext.define('Ext.view.Table', {
         if (me.columnLines) {
             me.addCls(me.grid.colLinesCls);
         }
-        
+
         if (me.rowLines) {
             me.addCls(me.grid.rowLinesCls);
         }
@@ -720,7 +720,7 @@ Ext.define('Ext.view.Table', {
 
         me.itemSelector = me.getItemSelector();
         me.all = new Ext.view.NodeCache(me);
-        
+
         me.actionRowFly = new Ext.dom.Fly();
 
         me.callParent();
@@ -764,7 +764,7 @@ Ext.define('Ext.view.Table', {
                     selModel.type = grid.selType || selModel.selType || selModel.type ||
                                     defaultType;
                 }
-                
+
                 if (!selModel.mode) {
                     if (grid.simpleSelect) {
                         selModel.mode = 'SIMPLE';
@@ -773,7 +773,7 @@ Ext.define('Ext.view.Table', {
                         selModel.mode = 'MULTI';
                     }
                 }
-                
+
                 selModel = Ext.Factory.selection(Ext.apply({
                     allowDeselect: grid.allowDeselect,
                     locked: disableSelection
@@ -795,17 +795,17 @@ Ext.define('Ext.view.Table', {
             });
             Ext.destroy(me.selModelRelayer);
         }
-        
+
         me.selModelRelayer = me.relayEvents(selModel, [
             'selectionchange', 'beforeselect', 'beforedeselect', 'select', 'deselect', 'focuschange'
         ]);
-        
+
         selModel.on({
             scope: me,
             lastselectedchanged: me.updateBindSelection,
             selectionchange: me.updateBindSelection
         });
-        
+
         me.selModel = selModel;
     },
 
@@ -863,7 +863,7 @@ Ext.define('Ext.view.Table', {
                         Ext.fly(cells[0]).addCls(me.lastCls);
                         continue;
                     }
-                    
+
                     if (fromIdx === 0) {
                         Ext.fly(cells[0]).removeCls(me.firstCls);
                         Ext.fly(cells[1]).addCls(me.firstCls);
@@ -872,7 +872,7 @@ Ext.define('Ext.view.Table', {
                         Ext.fly(cells[lastIndex]).removeCls(me.lastCls);
                         Ext.fly(cells[lastIndex - 1]).addCls(me.lastCls);
                     }
-                    
+
                     if (toIdx === 0) {
                         Ext.fly(cells[0]).removeCls(me.firstCls);
                         Ext.fly(cells[fromIdx]).addCls(me.firstCls);
@@ -896,7 +896,7 @@ Ext.define('Ext.view.Table', {
                             fragment.appendChild(cells[fromIdx]);
                         }
                     }
-                    
+
                     tr.insertBefore(fragment, cells[destinationCellIdx] || null);
                 }
                 else {
@@ -906,7 +906,7 @@ Ext.define('Ext.view.Table', {
 
             // Shuffle the <col> elements in all <colgroup>s
             colGroups = me.el.query('colgroup');
-            
+
             for (i = 0, len = colGroups.length; i < len; i++) {
                 // Extract the colgroup
                 tr = colGroups[i];
@@ -924,7 +924,7 @@ Ext.define('Ext.view.Table', {
                             fragment.appendChild(tr.childNodes[fromIdx]);
                         }
                     }
-                    
+
                     tr.insertBefore(fragment, tr.childNodes[destinationCellIdx] || null);
                 }
                 else {
@@ -977,14 +977,14 @@ Ext.define('Ext.view.Table', {
     getCell: function(record, column, returnElement) {
         var row = this.getRow(record),
             cell;
-        
+
         if (row) {
             if (typeof column === 'number') {
                 column = this.getHeaderAtIndex(column);
             }
-            
+
             cell = row.querySelector(column.getCellSelector());
-            
+
             return returnElement ? Ext.get(cell) : cell;
         }
     },
@@ -996,7 +996,7 @@ Ext.define('Ext.view.Table', {
      */
     getFeature: function(id) {
         var features = this.featuresMC;
-        
+
         if (features) {
             return features.get(id);
         }
@@ -1036,16 +1036,16 @@ Ext.define('Ext.view.Table', {
 
         me.featuresMC = new Ext.util.MixedCollection();
         features = me.features = me.constructFeatures();
-        
+
         for (i = 0, len = features ? features.length : 0; i < len; i++) {
             feature = features[i];
 
             // inject a reference to view and grid - Features need both
             feature.view = me;
             feature.grid = grid;
-            
+
             me.featuresMC.add(feature);
-            
+
             feature.init(grid);
         }
     },
@@ -1067,11 +1067,11 @@ Ext.define('Ext.view.Table', {
     // really necessary since currently only the summary feature uses this.
     addHeaderFn: function(fn) {
         var headers = this.headerFns;
-        
+
         if (!headers) {
             headers = this.headerFns = [];
         }
-        
+
         headers.push(fn);
     },
 
@@ -1088,11 +1088,11 @@ Ext.define('Ext.view.Table', {
 
     addFooterFn: function(fn) {
         var footers = this.footerFns;
-        
+
         if (!footers) {
             footers = this.footerFns = [];
         }
-        
+
         footers.push(fn);
     },
 
@@ -1139,9 +1139,9 @@ Ext.define('Ext.view.Table', {
         else {
             me[which] = newTpl;
         }
-        
+
         newTpl.nextTpl = tpl;
-        
+
         return newTpl;
     },
 
@@ -1151,9 +1151,9 @@ Ext.define('Ext.view.Table', {
                 return;
             }
         }
-        
+
         this.nextTpl.applyOut(values, out, parent);
-        
+
         if (this.after) {
             this.after(values, out, parent);
         }
@@ -1174,18 +1174,18 @@ Ext.define('Ext.view.Table', {
 
         if (features) {
             result = [];
-            
+
             for (i = 0, len = features.length; i < len; i++) {
                 feature = features[i];
-                
+
                 if (!feature.isFeature) {
                     feature = Ext.create('feature.' + feature.ftype, feature);
                 }
-                
+
                 result[i] = feature;
             }
         }
-        
+
         return result;
     },
 
@@ -1205,7 +1205,7 @@ Ext.define('Ext.view.Table', {
             ownerGrid.scrollable = scrollable;
         }
     },
-    
+
     afterComponentLayout: function(width, height, oldWidth, oldHeight) {
         var me = this,
             ownerGrid = me.grid.ownerGrid;
@@ -1213,21 +1213,21 @@ Ext.define('Ext.view.Table', {
         if (ownerGrid.mixins.lockable) {
             ownerGrid.syncLockableLayout();
         }
-        
+
         me.callParent([width, height, oldWidth, oldHeight]);
     },
-    
+
     getElConfig: function() {
         var config = this.callParent();
-        
+
         // Table views are special in this regard; they should not have
         // aria-hidden and aria-disabled attributes.
         delete config['aria-hidden'];
         delete config['aria-disabled'];
-        
+
         return config;
     },
-    
+
     onBindStore: function(store) {
         var me = this,
             bufferedRenderer = me.bufferedRenderer;
@@ -1240,7 +1240,7 @@ Ext.define('Ext.view.Table', {
         if (me.all && me.all.getCount() && !me.grid.reconfiguring) {
             me.clearViewEl(true);
         }
-        
+
         me.callParent(arguments);
     },
 
@@ -1253,7 +1253,7 @@ Ext.define('Ext.view.Table', {
         if (scroller) {
             scroller.suspendPartnerSync();
         }
-        
+
         // A buffered renderer should also not respond to that scroll.
         if (bufferedRenderer) {
             bufferedRenderer.disable();
@@ -1269,7 +1269,7 @@ Ext.define('Ext.view.Table', {
         if (scroller) {
             scroller.resumePartnerSync();
         }
-        
+
         // A buffered renderer should also not respond to that scroll.
         if (bufferedRenderer) {
             bufferedRenderer.enable();
@@ -1292,9 +1292,9 @@ Ext.define('Ext.view.Table', {
         if (me.bufferedRenderer) {
             delete result.clear;
         }
-        
+
         result.beforepageremove = me.beforePageRemove;
-        
+
         return result;
     },
 
@@ -1307,7 +1307,7 @@ Ext.define('Ext.view.Table', {
         if (rows.startIndex >= (pageNumber - 1) * pageSize &&
             rows.endIndex <= (pageNumber * pageSize - 1)) {
             pageMap.get(pageNumber);
-            
+
             return false;
         }
     },
@@ -1336,14 +1336,14 @@ Ext.define('Ext.view.Table', {
 
         tplData.columns = updateColumns;
         me.tpl.overwrite(div, tplData);
-        
+
         // We don't want references to be retained on the prototype
         me.cleanupData();
-        
+
         // Return first element within node containing element
         result = div.dom.querySelector(me.getNodeContainerSelector()).firstChild;
         Ext.fly(result).saveTabbableState(me.saveTabOptions);
-        
+
         return result;
     },
 
@@ -1359,7 +1359,7 @@ Ext.define('Ext.view.Table', {
             result;
 
         me.tpl.overwrite(div, me.collectData(records, index));
-        
+
         // We don't want references to be retained on the prototype
         me.cleanupData();
 
@@ -1367,19 +1367,19 @@ Ext.define('Ext.view.Table', {
         div.saveTabbableState(me.saveTabOptions);
 
         div = div.dom.querySelector(me.getNodeContainerSelector());
-        
+
         if (range) {
             range.selectNodeContents(div);
             result = range.extractContents();
         }
         else {
             result = document.createDocumentFragment();
-            
+
             while (div.firstChild) {
                 result.appendChild(div.firstChild);
             }
         }
-        
+
         return {
             fragment: result,
             children: Ext.Array.toArray(result.childNodes)
@@ -1397,10 +1397,10 @@ Ext.define('Ext.view.Table', {
         tableValues.columns = null;
         tableValues.viewStartIndex = startIndex;
         tableValues.tableStyle = 'width:' + me.headerCt.getTableWidth() + 'px';
-        
+
         return tableValues;
     },
-    
+
     cleanupData: function() {
         var tableValues = this.tableValues;
 
@@ -1494,7 +1494,7 @@ Ext.define('Ext.view.Table', {
             // If we are also removing the noe container, destroy it.
             if (!leaveNodeContainer) {
                 nodeContainer = Ext.get(me.getNodeContainer());
-                
+
                 if (nodeContainer && nodeContainer.dom !== me.getTargetEl().dom) {
                     nodeContainer.destroy();
                 }
@@ -1516,21 +1516,21 @@ Ext.define('Ext.view.Table', {
         for (recordId in rowContexts) {
             widgets = rowContexts[recordId].getWidgets();
             widgetCount = widgets.length;
-            
+
             for (i = 0; i < widgetCount; i++) {
                 widget = widgets[i];
 
                 // If we're in a lockable assembly, check that we're in the same side
                 if (isLocked === widget.$fromLocked) {
                     result[result.length] = widget;
-                    
+
                     if (deep && widget.getRefItems) {
                         result.push.apply(result, widget.getRefItems(true));
                     }
                 }
             }
         }
-        
+
         return result;
     },
 
@@ -1552,7 +1552,7 @@ Ext.define('Ext.view.Table', {
         if (this.store.destroyed) {
             return;
         }
-        
+
         if (node.isModel) {
             return node;
         }
@@ -1568,11 +1568,11 @@ Ext.define('Ext.view.Table', {
 
     indexOf: function(node) {
         node = this.getNode(node);
-        
+
         if (!node && node !== 0) {
             return -1;
         }
-        
+
         return this.all.indexOf(node);
     },
 
@@ -1593,7 +1593,7 @@ Ext.define('Ext.view.Table', {
         else {
             idx = dataSource.indexOf(record);
         }
-        
+
         return idx;
     },
 
@@ -1605,7 +1605,7 @@ Ext.define('Ext.view.Table', {
 
         rowValues.view = me;
         rowValues.columns = columns;
-        
+
         // The roles are the same for all data rows and cells
         rowValues.rowRole = me.rowAriaRole;
         me.cellValues.cellRole = me.cellAriaRole;
@@ -1650,20 +1650,20 @@ Ext.define('Ext.view.Table', {
             i, column, width;
 
         out.push('<colgroup role="presentation">');
-        
+
         for (i = 0; i < len; i++) {
             column = columns[i];
-            
+
             width = column.cellWidth
                 ? column.cellWidth
                 : Ext.grid.header.Container.prototype.defaultWidth;
-                
+
             out.push(
                 '<col role="presentation" class="', Ext.baseCSSPrefix, 'grid-cell-',
                 columns[i].getItemId(), '" style="width:' + width + 'px">'
             );
         }
-        
+
         out.push('</colgroup>');
     },
 
@@ -1712,7 +1712,7 @@ Ext.define('Ext.view.Table', {
         rowValues.rowIndex = rowIdx;
         rowValues.rowId = me.getRowId(record);
         rowValues.itemCls = rowValues.rowCls = '';
-        
+
         if (!rowValues.columns) {
             rowValues.columns = me.ownerCt.getVisibleColumnManager().getColumns();
         }
@@ -1738,7 +1738,7 @@ Ext.define('Ext.view.Table', {
 
             if (me.getRowClass) {
                 cls = me.getRowClass(record, rowIdx, null, me.dataSource);
-                
+
                 if (cls) {
                     rowClasses.push(cls);
                 }
@@ -1808,12 +1808,12 @@ Ext.define('Ext.view.Table', {
             fullIndex = renderer.length > 4
                 ? me.ownerCt.columnManager.getHeaderIndex(column)
                 : columnIndex;
-            
+
             value = renderer.call(
                 column.usingDefaultRenderer ? column : column.scope || me.ownerCt,
                 fieldValue, cellValues, record, recordIndex, fullIndex, me.dataSource, me
             );
-            
+
             if (cellValues.css) {
                 // This warning attribute is used by the compat layer
                 // TODO: remove when compat layer becomes deprecated
@@ -1836,33 +1836,33 @@ Ext.define('Ext.view.Table', {
         if (column.tdCls) {
             classes[clsInsertPoint++] = column.tdCls;
         }
-        
+
         if (me.markDirty && record.dirty && record.isModified(column.dataIndex)) {
             classes[clsInsertPoint++] = me.dirtyCls;
-            
+
             if (column.dirtyTextElementId) {
                 cellValues.tdAttr = (cellValues.tdAttr ? cellValues.tdAttr + ' ' : '') +
                                     'aria-describedby="' + column.dirtyTextElementId + '"';
             }
         }
-        
+
         if (column.isFirstVisible) {
             classes[clsInsertPoint++] = me.firstCls;
         }
-        
+
         if (column.isLastVisible) {
             classes[clsInsertPoint++] = me.lastCls;
         }
-        
+
         if (!enableTextSelection) {
             classes[clsInsertPoint++] = me.unselectableCls;
         }
-        
+
         if (selModel && (selModel.isCellModel || selModel.isSpreadsheetModel) &&
             selModel.isCellSelected(me, recordIndex, column)) {
             classes[clsInsertPoint++] = me.selectedCellCls;
         }
-        
+
         if (lastFocused && lastFocused.record.id === record.id && lastFocused.column === column) {
             classes[clsInsertPoint++] = me.focusedItemCls;
         }
@@ -1895,17 +1895,17 @@ Ext.define('Ext.view.Table', {
         // An id
         if (Ext.isString(nodeInfo)) {
             nodeInfo = Ext.getDom(nodeInfo);
-            
+
             return nodeInfo && nodeInfo.querySelectorAll(rowSelector)[0];
         }
-        
+
         // Row index
         if (Ext.isNumber(nodeInfo)) {
             nodeInfo = me.all.item(nodeInfo, true);
-            
+
             return nodeInfo && nodeInfo.querySelectorAll(rowSelector)[0];
         }
-        
+
         // Record
         if (nodeInfo.isModel) {
             return me.getRowByRecord(nodeInfo);
@@ -1933,13 +1933,13 @@ Ext.define('Ext.view.Table', {
 
     getNodeById: function(id) {
         id = this.constructRowId(id);
-        
+
         return this.retrieveNode(id, false);
     },
 
     getRowById: function(id) {
         id = this.constructRowId(id);
-        
+
         return this.retrieveNode(id, true);
     },
 
@@ -1969,7 +1969,7 @@ Ext.define('Ext.view.Table', {
         if (dataRow && result) {
             return result.querySelector(this.rowSelector, true);
         }
-        
+
         return result;
     },
 
@@ -2052,7 +2052,7 @@ Ext.define('Ext.view.Table', {
      */
     addRowCls: function(rowInfo, cls) {
         var row = this.getRow(rowInfo);
-        
+
         if (row) {
             Ext.fly(row).addCls(cls);
         }
@@ -2066,7 +2066,7 @@ Ext.define('Ext.view.Table', {
      */
     removeRowCls: function(rowInfo, cls) {
         var row = this.getRow(rowInfo);
-        
+
         if (row) {
             Ext.fly(row).removeCls(cls);
         }
@@ -2078,9 +2078,9 @@ Ext.define('Ext.view.Table', {
             rowNode;
 
         me.addItemCls(rowIdx, me.selectedItemCls);
-        
+
         rowNode = me.getRow(rowIdx);
-        
+
         if (rowNode) {
             rowNode.setAttribute('aria-selected', true);
         }
@@ -2098,9 +2098,9 @@ Ext.define('Ext.view.Table', {
             rowNode;
 
         me.removeItemCls(rowIdx, me.selectedItemCls);
-        
+
         rowNode = me.getRow(rowIdx);
-        
+
         if (rowNode) {
             rowNode.removeAttribute('aria-selected');
         }
@@ -2114,7 +2114,7 @@ Ext.define('Ext.view.Table', {
 
     onCellSelect: function(position) {
         var cell = this.getCellByPosition(position, true);
-        
+
         if (cell) {
             Ext.fly(cell).addCls(this.selectedCellCls);
             cell.setAttribute('aria-selected', true);
@@ -2123,7 +2123,7 @@ Ext.define('Ext.view.Table', {
 
     onCellDeselect: function(position) {
         var cell = this.getCellByPosition(position, true);
-        
+
         if (cell) {
             Ext.fly(cell).removeCls(this.selectedCellCls);
             cell.removeAttribute('aria-selected');
@@ -2134,60 +2134,60 @@ Ext.define('Ext.view.Table', {
     // to closest visible. Position.column includes all columns including hidden ones.
     getCellInclusive: function(position, returnDom) {
         var header, row, cell;
-        
+
         if (position) {
             row = this.getRow(position.row);
             header = this.ownerCt.getColumnManager().getHeaderAtIndex(position.column);
 
             if (header && row) {
                 cell = row.querySelector(this.getCellSelector(header));
-                
+
                 return returnDom ? cell : Ext.get(cell);
             }
         }
-        
+
         return false;
     },
-    
+
     getColumnByPosition: function(position) {
         var view, column;
-        
+
         if (position) {
             column = position.column;
-            
+
             // Previous column can be already destroyed via reconfigure
             if (column && !column.destroyed && column.isColumn) {
                 return column;
             }
             else {
                 view = position.view || this;
-                
+
                 // Column can be a number
                 column = typeof column === 'number' ? column : position.colIdx;
-                
+
                 return view.getVisibleColumnManager().getHeaderAtIndex(column);
             }
         }
-        
+
         return false;
     },
 
     getCellByPosition: function(position, returnDom) {
         var view, row, header, cell;
-        
+
         if (position) {
             view = position.view || this;
             row = view.getRow(position.record || position.row);
-            
+
             header = view.getColumnByPosition(position);
 
             if (header && row) {
                 cell = row.querySelector(view.getCellSelector(header));
-                
+
                 return returnDom ? cell : Ext.get(cell);
             }
         }
-        
+
         return false;
     },
 
@@ -2229,10 +2229,10 @@ Ext.define('Ext.view.Table', {
             if (me.actionPosition) {
                 me.el.dom.setAttribute('tabIndex', '-1');
                 me.cellFocused = true;
-                
+
                 return;
             }
-            
+
             // Must have swapped sides of a lockable.
             // We don't know what we're focusing into yet.
             // So exit actionable mode.
@@ -2261,11 +2261,11 @@ Ext.define('Ext.view.Table', {
                 // situation.
                 // See Ext.view.navigationModel for this being set.
                 if (me.lastFocused === 'scrollbar') {
-                   
+
                     if (e.relatedTarget && e.relatedTarget.focus) {
                         e.relatedTarget.focus();
                     }
-                    
+
                     return;
                 }
 
@@ -2275,7 +2275,7 @@ Ext.define('Ext.view.Table', {
                 if (!focusPosition) {
                     e.stopEvent();
                     me.el.focus();
-                    
+
                     return;
                 }
 
@@ -2288,7 +2288,7 @@ Ext.define('Ext.view.Table', {
                 focusPosition = new Ext.grid.CellContext(me).setPosition(
                     me.all.endIndex, me.getVisibleColumnManager().getColumns().length - 1
                 );
-                
+
                 focusTarget = null;
             }
             // Now there are just two valid choices.
@@ -2301,7 +2301,7 @@ Ext.define('Ext.view.Table', {
                     focusPosition = new Ext.grid.CellContext(me).setPosition(
                         me.getRecord(focusTarget), me.getHeaderByCell(cell)
                     );
-                    
+
                     focusTarget = null;
                 }
                 // If what is being focused an interior element, but is not a cell, we plan to enter
@@ -2359,7 +2359,7 @@ Ext.define('Ext.view.Table', {
 
             // We now contain focus if that was successful
             me.cellFocused = me.el.contains(Ext.Element.getActiveElement());
-            
+
             if (me.cellFocused) {
                 me.el.dom.setAttribute('tabIndex', '-1');
             }
@@ -2381,7 +2381,7 @@ Ext.define('Ext.view.Table', {
             isLeavingGrid = !me.lockingPartner || !e.toComponent ||
                             (e.toComponent !== me.lockingPartner &&
                             !me.lockingPartner.isAncestor(e.toComponent));
-            
+
             // Ignore this event if we do not actually contain focus.
             // CellEditors are rendered into the view's encapsulating element,
             // So focusleave will fire when they are programmatically blurred.
@@ -2430,7 +2430,7 @@ Ext.define('Ext.view.Table', {
 
         if (highlight) {
             me.addItemCls(rowIdx, me.focusedItemCls);
-            
+
             if (!suppressFocus) {
                 me.focusRow(rowIdx);
             }
@@ -2460,7 +2460,7 @@ Ext.define('Ext.view.Table', {
 
         if (delay) {
             focusTask.delay(Ext.isNumber(delay) ? delay : 10, me.focusRow, me, [row, false]);
-            
+
             return;
         }
 
@@ -2488,7 +2488,7 @@ Ext.define('Ext.view.Table', {
 
     scrollRowIntoView: function(row, animate) {
         row = this.getRow(row);
-        
+
         if (row) {
             this.scrollElIntoView(row, false, animate);
         }
@@ -2507,7 +2507,7 @@ Ext.define('Ext.view.Table', {
 
         if (delay) {
             focusTask.delay(Ext.isNumber(delay) ? delay : 10, me.focusCell, me, [position, false]);
-            
+
             return;
         }
 
@@ -2523,17 +2523,17 @@ Ext.define('Ext.view.Table', {
             me.getNavigationModel().setPosition(position);
         }
     },
-    
+
     findFocusPosition: function(from, currentPosition, forward, keyEvent) {
         var me = this,
             cell = currentPosition.cellElement,
             actionables = me.ownerGrid.actionables,
             len = actionables.length,
             position, tabbableChildren, focusTarget, i;
-        
+
         position = currentPosition.clone();
         tabbableChildren = Ext.fly(cell).findTabbableElements();
-        
+
         // Find the next or previous tabbable in this cell.
         focusTarget =
             tabbableChildren[Ext.Array.indexOf(tabbableChildren, from) + (forward ? 1 : -1)];
@@ -2554,27 +2554,27 @@ Ext.define('Ext.view.Table', {
             // the grid DOM and the position got refreshed.
             // eg: edit handler on previously active editor.
             cell = position.getCell(true);
-            
+
             // If there are now tabbable elements in this cell (entering a row restores tabbability)
             // and Actionables also show/insert tabbables), then focus in the current direction.
             if (cell && (tabbableChildren = Ext.fly(cell).findTabbableElements()).length) {
                 focusTarget = tabbableChildren[forward ? 0 : tabbableChildren.length - 1];
             }
         }
-        
+
         return {
             target: focusTarget,
             position: position
         };
     },
-    
+
     getDefaultFocusPosition: function(fromComponent) {
         var me = this,
             store = me.dataSource,
             focusPosition = me.lastFocused,
             newPosition = new Ext.grid.CellContext(me).setPosition(0, 0),
             targetCell, scroller;
-        
+
         if (fromComponent) {
             // Tabbing in from one of our column headers; the user will expect to land
             // in that column.
@@ -2583,7 +2583,7 @@ Ext.define('Ext.view.Table', {
                 if (!focusPosition) {
                     focusPosition = newPosition;
                 }
-                
+
                 focusPosition.setColumn(fromComponent);
                 focusPosition.setView(fromComponent.getView());
             }
@@ -2596,11 +2596,11 @@ Ext.define('Ext.view.Table', {
                 );
             }
         }
-        
+
         // We found a position from the "fromComponent, or there was a previously focused context
         if (focusPosition) {
             scroller = me.getScrollable();
-            
+
             // Record is not in the store, or not in the rendered block.
             // Fall back to using the same row index.
             if (!store.contains(focusPosition.record) ||
@@ -2613,10 +2613,10 @@ Ext.define('Ext.view.Table', {
         // All else fails, find the first focusable cell.
         else {
             focusPosition = newPosition;
-            
+
             // Find the first focusable cell.
             targetCell = me.el.dom.querySelector(me.getCellSelector() + '[tabIndex="-1"]');
-            
+
             if (targetCell) {
                 focusPosition.setPosition(me.getRecord(targetCell), me.getHeaderByCell(targetCell));
             }
@@ -2625,10 +2625,10 @@ Ext.define('Ext.view.Table', {
                 focusPosition = null;
             }
         }
-        
+
         return focusPosition;
     },
-    
+
     getLastFocused: function() {
         var me = this,
             lastFocused = me.lastFocused;
@@ -2649,7 +2649,7 @@ Ext.define('Ext.view.Table', {
         if (cell.isCellContext) {
             cell = this.getCellByPosition(cell);
         }
-        
+
         if (cell) {
             this.scrollElIntoView(cell, null, animate);
         }
@@ -2723,7 +2723,7 @@ Ext.define('Ext.view.Table', {
         if (Ext.isNumber(record)) {
             record = this.store.getAt(record);
         }
-        
+
         // For a TableView, refreshNode has to pass the "allColumns" flag to the handleUpdate
         // method to indicate that the whole column set must be rendered in a new row, and that
         // cell updaters may not be used.
@@ -2744,14 +2744,14 @@ Ext.define('Ext.view.Table', {
             oldItemDom, oldDataRow, newItemDom, newAttrs, attLen, attName, attrIndex,
             overItemCls, columns, column, len, i, cellUpdateFlag, cell, fieldName, value,
             clearDirty, defaultRenderer, scope, elData, emptyValue;
-        
+
         operation = operation || Ext.data.Model.EDIT;
         clearDirty = operation !== Ext.data.Model.EDIT;
 
         if (me.viewReady) {
             // Some features might need to know that we're updating
             me.updatingRows = true;
-            
+
             // Table row being updated
             oldItemDom = me.getNodeByRecord(record);
 
@@ -2764,7 +2764,7 @@ Ext.define('Ext.view.Table', {
                     Ext.fly(oldItemDom).syncContent(
                         me.createRowElement(record, me.indexOfRow(record))
                     );
-                    
+
                     return;
                 }
 
@@ -2794,10 +2794,10 @@ Ext.define('Ext.view.Table', {
                             // (defaults to true)
                             if (cell && !clearDirty && markDirty) {
                                 cellFly.attach(cell);
-                                
+
                                 if (record.isModified(column.dataIndex)) {
                                     cellFly.addCls(dirtyCls);
-                                    
+
                                     if (column.dirtyTextElementId) {
                                         cell.setAttribute('aria-describedby',
                                                           column.dirtyTextElementId);
@@ -2850,7 +2850,7 @@ Ext.define('Ext.view.Table', {
                     elData = oldItemDom._extData;
                     newItemDom =
                         me.createRowElement(record, me.indexOfRow(record), columnsToUpdate);
-                    
+
                     if (Ext.fly(oldItemDom, '_internal').hasCls(overItemCls)) {
                         Ext.fly(newItemDom).addCls(overItemCls);
                     }
@@ -2865,11 +2865,11 @@ Ext.define('Ext.view.Table', {
                     else {
                         newAttrs = newItemDom.attributes;
                         attLen = newAttrs.length;
-                        
+
                         for (attrIndex = 0; attrIndex < attLen; attrIndex++) {
                             attName = newAttrs[attrIndex].name;
                             value = newAttrs[attrIndex].value;
-                            
+
                             if (attName !== 'id' && oldItemDom.getAttribute(attName) !== value) {
                                 oldItemDom.setAttribute(attName, value);
                             }
@@ -2903,7 +2903,7 @@ Ext.define('Ext.view.Table', {
                                 break;
                             }
                         }
-                        
+
                         rowTpl = rowTpl.nextTpl;
                     }
                 }
@@ -2926,7 +2926,7 @@ Ext.define('Ext.view.Table', {
                         if (!clearDirty && markDirty) {
                             if (record.isModified(column.dataIndex)) {
                                 cellFly.addCls(dirtyCls);
-                                
+
                                 if (column.dirtyTextElementId) {
                                     cell.setAttribute('aria-describedby',
                                                       column.dirtyTextElementId);
@@ -2981,10 +2981,10 @@ Ext.define('Ext.view.Table', {
                             // removing the highlight class after the expiration time
                             if (!me.changedCells) {
                                 me.self.prototype.changedCells = [];
-                                
+
                                 me.prototype.clearChangedTask =
                                     new Ext.util.DelayedTask(me.clearChangedCells, me.prototype);
-                                
+
                                 me.clearChangedTask.delay(me.unhighlightDelay);
                             }
 
@@ -3033,7 +3033,7 @@ Ext.define('Ext.view.Table', {
                     Ext.resumeLayouts(true);
                 }
             }
-            
+
             me.updatingRows = false;
         }
     },
@@ -3045,7 +3045,7 @@ Ext.define('Ext.view.Table', {
 
         for (i = 0, len = me.changedCells.length; i < len;) {
             changedCell = me.changedCells[i];
-            
+
             if (changedCell.expires <= now) {
                 Ext.fly(changedCell.cell).removeCls(changedCell.highlightClass);
                 Ext.Array.erase(me.changedCells, i, 1);
@@ -3078,20 +3078,20 @@ Ext.define('Ext.view.Table', {
         else {
             newAttrs = newRow.attributes;
             attLen = newAttrs.length;
-            
+
             for (attrIndex = 0; attrIndex < attLen; attrIndex++) {
                 attName = newAttrs[attrIndex].name;
                 value = newAttrs[attrIndex].value;
-                
+
                 if (attName !== 'id' && oldRow.getAttribute(attName) !== value) {
                     oldRow.setAttribute(attName, value);
                 }
             }
         }
-        
+
         // The element's data is no longer synchronized. We just overwrote it in the DOM
         elData = oldRow._extData;
-        
+
         if (elData) {
             elData.isSynchronized = false;
         }
@@ -3106,23 +3106,23 @@ Ext.define('Ext.view.Table', {
             cellSelector = me.getCellSelector(column);
             oldCell = oldRow.querySelector(cellSelector);
             newCell = newRow.querySelector(cellSelector);
-            
+
             // Copy new cell attributes across.
             newAttrs = newCell.attributes;
             attLen = newAttrs.length;
-            
+
             for (attrIndex = 0; attrIndex < attLen; attrIndex++) {
                 attName = newAttrs[attrIndex].name;
                 value = newAttrs[attrIndex].value;
-                
+
                 if (attName !== 'id' && oldCell.getAttribute(attName) !== value) {
                     oldCell.setAttribute(attName, value);
                 }
             }
-            
+
             // The element's data is no longer synchronized. We just overwrote it in the DOM
             elData = oldCell._extData;
-            
+
             if (elData) {
                 elData.isSynchronized = false;
             }
@@ -3173,7 +3173,7 @@ Ext.define('Ext.view.Table', {
             if (me.refreshCounter) {
                 me.clearViewEl(true);
             }
-            
+
             me.addEmptyText();
         }
     },
@@ -3182,7 +3182,7 @@ Ext.define('Ext.view.Table', {
         // If we find a component & it belongs to our grid, don't fire the event.
         // For example, grid editors resolve to the parent grid
         var cmp = Ext.Component.from(e.target.parentNode);
-        
+
         if (cmp && cmp.up(this.ownerCt)) {
             return false;
         }
@@ -3224,7 +3224,7 @@ Ext.define('Ext.view.Table', {
                     // isn't valid
                     return false;
                 }
-                
+
                 column = me.getHeaderByCell(cell);
 
                 // Find the index of the header in the *full* (including hidden columns)
@@ -3241,7 +3241,7 @@ Ext.define('Ext.view.Table', {
             else {
                 cellIndex = -1;
             }
-            
+
             eventPosition.setAll(
                 me,
                 rowIndex,
@@ -3249,7 +3249,7 @@ Ext.define('Ext.view.Table', {
                 record,
                 column
             );
-            
+
             eventPosition.cellElement = cell;
 
             result = me.fireEvent('uievent', type, me, cell, rowIndex, cellIndex, e, record, row);
@@ -3264,7 +3264,7 @@ Ext.define('Ext.view.Table', {
 
             for (i = 0; i < len; ++i) {
                 feature = features[i];
-                
+
                 // In some features, the first/last row might be wrapped to contain extra info,
                 // such as grouping or summary, so we may need to stop the event
                 if (feature.wrapsItem) {
@@ -3272,7 +3272,7 @@ Ext.define('Ext.view.Table', {
                         // If the feature is vetoing the event, there's a good chance that
                         // it's for some feature action in the wrapped row.
                         me.processSpecialEvent(e);
-                        
+
                         return false;
                     }
                 }
@@ -3293,7 +3293,7 @@ Ext.define('Ext.view.Table', {
                 );
             }
             /* eslint-enable indent, max-len */
-            
+
             if (result !== false) {
                 result = me.fireEvent('row' + type, me, record, row, rowIndex, e);
             }
@@ -3309,7 +3309,7 @@ Ext.define('Ext.view.Table', {
             if (e.pointerType === 'mouse') {
                 e.preventDefault();
             }
-            
+
             return false;
         }
     },
@@ -3330,21 +3330,21 @@ Ext.define('Ext.view.Table', {
         }
 
         type = me.self.TouchEventMap[type] || type;
-        
+
         for (i = 0; i < ln; i++) {
             feature = features[i];
-            
+
             if (feature.hasFeatureEvent) {
                 featureTarget = e.getTarget(feature.eventSelector, me.getTargetEl());
-                
+
                 if (featureTarget) {
                     prefix = feature.eventPrefix;
-                    
+
                     // allows features to implement getFireEventArgs to change the
                     // fireEvent signature
                     beforeArgs =
                         feature.getFireEventArgs('before' + prefix + type, me, featureTarget, e);
-                    
+
                     args = feature.getFireEventArgs(prefix + type, me, featureTarget, e);
 
                     /* eslint-disable indent */
@@ -3364,7 +3364,7 @@ Ext.define('Ext.view.Table', {
                 }
             }
         }
-        
+
         return true;
     },
 
@@ -3405,16 +3405,16 @@ Ext.define('Ext.view.Table', {
         if (Ext.isNumber(header)) {
             header = this.getGridColumns()[header];
         }
-        
+
         if (header) {
             if (header.isGroupHeader) {
                 header.autoSize();
-                
+
                 return;
             }
-            
+
             delete header.flex;
-            
+
             header.setWidth(this.getMaxContentWidth(header));
         }
     },
@@ -3438,7 +3438,7 @@ Ext.define('Ext.view.Table', {
             if (Ext.supports.ScrollWidthInlinePaddingBug) {
                 widthAdjust += me.getCellPaddingAfter(cells[0]);
             }
-            
+
             if (me.columnLines) {
                 widthAdjust += Ext.fly(cells[0].parentNode).getBorderWidth('lr');
             }
@@ -3494,7 +3494,7 @@ Ext.define('Ext.view.Table', {
 
         for (i = 0; i < features.length; i++) {
             featureSizer = features[i].columnSizer;
-            
+
             if (featureSizer) {
                 resizers.push(featureSizer.select(me.getColumnSizerSelector(header)));
             }
@@ -3512,7 +3512,7 @@ Ext.define('Ext.view.Table', {
 
         for (i = 0; i < features.length; i++) {
             featureSizer = features[i].columnSizer;
-            
+
             if (featureSizer) {
                 headerCells = headerCells.concat(featureSizer.query(header.getCellInnerSelector()));
             }
@@ -3536,7 +3536,7 @@ Ext.define('Ext.view.Table', {
             return this.ownerGrid.getVisibleColumnManager()
                                  .getHeaderById(Ext.getDom(cell).getAttribute('data-columnId'));
         }
-        
+
         return false;
     },
 
@@ -3585,7 +3585,7 @@ Ext.define('Ext.view.Table', {
                 else {
                     result.navigate(+1);
                 }
-                
+
                 break;
 
             case 'left':
@@ -3611,7 +3611,7 @@ Ext.define('Ext.view.Table', {
                 else {
                     result.navigate(-1);
                 }
-                
+
                 break;
 
             case 'up':
@@ -3623,7 +3623,7 @@ Ext.define('Ext.view.Table', {
                 else {
                     result.setRow(rowIdx - 1);
                 }
-                
+
                 break;
 
             case 'down':
@@ -3635,7 +3635,7 @@ Ext.define('Ext.view.Table', {
                 else {
                     result.setRow(rowIdx + 1);
                 }
-                
+
                 break;
         }
 
@@ -3686,7 +3686,7 @@ Ext.define('Ext.view.Table', {
                 lastValid = result;
             }
         } while (moved !== distance);
-        
+
         return result;
     },
 
@@ -3727,17 +3727,17 @@ Ext.define('Ext.view.Table', {
             // Stepped onto VISIBLE record: Increment the moved count.
             // We must not count stepping onto a non-rendered record as a move.
             rec = store.getAt(testIndex);
-            
+
             if (!rec.isCollapsedPlaceholder &&
                 (node = Ext.fly(me.getNodeByRecord(rec))) && node.isVisible(true)) {
                 moved += increment;
                 lastValid = rec;
             }
         } while (moved !== distance);
-        
+
         return lastValid;
     },
-    
+
     /**
      * Returns the index of the first row in your table view deemed to be visible.
      * @return {Number}
@@ -3751,15 +3751,15 @@ Ext.define('Ext.view.Table', {
         count = me.dataSource.isBufferedStore
             ? me.dataSource.getTotalCount()
             : me.dataSource.getCount();
-        
+
         do {
             result += 1;
-            
+
             if (result === count) {
                 return;
             }
         } while (!Ext.fly(me.getRow(result)).isVisible(true));
-        
+
         return result;
     },
 
@@ -3774,12 +3774,12 @@ Ext.define('Ext.view.Table', {
 
         do {
             result -= 1;
-            
+
             if (result === -1) {
                 return;
             }
         } while (!Ext.fly(me.getRow(result)).isVisible(true));
-        
+
         return result;
     },
 
@@ -3795,7 +3795,7 @@ Ext.define('Ext.view.Table', {
         var me = this,
             features = me.featuresMC,
             feature, i, len;
-        
+
         // We need to unbind the store first to avoid firing update events;
         // all kinds of things are bound to this store and they don't need
         // updates anymore.
@@ -3804,18 +3804,18 @@ Ext.define('Ext.view.Table', {
         if (features) {
             for (i = 0, len = features.getCount(); i < len; ++i) {
                 feature = features.getAt(i);
-                
+
                 // Features could be already destroyed
                 if (feature && !feature.destroyed) {
                     feature.destroy();
                 }
             }
         }
-        
+
         me.all.destroy();
         me.body.destroy();
         me.actionRowFly.destroy();
-        
+
         me.callParent();
     },
 
@@ -3842,7 +3842,7 @@ Ext.define('Ext.view.Table', {
         else {
             me.callParent(arguments);
         }
-        
+
         me.setPendingStripe(startIndex);
     },
 
@@ -3862,7 +3862,7 @@ Ext.define('Ext.view.Table', {
     onAdd: function(store, records, index) {
         var me = this,
             bufferedRenderer = me.bufferedRenderer;
-        
+
         // Some features might need to know if we're refreshing or just adding rows
         me.addingRows = true;
 
@@ -3877,9 +3877,9 @@ Ext.define('Ext.view.Table', {
         else {
             me.callParent(arguments);
         }
-        
+
         me.setPendingStripe(index);
-        
+
         me.addingRows = false;
     },
 
@@ -3904,11 +3904,11 @@ Ext.define('Ext.view.Table', {
         else {
             me.callParent(arguments);
         }
-        
+
         if (me.actionPosition && Ext.Array.indexOf(records, me.actionPosition.record) !== -1) {
             me.actionPosition = null;
         }
-        
+
         me.setPendingStripe(index);
     },
 
@@ -3966,7 +3966,7 @@ Ext.define('Ext.view.Table', {
             // Do not leave the element in tht state in case refresh fails, and restoration
             // closure not called.
             activeElement.resumeFocusEvents();
-            
+
             // if the store is expanding or collapsing, we should never scroll the view.
             if (store.isExpandingOrCollapsing) {
                 return Ext.emptyFn;
@@ -3977,25 +3977,25 @@ Ext.define('Ext.view.Table', {
             // or the row index.
             return function() {
                 var all;
-                
+
                 // May have changed due to reconfigure
                 store = me.dataSource;
 
                 // If we still have data, attempt to refocus in the same mode.
                 if (store.getCount()) {
                     all = me.all;
-                    
+
                     // Adjust expectations of where we are able to refocus according to
                     // what kind of destruction might have been wrought on this view's DOM
                     // during focus save.
                     refocusRow =
                         Math.min(Math.max(focusPosition.rowIdx, all.startIndex), all.endIndex);
-                    
+
                     refocusCol = Math.min(
                         focusPosition.colIdx,
                         me.getVisibleColumnManager().getColumns().length - 1
                     );
-                    
+
                     record = focusPosition.record;
 
                     focusPosition = new Ext.grid.CellContext(me).setPosition(
@@ -4027,10 +4027,10 @@ Ext.define('Ext.view.Table', {
                 }
             };
         }
-        
+
         return Ext.emptyFn;
     },
-    
+
     onDataRefresh: function(store) {
         // When there's a buffered renderer present, store refresh events cause TableViews to
         // go to scrollTop:0
@@ -4040,7 +4040,7 @@ Ext.define('Ext.view.Table', {
         // If triggered during an animation, refresh once we're done
         if (owner && owner.isCollapsingOrExpanding === 2) {
             owner.on('expand', me.onDataRefresh, me, { single: true });
-            
+
             return;
         }
 
@@ -4053,37 +4053,37 @@ Ext.define('Ext.view.Table', {
         if (me.bufferedRenderer) {
             return me.bufferedRenderer.getViewRange();
         }
-        
+
         return me.callParent();
     },
 
     setPendingStripe: function(index) {
         var current = this.stripeOnUpdate;
-        
+
         if (current === null) {
             current = index;
         }
         else {
             current = Math.min(current, index);
         }
-        
+
         this.stripeOnUpdate = current;
     },
-    
+
     onEndUpdate: function() {
         var me = this,
             stripeOnUpdate = me.stripeOnUpdate,
             startIndex = me.all.startIndex;
-        
+
         if (me.rendered && (stripeOnUpdate || stripeOnUpdate === 0)) {
             if (stripeOnUpdate < startIndex) {
                 stripeOnUpdate = startIndex;
             }
-            
+
             me.doStripeRows(stripeOnUpdate);
             me.stripeOnUpdate = null;
         }
-        
+
         me.callParent(arguments);
     },
 
@@ -4104,11 +4104,11 @@ Ext.define('Ext.view.Table', {
 
             for (i = 0, rowsLn = rows.length; i < rowsLn; i++) {
                 row = rows[i];
-                
+
                 // Remove prior applied row classes.
                 row.className = row.className.replace(me.rowClsRe, ' ');
                 startRow++;
-                
+
                 // Every odd row will get an additional cls
                 if (startRow % 2 === 0) {
                     row.className += (' ' + me.altRowCls);
@@ -4198,9 +4198,9 @@ Ext.define('Ext.view.Table', {
                     // Row to return focus to.
                     record =
                         (me.actionPosition && me.actionPosition.record) || me.getRecord(activeEl);
-                    
+
                     column = me.getHeaderByCell(activeEl.findParent(me.getCellSelector()));
-                    
+
                     cell = position && position.getCell(true);
 
                     // Do not allow focus to fly out of the view when the actionables
@@ -4211,7 +4211,7 @@ Ext.define('Ext.view.Table', {
                     if (!position || !cell) {
                         position =
                             new Ext.grid.CellContext(me).setPosition(record || 0, column || 0);
-                        
+
                         cell = position.getCell(true);
                     }
 
@@ -4221,7 +4221,7 @@ Ext.define('Ext.view.Table', {
 
                     // Let's update the activeEl after focus here
                     activeEl = Ext.fly(Ext.Element.getActiveElement());
-                    
+
                     // If that focus triggered handlers (eg CellEditor after edit handlers) which
                     // programmatically moved focus somewhere, and the target cell has been
                     // unfocused, defer to that, null out position, so that we do not navigate
@@ -4293,7 +4293,7 @@ Ext.define('Ext.view.Table', {
             // Deactivate remaining tabbables in the row we were last actionable upon.
             if (me.actionPosition) {
                 prevRow = me.all.item(me.actionPosition.rowIdx, true);
-                
+
                 if (prevRow && focusRow !== prevRow) {
                     Ext.fly(prevRow).saveTabbableState({
                         skipSelf: true,
@@ -4307,7 +4307,7 @@ Ext.define('Ext.view.Table', {
             // navigationModel's  onFocusMove method needs to know if activating events
             // should be fired.
             me.activating = true;
-            
+
             // We're the focused side - attempt to see if ths focused cell is actionable
             if (!lockingPartner) {
                 focusCell = Ext.fly(position.getCell(true));
@@ -4362,7 +4362,7 @@ Ext.define('Ext.view.Table', {
                         me.actionableMode = true;
                         me.actionPosition = null;
                         me.activating = false;
-                        
+
                         return true;
                     }
 
@@ -4395,7 +4395,7 @@ Ext.define('Ext.view.Table', {
                     }
                 }
             }
-            
+
             me.activating = false;
         },
 
@@ -4426,7 +4426,7 @@ Ext.define('Ext.view.Table', {
             for (i = 0; i < len; i++) {
                 activated = activated || actionables[i].resume(position);
             }
-            
+
             // If non of the Actionable responded, attempt to find a naturally focusable
             // child element.
             if (!activated) {
@@ -4507,7 +4507,7 @@ Ext.define('Ext.view.Table', {
                 for (i = (forward ? 0 : columnCount - 1); (forward ? i < columnCount : i > -1) && !focusTarget; i = i + (forward ? 1 : -1)) {
                     column = columns[i];
                     position.setColumn(column);
-                    
+
                     focusCell = (focusRow.dom || focusRow).querySelector(
                         position.column.getCellSelector()
                     );
@@ -4520,7 +4520,7 @@ Ext.define('Ext.view.Table', {
                     // the grid DOM and the position got refreshed.
                     // eg: 'edit' handler on previously active editor.
                     focusCell = Ext.fly(position.getCell(true));
-                    
+
                     if (focusCell) {
                         focusRow = position.getNode(true);
 
@@ -4616,7 +4616,7 @@ Ext.define('Ext.view.Table', {
                     stretchers[0].style.marginTop = stretchers[1].style.marginTop =
                         me.el.dom.style.height = 0;
                 }
-                
+
                 me.el.dom.style.height = scroller.constrainScrollRange(height) + 'px';
 
                 shortfall = height - me.el.dom.offsetHeight;
@@ -4626,13 +4626,13 @@ Ext.define('Ext.view.Table', {
                     me.el.dom.style.height = '';
                     stretchers = me.getStretchers();
                     shortfall = height - me.el.dom.offsetHeight;
-                    
+
                     if (shortfall > 0) {
                         stretchers[0].style.marginTop =
                             scroller.constrainScrollRange(shortfall) + 'px';
-                        
+
                         shortfall = height - me.el.dom.offsetHeight;
-                    
+
                         if (shortfall > 0) {
                             stretchers[1].style.marginTop =
                                 Math.min(shortfall, scroller.maxSpacerMargin || 0) + 'px';

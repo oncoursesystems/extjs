@@ -8,12 +8,12 @@ Ext.define('KitchenSink.view.calendar.Days', {
         'Ext.calendar.List'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Store',
         path: 'samples/data/calendar/MultiDay.js'
     }],
-    // </example>
+    //</example>
 
     viewModel: {
         data: {
@@ -68,4 +68,4 @@ Ext.define('KitchenSink.view.calendar.Days', {
         }
     }]
 
-})
+});

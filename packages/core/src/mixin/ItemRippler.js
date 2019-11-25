@@ -88,7 +88,7 @@ Ext.define('Ext.mixin.ItemRippler', {
 
     destroyAllRipples: function() {
         var items;
-        
+
         for (items = this.$rippledItems; items && items.length;) {
             items.pop().destroyAllRipples();
         }

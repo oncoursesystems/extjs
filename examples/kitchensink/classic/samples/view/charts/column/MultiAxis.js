@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.charts.column.MultiAxis', {
     xtype: 'column-multi-axis',
     controller: 'column-multi-axis',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     layout: 'fit',
     otherContent: [{
@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.charts.column.MultiAxis', {
         type: 'Store',
         path: 'app/store/Climate.js'
     }],
-    // </example>
+    //</example>
     width: 650,
     height: 500,
 

@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.charts.line.Marked', {
     xtype: 'line-marked',
     controller: 'line-marked',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.charts.line.Marked', {
         type: 'Store',
         path: 'app/store/Browsers.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     tbar: [

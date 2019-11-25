@@ -128,7 +128,7 @@ Ext.define('Ext.fx.State', {
                     else {
                         transform.translateX = value;
                     }
-                    
+
                     break;
 
                 case 'rotate':
@@ -156,7 +156,7 @@ Ext.define('Ext.fx.State', {
                     else {
                         transform.rotate = value;
                     }
-                    
+
                     break;
 
                 case 'scale':
@@ -185,7 +185,7 @@ Ext.define('Ext.fx.State', {
                         transform.scaleX = value;
                         transform.scaleY = value;
                     }
-                    
+
                     break;
 
                 case 'skew':
@@ -207,7 +207,7 @@ Ext.define('Ext.fx.State', {
                     else {
                         transform.skewX = value;
                     }
-                    
+
                     break;
 
                 default:

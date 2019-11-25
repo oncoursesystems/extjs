@@ -8,20 +8,20 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
      */
     function addField(config, ct) {
         var c;
-        
+
         if (!config.isComponent) {
             Ext.apply(config, {
                 isEqual: Ext.form.field.Base.prototype.isEqualAsString
             });
-            
+
             c = new Ext.form.field.Base(config);
         }
         else {
             c = config;
         }
-        
+
         ct = ct || container;
-        
+
         return ct.add(c);
     }
 
@@ -92,7 +92,6 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
         });
     });
 
-
     describe("getFields", function() {
         beforeEach(function() {
             addField({ name: 'one' });
@@ -133,14 +132,14 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
             expect(fields2.getCount()).toEqual(1);
             expect(fields2.getAt(0).name).toEqual('two');
         });
-        
+
         it("should requery the list when an field is added in a container", function() {
             container.add(
                 new Ext.form.field.Base()
             );
             expect(basicForm.getFields().getCount()).toBe(3);
         });
-        
+
         it("should requery the list when an field is removed from a container", function() {
             container.add(
                 new Ext.form.field.Base()
@@ -168,7 +167,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
         it("should return false if no fields are dirty", function() {
             var one = addField({ name: 'one' }),
                 two = addField({ name: 'two' });
-                
+
             expect(basicForm.isDirty()).toBeFalsy();
         });
         it("should return true if any fields are dirty", function() {
@@ -191,7 +190,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
             expect(one.reset).toHaveBeenCalled();
             expect(two.reset).toHaveBeenCalled();
         });
-        
+
         it("should not clear any record reference by default", function() {
             var record = {
                 getData: function() {
@@ -206,7 +205,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
             basicForm.reset();
             expect(basicForm.getRecord()).toBe(record);
         });
-        
+
         it("should clear any record reference if resetRecord is passed", function() {
             var record = {
                 getData: function() {
@@ -244,13 +243,13 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
 
             expect(result).toBeNull();
         });
-        
+
         it("should exclude items with the excludeForm property on the field", function() {
             addField({
                 name: 'foo',
                 excludeForm: true
             });
-            
+
             expect(basicForm.findField('foo')).toBeNull();
         });
     });
@@ -370,14 +369,14 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
             });
             expect(one.originalValue).toEqual('new value');
         });
-        
+
         it("should only trigger a single layout", function() {
             var fields = [],
                 data = {},
                 i = 0,
                 count = 0,
                 key;
-                
+
             for (; i < 5; ++i) {
                 key = 'field' + i;
                 addField({
@@ -392,7 +391,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
                         if (me.inputEl) {
                             me.inputEl.dom.value = value;
                         }
-                        
+
                         me.updateLayout();
 
                         return value;
@@ -400,7 +399,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
                 });
                 data[key] = key;
             }
-            
+
             container.render(Ext.getBody());
             container.on('afterlayout', function() {
                 ++count;
@@ -441,7 +440,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
                     return ['value 3', 'value 4'];
                 }
             });
-            
+
             vals = basicForm.getValues();
             expect(vals).toEqual({ one: 'value 1', two: ['value 2', 'value 3', 'value 4'] });
         });
@@ -689,7 +688,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
             var field = addField({ name: 'one' });
 
             field.fireEvent('validitychange', field, false);
-            
+
             waitForSpy(spy, "checkValidity was not called", 1000);
         });
 
@@ -720,33 +719,33 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
             basicForm.checkValidity();
             expect(spy).not.toHaveBeenCalled();
         });
-        
+
         describe("add/remove items", function() {
             var checkValiditySpy;
-            
+
             beforeEach(function() {
                 checkValiditySpy = spyOn(Ext.form.Basic.prototype, 'checkValidity');
             });
-            
+
             afterEach(function() {
                 checkValiditySpy = null;
             });
-            
+
             it("should checkValidity when removing a field", function() {
                 addField({ name: 'one' });
                 addField({ name: 'two' });
                 container.remove(0);
-                
+
                 waitForSpy(checkValiditySpy, "checkValidity was not called", 1000);
             });
-            
+
             it("should checkValidity when adding a field", function() {
                 addField({ name: 'one' });
                 addField({ name: 'two' });
-                
+
                 waitForSpy(checkValiditySpy, "checkValidity was not called", 1000);
             });
-            
+
             it("should checkValidity when removing a container that contains a field", function() {
                 var myCt = container.add({
                     xtype: 'container'
@@ -754,16 +753,16 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
 
                 addField({ name: 'one' }, myCt);
                 container.remove(0);
-                
+
                 waitForSpy(checkValiditySpy, "checkValidity was not called", 1000);
             });
-            
+
             it("should checkValidity when adding a container that contains a field", function() {
                 var myCt = new Ext.container.Container();
 
                 addField({ name: 'one' }, myCt);
                 container.add(myCt);
-                
+
                 waitForSpy(checkValiditySpy, "checkValidity was not called", 1000);
             });
         });
@@ -855,7 +854,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
 
             spyOn(button, 'setDisabled');
             container.add(button);
- 
+
             basicForm.checkValidity();
             expect(button.setDisabled).not.toHaveBeenCalled();
         });
@@ -875,7 +874,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
             basicForm.checkValidity();
             expect(button.setDisabled).not.toHaveBeenCalled();
         });
-        
+
         it('should update a formBind button\'s state when a field changes enabled/disabled state', function() {
             var field1 = addField({ name: 'one', isValid: function() { return true; } }),
                 field2 = container.add({ xtype: 'textfield', name: 'two', allowBlank: false }),
@@ -886,7 +885,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
 
             expect(button.disabled).toBe(true);
             field2.disable();
-            
+
             // Validation state is evaluated on a delay
             waitsFor(function() {
                 return button.disabled === false;
@@ -910,7 +909,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
             basicForm.loadRecord(record);
             expect(basicForm.setValues).toHaveBeenCalledWith(data);
         });
-        
+
         it("should keep a reference to the record on the form", function() {
             var data = {
                 one: 'value 1',
@@ -937,12 +936,12 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
             });
             model = new BasicFormTestModel();
         });
-        
+
         afterEach(function() {
             Ext.undefine('BasicFormTestModel');
             Ext.data.Model.schema.clear();
         });
-        
+
         it("should update fields on a given model to match corresponding form fields", function() {
             var date = new Date();
 
@@ -954,15 +953,15 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
 
             expect(model.get('one')).toBe('valueone');
             expect(model.get('two')).toBe(2);
-            
+
             var d1 = model.get('three'),
                 d2 = date;
-            
+
             expect(d1.getFullYear()).toBe(d2.getFullYear());
             expect(d1.getMonth()).toBe(d2.getMonth());
             expect(d1.getDate()).toBe(d2.getDate());
         });
-        
+
         it("should use a record specified by loadRecord if one isn't provided", function() {
             basicForm.loadRecord(model);
             var date = new Date();
@@ -977,7 +976,7 @@ topSuite("Ext.form.Basic", ['Ext.Container', 'Ext.form.field.*', 'Ext.Button'], 
             expect(model.get('two')).toBe(2);
             var d1 = model.get('three'),
                 d2 = date;
-            
+
             expect(d1.getFullYear()).toBe(d2.getFullYear());
             expect(d1.getMonth()).toBe(d2.getMonth());
             expect(d1.getDate()).toBe(d2.getDate());

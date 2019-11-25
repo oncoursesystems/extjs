@@ -109,12 +109,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
     $configStrict: false,
 
     statics: {
-        defaultHitTestOptions: {
-            fill: true,
-            stroke: true
-        },
         //<debug>
-        
         /* eslint-disable max-len */
         /**
          * Debug rendering options:
@@ -125,9 +120,14 @@ Ext.define('Ext.draw.sprite.Sprite', {
          * }
          *
          */
-        debug: false
+        debug: false,
         /* eslint-enable max-len */
         //</debug>
+
+        defaultHitTestOptions: {
+            fill: true,
+            stroke: true
+        }
     },
 
     inheritableStatics: {
@@ -394,9 +394,9 @@ Ext.define('Ext.draw.sprite.Sprite', {
                  * {@link #scalingY}, and {@link #scalingCenterX}
                  */
                 scalingCenterY: "number",
-                
+
                 constrainGradients: "bool"
-                
+
                 /**
                  * @cfg {Number/Object} rotation
                  * Applies an initial angle of rotation to the sprite.  May be a number 
@@ -453,7 +453,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
                  * Unless explicitly set, will default to the calculated center of the 
                  * sprite along the y-axis.
                  */
-                
+
                 /**
                  * @cfg {Number/Object} scaling
                  * Applies initial scaling to the sprite.  May be a number specifying 
@@ -515,7 +515,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
                  * explicitly set, will default to the calculated center of the sprite 
                  * along the y-axis.
                  */
-                
+
                 /**
                  * @cfg {Object} translation
                  * Applies an initial translation, adjustment in x/y positioning, to the 
@@ -612,7 +612,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
                 scalingY: 1,
                 scalingCenterX: null,
                 scalingCenterY: null,
-                
+
                 constrainGradients: false
             },
 
@@ -649,7 +649,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
                 scalingY: "transform",
                 scalingCenterX: "transform",
                 scalingCenterY: "transform",
-                
+
                 constrainGradients: "canvas"
             },
 
@@ -724,7 +724,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
             throw 'Ext.draw.sprite.Sprite is an abstract class';
         }
         //</debug>
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             attributeDefinition = me.self.def,
@@ -756,7 +756,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
             }
         }
         //</debug>
-        
+
         me.setAttributes(config);
     },
 
@@ -780,7 +780,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
 
     setDirty: function(dirty) {
         var parent;
-        
+
         // This could have been a regular attribute.
         // Instead, it's a hidden one, which is initialized inside in the
         // Target's modifier `prepareAttributes` method and is exposed
@@ -924,7 +924,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
 
         attr = attr || this.attr;
         pendingUpdaters = attr.pendingUpdaters;
-        
+
         // If updaters set sprite attributes that trigger other updaters,
         // those updaters are not called right away, but wait until all current
         // updaters are called (till the next do/while loop iteration).
@@ -1022,7 +1022,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
      */
     scheduleUpdater: function(attr, updater, triggers) {
         var pendingUpdaters;
-        
+
         triggers = triggers || [];
         attr = attr || this.attr;
         pendingUpdaters = attr.pendingUpdaters;
@@ -1740,7 +1740,7 @@ Ext.define('Ext.draw.sprite.Sprite', {
      */
     hitTest: function(point, options) {
         var x, y, bbox, isBBoxHit;
-        
+
         // Meant to be overridden in subclasses for more precise hit testing.
         // This version doesn't take any options and simply hit tests sprite's
         // bounding box, if the sprite is visible.

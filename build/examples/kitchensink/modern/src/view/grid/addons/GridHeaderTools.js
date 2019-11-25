@@ -98,9 +98,9 @@ Ext.define('KitchenSink.view.grid.addons.GridHeaderTools', {
 
     helperTpl: [
         '<ul>',
-            '<tpl for="group.items">',
-                '<li>{data.name:htmlEncode}</li>',
-            '</tpl>',
+        '<tpl for="group.items">',
+        '<li>{data.name:htmlEncode}</li>',
+        '</tpl>',
         '</ul>'
     ]
 });

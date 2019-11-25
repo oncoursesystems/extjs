@@ -252,7 +252,7 @@ Ext.define('Ext.mixin.Pluggable', function(Pluggable) { return { // eslint-disab
                 }
                 else if (p.detachCmp) {
                     p.detachCmp();
-                    
+
                     if (p.setCmp) {
                         p.setCmp(null);
                     }
@@ -285,7 +285,7 @@ Ext.define('Ext.mixin.Pluggable', function(Pluggable) { return { // eslint-disab
                 plugins = config && config.plugins,
                 ret = null,
                 i, include, p;
-            
+
             if (plugins) {
                 include = me.config.plugins;
                 include = (include && typeof include === 'object') ? include : null;
@@ -298,16 +298,16 @@ Ext.define('Ext.mixin.Pluggable', function(Pluggable) { return { // eslint-disab
                     if (p === type || p.type === type) {
                         me.initialConfig = config = Ext.apply({}, config);
                         config.plugins = plugins; // switch over to our copy
-    
+
                         // Put the instance in the plugins array so it will be included in
                         // the applyPlugins loop for normal processing of plugins.
                         plugins[i] = ret = me.createPlugin(p);
-                        
+
                         break;
                     }
                 }
             }
-            
+
             return ret;
         },
 
@@ -340,7 +340,7 @@ Ext.define('Ext.mixin.Pluggable', function(Pluggable) { return { // eslint-disab
             // the same.
             //
             count = plugins && plugins.length || 0;
-            
+
             for (i = 0; i < count; ++i) {
                 plugins[i] = me.createPlugin(plugins[i]); // ensure we have an instance
             }
@@ -370,7 +370,7 @@ Ext.define('Ext.mixin.Pluggable', function(Pluggable) { return { // eslint-disab
 
             return plugins;
         },
-    
+
         /**
          * Converts the provided type or config object into a plugin instance.
          * @param {String/Object/Ext.plugin.Abstract} config The plugin type, config
@@ -380,21 +380,21 @@ Ext.define('Ext.mixin.Pluggable', function(Pluggable) { return { // eslint-disab
          */
         createPlugin: function(config) {
             var ret;
-            
+
             if (typeof config === 'string') {
                 config = {
                     type: config
                 };
             }
-    
+
             ret = config;
-    
+
             if (!config.isInstance) {
                 // The owner may be needed by plugin's initConfig so provide it:
                 config.cmp = this;
-    
+
                 ret = Ext.factory(config, null, null, 'plugin');
-    
+
                 // Cleanup the user's config object:
                 delete config.cmp;
             }
@@ -402,11 +402,11 @@ Ext.define('Ext.mixin.Pluggable', function(Pluggable) { return { // eslint-disab
             if (!ret.id) {
                 ret.id = ++Pluggable.idSeed;
             }
-    
+
             if (ret.setCmp) {
                 ret.setCmp(this);
             }
-    
+
             return ret;
         }
     }

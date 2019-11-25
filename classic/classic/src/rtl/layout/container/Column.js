@@ -23,11 +23,11 @@ Ext.define('Ext.rtl.layout.container.Column', {
             // |           +--------+           |
             // +--------------------------------+
             this.clearSide = 'right';
-            
+
             renderData.innerCtCls =
                 (renderData.innerCtCls || '') + ' ' + Ext.baseCSSPrefix + 'rtl';
         }
-        
+
         return renderData;
     }
 });

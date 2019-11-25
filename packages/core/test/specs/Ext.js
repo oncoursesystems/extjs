@@ -3,7 +3,7 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
         id: "fakeScope",
         fakeScope: true
     };
-    
+
     describe("Ext.global", function() {
         it("should return the global scope", function() {
             expect(Ext.global).toBe((function() { return this; }).call());
@@ -176,7 +176,7 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
            expect(Ext.emptyFn('aaaa', 'bbbbb')).toBeUndefined();
         });
     });
-    
+
     describe("Ext.iterate", function() {
         var itFn;
 
@@ -360,7 +360,6 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
             expect(Ext.applyIf(o)).toEqual(o);
         });
     });
-
 
     describe("Ext.extend", function() {
         describe("class creation", function() {
@@ -808,12 +807,11 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
         it("should return null", function() {
             expect(Ext.typeOf(null)).toEqual('null');
         });
-        
+
         it("should return undefined", function() {
             expect(Ext.typeOf(undefined)).toEqual('undefined');
             expect(Ext.typeOf(window.someWeirdPropertyThatDoesntExist)).toEqual('undefined');
         });
-
 
         it("should return string", function() {
             expect(Ext.typeOf('')).toEqual('string');
@@ -827,19 +825,17 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
             expect(Ext.typeOf(new Number(1.2))).toEqual('number');
         });
 
-
         it("should return boolean", function() {
             expect(Ext.typeOf(true)).toEqual('boolean');
             expect(Ext.typeOf(false)).toEqual('boolean');
             expect(Ext.typeOf(new Boolean(true))).toEqual('boolean');
         });
-        
 
         it("should return array", function() {
             expect(Ext.typeOf([1, 2, 3])).toEqual('array');
             expect(Ext.typeOf(new Array(1, 2, 3))).toEqual('array');
         });
-        
+
         it("should return function", function() {
             expect(Ext.typeOf(function() {})).toEqual('function');
             expect(Ext.typeOf(new Function())).toEqual('function');
@@ -860,7 +856,7 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
             //
             // if (typeof obj === 'object' && !obj.toString && obj.call && obj.apply && (obj + '')) {...}
         });
-        
+
         it("should return regexp", function() {
             expect(Ext.typeOf(/test/)).toEqual('regexp');
             expect(Ext.typeOf(new RegExp('test'))).toEqual('regexp');
@@ -869,7 +865,7 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
         it("should return date", function() {
             expect(Ext.typeOf(new Date())).toEqual('date');
         });
-        
+
         it("should return textnode", function() {
             expect(Ext.typeOf(document.createTextNode('tada'))).toEqual('textnode');
             expect(Ext.typeOf(document.createTextNode(' '))).toEqual('whitespace');
@@ -958,7 +954,7 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
         it("should return true with html collection", function() {
             expect(Ext.isIterable(document.images)).toBe(true);
         });
-        
+
         it("should return false for a function", function() {
             expect(Ext.isIterable(function() {})).toBe(false);
         });
@@ -970,15 +966,15 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
         it('should return false for objects with an item property', function() {
             expect(Ext.isIterable({ item: function() {} })).toBe(false);
         });
-        
+
         it('should return false for objects with a length prototype property', function() {
             expect(Ext.isIterable(new LengthyClass())).toBe(false);
         });
-        
+
         it('should return false for objects with an item prototype property', function() {
             expect(Ext.isIterable(new ClassWithItem())).toBe(false);
         });
-        
+
         it('should return false for objects with item and length prototype properties', function() {
             expect(Ext.isIterable(new LengthyItemClass())).toBe(false);
         });
@@ -1428,21 +1424,21 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
         it("should return false with node list", function() {
             expect(Ext.isFunction(document.getElementsByTagName('body'))).toBe(false);
         });
-        
+
         it("should return true with a function from a document where Ext isn't loaded", function() {
             var iframe = document.createElement('iframe'),
                 win, doc;
 
             iframe.src = 'about:blank';
             document.body.appendChild(iframe);
-            
+
             doc = iframe.contentDocument ? iframe.contentDocument : (iframe.contentWindow.document || iframe.document);
             win = iframe.contentWindow || iframe.window;
-            
+
             doc.open();
             doc.write('<html><head><script type="text/javascript">function customFn() {}</script></head><body></body></html>');
             doc.close();
-            
+
             expect(Ext.isFunction(win.customFn)).toBe(true);
             document.body.removeChild(iframe);
             iframe = doc = win = null;
@@ -1926,11 +1922,11 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
             expect(clone).not.toBe(node);
             document.body.removeChild(node);
         });
-        
+
         it("should return null for null items", function() {
             expect(Ext.clone(null)).toBeNull();
         });
-        
+
         it("should return undefined for undefined items", function() {
             expect(Ext.clone(undefined)).toBeUndefined();
         });
@@ -2252,61 +2248,61 @@ topSuite("Ext", ["Ext.event.publisher.Dom", "Ext.event.publisher.Gesture"], func
             });
         });
     });
-    
+
     describe("Ext.ariaWarn", function() {
         var logSpy, logMsgs;
-        
+
         beforeEach(function() {
             logMsgs = [];
             logSpy = spyOn(Ext.log, 'warn').andCallFake(function() {
                 logMsgs = [].concat(logMsgs, Array.prototype.slice.apply(arguments));
             });
-            
+
             // Ext.ariaWarn will be set to Ext.emptyFn before running the tests, to avoid
             // massive console fallout; we need to save the original fn for testing.
             Ext.ariaWarn = Ext._ariaWarn;
             Ext.ariaWarn.first = false;
         });
-        
+
         afterEach(function() {
             logSpy = logMsgs = null;
             Ext.ariaWarn = Ext.emptyFn;
         });
-        
+
         it("should provide additional instructions the first time", function() {
             Ext.ariaWarn('foo');
-            
+
             expect(logMsgs.join(' ')).toMatch(/can be suppressed/);
         });
-        
+
         it("should only provide additional instructions the first time", function() {
             Ext.ariaWarn('foo');
             Ext.ariaWarn('bar');
-            
+
             var match = logMsgs.join(' ').match(/can be suppressed/g);
-            
+
             expect(match.length).toBe(1);
         });
-        
+
         it("should not warn when Ext.enableAria = false", function() {
             var orig = Ext.enableAria;
-            
+
             Ext.enableAria = false;
             Ext.ariaWarn('blerg');
-            
+
             expect(logSpy).not.toHaveBeenCalled();
-            
+
             Ext.enableAria = orig;
         });
-        
+
         it("should not warn when Ext.slicer = true", function() {
             var orig = Ext.slicer;
-            
+
             Ext.slicer = true;
             Ext.ariaWarn('throbbe');
-            
+
             expect(logSpy).not.toHaveBeenCalled();
-            
+
             Ext.slicer = orig;
         });
     });

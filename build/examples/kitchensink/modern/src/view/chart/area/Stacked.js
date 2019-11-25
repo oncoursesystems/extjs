@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.chart.area.Stacked', {
     xtype: 'area-stacked',
     controller: 'area-stacked',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/area/StackedController.js'
@@ -43,9 +43,9 @@ Ext.define('KitchenSink.view.chart.area.Stacked', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -121,7 +121,7 @@ Ext.define('KitchenSink.view.chart.area.Stacked', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

@@ -19,7 +19,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Sunburst', {
         'Ext.grid.Tree'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/d3/hierarchy/SunburstController.js'
@@ -34,7 +34,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Sunburst', {
         path: 'data/tree/tree.json',
         prettyPrint: false
     }],
-    // </example>
+    //</example>
 
     layout: {
         type: 'hbox',

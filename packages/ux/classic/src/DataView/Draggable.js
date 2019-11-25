@@ -139,7 +139,7 @@ Ext.define('Ext.ux.DataView.Draggable', {
             // preventDefault is needed here to avoid the browser dragging the image
             // instead of dragging the container like it's supposed to
             e.preventDefault();
-            
+
             if (!dataview.isSelected(target)) {
                 selModel.select(dataview.getRecord(target));
             }
@@ -192,7 +192,7 @@ Ext.define('Ext.ux.DataView.Draggable', {
      */
     getRepairXY: function(e) {
         var repairEl, repairXY;
-        
+
         if (this.dragData.multi) {
             return false;
         }
@@ -238,12 +238,12 @@ Ext.define('Ext.ux.DataView.Draggable', {
             });
 
             store.loadRecords(records);
-            
+
             me.ghost = Ext.create('Ext.view.View', Ext.apply({
                 renderTo: document.createElement('div'),
                 store: store
             }, me.ghostConfig));
-            
+
             me.ghost.container.skipGarbageCollection = me.ghost.el.skipGarbageCollection = true;
         }
 

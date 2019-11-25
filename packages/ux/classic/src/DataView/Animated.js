@@ -13,7 +13,7 @@ Ext.define('Ext.ux.DataView.Animated', {
         duration: 750,
         idProperty: 'id'
     },
-    
+
     /**
      * Creates the plugin instance, applies defaults
      * @constructor
@@ -42,7 +42,7 @@ Ext.define('Ext.ux.DataView.Animated', {
          * Reference to the DataView this instance is bound to
          */
         me.dataview = dataview;
-        
+
         dataview.blockRefresh = true;
         dataview.updateIndexes = Ext.Function.createSequence(dataview.updateIndexes, function() {
             this.getTargetEl().select(this.itemSelector).each(function(element, composite, index) {
@@ -51,7 +51,7 @@ Ext.define('Ext.ux.DataView.Animated', {
                 );
             }, this);
         }, dataview);
-        
+
         /**
          * @property dataviewID
          * @type String
@@ -59,7 +59,7 @@ Ext.define('Ext.ux.DataView.Animated', {
          * child objects
          */
         me.dataviewID = dataview.id;
-        
+
         /**
          * @property cachedStoreData
          * @type Object
@@ -67,7 +67,7 @@ Ext.define('Ext.ux.DataView.Animated', {
          * whether any items were added or removed from the store on data change
          */
         me.cachedStoreData = {};
-        
+
         // catch the store data with the snapshot immediately
         me.cacheStoreData(store.data || store.snapshot);
 
@@ -86,7 +86,7 @@ Ext.define('Ext.ux.DataView.Animated', {
             scope: this,
             buffer: 50
         });
-        
+
         function reDraw() {
             var parentEl = dataview.getTargetEl(),
                 parentElY = parentEl.getY(),
@@ -161,7 +161,7 @@ Ext.define('Ext.ux.DataView.Animated', {
                         }
                     }
                 });
-                
+
                 delete item.dom;
             });
 
@@ -275,12 +275,12 @@ Ext.define('Ext.ux.DataView.Animated', {
      */
     cacheStoreData: function(store) {
         var cachedStoreData = this.cachedStoreData = {};
-        
+
         store.each(function(record) {
             cachedStoreData[record.internalId] = record;
         });
     },
-    
+
     /**
      * Returns all records that were already in the DataView
      * @return {Object} All existing records
@@ -288,7 +288,7 @@ Ext.define('Ext.ux.DataView.Animated', {
     getExisting: function() {
         return this.cachedStoreData;
     },
-    
+
     /**
      * Returns the total number of items that are currently visible in the DataView
      * @return {Number} The number of existing items
@@ -297,14 +297,14 @@ Ext.define('Ext.ux.DataView.Animated', {
         var count = 0,
             items = this.getExisting(),
             k; // eslint-disable-line no-unused-vars
-        
+
         for (k in items) {
             count++;
         }
-        
+
         return count;
     },
-    
+
     /**
      * Returns all records in the given store that were not already present
      * @param {Ext.data.Store} store The updated store instance
@@ -313,16 +313,16 @@ Ext.define('Ext.ux.DataView.Animated', {
     getAdded: function(store) {
         var cachedStoreData = this.cachedStoreData,
             added = {};
-        
+
         store.each(function(record) {
             if (cachedStoreData[record.internalId] == null) {
                 added[record.internalId] = record;
             }
         });
-        
+
         return added;
     },
-    
+
     /**
      * Returns all records that are present in the DataView but not the new store
      * @param {Ext.data.Store} store The updated store instance
@@ -332,17 +332,17 @@ Ext.define('Ext.ux.DataView.Animated', {
         var cachedStoreData = this.cachedStoreData,
             removed = {},
             id;
-        
+
         for (id in cachedStoreData) {
             // eslint-disable-next-line brace-style, semi
             if (store.findBy(function(record) { return record.internalId === id }) === -1) {
                 removed[id] = cachedStoreData[id];
             }
         }
-        
+
         return removed;
     },
-    
+
     /**
      * Returns all records that are already present and are still present in the new store
      * @param {Ext.data.Store} store The updated store instance
@@ -358,7 +358,7 @@ Ext.define('Ext.ux.DataView.Animated', {
                 remaining[record.internalId] = record;
             }
         });
-        
+
         return remaining;
     }
 });

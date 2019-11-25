@@ -22,7 +22,7 @@ Ext.define('KitchenSink.view.chart.drawing.IntersectionsComponent', {
         mouseleave: 'onMouseUp'
     },
 
-    findTarget: function (sprites, x, y) {
+    findTarget: function(sprites, x, y) {
         var me = this,
             sprite,
             i, ln;
@@ -44,7 +44,7 @@ Ext.define('KitchenSink.view.chart.drawing.IntersectionsComponent', {
         }
     },
 
-    onMouseDown: function (e) {
+    onMouseDown: function(e) {
         var me = this,
             surface = me.getSurface(),
             sprites = surface.getItems(),
@@ -68,7 +68,7 @@ Ext.define('KitchenSink.view.chart.drawing.IntersectionsComponent', {
         }
     },
 
-    onMouseMove: function (e) {
+    onMouseMove: function(e) {
         var me = this,
             surface = me.getSurface(),
             sprites = surface.getItems(),
@@ -101,7 +101,8 @@ Ext.define('KitchenSink.view.chart.drawing.IntersectionsComponent', {
             }
 
             me.showIntersections(intersections);
-        } else {
+        }
+        else {
             target = me.findTarget(sprites, x, y);
 
             if (target) {
@@ -114,7 +115,7 @@ Ext.define('KitchenSink.view.chart.drawing.IntersectionsComponent', {
         surface.renderFrame();
     },
 
-    onMouseUp: function (e) {
+    onMouseUp: function(e) {
         var me = this,
             surface = me.getSurface();
 
@@ -125,7 +126,7 @@ Ext.define('KitchenSink.view.chart.drawing.IntersectionsComponent', {
         surface.renderFrame();
     },
 
-    showIntersections: function (intersections) {
+    showIntersections: function(intersections) {
         var me = this,
             i, ln, point;
 
@@ -141,7 +142,7 @@ Ext.define('KitchenSink.view.chart.drawing.IntersectionsComponent', {
         }
     },
 
-    initialize: function () {
+    initialize: function() {
         var me = this,
             surface = me.getSurface();
 

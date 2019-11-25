@@ -6,7 +6,7 @@ topSuite("Ext.data.schema.Namer", ['Ext.data.ArrayStore'], function() {
         schema = Ext.data.Model.schema;
         associationNames = [];
         entityNames = [];
-        
+
         schema.setNamespace('spec.data.namer');
         Base = Ext.define('spec.data.namer.Base', {
             extend: 'Ext.data.Model',
@@ -89,9 +89,9 @@ topSuite("Ext.data.schema.Namer", ['Ext.data.ArrayStore'], function() {
 
         associationNames.sort();
         entityNames.sort();
-        
+
     });
-    
+
     afterEach(function() {
         Ext.Array.forEach(entityNames, function(key) {
             Ext.undefine('spec.data.namer.' + key);

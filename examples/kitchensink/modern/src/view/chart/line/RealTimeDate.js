@@ -3,13 +3,13 @@ Ext.define('KitchenSink.view.chart.line.RealTimeDate', {
     xtype: 'line-real-time-date',
     controller: 'line-real-time-date',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/line/RealTimeDateController.js'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
 

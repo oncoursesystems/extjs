@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.calendar.Validation', {
         'Ext.calendar.panel.Days'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/calendar/ValidationController.js'
@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.calendar.Validation', {
         type: 'Store',
         path: 'samples/data/calendar/Validation.js'
     }],
-    // </example>
+    //</example>
 
     viewModel: {
         data: {
@@ -59,4 +59,4 @@ Ext.define('KitchenSink.view.calendar.Validation', {
         }
     }]
 
-})
+});

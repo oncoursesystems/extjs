@@ -4838,7 +4838,7 @@ jazzman.Spec.prototype.waitsFor = function() {
         this.env,
         _timeout,
         _latchFunction,
-        _timeoutMessage,
+        _timeoutMessage || (_latchFunction && _latchFunction.toString()),
         _timeout_increment,
         this
     );
@@ -5327,6 +5327,10 @@ jazzman.WaitsForBlock.prototype.execute = function(onComplete) {
 // or explicitly if latch function throws an exception. In latter case
 // we will have an exception to report.
 jazzman.WaitsForBlock.prototype.fail = function(exception) {
+    if (jazzman.BREAK_ON_FAIL) {
+        debugger;
+    }
+
     this.stop(exception || {
         name: 'timeout',
         message: 'Timed out after ' + this.timeout + ' msec waiting for ' +

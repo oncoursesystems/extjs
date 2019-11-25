@@ -62,7 +62,7 @@
             }
         ]]>
     </script>
-<!--Commenting out below line to debug failing build 6.7 Continuous -->
+<!--Commenting out below line to debug failing build 7.0 Continuous -->
   <!--  <import file="${basedir}/.sencha/test/test-impl.xml"/> -->
 
     <!--

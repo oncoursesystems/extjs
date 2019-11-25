@@ -64,7 +64,7 @@ Ext.define('Ext.data.XmlStore', {
         'Ext.data.reader.Xml',
         'Ext.data.writer.Xml'
     ],
-    
+
     constructor: function(config) {
         config = Ext.apply({
             proxy: {

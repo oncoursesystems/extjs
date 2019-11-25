@@ -7,11 +7,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -20,9 +20,9 @@ function() {
                 fn: fn || Ext.emptyFn
             },
             spy = spyOn(obj, "fn");
-        
+
         object.addListener(eventName, obj.fn);
-        
+
         return spy;
     }
 
@@ -200,7 +200,7 @@ function() {
                                         saveAndRecreate(stateId);
                                         columnManager = grid[partner].columnManager;
                                     });
-                                    
+
                                     waitsFor(function() {
                                         return columnManager.getColumns()[0];
                                     });
@@ -208,7 +208,7 @@ function() {
                                     runs(function() {
                                         expect(columnManager.getColumns()[0].getWidth()).toBe(250);
                                     });
-                                    
+
                                 });
 
                                 it("should retain column visibility", function() {
@@ -223,7 +223,7 @@ function() {
                                         saveAndRecreate(stateId);
                                         columnManager = grid[partner].columnManager;
                                     });
-                                    
+
                                     waitsFor(function() {
                                         return columnManager.getColumns()[0];
                                     });
@@ -293,7 +293,7 @@ function() {
                 testStateId(null);
             });
         });
-        
+
         describe('border layout locking', function() {
             var GridEventModel = Ext.define(null, {
                 extend: 'Ext.data.Model',
@@ -317,7 +317,7 @@ function() {
                 var data = [],
                     defaultCols = [],
                     i;
-                    
+
                 for (i = 1; i <= 10; ++i) {
                     defaultCols.push({
                         text: 'F' + i,
@@ -340,12 +340,12 @@ function() {
                         field10: i + '.' + 10
                     });
                 }
-                
+
                 store = new Ext.data.Store({
                     model: GridEventModel,
                     data: data
                 });
-                
+
                 grid = new Ext.grid.Panel(Ext.apply({
                     columns: defaultCols,
                     store: store,
@@ -423,7 +423,7 @@ function() {
             (Ext.getScrollbarSize().height ? describe : xdescribe)("collpasing and expanding", function() {
                 it("should display the scroller if needed", function() {
                     var spy = jasmine.createSpy();
-                    
+
                     makeGrid(2, null, {
                         width: 100,
                         collapsible: true,
@@ -457,7 +457,7 @@ function() {
 
                 it("should display the scroller if need and the normal side continued to be scrollable during expand/collapse", function() {
                     var spy = jasmine.createSpy();
-                    
+
                     makeGrid(2, {
                         width: 400
                     }, {
@@ -468,7 +468,6 @@ function() {
                             collapse: spy
                         }
                     });
-
 
                     grid.lockedGrid.collapse();
 
@@ -602,7 +601,7 @@ function() {
             });
 
             grid.enable();
-            
+
             expect(grid.el.down('.x-mask').isVisible(true)).toBeFalsy();
         });
     });
@@ -654,8 +653,6 @@ function() {
                 width: 400
             });
 
-
-
             scroller = grid.getScrollable();
             scroller.scrollTo(null, 100);
             scroller.scrollTo(100, null);
@@ -678,8 +675,56 @@ function() {
                 jasmine.fireMouseEvent(cell, 'mouseup');
             });
         });
+
+        it("should not change scroll position when bufferedRenderer is false", function() {
+            var scroller,
+                cell;
+
+             createGrid({
+                bufferedRenderer: false,
+                columns: [{
+                    text: 'Name',
+                    dataIndex: 'name',
+                    locked: true
+                }, {
+                    text: 'Email',
+                    dataIndex: 'email',
+                    width: 300
+                }, {
+                    text: 'Phone',
+                    dataIndex: 'phone',
+                    width: 300
+                }],
+                height: 200,
+                width: 400
+            });
+
+            scroller = grid.getScrollable();
+            scroller.scrollTo(null, 100);
+            scroller.scrollTo(100, null);
+
+             waitsFor(function() {
+                return scroller.position.y === scroller.position.x && scroller.position.y === 100;
+            });
+
+             runs(function() {
+                cell = grid.normalGrid.view.getCell(7, 0);
+                jasmine.fireMouseEvent(cell, 'mousedown');
+            });
+
+             grid.updateLayout();
+
+             // Need waits here because we are waitign for the scroller not to move
+            waits(100);
+
+             runs(function() {
+                expect(scroller.getPosition().y).toBe(100);
+                // finish the click to avoid even publisher leaks
+                jasmine.fireMouseEvent(cell, 'mouseup');
+            });
+        });
     });
-    
+
     describe('View focus from cell editor', function() {
         it('should set position to the closest cell', function() {
             var rowIdx = 0,
@@ -687,7 +732,7 @@ function() {
                 editor, editorActive, position,
                 record, cellEl, cellRegion, viewRegion,
                 x, y;
-    
+
             store = new Ext.data.ArrayStore({
                 data: [
                     [ 1, 'Lorem'],
@@ -696,7 +741,7 @@ function() {
                 ],
                 fields: ['row', 'lorem']
             });
-            
+
             createGrid({
                 plugins: [{
                     ptype: 'cellediting',
@@ -720,33 +765,33 @@ function() {
                     editor: 'textfield'
                 }]
             });
-            
+
             view = grid.normalGrid.view;
             editor = grid.findPlugin('cellediting');
             navModel = grid.normalGrid.getNavigationModel();
             record = store.getAt(0);
-            
+
             editor.startEditByPosition({ row: rowIdx, column: colIdx });
-    
+
             waitFor(function() {
                 return editorActive;
             });
-    
+
             runs(function() {
                 cellEl = view.getCell(record, colIdx - 1, true);
                 cellRegion = cellEl.getRegion();
                 viewRegion = view.getRegion();
-                
+
                 // get the XY position in the middle between the grid cell and the
                 // bottom of the view
                 x = (cellRegion.left + cellRegion.right) / 2;
                 y = (cellRegion.bottom + viewRegion.bottom) / 2;
-                
+
                 // mousedown in the view container below the cell being edited
                 jasmine.fireMouseEvent(view, 'mousedown', x, y);
                 position = navModel.getPosition();
                 jasmine.fireMouseEvent(view, 'mouseup', x, y);
-                
+
                 // position should remain on the same cell
                 expect({
                     rowIdx: position.rowIdx,
@@ -755,12 +800,12 @@ function() {
                     rowIdx: rowIdx,
                     colIdx: --colIdx
                 });
-                
+
                 // mousedown below the cell to the left
                 jasmine.fireMouseEvent(view.el, 'mousedown', x - cellRegion.width, y);
                 position = navModel.getPosition();
                 jasmine.fireMouseEvent(view.el, 'mouseup', x - cellRegion.width, y);
-    
+
                 // position should be moved to the cell to the left
                 expect({
                     rowIdx: position.rowIdx,

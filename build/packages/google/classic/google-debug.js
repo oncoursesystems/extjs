@@ -183,9 +183,9 @@ Ext.define('Ext.google.data.AbstractProxy', {
             // See https://code.google.com/a/google.com/p/apps-api-issues/issues/detail?id=4528
             // TODO: use the following code once fixed! also check that it doesn't break
             // maxResults limit for event list requests.
-            //var batch = gapi.client.newBatch();
-            //Ext.Array.each(requests, function(r, i) { batch.add(r, { id: i }); });
-            //return batch.execute();
+            // var batch = gapi.client.newBatch();
+            // Ext.Array.each(requests, function(r, i) { batch.add(r, { id: i }); });
+            // return batch.execute();
             // WORKAROUND for the issue above (REMOVE ME)
             var results = [];
             return Ext.Array.reduce(requests, function(sequence, r) {
@@ -435,7 +435,7 @@ Ext.define('Ext.google.data.EventsProxy', {
             // it, so let's get it from the previous values if not anymore in data.
             data.calendarId = data.calendarId || record.get('calendarId') || record.getPrevious('calendarId');
             // ['delete'] to make YUI happy
-            return gapi.client.calendar.events['delete']({
+            return gapi.client.calendar.events.delete({
                 'calendarId': data.calendarId,
                 'eventId': data.id
             });
@@ -637,7 +637,7 @@ Ext.define('Ext.ux.google.Api', {
                                 module[n]();
                             }
                         }
-                    }, //iterate callbacks in reverse
+                    }, // iterate callbacks in reverse
                     api));
                 } else if (module !== true) {
                     module.push(callback);

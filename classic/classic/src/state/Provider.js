@@ -14,13 +14,13 @@ Ext.define('Ext.state.Provider', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
-    
+
     /**
      * @cfg {String} prefix A string to prefix to items stored in the underlying state store. 
      * Defaults to <tt>'ext-'</tt>
      */
     prefix: 'ext-',
-    
+
     /**
      * @event statechange
      * Fires when a state change occurs.
@@ -36,7 +36,7 @@ Ext.define('Ext.state.Provider', {
         me.state = {};
         me.mixins.observable.constructor.call(me);
     },
-    
+
     /**
      * Returns the current value for a key
      * @param {String} name The key name
@@ -90,27 +90,27 @@ Ext.define('Ext.state.Provider', {
             re = /^(a|n|d|b|s|o|e):(.*)$/,
             matches = re.exec(unescape(value)),
             all, type, keyValue, values, vLen, v;
-            
+
         if (!matches || !matches[1]) {
             return; // non state
         }
-        
+
         type = matches[1];
         value = matches[2];
 
         switch (type) {
             case 'e':
                 return null;
-            
+
             case 'n':
                 return parseFloat(value);
-            
+
             case 'd':
                 return new Date(Date.parse(value));
-            
+
             case 'b':
                 return (value === '1');
-            
+
             case 'a':
                 all = [];
 
@@ -125,7 +125,7 @@ Ext.define('Ext.state.Provider', {
                 }
 
                 return all;
-            
+
             case 'o':
                 all = {};
 
@@ -141,7 +141,7 @@ Ext.define('Ext.state.Provider', {
                 }
 
                 return all;
-            
+
             default:
                 return value;
         }
@@ -156,7 +156,7 @@ Ext.define('Ext.state.Provider', {
         var flat = '',
             i = 0,
             enc, len, key;
-            
+
         if (value == null) {
             return 'e:1';
         }

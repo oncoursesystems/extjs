@@ -81,7 +81,6 @@ Ext.define('Ext.draw.overrides.hittest.sprite.Path', {
             result = null,
             params, isFilled;
 
-
         if (!parentResult) {
             // The sprite is not visible or bounding box wasn't hit.
             return result;

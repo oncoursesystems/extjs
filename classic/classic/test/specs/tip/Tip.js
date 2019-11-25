@@ -14,7 +14,6 @@ topSuite("Ext.tip.Tip", function() {
         }
     });
 
-
     describe("basic", function() {
         it("should extend Ext.Panel", function() {
             createTip();
@@ -32,7 +31,6 @@ topSuite("Ext.tip.Tip", function() {
             expect(tip.el).toHaveCls('x-tip');
         });
     });
-
 
     describe("showAt", function() {
         it("should show the tip at the specified x/y coordinates", function() {
@@ -82,7 +80,6 @@ topSuite("Ext.tip.Tip", function() {
         });
     });
 
-
     describe("closable", function() {
         it("should not have a close button by default", function() {
             createTip().show();
@@ -103,7 +100,6 @@ topSuite("Ext.tip.Tip", function() {
         });
     });
 
-
     describe("title", function() {
         it("should have no title by default", function() {
             createTip().show();
@@ -116,14 +112,12 @@ topSuite("Ext.tip.Tip", function() {
         });
     });
 
-
     xdescribe("content", function() {
         it("should display the configured html value", function() {
             createTip({ html: 'Tip Body Text' }).show();
             expect(tip.body.dom).hasHTML('Tip Body Text');
         });
     });
-
 
     xdescribe("widths", function() {
         it("should allow setting an explicit width", function() {
@@ -141,7 +135,7 @@ topSuite("Ext.tip.Tip", function() {
             createTip({ html: '<div style="width: 20px;">x</div>', minWidth: 60 }).show();
             expect(tip.el.getWidth()).toEqual(tip.minWidth);
         });
-        
+
         it("should constrain the automatic width to at or below the configured maxWidth", function() {
             createTip({ html: '<div style="width: 2000px;">x</div>' }).show();
             expect(tip.el.getWidth()).toEqual(tip.maxWidth);
@@ -157,6 +151,5 @@ topSuite("Ext.tip.Tip", function() {
             expect(tip.getWidth()).toBe(212);
         });
     });
-
 
 });

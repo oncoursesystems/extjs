@@ -51,5 +51,4 @@ Ext.define('Ext.draw.overrides.hittest.sprite.Instancing', {
         return result;
     }
 
-
 });

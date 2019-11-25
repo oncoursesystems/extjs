@@ -39,19 +39,19 @@ Ext.define('Ext.app.bind.TemplateBinding', {
             me.onData(tpl.getText());
         }
     },
-    
+
     destroy: function() {
         var me = this;
-        
+
         Ext.destroy(me.multiBinding);
         me.tpl = me.multiBinding = null;
-        
+
         me.callParent();
     },
 
     getFullName: function() {
         var multi = this.multiBinding;
-        
+
         return this.fullName ||
                (this.fullName = '$' + (multi ? multi.getFullName() : this.callParent()));
     },
@@ -66,7 +66,7 @@ Ext.define('Ext.app.bind.TemplateBinding', {
 
     isAvailable: function() {
         var multi = this.multiBinding;
-        
+
         return multi ? multi.isAvailable() : false;
     },
 
@@ -76,10 +76,10 @@ Ext.define('Ext.app.bind.TemplateBinding', {
 
     isLoading: function() {
         var multi = this.multiBinding;
-        
+
         return multi ? multi.isLoading() : false;
     },
-    
+
     onBindData: function(data) {
         this.onData(this.tpl.apply(data, this.getTemplateScope()));
     },
@@ -100,7 +100,7 @@ Ext.define('Ext.app.bind.TemplateBinding', {
 
     refresh: function() {
         var multi = this.multiBinding;
-        
+
         if (multi) {
             multi.refresh();
         }
@@ -109,7 +109,7 @@ Ext.define('Ext.app.bind.TemplateBinding', {
     privates: {
         sort: function() {
             var multi = this.multiBinding;
-            
+
             if (multi) {
                 this.scheduler.sortItem(multi);
             }

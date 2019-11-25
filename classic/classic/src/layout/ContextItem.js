@@ -141,7 +141,7 @@ Ext.define('Ext.layout.ContextItem', {
             // These items are created top-down, so the ContextItem of our ownerCt should
             // be available (if it is part of this layout run).
             ownerCt = target.ownerCt;
-            
+
             if (ownerCt && (ownerCtContext = ownerCt.el && me.context.items[ownerCt.el.id])) {
                 me.ownerCtContext = ownerCtContext;
             }
@@ -275,7 +275,7 @@ Ext.define('Ext.layout.ContextItem', {
             // Init the children element items since they may have dirty state (no need to
             // do this the firstTime).
             children = me.children;
-            
+
             for (i = 0, n = children.length; i < n; ++i) {
                 children[i].init(true);
             }
@@ -334,7 +334,7 @@ Ext.define('Ext.layout.ContextItem', {
                     if (me.widthModel.calculated) {
                         ++ownerCtContext.remainingChildDimensions;
                     }
-                    
+
                     if (me.heightModel.calculated) {
                         ++ownerCtContext.remainingChildDimensions;
                     }
@@ -346,7 +346,7 @@ Ext.define('Ext.layout.ContextItem', {
             // this at some point more carefully):
             me.recoverProp('x', oldProps, oldDirty);
             me.recoverProp('y', oldProps, oldDirty);
-            
+
             // if these are calculated by the ownerCt, don't trash them:
             if (me.widthModel.calculated) {
                 me.recoverProp('width', oldProps, oldDirty);
@@ -354,14 +354,14 @@ Ext.define('Ext.layout.ContextItem', {
             else if ('width' in oldProps) {
                 ++remainingCount;
             }
-            
+
             if (me.heightModel.calculated) {
                 me.recoverProp('height', oldProps, oldDirty);
             }
             else if ('height' in oldProps) {
                 ++remainingCount;
             }
-            
+
             // if we are a container child and this is not a full init, that means our
             // parent was not invalidated and therefore only the dimensions that were
             // set last time and removed from remainingChildDimensions last time, need to
@@ -405,7 +405,7 @@ Ext.define('Ext.layout.ContextItem', {
             // a state with both constraints, but we cannot add them both at once.
             newHeightModel = options.heightModel;
             newWidthModel = options.widthModel;
-            
+
             if (newWidthModel && newHeightModel && oldWidthModel && oldHeightModel) {
                 if (oldWidthModel.shrinkWrap && oldHeightModel.shrinkWrap) {
                     if (newWidthModel.constrainedMax && newHeightModel.constrainedMin) {
@@ -418,7 +418,7 @@ Ext.define('Ext.layout.ContextItem', {
             if (newWidthModel) {
                 me.widthModel = newWidthModel;
             }
-            
+
             if (newHeightModel) {
                 me.heightModel = newHeightModel;
             }
@@ -452,7 +452,7 @@ Ext.define('Ext.layout.ContextItem', {
         if (full) {
             if (ownerCtContext && widthModel.shrinkWrap) {
                 boxParent = ownerCtContext.isBoxParent ? ownerCtContext : ownerCtContext.boxParent;
-                
+
                 if (boxParent) {
                     boxParent.addBoxChild(me);
                 }
@@ -477,7 +477,7 @@ Ext.define('Ext.layout.ContextItem', {
         if (me.remainingChildDimensions === 0) {
             props.containerChildrenSizeDone = true;
         }
-        
+
         if (containerLayoutDone) {
             props.containerLayoutDone = true;
         }
@@ -583,12 +583,12 @@ Ext.define('Ext.layout.ContextItem', {
             styles[this.translateProps.x] = x + 'px';
             ++count;
         }
-        
+
         if (y !== undefined) {
             styles.top = y + 'px';
             ++count;
         }
-        
+
         return count;
     },
 
@@ -714,7 +714,7 @@ Ext.define('Ext.layout.ContextItem', {
                 layout = blockedLayouts[layoutId];
 
                 --context.blockCount;
-                
+
                 if (! --layout.blockCount && !layout.pending && !layout.done) {
                     context.queueLayout(layout);
                 }
@@ -761,7 +761,7 @@ Ext.define('Ext.layout.ContextItem', {
             for (layoutId in triggers) {
                 layout = triggers[layoutId];
                 ++layout.firedTriggers;
-                
+
                 if (!layout.done && !layout.blockCount && !layout.pending) {
                     context.queueLayout(layout);
                 }
@@ -860,7 +860,7 @@ Ext.define('Ext.layout.ContextItem', {
                 else {
                     me.writeProps(anim.from);
                 }
-                
+
                 me.el.animate(anim);
                 animQueue = Ext.fx.Manager.getFxQueue(me.el.id);
                 anim = animQueue[animQueue.length - 1];
@@ -869,7 +869,7 @@ Ext.define('Ext.layout.ContextItem', {
                 anim.on({
                     afteranimate: function() {
                         var flag;
-                        
+
                         delete target.$layoutAnim;
 
                         // afteranimate can fire when the target is being destroyed
@@ -879,7 +879,7 @@ Ext.define('Ext.layout.ContextItem', {
                         }
 
                         flag = me.isCollapsingOrExpanding;
-                        
+
                         if (flag === 1) {
                             target.componentLayout.redoLayout(me);
                             target.afterCollapse(true);
@@ -900,7 +900,7 @@ Ext.define('Ext.layout.ContextItem', {
             // but still have to finish the expand sequence.
             else {
                 flag = me.isCollapsingOrExpanding;
-                
+
                 if (flag === 1) {
                     target.afterCollapse(true);
                 }
@@ -951,16 +951,16 @@ Ext.define('Ext.layout.ContextItem', {
             }
             else {
                 src = me.target;
-                
+
                 if (owner) {
                     src = owner;
                 }
 
                 el = src[nameOrEl];
-                
+
                 if (typeof el === 'function') { // ex 'getTarget'
                     el = el.call(src);
-                    
+
                     if (el === me.el) {
                         return this; // comp.getTarget() often returns comp.el
                     }
@@ -1028,7 +1028,7 @@ Ext.define('Ext.layout.ContextItem', {
 
                 // TODO: stop caching margin$ on the component EXTJS-13359
                 info = comp.margin$;
-                
+
                 if (info && info.ownerId !== ownerLayoutId) {
                     // got one but from the wrong owner
                     info = null;
@@ -1101,7 +1101,7 @@ Ext.define('Ext.layout.ContextItem', {
             result = me.props[propName];
 
         me.addTrigger(propName);
-        
+
         return result;
     },
 
@@ -1117,7 +1117,7 @@ Ext.define('Ext.layout.ContextItem', {
             result = (me.dirty && (propName in me.dirty)) ? undefined : me.props[propName];
 
         me.addTrigger(propName, true);
-        
+
         return result;
     },
 
@@ -1286,7 +1286,7 @@ Ext.define('Ext.layout.ContextItem', {
 
     parseMargins: function(comp, margins) {
         var type, ret;
-        
+
         if (margins === true) {
             margins = 5;
         }
@@ -1400,16 +1400,16 @@ Ext.define('Ext.layout.ContextItem', {
             }
             else {
                 src = me.target;
-                
+
                 if (owner) {
                     src = owner;
                 }
 
                 el = src[nameOrEl];
-                
+
                 if (typeof el === 'function') { // ex 'getTarget'
                     el = el.call(src);
-                    
+
                     if (el === me.el) {
                         return this; // comp.getTarget() often returns comp.el
                     }
@@ -1441,11 +1441,11 @@ Ext.define('Ext.layout.ContextItem', {
      */
     setAttribute: function(name, value) {
         var me = this;
-        
+
         if (!me.attributes) {
             me.attributes = {};
         }
-        
+
         me.attributes[name] = value;
         me.markDirty();
     },
@@ -1541,7 +1541,7 @@ Ext.define('Ext.layout.ContextItem', {
         if (valueType === 'undefined' || (valueType === 'number' && isNaN(value))) {
             return 0;
         }
-        
+
         if (me.props[propName] === value) {
             return 1;
         }
@@ -1557,7 +1557,7 @@ Ext.define('Ext.layout.ContextItem', {
         }
         else {
             info = me.styleInfo[propName];
-            
+
             if (info) {
                 if (!me.dirty) {
                     me.dirty = {};
@@ -1571,7 +1571,7 @@ Ext.define('Ext.layout.ContextItem', {
         // we always clear soft blocks on set
         me.fireTriggers('triggers', propName);
         me.clearBlocks('blocks', propName);
-        
+
         return 1;
     },
 
@@ -1592,7 +1592,7 @@ Ext.define('Ext.layout.ContextItem', {
         if (height < 0) {
             height = 0;
         }
-        
+
         if (!me.wrapsComponent) {
             if (!me.setProp('height', height, dirty)) {
                 return NaN;
@@ -1602,7 +1602,7 @@ Ext.define('Ext.layout.ContextItem', {
             min = me.collapsedVert ? 0 : (comp.minHeight || 0);
             height = Ext.Number.constrain(height, min, comp.maxHeight);
             oldHeight = me.props.height;
-            
+
             if (!me.setProp('height', height, dirty)) {
                 return NaN;
             }
@@ -1611,7 +1611,7 @@ Ext.define('Ext.layout.ContextItem', {
             // the number of remainingChildDimensions that the ownerCtContext is waiting on.
             if (ownerCtContext && !me.isComponentChild && isNaN(oldHeight)) {
                 rem = --ownerCtContext.remainingChildDimensions;
-                
+
                 if (!rem) {
                     // if there are 0 remainingChildDimensions set containerChildrenSizeDone
                     // on the ownerCtContext to indicate that all of its children's dimensions
@@ -1621,7 +1621,7 @@ Ext.define('Ext.layout.ContextItem', {
             }
 
             frameBody = me.frameBodyContext;
-            
+
             if (frameBody) {
                 frameInfo = me.getFrameInfo();
                 frameBody[me.el.vertical ? 'setWidth' : 'setHeight'](height - frameInfo.height,
@@ -1649,7 +1649,7 @@ Ext.define('Ext.layout.ContextItem', {
         if (width < 0) {
             width = 0;
         }
-        
+
         if (!me.wrapsComponent) {
             if (!me.setProp('width', width, dirty)) {
                 return NaN;
@@ -1659,7 +1659,7 @@ Ext.define('Ext.layout.ContextItem', {
             min = me.collapsedHorz ? 0 : (comp.minWidth || 0);
             width = Ext.Number.constrain(width, min, comp.maxWidth);
             oldWidth = me.props.width;
-            
+
             if (!me.setProp('width', width, dirty)) {
                 return NaN;
             }
@@ -1668,7 +1668,7 @@ Ext.define('Ext.layout.ContextItem', {
             // the number of remainingChildDimensions that the ownerCtContext is waiting on.
             if (ownerCtContext && !me.isComponentChild && isNaN(oldWidth)) {
                 rem = --ownerCtContext.remainingChildDimensions;
-                
+
                 if (!rem) {
                     // if there are 0 remainingChildDimensions set containerChildrenSizeDone
                     // on the ownerCtContext to indicate that all of its children's dimensions
@@ -1679,7 +1679,7 @@ Ext.define('Ext.layout.ContextItem', {
 
             // if ((frameBody = me.target.frameBody) && (frameBody = me.getEl(frameBody))){
             frameBody = me.frameBodyContext;
-            
+
             if (frameBody) {
                 frameInfo = me.getFrameInfo();
                 frameBody.setWidth(width - frameInfo.width, dirty);
@@ -1730,7 +1730,7 @@ Ext.define('Ext.layout.ContextItem', {
         var dirty = this.dirty;
 
         delete this.props[propName];
-        
+
         if (dirty) {
             delete dirty[propName];
         }
@@ -1741,7 +1741,7 @@ Ext.define('Ext.layout.ContextItem', {
             //<debug>
             Ext.Logger.warn('writeProps expected dirtyProps to be an object');
             //</debug>
-            
+
             return;
         }
 
@@ -1771,7 +1771,7 @@ Ext.define('Ext.layout.ContextItem', {
             }
 
             info = styleInfo[propName];
-            
+
             if (info && info.dom) {
                 // Numeric dirty values should have their associated suffix added
                 if (info.suffix && (numericValue = parseInt(dirtyProps[propName], 10))) {
@@ -1781,7 +1781,7 @@ Ext.define('Ext.layout.ContextItem', {
                 else {
                     styles[propName] = dirtyProps[propName];
                 }
-                
+
                 ++styleCount;
             }
         }
@@ -1800,12 +1800,12 @@ Ext.define('Ext.layout.ContextItem', {
         // Handle overflow settings updated by layout
         if ('overflowX' in dirtyProps) {
             scroller = target.getScrollable();
-            
+
             if (scroller) {
                 scroller.setX(dirtyProps.overflowX);
             }
         }
-        
+
         if ('overflowY' in dirtyProps) {
             if (scroller || (scroller = target.getScrollable())) {
                 scroller.setY(dirtyProps.overflowY);
@@ -1825,7 +1825,7 @@ Ext.define('Ext.layout.ContextItem', {
                 (hasHeight = height !== undefined && me.hasOverflowX)) {
                 // check that the component is absolute positioned.
                 isAbsolute = me.isAbsolute;
-                
+
                 if (isAbsolute === undefined) {
                     isAbsolute = false;
                     targetEl = me.target.getTargetEl();
@@ -1834,14 +1834,14 @@ Ext.define('Ext.layout.ContextItem', {
                 }
 
                 if (isAbsolute) {
-                    scrollbarSize = Ext.getScrollbarSize();
+                    scrollbarSize = Ext.scrollbar.size();
 
                     if (hasWidth) {
                         width = parseInt(width, 10) + scrollbarSize.width;
                         styles.width = width + 'px';
                         ++styleCount;
                     }
-                    
+
                     if (hasHeight) {
                         height = parseInt(height, 10) + scrollbarSize.height;
                         styles.height = height + 'px';
@@ -1865,7 +1865,7 @@ Ext.define('Ext.layout.ContextItem', {
 
         addBlock: function(name, layout, propName) {
             var blockedBy = (layout.blockedBy || (layout.blockedBy = {}));
-            
+
             // Ext.log(this.id,'.',propName,' ',name,': ',this.context.getLayoutName(layout));
             blockedBy[this.id + '.' + propName + (name.substring(0, 3) === 'dom' ? ':dom' : '')] =
                 1;
@@ -1896,11 +1896,11 @@ Ext.define('Ext.layout.ContextItem', {
 
             // Ext.log(this.id,'.',propName,' ',inDom ? ':dom' : '',' ',
             //         this.context.getLayoutName(layout));
-            
+
             this.callParent(arguments);
 
             triggers = this.context.triggersByLayoutId;
-            
+
             (triggers[layout.id] || (triggers[layout.id] = {}))[
                 this.id + '.' + propName + (inDom ? ':dom' : '')] =
                     {
@@ -1953,13 +1953,13 @@ Ext.define('Ext.layout.ContextItem', {
 
         getEl: function(el) {
             var child = this.callParent(arguments);
-            
+
             if (child && child !== this && child.parent !== this) {
                 Ext.raise({
                     msg: 'Got element from wrong component'
                 });
             }
-            
+
             return child;
         },
 
@@ -1991,7 +1991,7 @@ Ext.define('Ext.layout.ContextItem', {
                     msg: 'Cannot invalidate an element contextItem'
                 });
             }
-            
+
             return this.callParent(arguments);
         },
 
@@ -2004,7 +2004,7 @@ Ext.define('Ext.layout.ContextItem', {
 
             if (value !== null) {
                 setByProps = me.setBy || (me.setBy = {});
-                
+
                 if (!setByProps[propName]) {
                     setByProps[propName] = setBy;
                 }

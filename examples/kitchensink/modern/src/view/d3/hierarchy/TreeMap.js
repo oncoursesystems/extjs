@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeMap', {
         'Ext.d3.hierarchy.TreeMap'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/d3/hierarchy/TreeMapController.js'
@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeMap', {
         type: 'ViewModel',
         path: 'modern/src/view/d3/hierarchy/StocksViewModel.js'
     }],
-    // </example>
+    //</example>
 
     viewModel: {
         type: 'stocks'
@@ -51,8 +51,9 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeMap', {
                 range: ['#E45649', '#ECECEC', '#50A14F']
             },
             field: 'change',
-            processor: function (axis, scale, node, field) {
+            processor: function(axis, scale, node, field) {
                 var record = node.data;
+
                 return record.isLeaf() ? scale(record.get(field)) : '#ececec';
             }
         }

@@ -56,9 +56,9 @@ Ext.define('Ext.grid.column.Template', {
 
     initComponent: function() {
         var me = this;
-        
+
         me.tpl = (!Ext.isPrimitive(me.tpl) && me.tpl.compile) ? me.tpl : new Ext.XTemplate(me.tpl);
-        
+
         // Set this here since the template may access any record values,
         // so we must always run the update for this column
         me.hasCustomRenderer = true;
@@ -67,7 +67,7 @@ Ext.define('Ext.grid.column.Template', {
 
     defaultRenderer: function(value, meta, record) {
         var data = Ext.apply({}, record.data, record.getAssociatedData());
-        
+
         return this.tpl.apply(data);
     },
 

@@ -45,7 +45,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
             model: 'TestController.model.Test'
         });
-        
+
         Ext.define("TestController.controller.Events", {
             extend: 'Ext.app.Controller',
 
@@ -57,7 +57,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
                     }
                 });
             },
-            
+
             onPanelFooResize: function() {
                 panelEventFired = true;
             },
@@ -66,25 +66,25 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
                 customEventFired = true;
             }
         });
-        
+
         fooPanel = new TestController.view.FooPanel({
             itemId: 'fooPanel',
             prop: 'foo',
-            
+
             width: 100,
             height: 100,
-            
+
             renderTo: document.body
         });
     });
-    
+
     afterEach(function() {
         Ext.app.clearNamespaces();
-        
+
         if (fooPanel) {
             fooPanel.destroy();
         }
-        
+
         ctrl = null;
 
         if (Ext.isIE8) {
@@ -99,14 +99,14 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
             delete window.AnotherNonexistingNamespace;
             delete window.YetAnotherNonexistingNamespace;
         }
-        
+
         Ext.undefine('TestController.view.FooPanel');
         Ext.undefine('TestController.view.BarPanel');
         Ext.undefine('TestController.view.BazPanel');
         Ext.undefine('TestController.model.Test');
         Ext.undefine('TestController.store.Test');
         Ext.undefine('TestController.controller.Events');
-        
+
         Ext.data.Model.schema.clear();
     });
 
@@ -114,7 +114,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
         beforeEach(function() {
             spyOn(Ext.log, 'warn'); // Silence console warnings, they're pointless in unit tests
         });
-        
+
         it("resolves class name from Model@Name.space", function() {
             var names = Controller.getFullName('Model@Name.space.foo', 'model', 'Nonexisting');
 
@@ -200,7 +200,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
                 ]);
             });
         });
-        
+
         it("creates correct getter for Model Foo", function() {
             expect(Class.prototype.getFooModel).toBeFunction();
         });
@@ -314,7 +314,6 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
         it("uses $namespace shortcut to resolve modules if provided", function() {
             runs(function() {
                 spyOn(Ext.Loader, 'require').andReturn();
-
 
                 Class = Ext.define("NonexistingNamespace.controller.Fubaru", {
                     extend: 'Ext.app.Controller',
@@ -483,14 +482,14 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
                 id: 'foo'
             });
         });
-        
+
         afterEach(function() {
             var refs = ctrl.refCache;
-            
+
             for (var ref in refs) {
                 Ext.destroy(refs[ref]);
             }
-            
+
             Ext.undefine('TestController.controller.Refs');
         });
 
@@ -525,13 +524,13 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
         // https://sencha.jira.com/browse/EXTJSIV-6032
         it("doesn't require selector when ref has autoCreate flag", function() {
             var p = ctrl.getQuxPanel();
-        
+
             expect(p.xtype).toBe('barpanel');
         });
-        
+
         it("creates Component by default with autoCreate", function() {
             var p = ctrl.getFredComponent();
-            
+
             expect(p.xtype).toBe('component');
         });
 
@@ -552,7 +551,7 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
             expect(p.xtype).toBe('bazpanel');
 
             bazPanelId = p.getId();
-            
+
             p.destroy();
         });
 
@@ -562,71 +561,71 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
             expect(p.xtype).toBe('bazpanel');
             // AND
             expect(p.getId()).not.toBe(bazPanelId);
-            
+
             p.destroy();
         });
     });
-    
+
     describe("handles init():", function() {
         it("should survive init() on itself", function() {
             expect(function() { new TestController.controller.Events().init(); }).not.toThrow();
 
             expect(TestController.controller.Events).toBeDefined();
         });
-        
+
         it("should init() child Controllers", function() {
             var called1 = false,
                 called2 = false,
                 called3 = false;
-            
+
             spyOn(Ext.Loader, 'require').andCallFake(function(requires, callback) {
                 callback();
             });
-            
+
             Ext.define('TestController.controller.Child3', {
                 extend: 'Ext.app.Controller',
-                
+
                 init: function() {
                     called3 = true;
                 }
             });
-            
+
             Ext.define('TestController.controller.Child2', {
                 extend: 'Ext.app.Controller',
-                
+
                 controllers: ['Child3'],
-                
+
                 init: function() {
                     called2 = true;
                 }
             });
-            
+
             Ext.define('TestController.controller.Child1', {
                 extend: 'Ext.app.Controller',
-                
+
                 controllers: ['Child2'],
-                
+
                 init: function() {
                     called1 = true;
                 }
             });
-            
+
             Ext.define('TestController.controller.Parent', {
                 extend: 'Ext.app.Controller',
-                
+
                 controllers: ['Child1']
             });
-            
+
             Ext.define('TestController.Application', {
                 extend: 'Ext.app.Application',
-                
+
                 name: 'TestController',
-                
+
                 controllers: ['Parent']
             });
-            
+
             var testApp = new TestController.Application();
-            
+
             expect(called1).toBeTruthy();
             // AND
             expect(called2).toBeTruthy();
@@ -644,10 +643,10 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
             ctrl = new TestController.controller.Events();
             ctrl.init();
         });
-        
+
         it("should control newly created Views", function() {
             fooPanel.setSize(50, 50);
-            
+
             expect(panelEventFired).toBeTruthy();
         });
 
@@ -672,19 +671,19 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
 
     describe("handles getters:", function() {
         var c, s, m, v;
-        
+
         beforeEach(function() {
             ctrl = new TestController.controller.Events({
                 id: 'foo'
             });
             ctrl.init();
         });
-        
+
         afterEach(function() {
             Ext.destroy(s, m, v, c);
             s = m = v = c = null;
         });
-        
+
         it("should return self on getController(self-id)", function() {
             c = ctrl.getController('foo');
 
@@ -715,20 +714,20 @@ topSuite("Ext.app.Controller", ['Ext.app.Application', 'Ext.Panel'], function() 
             expect(v.$isClass).toBeTruthy();
         });
     });
-    
+
     describe("allows unit testing:", function() {
         beforeEach(function() {
             ctrl = new TestController.controller.Events({
                 id: 'bar'
             });
-            
+
             spyOn(ctrl, 'onPanelFooResize');
             ctrl.init();
         });
-        
+
         it("should fire the spy on the instance", function() {
             fooPanel.setSize(10, 10);
-            
+
             expect(ctrl.onPanelFooResize).toHaveBeenCalled();
         });
     });

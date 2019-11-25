@@ -135,7 +135,7 @@ Ext.define('Ext.data.reader.Xml', {
     extend: 'Ext.data.reader.Reader',
     alternateClassName: 'Ext.data.XmlReader',
     alias: 'reader.xml',
-    
+
     requires: [
         'Ext.dom.Query'
     ],
@@ -178,7 +178,7 @@ Ext.define('Ext.data.reader.Xml', {
         */
         namespace: ''
     },
-    
+
     /**
      * @private
      */
@@ -214,14 +214,14 @@ Ext.define('Ext.data.reader.Xml', {
             if (typeof node.normalize === 'function') {
                 node.normalize();
             }
-            
+
             node = node.firstChild;
-            
+
             if (node) {
                 return node.nodeValue;
             }
         }
-        
+
         return undefined;
     },
 
@@ -231,7 +231,7 @@ Ext.define('Ext.data.reader.Xml', {
 
         if (!xml) {
             Ext.Logger.warn(error);
-            
+
             return this.createReadError(error);
         }
 
@@ -281,7 +281,7 @@ Ext.define('Ext.data.reader.Xml', {
         else {
             root = [root];
         }
-        
+
         return this.callParent([root, readOptions]);
     },
 
@@ -337,14 +337,14 @@ Ext.define('Ext.data.reader.Xml', {
                     return self.getNodeValue(raw.querySelector(selector));
                 };
             }
-            
+
             if (!result) {
                 result = function(raw, self) {
                     return self.getNodeValue(Ext.DomQuery.selectNode(selector, raw));
                 };
             }
         }
-        
+
         return result;
     },
 
@@ -374,7 +374,7 @@ Ext.define('Ext.data.reader.Xml', {
             return this.getRootValue(data, this.getSummaryRootProperty());
         }
     },
-    
+
     deprecated: {
         '5.1.1': {
             properties: {

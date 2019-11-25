@@ -166,7 +166,6 @@ Ext.define('Ext.Anim', {
         el = Ext.get(el);
         config = config || {};
 
-
         style = el.dom.style;
         after = config.after;
 
@@ -634,7 +633,6 @@ Ext.define('Ext.Anim', {
             },
             duration: 250
         }),
-
 
         /**
          * Wipe Animation.

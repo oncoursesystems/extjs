@@ -5,12 +5,12 @@ Ext.define('KitchenSink.view.grid.ProgressBarPager', {
     extend: 'Ext.grid.Panel',
     xtype: 'progress-bar-pager',
     controller: 'basicgrid',
-    
+
     requires: [
         'Ext.toolbar.Paging',
         'Ext.ux.ProgressBarPager'
     ],
-    
+
     //<example>
     otherContent: [{
         type: 'Model',
@@ -43,6 +43,15 @@ Ext.define('KitchenSink.view.grid.ProgressBarPager', {
             lastUpdatedColumnWidth: 175,
             gainColor: 'unset',
             lossColor: 'unset'
+        },
+        'classic-material': {
+            width: 850,
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 175,
+            gainColor: 'unset',
+            lossColor: 'unset'
         }
     },
     //</example>
@@ -50,7 +59,7 @@ Ext.define('KitchenSink.view.grid.ProgressBarPager', {
     title: 'Progress Bar Pager',
     width: '${width}',
     height: 320,
-    
+
     frame: true,
     store: {
         type: 'companies',
@@ -61,34 +70,34 @@ Ext.define('KitchenSink.view.grid.ProgressBarPager', {
             'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +
         '>{text}</span>',
 
-    columns: [{ 
+    columns: [{
         text: 'Company',
         dataIndex: 'name',
-        
+
         sortable: true,
         flex: 1
-    },{
+    }, {
         text: 'Price',
         dataIndex: 'price',
-        
+
         sortable: true,
         formatter: 'usMoney',
         width: '${priceWidth}'
-    },{
+    }, {
         text: 'Change',
         dataIndex: 'priceChange',
-        
+
         width: '${pricechangeWidth}',
         sortable: true,
         renderer: 'renderChange'
-    },{
+    }, {
         text: '% Change',
         dataIndex: 'priceChangePct',
-        
+
         width: '${percentChangeColumnWidth}',
         sortable: true,
         renderer: 'renderPercent'
-    },{
+    }, {
         text: 'Last Updated',
         dataIndex: 'priceLastChange',
 
@@ -96,7 +105,7 @@ Ext.define('KitchenSink.view.grid.ProgressBarPager', {
         sortable: true,
         formatter: 'date("m/d/Y")'
     }],
-    
+
     bbar: {
         xtype: 'pagingtoolbar',
         displayInfo: true,

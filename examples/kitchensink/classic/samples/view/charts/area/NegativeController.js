@@ -2,16 +2,21 @@ Ext.define('KitchenSink.view.charts.area.NegativeController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.area-negative',
 
-    onPreview: function () {
+    onPreview: function() {
+        var chart;
+
         if (Ext.isIE8) {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
+
             return;
         }
-        var chart = this.lookup('chart');
+
+        chart = this.lookup('chart');
+
         chart.preview();
     },
 
-    getSeriesConfig: function (field, title) {
+    getSeriesConfig: function(field, title) {
         return {
             type: 'area',
             title: title,
@@ -34,7 +39,7 @@ Ext.define('KitchenSink.view.charts.area.NegativeController', {
             },
             tooltip: {
                 trackMouse: true,
-                renderer: function (tooltip, record, item) {
+                renderer: function(tooltip, record, item) {
                     tooltip.setHtml(title + ' (' + record.get('quarter') + '): ' +
                         record.get(field));
                 }
@@ -42,7 +47,7 @@ Ext.define('KitchenSink.view.charts.area.NegativeController', {
         };
     },
 
-    onAfterRender: function () {
+    onAfterRender: function() {
         var me = this,
             chart = me.lookup('chart');
 

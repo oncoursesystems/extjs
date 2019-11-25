@@ -30,6 +30,10 @@ Ext.define('KitchenSink.view.grid.Exporter', {
         graphite: {
             width: 900,
             priceWidth: 120
+        },
+        'classic-material': {
+            width: 900,
+            priceWidth: 120
         }
     },
     resizable: true,
@@ -37,10 +41,10 @@ Ext.define('KitchenSink.view.grid.Exporter', {
     otherContent: [{
         type: 'Store',
         path: 'classic/samples/store/Products.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/grid/Product.js'
-    },{
+    }, {
         type: 'Controller',
         path: 'classic/samples/view/grid/ExporterController.js'
     }],
@@ -65,10 +69,10 @@ Ext.define('KitchenSink.view.grid.Exporter', {
     },
 
     features: [{
-        ftype : 'groupingsummary',
-        groupHeaderTpl : '{name}',
-        hideGroupedHeader : false,
-        enableGroupingMenu : false
+        ftype: 'groupingsummary',
+        groupHeaderTpl: '{name}',
+        hideGroupedHeader: false,
+        enableGroupingMenu: false
     }, {
         ftype: 'summary',
         dock: 'bottom'
@@ -109,7 +113,7 @@ Ext.define('KitchenSink.view.grid.Exporter', {
                 alignment: {
                     horizontal: 'Right'
                 }
-            },{
+            }, {
                 // the type key means that this style will only be used by the html exporter
                 // and for all others the default one, defined above, will be used
                 type: 'html',
@@ -155,55 +159,56 @@ Ext.define('KitchenSink.view.grid.Exporter', {
         items: [{
             ui: 'default-toolbar',
             xtype: 'button',
+            cls: 'dock-tab-btn',
             text: 'Export to ...',
             menu: {
                 defaults: {
                     handler: 'exportTo'
                 },
                 items: [{
-                    text:   'Excel xlsx',
+                    text: 'Excel xlsx',
                     cfg: {
                         type: 'excel07',
                         ext: 'xlsx'
                     }
-                },{
-                    text:   'Excel xlsx (include groups)',
+                }, {
+                    text: 'Excel xlsx (include groups)',
                     cfg: {
                         type: 'excel07',
                         ext: 'xlsx',
                         includeGroups: true,
                         includeSummary: true
                     }
-                },{
+                }, {
                     text: 'Excel xml',
                     cfg: {
                         type: 'excel03',
                         ext: 'xml'
                     }
-                },{
+                }, {
                     text: 'Excel xml (include groups)',
                     cfg: {
                         includeGroups: true,
                         includeSummary: true
                     }
-                },{
-                    text:   'CSV',
+                }, {
+                    text: 'CSV',
                     cfg: {
                         type: 'csv'
                     }
-                },{
-                    text:   'TSV',
+                }, {
+                    text: 'TSV',
                     cfg: {
                         type: 'tsv',
                         ext: 'csv'
                     }
-                },{
-                    text:   'HTML',
+                }, {
+                    text: 'HTML',
                     cfg: {
                         type: 'html'
                     }
-                },{
-                    text:   'HTML (include groups)',
+                }, {
+                    text: 'HTML (include groups)',
                     cfg: {
                         type: 'html',
                         includeGroups: true,

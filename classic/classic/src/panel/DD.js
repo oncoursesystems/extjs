@@ -8,7 +8,7 @@ Ext.define('Ext.panel.DD', {
 
     constructor: function(panel, cfg) {
         var me = this;
-        
+
         me.panel = panel;
         me.dragData = { panel: panel };
         me.panelProxy = new Ext.panel.Proxy(panel, cfg);
@@ -17,12 +17,12 @@ Ext.define('Ext.panel.DD', {
         me.callParent([panel.el, cfg]);
         me.setupEl(panel);
     },
-    
+
     setupEl: function(panel) {
         var me = this,
             header = panel.header,
             el = panel.body;
-            
+
         if (header) {
             me.setHandleElId(header.id);
             el = header.el;
@@ -40,27 +40,27 @@ Ext.define('Ext.panel.DD', {
 
     showFrame: Ext.emptyFn,
     startDrag: Ext.emptyFn,
-    
+
     b4StartDrag: function(x, y) {
         this.panelProxy.show();
     },
-    
+
     b4MouseDown: function(e) {
         var xy = e.getXY(),
             x = xy[0],
             y = xy[1];
-            
+
         this.autoOffset(x, y);
     },
-    
+
     onInitDrag: function(x, y) {
         this.onStartDrag(x, y);
 
         return true;
     },
-    
+
     createFrame: Ext.emptyFn,
-    
+
     getDragEl: function(e) {
         var ghost = this.panelProxy.ghost;
 
@@ -68,7 +68,7 @@ Ext.define('Ext.panel.DD', {
             return ghost.el.dom;
         }
     },
-    
+
     endDrag: function(e) {
         this.panelProxy.hide();
         this.panel.saveState();
@@ -79,12 +79,12 @@ Ext.define('Ext.panel.DD', {
         y -= this.startPageY;
         this.setDelta(x, y);
     },
-    
+
     // Override this, we don't want to repair on an "invalid" drop, the panel
     // should main it's position
     onInvalidDrop: function(target, e, id) {
         var me = this;
-        
+
         if (me.beforeInvalidDrop(target, e, id) !== false) {
             if (me.cachedTarget) {
                 if (me.cachedTarget.isNotifyTarget) {

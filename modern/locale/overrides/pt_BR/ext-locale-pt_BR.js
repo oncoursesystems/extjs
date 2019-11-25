@@ -68,8 +68,8 @@ Ext.define("Ext.locale.pt.grid.filters.menu.Base", {
     }
 });
 
-Ext.define("Ext.locale.pt_BR.grid.LockedGrid", {
-    override: "Ext.grid.LockedGrid",
+Ext.define("Ext.locale.pt_BR.grid.locked.Grid", {
+    override: 'Ext.grid.locked.Grid',
 
     config: {
         columnMenu: {

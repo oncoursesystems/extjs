@@ -111,7 +111,7 @@ Ext.define('Ext.promise.Consequence', function(Consequence) { return { // eslint
         if (Ext.isFunction(this.onProgress)) {
             progress = this.onProgress(progress);
         }
-        
+
         this.deferred.update(progress);
     },
 

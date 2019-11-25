@@ -84,38 +84,38 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
                 it("should leave the number alone if it is equal to the min and the max", function() {
                     expect(EN.constrain(1, 1, 1)).toEqual(1);
                 });
-                
+
                 it("should leave the number alone if it is equal to the min", function() {
                     expect(EN.constrain(1, 1, 5)).toEqual(1);
                 });
-                
+
                 it("should leave the number alone if it is equal to the max", function() {
                     expect(EN.constrain(5, 1, 5)).toEqual(5);
                 });
-                
+
                 it("should leave the number alone if it is within the min and the max", function() {
                     expect(EN.constrain(3, 1, 5)).toEqual(3);
                 });
-                
+
                 it("should leave a negative number alone if it is within the min and the max", function() {
                     expect(EN.constrain(-3, -5, -1)).toEqual(-3);
                 });
             });
-            
+
             describe("if the number is not within the constraints", function() {
                 it("should make the number equal to the min value", function() {
                     expect(EN.constrain(1, 3, 5)).toEqual(3);
                 });
-                
+
                 it("should make the number equal to the max value", function() {
                     expect(EN.constrain(100, 1, 5)).toEqual(5);
                 });
-                
+
                 describe("and the number is negative", function() {
                     it("should make the number equal to the min value", function() {
                         expect(EN.constrain(-10, -50, -30)).toEqual(-30);
                     });
-                    
+
                     it("should make the number equal to the max value", function() {
                         expect(EN.constrain(-100, -50, -30)).toEqual(-50);
                     });
@@ -188,23 +188,23 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
                 });
             });
         });
-        
+
         describe("floating point numbers", function() {
             describe("if the number is within the constaints", function() {
                 it("should leave the number alone", function() {
                     expect(EN.constrain(3.3, 3.1, 3.5)).toEqual(3.3);
                 });
-                
+
                 it("should leave a negative number alone", function() {
                     expect(EN.constrain(-3.3, -3.5, -3.1)).toEqual(-3.3);
                 });
             });
-            
+
             describe("and the number is negative", function() {
                 it("should make the number equal to the min value", function() {
                     expect(EN.constrain(-3.3, -3.1, -3)).toEqual(-3.1);
                 });
-                
+
                 it("should make the number equal to the max value", function() {
                     expect(EN.constrain(-2.1, -3.1, -3)).toEqual(-3);
                 });
@@ -241,27 +241,27 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
             });
         });
     });
-    
+
     describe("toFixed", function() {
-        
+
         var f = EN.toFixed;
-        
+
         it("should return a string", function() {
             expect(typeof f(1)).toEqual('string');
         });
-        
+
         it("should default precision to 0", function() {
             expect(f(1.23456)).toEqual('1');
         });
-        
+
         it("should output the correct number of decimal places", function() {
             expect(f(1, 3)).toEqual('1.000');
         });
-        
+
         it("should round correctly", function() {
             expect(f(1.9834657, 1)).toEqual('2.0');
         });
-        
+
         it("should round with negative numbers", function() {
             expect(f(-3.4265, 2)).toEqual('-3.43');
         });
@@ -308,7 +308,7 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
         it("should round to the nearest snap point", function() {
             expect(snap(4, 5, 0, 100)).toEqual(5);
         });
-        
+
         it("should snap negative numbers", function() {
            expect(snap(-9, 10, -100, 0)).toBe(-10);
            expect(snap(-1, 10, -100, 0)).toBe(0);
@@ -369,7 +369,7 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
             expect(snapInRange(21, 10, 1, 101)).toBe(21);
             expect(snapInRange(22, 10, 1, 101)).toBe(21);
         });
-        
+
         it("should handle negative ranges", function() {
             expect(snapInRange(-10, 10, -101, -1)).toBe(-11);
             expect(snapInRange(-11, 10, -101, -1)).toBe(-11);
@@ -477,10 +477,10 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
             });
         });
     });
-    
+
     describe("from", function() {
         var from = EN.from;
-       
+
         it("should handle numbers", function() {
             expect(from(2, 1)).toBe(2);
             expect(from(-2, 1)).toBe(-2);
@@ -489,7 +489,7 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
             expect(from(999999.999, 1)).toBe(999999.999);
             expect(from(-999999.999, 1)).toBe(-999999.999);
         });
-           
+
         it("should handle strings that represent numbers", function() {
             expect(from("2", 1)).toBe(2);
             expect(from("-2", 1)).toBe(-2);
@@ -498,12 +498,12 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
             expect(from("999999.999", 1)).toBe(999999.999);
             expect(from("-999999.999", 1)).toBe(-999999.999);
         });
-           
+
         it("should handle infinity", function() {
             expect(from(1 / 0, 1)).toBe(window.Number.POSITIVE_INFINITY);
             expect(from(-1 / 0, 1)).toBe(window.Number.NEGATIVE_INFINITY);
         });
-           
+
         it("should return default value if value is not a number or numeric string", function() {
             expect(from("", 100)).toBe(100);
             expect(from(true, 100)).toBe(100);
@@ -512,7 +512,7 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
             expect(from("12345ImAlmostANumber", 100)).toBe(100);
         });
     });
-    
+
     describe("randomInt", function() {
         var randomInt = EN.randomInt;
 
@@ -525,18 +525,18 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
             expect(randomInt(1, 1)).toBe(1);
         });
     });
-    
+
     describe("correctFloat", function() {
         var correctFloat = EN.correctFloat;
-        
+
         it("should correct a small positive overflow", function() {
             expect(correctFloat(0.1 + 0.2)).toBe(0.3);
         });
-        
+
         it("should correct a small negative overflow", function() {
             expect(correctFloat(-0.1 + -0.2)).toBe(-0.3);
         });
-        
+
         it("should correct large overflows", function() {
             expect(correctFloat(10000000.12300000000001)).toBe(10000000.123);
         });

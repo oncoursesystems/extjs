@@ -103,7 +103,7 @@ topSuite("Ext.data.Range", [
                 begin: 50,
                 end: 75
             });
-            
+
             expectRangeSize(50, 75);
         });
     });

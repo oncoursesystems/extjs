@@ -58,13 +58,15 @@ Ext.define('KitchenSink.view.SourceOverlay', {
                 align: 'tr-br?',
                 html: 'Uses features that require Ext JS Professional'
             }
-        }].concat(Ext.os.is.Phone ? [{
-            xtype: 'button',
-            ui: 'action',
-            iconCls: 'x-fa fa-close',
-            align: 'right',
-            action: 'closeSource'
-        }] : [])
+        }].concat(Ext.os.is.Phone
+            ? [{
+                xtype: 'button',
+                ui: 'action',
+                iconCls: 'x-fa fa-times',
+                align: 'right',
+                action: 'closeSource'
+            }]
+            : [])
     },
 
     items: [{
@@ -85,7 +87,7 @@ Ext.define('KitchenSink.view.SourceOverlay', {
         }
     }],
 
-    setContent: function (content) {
+    setContent: function(content) {
         var tabs = this.lookup('tabs');
 
         tabs.removeAll();
@@ -93,19 +95,21 @@ Ext.define('KitchenSink.view.SourceOverlay', {
         tabs.getTabBar().setHidden(content.length === 1);
     },
 
-    updateTier: function (tier) {
+    updateTier: function(tier) {
         var premium = this.lookup('premiumComp'),
             pro = this.lookup('proComp');
 
         if (tier === 'premium') {
             premium.show();
-        } else if (tier === 'pro') {
+        }
+        else if (tier === 'pro') {
             pro.show();
         }
 
         if (tier !== 'premium') {
             premium.hide();
-        } else if (tier !== 'pro') {
+        }
+        else if (tier !== 'pro') {
             pro.hide();
         }
     }

@@ -218,7 +218,7 @@ Ext.define('Ext.draw.sprite.AttributeDefinition', {
 
     applyTriggers: function(triggers, oldTriggers) {
         var name;
-        
+
         if (!oldTriggers) {
             oldTriggers = {};
         }

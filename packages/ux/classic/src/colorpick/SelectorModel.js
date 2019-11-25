@@ -136,7 +136,7 @@ Ext.define('Ext.ux.colorpick.SelectorModel', {
 
     changeHSV: function(hsv) {
         var rgb;
-        
+
         Ext.applyIf(hsv, this.data.selectedColor);
 
         rgb = Ext.ux.colorpick.ColorUtils.hsv2rgb(hsv.h, hsv.s, hsv.v);
@@ -150,7 +150,7 @@ Ext.define('Ext.ux.colorpick.SelectorModel', {
 
     changeRGB: function(rgb) {
         var hsv;
-        
+
         Ext.applyIf(rgb, this.data.selectedColor);
 
         hsv = Ext.ux.colorpick.ColorUtils.rgb2hsv(rgb.r, rgb.g, rgb.b);

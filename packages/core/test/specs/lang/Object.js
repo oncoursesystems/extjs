@@ -5,7 +5,7 @@ topSuite("Ext.Object", function() {
 
            expect(Ext.Object.getSize(o)).toBe(0);
        });
-       
+
        it("should return the number of keys", function() {
            var o = {
                key1: true,
@@ -17,7 +17,7 @@ topSuite("Ext.Object", function() {
            expect(Ext.Object.getSize(o)).toBe(4);
        });
     });
-    
+
     describe("clear", function() {
         it("should remove a single key", function() {
             var obj = { x: 42 };
@@ -54,14 +54,14 @@ topSuite("Ext.Object", function() {
             expect(Ext.Object.clear(obj)).toBe(obj);
         });
     });
-    
+
     describe("isEmpty", function() {
         it("should return true if there are no properties", function() {
             var o = {};
 
             expect(Ext.Object.isEmpty(o)).toBe(true);
         });
-        
+
         it("should return false if there are properties", function() {
             var o = {
                 key1: true
@@ -148,83 +148,83 @@ topSuite("Ext.Object", function() {
             }, 1)).toEqual('bar');
         });
     });
-    
+
     describe("equals", function() {
         var equals = Ext.Object.equals;
-        
+
         it("should match undefined", function() {
             expect(equals(undefined, undefined)).toBe(true);
         });
-        
+
         it("should match null", function() {
             expect(equals(null, null)).toBe(true);
         });
-        
+
         it("should not match if one object is null", function() {
             expect(equals({}, null)).toBe(false);
         });
-        
+
         it("should not match if the objects have different keys", function() {
             var o1 = {
                 foo: true
             };
-            
+
             var o2 = {
                 bar: true
             };
 
             expect(equals(o1, o2)).toBe(false);
         });
-        
+
         it("should not match if keys have different values", function() {
             var o1 = {
                 foo: 1
             };
-            
+
             var o2 = {
                 foo: 2
             };
 
             expect(equals(o1, o2)).toBe(false);
         });
-        
+
         it("should use strict equality", function() {
             var o1 = {
                 foo: 1
             };
-            
+
             var o2 = {
                 foo: '1'
             };
 
             expect(equals(o1, o2)).toBe(false);
         });
-        
+
         it("should match objects with the same keys/values", function() {
             var o1 = {
                 foo: 'value',
                 bar: true
             };
-            
+
             var o2 = {
                 foo: 'value',
                 bar: true
             };
-            
+
             expect(equals(o1, o2)).toBe(true);
         });
-        
+
         it("should ignore key ordering", function() {
             var o1 = {
                 bar: true,
                 foo: 'value'
             };
-            
+
             var o2 = {
                 foo: 'value',
                 bar: true
             };
-            
+
             expect(equals(o1, o2)).toBe(true);
         });
     });
@@ -327,7 +327,7 @@ topSuite("Ext.Object", function() {
 
                     return key !== 'b';
                 });
-                
+
                 expect(count).toEqual(2);
             });
         });
@@ -425,32 +425,32 @@ topSuite("Ext.Object", function() {
         });
 
         describe("simple values", function() {
-            
+
             describe("empty values", function() {
                 it("undefined", function() {
                     expect(toQueryString({
                         foo: undefined
                     })).toEqual('foo=');
                 });
-            
+
                 it("null", function() {
                     expect(toQueryString({
                         foo: null
                     })).toEqual('foo=');
                 });
-            
+
                 it("empty string", function() {
                     expect(toQueryString({
                         foo: ''
                     })).toEqual('foo=');
                 });
-            
+
                 it("empty array", function() {
                     expect(toQueryString({
                         foo: ''
                     })).toEqual('foo=');
                 });
-                
+
                 it("should join empty values correctly", function() {
                     expect(toQueryString({
                         foo: '',
@@ -458,7 +458,7 @@ topSuite("Ext.Object", function() {
                     })).toEqual('foo=&bar=baz');
                 });
             });
-            
+
             it("should separate a property/value by an =", function() {
                 expect(toQueryString({
                     foo: 1

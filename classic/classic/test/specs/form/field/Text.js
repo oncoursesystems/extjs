@@ -3,21 +3,21 @@ topSuite("Ext.form.field.Text",
      'Ext.app.ViewModel', 'Ext.Button', 'Ext.data.validator.*', 'Ext.field.InputMask'],
 function() {
     var component;
-    
+
     function makeComponent(config) {
         config = config || {};
-        
+
         if (!config.name) {
             config.name = 'test';
         }
-        
+
         return component = new Ext.form.field.Text(config);
     }
 
     function render(parent) {
         component.render(parent || Ext.getBody());
     }
-    
+
     function createField(config) {
         config = Ext.apply({
             name: 'fieldName',
@@ -26,10 +26,10 @@ function() {
             size: 12,
             renderTo: Ext.getBody()
         }, config);
-        
+
         // Suppress console warning about 'size' config being deprecated
         spyOn(Ext.log, 'warn');
-                
+
         return makeComponent(config);
     }
 
@@ -137,7 +137,7 @@ function() {
             makeComponent({
                 inputMask: '(999) 999-9999'
             });
-            
+
             expect(component.getInputMask().getPattern()).toBe('(999) 999-9999');
         });
 
@@ -148,7 +148,7 @@ function() {
             });
 
             jasmine.focusAndWait(component.inputEl);
-            
+
             runs(function() {
                 expect(component.inputEl.dom.value).toBe('(___) ___-____');
             });
@@ -163,7 +163,7 @@ function() {
 
             jasmine.focusAndWait(component.inputEl);
             jasmine.blurAndWait(component);
-            
+
             runs(function() {
                 expect(component.inputEl.dom.value).toBe('');
             });
@@ -257,7 +257,7 @@ function() {
         });
         expect(component.inputEl.dom.value).toBe('test "  <br/> test');
     });
-    
+
     it("should be able to set a numeric value", function() {
         makeComponent({
             renderTo: Ext.getBody()
@@ -361,7 +361,7 @@ function() {
                     expect(+component.inputEl.dom.getAttribute("size")).toEqual(1);
                 });
             });
-            
+
             describe("ariaEl", function() {
                 it("should be inputEl", function() {
                     expect(component.ariaEl).toBe(component.inputEl);
@@ -393,7 +393,7 @@ function() {
                             }],
                             renderTo: document.body
                         }, cfg));
-    
+
                         fields = panel.items.getRange();
                     },
                     diff = Ext.isIE8 ? 2 : 0;
@@ -472,7 +472,7 @@ function() {
                                 innerCt = panel.el.down('[data-ref=innerCt]'); // 20px for each field
 
                             expect(fields[2].inputWrap.getHeight()).toBe(200 + diff);
-                            
+
                             if (Ext.isIE8) {
                                 waitsFor(function() {
                                     return fields[3].inputWrap.getHeight() > 100;
@@ -482,7 +482,7 @@ function() {
                             runs(function() {
                                 expect(fields[3].inputWrap.getHeight() - diff).toBe(innerCt.getHeight() - fields[0].getHeight() - fields[1].getHeight() - fields[2].getHeight() - margins);
                             });
-                            
+
                         });
 
                         it("should contain the heighted cls only when height is configured", function() {
@@ -491,92 +491,92 @@ function() {
                             expect(fields[3].hasCls(Ext.baseCSSPrefix + 'form-text-heighted')).toBe(true);
                         });
                     });
-                    
+
                 });
             });
         });
-        
+
         // Text fields are extremely important so we're duplicating
         // the Base tests here
         describe("ARIA attributes", function() {
             describe("in general", function() {
                 it("should not render when !ariaRole", function() {
                     createField({ ariaRole: undefined });
-                    
+
                     expect(component.ariaEl.dom.hasAttribute('role')).toBe(false);
                 });
-                
+
                 it("should render when ariaRole is defined", function() {
                     createField();
-                    
+
                     expect(component).toHaveAttr('role', 'textbox');
                 });
             });
-            
+
             describe("aria-hidden", function() {
                 it("should be false when visible", function() {
                     createField();
-                    
+
                     expect(component).toHaveAttr('aria-hidden', 'false');
                 });
-                
+
                 it("should be true when hidden", function() {
                     createField({ hidden: true });
-                    
+
                     expect(component).toHaveAttr('aria-hidden', 'true');
                 });
             });
-            
+
             describe("aria-disabled", function() {
                 it("should be false when enabled", function() {
                     createField();
-                    
+
                     expect(component).toHaveAttr('aria-disabled', 'false');
                 });
-                
+
                 it("should be true when disabled", function() {
                     createField({ disabled: true });
-                    
+
                     expect(component).toHaveAttr('aria-disabled', 'true');
                 });
             });
-            
+
             describe("aria-readonly", function() {
                 it("should be false by default", function() {
                     createField();
-                    
+
                     expect(component).toHaveAttr('aria-readonly', 'false');
                 });
-                
+
                 it("should be true when readOnly", function() {
                     createField({ readOnly: true });
-                    
+
                     expect(component).toHaveAttr('aria-readonly', 'true');
                 });
             });
-            
+
             describe("aria-invalid", function() {
                 it("should be false by default", function() {
                     createField();
-                    
+
                     expect(component).toHaveAttr('aria-invalid', 'false');
                 });
             });
-            
+
             describe("aria-label", function() {
                 it("should not exist by default", function() {
                     createField();
-                    
+
                     expect(component).not.toHaveAttr('aria-label');
                 });
-                
+
                 it("should be rendered when set", function() {
                     createField({ ariaLabel: 'foo' });
-                    
+
                     expect(component).toHaveAttr('aria-label', 'foo');
                 });
             });
-            
+
             describe("via config", function() {
                 it("should set aria-foo", function() {
                     createField({
@@ -584,7 +584,7 @@ function() {
                             'aria-foo': 'bar'
                         }
                     });
-                    
+
                     expect(component).toHaveAttr('aria-foo', 'bar');
                 });
             });
@@ -680,10 +680,10 @@ function() {
                     });
                     expect(spy).not.toHaveBeenCalled();
                 });
-                
+
                 it("should set aria-readonly to true", function() {
                     createField({ readOnly: true });
-                    
+
                     expect(component).toHaveAttr('aria-readonly', 'true');
                 });
             });
@@ -722,10 +722,10 @@ function() {
                     });
                     expect(spy).not.toHaveBeenCalled();
                 });
-                
+
                 it("should set aria-readonly to false", function() {
                     createField({ readOnly: false });
-                    
+
                     expect(component).toHaveAttr('aria-readonly', 'false');
                 });
             });
@@ -764,12 +764,12 @@ function() {
                         expect(spy.mostRecentCall.args[0]).toBe(component);
                         expect(spy.mostRecentCall.args[1]).toBe(true);
                     });
-                    
+
                     it("should set aria-readonly to true", function() {
                         makeComponent();
                         component.setReadOnly(true);
                         component.render(Ext.getBody());
-                        
+
                         expect(component).toHaveAttr('aria-readonly', 'true');
                     });
                 });
@@ -810,12 +810,12 @@ function() {
                         expect(spy.mostRecentCall.args[0]).toBe(component);
                         expect(spy.mostRecentCall.args[1]).toBe(false);
                     });
-                    
+
                     it("should set aria-readonly to false", function() {
                         makeComponent({ readOnly: true });
                         component.setReadOnly(false);
                         component.render(Ext.getBody());
-                        
+
                         expect(component).toHaveAttr('aria-readonly', 'false');
                     });
                 });
@@ -856,11 +856,11 @@ function() {
                         expect(spy.mostRecentCall.args[0]).toBe(component);
                         expect(spy.mostRecentCall.args[1]).toBe(true);
                     });
-                    
+
                     it("should set aria-readonly to true", function() {
                         createField();
                         component.setReadOnly(true);
-                        
+
                         expect(component).toHaveAttr('aria-readonly', 'true');
                     });
                 });
@@ -902,11 +902,11 @@ function() {
                         expect(spy.mostRecentCall.args[0]).toBe(component);
                         expect(spy.mostRecentCall.args[1]).toBe(false);
                     });
-                    
+
                     it("should set aria-readonly to false", function() {
                         createField({ readOnly: true });
                         component.setReadOnly(false);
-                        
+
                         expect(component).toHaveAttr('aria-readonly', 'false');
                     });
                 });
@@ -998,7 +998,7 @@ function() {
                         value: 'Foo',
                         renderTo: Ext.getBody()
                     });
-                    
+
                     expect(component.inputEl).not.toHaveCls(component.emptyCls);
                     component.setValue();
                     expect(component.inputEl).toHaveCls(component.emptyCls);
@@ -1144,7 +1144,7 @@ function() {
                             value: 'value',
                             renderTo: Ext.getBody()
                         });
-                        
+
                         expect(component.inputEl).not.toHaveCls(component.emptyCls);
                         component.setEmptyText('');
                         expect(component.emptyText).toBe('');
@@ -1160,7 +1160,6 @@ function() {
         }
     });
 
-    
     describe("validation", function() {
         describe("minLength", function() {
             it("should ignore minLength when allowBlank is set", function() {
@@ -1170,7 +1169,7 @@ function() {
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-        
+
             it("should have an error if the value is less than the minLength", function() {
                 makeComponent({
                     minLength: 5,
@@ -1179,7 +1178,7 @@ function() {
                 });
                 expect(component.getErrors()).toContain("The minimum length for this field is 5");
             });
-        
+
             it("should not have an error if the value length exceeds minLength", function() {
                 makeComponent({
                     minLength: 5,
@@ -1189,7 +1188,7 @@ function() {
                 expect(component.getErrors()).toEqual([]);
             });
         });
-        
+
         describe("maxLength", function() {
             it("should have an error if the value is more than the maxLength", function() {
                 makeComponent({
@@ -1198,7 +1197,7 @@ function() {
                 });
                 expect(component.getErrors()).toContain("The maximum length for this field is 5");
             });
-        
+
             it("should not have an error if the value length is less than the maxLength", function() {
                 makeComponent({
                     maxLength: 5,
@@ -1206,7 +1205,7 @@ function() {
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should set the maxlength attribute when enforceMaxLength is used", function() {
                 makeComponent({
                     maxLength: 5,
@@ -1215,32 +1214,32 @@ function() {
                 });
                 expect(component.inputEl.dom.maxLength).toEqual(5);
             });
-            
+
             it("should ignore enforceMaxLength if the max is the default", function() {
                 makeComponent({
                     enforceMaxLength: true,
                     renderTo: Ext.getBody()
                 });
-                
+
                 var dom = document.createElement('input'),
                     len;
-                    
+
                 dom.type = 'text';
                 len = dom.maxLength;
                 dom = null;
-                
+
                 // In some browsers, even if the maxLength is not set
                 // it still returns a numeric value
                 expect(component.inputEl.dom.maxLength).toEqual(len);
             });
         });
-        
+
         describe("allowBlank", function() {
             it("should have no errors if allowBlank is true and the field is empty", function() {
                 makeComponent();
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should have no errors if allowBlank is false and the field is not empty", function() {
                 makeComponent({
                     allowBlank: false,
@@ -1248,21 +1247,21 @@ function() {
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should have an error if allowBlank is false and the field is empty", function() {
                 makeComponent({
                     allowBlank: false
                 });
                 expect(component.getErrors()).toContain("This field is required");
             });
-            
+
             it("should set allowBlank to false when using allowOnlyWhitespace: false", function() {
                 makeComponent({
                     allowOnlyWhitespace: false
                 });
                 expect(component.allowBlank).toBe(false);
             });
-            
+
             it("should not allow only whitespace when allowOnlyWhitespace: false", function() {
                 makeComponent({
                     allowOnlyWhitespace: false,
@@ -1271,7 +1270,7 @@ function() {
                 expect(component.getErrors()).toContain('This field is required');
             });
         });
-        
+
         describe("regex", function() {
             it("should have an error if the value doesn't match the regex", function() {
                 makeComponent({
@@ -1281,7 +1280,7 @@ function() {
                 });
                 expect(component.getErrors()).toContain("regex error");
             });
-            
+
             it("should not have an error if the value matches the regex", function() {
                 makeComponent({
                     regex: /foo/,
@@ -1290,7 +1289,7 @@ function() {
                 expect(component.getErrors()).toEqual([]);
             });
         });
-        
+
         describe("validator", function() {
             it("should have an error if the value doesn't match the validator", function() {
                 makeComponent({
@@ -1302,7 +1301,7 @@ function() {
                 });
                 expect(component.getErrors()).toContain("error message");
             });
-            
+
             it("should not have an error if the value matches the validator", function() {
                 makeComponent({
                     allowBlank: false,
@@ -1314,7 +1313,7 @@ function() {
                 expect(component.getErrors()).toEqual([]);
             });
         });
-        
+
         describe("aria-invalid", function() {
             beforeEach(function() {
                 makeComponent({
@@ -1323,21 +1322,21 @@ function() {
                     value: "foo"
                 });
             });
-            
+
             it("should be false when valid", function() {
                 expect(component).toHaveAttr('aria-invalid', 'false');
             });
-            
+
             it("should be true when invalid", function() {
                 component.setValue('');
-                
+
                 expect(component).toHaveAttr('aria-invalid', 'true');
             });
-            
+
             it("should be false when invalid mark is cleared", function() {
                 component.setValue('');
                 component.setValue('bar');
-                
+
                 expect(component).toHaveAttr('aria-invalid', 'false');
             });
         });
@@ -1366,7 +1365,6 @@ function() {
             });
         });
     });
-
 
     describe("isDirty", function() {
         it("should return true when the value is different than the original value", function() {
@@ -1417,7 +1415,6 @@ function() {
             expect(component.el.hasCls('dirrrrrty')).toBe(true);
         });
     });
-
 
     describe("enableKeyEvents", function() {
         describe("enableKeyEvents=false", function() {
@@ -1480,7 +1477,6 @@ function() {
         });
     });
 
-
     describe("disable/enable", function() {
         describe("disabled config", function() {
             beforeEach(function() {
@@ -1493,18 +1489,18 @@ function() {
             it("should set the input element's disabled property to true", function() {
                 expect(component.inputEl.dom.disabled).toBe(true);
             });
-            
+
             it("should set aria-disabled to true", function() {
                 expect(component).toHaveAttr('aria-disabled', 'true');
             });
-            
+
             if (Ext.isIE) {
                 it("should set the input element's unselectable property to 'on'", function() {
                     expect(component.inputEl.dom.unselectable).toEqual('on');
                 });
             }
         });
-        
+
         describe("disable method", function() {
             beforeEach(function() {
                 makeComponent({
@@ -1516,18 +1512,18 @@ function() {
             it("should set the input element's disabled property to true", function() {
                 expect(component.inputEl.dom.disabled).toBe(true);
             });
-            
+
             it("should set aria-disabled to true", function() {
                 expect(component).toHaveAttr('aria-disabled', 'true');
             });
-            
+
             if (Ext.isIE) {
                 it("should set the input element's unselectable property to 'on'", function() {
                     expect(component.inputEl.dom.unselectable).toEqual('on');
                 });
             }
         });
-        
+
         describe("enable method", function() {
             beforeEach(function() {
                 makeComponent({
@@ -1540,11 +1536,11 @@ function() {
             it("should set the input element's disabled property to false", function() {
                 expect(component.inputEl.dom.disabled).toBe(false);
             });
-            
+
             it("should set aria-disabled to false", function() {
                 expect(component).toHaveAttr('aria-disabled', 'false');
             });
-            
+
             if (Ext.isIE) {
                 it("should set the input element's unselectable property to ''", function() {
                     expect(component.inputEl.dom.unselectable).toEqual('');
@@ -1553,12 +1549,9 @@ function() {
         });
     });
 
-
-
     describe("maskRe", function() {
         // TODO need a good way to test the cancellation of keypress events for masked chars
     });
-
 
     describe("stripCharsRe", function() {
         beforeEach(function() {
@@ -1589,7 +1582,6 @@ function() {
             expect(component.inputEl.dom.value).toEqual('a cd');
         });
     });
-
 
     describe("selectText method", function() {
         // utility to get the begin and end of the selection range across browsers
@@ -1641,7 +1633,6 @@ function() {
         });
     });
 
-
     describe("autoSize method and = configs", function() {
         describe("with an auto width", function() {
             beforeEach(function() {
@@ -1665,7 +1656,7 @@ function() {
                 expect(component.getWidth()).toBeLessThan(300);
                 expect(component.getWidth()).toBeGreaterThan(10);
             });
-            
+
             it("should set the initial width to growMin", function() {
                 expect(component.getWidth()).toBe(30);
             });
@@ -1689,7 +1680,7 @@ function() {
 
                 expect(width2).toBeLessThan(width1);
             });
-            
+
             it("should not increase the width above the growMax config", function() {
                 component.setValue('a really long value that would go above the growMax config');
                 var width = component.getWidth();
@@ -1703,7 +1694,7 @@ function() {
 
                 expect(width).toBe(30);
             });
-            
+
             it("should work with markup", function() {
                 component.setValue('<fake tag appears here');
                 expect(component.getWidth()).toBeGreaterThan(30);
@@ -1772,7 +1763,7 @@ function() {
 
                 isRed(borderColor);
             });
-            
+
             it("should store the argument as the fieldStyle and apply it when rendered", function() {
                 makeComponent({});
                 component.setFieldStyle('border-left-color:red;');
@@ -1823,7 +1814,7 @@ function() {
             });
         });
     });
-    
+
     describe("setRawValue", function() {
         it("should not fire the change event when called", function() {
             var called = false;
@@ -2459,28 +2450,28 @@ function() {
             expect(component.triggerWrap.selectNode('.foo-trigger', false)).toBe(fooEl);
             expect(component.triggerWrap.selectNode('.bar-trigger', false)).toBe(barEl);
         });
-        
+
         it("should render data-qtip attribute for tooltips", function() {
             create();
-            
+
             expect(fooEl).toHaveAttr('data-qtip', 'foobaroo');
             expect(barEl).not.toHaveAttr('data-qtip');
         });
-        
+
         it("should allow setting tooltip dynamically", function() {
             create();
-            
+
             barTrigger.setTooltip('blergofumble');
-            
+
             expect(fooEl).toHaveAttr('data-qtip', 'foobaroo');
             expect(barEl).toHaveAttr('data-qtip', 'blergofumble');
         });
-        
+
         it("should allow changing tooltip dynamically", function() {
             create();
-            
+
             fooTrigger.setTooltip('zombo gurgle!');
-            
+
             expect(fooEl).toHaveAttr('data-qtip', 'zombo gurgle!');
             expect(barEl).not.toHaveAttr('data-qtip');
         });

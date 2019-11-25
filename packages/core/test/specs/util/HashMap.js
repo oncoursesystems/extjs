@@ -23,7 +23,7 @@ topSuite("Ext.util.HashMap", function() {
             expect(hash.getValues()).toEqual([]);
         });
     });
-    
+
     describe("keyFn", function() {
         it("should have a default keyFn that returns the id of the object", function() {
             var o = {
@@ -33,7 +33,7 @@ topSuite("Ext.util.HashMap", function() {
             hash.add(o);
             expect(hash.get('foo')).toBe(o);
         });
-        
+
         it("should accept a custom getKey function", function() {
             hash = new Ext.util.HashMap({
                 keyFn: function() {
@@ -79,12 +79,12 @@ topSuite("Ext.util.HashMap", function() {
             expect(hash.get('key1')).toBe('a');
             expect(hash.get('key2')).toBe('b');
         });
-        
+
         it("should support adding undefined values", function() {
             hash.add('key1', undefined);
             expect(hash.get('key1')).toBeUndefined();
         });
-        
+
         it("should support adding null values", function() {
             hash.add('key1', null);
             expect(hash.get('key1')).toBeNull();
@@ -123,13 +123,13 @@ topSuite("Ext.util.HashMap", function() {
             hash.replace('key', 'val2');
             expect(hash.get('key')).toBe('val2');
         });
-        
+
         it("should replace an old value with undefined", function() {
             hash.add('key', 'val1');
             hash.replace('key', undefined);
             expect(hash.get('key')).toBeUndefined();
         });
-        
+
         it("should replace an old value with null", function() {
             hash.add('key', 'val1');
             hash.replace('key', null);
@@ -162,27 +162,27 @@ topSuite("Ext.util.HashMap", function() {
             hash.add('key5', 5);
             expect(hash.getCount()).toBe(5);
         });
-        
+
         it("should increase the count when adding a new item", function() {
             expect(hash.getCount()).toBe(0);
             hash.add('key1', 1);
             expect(hash.getCount()).toBe(1);
         });
-        
+
         it("should decrease the count when removing an item", function() {
             hash.add('key1', 1);
             expect(hash.getCount()).toBe(1);
             hash.removeAtKey('key1');
             expect(hash.getCount()).toBe(0);
         });
-        
+
         it("should keep the same count when replacing an item", function() {
             hash.add('key1', 1);
             expect(hash.getCount()).toBe(1);
             hash.replace('key1', 2);
             expect(hash.getCount()).toBe(1);
         });
-        
+
         it("should keep the same count when adding an existing item", function() {
             hash.add('key1', 1);
             expect(hash.getCount()).toBe(1);
@@ -345,7 +345,7 @@ topSuite("Ext.util.HashMap", function() {
                 hash.add('key', 'val');
                 expect(hash.containsKey('key')).toBe(true);
             });
-            
+
             it("should use a hasOwnProperty check", function() {
                 expect(hash.containsKey('toString')).toBe(false);
             });
@@ -382,7 +382,7 @@ topSuite("Ext.util.HashMap", function() {
             var a = {},
                 b = {},
                 c = {};
-            
+
             hash.add('key', [a, b, c]);
             expect(hash.get('key')).toEqual([a, b, c]);
         });

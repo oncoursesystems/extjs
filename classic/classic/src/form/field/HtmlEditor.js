@@ -52,7 +52,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
     extend: 'Ext.form.FieldContainer',
     alias: 'widget.htmleditor',
     alternateClassName: 'Ext.form.HtmlEditor',
-    
+
     requires: [
         'Ext.tip.QuickTipManager',
         'Ext.picker.Color',
@@ -64,11 +64,11 @@ Ext.define('Ext.form.field.HtmlEditor', {
         'Ext.util.TaskManager',
         'Ext.layout.container.boxOverflow.Menu'
     ],
-    
+
     mixins: {
         field: 'Ext.form.field.Field'
     },
-    
+
     focusable: true,
     componentLayout: 'htmleditor',
 
@@ -94,7 +94,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
         }
     ],
     /* eslint-enable indent, max-len */
-    
+
     stretchInputElFixed: true,
 
     subTplInsertions: [
@@ -235,7 +235,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
      * {@link Ext.button.Button buttons}.
      */
     defaultButtonUI: 'default-toolbar',
-    
+
     /**
      * @cfg {Object} buttonDefaults
      * A config object to apply to the toolbar's {@link Ext.button.Button buttons} to affect
@@ -276,7 +276,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
      * @private
      */
     hideMode: 'offsets',
-    
+
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -289,7 +289,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
     // This will strip any number of single or double quotes (in any order)
     // from a string at the anchors.
     reStripQuotes: /^['"]*|['"]*$/g,
-    
+
     textAlignRE: /text-align:(.*?);/i,
     safariNonsenseRE: /\sclass="(?:Apple-style-span|Apple-tab-span|khtml-block-placeholder)"/gi,
     nonDigitsRE: /\D/g,
@@ -360,13 +360,13 @@ Ext.define('Ext.form.field.HtmlEditor', {
         me.callParent(arguments);
         me.initField();
     },
-    
+
     createInputCmp: function() {
         this.inputCmp = Ext.widget(this.getInputCmpCfg());
 
         return this.inputCmp;
     },
-    
+
     getInputCmpCfg: function() {
         var me = this,
             id = me.id + '-inputCmp',
@@ -379,9 +379,9 @@ Ext.define('Ext.form.field.HtmlEditor', {
                 iframeSrc: Ext.SSL_SECURE_URL,
                 iframeCls: Ext.baseCSSPrefix + 'htmleditor-iframe'
             };
-            
+
         me.getInsertionRenderData(data, me.subTplInsertions);
-            
+
         return {
             flex: 1,
             xtype: 'component',
@@ -404,7 +404,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
 
         return this.toolbar;
     },
-    
+
     getToolbarCfg: function() {
         var me = this,
             items = [],
@@ -427,7 +427,6 @@ Ext.define('Ext.form.field.HtmlEditor', {
                 tabIndex: -1
             }, me.buttonDefaults);
         }
-
 
         if (me.enableFont) {
             fontSelectItem = Ext.widget('component', {
@@ -516,7 +515,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
                                     'forecolor',
                                     Ext.isWebKit || Ext.isIE || Ext.isEdge ? '#' + color : color
                                 );
-                                
+
                                 this.up('menu').hide();
                             }
                         }]
@@ -590,7 +589,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
                 })
             );
         }
-        
+
         // Everything starts disabled.
         for (i = 0; i < items.length; i++) {
             if (items[i].itemId !== 'sourceedit') {
@@ -616,7 +615,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
             }
         };
     },
-    
+
     getMaskTarget: function() {
         // Can't be the body td directly because of issues with absolute positioning
         // inside td's in FF
@@ -720,18 +719,18 @@ Ext.define('Ext.form.field.HtmlEditor', {
         // and fall back to window.frames if contentWindow is not available.
         return this.iframeEl.dom.contentWindow || window.frames[this.iframeEl.dom.name];
     },
-    
+
     initDefaultFont: function() {
         // It's not ideal to do this here since it's a write phase, but we need to know
         // what the font used in the textarea is so that we can setup the appropriate font
         // options in the select box. The select box will reflow once we populate it, so we want
         // to do so before we layout the first time.
-        
+
         var me = this,
             selIdx = 0,
             fonts, font, select,
             option, i, len, lower;
-        
+
         if (!me.defaultFont) {
             font = me.textareaEl.getStyle('font-family');
             font = Ext.String.capitalize(font.split(',')[0]);
@@ -739,7 +738,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
             Ext.Array.include(fonts, font);
             fonts.sort();
             me.defaultFont = font;
-            
+
             select = me.down('#fontSelect').selectEl.dom;
 
             for (i = 0, len = fonts.length; i < len; ++i) {
@@ -752,7 +751,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
                 }
 
                 option.style.fontFamily = lower;
-                
+
                 if (Ext.isIE) {
                     select.add(option);
                 }
@@ -766,7 +765,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
             select.options[selIdx].selected = true;
         }
     },
-    
+
     isEqual: function(value1, value2) {
         return this.isEqualAsString(value1, value2);
     },
@@ -779,10 +778,10 @@ Ext.define('Ext.form.field.HtmlEditor', {
             inputCmp = me.inputCmp;
 
         me.callParent(arguments);
-          
+
         me.iframeEl = inputCmp.iframeEl;
         me.textareaEl = inputCmp.textareaEl;
-        
+
         // The input element is interrogated by the layout to extract height when labelAlign
         // is 'top'. It must be set, and then switched between the iframe and the textarea
         me.inputEl = me.iframeEl;
@@ -985,7 +984,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
         if (html.charCodeAt(0) === parseInt(this.defaultValue.replace(this.nonDigitsRE, ''), 10)) {
             html = html.substring(1);
         }
-        
+
         return html;
     },
 
@@ -1408,7 +1407,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
             // When querying the fontName, Chrome may return an Array of font names
             // with those containing spaces being placed between single-quotes.
             queriedName = doc.queryCommandValue('fontName');
-            
+
             // eslint-disable-next-line max-len
             name = (queriedName ? queriedName.split(",")[0].replace(me.reStripQuotes, '') : me.defaultFont).toLowerCase();
             fontSelect = me.fontSelect.dom;
@@ -1420,10 +1419,10 @@ Ext.define('Ext.form.field.HtmlEditor', {
 
         function updateButtons() {
             var state;
-            
+
             for (i = 0, l = arguments.length, name; i < l; i++) {
                 name = arguments[i];
-                
+
                 // Firefox 18+ sometimes throws NS_ERROR_INVALID_POINTER exception
                 // See https://sencha.jira.com/browse/EXTJSIV-9766
                 try {
@@ -1432,7 +1431,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
                 catch (e) {
                     state = false;
                 }
-                
+
                 btns[name].toggle(state);
             }
         }
@@ -1477,7 +1476,7 @@ Ext.define('Ext.form.field.HtmlEditor', {
     relayCmd: function(cmd, value) {
         Ext.defer(function() {
             var me = this;
-            
+
             if (!this.destroyed) {
                 me.win.focus();
                 me.execCmd(cmd, value);
@@ -1792,62 +1791,62 @@ Ext.define('Ext.form.field.HtmlEditor', {
      * @event blur
      * @hide
      */
-    
+
     /**
      * @event focus
      * @hide
      */
-    
+
     /**
      * @event specialkey
      * @hide
      */
-    
+
     /**
      * @cfg {String} fieldCls
      * @hide
      */
-    
+
     /**
      * @cfg {String} focusCls
      * @hide
      */
-    
+
     /**
      * @cfg {String} autoCreate
      * @hide
      */
-    
+
     /**
      * @cfg {String} inputType
      * @hide
      */
-    
+
     /**
      * @cfg {String} invalidCls
      * @hide
      */
-    
+
     /**
      * @cfg {String} invalidText
      * @hide
      */
-    
+
     /**
      * @cfg {Boolean} allowDomMove
      * @hide
      */
-    
+
     /**
      * @cfg {String} readOnly
      * @hide
      */
-    
+
     /**
      * @cfg {String} tabIndex
      * @hide
      */
-    
+
     /**
      * @method validate
      * @hide

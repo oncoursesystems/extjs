@@ -217,28 +217,28 @@ Ext.define('Ext.layout.container.Container', {
             Ext.DomHelper.generateMarkup(tree, out);
         }
     },
-    
+
     doRenderTabGuard: function(out, renderData, position) {
         // Careful! This method is bolted on to the renderTpl so all we get for context is
         // the renderData! The "this" pointer is the renderTpl instance!
 
         var cmp = renderData.$comp,
             tabGuardTpl;
-        
+
         // Due to framing, we will be called in two different ways: in the frameTpl or in
         // the renderTpl. The frameTpl version enters via doRenderFramingTabGuard which
         // sets "$skipTabGuards" on the renderTpl's renderData.
         //
         if (cmp.tabGuard && !renderData.$skipTabGuards) {
             tabGuardTpl = cmp.lookupTpl('tabGuardTpl');
-            
+
             if (tabGuardTpl) {
                 renderData.tabGuard = position;
                 renderData.tabGuardEl = cmp.tabGuardElements[position];
-                
+
                 cmp.addChildEl(renderData.tabGuardEl);
                 tabGuardTpl.applyOut(renderData, out);
-                
+
                 delete renderData.tabGuard;
                 delete renderData.tabGuardEl;
             }
@@ -271,7 +271,7 @@ Ext.define('Ext.layout.container.Container', {
                          'is being overridden but not applyTargetCls(). ' + this.owner.id);
         }
         //</debug>
-        
+
         this.owner.afterLayout(this);
     },
 
@@ -360,7 +360,7 @@ Ext.define('Ext.layout.container.Container', {
     // preserves the order
     getPositionOffset: function(position) {
         var offset;
-        
+
         if (!this.createsInnerCt) {
             offset = this.owner.itemNodeOffset;
 
@@ -493,7 +493,7 @@ Ext.define('Ext.layout.container.Container', {
     },
 
     getScrollbarsNeeded: function(width, height, contentWidth, contentHeight) {
-        var scrollbarSize = Ext.getScrollbarSize(),
+        var scrollbarSize = Ext.scrollbar.size(),
             hasWidth = typeof width === 'number',
             hasHeight = typeof height === 'number',
             needHorz = 0,

@@ -54,14 +54,15 @@ Ext.define('KitchenSink.controller.phone.Main', {
      * This method is executed when the NestedList for navigation has been initialized.  We want to
      * check the hash on the URL and go to the correct list or leaf, accordingly.
      */
-    handleRoute: function (id) {
+    handleRoute: function(id) {
         var node = Ext.StoreMgr.get('Navigation').getNodeById(id);
 
         this.record = node;
 
         if (node.isLeaf()) {
             this.showView(node);
-        } else {
+        }
+        else {
             // go to the proper sublist
             this.getNav().goToNode(node);
         }
@@ -75,7 +76,7 @@ Ext.define('KitchenSink.controller.phone.Main', {
         this.redirectTo(location.record.get('id'));
     },
 
-    onNavLeafTap: function (nestedList, location) {
+    onNavLeafTap: function(nestedList, location) {
         nestedList.setDetailCard(this.createView(location.record));
     },
 
@@ -120,7 +121,7 @@ Ext.define('KitchenSink.controller.phone.Main', {
      * @param {String} name The full class name of the view to create (e.g. "KitchenSink.view.Forms")
      * @return {Ext.Component} The component, which may be from the cache
      */
-    createView: function (item, title) {
+    createView: function(item, title) {
         var me = this,
             viewClass = me.getViewClass(item),
             prototype = viewClass.prototype,
@@ -144,7 +145,8 @@ Ext.define('KitchenSink.controller.phone.Main', {
 
                 if (!oldView.isPainted()) {
                     oldView.destroy();
-                } else {
+                }
+                else {
                     cache[j++] = oldView;
                 }
             }
@@ -154,7 +156,7 @@ Ext.define('KitchenSink.controller.phone.Main', {
 
         cfg = {
             id: name.replace(/\./g, '-').toLowerCase()
-        }
+        };
 
         if (prototype.title === title || (prototype.config && prototype.config.title === title)) {
             /**
@@ -179,11 +181,10 @@ Ext.define('KitchenSink.controller.phone.Main', {
             nav = me.getNav(),
             title = item.get('text'),
             view = me.createView(item, title),
-            lastNode, lastList, layout, anim;
+            lastList, layout, anim;
 
         if (nav.getDetailCard() !== view) {
             lastList = nav.getLastActiveList();
-            lastNode = nav.getLastNode();
 
             if (!lastList || lastList.getStore().getNode().id !== item.parentNode.id) {
                 /**
@@ -210,7 +211,8 @@ Ext.define('KitchenSink.controller.phone.Main', {
             nav.setDetailCard(view);
 
             nav.goToLeaf(item);
-        } else if (item.isLeaf()) {
+        }
+        else if (item.isLeaf()) {
             me.currentDemo = item;
         }
 
@@ -233,7 +235,7 @@ Ext.define('KitchenSink.controller.phone.Main', {
         this.getTouchEvents().showConsole();
     },
 
-    getAvailableThemes: function () {
+    getAvailableThemes: function() {
         var items = this.callParent();
 
         delete items[0].xtype;
@@ -249,7 +251,7 @@ Ext.define('KitchenSink.controller.phone.Main', {
         return items;
     },
 
-    parseAvailableThemes: function (me) {
+    parseAvailableThemes: function(me) {
         var oldParser = this.callParent([me]);
 
         /**
@@ -257,12 +259,14 @@ Ext.define('KitchenSink.controller.phone.Main', {
          * which does not support menu items so we need
          * to remove the xtype to let it use the default.
          */
-        return Ext.theme.is.Material ? oldParser : function (theme) {
-            theme = oldParser.call(this, theme);
+        return Ext.theme.is.Material
+            ? oldParser
+            : function(theme) {
+                theme = oldParser.call(this, theme);
 
-            delete theme.xtype;
+                delete theme.xtype;
 
-            return theme;
-        };
+                return theme;
+            };
     }
 });

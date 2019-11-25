@@ -216,11 +216,11 @@ Ext.define('Ext.app.Controller', {
         resolveNamespace: function(cls, data) {
             var Controller = Ext.app.Controller,
                 namespaceRe, className, namespace, match;
-            
+
             namespaceRe = cls.prototype.isProfile
                 ? Controller.profileRegex
                 : Controller.controllerRegex;
-            
+
             /*
              * Namespace resolution is tricky business: we should know what namespace
              * this Controller descendant belongs to, or model/store/view dependency
@@ -796,7 +796,7 @@ Ext.define('Ext.app.Controller', {
             if (!me[fn]) {
                 me[fn] = Ext.Function.pass(me.getRef, [ref, info], me);
             }
-            
+
             me.references.push(ref.toLowerCase());
         }
     },
@@ -851,7 +851,7 @@ Ext.define('Ext.app.Controller', {
      */
     hasRef: function(ref) {
         var references = this.references;
-        
+
         return references && Ext.Array.indexOf(references, ref.toLowerCase()) !== -1;
     },
 
@@ -931,7 +931,7 @@ Ext.define('Ext.app.Controller', {
      */
     getProfile: function(name) {
         name = Ext.app.Controller.getFullName(name, 'profile', this.$namespace);
-        
+
         return name;
     },
 
@@ -947,7 +947,7 @@ Ext.define('Ext.app.Controller', {
      */
     getView: function(view) {
         var name = Ext.app.Controller.getFullName(view, 'view', this.$namespace);
-        
+
         return name && Ext.ClassManager.get(name.absoluteName);
     },
 
@@ -971,14 +971,14 @@ Ext.define('Ext.app.Controller', {
         if (destroyRefs) {
             // Possible destroy stores here too?
             refCache = me.refCache;
-            
+
             for (ref in refCache) {
                 if (refCache.hasOwnProperty(ref)) {
                     Ext.destroy(refCache[ref]);
                 }
             }
         }
-        
+
         me.callParent();
     }
 });

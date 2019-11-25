@@ -195,6 +195,21 @@ Ext.define('Ext.grid.Location', {
         }
     },
 
+    beforeEdit: function(editor) {
+        return this.fireEditEvent('beforeedit', editor);
+    },
+
+    fireEditEvent: function(eventName, editor) {
+        var me = this,
+            view = me.view;
+
+        if (editor) {
+            me.editor = editor;
+        }
+
+        return view.fireEvent(eventName, view, me);
+    },
+
     /**
      * Creates a clone of this Location, optionally moving either the record or column
      * to a different position.
@@ -618,7 +633,9 @@ Ext.define('Ext.grid.Location', {
                     // If we cannot navigate, previousCell and nextCell return the same Location
                     if (candidate && len) {
                         for (i = 0; !result && i < len; i++) {
-                            view.ensureVisible(candidate.record, { column: candidate.columnIndex, focus: true });
+                            view.ensureVisible(candidate.record, {
+                                column: candidate.columnIndex, focus: true }
+                            );
                             result = actionables[i].activateCell(candidate);
                         }
                     }
@@ -772,7 +789,6 @@ Ext.define('Ext.grid.Location', {
             return visibleColumns;
         },
 
-
         /**
          * Navigates to the previous visible *cell* Location.
          * @param {Boolean/Object} options An options object or a boolean flag meaning wrap
@@ -832,7 +848,6 @@ Ext.define('Ext.grid.Location', {
             return result;
         },
 
-
         /**
          *  Function to get the new location object based on target columns and the row num. 
          *  @param {Ext.Grid.Column} Column target column in for which we need the location
@@ -842,7 +857,7 @@ Ext.define('Ext.grid.Location', {
             var me = this,
                 grid = column.getGrid(),
                 targetRecord = me.view.store.getData().getAt(targetRowIndex),
-                location = grid.getNavigationModel().createLocation(targetRecord);
+                location = grid.createLocation(targetRecord);
 
             // Update location
             location.column = column;

@@ -1,57 +1,57 @@
 topSuite("Ext.menu.DatePicker", function() {
     var menu;
-    
+
     function makeMenu(cfg) {
         cfg = Ext.apply({
             floating: true
         }, cfg);
-        
+
         menu = new Ext.menu.DatePicker(cfg);
-        
+
         return menu;
     }
-    
+
     afterEach(function() {
         if (menu) {
             menu.destroy();
         }
-        
+
         menu = null;
     });
-    
+
     describe("pickerCfg", function() {
         beforeEach(function() {
             makeMenu({
                 pickerCfg: {
                     foo: 'bar'
                 },
-                
+
                 blerg: 'throbbe'
             });
         });
-        
+
         it("should apply pickerCfg", function() {
             expect(menu.picker.foo).toBe('bar');
         });
-        
+
         it("should not apply other configs", function() {
             expect(menu.picker.blerg).not.toBeDefined();
         });
     });
-    
+
     describe("no pickerCfg", function() {
         it("should apply config", function() {
             makeMenu({
                 frobbe: 'gurgle'
             });
-            
+
             expect(menu.picker.frobbe).toBe('gurgle');
         });
     });
 
     describe("interaction", function() {
         var button, dateItem;
-        
+
         beforeEach(function() {
             button = new Ext.button.Button({
                 renderTo: Ext.getBody(),
@@ -65,22 +65,22 @@ topSuite("Ext.menu.DatePicker", function() {
                     }
                 }]
             });
-            
+
             button.showMenu();
-            
+
             dateItem = button.menu.down('[text=date]');
-            
+
             dateItem.focus();
             dateItem.expandMenu(null, 0);
-            
+
             menu = dateItem.menu;
         });
-        
+
         afterEach(function() {
             if (button) {
                 button.destroy();
             }
-            
+
             button = null;
         });
 

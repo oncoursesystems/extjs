@@ -6,24 +6,24 @@ Ext.define('KitchenSink.view.toolbar.OverflowBar', {
         xtype: 'splitbutton',
         text: 'Menu',
         iconCls: 'toolbar-overflow-list',
-        menu:[{
-            text:'Menu Button 1'
+        menu: [{
+            text: 'Menu Button 1'
         }]
     }, '-', {
         xtype: 'splitbutton',
         text: 'Cut',
         iconCls: 'toolbar-overflow-cut',
         menu: [{
-            text:'Cut Menu Item'
+            text: 'Cut Menu Item'
         }]
     }, {
         iconCls: 'toolbar-overflow-copy',
-        text:'Copy'
+        text: 'Copy'
     }, {
         text: 'Paste',
         iconCls: 'toolbar-overflow-paste',
-        menu:[{
-            text:'Paste Menu Item'
+        menu: [{
+            text: 'Paste Menu Item'
         }]
     }, {
         iconCls: 'toolbar-overflow-format',

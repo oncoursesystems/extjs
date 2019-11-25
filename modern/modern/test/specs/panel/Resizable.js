@@ -196,11 +196,13 @@ topSuite("Ext.panel.Resizable", [
             v = box[key];
             ret[key] = v ? -v : 0;
         }
+
         return ret;
     }
 
     function getCenter(el) {
         var xy = el.getXY();
+
         return [xy[0] + (el.getWidth() / 2), xy[1] + (el.getHeight() / 2)];
     }
 
@@ -217,16 +219,19 @@ topSuite("Ext.panel.Resizable", [
 
     function expectBox(newBox) {
         var box = panel.element.getRegion();
+
         compareBoxes(box, newBox);
     }
 
     function expectBoxOffset(offsets) {
         var box = startBox.copy();
+
         expectBox(adjustBox(box, offsets));
     }
 
     function expectSize(w, h) {
         var el = panel.element;
+
         expect(el.getWidth()).toBe(w);
         expect(el.getHeight()).toBe(h);
     }
@@ -278,6 +283,7 @@ topSuite("Ext.panel.Resizable", [
 
     describe("panel level configuring", function() {
         var customCls = 'spec.MyCustomResizer';
+
         beforeEach(function() {
             Ext.define(customCls, {
                 extend: 'Ext.panel.Resizer'
@@ -326,6 +332,7 @@ topSuite("Ext.panel.Resizable", [
                     it("should destroy the old resizer", function() {
                         createPanel(true);
                         var old = panel.getResizable();
+
                         panel.setResizable(null);
                         expect(panel.getResizable()).toBeNull();
                         expect(old.destroy).toBe(Ext.emptyFn);
@@ -362,7 +369,6 @@ topSuite("Ext.panel.Resizable", [
                     expect(edge).not.toHaveCls('x-panelresizer-' + ui);
                 });
             }
-
 
             describe("at construction", function() {
                 describe("with no resizable", function() {
@@ -748,9 +754,11 @@ topSuite("Ext.panel.Resizable", [
                         expect(panel.element.query('.x-panelresizer').length).toBe(2);
                         allEdges.forEach(function(name) {
                             var edge = resizable.getEdge(name);
+
                             if (name === 'west' || name === 'southeast') {
                                 expect(edge.isElement).toBe(true);
-                            } else {
+                            }
+ else {
                                 expect(edge).toBeNull();
                             }
                         });
@@ -765,6 +773,7 @@ topSuite("Ext.panel.Resizable", [
                             var edges = panel.element.query('.x-panelresizer').map(function(el) {
                                 return el.getAttribute('data-edge');
                             });
+
                             expect(edges).toEqual([
                                 'east',
                                 'north',
@@ -790,9 +799,11 @@ topSuite("Ext.panel.Resizable", [
 
                         allEdges.forEach(function(name) {
                             var edge = resizable.getEdge(name);
+
                             if (name === 'east' || name === 'northwest' || name === 'south') {
                                 expect(edge.isElement).toBe(true);
-                            } else {
+                            }
+ else {
                                 expect(edge).toBeNull();
                             }
                         });
@@ -818,6 +829,7 @@ topSuite("Ext.panel.Resizable", [
                             resizable.setEdges('all');
                             allEdges.forEach(function(edge) {
                                 var el = resizable.getEdge(edge);
+
                                 expect(el).not.toHaveCls(Ext.baseCSSPrefix + 'splitter');
                             });
                         });
@@ -832,6 +844,7 @@ topSuite("Ext.panel.Resizable", [
                             resizable.setEdges('all');
                             allEdges.forEach(function(edge) {
                                 var el = resizable.getEdge(edge);
+
                                 expect(el).toHaveCls(Ext.baseCSSPrefix + 'splitter');
                             });
                         });
@@ -864,10 +877,11 @@ topSuite("Ext.panel.Resizable", [
                         createSplitPanel(false);
                         allEdges.forEach(function(edge) {
                             var el = resizable.getEdge(edge);
+
                             expect(el).not.toHaveCls(Ext.baseCSSPrefix + 'splitter');
                         });
                     });
-                }); 
+                });
 
                 describe("with split: true", function() {
                     describe("edges", function() {
@@ -875,6 +889,7 @@ topSuite("Ext.panel.Resizable", [
                             createSplitPanel(true);
                             splitEdges.forEach(function(edge) {
                                 var el = resizable.getEdge(edge);
+
                                 expect(el).toHaveCls(Ext.baseCSSPrefix + 'splitter');
                             });
                         });
@@ -915,6 +930,7 @@ topSuite("Ext.panel.Resizable", [
                         resizable.setEdges(splitEdges);
                         splitEdges.forEach(function(edge) {
                             var el = resizable.getEdge(edge);
+
                             expect(el).toHaveCls(Ext.baseCSSPrefix + 'splitter');
                         });
                     });
@@ -927,6 +943,7 @@ topSuite("Ext.panel.Resizable", [
                         resizable.setEdges(allEdges);
                         allEdges.forEach(function(edge) {
                             var el = resizable.getEdge(edge);
+
                             expect(el).not.toHaveCls(Ext.baseCSSPrefix + 'splitter');
                         });
                     });
@@ -973,7 +990,7 @@ topSuite("Ext.panel.Resizable", [
     });
 
     // TODO Tablet devices have trouble with these tests
-    (Ext.os.deviceType === 'Tablet' ? xdescribe: describe)("dragging", function() {
+    (Ext.os.deviceType === 'Tablet' ? xdescribe : describe)("dragging", function() {
         describe("with split: false", function() {
             function makeDynamicSuite(dynamic) {
                 describe("with dynamic: " + dynamic, function() {
@@ -981,11 +998,13 @@ topSuite("Ext.panel.Resizable", [
                         describe(floated ? "as floated" : "as positioned", function() {
                             function expectProxyBox(newBox) {
                                 var box = getProxyBox(resizable);
+
                                 compareBoxes(box, newBox);
                             }
 
                             function expectProxyBoxOffset(offsets) {
                                 var box = startBox.copy();
+
                                 expectProxyBox(adjustBox(box, offsets));
                             }
 
@@ -1014,7 +1033,8 @@ topSuite("Ext.panel.Resizable", [
                                     panel.center();
                                     resizable = panel.getResizable();
                                 };
-                            } else {
+                            }
+ else {
                                 createSuitePanel = function(resizerCfg, panelCfg) {
                                     resizerCfg = Ext.apply({
                                         dynamic: dynamic,
@@ -1059,11 +1079,13 @@ topSuite("Ext.panel.Resizable", [
                                     i;
 
                                 startDrag(dragEdge);
+
                                 for (i = 0; i < len; ++i) {
                                     adjustBox(cumulativeOffset, expectedOffsets[i]);
                                     moveBy(moves[i]);
                                     runsBoxOffsetFn(cumulativeOffset.copy());
                                 }
+
                                 endDrag();
                                 // Complete, so always check the element box
                                 runsExpectBoxOffset(cumulativeOffset);
@@ -1179,9 +1201,11 @@ topSuite("Ext.panel.Resizable", [
 
                                     if (snapHorz && snapVert) {
                                         key = 'snap in both dimensions';
-                                    } else if (snapVert) {
+                                    }
+ else if (snapVert) {
                                         key = 'snap vertically';
-                                    } else if (snapHorz) {
+                                    }
+ else if (snapHorz) {
                                         key = 'snap horizontally';
                                     }
 
@@ -1215,7 +1239,8 @@ topSuite("Ext.panel.Resizable", [
                                     if (typeof options === 'string') {
                                         edge = edgeInfo[options];
                                         options = {};
-                                    } else {
+                                    }
+ else {
                                         edge = edgeInfo[options.edge];
                                     }
 
@@ -1231,9 +1256,11 @@ topSuite("Ext.panel.Resizable", [
 
                                         move *= moveOffset;
                                         v = move;
+
                                         if (!noSnap) {
                                             v = o.offset * moveOffset;
                                         }
+
                                         offset[offsetKey] = v;
 
                                         return {
@@ -1249,7 +1276,8 @@ topSuite("Ext.panel.Resizable", [
                                     if (typeof options === 'string') {
                                         edge = edgeInfo[options];
                                         options = {};
-                                    } else {
+                                    }
+ else {
                                         edge = edgeInfo[options.edge];
                                     }
 
@@ -1619,7 +1647,8 @@ topSuite("Ext.panel.Resizable", [
 
                                         if (onComponent) {
                                             panelCfg[prop] = constrainVal;
-                                        } else {
+                                        }
+ else {
                                             resizerCfg[prop] = constrainVal;
                                         }
 
@@ -1717,16 +1746,19 @@ topSuite("Ext.panel.Resizable", [
                                             if (edgeInfo[edge].horz) {
                                                 if (constrainW) {
                                                     msg.push('constrain the width');
-                                                } else {
+                                                }
+ else {
                                                     msg.push('not constrain the width');
                                                 }
                                             }
 
                                             if (edgeInfo[edge].horz) {
                                                 append = msg.length ? ' & ' : '';
+
                                                 if (constrainH) {
                                                     msg.push(append + 'constrain the height');
-                                                } else {
+                                                }
+ else {
                                                     msg.push(append + 'not constrain the height');
                                                 }
                                             }
@@ -1969,6 +2001,7 @@ topSuite("Ext.panel.Resizable", [
                             });
                         });
                     }
+
                     makeFloatPositionSuite(false);
                     makeFloatPositionSuite(true);
                 });
@@ -2006,6 +2039,7 @@ topSuite("Ext.panel.Resizable", [
                                 o[key] = offset[key];
                             }
                         }
+
                         expectProxyOffset(o);
                     });
                 }
@@ -2023,7 +2057,7 @@ topSuite("Ext.panel.Resizable", [
                     var id = Ext.id(),
                         other = {
                             flex: 1
-                        }, 
+                        },
                         p = Ext.apply({
                             id: id,
                             resizable: resizerCfg
@@ -2075,6 +2109,7 @@ topSuite("Ext.panel.Resizable", [
                         i, offsets;
 
                     startDrag(dragEdge);
+
                     for (i = 0; i < len; ++i) {
                         offsets = expectedOffsets[i];
                         adjustBox(cumulativeOffset, offsets);
@@ -2082,6 +2117,7 @@ topSuite("Ext.panel.Resizable", [
                         moveBy(moves[i]);
                         runsBoxOffsetFn(cumulativeOffset.copy());
                     }
+
                     endDrag();
                     // Complete, so always check the element box
                     runsExpectBoxOffset(cumulativeOffset);
@@ -2154,7 +2190,7 @@ topSuite("Ext.panel.Resizable", [
 
                             makeSuite('north', -50, { top: -50 });
                             makeSuite('east', 50, { right: 50 });
-                            makeSuite('south', 40, { bottom: 40 } );
+                            makeSuite('south', 40, { bottom: 40 });
                             makeSuite('west', -70, { left: -70 });
                         });
 
@@ -2195,7 +2231,8 @@ topSuite("Ext.panel.Resizable", [
 
                             if (snapVert) {
                                 key = 'vertically';
-                            } else if (snapHorz) {
+                            }
+ else if (snapHorz) {
                                 key = 'horizontally';
                             }
 
@@ -2205,7 +2242,9 @@ topSuite("Ext.panel.Resizable", [
 
                             offsets = offsets.map(function(offset) {
                                 var o = {};
+
                                 o[(horz || vert).offsetKey] = offset;
+
                                 return o;
                             });
 
@@ -2498,7 +2537,7 @@ topSuite("Ext.panel.Resizable", [
                                 });
                             }
 
-                            makeSuite('north', [null, -200], { top: -(maxSize - baseSize) }, { top: baseSize - minSize } );
+                            makeSuite('north', [null, -200], { top: -(maxSize - baseSize) }, { top: baseSize - minSize });
                             makeSuite('east', [200, null], { right: maxSize - baseSize }, { right: -(baseSize - minSize) });
                             makeSuite('south', [null, 200], { bottom: maxSize - baseSize }, { bottom: -(baseSize - minSize) });
                             makeSuite('west', [-200, null], { left: -(maxSize - baseSize) }, { left: baseSize - minSize });
@@ -2518,9 +2557,11 @@ topSuite("Ext.panel.Resizable", [
 
                                 if (onComponent) {
                                     panelCfg[prop] = constrainVal;
-                                } else {
+                                }
+ else {
                                     resizerCfg[prop] = constrainVal;
                                 }
+
                                 createFn(edge, move, offsets, resizerCfg, panelCfg);
                             }
 
@@ -2601,16 +2642,19 @@ topSuite("Ext.panel.Resizable", [
                                     if (edgeInfo[edge].horz) {
                                         if (constrainW) {
                                             msg.push('constrain the width');
-                                        } else {
+                                        }
+ else {
                                             msg.push('not constrain the width');
                                         }
                                     }
 
                                     if (edgeInfo[edge].horz) {
                                         append = msg.length ? ' & ' : '';
+
                                         if (constrainH) {
                                             msg.push(append + 'constrain the height');
-                                        } else {
+                                        }
+ else {
                                             msg.push(append + 'not constrain the height');
                                         }
                                     }
@@ -2872,10 +2916,12 @@ topSuite("Ext.panel.Resizable", [
                                     moveBy(moveForEdge(edge, 50));
                                     runs(function() {
                                         var proxyBox = getProxyBox(resizable);
+
                                         if (horz) {
                                             expect(proxyBox.top).toBe(startBox.top);
                                             expect(proxyBox.bottom).toBe(startBox.bottom);
-                                        } else {
+                                        }
+ else {
                                             expect(proxyBox.left).toBe(startBox.left);
                                             expect(proxyBox.right).toBe(startBox.right);
                                         }

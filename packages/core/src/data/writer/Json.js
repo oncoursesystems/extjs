@@ -7,14 +7,14 @@ Ext.define('Ext.data.writer.Json', {
     extend: 'Ext.data.writer.Writer',
     alternateClassName: 'Ext.data.JsonWriter',
     alias: 'writer.json',
-    
+
     config: {
         /**
         * @cfg {String} rootProperty The HTTP parameter name by which JSON encoded records
         * will be passed to the server if the {@link #encode} option is `true`.
         */
         rootProperty: undefined,
-    
+
         /**
         * @cfg {Boolean} [encode=false] Configure `true` to send record data (all record fields
         * if {@link #writeAllFields} is `true`) as a JSON encoded HTTP parameter named by the
@@ -25,14 +25,14 @@ Ext.define('Ext.data.writer.Json', {
         * a raw post. The root will be the name of the parameter sent to the server.
         */
         encode: false,
-    
+
         /**
         * @cfg {Boolean} [allowSingle=true] Configure with `false` to ensure that records are
         * always wrapped in an array, even if there is only one record being sent. When there
         * is more than one record, they will always be encoded into an array.
         */
         allowSingle: true,
-    
+
         /**
         * @cfg {Boolean} [expandData=false] By default, when dot-delimited field
         * {@link #nameProperty mappings} are used (e.g. `name: 'myProperty', mapping:
@@ -48,7 +48,7 @@ Ext.define('Ext.data.writer.Json', {
         */
         expandData: false
     },
-    
+
     //<debug>
     constructor: function(config) {
         if (config && config.hasOwnProperty('root')) {
@@ -58,11 +58,11 @@ Ext.define('Ext.data.writer.Json', {
             Ext.log.warn('Ext.data.writer.Json: Using the deprecated "root" configuration. ' +
                          'Use "rootProperty" instead.');
         }
-        
+
         this.callParent([config]);
     },
     //</debug>
-    
+
     /**
      * @protected
      * The Reader classes support dot-delimited data mappings for extracting nested raw data
@@ -95,76 +95,76 @@ Ext.define('Ext.data.writer.Json', {
         var dataLength = data.length,
             i = 0,
             item, prop, nameParts, j, tempObj, toObject;
-            
+
         toObject = function(name, value) {
             var o = {};
-            
+
             o[name] = value;
-            
+
             return o;
         };
-        
+
         for (; i < dataLength; i++) {
             item = data[i];
-            
+
             for (prop in item) {
                 if (item.hasOwnProperty(prop)) {
                     // e.g. my.nested.property: 'foo'
                     nameParts = prop.split('.');
                     j = nameParts.length - 1;
-                    
+
                     if (j > 0) {
                         // Initially this will be the value 'foo'.
                         // Equivalent to rec['my.nested.property']
                         tempObj = item[prop];
-                        
+
                         for (; j > 0; j--) {
                             // Starting with the value above, we loop inside out, assigning the
                             // current object as the value for the parent name. Work all
                             // the way up until only the root name is left to assign.
                             tempObj = toObject(nameParts[j], tempObj);
                         }
-                        
+
                         // At this point we'll have all child properties rolled up into a single
                         // object like `{ nested: { property: 'foo' }}`. Now add the root name
                         // (e.g. 'my') to the record data if needed (do not overwrite existing):
                         item[nameParts[0]] = item[nameParts[0]] || {};
-                        
+
                         // Since there could be duplicate names at any level of the nesting be sure
                         // to merge rather than assign when setting the object as the value:
                         Ext.Object.merge(item[nameParts[0]], tempObj);
-                        
+
                         // Finally delete the original mapped property from the record
                         delete item[prop];
                     }
                 }
             }
         }
-        
+
         return data;
     },
-    
+
     writeRecords: function(request, data) {
         var me = this,
             root = me.getRootProperty(),
             json, single, transform;
-        
+
         if (me.getExpandData()) {
             data = me.getExpandedData(data);
         }
-        
+
         if (me.getAllowSingle() && data.length === 1) {
             // convert to single object format
             data = data[0];
             single = true;
         }
-        
+
         transform = this.getTransform();
-        
+
         if (transform) {
             data = transform(data, request);
         }
-        
+
         if (me.getEncode()) {
             if (root) {
                 // sending as a param, need to encode
@@ -179,17 +179,17 @@ Ext.define('Ext.data.writer.Json', {
         else if (single || (data && data.length)) {
             // send as jsonData
             json = request.getJsonData() || {};
-            
+
             if (root) {
                 json[root] = data;
             }
             else {
                 json = data;
             }
-            
+
             request.setJsonData(json);
         }
-        
+
         return request;
     }
 });

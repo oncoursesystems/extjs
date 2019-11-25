@@ -77,7 +77,7 @@ Ext.define('Ext.dataview.plugin.ItemTip', {
     onBeforeShow: function() {
         var me = this,
             viewModel = me.getViewModel(),
-            location = me.getCmp().getNavigationModel().createLocation(me.currentTarget);
+            location = me.getCmp().createLocation(me.currentTarget);
 
         // In case location has become invalidated during the showDelay.
         // For example the hovered item being removed.

@@ -1,6 +1,6 @@
 topSuite("Ext.app.bind.Formula", ['Ext.app.ViewModel'], function() {
     var vm;
-    
+
     beforeEach(function() {
         vm = new Ext.app.ViewModel({
             // this is a config not an instance so the VM knows it owns the instance
@@ -18,10 +18,10 @@ topSuite("Ext.app.bind.Formula", ['Ext.app.ViewModel'], function() {
 
     function makeFormula(fn, name) {
         var o = {};
-        
+
         o[name || 'fn'] = fn;
         vm.setFormulas(o);
-        
+
         return vm.getRoot().children.fn.formula;
     }
 
@@ -42,7 +42,7 @@ topSuite("Ext.app.bind.Formula", ['Ext.app.ViewModel'], function() {
                 return fn;
             }
         });
-        
+
         delete expr.$literal;
         expect(Ext.Object.getKeys(expr)).toEqual(result);
     }

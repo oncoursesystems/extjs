@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.chart.navigator.Line', {
         'Ext.chart.navigator.Container'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/navigator/LineController.js'
@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.chart.navigator.Line', {
             buttonShadow: true,
             insetPadding: '20 10 10',
             padding: 8,
-            panIcon: 'x-fa fa-arrows',
+            panIcon: 'x-fa fa-arrows-alt',
             panText: 'Pan',
             segBtnWidth: 200,
             tbarPadding: '5 8',
@@ -51,9 +51,9 @@ Ext.define('KitchenSink.view.chart.navigator.Line', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -81,21 +81,21 @@ Ext.define('KitchenSink.view.chart.navigator.Line', {
                     }
                 },
                 modeToggleButton: {
-                width: '${segBtnWidth}',
-                defaults: {
-                    flex: 1,
-                    ui: 'action'
-                },
-                items: [{
-                    iconCls: '${panIcon}',
-                    text: '${panText}',
-                    value: 'pan'
-                }, {
-                    iconCls: '${zoomIcon}',
-                    text: '${zoomText}',
-                    value: 'zoom'
-                }]
-            }
+                    width: '${segBtnWidth}',
+                    defaults: {
+                        flex: 1,
+                        ui: 'action'
+                    },
+                    items: [{
+                        iconCls: '${panIcon}',
+                        text: '${panText}',
+                        value: 'pan'
+                    }, {
+                        iconCls: '${zoomIcon}',
+                        text: '${zoomText}',
+                        value: 'zoom'
+                    }]
+                }
             }],
             legend: {
                 type: 'sprite',
@@ -172,7 +172,7 @@ Ext.define('KitchenSink.view.chart.navigator.Line', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

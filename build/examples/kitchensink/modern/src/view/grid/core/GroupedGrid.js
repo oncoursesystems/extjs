@@ -50,7 +50,7 @@ Ext.define('KitchenSink.view.grid.core.GroupedGrid', {
         }
     },
 
-    padding: '${padding}', //give room for the grid's shadow
+    padding: '${padding}', // give room for the grid's shadow
     shadow: false,
     //</example>
 

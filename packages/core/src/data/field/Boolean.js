@@ -34,14 +34,14 @@ Ext.define('Ext.data.field.Boolean', {
         if (typeof v === 'boolean') {
             return v;
         }
-        
+
         if (this.allowNull && (v === undefined || v === null || v === '')) {
             return null;
         }
-        
+
         return this.trueRe.test(String(v));
     },
-    
+
     getType: function() {
         return 'bool';
     }

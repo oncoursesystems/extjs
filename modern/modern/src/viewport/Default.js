@@ -1144,6 +1144,32 @@ Ext.define('Ext.viewport.Default', function() {
                 menu.translate(before.translateX, before.translateY);
             },
 
+            /**
+             * @private
+             */
+            disableTabbing: function() {
+                if (this.tabbingDisabled) {
+                    return;
+                }
+
+                this.tabbingDisabled = true;
+
+                this.callParent();
+            },
+
+            /**
+             * @private
+             */
+            enableTabbing: function(reset) {
+                if (!this.tabbingDisabled) {
+                    return;
+                }
+
+                this.tabbingDisabled = false;
+
+                this.callParent([reset]);
+            },
+
             doAddListener: function(eventName, fn, scope, options, order, caller, manager) {
                 var me = this;
 

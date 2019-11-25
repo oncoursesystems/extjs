@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.grid.GroupedHeaderGrid', {
     }, {
         type: 'Store',
         path: 'app/store/Companies.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/Company.js'
     }],
@@ -56,6 +56,15 @@ Ext.define('KitchenSink.view.grid.GroupedHeaderGrid', {
             percentChangeColumnWidth: 135,
             gainColor: 'unset',
             lossColor: 'unset'
+        },
+        'classic-material': {
+            width: 750,
+            priceWidth: 85,
+            changeColumnWidth: 110,
+            lastUpdatedColumnWidth: 155,
+            percentChangeColumnWidth: 135,
+            gainColor: 'unset',
+            lossColor: 'unset'
         }
     },
     //</example>
@@ -72,7 +81,7 @@ Ext.define('KitchenSink.view.grid.GroupedHeaderGrid', {
     store: {
         type: 'companies',
         sorters: {
-            property:'name',
+            property: 'name',
             direction: 'DESC'
         }
     },

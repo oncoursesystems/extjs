@@ -54,14 +54,14 @@ Ext.define('Ext.form.field.Hidden', {
     isTextInput: false,
     hideLabel: true,
     hidden: true,
-    
+
     ariaRole: 'presentation',
-    
+
     initComponent: function() {
         this.formItemCls += '-hidden';
         this.callParent();
     },
-    
+
     /**
      * @private
      * Override. Treat undefined and null values as equal to an empty string value.

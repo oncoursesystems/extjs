@@ -25,7 +25,7 @@ function() {
 
     function triggerCellKeyEvent(rowIdx, cellIdx, type, key) {
         var target = findCell(rowIdx, cellIdx);
-        
+
         jasmine.fireKeyEvent(target, type, key);
     }
 
@@ -62,7 +62,7 @@ function() {
                 field10: 10
             }]
         });
-        
+
         return store;
     }
 
@@ -76,7 +76,7 @@ function() {
             var colCount = typeof columns === 'number' ? columns : 10;
 
             columns = [];
-            
+
             for (i = 1; i <= colCount; i++) {
                 columns.push({
                     dataIndex: 'field' + i,
@@ -92,16 +92,16 @@ function() {
         if (typeof data === 'number') {
             dataCount = data;
             data = [];
-            
+
             for (i = 0; i < dataCount; i++) {
                 dataRow = {
                     id: 'rec' + i
                 };
-                
+
                 for (var j = 0; j < columns.length; j++) {
                     dataRow[columns[j].dataIndex] = (i + 1) + ', ' + (j + 1);
                 }
-                
+
                 data.push(dataRow);
             }
         }
@@ -188,7 +188,6 @@ function() {
 
                 return pos !== null && pos.isEqual(focusContext) && Ext.Element.getActiveElement() === focusContext.getCell(true);
             }, 'for position(0,0) to be focused');
-
 
             runs(function() {
                 focusContext = new Ext.grid.CellContext(view).setPosition(2, 2);
@@ -279,7 +278,7 @@ function() {
         makeRemovalSuite(false);
         makeRemovalSuite(true);
     });
-    
+
     describe("navigation with keys", function() {
         var E = Ext.event.Event;
 
@@ -434,7 +433,7 @@ function() {
                 });
             });
         });
-        
+
         describe('navigation in a non-locking grid', function() {
             it('should wrap and navigate correctly', function() {
                 makeGrid(4, 100);
@@ -656,7 +655,7 @@ function() {
         });
         it('should select when clicking a widget and stopSelection is false', function() {
             var row0Button = widgetColumn.getWidget(store.getAt(0));
-            
+
             jasmine.fireMouseEvent(row0Button.el, 'click');
 
             // The selection must get set
@@ -695,7 +694,7 @@ function() {
                 // Sort ascending
                 jasmine.fireKeyEvent(Ext.Element.getActiveElement(), 'keydown', Ext.event.Event.RIGHT);
             });
-            
+
             waitsFor(function() {
                 return new Ext.grid.CellContext(view).setPosition(0, 2).isEqual(navModel.getPosition());
             }, 'cell 0,2 to focus');

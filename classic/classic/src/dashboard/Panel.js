@@ -138,7 +138,7 @@ Ext.define('Ext.dashboard.Panel', {
 
     onViewBeforeLoad: function() {
         var loadMask;
-        
+
         this.loading = true;
         loadMask = this.getLoadMask();
 
@@ -149,14 +149,14 @@ Ext.define('Ext.dashboard.Panel', {
 
     onViewLoaded: function() {
         var loadMask, view, title;
-        
+
         this.loading = false;
         loadMask = this.getLoadMask();
 
         if (loadMask) {
             loadMask.hide();
         }
-        
+
         view = this.items.getAt(0);
 
         if (view.getTitle) {

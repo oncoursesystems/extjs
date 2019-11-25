@@ -94,21 +94,21 @@ Ext.define('Ext.dd.DD', {
         if (!this.deltaSetXY) {
             vpSize = this.cachedViewportSize =
                 { width: EL.getDocumentWidth(), height: EL.getDocumentHeight() };
-            
+
             aCoord = [
                 Math.max(0, Math.min(oCoord.x, vpSize.width - elSize.width)),
                 Math.max(0, Math.min(oCoord.y, vpSize.height - elSize.height))
             ];
-            
+
             fly.setXY(aCoord);
             newLeft = this.getLocalX(fly);
             newTop = fly.getLocalY();
-            
+
             this.deltaSetXY = [newLeft - oCoord.x, newTop - oCoord.y];
         }
         else {
             vpSize = this.cachedViewportSize;
-            
+
             this.setLocalXY(
                 fly,
                 Math.max(0, Math.min(oCoord.x + this.deltaSetXY[0], vpSize.width - elSize.width)),
@@ -134,7 +134,7 @@ Ext.define('Ext.dd.DD', {
      */
     cachePosition: function(iPageX, iPageY) {
         var aCoord;
-        
+
         if (iPageX) {
             this.lastPageX = iPageX;
             this.lastPageY = iPageY;
@@ -158,38 +158,38 @@ Ext.define('Ext.dd.DD', {
      */
     autoScroll: function(x, y, h, w) {
         var clientH, clientW, st, sl, bot, right, toBot, toRight, thresh, scrAmt;
-        
+
         if (this.scroll) {
             // The client height
             clientH = Ext.Element.getViewportHeight();
-            
+
             // The client width
             clientW = Ext.Element.getViewportWidth();
-            
+
             // The amt scrolled down
             st = this.DDMInstance.getScrollTop();
-            
+
             // The amt scrolled right
             sl = this.DDMInstance.getScrollLeft();
-            
+
             // Location of the bottom of the element
             bot = h + y;
-            
+
             // Location of the right of the element
             right = w + x;
-            
+
             // The distance from the cursor to the bottom of the visible area,
             // adjusted so that we don't scroll if the cursor is beyond the
             // element drag constraints
             toBot = (clientH + st - y - this.deltaY);
-            
+
             // The distance from the cursor to the right of the visible area
             toRight = (clientW + sl - x - this.deltaX);
-            
+
             // How close to the edge the cursor must be before we scroll
             // var thresh = (document.all) ? 100 : 40;
             thresh = 40;
-            
+
             // How many pixels to scroll per autoscroll op.  This helps to reduce
             // clunky scrolling. IE is more sensitive about this ... it needs this
             // value to be higher.
@@ -268,7 +268,7 @@ Ext.define('Ext.dd.DD', {
      */
     applyConfig: function() {
         this.callParent();
-        
+
         this.scroll = (this.config.scroll !== false);
     },
 
@@ -296,7 +296,7 @@ Ext.define('Ext.dd.DD', {
     toString: function() {
         return ("DD " + this.id);
     },
-    
+
     getLocalX: function(el) {
         return el.getLocalX();
     },

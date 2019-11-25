@@ -20,7 +20,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
     function clickItem(theItem, doClick) {
         theItem = theItem || item;
         jasmine.fireMouseEvent(theItem.itemEl.dom, 'click');
-            
+
         // Simulated events does not cause default action on anchors with href
         if (doClick) {
             theItem.itemEl.dom.click();
@@ -162,12 +162,12 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                         },
                         handler: spy
                     });
-                    
+
                     // Error messages are expected
                     spyOn(Ext, 'log');
                     spyOn(Ext.Error, 'raise');
                     clickItem();
-                    
+
                     expect(spy).not.toHaveBeenCalled();
                 });
             });
@@ -326,9 +326,9 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                     text: 'menu item two'
                 }]);
                 item.focus();
-                
+
                 waitsForFocus(item);
-                
+
                 runs(function() {
                     clickItem(item, true);
                 });
@@ -341,7 +341,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                     expect(location.hash).toBe('#ledzep');
                 });
             });
-            
+
             // TODO This test does not work properly due to events being translated
             // TODO: Reinstate this for touch platforms when https://sencha.jira.com/browse/EXT-4 is fixed.
             // We cannot now preventDefault on native click events on touch because of click event synthesis.
@@ -483,48 +483,21 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
             expect(subMenu.getTitle()).toBe('someTitle');
         });
     });
-    
+
     describe("ARIA", function() {
         describe("simple", function() {
             beforeEach(function() {
                 makeMenu({
                     text: 'foo'
                 });
-                
+
                 menu.show();
             });
-            
+
             it("should have itemEl as ariaEl", function() {
                 expect(item.ariaEl).toBe(item.itemEl);
             });
-            
-            it("should have menuitem role", function() {
-                expect(item).toHaveAttr('role', 'menuitem');
-            });
-            
-            it("should not have aria-haspopup", function() {
-                expect(item).not.toHaveAttr('aria-haspopup');
-            });
-            
-            it("should not have aria-owns", function() {
-                expect(item).not.toHaveAttr('aria-owns');
-            });
-        });
-        
-        describe("plain", function() {
-            beforeEach(function() {
-                makeMenu({
-                    text: 'plain',
-                    plain: true
-                });
-                
-                menu.show();
-            });
-            
-            it("should have el as ariaEl", function() {
-                expect(item.ariaEl).toBe(item.el);
-            });
-            
+
             it("should have menuitem role", function() {
                 expect(item).toHaveAttr('role', 'menuitem');
             });
@@ -532,12 +505,39 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
             it("should not have aria-haspopup", function() {
                 expect(item).not.toHaveAttr('aria-haspopup');
             });
-            
+
             it("should not have aria-owns", function() {
                 expect(item).not.toHaveAttr('aria-owns');
             });
         });
-        
+
+        describe("plain", function() {
+            beforeEach(function() {
+                makeMenu({
+                    text: 'plain',
+                    plain: true
+                });
+
+                menu.show();
+            });
+
+            it("should have el as ariaEl", function() {
+                expect(item.ariaEl).toBe(item.el);
+            });
+
+            it("should have menuitem role", function() {
+                expect(item).toHaveAttr('role', 'menuitem');
+            });
+
+            it("should not have aria-haspopup", function() {
+                expect(item).not.toHaveAttr('aria-haspopup');
+            });
+
+            it("should not have aria-owns", function() {
+                expect(item).not.toHaveAttr('aria-owns');
+            });
+        });
+
         describe("with submenu", function() {
             describe("via config", function() {
                 beforeEach(function() {
@@ -549,26 +549,26 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                             }]
                         }
                     });
-                    
+
                     menu.show();
                 });
-                
+
                 it("should have aria-haspopup", function() {
                     expect(item).toHaveAttr('aria-haspopup', 'true');
                 });
-                
+
                 it("should have aria-owns", function() {
                     expect(item).toHaveAttr('aria-owns', item.menu.id);
                 });
             });
-            
+
             describe("adding via setMenu", function() {
                 beforeEach(function() {
                     makeMenu({
                         text: 'submenu'
                     });
                 });
-                
+
                 describe("before rendering", function() {
                     beforeEach(function() {
                         item.setMenu({
@@ -576,40 +576,40 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                                 text: 'sub-item'
                             }]
                         });
-                        
+
                         menu.show();
                     });
-                    
+
                     it("should have aria-haspopup", function() {
                         expect(item).toHaveAttr('aria-haspopup', 'true');
                     });
-                    
+
                     it("should have aria-owns", function() {
                         expect(item).toHaveAttr('aria-owns', item.menu.id);
                     });
                 });
-                
+
                 describe("after rendering", function() {
                     beforeEach(function() {
                         menu.show();
-                        
+
                         item.setMenu({
                             items: [{
                                 text: 'sub-item'
                             }]
                         });
                     });
-                    
+
                     it("should have aria-haspopup", function() {
                         expect(item).toHaveAttr('aria-haspopup', 'true');
                     });
-                    
+
                     it("should have aria-owns", function() {
                         expect(item).toHaveAttr('aria-owns', item.menu.id);
                     });
                 });
             });
-            
+
             describe("removing via setMenu", function() {
                 beforeEach(function() {
                     makeMenu({
@@ -621,31 +621,31 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
                         }
                     });
                 });
-                
+
                 describe("before rendering", function() {
                     beforeEach(function() {
                         item.setMenu(null);
                     });
-                    
+
                     it("should not have aria-haspopup", function() {
                         expect(item).not.toHaveAttr('aria-haspopup');
                     });
-                    
+
                     it("should have no aria-owns", function() {
                         expect(item).not.toHaveAttr('aria-owns');
                     });
                 });
-                
+
                 describe("after rendering", function() {
                     beforeEach(function() {
                         menu.show();
                         item.setMenu(null);
                     });
-                    
+
                     it("should not have aria-haspopup", function() {
                         expect(item).not.toHaveAttr('aria-haspopup');
                     });
-                    
+
                     it("should not have aria-owns", function() {
                         expect(item).not.toHaveAttr('aria-owns');
                     });
@@ -685,7 +685,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
 
             // No glyph character
             expect(item.iconEl.dom.innerHTML).toBe('');
-            
+
             // iconEl must use the iconCls
             expect(item.iconEl.hasCls('foo-icon-class')).toBe(true);
 
@@ -721,7 +721,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
             item.setIcon('resources/images/foo.gif');
 
             expect(Ext.String.endsWith(item.iconEl.hasCls('foo-icon-class'))).toBe(false);
-            
+
             // iconEl must use the image as the background image
             // Some browsers quote the url value, some don't. Remove quotes.
             expect(Ext.String.endsWith(item.iconEl.getStyle('background-image').replace(/\"/g, ''), 'resources/images/foo.gif)')).toBe(true);
@@ -743,7 +743,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
 
             // No glyph character
             expect(item.iconEl.dom.innerHTML).toBe('');
-            
+
             // iconEl must use the image as the background image
             // Some browsers quote the url value, some don't. Remove quotes.
             expect(Ext.String.endsWith(item.iconEl.getStyle('background-image').replace(/\"/g, ''), 'resources/images/foo.gif)')).toBe(true);
@@ -762,7 +762,7 @@ topSuite("Ext.menu.Item", ['Ext.app.ViewModel', 'Ext.app.ViewController'], funct
 
             // No glyph character
             expect(item.iconEl.dom.innerHTML).toBe('');
-            
+
             // iconEl must use the iconCls
             expect(item.iconEl.hasCls('foo-icon-class')).toBe(true);
         });

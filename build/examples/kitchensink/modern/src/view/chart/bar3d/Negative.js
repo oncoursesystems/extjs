@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.chart.bar3d.Negative', {
         'Ext.chart.theme.Muted'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/bar3d/NegativeController.js'
@@ -54,9 +54,9 @@ Ext.define('KitchenSink.view.chart.bar3d.Negative', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -124,7 +124,7 @@ Ext.define('KitchenSink.view.chart.bar3d.Negative', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

@@ -8,7 +8,7 @@ topSuite("Ext.util.DelayedTask", function() {
             called = true;
         });
         d.delay(100);
-        
+
         // Immediately after the delay call, nothing has been executed
         expect(called).toBe(false);
 
@@ -86,7 +86,7 @@ topSuite("Ext.util.DelayedTask", function() {
             });
         });
     });
-    
+
     it("should accept a delay of 0", function() {
         var called = true;
 

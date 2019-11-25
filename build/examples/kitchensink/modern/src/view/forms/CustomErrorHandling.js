@@ -41,12 +41,12 @@ Ext.define('KitchenSink.view.forms.CustomErrorHandling', {
 
     defaults: {
         errorTarget: 'none',
-        invalidCls: '' //unset the invalidCls so individual fields do not get styled as invalid
+        invalidCls: '' // unset the invalidCls so individual fields do not get styled as invalid
     },
 
     listeners: {
         delegate: 'field',
-        buffer: 10, //buffer as validating each field may trigger an errorchange
+        buffer: 10, // buffer as validating each field may trigger an errorchange
         errorchange: 'updateErrorState'
     },
 

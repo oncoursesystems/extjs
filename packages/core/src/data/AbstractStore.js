@@ -344,7 +344,7 @@ Ext.define('Ext.data.AbstractStore', {
         me.isInitializing = false;
 
         storeId = me.getStoreId();
-        
+
         if (!storeId && (config && config.id)) {
             me.setStoreId(storeId = config.id);
         }
@@ -453,7 +453,6 @@ Ext.define('Ext.data.AbstractStore', {
         var startsWith = !anyMatch,
             endsWith = !!(startsWith && exactMatch);
 
-
         return this.getData().findIndex(property, value, startIndex, startsWith, endsWith,
                                         !caseSensitive);
     },
@@ -484,7 +483,7 @@ Ext.define('Ext.data.AbstractStore', {
     findRecord: function() {
         var me = this,
             index = me.find.apply(me, arguments);
-        
+
         return index !== -1 ? me.getAt(index) : null;
     },
 
@@ -571,7 +570,7 @@ Ext.define('Ext.data.AbstractStore', {
         if (options && options.callback) {
             options.callback.call(options.scope || this, result, start, end, options);
         }
-        
+
         return result;
     },
 
@@ -581,28 +580,30 @@ Ext.define('Ext.data.AbstractStore', {
      * @return {Ext.util.FilterCollection} The filters
      */
     getFilters: function(autoCreate) {
-        var result = this.callParent();
-        
+        var me = this,
+            result = me.callParent();
+
         if (!result && autoCreate !== false) {
-            this.setFilters([]);
-            result = this.callParent();
+            me.setFilters([]);
+            result = me.callParent();
         }
-        
+
         return result;
     },
 
     applyFilters: function(filters, filtersCollection) {
-        var created;
-        
+        var me = this,
+            created;
+
         if (!filtersCollection) {
-            filtersCollection = this.createFiltersCollection();
+            filtersCollection = me.createFiltersCollection();
             created = true;
         }
 
         filtersCollection.add(filters);
 
         if (created) {
-            this.onRemoteFilterSet(filtersCollection, this.getRemoteFilter());
+            me.onRemoteFilterSet(filtersCollection, me.getRemoteFilter());
         }
 
         return filtersCollection;
@@ -614,30 +615,32 @@ Ext.define('Ext.data.AbstractStore', {
      * @return {Ext.util.SorterCollection} The sorters
      */
     getSorters: function(autoCreate) {
-        var result = this.callParent();
-        
+        var me = this,
+            result = me.callParent();
+
         if (!result && autoCreate !== false) {
             // If not preventing creation, force it here
-            this.setSorters([]);
-            
-            result = this.callParent();
+            me.setSorters([]);
+
+            result = me.callParent();
         }
-        
+
         return result;
     },
 
     applySorters: function(sorters, sortersCollection) {
-        var created;
-        
+        var me = this,
+            created;
+
         if (!sortersCollection) {
-            sortersCollection = this.createSortersCollection();
+            sortersCollection = me.createSortersCollection();
             created = true;
         }
 
         sortersCollection.add(sorters);
 
         if (created) {
-            this.onRemoteSortSet(sortersCollection, this.getRemoteSort());
+            me.onRemoteSortSet(sortersCollection, me.getRemoteSort());
         }
 
         return sortersCollection;
@@ -679,7 +682,7 @@ Ext.define('Ext.data.AbstractStore', {
                 value: value
             };
         }
-        
+
         this.suppressNextFilter = !!suppressEvent;
         this.getFilters().add(filters);
         this.suppressNextFilter = false;
@@ -699,14 +702,14 @@ Ext.define('Ext.data.AbstractStore', {
             filters = me.getFilters();
 
         me.suppressNextFilter = !!suppressEvent;
-        
+
         if (toRemove instanceof Ext.util.Filter) {
             filters.remove(toRemove);
         }
         else {
             filters.removeByKey(toRemove);
         }
-        
+
         me.suppressNextFilter = false;
     },
 
@@ -776,7 +779,7 @@ Ext.define('Ext.data.AbstractStore', {
         if (!filters || filters.getCount() === 0) {
             return;
         }
-        
+
         me.suppressNextFilter = !!suppressEvent;
         filters.removeAll();
         me.suppressNextFilter = false;
@@ -796,7 +799,7 @@ Ext.define('Ext.data.AbstractStore', {
      */
     isSorted: function() {
         var sorters = this.getSorters(false);
-        
+
         return !!(sorters && sorters.length > 0) || this.isGrouped();
     },
 
@@ -871,7 +874,7 @@ Ext.define('Ext.data.AbstractStore', {
             if (this.hasListeners.endupdate) {
                 this.fireEvent('endupdate');
             }
-            
+
             this.onEndUpdate();
         }
     },
@@ -901,7 +904,7 @@ Ext.define('Ext.data.AbstractStore', {
             // meaningful in itself. If there are any filter in the collection, persist them.
             hasState = true;
             filterState = [];
-            
+
             filters.each(function(f) {
                 filterState[filterState.length] = f.getState();
             });
@@ -914,20 +917,20 @@ Ext.define('Ext.data.AbstractStore', {
         // If there is any state to save, return it as an object
         if (hasState) {
             result = {};
-            
+
             if (sorters.length) {
                 result.sorters = sorters;
             }
-            
+
             if (filterState) {
                 result.filters = filterState;
             }
-            
+
             if (grouper) {
                 result.grouper = grouper.getState();
             }
         }
-        
+
         return result;
     },
 
@@ -991,29 +994,30 @@ Ext.define('Ext.data.AbstractStore', {
 
     destroy: function() {
         var me = this;
-        
+
         if (me.hasListeners.beforedestroy) {
             me.fireEvent('beforedestroy', me);
         }
-        
+
         me.destroying = true;
-        
+
         if (me.getStoreId()) {
             Ext.data.StoreManager.unregister(me);
         }
-        
+
         me.doDestroy();
-        
+
         if (me.hasListeners.destroy) {
             me.fireEvent('destroy', me);
         }
-        
-        me.destroying = false;
+
+        // This just makes it hard to ask "was destroy() called?":
+        // me.destroying = false; // removed in 7.0
 
         // This will finish the sequence and null object references
         me.callParent();
     },
-    
+
     /**
      * Perform the Store destroying sequence. Override this method to add destruction
      * behaviors to your custom Stores.
@@ -1107,7 +1111,7 @@ Ext.define('Ext.data.AbstractStore', {
             if (sorters.length || me.getReloadOnClearSorters()) {
                 // The sort event will fire in the load callback;
                 fireSort = false;
-                
+
                 me.load({
                     callback: function() {
                         me.fireEvent('sort', me, sorters);
@@ -1146,7 +1150,7 @@ Ext.define('Ext.data.AbstractStore', {
             });
             //</debug>
             me.currentPage = 1;
-            
+
             if (!suppressNext) {
                 me.load();
             }
@@ -1222,7 +1226,7 @@ Ext.define('Ext.data.AbstractStore', {
         else {
             data.setGrouper(grouper);
         }
-        
+
         delete me.settingGroups;
 
         if (change) {
@@ -1230,7 +1234,9 @@ Ext.define('Ext.data.AbstractStore', {
                 if (!me.isInitializing) {
                     me.load({
                         scope: me,
-                        callback: me.fireGroupChange
+                        callback: function() {
+                            me.fireGroupChange(); // do not pass on args
+                        }
                     });
                 }
             }
@@ -1247,10 +1253,16 @@ Ext.define('Ext.data.AbstractStore', {
         }
     },
 
-    fireGroupChange: function() {
-        if (!this.destroyed) {
-            this.fireEvent('groupchange', this, this.getGrouper());
+    fireGroupChange: function(grouper) {
+        var me = this;
+
+        if (!me.isConfiguring && !me.destroying && !me.destroyed) {
+            me.fireGroupChangeEvent(grouper || me.getGrouper());
         }
+    },
+
+    fireGroupChangeEvent: function(grouper) {
+        this.fireEvent('groupchange', this, grouper);
     },
 
     /**
@@ -1267,7 +1279,7 @@ Ext.define('Ext.data.AbstractStore', {
         if (grouper) {
             group = grouper.getProperty();
         }
-        
+
         return group;
     },
 
@@ -1281,7 +1293,7 @@ Ext.define('Ext.data.AbstractStore', {
 
     applyGrouper: function(grouper) {
         this.group(grouper);
-        
+
         return this.getData().getGrouper();
     },
 
@@ -1367,7 +1379,7 @@ Ext.define('Ext.data.AbstractStore', {
                 sorters[remoteSort ? 'on' : 'un']('endupdate', 'onSorterEndUpdate', me);
 
                 data = me.getData();
-                
+
                 if (data) {
                     data[remoteSort ? 'un' : 'on']('beforesort', 'onBeforeCollectionSort', me);
                 }

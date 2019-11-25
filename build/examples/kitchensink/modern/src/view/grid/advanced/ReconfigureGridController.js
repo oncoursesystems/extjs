@@ -7,11 +7,11 @@ Ext.define('KitchenSink.view.grid.advanced.ReconfigureGridController', {
     cities: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Philadelphia', 'Phoenix', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'],
     departments: ['Development', 'QA', 'Marketing', 'Accounting', 'Sales'],
 
-    init: function () {
+    init: function() {
         this.onChange(null, 'Offices');
     },
 
-    onChange: function (segmented, value) {
+    onChange: function(segmented, value) {
         var view = this.getView(),
             grid = this.lookup('grid'),
             etc = view.etc[value],
@@ -22,7 +22,7 @@ Ext.define('KitchenSink.view.grid.advanced.ReconfigureGridController', {
             .setStore(store);
     },
 
-    createEmployeeStore: function(){
+    createEmployeeStore: function() {
         var data = [],
             usedNames = {},
             i, name;
@@ -44,7 +44,7 @@ Ext.define('KitchenSink.view.grid.advanced.ReconfigureGridController', {
         });
     },
 
-    createOfficeStore: function(){
+    createOfficeStore: function() {
         var data = [],
             usedNames = {},
             usedCities = {},
@@ -65,7 +65,7 @@ Ext.define('KitchenSink.view.grid.advanced.ReconfigureGridController', {
     },
 
     // Fake data generation functions
-    generateName: function(){
+    generateName: function() {
         var lasts = this.lastNames,
             firsts = this.firstNames,
             lastLen = lasts.length,
@@ -86,18 +86,20 @@ Ext.define('KitchenSink.view.grid.advanced.ReconfigureGridController', {
         }
 
         used[key] = true;
+
         return name;
     },
 
-    getCity: function(){
+    getCity: function() {
         var cities = this.cities,
             len = cities.length;
 
         return cities[Ext.Number.randomInt(0, len - 1)];
     },
 
-    getUniqueCity: function(used){
+    getUniqueCity: function(used) {
         var city = this.getCity();
+
         if (used[city]) {
             return this.getUniqueCity(used);
         }

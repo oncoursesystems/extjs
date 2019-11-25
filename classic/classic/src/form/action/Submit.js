@@ -89,7 +89,7 @@ Ext.define('Ext.form.action.Submit', {
     run: function() {
         var me = this,
             form = me.form;
-            
+
         if (me.clientValidation === false || form.isValid()) {
             me.doSubmit();
         }
@@ -133,14 +133,14 @@ Ext.define('Ext.form.action.Submit', {
             me.cleanup(formInfo);
         }
     },
-    
+
     cleanup: function(formInfo) {
         var formEl = formInfo.formEl,
             uploadEls = formInfo.uploadEls,
             uploadFields = formInfo.uploadFields,
             len = uploadFields.length,
             i, field;
-            
+
         for (i = 0; i < len; ++i) {
             field = uploadFields[i];
 
@@ -148,7 +148,7 @@ Ext.define('Ext.form.action.Submit', {
                 field.restoreInput(uploadEls[i]);
             }
         }
-        
+
         if (formEl) {
             Ext.removeNode(formEl);
         }
@@ -163,12 +163,12 @@ Ext.define('Ext.form.action.Submit', {
         var falseVal = false,
             configParams = this.callParent(),
             fieldParams;
-            
+
         fieldParams = this.form.getValues(
             falseVal, falseVal, this.submitEmptyText !== falseVal, useModelValues,
             /* isSubmitting */ true
         );
-            
+
         return Ext.apply({}, fieldParams, configParams);
     },
 
@@ -234,11 +234,11 @@ Ext.define('Ext.form.action.Submit', {
             cn: fieldsSpec
         };
 
-        // <debug>
+        //<debug>
         if (!formSpec.target) {
             Ext.raise('Invalid form target.');
         }
-        // </debug>
+        //</debug>
 
         // Set the proper encoding for file uploads
         if (uploadFields.length) {
@@ -284,7 +284,7 @@ Ext.define('Ext.form.action.Submit', {
             formActive = form && !form.destroying && !form.destroyed,
             success = true,
             result = this.processResponse(response);
-        
+
         if (result !== true && !result.success) {
             if (result.errors && formActive) {
                 form.markInvalid(result.errors);
@@ -293,7 +293,7 @@ Ext.define('Ext.form.action.Submit', {
             this.failureType = Ext.form.action.Action.SERVER_INVALID;
             success = false;
         }
-        
+
         if (formActive) {
             form.afterAction(this, success);
         }
@@ -306,7 +306,7 @@ Ext.define('Ext.form.action.Submit', {
         var form = this.form,
             errorReader = form.errorReader,
             rs, errors, i, len, records, result;
-            
+
         if (errorReader) {
             rs = errorReader.read(response);
             records = rs.records;
@@ -337,7 +337,7 @@ Ext.define('Ext.form.action.Submit', {
                     errors: []
                 };
             }
-            
+
         }
 
         return result;

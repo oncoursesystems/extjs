@@ -97,14 +97,14 @@ Ext.define('KitchenSink.view.layout.CardIndicator', {
                     disabled: '{!indicator.activeIndex}'
                 }
             },
-            // the indicator is inserted here
-            {
-                text: 'Next &raquo;',
-                handler: 'onNext',
-                bind: {
-                    disabled: '{indicator.activeIndex == indicator.count - 1}'
-                }
-            }]
+                // the indicator is inserted here
+                    {
+                        text: 'Next &raquo;',
+                        handler: 'onNext',
+                        bind: {
+                            disabled: '{indicator.activeIndex == indicator.count - 1}'
+                        }
+                    }]
         }
     }, {
         xtype: 'toolbar',

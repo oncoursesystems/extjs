@@ -6,19 +6,19 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
-    
+
     TestModel = Ext.define(null, {
         extend: 'Ext.data.Model',
         fields: ['name', 'size']
     });
-    
+
     function createView(cfg, data) {
         cfg = cfg || {};
 
@@ -30,7 +30,7 @@ function() {
 
         view = new Ext.view.View(cfg);
         navModel = view.getNavigationModel();
-        
+
         return view;
     }
 
@@ -76,7 +76,7 @@ function() {
 
         return nodes;
     }
-    
+
     function createModel(data) {
         if (!Ext.isObject(data)) {
             data = {
@@ -619,10 +619,10 @@ function() {
             expect(CM.getCount()).toBe(count);
         });
     });
-    
+
     describe("modifying the store", function() {
         var spy, args;
-        
+
         function createSimpleView(data) {
             createView({
                 renderTo: Ext.getBody(),
@@ -647,11 +647,11 @@ function() {
         function getUL() {
             return view.getEl().down('ul', true);
         }
-        
+
         beforeEach(function() {
             spy = jasmine.createSpy();
         });
-        
+
         describe("adding", function() {
             describe("a single record", function() {
                 describe("with a simple view", function() {
@@ -663,7 +663,7 @@ function() {
                         expect(nodes.length).toBe(1);
                         expect(nodes[0]).hasHTML('Item1');
                     });
-            
+
                     it("should be able to add to the end of a view", function() {
                         createSimpleView();
                         store.add(createModel('Item2'));
@@ -672,7 +672,7 @@ function() {
                         expect(nodes.length).toBe(2);
                         expect(nodes[1]).hasHTML('Item2');
                     });
-                
+
                     it("should be able to insert a node at the start of the view", function() {
                         createSimpleView();
                         store.insert(0, createModel('Item2'));
@@ -681,7 +681,7 @@ function() {
                         expect(nodes.length).toBe(2);
                         expect(nodes[0]).hasHTML('Item2');
                     });
-                
+
                     it("should be able to insert a node in the middle of the view", function() {
                         createSimpleView([{
                             name: 'Item1'
@@ -710,7 +710,7 @@ function() {
                         expect(nodes[0]).hasHTML('Item1');
                         expect(nodes[0].parentNode).toBe(getUL());
                     });
-            
+
                     it("should be able to add to the end of a view", function() {
                         createListView();
                         store.add(createModel('Item2'));
@@ -720,7 +720,7 @@ function() {
                         expect(nodes[1]).hasHTML('Item2');
                         expect(nodes[1].parentNode).toBe(getUL());
                     });
-                
+
                     it("should be able to insert a node at the start of the view", function() {
                         createListView();
                         store.insert(0, createModel('Item2'));
@@ -730,7 +730,7 @@ function() {
                         expect(nodes[0]).hasHTML('Item2');
                         expect(nodes[0].parentNode).toBe(getUL());
                     });
-                
+
                     it("should be able to insert a node in the middle of the view", function() {
                         createListView([{
                             name: 'Item1'
@@ -749,7 +749,7 @@ function() {
                         expect(nodes[2].parentNode).toBe(getUL());
                     });
                 });
-                
+
                 describe("events", function() {
                     it("should fire the itemadd event and pass the records, the index & the nodes", function() {
                         createSimpleView();
@@ -761,7 +761,7 @@ function() {
                         expect(args[1]).toBe(1);
                         expect(args[2]).toEqual([view.getNodes()[1]]);
                     });
-                    
+
                     it("should fire the itemadd event when adding to an empty view", function() {
                         createSimpleView([]);
                         view.on('itemadd', spy);
@@ -770,7 +770,7 @@ function() {
                     });
                 });
             });
-            
+
             describe("multiple records", function() {
                 describe("contiguous range", function() {
                     describe("with a simple view", function() {
@@ -880,7 +880,7 @@ function() {
                             expect(nodes[3].parentNode).toBe(getUL());
                         });
                     });
-                    
+
                     describe("events", function() {
                         it("should fire the itemadd event and pass the records, the index & the nodes", function() {
                             createSimpleView();
@@ -896,7 +896,7 @@ function() {
                         });
                     });
                 });
-                
+
                 describe("discontiguous range", function() {
                     describe("with a simple view", function() {
                         it("should be able to add nodes", function() {
@@ -953,7 +953,7 @@ function() {
                                 createModel('m'),
                                 createModel('p')
                             );
-                            
+
                             var nodes = view.getNodes(),
                                 ul = getUL(),
                                 i;
@@ -976,7 +976,7 @@ function() {
                             }
                         });
                     });
-                    
+
                     describe("events", function() {
                         it("should fire the itemadd event for each chunk", function() {
                             createSimpleView([
@@ -998,22 +998,22 @@ function() {
                                 createModel('p')
                             );
                             var nodes = view.getNodes();
-                            
+
                             args = spy.calls[0].args;
                             expect(args[0]).toEqual([store.getAt(0), store.getAt(1)]);
                             expect(args[1]).toBe(0);
                             expect(args[2]).toEqual([nodes[0], nodes[1]]);
-                            
+
                             args = spy.calls[1].args;
                             expect(args[0]).toEqual([store.getAt(3), store.getAt(4)]);
                             expect(args[1]).toBe(3);
                             expect(args[2]).toEqual([nodes[3], nodes[4]]);
-                            
+
                             args = spy.calls[2].args;
                             expect(args[0]).toEqual([store.getAt(6), store.getAt(7), store.getAt(8)]);
                             expect(args[1]).toBe(6);
                             expect(args[2]).toEqual([nodes[6], nodes[7], nodes[8]]);
-                            
+
                             args = spy.calls[3].args;
                             expect(args[0]).toEqual([store.getAt(10)]);
                             expect(args[1]).toBe(10);
@@ -1023,7 +1023,7 @@ function() {
                 });
             });
         });
-        
+
         describe("updating", function() {
             var rec;
 
@@ -1038,7 +1038,7 @@ function() {
                 expect(nodes.length).toBe(1);
                 expect(nodes[0]).hasHTML('foo');
             });
-            
+
             describe("events", function() {
                 it("should fire the itemupdate event and pass the record, index & node", function() {
                     var spy = jasmine.createSpy();
@@ -1054,7 +1054,7 @@ function() {
                 });
             });
         });
-        
+
         describe("removing", function() {
             describe("a single record", function() {
                 it("should be able to remove the only node in the view", function() {
@@ -1079,7 +1079,7 @@ function() {
                     expect(nodes[1]).hasHTML('b');
                     expect(nodes[2]).hasHTML('c');
                 });
-            
+
                 it("should be able to remove a node from the start of the view", function() {
                     createSimpleView([
                         createModel('a'),
@@ -1095,7 +1095,7 @@ function() {
                     expect(nodes[1]).hasHTML('c');
                     expect(nodes[2]).hasHTML('d');
                 });
-            
+
                 it("should be able to remove a node from the middle of the view", function() {
                     createSimpleView([
                         createModel('a'),
@@ -1111,7 +1111,7 @@ function() {
                     expect(nodes[1]).hasHTML('c');
                     expect(nodes[2]).hasHTML('d');
                 });
-                
+
                 describe("events", function() {
                     it("should fire the itemremove event and pass the records, the index & the nodes", function() {
                         createSimpleView([
@@ -1131,14 +1131,14 @@ function() {
                         expect(args[1]).toBe(1);
                         expect(args[2]).toEqual([node]);
                     });
-                    
+
                     it("should fire the itemremove event when removing the last record", function() {
                         createSimpleView([createModel('foo')]);
                         view.on('itemremove', spy);
                         store.removeAt(0);
                         expect(spy.callCount).toBe(1);
                     });
-                    
+
                     it("should fire the itemremove event when rereshing", function() {
                         createSimpleView([createModel('foo')]);
                         view.on('itemremove', spy);
@@ -1147,7 +1147,7 @@ function() {
                     });
                 });
             });
-            
+
             describe("multiple records", function() {
                 beforeEach(function() {
                     createSimpleView([
@@ -1169,13 +1169,13 @@ function() {
                         createModel('p')
                     ]);
                 });
-                
+
                 describe("contiguous range", function() {
                     it("should be able to remove the only nodes in the view", function() {
                         store.remove(store.getRange());
                         expect(view.getNodes().length).toBe(0);
                     });
-                    
+
                     it("should be able to remove at the end of a view", function() {
                         store.remove([byName('n'), byName('o'), byName('p')]);
                         var nodes = view.getNodes();
@@ -1202,7 +1202,7 @@ function() {
                         expect(nodes[4]).hasHTML('e');
                         expect(nodes[5]).hasHTML('j');
                     });
-                    
+
                     describe("events", function() {
                         it("should fire the itemremove event and pass the records, the index & the nodes", function() {
                             view.on('itemremove', spy);
@@ -1210,7 +1210,7 @@ function() {
                                 d = byName('d'),
                                 e = byName('e'),
                                 nodes = view.getNodes();
-                                
+
                             store.remove([c, d, e]);
                             expect(spy.callCount).toBe(1);
                             args = spy.mostRecentCall.args;
@@ -1220,7 +1220,7 @@ function() {
                         });
                     });
                 });
-                
+
                 describe("discontiguous range", function() {
                     it("should be able to remove  nodes", function() {
                         store.remove([
@@ -1245,13 +1245,13 @@ function() {
                         expect(nodes[7]).hasHTML('o');
                         expect(nodes[8]).hasHTML('p');
                     });
-                    
+
                     describe("events", function() {
                         it("should fire the itemremove event for each chunk in reverse order", function() {
                             view.on('itemremove', spy);
                             var nodes = view.getNodes(),
                                 records = store.getRange();
-                                
+
                             store.remove([
                                 byName('b'),
                                 byName('c'),
@@ -1261,17 +1261,17 @@ function() {
                                 byName('m'),
                                 byName('n')
                             ]);
-                            
+
                             args = spy.calls[0].args;
                             expect(args[0]).toEqual([records[12], records[13]]);
                             expect(args[1]).toBe(12);
                             expect(args[2]).toEqual([nodes[12], nodes[13]]);
-                            
+
                             args = spy.calls[1].args;
                             expect(args[0]).toEqual([records[5], records[6], records[7]]);
                             expect(args[1]).toBe(5);
                             expect(args[2]).toEqual([nodes[5], nodes[6], nodes[7]]);
-                            
+
                             args = spy.calls[2].args;
                             expect(args[0]).toEqual([records[1], records[2]]);
                             expect(args[1]).toBe(1);
@@ -1403,7 +1403,7 @@ function() {
             });
         });
     });
-    
+
     describe("shrink wrap", function() {
         describe("width", function() {
             function makeShrinkWrapView(tpl, data) {
@@ -1472,7 +1472,7 @@ function() {
                 expect(view.getWidth()).toBe(100);
             });
         });
-        
+
         describe("height", function() {
             function makeShrinkWrapView(tpl, data) {
                 createView({
@@ -1538,7 +1538,7 @@ function() {
                 expect(view.getHeight()).toBe(100);
             });
         });
-        
+
         it("should only trigger a single layout when adding multiple ranges", function() {
             createView({
                 renderTo: Ext.getBody(),
@@ -1553,7 +1553,7 @@ function() {
                 createModel('j')
             ]);
             view.getStore().sort('name');
-            
+
             var store = view.getStore(),
                 counter = view.componentLayoutCounter;
 
@@ -1564,7 +1564,7 @@ function() {
             );
             expect(view.componentLayoutCounter).toBe(counter + 1);
         });
-        
+
         it("should only trigger a single layout when removing multiple ranges", function() {
             createView({
                 renderTo: Ext.getBody(),
@@ -1581,7 +1581,7 @@ function() {
                 createModel('i'),
                 createModel('j')
             ]);
-            
+
             var store = view.getStore(),
                 counter = view.componentLayoutCounter;
 
@@ -1595,7 +1595,7 @@ function() {
             expect(view.componentLayoutCounter).toBe(counter + 1);
         });
     });
-    
+
     describe("emptyText", function() {
         function createSimpleView(deferEmptyText, data) {
             createView({
@@ -1605,7 +1605,7 @@ function() {
                 emptyText: 'Foo'
             }, data);
         }
-        
+
         describe("with deferEmptyText: false", function() {
             it("should show the empty text immediately when the store is empty", function() {
                 createSimpleView(false, null);
@@ -1613,21 +1613,21 @@ function() {
                 expect(view.getEl().dom.childNodes[0].data).toBe('Foo');
                 expect(view.getEl().dom.childNodes[1] === view.tabGuardEl).toBe(true);
             });
-            
+
             it("should not contain the empty text if there are nodes", function() {
                 createSimpleView(false);
                 expect(view.getEl().dom.childNodes.length).toBe(store.getCount() + 1);
                 expect(view.getEl().dom.childNodes[store.getCount()] === view.tabGuardEl).toBe(true);
             });
         });
-        
+
         describe("with deferEmptyText: true", function() {
             it("should not show the empty text immediately when the store is empty", function() {
                 createSimpleView(true, null);
                 expect(view.getEl().dom.childNodes.length).toBe(1);
                 expect(view.getEl().dom.childNodes[0] === view.tabGuardEl).toBe(true);
             });
-            
+
             it("should show the empty text after a second refresh if the store is empty", function() {
                 createSimpleView(true, null);
                 view.refresh();
@@ -1636,7 +1636,7 @@ function() {
                 // It is only necessary one time.
                 expect(view.getEl().dom).hasHTML('Foo');
             });
-            
+
             it("should not contain the empty text if there are nodes", function() {
                 createSimpleView(true);
                 expect(view.getEl().dom.childNodes.length).toBe(store.getCount() + 1);
@@ -1666,14 +1666,14 @@ function() {
                 expect(view.getEl().dom.childNodes[1] === view.tabGuardEl).toBe(true);
             });
         });
-        
+
         describe("store modifications", function() {
             it("should clear the empty text when adding a record", function() {
                 createSimpleView(false, []);
                 store.add(createModel('Item1'));
                 expect(view.getEl().dom).not.hasHTML('Foo');
             });
-            
+
             it("should clear the empty text when loading several records", function() {
                 createSimpleView(false, []);
                 store.loadData([{
@@ -1685,13 +1685,13 @@ function() {
                 }]);
                 expect(view.getEl().dom).not.hasHTML('Foo');
             });
-            
+
             it("should add the empty text when removing the last element", function() {
                 createSimpleView(false);
                 store.removeAt(0);
                 expect(view.getEl().dom).hasHTML('Foo');
             });
-            
+
             it("should add the empty text when loading an empty data set", function() {
                 createSimpleView(false);
                 store.loadData([]);
@@ -1939,7 +1939,7 @@ function() {
             expectSelected(a);
         });
     });
-    
+
     describe("highlighting", function() {
         beforeEach(function() {
             createView({
@@ -1949,14 +1949,14 @@ function() {
                 overItemCls: 'over'
             }, makeData(10));
         });
-        
+
         it("should apply the highlight class to a node", function() {
             view.highlightItem(view.getNode(0));
             var nodes = view.getEl().select('.foo');
 
             expect(nodes.item(0).hasCls(view.overItemCls)).toBe(true);
         });
-        
+
         it("should remove the highlight on an item", function() {
             view.highlightItem(view.getNode(0));
             view.clearHighlight(view.getNode(0));
@@ -1964,7 +1964,7 @@ function() {
 
             expect(nodes.item(0).hasCls(view.overItemCls)).toBe(false);
         });
-        
+
         it("should only have at most one item highlighted", function() {
             view.highlightItem(view.getNode(0));
             view.highlightItem(view.getNode(1));
@@ -1973,7 +1973,7 @@ function() {
             expect(nodes.item(0).hasCls(view.overItemCls)).toBe(false);
             expect(nodes.item(1).hasCls(view.overItemCls)).toBe(true);
         });
-        
+
         it("should keep highlight on an item when updated", function() {
             view.highlightItem(view.getNode(0));
             view.getStore().getAt(0).set('name', 'New');
@@ -1981,12 +1981,12 @@ function() {
 
             expect(nodes.item(0).hasCls(view.overItemCls)).toBe(true);
         });
-        
+
         it("should clear all highlights on refresh", function() {
             view.highlightItem(view.getNode(0));
             view.refresh();
             var nodes = view.getEl().select('.foo');
-  
+
             expect(nodes.item(0).hasCls(view.overItemCls)).toBe(false);
         });
     });
@@ -2655,7 +2655,7 @@ function() {
             // Navigation conditions must be restored after the refresh.
             expect(view.el.query('.' + navModel.focusCls).length).toBe(1);
             expect(itemAfterRefresh.hasCls(navModel.focusCls)).toBe(true);
-            
+
             itemBeforeRefresh.destroy();
         });
     });

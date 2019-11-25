@@ -19,7 +19,7 @@ Ext.define('Ext.rtl.layout.container.Box', {
             renderData.targetElCls =
                 (renderData.targetElCls || '') + ' ' + Ext.baseCSSPrefix + 'rtl';
         }
-        
+
         return renderData;
     }
 });

@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.chart.column.Stacked', {
     xtype: 'column-stacked',
     controller: 'column-stacked',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/column/StackedController.js'
@@ -18,10 +18,10 @@ Ext.define('KitchenSink.view.chart.column.Stacked', {
     profiles: {
         defaults: {
             buttonShadow: true,
-            groupIcon: 'x-fa fa-bar-chart',
+            groupIcon: 'x-far fa-chart-bar',
             insetPadding: '20 10',
             padding: 8,
-            panIcon: 'x-fa fa-arrows',
+            panIcon: 'x-fa fa-arrows-alt',
             panText: 'Pan',
             refreshText: 'Refresh',
             segBtnProp: 'text',
@@ -57,9 +57,9 @@ Ext.define('KitchenSink.view.chart.column.Stacked', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -140,7 +140,7 @@ Ext.define('KitchenSink.view.chart.column.Stacked', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {
@@ -167,7 +167,7 @@ Ext.define('KitchenSink.view.chart.column.Stacked', {
             }
         }, {
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }, {
             xtype: 'segmentedbutton',

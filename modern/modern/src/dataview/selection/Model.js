@@ -70,7 +70,13 @@ Ext.define('Ext.dataview.selection.Model', {
 
         /**
          * @cfg {'single'/'simple'/'multi'} mode
-         * Modes of selection.
+         * Modes of selection. Valid values are:
+         *
+         * - **"single"** - Only allows selecting one item at a time.  Use {@link #deselectable}
+         *   to allow deselecting that item.  Also see {@link #toggleOnClick}. This is the default.
+         * - **"simple"** - Allows simple selection of multiple items one-by-one. Each click in grid
+         *   will either select or deselect an item.
+         * - **"multi"** - Allows complex selection of multiple items using Ctrl and Shift keys.
          * @accessor
          */
         mode: 'single',
@@ -82,6 +88,14 @@ Ext.define('Ext.dataview.selection.Model', {
          * be at least one record selected.
          */
         deselectable: true,
+
+        /**
+         * @cfg {Boolean} toggleOnClick
+         * `true` to toggle the selection state of an item when clicked.
+         * Only applicable when the {@link #mode} is 'single'.
+         * Only applicable when the {@link #deselectable} is 'true'.
+         */
+        toggleOnClick: true,
 
         /**
          * @cfg {Ext.data.Model} lastSelected
@@ -363,7 +377,8 @@ Ext.define('Ext.dataview.selection.Model', {
         }
         else {
             if (isSelected) {
-                if (me.getDeselectable() && (mode === 'simple' || e.ctrlKey)) {
+                if (me.getDeselectable() &&
+                (mode === 'single' && me.getToggleOnClick()) || mode === 'simple' || e.ctrlKey) {
                     me.deselect(record);
                 }
             }

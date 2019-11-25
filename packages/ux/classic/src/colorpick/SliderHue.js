@@ -13,7 +13,7 @@ Ext.define('Ext.ux.colorpick.SliderHue', {
             el = me.el;
 
         me.callParent();
-        
+
         if (!src) {
             // We do this trick to allow the Sass to calculate resource image path for
             // our package and pick up the proper image URL here.
@@ -40,7 +40,6 @@ Ext.define('Ext.ux.colorpick.SliderHue', {
             src: src
         });
     },
-
 
     // Called via data binding whenever selectedColor.h changes; hue param is 0-1
     setHue: function(hue) {

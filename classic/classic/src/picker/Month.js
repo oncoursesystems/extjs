@@ -25,16 +25,16 @@ Ext.define('Ext.picker.Month', {
     extend: 'Ext.Component',
     alias: 'widget.monthpicker',
     alternateClassName: 'Ext.MonthPicker',
-    
+
     requires: [
         'Ext.XTemplate',
         'Ext.util.ClickRepeater',
         'Ext.Date',
         'Ext.button.Button'
     ],
-    
+
     isMonthPicker: true,
-    
+
     /**
      * @property focusable
      * @inheritdoc
@@ -147,7 +147,7 @@ Ext.define('Ext.picker.Month', {
     totalYears: 10,
     yearOffset: 5, // 10 years in total, 2 per row
     monthOffset: 6, // 12 months, 2 per row
-    
+
     /**
      * @cfg alignOnScroll
      * @inheritdoc
@@ -260,7 +260,7 @@ Ext.define('Ext.picker.Month', {
         for (; i < monthLen; ++i) {
             months.push(shortName(i), shortName(i + monthLen));
         }
-        
+
         if (Ext.isDefined(margin)) {
             style = 'margin: 0 ' + margin + 'px;';
         }
@@ -296,7 +296,7 @@ Ext.define('Ext.picker.Month', {
             body = me.bodyEl;
 
         me.callParent();
-        
+
         // Month picker is not focusable and essentially is pointer only thing.
         // Clicking on it will focus the document body, which may disrupt the state
         // of the floating parent such as Date picker or a menu, and cause it to hide.
@@ -325,12 +325,12 @@ Ext.define('Ext.picker.Month', {
         });
         me.nextEl.addClsOnOver(me.baseCls + '-yearnav-next-over');
         me.updateBody();
-        
+
         if (!Ext.isDefined(me.monthMargin)) {
             Ext.picker.Month.prototype.monthMargin = me.calculateMonthMargin();
         }
     },
-    
+
     calculateMonthMargin: function() {
         // We use this method for locales where the short month name
         // may be longer than we see in English. For example in the 
@@ -340,7 +340,7 @@ Ext.define('Ext.picker.Month', {
             months = me.months,
             first = months.first(),
             itemMargin = first.getMargin('l');
-            
+
         while (itemMargin && me.getLargest() > me.measureMaxHeight) {
             --itemMargin;
             months.setStyle('margin', '0 ' + itemMargin + 'px');
@@ -348,7 +348,7 @@ Ext.define('Ext.picker.Month', {
 
         return itemMargin;
     },
-    
+
     getLargest: function(months) {
         var largest = 0;
 
@@ -361,7 +361,7 @@ Ext.define('Ext.picker.Month', {
         });
 
         return largest;
-        
+
     },
 
     /**
@@ -503,7 +503,7 @@ Ext.define('Ext.picker.Month', {
 
         return year === null ? defaultValue : year + offset;
     },
-    
+
     onElClick: function(e) {
         e.stopEvent();
     },
@@ -606,7 +606,7 @@ Ext.define('Ext.picker.Month', {
 
     doDestroy: function() {
         Ext.destroy(this.backRepeater, this.nextRepeater, this.okBtn, this.cancelBtn);
-        
+
         this.callParent();
     },
 

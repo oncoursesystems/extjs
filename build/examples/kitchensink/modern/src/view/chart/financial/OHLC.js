@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.chart.financial.OHLC', {
     xtype: 'financial-ohlc',
     controller: 'financial-ohlc',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/financial/OHLCController.js'
@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.chart.financial.OHLC', {
             buttonShadow: true,
             insetPadding: '20 10',
             padding: 8,
-            panIcon: 'x-fa fa-arrows',
+            panIcon: 'x-fa fa-arrows-alt',
             panText: 'Pan',
             segBtnWidth: 200,
             shadow: true,
@@ -49,9 +49,9 @@ Ext.define('KitchenSink.view.chart.financial.OHLC', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 

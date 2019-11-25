@@ -4,7 +4,7 @@
 Ext.define('Ext.layout.container.boxOverflow.Menu', {
     extend: 'Ext.layout.container.boxOverflow.None',
     alternateClassName: 'Ext.layout.boxOverflow.Menu',
-    
+
     alias: [
         'box.overflow.menu',
         'box.overflow.Menu' // capitalized for 4.x compat
@@ -115,7 +115,7 @@ Ext.define('Ext.layout.container.boxOverflow.Menu', {
 
         return me.menuTrigger.getRenderTree();
     },
-    
+
     getOverflowCls: function(direction) {
         return this.menuCls + '-body-' + direction;
     },
@@ -293,7 +293,7 @@ Ext.define('Ext.layout.container.boxOverflow.Menu', {
 
         menu.resumeLayouts();
     },
-    
+
     /**
      * @private
      * Returns a menu config for a given component. This config is used to create a menu item
@@ -314,7 +314,7 @@ Ext.define('Ext.layout.container.boxOverflow.Menu', {
             destroyMenu: false,
             listeners: null
         });
-        
+
         config.text = component.overflowText || component.text;
         config.masterComponent = component;
 
@@ -470,7 +470,7 @@ Ext.define('Ext.layout.container.boxOverflow.Menu', {
             }
             else if (component.isCheckbox) {
                 component.overflowClone = menu.add(me.createMenuConfig(component));
-                
+
                 Ext.apply(component.overflowClone, {
                     getValue: function() {
                         return component.overflowClone.checked;
@@ -479,7 +479,7 @@ Ext.define('Ext.layout.container.boxOverflow.Menu', {
                         component.overflowClone.setChecked(component.getValue());
                     }
                 });
-                
+
                 component.overflowClone.on('click', function(item) {
                     item.setChecked(item.masterComponent.isRadio ? true : !item.checked);
                     item.fireEvent('change', item, item.checked);
@@ -495,7 +495,7 @@ Ext.define('Ext.layout.container.boxOverflow.Menu', {
 
     destroy: function() {
         Ext.destroy(this.menu, this.menuTrigger);
-        
+
         this.callParent();
     }
 });

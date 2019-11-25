@@ -6,11 +6,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -71,7 +71,7 @@ function() {
     function showMenu() {
         // Show the main grid menu.
         Ext.testHelper.showHeaderMenu(grid.getColumnManager().getLast());
-        
+
         runs(function() {
             headerCt = grid.headerCt;
 
@@ -92,7 +92,7 @@ function() {
     afterEach(function() {
         // Undo the overrides.
         Ext.data.ProxyStore.prototype.load = proxyStoreLoad;
-        
+
         Ext.destroy(store, grid);
         grid = store = plugin = columnFilter = menu = headerCt = rootMenuItem = null;
     });
@@ -288,7 +288,7 @@ function() {
                 spyOn(columnFilter, 'addStoreFilter');
 
                 showMenu();
-                
+
                 runs(function() {
                     expect(columnFilter.addStoreFilter).not.toHaveBeenCalled();
                 });
@@ -377,7 +377,7 @@ function() {
                     });
 
                     showMenu();
-                    
+
                     runs(function() {
                         fields = columnFilter.fields;
                         expect(fields.gt.inputEl.getValue()).toBe('10');
@@ -401,7 +401,7 @@ function() {
                         });
 
                         showMenu();
-                        
+
                         runs(function() {
                             columnFilter.setValue({
                                 eq: 5
@@ -433,7 +433,7 @@ function() {
 
                         len = store.data.length;
                         showMenu();
-                        
+
                         runs(function() {
                             expect(store.data.length).toBe(len);
                             columnFilter.setActive(true);
@@ -480,7 +480,7 @@ function() {
                         });
 
                         showMenu();
-                        
+
                         runs(function() {
                             expect(store.data.length).toBe(0);
                             columnFilter.setActive(false);

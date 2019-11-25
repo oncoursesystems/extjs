@@ -13,7 +13,7 @@ topSuite("Ext.Function", function() {
             timeouts = [];
             timeoutIds = [];
             clearedTimeoutIds = [];
-            
+
             _setTimeout = window.setTimeout;
 
             window.setTimeout = function(fn, timeout) {
@@ -24,7 +24,7 @@ topSuite("Ext.Function", function() {
 
                 return timeoutId;
             };
-            
+
             _clearTimeout = window.clearTimeout;
 
             window.clearTimeout = function(timeoutId) {
@@ -43,7 +43,6 @@ topSuite("Ext.Function", function() {
             foo: 'baz'
         };
 
-    
     describe("bind", function() {
         var fn,
             bind;
@@ -115,7 +114,7 @@ topSuite("Ext.Function", function() {
             });
         });
     });
-    
+
     describe("pass", function() {
         it("should pass the specified array of arguments as the first arguments to the given function", function() {
             var fn = jasmine.createSpy(),
@@ -185,7 +184,7 @@ topSuite("Ext.Function", function() {
             expect(foo).toBe('b');
         });
     });
-    
+
     describe("clone", function() {
         it("should clone the given function", function() {
             var fn = jasmine.createSpy().andCallFake(function(arg) { return 'bar'; }),
@@ -195,15 +194,15 @@ topSuite("Ext.Function", function() {
             expect(result).toBe('bar');
             expect(fn).toHaveBeenCalledWith('foo');
         });
-        
+
         it("should clone own properies on the given function", function() {
             var fn = function() {},
                 clone;
-            
+
             fn.$prop = 'foo';
-            
+
             clone = Ext.Function.clone(fn);
-            
+
             expect(clone.$prop).toEqual('foo');
         });
     });
@@ -264,35 +263,35 @@ topSuite("Ext.Function", function() {
                 expect(interceptedFn).not.toHaveBeenCalled();
             });
         });
-        
+
         describe("returnValue", function() {
             beforeEach(function() {
                 interceptedFn = function() {
                     return 'Original';
                 };
-                
+
                 interceptorFn = function() {
                     return false;
                 };
             });
-            
+
             describe("when interceptorFn returns false", function() {
                 it("should return null as a default", function() {
                     interceptor = Ext.Function.createInterceptor(interceptedFn, interceptorFn);
                     expect(interceptor()).toBeNull();
                 });
-            
+
                 it("should accept a custom returnValue", function() {
                     interceptor = Ext.Function.createInterceptor(interceptedFn, interceptorFn, null, 'Custom');
                     expect(interceptor()).toBe('Custom');
                 });
-            
+
                 it("should accept a falsy returnValue", function() {
                     interceptor = Ext.Function.createInterceptor(interceptedFn, interceptorFn, null, false);
                     expect(interceptor()).toBe(false);
                 });
             });
-            
+
             it("should return the value of the original function if false is not returned", function() {
                 interceptorFn = function() {
                     return;
@@ -303,18 +302,18 @@ topSuite("Ext.Function", function() {
             });
         });
     });
-    
+
     describe("createDelayed", function() {
        (Ext.isIE8 ? xit : it)("should create bind to the given function to be called after x milliseconds", function() {
            mockTimeout();
            var fn = jasmine.createSpy(),
                delayedFn = Ext.Function.createDelayed(fn, 2);
-           
+
            delayedFn('foo');
            expect(timeouts.shift()).toBe(2);
-           
+
            expect(fn).not.toHaveBeenCalled();
-           
+
            runAfterInvocation(fn, function() {
                expect(fn).toHaveBeenCalledWith('foo');
            });
@@ -328,7 +327,7 @@ topSuite("Ext.Function", function() {
            delayedFn();
            expect(fn).not.toHaveBeenCalled();
            expect(scope.x).toBe('foo');
-           
+
            runAfterInvocation(fn, function() {
                expect(scope.x).toBe('bar');
            });
@@ -475,25 +474,25 @@ topSuite("Ext.Function", function() {
 
         });
     });
-    
+
     describe("createBuffered", function() {
         (Ext.isIE8 ? xit : it)("should prevent the execution of multiple calls of the buffered function within the timeout period", function() {
             mockTimeout();
             var fn = jasmine.createSpy(),
                 bufferedFn = Ext.Function.createBuffered(fn, 2);
-           
+
             bufferedFn();
             expect(timeouts.shift()).toBe(2);
-           
+
             bufferedFn();
             expect(clearedTimeoutIds.shift()).toBe(timeoutIds.shift());
             expect(timeouts.shift()).toBe(2);
-           
+
             expect(fn).not.toHaveBeenCalled();
             runAfterInvocation(fn, function() {
                 expect(fn.calls.length).toBe(1);
             });
-            
+
             unmockTimeout();
         });
         it("should use the specified scope as 'this'", function() {
@@ -521,18 +520,18 @@ topSuite("Ext.Function", function() {
             });
         });
     });
-    
+
     (Ext.isIE8 ? xdescribe : xdescribe)("createThrottled", function() {
         it("should execute only once per each specified time interval", function() {
             mockTimeout();
             var fn = jasmine.createSpy(),
                 throttledFn = Ext.Function.createThrottled(fn, 10);
-           
+
             expect(fn).not.toHaveBeenCalled();
             throttledFn();
             expect(clearedTimeoutIds.shift()).toBeUndefined();
             expect(fn.calls.length).toBe(1);
-            
+
             throttledFn();
             expect(timeouts.shift()).not.toBeGreaterThan(10);
             expect(clearedTimeoutIds.shift()).toBeUndefined();
@@ -542,7 +541,7 @@ topSuite("Ext.Function", function() {
             throttledFn();
             expect(timeouts.shift()).not.toBeGreaterThan(10);
             expect(clearedTimeoutIds.shift()).toBe(timeoutIds.shift());
-            
+
             expect(fn.calls.length).toBe(1);
             runAfterInvocation(fn, function() {
                 expect(fn.calls.length).toEqual(2);
@@ -552,23 +551,23 @@ topSuite("Ext.Function", function() {
             }, 2);
             unmockTimeout();
         });
-        
+
         it("should use the specified scope as 'this'", function() {
             var scope = {},
                 fn = jasmine.createSpy().andCallFake(function(value) { this.x = value; }),
                 throttledFn = Ext.Function.createThrottled(fn, 10, scope);
-            
+
             throttledFn('foo');
             throttledFn('bar');
             throttledFn('baz');
             throttledFn('qux');
-            
+
             expect(fn).toHaveBeenCalledWith('foo');
             expect(scope.x).toBe('foo');
             expect(fn.calls.length).toBe(1);
         });
     });
-    
+
     describe("interceptAfter", function() {
         it("should execute interceptor after each method call", function() {
             var monologue = {
@@ -580,7 +579,7 @@ topSuite("Ext.Function", function() {
                 addMeToo = jasmine.createSpy().andCallFake(function(phrase) {
                     this.phrases.push(phrase + ' too');
                 });
-                
+
             Ext.Function.interceptAfter(monologue, 'addPhrase', addMeToo);
             monologue.addPhrase('I like you');
             monologue.addPhrase('I love you');
@@ -588,7 +587,7 @@ topSuite("Ext.Function", function() {
             expect(addMeToo).toHaveBeenCalledWith('I like you');
             expect(addMeToo).toHaveBeenCalledWith('I love you');
         });
-        
+
         it("should execute interceptor after each method call with the specified scope as 'this'", function() {
             var monologue = {
                     phrases: [],
@@ -602,7 +601,7 @@ topSuite("Ext.Function", function() {
                 transcriptPhrase = jasmine.createSpy().andCallFake(function(phrase) {
                     this.phrases.push("He said: " + phrase);
                 });
-            
+
             Ext.Function.interceptAfter(monologue, 'addPhrase', transcriptPhrase, transcription);
             monologue.addPhrase('I like you');
             monologue.addPhrase('I love you');
@@ -612,7 +611,7 @@ topSuite("Ext.Function", function() {
             expect(transcriptPhrase).toHaveBeenCalledWith('I love you');
         });
     });
-    
+
     describe('asap', function() {
         it('should call the passed function', function() {
             var called = false;

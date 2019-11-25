@@ -30,7 +30,14 @@ Ext.define('KitchenSink.view.grid.ExpanderLockable', {
             priceWidth: 100,
             pricechangeWidth: 110,
             percentChangeColumnWidth: 120,
-            lastUpdatedColumnWidth: 150          
+            lastUpdatedColumnWidth: 150
+        },
+        'classic-material': {
+            width: 750,
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 150
         }
     },
     //</example>
@@ -38,7 +45,7 @@ Ext.define('KitchenSink.view.grid.ExpanderLockable', {
     title: 'Expander Rows in a Collapsible Grid with lockable columns',
     width: '${width}',
     height: 300,
-    
+
     collapsible: true,
     animCollapse: false,
     columnLines: true,
@@ -76,7 +83,7 @@ Ext.define('KitchenSink.view.grid.ExpanderLockable', {
                 '<p><b>Change:</b> {change:this.formatChange}</p><br>',
                 '<p><b>Summary:</b> {desc}</p>',
                 {
-                    formatChange: function (v) {
+                    formatChange: function(v) {
                         var color = v >= 0 ? 'green' : 'red';
 
                         return '<span style="color: ' + color + ';">' +

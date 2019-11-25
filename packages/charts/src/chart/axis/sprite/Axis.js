@@ -429,10 +429,13 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                     }
 
                     me.iterate(majorTicks, getRightTickFn(majorTickSize));
-                    minorTicks && me.iterate(minorTicks, getRightTickFn(minorTickSize));
-                    
+
+                    if (minorTicks) {
+                        me.iterate(minorTicks, getRightTickFn(minorTickSize));
+                    }
+
                     break;
-                    
+
                 case 'left':
                     function getLeftTickFn(size) {
                         return function(position, labelText, i) {
@@ -443,10 +446,13 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                     }
 
                     me.iterate(majorTicks, getLeftTickFn(majorTickSize));
-                    minorTicks && me.iterate(minorTicks, getLeftTickFn(minorTickSize));
-                    
+
+                    if (minorTicks) {
+                        me.iterate(minorTicks, getLeftTickFn(minorTickSize));
+                    }
+
                     break;
-                    
+
                 case 'bottom':
                     function getBottomTickFn(size) {
                         return function(position, labelText, i) {
@@ -457,10 +463,13 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                     }
 
                     me.iterate(majorTicks, getBottomTickFn(majorTickSize));
-                    minorTicks && me.iterate(minorTicks, getBottomTickFn(minorTickSize));
-                    
+
+                    if (minorTicks) {
+                        me.iterate(minorTicks, getBottomTickFn(minorTickSize));
+                    }
+
                     break;
-                    
+
                 case 'top':
                     function getTopTickFn(size) {
                         return function(position, labelText, i) {
@@ -471,10 +480,13 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                     }
 
                     me.iterate(majorTicks, getTopTickFn(majorTickSize));
-                    minorTicks && me.iterate(minorTicks, getTopTickFn(minorTickSize));
-                    
+
+                    if (minorTicks) {
+                        me.iterate(minorTicks, getTopTickFn(minorTickSize));
+                    }
+
                     break;
-                    
+
                 case 'angular':
                     me.iterate(majorTicks, function(position, labelText, i) {
                         position = position / (attr.max + 1) * Math.PI * 2 + attr.baseRotation;
@@ -487,9 +499,9 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                             attr.centerY + (attr.length + majorTickSize) * Math.sin(position)
                         );
                     });
-                    
+
                     break;
-                    
+
                 case 'gauge':
                     gaugeAngles = me.getGaugeAngles();
 
@@ -505,7 +517,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                             attr.centerY + (attr.length + majorTickSize) * Math.sin(position)
                         );
                     });
-                    
+
                     break;
             }
         }
@@ -561,14 +573,14 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                     switch (label.attr.textAlign) {
                         case 'start':
                             translation = surface.roundPixel(titlePadding + dx) - halfLineWidth;
-                            
+
                             break;
-                        
+
                         case 'end':
                             translation = surface.roundPixel(clipRect[2] - tickPadding + dx) -
                                           halfLineWidth;
                             break;
-                        
+
                         default: // 'center'
                             translation =
                                 surface.roundPixel(titlePadding + (clipRect[2] - titlePadding -
@@ -578,24 +590,24 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                     label.setAttributes({
                         translationX: translation
                     }, true);
-                    
+
                     break;
-                
+
                 case 'right':
                     titlePadding = titleBBox ? clipRect[2] - titleBBox.x : 0;
 
                     switch (label.attr.textAlign) {
                         case 'start':
                             translation = surface.roundPixel(tickPadding + dx) + halfLineWidth;
-                            
+
                             break;
-                        
+
                         case 'end':
                             translation = surface.roundPixel(clipRect[2] - titlePadding + dx) +
                                           halfLineWidth;
-                            
+
                             break;
-                        
+
                         default: // 'center'
                             translation =
                                 surface.roundPixel(tickPadding + (clipRect[2] - tickPadding -
@@ -605,30 +617,30 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                     label.setAttributes({
                         translationX: translation
                     }, true);
-                    
+
                     break;
-                
+
                 case 'top':
                     titlePadding = titleBBox ? titleBBox.y + titleBBox.height : 0;
-                    
+
                     label.setAttributes({
                         translationY: surface.roundPixel(titlePadding + (clipRect[3] -
                                                          titlePadding - tickPadding) / 2) -
                                       halfLineWidth
                     }, true);
-                    
+
                     break;
-                
+
                 case 'bottom':
                     titlePadding = titleBBox ? clipRect[3] - titleBBox.y : 0;
-                    
+
                     label.setAttributes({
                         translationY: surface.roundPixel(tickPadding + (clipRect[3] - tickPadding -
                                                          titlePadding) / 2) + halfLineWidth
                     }, true);
-                    
+
                     break;
-                
+
                 case 'radial' :
                     label.setAttributes({
                         translationX: attr.centerX
@@ -669,7 +681,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                         text: String(text),
                         translationY: surface.roundPixel(position * yy + dy)
                     }, true);
-                    
+
                     label.applyTransformations();
                     thickness = Math.max(thickness, label.getBBox().width + tickPadding);
 
@@ -750,7 +762,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                             translationY: attr.centerY - surface.roundPixel(position) /
                             attr.max * attr.length * Math.sin(attr.baseRotation + Math.PI / 2)
                         }, true);
-                        
+
                         label.applyTransformations();
                         bbox = label.attr.matrix.transformBBox(label.getBBox(true));
 
@@ -797,7 +809,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                             translationY: attr.centerY + (attr.length + labelOffset) *
                                           Math.sin(angle)
                         }, true);
-                        
+
                         label.applyTransformations();
                         bbox = label.attr.matrix.transformBBox(label.getBBox(true));
 
@@ -842,7 +854,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                             translationY: attr.centerY + (attr.length + labelOffset) *
                                           Math.sin(angle)
                         }, true);
-                        
+
                         label.applyTransformations();
                         bbox = label.attr.matrix.transformBBox(label.getBBox(true));
 
@@ -892,42 +904,42 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                     position = surface.roundPixel(clipRect[2]) - halfLineWidth;
                     ctx.moveTo(position, -attr.endGap);
                     ctx.lineTo(position, attr.length + attr.startGap + 1);
-                    
+
                     break;
-                
+
                 case 'right':
                     ctx.moveTo(halfLineWidth, -attr.endGap);
                     ctx.lineTo(halfLineWidth, attr.length + attr.startGap + 1);
-                    
+
                     break;
-                
+
                 case 'bottom':
                     ctx.moveTo(-attr.startGap, halfLineWidth);
                     ctx.lineTo(attr.length + attr.endGap, halfLineWidth);
-                    
+
                     break;
-                
+
                 case 'top':
                     position = surface.roundPixel(clipRect[3]) - halfLineWidth;
                     ctx.moveTo(-attr.startGap, position);
                     ctx.lineTo(attr.length + attr.endGap, position);
-                    
+
                     break;
-                
+
                 case 'angular':
                     ctx.moveTo(attr.centerX + attr.length, attr.centerY);
                     ctx.arc(attr.centerX, attr.centerY, attr.length, 0, Math.PI * 2, true);
-                    
+
                     break;
-                
+
                 case 'gauge':
                     gaugeAngles = me.getGaugeAngles();
-                    
+
                     ctx.moveTo(attr.centerX + Math.cos(gaugeAngles.start) * attr.length,
                                attr.centerY + Math.sin(gaugeAngles.start) * attr.length);
                     ctx.arc(attr.centerX, attr.centerY, attr.length, gaugeAngles.start,
                             gaugeAngles.end, true);
-                    
+
                     break;
             }
         }
@@ -1081,7 +1093,11 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
         if (position === 'left' || position === 'right') {
             for (i = 0, ln = limits.length; i < ln; i++) {
                 limit = chain(limits[i]);
-                !limit.line && (limit.line = {});
+
+                if (!limit.line) {
+                    limit.line = {};
+                }
+
                 value = Ext.isString(limit.value) ? axis.getCoordFor(limit.value) : limit.value;
                 value = value * matrix.getYY() + matrix.getDY();
                 limit.line.y = value + innerPadding.top;
@@ -1098,11 +1114,11 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                         case 'start':
                             x = 10;
                             break;
-                        
+
                         case 'end':
                             x = limitsRect[2] - 10;
                             break;
-                        
+
                         case 'middle':
                             x = limitsRect[2] / 2;
                             break;
@@ -1120,7 +1136,11 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
         else if (position === 'top' || position === 'bottom') {
             for (i = 0, ln = limits.length; i < ln; i++) {
                 limit = chain(limits[i]);
-                !limit.line && (limit.line = {});
+
+                if (!limit.line) {
+                    limit.line = {};
+                }
+
                 value = Ext.isString(limit.value) ? axis.getCoordFor(limit.value) : limit.value;
                 value = value * matrix.getXX() + matrix.getDX();
                 limit.line.x = value + innerPadding.left;
@@ -1137,11 +1157,11 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                         case 'start':
                             y = limitsRect[3] - titleBBox.width / 2 - 10;
                             break;
-                        
+
                         case 'end':
                             y = titleBBox.width / 2 + 10;
                             break;
-                        
+
                         case 'middle':
                             y = limitsRect[3] / 2;
                             break;
@@ -1159,7 +1179,11 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
         else if (position === 'radial') {
             for (i = 0, ln = limits.length; i < ln; i++) {
                 limit = chain(limits[i]);
-                !limit.line && (limit.line = {});
+
+                if (!limit.line) {
+                    limit.line = {};
+                }
+
                 value = Ext.isString(limit.value) ? axis.getCoordFor(limit.value) : limit.value;
 
                 if (value > attr.max) {
@@ -1188,7 +1212,11 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
         else if (position === 'angular') {
             for (i = 0, ln = limits.length; i < ln; i++) {
                 limit = chain(limits[i]);
-                !limit.line && (limit.line = {});
+
+                if (!limit.line) {
+                    limit.line = {};
+                }
+
                 value = Ext.isString(limit.value) ? axis.getCoordFor(limit.value) : limit.value;
                 value = value / (attr.max + 1) * Math.PI * 2 + attr.baseRotation;
                 limit.line.translationX = attr.centerX;
@@ -1208,7 +1236,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                                 (value > 1.5 * Math.PI && value < 2 * Math.PI))
                         ? 1
                         : -1;
-                    
+
                     titles.setAttributesFor(titles.position - 1, {
                         x: attr.centerX + 0.5 * attr.length * Math.cos(value) +
                            titleFlip * titleBBox.height / 2 * Math.sin(value),

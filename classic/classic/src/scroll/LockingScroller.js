@@ -19,7 +19,7 @@ Ext.define('Ext.scroll.LockingScroller', {
         }
 
         ret = this.callParent([x, y, animate]);
-        
+
         if (lockedPromise) {
             ret = Ext.Promise.all([ret, lockedPromise]);
         }
@@ -61,10 +61,10 @@ Ext.define('Ext.scroll.LockingScroller', {
                 lockedView = lockedScroller.component,
                 normalView = normalScroller.component,
                 height;
-                
+
             height = pos.y +
                 ((normalView.headerCt.tooNarrow || lockedView.headerCt.tooNarrow)
-                    ? Ext.getScrollbarSize().height
+                    ? Ext.scrollbar.height()
                     : 0);
 
             normalView.stretchHeight(height);
@@ -82,11 +82,11 @@ Ext.define('Ext.scroll.LockingScroller', {
             }
 
             ret = this.callParent([x, y, animate]);
-            
+
             if (normalPromise) {
                 ret = Ext.Promise.all([ret, normalPromise]);
             }
-            
+
             return ret;
         },
 
@@ -100,7 +100,7 @@ Ext.define('Ext.scroll.LockingScroller', {
 
         readPosition: function(position) {
             var me = this;
-            
+
             position = me.callParent([position]);
             position = position || {};
 

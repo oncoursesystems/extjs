@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.lists.GroupedList', {
     extend: 'Ext.dataview.List',
     xtype: 'grouped-list',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Store',
         path: 'modern/src/store/List.js'
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.lists.GroupedList', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     width: '${width}',
@@ -36,5 +36,6 @@ Ext.define('KitchenSink.view.lists.GroupedList', {
     itemTpl: '{firstName} {lastName}',
     grouped: true,
     pinHeaders: false,
+    infinite: true,
     store: 'List'
 });

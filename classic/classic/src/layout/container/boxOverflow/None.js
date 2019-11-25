@@ -23,7 +23,7 @@ Ext.define('Ext.layout.container.boxOverflow.None', {
 
     $configPrefixed: false,
     $configStrict: false,
-    
+
     constructor: function(config) {
         this.initConfig(config);
     },
@@ -115,7 +115,7 @@ Ext.define('Ext.layout.container.boxOverflow.None', {
         else {
             type = owner.getXType();
         }
-        
+
         return type;
     },
 

@@ -283,7 +283,7 @@ Ext.define('Ext.form.field.Date', {
      * @inheritdoc
      */
     componentCls: Ext.baseCSSPrefix + 'form-field-date',
-    
+
     /**
      * @property ariaRole
      * @inheritdoc
@@ -299,7 +299,7 @@ Ext.define('Ext.form.field.Date', {
      * @private
      */
     rawDateText: '',
-    
+
     // Date field should validate on focusleave not blur
     validateOnFocusLeave: true,
 
@@ -332,22 +332,22 @@ Ext.define('Ext.form.field.Date', {
 
         me.callParent();
     },
-    
+
     getSubTplData: function(fieldData) {
         var me = this,
             data, ariaAttr;
-        
+
         data = me.callParent([fieldData]);
-        
+
         if (!me.ariaStaticRoles[me.ariaRole]) {
             ariaAttr = data.ariaElAttributes;
-            
+
             if (ariaAttr) {
                 ariaAttr['aria-owns'] = me.id + '-inputEl ' + me.id + '-picker-eventEl';
                 ariaAttr['aria-autocomplete'] = 'none';
             }
         }
-        
+
         return data;
     },
 
@@ -812,7 +812,7 @@ Ext.define('Ext.form.field.Date', {
         // key handling in the picker, which is the way we want it.
         me.onTabOut(m);
     },
-    
+
     onTabOut: function(picker) {
         this.inputEl.focus();
         this.collapse();
@@ -846,17 +846,17 @@ Ext.define('Ext.form.field.Date', {
      * @cfg {Boolean} grow
      * @private
      */
-    
+
     /**
      * @cfg {Number} growMin
      * @private
      */
-    
+
     /**
      * @cfg {Number} growMax
      * @private
      */
-    
+
     /**
      * @method autoSize
      * @private

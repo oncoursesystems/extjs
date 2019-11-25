@@ -1005,12 +1005,13 @@ Ext.define('KitchenSink.data.Company', {
         "priceChangePct": -7.13
     }];
 
-    //from https://git.daplie.com/Daplie/knuth-shuffle/
-    function shuffle (array) {
+    // from https://git.daplie.com/Daplie/knuth-shuffle/
+    function shuffle(array) {
+        var currentIndex, temporaryValue, randomIndex;
+
         array = Ext.Array.clone(array);
 
-        var currentIndex = array.length,
-            temporaryValue, randomIndex;
+        currentIndex = array.length;
 
         // While there remain elements to shuffle...
         while (0 !== currentIndex) {
@@ -1023,7 +1024,7 @@ Ext.define('KitchenSink.data.Company', {
             temporaryValue = array[currentIndex];
 
             array[currentIndex] = array[randomIndex];
-            array[randomIndex]  = temporaryValue;
+            array[randomIndex] = temporaryValue;
         }
 
         return array;
@@ -1044,7 +1045,8 @@ Ext.define('KitchenSink.data.Company', {
                 return Ext.Array.findBy(companies, function(company) {
                     return company.id === id;
                 });
-            } else if (ctx.params.shuffle) {
+            }
+            else if (ctx.params.shuffle) {
                 return shuffle(companies);
             }
 

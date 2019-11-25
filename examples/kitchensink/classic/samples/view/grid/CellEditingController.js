@@ -1,8 +1,8 @@
 Ext.define('KitchenSink.view.grid.CellEditingController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.cell-editing',
-    
-    onAddClick: function () {
+
+    onAddClick: function() {
         var view = this.getView(),
             rec = new KitchenSink.model.Plant({
                 common: '',
@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.grid.CellEditingController', {
         view.findPlugin('cellediting').startEdit(rec, 0);
     },
 
-    onRemoveClick: function (view, recIndex, cellIndex, item, e, record) {
+    onRemoveClick: function(view, recIndex, cellIndex, item, e, record) {
         record.drop();
     }
 });

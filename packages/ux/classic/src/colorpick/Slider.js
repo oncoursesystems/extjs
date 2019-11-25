@@ -9,7 +9,7 @@ Ext.define('Ext.ux.colorpick.Slider', {
 
     afterRender: function() {
         var width, dragCt, dragWidth;
-        
+
         this.callParent(arguments);
 
         width = this.width;
@@ -57,12 +57,12 @@ Ext.define('Ext.ux.colorpick.Slider', {
         }
     },
 
-    // <debug>
+    //<debug>
     // Called via data binding whenever selectedColor.h changes;
     setHue: function() {
         Ext.raise('Must implement setHue() in a child class!');
     },
-    // </debug>
+    //</debug>
 
     getDragHandle: function() {
         return this.lookupReference('dragHandle');

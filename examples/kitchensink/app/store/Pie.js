@@ -1,10 +1,11 @@
-Ext.define('KitchenSink.store.Pie', function () {
+Ext.define('KitchenSink.store.Pie', function() {
     var seed = 1.3;
 
     // Controllable random.
     function random() {
         seed *= 7.3;
         seed -= Math.floor(seed);
+
         return seed;
     }
 
@@ -18,7 +19,7 @@ Ext.define('KitchenSink.store.Pie', function () {
 
         fields: ['id', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'name'],
 
-        generateData: function (count) {
+        generateData: function(count) {
             var data = [],
                 record = {
                     id: 0,
@@ -52,11 +53,11 @@ Ext.define('KitchenSink.store.Pie', function () {
             this.loadData(data);
         },
 
-        refreshData: function () {
+        refreshData: function() {
             this.generateData(this.getNumRecords());
         },
 
-        constructor: function (config) {
+        constructor: function(config) {
             this.callParent([config]);
 
             this.refreshData();

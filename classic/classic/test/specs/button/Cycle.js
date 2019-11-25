@@ -9,7 +9,7 @@ topSuite("Ext.button.Cycle", ['Ext.app.ViewController'], function() {
         // ARIA errors and warnings are expected
         spyOn(Ext.log, 'error');
         spyOn(Ext.log, 'warn');
-        
+
         button = new Ext.button.Cycle(Ext.apply({
             text: 'Button',
             menu: {
@@ -47,7 +47,7 @@ topSuite("Ext.button.Cycle", ['Ext.app.ViewController'], function() {
 
     describe("event/handler", function() {
         var eventSpy, handlerSpy;
-        
+
         beforeEach(function() {
             eventSpy = jasmine.createSpy();
             handlerSpy = jasmine.createSpy();
@@ -126,7 +126,7 @@ topSuite("Ext.button.Cycle", ['Ext.app.ViewController'], function() {
 
             it("should use a passed scope", function() {
                 var scope = {};
-                
+
                 makeButton({
                     changeHandler: handlerSpy,
                     scope: scope
@@ -138,17 +138,17 @@ topSuite("Ext.button.Cycle", ['Ext.app.ViewController'], function() {
 
         it("should be able to resolve to a view controller", function() {
             var ctrl = new Ext.app.ViewController();
-            
+
             ctrl.doSomething = jasmine.createSpy();
             makeButton({
                 changeHandler: 'doSomething'
             });
-            
+
             var ct = new Ext.container.Container({
                 controller: ctrl,
                 items: button
             });
-            
+
             button = ct.items.first();
             button.setActiveItem(2);
             ct.destroy();

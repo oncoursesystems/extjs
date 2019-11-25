@@ -19,17 +19,30 @@ Ext.define('KitchenSink.view.binding.ChildSessionForm', {
         classic: {
             height: 430,
             removeWidth: 90,
-            idWidth: 50
+            idWidth: 50,
+            bodyPadding: 10,
+            textfieldPadding: 0
         },
         neptune: {
             height: 430,
             removeWidth: 90,
-            idWidth: 50
+            idWidth: 50,
+            bodyPadding: 10,
+            textfieldPadding: 0
         },
         graphite: {
             height: 530,
             removeWidth: 150,
-            idWidth: 80
+            idWidth: 80,
+            bodyPadding: 10,
+            textfieldPadding: 0
+        },
+        'classic-material': {
+            height: 530,
+            removeWidth: 150,
+            idWidth: 80,
+            bodyPadding: 0,
+            textfieldPadding: '5 10'
         }
     },
     bind: {
@@ -40,11 +53,12 @@ Ext.define('KitchenSink.view.binding.ChildSessionForm', {
     width: 500,
     height: '${height}',
     closable: true,
+    cls: 'child-session-form',
 
     items: {
         xtype: 'form',
         reference: 'form',
-        bodyPadding: 10,
+        bodyPadding: '${bodyPadding}',
         border: false,
         // use the Model's validations for displaying form errors
         modelValidation: true,
@@ -57,12 +71,14 @@ Ext.define('KitchenSink.view.binding.ChildSessionForm', {
             fieldLabel: 'Name',
             reference: 'name',
             msgTarget: 'side',
+            padding: '${textfieldPadding}',
             bind: '{theCompany.name}'
         }, {
             xtype: 'textfield',
             fieldLabel: 'Phone',
             reference: 'phone',
             msgTarget: 'side',
+            padding: '${textfieldPadding}',
             bind: '{theCompany.phone}'
         }, {
             xtype: 'grid',
@@ -89,10 +105,10 @@ Ext.define('KitchenSink.view.binding.ChildSessionForm', {
                 flex: 1
             }, {
                 xtype: 'checkcolumn',
-                text: 'Shipped', 
+                text: 'Shipped',
                 dataIndex: 'shipped'
             }, {
-               xtype: 'widgetcolumn',
+                xtype: 'widgetcolumn',
                 width: '${removeWidth}',
                 widget: {
                     xtype: 'button',

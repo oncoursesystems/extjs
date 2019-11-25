@@ -18,19 +18,19 @@ Ext.define('Ext.sparkline.BarBase', {
         if (!me.callParent()) {
             return;
         }
-        
+
         for (i = values.length; i--;) {
             shapes = me.renderRegion(i);
-            
+
             if (shapes) {
                 if (Ext.isArray(shapes)) {
                     ids = [];
-                    
+
                     for (j = shapes.length; j--;) {
                         shapes[j].append();
                         ids.push(shapes[j].id);
                     }
-                    
+
                     regionShapes[i] = ids;
                 }
                 else {
@@ -43,13 +43,13 @@ Ext.define('Ext.sparkline.BarBase', {
                 regionShapes[i] = null;
             }
         }
-        
+
         // If mouse is over, add the highlight sprite
         if (me.currentPageXY) {
             me.currentRegion = null;
             me.updateDisplay();
         }
-        
+
         canvas.render();
     }
 });

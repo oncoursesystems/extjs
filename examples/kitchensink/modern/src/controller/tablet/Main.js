@@ -87,7 +87,7 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         var text = node.get('text');
 
         document.title = document.title.split(' - ')[0] + ' - ' + text;
-        
+
         return this;  // NOTE this is not a config updater method...
     },
 
@@ -279,7 +279,7 @@ Ext.define('KitchenSink.controller.tablet.Main', {
 
         items.push({
             text: 'Classic Kitchen Sink',
-            iconCls: 'x-fa fa-external-link',
+            iconCls: 'x-fa fa-external-link-alt',
             separator: true,
             handler: function() {
                 window.location = location.pathname + '?classic';

@@ -57,14 +57,14 @@ Ext.define('Ext.ComponentLoader', {
         Renderer: {
             Data: function(loader, response, active) {
                 var success = true;
-                
+
                 try {
                     loader.getTarget().update(Ext.decode(response.responseText));
                 }
                 catch (e) {
                     success = false;
                 }
-                
+
                 return success;
             },
 
@@ -91,15 +91,15 @@ Ext.define('Ext.ComponentLoader', {
 
                 if (success) {
                     target.suspendLayouts();
-                    
+
                     if (active.removeAll) {
                         target.removeAll();
                     }
-                    
+
                     target.add(items);
                     target.resumeLayouts(true);
                 }
-                
+
                 return success;
             }
         }
@@ -189,9 +189,9 @@ Ext.define('Ext.ComponentLoader', {
         if (me.target && me.target !== target) {
             me.abort();
         }
-        
+
         me.target = target;
-        
+
         if (target && me.loadOnRender) {
             if (target.rendered) {
                 me.doLoadOnRender();
@@ -204,7 +204,7 @@ Ext.define('Ext.ComponentLoader', {
 
     doLoadOnRender: function() {
         var loadOnRender = this.loadOnRender;
-        
+
         this.load(Ext.isObject(loadOnRender) ? loadOnRender : null);
     },
 
@@ -221,7 +221,6 @@ Ext.define('Ext.ComponentLoader', {
         this.target.setLoading(mask);
     },
 
-
     setOptions: function(active, options) {
         active.removeAll = Ext.isDefined(options.removeAll) ? options.removeAll : this.removeAll;
         active.rendererScope = options.rendererScope || this.rendererScope || this.target;
@@ -235,20 +234,20 @@ Ext.define('Ext.ComponentLoader', {
      */
     getRenderer: function(renderer) {
         var renderers;
-        
+
         if (Ext.isFunction(renderer)) {
             return renderer;
         }
 
         renderers = this.statics().Renderer;
-        
+
         switch (renderer) {
             case 'component':
                 return renderers.Component;
-            
+
             case 'data':
                 return renderers.Data;
-            
+
             default:
                 return Ext.ElementLoader.Renderer.Html;
         }

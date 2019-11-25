@@ -8,9 +8,9 @@
 Ext.define('Ext.data.writer.Xml', {
     extend: 'Ext.data.writer.Writer',
     alternateClassName: 'Ext.data.XmlWriter',
-    
+
     alias: 'writer.xml',
-    
+
     config: {
         /**
          * @cfg {String} documentRoot The name of the root element of the document. Defaults to
@@ -21,19 +21,19 @@ Ext.define('Ext.data.writer.Xml', {
          * and the selector includes the root element name, then you must configure this as `false`
          */
         documentRoot: 'xmlData',
-        
+
         /**
          * @cfg {String} defaultDocumentRoot The root to be used if {@link #documentRoot} is empty
          * and a root is required to form a valid XML document.
          */
         defaultDocumentRoot: 'xmlData',
-    
+
         /**
          * @cfg {String} header A header to use in the XML document (such as setting the encoding
          * or version). Defaults to `''`.
          */
         header: '',
-    
+
         /**
          * @cfg {String} record The name of the node to use for each record. Defaults to
          * the owning {@link Ext.data.proxy.Proxy Proxy}'s {@link Ext.data.reader.Xml Reader}'s
@@ -62,16 +62,16 @@ Ext.define('Ext.data.writer.Xml', {
             // it's not a compound record selector
             needsRoot = data.length !== 1 && recLen === 1,
             transform;
-            
+
         transform = this.getTransform();
-        
+
         if (transform) {
             data = transform(data, request);
         }
-        
+
         // may not exist
         xml.push(me.getHeader() || '');
-        
+
         if (!root && needsRoot) {
             root = me.getDefaultDocumentRoot();
         }
@@ -85,24 +85,24 @@ Ext.define('Ext.data.writer.Xml', {
         for (i = 0; i < recLen - 1; i++) {
             xml.push('<', record[i], '>');
         }
-        
+
         recordName = record[i];
-        
+
         for (i = 0; i < len; ++i) {
             this.objectToElement(recordName, data[i], xml);
         }
-        
+
         // Close record nodes' wrapping, eg "</Items>" from record "Items>Item"->["Items", "Item"]
         for (i = recLen - 2; i > -1; i--) {
             xml.push('</', record[i], '>');
         }
-        
+
         if (root) {
             xml.push('</', root, '>');
         }
-            
+
         request.setXmlData(xml.join(''));
-        
+
         return request;
     },
 
@@ -147,7 +147,7 @@ Ext.define('Ext.data.writer.Xml', {
         // Open the record node, eg "<Item"
         // Stop there because some child properties may be attributes.
         output.push('<', name);
-        
+
         for (key in o) {
             datum = o[key];
 
@@ -169,13 +169,13 @@ Ext.define('Ext.data.writer.Xml', {
                     // Ensure looks like contains {foo: {bar: {}}}
                     if ((subKeyLen = subKeys.length) > 1) {
                         subObjects = subObjects || {};
-                        
+
                         for (subObject = subObjects, i = 0; i < subKeyLen; i++) {
                             lastObject = subObject;
                             lastKey = subKeys[i];
                             subObject = subObject[lastKey] || (subObject[lastKey] = {});
                         }
-                        
+
                         // lastObject is now the bar property in the above example
                         lastObject[lastKey] = datum;
                     }
@@ -185,7 +185,7 @@ Ext.define('Ext.data.writer.Xml', {
                 }
             }
         }
-        
+
         output.push('>');
         output.push.apply(output, subOutput);
 

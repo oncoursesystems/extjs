@@ -36,11 +36,11 @@ Ext.Function = (function() {
                 timerFn.$origFn = callback.$origFn || callback;
                 timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
                 //</debug>
-                
+
                 id = win.setTimeout(timerFn, timeToCall);
-                
+
                 lastTime = currTime + timeToCall;
-                
+
                 return id;
             },
         fireHandlers = function() {
@@ -57,14 +57,14 @@ Ext.Function = (function() {
             for (i = 0; i < len; i++) {
                 handler = animFrameHandlers[i];
                 id = handler[3];
-                
+
                 // Check if this timer has been canceled; its map entry is going to be removed
                 if (animFrameMap[id]) {
                     delete animFrameMap[id];
 
                     //<debug>
                     timer = Ext.Timer.get(id, 'raf');
-                    
+
                     if (timer) {
                         timer.tick();
                     }
@@ -134,7 +134,7 @@ Ext.Function = (function() {
                         if (Ext.enumerables) {
                             for (i = Ext.enumerables.length; i--;) {
                                 k = Ext.enumerables[i];
-                                
+
                                 if (name.hasOwnProperty(k)) {
                                     setter.call(this, k, name[k]);
                                 }
@@ -226,7 +226,7 @@ Ext.Function = (function() {
         bindCallback: function(callback, scope, args, delay, caller) {
             return function() {
                 var a = slice.call(arguments);
-                
+
                 return Ext.callback(callback, scope, args ? args.concat(a) : a, delay, caller);
             };
         },
@@ -268,9 +268,9 @@ Ext.Function = (function() {
 
             return function() {
                 var fnArgs = args.slice();
-                
+
                 fnArgs.push.apply(fnArgs, arguments);
-                
+
                 return fn.apply(scope || this, fnArgs);
             };
         },
@@ -298,17 +298,17 @@ Ext.Function = (function() {
          */
         clone: function(method) {
             var newMethod, prop;
-            
+
             newMethod = function() {
                 return method.apply(this, arguments);
             };
-            
+
             for (prop in method) {
                 if (method.hasOwnProperty(prop)) {
                     newMethod[prop] = method[prop];
                 }
             }
-            
+
             return newMethod;
         },
 
@@ -348,7 +348,7 @@ Ext.Function = (function() {
             }
             else {
                 returnValue = Ext.isDefined(returnValue) ? returnValue : null;
-                
+
                 return function() {
                     var me = this,
                         args = arguments;
@@ -378,7 +378,7 @@ Ext.Function = (function() {
          */
         createDelayed: function(fn, delay, scope, args, appendArgs) {
             var boundFn = fn;
-            
+
             if (scope || args) {
                 boundFn = Ext.Function.bind(fn, scope, args, appendArgs);
             }
@@ -387,7 +387,7 @@ Ext.Function = (function() {
                 var me = this,
                     args = slice.call(arguments),
                     timerFn, timerId;
-                
+
                 //<debug>
                 var timer; // eslint-disable-line vars-on-top, one-var
                 //</debug>
@@ -454,18 +454,18 @@ Ext.Function = (function() {
         defer: function(fn, millis, scope, args, appendArgs) {
             var timerId = 0,
                 timerFn, boundFn;
-            
+
             //<debug>
             var timer; // eslint-disable-line vars-on-top, one-var
             //</debug>
-            
+
             if (!scope && !args && !appendArgs) {
                 boundFn = fn;
             }
             else {
                 boundFn = Ext.Function.bind(fn, scope, args, appendArgs);
             }
-            
+
             if (millis > 0) {
                 timerFn = function() {
                     Ext.elevate(boundFn
@@ -491,7 +491,7 @@ Ext.Function = (function() {
             else {
                 boundFn();
             }
-            
+
             return timerId;
         },
 
@@ -525,13 +525,13 @@ Ext.Function = (function() {
          */
         interval: function(fn, millis, scope, args, appendArgs) {
             var timerFn, timerId, boundFn;
-            
+
             //<debug>
             var timer; // eslint-disable-line vars-on-top, one-var
             //</debug>
-            
+
             boundFn = Ext.Function.bind(fn, scope, args, appendArgs);
-            
+
             timerFn = function() {
                 Ext.elevate(boundFn
                             //<debug>
@@ -539,7 +539,7 @@ Ext.Function = (function() {
                             //</debug>
                 );
             };
-            
+
             timerId = setInterval(timerFn, millis);
 
             //<debug>
@@ -588,9 +588,9 @@ Ext.Function = (function() {
             else {
                 return function() {
                     var result = originalFn.apply(this, arguments);
-                    
+
                     newFn.apply(scope || this, arguments);
-                    
+
                     return result;
                 };
             }
@@ -619,7 +619,7 @@ Ext.Function = (function() {
                     var callArgs = args || slice.call(arguments, 0),
                         me = scope || this,
                         timerFn;
-                    
+
                     //<debug>
                     var timer; // eslint-disable-line vars-on-top, one-var
                     //</debug>
@@ -690,16 +690,16 @@ Ext.Function = (function() {
                         timerId = boundFn.timerId = null;
                         fn.apply(scope, callArgs);
                     };
-                    
+
                     //<debug>
                     timerFn.$origFn = fn.$origFn || fn;
                     timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
                     //</debug>
-                    
+
                     timerId = boundFn.timerId = ExtFunction.requestAnimationFrame(timerFn);
                 }
             };
-            
+
             return boundFn;
         },
 
@@ -777,7 +777,7 @@ Ext.Function = (function() {
                     lastCallTime = Ext.now();
                     lastArgs = timerId = null;
                 };
-            
+
             //<debug>
             execute.$origFn = fn.$origFn || fn;
             execute.$skipTimerCheck = execute.$origFn.$skipTimerCheck;
@@ -788,7 +788,7 @@ Ext.Function = (function() {
                 if (!scope) {
                     scope = this;
                 }
-                
+
                 elapsed = Ext.now() - lastCallTime;
                 lastArgs = Ext.Array.slice(arguments);
 
@@ -820,12 +820,12 @@ Ext.Function = (function() {
                     fn.apply(scope, arguments);
                 }
             };
-            
+
             //<debug>
             barrierFn.$origFn = fn.$origFn || fn;
             barrierFn.$skipTimerCheck = barrierFn.$origFn.$skipTimerCheck;
             //</debug>
-            
+
             return barrierFn;
         },
 
@@ -864,7 +864,7 @@ Ext.Function = (function() {
 
             return (object[methodName] = function() {
                 var ret = fn.apply(scope || this, arguments);
-                
+
                 method.apply(this, arguments);
 
                 return ret;
@@ -904,32 +904,32 @@ Ext.Function = (function() {
 
             return (object[methodName] = function() {
                 method.apply(this, arguments);
-                
+
                 return fn.apply(scope || this, arguments);
             });
         },
-        
+
         interceptAfterOnce: function(object, methodName, fn, scope) {
             var origMethod = object[methodName],
                 newMethod;
-            
+
             newMethod = function() {
                 var ret;
-                
+
                 if (origMethod) {
                     origMethod.apply(this, arguments);
                 }
-                
+
                 ret = fn.apply(scope || this, arguments);
-                
+
                 object[methodName] = origMethod;
                 object = methodName = fn = scope = origMethod = newMethod = null;
-                
+
                 return ret;
             };
-            
+
             object[methodName] = newMethod;
-            
+
             return newMethod;
         },
 
@@ -939,7 +939,7 @@ Ext.Function = (function() {
                 if (scope.$className) {
                     Ext.raise('No method "' + callback + '" on ' + scope.$className);
                 }
-                
+
                 Ext.raise('No method "' + callback + '"');
             }
             //</debug>
@@ -1059,15 +1059,15 @@ Ext.Function = (function() {
         ? function(fn, scope, parameters) {
             var boundFn = fn,
                 timerFn, timerId;
-            
+
             //<debug>
             var timer; // eslint-disable-line vars-on-top, one-var
             //</debug>
-            
+
             if (scope != null || parameters != null) {
                 boundFn = ExtFunction.bind(fn, scope, parameters);
             }
-            
+
             timerFn = function() {
                 Ext.elevate(boundFn
                             //<debug>
@@ -1077,7 +1077,7 @@ Ext.Function = (function() {
             };
 
             timerId = setImmediate(timerFn);
-            
+
             //<debug>
             timerFn.$origFn = fn.$origFn || fn;
             timerFn.$skipTimerCheck = timerFn.$origFn.$skipTimerCheck;
@@ -1088,21 +1088,21 @@ Ext.Function = (function() {
                 timerFn: timerFn
             });
             //</debug>
-            
+
             return timerId;
         }
         : function(fn, scope, parameters) {
             var boundFn = fn,
                 timerFn, timerId;
-            
+
             //<debug>
             var timer; // eslint-disable-line vars-on-top, one-var
             //</debug>
-                
+
             if (scope != null || parameters != null) {
                 boundFn = ExtFunction.bind(fn, scope, parameters);
             }
-            
+
             timerFn = function() {
                 Ext.elevate(boundFn
                             //<debug>
@@ -1123,7 +1123,7 @@ Ext.Function = (function() {
                 timerFn: timerFn
             });
             //</debug>
-            
+
             return timerId;
         };
 

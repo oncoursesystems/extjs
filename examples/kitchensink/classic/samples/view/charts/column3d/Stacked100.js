@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.charts.column3d.Stacked100', {
     xtype: 'column-stacked-100-3d',
     requires: ['Ext.chart.theme.Muted'],
     controller: 'column-stacked-100-3d',
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     otherContent: [{
@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.charts.column3d.Stacked100', {
         type: 'vbox',
         pack: 'center'
     },
-    // </example>
+    //</example>
     width: 650,
 
     items: [{
@@ -48,10 +48,12 @@ Ext.define('KitchenSink.view.charts.column3d.Stacked100', {
         store: {
             type: 'browsers'
         },
-        animation: Ext.isIE8 ? false : {
-            easing: 'backOut',
-            duration: 500
-        },
+        animation: Ext.isIE8
+            ? false
+            : {
+                easing: 'backOut',
+                duration: 500
+            },
         axes: [{
             type: 'numeric3d',
             position: 'left',

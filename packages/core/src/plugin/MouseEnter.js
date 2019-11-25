@@ -39,7 +39,7 @@ Ext.define('Ext.plugin.MouseEnter', {
     /**
      * @cfg {Object} [scope] The scope (`this` pointer) in which to execute the callback(s).
      */
-    
+
     /**
      * @cfg {Number} [delay] The time in milliseconds to wait before processing the mouse event.
      * This can prevent unwanted processing when the user swipes the mouse rapidly across
@@ -51,12 +51,12 @@ Ext.define('Ext.plugin.MouseEnter', {
         if (!this.delegate) {
             Ext.raise('mouseenter plugin must be configured with a delegate selector');
         }
-        
+
         if (!this.handler) {
             Ext.raise('mouseenter plugin must be configured with handler callback');
         }
         //</debug>
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             listeners = {

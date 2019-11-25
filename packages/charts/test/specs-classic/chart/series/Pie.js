@@ -49,16 +49,16 @@ function() {
                     }
                 });
             });
-            
+
             waitsFor(function() {
                 return layoutDone;
             });
-            
+
             runs(function() {
                 var series = chart.getSeries()[0];
-                
+
                 var labels = series.getSprites()[0].getMarker('labels');
-                
+
                 expect(labels.instances[0].hidden).toBe(false);
                 expect(labels.instances[1].hidden).toBe(false);
                 expect(labels.attr.hidden).toBe(true);
@@ -66,7 +66,7 @@ function() {
                 series.setLabel({
                     display: 'inside'
                 });
-                
+
                 expect(labels.instances[0].display).toBe('inside');
                 expect(labels.instances[1].display).toBe('inside');
                 expect(labels.instances[0].hidden).toBe(false);

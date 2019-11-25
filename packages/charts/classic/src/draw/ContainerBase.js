@@ -6,12 +6,12 @@ Ext.define('Ext.draw.ContainerBase', {
     extend: 'Ext.panel.Panel',
 
     requires: ['Ext.window.Window'],
-    
+
     /**
      * @cfg {String} previewTitleText The text to place in Preview Chart window title.
      */
     previewTitleText: 'Chart Preview',
-    
+
     /**
      * @cfg {String} previewAltText The text to place in the Preview image alt attribute.
      */

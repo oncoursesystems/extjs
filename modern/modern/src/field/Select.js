@@ -549,9 +549,7 @@ Ext.define('Ext.field.Select', {
 
         // We clear things differently vs superclass. The value of Select fields depends
         // upon the value collection.
-        me.forceInputChange = true;
-        me.setValue(null);
-        me.forceInputChange = false;
+        me.forceSetValue(null);
 
         me.syncEmptyState();
     },
@@ -619,7 +617,9 @@ Ext.define('Ext.field.Select', {
     },
 
     updateValue: function(value, oldValue) {
-        this.syncValue();
+        var me = this;
+
+        me.syncValue();
 
         // Note that we must not invoke superclass updateValue because that updates the
         // field UI in ways that SelectFields cannot handle.
@@ -627,7 +627,7 @@ Ext.define('Ext.field.Select', {
         // event and validates the value which we still need to happen.
         //
         // Do value change checks here
-        if (this.getMultiSelect()
+        if (me.getMultiSelect()
             ? (!value || !oldValue || !Ext.Array.equals(value, oldValue))
             : value !== oldValue) {
             Ext.field.Field.prototype.updateValue.call(this, value, oldValue);
@@ -1833,5 +1833,7 @@ Ext.define('Ext.field.Select', {
                 me.syncEmptyState();
             }
         }
-    }
+    },
+
+    rawToValue: Ext.emptyFn
 });

@@ -181,7 +181,7 @@ topSuite("Ext.form.action.Submit", ['Ext.form.Basic', 'Ext.form.field.*'], funct
                 action.run();
                 expect(ajaxRequestCfg.params).toEqual({ field1: 'foo', field2: 'bar', one: '1', two: '2', three: '3', four: '4' });
             });
-            
+
             it("should set the jsonData if using jsonSubmit", function() {
                 createAction({
                     form: formBase,
@@ -257,7 +257,7 @@ topSuite("Ext.form.action.Submit", ['Ext.form.Basic', 'Ext.form.field.*'], funct
 
         function run(response, form) {
             response = response || wantResponse;
-            
+
             spyOn(Ext.Ajax, 'request').andCallFake(function(config) {
                 // call the configured failure handler
                 config.failure.call(config.scope, response);
@@ -273,31 +273,31 @@ topSuite("Ext.form.action.Submit", ['Ext.form.Basic', 'Ext.form.field.*'], funct
 
         it("should set the Action's failureType property to CONNECT_FAILURE", function() {
             run();
-            
+
             expect(action.failureType).toEqual(Ext.form.action.Action.CONNECT_FAILURE);
         });
 
         it("should set the Action's response property to the ajax response", function() {
             run();
-            
+
             expect(action.response).toEqual(wantResponse);
         });
 
         it("should call the BasicForm's afterAction method with a false success param", function() {
             run();
-            
+
             expect(action.form.afterAction).toHaveBeenCalledWith(action, false);
         });
-        
+
         it("should not call afterAction if the form is destroying", function() {
             run(null, { destroying: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
-        
+
         it("should not call afterAction if the form is already destroyed", function() {
             run(null, { destroyed: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
     });
@@ -374,16 +374,16 @@ topSuite("Ext.form.action.Submit", ['Ext.form.Basic', 'Ext.form.field.*'], funct
             run({ responseText: '{"success":false,"errors":{"foo":"bar"}}' });
             expect(action.form.markInvalid).toHaveBeenCalledWith({ foo: "bar" });
         });
-        
+
         it("should not call afterAction if the form is destroying", function() {
             run({ responseText: '{"success":false}' }, { destroying: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
-        
+
         it("should not call afterAction if the form is already destroyed", function() {
             run({ responseText: '{"success":false}' }, { destroyed: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
     });
@@ -417,16 +417,16 @@ topSuite("Ext.form.action.Submit", ['Ext.form.Basic', 'Ext.form.field.*'], funct
             run({ responseText: '{"success":true,"data":{"from":"responseText"}}' });
             expect(action.form.afterAction).toHaveBeenCalledWith(action, true);
         });
-        
+
         it("should not call afterAction if the form is destroying", function() {
             run({ responseText: '{"success":true,"data":{"from":"responseText"}}' }, { destroying: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
-        
+
         it("should not call afterAction if the form is already destroyed", function() {
             run({ responseText: '{"success":true,"data":{"from":"responseText"}}' }, { destroyed: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
     });

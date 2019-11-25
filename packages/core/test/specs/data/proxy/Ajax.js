@@ -1,6 +1,6 @@
 topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
     var proxy;
-    
+
     function makeProxy(cfg) {
         cfg = cfg || {};
         cfg = Ext.applyIf(cfg, {
@@ -19,7 +19,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
         beforeEach(function() {
             makeProxy();
         });
-        
+
         it("should extend Ext.data.proxy.Server", function() {
             expect(proxy.superclass).toBe(Ext.data.proxy.Server.prototype);
         });
@@ -33,7 +33,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
             });
         });
     });
-    
+
     describe("parameters", function() {
         var ajax, operation;
 
@@ -43,18 +43,18 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
             });
             operation = new Ext.data.operation.Read();
         });
-        
+
         afterEach(function() {
             ajax = operation = null;
         });
-        
+
         describe("binary", function() {
             it("should default to binary false", function() {
                 makeProxy();
                 proxy.read(operation);
                 expect(ajax.binary).toBe(false);
             });
-            
+
             it("should pass binary when set on the proxy", function() {
                 makeProxy({
                     binary: true
@@ -63,14 +63,14 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 expect(ajax.binary).toBe(true);
             });
         });
-        
+
         describe("headers", function() {
             it("should default to no headers", function() {
                 makeProxy();
                 proxy.read(operation);
                 expect(ajax.headers).toBeUndefined();
             });
-            
+
             it("should pass headers", function() {
                 makeProxy({
                     headers: {
@@ -83,14 +83,14 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 });
             });
         });
-        
+
         describe("timeout", function() {
             it("should use the default timeout", function() {
                 makeProxy();
                 proxy.read(operation);
                 expect(ajax.timeout).toBe(proxy.getTimeout());
             });
-            
+
             it("should use a passed timeout", function() {
                 makeProxy({
                     timeout: 1000
@@ -99,14 +99,14 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 expect(ajax.timeout).toBe(1000);
             });
         });
-        
+
         describe("useDefaultXhrHeader", function() {
             it("should default to true", function() {
                 makeProxy();
                 proxy.read(operation);
                 expect(ajax.useDefaultXhrHeader).toBe(true);
             });
-            
+
             it("should pass along useDefaultXhrHeader", function() {
                 makeProxy({
                     useDefaultXhrHeader: true
@@ -115,14 +115,14 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 expect(ajax.useDefaultXhrHeader).toBe(true);
             });
         });
-        
+
         describe("withCredentials", function() {
             it("should default to false", function() {
                 makeProxy();
                 proxy.read(operation);
                 expect(ajax.withCredentials).toBe(false);
             });
-            
+
             it("should should pass the username/password", function() {
                 makeProxy({
                     withCredentials: true,
@@ -135,7 +135,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 expect(ajax.password).toBe('bar');
             });
         });
-        
+
         describe("paramsAsJson", function() {
             it("should always send as params when using get", function() {
                 proxy = new Ext.data.proxy.Ajax({
@@ -210,7 +210,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
             });
         });
     });
-    
+
     describe("request result", function() {
         var operation, request;
 
@@ -221,13 +221,13 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 responseText: Ext.isDefined(responseText) ? responseText : '{"success": true, "data": []}'
             });
         }
-        
+
         beforeEach(function() {
             Ext.define('spec.AjaxModel', {
                 extend: 'Ext.data.Model',
                 fields: ['id']
             });
-            
+
             MockAjaxManager.addMethods();
             operation = new Ext.data.operation.Read();
             makeProxy({
@@ -239,7 +239,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 }
             });
         });
-        
+
         afterEach(function() {
             request = operation = null;
             MockAjaxManager.removeMethods();
@@ -252,11 +252,11 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
             spyOn(proxy, 'afterRequest');
             complete(204, 'No Content', '');
             expect(operation.getResultSet()).toBe(Ext.data.reader.Reader.prototype.nullResultSet);
-            
+
             delete operation.destroy;
             operation.destroy();
         });
-        
+
         describe("successful request", function() {
             it("should call afterRequest with the request & the success status", function() {
                 request = proxy.read(operation);
@@ -264,7 +264,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 complete(200);
                 expect(proxy.afterRequest).toHaveBeenCalledWith(request, true);
             });
-            
+
             describe("reader success", function() {
                 it("should process the operation", function() {
                     proxy.read(operation);
@@ -272,7 +272,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                     complete(200);
                     expect(operation.process).toHaveBeenCalled();
                 });
-                
+
                 it("should not fire the exception event", function() {
                     var spy = jasmine.createSpy();
 
@@ -282,7 +282,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                     expect(spy).not.toHaveBeenCalled();
                 });
             });
-            
+
             describe("reader failure", function() {
                 it("should process the operation", function() {
                     spyOn(operation, 'process');
@@ -290,7 +290,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                     complete(200, '', '{"success": false}');
                     expect(operation.process).toHaveBeenCalled();
                 });
-                
+
                 it("should fire the exception event", function() {
                     var spy = jasmine.createSpy();
 
@@ -305,7 +305,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 });
             });
         });
-        
+
         describe("failed request", function() {
             it("should call afterRequest with the request & the success status", function() {
                 request = proxy.read(operation);
@@ -313,12 +313,12 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 complete(500);
                 expect(proxy.afterRequest).toHaveBeenCalledWith(request, false);
             });
-            
+
             describe("server error", function() {
                 beforeEach(function() {
                     proxy.read(operation);
                 });
-                
+
                 it("should set an exception on the operation", function() {
                     complete(500, 'failStatus');
                     expect(operation.wasSuccessful()).toBe(false);
@@ -328,7 +328,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                         response: jasmine.any(Object)
                     });
                 });
-                
+
                 it("should fire the exception event and pass the proxy, response & operation", function() {
                     var spy = jasmine.createSpy();
 
@@ -341,7 +341,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                     expect(args[2]).toBe(operation);
                 });
             });
-            
+
             describe("timeout", function() {
                 it("should set an exception on the operation", function() {
                     proxy.setTimeout(1);
@@ -349,7 +349,7 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                     waitsFor(function() {
                         return operation.isComplete();
                     }, "Operation never completed");
-                    
+
                     runs(function() {
                         expect(operation.wasSuccessful()).toBe(false);
                         expect(operation.getError()).toEqual({
@@ -359,19 +359,19 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                         });
                     });
                 });
-                
+
                 it("should fire the exception event and pass the proxy, response & operation", function() {
                     var spy = jasmine.createSpy();
 
                     proxy.on('exception', spy);
-                    
+
                     proxy.setTimeout(1);
                     request = proxy.read(operation);
-                    
+
                     waitsFor(function() {
                         return operation.isComplete();
                     }, "Operation never completed");
-                    
+
                     runs(function() {
                         var args = spy.mostRecentCall.args;
 
@@ -398,14 +398,14 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
         it("should return the HTTP method name for a given request", function() {
             expect(proxy.getMethod(request)).toBe('GET');
         });
-        
+
         it("should return a the default action method if the actionMethods property is overridden", function() {
             proxy.setActionMethods({
                 update: 'PUT'
             });
             expect(proxy.getMethod(request)).toBe('GET');
         });
-        
+
         it("should return a value when actionMethods is undefined/null", function() {
             proxy.setActionMethods(undefined);
             expect(proxy.getMethod(request)).toBe('GET');

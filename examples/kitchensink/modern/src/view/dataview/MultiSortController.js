@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.dataview.MultiSortController', {
 
     ready: false,
 
-    init: function () {
+    init: function() {
         this.ready = true; // skips updateSorters from button initialization
 
         this.updateStoreSorters();
@@ -14,12 +14,12 @@ Ext.define('KitchenSink.view.dataview.MultiSortController', {
      * Returns the array of Ext.util.Sorters defined by the current toolbar button order
      * @return {Array} The sorters
      */
-    getSorters: function () {
+    getSorters: function() {
         var view = this.getView(),
             buttons = view.query('dataview-multisort-sortbutton'),
             sorters = [];
 
-        Ext.each(buttons, function (button) {
+        Ext.each(buttons, function(button) {
             sorters.push({
                 property: button.getDataIndex(),
                 direction: button.getDirection()
@@ -33,10 +33,12 @@ Ext.define('KitchenSink.view.dataview.MultiSortController', {
      * @private
      * Updates the DataView's Store's sorters based on the current Toolbar button configuration
      */
-    updateStoreSorters: function () {
+    updateStoreSorters: function() {
+        var sorters, view;
+
         if (this.ready) {
-            var sorters = this.getSorters(),
-                view = this.lookup('dataview');
+            sorters = this.getSorters();
+            view = this.lookup('dataview');
 
             view.getStore().sort(sorters);
         }

@@ -22,7 +22,7 @@ Ext.define('Ext.grid.property.Store', {
      */
     constructor: function(grid, source) {
         var me = this;
-        
+
         me.grid = grid;
         me.source = source;
         me.callParent([{
@@ -95,7 +95,7 @@ Ext.define('Ext.grid.property.Store', {
     setValue: function(prop, value, create) {
         var me = this,
             rec = me.getRec(prop);
-            
+
         if (rec) {
             rec.set('value', value);
             me.source[prop] = value;

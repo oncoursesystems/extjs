@@ -234,7 +234,7 @@ Ext.define('Ext.layout.container.Auto', {
         this.callParent(arguments);
         this.initContextItems(ownerContext);
     },
-    
+
     beforeLayoutCycle: function(ownerContext) {
         var comp = this.owner,
             inheritedState = comp.inheritedState,
@@ -244,7 +244,7 @@ Ext.define('Ext.layout.container.Auto', {
             inheritedState = comp.getInherited(); // fixes both
             inheritedStateInner = comp.inheritedStateInner;
         }
-        
+
         if (ownerContext.widthModel.shrinkWrap) {
             inheritedStateInner.inShrinkWrapTable = true;
         }
@@ -336,7 +336,7 @@ Ext.define('Ext.layout.container.Auto', {
             state = ownerContext.state,
             containerSize = me.getContainerSize(ownerContext, true),
             calculatedItems;
-            
+
         // If subclass has a calculateItems method, call it and cache the result
         calculatedItems = state.calculatedItems ||
             (state.calculatedItems =
@@ -356,7 +356,7 @@ Ext.define('Ext.layout.container.Auto', {
                 return;
             }
         }
-        
+
         me.done = false;
     },
 
@@ -391,7 +391,7 @@ Ext.define('Ext.layout.container.Auto', {
             if (calcWidth && !ownerContext.setContentWidth(me.measureContentWidth(ownerContext))) {
                 me.done = false;
             }
-            
+
             // eslint-disable-next-line max-len
             if (calcHeight && !ownerContext.setContentHeight(me.measureContentHeight(ownerContext))) {
                 me.done = false;
@@ -423,7 +423,7 @@ Ext.define('Ext.layout.container.Auto', {
         yauto = (me.getOverflowYStyle(ownerContext) === 'auto');
 
         if (xauto || yauto) {
-            scrollbarSize = Ext.getScrollbarSize();
+            scrollbarSize = Ext.scrollbar.size();
             targetEl = ownerContext.overflowContext.el.dom;
             scrollbars = 0;
 
@@ -511,6 +511,7 @@ Ext.define('Ext.layout.container.Auto', {
             // the normal repaint() method doesn't seem to do the trick, but tweaking
             // the position property in combination with reading scrollWidth does.
             innerCt.setStyle('position', 'relative');
+            // eslint-disable-next-line no-unused-expressions
             innerCt.dom.scrollWidth;
             innerCt.setStyle('position', '');
         }
@@ -537,7 +538,7 @@ Ext.define('Ext.layout.container.Auto', {
         // We don't want to call getProp/hasProp et.al. unless we in fact need that value
         // for our results! If we call it and don't need it, the layout manager will think
         // we depend on it and will schedule us again should it change.
-        
+
         var size = this.callParent(arguments),
             overflowAdjust = ownerContext.state.overflowAdjust;
 
@@ -627,7 +628,7 @@ Ext.define('Ext.layout.container.Auto', {
 
     initLayout: function() {
         var me = this,
-            scrollbarWidth = Ext.getScrollbarSize().width,
+            scrollbarWidth = Ext.scrollbar.width(),
             owner = me.owner;
 
         me.callParent();
@@ -663,7 +664,7 @@ Ext.define('Ext.layout.container.Auto', {
 
     measureContentWidth: function(ownerContext) {
         var dom, style, old, contentWidth, target;
-            
+
         // In the newer Chrome versions, it won't measure the
         // width correctly without repainting the inner
         // cell in some circumstances.
@@ -671,9 +672,10 @@ Ext.define('Ext.layout.container.Auto', {
             dom = this.innerCt.dom;
             style = dom.style;
             old = style.display;
-            
+
             if (old === 'table-cell') {
                 style.display = '';
+                // eslint-disable-next-line no-unused-expressions
                 dom.offsetWidth;
                 style.display = old;
             }
@@ -688,6 +690,7 @@ Ext.define('Ext.layout.container.Auto', {
             dom = this.outerCt.dom;
             style = dom.style;
             style.display = 'table-cell';
+            // eslint-disable-next-line no-unused-expressions
             dom.offsetWidth;
             dom.style.display = '';
         }
@@ -736,7 +739,7 @@ Ext.define('Ext.layout.container.Auto', {
             targetEl = me.getTarget(),
             overflowXStyle = me.getOverflowXStyle(ownerContext),
             canOverflowX = (overflowXStyle === 'auto' || overflowXStyle === 'scroll'),
-            scrollbarSize = Ext.getScrollbarSize(),
+            scrollbarSize = Ext.scrollbar.size(),
             needsOuterHeight, needsInnerHeight;
 
         if (height && !ownerContext.heightModel.shrinkWrap) {
@@ -764,7 +767,7 @@ Ext.define('Ext.layout.container.Auto', {
                 ownerContext.outerCtContext.setProp('height', height + padding.height);
                 me.hasOuterCtPxHeight = true;
             }
-            
+
             if (needsInnerHeight) {
                 ownerContext.innerCtContext.setProp('height', height);
                 me.hasInnerCtPxHeight = true;
@@ -784,7 +787,7 @@ Ext.define('Ext.layout.container.Auto', {
 
 }, function(Cls) {
     var v = Ext.chromeVersion;
-    
+
     // This was likely fixed much earlier, on the bug tracker marked as fixed on 2014/04/01.
     // 34 was the most recently released version after this date. Google doesn't release older
     // versions to test on so it's not possible to say. However due to the auto update nature it's

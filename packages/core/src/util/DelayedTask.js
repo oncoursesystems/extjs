@@ -49,16 +49,21 @@ Ext.util.DelayedTask = function(fn, scope, args, cancelOnDelay, fireIdleEvent) {
         delay,
         call = function() {
             me.id = null;
-            
+
             if (!(scope && scope.destroyed)) {
-                args ? fn.apply(scope, args) : fn.call(scope);
+                if (args) {
+                    fn.apply(scope, args);
+                }
+                else {
+                    fn.call(scope);
+                }
             }
-            
+
             if (fireIdleEvent === false) {
                 Ext._suppressIdle = true;
             }
         };
-    
+
     //<debug>
     // DelayedTask can be called with no function upfront
     if (fn) {
@@ -96,23 +101,23 @@ Ext.util.DelayedTask = function(fn, scope, args, cancelOnDelay, fireIdleEvent) {
         if (cancelOnDelay) {
             me.cancel();
         }
-        
+
         if (typeof newDelay === 'number') {
             delay = newDelay;
         }
-        
+
         fn = newFn || fn;
         scope = newScope || scope;
         args = newArgs || args;
         me.delayTime = delay;
-        
+
         //<debug>
         if (fn) {
             call.$origFn = fn.$origFn || fn;
             call.$skipTimerCheck = call.$origFn.$skipTimerCheck;
         }
         //</debug>
-        
+
         if (!me.id) {
             if (delay === -1) {
                 me.id = Ext.raf(call);
@@ -121,7 +126,7 @@ Ext.util.DelayedTask = function(fn, scope, args, cancelOnDelay, fireIdleEvent) {
                 me.id = Ext.defer(call, delay || 1);  // 0 == immediate call
             }
         }
-        
+
         return me.id;
     };
 
@@ -143,7 +148,7 @@ Ext.util.DelayedTask = function(fn, scope, args, cancelOnDelay, fireIdleEvent) {
 
     me.flush = function() {
         var was;
-        
+
         if (me.id) {
             me.cancel();
 
@@ -157,7 +162,7 @@ Ext.util.DelayedTask = function(fn, scope, args, cancelOnDelay, fireIdleEvent) {
             fireIdleEvent = was;
         }
     };
-    
+
     /**
      * @private
      * Cancel the timeout if it was set for the specified fn and scope.

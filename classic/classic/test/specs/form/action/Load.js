@@ -147,13 +147,12 @@ topSuite("Ext.form.action.Load", function() {
         });
     });
 
-
     describe("ajax request error", function() {
         var wantResponse = { responseText: '{}' };
 
         function run(response, form) {
             response = response || wantResponse;
-            
+
             spyOn(Ext.Ajax, 'request').andCallFake(function(config) {
                 // call the configured failure handler
                 config.failure.call(config.scope, response);
@@ -168,35 +167,35 @@ topSuite("Ext.form.action.Load", function() {
 
         it("should set the Action's failureType property to CONNECT_FAILURE", function() {
             run();
-            
+
             expect(action.failureType).toEqual(Ext.form.action.Action.CONNECT_FAILURE);
         });
 
         it("should set the Action's response property to the ajax response", function() {
             run();
-            
+
             expect(action.response).toEqual(wantResponse);
         });
 
         it("should call the BasicForm's afterAction method with a false success param", function() {
             run();
-            
+
             expect(action.form.afterAction).toHaveBeenCalledWith(action, false);
         });
-        
+
         it("should not call afterAction if the form is destroying", function() {
             run(null, { destroying: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
-        
+
         it("should not call afterAction if the form is already destroyed", function() {
             run(null, { destroyed: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
     });
-    
+
     describe("load failure", function() {
 
         function run(response, form) {
@@ -235,20 +234,19 @@ topSuite("Ext.form.action.Load", function() {
             run({ responseText: '{"success":true}' });
             expect(action.failureType).toBeDefined();
         });
-        
+
         it("should not call afterAction if the form is destroying", function() {
             run({}, { destroying: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
-        
+
         it("should not call afterAction if the form is already destroyed", function() {
             run({}, { destroyed: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
     });
-
 
     describe("load success", function() {
         function run(response, reader, form) {
@@ -301,16 +299,16 @@ topSuite("Ext.form.action.Load", function() {
             expect(action.form.reader.read).toHaveBeenCalledWith(response);
             expect(action.form.setValues).toHaveBeenCalledWith({ from: "reader" });
         });
-        
+
         it("should not call afterAction if the form is destroying", function() {
             run({ responseText: '{"success":true,"data":{"from":"responseText"}}' }, undefined, { destroying: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
-        
+
         it("should not call afterAction if the form is already destroyed", function() {
             run({ responseText: '{"success":true,"data":{"from":"responseText"}}' }, undefined, { destroyed: true });
-            
+
             expect(action.form.afterAction).not.toHaveBeenCalled();
         });
     });

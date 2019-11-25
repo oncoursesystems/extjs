@@ -3,7 +3,7 @@ Ext.define('KitchenSink.view.pivot.PivotRowModel', {
     alias: 'viewmodel.pivot-row-model',
 
     formulas: {
-        rowStyle: function (get) {
+        rowStyle: function(get) {
             var isGrandTotal = get('record.isRowGrandTotal'),
                 isHeader = get('record.isRowGroupHeader'),
                 isFooter = get('record.isRowGroupTotal'),
@@ -11,9 +11,11 @@ Ext.define('KitchenSink.view.pivot.PivotRowModel', {
 
             if (isGrandTotal) {
                 cls = 'pivotRowGrandTotal';
-            } else if (isHeader) {
+            }
+            else if (isHeader) {
                 cls = 'pivotRowHeader';
-            } else if (isFooter) {
+            }
+            else if (isFooter) {
                 cls = 'pivotRowTotal';
             }
 

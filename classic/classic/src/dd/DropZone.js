@@ -88,7 +88,7 @@ Ext.define('Ext.dd.DropZone', {
      * @param {Object} data An object containing arbitrary data supplied by the drag source
      */
     onNodeEnter: function(nodeData, source, e, data) {
-        
+
     },
 
     /**
@@ -121,7 +121,7 @@ Ext.define('Ext.dd.DropZone', {
      * @template
      */
     onNodeOut: function(nodeData, source, e, data) {
-        
+
     },
 
     /**

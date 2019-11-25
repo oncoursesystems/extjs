@@ -258,12 +258,12 @@ Ext.Loader = (new function() {
         classesLoading: {},
         missingCount: 0,
         missingQueue: {},
-        
+
         /**
          * @private
          */
         syncModeEnabled: false,
-        
+
         init: function() {
             // initalize the default path of the framework
             var scripts = document.getElementsByTagName('script'),
@@ -283,7 +283,6 @@ Ext.Loader = (new function() {
             }
             //</debug>
 
-            
             if (!Manager.getPath("Ext")) {
                 Manager.setPath('Ext', path + 'src');
             }
@@ -293,15 +292,15 @@ Ext.Loader = (new function() {
                 Ext._classPathMetadata = null;
                 Loader.addClassPathMappings(meta);
             }
-            
+
             if (manifest) {
                 loadOrder = manifest.loadOrder;
-                
+
                 // if the manifest paths were calculated as relative to the 
                 // bootstrap file, then we need to prepend Boot.baseUrl to the
                 // paths before processing
                 baseUrl = Ext.Boot.baseUrl;
-                
+
                 if (loadOrder && manifest.bootRelative) {
                     for (loadlen = loadOrder.length, l = 0; l < loadlen; l++) {
                         loadItem = loadOrder[l];
@@ -310,10 +309,10 @@ Ext.Loader = (new function() {
                     }
                 }
             }
-            
+
             if (microloader) {
                 Ready.block();
-                
+
                 microloader.onMicroloaderReady(function() {
                     Ready.unblock();
                 });
@@ -389,7 +388,7 @@ Ext.Loader = (new function() {
         setPath: function() {
             // Paths are an Ext.Inventory thing and ClassManager is an instance of that:
             Manager.setPath.apply(Manager, arguments);
-            
+
             return Loader;
         },
 
@@ -402,7 +401,7 @@ Ext.Loader = (new function() {
         addClassPathMappings: function(paths) {
             // Paths are an Ext.Inventory thing and ClassManager is an instance of that:
             Manager.setPath(paths);
-            
+
             return Loader;
         },
 
@@ -413,11 +412,11 @@ Ext.Loader = (new function() {
          */
         addBaseUrlClassPathMappings: function(pathConfig) {
             var name;
-            
+
             for (name in pathConfig) {
                 pathConfig[name] = Boot.baseUrl + pathConfig[name];
             }
-            
+
             Ext.Loader.addClassPathMappings(pathConfig);
         },
 
@@ -461,7 +460,7 @@ Ext.Loader = (new function() {
 
         require: function(expressions, fn, scope, excludes) {
             var classNames;
-            
+
             if (excludes) {
                 return Loader.exclude(excludes).require(expressions, fn, scope);
             }
@@ -501,7 +500,7 @@ Ext.Loader = (new function() {
             });
 
             selector.exclude(excludes);
-            
+
             return selector;
         },
 
@@ -512,7 +511,7 @@ Ext.Loader = (new function() {
                     // the requires class(es) from the names we are given.
                     callback = Loader.makeLoadCallback(classNames, callback);
                 }
-                
+
                 callback = callback.bind(scope || Ext.global);
             }
 
@@ -523,32 +522,32 @@ Ext.Loader = (new function() {
                 urlByClass = {},
                 numClasses = classNames.length,
                 className, i, numMissing;
-            
+
             for (i = 0; i < numClasses; ++i) {
                 className = Manager.resolveName(classNames[i]);
-                
+
                 if (!Manager.isCreated(className)) {
                     missingClassNames.push(className);
-                    
+
                     if (!state[className]) {
                         urlByClass[className] = Loader.getPath(className);
                         urls.push(urlByClass[className]);
                     }
                 }
             }
-            
+
             // If the dynamic dependency feature is not being used, throw an error
             // if the dependencies are not defined
             numMissing = missingClassNames.length;
-            
+
             if (numMissing) {
                 Loader.missingCount += numMissing;
-                
+
                 Manager.onCreated(function() {
                     if (callback) {
                         Ext.callback(callback, scope, arguments);
                     }
-                    
+
                     Loader.checkReady();
                 }, Loader, missingClassNames);
 
@@ -578,13 +577,13 @@ Ext.Loader = (new function() {
                 if (callback) {
                     callback.call(scope);
                 }
-                
+
                 // need to call checkReady here, as the _missingCoun
                 // may have transitioned from 0 to > 0, meaning we
                 // need to block ready
                 Loader.checkReady();
             }
-            
+
             if (Loader.syncModeEnabled) {
                 // Class may have been just loaded or was already loaded
                 if (numClasses === 1) {
@@ -607,7 +606,7 @@ Ext.Loader = (new function() {
                 return callback.apply(this, classes);
             };
         },
-        
+
         onLoadFailure: function(request) {
             var options = this,
                 entries = request.entries || [],
@@ -620,13 +619,13 @@ Ext.Loader = (new function() {
             if (onError) {
                 for (i = 0; i < entries.length; i++) {
                     entry = entries[i];
-                    
+
                     if (entry.error) {
                         error = new Error('Failed to load: ' + entry.url);
                         break;
                     }
                 }
-                
+
                 error = error || new Error('Failed to load');
                 onError.call(options.userScope, options, error, request);
             }
@@ -647,21 +646,21 @@ Ext.Loader = (new function() {
                 state = Manager.classState,
                 missingQueue = Loader.missingQueue,
                 className, i, len;
-            
+
             --Loader.scriptsLoading;
-            
+
             if (onLoad) {
                 // TODO: need an adapter to convert to v4 onLoad signatures
                 onLoad.call(options.userScope, options);
                 // onLoad can cause more loads to start, so it must run first
             }
-            
+
             // classNames is the array of *all* classes that load() was asked to load,
             // including those that might have been already loaded but not yet created.
             // urlByClass is a map of only those classes that we asked Boot to load.
             for (i = 0, len = classNames.length; i < len; i++) {
                 className = classNames[i];
-                
+
                 // When a script is loaded and executed, we should have Ext.define() called
                 // for at least one of the classes in the list, which will set the state
                 // for that class. That by itself does not mean that the class is available
@@ -674,7 +673,7 @@ Ext.Loader = (new function() {
                     missingQueue[className] = urlByClass[className];
                 }
             }
-            
+
             Loader.checkReady();
         },
 
@@ -719,7 +718,7 @@ Ext.Loader = (new function() {
          */
         onReady: function(fn, scope, withDomReady, options) {
             var listener;
-            
+
             if (withDomReady) {
                 Ready.on(fn, scope, options);
             }
@@ -744,10 +743,10 @@ Ext.Loader = (new function() {
 
             if (classes) {
                 classes = (typeof classes === 'string') ? [classes] : classes;
-                
+
                 for (i = 0, ln = classes.length; i < ln; i++) {
                     cls = classes[i];
-                    
+
                     if (typeof cls === 'string' && !Ext.Array.contains(usedClasses, cls)) {
                         usedClasses.push(cls);
                     }
@@ -812,7 +811,7 @@ Ext.Loader = (new function() {
                 isInHistory[className] = true;
                 history.push(className);
             }
-            
+
             return Loader;
         },
 
@@ -827,9 +826,9 @@ Ext.Loader = (new function() {
                 loadOrder = manifest && manifest.loadOrder,
                 loadOrderMap = manifest && manifest.loadOrderMap,
                 options;
-            
+
             ++Loader.scriptsLoading;
-            
+
             // if the load order map hasn't been created, create it now 
             // and cache on the manifest
             if (loadOrder && !loadOrderMap) {
@@ -863,7 +862,7 @@ Ext.Loader = (new function() {
          */
         loadScriptsSync: function(urls) {
             var syncwas = Loader.syncModeEnabled;
-            
+
             Loader.syncModeEnabled = true;
             Loader.loadScripts({ url: urls });
             Loader.syncModeEnabled = syncwas;
@@ -876,12 +875,12 @@ Ext.Loader = (new function() {
          */
         loadScriptsSyncBasePrefix: function(urls) {
             var syncwas = Loader.syncModeEnabled;
-            
+
             Loader.syncModeEnabled = true;
             Loader.loadScripts({ url: urls, prependBaseUrl: true });
             Loader.syncModeEnabled = syncwas;
         },
-        
+
         /**
          * Loads the specified script URL and calls the supplied callbacks. If this method
          * is called before {@link Ext#isReady}, the script's load will delay the transition
@@ -921,7 +920,7 @@ Ext.Loader = (new function() {
                 newQueue = {},
                 missing = 0,
                 name;
-            
+
             for (name in missingQueue) {
                 // If class state is available for the name, that means ClassManager
                 // is tracking it and will fire callback when it is created.
@@ -931,7 +930,7 @@ Ext.Loader = (new function() {
                     missing++;
                 }
             }
-            
+
             Loader.missingCount = missing;
             Loader.missingQueue = newQueue;
         },
@@ -945,7 +944,7 @@ Ext.Loader = (new function() {
 
             Loader.checkMissingQueue();
             isLoading = Loader.missingCount + Loader.scriptsLoading;
-            
+
             if (isLoading && !wasLoading) {
                 Ready.block();
                 Loader.isLoading = !!isLoading;
@@ -960,10 +959,10 @@ Ext.Loader = (new function() {
                 // for a bit then check if things are still stuck.
                 Ext.defer(function() {
                     var name;
-                    
+
                     if (!Loader.scriptsLoading && Loader.missingCount) {
                         Ext.log.error('[Loader] The following classes failed to load:');
-                        
+
                         for (name in Loader.missingQueue) {
                             Ext.log.error('[Loader] ' + name + ' from ' +
                                 Loader.missingQueue[name]);
@@ -1032,10 +1031,11 @@ Ext.Loader = (new function() {
      */
     Class.registerPreprocessor('loader', function(cls, data, hooks, continueFn) {
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(cls, 'Ext.Loader#loaderPreprocessor', arguments);
+        }
         //</debug>
-        
+
         /* eslint-disable-next-line vars-on-top */
         var me = this,
             dependencies = [],
@@ -1100,7 +1100,7 @@ Ext.Loader = (new function() {
         if (dependencies.length === 0) {
             return;
         }
-        
+
         if (className) {
             _requiresMap[className] = dependencies;
         }
@@ -1148,7 +1148,7 @@ Ext.Loader = (new function() {
 
                     for (i = 0, ln = requires.length; i < ln; i++) {
                         dep = requires[i];
-                        
+
                         if (!isInHistory[dep]) {
                             detectDeadlock(requires[i]);
                         }
@@ -1162,7 +1162,7 @@ Ext.Loader = (new function() {
 
         (className ? Loader.exclude(className) : Loader).require(dependencies, function() {
             var i, ln, j, subLn, k;
-            
+
             for (i = 0, ln = dependencyProperties.length; i < ln; i++) {
                 propertyName = dependencyProperties[i];
 
@@ -1224,10 +1224,11 @@ Ext.Loader = (new function() {
             classNames;
 
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(cls, 'Ext.Loader#usesPostprocessor', arguments);
+        }
         //</debug>
-        
+
         if (uses) {
             classNames = Manager.getNamesByExpression(data.uses);
             Loader.addUsedClasses(classNames);

@@ -39,7 +39,7 @@ Ext.define('Ext.layout.container.Fit', {
      */
     itemCls: Ext.baseCSSPrefix + 'fit-item',
     type: 'fit',
-   
+
     manageMargins: true,
 
     sizePolicies: [
@@ -172,7 +172,7 @@ Ext.define('Ext.layout.container.Fit', {
             );
 
             if (scrollbars) {
-                scrollbarSize = Ext.getScrollbarSize();
+                scrollbarSize = Ext.scrollbar.size();
 
                 if (scrollbars & 1) {
                     // if we need the hscrollbar, remove its height
@@ -200,7 +200,7 @@ Ext.define('Ext.layout.container.Fit', {
 
         if (shrinkWrapHeight || shrinkWrapWidth) {
             padding = ownerContext.targetContext.getPaddingInfo();
-            
+
             if (shrinkWrapWidth) {
                 if (overflowY && !containerSize.gotHeight) {
                     // if we might overflow vertically and don't have the container height,
@@ -312,7 +312,7 @@ Ext.define('Ext.layout.container.Fit', {
         if (info.ownerContext.heightModel.shrinkWrap) {
             // contentHeight must include the margins to be consistent with setItemHeight
             height = itemContext.getProp('height') + info.margins.height;
-            
+
             // because we add margins, height will be NaN or a number (not undefined)
             contentHeight = info.contentHeight;
 

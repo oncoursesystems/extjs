@@ -1,15 +1,15 @@
 topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'], function() {
     var ct, c, makeCt;
-    
+
     afterEach(function() {
         Ext.destroy(ct, c);
         ct = c = makeCt = null;
     });
-    
+
     describe("defaults", function() {
         var counter = 0,
             proto = Ext.layout.container.VBox.prototype;
-        
+
         beforeEach(function() {
             // We only need to create a layout instance once to wire up configs
             if (!counter) {
@@ -19,27 +19,27 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     width: 100,
                     height: 100
                 });
-                
+
                 counter++;
             }
         });
-        
+
         it("should have align: begin", function() {
             expect(proto.align).toBe('begin');
         });
-        
+
         it("should have constrainAlign: false", function() {
             expect(proto.constrainAlign).toBe(false);
         });
-        
+
         it("should have enableSplitters: true", function() {
             expect(proto.enableSplitters).toBe(true);
         });
-        
+
         it("should have no padding", function() {
             expect(proto.padding).toBe(0);
         });
-        
+
         it("should have pack start", function() {
             expect(proto.pack).toBe('start');
         });
@@ -50,7 +50,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
             c = new Ext.Component({
                 height: 50
             });
-            
+
             ct = new Ext.container.Container({
                 renderTo: Ext.getBody(),
                 layout: 'vbox',
@@ -60,19 +60,19 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     height: 50
                 }, c]
             });
-            
+
             var other = new Ext.container.Container({
                 renderTo: Ext.getBody(),
                 layout: 'fit',
                 width: 100,
                 height: 100
             });
-            
+
             ct.remove(c, false);
             other.add(c);
-            
+
             var top = c.getEl().getStyle('top');
-            
+
             // Normalize top value
             if (top === 'auto') {
                 top = '';
@@ -82,10 +82,10 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
             }
 
             expect(top).toBe('');
-            
+
             other.destroy();
         });
-        
+
         it("should remove an item when the item is not rendered and the item is not destroying", function() {
             ct = new Ext.container.Container({
                 renderTo: Ext.getBody(),
@@ -94,10 +94,10 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 width: 100,
                 height: 100
             });
-            
+
             // When adding the item to the collapsed panel, it won't render
             c = ct.add({});
-            
+
             expect(function() {
                 ct.remove(0, false);
             }).not.toThrow();
@@ -124,7 +124,6 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 });
             };
         });
-
 
         it("should not add any padding by default", function() {
             makeCt(0);
@@ -167,7 +166,6 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
             };
         });
 
-
         it("should not add any padding by default", function() {
             makeCt(0);
             expect(ct.layout.innerCt.getHeight()).toBe(100);
@@ -200,17 +198,17 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
             },
             items: [{}, {}]
         });
-        
+
         expect(ct.items.first().getY()).toBe(5);
         expect(ct.items.first().getX()).toBe(5);
-        
+
         expect(ct.items.last().getY()).toBe(105);
         expect(ct.items.last().getX()).toBe(5);
     });
-    
+
     describe("pack", function() {
         var getY;
-        
+
         beforeEach(function() {
             makeCt = function(pack) {
                 ct = new Ext.container.Container({
@@ -231,30 +229,30 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     }]
                 });
             };
-            
+
             getY = function(index) {
                 return ct.items.getAt(index).el.getY();
             };
         });
-        
+
         afterEach(function() {
             getY = null;
         });
-        
+
         it("should pack at the top with pack: start", function() {
             makeCt('start');
             expect(getY(0)).toBe(0);
             expect(getY(1)).toBe(30);
             expect(getY(2)).toBe(70);
         });
-        
+
         it("should pack in the middle with pack: center", function() {
             makeCt('center');
             expect(getY(0)).toBe(255);
             expect(getY(1)).toBe(285);
             expect(getY(2)).toBe(325);
         });
-        
+
         it("should pack at the bottom with pack: cend", function() {
             makeCt('end');
             expect(getY(0)).toBe(510);
@@ -262,10 +260,10 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
             expect(getY(2)).toBe(580);
         });
     });
-    
+
     describe("align", function() {
         var getX, getY, getWidth, getHeight;
-        
+
         beforeEach(function() {
             makeCt = function(align, items, options) {
                 options = options || {};
@@ -283,30 +281,30 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     items: items
                 });
             };
-            
+
             getX = function(index) {
                 return ct.items.getAt(index).getEl().getX();
             };
-            
+
             getY = function(index) {
                 return ct.items.getAt(index).getEl().getY();
             };
-            
+
             getWidth = function(index) {
                 return ct.items.getAt(index).getWidth();
             };
-            
+
             getHeight = function(index) {
                 return ct.items.getAt(index).getHeight();
             };
         });
-        
+
         afterEach(function() {
             getX = getY = getWidth = getHeight = null;
         });
-        
+
         describe("left/center/right", function() {
-        
+
             it("should keep items at the left when using align: left", function() {
                 makeCt('left', [{
                     html: 'a'
@@ -316,7 +314,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getX(0)).toBe(0);
                 expect(getX(1)).toBe(0);
             });
-        
+
             it("should align items in the middle when using align: center", function() {
                 makeCt('center', [{
                     width: 100
@@ -326,7 +324,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getX(0)).toBe(250);
                 expect(getX(1)).toBe(150);
             });
-        
+
             it("should keep items to the right when using align: right", function() {
                 makeCt('right', [{
                     html: 'a'
@@ -336,19 +334,19 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getX(0)).toBe(600 - getWidth(0));
                 expect(getX(1)).toBe(600 - getWidth(1));
             });
-            
+
             describe("constrainAlign", function() {
                 var makeLongString = function(c, len) {
                     var out = [],
                         i = 0;
-                        
+
                     for (; i < len; ++i) {
                         out.push(c);
                     }
 
                     return out.join(' ');
                 };
-                
+
                 it("should constrain a shrink wrapped item with align: left", function() {
                     makeCt('left', [{
                         html: makeLongString('A', 100)
@@ -358,7 +356,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     expect(getWidth(0)).toBe(600);
                     expect(getX(0)).toBe(0);
                 });
-                
+
                 it("should constrain a shrink wrapped item with align: center", function() {
                     makeCt('center', [{
                         html: makeLongString('A', 100)
@@ -368,7 +366,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     expect(getWidth(0)).toBe(600);
                     expect(getX(0)).toBe(0);
                 });
-                
+
                 it("should constrain a shrink wrapped item with align: right", function() {
                     makeCt('center', [{
                         html: makeLongString('A', 100)
@@ -378,7 +376,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     expect(getWidth(0)).toBe(600);
                     expect(getX(0)).toBe(0);
                 });
-                
+
                 it("should not constrain a fixed width item", function() {
                     makeCt('left', [{
                         html: 'A',
@@ -388,7 +386,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     });
                     expect(getWidth(0)).toBe(1000);
                 });
-                
+
                 it("should recalculate the top positions", function() {
                     makeCt('left', [{
                         html: makeLongString('A', 100)
@@ -397,15 +395,15 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     }], {
                         constrainAlign: true
                     });
-                    
+
                     expect(getY(0)).toBe(0);
                     expect(getY(1)).toBe(getHeight(0));
                 });
             });
         });
-        
+
         describe("stretchmax", function() {
-        
+
             it("should stretch all items to the size of the largest when using align: stretchmax", function() {
                 makeCt('stretchmax', [{
                     html: 'foo'
@@ -414,22 +412,22 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 }, {
                     html: 'foo'
                 }]);
-            
+
                 c = new Ext.Component({
                     renderTo: Ext.getBody(),
                     html: 'foo bar baz',
                     floating: true
                 });
-            
+
                 var expected = c.getWidth();
 
                 c.destroy();
-            
+
                 expect(getWidth(0)).toBe(expected);
                 expect(getWidth(1)).toBe(expected);
                 expect(getWidth(2)).toBe(expected);
             });
-            
+
             it("should always use a stretchmax over a fixed width", function() {
                 makeCt('stretchmax', [{
                     width: 30
@@ -438,22 +436,22 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 }, {
                     html: 'foo'
                 }]);
-            
+
                 c = new Ext.Component({
                     renderTo: Ext.getBody(),
                     html: 'foo bar baz blah long text',
                     floating: true
                 });
-            
+
                 var expected = c.getWidth();
 
                 c.destroy();
-            
+
                 expect(getWidth(0)).toBe(expected);
                 expect(getWidth(1)).toBe(expected);
                 expect(getWidth(2)).toBe(expected);
             });
-            
+
             describe("minWidth", function() {
                 it("should stretch an item with a minWidth", function() {
                     makeCt('stretchmax', [{
@@ -464,7 +462,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     expect(getWidth(0)).toBe(30);
                     expect(getWidth(1)).toBe(30);
                 });
-                
+
                 it("should stretch to the item with the largest minWidth", function() {
                     makeCt('stretchmax', [{
                         minWidth: 30
@@ -474,7 +472,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     expect(getWidth(0)).toBe(50);
                     expect(getWidth(1)).toBe(50);
                 });
-                
+
                 it("should stretch a single item outside the bounds of the container", function() {
                     makeCt('stretchmax', [{
                         xtype: 'panel',
@@ -489,7 +487,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     expect(getWidth(0)).toBe(1000);
                 });
             });
-            
+
             it("should respect a maxWidth", function() {
                 makeCt('stretchmax', [{
                     width: 30
@@ -500,7 +498,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getWidth(1)).toBe(20);
             });
         });
-        
+
         it("should stretch all items to the container width", function() {
             makeCt('stretch', [{
              }, {
@@ -509,10 +507,10 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
             expect(getWidth(1)).toBe(600);
         });
     });
-    
+
     describe("height", function() {
         var getHeight;
-        
+
         beforeEach(function() {
             makeCt = function(items) {
                 ct = new Ext.container.Container({
@@ -527,16 +525,16 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     items: items
                 });
             };
-            
+
             getHeight = function(index) {
                 return ct.items.getAt(index).getHeight();
             };
         });
-        
+
         afterEach(function() {
             getHeight = null;
         });
-        
+
         describe("flex only", function() {
             it("should stretch a single flex item to the height of the container", function() {
                 makeCt({
@@ -544,7 +542,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 });
                 expect(getHeight(0)).toBe(600);
             });
-        
+
             it("should stretch 3 equally flexed items equally", function() {
                 makeCt([{
                     flex: 1
@@ -557,7 +555,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(1)).toBe(200);
                 expect(getHeight(2)).toBe(200);
             });
-            
+
             it("should flex 2 items according to ratio", function() {
                 makeCt([{
                     flex: 3
@@ -567,7 +565,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(0)).toBe(450);
                 expect(getHeight(1)).toBe(150);
             });
-            
+
             it("should flex 4 items according to ratio", function() {
                 makeCt([{
                     flex: 3
@@ -583,7 +581,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(2)).toBe(225);
                 expect(getHeight(3)).toBe(75);
             });
-            
+
             it("should use flex as a ratio", function() {
                 makeCt([{
                     flex: 5000000
@@ -594,7 +592,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(1)).toBe(100);
             });
         });
-        
+
         describe("fixed height only", function() {
             it("should set the height of a single item", function() {
                 makeCt({
@@ -602,7 +600,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 });
                 expect(getHeight(0)).toBe(200);
             });
-            
+
             it("should set the height of multiple items", function() {
                 makeCt([{
                     height: 500
@@ -612,14 +610,14 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(0)).toBe(500);
                 expect(getHeight(1)).toBe(50);
             });
-            
+
             it("should allow a single item to exceed the container height", function() {
                 makeCt({
                     height: 900
                 });
                 expect(getHeight(0)).toBe(900);
             });
-            
+
             it("should allow multiple items to exceed the container height", function() {
                 makeCt([{
                     height: 400
@@ -641,7 +639,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(0)).toBe(300);
                 expect(getHeight(1)).toBe(300);
             });
-            
+
             it("should work with fixed height", function() {
                 makeCt([{
                     height: 100
@@ -654,7 +652,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(1)).toBe(120);
                 expect(getHeight(2)).toBe(380);
             });
-            
+
             it("should work with flex", function() {
                 makeCt([{
                     flex: 2
@@ -668,7 +666,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(2)).toBe(120);
             });
         });
-        
+
         describe("mixed", function() {
             it("should give any remaining space to a single flexed item", function() {
                 makeCt([{
@@ -679,7 +677,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(0)).toBe(200);
                 expect(getHeight(1)).toBe(400);
             });
-            
+
             it("should flex a single item with 2 fixed", function() {
                 makeCt([{
                     height: 100
@@ -692,7 +690,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(1)).toBe(200);
                 expect(getHeight(2)).toBe(300);
             });
-            
+
             it("should flex 2 items with 1 fixed", function() {
                 makeCt([{
                     flex: 2
@@ -730,7 +728,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(0)).toBe(0);
                 expect(getHeight(1)).toBe(700);
             });
-            
+
             it("should respect a minWidth on a flex even if there is no more flex width", function() {
                 makeCt([{
                     flex: 1,
@@ -741,7 +739,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(0)).toBe(50);
                 expect(getHeight(1)).toBe(700);
             });
-            
+
             it("should respect a minWidth on a flex even if there is no excess flex width", function() {
                 makeCt([{
                     flex: 1,
@@ -752,7 +750,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 expect(getHeight(0)).toBe(100);
                 expect(getHeight(1)).toBe(300);
             });
-            
+
             it("should update flex values based on min constraint", function() {
                 var c1 = new Ext.Component({
                         flex: 1,
@@ -761,12 +759,12 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     c2 = new Ext.Component({
                         flex: 1
                     });
-                
+
                 makeCt([c1, c2]);
                 expect(c1.getHeight()).toBe(500);
                 expect(c2.getHeight()).toBe(100);
             });
-            
+
             it("should handle multiple min constraints", function() {
                  var c1 = new Ext.Component({
                         flex: 1,
@@ -779,13 +777,13 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     c3 = new Ext.Component({
                         flex: 1
                     });
-                
+
                 makeCt([c1, c2, c3]);
                 expect(c1.getHeight()).toBe(250);
                 expect(c2.getHeight()).toBe(250);
                 expect(c3.getHeight()).toBe(100);
             });
-            
+
             it("should update flex values based on max constraint", function() {
                 var c1 = new Ext.Component({
                         flex: 1,
@@ -794,12 +792,12 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     c2 = new Ext.Component({
                         flex: 1
                     });
-                
+
                 makeCt([c1, c2]);
                 expect(c1.getHeight()).toBe(100);
                 expect(c2.getHeight()).toBe(500);
             });
-            
+
             it("should update flex values based on multiple max constraints", function() {
                 var c1 = new Ext.Component({
                         flex: 1,
@@ -812,7 +810,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                     c3 = new Ext.Component({
                         flex: 1
                     });
-                
+
                 makeCt([c1, c2, c3]);
                 expect(c1.getHeight()).toBe(100);
                 expect(c2.getHeight()).toBe(100);
@@ -832,7 +830,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                         flex: 1,
                         minHeight: 200
                     });
-                
+
                 makeCt([c1, c2, c3]);
                 expect(c1.getHeight()).toBe(200);
                 expect(c2.getHeight()).toBe(200);
@@ -852,7 +850,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                         flex: 1,
                         maxHeight: 100
                     });
-                
+
                 makeCt([c1, c2, c3]);
                 expect(c1.getHeight()).toBe(100);
                 expect(c2.getHeight()).toBe(100);
@@ -890,7 +888,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
             });
         });
     });
-    
+
     // Taken from extjs/test/issues/issue.html?id=5497
     it("should align:center when box layouts are nested", function() {
         // create a temporary component to measure the width of the text when
@@ -934,7 +932,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
                 }
             }
         });
-        
+
         expect(ct).toHaveLayout({
            "el": {
               "xywh": "0 0 300 200"
@@ -958,7 +956,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
            }
         });
     });
-    
+
     // Taken from extjs/test/issues/5562.html
     // Shrinkwrapping VBox should add height for any horizontal scrollbar if any of the boxes overflowed the Container width.
     // So ct1's published shrinkwrap width shoiuld be the height of the two children cmp1 and cmp2 plus scrollbart height.
@@ -1008,7 +1006,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
         // ct just has border:1px solid black, so should be 2px higher
         expect(ct.el.getHeight()).toEqual(cmp1Height + cmp2Height + Ext.getScrollbarSize().height + 2);
     });
-    
+
     it("should size correctly with docked items & a configured parallel size & shrinkWrap perpendicular size", function() {
         ct = new Ext.panel.Panel({
             floating: true,
@@ -1118,7 +1116,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
             if (Ext.isIE9 && shrinkWrap && overflowOther) {
                 width += 4;
             }
-            
+
             expect(ct.getWidth()).toBe(width);
         }
 
@@ -1150,18 +1148,26 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
         }
 
         beforeEach(function() {
-            origScroll = Ext.getScrollbarSize;
+            origScroll = Ext.scrollbar;
 
-            Ext.getScrollbarSize = function() {
-                return {
-                    width: scrollSize,
-                    height: scrollSize
-                };
+            Ext.scrollbar = {
+                width: function() {
+                    return scrollSize;
+                },
+                height: function() {
+                    return scrollSize;
+                },
+                size: function() {
+                    return {
+                        width: scrollSize,
+                        height: scrollSize
+                    };
+                }
             };
         });
 
         afterEach(function() {
-            Ext.getScrollbarSize = origScroll;
+            Ext.scrollbar = origScroll;
         });
 
         describe("limited scrolling", function() {
@@ -2483,7 +2489,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
             }
 
             // Not testing vertical scroll here because it's never visible
-            
+
             describe("with no vertical scrollbar", function() {
                 describe("configured", function() {
                     it("should publish the largest width", function() {
@@ -3146,7 +3152,7 @@ topSuite("Ext.layout.container.VBox", ['Ext.Panel', 'Ext.layout.container.Fit'],
         childXtype: 'panel',
         parentLayout: 'vbox'
     });
-    
+
     describe("misc overflow", function() {
         it("should layout with autoScroll + align: stretch + A shrink wrapped parallel item", function() {
             expect(function() {

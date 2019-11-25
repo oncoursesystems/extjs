@@ -27,6 +27,7 @@ Ext.define('KitchenSink.view.progress.DecoratedModel', {
                 len = choices.length,
 
                 index = Math.floor(progress * len);
+
             return choices[index];
         }
     }

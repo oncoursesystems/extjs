@@ -133,7 +133,7 @@ Ext.define('Ext.draw.engine.SvgContext', {
      */
     transform: function(xx, yx, xy, yy, dx, dy) {
         var inv;
-        
+
         if (this.path) {
             inv = Ext.draw.Matrix.fly([xx, yx, xy, yy, dx, dy]).inverse();
             this.path.transform(inv);
@@ -400,7 +400,7 @@ Ext.define('Ext.draw.engine.SvgContext', {
      */
     strokeText: function(text, x, y) {
         var element, tspan;
-        
+
         text = String(text);
 
         if (this.strokeStyle) {
@@ -434,7 +434,7 @@ Ext.define('Ext.draw.engine.SvgContext', {
             this.surface.setElementAttributes(tspan, {
                 "alignment-baseline": "alphabetic"
             });
-            
+
             tspan.dom.appendChild(document.createTextNode(Ext.String.htmlDecode(text)));
         }
     },
@@ -448,7 +448,7 @@ Ext.define('Ext.draw.engine.SvgContext', {
      */
     fillText: function(text, x, y) {
         var element, tspan;
-        
+
         text = String(text);
 
         if (this.fillStyle) {
@@ -472,7 +472,7 @@ Ext.define('Ext.draw.engine.SvgContext', {
             this.surface.setElementAttributes(tspan, {
                 "alignment-baseline": "alphabetic"
             });
-            
+
             tspan.dom.appendChild(document.createTextNode(Ext.String.htmlDecode(text)));
         }
     },
@@ -511,7 +511,7 @@ Ext.define('Ext.draw.engine.SvgContext', {
         }
 
         element.dom.setAttributeNS("http:/" + "/www.w3.org/1999/xlink", "href", image.src);
-        
+
         me.surface.setElementAttributes(element, {
             viewBox: viewBox,
             x: x,

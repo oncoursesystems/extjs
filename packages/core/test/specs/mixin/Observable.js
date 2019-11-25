@@ -134,7 +134,7 @@ function makeObservableSuite(isMixin) {
 
             employee = new Employee(employeeConfig);
         });
-        
+
         afterEach(function() {
             Observable.prototype.fireEventArgs.target = null;
         });
@@ -675,7 +675,6 @@ function makeObservableSuite(isMixin) {
                 });
             });
 
-
             describe("with options", function() {
                 describe("single", function() {
                     var singleFn;
@@ -1119,28 +1118,28 @@ function makeObservableSuite(isMixin) {
                 var fn1, fn2, fn3, fn4,
                     fn1Called, fn2Called, fn3Called,
                     fn4Called = false;
-                
+
                 beforeEach(function() {
                     fn1Called = fn2Called = fn3Called = fn4Called = false;
-                    
+
                     fn1 = function() {
                         fn1Called = true;
 
                         return true;
                     };
-                    
+
                     fn2 = function() {
                         fn2Called = true;
 
                         return true;
                     };
-                    
+
                     fn3 = function() {
                         fn3Called = true;
 
                         return true;
                     };
-                    
+
                     fn4 = function() {
                         fn4Called = true;
 
@@ -1186,22 +1185,22 @@ function makeObservableSuite(isMixin) {
                     expect(fn3Called).toBe(false);
                 });
             });
-            
+
             // https://sencha.jira.com/browse/EXTJS-22353
             // Three different but related bugs here, so three suites
             describe("during scope destruction", function() {
                 var employee2, listenerSpy;
-                
+
                 beforeEach(function() {
                     spyOn(Ext, 'raise');
                     listenerSpy = jasmine.createSpy('listener');
                     employee2 = new Employee();
-                    
+
                     employee.on('foo', function() {
                         employee2.destroy();
                     });
                 });
-                
+
                 afterEach(function() {
                     listenerSpy = employee2 = Ext.destroy(employee2);
                 });
@@ -1216,49 +1215,49 @@ function makeObservableSuite(isMixin) {
                             employee.fireEvent('foo');
                         }).not.toThrow();
                     });
-                    
+
                     it("should not fire the listener", function() {
                         employee.fireEvent('foo');
-                        
+
                         expect(listenerSpy).not.toHaveBeenCalled();
                     });
-                    
+
                     it("should remove the listener", function() {
                         employee.fireEvent('foo');
-                        
+
                         // The destruction listener above
                         expect(employee.hasListeners.foo).toBe(1);
                     });
                 });
-                
+
                 describe("with managed listener", function() {
                     beforeEach(function() {
                         employee2.mon(employee, 'foo', listenerSpy, employee2);
                     });
-                    
+
                     it("should not throw an exception", function() {
                         expect(function() {
                             employee.fireEvent('foo');
                         }).not.toThrow();
                     });
-                    
+
                     it("should not fire the listener", function() {
                         employee.fireEvent('foo');
-                        
+
                         expect(listenerSpy).not.toHaveBeenCalled();
                     });
-                    
+
                     it("should remove the listener", function() {
                         employee.fireEvent('foo');
-                        
+
                         // The destruction listener above
                         expect(employee.hasListeners.foo).toBe(1);
                     });
                 });
-                
+
                 describe("with 3rd party listener", function() {
                     var employee3;
-                    
+
                     beforeEach(function() {
                         // A la Classic components
                         Ext.override(employee2, {
@@ -1267,35 +1266,35 @@ function makeObservableSuite(isMixin) {
                                 this.callParent();
                             }
                         });
-                        
+
                         employee3 = new Employee();
-                        
+
                         employee2.on('destroy', function() {
                             employee3.destroy();
                         });
-                        
+
                         employee.on('foo', listenerSpy, employee3);
                     });
-                    
+
                     afterEach(function() {
                         employee3 = Ext.destroy(employee3);
                     });
-                    
+
                     it("should not throw an exception", function() {
                         expect(function() {
                             employee.fireEvent('foo');
                         }).not.toThrow();
                     });
-                    
+
                     it("should not fire the listener", function() {
                         employee.fireEvent('foo');
-                        
+
                         expect(listenerSpy).not.toHaveBeenCalled();
                     });
-                    
+
                     it("should remove the listener", function() {
                         employee.fireEvent('foo');
-                        
+
                         // The destruction listener above
                         expect(employee.hasListeners.foo).toBe(1);
                     });
@@ -1329,7 +1328,6 @@ function makeObservableSuite(isMixin) {
                 var listeners;
 
                 beforeEach(function() {
-
 
                     listeners = {
                         fired: bossFiredFn,
@@ -2868,7 +2866,7 @@ function makeObservableSuite(isMixin) {
                 capturer = jasmine.createSpy('capturer');
                 Observable.capture(boss, capturer, fakeScope);
             });
-            
+
             afterEach(function() {
                 Observable.releaseCapture(boss);
             });
@@ -2948,7 +2946,7 @@ function makeObservableSuite(isMixin) {
 
                 Boss.un('fired', bossFiredFn, fakeScope);
             });
-            
+
             afterEach(function() {
                 Boss.un('fired', firedListener);
                 Observable.releaseCapture(Boss);
@@ -3096,7 +3094,7 @@ function makeObservableSuite(isMixin) {
                 else {
                     s = c + to;
                 }
-                
+
                 return s;
             }
 
@@ -3946,7 +3944,6 @@ function makeObservableSuite(isMixin) {
     });
 
 }
-
 
 makeObservableSuite(true);
 makeObservableSuite(false);

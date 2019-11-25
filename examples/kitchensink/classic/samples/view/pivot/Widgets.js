@@ -15,10 +15,10 @@ Ext.define('KitchenSink.view.pivot.Widgets', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/WidgetsController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
@@ -34,6 +34,11 @@ Ext.define('KitchenSink.view.pivot.Widgets', {
             performanceWidth: 90
         },
         graphite: {
+            width: 750,
+            height: 600,
+            performanceWidth: 150
+        },
+        'classic-material': {
             width: 750,
             height: 600,
             performanceWidth: 150
@@ -73,13 +78,13 @@ Ext.define('KitchenSink.view.pivot.Widgets', {
 
             // Define here column specific configs for all columns
             // generated for this aggregate dimension
-            column:{
+            column: {
                 xtype: 'widgetcolumn',
                 widget: {
                     xtype: 'sparklineline'
                 }
             }
-        },{
+        }, {
             dataIndex: 'value',
             header: 'Count',
             aggregator: 'count'
@@ -117,13 +122,13 @@ Ext.define('KitchenSink.view.pivot.Widgets', {
     tbar: [{
         text: 'Add data',
         handler: 'onAddData'
-    },{
+    }, {
         text: 'Update data',
         handler: 'onUpdateData'
-    },{
+    }, {
         text: 'Remove data',
         handler: 'onRemoveData'
-    },{
+    }, {
         text: 'Clear all data',
         handler: 'onClearData'
     }]

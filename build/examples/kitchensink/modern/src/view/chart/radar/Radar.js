@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.chart.radar.Radar', {
     xtype: 'radar-filled',
     controller: 'chart',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/ChartController.js'
@@ -40,9 +40,9 @@ Ext.define('KitchenSink.view.chart.radar.Radar', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -142,7 +142,7 @@ Ext.define('KitchenSink.view.chart.radar.Radar', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {
@@ -169,7 +169,7 @@ Ext.define('KitchenSink.view.chart.radar.Radar', {
             }
         }, {
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }]
     }]

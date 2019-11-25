@@ -245,7 +245,7 @@ Ext.define('Ext.ux.rating.Picker', {
 
     applyValue: function(v) {
         var rounding, limit, min;
-        
+
         if (v !== null) {
             rounding = this.getRounding();
             limit = this.getLimit();

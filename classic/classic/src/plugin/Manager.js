@@ -22,7 +22,7 @@
  */
 Ext.define('Ext.plugin.Manager', {
     singleton: true,
-    
+
     alternateClassName: [
         'Ext.PluginManager',
         'Ext.PluginMgr'
@@ -71,7 +71,7 @@ Ext.define('Ext.plugin.Manager', {
             result.setCmp(host);
             result.setCmpCalled = true;
         }
-        
+
         return result;
     }
 });

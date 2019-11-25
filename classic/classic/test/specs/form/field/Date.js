@@ -1,7 +1,7 @@
 topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anchor', 'Ext.Panel',
 'Ext.app.ViewModel'], function() {
     var component, makeComponent;
-    
+
     function spyOnEvent(object, eventName, fn) {
         var obj = {
             fn: fn || Ext.emptyFn
@@ -30,7 +30,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
             component = new Ext.form.field.Date(config);
         };
     });
-    
+
     afterEach(function() {
         if (component) {
             component.destroy();
@@ -61,17 +61,17 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
         var eDate = Ext.Date,
             today = eDate.clearTime(new Date()),
             picker;
-        
+
         function expectValue(cmp, want) {
             var value = cmp.getValue();
-            
+
             if (Ext.isDate(want)) {
                 want = want.toString();
             }
             else if (typeof want === 'number') {
                 want = new Date(want).toString();
             }
-            
+
             if (want) {
                 expect(value.toString()).toBe(want);
             }
@@ -80,58 +80,58 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 expect(value).toBe(want);
             }
         }
-        
+
         beforeEach(function() {
             makeComponent({
                 renderTo: Ext.getBody()
             });
         });
-        
+
         afterEach(function() {
             picker = null;
         });
-        
+
         describe("focus remains in picker", function() {
             var spy, event;
-            
+
             function pressKey(key, options) {
                 picker.eventEl.on('keydown', spy);
                 jasmine.syncPressKey(picker, key, options);
                 picker.eventEl.un('keydown', spy);
-                
+
                 event = spy.mostRecentCall.args[0];
             }
-            
+
             beforeEach(function() {
                 spy = jasmine.createSpy('keydown');
-                
+
                 clickTrigger();
-                
+
                 picker = component.picker;
             });
-            
+
             afterEach(function() {
                 spy = event = null;
             });
-            
+
             describe("Space key", function() {
                 beforeEach(function() {
                     pressKey('space');
                 });
-                
+
                 it("should not collapse the picker", function() {
                     expect(picker.hidden).toBe(false);
                 });
-                
+
                 it("should set the current date in the field", function() {
                     expectValue(component, today);
                 });
-                
+
                 it("should prevent default on the event", function() {
                     expect(event.defaultPrevented).toBe(true);
                 });
             });
-            
+
             describe("Enter key", function() {
                 beforeEach(function() {
                     // 8 days before today
@@ -139,15 +139,15 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                     pressKey('left');
                     pressKey('enter');
                 });
-                
+
                 it("should collapse the picker", function() {
                     expect(picker.hidden).toBe(true);
                 });
-                
+
                 it("should confirm currently selected date", function() {
                     expectValue(component, eDate.add(today, eDate.DAY, -8));
                 });
-                
+
                 it("should stop the event", function() {
                     expect(event.stopped).toBe(true);
                 });
@@ -156,14 +156,14 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
             describe("Escape key", function() {
                 beforeEach(function() {
                     component.setValue(eDate.add(today, eDate.DAY, 3));
-                    
+
                     pressKey('esc');
                 });
-                
+
                 it("should collapse the picker", function() {
                     expect(picker.hidden).toBe(true);
                 });
-                
+
                 it("should not change the value", function() {
                     expectValue(component, eDate.add(today, eDate.DAY, 3));
                 });
@@ -180,10 +180,10 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
 
             it('should bind value of datefield to component', function() {
                 var spy = jasmine.createSpy();
-                
+
                 vm = new Ext.app.ViewModel();
                 component.destroy();
-        
+
                 dt2 = Ext.create('Ext.form.field.Date', {
                     viewModel: vm,
                     bind: '{foo}',
@@ -195,9 +195,9 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                     bind: '{foo}',
                     renderTo: document.body
                 });
-        
+
                 vm.bind('{foo}', spy);
-                    
+
                 setTimeout(function() {
                     dt2.setValue(new Date());
                 }, 10);
@@ -210,73 +210,73 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
             });
         });
-        
+
         describe("Tab key", function() {
             var waitForFocus = jasmine.waitForFocus,
                 expectFocused = jasmine.expectFocused,
                 pressTabKey = jasmine.syncPressTabKey,
                 btn;
-            
+
             beforeEach(function() {
                 btn = new Ext.button.Button({
                     renderTo: Ext.getBody(),
                     text: 'foo'
                 });
             });
-            
+
             afterEach(function() {
                 Ext.destroy(btn);
                 btn = null;
             });
-            
+
             describe("on enabled dates", function() {
                 beforeEach(function() {
                     clickTrigger();
-                    
+
                     picker = component.picker;
-                    
+
                     pressTabKey(picker.eventEl, true);
-                    
+
                     waitForFocus(btn);
                 });
-                
+
                 it("should close the picker", function() {
                     expect(picker.hidden).toBe(true);
                 });
-                
+
                 // Floating pickers are rendered at the bottom of the DOM;
                 // if we're tabbing off the cliff the button won't be selected
                 // as it comes before the picker in the DOM order
                 it("should focus the button", function() {
                     expectFocused(btn);
                 });
-                
+
                 it("should select the date", function() {
                     expectValue(component, today);
                 });
             });
-            
+
             describe("on disabled dates", function() {
                 beforeEach(function() {
                     component.setDisabledDates([Ext.Date.format(new Date(), 'm/d/Y')]);
-                    
+
                     clickTrigger();
-                    
+
                     picker = component.picker;
-                    
+
                     pressTabKey(picker.eventEl, true);
-                    
+
                     waitForFocus(btn);
                 });
-                
+
                 it("should close the picker", function() {
                     expect(picker.hidden).toBe(true);
                 });
-                
+
                 it("should focus the button", function() {
                     expectFocused(btn);
                 });
-                
+
                 it("should not select the date", function() {
                     expectValue(component, null);
                 });
@@ -334,18 +334,18 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
         it("should give the trigger a class of 'x-form-date-trigger'", function() {
             expect(component.getTrigger('picker').el).toHaveCls('x-form-date-trigger');
         });
-        
+
         it("should have combobox role", function() {
             expect(component).toHaveAttr('role', 'combobox');
         });
-        
+
         it("should have aria-autocomplete", function() {
             expect(component).toHaveAttr('aria-autocomplete', 'none');
         });
-        
+
         it("should have aria-owns", function() {
             var id = component.id;
-            
+
             expect(component).toHaveAttr('aria-owns', id + '-inputEl ' + id + '-picker-eventEl');
         });
     });
@@ -371,27 +371,27 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                     format: 'Y/m/d',
                     value: '2008/05/06'
                 });
-                
+
                 expect(component.getValue()).toEqual(new Date(2008, 4, 6));
             });
-            
+
             it("should parse a value according to the format 2", function() {
                 makeComponent({
                     format: 'd/m/Y',
                     value: '03/03/1986'
                 });
-                
+
                 expect(component.getValue()).toEqual(new Date(1986, 2, 3));
             });
         });
-        
+
         describe("setValue", function() {
             it("should accept a date object", function() {
                 makeComponent();
                 component.setValue(new Date(2010, 10, 5)); // 5th nov 2010
                 expect(component.getValue()).toEqual(new Date(2010, 10, 5));
             });
-            
+
             it("should accept a string value", function() {
                 makeComponent({
                     format: 'Y/m/d'
@@ -399,13 +399,13 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 component.setValue('2006/01/01');
                 expect(component.getValue()).toEqual(new Date(2006, 0, 1));
             });
-            
+
             it("should accept a null value", function() {
                 makeComponent();
                 component.setValue(null);
                 expect(component.getValue()).toBeNull();
             });
-            
+
             it("should set null if an invalid date string is passed", function() {
                 makeComponent({
                     format: 'Y/m/d'
@@ -413,7 +413,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 component.setValue('03.03.2000');
                 expect(component.getValue()).toBeNull();
             });
-            
+
             it("should fire the change event", function() {
                 makeComponent();
                 var spy = spyOnEvent(component, 'change').andCallThrough();
@@ -468,22 +468,22 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
             expect(component.picker).toBeDefined();
             expect(component.picker instanceof Ext.picker.Date).toBe(true);
         });
-        
+
         it("should set the date picker's value to the current field value", function() {
             clickTrigger();
             expect(component.picker.value.getFullYear()).toEqual(2011);
             expect(component.picker.value.getMonth()).toEqual(0);
             expect(component.picker.value.getDate()).toEqual(11);
         });
-        
+
         it("should show the picker", function() {
             clickTrigger();
             expect(component.picker.hidden).toBe(false);
         });
-        
+
         it("should set proper picker id", function() {
             clickTrigger();
-            
+
             expect(component.picker.id).toBe(component.id + '-picker');
         });
     });
@@ -584,7 +584,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
             expect(date).toBeNull();
         });
     });
-    
+
     describe("submit value", function() {
         it("should use the format as the default", function() {
             makeComponent({
@@ -592,7 +592,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
             });
             expect(component.getSubmitValue()).toBe('01/15/2010');
         });
-        
+
         it("should give precedence to submitFormat", function() {
             makeComponent({
                 value: new Date(2010, 0, 15),
@@ -600,7 +600,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
             });
             expect(component.getSubmitValue()).toBe('2010-01-15');
         });
-        
+
         it("should return null if the value isn't a valid date", function() {
             makeComponent({
                 value: 'wontparse',
@@ -609,7 +609,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
             expect(component.getSubmitValue()).toBe('');
         });
     });
-    
+
     describe("getModelData", function() {
         it("should use the format as the default", function() {
             makeComponent({
@@ -642,7 +642,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should have an error with allowBlank false and no value", function() {
                 makeComponent({
                     allowBlank: false
@@ -650,7 +650,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 expect(component.getErrors()).toContain(component.blankText);
             });
         });
-        
+
         describe("invalid dates", function() {
             it("should have no error if the date is valid according to the format", function() {
                 makeComponent({
@@ -659,7 +659,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should have an error if the date is not in a required format", function() {
                 makeComponent({
                     format: 'Y/m/d',
@@ -667,12 +667,12 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 var val = '2004.05.01',
                     errStr = Ext.String.format(component.invalidText, val, component.format);
-                    
+
                 component.inputEl.dom.value = val;
                 expect(component.getErrors()).toContain(errStr);
             });
         });
-        
+
         describe("minValue", function() {
             it("should have no errors if a min value is not specified", function() {
                 makeComponent({
@@ -680,7 +680,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should have no errors if the value is greater than the minimum", function() {
                 makeComponent({
                     format: 'Y/m/d',
@@ -689,11 +689,11 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should have an error if the value is less than the minimum", function() {
                 var val = '2006/07/09',
                     errStr;
-                     
+
                 makeComponent({
                     format: 'Y/m/d',
                     value: '2004/07/22',
@@ -702,11 +702,11 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 errStr = Ext.String.format(component.minText, val);
                 expect(component.getErrors()).toContain(errStr);
             });
-            
+
             it("should respond to setMinValue", function() {
                 var val = '2009/07/09',
                     errStr;
-                     
+
                 makeComponent({
                     format: 'Y/m/d',
                     value: '2008/07/22',
@@ -714,11 +714,11 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 errStr = Ext.String.format(component.minText, val);
                 expect(component.getErrors()).toEqual([]);
-                
+
                 component.setMinValue(val);
                 expect(component.getErrors()).toContain(errStr);
             });
-            
+
             it("should not throw an error when the value is equal to the min value", function() {
                 makeComponent({
                     format: 'Y/m/d',
@@ -728,7 +728,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 expect(component.getErrors()).toEqual([]);
             });
         });
-        
+
         describe("maxValue", function() {
             it("should have no errors if a max value is not specified", function() {
                 makeComponent({
@@ -736,7 +736,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should have no errors if the value is less than the maximum", function() {
                 makeComponent({
                     format: 'Y/m/d',
@@ -745,11 +745,11 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should have an error if the value is bigger than the maximum", function() {
                 var val = '2006/07/09',
                     errStr;
-                     
+
                 makeComponent({
                     format: 'Y/m/d',
                     value: '2008/07/22',
@@ -758,11 +758,11 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 errStr = Ext.String.format(component.maxText, val);
                 expect(component.getErrors()).toContain(errStr);
             });
-            
+
             it("should respond to setMaxValue", function() {
                 var val = '2008/05/09',
                     errStr;
-                     
+
                 makeComponent({
                     format: 'Y/m/d',
                     value: '2008/07/22',
@@ -770,11 +770,11 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 errStr = Ext.String.format(component.maxText, val);
                 expect(component.getErrors()).toEqual([]);
-                
+
                 component.setMaxValue(val);
                 expect(component.getErrors()).toContain(errStr);
             });
-            
+
             it("should not throw an error when the value is equal to the max value", function() {
                 makeComponent({
                     format: 'Y/m/d',
@@ -784,17 +784,17 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 expect(component.getErrors()).toEqual([]);
             });
         });
-        
+
         describe("disabledDays", function() {
             it("should throw no error if disabledDays is not defined", function() {
                 makeComponent({
                     format: 'Y/m/d',
                     value: '2008/06/06'
                 });
-            
+
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should not throw an error if the date doesn't match the disabled days", function() {
                 makeComponent({
                     format: 'Y/m/d',
@@ -803,7 +803,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should throw an error if the date does match the disabled days", function() {
                 makeComponent({
                     format: 'Y/m/d',
@@ -831,7 +831,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
             });
         });
-        
+
         describe("disabledDates", function() {
             it("should not throw an error if there's no regex", function() {
                 makeComponent({
@@ -840,7 +840,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should not throw an error if the value does not match the regex", function() {
                 makeComponent({
                     format: 'Y/m/d',
@@ -849,7 +849,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 });
                 expect(component.getErrors()).toEqual([]);
             });
-            
+
             it("should throw an error if the value matches the regex", function() {
                 makeComponent({
                     format: 'Y/m/d',
@@ -886,7 +886,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
             });
         });
     });
-   
+
     describe("maintain proper year", function() {
         it("should allow 1999", function() {
             makeComponent({
@@ -916,7 +916,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 expect(component.getValue()).toEqual(new Date(2099, 1, 1));
             });
         });
-        
+
         it("should fire change event on blur if text changed", function() {
             var spy;
 
@@ -924,7 +924,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
                 renderTo: Ext.getBody(),
                 format: 'm-d-y'
             });
-            
+
             component.setValue(new Date(2016, 5, 1));
             expect(component.getValue()).toEqual(new Date(2016, 5, 1));
             jasmine.focusAndWait(component);
@@ -995,7 +995,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
             });
 
             jasmine.blurAndWait(component);
-            
+
             waitsFor(function() {
                 return !component.hasFocus;
             });
@@ -1018,7 +1018,7 @@ topSuite("Ext.form.field.Date", ['Ext.window.Window', 'Ext.layout.container.Anch
             });
 
             jasmine.blurAndWait(component);
-            
+
             waitsFor(function() {
                 return !component.hasFocus;
             });

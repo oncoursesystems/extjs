@@ -110,7 +110,7 @@ Ext.define('Ext.data.Batch', {
          * @private
          */
         me.operations = [];
-        
+
         /**
          * Ordered array of operations that raised an exception during the most recent
          * batch execution and did not successfully complete
@@ -128,7 +128,7 @@ Ext.define('Ext.data.Batch', {
     add: function(operation) {
         var me = this,
             i, len;
-            
+
         if (Ext.isArray(operation)) {
             for (i = 0, len = operation.length; i < len; ++i) {
                 me.add(operation[i]);
@@ -136,12 +136,12 @@ Ext.define('Ext.data.Batch', {
         }
         else {
             me.total++;
-    
+
             operation.setBatch(me);
 
             me.operations.push(operation);
         }
-        
+
         return me;
     },
 
@@ -169,7 +169,7 @@ Ext.define('Ext.data.Batch', {
 
     sortFn: function(operation1, operation2) {
         var ret = operation1.order - operation2.order;
-        
+
         if (ret) {
             return ret;
         }
@@ -213,35 +213,35 @@ Ext.define('Ext.data.Batch', {
      */
     start: function(index) {
         var me = this;
-        
+
         if (me.destroyed || !me.operations.length || me.running) {
             return me;
         }
-        
+
         me.exceptions.length = 0;
         me.exception = false;
         me.running = true;
 
         return me.runOperation(Ext.isDefined(index) ? index : me.current + 1);
     },
-    
+
     abort: function() {
         var me = this,
             op;
-        
+
         if (me.running) {
             op = me.getCurrent();
-            
+
             if (!op.destroyed) {
                 op.abort();
             }
         }
-        
+
         me.running = false;
         me.aborted = true;
         me.current = undefined;
     },
-    
+
     /**
      * Kicks off execution of the batch, continuing from the current operation. This is intended
      * for restarting a {@link #pause paused} batch after an exception, and the operation that
@@ -263,11 +263,11 @@ Ext.define('Ext.data.Batch', {
      */
     runNextOperation: function() {
         var me = this;
-        
+
         if (me.running) {
             me.runOperation(me.current + 1);
         }
-        
+
         return me;
     },
 
@@ -277,10 +277,10 @@ Ext.define('Ext.data.Batch', {
      */
     pause: function() {
         this.running = false;
-        
+
         return this;
     },
-    
+
     /**
      * Gets the operations for this batch.
      * @return {Ext.data.operation.Operation[]} The operations.
@@ -288,7 +288,7 @@ Ext.define('Ext.data.Batch', {
     getOperations: function() {
         return this.operations;
     },
-    
+
     /**
      * Gets any operations that have returned without success in this batch.
      * @return {Ext.data.operation.Operation[]} The exceptions
@@ -296,7 +296,7 @@ Ext.define('Ext.data.Batch', {
     getExceptions: function() {
         return this.exceptions;
     },
-    
+
     /**
      * Gets the currently running operation. Will return null if the batch has
      * not started or is completed.
@@ -305,14 +305,14 @@ Ext.define('Ext.data.Batch', {
     getCurrent: function() {
         var out = null,
             current = this.current;
-            
+
         if (!(current === -1 || this.complete)) {
             out = this.operations[current];
         }
-        
+
         return out;
     },
-    
+
     /**
      * Gets the total number of operations in this batch.
      * @return {Number} The total
@@ -320,7 +320,7 @@ Ext.define('Ext.data.Batch', {
     getTotal: function() {
         return this.total;
     },
-    
+
     /**
      * Checks if this batch is running.
      * @return {Boolean} `true` if this batch is running.
@@ -328,7 +328,7 @@ Ext.define('Ext.data.Batch', {
     isRunning: function() {
         return this.running;
     },
-    
+
     /**
      * Checks if this batch is complete.
      * @return {Boolean} `true` if this batch is complete.
@@ -336,7 +336,7 @@ Ext.define('Ext.data.Batch', {
     isComplete: function() {
         return this.complete;
     },
-    
+
     /**
      * Checks if this batch has any exceptions.
      * @return {Boolean} `true` if this batch has any exceptions.
@@ -368,14 +368,14 @@ Ext.define('Ext.data.Batch', {
             operation.setInternalScope(me);
             operation.execute();
         }
-        
+
         return me;
     },
-    
+
     onOperationComplete: function(operation) {
         var me = this,
             exception = operation.hasException();
-            
+
         if (exception) {
             me.exception = true;
             me.exceptions.push(operation);
@@ -390,31 +390,31 @@ Ext.define('Ext.data.Batch', {
             me.runNextOperation();
         }
     },
-    
+
     destroy: function() {
         var me = this,
             operations = me.operations,
             op, i, len;
-        
+
         if (me.running) {
             me.abort();
         }
-        
+
         for (i = 0, len = me.operations.length; i < len; i++) {
             op = operations[i];
-            
+
             if (op) {
                 if (!op.destroyed && !op.$destroyOwner) {
                     op.destroy();
                 }
-                
+
                 op[i] = null;
             }
         }
-        
+
         // Global cleanup can be turned off
         me.operations = me.exceptions = null;
-        
+
         me.callParent();
     }
 });

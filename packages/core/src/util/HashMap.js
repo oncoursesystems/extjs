@@ -26,7 +26,7 @@ Ext.define('Ext.util.HashMap', {
      * @readonly
      */
     generation: 0,
-    
+
     config: {
         /**
         * @cfg {Function} keyFn A function that is used to retrieve a default key for a passed
@@ -74,7 +74,7 @@ Ext.define('Ext.util.HashMap', {
     constructor: function(config) {
         var me = this,
             fn;
-        
+
         // Will call initConfig
         me.mixins.observable.constructor.call(me, config);
         me.clear(true);

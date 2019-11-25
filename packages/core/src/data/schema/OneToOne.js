@@ -70,9 +70,9 @@ Ext.define('Ext.data.schema.OneToOne', {
 
         onDrop: function(rightRecord, session) {
             var leftRecord = this.getAssociatedItem(rightRecord);
-            
+
             rightRecord[this.getInstanceName()] = null;
-            
+
             if (leftRecord) {
                 leftRecord[this.inverse.getInstanceName()] = null;
             }
@@ -89,7 +89,7 @@ Ext.define('Ext.data.schema.OneToOne', {
 
         createGetter: function() {
             var me = this;
-            
+
             return function() {
                 // 'this' refers to the Model instance inside this function
                 return me.doGet(this);
@@ -98,7 +98,7 @@ Ext.define('Ext.data.schema.OneToOne', {
 
         createSetter: function() {
             var me = this;
-            
+
             return function(value) {
                 // 'this' refers to the Model instance inside this function
                 return me.doSet(this, value);
@@ -141,7 +141,7 @@ Ext.define('Ext.data.schema.OneToOne', {
                     // thing we keep on this side so we won't recurse back-and-forth.
                     leftRecord[inverseSetter](rightRecord);
                 }
-                
+
                 rightRecord.onAssociatedRecordSet(leftRecord, this);
             }
 
@@ -155,7 +155,7 @@ Ext.define('Ext.data.schema.OneToOne', {
 
             if (leftRecords) {
                 leftRecord = leftRecords[0];
-                
+
                 if (leftRecord) {
                     leftRecord[me.inverse.getInstanceName()] = rightRecord;
 
@@ -172,7 +172,7 @@ Ext.define('Ext.data.schema.OneToOne', {
 
         left: false,
         side: 'right',
-        
+
         createGetter: function() {
             // As the target of the FK (say "manager" for the Department entity) this
             // getter is responsible for getting the entity referenced by the FK value.
@@ -183,7 +183,7 @@ Ext.define('Ext.data.schema.OneToOne', {
                 return me.doGetFK(this, options, scope);
             };
         },
-        
+
         createSetter: function() {
             var me = this;
 
@@ -202,10 +202,10 @@ Ext.define('Ext.data.schema.OneToOne', {
             if (me.inverse.owner) {
                 if (session && field) {
                     id = leftRecord.get(field.name);
-                    
+
                     if (id || id === 0) {
                         rightRecord = session.getEntry(me.cls, id).record;
-                        
+
                         if (rightRecord) {
                             rightRecord.drop();
                         }
@@ -217,13 +217,13 @@ Ext.define('Ext.data.schema.OneToOne', {
                     }
                 }
             }
-             
+
             if (field) {
                 leftRecord.set(field.name, null);
             }
-            
+
             leftRecord[me.getInstanceName()] = null;
-            
+
             if (rightRecord) {
                 rightRecord[me.inverse.getInstanceName()] = null;
             }
@@ -239,7 +239,7 @@ Ext.define('Ext.data.schema.OneToOne', {
 
             leftRecord.changingKey = true;
             me.doSetFK(leftRecord, newValue);
-            
+
             if (!hasNewValue) {
                 leftRecord[instanceName] = null;
             }
@@ -247,23 +247,23 @@ Ext.define('Ext.data.schema.OneToOne', {
                 // Setting to undefined is important so that we can load the record later.
                 leftRecord[instanceName] = session.peekRecord(cls, newValue) || undefined;
             }
-            
+
             if (me.inverse.owner && rightRecord) {
                 me.association.schema.queueKeyCheck(rightRecord, me);
             }
-            
+
             leftRecord.changingKey = false;
         },
 
         checkKeyForDrop: function(rightRecord) {
             var leftRecord = this.inverse.getAssociatedItem(rightRecord);
-            
+
             if (!leftRecord) {
                 // Not reassigned to another parent
                 rightRecord.drop();
             }
         },
-        
+
         read: function(leftRecord, node, fromReader, readOptions) {
             var me = this,
                 rightRecords = me.callParent([leftRecord, node, fromReader, readOptions]),
@@ -273,14 +273,14 @@ Ext.define('Ext.data.schema.OneToOne', {
             if (rightRecords) {
                 rightRecord = rightRecords[0];
                 field = me.association.field;
-                
+
                 if (field) {
                     fieldName = field.name;
                 }
-                
+
                 session = leftRecord.session;
                 data = leftRecord.data;
-                
+
                 if (rightRecord) {
                     if (session) {
                         refs = session.getRefs(rightRecord, this.inverse, true);
@@ -291,27 +291,27 @@ Ext.define('Ext.data.schema.OneToOne', {
                     else {
                         setKey = true;
                     }
-                    
+
                     if (setKey) {
                         // We want to poke the inferred key onto record if it exists, but we don't
                         // want to mess with the dirty or modified state of the record.
                         if (field) {
                             oldId = data[fieldName];
                             id = rightRecord.id;
-                            
+
                             if (oldId !== id) {
                                 data[fieldName] = id;
-                                
+
                                 if (session) {
                                     session.updateReference(leftRecord, field, id, oldId);
                                 }
                             }
                         }
-                        
+
                         rightRecord[me.inverse.getInstanceName()] = leftRecord;
                         leftRecord[me.getInstanceName()] = rightRecord;
                     }
-                    
+
                     // Inline associations should *not* arrive on the "data" object:
                     delete data[me.role];
                 }

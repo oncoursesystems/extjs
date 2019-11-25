@@ -21,10 +21,10 @@ Ext.define('KitchenSink.view.pivot.RangeEditor', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/PivotController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
@@ -32,17 +32,26 @@ Ext.define('KitchenSink.view.pivot.RangeEditor', {
         classic: {
             width: 600,
             height: 350,
-            totalColumnWidth: 100
+            totalColumnWidth: 100,
+            columnLines: true
         },
         neptune: {
             width: 750,
             height: 400,
-            totalColumnWidth: 100
+            totalColumnWidth: 100,
+            columnLines: true
         },
         graphite: {
             width: 780,
             height: 600,
-            totalColumnWidth: 130
+            totalColumnWidth: 130,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 780,
+            height: 600,
+            totalColumnWidth: 130,
+            columnLines: false
         }
     },
     //</example>
@@ -52,6 +61,7 @@ Ext.define('KitchenSink.view.pivot.RangeEditor', {
     height: '${height}',
     collapsible: true,
     multiSelect: true,
+    columnLines: '${columnLines}',
 
     selModel: {
         type: 'spreadsheet'

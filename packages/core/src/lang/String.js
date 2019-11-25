@@ -57,7 +57,7 @@ Ext.String = (function() {
 
             while (++index < length) {
                 codePoint = Number(arguments[index]);
-                
+
                 if (
                     !isFinite(codePoint) ||       // `NaN`, `+Infinity`, or `-Infinity`
                     codePoint < 0 ||              // not a valid Unicode code point
@@ -66,7 +66,7 @@ Ext.String = (function() {
                 ) {
                     Ext.raise('Invalid code point: ' + codePoint);
                 }
-                
+
                 if (codePoint <= 0xFFFF) { // BMP code point
                     codeUnits.push(codePoint);
                 }
@@ -75,13 +75,13 @@ Ext.String = (function() {
                     codePoint -= 0x10000;
                     codeUnits.push((codePoint >> 10) + 0xD800, (codePoint % 0x400) + 0xDC00);
                 }
-                
+
                 if (index + 1 === length) {
                     result += fromCharCode(codeUnits);
                     codeUnits.length = 0;
                 }
             }
-            
+
             return result;
         },
 
@@ -98,24 +98,24 @@ Ext.String = (function() {
          */
         insert: function(s, value, index) {
             var len;
-            
+
             if (!s) {
                 return value;
             }
-            
+
             if (!value) {
                 return s;
             }
-            
+
             len = s.length;
-            
+
             if (!index && index !== 0) {
                 index = len;
             }
-            
+
             if (index < 0) {
                 index *= -1;
-                
+
                 if (index >= len) {
                     // negative overflow, insert at start
                     index = 0;
@@ -124,7 +124,7 @@ Ext.String = (function() {
                     index = len - index;
                 }
             }
-            
+
             if (index === 0) {
                 s = value + s;
             }
@@ -134,10 +134,10 @@ Ext.String = (function() {
             else {
                 s = s.substr(0, index) + value + s.substr(index);
             }
-            
+
             return s;
         },
-        
+
         /**
          * Checks if a string starts with a substring
          * @param {String} s The original string
@@ -146,19 +146,19 @@ Ext.String = (function() {
          */
         startsWith: function(s, start, ignoreCase) {
             var result = boundsCheck(s, start);
-            
+
             if (result) {
                 if (ignoreCase) {
                     s = s.toLowerCase();
                     start = start.toLowerCase();
                 }
-                
+
                 result = s.lastIndexOf(start, 0) === 0;
             }
-            
+
             return result;
         },
-        
+
         /**
          * Checks if a string ends with a substring
          * @param {String} s The original string
@@ -167,16 +167,16 @@ Ext.String = (function() {
          */
         endsWith: function(s, end, ignoreCase) {
             var result = boundsCheck(s, end);
-            
+
             if (result) {
                 if (ignoreCase) {
                     s = s.toLowerCase();
                     end = end.toLowerCase();
                 }
-                
+
                 result = s.indexOf(end, s.length - end.length) !== -1;
             }
-            
+
             return result;
         },
 
@@ -211,7 +211,7 @@ Ext.String = (function() {
         htmlDecode: function(value) {
             return (!value) ? value : String(value).replace(entityToCharRegex, htmlDecodeReplaceFn);
         },
-        
+
         /**
          * Checks if a string has values needing to be html encoded.
          * @private
@@ -255,7 +255,7 @@ Ext.String = (function() {
             var charKeys = [],
                 entityKeys = [],
                 key, echar;
-            
+
             for (key in newEntities) {
                 echar = newEntities[key];
                 entityToChar[key] = echar;
@@ -263,7 +263,7 @@ Ext.String = (function() {
                 charKeys.push(echar);
                 entityKeys.push(key);
             }
-            
+
             charToEntityRegex = new RegExp('(' + charKeys.join('|') + ')', 'g');
             entityToCharRegex =
                 new RegExp('(' + entityKeys.join('|') + '|&#[0-9]{1,5};' + ')', 'g');
@@ -317,7 +317,7 @@ Ext.String = (function() {
             if (string) {
                 string = string.replace(trimRegex, "");
             }
-            
+
             return string || '';
         },
 
@@ -330,7 +330,7 @@ Ext.String = (function() {
             if (string) {
                 string = string.charAt(0).toUpperCase() + string.substr(1);
             }
-            
+
             return string || '';
         },
 
@@ -343,7 +343,7 @@ Ext.String = (function() {
             if (string) {
                 string = string.charAt(0).toLowerCase() + string.substr(1);
             }
-            
+
             return string || '';
         },
 
@@ -357,21 +357,21 @@ Ext.String = (function() {
          */
         ellipsis: function(value, length, word) {
             var vs, index;
-            
+
             if (value && value.length > length) {
                 if (word) {
                     vs = value.substr(0, length - 2);
                     index = Math.max(vs.lastIndexOf(' '), vs.lastIndexOf('.'),
                                      vs.lastIndexOf('!'), vs.lastIndexOf('?'));
-                    
+
                     if (index !== -1 && index >= (length - 15)) {
                         return vs.substr(0, index) + "...";
                     }
                 }
-                
+
                 return value.substr(0, length - 3) + "...";
             }
-            
+
             return value;
         },
 
@@ -419,7 +419,7 @@ Ext.String = (function() {
                 if (startsWith !== false) {
                     ret = '^' + ret;
                 }
-                
+
                 if (endsWith !== false) {
                     ret += '$';
                 }
@@ -477,13 +477,13 @@ Ext.String = (function() {
          */
         leftPad: function(string, size, character) {
             var result = String(string);
-            
+
             character = character || " ";
-            
+
             while (result.length < size) {
                 result = character + result;
             }
-            
+
             return result;
         },
 
@@ -501,15 +501,15 @@ Ext.String = (function() {
         repeat: function(pattern, count, sep) {
             var buf = [],
                 i;
-            
+
             if (count < 1) {
                 count = 0;
             }
-            
+
             for (i = count; i--;) {
                 buf.push(pattern);
             }
-            
+
             return buf.join(sep || '');
         },
 
@@ -523,7 +523,7 @@ Ext.String = (function() {
             if (words && typeof words === 'string') {
                 return words.replace(basicTrimRe, '').split(whitespaceRe);
             }
-            
+
             return words || [];
         }
     };
@@ -538,7 +538,6 @@ Ext.String.resetCharacterEntities();
  * @inheritdoc Ext.String#htmlEncode
  */
 Ext.htmlEncode = Ext.String.htmlEncode;
-
 
 /**
  * @method htmlDecode

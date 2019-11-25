@@ -59,7 +59,7 @@ Ext.Number = (new function() { // jshint ignore:line
             if (value !== null && typeof value !== 'number') {
                 value = String(value);
                 value = ExtNumber.floatRe.test(value) ? +value : null;
-                
+
                 if (isNaN(value)) {
                     value = null;
                 }
@@ -97,7 +97,7 @@ Ext.Number = (new function() { // jshint ignore:line
             if (begin === undefined) {
                 begin = 0;
             }
-            
+
             if (end === undefined) {
                 end = array.length;
             }
@@ -111,7 +111,7 @@ Ext.Number = (new function() { // jshint ignore:line
                 if (value === midVal) {
                     return middle;
                 }
-                
+
                 if (midVal < value) {
                     begin = middle + 1;
                 }
@@ -129,7 +129,7 @@ Ext.Number = (new function() { // jshint ignore:line
             if (begin === undefined) {
                 begin = 0;
             }
-            
+
             if (end === undefined) {
                 end = array.length;
             }
@@ -143,7 +143,7 @@ Ext.Number = (new function() { // jshint ignore:line
                 if (value === midVal) {
                     return middle;
                 }
-                
+
                 if (midVal < value) {
                     begin = middle + 1;
                 }
@@ -211,13 +211,13 @@ Ext.Number = (new function() { // jshint ignore:line
             wrap = options.wrap;
 
             indices = indices || [];
-            
+
             for (i = 0; i < 2; ++i) {
                 // names are off on first pass but used this way so things make sense
                 // following the loop..
                 begin = end; // pick up and keep the result from the first loop
                 end = indices[i];
-                
+
                 if (end == null) {
                     end = defaultValue;
                 }
@@ -229,14 +229,14 @@ Ext.Number = (new function() { // jshint ignore:line
                     if (wrap) {
                         end = (end < 0) ? (length + end) : end;
                     }
-                    
+
                     if (i && options.inclusive) {
                         ++end;
                     }
-                    
+
                     end = (end < 0) ? 0 : ((end > length) ? length : end);
                 }
-                
+
                 defaultValue = length; // default value for "end"
             }
 
@@ -246,7 +246,7 @@ Ext.Number = (new function() { // jshint ignore:line
 
             indices[0] = begin;
             indices[1] = (end < begin) ? begin : end;
-            
+
             return indices;
         },
 
@@ -313,10 +313,10 @@ Ext.Number = (new function() { // jshint ignore:line
 
             if (increment) {
                 m = value % increment;
-                
+
                 if (m !== 0) {
                     value -= m;
-                    
+
                     if (m * 2 >= increment) {
                         value += increment;
                     }
@@ -325,7 +325,7 @@ Ext.Number = (new function() { // jshint ignore:line
                     }
                 }
             }
-            
+
             return ExtNumber.constrain(value, minValue, maxValue);
         },
 
@@ -364,7 +364,7 @@ Ext.Number = (new function() { // jshint ignore:line
             if (increment && (tween = ((value - minValue) % increment))) {
                 value -= tween;
                 tween *= 2;
-                
+
                 if (tween >= increment) {
                     value += increment;
                 }
@@ -390,7 +390,7 @@ Ext.Number = (new function() { // jshint ignore:line
          */
         roundToNearest: function(value, interval) {
             interval = interval || 1;
-            
+
             return interval * math.round(value / interval);
         },
 
@@ -464,7 +464,7 @@ Ext.Number = (new function() { // jshint ignore:line
                 Ext.raise("All parameters should be valid numbers.");
             }
             //</debug>
-            
+
             return math.abs(n1 - n2) < epsilon;
         },
 
@@ -495,10 +495,10 @@ Ext.Number = (new function() { // jshint ignore:line
         toFixed: isToFixedBroken
             ? function(value, precision) {
                 var pow;
-                
+
                 precision = precision || 0;
                 pow = math.pow(10, precision);
-                
+
                 return (math.round(value * pow) / pow).toFixed(precision);
             }
             : function(value, precision) {

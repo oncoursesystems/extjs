@@ -46,18 +46,18 @@ function() {
                             dataIndex: 'f4'
                         }]
                     });
-                
+
                 view = grid.view;
                 navModel = grid.getNavigationModel();
             };
-            
+
             beforeEach(function() {
                 Ext.define('spec.LockedModel', {
                     extend: 'Ext.data.Model',
                     fields: ['f1', 'f2', 'f3', 'f4']
                 });
             });
-            
+
             afterEach(function() {
                 Ext.undefine('spec.LockedModel');
                 Ext.data.Model.schema.clear();
@@ -65,16 +65,16 @@ function() {
                 grid = null;
                 locked = false;
             });
-            
+
             describe("locked view", function() {
                 var innerSelector;
-                
+
                 beforeEach(function() {
                     locked = true;
                     createGrid();
                     innerSelector = grid.normalGrid.getView().innerSelector;
                 });
-                
+
                 describe("getCellInclusive", function() {
                     it("should be able to get a cell in the locked area", function() {
                         var cell = grid.getView().getCellInclusive({
@@ -84,7 +84,7 @@ function() {
 
                         expect(cell.querySelector(innerSelector).innerHTML).toBe('1');
                     });
-                    
+
                     it("should be able to get a cell in the unlocked area", function() {
                         var cell = grid.getView().getCellInclusive({
                             row: 3,
@@ -93,7 +93,7 @@ function() {
 
                         expect(cell.querySelector(innerSelector).innerHTML).toBe('16');
                     });
-                    
+
                     it("should return false if the cell doesn't exist", function() {
                         var cell = grid.getView().getCellInclusive({
                             row: 20,
@@ -102,7 +102,7 @@ function() {
 
                         expect(cell).toBe(false);
                     });
-                    
+
                     it("should return a dom element if the returnDom param is passed", function() {
                         var cell = grid.getView().getCellInclusive({
                             row: 1,
@@ -112,16 +112,16 @@ function() {
                         expect(cell.tagName).not.toBeUndefined();
                         expect(cell.querySelector(innerSelector).innerHTML).toBe('6');
                     });
-                    
+
                     it("should return an Element instance if returnDom param is not used", function() {
                         var cell = grid.getView().getCellInclusive({
                             row: 1,
                             column: 1
                         });
-                        
+
                         expect(cell instanceof Ext.dom.Element).toBe(true);
                         expect(cell.down(innerSelector, true).innerHTML).toBe('6');
-                        
+
                         cell.destroy();
                     });
                 });
@@ -131,7 +131,7 @@ function() {
                         // Suppress console warnings about Store created with no model
                         spyOn(Ext.log, 'warn');
                     });
-                    
+
                     it('should use the new store to refresh', function() {
                         expect(grid.lockedGrid.view.all.getCount()).toBe(4);
                         expect(grid.normalGrid.view.all.getCount()).toBe(4);

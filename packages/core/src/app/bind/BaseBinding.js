@@ -38,7 +38,7 @@ Ext.define('Ext.app.bind.BaseBinding', {
 
         // If given a string callback name, preserve the late binding:
         me.lateBound = Ext.isString(callback);
-        
+
         if (options && options.deep) {
             me.deep = true;
         }
@@ -55,7 +55,7 @@ Ext.define('Ext.app.bind.BaseBinding', {
         }
 
         me.callParent();
-        
+
         me.scope = me.callback = me.owner = null;
     },
 
@@ -66,13 +66,13 @@ Ext.define('Ext.app.bind.BaseBinding', {
     privates: {
         getScheduler: function() {
             var owner = this.owner;
-            
+
             return owner && owner.getScheduler();
         },
 
         getSession: function() {
             var owner = this.owner;
-            
+
             return owner.isSession ? owner : owner.getSession();
         },
 
@@ -118,7 +118,7 @@ Ext.define('Ext.app.bind.BaseBinding', {
             else {
                 ret = Ext.isArray(value);
             }
-            
+
             return ret;
         }
     }

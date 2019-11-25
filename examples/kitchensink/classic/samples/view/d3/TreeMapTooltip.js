@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.d3.TreeMapTooltip', {
         'KitchenSink.view.d3.StocksViewModel',
         'Ext.d3.hierarchy.TreeMap'
     ],
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [
         {
@@ -36,7 +36,7 @@ Ext.define('KitchenSink.view.d3.TreeMapTooltip', {
             path: 'classic/sass/src/view/d3/TreeMapTooltip.scss'
         }
     ],
-    // </example>
+    //</example>
 
     width: 930,
     height: 600,
@@ -64,7 +64,7 @@ Ext.define('KitchenSink.view.d3.TreeMapTooltip', {
         },
         selectEventName: null,
         expandEventName: null,
-        nodeValue: function (node) {
+        nodeValue: function(node) {
             return node.data.cap;
         },
         noParentValue: true,
@@ -82,8 +82,9 @@ Ext.define('KitchenSink.view.d3.TreeMapTooltip', {
                 range: ['#E45649', '#ECECEC', '#50A14F']
             },
             field: 'change',
-            processor: function (axis, scale, node, field) {
+            processor: function(axis, scale, node, field) {
                 var record = node.data;
+
                 return record.isLeaf() ? scale(record.get(field)) : '#ececec';
             }
         }

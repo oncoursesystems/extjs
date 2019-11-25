@@ -115,7 +115,7 @@ Ext.define('Ext.data.amf.XmlDecoder', {
             i;
 
         this.clear(); // reset counters
-        
+
         doc = Ext.data.amf.XmlDecoder.readXml(xml);
         amfx = doc.getElementsByTagName('amfx')[0];
 
@@ -128,7 +128,7 @@ Ext.define('Ext.data.amf.XmlDecoder', {
             Ext.raise("Unsupported AMFX version: " + amfx.getAttribute('ver'));
         }
         //</debug>
-        
+
         body = amfx.getElementsByTagName('body')[0];
         resp.targetURI = body.getAttribute('targetURI');
         resp.responseURI = body.getAttribute('responseURI'); // most likely empty string
@@ -140,7 +140,7 @@ Ext.define('Ext.data.amf.XmlDecoder', {
             }
 
             resp.message = this.readValue(body.childNodes.item(i));
-            
+
             break; // no need to keep iterating
         }
 
@@ -208,11 +208,11 @@ Ext.define('Ext.data.amf.XmlDecoder', {
                 Ext.data.amf.XmlDecoder.readByteArray(node)
             );
         }
-        
+
         //<debug>
         Ext.raise("Unknown tag type: " + node.tagName);
         //</debug>
-        
+
         return null;
     },
 
@@ -325,7 +325,7 @@ Ext.define('Ext.data.amf.XmlDecoder', {
             Ext.raise("No support for externalizable object: " + className);
         }
         //</debug>
-        
+
         // Register object if ref table, in case there's a cyclical reference coming
         this.objectReferences.push(obj);
 
@@ -423,7 +423,7 @@ Ext.define('Ext.data.amf.XmlDecoder', {
             Ext.raise("Array has less items than declared length: " + i + " < " + len);
         }
         //</debug>
-        
+
         return arr;
     },
 
@@ -439,7 +439,7 @@ Ext.define('Ext.data.amf.XmlDecoder', {
             i, j, n, len;
 
         len = parseInt(node.getAttribute('length'));
-        
+
         // Register dictionary in the ref table, in case there's a cyclical reference coming
         this.objectReferences.push(dict);
 
@@ -473,10 +473,9 @@ Ext.define('Ext.data.amf.XmlDecoder', {
             Ext.raise("Incorrect number of dictionary values: " + j + " != " + len);
         }
         //</debug>
-        
+
         return dict;
     },
-
 
     /**
      * Converts externalizable flex objects with a source array to a regular array.

@@ -296,7 +296,7 @@ Ext.Date = (function() {
     if (!Date.prototype.toISOString) {
         Date.prototype.toISOString = function() {
             var me = this;
-            
+
             return pad(me.getUTCFullYear(), 4, '0') + '-' +
                    pad(me.getUTCMonth() + 1, 2, '0') + '-' +
                    pad(me.getUTCDate(), 2, '0') + 'T' +
@@ -317,7 +317,7 @@ Ext.Date = (function() {
      */
     function xf(format) {
         var args = Array.prototype.slice.call(arguments, 1);
-        
+
         return format.replace(numberTokenRe, function(m, i) {
             return args[i];
         });
@@ -373,7 +373,7 @@ utilDate = {
 
         if (p) {
             p = typeof p === 'function' ? p() : p;
-          
+
             // reassign function result to prevent repeated execution
             utilDate.parseCodes[character] = p;
         }
@@ -420,25 +420,25 @@ utilDate = {
             // note: the timezone offset is ignored since the MS Ajax server sends
             // a UTC milliseconds-since-Unix-epoch value (negative values are allowed)
             var r = (input || '').match(MSFormatRe);
-            
+
             return r ? new nativeDate(((r[1] || '') + r[2]) * 1) : null;
         },
         "time": function(input, strict) {
             var num = parseInt(input, 10);
-            
+
             if (num || num === 0) {
                 return new nativeDate(num);
             }
-            
+
             return null;
         },
         "timestamp": function(input, strict) {
             var num = parseInt(input, 10);
-            
+
             if (num || num === 0) {
                 return new nativeDate(num * 1000);
             }
-            
+
             return null;
         }
     },
@@ -874,13 +874,13 @@ utilDate = {
                 code = [],
                 l = c.length,
                 i, e;
-            
+
             for (i = 0; i < l; ++i) {
                 e = c.charAt(i);
                 // treat T as a character literal
                 code.push(e === "T" ? "'T'" : utilDate.getFormatCode(e));
             }
-            
+
             return code.join(" + ");
         },
 
@@ -905,7 +905,7 @@ utilDate = {
      */
     isValid: function(year, month, day, hour, minute, second, millisecond) {
         var dt;
-        
+
         // setup defaults
         hour = hour || 0;
         minute = minute || 0;
@@ -1006,7 +1006,7 @@ utilDate = {
         }
 
         p = utilDate.parseFunctions;
-        
+
         if (p[format] == null) {
             utilDate.createParser(format);
         }
@@ -1027,7 +1027,7 @@ utilDate = {
 
         if (f) {
             f = typeof f === 'function' ? f() : f;
-          
+
             // reassign function result to prevent repeated execution
             utilDate.formatCodes[character] = f;
         }
@@ -1047,7 +1047,7 @@ utilDate = {
 
         for (i = 0; i < format.length; ++i) {
             ch = format.charAt(i);
-            
+
             if (!special && ch === "\\") {
                 special = true;
             }
@@ -1064,7 +1064,7 @@ utilDate = {
                 }
             }
         }
-        
+
         utilDate.formatFunctions[format] = Ext.functionFactory(
             "var m = this; return " + code.join('+')
         );
@@ -1087,7 +1087,7 @@ utilDate = {
 
         for (; i < len; ++i) {
             ch = format.charAt(i);
-            
+
             if (!special && ch === "\\") {
                 special = true;
             }
@@ -1099,7 +1099,7 @@ utilDate = {
                 obj = utilDate.formatCodeToRegex(ch, currentGroup);
                 currentGroup += obj.g;
                 regex.push(obj.s);
-                
+
                 if (obj.g && obj.c) {
                     if (obj.calcAtEnd) {
                         atEnd.push(obj.c);
@@ -1143,12 +1143,12 @@ utilDate = {
         D: function() {
             var a = [],
                 i;
-            
+
             // get localised short day names
             for (i = 0; i < 7; i++) {
                 a.push(utilDate.getShortDayName(i));
             }
-            
+
             return {
                 g: 0,
                 c: null,
@@ -1199,12 +1199,12 @@ utilDate = {
         M: function() {
             var a = [],
                 i;
-            
+
             // get localised short month names
             for (i = 0; i < 12; i++) {
                 a.push(utilDate.getShortMonthName(i));
             }
-            
+
             return Ext.applyIf({
                 s: "(" + a.join("|") + ")"
             }, utilDate.formatCodeToRegex("F"));
@@ -1439,7 +1439,7 @@ utilDate = {
         if (date1 && date2) {
             return +date1 === +date2;
         }
-        
+
         // one or both isn't a date, only equal if both are falsy
         return !(date1 || date2);
     },
@@ -1511,7 +1511,7 @@ utilDate = {
      */
     getGMTOffset: function(date, colon) {
         var offset = date.getTimezoneOffset();
-        
+
         return (offset > 0 ? "-" : "+") +
                Ext.String.leftPad(Math.floor(Math.abs(offset) / 60), 2, "0") +
                (colon ? ":" : "") +
@@ -1536,7 +1536,7 @@ utilDate = {
         for (i = 0, d.setDate(1), d.setMonth(0); i < m; d.setMonth(++i)) {
             num += utilDate.getDaysInMonth(d);
         }
-        
+
         return num + date.getDate() - 1;
     },
 
@@ -1577,7 +1577,7 @@ utilDate = {
      */
     isLeapYear: function(date) {
         var year = date.getFullYear();
-        
+
         return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)));
     },
 
@@ -1596,7 +1596,7 @@ utilDate = {
      */
     getFirstDayOfMonth: function(date) {
         var day = (date.getDay() - (date.getDate() - 1)) % 7;
-        
+
         return (day < 0) ? (day + 7) : day;
     },
 
@@ -1616,7 +1616,6 @@ utilDate = {
     getLastDayOfMonth: function(date) {
         return utilDate.getLastDateOfMonth(date).getDay();
     },
-
 
     /**
      * Get the date of the first day of the month in which this date resides.
@@ -1727,7 +1726,7 @@ utilDate = {
      */
     clearTime: function(date, clone) {
         var d, hr, c;
-        
+
         // handles invalid dates preventing the browser from crashing.
         if (isNaN(date.getTime())) {
             return date;
@@ -1829,9 +1828,9 @@ utilDate = {
                     else {
                         d.setTime(d.getTime() + value);
                     }
-                    
+
                     break;
-                
+
                 case utilDate.SECOND:
                     if (preventDstAdjust) {
                         d.setSeconds(d.getSeconds() + value);
@@ -1839,9 +1838,9 @@ utilDate = {
                     else {
                         d.setTime(d.getTime() + value * 1000);
                     }
-                    
+
                     break;
-                
+
                 case utilDate.MINUTE:
                     if (preventDstAdjust) {
                         d.setMinutes(d.getMinutes() + value);
@@ -1849,9 +1848,9 @@ utilDate = {
                     else {
                         d.setTime(d.getTime() + value * 60 * 1000);
                     }
-                    
+
                     break;
-                
+
                 case utilDate.HOUR:
                     if (preventDstAdjust) {
                         d.setHours(d.getHours() + value);
@@ -1859,9 +1858,9 @@ utilDate = {
                     else {
                         d.setTime(d.getTime() + value * 60 * 60 * 1000);
                     }
-                    
+
                     break;
-                
+
                 case utilDate.DAY:
                     if (preventDstAdjust === false) {
                         d.setTime(d.getTime() + value * 24 * 60 * 60 * 1000);
@@ -1869,33 +1868,33 @@ utilDate = {
                     else {
                         d.setDate(d.getDate() + value);
                     }
-                    
+
                     break;
-                
+
                 case utilDate.MONTH:
                     day = date.getDate();
-                    
+
                     if (day > 28) {
                         /* eslint-disable-next-line max-len */
                         day = Math.min(day, utilDate.getLastDateOfMonth(utilDate.add(utilDate.getFirstDateOfMonth(date), utilDate.MONTH, value)).getDate());
                     }
-                    
+
                     d.setDate(day);
                     d.setMonth(date.getMonth() + value);
-                    
+
                     break;
-                
+
                 case utilDate.YEAR:
                     day = date.getDate();
-                    
+
                     if (day > 28) {
                         /* eslint-disable-next-line max-len */
                         day = Math.min(day, utilDate.getLastDateOfMonth(utilDate.add(utilDate.getFirstDateOfMonth(date), utilDate.YEAR, value)).getDate());
                     }
-                    
+
                     d.setDate(day);
                     d.setFullYear(date.getFullYear() + value);
-                    
+
                     break;
             }
         }
@@ -1920,7 +1919,7 @@ utilDate = {
                     base = 1000 * 60 * 60 * 24 * day;
                     break;
             }
-            
+
             if (base) {
                 d.setTime(d.getTime() + base * decimalValue);
             }
@@ -1968,7 +1967,7 @@ utilDate = {
      */
     between: function(date, start, end) {
         var t = date.getTime();
-        
+
         return start.getTime() <= t && t <= end.getTime();
     },
 
@@ -2064,12 +2063,12 @@ utilDate = {
         // Append to prototype
         for (p = 0; p < pLen; p++) {
             prot = proto[p];
-            
+
             nativeDate.prototype[prot] = function() {
                 var args = Array.prototype.slice.call(arguments);
-                
+
                 args.unshift(this);
-                
+
                 return utilDate[prot].apply(utilDate, args);
             };
         }
@@ -2085,39 +2084,39 @@ utilDate = {
     diff: function(min, max, unit) {
         var diff = +max - min,
             est;
-        
+
         switch (unit) {
             case utilDate.MILLI:
                 return diff;
-            
+
             case utilDate.SECOND:
                 return Math.floor(diff / 1000);
-            
+
             case utilDate.MINUTE:
                 return Math.floor(diff / 60000);
-            
+
             case utilDate.HOUR:
                 return Math.floor(diff / 3600000);
-            
+
             case utilDate.DAY:
                 return Math.floor(diff / 86400000);
-            
+
             case 'w':
                 return Math.floor(diff / 604800000);
-            
+
             case utilDate.MONTH:
                 est = (max.getFullYear() * 12 + max.getMonth()) -
                        (min.getFullYear() * 12 + min.getMonth());
-                
+
                 if (utilDate.add(min, unit, est) > max) {
                     return est - 1;
                 }
-                
+
                 return est;
-            
+
             case utilDate.YEAR:
                 est = max.getFullYear() - min.getFullYear();
-                
+
                 if (utilDate.add(min, unit, est) > max) {
                     return est - 1;
                 }
@@ -2140,56 +2139,56 @@ utilDate = {
         switch (unit.toLowerCase()) {
             case utilDate.MILLI:
                 return num;
-            
+
             case utilDate.SECOND:
                 num.setUTCSeconds(num.getUTCSeconds() - num.getUTCSeconds() % step);
                 num.setUTCMilliseconds(0);
-                
+
                 return num;
-            
+
             case utilDate.MINUTE:
                 num.setUTCMinutes(num.getUTCMinutes() - num.getUTCMinutes() % step);
                 num.setUTCSeconds(0);
                 num.setUTCMilliseconds(0);
-                
+
                 return num;
-            
+
             case utilDate.HOUR:
                 num.setUTCHours(num.getUTCHours() - num.getUTCHours() % step);
                 num.setUTCMinutes(0);
                 num.setUTCSeconds(0);
                 num.setUTCMilliseconds(0);
-                
+
                 return num;
-            
+
             case utilDate.DAY:
                 if (step === 7 || step === 14) {
                     num.setUTCDate(num.getUTCDate() - num.getUTCDay() + 1);
                 }
-                
+
                 num.setUTCHours(0);
                 num.setUTCMinutes(0);
                 num.setUTCSeconds(0);
                 num.setUTCMilliseconds(0);
-                
+
                 return num;
-            
+
             case utilDate.MONTH:
                 num.setUTCMonth(num.getUTCMonth() - (num.getUTCMonth() - 1) % step, 1);
                 num.setUTCHours(0);
                 num.setUTCMinutes(0);
                 num.setUTCSeconds(0);
                 num.setUTCMilliseconds(0);
-                
+
                 return num;
-            
+
             case utilDate.YEAR:
                 num.setUTCFullYear(num.getUTCFullYear() - num.getUTCFullYear() % step, 1, 1);
                 num.setUTCHours(0);
                 num.setUTCMinutes(0);
                 num.setUTCSeconds(0);
                 num.setUTCMilliseconds(0);
-                
+
                 return date;
         }
     },

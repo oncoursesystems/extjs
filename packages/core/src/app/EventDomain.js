@@ -45,11 +45,11 @@ Ext.define('Ext.app.EventDomain', {
          */
         instances: {}
     },
-    
+
     /**
      * @cfg {String} idProperty Name of the identifier property for this event domain.
      */
-         
+
     isEventDomain: true,
     isInstance: false,
 
@@ -81,7 +81,7 @@ Ext.define('Ext.app.EventDomain', {
      */
     dispatch: function(target, ev, args) {
         ev = Ext.canonicalEventName(ev);
-        
+
         /* eslint-disable-next-line vars-on-top */
         var me = this,
             bus = me.bus,
@@ -104,16 +104,16 @@ Ext.define('Ext.app.EventDomain', {
                 for (id in controllers) {
                     if (controllers.hasOwnProperty(id)) {
                         info = controllers[id];
-                        
+
                         if (info.controller.isActive()) {
                             // Loop over all the events that are bound to this selector
                             // on the current controller
                             events = info.list;
                             len = events.length;
-                    
+
                             for (i = 0; i < len; i++) {
                                 event = events[i];
-                    
+
                                 // Fire the event!
                                 if (event.fire.apply(event, args) === false) {
                                     return false;
@@ -189,10 +189,10 @@ Ext.define('Ext.app.EventDomain', {
                         Ext.raise('Selectors containing id should begin with #');
                     }
                     //</debug>
-                
+
                     selector = selector === '*' ? selector : selector.substring(1);
                 }
-                
+
                 for (ev in listeners) {
                     options = null;
                     listener = listeners[ev];
@@ -209,7 +209,7 @@ Ext.define('Ext.app.EventDomain', {
                         delete options.fn;
                         delete options.scope;
                     }
-                    
+
                     //<debug>
                     if ((!options || !options.scope) && typeof listener === 'string') {
                         // Allow this lookup to be dynamic in debug mode.
@@ -217,7 +217,7 @@ Ext.define('Ext.app.EventDomain', {
                         if (!scope[listener]) {
                             Ext.raise('Cannot resolve "' + listener + '" on controller.');
                         }
-                        
+
                         scope = null;
                     }
                     else
@@ -226,12 +226,12 @@ Ext.define('Ext.app.EventDomain', {
                     if (typeof listener === 'string') {
                         listener = scope[listener];
                     }
-                    
+
                     event.addListener(listener, scope, options);
 
                     for (i = 0; i < monitoredClassesCount; ++i) {
                         classHasListeners = monitoredClasses[i].hasListeners;
-                        
+
                         if (classHasListeners) {
                             // Ext.mixin.Observable doesn't have hasListeners at class level
                             classHasListeners._incr_(ev);
@@ -268,11 +268,11 @@ Ext.define('Ext.app.EventDomain', {
      */
     match: function(target, selector) {
         var idProperty = this.idProperty;
-        
+
         if (idProperty) {
             return selector === '*' || target[idProperty] === selector;
         }
-        
+
         return false;
     },
 
@@ -298,7 +298,7 @@ Ext.define('Ext.app.EventDomain', {
         prototype.doFireEvent = function(ev, args) {
             var me = this,
                 ret;
-            
+
             ret = doFireEvent.apply(me, arguments);
 
             // Observable can be destroyed in the event handler above,
@@ -325,30 +325,30 @@ Ext.define('Ext.app.EventDomain', {
             monitoredClassesCount = monitoredClasses.length,
             controllers, ev, events, len,
             item, selector, selectors, i, j, info, classHasListeners;
-            
+
         if (controllerId.isController) {
             id = controllerId.getId();
         }
 
         for (ev in bus) {
             ev = Ext.canonicalEventName(ev);
-            
+
             if (bus.hasOwnProperty(ev) && (selectors = bus[ev])) {
                 for (selector in selectors) {
                     controllers = selectors[selector];
                     info = controllers[id];
-                    
+
                     if (info) {
                         events = info.list;
-                        
+
                         if (events) {
                             for (i = 0, len = events.length; i < len; ++i) {
                                 item = events[i];
                                 item.clearListeners();
-                                
+
                                 for (j = 0; j < monitoredClassesCount; ++j) {
                                     classHasListeners = monitoredClasses[j].hasListeners;
-                                    
+
                                     if (classHasListeners) {
                                         // Ext.mixin.Observable doesn't have hasListeners
                                         // at class level
@@ -356,16 +356,16 @@ Ext.define('Ext.app.EventDomain', {
                                     }
                                 }
                             }
-                            
+
                             delete controllers[id];
                         }
                     }
                 }
             }
         }
-        
+
     },
-    
+
     destroy: function() {
         this.monitoredClasses = this.bus = null;
         this.callParent();

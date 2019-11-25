@@ -29,7 +29,7 @@ Ext.define('KitchenSink.view.direct.GenericController', {
 
     contentTpl: '<b>Successful call to {0}.{1} with response:</b> <pre>{2}</pre>',
 
-    destroy: function () {
+    destroy: function() {
         var provider = this.$provider;
 
         if (provider) {
@@ -41,7 +41,7 @@ Ext.define('KitchenSink.view.direct.GenericController', {
         this.callParent();
     },
 
-    finishInit: function () {
+    finishInit: function() {
         /**
          * This may come early, before the view is rendered.
          * Also note that the provider is disconnected but not destroyed
@@ -57,7 +57,8 @@ Ext.define('KitchenSink.view.direct.GenericController', {
 
         if (view.rendered) {
             me.handleInterval();
-        } else {
+        }
+        else {
             view.on({
                 painted: me.handleInterval,
                 scope: me,
@@ -66,10 +67,12 @@ Ext.define('KitchenSink.view.direct.GenericController', {
         }
     },
 
-    onIntervalChange: function (menuitem, checked) {
+    onIntervalChange: function(menuitem, checked) {
+        var vm, interval;
+
         if (checked) {
-            var vm = this.getViewModel(),
-                interval = menuitem.getValue();
+            vm = this.getViewModel();
+            interval = menuitem.getValue();
 
             this.setInterval(interval);
 
@@ -77,7 +80,7 @@ Ext.define('KitchenSink.view.direct.GenericController', {
         }
     },
 
-    updateView: function (content) {
+    updateView: function(content) {
         var view = this.lookup('panel'),
             args = Array.prototype.slice.call(arguments);
 
@@ -91,23 +94,23 @@ Ext.define('KitchenSink.view.direct.GenericController', {
             data: content
         });
 
-        //scroll to the end
+        // scroll to the end
         view.getScrollable().scrollTo(Infinity, Infinity, true);
     },
 
-    onFieldSpecialKey: function (field, event) {
+    onFieldSpecialKey: function(field, event) {
         if (event.getKey() === event.ENTER) {
             this[field.directAction](field);
         }
     },
 
-    onButtonClick: function (button) {
+    onButtonClick: function(button) {
         var field = button.prev();
 
         this[field.directAction](field);
     },
 
-    setInterval: function (interval) {
+    setInterval: function(interval) {
         var me = this,
             provider = me.$provider;
 
@@ -131,7 +134,8 @@ Ext.define('KitchenSink.view.direct.GenericController', {
                 provider.setInterval(interval);
 
                 me.handleInterval(interval);
-            } else {
+            }
+            else {
                 provider.disconnect();
 
                 me.updateView('Polling was paused');
@@ -139,37 +143,42 @@ Ext.define('KitchenSink.view.direct.GenericController', {
         }
     },
 
-    handleInterval: function (interval) {
+    handleInterval: function(interval) {
         interval = Ext.isNumeric(interval) ? interval : this.$provider.getInterval();
 
         this.updateView('Polling interval set to ' + (interval / 1000) + ' seconds');
     },
 
-    doEcho: function (field) {
+    doEcho: function(field) {
+        // eslint-disable-next-line no-undef
         TestAction.doEcho(field.getValue(), this.onEcho, this);
 
         field.reset();
     },
 
-    onEcho: function (result, event, success) {
+    onEcho: function(result, event, success) {
         var transaction = event.getTransaction();
 
         this.updateView(transaction.action, transaction.method, Ext.encode(result));
     },
 
-    doMultiply: function (field) {
+    doMultiply: function(field) {
+        // eslint-disable-next-line no-undef
         TestAction.multiply(field.getValue(), this.onMultiply, this);
 
         field.reset();
     },
 
-    onMultiply: function (result, event, success) {
+    onMultiply: function(result, event, success) {
         var transaction = event.getTransaction();
 
-        this.updateView(transaction.action, transaction.method, event.status ? Ext.encode(result) : event.message);
+        this.updateView(
+            transaction.action,
+            transaction.method, event.status ? Ext.encode(result) : event.message
+        );
     },
 
-    onDirectEventData: function (provider, event) {
+    onDirectEventData: function(provider, event) {
         if (provider === this.$provider) {
             this.updateView('<i>' + event.data + '</i>');
         }

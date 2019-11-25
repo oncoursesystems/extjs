@@ -82,7 +82,7 @@ Ext.define('Admin.view.tablet.email.Email', {
                 iconAlign: 'left',
                 textAlign: 'left',
                 itemId: 'trash',
-                iconCls: 'x-fa fa-trash-o',
+                iconCls: 'x-fa fa-trash-alt',
                 handler: 'onChangeFilter'
             }]
         }, {
@@ -92,7 +92,7 @@ Ext.define('Admin.view.tablet.email.Email', {
             bodyBorder: true,
             shadow: true,
             userCls: 'friends-list email-controls-box',
-            iconCls: 'x-fa fa-group',
+            iconCls: 'x-fa fa-users',
             header: {
                 userCls: 'email-toolbox'
             },

@@ -177,9 +177,9 @@ Ext.define('Ext.grid.RowContext', {
             widget._rowContext = null;
             widget.destroy();
         }
-        
+
         Ext.destroy(me.viewModel);
-        
+
         me.callParent();
     },
 

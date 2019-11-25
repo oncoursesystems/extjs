@@ -183,27 +183,42 @@ Ext.define('Ext.mixin.Toolable', {
 
     // tools
 
+    addTool: function(tool) {
+        var me = this,
+            tools = me.getTools(),
+            before, zone;
+
+        if (!tools || !tools.length) {
+            me.setTools([tool]);
+            tool = me.getTools()[0];
+        }
+        else {
+            tools.push(tool = me.instantiateTool(tool));
+            Ext.sortByWeight(tools);
+            before = tools[tools.indexOf(tool) + 1];
+            zone = tool.zone;
+
+            before = (before && before.zone === zone) ? before.el.dom : null;
+
+            me.getToolZone(zone).el.insertBefore(tool.el, before);
+        }
+
+        return tool;
+    },
+
     applyTools: function(tools) {
         if (tools) {
             // eslint-disable-next-line vars-on-top
             var me = this,
                 array = me.createTools(tools),
                 n = array.length,
-                i, tool, zone;
+                i, tool;
 
-            Ext.Array.sort(array, Ext.weightSortFn);
+            Ext.sortByWeight(array);
 
             for (i = 0; i < n; ++i) {
-                tool = array[i];
-                tool.ownerCmp = tool.toolOwner = me;
+                array[i] = tool = me.instantiateTool(array[i]);
 
-                array[i] = tool = Ext.create(tool);
-
-                tool.doInheritUi();
-
-                zone = tool.zone;
-
-                tool.addCls(me._toolPositionClsMap[zone]);
                 me.getToolZone(tool.zone).el.appendChild(tool.el);
             }
 
@@ -211,6 +226,23 @@ Ext.define('Ext.mixin.Toolable', {
         }
 
         return tools;
+    },
+
+    instantiateTool: function(tool) {
+        if (!tool.isTool) {
+            tool = Ext.clone(tool);
+        }
+
+        tool.ownerCmp = tool.toolOwner = this;
+
+        if (!tool.isTool) {
+            tool = Ext.create(tool);
+        }
+
+        tool.doInheritUi();
+        tool.addCls(this._toolPositionClsMap[tool.zone]);
+
+        return tool;
     },
 
     updateTools: function(tools, oldTools) {
@@ -269,7 +301,7 @@ Ext.define('Ext.mixin.Toolable', {
 
             if (toolDefaults) {
                 Ext.applyIf(tool, toolDefaults);
-                
+
                 tool.instanceCls = this.toolCls;
             }
 
@@ -405,7 +437,7 @@ Ext.define('Ext.mixin.Toolable', {
                 dockWrap = me._toolDockWrap,
                 alignCls = me._toolDockAlignCls,
                 align;
-            
+
             if (dockWrap && (typeof me.getAlign === 'function')) {
                 align = me.getAlign();
                 dockWrap.replaceCls(alignCls[me._toolDockAlign], alignCls[align]);

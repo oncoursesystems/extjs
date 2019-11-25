@@ -1,6 +1,6 @@
 topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
     var slider, thumb, createSlider, createThumb;
-    
+
     beforeEach(function() {
         createSlider = function(config) {
             slider = new Ext.slider.Multi(Ext.apply({
@@ -19,21 +19,21 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
             thumb = new Ext.slider.Thumb(config);
         };
     });
-    
+
     afterEach(function() {
         if (slider) {
             slider.destroy();
         }
 
         slider = null;
-        
+
         if (thumb) {
             thumb.destroy();
         }
 
         thumb = null;
     });
-    
+
     describe("component initialization", function() {
         describe("if slider is vertical", function() {
             beforeEach(function() {
@@ -43,7 +43,7 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                     }
                 });
             });
-            
+
             specFor(Ext.slider.Thumb.Vertical, function(key, value) {
                 it("should override " + key + " method", function() {
                     expect(thumb[key]).toBe(value);
@@ -51,7 +51,7 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
             });
         });
     });
-    
+
     describe("thumb slide", function() {
         describe("horizontal", function() {
             var thumb0, thumb60, thumb90,
@@ -59,14 +59,14 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                     createSlider(Ext.apply({
                         values: [0, 60, 90]
                     }, config));
-                    
+
                     thumb0 = slider.thumbs[0];
                     thumb60 = slider.thumbs[1];
                     thumb90 = slider.thumbs[2];
-                    
+
                     spyOn(slider, "fireEvent").andCallThrough();
                 };
-            
+
             describe("mouse events", function() {
                 describe("on slider mousedown", function() {
                     describe("on thumb", function() {
@@ -85,19 +85,19 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                         });
 
                         var dragConfig = {};
-                        
+
                         dragConfig["drag without snapping"] = {
                             config: {},
                             expected: 3
                         };
-                        
+
                         dragConfig["drag with snapping"] = {
                             config: {
                                 increment: 5
                             },
                             expected: 5
                         };
-                        
+
                         specFor(dragConfig, function(key, value) {
                            describe(key, function() {
                                 beforeEach(function() {
@@ -123,7 +123,7 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                                     it("should increase z-index of dragged thumb", function() {
                                         expect(thumb0.el.dom.style.zIndex).toBeGreaterThan(0);
                                     });
-                                    
+
                                     it("should remove z-index of non-dragged thumb", function() {
                                         // z-indices will work down from the top one which is at 10000
                                         expect(+thumb60.el.dom.style.zIndex).toBe(9000);
@@ -138,19 +138,19 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                         beforeEach(function() {
                             setupSlider();
                         });
-                        
+
                         describe("if slider enabled", function() {
                             beforeEach(function() {
                                 var xy = slider.innerEl.getXY();
 
                                 jasmine.fireMouseEvent(slider.el, 'click', xy[0] + 100, xy[1] + 10);
                             });
-                            
+
                             it("should change the thumb value", function() {
                                 expect(thumb60.value).toEqual(50);
                             });
                         });
-                        
+
                         describe("if slider disabled", function() {
                             beforeEach(function() {
                                 slider.disable();
@@ -158,7 +158,7 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
 
                                 jasmine.fireMouseEvent(slider.el, 'mousedown', xy[0] + 10, xy[1] + 10);
                             });
-                            
+
                             afterEach(function() {
                                 var xy = slider.innerEl.getXY();
 
@@ -186,27 +186,27 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                     thumb0 = slider.thumbs[0];
                     thumb60 = slider.thumbs[1];
                     thumb90 = slider.thumbs[2];
-                    
+
                     spyOn(slider, "fireEvent").andCallThrough();
                 };
-            
+
             describe("mouse events", function() {
                 describe("on slider mousedown", function() {
                     describe("on thumb", function() {
                         var dragConfig = {};
-                        
+
                         dragConfig["drag without snapping"] = {
                             config: {},
                             expected: 54
                         };
-                        
+
                         dragConfig["drag with snapping"] = {
                             config: {
                                 increment: 10
                             },
                             expected: 50
                         };
-                        
+
                         specFor(dragConfig, function(key, value) {
                            describe(key, function() {
                                 beforeEach(function() {
@@ -232,7 +232,7 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                                     it("should increase z-index of dragged thumb", function() {
                                         expect(thumb0.el.dom.style.zIndex).toBeGreaterThan(0);
                                     });
-                                    
+
                                     it("should remove z-index of non-dragged thumb", function() {
                                         // z-indices will work down from the top one which is at 10000
                                         expect(+thumb60.el.dom.style.zIndex).toBe(9000);
@@ -246,7 +246,7 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
                         beforeEach(function() {
                             setupSlider();
                         });
-                        
+
                         describe("if slider enabled", function() {
                             beforeEach(function() {
                                 var xy = slider.innerEl.getXY(),
@@ -254,13 +254,12 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
 
                                 jasmine.fireMouseEvent(slider.el, 'click', xy[0] + 8, xy[1] + offset);
                             });
-                            
 
                             it("should change the thumb value", function() {
                                 expect(thumb60.value).toEqual(50);
                             });
                         });
-                        
+
                         describe("if slider disabled", function() {
                             beforeEach(function() {
                                 slider.disable();
@@ -268,7 +267,7 @@ topSuite("Ext.slider.Thumb", ['Ext.slider.Single'], function() {
 
                                 jasmine.fireMouseEvent(slider.el, 'mousedown', xy[0] + 10, xy[1] - 10);
                             });
-                            
+
                             afterEach(function() {
                                 var xy = slider.innerEl.getXY();
 

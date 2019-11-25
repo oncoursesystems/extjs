@@ -15,14 +15,14 @@ topSuite("Ext.picker.Color", function() {
             }
         });
     });
-    
+
     afterEach(function() {
         if (colorPicker) {
             colorPicker.destroy();
             colorPicker = null;
         }
     });
-    
+
     describe("alternate class name", function() {
         it("should have Ext.ColorPalette as the alternate class name", function() {
             expect(Ext.picker.Color.prototype.alternateClassName).toEqual("Ext.ColorPalette");
@@ -43,7 +43,7 @@ topSuite("Ext.picker.Color", function() {
         it("should select the element corresponding to the initial value", function() {
             expect(colorPicker).toHaveSelected("003300");
         });
-        
+
         it("should set the value", function() {
             expect(colorPicker.value).toBe("003300");
         });
@@ -69,20 +69,19 @@ topSuite("Ext.picker.Color", function() {
         });
     });
 
-
     describe("select", function() {
         describe("when picker is rendered", function() {
             beforeEach(function() {
                 createPicker();
             });
-            
+
             it("should handle color with #", function() {
                 colorPicker.select("#339966");
 
                 expect(colorPicker).toHaveSelected("339966");
                 expect(colorPicker.value).toBe("339966");
             });
-            
+
             it("should handle color without #", function() {
                 colorPicker.select("339966");
 
@@ -93,7 +92,7 @@ topSuite("Ext.picker.Color", function() {
             it("should be able to supress event", function() {
                 spyOn(colorPicker, "fireEvent");
                 colorPicker.select("#339966", true);
-                
+
                 expect(colorPicker.fireEvent).not.toHaveBeenCalled();
             });
         });
@@ -104,33 +103,33 @@ topSuite("Ext.picker.Color", function() {
                     renderTo: undefined
                 });
             });
-            
+
             it("should handle color with #", function() {
                 colorPicker.select("#339966");
 
                 expect(colorPicker.value).toBe("339966");
             });
-            
+
             it("should handle color without #", function() {
                 colorPicker.select("339966");
-                
+
                 expect(colorPicker.value).toBe("339966");
             });
 
             it("should be able to supress event", function() {
                 spyOn(colorPicker, "fireEvent");
                 colorPicker.select("#339966", true);
-                
+
                 expect(colorPicker.fireEvent).not.toHaveBeenCalled();
             });
         });
     });
-    
+
         describe("getValue", function() {
             beforeEach(function() {
                 createPicker();
             });
-            
+
             it("should return the value if a value was selected", function() {
                 colorPicker.select("339966");
 

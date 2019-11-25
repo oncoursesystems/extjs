@@ -179,7 +179,7 @@ function() {
             expect(store.getSorters().length).toBe(0);
         });
     });
-    
+
     describe("layout", function() {
         it("should layout grouped columns correctly", function() {
             grid = new Ext.grid.Panel({
@@ -416,7 +416,6 @@ function() {
             expect(colRef[0].textInnerEl.dom).hasHTML('NewName');
         });
 
-
         describe("empty value", function() {
             var emptyValues = ['', ' ', null, undefined, '&#160;'],
                 i;
@@ -428,9 +427,9 @@ function() {
                             { text: emptyValues[i], dataIndex: 'phone', flex: 1 }
                         ]
                     });
-                    
+
                     expect(colRef[0].titleEl).toHaveCls(Ext.baseCSSPrefix + 'column-header-inner-empty');
-                    
+
                     colRef[0].setText('Phone');
 
                     expect(colRef[0].titleEl).not.toHaveCls(Ext.baseCSSPrefix + 'column-header-inner-empty');
@@ -442,9 +441,9 @@ function() {
                             { text: 'Foo', dataIndex: 'phone', flex: 1 }
                         ]
                     });
-                    
+
                     expect(colRef[0].titleEl).not.toHaveCls(Ext.baseCSSPrefix + 'column-header-inner-empty');
-                    
+
                     colRef[0].setText(emptyValues[i]);
 
                     expect(colRef[0].titleEl).toHaveCls(Ext.baseCSSPrefix + 'column-header-inner-empty');

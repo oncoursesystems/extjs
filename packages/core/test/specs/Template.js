@@ -30,7 +30,7 @@ topSuite("Ext.Template", ["Ext.dom.Element"], function() {
             tpl = new Ext.Template('Hello {foo}', {
                 compiled: true
             });
-            
+
             // must call the new tpl for it bother compiling it
             var s = tpl.apply({ foo: 42 });
 
@@ -66,14 +66,14 @@ topSuite("Ext.Template", ["Ext.dom.Element"], function() {
                     expect(tpl.html).toEqual(s1 + s2 + s3);
                 });
             });
-            
+
             describe("array", function() {
                 it("should concat all array strings", function() {
                     var tpl = new Ext.Template(['foo', 'bar', 'baz']);
 
                     expect(tpl.html).toBe('foobarbaz');
                 });
-                
+
                 it("should apply an objects after the first argument to the template", function() {
                     var o1 = {
                         a: function() {}
@@ -81,7 +81,7 @@ topSuite("Ext.Template", ["Ext.dom.Element"], function() {
                     o2 = {
                         b: function() {}
                     };
-                    
+
                     var tpl = new Ext.Template(['foo', 'bar', o1, o2]);
 
                     expect(tpl.html).toBe('foobar');
@@ -174,10 +174,10 @@ topSuite("Ext.Template", ["Ext.dom.Element"], function() {
                 it("should apply the supplied value and return an HTML fragments", function() {
                     expect(simpleTpl.apply(appliedArr)).toEqual('<div class="template">Hello world.</div>');
                 });
-                
+
                 it("should expand tokens with $ characters", function() {
                     var result = new Ext.Template('foo {$foo$}').apply({ $foo$: 'bar' });
-                    
+
                     expect(result).toBe('foo bar');
                 });
             });
@@ -534,7 +534,7 @@ topSuite("Ext.Template", ["Ext.dom.Element"], function() {
                 controller: 'foo',
 
                 fmt: function() {
-                    
+
                 },
                 promote: function() {
                 //

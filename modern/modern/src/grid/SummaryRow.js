@@ -21,9 +21,9 @@ Ext.define('Ext.grid.SummaryRow', {
     },
 
     defaultCellUI: 'summary',
-    
+
     classCls: Ext.baseCSSPrefix + 'summaryrow',
-    
+
     element: {
         reference: 'element',
         children: [{
@@ -35,25 +35,25 @@ Ext.define('Ext.grid.SummaryRow', {
         }]
     },
 
-
-    updateGroup: function () {
+    updateGroup: function() {
         this.syncSummary();
     },
 
     privates: {
-        beginRefresh: function (context) {
-            var me = this;
+        beginRefresh: function(context) {
+            var me = this,
+                group = me.getGroup();
 
             context = me.callParent([ context ]);
 
-            context.group = me.getGroup();
-            context.records = (context.group || context.store.data).items;
+            context.group = group;
+            context.records = (group ? group.data : context.store.data).items;
             context.summary = true;
 
             return context;
         },
 
-        syncSummary: function () {
+        syncSummary: function() {
             var me = this,
                 owner = me.getGroup() || me.parent.store,
                 record = owner.getSummaryRecord(),

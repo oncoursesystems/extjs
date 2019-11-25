@@ -221,7 +221,7 @@ Ext.define('Ext.Component', {
                         }
 
                         result = this.callParent(); // not "me" here!
-                        
+
                         if (GlobalEvents.hasListeners.afterlayout) {
                             GlobalEvents.fireEvent('afterlayout');
                         }
@@ -248,7 +248,7 @@ Ext.define('Ext.Component', {
                 if (flush) {
                     this.flushLayouts();
                 }
-                
+
                 if (Ext.GlobalEvents.hasListeners.resumelayouts) {
                     Ext.GlobalEvents.fireEvent('resumelayouts');
                 }
@@ -1018,7 +1018,7 @@ Ext.define('Ext.Component', {
      * and the header are still mouse-accessible.
      */
     maskElement: null,
-    
+
     /**
      * @cfg {Object} [maskDefaults] Default LoadMask configuration for {@link #method-setLoading}.
      */
@@ -1574,7 +1574,7 @@ Ext.define('Ext.Component', {
      *
      * @since 2.3.0
      */
-    
+
     /**
      * @cfg {Number} tabIndex
      * DOM tabIndex attribute for this component's {@link #focusEl}.
@@ -2163,7 +2163,7 @@ Ext.define('Ext.Component', {
             if (config.isAction) {
                 me.baseAction = config;
             }
-            
+
             config = config.initialConfig;
             // component cloning / action set up
         }
@@ -2195,13 +2195,13 @@ Ext.define('Ext.Component', {
         // Ensure that we have an id early so that config getters may access it
         me.getId();
         me.protoEl = new Ext.util.ProtoElement();
-        
+
         //<debug>
         me.$calledInitConfig = true;
         //</debug>
-        
+
         me.initConfig(config);
-        
+
         //<debug>
         delete me.$calledInitConfig;
         //</debug>
@@ -2230,7 +2230,7 @@ Ext.define('Ext.Component', {
         }
 
         xhooks = me.xhooks;
-        
+
         if (xhooks) {
             delete me.xhooks;
             Ext.override(me, xhooks);
@@ -2242,7 +2242,7 @@ Ext.define('Ext.Component', {
         if (!me.validIdRe.test(me.id)) {
             Ext.raise('Invalid component "id": "' + me.id + '"');
         }
-        
+
         if (!me.validIdRe.test(me.itemId)) {
             Ext.raise('Invalid component "itemId": "' + me.itemId + '"');
         }
@@ -2257,7 +2257,7 @@ Ext.define('Ext.Component', {
             me.initialCls = me.cls;
             me.protoEl.addCls(me.cls);
         }
-        
+
         if (me.style) {
             me.initialStyle = me.style;
             me.protoEl.setStyle(me.style);
@@ -2276,7 +2276,7 @@ Ext.define('Ext.Component', {
         me.addStateEvents('resize');
 
         controller = me.getController();
-        
+
         if (controller) {
             controller.init(me);
         }
@@ -2315,7 +2315,7 @@ Ext.define('Ext.Component', {
                 Ext.global.console.warn('Ext.Component: disabledClass has been deprecated. ' +
                                         'Please use disabledCls.');
             }
-            
+
             me.disabledCls = me.disabledClass;
             delete me.disabledClass;
         }
@@ -2335,7 +2335,7 @@ Ext.define('Ext.Component', {
                       'called by Ext.Component');
         }
         //</debug>
-        
+
         this.mixins.observable.constructor.call(this);
     },
 
@@ -2354,7 +2354,7 @@ Ext.define('Ext.Component', {
             el = me.rendered ? me.el : me.protoEl;
 
         el.addCls.apply(el, arguments);
-        
+
         return me;
     },
 
@@ -2445,18 +2445,18 @@ Ext.define('Ext.Component', {
         var me = this;
 
         plugin = me.constructPlugin(plugin);
-        
+
         if (me.plugins) {
             me.plugins.push(plugin);
         }
         else {
             me.plugins = [ plugin ];
         }
-        
+
         if (me.pluginsInitialized) {
             me.initPlugin(plugin);
         }
-        
+
         return plugin;
     },
 
@@ -2511,10 +2511,10 @@ Ext.define('Ext.Component', {
 
             for (childElName in childEls) {
                 suffix = childEls[childElName].frame;
-                
+
                 if (suffix && suffix !== true) {
                     el = me[childElName];
-                    
+
                     if (el) {
                         el.addCls(baseClsUI + suffix);
                     }
@@ -2544,10 +2544,10 @@ Ext.define('Ext.Component', {
 
             for (childElName in childEls) {
                 suffix = childEls[childElName].frame;
-                
+
                 if (suffix && suffix !== true) {
                     el = me[childElName];
-                    
+
                     if (el) {
                         el.removeCls(baseClsUI + suffix);
                     }
@@ -2627,9 +2627,9 @@ Ext.define('Ext.Component', {
      */
     afterSetPosition: function(x, y) {
         var me = this;
-        
+
         me.onPosition(x, y);
-        
+
         if (me.hasListeners.move) {
             me.fireEvent('move', me, x, y);
         }
@@ -2664,7 +2664,7 @@ Ext.define('Ext.Component', {
         if (!me.ghost) {
             animateTarget = null;
         }
-        
+
         // If we're animating, kick of an animation of the ghost from the target
         // to the *Element* current box
         if (animateTarget) {
@@ -2674,7 +2674,7 @@ Ext.define('Ext.Component', {
                 width: myEl.dom.offsetWidth,
                 height: myEl.dom.offsetHeight
             };
-            
+
             fromBox = {
                 x: animateTarget.getX(),
                 y: animateTarget.getY(),
@@ -2699,6 +2699,11 @@ Ext.define('Ext.Component', {
                 from: fromBox,
                 to: toBox,
                 listeners: {
+                    beforeanimate: function() {
+                        if (me.modal) {
+                            ghostPanel.toFront();
+                        }
+                    },
                     afteranimate: function() {
                         if (!me.destroying) {
                             ghostPanel.componentLayout.lastComponentSize = null;
@@ -2714,7 +2719,7 @@ Ext.define('Ext.Component', {
             me.onShowComplete(callback, scope);
             me.fireHierarchyEvent('show');
         }
-        
+
         // Take a run through the zIndex stack ensuring modal, focus and topmost is correct
         if (zim) {
             zim.resumeReflow(true);
@@ -2735,13 +2740,13 @@ Ext.define('Ext.Component', {
         }
 
         hasToWidth = Ext.isDefined(to.width);
-        
+
         if (hasToWidth) {
             toWidth = Ext.Number.constrain(to.width, me.minWidth, me.maxWidth);
         }
 
         hasToHeight = Ext.isDefined(to.height);
-        
+
         if (hasToHeight) {
             toHeight = Ext.Number.constrain(to.height, me.minHeight, me.maxHeight);
         }
@@ -2750,17 +2755,17 @@ Ext.define('Ext.Component', {
         if (!animObj.dynamic && (hasToWidth || hasToHeight)) {
             curWidth = (animObj.from ? animObj.from.width : undefined) || me.getWidth();
             w = curWidth;
-            
+
             curHeight = (animObj.from ? animObj.from.height : undefined) || me.getHeight();
             h = curHeight;
-            
+
             isExpanding = false;
 
             if (hasToHeight && toHeight > curHeight) {
                 h = toHeight;
                 isExpanding = true;
             }
-            
+
             if (hasToWidth && toWidth > curWidth) {
                 w = toWidth;
                 isExpanding = true;
@@ -2769,7 +2774,7 @@ Ext.define('Ext.Component', {
             // During animated sizing, overflow has to be hidden to clip expanded content
             if (hasToHeight || hasToWidth) {
                 oldOverflow = me.el.getStyle('overflow');
-                
+
                 if (oldOverflow !== 'hidden') {
                     me.el.setStyle('overflow', 'hidden');
                 }
@@ -2792,12 +2797,12 @@ Ext.define('Ext.Component', {
                 if (clearWidth) {
                     delete me.width;
                 }
-                
+
                 if (clearHeight) {
                     delete me.height;
                 }
             }
-            
+
             if (hasToWidth) {
                 to.width = toWidth;
             }
@@ -2812,26 +2817,26 @@ Ext.define('Ext.Component', {
         // Arrange to reinstate any constraining after the animation has completed
         wasConstrained = me.constrain;
         wasConstrainedHeader = me.constrainHeader;
-        
+
         if (wasConstrained || wasConstrainedHeader) {
             me.constrain = me.constrainHeader = false;
             passedCallback = animObj.callback;
-            
+
             animObj.callback = function() {
                 me.constrain = wasConstrained;
                 me.constrainHeader = wasConstrainedHeader;
-                
+
                 // Call the original callback if any
                 if (passedCallback) {
                     passedCallback.call(animObj.scope || me, arguments);
                 }
-                
+
                 if (oldOverflow !== 'hidden') {
                     me.el.setStyle('overflow', oldOverflow);
                 }
             };
         }
-        
+
         return me.mixins.animate.animate.apply(me, arguments);
     },
 
@@ -2889,7 +2894,7 @@ Ext.define('Ext.Component', {
             else {
                 me.scrollFlags = me._scrollFlags.none;
             }
-            
+
             me.updateLayout();
         }
 
@@ -2970,7 +2975,7 @@ Ext.define('Ext.Component', {
 
         if (me.constrain || me.constrainHeader) {
             pos = me.calculateConstrainedPosition(null, [x, y], true);
-            
+
             if (pos) {
                 x = pos[0];
                 y = pos[1];
@@ -2987,7 +2992,7 @@ Ext.define('Ext.Component', {
             me.y = y;
 
             adj = me.adjustPosition(x, y);
-            
+
             // Set up the return info and store the position in this object
             pos = {
                 x: adj.x,
@@ -3024,21 +3029,21 @@ Ext.define('Ext.Component', {
      */
     bubble: function(fn, scope, args) {
         var p = this;
-        
+
         while (p) {
             if (fn.apply(scope || p, args || [p]) === false) {
                 break;
             }
-            
+
             p = p.getBubbleTarget();
         }
-        
+
         return this;
     },
 
     clearListeners: function() {
         var me = this;
-        
+
         me.mixins.observable.clearListeners.call(me);
         me.mixins.componentDelegation.clearDelegatedListeners.call(me);
     },
@@ -3053,7 +3058,7 @@ Ext.define('Ext.Component', {
      */
     cloneConfig: function(overrides) {
         overrides = overrides || {};
-        
+
         // eslint-disable-next-line vars-on-top
         var id = overrides.id || Ext.id(),
             cfg = Ext.applyIf(overrides, this.initialConfig),
@@ -3083,7 +3088,7 @@ Ext.define('Ext.Component', {
         if (!me.hasListeners.beforedestroy || me.fireEvent('beforedestroy', me) !== false) {
             // isDestroying added for compat reasons
             me.isDestroying = me.destroying = true;
-            
+
             me.doDestroy();
 
             // We need to defer clearing listeners until after doDestroy() completes,
@@ -3094,7 +3099,7 @@ Ext.define('Ext.Component', {
             me.isDestroying = me.destroying = false;
 
             me.callParent(); // Ext.Base
-            
+
             // ComponentDelegation mixin does not install "after" interceptor on the
             // base class destructor; Observable mixin does install the interceptor
             // but cannot destroy itself automatically because Components are
@@ -3103,7 +3108,7 @@ Ext.define('Ext.Component', {
             me.mixins.observable.destroyObservable.call(me, true);
         }
     },
-    
+
     /**
      * Perform the actual destruction sequence.
      *
@@ -3122,10 +3127,10 @@ Ext.define('Ext.Component', {
             selector, ownerCt, el;
 
         ownerCt = me.floatParent || me.ownerCt;
-        
+
         if (me.floating) {
             delete me.floatParent;
-            
+
             // A zIndexManager is stamped into a *floating* Component when it is added
             // to a Container. If it has no zIndexManager at render time, it is assigned
             // to the global Ext.WindowManager instance.
@@ -3133,7 +3138,7 @@ Ext.define('Ext.Component', {
             if (me.zIndexManager && !me.zIndexManager.destroyed) {
                 me.zIndexManager.unregister(me);
             }
-            
+
             // Some components may set floating as config object, which will be nulled
             // in the base destructor. We need this property in Containers, so set it
             // to Boolean instead.
@@ -3141,7 +3146,7 @@ Ext.define('Ext.Component', {
         }
 
         me.removeBindings();
-        
+
         if (!me.beforeDestroy.$emptyFn) {
             me.beforeDestroy();
         }
@@ -3155,7 +3160,7 @@ Ext.define('Ext.Component', {
         }
 
         me.stopAnimation();
-        
+
         // Ensure that any ancillary components are destroyed.
         if (me.rendered) {
             Ext.destroy(
@@ -3185,7 +3190,7 @@ Ext.define('Ext.Component', {
             me.loadMask,
             me.floatingDescendants
         );
-        
+
         if (!me.onDestroy.$emptyFn) {
             me.onDestroy();
         }
@@ -3198,11 +3203,11 @@ Ext.define('Ext.Component', {
         }
 
         me.componentLayout = null;
-        
+
         if (me.hasListeners.destroy) {
             me.fireEvent('destroy', me);
         }
-        
+
         if (!me.preventRegister) {
             Ext.ComponentManager.unregister(me);
         }
@@ -3219,11 +3224,11 @@ Ext.define('Ext.Component', {
                 me.showListenerIE.destroy();
                 me.showListenerIE = null;
             }
-            
+
             if (!me.preserveElOnDestroy) {
                 me.el.destroy();
             }
-            
+
             // We don't own the container element so can't just destroy it as that would
             // remove it from the DOM; we have to remove the Element instance from cache
             // though.
@@ -3231,18 +3236,18 @@ Ext.define('Ext.Component', {
                 if (!container.destroyed) {
                     container.collect();
                 }
-                
+
                 me.container = null;
             }
-            
+
             me.el.component = null;
             me.mixins.elementCt.destroy.call(me); // removes childEls
-            
+
             if (selectors) {
                 for (selector in selectors) {
                     if (selectors.hasOwnProperty(selector)) {
                         el = me[selector];
-                        
+
                         if (el) { // in case any other code may have already removed it
                             delete me[selector];
                             el.destroy();
@@ -3308,9 +3313,9 @@ Ext.define('Ext.Component', {
     doFireEvent: function(eventName, args, bubbles) {
         var me = this,
             ret;
-        
+
         ret = me.mixins.observable.doFireEvent.call(me, eventName, args, bubbles);
-        
+
         // The Component instance can be destroyed in the handler, in which case
         // we can't fire delegated events on it anymore.
         if (ret !== false && !me.destroyed) {
@@ -3390,7 +3395,7 @@ Ext.define('Ext.Component', {
         for (p = this.getRefOwner(); p && !fn(p, this); p = p.getRefOwner()) {
             // do nothing
         }
-        
+
         return p || null;
     },
 
@@ -3460,11 +3465,11 @@ Ext.define('Ext.Component', {
 
     getAnimateTarget: function(target) {
         target = target || this.animateTarget;
-        
+
         if (target) {
             target = target.isComponent ? target.getEl() : Ext.get(target);
         }
-        
+
         return target || null;
     },
 
@@ -3485,7 +3490,7 @@ Ext.define('Ext.Component', {
         if (!me.componentLayout || !me.componentLayout.isLayout) {
             me.setComponentLayout(Ext.layout.Layout.create(me.componentLayout, 'autocomponent'));
         }
-        
+
         return me.componentLayout;
     },
 
@@ -3518,11 +3523,11 @@ Ext.define('Ext.Component', {
         if (me.hidden) {
             inheritedState.hidden = true;
         }
-        
+
         if (me.collapseImmune) {
             inheritedState.collapseImmune = true;
         }
-        
+
         if (me.modelValidation !== undefined) {
             inheritedState.modelValidation = me.modelValidation;
         }
@@ -3551,17 +3556,17 @@ Ext.define('Ext.Component', {
         // Autogenerate it if none was configured.
         if (!(me.id || (me.id = me.initialConfig.id))) {
             xtype = me.getXType();
-            
+
             if (xtype) {
                 xtype = xtype.replace(Ext.Component.INVALID_ID_CHARS_Re, '-');
             }
             else {
                 xtype = Ext.name.toLowerCase() + '-comp';
             }
-            
+
             me.id = xtype + '-' + me.getAutoId();
         }
-        
+
         return me.id;
     },
 
@@ -3591,11 +3596,11 @@ Ext.define('Ext.Component', {
             else {
                 loader.setTarget(me);
             }
-            
+
             return me.loader;
 
         }
-        
+
         return null;
     },
 
@@ -3668,7 +3673,7 @@ Ext.define('Ext.Component', {
 
         for (i = 0; i < ln; i++) {
             plugin = plugins[i];
-            
+
             // pre-6.2 we only considered pluginId property...
             if (plugin.id === id || plugin.pluginId === id) {
                 return plugin;
@@ -3703,7 +3708,7 @@ Ext.define('Ext.Component', {
             xy[0] -= floatParentBox.left;
             xy[1] -= floatParentBox.top;
         }
-        
+
         return xy;
     },
 
@@ -3714,7 +3719,7 @@ Ext.define('Ext.Component', {
      */
     getScrollX: function() {
         var scroller = this.getScrollable();
-        
+
         return scroller ? scroller.getPosition().x : 0;
     },
 
@@ -3725,7 +3730,7 @@ Ext.define('Ext.Component', {
      */
     getScrollY: function() {
         var scroller = this.getScrollable();
-        
+
         return scroller ? scroller.getPosition().y : 0;
     },
 
@@ -3813,7 +3818,7 @@ Ext.define('Ext.Component', {
                     shrinkWrap &= 2; // percentage, "30em" or whatever - not width shrinkWrap
                     hasWidthStyle = true;
                 }
-                
+
                 if (height && typeofHeight === 'string') {
                     shrinkWrap &= 1; // percentage, "30em" or whatever - not height shrinkWrap
                     hasHeightStyle = true;
@@ -3907,7 +3912,7 @@ Ext.define('Ext.Component', {
         if (sizeModel.width.configured) {
             state = me.addPropertyToState(state, 'width');
         }
-        
+
         if (sizeModel.height.configured) {
             state = me.addPropertyToState(state, 'height');
         }
@@ -4006,7 +4011,7 @@ Ext.define('Ext.Component', {
      */
     hasCls: function(className) {
         var el = this.rendered ? this.el : this.protoEl;
-        
+
         return el.hasCls.apply(el, arguments);
     },
 
@@ -4046,7 +4051,7 @@ Ext.define('Ext.Component', {
             if (!me.hasListeners.beforehide || me.fireEvent('beforehide', me) !== false ||
                 me.hierarchicallyHidden) {
                 me.getInherited().hidden = me.hidden = true;
-                
+
                 if (container && !container.beforeFocusableChildHide.$nullFn) {
                     container.beforeFocusableChildHide(me);
                 }
@@ -4061,7 +4066,7 @@ Ext.define('Ext.Component', {
                 }
             }
         }
-        
+
         return me;
     },
 
@@ -4114,7 +4119,7 @@ Ext.define('Ext.Component', {
         if (me.plugins && !me.plugins.processed) {
             me.constructPlugins();
         }
-        
+
         me.pluginsInitialized = true;
 
         // this will properly (ignore or) constrain the configured width/height to their
@@ -4214,7 +4219,7 @@ Ext.define('Ext.Component', {
     isHidden: function() {
         return this.hidden;
     },
-    
+
     getHidden: function() {
         return this.hidden;
     },
@@ -4230,12 +4235,12 @@ Ext.define('Ext.Component', {
         // visible state of the component.
         for (; (parent = child.ownerCt || child.floatParent); child = parent) {
             parentInheritedState = parent.getInherited();
-            
+
             if (parentInheritedState.hidden) {
                 hidden = true;
                 break;
             }
-            
+
             if (child.getInherited().collapseImmune) {
                 // The child or one of its ancestors is immune to collapse.
                 if (parent.collapsed && !child.collapseImmune) {
@@ -4316,7 +4321,7 @@ Ext.define('Ext.Component', {
             }
 
             ownerLayout = comp.ownerLayout;
-            
+
             if (!ownerLayout) {
                 break;
             }
@@ -4462,7 +4467,7 @@ Ext.define('Ext.Component', {
         if (box) {
             elHeight = box.height;
         }
-        
+
         target.mask(msg, msgCls, elHeight);
 
         this.setMasked(true);
@@ -4493,23 +4498,23 @@ Ext.define('Ext.Component', {
             // eslint-disable-next-line max-len
             for (it = ownerCt.items.items, i = Ext.Array.indexOf(it, node) + 1, len = it.length; i < len; i++) {
                 sib = it[i];
-                
+
                 if (sib.is(selector)) {
                     return sib;
                 }
-                
+
                 if (sib.down) {
                     result = sib.down(selector);
-                    
+
                     if (result) {
                         return result;
                     }
                 }
             }
-            
+
             return ownerCt.nextNode(selector);
         }
-        
+
         return null;
     },
 
@@ -4531,11 +4536,11 @@ Ext.define('Ext.Component', {
     nextSibling: function(selector) {
         var o = this.ownerCt,
             it, last, idx, c;
-        
+
         if (o) {
             it = o.items;
             idx = it.indexOf(this) + 1;
-            
+
             if (idx) {
                 if (selector) {
                     for (last = it.getCount(); idx < last; idx++) {
@@ -4551,7 +4556,7 @@ Ext.define('Ext.Component', {
                 }
             }
         }
-        
+
         return null;
     },
 
@@ -4620,7 +4625,7 @@ Ext.define('Ext.Component', {
         // focus restoration.
         if (!me.isLayoutMoving && me.el && me.el.contains(Ext.Element.getActiveElement())) {
             focusTarget = me.findFocusTarget();
-            
+
             if (focusTarget) {
                 focusTarget.focus();
             }
@@ -4815,7 +4820,7 @@ Ext.define('Ext.Component', {
         if (!me.ghost) {
             animateTarget = null;
         }
-        
+
         // If we're animating, kick off an animation of the ghost down to the target
         if (animateTarget) {
             toBox = {
@@ -4824,11 +4829,11 @@ Ext.define('Ext.Component', {
                 width: animateTarget.dom.offsetWidth,
                 height: animateTarget.dom.offsetHeight
             };
-            
+
             ghostPanel = me.ghost();
             ghostPanel.el.stopAnimation();
             fromSize = me.getSize();
-            
+
             ghostPanel.el.animate({
                 to: toBox,
                 listeners: {
@@ -4836,7 +4841,7 @@ Ext.define('Ext.Component', {
                         if (!me.destroying) {
                             ghostPanel.componentLayout.lastComponentSize = null;
                             me.unghost(false);
-                            
+
                             ghostPanel.el.setSize(fromSize);
                             me.afterHide(callback, scope);
                         }
@@ -4847,8 +4852,7 @@ Ext.define('Ext.Component', {
         else {
             me.el.hide();
         }
-        
-        
+
         if (!animateTarget) {
             me.afterHide(callback, scope);
         }
@@ -5023,24 +5027,24 @@ Ext.define('Ext.Component', {
         if (ownerCt) {
             for (it = ownerCt.items.items, i = Ext.Array.indexOf(it, node) - 1; i > -1; i--) {
                 sib = it[i];
-                
+
                 if (sib.query) {
                     result = sib.query(selector);
                     result = result[result.length - 1];
-                    
+
                     if (result) {
                         return result;
                     }
                 }
-                
+
                 if (sib.is(selector)) {
                     return sib;
                 }
             }
-            
+
             return ownerCt.previousNode(selector, true);
         }
-        
+
         return null;
     },
 
@@ -5063,11 +5067,11 @@ Ext.define('Ext.Component', {
     previousSibling: function(selector) {
         var o = this.ownerCt,
             it, idx, c;
-        
+
         if (o) {
             it = o.items;
             idx = it.indexOf(this);
-            
+
             if (idx !== -1) {
                 if (selector) {
                     for (--idx; idx >= 0; idx--) {
@@ -5083,7 +5087,7 @@ Ext.define('Ext.Component', {
                 }
             }
         }
-        
+
         return null;
     },
 
@@ -5098,11 +5102,11 @@ Ext.define('Ext.Component', {
      */
     registerFloatingItem: function(cmp) {
         var me = this;
-        
+
         if (!me.floatingDescendants) {
             me.floatingDescendants = new Ext.ZIndexManager(me);
         }
-        
+
         me.floatingDescendants.register(cmp);
     },
 
@@ -5116,7 +5120,7 @@ Ext.define('Ext.Component', {
             el = me.rendered ? me.el : me.protoEl;
 
         el.removeCls.apply(el, arguments);
-        
+
         return me;
     },
 
@@ -5164,20 +5168,20 @@ Ext.define('Ext.Component', {
 
     resumeLayouts: function(flushOptions) {
         var me = this;
-        
+
         if (!me.rendered) {
             return;
         }
-        
+
         //<debug>
         if (!me.layoutSuspendCount) {
             Ext.log.warn('Mismatched call to resumeLayouts - layouts are currently not suspended.');
         }
         //</debug>
-        
+
         if (me.layoutSuspendCount && !--me.layoutSuspendCount) {
             me.suspendLayout = false;
-            
+
             if (flushOptions && !me.isLayoutSuspended()) {
                 me.updateLayout(flushOptions);
             }
@@ -5232,7 +5236,7 @@ Ext.define('Ext.Component', {
      */
     setAutoScroll: function(scroll) {
         this.setScrollable(!!scroll);
-        
+
         return this;
     },
 
@@ -5259,14 +5263,14 @@ Ext.define('Ext.Component', {
             else {
                 border = this.unitizeBox(border);
             }
-            
+
             targetEl.setStyle('border-width', border);
-            
+
             if (!initial) {
                 me.updateLayout();
             }
         }
-        
+
         me.border = border;
     },
 
@@ -5360,7 +5364,7 @@ Ext.define('Ext.Component', {
                 else {
                     Ext.apply(config, load, me.maskDefaults);
                 }
-                
+
                 // We do not already have a LoadMask: create one
                 if (!me.loadMask || !me.loadMask.isLoadMask) {
                     // Deprecated second parameter.
@@ -5368,14 +5372,14 @@ Ext.define('Ext.Component', {
                     if (targetEl && config.useTargetEl == null) {
                         config.useTargetEl = true;
                     }
-                    
+
                     me.loadMask = new Ext.LoadMask(config);
                 }
                 // Change any settings according to load config
                 else {
                     Ext.apply(me.loadMask, config);
                 }
-                
+
                 // If already visible, just update display with passed configs.
                 if (me.loadMask.isVisible()) {
                     me.loadMask.syncMaskState();
@@ -5392,7 +5396,7 @@ Ext.define('Ext.Component', {
                 }
             }
         }
-        
+
         return me.loadMask;
     },
 
@@ -5412,16 +5416,16 @@ Ext.define('Ext.Component', {
                 if (margin === true) {
                     margin = 5;
                 }
-                
+
                 margin = this.unitizeBox(margin);
             }
-            
+
             me.margin = margin;
-            
+
             // See: EXTJS-13359
             me.margin$ = null;
             me.getEl().setStyle('margin', margin);
-            
+
             if (!preventLayout) {
                 // Changing the margins can impact the position of this (and possibly)
                 // other subsequent components in the layout.
@@ -5469,7 +5473,7 @@ Ext.define('Ext.Component', {
             y = x[1];
             x = x[0];
         }
-        
+
         me.pageX = x;
         me.pageY = y;
 
@@ -5478,11 +5482,11 @@ Ext.define('Ext.Component', {
             // their x and y properties made relative
             if (me.isContainedFloater()) {
                 floatParentBox = me.floatParent.getTargetEl().getViewRegion();
-                
+
                 if (Ext.isNumber(x) && Ext.isNumber(floatParentBox.left)) {
                     x -= floatParentBox.left;
                 }
-                
+
                 if (Ext.isNumber(y) && Ext.isNumber(floatParentBox.top)) {
                     y -= floatParentBox.top;
                 }
@@ -5529,7 +5533,7 @@ Ext.define('Ext.Component', {
                 // want to incur the penalty of read/write on every call to setPosition
                 if (x !== me.getLocalX() || y !== me.getLocalY()) {
                     me.stopAnimation();
-                    
+
                     me.animate(Ext.apply({
                         duration: 1000,
                         listeners: {
@@ -5551,7 +5555,7 @@ Ext.define('Ext.Component', {
                 me.afterSetPosition(x, y);
             }
         }
-        
+
         return me;
     },
 
@@ -5693,9 +5697,9 @@ Ext.define('Ext.Component', {
      */
     setStyle: function(property, value) {
         var el = this.el || this.protoEl;
-        
+
         el.setStyle(property, value);
-        
+
         return this;
     },
 
@@ -5832,7 +5836,7 @@ Ext.define('Ext.Component', {
                 // it becomes hierarchically visible.
                 me.initHierarchyEvents();
             }
-            
+
             // defer the show call until next syncHidden(), but ignore animateTarget.
             if (arguments.length > 1) {
                 arguments[0] = null;
@@ -5862,7 +5866,7 @@ Ext.define('Ext.Component', {
                 delete this.getInherited().hidden;
                 // Render on first show if there is an autoRender config, or if this
                 // is a floater (Window, Menu, BoundList etc).
-                
+
                 if (container && !container.beforeFocusableChildShow.$nullFn) {
                     container.beforeFocusableChildShow(me);
                 }
@@ -5874,7 +5878,7 @@ Ext.define('Ext.Component', {
                 // we resume layouts and force a flush because we don't know if something
                 // will force it.
                 Ext.suspendLayouts();
-                
+
                 if (!rendered && (me.autoRender || me.floating)) {
                     me.doAutoRender();
                     rendered = me.rendered;
@@ -5894,7 +5898,7 @@ Ext.define('Ext.Component', {
                 me.onShowVeto();
             }
         }
-        
+
         return me;
     },
 
@@ -5934,17 +5938,17 @@ Ext.define('Ext.Component', {
         if (!me.rendered && (me.autoRender || me.floating)) {
             me.x = x;
             me.y = y;
-            
+
             return me.show();
         }
-        
+
         if (me.floating) {
             me.setPosition(x, y, animate);
         }
         else {
             me.setPagePosition(x, y, animate);
         }
-        
+
         return me.show();
     },
 
@@ -5982,11 +5986,11 @@ Ext.define('Ext.Component', {
 
     suspendLayouts: function() {
         var me = this;
-        
+
         if (!me.rendered) {
             return;
         }
-        
+
         if (++me.layoutSuspendCount === 1) {
             me.suspendLayout = true;
         }
@@ -6024,7 +6028,7 @@ Ext.define('Ext.Component', {
 
     unregisterFloatingItem: function(cmp) {
         var me = this;
-        
+
         if (me.floatingDescendants) {
             me.floatingDescendants.unregister(cmp);
         }
@@ -6067,7 +6071,7 @@ Ext.define('Ext.Component', {
                 }
 
                 steps++;
-                
+
                 if (selector.isComponent) {
                     if (result === selector) {
                         return result;
@@ -6083,17 +6087,17 @@ Ext.define('Ext.Component', {
                 if (limitSelector && result.is(limit)) {
                     return;
                 }
-                
+
                 if (limitCount && steps === limit) {
                     return;
                 }
-                
+
                 if (limitComponent && result === limit) {
                     return;
                 }
             }
         }
-        
+
         return result;
     },
 
@@ -6120,7 +6124,6 @@ Ext.define('Ext.Component', {
             container = me.ownerFocusableContainer,
             sizeModel, doLayout, el;
 
-
         if (isData) {
             me.data = (htmlOrData && htmlOrData.isEntity) ? htmlOrData.getData(true) : htmlOrData;
         }
@@ -6141,7 +6144,7 @@ Ext.define('Ext.Component', {
             else {
                 el = me.getTargetEl();
             }
-            
+
             if (isData) {
                 me.tpl[me.tplWriteMode](el, me.data || {});
             }
@@ -6193,7 +6196,7 @@ Ext.define('Ext.Component', {
     updateBox: function(box) {
         this.setSize(box.width, box.height);
         this.setPagePosition(box.x, box.y);
-        
+
         return this;
     },
 
@@ -6354,7 +6357,7 @@ Ext.define('Ext.Component', {
     privates: {
         addOverCls: function() {
             var me = this;
-            
+
             if (!me.disabled) {
                 me.el.addCls(me.overCls);
             }
@@ -6378,10 +6381,10 @@ Ext.define('Ext.Component', {
 
                 for (childElName in childEls) {
                     suffix = childEls[childElName].frame;
-                    
+
                     if (suffix && suffix !== true) {
                         el = me[childElName];
-                        
+
                         if (el) {
                             el.addCls(baseClsUI + suffix);
                         }
@@ -6471,7 +6474,7 @@ Ext.define('Ext.Component', {
             }
 
             me.pluginsInitialized = true;
-            
+
             return result;
         },
 
@@ -6495,13 +6498,13 @@ Ext.define('Ext.Component', {
                     elementName = options.element;
                     listeners = {};
                     listeners[ename] = fn;
-                    
+
                     if (scope) {
                         listeners.scope = scope;
                     }
 
                     eventOptions = me.$elementEventOptions;
-                    
+
                     for (option in options) {
                         if (eventOptions[option]) {
                             listeners[option] = options[option];
@@ -6521,25 +6524,25 @@ Ext.define('Ext.Component', {
                 }
                 else {
                     me.afterRenderEvents = me.afterRenderEvents || {};
-                    
+
                     if (!me.afterRenderEvents[elementName]) {
                         me.afterRenderEvents[elementName] = [];
                     }
-                    
+
                     me.afterRenderEvents[elementName].push(listeners);
                 }
-                
+
                 return;
             }
 
             if (options) {
                 delegate = options.delegate;
-                
+
                 if (delegate) {
                     me.mixins.componentDelegation.addDelegatedListener.call(
                         me, ename, fn, scope, options, order, caller, manager
                     );
-                    
+
                     return;
                 }
             }
@@ -6551,7 +6554,7 @@ Ext.define('Ext.Component', {
 
         doRemoveListener: function(eventName, fn, scope) {
             var me = this;
-            
+
             me.mixins.observable.doRemoveListener.call(me, eventName, fn, scope);
             me.mixins.componentDelegation.removeDelegatedListener.call(me, eventName, fn, scope);
         },
@@ -6594,7 +6597,7 @@ Ext.define('Ext.Component', {
          */
         getAutoId: function() {
             this.autoGenId = true;
-            
+
             return ++Ext.Component.AUTO_ID;
         },
 
@@ -6630,17 +6633,17 @@ Ext.define('Ext.Component', {
 
             if (scroller) {
                 x = scroller.getX();
-                
+
                 if (x === true) {
                     x = 'auto';
                 }
-                
+
                 y = scroller.getY();
-                
+
                 if (y === true) {
                     y = 'auto';
                 }
-                
+
                 scrollFlags = flags[x][y];
             }
             else {
@@ -6663,7 +6666,7 @@ Ext.define('Ext.Component', {
             var plugins = this.plugins;
 
             plugins = (plugins && plugins.processed) ? plugins : this.constructPlugins();
-            
+
             return plugins || null;
         },
 
@@ -6675,7 +6678,7 @@ Ext.define('Ext.Component', {
                 target = Ext.getBody();
                 me.proxy = me.el.createProxy(Ext.baseCSSPrefix + 'proxy-el', target, true);
             }
-            
+
             return me.proxy;
         },
 
@@ -6717,7 +6720,7 @@ Ext.define('Ext.Component', {
             //<debug>
             Ext.log.warn('getTpl is deprecated, use lookupTpl.');
             //</debug>
-            
+
             return this.lookupTpl(name);
         },
 
@@ -6737,7 +6740,7 @@ Ext.define('Ext.Component', {
                         'Ext.Component: cmpCls has been deprecated. Please use componentCls.'
                     );
                 }
-                
+
                 me.componentCls = me.cmpCls;
                 delete me.cmpCls;
             }
@@ -6767,7 +6770,7 @@ Ext.define('Ext.Component', {
                     container: me.container
                 })
                 : me;
-            
+
             ddConfig = Ext.applyIf({
                 el: dragTarget.getDragEl(),
                 // eslint-disable-next-line max-len
@@ -6831,7 +6834,7 @@ Ext.define('Ext.Component', {
                 constrainTo: (me.constrain || (resizable && resizable.constrain)) ? (me.constrainTo || (me.floatParent ? me.floatParent.getTargetEl() : me.container)) : undefined,
                 handles: me.resizeHandles
             }, resizable);
-            
+
             resizable.target = me;
             me.resizer = new Ext.resizer.Resizer(resizable);
         },
@@ -6869,7 +6872,7 @@ Ext.define('Ext.Component', {
                 targetEl.addCls(cls);
                 me.cls = me.initialCls = null;
             }
-            
+
             if (style && style !== me.initialStyle) {
                 targetEl.setStyle(style);
                 me.style = me.initialStyle = null;
@@ -6878,7 +6881,7 @@ Ext.define('Ext.Component', {
             if (x != null) {
                 targetEl.setStyle(me.horizontalPosProp, (typeof x === 'number') ? (x + 'px') : x);
             }
-            
+
             if (y != null) {
                 targetEl.setStyle('top', (typeof y === 'number') ? (y + 'px') : y);
             }
@@ -6887,7 +6890,7 @@ Ext.define('Ext.Component', {
                 if (Ext.scopeCss) {
                     targetEl.addCls(me.rootCls);
                 }
-                
+
                 targetEl.addCls(me.borderBoxCls);
             }
 
@@ -6908,7 +6911,7 @@ Ext.define('Ext.Component', {
                         targetEl.setStyle('width', width);
                     }
                 }
-                
+
                 if (height != null) {
                     if (typeof height === 'number') {
                         targetEl.setStyle('height', height + 'px');
@@ -6928,7 +6931,7 @@ Ext.define('Ext.Component', {
 
         isDescendant: function(ancestor) {
             var c;
-            
+
             if (ancestor.isContainer) {
                 for (c = this.ownerCt; c; c = c.ownerCt) {
                     if (c === ancestor) {
@@ -6936,7 +6939,7 @@ Ext.define('Ext.Component', {
                     }
                 }
             }
-            
+
             return false;
         },
 
@@ -6983,14 +6986,14 @@ Ext.define('Ext.Component', {
 
             if (element) {
                 element = me[element];
-                
+
                 if (element && element.un) {
                     // eslint-disable-next-line max-len
                     if (isClear || (managedListener.item === item && managedListener.ename === ename && (!fn || managedListener.fn === fn) && (!scope || managedListener.scope === scope))) {
                         element.un(
                             managedListener.ename, managedListener.fn, managedListener.scope
                         );
-                        
+
                         if (!isClear) {
                             Ext.Array.remove(me.managedListeners, managedListener);
                         }
@@ -7029,10 +7032,10 @@ Ext.define('Ext.Component', {
 
                 for (childElName in childEls) {
                     suffix = childEls[childElName].frame;
-                    
+
                     if (suffix && suffix !== true) {
                         el = me[childElName];
-                        
+
                         if (el) {
                             el.removeCls(baseClsUI + suffix);
                         }
@@ -7046,11 +7049,11 @@ Ext.define('Ext.Component', {
          */
         setComponentLayout: function(layout) {
             var currentLayout = this.componentLayout;
-            
+
             if (currentLayout && currentLayout.isLayout && currentLayout !== layout) {
                 currentLayout.setOwner(null);
             }
-            
+
             this.componentLayout = layout;
             layout.setOwner(this);
         },
@@ -7116,7 +7119,7 @@ Ext.define('Ext.Component', {
                  */
                 doComponentLayout: function() {
                     this.updateLayout();
-                    
+
                     return this;
                 },
 
@@ -7189,7 +7192,7 @@ Ext.define('Ext.Component', {
      */
     Ext.batchLayouts = function(fn, scope) {
         Component.suspendLayouts();
-        
+
         // Invoke the function
         // note: try/finally works in IE8 standards mode
         try {

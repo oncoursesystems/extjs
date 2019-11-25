@@ -4,7 +4,7 @@ Ext.define('KitchenSink.store.Pareto', {
 
     fields: ['complaint', 'count', 'cumnumber', 'cumpercent' ],
 
-    constructor: function (config) {
+    constructor: function(config) {
         config = config || {};
 
         // Create data in construct time instead of defining it

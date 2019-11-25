@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.drag.Group', {
     xtype: 'drag-group',
     controller: 'drag-group',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/drag/GroupController.js'
@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.drag.Group', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     height: '${height}',
     padding: 5,

@@ -274,7 +274,7 @@ Ext.define('Ext.grid.property.Grid', {
                 // own scope.
                 return this.self.prototype.startEdit.call(this, record, me.valueColumn);
             },
-    
+
             // Gets an editor based on the property name and not column itemId
             getEditor: function(record, column) {
                 return this.getCachedEditor(record.get(me.nameField), record, column);
@@ -308,12 +308,12 @@ Ext.define('Ext.grid.property.Grid', {
         me.columns = new Ext.grid.property.HeaderContainer(me, me.store);
 
         me.callParent();
-        
+
         view = me.getView();
-        
+
         // Inject a custom implementation of walkCells which only goes up or down
         view.walkCells = me.walkCells;
-        
+
         // Inject a custom implementation that only allows focusing value column
         view.getDefaultFocusPosition = me.getDefaultFocusPosition;
 
@@ -501,13 +501,13 @@ Ext.define('Ext.grid.property.Grid', {
 
         return pos;
     },
-    
+
     getDefaultFocusPosition: function() {
         var view = this, // NOT grid!
             focusPosition;
-        
+
         focusPosition = new Ext.grid.CellContext(view).setColumn(1);
-        
+
         return focusPosition;
     },
 
@@ -544,15 +544,15 @@ Ext.define('Ext.grid.property.Grid', {
                 case 'date':
                     editor = editors.date;
                     break;
-                
+
                 case 'number':
                     editor = editors.number;
                     break;
-                
+
                 case 'boolean':
                     editor = editors[type];
                     break;
-                
+
                 default:
                     editor = editors.string;
             }
@@ -579,10 +579,10 @@ Ext.define('Ext.grid.property.Grid', {
         // Give the editor a unique ID because the CellEditing plugin caches them
         editor.editorId = propName;
         editor.field.column = me.valueColumn;
-        
+
         if (propName) {
             propName = Ext.String.htmlEncode(propName);
-            
+
             if (field.rendered) {
                 field.inputEl.dom.setAttribute('aria-label', propName);
             }
@@ -590,22 +590,22 @@ Ext.define('Ext.grid.property.Grid', {
                 field.ariaLabel = propName;
             }
         }
-        
+
         return editor;
     },
 
     doDestroy: function() {
         var me = this;
-        
+
         me.destroyEditors(me.editors);
         me.destroyEditors(me.customEditors);
-        
+
         me.callParent();
     },
 
     destroyEditors: function(editors) {
         var ed;
-        
+
         for (ed in editors) {
             if (editors.hasOwnProperty(ed)) {
                 Ext.destroy(editors[ed]);
@@ -689,7 +689,7 @@ Ext.define('Ext.grid.property.Grid', {
      * @cfg {Object} store
      * @private
      */
-    
+
     /**
      * @cfg {Object} columns
      * @private

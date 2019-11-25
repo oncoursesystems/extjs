@@ -13,7 +13,7 @@ topSuite("Ext.data.reader.Array", ['Ext.data.Model'], function() {
                { name: 'msg' }
             ]
         });
-        
+
         Ext.define('spec.MapModel', {
             extend: 'Ext.data.Model',
             fields: [
@@ -35,14 +35,14 @@ topSuite("Ext.data.reader.Array", ['Ext.data.Model'], function() {
 
         records = reader.readRecords(data);
     });
-    
+
     afterEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = true;
         Ext.data.Model.schema.clear();
         Ext.undefine('spec.SomeModel');
         Ext.undefine('spec.MapModel');
     });
-    
+
     it("should find the total number of records", function() {
         expect(records.getTotal()).toEqual(1);
     });
@@ -56,16 +56,16 @@ topSuite("Ext.data.reader.Array", ['Ext.data.Model'], function() {
         expect(recData.bool).toEqual(data[0][3]);
         expect(recData.msg).toEqual(data[0][4]);
     });
-    
+
     it("should work with custom index mappings", function() {
         reader = new Ext.data.reader.Array({
             model: 'spec.MapModel'
         });
-        
+
         records = reader.readRecords(data);
-        
+
         var recData = records.getRecords()[0].getData();
-        
+
         expect(recData.a).toBe(1);
         expect(recData.b).toBe(6);
         expect(recData.c).toBe(true);

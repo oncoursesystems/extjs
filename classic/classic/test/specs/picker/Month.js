@@ -1,6 +1,6 @@
 topSuite("Ext.picker.Month", function() {
     var component, makeComponent;
-    
+
     function getByElementsByClassName(dom, className) {
         var elements, length, result, i, el, testRe;
 
@@ -23,7 +23,7 @@ topSuite("Ext.picker.Month", function() {
 
         return result;
     }
-    
+
     beforeEach(function() {
         makeComponent = function(config) {
             config = config || {};
@@ -33,7 +33,7 @@ topSuite("Ext.picker.Month", function() {
             component = new Ext.picker.Month(config);
         };
     });
-    
+
     afterEach(function() {
         if (component) {
             component.destroy();
@@ -53,44 +53,44 @@ topSuite("Ext.picker.Month", function() {
     });
 
     describe("initial value", function() {
-        
+
         it("should not default any value", function() {
             makeComponent();
             expect(component.getValue()).toEqual([null, null]);
         });
-        
+
         it("should accept a date as the value config", function() {
             makeComponent({
                 value: new Date(2009, 3, 3)
             });
-            
+
             expect(component.getValue()).toEqual([3, 2009]);
         });
-        
+
         it("should accept an array as the value", function() {
             makeComponent({
                 value: [4, 1984]
             });
-            
+
             expect(component.getValue()).toEqual([4, 1984]);
         });
-        
+
     });
-    
+
     describe("setting value", function() {
-        
+
         it("should accept a date when setting a value", function() {
             makeComponent();
             component.setValue(new Date(2004, 1, 12));
             expect(component.getValue()).toEqual([1, 2004]);
         });
-        
+
         it("should accept an array when setting a value", function() {
             makeComponent();
             component.setValue([9, 2001]);
             expect(component.getValue()).toEqual([9, 2001]);
         });
-        
+
         it("should be able to null out certain values", function() {
             makeComponent({
                 value: [3, 2010]
@@ -99,7 +99,7 @@ topSuite("Ext.picker.Month", function() {
             expect(component.getValue()).toEqual([null, 2010]);
         });
     });
-    
+
     describe("rendering", function() {
         it("should respect the padding config", function() {
             makeComponent({
@@ -112,10 +112,10 @@ topSuite("Ext.picker.Month", function() {
             makeComponent({
                 showButtons: false
             });
-            
+
             expect(getByElementsByClassName(component.el.dom, 'x-monthpicker-buttons').length).toEqual(0);
         });
-        
+
         describe("year range", function() {
             var getYears, getYearText;
 
@@ -123,47 +123,47 @@ topSuite("Ext.picker.Month", function() {
                 getYears = function() {
                     return getByElementsByClassName(component.el.dom, 'x-monthpicker-year');
                 };
-                
+
                 getYearText = function(years, index) {
                     return years[index].firstChild.innerHTML;
                 };
             });
-            
+
             afterEach(function() {
                 getYears = null;
             });
-            
+
             it("should use the current year if none is provided", function() {
                 makeComponent();
-                
+
                 var years = getYears(),
                     year = (new Date()).getFullYear();
 
                 expect(getYearText(years, 0)).toEqual((year - 4).toString());
                 expect(getYearText(years, years.length - 1)).toEqual((year + 5).toString());
             });
-            
+
             it("should use the value year as the active year if passed", function() {
                 makeComponent({
                     value: [0, 1970]
                 });
-                
+
                 var years = getYears();
 
                 expect(getYearText(years, 0)).toEqual('1966');
                 expect(getYearText(years, years.length - 1, 0)).toEqual('1975');
             });
-            
+
             it("should change the year range if a new value is set", function() {
                 makeComponent();
                 component.setValue([0, 1980]);
-                
+
                 var years = getYears();
 
                 expect(getYearText(years, 0)).toEqual('1976');
                 expect(getYearText(years, years.length - 1, 0)).toEqual('1985');
             });
-            
+
             it("it should not change the range if the value is within the current range", function() {
                 makeComponent();
                 var year = new Date().getFullYear();
@@ -176,18 +176,18 @@ topSuite("Ext.picker.Month", function() {
             });
         });
     });
-    
+
     describe("selection", function() {
-        
+
         var getSelection;
-        
+
         beforeEach(function() {
             getSelection = function(isMonth) {
                 var items = getByElementsByClassName(component.el.dom, 'x-monthpicker-' + (isMonth ? 'month' : 'year')),
                     len = items.length,
                     i = 0,
                     item;
-                    
+
                 for (; i < len; ++i) {
                     item = items[i];
 
@@ -199,17 +199,17 @@ topSuite("Ext.picker.Month", function() {
                 return null;
             };
         });
-        
+
         afterEach(function() {
             getSelection = null;
         });
-        
+
         it("should have no selections if no value is specified", function() {
             makeComponent();
             expect(getSelection()).toBeNull();
             expect(getSelection(true)).toBeNull();
         });
-        
+
         it("should only have a month selection for a month-only value", function() {
             makeComponent({
                 value: [3, null]
@@ -217,7 +217,7 @@ topSuite("Ext.picker.Month", function() {
             expect(getSelection()).toBeNull();
             expect(getSelection(true)).hasHTML('Apr');
         });
-        
+
         it("should only have a year selection for a year-only value", function() {
             makeComponent({
                 value: [null, 2000]
@@ -225,7 +225,7 @@ topSuite("Ext.picker.Month", function() {
             expect(getSelection()).hasHTML('2000');
             expect(getSelection(true)).toBeNull();
         });
-        
+
         it("should select have selections when both items are selected", function() {
             makeComponent({
                 value: [0, 2004]
@@ -233,7 +233,7 @@ topSuite("Ext.picker.Month", function() {
             expect(getSelection()).hasHTML('2004');
             expect(getSelection(true)).hasHTML('Jan');
         });
-        
+
         it("should remove any selection if it's not valid for the range", function() {
             var d = new Date();
 

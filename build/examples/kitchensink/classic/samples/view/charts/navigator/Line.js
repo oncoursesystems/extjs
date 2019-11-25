@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.charts.navigator.Line', {
     xtype: 'navigator-line',
     controller: 'navigator',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.charts.navigator.Line', {
         type: 'Store',
         path: 'classic/samples/store/Trig.js'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
     width: 900,
@@ -79,7 +79,7 @@ Ext.define('KitchenSink.view.charts.navigator.Line', {
                             degrees: -90
                         }
                     },
-                    renderer: function (axis, text) {
+                    renderer: function(axis, text) {
                         return Math.round(text * 180 / Math.PI);
                     }
                 }

@@ -15,15 +15,23 @@ Ext.define('KitchenSink.view.binding.AlgebraBinary', {
     profiles: {
         classic: {
             width: 470,
-            labelWidth: 105
+            labelWidth: 105,
+            textWidth: 120
         },
         neptune: {
             width: 470,
-            labelWidth: 105
+            labelWidth: 105,
+            textWidth: 120
         },
         graphite: {
             width: 600,
-            labelWidth: 150
+            labelWidth: 150,
+            textWidth: 120
+        },
+        'classic-material': {
+            width: 450,
+            labelWidth: 150,
+            textWidth: 150
         }
     },
 
@@ -104,7 +112,7 @@ Ext.define('KitchenSink.view.binding.AlgebraBinary', {
         defaults: {
             labelWidth: 20,
             margin: '0 0 0 10',
-            width: 120
+            width: '${textWidth}'
         },
 
         items: [{

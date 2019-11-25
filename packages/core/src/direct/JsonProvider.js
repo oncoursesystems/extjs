@@ -23,7 +23,7 @@ Ext.define('Ext.direct.JsonProvider', {
     */
     parseResponse: function(response) {
         var text = response && response.responseText;
-        
+
         // Empty string should blow up in JSON decoder
         if (text != null) {
             if (Ext.isObject(text) || Ext.isArray(text)) {
@@ -91,7 +91,7 @@ Ext.define('Ext.direct.JsonProvider', {
                 message: 'Invalid data: event type is not specified'
             });
         }
-    
+
         return Ext.create('direct.' + response.type, response);
     }
 });

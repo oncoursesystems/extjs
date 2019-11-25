@@ -205,7 +205,7 @@ topSuite("Ext.data.schema.ManyToMany", ['Ext.data.ArrayStore', 'Ext.data.Session
                     expect(groups.cls).toBe(Group);
                 });
             });
-            
+
             describe('Common properties', function() {
                 it("should set the assoc name", function() {
                     expect(userGroups.name).toBe('GroupUsers');
@@ -293,7 +293,7 @@ topSuite("Ext.data.schema.ManyToMany", ['Ext.data.ArrayStore', 'Ext.data.Session
                     expect(groups.cls).toBe(Group);
                 });
             });
-            
+
             describe('Common properties', function() {
                 it("should set the assoc name", function() {
                     expect(userGroups.name).toBe('User2Group2s');
@@ -371,7 +371,7 @@ topSuite("Ext.data.schema.ManyToMany", ['Ext.data.ArrayStore', 'Ext.data.Session
                     expect(groups.cls).toBe(Group);
                 });
             });
-            
+
             describe('Common properties', function() {
                 it("should set the assoc name", function() {
                     expect(userGroups.name).toBe('User3Group3s');
@@ -449,7 +449,7 @@ topSuite("Ext.data.schema.ManyToMany", ['Ext.data.ArrayStore', 'Ext.data.Session
                     expect(groups.cls).toBe(Group);
                 });
             });
-            
+
             describe('Common properties', function() {
                 it("should set the assoc name", function() {
                     expect(userGroups.name).toBe('User4Group4s');
@@ -527,7 +527,7 @@ topSuite("Ext.data.schema.ManyToMany", ['Ext.data.ArrayStore', 'Ext.data.Session
                     expect(groups.cls).toBe(Group);
                 });
             });
-            
+
             describe('Common properties', function() {
                 it("should set the assoc name", function() {
                     expect(userGroups.name).toBe('foo');
@@ -1066,5 +1066,5 @@ topSuite("Ext.data.schema.ManyToMany", ['Ext.data.ArrayStore', 'Ext.data.Session
             });
         });
     });
-    
+
 });

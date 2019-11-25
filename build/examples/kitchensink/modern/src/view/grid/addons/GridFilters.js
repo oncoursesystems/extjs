@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.grid.addons.GridFilters', {
         'Ext.grid.filters.*'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/grid/addons/GridFiltersController.js'
@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.grid.addons.GridFilters', {
         path: 'modern/src/model/Employee.js'
     }],
     emptyText: 'No Matching Records',
-    // </example>
+    //</example>
 
     // rowLines: true,
 

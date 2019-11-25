@@ -47,7 +47,7 @@ Ext.define('Admin.view.authentication.Login', {
             width: '100%',
             text: 'Login with Facebook',
             iconAlign: 'right',
-            iconCls: 'x-fa fa-facebook',
+            iconCls: 'x-fab fa-facebook',
             ui: 'facebook',
             handler: 'goToDashboard'
         }, {

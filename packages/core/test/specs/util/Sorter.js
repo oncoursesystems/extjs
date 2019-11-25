@@ -147,7 +147,7 @@ topSuite("Ext.util.Sorter", ['Ext.data.SortTypes', 'Ext.data.Model'], function()
                     v1 = transform(v1);
                     v2 = transform(v2);
                 }
-                
+
                 return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
             };
         }

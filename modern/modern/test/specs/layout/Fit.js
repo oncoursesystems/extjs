@@ -1,11 +1,11 @@
-describe("Ext.layout.Fit", function () {
+describe("Ext.layout.Fit", function() {
     var ct, item;
 
-    afterEach(function () {
+    afterEach(function() {
         ct = Ext.destroy(ct);
     });
 
-    describe("configured size", function () {
+    describe("configured size", function() {
         function create(itemConfig) {
             ct = new Ext.Container({
                 layout: 'fit',
@@ -31,7 +31,7 @@ describe("Ext.layout.Fit", function () {
         // https://bugs.webkit.org/show_bug.cgi?id=137730
         // UPDATE - these are failing on IE11, Edge, FF and Chrome (latest on Oct 2018),
         // so I suspect this is not per-flexbox spec
-        xit("should grow a sized item", function () {
+        xit("should grow a sized item", function() {
             create({
                 width: 50,
                 height: 50
@@ -43,7 +43,7 @@ describe("Ext.layout.Fit", function () {
 
         // TODO: enable this spec once the following issue is fixed.
         // https://bugs.webkit.org/show_bug.cgi?id=137730
-        xit("should shrink a sized item", function () {
+        xit("should shrink a sized item", function() {
             create({
                 width: 150,
                 height: 150
@@ -54,7 +54,7 @@ describe("Ext.layout.Fit", function () {
         });
     });
 
-    describe("shrink wrap both dimensions", function () {
+    describe("shrink wrap both dimensions", function() {
         function create(itemConfig) {
             ct = new Ext.Container({
                 layout: 'fit',
@@ -69,7 +69,7 @@ describe("Ext.layout.Fit", function () {
             ct.show();
         }
 
-        it("should shrink wrap an unsized item", function () {
+        it("should shrink wrap an unsized item", function() {
             create({
                 html: '<div style="height: 50px; width: 50px;"></div>'
             });
@@ -82,7 +82,7 @@ describe("Ext.layout.Fit", function () {
 
         // TODO: enable this spec once the following issue is fixed.
         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/13179068/
-        (Ext.isEdge ? xit : it)("should shrink wrap a sized item", function () {
+        (Ext.isEdge ? xit : it)("should shrink wrap a sized item", function() {
             create({
                 width: 50,
                 height: 50

@@ -55,7 +55,7 @@ var Ext = Ext || {};
         // calls through the class prototype by the name of the called method.
         callOverrideParent = function() {
             var method = callOverrideParent.caller.caller; // skip callParent (our caller)
-            
+
             return method.$owner.prototype[method.$name].apply(this, arguments);
         },
         manifest = Ext.manifest || {},
@@ -96,7 +96,7 @@ var Ext = Ext || {};
     emptyFn.$nullFn = identityFn.$nullFn = emptyFn.$emptyFn = identityFn.$identityFn =
         privateFn.$nullFn = true;
     privateFn.$privacy = 'framework';
-    
+
     // We also want to prevent these functions from being cleaned up on destroy
     emptyFn.$noClearOnDestroy = identityFn.$noClearOnDestroy = true;
     privateFn.$noClearOnDestroy = true;
@@ -150,7 +150,7 @@ var Ext = Ext || {};
                 if (enumerables) {
                     for (j = enumerables.length; j--;) {
                         k = enumerables[j];
-                        
+
                         if (config.hasOwnProperty(k)) {
                             object[k] = config[k];
                         }
@@ -345,7 +345,7 @@ var Ext = Ext || {};
             }
         },
         //</debug>
-        
+
         /**
          * @property {Boolean} [enableAria=true] This property is provided for backward
          * compatibility with previous versions of Ext JS. Accessibility is always enabled
@@ -378,9 +378,9 @@ var Ext = Ext || {};
          * @deprecated 6.0.2 This property is no longer necessary, so no replacement is required.
          */
         enableAria: true,
-        
+
         startsWithHashRe: /^#/,
-        
+
         /**
          * @property {RegExp}
          * @private
@@ -411,7 +411,7 @@ var Ext = Ext || {};
                 Ext.raise('Invalid id selector: "' + id + '"');
             }
             //</debug>
-            
+
             return '#' + id;
         },
 
@@ -429,7 +429,7 @@ var Ext = Ext || {};
 
             /* eslint-disable-next-line vars-on-top */
             var id = (prefix || Ext.idPrefix) + (++Ext.idSeed);
-            
+
             if (o) {
                 o.id = id;
             }
@@ -514,7 +514,7 @@ var Ext = Ext || {};
          */
         applyIf: function(object, config) {
             var property;
-            
+
             if (object && config && typeof config === 'object') {
                 for (property in config) {
                     if (object[property] === undefined) {
@@ -543,7 +543,7 @@ var Ext = Ext || {};
 
             for (i = 0; i < ln; i++) {
                 arg = arguments[i];
-                
+
                 if (arg) {
                     if (Ext.isArray(arg)) {
                         this.destroy.apply(this, arg);
@@ -553,7 +553,7 @@ var Ext = Ext || {};
                     }
                 }
             }
-            
+
             return null;
         },
 
@@ -624,7 +624,7 @@ var Ext = Ext || {};
 
                 if (owner && owner.$isClass) { // if (instance of Ext.define'd class)
                     privates = overrides.privates;
-                    
+
                     if (privates) {
                         overrides = Ext.apply({}, overrides);
                         delete overrides.privates;
@@ -705,7 +705,7 @@ var Ext = Ext || {};
             if (!Ext.isString(value)) {
                 return false;
             }
-            
+
             return MSDateRe.test(value);
         },
 
@@ -886,7 +886,7 @@ var Ext = Ext || {};
                 if (defaultEnabled !== undefined) {
                     enabled = defaultEnabled;
                 }
-                
+
                 if (!className) {
                     return enabled;
                 }
@@ -963,7 +963,7 @@ var Ext = Ext || {};
                 if (enumerables) {
                     for (j = enumerables.length; j--;) {
                         k = enumerables[j];
-                        
+
                         if (item.hasOwnProperty(k)) {
                             clone[k] = item[k];
                         }
@@ -1009,22 +1009,22 @@ var Ext = Ext || {};
 
             if (Ext.isSandboxed) {
                 ln = args.length;
-                
+
                 if (ln > 0) {
                     ln--;
                     args[ln] = 'var Ext=window.' + Ext.name + ';' + args[ln];
                 }
             }
-            
+
             idx = args.join('');
             fn = cache[idx];
-            
+
             if (!fn) {
                 fn = Function.prototype.constructor.apply(Function.prototype, args);
 
                 cache[idx] = fn;
             }
-            
+
             return fn;
         },
 
@@ -1034,7 +1034,7 @@ var Ext = Ext || {};
 
             if (Ext.isSandboxed) {
                 ln = args.length;
-                
+
                 if (ln > 0) {
                     ln--;
                     args[ln] = 'var Ext=window.' + Ext.name + ';' + args[ln];
@@ -1054,7 +1054,7 @@ var Ext = Ext || {};
                     if (!priority || !(priority in global.console)) {
                         priority = 'log';
                     }
-                    
+
                     message = '[' + priority.toUpperCase() + '] ' + message;
                     global.console[priority](message);
                 }
@@ -1085,7 +1085,7 @@ var Ext = Ext || {};
             },
             deprecate: emptyFn
         },
-        
+
         ariaWarn: function(target, msg) {
             // The checks still can be disabled by setting Ext.enableAria to false;
             // this is for backwards compatibility. Also make sure we're not running
@@ -1097,7 +1097,7 @@ var Ext = Ext || {};
                                  "by adding the following to application startup code:");
                     Ext.log.warn("    Ext.ariaWarn = Ext.emptyFn;");
                 }
-                
+
                 Ext.log.warn({
                     msg: msg,
                     dump: target
@@ -1118,7 +1118,7 @@ var Ext = Ext || {};
          */
         splitAndUnescape: (function() {
             var cache = {};
-    
+
             return function(origin, delimiter) {
                 if (!origin) {
                     return [];
@@ -1126,27 +1126,27 @@ var Ext = Ext || {};
                 else if (!delimiter) {
                     return [origin];
                 }
-                
+
                 /* eslint-disable-next-line vars-on-top, max-len */
                 var replaceRe = cache[delimiter] || (cache[delimiter] = new RegExp('\\\\' + delimiter, 'g')),
                     result = [],
                     parts, part;
-    
+
                 parts = origin.split(delimiter);
-    
+
                 while ((part = parts.shift()) !== undefined) {
                     // If any of the parts ends with the delimiter that means
                     // the delimiter was escaped and the split was invalid. Roll back.
                     while (part.charAt(part.length - 1) === '\\' && parts.length > 0) {
                         part = part + delimiter + parts.shift();
                     }
-    
+
                     // Now that we have split the parts, unescape the delimiter char
                     part = part.replace(replaceRe, delimiter);
-    
+
                     result.push(part);
                 }
-    
+
                 return result;
             };
         })(),
@@ -1255,7 +1255,7 @@ var Ext = Ext || {};
 
                 /* eslint-disable-next-line vars-on-top, one-var */
                 var timers = Ext.Timer.all[kind] || (Ext.Timer.all[kind] = {});
-                
+
                 timers[timer.id] = timer;
 
                 if (Ext.Timer.hook) {
@@ -1297,7 +1297,7 @@ var Ext = Ext || {};
 
                 if (this.kind !== 'interval') {
                     this.done = true;
-                    
+
                     Ext.Timer.all[this.kind][this.id] = null;
                     delete Ext.Timer.all[this.kind][this.id];
                 }
@@ -1338,6 +1338,8 @@ var Ext = Ext || {};
             else if (expandos) {
                 delete expandos[id];
             }
+
+            return value;
         }
 
     });

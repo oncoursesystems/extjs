@@ -44,14 +44,14 @@ Ext.define('Ext.fx.Queue', {
             queue = me.getFxQueue(targetId),
             ln = queue.length,
             item;
-        
+
         while (ln) {
             item = queue[ln - 1];
-            
+
             if (item) {
                 item.end(suppressEvent);
             }
-            
+
             ln--;
         }
     },
@@ -84,7 +84,7 @@ Ext.define('Ext.fx.Queue', {
         if (!targetId) {
             return false;
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             fxQueue = me.fxQueue,
@@ -97,7 +97,7 @@ Ext.define('Ext.fx.Queue', {
 
         if (!queue) {
             me.fxQueue[targetId] = fxQueue[targetId] = [];
-            
+
             // GarbageCollector will need to clean up Elements since they
             // aren't currently observable
             if (target.type !== 'element') {
@@ -110,7 +110,7 @@ Ext.define('Ext.fx.Queue', {
 
         return me.fxQueue[targetId];
     },
-    
+
     /**
      * @private
      * Clears the fx queue of any pending animations
@@ -148,22 +148,22 @@ Ext.define('Ext.fx.Queue', {
         else {
             anim.paused = false;
         }
-        
+
         anim.on('afteranimate', function() {
             var el;
-            
+
             Ext.Array.remove(queue, anim);
-            
+
             if (queue.length === 0) {
                 me.targets.remove(anim.target);
                 me.fxQueue[targetId] = null;
                 delete me.fxQueue[targetId];
             }
-            
+
             if (anim.remove) {
                 if (target.type === 'element') {
                     el = Ext.get(targetId);
-                    
+
                     if (el) {
                         el.destroy();
                     }
@@ -172,7 +172,7 @@ Ext.define('Ext.fx.Queue', {
         }, me, {
             single: true
         });
-        
+
         queue.push(anim);
     }
 });

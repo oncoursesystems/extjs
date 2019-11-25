@@ -95,7 +95,7 @@ Ext.define('Ext.grid.selection.Rows', {
             // While this is set, a call to contains will add the record to the collection
             // and return true
             me.allSelected = false;
-            
+
             return true;
         }
 
@@ -120,7 +120,7 @@ Ext.define('Ext.grid.selection.Rows', {
             Ext.raise('remove must be called with a record or array of records');
         }
         //</debug>
-        
+
         return ret;
     },
 
@@ -206,7 +206,7 @@ Ext.define('Ext.grid.selection.Rows', {
      * @return {Number} The row index of the last row in the range or -1 if no range.
      */
     getLastRowIndex: function() {
-        return this.getCount() ? this.view.dataSource.indexOf(this.selectedRecords.first()) : -1;
+        return this.getCount() ? this.view.dataSource.indexOf(this.selectedRecords.last()) : -1;
     },
 
     eachRow: function(fn, scope) {
@@ -240,7 +240,6 @@ Ext.define('Ext.grid.selection.Rows', {
             abort = false,
             colCount, i, j, context, range, recCount;
 
-
         if (columns) {
             colCount = columns.length;
             context = new Ext.grid.CellContext(view);
@@ -263,7 +262,7 @@ Ext.define('Ext.grid.selection.Rows', {
                     }
                 });
             }
-            
+
             // If called during a drag select, or SHIFT+arrow select, include the drag range
             if (!abort) {
                 range = me.getRange();
@@ -305,7 +304,7 @@ Ext.define('Ext.grid.selection.Rows', {
      */
     beginUpdate: function() {
         var selectedRecords = this.selectedRecords;
-        
+
         if (selectedRecords) {
             selectedRecords.beginUpdate();
         }
@@ -317,7 +316,7 @@ Ext.define('Ext.grid.selection.Rows', {
      */
     endUpdate: function() {
         var selectedRecords = this.selectedRecords;
-        
+
         if (selectedRecords) {
             selectedRecords.endUpdate();
         }
@@ -519,10 +518,10 @@ Ext.define('Ext.grid.selection.Rows', {
 
             if (me.rangeStart != null) {
                 range = me.getRange();
-                
+
                 selection = me.selectedRecords ||
                             (me.selectedRecords = me.createRecordCollection());
-                
+
                 me.view.dataSource.getRange(range[0], range[1], {
                     forRender: false,
                     callback: function(range) {
@@ -564,7 +563,7 @@ Ext.define('Ext.grid.selection.Rows', {
                 selection = Ext.Array.sort(this.selectedRecords.getRange(), function(r1, r2) {
                     return store.indexOf(r1) - store.indexOf(r2);
                 });
-                
+
                 len = selection.length;
 
                 if (len) {

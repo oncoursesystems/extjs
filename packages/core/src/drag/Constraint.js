@@ -95,7 +95,7 @@ Ext.define('Ext.drag.Constraint', {
         if (element && typeof element !== 'boolean') {
             element = Ext.get(element);
         }
-        
+
         return element || null;
     },
 
@@ -106,7 +106,7 @@ Ext.define('Ext.drag.Constraint', {
                 y: snap
             };
         }
-        
+
         return snap;
     },
 
@@ -221,7 +221,7 @@ Ext.define('Ext.drag.Constraint', {
                     val = resolver(a, b);
                 }
             }
-            
+
             return val;
         },
 
@@ -290,10 +290,10 @@ Ext.define('Ext.drag.Constraint', {
                 if (typeof element === 'boolean') {
                     element = me.getSource().getElement().parent();
                 }
-                
+
                 if (info.local) {
                     pos = element.getStyle('position');
-                    
+
                     if (pos === 'relative' || pos === 'absolute') {
                         size = element.getSize();
                         region = new Ext.util.Region(0, size.width, size.height, 0);
@@ -318,7 +318,6 @@ Ext.define('Ext.drag.Constraint', {
                     rmaxY = region.bottom - (proxyEl ? proxy.height : 0);
                 }
             }
-
 
             // The following piece sets up the numeric values for our constraint.
             // If there is an axis constraint, don't bother calculating the values since
@@ -346,7 +345,7 @@ Ext.define('Ext.drag.Constraint', {
                     minY = y[0];
                     maxY = y[1];
                 }
-                
+
                 if (minY !== null || maxY !== null || rminY !== null || rmaxY !== null) {
                     minY = me.constrainValue(minY, rminY, Math.max);
                     maxY = me.constrainValue(maxY, rmaxY, Math.min);

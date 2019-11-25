@@ -20,14 +20,20 @@ Ext.define('KitchenSink.view.grid.RowNumberer', {
         neptune: {
             width: 750,
             priceWidth: 120,
-            pricechangeWidth: 120,           
+            pricechangeWidth: 120,
             lastUpdatedColumnWidth: 120
         },
         graphite: {
             width: 750,
             priceWidth: 100,
-            pricechangeWidth: 110,           
-            lastUpdatedColumnWidth: 150          
+            pricechangeWidth: 110,
+            lastUpdatedColumnWidth: 150
+        },
+        'classic-material': {
+            width: 750,
+            priceWidth: 150,
+            pricechangeWidth: 150,
+            lastUpdatedColumnWidth: 150
         }
     },
     //</example>
@@ -48,7 +54,7 @@ Ext.define('KitchenSink.view.grid.RowNumberer', {
         dataIndex: 'name'
     }, {
         text: "Price",
-        width:'${priceWidth}',
+        width: '${priceWidth}',
         sortable: true,
         formatter: 'usMoney',
         dataIndex: 'price'

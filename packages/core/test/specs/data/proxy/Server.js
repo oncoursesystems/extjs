@@ -5,17 +5,17 @@ function() {
         ServerProxy = Ext.data.proxy.Server,
         reader = new Ext.data.reader.Reader(),
         writer = new Ext.data.writer.Writer();
-    
+
     beforeEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = false;
     });
-    
+
     afterEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = true;
         Ext.data.Model.schema.clear();
         Ext.undefine('spec.SomeModel');
     });
-    
+
     describe("instantiation", function() {
         var config;
 
@@ -30,7 +30,7 @@ function() {
             };
             proxy = new ServerProxy(config);
         });
-                
+
         it("should extend Ext.data.proxy.Proxy", function() {
             expect(proxy.superclass).toEqual(Ext.data.proxy.Proxy.prototype);
         });
@@ -150,7 +150,7 @@ function() {
             proxy = new ServerProxy(configWithCacheString);
             expect(proxy.buildUrl(request), 'keep?_cool=bro');
         });
-        
+
         describe("url precedence", function() {
             it("should use the url on the proxy as a default", function() {
                 proxy = new ServerProxy({
@@ -159,7 +159,7 @@ function() {
                 });
                 expect(proxy.buildUrl(new Ext.data.Request())).toBe('proxy');
             });
-            
+
             it("should use the specified api by default", function() {
                 proxy = new ServerProxy({
                     api: {
@@ -171,7 +171,7 @@ function() {
                     action: 'read'
                 }))).toBe('read');
             });
-            
+
             it("should use the url on the request by default", function() {
                 proxy = new ServerProxy({
                     noCache: false
@@ -181,7 +181,7 @@ function() {
                     url: 'request'
                 }))).toBe('request');
             });
-            
+
             it("should use proxy url if the item in the proxy is undefined", function() {
                 proxy = new ServerProxy({
                     url: 'proxy',
@@ -194,7 +194,7 @@ function() {
                     action: 'update'
                 }))).toBe('proxy');
             });
-            
+
             it("should favour the api over the proxy url", function() {
                 proxy = new ServerProxy({
                     url: 'proxy',
@@ -207,7 +207,7 @@ function() {
                     action: 'read'
                 }))).toBe('read');
             });
-            
+
             it("should favour the request url over the proxy", function() {
                 proxy = new ServerProxy({
                     url: 'proxy',
@@ -218,7 +218,7 @@ function() {
                     url: 'request'
                 }))).toBe('request');
             });
-            
+
             it("should favour the request url over the api", function() {
                 proxy = new ServerProxy({
                     api: {
@@ -231,7 +231,7 @@ function() {
                     url: 'request'
                 }))).toBe('request');
             });
-            
+
             it("should favour the request url over proxy & api", function() {
                 proxy = new ServerProxy({
                     url: 'proxy',
@@ -477,7 +477,7 @@ function() {
                 }]);
             });
         });
-        
+
         describe('simple encoding', function() {
             it("should encode a single sorter into the sortParam and sortDirection params", function() {
                 var sorter1 = new Ext.util.Sorter({
@@ -691,14 +691,13 @@ function() {
             modelName = 'spec.SomeModel',
             model;
 
-
         beforeEach(function() {
             model = Ext.define(modelName, {
                 extend: 'Ext.data.Model',
                 fields: ['id']
             });
         });
-        
+
         describe("set the proxy's reader by reader instance", function() {
             beforeEach(function() {
                 config = {
@@ -709,7 +708,7 @@ function() {
 
             it("should not create a new reader instance", function() {
                 var called = false;
- 
+
                 spyOn(Ext, "createByAlias").andCallFake(function(name) {
                     if (name === 'reader.json') {
                         called = true;

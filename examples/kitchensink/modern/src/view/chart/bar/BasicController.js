@@ -2,15 +2,15 @@ Ext.define('KitchenSink.view.chart.bar.BasicController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.bar-basic',
 
-    onAxisLabelRender: function (axis, label, layoutContext) {
+    onAxisLabelRender: function(axis, label, layoutContext) {
         return Ext.util.Format.number(layoutContext.renderer(label) / 1000, '0,000');
     },
 
-    onSeriesLabelRender: function (v) {
+    onSeriesLabelRender: function(v) {
         return Ext.util.Format.number(v / 1000, '0,000');
     },
 
-    onItemEditTooltipRender: function (tooltip, item, target, e) {
+    onItemEditTooltipRender: function(tooltip, item, target, e) {
         var formatString = '0,000 (billions of USD)',
             record = item.record;
 
@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.chart.bar.BasicController', {
             Ext.util.Format.number(record.get('ind'), formatString));
     },
 
-    onColumnRender: function (v) {
+    onColumnRender: function(v) {
         return Ext.util.Format.usMoney(v * 1000);
     }
 });

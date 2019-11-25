@@ -93,7 +93,7 @@ Ext.define('Ext.draw.TextMeasurer', {
                     "margin": 0
                 }
             });
-            
+
             Ext.getBody().appendChild(parent);
             parent.appendChild(measureDiv);
         }
@@ -167,7 +167,7 @@ Ext.define('Ext.draw.TextMeasurer', {
     // A more precise but slower version of the measureTextSingleLine method.
     preciseMeasureTextSingleLine: function(text, font) {
         var measureDiv;
-        
+
         text = text.toString();
 
         measureDiv = this.measureDiv ||

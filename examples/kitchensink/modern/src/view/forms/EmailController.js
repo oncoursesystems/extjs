@@ -7,9 +7,11 @@ Ext.define('KitchenSink.view.forms.EmailController', {
 
         if (value) {
             value = value.toLowerCase();
-            return Ext.String.startsWith(record.get( 'name').toLowerCase(), value) ||
+
+            return Ext.String.startsWith(record.get('name').toLowerCase(), value) ||
                    Ext.String.startsWith(record.get('email').toLowerCase(), value);
         }
+
         return true;
     },
 
@@ -19,13 +21,14 @@ Ext.define('KitchenSink.view.forms.EmailController', {
 
         if (message !== true) {
             Ext.toast('"' + value + '" ' + message, 3000);
-        } else {
+        }
+        else {
             emailParts = value.split('@')[0].split('.');
 
             return new model({
                 name: Ext.Array.map(emailParts, function(namePart) {
-                        return Ext.String.capitalize(namePart);
-                    }).join(' '),
+                    return Ext.String.capitalize(namePart);
+                }).join(' '),
                 email: value
             });
         }
@@ -38,10 +41,10 @@ Ext.define('KitchenSink.view.forms.EmailController', {
         Ext.Msg.alert('Sending email to:', this.makeList(recipients));
     },
 
-    makeList: function (records) {
+    makeList: function(records) {
         var message = [];
 
-        records.forEach(function (rec) {
+        records.forEach(function(rec) {
             if (message.length < 5) {
                 message.push(rec.get('name'));
             }

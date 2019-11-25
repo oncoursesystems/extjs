@@ -7,13 +7,13 @@ Ext.define('KitchenSink.model.Tree', {
         'size',
         {
             name: 'leaf',
-            calculate: function (data) {
+            calculate: function(data) {
                 return data.root ? false : !data.children;
             }
         },
         {
             name: 'text',
-            calculate: function (data) {
+            calculate: function(data) {
                 return data.name;
             }
         }

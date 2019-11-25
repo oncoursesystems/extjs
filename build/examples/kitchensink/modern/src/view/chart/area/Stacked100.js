@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.chart.area.Stacked100', {
     xtype: 'area-stacked-100',
     controller: 'area-stacked-100',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/area/Stacked100Controller.js'
@@ -43,9 +43,9 @@ Ext.define('KitchenSink.view.chart.area.Stacked100', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -85,8 +85,8 @@ Ext.define('KitchenSink.view.chart.area.Stacked100', {
         series: [{
             type: 'area',
             fullStack: true,
-            title:  [ 'IE',    'Firefox', 'Chrome', 'Safari', 'Others' ],
-            yField: [ 'data1', 'data2',   'data3',  'data4',  'other' ],
+            title: [ 'IE', 'Firefox', 'Chrome', 'Safari', 'Others' ],
+            yField: [ 'data1', 'data2', 'data3', 'data4', 'other' ],
             xField: 'month',
             style: {
                 opacity: 0.80
@@ -123,7 +123,7 @@ Ext.define('KitchenSink.view.chart.area.Stacked100', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

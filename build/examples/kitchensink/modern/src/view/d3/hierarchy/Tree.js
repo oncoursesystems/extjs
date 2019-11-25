@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Tree', {
         'Ext.d3.interaction.PanZoom',
         'Ext.tip.ToolTip'
     ],
-    // <example>
+    //<example>
     otherContent: [
         {
             type: 'Controller',
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Tree', {
             path: 'app/reader/Salary.js'
         }
     ],
-    // </example>
+    //</example>
 
     viewModel: {
         type: 'd3-salary'
@@ -55,7 +55,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Tree', {
         padding: 10,
         nodeSize: [300, 40],
         nodeRadius: 10,
-        nodeText: function (tree, node) {
+        nodeText: function(tree, node) {
             var record = node.data,
                 text = record.data.text;
 

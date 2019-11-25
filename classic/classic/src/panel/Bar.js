@@ -55,7 +55,7 @@ Ext.define('Ext.panel.Bar', {
             // allows bars to be rendered directly to body with no owner container
             me.initOrientation();
         }
-        
+
         me.callParent();
     },
 
@@ -71,7 +71,7 @@ Ext.define('Ext.panel.Bar', {
             me.callParent([dock]);
 
             me.initOrientation();
-            
+
             vertical = me.vertical;
             layout = me.layout;
             layout.setVertical(vertical);

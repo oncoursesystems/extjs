@@ -26,7 +26,7 @@ Ext.define('Ext.drag.proxy.None', {
 
     constructor: function(config) {
         var getElement = config && config.getElement;
-        
+
         if (getElement) {
             // Don't mutate the object the user passed. Need to do this
             // here otherwise initConfig will complain about writing over
@@ -35,7 +35,7 @@ Ext.define('Ext.drag.proxy.None', {
             config = Ext.apply({}, config);
             delete config.getElement;
         }
-        
+
         this.initConfig(config);
     },
 
@@ -53,7 +53,7 @@ Ext.define('Ext.drag.proxy.None', {
             initial = info.proxy.initial;
 
         positionable.addCls(revertCls);
-        
+
         positionable.setXY([initial.x, initial.y], Ext.apply({
             callback: function() {
                 positionable.removeCls(revertCls);

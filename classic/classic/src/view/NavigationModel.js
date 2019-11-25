@@ -51,14 +51,14 @@ Ext.define('Ext.view.NavigationModel', {
             listeners;
 
         me.initKeyNav(view);
-        
+
         if (!dataSource.isEmptyStore) {
             me.setStore(dataSource);
         }
-        
+
         listeners = me.getViewListeners();
         listeners.destroyable = true;
-        
+
         me.viewListeners = me.viewListeners || [];
         me.viewListeners.push(view.on(listeners));
     },
@@ -141,7 +141,7 @@ Ext.define('Ext.view.NavigationModel', {
         // try to focus the lastFocused or first item. This is undesirable.
         // So on mousedown outside of view client area, prevent the default focus behaviour.
         // See Ext.view.Table#onFocusEnter for this being acted upon.
-        if (Ext.getScrollbarSize().width) {
+        if (Ext.scrollbar.width()) {
             if (!view.el.getClientRegion().contains(mousedownEvent.getPoint())) {
                 mousedownEvent.preventDefault();
                 view.lastFocused = 'scrollbar';
@@ -212,7 +212,7 @@ Ext.define('Ext.view.NavigationModel', {
         // the record is the same (filtering, sorting)
         if (newRecord === me.record) {
             me.recordIndex = newRecordIndex;
-            
+
             return me.focusPosition(newRecordIndex);
         }
 
@@ -264,9 +264,9 @@ Ext.define('Ext.view.NavigationModel', {
             if (recordIndex.isEntity) {
                 recordIndex = me.view.dataSource.indexOf(recordIndex);
             }
-            
+
             me.item = me.view.all.item(recordIndex);
-            
+
             if (me.item) {
                 me.lastFocused = me.record;
                 me.lastFocusedIndex = me.recordIndex;
@@ -318,7 +318,7 @@ Ext.define('Ext.view.NavigationModel', {
         if (this.view.dataSource.indexOf(this.lastFocused) === -1) {
             return null;
         }
-        
+
         return this.lastFocused;
     },
 
@@ -334,46 +334,46 @@ Ext.define('Ext.view.NavigationModel', {
 
     onKeyDown: function(keyEvent) {
         var newPosition = this.recordIndex + 1;
-        
+
         if (newPosition > this.view.all.getCount() - 1) {
             newPosition = 0;
         }
-        
+
         this.setPosition(newPosition, keyEvent);
     },
-    
+
     onKeyRight: function(keyEvent) {
         var newPosition = this.recordIndex + 1;
-        
+
         if (newPosition > this.view.all.getCount() - 1) {
             newPosition = 0;
         }
-        
+
         this.setPosition(newPosition, keyEvent);
     },
-    
+
     onKeyLeft: function(keyEvent) {
         var newPosition = this.recordIndex - 1;
-        
+
         if (newPosition < 0) {
             newPosition = this.view.all.getCount() - 1;
         }
-        
+
         this.setPosition(newPosition, keyEvent);
     },
-    
+
     onKeyPageDown: Ext.emptyFn,
-    
+
     onKeyPageUp: Ext.emptyFn,
-    
+
     onKeyHome: function(keyEvent) {
         this.setPosition(0, keyEvent);
     },
-    
+
     onKeyEnd: function(keyEvent) {
         this.setPosition(this.view.all.getCount() - 1, keyEvent);
     },
-   
+
     onKeySpace: function(keyEvent) {
         this.fireNavigateEvent(keyEvent);
     },
@@ -409,7 +409,7 @@ Ext.define('Ext.view.NavigationModel', {
     destroy: function() {
         this.setStore(null);
         Ext.destroy(this.viewListeners, this.keyNav);
-        
+
         this.callParent();
     }
 });

@@ -7,7 +7,8 @@ Ext.define('KitchenSink.view.forms.RegisterController', {
 
         if (form.validate()) {
             Ext.Msg.alert('Registration Complete', 'You have successfully registered');
-        } else {
+        }
+        else {
             Ext.Msg.alert('Registration Failure', 'Please check for form errors and retry.');
         }
     }

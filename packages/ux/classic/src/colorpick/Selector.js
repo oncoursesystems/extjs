@@ -44,7 +44,7 @@ Ext.define('Ext.ux.colorpick.Selector', {
         'Ext.ux.colorpick.SliderValue',
         'Ext.ux.colorpick.SliderHue'
     ],
-    
+
     config: {
         hexReadOnly: true
     },

@@ -114,7 +114,7 @@ Ext.define('Ext.util.ObjectTemplate', {
 
                     fn = function(context) {
                         var v, i;
-                        
+
                         for (v = context, i = 0; v && i < template.length; ++i) {
                             v = v[template[i]];
                         }

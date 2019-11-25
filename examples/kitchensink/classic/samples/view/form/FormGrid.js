@@ -37,7 +37,9 @@ Ext.define('KitchenSink.view.form.FormGrid', {
             lastUpdatedColumnWidth: 85,
             ratingColumnWidth: 30,
             gainColor: 'green',
-            lossColor: 'red'
+            lossColor: 'red',
+            labelAlign: 'left',
+            bodyPadding: 5
         },
         neptune: {
             width: 880,
@@ -49,7 +51,9 @@ Ext.define('KitchenSink.view.form.FormGrid', {
             lastUpdatedColumnWidth: 115,
             ratingColumnWidth: 60,
             gainColor: '#73b51e',
-            lossColor: '#cf4c35'
+            lossColor: '#cf4c35',
+            labelAlign: 'left',
+            bodyPadding: 5
         },
         graphite: {
             width: 1150,
@@ -61,15 +65,31 @@ Ext.define('KitchenSink.view.form.FormGrid', {
             lastUpdatedColumnWidth: 155,
             ratingColumnWidth: 90,
             gainColor: 'unset',
-            lossColor: 'unset'
+            lossColor: 'unset',
+            labelAlign: 'left',
+            bodyPadding: 5
+        },
+        'classic-material': {
+            width: 1150,
+            gridWidth: 0.65,
+            formWidth: 0.35,
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 130,
+            lastUpdatedColumnWidth: 155,
+            ratingColumnWidth: 90,
+            gainColor: 'unset',
+            lossColor: 'unset',
+            labelAlign: 'top',
+            bodyPadding: 0
         }
     },
     //</example>
-    
+
     title: 'Company data',
     width: '${width}',
     frame: true,
-    bodyPadding: 5,
+    bodyPadding: '${bodyPadding}',
     layout: 'column',
     signTpl: '<span style="' +
             'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +
@@ -82,7 +102,7 @@ Ext.define('KitchenSink.view.form.FormGrid', {
     },
 
     fieldDefaults: {
-        labelAlign: 'left',
+        labelAlign: '${labelAlign}',
         labelWidth: 90,
         anchor: '100%',
         msgTarget: 'side'
@@ -144,7 +164,7 @@ Ext.define('KitchenSink.view.form.FormGrid', {
         }]
     }, {
         xtype: 'fieldset',
-        title:'Company details',
+        title: 'Company details',
 
         columnWidth: '${formWidth}',
         margin: '0 0 0 10',

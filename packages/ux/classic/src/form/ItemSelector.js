@@ -47,7 +47,7 @@ Ext.define('Ext.ux.form.ItemSelector', {
         type: 'hbox',
         align: 'stretch'
     },
-    
+
     ariaRole: 'group',
 
     initComponent: function() {
@@ -56,7 +56,7 @@ Ext.define('Ext.ux.form.ItemSelector', {
         me.ddGroup = me.id + '-dd';
         me.ariaRenderAttributes = me.ariaRenderAttributes || {};
         me.ariaRenderAttributes['aria-labelledby'] = me.id + '-labelEl';
-        
+
         me.callParent();
 
         // bindStore must be called after the fromField has been created because
@@ -277,7 +277,7 @@ Ext.define('Ext.ux.form.ItemSelector', {
         toStore.add(recs);
         fromStore.resumeEvents();
         toStore.resumeEvents();
-        
+
         // If the list item was focused when moved (e.g. via double-click)
         // then removing it will cause the focus to be thrown back to the
         // document body. Which might disrupt things if ItemSelector is
@@ -296,7 +296,7 @@ Ext.define('Ext.ux.form.ItemSelector', {
     // Synchronizes the submit value with the current state of the toStore
     syncValue: function() {
         var me = this;
- 
+
         me.mixins.field.setValue.call(me, me.setupValue(me.toField.store.getRange()));
     },
 

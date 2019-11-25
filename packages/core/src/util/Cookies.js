@@ -6,7 +6,7 @@
  */
 Ext.define('Ext.util.Cookies', {
     singleton: true,
-    
+
     /**
      * Creates a cookie with the specified name and value. Additional settings for the cookie
      * may be optionally specified (for example: expiration, access restriction, SSL).
@@ -32,7 +32,7 @@ Ext.define('Ext.util.Cookies', {
             path = (argc > 3) ? argv[3] : '/',
             domain = (argc > 4) ? argv[4] : null,
             secure = (argc > 5) ? argv[5] : false;
-            
+
         document.cookie = name + "=" +
             escape(value) +
             ((expires === null) ? "" : ("; expires=" + expires.toUTCString())) +

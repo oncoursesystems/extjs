@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.gauge.Basic', {
         'Ext.ux.gauge.Gauge'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'UI',
         path: 'modern/sass/src/view/gauge/Basic.scss'
@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.gauge.Basic', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     title: 'Basic',
     width: '${width}',

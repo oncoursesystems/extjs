@@ -20,6 +20,9 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
         },
         graphite: {
             comboBoxWidth: 230
+        },
+        'classic-material': {
+            comboBoxWidth: 230
         }
     },
     referenceHolder: true,
@@ -87,4 +90,4 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
         }
     }]
 
-})
+});

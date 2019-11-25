@@ -47,6 +47,15 @@ Ext.define('KitchenSink.view.grid.Reconfigure', {
             totalEmployeesWidth: 180,
             employeeWidth: 150,
             managerWidth: 120
+        },
+        'classic-material': {
+            width: 850,
+            height: 430,
+            firstNameWidth: 150,
+            lastNameWidth: 150,
+            totalEmployeesWidth: 180,
+            employeeWidth: 150,
+            managerWidth: 120
         }
     },
     //</example>

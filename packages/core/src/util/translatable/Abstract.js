@@ -82,7 +82,7 @@ Ext.define('Ext.util.translatable.Abstract', {
 
     constructor: function(config) {
         this.callParent([config]);
-        
+
         // this.position is simply an internal reusable object for GC purposes and should
         // not be accessed directly as it's values are not kept in sync.  always use
         // getPosition() to get the position
@@ -234,11 +234,11 @@ Ext.define('Ext.util.translatable.Abstract', {
 
         now = Ext.Date.now();
         easing = animation.easing;
-        
+
         easingX = (typeof x === 'number')
             ? (animation.easingX || easing || me.getEasingX() || true)
             : null;
-        
+
         easingY = (typeof y === 'number')
             ? (animation.easingY || easing || me.getEasingY() || true)
             : null;
@@ -338,7 +338,7 @@ Ext.define('Ext.util.translatable.Abstract', {
         }
 
         Ext.AnimationQueue.stop(me.doAnimationFrame, me);
-        
+
         me.fireEvent('animationend', me, me.x, me.y);
 
         if (me.callback) {
@@ -364,16 +364,17 @@ Ext.define('Ext.util.translatable.Abstract', {
 
     destroy: function() {
         var me = this;
-        
+
         me.destroying = true;
-        
+
         if (me.isAnimating) {
             me.stopAnimation();
         }
 
         me.callParent();
-        
-        me.destroying = false;
+
+        // This just makes it hard to ask "was destroy() called?":
+        // me.destroying = false; // removed in 7.0
         me.destroyed = true;
     }
 });

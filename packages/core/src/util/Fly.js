@@ -37,7 +37,7 @@ Ext.define('Ext.util.Fly', {
                 instance = flyweights.length ? flyweights.pop() : new T();
 
             instance.reset.apply(instance, arguments);
-            
+
             return instance;
         }
     },

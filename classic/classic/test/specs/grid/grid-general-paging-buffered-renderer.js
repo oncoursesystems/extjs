@@ -7,11 +7,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -41,7 +41,7 @@ function() {
 
             if (Ext.supports.CssTransforms && !Ext.isIE9m) {
                 transform = dom.style[transformStyleName];
-                
+
                 return transform ? parseInt(transform.split(',')[1], 10) : 0;
             }
             else {
@@ -59,12 +59,12 @@ function() {
         it("should refresh the view on each page change", function() {
             var store, ptoolbar,
                 refreshCount = 0;
-            
+
             runs(function() {
                 function getRandomDate() {
                     var from = new Date(1900, 0, 1).getTime(),
                         to = new Date().getTime();
-                    
+
                     return new Date(from + Math.random() * (to - from));
                 }
 
@@ -73,7 +73,7 @@ function() {
                         lastNames    = ['Spencer', 'Maintz', 'Conran', 'Elias'];
 
                     var data = [];
-                    
+
                     for (var i = 0; i < count; i++) {
                         var dob = getRandomDate(),
                             firstNameId = Math.floor(Math.random() * firstNames.length),
@@ -82,7 +82,7 @@ function() {
 
                         data.push([name, dob]);
                     }
-                    
+
                     return data;
                 }
 
@@ -128,7 +128,7 @@ function() {
             waitsFor(function() {
                 return grid.view.all.getCount() === 20;
             }, 'first refresh');
-            
+
             runs(function() {
                 refreshCount = grid.view.refreshCounter;
 

@@ -24,10 +24,10 @@ Ext.define('KitchenSink.view.pivot.Collapsible', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/CollapsibleController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
@@ -36,19 +36,29 @@ Ext.define('KitchenSink.view.pivot.Collapsible', {
             width: 600,
             height: 350,
             companyWidth: 100,
-            totalWidth: 90
+            totalWidth: 90,
+            columnLines: true
         },
         neptune: {
             width: 750,
             height: 400,
             companyWidth: 100,
-            totalWidth: 90
+            totalWidth: 90,
+            columnLines: true
         },
         graphite: {
             width: 750,
             height: 600,
             companyWidth: 120,
-            totalWidth: 180
+            totalWidth: 180,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 750,
+            height: 600,
+            companyWidth: 120,
+            totalWidth: 180,
+            columnLines: false
         }
     },
     //</example>
@@ -58,6 +68,7 @@ Ext.define('KitchenSink.view.pivot.Collapsible', {
     height: '${height}',
     collapsible: true,
     multiSelect: true,
+    columnLines: '${columnLines}',
 
     matrix: {
         type: 'local',
@@ -106,7 +117,7 @@ Ext.define('KitchenSink.view.pivot.Collapsible', {
             dataIndex: 'company',
             header: 'Company',
             width: '${companyWidth}'
-        },{
+        }, {
             dataIndex: 'year',
             header: 'Year'
         }],
@@ -154,7 +165,7 @@ Ext.define('KitchenSink.view.pivot.Collapsible', {
                     collapsibleRows: false,
                     collapsibleColumns: true
                 }
-            },{
+            }, {
                 text: 'Rows & Columns',
                 cfg: {
                     collapsibleRows: true,

@@ -20,7 +20,7 @@ Ext.define('Ext.util.Event', function() {
          * `true` in this class to identify an object as an instantiated Event, or subclass thereof.
          */
         isEvent: true,
-        
+
         // Private. Event suspend count
         suspended: 0,
 
@@ -280,7 +280,7 @@ Ext.define('Ext.util.Event', function() {
 
                 if (listener) {
                     options = listener.o;
-        
+
                     // cancel and remove a buffered handler that hasn't fired yet.
                     // When the buffered listener is invoked, it must check whether
                     // it still has a task.
@@ -288,7 +288,7 @@ Ext.define('Ext.util.Event', function() {
                         listener.task.cancel();
                         delete listener.task;
                     }
-        
+
                     // cancel and remove all delayed handlers that haven't fired yet
                     i = listener.tasks && listener.tasks.length;
 
@@ -299,10 +299,10 @@ Ext.define('Ext.util.Event', function() {
 
                         delete listener.tasks;
                     }
-                    
+
                     // Cancel the timer that could have been set if the event has already fired
                     listener.fireFn.timerId = Ext.undefer(listener.fireFn.timerId);
-        
+
                     manager = listener.manager;
 
                     if (manager) {
@@ -328,7 +328,7 @@ Ext.define('Ext.util.Event', function() {
                             }
                         }
                     }
-        
+
                     if (observable.isElement) {
                         // eslint-disable-next-line max-len
                         observable._getPublisher(eventName, options.translate === false).unsubscribe(
@@ -339,7 +339,7 @@ Ext.define('Ext.util.Event', function() {
                         );
                     }
                 }
-                
+
                 removed = true;
             }
 
@@ -367,7 +367,7 @@ Ext.define('Ext.util.Event', function() {
                 --this.suspended;
             }
         },
-        
+
         isSuspended: function() {
             return this.suspended > 0;
         },
@@ -394,21 +394,21 @@ Ext.define('Ext.util.Event', function() {
                 me.firing = true;
                 args = arguments.length ? arraySlice.call(arguments, 0) : [];
                 len = args.length;
-                
+
                 if (isElement) {
                     e = args[0];
                 }
 
                 for (i = 0; i < count; i++) {
                     listener = listeners[i];
-                    
+
                     // Listener may be undefined if one of the previous listeners
                     // destroyed the observable that was listening to these events.
                     // We'd be still in the middle of the loop here, unawares.
                     if (!listener) {
                         continue;
                     }
-                    
+
                     options = listener.o;
 
                     if (isElement) {
@@ -469,16 +469,16 @@ Ext.define('Ext.util.Event', function() {
                                 continue;
                             }
                         }
-                        
+
                         if (isElement) {
                             if (options.preventDefault) {
                                 e.preventDefault();
                             }
-        
+
                             if (options.stopPropagation) {
                                 e.stopPropagation();
                             }
-        
+
                             if (options.stopEvent) {
                                 e.stopEvent();
                             }
@@ -494,17 +494,17 @@ Ext.define('Ext.util.Event', function() {
                     fireInfo = me.getFireInfo(listener);
                     fireFn = fireInfo.fn;
                     fireScope = fireInfo.scope;
-                    
+
                     // We don't want to keep closure and scope on the Event prototype!
                     fireInfo.fn = fireInfo.scope = null;
-                    
+
                     // If the scope is already destroyed, we absolutely cannot deliver events to it.
                     // We also need to clean up the listener to avoid it hanging around forever
                     // like a zombie. Scope can be null/undefined, that's normal.
                     if (fireScope && fireScope.destroyed) {
                         me.removeListener(fireFn, fireScope, i);
                         fireFn = null;
-                        
+
                         //<debug>
                         // Skip warnings for Ext.container.Monitor
                         // It is to be deprecated and removed shortly.
@@ -518,11 +518,11 @@ Ext.define('Ext.util.Event', function() {
                         }
                         //</debug>
                     }
-                    
+
                     // N.B. This is where actual listener code is called. Step boldly into!
                     if (fireFn && fireFn.apply(fireScope, firingArgs) === false) {
                         Ext.EventObject = null;
-                        
+
                         return (me.firing = false);
                     }
 
@@ -539,15 +539,15 @@ Ext.define('Ext.util.Event', function() {
                         e = args[0] = chained;
                         chained = null;
                     }
-                    
+
                     // We don't guarantee Ext.EventObject existence outside of the immediate
                     // event propagation scope
                     Ext.EventObject = null;
                 }
             }
-            
+
             me.firing = false;
-            
+
             return true;
         },
 
@@ -565,7 +565,7 @@ Ext.define('Ext.util.Event', function() {
 
                 return fireArgs;
             }
-                
+
             fn = fromWrapped ? listener.fn : fireFn;
 
             //<debug>
@@ -653,13 +653,13 @@ Ext.define('Ext.util.Event', function() {
         createTargeted: function(handler, listener, o, scope, wrapped) {
             return function() {
                 var fireInfo;
-                
+
                 if (o.target === arguments[0]) {
                     if (!wrapped) {
                         fireInfo = listener.ev.getFireInfo(listener, true);
                         handler = fireInfo.fn;
                         scope = fireInfo.scope;
-                        
+
                         // We don't want to keep closure and scope references
                         // on the Event prototype!
                         fireInfo.fn = fireInfo.scope = null;
@@ -710,15 +710,15 @@ Ext.define('Ext.util.Event', function() {
                     fireInfo = listener.ev.getFireInfo(listener, true);
                     handler = fireInfo.fn;
                     scope = fireInfo.scope;
-                    
+
                     // We don't want to keep closure and scope references on the Event prototype!
                     fireInfo.fn = fireInfo.scope = null;
                 }
-                    
+
                 if (!listener.tasks) {
                     listener.tasks = [];
                 }
-                
+
                 listener.tasks.push(task);
 
                 //<debug>
@@ -755,11 +755,11 @@ Ext.define('Ext.util.Event', function() {
                     fireInfo = event.getFireInfo(listener, true);
                     handler = fireInfo.fn;
                     scope = fireInfo.scope;
-                    
+
                     // We don't want to keep closure and scope references on the Event prototype!
                     fireInfo.fn = fireInfo.scope = null;
                 }
-                
+
                 return handler.apply(scope, arguments);
             };
         }

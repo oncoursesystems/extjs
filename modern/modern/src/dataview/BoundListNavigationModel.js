@@ -237,7 +237,7 @@ Ext.define('Ext.dataview.BoundListNavigationModel', {
             // The ENTER key is handled above.
             if (doNavigate) {
                 this.callParent([event]);
-                
+
                 if (field && field.maybeCollapse) {
                     field.maybeCollapse(event);
                 }

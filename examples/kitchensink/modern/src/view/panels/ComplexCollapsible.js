@@ -75,7 +75,7 @@ Ext.define('KitchenSink.view.panels.ComplexCollapsible', {
                 ]
             },
             itemTpl: '{a}'
-        },{
+        }, {
             xtype: 'panel',
             flex: 1,
             collapsible: 'right',
@@ -119,16 +119,16 @@ Ext.define('KitchenSink.view.panels.ComplexCollapsible', {
                 },
                 columns: [{
                     text: 'Column 1', dataIndex: 'a'
-                },{
+                }, {
                     text: 'Column 2', dataIndex: 'b'
                 }]
             }]
-        },{
+        }, {
             title: 'Center',
             flex: 2,
             html: 'Center panel',
             collapsible: false
-        },{
+        }, {
             xtype: 'formpanel',
             title: 'East',
             width: 200,

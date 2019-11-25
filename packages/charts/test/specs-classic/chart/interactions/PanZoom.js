@@ -56,11 +56,11 @@ function() {
                     }
                 });
             });
-            
+
             waitsFor(function() {
                 return isAfterRender;
             });
-            
+
             runs(function() {
                 var chart = Ext.first('cartesian');
 

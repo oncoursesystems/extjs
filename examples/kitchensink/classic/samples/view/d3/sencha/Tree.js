@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.d3.sencha.Tree', {
         'KitchenSink.store.OrgChart'
 
     ],
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [
         {
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.d3.sencha.Tree', {
             path: 'app/store/OrgChart.js'
         }
     ],
-    // </example>
+    //</example>
 
     width: 1200,
     height: 700,

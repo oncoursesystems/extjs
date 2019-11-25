@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.chart.pie.Custom', {
         'Ext.chart.interactions.Rotate'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/pie/CustomController.js'
@@ -48,9 +48,9 @@ Ext.define('KitchenSink.view.chart.pie.Custom', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -113,7 +113,7 @@ Ext.define('KitchenSink.view.chart.pie.Custom', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

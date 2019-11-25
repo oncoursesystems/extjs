@@ -9,21 +9,21 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         },
         treeStoreLoad = Ext.data.TreeStore.prototype.load,
         loadTreeStore = function() {
             treeStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         },
         itIE10p = Ext.isIE9m ? xit : it,
@@ -61,7 +61,7 @@ function() {
                 name: 'name' + i
             });
         }
-        
+
         return data;
     }
 
@@ -76,7 +76,7 @@ function() {
                 namee: 'name' + i
             });
         }
-        
+
         return recs;
     }
 
@@ -354,6 +354,35 @@ function() {
                 });
             });
 
+            describe('locked partner with no column configuration', function() {
+                beforeEach(function() {
+                    makeGrid({
+                        enableLocking: true,
+                        columns: [
+                            { header: 'Name',  dataIndex: 'name', editor: 'textfield' },
+                            { header: 'Email', dataIndex: 'email', flex: 1,
+                                editor: {
+                                    xtype: 'textfield',
+                                    allowBlank: false
+                                }
+                            },
+                            { header: 'Phone', dataIndex: 'phone', editor: 'textfield' },
+                            { header: 'Age', dataIndex: 'age', editor: 'textfield' }
+                        ]
+                    }, {
+                        data: makeData(1000)
+                    });
+
+                    normal = grid.normalGrid.bufferedRenderer;
+                });
+
+                it('should not throw range error from locking partner', function() {
+                    expect(function() {
+                        normal.scrollTo(500);
+                    }).not.toThrow();
+                });
+            });
+
             describe('Load requests during scrolling', function() {
                 var scrollToLoadBufferValue,
                     Person = Ext.define(null, {
@@ -417,7 +446,7 @@ function() {
                 });
                 it('should not have time between scroll events to fire off any requests', function() {
                     spyOn(plugin, 'doAttemptLoad');
-                    
+
                     // Scroll to close enough to the end in a controlled manner.
                     // The doAttemptLoad timer should not timeout and fire off a page request between each scroll.
                     jasmine.waitsForScroll(scroller, function(scroller, x, y) {
@@ -489,7 +518,7 @@ function() {
             runs(function() {
                 store.insert(0, { id: 666, name: 'Old Nick' });
                 view.scrollTo(0, 0);
-                
+
                 var r0 = view.all.item(0, true);
 
                 // Must have been rendered
@@ -640,7 +669,7 @@ function() {
             runs(function() {
                 satisfyRequests();
             });
-            
+
             // Both views must render up to the last row with no error thrown
             waitsFor(function() {
                 return lockedView.all.endIndex === 4999 && normalView.all.endIndex === 4999;
@@ -1881,7 +1910,7 @@ function() {
 
                     scroller.scrollBy(0, 1000);
                 }, 'row 950 to scroll into view', 30000);
-                
+
                 // Scrolling is too fast for IE8, need to repaint the grid
                 // so that measurements below will yield correct values
                 if (Ext.isIE8) {
@@ -1894,7 +1923,7 @@ function() {
                 // Must have invoked the row syncher and the two body heights must be the same
                 runs(function() {
                     expect(bufferedRendererInvocationCount).toBeGreaterThan(0);
-                    
+
                     var mainHeight = Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight(),
                         partnerHeight = Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight();
 
@@ -2016,7 +2045,7 @@ function() {
 
                     scroller.scrollBy(0, 1000);
                 }, 'row 990 to scroll into view', 30000);
-                
+
                 // Scrolling is too fast for IE8, need to repaint the grid
                 // so that measurements below will yield correct values
                 if (Ext.isIE8) {
@@ -2029,7 +2058,7 @@ function() {
                 // Must have invoked the row syncher and the two body heights must be the same
                 runs(function() {
                     expect(bufferedRendererInvocationCount).toBeGreaterThan(0);
-                    
+
                     var mainHeight = Ext.fly(view.el.dom.querySelector('.x-grid-item-container')).getHeight(),
                         partnerHeight = Ext.fly(view.lockingPartner.el.dom.querySelector('.x-grid-item-container')).getHeight();
 
@@ -2139,7 +2168,7 @@ function() {
                 sparklinebarWidth = sparklineWidget.length > 0 ? sparklineWidget.item(0).width : undefined;
 
                 expect(sparklinebarWidth).toBeDefined();
-                
+
                 // TODO This expectation matches even when sparklinebarWidth is not defined.
                 expect(sparklinebarWidth).not.toBeLessThan(0);
             });
@@ -2412,13 +2441,13 @@ function() {
                 // EXTJS-15942 - did not measure, stayed at classic default of 21
                 var row = view.all.first(),
                     rowHeight = row.getHeight();
-                
+
                 // In IE8 we're adding a bottom border on the rows and shifting the row up
                 // at -border-width to compensate for that
                 if (Ext.isIE8) {
                     rowHeight -= row.getBorderWidth('b');
                 }
-                
+
                 expect(plugin.rowHeight).toBe(rowHeight);
             });
         });
@@ -2502,7 +2531,7 @@ function() {
                 expect(plugin.position).toBe(0);
             });
         });
-        
+
         // Uses shift/click which is not available on touch
         itNotTouch('should reset the cached position so the grid-item-container is at the top of the view on clearFilter', function() {
             var selModel;
@@ -2580,7 +2609,7 @@ function() {
                 // Should have gone to top
                 expect(view.all.getCount()).toBe(0);
                 expect(view.getScrollY()).toBe(0);
-                
+
                 // Unfortunately, we're testing private properties here :(
                 expect(plugin.bodyTop).toBe(0);
                 expect(plugin.position).toBe(0);
@@ -2708,15 +2737,15 @@ function() {
                 var lockedView, normalView, lockedViewDom, normalViewDom;
 
                 testLockable(true);
-                
+
                 lockedViewDom = view.lockedView.el.dom;
                 normalViewDom = view.normalView.el.dom;
 
                 expect(lockedViewDom.scrollTop).toBe(0);
                 expect(normalViewDom.scrollTop).toBe(0);
-                
+
                 store.load();
-                
+
                 expect(lockedViewDom.scrollTop).toBe(0);
                 expect(normalViewDom.scrollTop).toBe(0);
             });
@@ -2753,7 +2782,7 @@ function() {
                 store1, grid, grid1, tabPanel, view;
 
             store.load();
-            
+
             store1 = new Ext.data.Store({
                 model: Person,
                 proxy: {
@@ -2761,7 +2790,7 @@ function() {
                     data: makeData(52)
                 }
             });
-            
+
             store1.load();
 
             grid = new Ext.grid.Panel({
@@ -2775,7 +2804,7 @@ function() {
                     dataIndex: 'name'
                 }]
             });
-            
+
             grid1 = new Ext.grid.Panel({
                 hideMode: 'offsets',
                 title: 'Grid 2',
@@ -2806,7 +2835,7 @@ function() {
                     ]
                 }
             });
-            
+
             tabPanel = win.child('tabpanel');
             view = grid.getView();
             scroller = view.isLockingView ? grid.getScrollable() : view.getScrollable();
@@ -2816,7 +2845,7 @@ function() {
                 if (view.all.endIndex === store.getCount() - 1) {
                     return true;
                 }
-        
+
                 scroller.scrollBy(null, Infinity);
             }, 'scroll to end', 500);
 
@@ -2836,13 +2865,13 @@ function() {
 
                 win.setHeight(940);
             });
-            
+
             // Scroll all the way to the start
             waitsFor(function() {
                 if (view.getScrollY() < 100) {
                     return true;
                 }
-        
+
                 scroller.scrollBy(null, -Infinity);
             }, 'scroll to the start', 500);
 
@@ -2895,17 +2924,17 @@ function() {
                 height: 500,
                 renderTo: document.body
             });
-            
+
             grid.view.getScrollable().scrollBy(0, 2000);
-            
+
             waitsFor(function() {
                 return grid.view.all.startIndex !== 0;
             }, 'rendered block to move away from position zero', 30000, 100);
-            
+
             runs(function() {
 
                 var renderedBlockSize = grid.view.all.getCount();
-                
+
                 expect(function() {
                     grid.setHeight(200);
                 }).not.toThrow();
@@ -2967,7 +2996,7 @@ function() {
                     dataIndex: 'field4',
                     width: 100
                 }];
-            
+
             makeGrid({
                 columns: columns,
                 listeners: {
@@ -2993,7 +3022,7 @@ function() {
             expect(view.bufferedRenderer.getLastVisibleRowIndex()).toBe(999);
         });
     });
-    
+
     // https://sencha.jira.com/browse/EXTJS-19454
     // Bug manifests when a buffer rendered tree is added by state restoration
     // on DOM scrolling devices when touch is enabled.
@@ -3034,7 +3063,7 @@ function() {
             expect(view.getScrollable()._spacer).not.toBeUndefined();
         });
     });
-    
+
     describe('delayed data returning after scroll position has moved', function() {
         it('should not render the returned data block if the scroll position has moved on since the load was requested', function() {
             var Person = Ext.define(null, {
@@ -3102,7 +3131,7 @@ function() {
 
         });
     });
-    
+
     describe('refreshView', function() {
         it('should scroll to an appropriate position when refreshing the view at a specified startIndex', function() {
             var columns = [{
@@ -3159,7 +3188,7 @@ function() {
             });
         });
     });
-    
+
     describe('non scrolling grids', function() {
         it('should not throw an error', function() {
             expect(function() {
@@ -3206,9 +3235,9 @@ function() {
                     fields: fields
                 };
             };
-            
+
             var data = createMillionDataStore(1000);
-            
+
             store = Ext.create('Ext.data.Store', {
                 data: data.data,
                 fields: data.fields
@@ -3229,13 +3258,13 @@ function() {
                 store: store
             });
         });
-        
+
         it('should maintain the value of preserveScrollOnRefresh', function() {
             var preserveScrollOnRefreshValue = true;
 
-            view = grid.getView(),
+            view = grid.getView();
             scroller = view.getScrollable();
-        
+
             spyOn(view, 'refreshView').andCallFake(function() {
                 preserveScrollOnRefreshValue = view.preserveScrollOnRefresh;
             });
@@ -3250,7 +3279,7 @@ function() {
             });
             expect(view.refreshView).toHaveBeenCalled();
             expect(preserveScrollOnRefreshValue).toBe(false);
-            
+
             // on clearing filter, the preserveScrollOnRefresh should be set to false
             preserveScrollOnRefreshValue = null;
             // scroll to bottom of grid 
@@ -3286,7 +3315,7 @@ function() {
 
             store = Ext.create('Ext.data.Store', {
                 fields: ['name', 'email', 'change'],
-        
+
                 data: data
             });
 
@@ -3321,16 +3350,14 @@ function() {
                 expect(view.selModel.getSelection().length).toBe(4);
 
                 spyOn(scroller, 'getPosition').andCallThrough();
-                
+
                 // the view should be able to scroll till last record
                 scroller.scrollTo(0, 10000);
                 expect(scroller.getPosition().y).toBeGreaterThan(0);
                 expect(view.all.endIndex).toBe(store.getCount() - 1);
-                
+
             });
         });
     });
 
-     
-      
 });

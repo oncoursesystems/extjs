@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.chart.gauge.Sectors', {
     xtype: 'gauge-sectors',
     controller: 'gauge-sectors',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/gauge/GaugeController.js'
@@ -21,7 +21,6 @@ Ext.define('KitchenSink.view.chart.gauge.Sectors', {
             innerPadding: 10,
             padding: 8,
             refreshText: 'Refresh',
-            shadow: true,
             shadow: true,
             tbarPadding: '5 8'
         },
@@ -42,9 +41,9 @@ Ext.define('KitchenSink.view.chart.gauge.Sectors', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -124,7 +123,7 @@ Ext.define('KitchenSink.view.chart.gauge.Sectors', {
         },
         items: [{
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }]
     }]

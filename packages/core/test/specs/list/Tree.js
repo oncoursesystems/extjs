@@ -118,10 +118,10 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                         model: Model
                     }
                 }, true);
-                
+
                 // Make sure the store gets destroyed
                 store = list.getStore();
-                
+
                 expect(store.$className).toBe('Ext.data.TreeStore');
                 expect(store.getStoreId()).toBe('storeWithId');
             });
@@ -139,10 +139,10 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                         model: Model
                     }
                 }, true);
-                
+
                 // Ditto
                 store = list.getStore();
-                
+
                 expect(store.$className).toBe('spec.CustomTreeStore');
                 expect(store.getStoreId()).toBe('storeWithId');
 
@@ -183,7 +183,7 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                     });
 
                     store = list.getStore();
-                
+
                     expect(store.$className).toBe('Ext.data.TreeStore');
                     expect(store.getStoreId()).toBe('storeWithId');
                 });
@@ -201,7 +201,7 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                     });
 
                     store = list.getStore();
-                
+
                     expect(store.$className).toBe('spec.CustomTreeStore');
                     expect(store.getStoreId()).toBe('storeWithId');
 
@@ -252,7 +252,7 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                     expect(list.getStore().$className).toBe('Ext.data.TreeStore');
                     expect(list.getStore().getStoreId()).toBe('storeWithId');
                     expect(getListeners()).toEqual(listeners);
-                    
+
                     // Stores with ID are not destroyed automatically
                     list.getStore().destroy();
                 });
@@ -271,7 +271,7 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                     expect(list.getStore().$className).toBe('spec.CustomTreeStore');
                     expect(list.getStore().getStoreId()).toBe('storeWithId');
                     expect(getListeners()).toEqual(listeners);
-                    
+
                     list.getStore().destroy();
                     Ext.undefine('spec.CustomTreeStore');
                 });
@@ -356,7 +356,7 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                 itemcollapse: collapseSpy
             });
         }
-        
+
         beforeAll(function() {
             // We create this first to prevent the inconsistency with the way configs behave
             // when using cached: true. After the first instance, the behaviour will remain the same
@@ -373,7 +373,7 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                 constructor: function(config) {
                     this.$noClearOnDestroy = (this.$noClearOnDestroy || {});
                     this.$noClearOnDestroy.logs = true;
-                    
+
                     this.logs = {
                         expandable: [],
                         expanded: [],
@@ -393,12 +393,12 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                     };
                     this.callParent([config]);
                 },
-                
+
                 doDestroy: function() {
                     if (this.toolElement) {
                         this.toolElement.destroy();
                     }
-                    
+
                     this.callParent();
                 },
 
@@ -406,7 +406,7 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                     if (!this.toolElement) {
                         this.toolElement = this.element.createChild();
                     }
-   
+
                     return this.toolElement;
                 },
 
@@ -467,7 +467,7 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                     this.logs.text.push(text);
                 }
             });
-            
+
             var temp = new spec.treelist.CustomItem();
 
             temp.destroy();
@@ -971,7 +971,7 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                     });
                 });
             });
-            
+
             describe("child level nodes", function() {
                 describe("parent expanded: false", function() {
                     it("should set expanded", function() {
@@ -4191,6 +4191,8 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
 
         describe("at construction", function() {
             describe("starting as micro: true", function() {
+                var itNotTouch = Ext.supports.Touch ? xit : it;
+
                 beforeEach(function() {
                     makeList({
                         micro: true
@@ -4207,7 +4209,7 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                 });
 
                 // https://sencha.jira.com/browse/EXTJS-20210
-                (Ext.supports.Touch ? xit : it)('should hide the icon on float', function() {
+                itNotTouch('should hide the icon on float', function() {
                     var rec0 = store.getAt(0),
                         item0 = list.getItem(rec0);
 
@@ -4219,6 +4221,25 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                     // When floated, it should be hidden
                     expect(item0.iconElement.isVisible()).toBe(false);
                 });
+
+                // https://sencha.jira.com/browse/EXTJS-27536
+                // This test case is written only to satify the above mentioned JIRA ticket
+                itNotTouch('should not throw error on leaf node click', function() {
+                    var rec0 = store.getAt(0),
+                        leafRec0 = rec0.childNodes[0],
+                        item0 = list.getItem(rec0),
+                        leafItem0 = list.getItem(leafRec0);
+
+                    jasmine.fireMouseEvent(item0.toolElement, 'mouseover');
+
+                    expect(leafItem0.el.isVisible()).toBe(true);
+
+                    runs(function() {
+                        expect(function() {
+                            jasmine.fireMouseEvent(leafItem0.el, 'click');
+                        }).not.toThrow();
+                     });
+                 });
             });
 
             describe("starting micro: false", function() {

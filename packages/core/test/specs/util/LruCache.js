@@ -19,7 +19,7 @@ topSuite("Ext.util.LruCache", function() {
         it("should create an empty cache", function() {
             createCache();
             expect(cache.length).toBe(0);
-            expect(cache.first).toBeNull;
+            expect(cache.first).toBeNull();
             expect(cache.last).toBeNull();
             expect(cache.getValues()).toEqual([]);
             expect(cache.getKeys()).toEqual([]);

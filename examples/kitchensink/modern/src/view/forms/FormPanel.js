@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
         'KitchenSink.store.States'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/forms/FormPanelController.js'
@@ -42,7 +42,7 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
             }
         }
     },
-    // </example>
+    //</example>
 
     viewModel: {
     },

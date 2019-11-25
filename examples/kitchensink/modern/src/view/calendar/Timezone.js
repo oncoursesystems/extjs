@@ -8,12 +8,12 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
         'Ext.field.Select'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Store',
         path: 'samples/data/calendar/Timezone.js'
     }],
-    // </example>
+    //</example>
 
     referenceHolder: true,
     viewModel: {
@@ -53,10 +53,10 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
                 text: Ext.os.is.Phone ? 'New York -5' : 'New York (UTC-05:00)',
                 value: 300
             }, {
-                text: Ext.os.is.Phone ? 'London +0' :'London (UTC+00:00)',
+                text: Ext.os.is.Phone ? 'London +0' : 'London (UTC+00:00)',
                 value: 0
             }, {
-                text: Ext.os.is.Phone ? 'Paris +1' :'Paris (UTC+01:00)',
+                text: Ext.os.is.Phone ? 'Paris +1' : 'Paris (UTC+01:00)',
                 value: -60
             }, {
                 text: Ext.os.is.Phone ? 'Sydney +10' : 'Sydney (UTC+10:00)',
@@ -78,4 +78,4 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
             timezoneOffset: '{tzSelector.selection.value}'
         }
     }]
-})
+});

@@ -17,15 +17,15 @@ Ext.define('Admin.view.widgets.SocialBar', {
 
     items: [{
         ui: 'facebook',
-        iconCls: 'x-fa fa-facebook',
+        iconCls: 'x-fab fa-facebook',
         handler: 'onContactFacebook'
     }, {
         ui: 'soft-cyan',
-        iconCls: 'x-fa fa-twitter',
+        iconCls: 'x-fab fa-twitter',
         handler: 'onContactTwitter'
     }, {
         ui: 'soft-red',
-        iconCls: 'x-fa fa-google-plus',
+        iconCls: 'x-fab fa-google-plus',
         handler: 'onContactGooglePlus'
     }, {
         ui: 'soft-purple',

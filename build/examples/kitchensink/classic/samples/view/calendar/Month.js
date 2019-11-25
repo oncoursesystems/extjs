@@ -23,6 +23,10 @@ Ext.define('KitchenSink.view.calendar.Month', {
         graphite: {
             width: 1200,
             calendarWidth: 180
+        },
+        'classic-material': {
+            width: 1200,
+            calendarWidth: 180
         }
     },
 
@@ -42,6 +46,7 @@ Ext.define('KitchenSink.view.calendar.Month', {
         }
     },
 
+    cls: 'calendar-view',
     layout: 'border',
     bind: {
         title: '{value:date("M Y")}'
@@ -69,4 +74,4 @@ Ext.define('KitchenSink.view.calendar.Month', {
         }
     }]
 
-})
+});

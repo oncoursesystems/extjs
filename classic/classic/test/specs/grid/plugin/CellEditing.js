@@ -8,11 +8,11 @@ function() {
         store, plugin, grid, view, node, record, column, field,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -23,7 +23,7 @@ function() {
             spy = spyOn(obj, 'fn');
 
         object.addListener(eventName, obj.fn);
-        
+
         return spy;
     }
 
@@ -70,7 +70,7 @@ function() {
         }, gridCfg));
 
         view = grid.view;
-        
+
         return grid;
     }
 
@@ -115,7 +115,7 @@ function() {
             var spy = spyOnEvent(grid, 'cellactivate'),
                 cell = findCell(0, 0),
                 ed;
-           
+
             jasmine.fireMouseEvent(cell, 'click');
             ed = plugin.getActiveEditor();
             triggerEditorKey(ed.field.inputEl, TAB);
@@ -148,7 +148,7 @@ function() {
             record = grid.store.getAt(0);
             column = columnManager.getColumns()[0];
             cell = grid.view.getCell(record, column);
-            
+
             view.getNavigationModel().setPosition(cell);
             jasmine.fireMouseEvent(cell, 'click');
 
@@ -286,7 +286,7 @@ function() {
             waitsFor(function() {
                 return plugin.activeEditor && plugin.activeEditor.field.hasFocus && plugin.activeEditor.field.getValue() === 'lisa@milhouse.com';
             });
-            
+
         });
     });
 
@@ -320,7 +320,7 @@ function() {
 
                 // Must wait for async focus events from previous suite to complete.
                 waits(10);
-                
+
                 runs(function() {
                     cancelEditFired = false;
 
@@ -656,7 +656,7 @@ function() {
                                 Ext.destroy(comboStore);
                                 comboStore = ed = null;
                             });
-                            
+
                             function tabToNextRow() {
                                 var curRowIdx = ed.context.rowIdx;
 
@@ -1053,7 +1053,7 @@ function() {
         beforeEach(function() {
             // Must wait for async focus events from previous suite to complete.
             waits(10);
-            
+
             runs(function() {
                 makeGrid();
                 startEdit();
@@ -1071,21 +1071,21 @@ function() {
                 return plugin.activeEditor && plugin.activeEditor.up('grid') === grid;
             });
         });
-    
+
         it('should allow custom editors as a config', function() {
             var spy;
-            
+
             Ext.define('CustomEditor', {
                 extend: 'Ext.grid.CellEditor',
                 alias: 'widget.customeditor',
-                
+
                 constructor: function(config) { return this.callParent([config]); }
             });
-            
+
             // eslint-disable-next-line no-undef
             spy = spyOn(CustomEditor.prototype, 'constructor').andCallThrough();
             grid = Ext.destroy(grid);
-            
+
             makeGrid(null, {
                 columns: [{
                     header: 'Name',  dataIndex: 'name', editor: {
@@ -1097,9 +1097,9 @@ function() {
                 }]
             });
             startEdit();
-            
+
             waitsForSpy(spy);
-            
+
             Ext.undefine('CustomEditor');
         });
 
@@ -1195,7 +1195,7 @@ function() {
                 runs(function() {
                     jasmine.fireKeyEvent(node, 'keydown', 13);
                 });
-                
+
                 waitsFor(function() {
                     return plugin.activeEditor && plugin.editing === true;
                 }, 'editing to start on the focused cell');
@@ -1274,7 +1274,7 @@ function() {
                 runs(function() {
                     jasmine.fireKeyEvent(node, 'keydown', 13);
                 });
-                
+
                 waitsFor(function() {
                     return plugin.activeEditor && plugin.editing === true;
                 }, 'editing to start on the focused cell');
@@ -1406,7 +1406,7 @@ function() {
 
             makeGrid();
             startEdit(0, 1);
-            
+
             waitsFor(function() {
                 return plugin.activeEditor;
             });
@@ -1453,7 +1453,7 @@ function() {
             waitsFor(function() {
                 return (editor_1 = plugin.activeEditor) && editor_1.field.hasFocus;
             }, 'editing to start');
-            
+
             runs(function() {
 
                 // We have to fake a blur here.
@@ -1484,7 +1484,7 @@ function() {
             waitsFor(function() {
                 return (editor_1 = plugin.activeEditor) && editor_1.field.hasFocus;
             }, 'editing to start');
-            
+
             runs(function() {
 
                 // We have to fake a blur here.
@@ -1729,6 +1729,26 @@ function() {
                     expect(ed.el.dom.parentNode === Ext.getDetachedBody().dom).toBe(true);
                 });
             });
+        });
+    });
+
+    describe("reconfigure", function() {
+        it("should destroy old editors", function() {
+            var editor;
+
+            makeGrid();
+
+            startEdit(0, 0);
+            editor = plugin.getActiveEditor();
+            editor.setValue('111-111-1111');
+            plugin.completeEdit();
+            grid.setColumns([{ header: 'Name',  dataIndex: 'name', editor: 'textfield' }]);
+
+            expect(editor.destroyed).toBe(true);
+
+            if (!editor.destroyed) {
+                editor.destroy();
+            }
         });
     });
 });

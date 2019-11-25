@@ -3,7 +3,7 @@ topSuite("Ext.draw.sprite.Path", ['Ext.draw.*'], function() {
         // Silence warnings regarding Sencha download server
         spyOn(Ext.log, 'warn');
     });
-    
+
     describe("hitTest", function() {
         var sprite, surface, container;
 
@@ -43,5 +43,5 @@ topSuite("Ext.draw.sprite.Path", ['Ext.draw.*'], function() {
         });
 
     });
-    
+
 });

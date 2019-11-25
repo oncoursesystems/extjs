@@ -320,11 +320,11 @@ Ext.define('Ext.dataview.DataView', {
 
             this.callParent();
         },
-		
+
         resetSelection: function(records) {
             this.setItemSelection(records, false);
         },
-		
+
         doRefresh: function(scrollToTop) {
             var me = this,
                 records = me.dataRange.records,
@@ -347,7 +347,7 @@ Ext.define('Ext.dataview.DataView', {
                 // Stashes the NavigationModel's location for restoration after refresh
                 restoreFocus = me.saveFocusState();
                 me.hideEmptyText();
-                
+
                 // Resets Store's selection
                 me.resetSelection(records);
 

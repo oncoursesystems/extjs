@@ -126,7 +126,7 @@ Ext.define('Ext.ux.layout.ResponsiveColumn', {
 
     onAdd: function(item) {
         var responsiveCls;
-        
+
         this.callParent([item]);
 
         responsiveCls = item.responsiveCls;
@@ -163,10 +163,10 @@ Ext.define('Ext.ux.layout.ResponsiveColumn', {
                 // No parallel measurement, cannot lay out boxes.
                 if (gotWidth === false) {
                     targetContext.domBlock(me, 'width');
-                    
+
                     return false;
                 }
-                
+
                 if (!gotWidth) {
                     // gotWidth is undefined, which means we must be width shrink wrap.
                     // Cannot calculate item widths if we're shrink wrapping.

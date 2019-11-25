@@ -16,15 +16,15 @@ Ext.define('KitchenSink.view.pivot.ExporterController', {
 
     events: ['beforedocumentsave', 'documentsave', 'dataready'],
 
-    yearLabelRenderer: function(value){
+    yearLabelRenderer: function(value) {
         return 'Year ' + value;
     },
 
-    monthLabelRenderer: function(value){
+    monthLabelRenderer: function(value) {
         return Ext.Date.monthNames[value];
     },
 
-    exportToPivotXlsx: function () {
+    exportToPivotXlsx: function() {
         this.doExport({
             type: 'pivotxlsx',
             matrix: this.getView().getMatrix(),
@@ -33,28 +33,28 @@ Ext.define('KitchenSink.view.pivot.ExporterController', {
         });
     },
 
-    exportTo: function(btn){
+    exportTo: function(btn) {
         var cfg = Ext.merge({
             title: 'Pivot grid export demo',
             fileName: 'PivotGridExport' + (btn.cfg.onlyExpandedNodes ? 'Visible' : '') + '.' + (btn.cfg.ext || btn.cfg.type)
         }, btn.cfg);
 
-        this.doExport(cfg)
+        this.doExport(cfg);
     },
 
-    doExport: function (config) {
+    doExport: function(config) {
         this.getView().saveDocumentAs(config).then(null, this.onError);
     },
 
-    onError: function (error) {
+    onError: function(error) {
         Ext.Msg.alert('Error', typeof error === 'string' ? error : 'Unknown error');
     },
 
-    onBeforeDocumentSave: function (view) {
+    onBeforeDocumentSave: function(view) {
         view.mask('Document is prepared for export. Please wait ...');
     },
 
-    onDocumentSave: function (view) {
+    onDocumentSave: function(view) {
         view.unmask();
     }
 });

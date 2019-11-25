@@ -7,12 +7,12 @@ Ext.define('KitchenSink.view.chart.drawing.FreeDraw', {
         'KitchenSink.view.chart.drawing.FreeDrawComponent'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Component',
         path: 'modern/src/view/chart/drawing/FreeDrawComponent.js'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
 

@@ -16,7 +16,7 @@ Ext.define('Ext.rtl.view.Table', {
         var me = this;
 
         me.callParent();
-        
+
         if (me.getInherited().rtl) {
             me.addCellTpl(me.lookupTpl('rtlCellTpl'));
         }

@@ -12,7 +12,7 @@ topSuite("Ext.draw.engine.Canvas", ['Ext.draw.Container'], function() {
                 originalThreshold = proto.splitThreshold;
 
             proto.splitThreshold = threshold;
-            
+
             var draw = new Ext.draw.Container({
                 renderTo: Ext.getBody(),
                 engine: 'Ext.draw.engine.Canvas',

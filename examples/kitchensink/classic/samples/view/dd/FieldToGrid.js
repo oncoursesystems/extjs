@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
         align: 'stretch'
     },
     signTpl: '<span style="' +
-            'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +
+        'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +
         '>{text}</span>',
 
     //<example>
@@ -37,7 +37,7 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
     }, {
         type: 'Model',
         path: 'app/model/Company.js'
-    },{
+    }, {
         type: 'Data',
         path: 'classic/samples/data/DataSets.js'
     }],
@@ -65,6 +65,14 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
             lastUpdatedColumnWidth: 150,
             gainColor: 'unset',
             lossColor: 'unset'
+        },
+        'classic-material': {
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 150,
+            gainColor: '#4caf50',
+            lossColor: '#f44336'
         }
     },
     //</example>
@@ -86,7 +94,7 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
         },
 
         columns: [{
-            id:'company',
+            id: 'company',
             header: 'Company',
             sortable: true,
             dataIndex: 'name',
@@ -100,7 +108,7 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
         }, {
             header: 'Change',
             dataIndex: 'priceChange',
-            width:'${pricechangeWidth}',
+            width: '${pricechangeWidth}',
             sortable: true,
             renderer: 'renderChange'
         }, {
@@ -132,11 +140,11 @@ Ext.define('KitchenSink.view.dd.FieldToGrid', {
             xtype: 'textfield',
             fieldLabel: 'Drag this text',
             value: 'test'
-        },{
+        }, {
             xtype: 'numberfield',
             fieldLabel: 'Drag this number',
             value: 3.14
-        },{
+        }, {
             xtype: 'datefield',
             fieldLabel: 'Drag this date',
             value: new Date(2016, 4, 20)

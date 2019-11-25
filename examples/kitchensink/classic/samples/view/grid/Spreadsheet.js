@@ -24,10 +24,10 @@ Ext.define('KitchenSink.view.grid.Spreadsheet', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/grid/SpreadsheetController.js'
-    },{
+    }, {
         type: 'Store',
         path: 'app/store/MonthlySales.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/MonthlySales.js'
     }],
@@ -47,6 +47,7 @@ Ext.define('KitchenSink.view.grid.Spreadsheet', {
     width: 750,
     title: 'Spreadsheet',
     frame: true,
+    cls: 'tool-icon-size',
 
     selModel: {
         type: 'spreadsheet',
@@ -95,20 +96,20 @@ Ext.define('KitchenSink.view.grid.Spreadsheet', {
         reference: 'status'
     }],
 
-    columns:[
+    columns: [
         { text: 'Year', dataIndex: 'year', width: 70, minWidth: 70, locked: true },
-        { text: 'Jan',  dataIndex: 'jan', width: 100 },
-        { text: 'Feb',  dataIndex: 'feb', width: 100 },
-        { text: 'Mar',  dataIndex: 'mar', width: 100 },
-        { text: 'Apr',  dataIndex: 'apr', width: 100 },
-        { text: 'May',  dataIndex: 'may', width: 100 },
-        { text: 'Jun',  dataIndex: 'jun', width: 100 },
-        { text: 'Jul',  dataIndex: 'jul', width: 100 },
-        { text: 'Aug',  dataIndex: 'aug', width: 100 },
-        { text: 'Sep',  dataIndex: 'sep', width: 100 },
-        { text: 'Oct',  dataIndex: 'oct', width: 100 },
-        { text: 'Nov',  dataIndex: 'nov', width: 100 },
-        { text: 'Dec',  dataIndex: 'dec', width: 100 }
+        { text: 'Jan', dataIndex: 'jan', width: 100 },
+        { text: 'Feb', dataIndex: 'feb', width: 100 },
+        { text: 'Mar', dataIndex: 'mar', width: 100 },
+        { text: 'Apr', dataIndex: 'apr', width: 100 },
+        { text: 'May', dataIndex: 'may', width: 100 },
+        { text: 'Jun', dataIndex: 'jun', width: 100 },
+        { text: 'Jul', dataIndex: 'jul', width: 100 },
+        { text: 'Aug', dataIndex: 'aug', width: 100 },
+        { text: 'Sep', dataIndex: 'sep', width: 100 },
+        { text: 'Oct', dataIndex: 'oct', width: 100 },
+        { text: 'Nov', dataIndex: 'nov', width: 100 },
+        { text: 'Dec', dataIndex: 'dec', width: 100 }
     ],
 
     viewConfig: {

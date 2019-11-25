@@ -122,11 +122,11 @@ Ext.define('Ext.container.Viewport', {
      * @cfg scrollable
      * @hide
      */
-    
+
     ariaRole: 'application',
 
     responsiveConfig: true,
-    
+
     privates: {
         updateResponsiveState: function() {
             // By providing this method we are in sync with the layout suspend/resume as

@@ -20,10 +20,10 @@ Ext.define('KitchenSink.view.tree.FilteredTree', {
     otherContent: [{
         type: 'Store',
         path: 'app/store/Posts.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/tree/Post.js'
-    },{
+    }, {
         type: 'Data',
         path: 'app/data/Posts.js'
     }],
@@ -42,7 +42,7 @@ Ext.define('KitchenSink.view.tree.FilteredTree', {
     reserveScrollbar: true,
     useArrows: true,
     columns: [{
-        xtype: 'treecolumn', //this is so we know which column will show the tree
+        xtype: 'treecolumn', // this is so we know which column will show the tree
         text: 'Forum',
         flex: 2.5,
         sortable: true,
@@ -56,12 +56,14 @@ Ext.define('KitchenSink.view.tree.FilteredTree', {
         text: 'Title',
         flex: 2,
         dataIndex: 'title',
-        renderer: function (value, p, record) {
-            return value ? Ext.String.format(
-                '<a href="http://sencha.com/forum/showthread.php?t={1}" target="_blank">{0}</a>',
-                value,
-                record.data.threadid
-            ) : '';
+        renderer: function(value, p, record) {
+            return value
+                ? Ext.String.format(
+                    '<a href="http://sencha.com/forum/showthread.php?t={1}" target="_blank">{0}</a>',
+                    value,
+                    record.data.threadid
+                )
+                : '';
         },
         filter: {
             type: 'string',
@@ -82,6 +84,7 @@ Ext.define('KitchenSink.view.tree.FilteredTree', {
                 me.up('treepanel').store.on({
                     filterchange: function(store) {
                         var leafCount = 0;
+
                         store.getRoot().visitPostOrder('', function(node) {
                             if (node.isLeaf() && node.get('visible')) {
                                 leafCount++;

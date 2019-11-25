@@ -41,7 +41,7 @@ Ext.define('Ext.dataview.selection.Rows', {
     add: function(range, keepExisting, suppressEvent) {
         var me = this,
             view = me.view,
-            rowIdx, tmp;
+            rowIdx, tmp, record;
 
         // Single element array - extract it.
         // We cannot accept an array of records in this Selection class
@@ -52,6 +52,7 @@ Ext.define('Ext.dataview.selection.Rows', {
 
         // Adding a record selects that index
         if (range.isEntity) {
+            record = range;
             range = view.mapToRecordIndex(range);
         }
 
@@ -83,6 +84,8 @@ Ext.define('Ext.dataview.selection.Rows', {
         for (rowIdx = range[0]; rowIdx < range[1]; rowIdx++) {
             view.onItemSelect(rowIdx);
         }
+
+        me.manageSelection(record);
 
         if (!suppressEvent) {
             me.getSelectionModel().fireSelectionChange();
@@ -274,7 +277,7 @@ Ext.define('Ext.dataview.selection.Rows', {
                     }
                 });
             }
-            
+
             // If called during a drag select, or SHIFT+arrow select, include the drag range
             if (!abort && range != null) {
                 me.view.getStore().getRange(range[0], range[1], {
@@ -324,13 +327,17 @@ Ext.define('Ext.dataview.selection.Rows', {
                 view = me.view,
                 items = view.dataItems,
                 len = items.length,
+                indexTop = view.renderInfo.indexTop,
                 i;
 
             // Apply selected rendition to all view items.
             // Buffer rendered items will appear selected
             // because the rendering pathway consults the selection.
             for (i = 0; i < len; i++) {
-                view.onItemDeselect(i);
+                // when looping on view inner items (not rowIndex) at that time
+                // 'renderInfo.indexTop' should not be subtracted,  which is resulting in
+                // negative indexes when we have scrolled down the line to too many records.
+                view.onItemDeselect(i + indexTop);
             }
 
             me.getSelected().clear();
@@ -341,6 +348,8 @@ Ext.define('Ext.dataview.selection.Rows', {
             if (!selModel.getDeselectable() && me.lastSelected) {
                 me.add(me.lastSelected, true, true);
             }
+
+            me.manageSelection(null);
 
             if (!suppressEvent) {
                 selModel.fireSelectionChange();
@@ -529,6 +538,62 @@ Ext.define('Ext.dataview.selection.Rows', {
             // allow the range extender.
             if (spans === 1 && store.getAt(spans[0][0]) && store.getAt(spans[0][1])) {
                 return selected.spans[0];
+            }
+        },
+
+        /**
+         * Update view selection on `single` selectable mode.
+         * @param {Ext.data.Model/null} record Selected row record, 
+         * if `null` remove selected record 
+         * @private
+         */
+        manageSelection: function(record) {
+            var me = this,
+                view = me.view,
+                store = view.getStore(),
+                selModel = me.getSelectionModel(),
+                selected;
+
+            if (!store.isVirtualStore || selModel.getMode() !== 'single') {
+                return;
+            }
+
+            // update selection if selection mode is single and store type is virtual
+            selected = selModel.getSelected();
+
+            // unlock record page if view has selection
+            if (selected.length) {
+                me.adjustPageLock(store, selected.getAt(0), -1);
+            }
+
+            if (record) {
+                selected.splice.apply(selected, [0, 0, record]);
+                me.adjustPageLock(store, record, 1);
+            }
+            else {
+                selected.remove(selected.getAt(0));
+            }
+        },
+
+        /**
+         * Acquires or releases the lock to the page.
+         * Utility method only called from manageSelection.
+         * @param {Ext.data.virtual.Store} store View store.
+         * @param {Ext.data.Model} record Selected record
+         * @param {Number} delta A value of `1` to lock or `-1` to release.
+         * @private
+         */
+        adjustPageLock: function(store, record, delta) {
+            var page;
+
+            if (!store.isVirtualStore || !record) {
+                return;
+            }
+
+            page = store.pageMap.getPageOf(store.indexOf(record));
+
+            if (page) {
+                page.adjustLock('active', delta);
             }
         }
     }

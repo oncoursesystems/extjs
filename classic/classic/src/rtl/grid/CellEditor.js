@@ -8,7 +8,7 @@ Ext.define('Ext.rtl.grid.CellEditor', {
             offset = -(innerCell.getWidth() - offset -
                        innerCell.child(this.treeNodeSelector).getWidth());
         }
-        
+
         return offset;
     }
 });

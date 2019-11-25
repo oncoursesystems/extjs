@@ -16,18 +16,18 @@ Ext.define('Ext.sparkline.Pie', {
          * @cfg {Number} [offset] Angle in degrees to offset the first slice.
          */
         offset: 0,
-        
+
         /**
          * @cfg {String[]} [sliceColors] An array of CSS colro values to apply to the chart slices.
          */
         sliceColors: ['#3366cc', '#dc3912', '#ff9900', '#109618', '#66aa00', '#dd4477', '#0099c6',
                       '#990099'],
-        
+
         /**
          * @cfg {Number} [borderWidth=0] Border width in pixels of line round slices.
          */
         borderWidth: 0,
-        
+
         /**
          * @cfg {String} [borderColor=#000] Border color of line round slices.
          */

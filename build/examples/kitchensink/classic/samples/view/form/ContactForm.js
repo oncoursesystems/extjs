@@ -9,13 +9,13 @@ Ext.define('KitchenSink.view.form.ContactForm', {
     extend: 'Ext.form.Panel',
     xtype: 'form-contact',
     controller: 'form-contact',
-    
+
     //<example>
     requires: [
         'KitchenSink.view.form.ContactFormController',
         'KitchenSink.view.form.ContactFormWindow'
     ],
-    
+
     exampleTitle: 'Contact Form',
     otherContent: [{
         type: 'Controller',
@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.form.ContactForm', {
         path: 'classic/samples/view/form/ContactFormWindow.js'
     }],
     //</example>
-    
+
     title: 'Contact Us',
     width: 500,
     bodyPadding: 20,

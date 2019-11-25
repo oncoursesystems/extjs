@@ -148,10 +148,10 @@ Ext.define('Ext.scroll.indicator.Bar', {
                 innerEl = me.getScroller().getInnerElement(),
                 names = me.names[axis],
                 extraPadding = Ext.isIE ? 1 : 0,
-                scrollbarSize = (Ext.getScrollbarSize()[names.size] + extraPadding) + 'px';
+                scrollbarSize = (Ext.scrollbar.size()[names.size] + extraPadding) + 'px';
             // Added extra 1 px in scrollbarSize as in case of IE browser, it will
             // not respond to scrollbutton click if size <= native scroll bar size
-            
+
             this.callParent([axis, oldAxis]);
 
             el.setStyle(names.size, scrollbarSize);

@@ -105,7 +105,7 @@ xdescribe("Ext.Loader", function() {
             var F = function() {};
 
             F.prototype = Ext;
-            
+
             // Note Foo needs to be a global variable b/c it's looked up in
             // Loader.onFileLoaded() -> Loader.refreshQueue() -> ClassManager.isCreated().
             // eslint-disable-next-line no-global-assign

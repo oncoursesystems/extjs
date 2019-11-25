@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.grid.TreeListModel', {
     alias: 'viewmodel.tree-list',
 
     formulas: {
-        selectionText: function (get) {
+        selectionText: function(get) {
             var selection = get('treelist.selection'),
                 path;
 
@@ -12,7 +12,8 @@ Ext.define('KitchenSink.view.grid.TreeListModel', {
                 path = selection.getPath('text');
 
                 return 'Selected: ' + path.replace(/^\/All/i, '');
-            } else {
+            }
+            else {
                 return 'No node selected';
             }
         }
@@ -38,7 +39,7 @@ Ext.define('KitchenSink.view.grid.TreeListModel', {
                         iconCls: 'x-fa fa-database',
                         children: [{
                             text: 'First',
-                            iconCls: 'x-fa fa-sliders',
+                            iconCls: 'x-fa fa-sliders-h',
                             leaf: true
                         }, {
                             text: 'No Icon',
@@ -63,12 +64,12 @@ Ext.define('KitchenSink.view.grid.TreeListModel', {
                         leaf: true
                     }, {
                         text: 'Inactive',
-                        iconCls: 'x-fa fa-trash',
+                        iconCls: 'x-fa fa-trash-alt',
                         leaf: true
                     }]
                 }, {
                     text: 'Groups',
-                    iconCls: 'x-fa fa-group',
+                    iconCls: 'x-fa fa-users',
                     leaf: true
                 }, {
                     text: 'Settings',

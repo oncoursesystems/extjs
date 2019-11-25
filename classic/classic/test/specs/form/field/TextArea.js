@@ -24,7 +24,7 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
         });
         expect(component.inputEl.dom.value).toBe('test "  <br/> test');
     });
-    
+
     it("should be able to set a numeric value", function() {
         makeComponent({
             renderTo: Ext.getBody()
@@ -32,7 +32,6 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
         component.setValue(100);
         expect(component.getValue()).toBe('100');
     });
-
 
     describe("defaults", function() {
         beforeEach(function() {
@@ -55,7 +54,6 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
             expect(component.preventScrollbars).toBe(false);
         });
     });
-
 
     describe("rendering", function() {
         // NOTE this doesn't yet test the main label, error icon, etc. just the parts specific to TextArea.
@@ -112,23 +110,23 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
                 expect('' + component.inputEl.dom.getAttribute("tabIndex")).toEqual('5');
             });
         });
-        
+
         describe("ariaEl", function() {
             it("should be inputEl", function() {
                 expect(component.ariaEl).toBe(component.inputEl);
             });
         });
-        
+
         describe("ARIA attributes", function() {
             it("should have textbox role", function() {
                 expect(component).toHaveAttr('role', 'textbox');
             });
-            
+
             it("should have aria-multiline attribute", function() {
                 expect(component).toHaveAttr('aria-multiline', 'true');
             });
         });
-        
+
         xdescribe("sizing", function() {
             it("should have the cols property affect size when shrink wrapping", function() {
                 var width = component.getWidth();
@@ -148,7 +146,7 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
                 });
                 expect(component.getWidth()).toBeLessThan(width);
             });
-            
+
             it("should give preference to a calculated/configured width", function() {
                 component.destroy();
                 makeComponent({
@@ -159,7 +157,7 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
                 });
                 expect(component.getWidth()).toBe(500);
             });
-            
+
             it("should account for a top label when sizing", function() {
                 component.destroy();
                 makeComponent({
@@ -169,10 +167,10 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
                     labelAlign: 'top',
                     fieldLabel: 'A label'
                 });
-                
+
                 var label = component.labelEl,
                     expected = 100 - (label.getHeight() + label.getMargin('tb'));
-                      
+
                 expect(component.inputEl.getHeight()).toBe(expected);
             });
         });
@@ -213,7 +211,7 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
                 expect(component.getHeight()).toBeLessThan(500);
                 expect(component.getHeight()).toBeGreaterThan(40);
             });
-            
+
             it("should set the initial textarea height to growMin", function() {
                 expect(component.getHeight()).toBe(40);
             });
@@ -267,7 +265,7 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
 
                 expect(height).toBe(40);
             });
-            
+
             it("should work with markup", function() {
                 component.setValue('<fake tag appears here with longer text that should cause the field to grow');
                 expect(component.getHeight()).toBeGreaterThan(40);
@@ -308,7 +306,6 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
             });
         });
     });
-
 
     describe("readOnly", function() {
         describe("readOnly config", function() {
@@ -365,7 +362,7 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
             expect(component.inputEl.getStyle('overflow')).not.toEqual('hidden');
         });
     });
-    
+
     describe("initial value", function() {
         var makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty = function(initialValue) {
             makeComponent({
@@ -374,7 +371,7 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
             expect(component.getValue()).toBe(initialValue);
             expect(component.isDirty()).toBeFalsy();
         };
-        
+
         it("should not insert unspecified new lines", function() {
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty('initial value');
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty(' initial  value ');
@@ -382,7 +379,7 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty(' ');
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty('  ');
         });
-        
+
         it("should preserve new lines", function() {
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty('\ninitial value');
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty('\n\ninitial value');
@@ -396,7 +393,7 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty('initial value\n');
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty('initial value\n\n');
         });
-        
+
         it("should preserve empty strings", function() {
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty('\n');
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty(' \n ');
@@ -407,26 +404,26 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
             makeComponentWithInitialValueAndExpectValueToBeExactAndNonDirty('\n  \n');
         });
     });
-    
+
     describe("carriage returns", function() {
         var s = 'line1\r\nline2';
-        
+
         var expectNoCarriageReturns = function() {
             expect(component.getValue().indexOf('\r')).toBe(-1);
         };
-        
+
         var expectNoCarriageReturnsAndNotDirty = function() {
             expectNoCarriageReturns();
             expect(component.isDirty()).toBe(false);
         };
-        
+
         it("should strip carriage returns from the initial value before render", function() {
             makeComponent({
                 value: s
             });
             expectNoCarriageReturnsAndNotDirty();
         });
-        
+
         it("should strip carriage returns from the initial value after render", function() {
             makeComponent({
                 value: s,
@@ -434,13 +431,13 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
             });
             expectNoCarriageReturnsAndNotDirty();
         });
-        
+
         it("should strip carriage returns when we call setValue before rendering", function() {
             makeComponent();
             component.setValue(s);
             expectNoCarriageReturns();
         });
-        
+
         it("should strip carriage returns when we call setValue after rendering", function() {
             makeComponent({
                 renderTo: Ext.getBody()
@@ -449,7 +446,7 @@ topSuite("Ext.form.field.TextArea", ['Ext.Container', 'Ext.layout.container.Fit'
             expectNoCarriageReturns();
         });
     });
-    
+
     describe("validation", function() {
         describe("allowBlank", function() {
             it("should not allow only newlines and spaces when used with allowOnlyWhitespace: false", function() {

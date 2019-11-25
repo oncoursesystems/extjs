@@ -47,12 +47,12 @@ Ext.define('Ext.data.field.Integer', {
         }
         else {
             out = this.parse(v);
-            
+
             if (allowNull && isNaN(out)) {
                 out = null;
             }
         }
-        
+
         return out;
     },
 

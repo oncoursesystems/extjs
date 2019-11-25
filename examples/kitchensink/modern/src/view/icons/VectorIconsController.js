@@ -40,11 +40,13 @@ Ext.define('KitchenSink.view.icons.VectorIconsController', {
         me.updateLastHightlighted(0, 0);
     },
 
-    updateLastHightlighted: function (row, col) {
+    updateLastHightlighted: function(row, col) {
         var list = this.lookup('list'),
             preview = this.lookup('preview'),
-            previewItem = preview.getSurface().getItems()[0]
-            lastHighlighted = this.lastHighlighted;
+            previewItem = preview.getSurface().getItems()[0],
+            lastHighlighted;
+
+        lastHighlighted = this.lastHighlighted;
 
         if (lastHighlighted) {
             lastHighlighted.setAttributes({
@@ -62,17 +64,20 @@ Ext.define('KitchenSink.view.icons.VectorIconsController', {
             previewItem.setAttributes({
                 path: lastHighlighted.attr.path
             });
-        } else {
+        }
+        else {
             lastHighlighted = null;
         }
 
         return this.lastHighlighted = lastHighlighted;
     },
 
-    placeItem: function (size, item) {
+    placeItem: function(size, item) {
         var bbox = item.getBBox(true),
             iconSize = this.iconSize,
-            scaling = Math.min((size.width - 30) / (bbox.width || iconSize), (size.height - 30) / (bbox.height || iconSize));
+            val1 = (size.width - 30) / (bbox.width || iconSize),
+            val2 = (size.height - 30) / (bbox.height || iconSize),
+            scaling = Math.min(val1, val2);
 
         if (isFinite(scaling)) {
             item.setAttributes({
@@ -83,7 +88,7 @@ Ext.define('KitchenSink.view.icons.VectorIconsController', {
         }
     },
 
-    listResizeHandler: function (size) {
+    listResizeHandler: function(size) {
         var list = this.lookup('list'),
             colSize = this.colSize,
             iconSize = this.iconSize,
@@ -94,7 +99,7 @@ Ext.define('KitchenSink.view.icons.VectorIconsController', {
         }
     },
 
-    previewResizeHandler: function (size) {
+    previewResizeHandler: function(size) {
         var preview = this.lookup('preview'),
             surface = preview.getSurface(),
             item = surface.getItems()[0];
@@ -104,7 +109,7 @@ Ext.define('KitchenSink.view.icons.VectorIconsController', {
         this.placeItem(size, item);
     },
 
-    onIconTap: function (e) {
+    onIconTap: function(e) {
         var me = this,
             scrollableTarget = e.getTarget('.x-scroller'),
             iconSize = me.iconSize,

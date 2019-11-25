@@ -228,7 +228,7 @@ Ext.define('Ext.data.proxy.Ajax', {
     alternateClassName: ['Ext.data.HttpProxy', 'Ext.data.AjaxProxy'],
 
     isAjaxProxy: true,
-    
+
     // Keep a default copy of the action methods here. Ideally could just null
     // out actionMethods and just check if it exists & has a property, otherwise
     // fallback to the default. But at the moment it's defined as a public property,
@@ -247,7 +247,7 @@ Ext.define('Ext.data.proxy.Ajax', {
         * the use of a binary reader such as {@link Ext.data.amf.Reader AMF Reader}
         */
         binary: false,
-    
+
         /**
          * @cfg {Object} [headers]
          * Any headers to add to the Ajax request.
@@ -260,7 +260,7 @@ Ext.define('Ext.data.proxy.Ajax', {
          *     }
          */
         headers: undefined,
-    
+
         /**
          * @cfg {Boolean} paramsAsJson
          * Set to `true` to have any request parameters sent as
@@ -272,7 +272,7 @@ Ext.define('Ext.data.proxy.Ajax', {
          * requests.
          */
         paramsAsJson: false,
-        
+
         /**
          * @cfg {Boolean} withCredentials
          * This configuration is sometimes necessary when using cross-origin resource sharing.
@@ -303,7 +303,7 @@ Ext.define('Ext.data.proxy.Ajax', {
          * @accessor
          */
         password: null,
-        
+
         /**
         * @cfg {Object} actionMethods
         * Mapping of action name to HTTP request method. In the basic AjaxProxy these are set to
@@ -317,18 +317,18 @@ Ext.define('Ext.data.proxy.Ajax', {
             destroy: 'POST'
         }
     },
-    
+
     doRequest: function(operation) {
         var me = this,
             writer = me.getWriter(),
             request = me.buildRequest(operation),
             method = me.getMethod(request),
             jsonData, params;
-            
+
         if (writer && operation.allowWrite()) {
             request = writer.write(request);
         }
-        
+
         request.setConfig({
             binary: me.getBinary(),
             headers: me.getHeaders(),
@@ -339,38 +339,38 @@ Ext.define('Ext.data.proxy.Ajax', {
             useDefaultXhrHeader: me.getUseDefaultXhrHeader(),
             disableCaching: false // explicitly set it to false, ServerProxy handles caching
         });
-        
+
         if (me.responseType != null && Ext.supports.XHR2) {
             request.setResponseType(me.responseType);
         }
-        
+
         if (method.toUpperCase() !== 'GET' && me.getParamsAsJson()) {
             params = request.getParams();
 
             if (params) {
                 jsonData = request.getJsonData();
-                
+
                 if (jsonData) {
                     jsonData = Ext.Object.merge({}, jsonData, params);
                 }
                 else {
                     jsonData = params;
                 }
-                
+
                 request.setJsonData(jsonData);
                 request.setParams(undefined);
             }
         }
-        
+
         if (me.getWithCredentials()) {
             request.setWithCredentials(true);
             request.setUsername(me.getUsername());
             request.setPassword(me.getPassword());
         }
-        
+
         return me.sendRequest(request);
     },
-    
+
     /**
      * Fires a request
      * @param {Ext.data.Request} request The request
@@ -380,10 +380,10 @@ Ext.define('Ext.data.proxy.Ajax', {
     sendRequest: function(request) {
         request.setRawRequest(Ext.Ajax.request(request.getCurrentConfig()));
         this.lastRequest = request;
-        
+
         return request;
     },
-    
+
     /**
      * Aborts a running request.
      * @param {Ext.data.Request} [request] The request to abort. If not passed, the most recent
@@ -391,12 +391,12 @@ Ext.define('Ext.data.proxy.Ajax', {
      */
     abort: function(request) {
         request = request || this.lastRequest;
-        
+
         if (request) {
             Ext.Ajax.abort(request.getRawRequest());
         }
     },
-    
+
     /**
      * Returns the HTTP method name for a given request. By default this returns based on a lookup
      * on {@link #cfg!actionMethods}.
@@ -407,14 +407,14 @@ Ext.define('Ext.data.proxy.Ajax', {
         var actions = this.getActionMethods(),
             action = request.getAction(),
             method;
-            
+
         if (actions) {
             method = actions[action];
         }
-        
+
         return method || this.defaultActionMethods[action];
     },
-    
+
     /**
      * @private
      * TODO: This is currently identical to the JsonPProxy version except for the return function's
@@ -427,20 +427,20 @@ Ext.define('Ext.data.proxy.Ajax', {
     createRequestCallback: function(request, operation) {
         return function(options, success, response) {
             var me = this;
-            
+
             if (request === me.lastRequest) {
                 me.lastRequest = null;
             }
-            
+
             if (!me.destroying && !me.destroyed) {
                 me.processResponse(success, operation, request, response);
             }
         };
     },
-    
+
     destroy: function() {
         this.lastRequest = null;
-        
+
         this.callParent();
     }
 });

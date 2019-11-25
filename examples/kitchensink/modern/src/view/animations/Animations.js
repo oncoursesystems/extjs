@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.animations.Animations', {
         'KitchenSink.view.animations.AnimationsController'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/animations/AnimationsController.js'
@@ -33,7 +33,7 @@ Ext.define('KitchenSink.view.animations.Animations', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     height: '${height}',
     width: '${width}',
@@ -43,15 +43,15 @@ Ext.define('KitchenSink.view.animations.Animations', {
     },
 
     anims: [{
-            group: 'Slide'
-        }, {
-            group: 'Cover'
-        }, {
-            group: 'Reveal'
-        },
-        'Fade',
-        'Pop',
-        'Flip'
+        group: 'Slide'
+    }, {
+        group: 'Cover'
+    }, {
+        group: 'Reveal'
+    },
+            'Fade',
+            'Pop',
+            'Flip'
     ],
 
     defaults: {

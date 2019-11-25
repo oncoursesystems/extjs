@@ -352,7 +352,7 @@ Ext.define('Ext.draw.PathUtil', function() {
          */
         interpolateCubic: function(a, b, c, d, t) {
             var rate;
-            
+
             if (t === 0) {
                 return a;
             }

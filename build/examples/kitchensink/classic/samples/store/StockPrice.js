@@ -3,7 +3,7 @@ Ext.define('KitchenSink.store.StockPrice', {
     model: 'KitchenSink.model.StockPrice',
     alias: 'store.stock-price',
 
-    generateData: function (count) {
+    generateData: function(count) {
         var first = {
                 time: Ext.Date.now(),
                 close: 100
@@ -21,7 +21,7 @@ Ext.define('KitchenSink.store.StockPrice', {
         return records;
     },
 
-    getNextPrice: function (previousClose) {
+    getNextPrice: function(previousClose) {
         var open = previousClose - 2 + Math.random() * 8,
             high = open + Math.random() * 2,
             close = open - Math.random() * 4,
@@ -43,11 +43,11 @@ Ext.define('KitchenSink.store.StockPrice', {
         };
     },
 
-    refreshData: function () {
+    refreshData: function() {
         this.setData(this.generateData(2 * 365));
     },
 
-    constructor: function (config) {
+    constructor: function(config) {
 
         config = Ext.apply({
             data: this.generateData(2 * 365)

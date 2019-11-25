@@ -106,6 +106,15 @@ Ext.define('Ext.field.Text', {
      */
 
     /**
+     * @event keydown
+     * @preventable
+     * Fires when a key is pressed on the input element
+     * @param {Ext.field.Text} this This field
+     * @param {Ext.event.Event} e
+     * @since 7.0
+     */
+
+    /**
      * @event keyup
      * @preventable
      * Fires when a key is released on the input element
@@ -130,6 +139,13 @@ Ext.define('Ext.field.Text', {
      * that this event bubbles up to parent containers.
      * @param {Ext.field.Text} this This field
      * @param {Mixed} e The key event object
+     */
+
+    /**
+     * @cfg {RegExp} stripCharsRe
+     * A JavaScript RegExp object used to strip unwanted content from the value
+     * during input. If `stripCharsRe` is specified,
+     * every *character sequence* matching `stripCharsRe` will be removed.
      */
 
     config: {
@@ -429,12 +445,23 @@ Ext.define('Ext.field.Text', {
             inputMask.showEmptyMask(me, true);
         }
         else {
-            me.forceInputChange = true;
-            me.setValue('');
-            me.forceInputChange = false;
+            me.forceSetValue('');
         }
 
         me.syncEmptyState();
+    },
+
+    isEqual: function(value1, value2) {
+        var v1 = this.transformValue(value1),
+            v2 = this.transformValue(value2);
+
+        return v1 === v2;
+    },
+
+    forceSetValue: function(value) {
+        this.forceInputChange = true;
+        this.setValue(value);
+        this.forceInputChange = false;
     },
 
     transformValue: function(value) {
@@ -829,6 +856,30 @@ Ext.define('Ext.field.Text', {
         return trigger;
     },
 
+    /**
+     * @private
+     */
+    fireKey: function(e) {
+        if (e.isSpecialKey()) {
+            this.fireEvent('specialkey', this, e);
+        }
+    },
+
+    onKeyPress: function(event) {
+        var me = this,
+            inputMask = me.getInputMask();
+
+        if (inputMask) {
+            inputMask.onKeyPress(me, me.getValue(), event);
+        }
+
+        me.fireEvent('keypress', me, event);
+
+        if (!Ext.supports.SpecialKeyDownRepeat) {
+            me.fireKey(event);
+        }
+    },
+
     onKeyDown: function(event) {
         var me = this,
             inputMask = me.getInputMask();
@@ -846,6 +897,30 @@ Ext.define('Ext.field.Text', {
         if (Ext.supports.SpecialKeyDownRepeat) {
             me.fireKey(event);
         }
+
+        me.fireAction('keydown', [me, event], 'doKeyDown');
+    },
+
+    /**
+     * Called when a key has been pressed in the `<input>`
+     * @protected
+     */
+    doKeyDown: Ext.emptyFn,
+
+    onKeyUp: function(e) {
+        this.fireAction('keyup', [this, e], 'doKeyUp');
+    },
+
+    /**
+     * Called when a key has been pressed in the `<input>`
+     * @private
+     */
+    doKeyUp: function(me, e) {
+        me.syncEmptyState();
+
+        if (e.browserEvent.keyCode === 13) {
+            me.fireAction('action', [me, e], 'doAction');
+        }
     },
 
     onInput: function(e) {
@@ -862,6 +937,10 @@ Ext.define('Ext.field.Text', {
 
         // Keep our config up to date:
         me._inputValue = value;
+
+        if (!me.hasFocus && me.getLabelAlign() === 'placeholder') {
+            me.syncLabelPlaceholder(true);
+        }
 
         // If the value is empty don't try and parse it, use the result
         // of parseValue as the default. For text fields it will be empty string,
@@ -902,46 +981,6 @@ Ext.define('Ext.field.Text', {
                 me.ignoreInput = false;
             }
         }, 10);
-    },
-
-    /**
-     * @private
-     */
-    fireKey: function(e) {
-        if (e.isSpecialKey()) {
-            this.fireEvent('specialkey', this, e);
-        }
-    },
-
-    onKeyPress: function(event) {
-        var me = this,
-            inputMask = me.getInputMask();
-
-        if (inputMask) {
-            inputMask.onKeyPress(me, me.getValue(), event);
-        }
-
-        me.fireEvent('keypress', me, event);
-
-        if (!Ext.supports.SpecialKeyDownRepeat) {
-            me.fireKey(event);
-        }
-    },
-
-    onKeyUp: function(e) {
-        this.fireAction('keyup', [this, e], 'doKeyUp');
-    },
-
-    /**
-     * Called when a key has been pressed in the `<input>`
-     * @private
-     */
-    doKeyUp: function(me, e) {
-        me.syncEmptyState();
-
-        if (e.browserEvent.keyCode === 13) {
-            me.fireAction('action', [me, e], 'doAction');
-        }
     },
 
     doAction: function() {
@@ -1317,6 +1356,46 @@ Ext.define('Ext.field.Text', {
         },
 
         /**
+         * Performs any necessary manipulation of a raw String value to prepare
+         * it for conversion and/or
+         * {@link #validate validation}. For text fields this applies the configured
+         * {@link #stripCharsRe} to the raw value.
+         * @param {String} value The unprocessed string value
+         * @return {String} The processed string value
+         * @since 7.0
+         */
+        processRawValue: function(value) {
+            var me = this,
+                stripRe = me.stripCharsRe,
+                mod, newValue;
+
+            if (stripRe) {
+            // This will force all instances that match stripRe to be removed
+                if (!stripRe.global) {
+                    mod = 'g';
+                    mod += (stripRe.ignoreCase) ? 'i' : '';
+                    mod += (stripRe.multiline) ? 'm' : '';
+                    stripRe = new RegExp(stripRe.source, mod);
+                }
+
+                newValue = value.replace(stripRe, '');
+
+                if (newValue !== value) {
+
+                    if (!me.transformRawValue.$nullFn) {
+                        newValue = me.transformRawValue(newValue);
+                    }
+
+                    me.inputElement.dom.value = newValue;
+
+                    value = newValue;
+                }
+            }
+
+            return value;
+        },
+
+        /**
          * Synchronizes the DOM to match the triggers' configured weight, side, and grouping
          * @private
          */
@@ -1455,10 +1534,22 @@ Ext.define('Ext.field.Text', {
     if (Ext.os.is.Android) {
         window.addEventListener('resize', function() {
             var el = document.activeElement,
-                tag = el && el.tagName;
-            
+                tag = el && el.tagName,
+                focusedField, focusedDom;
+
             if (tag === 'INPUT' || tag === 'TEXTAREA') {
-                el.scrollIntoView();
+                focusedField = Ext.Component.from(el);
+                focusedDom = focusedField && focusedField.element && focusedField.element.dom;
+
+                // scroll field into view if it's needed
+                if (focusedDom) {
+                    if (focusedDom.scrollIntoViewIfNeeded) {
+                        focusedDom.scrollIntoViewIfNeeded();
+                    }
+                    else {
+                        focusedDom.scrollIntoView();
+                    }
+                }
             }
         });
     }

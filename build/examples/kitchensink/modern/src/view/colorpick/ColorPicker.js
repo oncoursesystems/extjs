@@ -18,13 +18,13 @@ Ext.define('KitchenSink.view.colorpick.ColorPicker', {
         'Ext.ux.colorpick.*'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/colorpick/ColorPickerController.js'
     }],
-    // </example>
-    
+    //</example>
+
     title: 'Color Picker Components',
 
     bodyPadding: 5,

@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.charts.area.Stacked', {
     xtype: 'area-stacked',
     controller: 'area-stacked',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -22,7 +22,7 @@ Ext.define('KitchenSink.view.charts.area.Stacked', {
         type: 'Store',
         path: 'app/store/Browsers.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     tbar: [
@@ -101,7 +101,7 @@ Ext.define('KitchenSink.view.charts.area.Stacked', {
     }, {
         style: 'margin-top: 10px;',
         xtype: 'gridpanel',
-        columns : {
+        columns: {
             defaults: {
                 sortable: false,
                 menuDisabled: true,

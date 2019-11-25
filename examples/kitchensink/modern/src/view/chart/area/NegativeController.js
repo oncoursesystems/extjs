@@ -2,21 +2,21 @@ Ext.define('KitchenSink.view.chars.area.NegativeController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.area-negative',
 
-    init: function (view) {
+    init: function(view) {
         var me = this,
             chart = me.lookup('chart');
 
         me.callParent([view]);
 
         chart.setSeries([
-            me.getSeriesConfig('phone',     'Phone Hardware'),
-            me.getSeriesConfig('consumer',  'Consumer Licensing'),
-            me.getSeriesConfig('gaming',    'Gaming Hardware'),
+            me.getSeriesConfig('phone', 'Phone Hardware'),
+            me.getSeriesConfig('consumer', 'Consumer Licensing'),
+            me.getSeriesConfig('gaming', 'Gaming Hardware'),
             me.getSeriesConfig('corporate', 'Corporate and Other')
         ]);
     },
 
-    getSeriesConfig: function (field, title) {
+    getSeriesConfig: function(field, title) {
         return {
             type: 'area',
             title: title,
@@ -44,7 +44,7 @@ Ext.define('KitchenSink.view.chars.area.NegativeController', {
         };
     },
 
-    tooltipRenderer: function (tooltip, record, item) {
+    tooltipRenderer: function(tooltip, record, item) {
         tooltip.setTitle(item.series.getTitle());
 
         tooltip.setHtml(record.get('quarter') + ': ' + record.get(item.field));

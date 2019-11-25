@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
         'Ext.pivot.plugin.Configurator'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/pivot/ExporterController.js'
@@ -47,9 +47,9 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
         }
     },
 
-    padding: '${padding}', //give room for the grid's shadow
+    padding: '${padding}', // give room for the grid's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     height: '${height}',
     layout: 'fit',
@@ -58,7 +58,7 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
     items: [{
         xtype: 'pivotgrid',
         shadow: '${shadow}',
-            reference: 'pivotgrid',
+        reference: 'pivotgrid',
         plugins: {
             pivotexporter: true,
             pivotconfigurator: {
@@ -260,11 +260,11 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
             menu: {
                 defaults: {
                     handler: 'exportDocument',
-                    iconCls: 'x-fa fa-file-text-o'
+                    iconCls: 'x-far fa-file-alt'
                 },
                 items: [{
                     text: 'Excel xlsx (pivot table definition)',
-                    iconCls: 'x-fa fa-file-excel-o',
+                    iconCls: 'x-far fa-file-excel',
                     cfg: {
                         type: 'pivotxlsx',
                         matrix: true,
@@ -272,14 +272,14 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
                     }
                 }, {
                     text: 'Excel xlsx (all items)',
-                    iconCls: 'x-fa fa-file-excel-o',
+                    iconCls: 'x-far fa-file-excel',
                     cfg: {
                         type: 'excel07',
                         fileName: 'ExportAll.xlsx'
                     }
                 }, {
                     text: 'Excel xlsx (visible items)',
-                    iconCls: 'x-fa fa-file-excel-o',
+                    iconCls: 'x-far fa-file-excel',
                     cfg: {
                         type: 'excel07',
                         fileName: 'ExportVisible.xlsx',
@@ -287,14 +287,14 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
                     }
                 }, {
                     text: 'Excel xml (all items)',
-                    iconCls: 'x-fa fa-file-excel-o',
+                    iconCls: 'x-far fa-file-excel',
                     cfg: {
                         type: 'excel03',
                         fileName: 'ExportAll.xml'
                     }
                 }, {
                     text: 'Excel xml (visible items)',
-                    iconCls: 'x-fa fa-file-excel-o',
+                    iconCls: 'x-far fa-file-excel',
                     cfg: {
                         type: 'excel03',
                         fileName: 'ExportVisible.xml',
@@ -328,14 +328,14 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
                     }
                 }, {
                     text: 'HTML (all items)',
-                    iconCls: 'x-fa fa-html5',
+                    iconCls: 'x-fab fa-html5',
                     cfg: {
                         type: 'html',
                         fileName: 'ExportAll.html'
                     }
                 }, {
                     text: 'HTML (visible items)',
-                    iconCls: 'x-fa fa-html5',
+                    iconCls: 'x-fab fa-html5',
                     cfg: {
                         type: 'html',
                         fileName: 'ExportVisible.html',

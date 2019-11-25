@@ -2,11 +2,11 @@ Ext.define('KitchenSink.view.chart.area.StackedController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.area-stacked',
 
-    onAxisLabelRender: function (axis, label) {
+    onAxisLabelRender: function(axis, label) {
         return label.toFixed(label < 10 ? 1 : 0) + '%';
     },
 
-    onSeriesTooltipRender: function (tooltip, record, item) {
+    onSeriesTooltipRender: function(tooltip, record, item) {
         var fieldIndex = Ext.Array.indexOf(item.series.getYField(), item.field),
             browser = item.series.getTitle()[fieldIndex];
 
@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.chart.area.StackedController', {
             record.get(item.field) + '%');
     },
 
-    onColumnRender: function (v) {
+    onColumnRender: function(v) {
         return v + '%';
     }
 

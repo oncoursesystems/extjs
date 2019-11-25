@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.enterprise.SOAP', {
         'Ext.data.soap.Proxy'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Model',
         path: 'modern/src/model/SoapBook.js'
@@ -16,16 +16,16 @@ Ext.define('KitchenSink.view.enterprise.SOAP', {
     profiles: {
         defaults: {
             height: 400,
-            width : 600
+            width: 600
         },
         phone: {
             defaults: {
                 height: undefined,
-                width : undefined
+                width: undefined
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     width: '${width}',

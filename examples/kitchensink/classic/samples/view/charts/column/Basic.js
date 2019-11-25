@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.charts.column.Basic', {
     extend: 'Ext.Panel',
     xtype: 'column-basic',
     controller: 'column-basic',
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: 'fit',
@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.charts.column.Basic', {
         type: 'Store',
         path: 'app/store/Climate.js'
     }],
-    // </example>
+    //</example>
     width: 650,
     height: 500,
 

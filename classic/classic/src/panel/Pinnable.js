@@ -35,7 +35,7 @@ Ext.define('Ext.panel.Pinnable', {
 
         if (pinned !== me.isPinned()) {
             args = [me, pinned];
-            
+
             if (me.fireEventArgs('beforepinchange', args) !== false) {
                 me.updatePinned(pinned);
                 me.fireEventArgs('pinchange', args);

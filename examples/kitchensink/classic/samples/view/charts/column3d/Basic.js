@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.charts.column3d.Basic', {
     xtype: 'column-basic-3d',
     requires: ['Ext.chart.theme.Muted'],
     controller: 'column-basic-3d',
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -22,7 +22,7 @@ Ext.define('KitchenSink.view.charts.column3d.Basic', {
     }],
     bodyStyle: 'background: transparent !important',
     layout: 'fit',
-    // </example>
+    //</example>
 
     width: '${width}',
     height: 500,
@@ -34,6 +34,9 @@ Ext.define('KitchenSink.view.charts.column3d.Basic', {
             width: 650
         },
         graphite: {
+            width: 800
+        },
+        'classic-material': {
             width: 800
         }
     },
@@ -60,10 +63,12 @@ Ext.define('KitchenSink.view.charts.column3d.Basic', {
             type: 'economy-sectors'
         },
         downloadServerUrl: '//svg.sencha.io',
-        animation: Ext.isIE8 ? false : {
-            easing: 'backOut',
-            duration: 500
-        },
+        animation: Ext.isIE8
+            ? false
+            : {
+                easing: 'backOut',
+                duration: 500
+            },
         axes: [{
             type: 'numeric3d',
             position: 'left',

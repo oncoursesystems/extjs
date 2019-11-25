@@ -179,7 +179,7 @@ return {
         if (me.error) {
             throw me.error;
         }
-        
+
         if (expected) {
             me.expect(expected);
         }
@@ -232,7 +232,7 @@ return {
         if (expected !== token.id) {
             this.syntaxError(token.at, 'Expected "' + expected + '"');
         }
-        
+
         return this;
     },
 
@@ -330,7 +330,7 @@ return {
                     update = Ext.Array.from(update);
                     length = update.length;
                     cfg = {};
-                    
+
                     for (i = 0; i < length; i++) {
                         cfg[update[i]] = type.prototype[update[i]];
                     }
@@ -338,7 +338,7 @@ return {
                 else {
                     return symbol;
                 }
-                
+
                 symbol.update(cfg);
             }
             else {
@@ -358,7 +358,7 @@ return {
 
         addSymbols: function(symbols, type, update) {
             var id;
-            
+
             for (id in symbols) {
                 this.addSymbol(id, symbols[id], type, update);
             }

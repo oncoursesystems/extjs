@@ -2,9 +2,9 @@ Ext.define('KitchenSink.store.form.ForumPosts', {
     extend: 'Ext.data.Store',
     alias: 'store.form-forum-posts',
     storeId: 'form-forum-posts',
-    
+
     model: 'KitchenSink.model.form.ForumPost',
-    
+
     proxy: {
         type: 'jsonp',
         url: 'https://www.sencha.com/forum/topics-remote.php',
@@ -29,7 +29,7 @@ Ext.define('KitchenSink.store.form.ForumPosts', {
             return params;
         };
     },
-    
+
     statics: {
         defaultForumId: 4
     }

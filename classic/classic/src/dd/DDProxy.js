@@ -147,7 +147,7 @@ Ext.define('Ext.dd.DDProxy', {
      */
     _resizeProxy: function() {
         var el;
-        
+
         if (this.resizeFrame) {
             el = this.getEl();
 

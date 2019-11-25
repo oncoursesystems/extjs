@@ -57,7 +57,7 @@ Ext.define('KitchenSink.view.form.FieldReplicator', {
             queryMode: 'local',
             selectOnTab: false,
             name: 'to',
-            onReplicate: function () {
+            onReplicate: function() {
                 this.getStore().clearFilter();
             }
         }]

@@ -15,7 +15,7 @@ xdescribe("Ext.data.Tree", function() {
         Ext.data.NodeInterface.decorate(spec.Node);
         node = new spec.Node({ id: 42 });
     });
-    
+
     afterEach(function() {
         Ext.data.Model.schema.clear();
         Ext.undefine('spec.Node');
@@ -28,34 +28,34 @@ xdescribe("Ext.data.Tree", function() {
     });
 
     describe("methods", function() {
-        
+
         describe("setting the root node", function() {
             beforeEach(function() {
                 spy = spyOn(tree, "registerNode");
                 tree.setRootNode(node);
             });
-        
+
             describe("setRootNode", function() {
                 it("should set the root node for the tree", function() {
                     expect(tree.root).toBe(node);
                 });
-        
+
                 it("should set the node as root", function() {
                     expect(node.isRoot()).toBe(true);
                 });
-        
+
                 it("should register node", function() {
                     expect(spy).toHaveBeenCalledWith(node, true);
                 });
             });
-        
+
             describe("getRootNode", function() {
                 it("should return the root node", function() {
                     expect(tree.getRootNode()).toBe(node);
                 });
             });
         });
-        
+
         describe("registering and unregistering nodes", function() {
             beforeEach(function() {
                 tree.setRootNode(node);
@@ -69,7 +69,7 @@ xdescribe("Ext.data.Tree", function() {
                     expect(tree.getNodeById(10)).toBe(newNode);
                 });
             });
-        
+
             describe("unregisterNode", function() {
                 it("should remove node from nodeHash", function() {
                     tree.registerNode(node);

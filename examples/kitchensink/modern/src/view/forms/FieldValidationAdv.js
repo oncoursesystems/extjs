@@ -59,7 +59,7 @@ Ext.define('KitchenSink.view.forms.FieldValidationAdv', {
     items: [{
         label: 'Function',
         errorTarget: 'side',
-        validators: function (value) {
+        validators: function(value) {
             return /^[a-z]*$/.test(value) ? true : 'Invalid by function';
         }
     }, {

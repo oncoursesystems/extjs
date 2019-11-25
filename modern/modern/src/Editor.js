@@ -251,6 +251,18 @@ Ext.define('Ext.Editor', {
      */
     matchFont: false,
 
+    /**
+     * @method
+     * @protected
+     * @returns {Ext.grid.Location} The location where editing is active *if* editing is
+     * active, else `null`.
+     */
+    getLocation: Ext.emptyFn,
+
+    beforeEdit: function(el, value) {
+        return this.fireEvent('beforestartedit', this, el, value, this.getLocation());
+    },
+
     applyField: function(config) {
         return Ext.widget(config);
     },
@@ -358,7 +370,7 @@ Ext.define('Ext.Editor', {
             value = Ext.String.trim(dom.textContent || dom.innerText || dom.innerHTML);
         }
 
-        if (me.fireEvent('beforestartedit', me, el, value) !== false) {
+        if (me.beforeEdit(el, value) !== false) {
             if (me.context) {
                 // Grab the value again, may have changed in beforestartedit
                 value = me.context.value;
@@ -449,7 +461,7 @@ Ext.define('Ext.Editor', {
             return;
         }
 
-        if (me.fireEvent('beforecomplete', me, value, startValue) !== false) {
+        if (me.fireEvent('beforecomplete', me, value, startValue, me.getLocation()) !== false) {
             // Grab the value again, may have changed in beforecomplete
             value = me.getValue();
 
@@ -458,15 +470,16 @@ Ext.define('Ext.Editor', {
             }
 
             me.onEditComplete(remainVisible, cancel);
-            me.fireEvent('complete', me, value, startValue);
+            me.fireEvent('complete', me, value, startValue, me.getLocation());
         }
     },
 
     afterShow: function() {
         var me = this;
 
-        me.callParent(arguments);
-        me.fireEvent('startedit', me, me.boundEl, me.startValue);
+        me.callParent();
+
+        me.fireEvent('startedit', me, me.boundEl, me.startValue, me.getLocation());
     },
 
     onFieldClear: function() {

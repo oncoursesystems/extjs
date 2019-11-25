@@ -25,7 +25,7 @@ topSuite("Ext.drag.Info", ['Ext.drag.*', 'Ext.dom.Element'], function() {
         if (typeof x !== 'number') {
             x = 50;
         }
-        
+
         if (typeof y !== 'number') {
             y = 50;
         }
@@ -46,7 +46,7 @@ topSuite("Ext.drag.Info", ['Ext.drag.*', 'Ext.dom.Element'], function() {
         if (typeof x !== 'number') {
             x = 100;
         }
-        
+
         if (typeof y !== 'number') {
             y = 100;
         }
@@ -413,7 +413,7 @@ topSuite("Ext.drag.Info", ['Ext.drag.*', 'Ext.dom.Element'], function() {
             startDrag();
             moveBy(10, 10);
             endDrag();
-            
+
             runs(function() {
                 expect(describeSpy.callCount).toBe(1);
                 expect(describeSpy.mostRecentCall.args[0]).toBe(dragSpy.mostRecentCall.args[1]);
@@ -469,7 +469,7 @@ topSuite("Ext.drag.Info", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 endDrag();
 
                 waitsForSpy(dropSpy);
-                
+
                 runs(function() {
                     expectPromiseValue('bar', '');
                 });
@@ -688,7 +688,7 @@ topSuite("Ext.drag.Info", ['Ext.drag.*', 'Ext.dom.Element'], function() {
                 endDrag();
 
                 waitsForSpy(dropSpy);
-                
+
                 runs(function() {
                     expectPromiseValue('type1', '');
                 });

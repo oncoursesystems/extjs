@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.charts.line.CrossZoom', {
     ],
 
     layout: 'fit',
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.charts.line.CrossZoom', {
         type: 'Store',
         path: 'app/store/USD2EUR.js'
     }],
-    // </example>
+    //</example>
 
     width: 650,
 

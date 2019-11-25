@@ -13,7 +13,7 @@ Ext.define('Ext.view.BoundListKeyNav', {
      * @cfg {Ext.view.BoundList} boundList (required)
      * The {@link Ext.view.BoundList} instance for which key navigation will be managed.
      */
-    
+
     navigateOnSpace: true,
 
     initKeyNav: function(view) {
@@ -42,7 +42,7 @@ Ext.define('Ext.view.BoundListKeyNav', {
             field.on(
                 'render', Ext.Function.bind(me.initKeyNav, me, [view], 0), me, { single: true }
             );
-            
+
             return;
         }
 
@@ -88,7 +88,7 @@ Ext.define('Ext.view.BoundListKeyNav', {
             if (Ext.fly(event.target).isInputField()) {
                 event.target = event.target.parentNode;
             }
-            
+
             return event;
         }
         // Falsy return stops the KeyMap processing the event
@@ -106,7 +106,7 @@ Ext.define('Ext.view.BoundListKeyNav', {
 
     onItemMouseDown: function(view, record, item, index, event) {
         this.callParent([view, record, item, index, event]);
-        
+
         if (event.pointerType === 'mouse') {
             // Stop the mousedown from blurring the input field
             // We can't do this for touch events otherwise scrolling
@@ -155,7 +155,7 @@ Ext.define('Ext.view.BoundListKeyNav', {
             if (field.selectOnTab) {
                 this.selectHighlighted(e);
             }
-            
+
             if (field.collapse) {
                 field.collapse();
             }
@@ -186,7 +186,7 @@ Ext.define('Ext.view.BoundListKeyNav', {
         // does not completeEdit, but we also need to still fire the specialkey event for ENTER, 
         // so lets add fromBoundList to eOpts, and this will be handled by CellEditor#onSpecialKey.
         field.fireEvent('specialkey', field, e, { fromBoundList: true });
-        
+
         return false;
     },
 
@@ -194,7 +194,7 @@ Ext.define('Ext.view.BoundListKeyNav', {
         if (this.navigateOnSpace) {
             this.callParent(arguments);
         }
-        
+
         // Allow to propagate to field
         return true;
     },
@@ -216,7 +216,7 @@ Ext.define('Ext.view.BoundListKeyNav', {
         if (typeof item === 'number') {
             item = boundList.all.item(item);
         }
-        
+
         if (item) {
             item = item.dom;
             boundList.highlightItem(item);
@@ -238,7 +238,7 @@ Ext.define('Ext.view.BoundListKeyNav', {
         // If all options have been filtered out, then do NOT add most recently highlighted.
         if (boundList.all.getCount()) {
             highlightedRec = me.getRecord();
-            
+
             if (highlightedRec) {
                 // Select if not already selected.
                 // If already selected, selecting with no CTRL flag will deselect the record.

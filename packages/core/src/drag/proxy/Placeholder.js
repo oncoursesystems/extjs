@@ -59,7 +59,7 @@ Ext.define('Ext.drag.proxy.Placeholder', {
             cls: this.getCls(),
             html: this.getHtml()
         });
-        
+
         el.addCls(this.placeholderCls);
 
         el.setTouchAction({
@@ -92,7 +92,7 @@ Ext.define('Ext.drag.proxy.Placeholder', {
 
     updateCls: function(cls, oldCls) {
         var el = this.element;
-        
+
         if (el) {
             if (oldCls) {
                 el.removeCls(oldCls);
@@ -106,7 +106,7 @@ Ext.define('Ext.drag.proxy.Placeholder', {
 
     updateHtml: function(html) {
         var el = this.element;
-        
+
         if (el) {
             el.setHtml(html || '');
         }
@@ -122,7 +122,7 @@ Ext.define('Ext.drag.proxy.Placeholder', {
 
     destroy: function() {
         this.element = Ext.destroy(this.element);
-        
+
         this.callParent();
     },
 
@@ -133,12 +133,12 @@ Ext.define('Ext.drag.proxy.Placeholder', {
          */
         adjustCursorOffset: function(info, xy) {
             var offset = this.getCursorOffset();
-            
+
             if (offset) {
                 xy[0] += (offset[0] || 0);
                 xy[1] += (offset[1] || 0);
             }
-            
+
             return xy;
         },
 

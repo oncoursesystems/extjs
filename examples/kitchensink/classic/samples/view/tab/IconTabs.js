@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.tab.IconTabs', {
     xtype: 'icon-tabs',
     controller: 'tab-view',
     width: 400,
-    
+
     //<example>
     requires: [
         'KitchenSink.view.tab.TabController'
@@ -16,6 +16,7 @@ Ext.define('KitchenSink.view.tab.IconTabs', {
         path: 'classic/samples/view/tab/TabController.js'
     }],
     exampleTitle: 'Icon Tabs',
+    cls: Ext.baseCSSPrefix + 'shadow',
     //</example>
 
     defaults: {
@@ -27,7 +28,7 @@ Ext.define('KitchenSink.view.tab.IconTabs', {
             scrollable: true
         }
     },
-    
+
     items: [{
         margin: '0 0 20 0',
         items: [{

@@ -1,6 +1,6 @@
 Ext.define('Aria.view.Viewport', {
     extend: 'Ext.container.Viewport',
-    
+
     requires: [
         'Ext.Img',
         'Ext.layout.container.Border',
@@ -20,14 +20,14 @@ Ext.define('Aria.view.Viewport', {
             region: 'north',
             padding: '6 12',
             height: 40,
-            
+
             ariaRole: 'banner',
-            
+
             layout: {
                 align: 'stretch',
                 type: 'hbox'
             },
-            
+
             items: [{
                 xtype: 'image',
                 alt: 'Sencha logo',
@@ -57,17 +57,17 @@ Ext.define('Aria.view.Viewport', {
         }, {
             xtype: 'panel',
             region: 'west',
-            
+
             title: 'Accordion panels',
             collapsible: true,
             split: true,
             minWidth: 320,
-            
+
             layout: {
                 type: 'accordion',
                 animate: true
             },
-            
+
             tools: [{
                 type: 'pin',
                 tooltip: 'Pin the panel'
@@ -75,7 +75,7 @@ Ext.define('Aria.view.Viewport', {
                 type: 'help',
                 tooltip: 'Get panel help'
             }],
-            
+
             items: [{
                 xtype: 'mysimplebuttons',
                 closable: true,
@@ -114,7 +114,7 @@ Ext.define('Aria.view.Viewport', {
                 padding: 12,
                 bodyStyle: 'background:white'
             },
-            
+
             items: [{
                 xtype: 'mysimplegrid'
             }, {
@@ -129,16 +129,16 @@ Ext.define('Aria.view.Viewport', {
                     text: 'Open Window',
                     handler: function() {
                         var win = this.up('container').add(Ext.widget('mysimplewindow', {
-                            title:'ARIA Window ' + num++
+                            title: 'ARIA Window ' + num++
                         }));
-                        
-                        win.showBy(this, 'tr', [num*20, num*20]);
+
+                        win.showBy(this, 'tr', [num * 20, num * 20]);
                     }
                 }]
             }, {
                 xtype: 'mysimpleitemselector'
-//             }, {
-//                 xtype: 'mysimpledatepicker'
+                //             }, {
+                //                 xtype: 'mysimpledatepicker'
             }, {
                 xtype: 'mysimpletoolbar'
             }, {
@@ -147,7 +147,7 @@ Ext.define('Aria.view.Viewport', {
                 xtype: 'container',
                 title: 'Image',
                 closable: true,
-                
+
                 items: [{
                     xtype: 'mysimpleimage'
                 }]

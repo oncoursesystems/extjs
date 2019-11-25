@@ -1,7 +1,7 @@
 /* global MyModel */
 topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
     var writer, buildWriter, Article, article, operation;
-    
+
     beforeEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = false;
 
@@ -14,7 +14,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
             });
             writer = new Ext.data.writer.Writer(cfg);
         };
-        
+
         Article = Ext.define('spec.Article', {
             extend: 'Ext.data.Model',
             fields: [
@@ -24,7 +24,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                 { name: 'isRead', type: 'boolean', persist: false }
             ]
         });
-        
+
         article = new Article({
             id: 1,
             title: 'Foo',
@@ -34,26 +34,26 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
             records: [article]
         });
     });
-    
+
     afterEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = true;
         Ext.data.Model.schema.clear();
         Ext.undefine('spec.Article');
     });
-    
+
     describe("initialization", function() {
         it("should default writeAllFields to false", function() {
             var writer = new Ext.data.writer.Writer();
 
             expect(writer.getWriteAllFields()).toBe(false);
         });
-        
+
         it("should default nameProperty to 'name'", function() {
             buildWriter();
             expect(writer.getNameProperty()).toBe('name');
         });
     });
-    
+
     describe("getRecordData", function() {
         it("should return undeclared fields in the model", function() {
             buildWriter();
@@ -62,7 +62,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
 
             expect(result.something).toBe(1);
         });
-        
+
         it("should write all fields in the model", function() {
             buildWriter();
             var result = writer.getRecordData(article, operation);
@@ -73,14 +73,14 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                 body: 'Bar'
             });
         });
-        
+
         it("should ignore any fields with persist: false", function() {
             buildWriter();
             var result = writer.getRecordData(article, operation);
 
             expect(result.isRead).toBeUndefined();
         });
-        
+
         it("should write the id as the clientIdProperty if the record is a phantom", function() {
             buildWriter({
                 clientIdProperty: 'cid'
@@ -174,14 +174,14 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                 });
             });
         });
-        
+
         describe("writeAllFields: false", function() {
             beforeEach(function() {
                 buildWriter({
                     writeAllFields: false
                 });
             });
-            
+
             it("should return an object with only the id if nothing is modified", function() {
                 var result = writer.getRecordData(article, operation);
 
@@ -189,7 +189,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                     id: 1
                 });
             });
-            
+
             it("should return an empty object if nothing is modified when writeRecordId = false", function() {
                 buildWriter({
                     writeAllFields: false,
@@ -199,7 +199,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
 
                 expect(result).toEqual({});
             });
-            
+
             it("should return only the modified fields and the id", function() {
                 article.set('title', 'other');
                 var result = writer.getRecordData(article, operation);
@@ -209,7 +209,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                     title: 'other'
                 });
             });
-            
+
             it("should return the modified fields except id if the record is a non-phantom and writeRecordId = false", function() {
                 buildWriter({
                     writeAllFields: false,
@@ -222,7 +222,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                     title: 'other'
                 });
             });
-            
+
             it("should write all fields if the record is a phantom", function() {
                 article = new Article({
                     title: 'Foo',
@@ -236,7 +236,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                     body: 'Bar'
                 });
             });
-            
+
             describe("dates", function() {
                 beforeEach(function() {
                     Ext.define('MyModel', {
@@ -253,7 +253,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                 afterEach(function() {
                     Ext.undefine('MyModel');
                 });
-                
+
                 it("should serialize Dates using the dateFormat", function() {
                     var myModel = new MyModel({
                         myDate: new Date(1962, 5, 17)
@@ -266,7 +266,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
 
                     expect(result.myDate).toBe('1962/06/17');
                 });
-                
+
                 it("should respect the timestamp format", function() {
                     var now = new Date();
 
@@ -281,7 +281,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
 
                     expect(result.timestamp).toBe(Ext.Date.format(now, 'U'));
                 });
-                
+
                 it("should respect the time format", function() {
                     var now = new Date();
 
@@ -296,7 +296,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
 
                     expect(result.time).toBe(now.getTime().toString());
                 });
-            
+
                 it("should send null for dates when the date is null", function() {
                     var myModel = new MyModel({}),
                     operation = new Ext.data.operation.Create({
@@ -307,7 +307,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
 
                     expect(result.myDate).toBe(null);
                 });
-                
+
                 it("should give precedence to writeFormat", function() {
                     var myModel = new MyModel({
                             dateWriteFormat: new Date(2012, 0, 1)
@@ -319,10 +319,10 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                             dateFormat: 'Y/m/d'
                         }),
                         result = writer.getRecordData(myModel, operation);
-                          
+
                     expect(result.dateWriteFormat).toBe('2012/01/01');
                 });
-                
+
                 it("should give precedence to the writer dateFormat", function() {
                     var myModel = new MyModel({
                             myDate: new Date(2012, 0, 1)
@@ -334,7 +334,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                             dateFormat: 'Y/m/d'
                         }),
                         result = writer.getRecordData(myModel, operation);
-                          
+
                     expect(result.myDate).toBe('2012/01/01');
                 });
             });
@@ -363,7 +363,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
             });
 
         });
-        
+
         describe("nameProperty", function() {
             function redefineArticle() {
                 Ext.data.Model.schema.clear();
@@ -436,7 +436,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                         content: 'new body'
                     });
                 });
-                
+
                 it("should fall back to the name property", function() {
                     buildWriter({
                         nameProperty: 'writeName'
@@ -465,7 +465,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                         content: 'new body'
                     });
                 });
-                
+
                 it("should fall back to the name property", function() {
                     buildWriter({
                         nameProperty: 'writeName'
@@ -478,7 +478,7 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
                         content: 'Bar'
                     });
                 });
-                
+
                 it("should write mapped names correctly when phantom = false", function() {
                     // Validate a fix for the non-mapped id always being written out
                     // in addition to the mapped id for non-phantom records
@@ -506,5 +506,5 @@ topSuite("Ext.data.writer.Writer", ['Ext.data.ArrayStore'], function() {
             });
         });
     });
-    
+
 });

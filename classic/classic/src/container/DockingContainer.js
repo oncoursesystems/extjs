@@ -5,7 +5,7 @@ Ext.define('Ext.container.DockingContainer', {
     requires: ['Ext.util.MixedCollection', 'Ext.Element' ],
 
     isDockingContainer: true,
-    
+
     /**
      * @event dockedadd
      * Fires when any {@link Ext.Component} is added or inserted as a docked item.
@@ -13,7 +13,7 @@ Ext.define('Ext.container.DockingContainer', {
      * @param {Ext.Component} component The component being added
      * @param {Number} index The index at which the component will be added docked items collection
      */
-    
+
     /**
      * @event dockedremove
      * Fires when any {@link Ext.Component} is removed from the docked items.
@@ -110,41 +110,40 @@ Ext.define('Ext.container.DockingContainer', {
 
         for (; i < length; i++) {
             item = items[i];
-            
+
             if (item.isDetached) {
                 item.reattachToBody();
             }
 
             item.dock = item.dock || 'top';
-            
+
             if (item.dock === 'left' || item.dock === 'right') {
                 me.horizontalDocks++;
             }
 
             index = pos + i;
             dockedItems.insert(index, item);
-            
+
             instanced = !!item.instancedCmp;
             delete item.instancedCmp;
-            
+
             item.onAdded(me, index, instanced);
             delete item.$initParent;
-            
+
             if (me.onDockedAdd !== Ext.emptyFn) {
                 me.onDockedAdd(item);
             }
-            
+
             if (me.hasListeners.dockedadd) {
                 me.fireEvent('dockedadd', me, item, index);
             }
         }
 
-        
         if (me.rendered) {
             me.updateLayout();
             Ext.resumeLayouts(true);
         }
-        
+
         return items;
     },
 
@@ -192,7 +191,7 @@ Ext.define('Ext.container.DockingContainer', {
         if (Ext.isObject(comp)) {
             comp = comp.getItemId();
         }
-        
+
         return this.dockedItems.get(comp);
     },
 
@@ -247,7 +246,7 @@ Ext.define('Ext.container.DockingContainer', {
 
         if (!items || !items.isMixedCollection) {
             me.dockedItems = new Ext.util.ItemCollection();
-            
+
             if (items) {
                 me.addDocked(items);
             }
@@ -325,7 +324,7 @@ Ext.define('Ext.container.DockingContainer', {
         }
 
         me.dockedItems.remove(item);
-        
+
         // destroying flag is true if the removal is taking place as part of destruction,
         // OR if removal is intended to *cause* destruction
         if (!item.destroyed) {
@@ -342,12 +341,12 @@ Ext.define('Ext.container.DockingContainer', {
                 // not destroying, make any layout related removals
                 layout.afterRemove(item);
             }
-            
+
             if (doDetach && item.rendered) {
                 item.detachFromBody();
             }
         }
-        
+
         if (me.hasListeners.dockedremove) {
             me.fireEvent('dockedremove', me, item);
         }
@@ -384,7 +383,7 @@ Ext.define('Ext.container.DockingContainer', {
             if (item.frame) {
                 item.updateFrame();
             }
-            
+
             Ext.resumeLayouts(true);
         }
     },

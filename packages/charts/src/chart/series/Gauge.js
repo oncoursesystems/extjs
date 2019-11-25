@@ -231,7 +231,7 @@ Ext.define('Ext.chart.series.Gauge', {
         });
         this.doUpdateStyles();
     },
-    
+
     updateRect: function(rect) {
         var wholeDisk = this.getWholeDisk(),
             halfTotalAngle = wholeDisk ? Math.PI : this.getTotalAngle() / 2,
@@ -406,7 +406,7 @@ Ext.define('Ext.chart.series.Gauge', {
         var me = this,
             sectorCount = (sectors && sectors.length) || 0,
             i, value, start, end;
-    
+
         if (sectorCount) {
             for (i = 0; i < sectorCount; i++) {
                 value = sectors[i];

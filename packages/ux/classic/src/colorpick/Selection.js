@@ -46,7 +46,7 @@ Ext.define('Ext.ux.colorpick.Selection', {
          */
         color: null,
         previousColor: null,
-        
+
         /**
          * @cfg {String} [alphaDecimalFormat=#.##]
          * The format used by {@link Ext.util.Format#number} to format the alpha channel's
@@ -58,25 +58,25 @@ Ext.define('Ext.ux.colorpick.Selection', {
 
     applyColor: function(color) {
         var c = color;
-        
+
         if (Ext.isString(c)) {
             c = Ext.ux.colorpick.ColorUtils.parseColor(color, this.getAlphaDecimalFormat());
         }
-        
+
         return c;
     },
-    
+
     applyFormat: function(format) {
         var formats = Ext.ux.colorpick.ColorUtils.formats;
-        
+
         if (!formats.hasOwnProperty(format)) {
             //<debug>
             Ext.raise('The specified format "' + format + '" is invalid.');
             //</debug>
-            
+
             return;
         }
-        
+
         return format;
     },
 
@@ -85,7 +85,7 @@ Ext.define('Ext.ux.colorpick.Selection', {
         var c = Ext.ux.colorpick.ColorUtils.parseColor(
             color || '#000000', this.getAlphaDecimalFormat()
         );
-        
+
         return this.formatColor(c);
     },
 

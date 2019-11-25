@@ -22,6 +22,9 @@ Ext.define('KitchenSink.view.gauge.NeedleGauge', {
         },
         graphite: {
             needleColorCls: 'needle-color'
+        },
+        'classic-material': {
+            needleColorCls: ''
         }
     },
     //</example>

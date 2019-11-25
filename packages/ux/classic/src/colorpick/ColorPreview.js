@@ -13,7 +13,7 @@ Ext.define('Ext.ux.colorpick.ColorPreview', {
 
     // hack to solve issue with IE, when applying a filter the click listener is not being fired.
     style: 'position: relative',
-    
+
     /* eslint-disable max-len */
     html: '<div class="' + Ext.baseCSSPrefix + 'colorpreview-filter" style="height:100%; width:100%; position: absolute;"></div>' +
           '<a class="btn" style="height:100%; width:100%; position: absolute;"></a>',

@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.lists.UndoableAccordion', {
         'Ext.dataview.listswiper.ListSwiper'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/lists/UndoableSwiperController.js'
@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.lists.UndoableAccordion', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     itemTpl: '{firstName} {lastName}',
@@ -52,7 +52,7 @@ Ext.define('KitchenSink.view.lists.UndoableAccordion', {
                 commit: 'onCall',
                 undoable: true
             }, {
-                iconCls: 'x-fa fa-trash',
+                iconCls: 'x-fa fa-trash-alt',
                 ui: 'alt decline',
 
                 precommit: 'onDeleteItem',

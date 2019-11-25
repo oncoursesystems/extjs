@@ -19,7 +19,8 @@ Ext.define('KitchenSink.view.forms.InputMasksController', {
 
         if (/^3[47]/.test(newValue)) {
             mask = amexMask;
-        } else {
+        }
+        else {
             mask = visaMask;
         }
 

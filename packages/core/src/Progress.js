@@ -92,7 +92,7 @@ Ext.define('Ext.Progress', {
                 percent: Math.round(value * 100)
             }));
         }
-        
+
         if (!me.isConfiguring && me.getAnimate()) {
             me.stopBarAnimation();
             me.startBarAnimation(Ext.apply({

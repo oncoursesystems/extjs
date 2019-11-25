@@ -495,7 +495,7 @@ topSuite("Ext.layout.container.Fit", ['Ext.Panel'], function() {
             });
         });
     });
-    
+
     it("should not fail when the item is hidden & the container is shrink wrapping", function() {
         expect(function() {
             ct = new Ext.container.Container({

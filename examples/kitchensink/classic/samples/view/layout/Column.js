@@ -12,7 +12,6 @@ Ext.define('KitchenSink.view.layout.Column', {
     exampleTitle: 'Column Layout',
     //</example>
 
-
     profiles: {
         classic: {
             width: 500,
@@ -28,16 +27,22 @@ Ext.define('KitchenSink.view.layout.Column', {
             height: 500,
             width: 650,
             titleWidth: 220
+        },
+        'classic-material': {
+            height: 500,
+            width: 650,
+            titleWidth: 220
         }
     },
 
     width: '${width}',
     height: '${height}',
-    
+    cls: Ext.baseCSSPrefix + 'shadow',
+
     layout: 'column',
 
     bodyPadding: 5,
-    
+
     defaults: {
         bodyPadding: 15
     },

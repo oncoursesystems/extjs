@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.menu.MenusController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.menus',
 
-    init: function () {
+    init: function() {
         this.topMenu = Ext.Viewport.setMenu(this.getMenuCfg('top'), {
             side: 'top'
         });
@@ -23,24 +23,24 @@ Ext.define('KitchenSink.view.menu.MenusController', {
         });
     },
 
-    destroy: function () {
+    destroy: function() {
         Ext.destroyMembers(this, 'topMenu', 'rightMenu', 'bottomMenu', 'leftMenu');
 
         this.callParent();
     },
 
-    getMenuCfg: function (side) {
+    getMenuCfg: function(side) {
         var cfg = {
             side: side,
             items: [{
                 text: 'Settings',
-                iconCls: 'x-fa fa-gear',
+                iconCls: 'x-fa fa-cog',
                 handler: function() {
                     Ext.Viewport.hideMenu(side);
                 }
             }, {
                 text: 'New Item',
-                iconCls: 'x-fa fa-pencil',
+                iconCls: 'x-fa fa-pencil-alt',
                 handler: function() {
                     Ext.Viewport.hideMenu(side);
                 }
@@ -61,7 +61,7 @@ Ext.define('KitchenSink.view.menu.MenusController', {
         return cfg;
     },
 
-    toggleMenu: function (side) {
+    toggleMenu: function(side) {
         Ext.Viewport.setMenu(this[side + 'Menu'], {
             side: side
         });
@@ -69,43 +69,43 @@ Ext.define('KitchenSink.view.menu.MenusController', {
         Ext.Viewport.toggleMenu(side);
     },
 
-    toggleLeft: function () {
+    toggleLeft: function() {
         this.toggleMenu('left');
     },
 
-    toggleRight: function () {
+    toggleRight: function() {
         this.toggleMenu('right');
     },
 
-    toggleTop: function () {
+    toggleTop: function() {
         this.toggleMenu('top');
     },
 
-    toggleBottom: function () {
+    toggleBottom: function() {
         this.toggleMenu('bottom');
     },
 
-    onItemOneClick: function () {
+    onItemOneClick: function() {
         Ext.Msg.alert('Menu Item Clicked', 'You clicked Item One');
     },
 
-    onSimpleCheckChange: function (checkboxItem, checked) {
+    onSimpleCheckChange: function(checkboxItem, checked) {
         Ext.toast('You ' + (checked ? 'checked' : 'unchecked') + ' Simple check Item');
     },
 
-    onCheckItemClick: function () {
+    onCheckItemClick: function() {
         Ext.toast('You clicked Check Item');
     },
 
-    onCheckItemCheckChange: function (checkboxItem, checked) {
+    onCheckItemCheckChange: function(checkboxItem, checked) {
         Ext.toast('You ' + (checked ? 'checked' : 'unchecked') + ' Check Item');
     },
 
-    onSubItem1Click: function () {
+    onSubItem1Click: function() {
         Ext.Msg.alert('Menu Item Clicked', 'You clicked Subitem one');
     },
 
-    onSubItem2Click: function () {
+    onSubItem2Click: function() {
         Ext.Msg.alert('Menu Item Clicked', 'You clicked Subitem two');
     }
 });

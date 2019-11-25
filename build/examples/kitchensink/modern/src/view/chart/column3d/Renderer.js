@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.chart.column3d.Renderer', {
         'Ext.chart.theme.Muted'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/column3d/RendererController.js'
@@ -33,7 +33,7 @@ Ext.define('KitchenSink.view.chart.column3d.Renderer', {
             }
         }
     },
-    // </example>
+    //</example>
 
     layout: 'fit',
 

@@ -132,7 +132,7 @@ Ext.define('Ext.data.identifier.Uuid', {
 
             return function() {
                 var r, c, i;
-                
+
                 for (i = 0; i < length; ++i) {
                     c = pattern[i];
 
@@ -157,17 +157,17 @@ Ext.define('Ext.data.identifier.Uuid', {
                 timeLo = time.lo,
                 timeHi = time.hi,
                 toHex;
-                
+
             toHex = function(value, length) {
                 var ret = value.toString(16).toLowerCase();
-                
+
                 if (ret.length > length) {
                     ret = ret.substring(ret.length - length); // right-most digits
                 }
                 else if (ret.length < length) {
                     ret = Ext.String.leftPad(ret, length, '0');
                 }
-                
+
                 return ret;
             };
 
@@ -175,7 +175,7 @@ Ext.define('Ext.data.identifier.Uuid', {
                 saltHi = Math.floor(salt / twoPow32);
                 saltLo = Math.floor(salt - saltHi * twoPow32);
             }
-            
+
             if (typeof time === 'number') {
                 timeHi = Math.floor(time / twoPow32);
                 timeLo = Math.floor(time - timeHi * twoPow32);
@@ -220,7 +220,7 @@ Ext.define('Ext.data.identifier.Uuid', {
 
                 // sequentially increment the timestamp...
                 ++timeLo;
-                
+
                 if (timeLo >= twoPow32) { // if (overflow)
                     timeLo = 0;
                     ++timeHi;

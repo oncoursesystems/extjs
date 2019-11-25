@@ -20,7 +20,7 @@ Ext.define('Ext.event.publisher.Focus', {
     publishDelegatedDomEvent: function(e) {
         var me = this,
             relatedTarget = e.relatedTarget;
-        
+
         //<debug>
         if (me.$suppressEvents) {
             return;
@@ -76,7 +76,7 @@ Ext.define('Ext.event.publisher.Focus', {
             event = me.createSyntheticEvent('focusleave', e, fromElement, toElement, fromElement,
                                             toElement, backwards);
             me.publish(event, targets);
-            
+
             if (event.stopped) {
                 return;
             }
@@ -85,7 +85,7 @@ Ext.define('Ext.event.publisher.Focus', {
         // Gather targets for focusenter event from the focus targetElement to the parentNode
         // (not inclusive)
         targets.length = 0;
-        
+
         for (node = toElement; node && node !== commonAncestor; node = node.parentNode) {
             targets.push(node);
         }
@@ -97,7 +97,7 @@ Ext.define('Ext.event.publisher.Focus', {
         // Publish the focusleave event for the bubble hierarchy
         if (targets.length) {
             me.publish(focusEnterEvent, targets);
-            
+
             if (focusEnterEvent.stopped) {
                 return;
             }
@@ -111,12 +111,12 @@ Ext.define('Ext.event.publisher.Focus', {
             event = me.createSyntheticEvent('focusmove', e, toElement, fromElement, fromElement,
                                             toElement, backwards);
             me.publish(event, targets);
-            
+
             if (event.stopped) {
                 return;
             }
         }
-        
+
         if (Ext.GlobalEvents.hasListeners.focus) {
             Ext.GlobalEvents.fireEvent('focus', {
                 event: focusEnterEvent,
@@ -153,11 +153,11 @@ Ext.define('Ext.event.publisher.Focus', {
         // and fire both focusenter *and* focusleave in the focus handler.
         this.override({
             handledDomEvents: ['focus', 'blur'],
-            
+
             publishDelegatedDomEvent: function(e) {
                 var me = this,
                     targetIsElement;
-                
+
                 me.callSuper([e]);
 
                 // We need to know if event target was an element or (window || document)
@@ -194,7 +194,7 @@ Ext.define('Ext.event.publisher.Focus', {
                             me.processFocusIn(e, e.target, document.body);
                             Focus.previousActiveElement = null;
                         }, 1);
-                        
+
                         // Store the timer in case the element gets destroyed before
                         // the function above has a chance to fire
                         if (targetIsElement && Ext.cache[e.target.id]) {
@@ -216,16 +216,16 @@ Ext.define('Ext.event.publisher.Focus', {
                 }
             }
         });
-        
+
         Ext.define(null, {
             override: 'Ext.dom.Element',
-            
+
             destroy: function() {
                 if (this.focusinTimeout) {
                     Ext.undefer(this.focusinTimeout);
                     this.focusinTimeout = null;
                 }
-                
+
                 this.callParent();
             }
         });

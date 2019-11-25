@@ -5,11 +5,11 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
     form: null,
     selectedRec: null,
 
-    onColumnRender: function (v) {
+    onColumnRender: function(v) {
         return v + '%';
     },
 
-    onItemHighlight: function (chart, item) {
+    onItemHighlight: function(chart, item) {
         if (item) {
             this.lookup('gridPanel').ensureVisible(item.record, {
                 select: true
@@ -17,25 +17,27 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
         }
     },
 
-    onBarChartAxisLabelRender: function (axis, label, layoutContext) {
+    onBarChartAxisLabelRender: function(axis, label, layoutContext) {
         return Ext.String.ellipsis(label, 15, false);
     },
 
-    onSelectionChange: function (model, records) {
+    onSelectionChange: function(model, records) {
         var me = this,
             fields;
 
         if (records[0]) {
             me.selectedRec = records[0];
+
             if (!me.form) {
                 me.form = me.lookup('form').getForm();
                 fields = me.form.getFields();
-                fields.each(function(field){
-                    if (field.name != 'name') {
+                fields.each(function(field) {
+                    if (field.name !== 'name') {
                         field.setDisabled(false);
                     }
                 });
-            } else {
+            }
+            else {
                 fields = me.form.getFields();
             }
 
@@ -50,20 +52,20 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
 
     // Loads fresh records into the radar store
     // based upon the passed company record.
-    updateRadarChart: function (rec) {
+    updateRadarChart: function(rec) {
         var store = this.lookup('radarChart').getStore();
 
         store.loadData([
-            { 'Name': 'Price',     'Data': rec.get('price') },
+            { 'Name': 'Price', 'Data': rec.get('price') },
             { 'Name': 'Revenue %', 'Data': rec.get('revenue') },
-            { 'Name': 'Growth %',  'Data': rec.get('growth') },
+            { 'Name': 'Growth %', 'Data': rec.get('growth') },
             { 'Name': 'Product %', 'Data': rec.get('product') },
-            { 'Name': 'Market %',  'Data': rec.get('market') }
+            { 'Name': 'Market %', 'Data': rec.get('market') }
         ]);
     },
 
     // Performs the highlight of an item in the bar series.
-    highlightCompanyPriceBar: function (record) {
+    highlightCompanyPriceBar: function(record) {
         var barChart = this.lookup('barChart'),
             store = barChart.getStore(),
             series = barChart.getSeries()[0];
@@ -71,19 +73,20 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
         barChart.setHighlightItem(series.getItemByIndex(store.indexOf(record)));
     },
 
-    onStoreRefresh: function () {
+    onStoreRefresh: function() {
         if (this.selectedRec) {
             this.highlightCompanyPriceBar(this.selectedRec);
         }
     },
 
-    onFormChange: function (field, newValue, oldValue, listener) {
+    onFormChange: function(field, newValue, oldValue, listener) {
         var me = this;
 
         if (me.selectedRec && me.form) {
             if (newValue > field.maxValue) {
                 field.setValue(field.maxValue);
-            } else {
+            }
+            else {
                 if (me.form.isValid()) {
                     me.form.updateRecord(me.selectedRec);
                     me.updateRadarChart(me.selectedRec);
@@ -92,22 +95,22 @@ Ext.define('KitchenSink.view.charts.combination.DashboardController', {
         }
     },
 
-    onAfterRender: function () {
+    onAfterRender: function() {
         var barChart = this.lookup('barChart'),
-            gridPanel = this.lookup('gridPanel');
+            gridPanel = this.lookup('gridPanel'),
 
-        var store = Ext.create('KitchenSink.store.Dashboard', {
-            listeners: {
+            store = Ext.create('KitchenSink.store.Dashboard', {
+                listeners: {
                 // Add listener to (re)select bar item
                 // after sorting or refreshing the dataset.
-                refresh: {
-                    fn: 'onStoreRefresh',
-                    scope: this,
-                    // Jump over the chart's refresh listener.
-                    delay: 1
+                    refresh: {
+                        fn: 'onStoreRefresh',
+                        scope: this,
+                        // Jump over the chart's refresh listener.
+                        delay: 1
+                    }
                 }
-            }
-        });
+            });
 
         barChart.setStore(store);
         gridPanel.setStore(store);

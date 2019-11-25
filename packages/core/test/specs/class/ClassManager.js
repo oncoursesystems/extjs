@@ -34,7 +34,7 @@ topSuite("Ext.ClassManager", function() {
             window.I = undefined;
             window.Test = undefined;
         }
-        
+
         manager.enableNamespaceParseCache = true;
     });
 
@@ -66,7 +66,6 @@ topSuite("Ext.ClassManager", function() {
                     }
                 },
                 classNames;
-
 
             spyOn(Ext.Loader, 'require').andCallFake(function(classes, fn) {
                 classNames = classes;
@@ -180,7 +179,7 @@ topSuite("Ext.ClassManager", function() {
                 }
             });
         });
-        
+
         afterEach(function() {
             Ext.undefine('I.am.the.MixinClass1');
             Ext.undefine('I.am.the.MixinClass2');
@@ -323,9 +322,9 @@ topSuite("Ext.ClassManager", function() {
                     }
                 };
             });
-            
+
             var obj = new T();
-            
+
             expect(obj.foo).toBe(1);
             expect(T).toBe(obj.self);
             expect(obj.T).toBe(T);

@@ -44,13 +44,13 @@ Ext.define('Ext.ux.ajax.DataSimlet', function() {
             }
 
             ctx.groupSpec = params.group && Ext.decode(params.group);
-            
+
             if (order == me.currentOrder) { // eslint-disable-line eqeqeq
                 return me.sortedData;
             }
 
             fields = params.sort;
-            
+
             if (params.dir) {
                 fields = [{ direction: params.dir, property: fields }];
             }

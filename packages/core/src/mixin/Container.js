@@ -59,10 +59,8 @@ Ext.define('Ext.mixin.Container', {
      * @since 6.5.0
      */
     getNamedItems: function() {
-        var CM = Ext.ComponentManager;
-
-        if (CM.referencesDirty) {
-            CM.fixReferences();
+        if (Ext.referencesDirty) {
+            Ext.fixReferences();
         }
 
         return this.nameRefs || null;
@@ -95,10 +93,8 @@ Ext.define('Ext.mixin.Container', {
      * @since 5.0.0
      */
     getReferences: function() {
-        var CM = Ext.ComponentManager;
-
-        if (CM.referencesDirty) {
-            CM.fixReferences();
+        if (Ext.referencesDirty) {
+            Ext.fixReferences();
         }
 
         return this.refs || null;
@@ -116,7 +112,7 @@ Ext.define('Ext.mixin.Container', {
      */
     lookup: function(ref) {
         var refs = this.getReferences();
-        
+
         return (refs && refs[ref]) || null;
     },
 
@@ -129,7 +125,7 @@ Ext.define('Ext.mixin.Container', {
      */
     lookupName: function(name) {
         var items = this.getNamedItems();
-        
+
         return (items && items[name]) || null;
     },
 
@@ -161,7 +157,7 @@ Ext.define('Ext.mixin.Container', {
             if (key && !me.destroying && !me.destroyed) {
                 nameRefs = me.nameRefs || (me.nameRefs = {});
                 entry = nameRefs[key];
-                
+
                 if (!entry) {
                     entry = component.shareableName ? [component] : component;
                 }
@@ -208,11 +204,9 @@ Ext.define('Ext.mixin.Container', {
 
         containerOnAdded: function(component, instanced) {
             // We have been added to a container, we may have child references
-            // or be a reference ourself. At this point we have no way of knowing if 
+            // or be a reference ourselves. At this point we have no way of knowing if
             // our references are correct, so trigger a fix.
-            if (instanced) {
-                Ext.ComponentManager.markReferencesDirty();
-            }
+            Ext.ComponentManager.markReferencesDirty();
         },
 
         containerOnRemoved: function(destroying) {
@@ -267,7 +261,7 @@ Ext.define('Ext.mixin.Container', {
                 inheritedState.viewModelPath = me.viewModelKey + '.';
             }
         },
-        
+
         setupReference: function(reference) {
             var len;
 

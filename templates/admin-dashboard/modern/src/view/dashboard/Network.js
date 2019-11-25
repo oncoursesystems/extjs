@@ -64,7 +64,7 @@ Ext.define('Admin.view.dashboard.Network', {
                     xtype: 'component',
                     flex: 1,
                     userCls: 'top-info-container',
-                    html: '<div class="inner"><span class="x-fa fa-pie-chart"></span><span class="dashboard-analytics-percentage"> 25% </span>server load</div>',
+                    html: '<div class="inner"><span class="x-fa fa-chart-pie"></span><span class="dashboard-analytics-percentage"> 25% </span>server load</div>',
                     padding: '10 10 10 0'
                 }, {
                     xtype: 'component',

@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.chart.bar.Stacked100Controller', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.bar-stacked-100',
 
-    onAxisLabelRender: function (axis, label, layoutContext) {
+    onAxisLabelRender: function(axis, label, layoutContext) {
         // Custom renderer overrides the native axis label renderer.
         // Since we don't want to do anything fancy with the value
         // ourselves except appending a '%' sign, but at the same time
@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.chart.bar.Stacked100Controller', {
         return layoutContext.renderer(label) + '%';
     },
 
-    onSeriesTooltipRender: function (tooltip, record, item) {
+    onSeriesTooltipRender: function(tooltip, record, item) {
         var fieldIndex = Ext.Array.indexOf(item.series.getYField(), item.field),
             browser = item.series.getTitle()[fieldIndex];
 
@@ -19,7 +19,7 @@ Ext.define('KitchenSink.view.chart.bar.Stacked100Controller', {
             record.get(item.field) + '%');
     },
 
-    onColumnRender: function (v) {
+    onColumnRender: function(v) {
         return v + '%';
     }
 });

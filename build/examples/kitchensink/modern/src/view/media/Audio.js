@@ -5,7 +5,7 @@ Ext.define('KitchenSink.view.media.Audio', {
     extend: 'Ext.Audio',
     xtype: 'audio-basic',
 
-    // <example>
+    //<example>
     profiles: {
         defaults: {
             width: 300
@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.media.Audio', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     width: '${width}',
 

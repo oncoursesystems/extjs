@@ -6,7 +6,7 @@ Ext.define('KitchenSink.store.Cars', {
 
     fields: ['year', 'to', 'gm', 'vw', 'fo', 'hy'],
 
-    constructor: function (config) {
+    constructor: function(config) {
         config = config || {};
 
         config.data = [

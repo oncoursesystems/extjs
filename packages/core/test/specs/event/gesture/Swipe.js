@@ -27,7 +27,7 @@
     beforeEach(function() {
         originalMaxDuration = recognizer.getMaxDuration();
         recognizer.setMaxDuration(maxDuration);
-        
+
         targetEl = Ext.getBody().createChild({});
         swipeHandler = jasmine.createSpy();
 
@@ -47,15 +47,15 @@
         runs(function() {
             start({ id: 1, x: 10, y: 10 });
         });
-        
+
         wait(halfDuration);
-        
+
         runs(function() {
             end({ id: 1, x: 10, y: 10 });
         });
-        
+
         waitsForAnimation();
-        
+
         runs(function() {
             expect(swipeHandler).not.toHaveBeenCalled();
         });

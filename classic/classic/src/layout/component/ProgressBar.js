@@ -19,7 +19,7 @@ Ext.define('Ext.layout.component.ProgressBar', {
             if (textEls.isComposite) {
                 ownerContext.textEls = [];
                 textEls = textEls.elements;
-                
+
                 for (i = textEls.length; i--;) {
                     ownerContext.textEls[i] = ownerContext.getEl(Ext.get(textEls[i]));
                 }

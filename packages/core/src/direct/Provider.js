@@ -19,11 +19,11 @@ Ext.define('Ext.direct.Provider', {
     mixins: [
         'Ext.mixin.Observable'
     ],
-    
+
     requires: [
         'Ext.direct.Manager'
     ],
-    
+
     isProvider: true,
     $configPrefixed: false,
     $configStrict: false,
@@ -47,13 +47,13 @@ Ext.define('Ext.direct.Provider', {
      *
      */
     /* eslint-enable max-len */
-    
+
     /**
      * @cfg {String[]} relayedEvents
      * List of Provider events that should be relayed by {@link Ext.direct.Manager}.
      * 'data' event is always relayed.
      */
-    
+
     config: {
         /**
          * @cfg {Object} [headers]
@@ -61,7 +61,7 @@ Ext.define('Ext.direct.Provider', {
          */
         headers: undefined
     },
-    
+
     /**
      * @event connect
      * Fires when the Provider connects to the server-side
@@ -93,7 +93,7 @@ Ext.define('Ext.direct.Provider', {
      * @param {Ext.direct.Provider} provider The {@link Ext.direct.Provider Provider} instance.
      * @param {Ext.direct.Event} e The {@link Ext.direct.Event Exception event} that occured.
      */
-    
+
     subscribers: 0,
 
     constructor: function(config) {
@@ -107,14 +107,14 @@ Ext.define('Ext.direct.Provider', {
             me.id = Ext.id(null, 'provider-');
         }
     },
-    
+
     destroy: function() {
         var me = this;
-        
+
         me.disconnect(true);
         me.callParent();
     },
-    
+
     /**
      * Returns whether or not the server-side is currently connected.
      */
@@ -128,15 +128,15 @@ Ext.define('Ext.direct.Provider', {
      */
     connect: function() {
         var me = this;
-        
+
         if (me.subscribers === 0) {
             me.doConnect();
             me.fireEventArgs('connect', [me]);
         }
-        
+
         me.subscribers++;
     },
-    
+
     /**
      * @method
      *
@@ -152,7 +152,7 @@ Ext.define('Ext.direct.Provider', {
      */
     disconnect: function(/* */ force) {
         var me = this;
-        
+
         if (me.subscribers > 0 || force) {
             if (force) {
                 me.subscribers = 0;
@@ -160,14 +160,14 @@ Ext.define('Ext.direct.Provider', {
             else {
                 me.subscribers--;
             }
-            
+
             if (me.subscribers === 0) {
                 me.doDisconnect();
                 me.fireEventArgs('disconnect', [me]);
             }
         }
     },
-    
+
     /**
      * @method
      *
@@ -178,15 +178,15 @@ Ext.define('Ext.direct.Provider', {
     doDisconnect: function() {
         var requests = this.requests,
             request, id;
-        
+
         for (id in requests) {
             request = requests[id];
             request.abort();
         }
-        
+
         this.requests = {};
     },
-    
+
     /**
      * Send the Ajax request
      *
@@ -196,14 +196,14 @@ Ext.define('Ext.direct.Provider', {
      */
     sendAjaxRequest: function(params) {
         var request = Ext.Ajax.request(params);
-        
+
         if (request && request.id) {
             this.requests[request.id] = request;
         }
-            
+
         return request;
     },
-    
+
     /**
      * Ajax request callback
      *
@@ -214,7 +214,7 @@ Ext.define('Ext.direct.Provider', {
             delete this.requests[response.request.id];
         }
     },
-    
+
     inheritableStatics: {
         /**
          * @method
@@ -230,7 +230,7 @@ Ext.define('Ext.direct.Provider', {
          */
         checkConfig: Ext.returnFalse
     },
-    
+
     onClassExtended: function(cls, data, hooks) {
         if (data.type) {
             Ext.direct.Manager.addProviderClass(data.type, cls);

@@ -402,7 +402,7 @@ Ext.define('Ext.Button', {
 
         /**
          * @cfg {Object} scope
-         * The scope (`this` refeence) in which the configured {@link #handler} will be executed,
+         * The scope (`this` reference) in which the configured {@link #handler} will be executed,
          * unless the scope is a ViewController method nmame.
          * @accessor
          */
@@ -617,7 +617,6 @@ Ext.define('Ext.Button', {
             ripple = me.getRipple(),
             isFab = ui ? ui.split(" ").indexOf("fab") >= 0 : false,
             text, icon;
-
 
         if (!isFab && ripple && ripple.bound === undefined) {
             text = me.getText();

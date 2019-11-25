@@ -17,7 +17,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
     });
 
     describe("value", function() {
-        
+
         // TODO change event
 
         describe("allowMultiple:false", function() {
@@ -449,15 +449,15 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
 
             it("should not mutate a passed value", function() {
                 var arr = ['seg'];
-                
+
                 makeButton({
                     value: arr
                 });
-                
+
                 clickButton(2);
                 expect(arr).toEqual(['seg']);
             });
-            
+
             it("should fire a change event", function() {
                 var newValues = [],
                     oldValues = [];
@@ -471,7 +471,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                         }
                     }
                 });
-                
+
                 // Listener will fire when button is created
                 oldValues.length = newValues.length = 0;
 
@@ -481,7 +481,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                 expect(button.items.getAt(0).pressed).toBe(false);
                 expect(button.items.getAt(1).pressed).toBe(true);
                 expect(button.items.getAt(2).pressed).toBe(true);
-                
+
                 clickButton(1);
 
                 expect(button.getValue()).toEqual(['ted']);
@@ -493,7 +493,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                 expect(oldValues[0]).toEqual([]);
                 expect(newValues[1]).toEqual(['ted']);
                 expect(oldValues[1]).toEqual([1, 'ted']);
-                
+
             });
 
             describe('forceSelection', function() {
@@ -937,7 +937,6 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
             middleCls = 'x-segmented-button-middle',
             lastCls = 'x-segmented-button-last';
 
-
         // expects all of the items to have correct classes
         function expectClasses(items) {
             var itemCount, el;
@@ -973,7 +972,6 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                 });
             }
         }
-
 
         it("should have the correct classes when there is only one item", function() {
             makeButton({
@@ -1136,7 +1134,6 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                 2: 'height:94px;',
                 3: 'width:86px;height:94px;'
             };
-
 
         function makeLayoutSuite(shrinkWrap) {
             function makeButton(cfg) {
@@ -1337,7 +1334,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                     }
                 });
             });
-            
+
             if (!Ext.supports.CSS3BorderRadius) {
                 it("should stretch the frameBody when the width of the segmented button is stretched", function() {
                     makeButton({
@@ -1347,7 +1344,7 @@ topSuite("Ext.button.Segmented", ['Ext.app.ViewModel'], function() {
                             { text: 'Bar' }
                         ]
                     });
-                    
+
                     var btn = button.items.getAt(1);
 
                     expect(btn.frameBody.getWidth()).toBe(150 - btn.getFrameInfo().right);

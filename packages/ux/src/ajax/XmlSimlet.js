@@ -74,7 +74,7 @@ Ext.define('Ext.ux.ajax.XmlSimlet', {
 
     fixTree: function() {
         var buffer = [];
-        
+
         this.callParent(arguments);
 
         this.buildTreeXml(this.data, buffer);
@@ -86,10 +86,10 @@ Ext.define('Ext.ux.ajax.XmlSimlet', {
             recordProperty = this.recordProperty;
 
         buffer.push('<', rootProperty, '>');
-        
+
         Ext.Array.forEach(nodes, function(node) {
             var key;
-            
+
             buffer.push('<', recordProperty, '>');
 
             for (key in node) {
@@ -103,7 +103,7 @@ Ext.define('Ext.ux.ajax.XmlSimlet', {
 
             buffer.push('</', recordProperty, '>');
         });
-        
+
         buffer.push('</', rootProperty, '>');
     }
 });

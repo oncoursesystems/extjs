@@ -6,11 +6,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -88,7 +88,7 @@ function() {
     function tearDown() {
         // Undo the overrides.
         Ext.data.ProxyStore.prototype.load = proxyStoreLoad;
-        
+
         Ext.destroy(store, grid);
         grid = store = plugin = columnFilter = menu = null;
     }

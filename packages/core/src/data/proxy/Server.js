@@ -8,7 +8,7 @@ Ext.define('Ext.data.proxy.Server', {
     alias: 'proxy.server',
     alternateClassName: 'Ext.data.ServerProxy',
     uses: ['Ext.data.Request'],
-    
+
     isRemote: true,
 
     config: {
@@ -17,35 +17,35 @@ Ext.define('Ext.data.proxy.Server', {
          * The URL from which to request the data object.
          */
         url: '',
-    
+
         /**
          * @cfg {String} [pageParam="page"]
          * The name of the 'page' parameter to send in a request. Defaults to 'page'. Set this to
          * `''` if you don't want to send a page parameter.
          */
         pageParam: 'page',
-    
+
         /**
          * @cfg {String} [startParam="start"]
          * The name of the 'start' parameter to send in a request. Defaults to 'start'. Set this to
          * `''` if you don't want to send a start parameter.
          */
         startParam: 'start',
-    
+
         /**
          * @cfg {String} [limitParam="limit"]
          * The name of the 'limit' parameter to send in a request. Defaults to 'limit'. Set this to
          * `''` if you don't want to send a limit parameter.
          */
         limitParam: 'limit',
-    
+
         /**
          * @cfg {String} [groupParam="group"]
          * The name of the 'group' parameter to send in a request. Defaults to 'group'. Set this to
          * `''` if you don't want to send a group parameter.
          */
         groupParam: 'group',
-    
+
         /**
          * @cfg {String} [groupDirectionParam="groupDir"]
          * The name of the direction parameter to send in a request. **This is only used when
@@ -59,21 +59,21 @@ Ext.define('Ext.data.proxy.Server', {
          *     ?group=name%20ASC&group=age%20DESC
          */
         groupDirectionParam: 'groupDir',
-    
+
         /**
          * @cfg {String} [sortParam="sort"]
          * The name of the 'sort' parameter to send in a request. Defaults to 'sort'. Set this to
          * `''` if you don't want to send a sort parameter.
          */
         sortParam: 'sort',
-    
+
         /**
          * @cfg {String} [filterParam="filter"]
          * The name of the 'filter' parameter to send in a request. Defaults to 'filter'. Set this
          * to `''` if you don't want to send a filter parameter.
          */
         filterParam: 'filter',
-    
+
         /**
          * @cfg {String} [directionParam="dir"]
          * The name of the direction parameter to send in a request. **This is only used when
@@ -88,13 +88,13 @@ Ext.define('Ext.data.proxy.Server', {
          *     ?sort=name%20ASC&sort=age%20DESC
          */
         directionParam: 'dir',
-    
+
         /**
          * @cfg {String} [idParam="id"]
          * The name of the parameter which carries the id of the entity being operated upon.
          */
         idParam: 'id',
-    
+
         /**
          * @cfg {Boolean} [simpleSortMode=false]
          * Enabling simpleSortMode in conjunction with remoteSort will send the sorted field names
@@ -110,7 +110,7 @@ Ext.define('Ext.data.proxy.Server', {
          *     ?sort=name&sort=age&dir=ASC&dir=DESC
          */
         simpleSortMode: false,
-    
+
         /**
          * @cfg {Boolean} [simpleGroupMode=false]
          * Enabling simpleGroupMode in conjunction with remoteGroup will only send one group
@@ -119,27 +119,27 @@ Ext.define('Ext.data.proxy.Server', {
          * and either 'ASC' or 'DESC'.
          */
         simpleGroupMode: false,
-    
+
         /**
          * @cfg {Boolean} [noCache=true]
          * Disable caching by adding a unique parameter name to the request. Set to false to allow
          * caching. Defaults to true.
          */
         noCache: true,
-    
+
         /**
          * @cfg {String} [cacheString="_dc"]
          * The name of the cache param added to the url when using noCache. Defaults to "_dc".
          */
         cacheString: "_dc",
-    
+
         /**
          * @cfg {Number} timeout
          * The number of milliseconds to wait for a response. Defaults to 30000 milliseconds
          * (30 seconds).
          */
         timeout: 30000,
-    
+
         /**
          * @cfg {Object} api
          * Specific urls to call on CRUD action methods "create", "read", "update" and "destroy".
@@ -217,9 +217,9 @@ Ext.define('Ext.data.proxy.Server', {
      */
     setExtraParam: function(name, value) {
         var extraParams = this.getExtraParams();
-        
+
         extraParams[name] = value;
-        
+
         this.fireEvent('extraparamschanged', extraParams);
     },
 
@@ -254,7 +254,7 @@ Ext.define('Ext.data.proxy.Server', {
         // specifies the id parameter name of the node being loaded.
         operationId = operation.getId();
         idParam = me.getIdParam();
-        
+
         if (operationId !== undefined && params[idParam] === undefined) {
             params[idParam] = operationId;
         }
@@ -293,7 +293,7 @@ Ext.define('Ext.data.proxy.Server', {
     processResponse: function(success, operation, request, response) {
         var me = this,
             exception, reader, resultSet, meta, destroyOp;
-        
+
         // Async callback could have landed at any time, including during and after
         // destruction. We don't want to unravel the whole response chain in such case.
         if (me.destroying || me.destroyed) {
@@ -327,7 +327,7 @@ Ext.define('Ext.data.proxy.Server', {
                 operation.$destroyOwner = me;
                 destroyOp = true;
             }
-            
+
             operation.process(resultSet, request, response);
             exception = !operation.wasSuccessful();
         }
@@ -335,17 +335,17 @@ Ext.define('Ext.data.proxy.Server', {
             me.setException(operation, response);
             exception = true;
         }
-        
+
         // It is possible that exception callback destroyed the store and owning proxy,
         // in which case we can't do nothing except punt.
         if (me.destroyed) {
             if (!operation.destroyed && destroyOp && operation.$destroyOwner === me) {
                 operation.destroy();
             }
-            
+
             return;
         }
-        
+
         if (exception) {
             me.fireEvent('exception', me, response, operation);
         }
@@ -354,7 +354,7 @@ Ext.define('Ext.data.proxy.Server', {
         // 'metachange'
         else {
             meta = resultSet.getMetadata();
-            
+
             if (meta) {
                 me.onMetaChange(meta);
             }
@@ -365,7 +365,7 @@ Ext.define('Ext.data.proxy.Server', {
             if (!operation.destroyed && destroyOp && operation.$destroyOwner === me) {
                 operation.destroy();
             }
-            
+
             return;
         }
 
@@ -375,12 +375,12 @@ Ext.define('Ext.data.proxy.Server', {
         // It will fire its endupdate event which will cause interested views to 
         // resume layouts.
         me.fireEvent('endprocessresponse', me, response, operation);
-        
+
         if (!operation.destroyed && destroyOp && operation.$destroyOwner === me) {
             operation.destroy();
         }
     },
-    
+
     /**
      * Sets up an exception on the operation
      * @private
@@ -426,7 +426,7 @@ Ext.define('Ext.data.proxy.Server', {
         var out = [],
             length = sorters.length,
             i;
-        
+
         for (i = 0; i < length; i++) {
             out[i] = sorters[i].serialize();
         }
@@ -497,7 +497,7 @@ Ext.define('Ext.data.proxy.Server', {
         }
 
         hasGroups = groupParam && grouper;
-        
+
         if (hasGroups) {
             // Grouper is a subclass of sorter, so we can just use the sorter method
             if (simpleGroupMode) {
@@ -582,11 +582,11 @@ Ext.define('Ext.data.proxy.Server', {
      */
     getUrl: function(request) {
         var url;
-        
+
         if (request) {
             url = request.getUrl() || this.getApi()[request.getAction()];
         }
-        
+
         return url ? url : this.callParent();
     },
 
@@ -620,15 +620,16 @@ Ext.define('Ext.data.proxy.Server', {
 
     destroy: function() {
         var me = this;
-        
+
         me.destroying = true;
-        
+
         // Don't force Reader and Writer creation if they weren't yet instantiated
         me.reader = me.writer = Ext.destroy(me.reader, me.writer);
-        
+
         me.callParent();
-        
-        me.destroying = false;
+
+        // This just makes it hard to ask "was destroy() called?":
+        // me.destroying = false; // removed in 7.0
         me.destroyed = true;
     }
 });

@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.grid.ExporterController', {
         'Ext.exporter.excel.Xlsx'
     ],
 
-    exportTo: function(btn){
+    exportTo: function(btn) {
         var cfg = Ext.merge({
             title: 'Grid export demo',
             fileName: 'GridExport' + '.' + (btn.cfg.ext || btn.cfg.type)
@@ -26,18 +26,18 @@ Ext.define('KitchenSink.view.grid.ExporterController', {
         this.getView().saveDocumentAs(cfg);
     },
 
-    onBeforeDocumentSave: function(view){
+    onBeforeDocumentSave: function(view) {
         this.timeStarted = Date.now();
         view.mask('Document is prepared for export. Please wait ...');
         Ext.log('export started');
     },
 
-    onDocumentSave: function(view){
+    onDocumentSave: function(view) {
         view.unmask();
         Ext.log('export finished; time passed = ' + (Date.now() - this.timeStarted));
     },
 
-    onDataReady: function(){
+    onDataReady: function() {
         Ext.log('data ready; time passed = ' + (Date.now() - this.timeStarted));
     }
 

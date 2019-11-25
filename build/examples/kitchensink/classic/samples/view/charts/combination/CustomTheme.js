@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.charts.combination.CustomTheme', {
         'KitchenSink.view.charts.combination.theme.CustomTheme'
     ],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.charts.combination.CustomTheme', {
         type: 'Theme',
         path: 'classic/samples/view/charts/combination/theme/CustomTheme.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     tbar: [
@@ -107,7 +107,7 @@ Ext.define('KitchenSink.view.charts.combination.CustomTheme', {
         store: {
             type: 'browsers'
         },
-        columns : {
+        columns: {
             defaults: {
                 sortable: false,
                 menuDisabled: true,

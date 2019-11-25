@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Purchases', {
         'Ext.d3.HeatMap'
     ],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [
         {
@@ -25,18 +25,20 @@ Ext.define('KitchenSink.view.d3.heatmap.Purchases', {
             path: 'classic/samples/store/HeatMap.js'
         }
     ],
-    // </example>
+    //</example>
 
     profiles: {
         classic: {
             width: 960
-            
         },
         neptune: {
             width: 960
         },
         graphite: {
-            width: 1100  
+            width: 1100
+        },
+        'classic-material': {
+            width: 1100
         }
     },
     width: '${width}',
@@ -87,7 +89,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Purchases', {
             field: 'bucket',
             step: 100
         },
-        
+
         colorAxis: {
             scale: {
                 type: 'linear',

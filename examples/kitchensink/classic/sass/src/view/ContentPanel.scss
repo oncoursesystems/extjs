@@ -34,6 +34,18 @@
         background: #a1a0a0;
     }
 }
+
+@if $theme-name == 'theme-material' {
+    .dark-mode {
+        #content-panel-body {
+            background-color: #2d2d2d;
+            background-image:
+            linear-gradient(00deg, #3a3a3a 1.1px, transparent 0),
+            linear-gradient(90deg, #3a3a3a 1.1px, transparent 0);
+        }
+    }
+}
+
 #content-panel-innerCt {
     padding: 20px;
     vertical-align: middle;

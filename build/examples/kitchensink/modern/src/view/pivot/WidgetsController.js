@@ -5,7 +5,7 @@ Ext.define('KitchenSink.view.pivot.WidgetsController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.pivotwidgets',
 
-    onAddData: function () {
+    onAddData: function() {
         var store = this.lookup('pivotgrid').getMatrix().store,
             data = KitchenSink.data.PivotData.getData(6),
             len = data.length,
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.pivot.WidgetsController', {
         store.add(data);
     },
 
-    onUpdateData: function () {
+    onUpdateData: function() {
         var store = this.lookup('pivotgrid').getMatrix().store,
             data = KitchenSink.data.PivotData.getData(1)[0],
             record = KitchenSink.data.PivotData.getRandomItem(store.data.items);
@@ -30,7 +30,7 @@ Ext.define('KitchenSink.view.pivot.WidgetsController', {
         }
     },
 
-    onRemoveData: function () {
+    onRemoveData: function() {
         var store = this.lookup('pivotgrid').getMatrix().store,
             record = KitchenSink.data.PivotData.getRandomItem(store.data.items);
 
@@ -39,21 +39,21 @@ Ext.define('KitchenSink.view.pivot.WidgetsController', {
         }
     },
 
-    onClearData: function () {
+    onClearData: function() {
         var store = this.lookup('pivotgrid').getMatrix().store;
 
         store.removeAll();
     },
 
-    onPivotGroupExpand: function (matrix, type, group) {
-        Ext.log( (group ? 'Group "' + group.name + '" expanded on ' : 'All groups expanded on ') + type);
+    onPivotGroupExpand: function(matrix, type, group) {
+        Ext.log((group ? 'Group "' + group.name + '" expanded on ' : 'All groups expanded on ') + type);
     },
 
-    onPivotGroupCollapse: function (matrix, type, group) {
-        Ext.log( (group ? 'Group "' + group.name + '" collapsed on ' : 'All groups expanded on ') + type);
+    onPivotGroupCollapse: function(matrix, type, group) {
+        Ext.log((group ? 'Group "' + group.name + '" collapsed on ' : 'All groups expanded on ') + type);
     },
 
-    getPerformance: function (records, dataIndex) {
+    getPerformance: function(records, dataIndex) {
         var ret = [],
             len = records.length,
             i;

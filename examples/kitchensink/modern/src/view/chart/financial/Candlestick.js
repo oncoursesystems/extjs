@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.chart.financial.Candlestick', {
         'Ext.chart.series.CandleStick'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/financial/CandlestickController.js'
@@ -48,9 +48,9 @@ Ext.define('KitchenSink.view.chart.financial.Candlestick', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 

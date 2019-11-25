@@ -5,7 +5,7 @@
 Ext.define('Ext.sparkline.Shape', {
     constructor: function(target, id, type, args) {
         var me = this;
-        
+
         me.target = target;
         me.id = id;
         me.type = type;
@@ -13,7 +13,7 @@ Ext.define('Ext.sparkline.Shape', {
     },
     append: function() {
         this.target.appendShape(this);
-        
+
         return this;
     }
 });

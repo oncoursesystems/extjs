@@ -8,9 +8,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
+
             return this;
         };
 
@@ -18,10 +20,10 @@ function() {
         store = new Ext.data.Store(Ext.apply({
             fields: ['name', 'email', 'phone'],
             data: [
-                {'name': 'Lisa', 'email': 'lisa@simpsons.com', 'phone': '555-111-1224', 'age': 14},
-                {'name': 'Bart', 'email': 'bart@simpsons.com', 'phone': '555-222-1234', 'age': 12},
-                {'name': 'Homer', 'email': 'homer@simpsons.com', 'phone': '555-222-1244', 'age': 44},
-                {'name': 'Marge', 'email': 'marge@simpsons.com', 'phone': '555-222-1254', 'age': 41}
+                { 'name': 'Lisa', 'email': 'lisa@simpsons.com', 'phone': '555-111-1224', 'age': 14 },
+                { 'name': 'Bart', 'email': 'bart@simpsons.com', 'phone': '555-222-1234', 'age': 12 },
+                { 'name': 'Homer', 'email': 'homer@simpsons.com', 'phone': '555-222-1244', 'age': 44 },
+                { 'name': 'Marge', 'email': 'marge@simpsons.com', 'phone': '555-222-1254', 'age': 41 }
             ],
             autoDestroy: true
         }, storeCfg));
@@ -30,15 +32,15 @@ function() {
 
         grid = new Ext.grid.Grid(Ext.apply({
             columns: [
-                {header: 'Name',  dataIndex: 'name', editor: 'textfield'},
-                {header: 'Email', dataIndex: 'email', flex:1,
+                { header: 'Name',  dataIndex: 'name', editor: 'textfield' },
+                { header: 'Email', dataIndex: 'email', flex: 1,
                     editor: {
                         xtype: 'textfield',
                         allowBlank: false
                     }
                 },
-                {header: 'Phone', dataIndex: 'phone', editor: 'textfield'},
-                {header: 'Age', dataIndex: 'age', editor: 'textfield'}
+                { header: 'Phone', dataIndex: 'phone', editor: 'textfield' },
+                { header: 'Age', dataIndex: 'age', editor: 'textfield' }
             ],
             store: store,
             selectable: {
@@ -73,9 +75,8 @@ function() {
                 break;
         }
 
-        jasmine.fireKeyEvent(clipboard.getTarget(grid), 'keydown', key, /*shift*/ null, /*ctrl*/ true);
+        jasmine.fireKeyEvent(clipboard.getTarget(grid), 'keydown', key, /* shift */ null, /* ctrl */ true);
     }
-
 
     beforeEach(function() {
         // Override so that we can control asynchronous loading

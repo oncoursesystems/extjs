@@ -125,14 +125,14 @@ Ext.define('Ext.plugin.AbstractClipboard', {
         var me = this,
             keyMap = me.keyMap,
             shared = me.shared;
-        
+
         Ext.destroy(me.destroyListener);
 
         if (keyMap) {
             // If we have a keyMap then we have incremented the shared usage counter
             // and now need to remove ourselves.
             me.keyMap = Ext.destroy(keyMap);
-            
+
             if (! --shared.counter) {
                 shared.textArea = Ext.destroy(shared.textArea);
             }
@@ -284,11 +284,11 @@ Ext.define('Ext.plugin.AbstractClipboard', {
 
             if (system) {
                 sys = data[system];
-                
+
                 if (formats[system] < 3) {
                     delete data[system];
                 }
-                
+
                 me.setClipboardData(sys);
             }
         },
@@ -334,7 +334,7 @@ Ext.define('Ext.plugin.AbstractClipboard', {
                     Ext.raise('Invalid clipboard format "' + format + '"');
                 }
                 //</debug>
-                
+
                 data = me[formats[format].get](format, erase);
             }
             else {
@@ -348,7 +348,7 @@ Ext.define('Ext.plugin.AbstractClipboard', {
                             Ext.raise('Invalid clipboard format "' + name + '"');
                         }
                         //</debug>
-                        
+
                         names.push(name);
                     }
                 }
@@ -371,9 +371,9 @@ Ext.define('Ext.plugin.AbstractClipboard', {
         getHiddenTextArea: function() {
             var shared = this.shared,
                 el;
-            
+
             el = shared.textArea;
-            
+
             if (!el) {
                 el = shared.textArea = Ext.getBody().createChild({
                     tag: 'textarea',
@@ -385,11 +385,11 @@ Ext.define('Ext.plugin.AbstractClipboard', {
                         height: '1px'
                     }
                 });
-                
+
                 // We don't want this element to fire focus events ever
                 el.suspendFocusEvents();
             }
-            
+
             return el;
         },
 
@@ -446,7 +446,7 @@ Ext.define('Ext.plugin.AbstractClipboard', {
                 if (focusEl) {
                     focusEl.suspendFocusEvents();
                 }
-                
+
                 area.focus();
 
                 // Between now and the deferred function, the CTRL+V hotkey will have
@@ -456,11 +456,11 @@ Ext.define('Ext.plugin.AbstractClipboard', {
                     // Focus back to the real destination
                     if (focusEl) {
                         focusEl.focus();
-                        
+
                         // Restore framework focus handling
                         focusEl.resumeFocusEvents();
                     }
-                    
+
                     me.doPaste(format, area.value);
                     area.value = '';
                 }, 100, me);
@@ -485,7 +485,7 @@ Ext.define('Ext.plugin.AbstractClipboard', {
                 if (focusEl) {
                     focusEl.suspendFocusEvents();
                 }
-                
+
                 area.focus();
                 area.select();
 
@@ -494,10 +494,10 @@ Ext.define('Ext.plugin.AbstractClipboard', {
                 // textarea.
                 Ext.defer(function() {
                     area.value = '';
-                    
+
                     if (focusEl) {
                         focusEl.focus();
-                        
+
                         // Restore framework focus handling
                         focusEl.resumeFocusEvents();
                     }

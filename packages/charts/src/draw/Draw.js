@@ -6,13 +6,13 @@
         // eslint-disable-next-line vars-on-top
         var Float32Array = function(array) {
             var i, len;
-            
+
             if (typeof array === 'number') {
                 this.length = array;
             }
             else if ('length' in array) {
                 this.length = array.length;
-                
+
                 for (i = 0, len = array.length; i < len; i++) {
                     this[i] = +array[i];
                 }
@@ -71,7 +71,7 @@ Ext.define('Ext.draw.Draw', {
      */
     isBBoxIntersect: function(bbox1, bbox2, padding) {
         padding = padding || 0;
-        
+
         return (Math.max(bbox1.x, bbox2.x) - padding >
                     Math.min(bbox1.x + bbox1.width, bbox2.x + bbox2.width)) ||
                (Math.max(bbox1.y, bbox2.y) - padding >
@@ -121,7 +121,7 @@ Ext.define('Ext.draw.Draw', {
 
         ny = points[0];
         nd = ny - zs[0];
-        
+
         for (i = 0, j = 0; i < ln - 1; j += 3) {
             y = ny;
             d = nd;
@@ -132,9 +132,9 @@ Ext.define('Ext.draw.Draw', {
             result[j + 1] = (nd + 2 * d) / 3;
             result[j + 2] = (nd * 2 + d) / 3;
         }
-        
+
         result[j] = ny;
-        
+
         return result;
     },
 
@@ -228,7 +228,7 @@ Ext.define('Ext.draw.Draw', {
             control1X, control1Y, control2X, control2Y, alpha;
 
         value = value || 4;
-        
+
         // Find the length of each control anchor line, by dividing the horizontal distance
         // between points by the value parameter.
         control1Length = (curX - prevX) / value;
@@ -243,13 +243,13 @@ Ext.define('Ext.draw.Draw', {
         }
         else {
             control1Angle = atan((curX - prevX) / abs(curY - prevY));
-            
+
             if (prevY < curY) {
                 control1Angle = PI - control1Angle;
             }
-            
+
             control2Angle = atan((nextX - curX) / abs(curY - nextY));
-            
+
             if (nextY < curY) {
                 control2Angle = PI - control2Angle;
             }
@@ -257,11 +257,11 @@ Ext.define('Ext.draw.Draw', {
 
         // Adjust the calculated angles so they point away from each other on the same line
         alpha = halfPI - ((control1Angle + control2Angle) % (PI * 2)) / 2;
-        
+
         if (alpha > halfPI) {
             alpha -= PI;
         }
-        
+
         control1Angle += alpha;
         control2Angle += alpha;
 
@@ -279,7 +279,7 @@ Ext.define('Ext.draw.Draw', {
             control1X += abs(prevY - control1Y) * (control1X - curX) / (control1Y - curY);
             control1Y = prevY;
         }
-        
+
         if ((curY > nextY && control2Y < nextY) || (curY < nextY && control2Y > nextY)) {
             control2X -= abs(nextY - control2Y) * (control2X - curX) / (control2Y - curY);
             control2Y = nextY;
@@ -314,37 +314,37 @@ Ext.define('Ext.draw.Draw', {
         for (i = 0; i < ln - 1; i++) {
             prevX = dataX[i];
             prevY = dataY[i];
-            
+
             if (i === 0) {
                 x = prevX;
                 y = prevY;
                 smoothX.push(x);
                 smoothY.push(y);
-                
+
                 if (ln === 1) {
                     break;
                 }
             }
-            
+
             curX = dataX[i + 1];
             curY = dataY[i + 1];
             nextX = dataX[i + 2];
             nextY = dataY[i + 2];
-            
+
             if (!(Ext.isNumber(nextX) && Ext.isNumber(nextY))) {
                 smoothX.push(x, curX, curX);
                 smoothY.push(y, curY, curY);
-                
+
                 break;
             }
-            
+
             anchors = this.getAnchors(prevX, prevY, curX, curY, nextX, nextY, value);
             smoothX.push(x, anchors.x1, curX);
             smoothY.push(y, anchors.y1, curY);
             x = anchors.x2;
             y = anchors.y2;
         }
-        
+
         return {
             smoothX: smoothX,
             smoothY: smoothY

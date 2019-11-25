@@ -220,7 +220,7 @@ Ext.define('Ext.event.publisher.Dom', {
         if (delegated && !me.directEvents[eventName]) {
             // delegated listeners
             subscribers = capture ? me.captureSubscribers : me.bubbleSubscribers;
-            
+
             if (!me.handles[eventName] && !me.delegatedListeners[eventName]) {
                 // First time we've attached a listener for this eventName - need to begin
                 // listening at the dom level
@@ -243,7 +243,7 @@ Ext.define('Ext.event.publisher.Dom', {
             // so that this map does not grow indefinitely (it can only grow to a finite
             // set of event names) - see unsubscribe
             subscribers = subscribers[eventName] || (subscribers[eventName] = {});
-            
+
             if (subscribers[id]) {
                 ++subscribers[id];
             }
@@ -279,7 +279,7 @@ Ext.define('Ext.event.publisher.Dom', {
 
             id = element.id;
             subscribers = subscribers[eventName];
-            
+
             if (subscribers[id]) {
                 --subscribers[id];
             }
@@ -368,7 +368,7 @@ Ext.define('Ext.event.publisher.Dom', {
 
         for (i = 0; i < eLn; i++) {
             type = events[i].type;
-            
+
             if (!hasCaptureSubscribers && me.captureSubscribers[type]) {
                 hasCaptureSubscribers = true;
             }
@@ -390,7 +390,7 @@ Ext.define('Ext.event.publisher.Dom', {
         if (hasCaptureSubscribers) {
             for (i = ln; i--;) {
                 el = Ext.cache[targets[i].id];
-                
+
                 if (el) {
                     for (j = 0; j < eLn; j++) {
                         e = events[j];
@@ -418,7 +418,7 @@ Ext.define('Ext.event.publisher.Dom', {
         if (hasBubbleSubscribers && !e.stopped) {
             for (i = 0; i < ln; i++) {
                 el = Ext.cache[targets[i].id];
-                
+
                 if (el) {
                     for (j = 0; j < eLn; j++) {
                         e = events[j];
@@ -504,7 +504,7 @@ Ext.define('Ext.event.publisher.Dom', {
             me.reEnterCountAdjusted = false;
             me.reEnterCount++;
             me.publishDelegatedDomEvent(e);
-            
+
             // Gesture publisher deals with exceptions in recognizers
             if (!me.reEnterCountAdjusted) {
                 me.reEnterCount--;
@@ -559,9 +559,9 @@ Ext.define('Ext.event.publisher.Dom', {
         me.beforeEvent(e);
 
         Ext.frameStartTime = timeStamp;
-        
+
         el = Ext.cache[currentTarget.id];
-        
+
         // Element can be removed from the cache by this time, with the node
         // still lingering for some reason. This can happen for example when
         // load event is fired on an iframe that we constructed when submitting
@@ -719,7 +719,7 @@ Ext.define('Ext.event.publisher.Dom', {
         // We are wired to the unload event, so we ensure cleanup of low-level stuff
         // like the Reaper and the GarbageCollector.
         Ext.Reaper.flush();
-        
+
         if (GC) {
             GC.collect();
         }
@@ -754,7 +754,8 @@ Ext.define('Ext.event.publisher.Dom', {
         defaultView = doc.defaultView,
         prototype = Dom.prototype;
 
-    if ((Ext.os.is.iOS && Ext.os.version.getMajor() < 5) || Ext.browser.is.AndroidStock ||
+    // In case of iOS if it is in iFrame then it should enter if condition
+    if ((Ext.os.is.iOS && window.self !== window.top) || Ext.browser.is.AndroidStock ||
         !(defaultView && defaultView.addEventListener)) {
         // Delegated listeners will get attached to the document object because
         // attaching to the window object will not work.  In IE8 this is needed because

@@ -11,6 +11,10 @@
         flex: 1 1 auto;
         position: relative;
         width: 100%;
+
+        // We need to contain the z-index values of inner items so that they do not
+        // overlop positioned items that reside outside the outer-ct (e.g., indexbar).
+        z-index: 0;
     }
 
     .#{$prefix}list-inner-ct {

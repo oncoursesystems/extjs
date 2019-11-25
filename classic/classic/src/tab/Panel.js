@@ -374,7 +374,6 @@ Ext.define('Ext.tab.Panel', {
      * If null, no tab will be set as active.
      */
 
-
     /**
      * @cfg {Ext.enums.Layout/Object} layout
      * Optional configuration object for the internal {@link Ext.layout.container.Card card layout}.
@@ -556,7 +555,7 @@ Ext.define('Ext.tab.Panel', {
             if (previous === card ||
                 me.fireEvent('beforetabchange', me, card, previous) === false) {
                 Ext.resumeLayouts(true);
-                
+
                 return previous;
             }
 
@@ -698,13 +697,13 @@ Ext.define('Ext.tab.Panel', {
 
         // Create the correspondiong tab in the tab bar
         item.tab = me.tabBar.insert(index, cfg);
-        
+
         // We want to force the relationship of the tabpanel to the tab
         item.ariaRole = 'tabpanel';
-        
+
         // Item might be already rendered and then added to the TabPanel
         ariaDom = item.ariaEl.dom;
-        
+
         if (ariaDom) {
             ariaDom.setAttribute('aria-labelledby', item.tab.id);
         }
@@ -811,7 +810,7 @@ Ext.define('Ext.tab.Panel', {
     onItemIconChange: function(item, newIcon) {
         item.tab.setIcon(newIcon);
     },
-    
+
     /**
      * @private
      * Update the tab iconCls when panel iconCls has been set or changed.
@@ -850,17 +849,17 @@ Ext.define('Ext.tab.Panel', {
             me.tabBar.remove(item.tab);
         }
     },
-    
+
     enable: function() {
         var me = this,
             activeTab = me.activeTab !== null ? (me.activeTab || 0) : null,
             wasDisabled = me.disabled;
-        
+
         me.callParent(arguments);
-        
+
         if (wasDisabled) {
             activeTab = activeTab.isComponent ? activeTab : me.getComponent(activeTab);
-            
+
             if (activeTab) {
                 me.getTabBar().setActiveTab(activeTab.tab);
             }
@@ -897,7 +896,7 @@ Ext.define('Ext.tab.Panel', {
             else if (item.tab && (toActivate = me.tabBar.items.indexOf(me.tabBar.findNextActivatable(item.tab))) !== -1) {
                 me.setActiveTab(toActivate);
             }
-            
+
             me.callParent([item, autoDestroy]);
 
             Ext.resumeLayouts(); // Don't want to flush here, this will happen in remove()

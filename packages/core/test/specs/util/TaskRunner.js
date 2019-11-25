@@ -40,10 +40,10 @@ topSuite("Ext.util.TaskRunner", [
             if (runner) {
                 runner.destroy();
             }
-            
+
             task = runner = spy = null;
         });
-        
+
         // https://sencha.jira.com/browse/EXTJS-19133
         // IE8 does not allow capturing stack trace so always fails
         // This test is also fails consistently on tablets
@@ -52,13 +52,13 @@ topSuite("Ext.util.TaskRunner", [
                 runner = new Ext.util.TaskRunner({
                     fireIdleEvent: false
                 });
-                
+
                 task = runner.newTask({
                     fireIdleEvent: false,
                     interval: 10,
                     run: Ext.emptyFn
                 });
-                
+
                 task.start();
 
                 var timer = Ext.Timer.get(runner.timerId);
@@ -67,10 +67,10 @@ topSuite("Ext.util.TaskRunner", [
                     timer.ours = true;
                 }
             });
-            
+
             // This should be enough to trip the event, happens fairly often in IE
             waits(300);
-            
+
             runs(function() {
                 expect(calls).toEqual([]);
             });
@@ -98,7 +98,7 @@ topSuite("Ext.util.TaskRunner", [
                 args: ['Foo'],
                 repeat: 1
             });
-            
+
             task.start();
 
             waitsFor(function() {
@@ -118,7 +118,7 @@ topSuite("Ext.util.TaskRunner", [
                 args: ['Foo'],
                 repeat: 1
             });
-            
+
             task.start();
 
             waitsFor(function() {
@@ -137,7 +137,7 @@ topSuite("Ext.util.TaskRunner", [
                 args: ['Foo'],
                 repeat: 2
             });
-            
+
             task.start();
 
             waitsFor(function() {

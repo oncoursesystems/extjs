@@ -5,11 +5,11 @@ topSuite("Ext.fx.Anim", function() {
         target = Ext.getBody().createChild({ cls: 'fxtarget' });
         spyOn(Ext.fx.Anim.prototype, "end").andCallThrough();
     });
-    
+
     afterEach(function() {
         target.destroy();
     });
-    
+
     describe("instantiation", function() {
         beforeEach(function() {
             spyOn(Ext.fx.Manager, "addAnim"); // avoid animation start

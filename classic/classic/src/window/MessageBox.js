@@ -111,61 +111,61 @@ Ext.define('Ext.window.MessageBox', {
      * Button config that displays a single OK button
      */
     OK: 1,
-    
+
     /**
      * @property
      * Button config that displays a single Yes button
      */
     YES: 2,
-    
+
     /**
      * @property
      * Button config that displays a single No button
      */
     NO: 4,
-    
+
     /**
      * @property
      * Button config that displays a single Cancel button
      */
     CANCEL: 8,
-    
+
     /**
      * @property
      * Button config that displays OK and Cancel buttons
      */
     OKCANCEL: 9,
-    
+
     /**
      * @property
      * Button config that displays Yes and No buttons
      */
     YESNO: 6,
-    
+
     /**
      * @property
      * Button config that displays Yes, No and Cancel buttons
      */
     YESNOCANCEL: 14,
-    
+
     /**
      * @property
      * The CSS class that provides the INFO icon image
      */
     INFO: Ext.baseCSSPrefix + 'message-box-info',
-    
+
     /**
      * @property
      * The CSS class that provides the WARNING icon image
      */
     WARNING: Ext.baseCSSPrefix + 'message-box-warning',
-    
+
     /**
      * @property
      * The CSS class that provides the QUESTION icon image
      */
     QUESTION: Ext.baseCSSPrefix + 'message-box-question',
-    
+
     /**
      * @property
      * The CSS class that provides the ERROR icon image
@@ -183,7 +183,7 @@ Ext.define('Ext.window.MessageBox', {
     defaultMaxWidth: 600,
     defaultMinHeight: 110,
     defaultMaxHeight: 500,
-    
+
     // Forcibly set these to null on the prototype to override anything set higher in
     // the hierarchy
     minWidth: null,
@@ -207,14 +207,14 @@ Ext.define('Ext.window.MessageBox', {
      * The default height in pixels of the message box's multiline textarea if displayed.
      */
     defaultTextHeight: 75,
-    
+
     /**
      * @property
      * The minimum width in pixels of the message box if it is a progress-style dialog.
      * This is useful for setting a different minimum width than text-only dialogs may need.
      */
     minProgressWidth: 250,
-    
+
     /**
      * @property
      * The minimum width in pixels of the message box if it is a prompt dialog.  This is useful
@@ -245,12 +245,12 @@ Ext.define('Ext.window.MessageBox', {
     ],
 
     baseIconCls: Ext.baseCSSPrefix + 'message-box-icon',
-    
+
     ariaRole: 'alertdialog',
 
     makeButton: function(btnIdx) {
         var btnId = this.buttonIds[btnIdx];
-        
+
         return new Ext.button.Button({
             handler: this.btnCallback,
             itemId: btnId,
@@ -275,7 +275,7 @@ Ext.define('Ext.window.MessageBox', {
                 },
                 single: true
             });
-            
+
             return;
         }
 
@@ -286,7 +286,7 @@ Ext.define('Ext.window.MessageBox', {
             else {
                 field = me.textField;
             }
-            
+
             value = field.getValue();
             field.reset();
         }
@@ -301,11 +301,11 @@ Ext.define('Ext.window.MessageBox', {
             cls = me.cfg ? me.cfg.cls : '';
 
         me.progressBar.reset();
-        
+
         if (cls) {
             me.removeCls(cls);
         }
-        
+
         me.callParent(arguments);
     },
 
@@ -377,7 +377,7 @@ Ext.define('Ext.window.MessageBox', {
                 })
             ]
         });
-        
+
         me.progressBar = new Ext.ProgressBar({
             id: baseId + '-progressbar',
             margin: '0 10 10 10'
@@ -387,13 +387,13 @@ Ext.define('Ext.window.MessageBox', {
 
         // Create the buttons based upon passed bitwise config
         me.msgButtons = [];
-        
+
         for (i = 0; i < 4; i++) {
             button = me.makeButton(i);
             me.msgButtons[button.itemId] = button;
             me.msgButtons.push(button);
         }
-        
+
         me.bottomTb = new Ext.toolbar.Toolbar({
             id: baseId + '-toolbar',
             ui: 'footer',
@@ -401,7 +401,7 @@ Ext.define('Ext.window.MessageBox', {
             focusableContainer: false,
             ariaRole: null,
             layout: {
-                pack: 'center'
+                pack: { left: 'start', right: 'end' }[me.buttonAlign] || 'center'
             },
             items: [
                 me.msgButtons[0],
@@ -410,18 +410,18 @@ Ext.define('Ext.window.MessageBox', {
                 me.msgButtons[3]
             ]
         });
-        
+
         me.dockedItems = [me.bottomTb];
         me.on('close', me.onClose, me);
-        
+
         me.callParent();
     },
-    
+
     afterRender: function() {
         var me = this;
-        
+
         me.callParent(arguments);
-        
+
         // These fields do not have a visible label, we're using message component instead.
         // Input elements have aria-labelledby pointing to the message component's id;
         // "for" attributes on the labelEl are redundant and get in the way.
@@ -469,7 +469,7 @@ Ext.define('Ext.window.MessageBox', {
         me.cfg = cfg = cfg || {};
 
         wait = cfg.wait;
-        
+
         if (cfg.width) {
             width = cfg.width;
         }
@@ -482,7 +482,7 @@ Ext.define('Ext.window.MessageBox', {
         me.maxWidth = cfg.maxWidth || me.defaultMaxWidth;
         me.minHeight = cfg.minHeight || me.defaultMinHeight;
         me.maxHeight = cfg.maxHeight || me.defaultMaxHeight;
-        
+
         if ('maskClickAction' in cfg) {
             me.maskClickAction = cfg.maskClickAction;
         }
@@ -500,7 +500,7 @@ Ext.define('Ext.window.MessageBox', {
 
         // Previous default is rarely going to be valid
         delete me.defaultFocus;
-        
+
         if (cfg.defaultFocus) {
             me.defaultFocus = cfg.defaultFocus;
         }
@@ -527,7 +527,7 @@ Ext.define('Ext.window.MessageBox', {
         else {
             title = me.title;
         }
-        
+
         if (cfg.iconCls != null) {
             iconCls = cfg.iconCls;
         }
@@ -537,7 +537,7 @@ Ext.define('Ext.window.MessageBox', {
         else {
             iconCls = me.iconCls;
         }
-        
+
         me.setTitle(title);
         me.setIconCls(iconCls);
 
@@ -566,9 +566,9 @@ Ext.define('Ext.window.MessageBox', {
         // we need to suspend layouts, and flush at the end when the Window's children
         // are at their final visibility.
         Ext.suspendLayouts();
-        
+
         me.width = me.height = null;
-        
+
         if (width || height) {
             if (width) {
                 me.setWidth(width);
@@ -578,7 +578,7 @@ Ext.define('Ext.window.MessageBox', {
                 me.setHeight(height);
             }
         }
-        
+
         if (!me.rendered) {
             me.render(Ext.getBody());
         }
@@ -591,7 +591,7 @@ Ext.define('Ext.window.MessageBox', {
 
         if (header) {
             tool = header.child('[type=close]');
-            
+
             if (tool) {
                 tool.setVisible(me.closable);
             }
@@ -618,11 +618,11 @@ Ext.define('Ext.window.MessageBox', {
 
         // Hide or show the message area
         msg = me.msg;
-        
+
         if (message) {
             msg.setHtml(message);
             msg.show();
-            
+
             // As per WAI-ARIA spec, the alertdialog element should point to message element
             // via aria-describedby attribute.
             me.ariaEl.dom.setAttribute('aria-describedby', msg.id);
@@ -635,10 +635,10 @@ Ext.define('Ext.window.MessageBox', {
         // Hide or show the input field
         textArea = me.textArea;
         textField = me.textField;
-        
+
         if (cfg.prompt || cfg.multiline) {
             me.multiline = cfg.multiline;
-            
+
             if (cfg.multiline) {
                 textArea.setValue(cfg.value);
                 textArea.setHeight(cfg.defaultTextHeight || me.defaultTextHeight);
@@ -652,7 +652,7 @@ Ext.define('Ext.window.MessageBox', {
                 textField.show();
                 me.defaultFocus = textField;
             }
-            
+
             // When either input field is displayed, it will reference the message component's
             // element via aria-labelledby. In such cases we need to remove aria-describedby
             // from the window ariaEl to avoid the message being announced twice.
@@ -665,12 +665,12 @@ Ext.define('Ext.window.MessageBox', {
 
         // Hide or show the progress bar
         progressBar = me.progressBar;
-        
+
         if (cfg.progress || wait) {
             progressBar.show();
             me.updateProgress(0, cfg.progressText);
             me.defaultFocus = progressBar;
-            
+
             if (wait) {
                 progressBar.wait(wait === true ? cfg.waitConfig : wait);
             }
@@ -681,7 +681,7 @@ Ext.define('Ext.window.MessageBox', {
 
         // Hide or show buttons depending on flag value sent.
         msgButtons = me.msgButtons;
-        
+
         for (i = 0; i < 4; i++) {
             if (buttons & Math.pow(2, i)) {
 
@@ -689,7 +689,7 @@ Ext.define('Ext.window.MessageBox', {
                 if (!me.defaultFocus) {
                     me.defaultFocus = msgButtons[i];
                 }
-                
+
                 msgButtons[i].show();
                 hideToolbar = false;
             }
@@ -705,7 +705,7 @@ Ext.define('Ext.window.MessageBox', {
         else {
             me.bottomTb.show();
         }
-        
+
         Ext.resumeLayouts(true);
     },
 
@@ -724,19 +724,19 @@ Ext.define('Ext.window.MessageBox', {
         for (btnId in buttonText) {
             if (buttonText.hasOwnProperty(btnId)) {
                 btn = me.msgButtons[btnId];
-                
+
                 if (btn) {
                     if (me.cfg && me.cfg.buttonText) {
                         buttons = buttons | Math.pow(2, Ext.Array.indexOf(me.buttonIds, btnId));
                     }
-                    
+
                     if (btn.text !== buttonText[btnId]) {
                         btn.setText(buttonText[btnId]);
                     }
                 }
             }
         }
-        
+
         return buttons;
     },
 
@@ -928,12 +928,12 @@ Ext.define('Ext.window.MessageBox', {
                 },
                 single: true
             });
-            
+
             return me;
         }
 
         me.reconfigure(cfg);
-        
+
         if (cfg.cls) {
             me.addCls(cfg.cls);
         }
@@ -942,11 +942,11 @@ Ext.define('Ext.window.MessageBox', {
         // has no visible focusable items. For example, a "wait" message box should not get focus.
         visibleFocusables =
             me.query('textfield:not([hidden]),textarea:not([hidden]),button:not([hidden])');
-        
+
         me.preventFocusOnActivate = !visibleFocusables.length;
 
         me.callParent();
-        
+
         return me;
     },
 
@@ -988,11 +988,11 @@ Ext.define('Ext.window.MessageBox', {
 
         if (icon) {
             iconCmp.show();
-            
+
             if (width || height) {
                 iconCmp.setSize(width || iconCmp.getWidth(), height || iconCmp.getHeight());
             }
-            
+
             iconCmp.addCls(Ext.baseCSSPrefix + 'dlg-icon');
             iconCmp.addCls(me.messageIconCls = icon);
         }
@@ -1000,7 +1000,7 @@ Ext.define('Ext.window.MessageBox', {
             iconCmp.removeCls(Ext.baseCSSPrefix + 'dlg-icon');
             iconCmp.hide();
         }
-        
+
         return me;
     },
 
@@ -1018,11 +1018,11 @@ Ext.define('Ext.window.MessageBox', {
      */
     updateProgress: function(value, progressText, message) {
         this.progressBar.updateProgress(value, progressText);
-        
+
         if (message) {
             this.updateText(message);
         }
-        
+
         return this;
     },
 
@@ -1058,7 +1058,7 @@ Ext.define('Ext.window.MessageBox', {
                 scope: scope
             };
         }
-        
+
         return this.show(title);
     },
 
@@ -1095,7 +1095,7 @@ Ext.define('Ext.window.MessageBox', {
                 value: value
             };
         }
-        
+
         return this.show(title);
     },
 
@@ -1122,7 +1122,7 @@ Ext.define('Ext.window.MessageBox', {
                 waitConfig: config
             };
         }
-        
+
         return this.show(message);
     },
 
@@ -1152,7 +1152,7 @@ Ext.define('Ext.window.MessageBox', {
                 minWidth: this.minWidth
             };
         }
-        
+
         return this.show(title);
     },
 
@@ -1177,10 +1177,10 @@ Ext.define('Ext.window.MessageBox', {
                 progressText: progressText
             };
         }
-        
+
         return this.show(title);
     },
-    
+
     privates: {
         syncHeaderConfigs: Ext.privateFn
     }

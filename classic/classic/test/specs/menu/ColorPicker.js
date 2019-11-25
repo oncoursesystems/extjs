@@ -1,16 +1,16 @@
 topSuite("Ext.menu.ColorPicker", function() {
     var menu;
-    
+
     function makeMenu(cfg) {
         cfg = Ext.apply({
             floating: true
         }, cfg);
-        
+
         menu = new Ext.menu.ColorPicker(cfg);
-        
+
         return menu;
     }
-    
+
     afterEach(function() {
         if (menu) {
             menu.destroy();
@@ -27,10 +27,9 @@ topSuite("Ext.menu.ColorPicker", function() {
         });
     });
 
-
     describe("interaction", function() {
         var button, colorItem;
-        
+
         beforeEach(function() {
             button = new Ext.button.Button({
                 renderTo: Ext.getBody(),
@@ -44,22 +43,22 @@ topSuite("Ext.menu.ColorPicker", function() {
                     }
                 }]
             });
-            
+
             button.showMenu();
-            
+
             colorItem = button.menu.down('[text=color]');
-            
+
             colorItem.focus();
             colorItem.expandMenu(null, 0);
-            
+
             menu = colorItem.menu;
         });
-        
+
         afterEach(function() {
             if (button) {
                 button.destroy();
             }
-            
+
             button = null;
         });
 

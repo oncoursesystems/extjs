@@ -152,7 +152,7 @@ Ext.define('Ext.util.TextMetrics', {
 
             return shared.getSize(text);
         },
-        
+
         /**
          * Destroy the TextMetrics instance created by {@link #measure}.
          * @static
@@ -161,7 +161,7 @@ Ext.define('Ext.util.TextMetrics', {
             this.shared = Ext.destroy(this.shared);
         }
     },
-    
+
     /**
      * Creates new TextMetrics.
      * @param {String/HTMLElement/Ext.dom.Element} bindTo The element or its ID to bind to.
@@ -192,7 +192,7 @@ Ext.define('Ext.util.TextMetrics', {
             measure.setWidth(fixedWidth);
         }
     },
-    
+
     /**
      * Returns the size of the specified text based on the internal element's style and width
      * properties
@@ -202,14 +202,14 @@ Ext.define('Ext.util.TextMetrics', {
     getSize: function(text) {
         var measure = this.measure,
             size;
-        
+
         measure.setHtml(text);
         size = measure.getSize();
         measure.setHtml('');
 
         return size;
     },
-    
+
     /**
      * Binds this TextMetrics instance to a new element
      * @param {String/HTMLElement/Ext.dom.Element} el The element or its ID.
@@ -234,7 +234,7 @@ Ext.define('Ext.util.TextMetrics', {
             ])
         );
     },
-    
+
     /**
      * Sets a fixed width on the internal measurement element.  If the text will be multiline,
      * you have to set a fixed width in order to accurately measure the text height.
@@ -243,7 +243,7 @@ Ext.define('Ext.util.TextMetrics', {
     setFixedWidth: function(width) {
         this.measure.setWidth(width);
     },
-     
+
     /**
       * Returns the measured width of the specified text
       * @param {String} text The text to measure
@@ -254,7 +254,7 @@ Ext.define('Ext.util.TextMetrics', {
 
         return this.getSize(text).width;
     },
-     
+
     /**
       * Returns the measured height of the specified text
       * @param {String} text The text to measure
@@ -263,7 +263,7 @@ Ext.define('Ext.util.TextMetrics', {
     getHeight: function(text) {
         return this.getSize(text).height;
     },
-     
+
     /**
       * Destroy this instance
       */

@@ -298,11 +298,11 @@ Ext.define('Ext.util.Color', {
      */
     lighten: function(factor) {
         var hsl;
-        
+
         if (!factor && factor !== 0) {
             factor = this.lightnessFactor;
         }
-        
+
         hsl = this.getHSL();
 
         this.setHSL(hsl[0], hsl[1], Ext.Number.constrain(hsl[2] + factor, 0, 1));

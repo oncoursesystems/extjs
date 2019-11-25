@@ -19,14 +19,18 @@ Ext.define('KitchenSink.view.layout.Border', {
         },
         graphite: {
             itemHeight: 120
+        },
+        'classic-material': {
+            itemHeight: 120
         }
     },
     layout: 'border',
     width: 500,
     height: 400,
+    cls: Ext.baseCSSPrefix + 'shadow',
 
     bodyBorder: false,
-    
+
     defaults: {
         collapsible: true,
         split: true,
@@ -44,7 +48,7 @@ Ext.define('KitchenSink.view.layout.Border', {
         },
         {
             title: 'Navigation',
-            region:'west',
+            region: 'west',
             floatable: false,
             margin: '5 0 0 0',
             width: 125,

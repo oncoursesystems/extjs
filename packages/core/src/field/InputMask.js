@@ -127,12 +127,12 @@ Ext.define('Ext.field.InputMask', function(InputMask) { return { // eslint-disab
 
         if (me._cached && !--me._cached) {
             key = me.getPattern();
-            
+
             //<debug>
             if (InputMask.active[key] !== me) {
                 Ext.raise('Invalid call to InputMask#release (not active)');
             }
-            
+
             if (cache.map[key]) {
                 Ext.raise('Invalid call to InputMask#release (already cached)');
             }
@@ -227,7 +227,7 @@ Ext.define('Ext.field.InputMask', function(InputMask) { return { // eslint-disab
 
     getEditPosLeft: function(pos) {
         var i;
-        
+
         for (i = pos; i >= 0; --i) {
             if (!this.isFixedChar(i)) {
                 return i;
@@ -364,7 +364,7 @@ Ext.define('Ext.field.InputMask', function(InputMask) { return { // eslint-disab
 
     isEmpty: function(value) {
         var i, len;
-        
+
         for (i = 0, len = value.length; i < len; ++i) {
             if (!this.isFixedChar(i) && this.isAllowedChar(value[i], i)) {
                 return false;
@@ -439,7 +439,7 @@ Ext.define('Ext.field.InputMask', function(InputMask) { return { // eslint-disab
 
         if (field.maskProcessed || value === oldValue) {
             field.maskProcessed = false;
-            
+
             return true;
         }
 
@@ -463,7 +463,7 @@ Ext.define('Ext.field.InputMask', function(InputMask) { return { // eslint-disab
             field.maskProcessed = true;
             field.inputElement.dom.value = s; // match DOM
             field.setValue(s);
-            
+
             this.setCaretToEnd(field, value);
         }
     },

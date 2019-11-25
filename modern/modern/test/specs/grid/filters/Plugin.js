@@ -2,6 +2,7 @@
 
 topSuite('Ext.grid.filters.Plugin', [
     'Ext.grid.Grid',
+    'Ext.data.virtual.Store',
     'Ext.grid.filters.*'
 ], function() {
     var MyStore = Ext.define(null, {
@@ -457,7 +458,6 @@ topSuite('Ext.grid.filters.Plugin', [
             // To set filter type number with < and > oprator
             plugin.setActiveFilter(a_lt_gt);
 
-
             // To check there are activeFilter exists
             expect(plugin.getActiveFilter()).not.toBe(null);
 
@@ -557,6 +557,54 @@ topSuite('Ext.grid.filters.Plugin', [
 
             // To check initial value
             expect(cells[0].getValue()).toBe('Lisa');
+        });
+    });
+
+    describe('Virtual Store', function() {
+
+        function createStore(cfg) {
+            return store = new Ext.data.virtual.Store(Ext.apply({
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl',
+                    reader: {
+                        rootProperty: 'data',
+                        totalProperty: 'totalCount'
+                    }
+                },
+                pageSize:25,
+                autoLoad:true
+            }, cfg));
+        }
+
+        function createGrid(cfg) {
+            cfg = Ext.apply({
+                title: 'Virtual Store Grid',
+                height: 400,
+                width: 600,
+                plugins: {
+                    gridfilters: true
+                },
+                columns: [{
+                    text: 'column Header 1'
+                }, {
+                    text: 'Column Header 2'
+                }],
+                store: createStore(),
+                renderTo: document.body
+            });
+            grid = new Ext.grid.Grid(cfg);
+        }
+
+        afterEach(function(){
+            store.destroy();
+            store = null;
+        });
+
+        it('should not throw error on adding filter plugin to the grid with virtual store', function() {
+            expect(function(){
+                createGrid()
+            }).not.toThrow()
         });
     });
 });

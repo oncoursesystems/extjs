@@ -265,7 +265,7 @@ topSuite('Ext.Action', ['Ext.Panel', 'Ext.Button', 'Ext.app.ViewController'], fu
         describe("each", function() {
             it("should execute the specified function on each instance", function() {
                 var spy = jasmine.createSpy();
-                
+
                 cmp2 = new Ext.button.Button(action);
                 action.each(spy);
 
@@ -276,7 +276,7 @@ topSuite('Ext.Action', ['Ext.Panel', 'Ext.Button', 'Ext.app.ViewController'], fu
         describe("execute", function() {
             it("should execute the handler on each instance with the passed argments", function() {
                 var spy = jasmine.createSpy();
-                
+
                 action.setHandler(spy);
                 action.execute('foo', 'bar', 'baz');
 
@@ -351,7 +351,7 @@ topSuite('Ext.Action', ['Ext.Panel', 'Ext.Button', 'Ext.app.ViewController'], fu
                 expect(cmp2.iconCls).toBe('fa fa-truck');
             });
         });
-        
+
         describe("setHandler", function() {
             it("should update initialConfig handler value", function() {
                 var fn  = Ext.emptyFn,
@@ -371,11 +371,11 @@ topSuite('Ext.Action', ['Ext.Panel', 'Ext.Button', 'Ext.app.ViewController'], fu
             it("should update the handler of all instances", function() {
                 var fn = Ext.emptyFn,
                     scope = new Ext.container.Container();
-                
+
                 // just update handler
                 action.setHandler(fn);
                 expect(cmp1.handler).toBe(fn);
-                
+
                 // update handler and scope
                 action.setHandler(fn, scope);
                 expect(cmp1.scope).toBe(scope);

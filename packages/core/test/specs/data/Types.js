@@ -11,7 +11,7 @@ topSuite("Ext.data.Types", function() {
                 return scope ? scope.dateReadFormat : null;
             }
         });
-        
+
         return type.convert.call(cfg, value);
     };
 
@@ -78,13 +78,13 @@ topSuite("Ext.data.Types", function() {
             it("should convert a boolean value", function() {
                 expect(conv(type, null, true)).toEqual("true");
             });
-            
+
             it("should set to null with allowNull and an undefined value", function() {
                 expect(conv(type, {
                     allowNull: true
                 }), undefined).toBeNull();
             });
-            
+
             it("should set to null with allowNull and a null value", function() {
                 expect(conv(type, {
                     allowNull: true
@@ -348,20 +348,20 @@ topSuite("Ext.data.Types", function() {
                     expect(conv(type, null, new Date())).toBe(false);
                 });
             });
-            
+
             describe("allowNull", function() {
                 it("should convert undefined to null if allowNull is specified", function() {
                     expect(conv(type, {
                         allowNull: true
                     }, undefined)).toBeNull();
                 });
-                
+
                 it("should convert null to null if allowNull is specified", function() {
                     expect(conv(type, {
                         allowNull: true
                     }, null)).toBeNull();
                 });
-                
+
                 it("should convert empty string to null if allowNull is specified", function() {
                     expect(conv(type, {
                         allowNull: true
@@ -426,7 +426,7 @@ topSuite("Ext.data.Types", function() {
                     var format = 'Y-m-d',
                         val = '1986-03-03',
                         d = Ext.Date.parse(val, format);
-                        
+
                     expect(conv(type, { dateFormat: format }, val).getTime()).toEqual(d.getTime());
                 });
                 // ~  TODO: parse method disappear ?

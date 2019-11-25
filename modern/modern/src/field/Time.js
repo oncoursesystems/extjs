@@ -2,7 +2,8 @@
  * Provides a time input field with a analog time picker and automatic time validation.
  *
  * This field recognizes and uses JavaScript Date objects to validate input from {@link #picker}.
- * In addition, it recognizes string values which are parsed according to the {@link #format} config.
+ * In addition, it recognizes string values which are parsed according to 
+ * the {@link #format} config.
  * These may be reconfigured to use time formats appropriate for the user's locale.
  *
  * Example usage:
@@ -65,7 +66,31 @@ Ext.define('Ext.field.Time', {
          * @locale
          * @since 6.6.0
          */
-        altFormats: 'g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H|gi a|hi a|giA|hiA|gi A|hi A'
+        altFormats: 'g:ia|' +
+                    'g:iA|' +
+                    'g:i a|' +
+                    'g:i A|' +
+                    'h:i|' +
+                    'g:i|' +
+                    'H:i|' +
+                    'ga|' +
+                    'ha|' +
+                    'gA|' +
+                    'h a|' +
+                    'g a|' +
+                    'g A|' +
+                    'gi|' +
+                    'hi|' +
+                    'gia|' +
+                    'hia|' +
+                    'g|' +
+                    'H|' +
+                    'gi a|' +
+                    'hi a|' +
+                    'giA|' +
+                    'hiA|' +
+                    'gi A|' +
+                    'hi A'
     },
 
     platformConfig: {
@@ -96,13 +121,13 @@ Ext.define('Ext.field.Time', {
 
     matchFieldWidth: false,
 
-    createFloatedPicker: function (config) {
+    createFloatedPicker: function(config) {
         var pickerConfig = this.getFloatedPicker();
 
         return Ext.apply(pickerConfig, config);
     },
 
-    getAutoPickerType: function () {
+    getAutoPickerType: function() {
         return 'floated';
     },
 
@@ -112,19 +137,17 @@ Ext.define('Ext.field.Time', {
      * @param {Object} value The new value from the time picker.
      * @private
      */
-    onPickerChange: function (picker, value) {
+    onPickerChange: function(picker, value) {
         var me = this;
 
-        me.forceInputChange = true;
-        me.setValue(value);
-        me.forceInputChange = false;
+        me.forceSetValue(value);
 
         me.fireEvent('select', me, value);
 
         me.collapse();
     },
 
-    parseValue: function (value, errors) {
+    parseValue: function(value, errors) {
         var me = this,
             date = value,
             defaultFormat = me.getFormat(),
@@ -156,7 +179,7 @@ Ext.define('Ext.field.Time', {
         return this.callParent([value, errors]);
     },
 
-    realignFloatedPicker: function (picker) {
+    realignFloatedPicker: function(picker) {
         picker = picker || this.getPicker();
 
         if (picker.isCentered()) {
@@ -167,12 +190,11 @@ Ext.define('Ext.field.Time', {
         }
     },
 
-    showPicker: function () {
+    showPicker: function() {
         var me = this,
             picker;
 
         me.callParent();
-
 
         picker = me.getPicker();
         picker.setValue(me.getValue());
@@ -184,8 +206,14 @@ Ext.define('Ext.field.Time', {
         }
     },
 
+    isEqual: function(value1, value2) {
+        var v1 = this.transformValue(value1),
+            v2 = this.transformValue(value2);
 
-    transformValue: function (value) {
+        return +v1 === +v2;
+    },
+
+    transformValue: function(value) {
         if (Ext.isDate(value)) {
             if (isNaN(value.getTime())) {
                 value = null;
@@ -195,7 +223,7 @@ Ext.define('Ext.field.Time', {
         return value;
     },
 
-    applyInputValue: function (value, oldValue) {
+    applyInputValue: function(value, oldValue) {
         if (Ext.isDate(value)) {
             return Ext.Date.format(value, this.getFormat());
         }
@@ -203,14 +231,14 @@ Ext.define('Ext.field.Time', {
         return this.callParent([value, oldValue]);
     },
 
-    applyPicker: function (picker, oldPicker) {
+    applyPicker: function(picker, oldPicker) {
         var me = this;
 
         if (picker === 'edge') {
             //<debug>
             Ext.log.warn('Time Panel does not support "edge" picker, defaulting to "floated"');
             //</debug>
-            picker = 'floated'
+            picker = 'floated';
         }
 
         picker = me.callParent([picker, oldPicker]);
@@ -222,28 +250,29 @@ Ext.define('Ext.field.Time', {
         return picker;
     },
 
-    applyAltFormats: function (altFormats) {
+    applyAltFormats: function(altFormats) {
         if (!altFormats) {
             return [];
-        } else if (!Ext.isArray(altFormats)) {
+        }
+        else if (!Ext.isArray(altFormats)) {
             return altFormats.split('|');
         }
 
         return altFormats;
     },
 
-    applyFormat: function (format) {
+    applyFormat: function(format) {
         return format || Ext.Date.defaultTimeFormat;
     },
 
-    updateFormat: function (format) {
+    updateFormat: function(format) {
         this.setParseValidator({
             type: 'time',
             format: format
         });
     },
 
-    applyValue: function (value, oldValue) {
+    applyValue: function(value, oldValue) {
         if (!(value || value === 0)) {
             value = null;
         }
@@ -259,7 +288,7 @@ Ext.define('Ext.field.Time', {
         return value;
     },
 
-    updateValue: function (value, oldValue) {
+    updateValue: function(value, oldValue) {
         // Using a getter will create the picker instance if it does not exist.
         // We don't want this here.
         var picker = this._picker;
@@ -269,5 +298,9 @@ Ext.define('Ext.field.Time', {
         }
 
         this.callParent([value, oldValue]);
+    },
+
+    rawToValue: function(value) {
+        return this.parseValue(value);
     }
 });

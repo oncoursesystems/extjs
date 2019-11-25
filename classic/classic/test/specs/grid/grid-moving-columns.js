@@ -343,7 +343,7 @@ function() {
             });
 
             dragColumn(visibleColumns[3], visibleColumns[1]);
-            
+
             expect(errorSpy).not.toHaveBeenCalled();
 
             window.onerror = old;
@@ -753,7 +753,7 @@ function() {
             grid.headerCt.move(2, 3);
             // [colChange, colMove]
             testSpies([1, 1]);
-            
+
             // Don't test the view rows b/c the above move operation will only move the headers.
             testUI('1,2,7,3,4,5,6,8', /* testRowText */ false);
 
@@ -4210,7 +4210,7 @@ function() {
                 Ext.Array.each(grid.getVisibleColumnManager().getColumns(), function(c) {
                     headers += c.text;
                 });
-                
+
                 expect(headers).toBe('EmailNamePhone 1Phone 2Phone 3Phone 4Phones 1Phones 2Phones 3Phones 4');
             });
         });

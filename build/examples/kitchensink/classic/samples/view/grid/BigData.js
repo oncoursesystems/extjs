@@ -32,10 +32,10 @@ Ext.define('KitchenSink.view.grid.BigData', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/grid/BigDataController.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/BigData.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/grid/Employee.js'
     }],
@@ -74,6 +74,16 @@ Ext.define('KitchenSink.view.grid.BigData', {
             dobColumnWidth: 145,
             emailColumnWidth: 290,
             fieldStyle: 'background-color: #aeaeae;'
+        },
+        'classic-material': {
+            width: 1000,
+            height: 500,
+            employeeGridWidth: 395,
+            idColumnWidth: 100,
+            nameColumnWidth: 190,
+            dobColumnWidth: 150,
+            emailColumnWidth: 290,
+            fieldStyle: ''
         }
     },
     store: 'BigData',
@@ -81,10 +91,10 @@ Ext.define('KitchenSink.view.grid.BigData', {
     multiColumnSort: true,
 
     features: [{
-        ftype : 'groupingsummary',
-        groupHeaderTpl : '{name}',
-        hideGroupedHeader : false,
-        enableGroupingMenu : false
+        ftype: 'groupingsummary',
+        groupHeaderTpl: '{name}',
+        hideGroupedHeader: false,
+        enableGroupingMenu: false
     }, {
         ftype: 'summary',
         dock: 'bottom'
@@ -92,7 +102,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
 
     layout: 'border',
     split: true,
-    
+
     lockedGridConfig: {
         title: 'Employees',
         header: false,
@@ -106,7 +116,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
         type: 'checkboxmodel',
         checkOnly: true
     },
-    
+
     listeners: {
         headermenucreate: 'onHeaderMenuCreate',
         // this event notifies us when the document was saved
@@ -114,7 +124,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
         beforedocumentsave: 'onBeforeDocumentSave'
     },
 
-    columns:[{
+    columns: [{
         xtype: 'rownumberer',
         width: 40,
         sortable: false,
@@ -148,7 +158,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
             xtype: 'textfield',
             fieldStyle: '${fieldStyle}',
             reference: 'nameFilterField',
-            flex : 1,
+            flex: 1,
             margin: 2,
             enableKeyEvents: true,
             listeners: {
@@ -318,26 +328,27 @@ Ext.define('KitchenSink.view.grid.BigData', {
     viewConfig: {
         stripeRows: true
     },
-    
+
     header: {
         itemPosition: 1, // after title before collapse tool
         items: [{
             ui: 'default-toolbar',
             xtype: 'button',
+            cls: 'dock-tab-btn',
             text: 'Export to ...',
             menu: {
                 defaults: {
                     handler: 'exportTo'
                 },
                 items: [{
-                    text:   'Excel xlsx',
+                    text: 'Excel xlsx',
                     cfg: {
                         type: 'excel07',
                         ext: 'xlsx',
                         includeGroups: true,
                         includeSummary: true
                     }
-                },{
+                }, {
                     text: 'Excel xml',
                     cfg: {
                         type: 'excel03',
@@ -345,19 +356,19 @@ Ext.define('KitchenSink.view.grid.BigData', {
                         includeGroups: true,
                         includeSummary: true
                     }
-                },{
-                    text:   'CSV',
+                }, {
+                    text: 'CSV',
                     cfg: {
                         type: 'csv'
                     }
-                },{
-                    text:   'TSV',
+                }, {
+                    text: 'TSV',
                     cfg: {
                         type: 'tsv',
                         ext: 'csv'
                     }
-                },{
-                    text:   'HTML',
+                }, {
+                    text: 'HTML',
                     cfg: {
                         type: 'html',
                         includeGroups: true,
@@ -374,7 +385,7 @@ Ext.define('KitchenSink.view.grid.BigData', {
         rowexpander: {
             // dblclick invokes the row editor
             expandOnDblClick: false,
-            rowBodyTpl: '<img src="{avatar}" height="100px" '+
+            rowBodyTpl: '<img src="{avatar}" height="100px" ' +
                 'style="float:left;margin:0 10px 5px 0"><b>{name}<br></b>{dob:date}'
         }
     }

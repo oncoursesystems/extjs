@@ -84,10 +84,10 @@ Ext.define('Ext.ux.colorpick.Field', {
      * @param {String} color The value of the selected color as per specified {@link #format}.
      * @param {String} previousColor The previous color value.
      */
-    
+
     initComponent: function() {
         var me = this;
-        
+
         me.callParent();
         me.on('change', me.onHexChange);
     },
@@ -114,7 +114,7 @@ Ext.define('Ext.ux.colorpick.Field', {
         picker.setFormat(me.getFormat());
         picker.setColor(me.getColor());
         picker.setHexReadOnly(!me.editable);
-        
+
         picker.on({
             ok: 'onColorPickerOK',
             cancel: 'onColorPickerCancel',
@@ -145,7 +145,7 @@ Ext.define('Ext.ux.colorpick.Field', {
 
         this.colorPicker.setPreviousColor(color);
     },
-    
+
     onHexChange: function(field) {
         if (field.validate()) {
             this.setValue(field.getValue());
@@ -155,12 +155,12 @@ Ext.define('Ext.ux.colorpick.Field', {
     // Expects value formatted as per "format" config
     setValue: function(color) {
         var me = this;
-        
+
         if (Ext.ux.colorpick.ColorUtils.isValid(color)) {
             color = me.applyValue(color);
-    
+
             me.callParent([color]);
-    
+
             // always update in case opacity changes, even if value doesn't have it
             // to handle "hex6" non-opacity type of format
             me.updateValue(color);
@@ -190,21 +190,21 @@ Ext.define('Ext.ux.colorpick.Field', {
         }
 
         c = me.getColor();
-        
+
         if (c) {
             Ext.ux.colorpick.ColorUtils.setBackground(me.swatchEl, c);
-    
+
             if (me.colorPicker) {
                 me.colorPicker.setColor(c);
             }
         }
     },
-    
+
     validator: function(val) {
         if (!Ext.ux.colorpick.ColorUtils.isValid(val)) {
             return this.invalidText;
         }
-        
+
         return true;
     }
 });

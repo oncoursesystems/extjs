@@ -56,7 +56,7 @@ Ext.define('Ext.form.field.Spinner', {
     extend: 'Ext.form.field.Text',
     alias: 'widget.spinnerfield',
     alternateClassName: 'Ext.form.Spinner',
-    
+
     requires: [
         'Ext.form.trigger.Spinner',
         'Ext.util.KeyNav'
@@ -126,7 +126,7 @@ Ext.define('Ext.form.field.Spinner', {
      * is pressed if {@link #keyNavEnabled} is true. Must be implemented by subclasses.
      */
     onSpinDown: Ext.emptyFn,
-    
+
     ariaRole: 'spinbutton',
 
     /**
@@ -186,7 +186,7 @@ Ext.define('Ext.form.field.Spinner', {
                 up: me.spinUp,
                 down: me.spinDown
             });
-            
+
             me.inputEl.on({
                 keyup: me.onInputElKeyUp,
                 scope: me
@@ -227,7 +227,7 @@ Ext.define('Ext.form.field.Spinner', {
      */
     spinUp: function() {
         var me = this;
-        
+
         if (me.spinUpEnabled && !me.disabled) {
             me.fireEvent('spin', me, 'up');
             me.fireEvent('spinup', me);
@@ -242,7 +242,7 @@ Ext.define('Ext.form.field.Spinner', {
      */
     spinDown: function() {
         var me = this;
-        
+
         if (me.spinDownEnabled && !me.disabled) {
             me.fireEvent('spin', me, 'down');
             me.fireEvent('spindown', me);
@@ -257,9 +257,9 @@ Ext.define('Ext.form.field.Spinner', {
     setSpinUpEnabled: function(enabled) {
         var me = this,
             wasEnabled = me.spinUpEnabled;
-        
+
         me.spinUpEnabled = enabled;
-        
+
         if (wasEnabled !== enabled && me.rendered) {
             me.getTrigger('spinner').setUpEnabled(enabled);
         }
@@ -272,9 +272,9 @@ Ext.define('Ext.form.field.Spinner', {
     setSpinDownEnabled: function(enabled) {
         var me = this,
             wasEnabled = me.spinDownEnabled;
-        
+
         me.spinDownEnabled = enabled;
-        
+
         if (wasEnabled !== enabled && me.rendered) {
             me.getTrigger('spinner').setDownEnabled(enabled);
         }
@@ -287,17 +287,17 @@ Ext.define('Ext.form.field.Spinner', {
     onMouseWheel: function(e) {
         var me = this,
             delta;
-        
+
         if (me.hasFocus) {
             delta = e.getWheelDelta();
-            
+
             if (delta > 0) {
                 me.spinUp();
             }
             else if (delta < 0) {
                 me.spinDown();
             }
-            
+
             e.stopEvent();
             me.onSpinEnd();
         }
@@ -311,7 +311,7 @@ Ext.define('Ext.form.field.Spinner', {
 
     doDestroy: function() {
         Ext.destroyMembers(this, 'spinnerKeyNav');
-        
+
         this.callParent();
     }
 
@@ -321,10 +321,10 @@ Ext.define('Ext.form.field.Spinner', {
             this.fireEvent('spinend', this);
         }
     };
-    
+
     //<debug>
     spinEnd.$skipTimerCheck = true;
     //</debug>
-    
+
     Spinner.prototype.onSpinEnd = Ext.Function.createBuffered(spinEnd, 100);
 });

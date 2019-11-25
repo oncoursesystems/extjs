@@ -38,14 +38,20 @@ Ext.define('KitchenSink.view.toolbar.Overflow', {
             height: 250,
             topHeight: 100,
             bottomHeight: 100
-        }, 
+        },
         graphite: {
             width: 680,
             height: 350,
             topHeight: 155,
             bottomHeight: 135
+        },
+        'classic-material': {
+            width: 555,
+            height: 250,
+            topHeight: 155,
+            bottomHeight: 135
         }
-        
+
     },
     //</example>
     width: '${width}',

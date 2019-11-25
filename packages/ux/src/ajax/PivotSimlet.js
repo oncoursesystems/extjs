@@ -143,9 +143,6 @@ Ext.define('Ext.ux.ajax.PivotSimlet', {
         item.records.push(record);
     },
 
-
-
-
     sum: function(records, measure, rowGroupKey, colGroupKey) {
         var length = records.length,
             total = 0,

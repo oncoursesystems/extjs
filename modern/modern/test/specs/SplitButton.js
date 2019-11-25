@@ -480,7 +480,7 @@ topSuite("Ext.SplitButton", function() {
             button.render(Ext.getBody());
             fooItem = button.getMenu().getItems().getAt(0);
         });
-        
+
         it("should fire the handler on Space key", function() {
             jasmine.fireKeyEvent(button.splitArrowCoverElement, 'click', 'space');
 

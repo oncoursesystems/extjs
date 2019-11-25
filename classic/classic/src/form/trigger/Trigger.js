@@ -4,11 +4,11 @@
  */
 Ext.define('Ext.form.trigger.Trigger', {
     alias: 'trigger.trigger',
-    
+
     requires: [
         'Ext.util.ClickRepeater'
     ],
-    
+
     mixins: [
         'Ext.mixin.Factoryable'
     ],
@@ -91,7 +91,7 @@ Ext.define('Ext.form.trigger.Trigger', {
      * prevents the browser's file dialog from opening.
      */
     preventMouseDown: true,
-    
+
     /**
      * @cfg {Boolean} [focusOnMouseDown=false] If `true`, the field will be focused upon
      * mousedown on the trigger. This should be used only for main Picker field triggers

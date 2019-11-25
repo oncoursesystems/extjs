@@ -55,11 +55,11 @@ Ext.define('Ext.ux.TabScrollerMenu', {
     showButton: function() {
         var me = this,
             result, button;
-        
+
         result = Ext.getClass(me.layout.overflowHandler).prototype.handleOverflow.apply(
             me.layout.overflowHandler, arguments
         );
-        
+
         button = me.menuButton;
 
         if (me.tabPanel.items.getCount() > 1) {
@@ -167,9 +167,9 @@ Ext.define('Ext.ux.TabScrollerMenu', {
             tabsMenu = me.tabsMenu,
             totalItems, numSubMenus, remainder,
             i, curPage, menuItems, x, item, start, index;
-            
+
         tabsMenu.suspendLayouts();
-        
+
         allItems = Ext.Array.filter(allItems, function(item) {
             if (item.id === curActive.id) {
                 return false;
@@ -177,7 +177,7 @@ Ext.define('Ext.ux.TabScrollerMenu', {
 
             return item.hidden ? !!item.hiddenByLayout : true;
         });
-        
+
         totalItems = allItems.length;
         numSubMenus = Math.floor(totalItems / pageSize);
         remainder = totalItems % pageSize;
@@ -251,7 +251,7 @@ Ext.define('Ext.ux.TabScrollerMenu', {
     showTabFromMenu: function(menuItem) {
         this.tabPanel.setActiveTab(menuItem.tabToShow);
     },
-    
+
     destroy: function() {
         Ext.destroy(this.tabsMenu, this.menuButton);
         this.callParent();

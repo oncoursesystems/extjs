@@ -11,7 +11,7 @@ Ext.Inventory = function() {
 
     me.names = [];
     me.paths = {};
-    
+
     me.alternateToName = {};
     me.aliasToName = {};
     me.nameToAliases = {};
@@ -49,7 +49,7 @@ Ext.Inventory.prototype = {
 
         for (cls in mappings) {
             aliases = mappings[cls];
-            
+
             if (Ext.isString(aliases)) {
                 array[0] = aliases;
                 aliases = array;
@@ -57,7 +57,7 @@ Ext.Inventory.prototype = {
 
             length = aliases.length;
             nameMapping = nameTo[cls] || (nameTo[cls] = []);
-            
+
             for (i = 0; i < length; ++i) {
                 if (!(a = aliases[i])) {
                     continue;
@@ -167,16 +167,16 @@ Ext.Inventory.prototype = {
                     if (!(name in map) && !(exclude && (name in exclude))) {
                         if (!(match = regex.test(name))) {
                             n = (list = nameToAliases[name]).length;
-                            
+
                             while (!match && n-- > 0) {
                                 match = regex.test(list[n]);
                             }
 
                             list = nameToAlternates[name];
-                            
+
                             if (list && !match) {
                                 n = list.length;
-                                
+
                                 while (!match && n-- > 0) {
                                     match = regex.test(list[n]);
                                 }
@@ -207,11 +207,11 @@ Ext.Inventory.prototype = {
         else {
             prefix = me.nameToPrefix[className] ||
                      (me.nameToPrefix[className] = me.getPrefix(className));
-            
+
             if (prefix) {
                 className = className.substring(prefix.length + 1);
                 ret = paths[prefix];
-                
+
                 if (ret) {
                     ret += '/';
                 }
@@ -235,23 +235,23 @@ Ext.Inventory.prototype = {
         var prefixes = this.getPrefixes(),
             length = className.length,
             items, currChar, prefix, j, jlen;
-        
+
         // Walk the prefixes backwards so we consider the longest ones first.
         // Prefixes are kept in a sparse array grouped by length so we don't have to
         // iterate over all of them, just the ones we need.
         while (length-- > 0) {
             items = prefixes[length];
-            
+
             if (items) {
                 currChar = className.charAt(length);
-                
+
                 if (currChar !== '.') {
                     continue;
                 }
-                
+
                 for (j = 0, jlen = items.length; j < jlen; j++) {
                     prefix = items[j];
-                    
+
                     if (prefix === className.substring(0, length)) {
                         return prefix;
                     }
@@ -270,13 +270,13 @@ Ext.Inventory.prototype = {
         if (!prefixes) {
             names = me.names.slice(0);
             me.prefixes = prefixes = [];
-            
+
             for (i = 0, len = names.length; i < len; i++) {
                 name = names[i];
                 nameLength = name.length;
-                
+
                 items = prefixes[nameLength] || (prefixes[nameLength] = []);
-                
+
                 items.push(name);
             }
         }
@@ -371,7 +371,7 @@ Ext.Inventory.prototype = {
 
                 exclude: function() {
                     me.getNamesByExpression(arguments[0], excludes, true);
-                    
+
                     return this;
                 }
             },
@@ -389,7 +389,7 @@ Ext.Inventory.prototype = {
 
         return function(include) {
             var args = Ext.Array.slice(arguments, 1);
-            
+
             args.unshift(me.getNamesByExpression(include, excludes));
 
             return fn.apply(scope, args);

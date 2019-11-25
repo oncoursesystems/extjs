@@ -25,10 +25,10 @@ Ext.define('Ext.ux.TabCloseMenu', {
     showCloseOthers: true,
 
     /**
-     * @cfg {String} closeOthersTabsText
+     * @cfg {String} closeOtherTabsText
      * The text for closing all tabs except the current one.
      */
-    closeOthersTabsText: 'Close Other Tabs',
+    closeOtherTabsText: 'Close Other Tabs',
 
     /**
      * @cfg {Boolean} showCloseAll
@@ -147,7 +147,7 @@ Ext.define('Ext.ux.TabCloseMenu', {
             if (me.showCloseOthers) {
                 items.push({
                     itemId: 'closeOthers',
-                    text: me.closeOthersTabsText,
+                    text: me.closeOtherTabsText,
                     scope: me,
                     handler: me.onCloseOthers
                 });

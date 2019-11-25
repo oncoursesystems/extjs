@@ -132,7 +132,7 @@ Ext.define('Ext.mixin.Responsive', function(Responsive) { return { // eslint-dis
 
             merge: function(newValue, oldValue, target, mixinClass) {
                 var marker, entry, ret, rule;
-                
+
                 if (!newValue) {
                     return oldValue;
                 }
@@ -223,7 +223,7 @@ Ext.define('Ext.mixin.Responsive', function(Responsive) { return { // eslint-dis
      */
     destroy: function() {
         Responsive.unregister(this);
-        
+
         // No callParent() here, it's a mixin
     },
 
@@ -398,7 +398,7 @@ Ext.define('Ext.mixin.Responsive', function(Responsive) { return { // eslint-dis
                 context.wide = !context.tall;
 
                 context.landscape = context.portrait = false;
-                
+
                 if (!context.platform) {
                     context.platform = Ext.platformTags;
                 }
@@ -448,7 +448,7 @@ Ext.define('Ext.mixin.Responsive', function(Responsive) { return { // eslint-dis
 
         applyResponsiveConfig: function(rules) {
             var rule;
-            
+
             for (rule in rules) {
                 rules[rule].fn = Ext.createRuleFn(rule);
             }
@@ -466,7 +466,7 @@ Ext.define('Ext.mixin.Responsive', function(Responsive) { return { // eslint-dis
                     if (Ext.isString(fn = formulas[name])) {
                         fn = Ext.createRuleFn(fn);
                     }
-                    
+
                     ret[name] = fn;
                 }
             }
@@ -489,7 +489,7 @@ Ext.define('Ext.mixin.Responsive', function(Responsive) { return { // eslint-dis
 
                 for (rule in rules) {
                     entry = rules[rule];
-                    
+
                     if (entry.fn.call(this, context)) {
                         Ext.merge(ret, entry.config);
                     }
@@ -561,7 +561,7 @@ Ext.define('Ext.mixin.Responsive', function(Responsive) { return { // eslint-dis
          */
         updateResponsiveState: function() {
             var config = this.getResponsiveState();
-            
+
             this.setConfig(config);
         }
     } // private

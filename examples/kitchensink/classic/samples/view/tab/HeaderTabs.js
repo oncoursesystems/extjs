@@ -7,6 +7,7 @@ Ext.define('KitchenSink.view.tab.HeaderTabs', {
     xtype: 'header-tabs',
 
     //<example>
+    cls: '${containerShadowCls}',
     profiles: {
         classic: {
             buttonUI: 'default',
@@ -22,7 +23,9 @@ Ext.define('KitchenSink.view.tab.HeaderTabs', {
             iconHeader: 'classic/resources/images/icons/fam/application_view_list.png',
             width: 700,
             plain: true,
-            labelWidth: 100
+            labelWidth: 100,
+            containerShadowCls: Ext.baseCSSPrefix + 'shadow',
+            tabpanelShadowCls: 'header-tabs-tabpanel'
         },
         neptune: {
             buttonUI: 'default-toolbar',
@@ -38,7 +41,9 @@ Ext.define('KitchenSink.view.tab.HeaderTabs', {
             iconHeader: null,
             width: 800,
             plain: true,
-            labelWidth: 100
+            labelWidth: 100,
+            containerShadowCls: Ext.baseCSSPrefix + 'shadow',
+            tabpanelShadowCls: 'header-tabs-tabpanel'
         },
         'neptune-touch': {
             width: 900
@@ -48,7 +53,26 @@ Ext.define('KitchenSink.view.tab.HeaderTabs', {
         },
         graphite: {
             width: 1050,
-            labelWidth: 150
+            labelWidth: 150,
+            containerShadowCls: Ext.baseCSSPrefix + 'shadow',
+            tabpanelShadowCls: 'header-tabs-tabpanel'
+        },
+        'classic-material': {
+            width: 800,
+            glyph1: 42,
+            glyph2: 70,
+            glyph3: 86,
+            glyphAdd: 43,
+            glyphHeader: 77,
+            icon1: null,
+            icon2: null,
+            icon3: null,
+            iconAdd: null,
+            iconHeader: null,
+            plain: true,
+            labelWidth: 150,
+            containerShadowCls: null,
+            tabpanelShadowCls: 'header-tabs-tabpanel ' + Ext.baseCSSPrefix + 'shadow'
         }
     },
     //</example>
@@ -62,6 +86,7 @@ Ext.define('KitchenSink.view.tab.HeaderTabs', {
 
     items: [{
         xtype: 'fieldset',
+        cls: 'header-tabs-fieldset',
         title: 'Options',
         layout: 'auto',
         margin: '0 20 0 0',
@@ -141,6 +166,7 @@ Ext.define('KitchenSink.view.tab.HeaderTabs', {
     }, {
         xtype: 'tabpanel',
         title: 'Tab Panel',
+        cls: '${tabpanelShadowCls}',
         flex: 1,
         height: 500,
         icon: '${iconHeader}',

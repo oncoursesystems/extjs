@@ -46,7 +46,9 @@ Ext.define('Ext.Glyph', {
      *     new Ext.Glyph('xf015@FontAwesome');  // The "home" icon in the FontAwesome font.
      */
     constructor: function(glyph) {
-        glyph && this.setGlyph(glyph);
+        if (glyph) {
+            this.setGlyph(glyph);
+        }
     },
 
     /**
@@ -68,7 +70,7 @@ Ext.define('Ext.Glyph', {
         var glyphParts;
 
         this.glyphConfig = glyph;
-        
+
         if (typeof glyph === 'string') {
             glyphParts = glyph.split('@');
             glyph = isNaN(glyphParts[0])

@@ -140,7 +140,7 @@ Ext.define('Ext.draw.modifier.Animation', {
         var any, key, attrs, easing, i, ln;
 
         oldEasings = oldEasings || {};
-        
+
         for (key in newEasings) {
             any = true;
             easing = newEasings[key];
@@ -175,7 +175,7 @@ Ext.define('Ext.draw.modifier.Animation', {
             i, ln;
 
         attrs = Ext.Array.from(attrs).slice();
-        
+
         for (i = 0, ln = attrs.length; i < ln; i++) {
             customEasings[attrs[i]] = easing;
         }
@@ -189,7 +189,7 @@ Ext.define('Ext.draw.modifier.Animation', {
      */
     clearEasingOn: function(attrs) {
         var i, ln;
-        
+
         attrs = Ext.Array.from(attrs, true);
 
         for (i = 0, ln = attrs.length; i < ln; i++) {
@@ -201,7 +201,7 @@ Ext.define('Ext.draw.modifier.Animation', {
         var any, key, duration, attrs, i, ln;
 
         oldDurations = oldDurations || {};
-        
+
         for (key in newDurations) {
             any = true;
             duration = newDurations[key];
@@ -246,7 +246,7 @@ Ext.define('Ext.draw.modifier.Animation', {
      */
     clearDurationOn: function(attrs) {
         var i, ln;
-        
+
         attrs = Ext.Array.from(attrs, true);
 
         for (i = 0, ln = attrs.length; i < ln; i++) {
@@ -391,7 +391,7 @@ Ext.define('Ext.draw.modifier.Animation', {
                         targets[name] = newValue;
                         delete changes[name];
                         ignite = true;
-                        
+
                         continue;
                     }
                     else {
@@ -427,7 +427,7 @@ Ext.define('Ext.draw.modifier.Animation', {
         if (!attr.animating) {
             return {};
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var changes = {},
             any = false,
@@ -467,7 +467,7 @@ Ext.define('Ext.draw.modifier.Animation', {
                 changes[name] = timer.serve(
                     timer.compute(timer.source, timer.target, timer.easing(delta), attr[name])
                 );
-                
+
                 any = true;
             }
         }

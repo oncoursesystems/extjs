@@ -7,7 +7,7 @@
 Ext.define('Ext.data.proxy.Client', {
     extend: 'Ext.data.proxy.Proxy',
     alternateClassName: 'Ext.data.ClientProxy',
-    
+
     /**
      * @property {Boolean} isSynchronous
      * `true` in this class to identify that requests made on this proxy are

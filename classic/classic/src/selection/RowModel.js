@@ -46,7 +46,6 @@ Ext.define('Ext.selection.RowModel', {
         'Ext.grid.CellContext'
     ],
 
-
     /**
      * @cfg {Boolean} enableKeyNav
      *
@@ -155,7 +154,7 @@ Ext.define('Ext.selection.RowModel', {
      */
     getCurrentPosition: function() {
         var firstSelection = this.selected.getAt(0);
-        
+
         if (firstSelection) {
             return new Ext.grid.CellContext(this.view).setPosition(
                 this.store.indexOf(firstSelection), 0
@@ -169,7 +168,7 @@ Ext.define('Ext.selection.RowModel', {
                 position.row, position.column
             );
         }
-        
+
         this.select(position.record, keepExisting);
     },
 

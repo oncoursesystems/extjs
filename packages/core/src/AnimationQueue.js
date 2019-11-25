@@ -174,7 +174,7 @@ Ext.define('Ext.AnimationQueue', {
         if (this.animationFrameId) {
             Ext.unraf(this.animationFrameId);
         }
-        
+
         this.animationFrameId = null;
     },
 
@@ -189,7 +189,6 @@ Ext.define('Ext.AnimationQueue', {
             queue = me.queue,
             ln = queue.length,
             i, item;
-
 
         if (!me.isRunning) {
             return;
@@ -255,12 +254,12 @@ Ext.define('Ext.AnimationQueue', {
                 return true;
             }
         }
-        
+
         if (!listeners.length && me.idleTimer) {
             Ext.undefer(me.idleTimer);
             delete me.idleTimer;
         }
-        
+
         if (!listeners.length && me.idleQueueTimer) {
             Ext.undefer(me.idleQueueTimer);
             delete me.idleQueueTimer;

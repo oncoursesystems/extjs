@@ -550,7 +550,7 @@ Ext.define('Ext.container.Container', {
      *
      * @since 2.3.0
      */
-    
+
     /**
      * @cfg {String} defaultType
      * The default {@link Ext.Component xtype} of child Components to create in this Container when
@@ -697,14 +697,14 @@ Ext.define('Ext.container.Container', {
      * and not passing them as multiple arguments or an array.
      */
     suspendLayout: false,
-    
+
     /**
      * @cfg {String} defaultFocus
      *
      * Specifies a child Component to receive focus when this Container's {@link #method-focus}
      * method is called. Should be a valid {@link Ext.ComponentQuery query} selector.
      */
-    
+
     /**
      * When set to `true`, two elements are added to the container's element. These are the
      * `{@link #tabGuardBeforeEl}` and `{@link #tabGuardAfterEl}`.
@@ -741,7 +741,7 @@ Ext.define('Ext.container.Container', {
             ' style="width:0px;height:0px;">' +
         '</span>',
     /* eslint-enable indent, max-len */
-    
+
     /**
      * @property {Object} tabGuardElements
      * Read only object containing property names for tab guard elements, keyed by position.
@@ -752,7 +752,7 @@ Ext.define('Ext.container.Container', {
         before: 'tabGuardBeforeEl',
         after: 'tabGuardAfterEl'
     },
-    
+
     /**
      * @property {Number} tabGuardBeforeIndex The tabIndex attribute value to assign
      * to the "before" tab guard element. Default is `undefined` for automatic detection
@@ -760,7 +760,7 @@ Ext.define('Ext.container.Container', {
      * @private
      * @since 6.2.0
      */
-    
+
     /**
      * @property {Number} tabGuardAfterIndex The tabIndex attribute value to assign
      * to the "after" tab guard element. Default is `undefined` for automatic detection
@@ -798,7 +798,7 @@ Ext.define('Ext.container.Container', {
      * @inheritdoc
      */
     ariaRole: 'presentation',
-    
+
     /**
      * @cfg baseCls
      * @inheritdoc
@@ -811,7 +811,7 @@ Ext.define('Ext.container.Container', {
      * @private
      */
     layoutCounter: 0,
-    
+
     // ***********************************************************************************
     // End Properties
     // ***********************************************************************************
@@ -965,7 +965,7 @@ Ext.define('Ext.container.Container', {
         // loop
         for (i = 0; i < length; i++) {
             item = items[i];
-            
+
             //<debug>
             if (!item) {
                 Ext.raise("Cannot add null item to Container with itemId/id: " + me.getItemId());
@@ -980,14 +980,14 @@ Ext.define('Ext.container.Container', {
             pos = (index < 0) ? me.items.length : (index + i);
             instanced = !!item.instancedCmp;
             delete item.instancedCmp;
-            
+
             // Floating Components are not added into the items collection,
             // but to a separate floatingItems collection
             if (item.floating) {
                 (me.floatingItems || (me.floatingItems = new Ext.util.ItemCollection())).add(item);
                 item.onAdded(me, pos, instanced);
                 delete item.$initParent;
-                
+
                 if (me.hasListeners.add) {
                     me.fireEvent('add', me, item, pos);
                 }
@@ -997,16 +997,16 @@ Ext.define('Ext.container.Container', {
                 me.items.insert(pos, item);
                 item.onAdded(me, pos, instanced);
                 delete item.$initParent;
-                
+
                 if (me.focusableContainer) {
                     me.onFocusableChildAdd(item);
                 }
-                
+
                 me.onAdd(item, pos);
                 layout.onAdd(item, pos);
 
                 needsLayout = true;
-                
+
                 if (me.hasListeners.add) {
                     me.fireEvent('add', me, item, pos);
                 }
@@ -1028,18 +1028,18 @@ Ext.define('Ext.container.Container', {
             if (length && me.focusableContainer) {
                 me.$initFocusableContainerAfterLayout = true;
             }
-            
+
             Ext.resumeLayouts(true);
         }
 
         return ret;
     },
-    
+
     onAdded: function(container, pos, instanced) {
         this.callParent([container, pos, instanced]);
         this.containerOnAdded(container, instanced);
     },
-    
+
     /**
      * @method onRemoved
      * @inheritdoc
@@ -1060,10 +1060,10 @@ Ext.define('Ext.container.Container', {
         if (floaters) {
             floaters = floaters.items;
             floaterCount = floaters.length;
-            
+
             for (i = 0; i < floaterCount; i++) {
                 floater = floaters[i];
-                
+
                 if (!floater.rendered && floater.autoShow) {
                     floater.show();
                 }
@@ -1088,13 +1088,13 @@ Ext.define('Ext.container.Container', {
         if (me.hasListeners.afterlayout) {
             me.fireEvent('afterlayout', me, layout);
         }
-        
+
         // focusableContainer could have changed between setting the flag in add()
         // and actual layout, so check again
         if (me.focusableContainer && me.$initFocusableContainerAfterLayout) {
             me.initFocusableContainer();
         }
-        
+
         delete me.$initFocusableContainerAfterLayout;
     },
 
@@ -1103,7 +1103,7 @@ Ext.define('Ext.container.Container', {
             items = me.items,
             floatingItems = me.floatingItems,
             c;
-        
+
         if (me.focusableContainer) {
             me.destroyFocusableContainer();
         }
@@ -1112,9 +1112,9 @@ Ext.define('Ext.container.Container', {
             while ((c = items.first())) {
                 me.doRemove(c, true);
             }
-            
+
             items.destroy();
-            
+
             me.items = null;
         }
 
@@ -1122,14 +1122,14 @@ Ext.define('Ext.container.Container', {
             while ((c = floatingItems.first())) {
                 me.doRemove(c, true);
             }
-            
+
             floatingItems.destroy();
-            
+
             me.floatingItems = null;
         }
-        
+
         Ext.destroy(me.layout);
-        
+
         me.callParent();
     },
 
@@ -1180,7 +1180,7 @@ Ext.define('Ext.container.Container', {
         if (fn.apply(scope || me, args) !== false) {
             for (; i < len; i++) {
                 c = cs[i];
-                
+
                 if (c.cascade) {
                     c.cascade(fn, scope, origArgs);
                 }
@@ -1190,7 +1190,7 @@ Ext.define('Ext.container.Container', {
                 }
             }
         }
-        
+
         return this;
     },
 
@@ -1205,17 +1205,17 @@ Ext.define('Ext.container.Container', {
      */
     contains: function(comp, deep) {
         var result = false;
-        
+
         if (deep) {
             this.cascade(function(c) {
                 // Only test if the item is a container
                 if (c.contains && c.contains(comp)) {
                     result = true;
-                    
+
                     return false;
                 }
             });
-            
+
             return result;
         }
         else {
@@ -1244,11 +1244,11 @@ Ext.define('Ext.container.Container', {
                 itemsToDisable[i].disable(silent, true);
             }
         }
-        
+
         if (me.focusableContainer) {
             me.activateFocusableContainer(false);
         }
-        
+
         return me;
     },
 
@@ -1272,7 +1272,7 @@ Ext.define('Ext.container.Container', {
                 itemsToDisable[i].enable(silent, true);
             }
         }
-        
+
         if (me.focusableContainer) {
             me.activateFocusableContainer(true);
         }
@@ -1295,16 +1295,16 @@ Ext.define('Ext.container.Container', {
             ln = it.length;
 
         el = Ext.getDom(el);
-        
+
         for (; i < ln; i++) {
             item = it[i];
             itemEl = item.getEl();
-            
+
             if (itemEl && ((itemEl.dom === el) || itemEl.contains(el))) {
                 return (deep && item.getChildByElement) ? item.getChildByElement(el, deep) : item;
             }
         }
-        
+
         return null;
     },
 
@@ -1353,7 +1353,7 @@ Ext.define('Ext.container.Container', {
      */
     getFocusEl: function() {
         var delegate = this.getDefaultFocus();
-        
+
         if (delegate) {
             // DO NOT drill down to delegate's focusEl or return its main el here.
             // Container's getFocusEl() is supposed to return delegates as components,
@@ -1408,7 +1408,7 @@ Ext.define('Ext.container.Container', {
         for (; i < len; i++) {
             item = items[i];
             result[result.length] = item;
-            
+
             if (deep && item.getRefItems) {
                 result.push.apply(result, item.getRefItems(true));
             }
@@ -1418,11 +1418,11 @@ Ext.define('Ext.container.Container', {
         if (me.floatingItems) {
             items = me.floatingItems.items;
             len = items.length;
-            
+
             for (i = 0; i < len; i++) {
                 item = items[i];
                 result[result.length] = item;
-                
+
                 if (deep && item.getRefItems) {
                     result.push.apply(result, item.getRefItems(true));
                 }
@@ -1431,27 +1431,27 @@ Ext.define('Ext.container.Container', {
 
         return result;
     },
-    
+
     /**
      * Finds the configured default focus item. See {@link #defaultFocus}.
      */
     getDefaultFocus: function() {
         var defaultFocus = this.defaultFocus,
             result;
-        
+
         // This might not work during initConfig
         if (defaultFocus && !this.isConfiguring) {
             result = this.down(defaultFocus);
         }
-        
+
         // Returning undefined is ok
         return result;
     },
-    
+
     setDefaultFocus: function(value) {
         this.defaultFocus = value;
     },
-    
+
     initComponent: function() {
         var me = this;
 
@@ -1568,15 +1568,15 @@ Ext.define('Ext.container.Container', {
      */
     insert: function(index, component) {
         var compIdx;
-        
+
         if (component && component.isComponent) {
             compIdx = this.items.indexOf(component);
-            
+
             if (compIdx !== -1) {
                 return this.move(compIdx, index);
             }
         }
-        
+
         return this.add(index, component);
     },
 
@@ -1624,7 +1624,7 @@ Ext.define('Ext.container.Container', {
                 comp.instancedCmp = true;
             }
         }
-        
+
         return comp;
     },
 
@@ -1646,28 +1646,28 @@ Ext.define('Ext.container.Container', {
         if (fromIdx.isComponent) {
             fromIdx = items.indexOf(fromIdx);
         }
-        
+
         item = items.getAt(fromIdx);
-        
+
         if (fromIdx !== toIdx) {
             item = items.removeAt(fromIdx);
-            
+
             if (item === false) {
                 return false;
             }
-            
+
             toIdx = Math.min(toIdx, items.getCount());
             items.insert(toIdx, item);
-            
+
             me.onMove(item, fromIdx, toIdx);
-            
+
             if (me.hasListeners.childmove) {
                 me.fireEvent('childmove', me, item, fromIdx, toIdx);
             }
-            
+
             me.updateLayout();
         }
-        
+
         return item;
     },
 
@@ -1711,16 +1711,16 @@ Ext.define('Ext.container.Container', {
                 refocusEl.suspendFocusEvents();
                 item.isLayoutMoving = true;
             }
-            
+
             item = this.layout.moveItemBefore(item, before);
-            
+
             if (refocusEl) {
                 item.isLayoutMoving = false;
                 refocusEl.focus();
                 refocusEl.resumeFocusEvents();
             }
         }
-        
+
         return item;
     },
 
@@ -1757,7 +1757,7 @@ Ext.define('Ext.container.Container', {
             index = after ? layout.getMoveAfterIndex(after) : 0;
             item = this.moveBefore(item, this.items.getAt(index));
         }
-        
+
         return item;
     },
 
@@ -1792,7 +1792,7 @@ Ext.define('Ext.container.Container', {
                 result = items.getAt(childIndex + 1);
             }
         }
-        
+
         return result || null;
     },
 
@@ -1832,7 +1832,7 @@ Ext.define('Ext.container.Container', {
 
         if (owner && owner !== this) {
             item.isLayoutMoving = true;
-            
+
             owner.remove(item, {
                 destroy: false,
                 detach: false
@@ -1903,7 +1903,7 @@ Ext.define('Ext.container.Container', {
                 result = items.getAt(childIndex - 1);
             }
         }
-        
+
         return result || null;
     },
 
@@ -1953,7 +1953,7 @@ Ext.define('Ext.container.Container', {
             if (!me.destroying && !me.destroyAfterRemoving && !c.floating) {
                 me.updateLayout();
             }
-            
+
             if (me.destroyAfterRemoving) {
                 me.destroy();
             }
@@ -1985,13 +1985,13 @@ Ext.define('Ext.container.Container', {
         else {
             removeItems = me.items.items.slice();
         }
-        
+
         len = removeItems.length;
 
         // Suspend Layouts while we remove multiple items from the container
         Ext.suspendLayouts();
         me.removingAll = true;
-        
+
         for (; i < len; i++) {
             item = removeItems[i];
             me.remove(item, autoDestroy);
@@ -2000,13 +2000,13 @@ Ext.define('Ext.container.Container', {
                 items.push(item);
             }
         }
-        
+
         me.removingAll = false;
-        
+
         // Resume Layouts now that all items have been removed and do a single layout
         // (if we removed anything!)
         Ext.resumeLayouts(!!len);
-        
+
         return items;
     },
 
@@ -2032,7 +2032,7 @@ Ext.define('Ext.container.Container', {
                     type: configuration
                 };
             }
-            
+
             type = configuration.type;
 
             if (oldLayout) {
@@ -2056,7 +2056,7 @@ Ext.define('Ext.container.Container', {
                             type: oldLayout
                         };
                     }
-                    
+
                     configuration = Ext.merge({}, oldLayout, configuration);
                 }
             }
@@ -2065,10 +2065,10 @@ Ext.define('Ext.container.Container', {
                 configuration.owner = this;
                 configuration = Ext.Factory.layout(configuration);
             }
-            
+
             configuration.setOwner(this);
         }
-        
+
         me.layout = configuration;
 
         if (me.rendered) {
@@ -2117,29 +2117,29 @@ Ext.define('Ext.container.Container', {
      */
     getAction: function(name) {
         var owner = this;
-        
+
         for (owner = this; owner; owner = owner.getRefOwner()) {
             if (owner.actions && owner.actions[name]) {
                 return owner.actions[name];
             }
         }
     },
-    
+
     onShowComplete: function(cb, scope) {
         var me = this;
-        
+
         me.callParent([cb, scope]);
-        
+
         if (me.focusableContainer && me.activateFocusableContainer) {
             me.activateFocusableContainer();
         }
     },
-    
+
     onFocusEnter: function(e) {
         var me = this;
 
         me.callParent([e]);
-        
+
         // We DO NOT check if `me` is focusable here. The reason is that
         // non-focusable containers need to track focus entering their
         // children so that revertFocus would work if these children
@@ -2148,12 +2148,12 @@ Ext.define('Ext.container.Container', {
             me.mixins.focusablecontainer.onFocusEnter.call(me, e);
         }
     },
-    
+
     onFocusLeave: function(e) {
         var me = this;
-        
+
         me.callParent([e]);
-        
+
         // Ditto
         if (me.focusableContainer && !me.destroying && !me.destroyed) {
             me.mixins.focusablecontainer.onFocusLeave.call(me, e);
@@ -2195,7 +2195,7 @@ Ext.define('Ext.container.Container', {
                     config = me.self.getConfigurator().merge(me, Ext.Object.fork(defaults), config);
                 }
             }
-            
+
             return config;
         },
 
@@ -2229,7 +2229,7 @@ Ext.define('Ext.container.Container', {
                 if (flags.destroy != null) {
                     doDestroy = flags.destroy;
                 }
-                
+
                 if (flags.detach != null) {
                     doDetach = flags.detach;
                 }
@@ -2253,7 +2253,7 @@ Ext.define('Ext.container.Container', {
                 if (layout.running) {
                     Ext.Component.cancelLayout(component, isDestroying);
                 }
-                
+
                 layout.onRemove(component, isDestroying);
             }
 
@@ -2280,7 +2280,7 @@ Ext.define('Ext.container.Container', {
                 if (hasLayout && !floating) {
                     layout.afterRemove(component);
                 }
-                
+
                 if (doDetach && component.rendered) {
                     component.detachFromBody();
                 }
@@ -2289,7 +2289,7 @@ Ext.define('Ext.container.Container', {
 
         finishRenderChildren: function() {
             var layout;
-            
+
             this.callParent();
 
             layout = this.getLayout();
@@ -2345,7 +2345,7 @@ Ext.define('Ext.container.Container', {
 
             for (; i < len; i++) {
                 item = items[i];
-                
+
                 if (item == null) {
                     Ext.Array.erase(items, i, 1);
                     --i;
@@ -2358,16 +2358,16 @@ Ext.define('Ext.container.Container', {
 
                     // Tell the item we're in a container during construction
                     item.$initParent = me;
-                    
+
                     if (item.isComponent) {
                         // When this was passed to us, it's an already constructed component
                         // This is useful to know because we can make decisions regarding the
                         // state of the component if it's newly created
                         item.instancedCmp = true;
                     }
-                    
+
                     items[i] = me.lookupComponent(item);
-                    
+
                     // delete here because item may have been a config, so we don't
                     // want to mutate it
                     delete item.$initParent;
@@ -2386,10 +2386,10 @@ Ext.define('Ext.container.Container', {
             if (floaters) {
                 floaters = floaters.items;
                 floaterCount = floaters.length;
-                
+
                 for (i = 0; i < floaterCount; i++) {
                     floater = floaters[i];
-                    
+
                     if (floater.el && !floater.hidden) {
                         floater.setPosition(floater.x, floater.y);
                     }
@@ -2404,24 +2404,24 @@ Ext.define('Ext.container.Container', {
                 minTabIndex = me.tabGuardBeforeIndex || 0,
                 maxTabIndex = me.tabGuardAfterIndex || 0,
                 i, tabIndex, nodes;
-            
+
             if (!me.rendered || !me.tabGuard) {
                 return;
             }
-            
+
             nodes = me.el.findTabbableElements({
                 skipSelf: true
             });
-            
+
             // Both tab guards may be in the list, disregard them
             if (nodes[0] === beforeGuard.dom) {
                 nodes.shift();
             }
-            
+
             if (nodes[nodes.length - 1] === afterGuard.dom) {
                 nodes.pop();
             }
-            
+
             if (nodes && nodes.length) {
                 // In some cases it might be desirable to configure before and after
                 // guard elements' tabIndex explicitly but if it is missing we try to
@@ -2433,14 +2433,14 @@ Ext.define('Ext.container.Container', {
                         // Can't use node.tabIndex property here, IE8 will report 0
                         // even if tabIndex attribute is missing.
                         tabIndex = +nodes[i].getAttribute('tabIndex');
-                        
+
                         if (tabIndex > 0) {
                             minTabIndex = Math.min(minTabIndex, tabIndex);
                             maxTabIndex = Math.max(maxTabIndex, tabIndex);
                         }
                     }
                 }
-                
+
                 beforeGuard.dom.setAttribute('tabIndex', minTabIndex);
                 afterGuard.dom.setAttribute('tabIndex', maxTabIndex);
             }
@@ -2450,12 +2450,12 @@ Ext.define('Ext.container.Container', {
                 beforeGuard.dom.removeAttribute('tabIndex');
                 afterGuard.dom.removeAttribute('tabIndex');
             }
-            
+
             if (me.onTabGuardFocusEnter) {
                 if (!beforeGuard.hasListeners.focusenter) {
                     beforeGuard.on('focusenter', me.onTabGuardFocusEnter, me);
                 }
-                
+
                 if (!afterGuard.hasListeners.focusenter) {
                     afterGuard.on('focusenter', me.onTabGuardFocusEnter, me);
                 }

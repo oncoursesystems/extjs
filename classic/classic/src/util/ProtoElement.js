@@ -90,7 +90,7 @@ Ext.define('Ext.util.ProtoElement', function() {
             if (!cls) {
                 return this;
             }
-            
+
             // eslint-disable-next-line vars-on-top
             var me = this,
                 add = (typeof cls === 'string') ? splitWords(cls) : cls,

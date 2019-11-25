@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.charts.line.PlotController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.line-plot',
 
-    onPanZoomReset: function () {
+    onPanZoomReset: function() {
         var chart = this.lookup('chart'),
             axes = chart.getAxes();
 
@@ -12,14 +12,14 @@ Ext.define('KitchenSink.view.charts.line.PlotController', {
         chart.redraw();
     },
 
-    onRefresh: function () {
+    onRefresh: function() {
         var chart = this.lookup('chart'),
             store = chart.getStore();
 
         store.refreshData();
     },
 
-    onAfterRender: function () {
+    onAfterRender: function() {
         var chart = this.lookup('chart'),
             toolbar = this.lookup('toolbar'),
             panzoom = chart.getInteractions()[0];
@@ -27,12 +27,17 @@ Ext.define('KitchenSink.view.charts.line.PlotController', {
         toolbar.add(panzoom.getModeToggleButton());
     },
 
-    onPreview: function () {
+    onPreview: function() {
+        var chart;
+
         if (Ext.isIE8) {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
+
             return;
         }
-        var chart = this.lookup('chart');
+
+        chart = this.lookup('chart');
+
         chart.preview();
     }
 

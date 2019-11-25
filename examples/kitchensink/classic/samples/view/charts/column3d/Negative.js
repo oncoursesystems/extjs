@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.charts.column3d.Negative', {
     xtype: 'column-negative-3d',
     requires: ['Ext.chart.theme.Muted'],
     controller: 'column-negative-3d',
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.charts.column3d.Negative', {
     }],
     bodyStyle: 'background: transparent !important',
     layout: 'fit',
-    // </example>
+    //</example>
 
     width: 650,
     height: '${height}',
@@ -31,6 +31,9 @@ Ext.define('KitchenSink.view.charts.column3d.Negative', {
             height: 500
         },
         graphite: {
+            height: 650
+        },
+        'classic-material': {
             height: 650
         }
     },
@@ -56,10 +59,12 @@ Ext.define('KitchenSink.view.charts.column3d.Negative', {
         downloadServerUrl: '//svg.sencha.io',
         innerPadding: '0 3 0 0',
         interactions: ['itemhighlight'],
-        animation: Ext.isIE8 ? false : {
-            easing: 'backOut',
-            duration: 500
-        },
+        animation: Ext.isIE8
+            ? false
+            : {
+                easing: 'backOut',
+                duration: 500
+            },
         axes: [{
             type: 'numeric3d',
             position: 'left',

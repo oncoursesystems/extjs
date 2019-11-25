@@ -113,12 +113,12 @@ Ext.define('Ext.grid.filters.filter.Base', {
     constructor: function(config) {
         var me = this,
             column;
-        
+
         // Calling Base constructor is very desirable for testing
         //<debug>
         me.callParent([config]);
         //</debug>
-        
+
         me.initConfig(config);
 
         column = me.column;
@@ -133,15 +133,15 @@ Ext.define('Ext.grid.filters.filter.Base', {
      */
     destroy: function() {
         var me = this;
-        
+
         if (me.task) {
             me.task.cancel();
             me.task = null;
         }
-        
+
         me.columnListeners = me.columnListeners.destroy();
         me.grid = me.menu = Ext.destroy(me.menu);
-        
+
         me.callParent();
     },
 
@@ -160,9 +160,9 @@ Ext.define('Ext.grid.filters.filter.Base', {
 
     createFilter: function(config, key) {
         var filter = new Ext.util.Filter(this.getFilterConfig(config, key));
-        
+
         filter.isGridFilter = true;
-        
+
         return filter;
     },
 
@@ -182,9 +182,9 @@ Ext.define('Ext.grid.filters.filter.Base', {
         if (key) {
             config.id += '-' + key;
         }
-        
+
         config.serializer = this.getSerializer();
-        
+
         return config;
     },
 
@@ -251,7 +251,7 @@ Ext.define('Ext.grid.filters.filter.Base', {
         if (field.isValid()) {
             if (keyCode === e.RETURN) {
                 me.menu.hide();
-                
+
                 return;
             }
 
@@ -301,7 +301,7 @@ Ext.define('Ext.grid.filters.filter.Base', {
      * @param {Object} data The value to set the filter
      * @template
      */
-    
+
     /**
      * Sets the status of the filter and fires the appropriate events.
      * @param {Boolean} active The new filter state.
@@ -316,7 +316,7 @@ Ext.define('Ext.grid.filters.filter.Base', {
 
             filterCollection = me.getGridStore().getFilters();
             filterCollection.beginUpdate();
-            
+
             if (active) {
                 me.activate();
             }
@@ -351,7 +351,7 @@ Ext.define('Ext.grid.filters.filter.Base', {
 
         menuItem.setMenu(me.menu, false);
         menuItem.setChecked(me.active);
-        
+
         // Disable the menu if filter.disabled explicitly set to true.
         menuItem.setDisabled(me.disabled === true);
 

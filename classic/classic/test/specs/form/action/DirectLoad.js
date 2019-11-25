@@ -1,13 +1,13 @@
 topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form.Basic'], function() {
     var provider, action, loadSpy, loadSpy2, submitSpy;
-    
+
     function makeApi(cfg) {
         cfg = Ext.apply({
             "namespace": "spec",
             type: "remoting",
             url: "fake"
         }, cfg);
-        
+
         provider = Ext.direct.Manager.addProvider(cfg);
     }
 
@@ -16,17 +16,17 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
             spy = spyOn(spec.TestDirect, name);
 
         spy.directCfg = directCfg;
-        
+
         return spy;
     }
-    
+
     function createAction(config) {
         config = config || {};
-        
+
         if (!config.form) {
             config.form = {};
         }
-        
+
         Ext.applyIf(config.form, {
             clearInvalid: Ext.emptyFn,
             markInvalid: Ext.emptyFn,
@@ -43,15 +43,15 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
                 submit: 'spec.TestDirect.submit'
             }
         });
-        
+
         action = new Ext.form.action.DirectLoad(config);
-        
+
         return action;
     }
 
     function createActionWithCallbackArgs(config, result, trans) {
         createAction(config);
-        
+
         loadSpy.andCallFake(function() {
             var cb = arguments[1],
                 scope = arguments[2];
@@ -75,24 +75,24 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
                 }]
             }
         });
-        
+
         loadSpy = makeSpy('load');
         loadSpy2 = makeSpy('load2');
         submitSpy = makeSpy('submit');
     });
-    
+
     afterEach(function() {
         if (provider) {
             Ext.direct.Manager.removeProvider(provider);
             provider.destroy();
         }
-        
+
         Ext.direct.Manager.clearAllMethods();
-        
+
         if (action) {
             action.destroy();
         }
-        
+
         loadSpy = loadSpy2 = submitSpy = action = provider = window.spec = null;
     });
 
@@ -115,17 +115,17 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
     describe("run", function() {
         it("should not resolve 'load' method before first invocation", function() {
             createAction();
-            
+
             expect(action.form.api.load).toBe('spec.TestDirect.load');
         });
-        
+
         it("should resolve 'load' method on first invocation", function() {
             createAction();
             action.run();
-            
+
             expect(Ext.isFunction(action.form.api.load)).toBeTruthy();
         });
-        
+
         it("should resolve prefixed 'load' method", function() {
             createAction({
                 form: {
@@ -136,24 +136,24 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
                     }
                 }
             });
-            
+
             action.run();
-            
+
             expect(loadSpy).toHaveBeenCalled();
         });
-        
+
         it("should raise an error if it cannot resolve 'load' method", function() {
             createAction();
             window.spec = null;
-            
+
             var ex = "Cannot resolve Direct API method 'spec.TestDirect.load' for " +
                      "load action in Ext.form.action.DirectLoad instance with id: unknown";
-            
+
             expect(function() {
                 action.run();
             }).toThrow(ex);
         });
-        
+
         it("should invoke the 'load' function in the BasicForm's 'api' config", function() {
             createAction();
             action.run();
@@ -169,7 +169,7 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
                     foo: 'bar'
                 }
             });
-            
+
             action.run();
             expect(action.form.api.load.mostRecentCall.args[0]).toEqual({ foo: 'bar' });
         });
@@ -187,9 +187,9 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
                     two: 'bar'
                 }
             });
-            
+
             action.run();
-            
+
             var args = action.form.api.load.mostRecentCall.args;
 
             expect(args[0]).toEqual('foo');
@@ -210,9 +210,9 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
                     two: '2'
                 }
             });
-            
+
             action.run();
-            
+
             expect(action.form.api.load.mostRecentCall.args[0]).toEqual({
                 baseOne: '1',
                 baseTwo: '2',
@@ -230,44 +230,44 @@ topSuite("Ext.form.action.DirectLoad", ['Ext.direct.RemotingProvider', 'Ext.form
                     foo: 'bar'
                 }
             });
-            
+
             action.run();
-            
+
             var args = action.form.api.load.mostRecentCall.args;
 
             expect(typeof args[args.length - 3]).toEqual('function');
             expect(args[args.length - 2]).toBe(action);
         });
-        
+
         describe("metadata", function() {
             beforeEach(function() {
                 // Grr, this is a kludge :(
                 loadSpy.directCfg.metadata = {
                     params: ['foo', 'bar']
                 };
-                
+
                 createAction({
                     form: {
                         metadata: { foo: 42, bar: false }
                     }
                 });
             });
-            
+
             it("should override form metadata with options values", function() {
                 // Form.load(options) will apply options via Action constructor
                 Ext.apply(action, { metadata: { foo: -1, bar: true } });
-                
+
                 action.run();
-                
+
                 expect(loadSpy.mostRecentCall.args[3]).toEqual({
                     metadata: { foo: -1, bar: true },
                     timeout: 30000
                 });
             });
-            
+
             it("should default to form metadata", function() {
                 action.run();
-        
+
                 expect(loadSpy.mostRecentCall.args[3]).toEqual({
                     metadata: { foo: 42, bar: false },
                     timeout: 30000

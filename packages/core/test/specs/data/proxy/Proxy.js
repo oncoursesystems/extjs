@@ -24,25 +24,24 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
     beforeEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = false;
         proxy = new Proxy({});
-        
+
         AlienModel = Ext.define(AlienModelName, AlienModelConfig);
         HumanModel = Ext.define(HumanModelName, HumanModelConfig);
 
     });
-    
+
     afterEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = true;
         Ext.data.Model.schema.clear();
         Ext.undefine('spec.Alien');
         Ext.undefine('spec.Human');
-        
+
         if (proxy) {
             proxy.destroy();
         }
-        
+
         proxy = null;
     });
-    
 
     it("should mixin Ext.mixins.Observable", function() {
         expect(proxy.mixins.observable).toEqual(Ext.mixin.Observable.prototype);
@@ -53,13 +52,13 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
             expect(proxy.getBatchOrder()).toBe('create,update,destroy');
         });
     });
-    
+
     describe("destruction", function() {
         it("should call parent destructor", function() {
             proxy.destroy();
-            
+
             expect(proxy.isDestroyed).toBe(true);
-            
+
             proxy = null;
         });
     });
@@ -193,45 +192,45 @@ topSuite("Ext.data.proxy.Proxy", ['Ext.data.ArrayStore'], function() {
             expect(args[1]).toBe(metaArg);
         });
     });
-    
+
     describe("pending operations", function() {
         var op1, op2;
-        
+
         beforeEach(function() {
             op1 = new Ext.data.operation.Operation();
             op2 = new Ext.data.operation.Operation();
-            
+
             spyOn(op1, 'abort');
             spyOn(op2, 'abort');
-            
+
             proxy.pendingOperations[op1._internalId] = op1;
             proxy.pendingOperations[op2._internalId] = op2;
         });
-        
+
         afterEach(function() {
             op1 = op2 = proxy = null;
         });
-        
+
         describe("aborting", function() {
             beforeEach(function() {
                 op1.execute();
                 proxy.destroy();
             });
-            
+
             it("should abort running operations", function() {
                 expect(op1.abort).toHaveBeenCalled();
             });
-            
+
             it("should not abort non-running operations", function() {
                 expect(op2.abort).not.toHaveBeenCalled();
             });
         });
-        
+
         describe("cleanup", function() {
             beforeEach(function() {
                 proxy.destroy();
             });
-            
+
             it("should null pendingOperations", function() {
                 expect(proxy.pendingOperations).toBe(null);
             });

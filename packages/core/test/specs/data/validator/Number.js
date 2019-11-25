@@ -3,7 +3,7 @@ topSuite("Ext.data.validator.Number", function() {
 
     function validate(value) {
         v = new Ext.data.validator.Number();
-        
+
         return v.validate(value);
     }
 

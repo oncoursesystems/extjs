@@ -31,7 +31,7 @@ topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore',
 
         return data;
     }
-    
+
     beforeEach(function() {
         // Silence Sencha download server warnings
         spyOn(Ext.log, 'warn');
@@ -740,7 +740,7 @@ topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore',
                 chart.legendStore.sort('name', 'ASC');
                 performLayoutSpy.reset();
             });
-            
+
            waitsForSpy(performLayoutSpy, "legend layout to finish after ASC sort");
 
             runs(function() {
@@ -787,7 +787,6 @@ topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore',
             chart = Ext.destroy(chart);
             layoutEnd = false;
         });
-
 
         it('should use theme colors in a cartesian (bar) chart', function() {
             runs(function() {
@@ -1107,7 +1106,7 @@ topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore',
                     highlight: true,
                     tooltip: {
                         trackMouse: true,
-    
+
                         renderer: function(tt, storeItem, item) {
                             tt.setHtml(storeItem.get('os') + ': ' + storeItem.get('data1') + '%');
                         }
@@ -1124,14 +1123,14 @@ topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore',
             waitsFor(function() {
                 return layoutDone;
             });
-            
+
             runs(function() {
                 var canvas = document.querySelector('.x-surface-canvas');
 
                 expect(canvas).not.toBe(null);
             });
-            
+
         });
-        
+
     });
 });

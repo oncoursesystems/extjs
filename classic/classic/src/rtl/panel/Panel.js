@@ -12,7 +12,7 @@ Ext.define('Ext.rtl.panel.Panel', {
         if (!!Ext.rootInheritedState.rtl !== this.isLocalRtl()) {
             collapseDir = this.rtlCollapseDirs[collapseDir];
         }
-        
+
         return this.callParent(arguments);
     }
 });

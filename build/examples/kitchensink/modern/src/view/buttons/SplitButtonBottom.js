@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.buttons.SplitButtonBottom', {
         'Ext.SplitButton'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'ViewModel',
         path: 'modern/src/view/buttons/ExtraModel.js'
@@ -62,7 +62,7 @@ Ext.define('KitchenSink.view.buttons.SplitButtonBottom', {
     cls: 'demo-buttons-extra',
     padding: '${padding}',
     shadow: false,
-    // </example>
+    //</example>
 
     scrollable: 'y',
     width: '${width}',
@@ -76,7 +76,7 @@ Ext.define('KitchenSink.view.buttons.SplitButtonBottom', {
         cls: 'demo-solid-background',
         shadow: '${shadow}',
         defaults: {
-            flex: '1 1 auto', //this allows auto-height in vbox
+            flex: '1 1 auto', // this allows auto-height in vbox
             margin: '${stripMargins}',
             layout: {
                 type: '${layout}'
@@ -305,22 +305,22 @@ Ext.define('KitchenSink.view.buttons.SplitButtonBottom', {
                     group: 'value'
                 },
                 items: [{
-                        text: 'None',
-                        value: '',
-                        checked: true
-                    },
-                    {
-                        text: 'Action',
-                        value: 'action'
-                    },
-                    {
-                        text: 'Decline',
-                        value: 'decline'
-                    },
-                    {
-                        text: 'Confirm',
-                        value: 'confirm'
-                    }
+                    text: 'None',
+                    value: '',
+                    checked: true
+                },
+                        {
+                            text: 'Action',
+                            value: 'action'
+                        },
+                        {
+                            text: 'Decline',
+                            value: 'decline'
+                        },
+                        {
+                            text: 'Confirm',
+                            value: 'confirm'
+                        }
                 ]
             }
         }, {
@@ -334,18 +334,18 @@ Ext.define('KitchenSink.view.buttons.SplitButtonBottom', {
                     group: 'value'
                 },
                 items: [{
-                        text: 'Text',
-                        value: 'text',
-                        checked: true
-                    },
-                    {
-                        text: 'Icon',
-                        value: 'icon'
-                    },
-                    {
-                        text: 'Text & Icon',
-                        value: 'text-icon'
-                    }
+                    text: 'Text',
+                    value: 'text',
+                    checked: true
+                },
+                        {
+                            text: 'Icon',
+                            value: 'icon'
+                        },
+                        {
+                            text: 'Text & Icon',
+                            value: 'text-icon'
+                        }
                 ]
             }
         }, {

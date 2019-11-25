@@ -38,9 +38,9 @@ Ext.define('Ext.menu.DatePicker', {
     requires: [
         'Ext.picker.Date'
     ],
-     
+
     ariaRole: 'dialog',
-    
+
     /**
      * @cfg {String} ariaLabel
      * The ARIA label for the Date Picker menu.
@@ -59,7 +59,7 @@ Ext.define('Ext.menu.DatePicker', {
      * An id to assign to the underlying date picker.
      */
     pickerId: null,
-    
+
     /**
      * @cfg {Object} [pickerCfg] Date picker configuration. This config
      * takes priority over {@link #pickerId}.
@@ -74,7 +74,7 @@ Ext.define('Ext.menu.DatePicker', {
      * @property {Ext.picker.Date} picker
      * The {@link Ext.picker.Date} instance for this DateMenu
      */
-    
+
     // DatePicker menu is a special case; Date picker does all key handling
     // except the Esc key which is also handled unlike the ordinary menu
     focusableContainer: false,
@@ -82,7 +82,7 @@ Ext.define('Ext.menu.DatePicker', {
     initComponent: function() {
         var me = this,
             cfg, pickerConfig;
-            
+
         if (me.pickerCfg) {
             pickerConfig = Ext.apply({
                 cls: Ext.baseCSSPrefix + 'menu-date-item',
@@ -94,10 +94,10 @@ Ext.define('Ext.menu.DatePicker', {
         else {
             // Need to keep this insanity for backwards compat :(
             cfg = Ext.apply({}, me.initialConfig);
-            
+
             // Ensure we clear any listeners so they aren't duplicated
             delete cfg.listeners;
-            
+
             pickerConfig = Ext.applyIf({
                 cls: Ext.baseCSSPrefix + 'menu-date-item',
                 margin: 0,
@@ -105,7 +105,7 @@ Ext.define('Ext.menu.DatePicker', {
                 xtype: 'datepicker'
             }, cfg);
         }
-        
+
         if (me.pickerId != null && pickerConfig.id == null) {
             pickerConfig.id = me.pickerId;
         }
@@ -114,7 +114,7 @@ Ext.define('Ext.menu.DatePicker', {
         // This MUST not be propagated down into the picker. The picker's getRefOwner
         // must follow the ownerCt and find this Menu.
         delete pickerConfig.ownerCmp;
-        
+
         Ext.apply(me, {
             showSeparator: false,
             plain: true,
@@ -126,7 +126,7 @@ Ext.define('Ext.menu.DatePicker', {
         me.callParent();
 
         me.picker = me.down('datepicker');
-        
+
         /**
          * @event select
          * @inheritdoc Ext.picker.Date#select
@@ -137,10 +137,10 @@ Ext.define('Ext.menu.DatePicker', {
             me.on('select', me.hidePickerOnSelect, me);
         }
     },
-    
+
     onEscapeKey: function(e) {
         var me = this;
-        
+
         // Unlike the other menus, DatePicker menu should not close completely on Esc key.
         // This is because ordinary menu items will allow using Left arrow key to return
         // to the parent menu; however in the Date picker left arrow is used to navigate

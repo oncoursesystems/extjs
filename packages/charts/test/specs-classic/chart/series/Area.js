@@ -1,11 +1,11 @@
 topSuite("Ext.chart.series.Area", ['Ext.chart.*', 'Ext.data.ArrayStore'], function() {
     var chart;
-    
+
     beforeEach(function() {
         // Silence warnings regarding Sencha download server
         spyOn(Ext.log, 'warn');
     });
-    
+
     afterEach(function() {
         Ext.destroy(chart);
     });

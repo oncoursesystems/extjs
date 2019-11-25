@@ -27,19 +27,29 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
             width: 600,
             height: 350,
             totalColumnWidth: 90,
-            companyColumnWidth: 80
+            companyColumnWidth: 80,
+            columnLines: true
         },
         neptune: {
             width: 750,
             height: 400,
             totalColumnWidth: 90,
-            companyColumnWidth: 80
+            companyColumnWidth: 80,
+            columnLines: true
         },
         graphite: {
             width: 750,
             height: 600,
             totalColumnWidth: 120,
-            companyColumnWidth: 120
+            companyColumnWidth: 120,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 800,
+            height: 600,
+            totalColumnWidth: 150,
+            companyColumnWidth: 150,
+            columnLines: false
         }
     },
     //</example>
@@ -49,6 +59,7 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
     height: '${height}',
     collapsible: true,
     multiSelect: true,
+    columnLines: '${columnLines}',
 
     selModel: {
         type: 'spreadsheet'
@@ -58,15 +69,15 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
         pivotdrilldown: {
             // define the columns used by the grid
             columns: [
-                {dataIndex: 'company', text: 'Company'},
-                {dataIndex: 'continent', text: 'Continent'},
-                {dataIndex: 'country', text: 'Country'},
-                {dataIndex: 'person', text: 'Person'},
-                {dataIndex: 'date', text: 'Date', xtype: 'datecolumn'},
-                {dataIndex: 'value', text: 'Value', xtype: 'numbercolumn', align: 'right'},
-                {dataIndex: 'quantity', text: 'Qty', xtype: 'numbercolumn', align: 'right'},
-                {dataIndex: 'year', text: 'Year', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right'},
-                {dataIndex: 'month', text: 'Month', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right'}
+                { dataIndex: 'company', text: 'Company' },
+                { dataIndex: 'continent', text: 'Continent' },
+                { dataIndex: 'country', text: 'Country' },
+                { dataIndex: 'person', text: 'Person' },
+                { dataIndex: 'date', text: 'Date', xtype: 'datecolumn' },
+                { dataIndex: 'value', text: 'Value', xtype: 'numbercolumn', align: 'right' },
+                { dataIndex: 'quantity', text: 'Qty', xtype: 'numbercolumn', align: 'right' },
+                { dataIndex: 'year', text: 'Year', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right' },
+                { dataIndex: 'month', text: 'Month', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right' }
             ],
 
             // define a remote store that will be used to filter the records
@@ -99,7 +110,7 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
         // "pivot" package
         // Beware that you also need to change the remoteStore of the
         // DrillDown plugin to point to another script that filters that table.
-        //url: 'path_to_remote.php'
+        // url: 'path_to_remote.php'
 
         // Set layout type to "outline". If this config is missing then
         // the default layout is "outline"

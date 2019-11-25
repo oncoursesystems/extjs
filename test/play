@@ -35,4 +35,7 @@ if [ "$NGINX" ]; then
     NGINX_ARGS="--nginx-path $NGINX"
 fi
 
-exec $NODEJS $SCRIPTPATH/index.js $NGINX_ARGS "$@"
+# TODO change this to a node binary
+# TODO remove this forked code and change to the Jazzman library
+# Node will run Jazzman
+$NODEJS $SCRIPTPATH/index.js $NGINX_ARGS "$@"

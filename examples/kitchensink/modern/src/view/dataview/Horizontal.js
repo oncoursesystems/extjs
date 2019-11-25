@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.dataview.Horizontal', {
         'Ext.dataview.plugin.ItemTip'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Model',
         path: 'modern/src/model/Speaker.js'
@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.dataview.Horizontal', {
     },
 
     cls: 'ks-basic',
-    // </example>
+    //</example>
 
     layout: 'fit',
     width: '${width}',

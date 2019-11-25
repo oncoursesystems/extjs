@@ -7,13 +7,13 @@ Ext.define('KitchenSink.model.Stock', {
         'cap',
         {
             name: 'leaf',
-            calculate: function (data) {
+            calculate: function(data) {
                 return data.root ? false : !data.children;
             }
         },
         {
             name: 'change',
-            calculate: function () {
+            calculate: function() {
                 return (-5 + Math.random() * 10).toFixed(2); // percentages
             }
         },

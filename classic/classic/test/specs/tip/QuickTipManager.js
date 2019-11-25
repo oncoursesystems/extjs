@@ -6,7 +6,7 @@ topSuite("Ext.tip.QuickTipManager", function() {
         jasmine.removeAllowedComponent(Ext.QuickTips.tip, true);
         Ext.tip.QuickTipManager.destroy();
     });
-    
+
     // And when these tests are finished we need to make sure QuickTips are back
     // so that other tests depending on them wouldn't fail.
     afterAll(function() {
@@ -14,11 +14,11 @@ topSuite("Ext.tip.QuickTipManager", function() {
         Ext.tip.QuickTipManager.init();
         jasmine.addAllowedComponent(Ext.QuickTips.tip, true, true);
     });
-    
+
     afterEach(function() {
         Ext.tip.QuickTipManager.destroy();
     });
-    
+
     describe("init", function() {
         it("should create a new Ext.QuickTip instance", function() {
             expect(Ext.tip.QuickTipManager.getQuickTip()).toBe(null);

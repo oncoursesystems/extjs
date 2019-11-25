@@ -5,7 +5,7 @@ Ext.define('KitchenSink.profile.Tablet', {
 
     mainView: 'tablet.Main',
 
-    isActive: function () {
+    isActive: function() {
         return Ext.os.is.Tablet;
     }
 });

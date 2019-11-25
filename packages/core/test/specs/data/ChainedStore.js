@@ -6,7 +6,7 @@ topSuite("Ext.data.ChainedStore", [
         abeRec, aaronRec, edRec, tommyRec,
         abeRaw, aaronRaw, edRaw, tommyRaw,
         source, store, User;
-        
+
     function addSourceData() {
         source.add(edRaw, abeRaw, aaronRaw, tommyRaw);
         edRec    = source.getAt(0);
@@ -14,7 +14,7 @@ topSuite("Ext.data.ChainedStore", [
         aaronRec = source.getAt(2);
         tommyRec = source.getAt(3);
     }
-    
+
     function makeUser(email, data) {
         if (Ext.isObject(email)) {
             data = email;
@@ -26,10 +26,10 @@ topSuite("Ext.data.ChainedStore", [
                 data.email = email;
             }
         }
-        
+
         return new User(data);
     }
-    
+
     function createSource(cfg) {
         cfg = cfg || {};
         source = new Ext.data.Store(Ext.applyIf(cfg, {
@@ -37,17 +37,17 @@ topSuite("Ext.data.ChainedStore", [
             model: 'spec.User'
         }));
     }
-    
+
     function createStore(cfg) {
         store = new Ext.data.ChainedStore(Ext.apply({
             source: source
         }, cfg));
     }
-    
+
     function completeWithData(data) {
         Ext.Ajax.mockCompleteWithData(data);
     }
-    
+
     function expectOrder(recs, s) {
         var len = recs.length,
             i;
@@ -56,12 +56,21 @@ topSuite("Ext.data.ChainedStore", [
             expect(s.getAt(i)).toBe(recs[i]);
         }
     }
-    
+
+    function getRecValues(store, fieldName) {
+        var ret = [];
+
+        store.each(function(r) {
+            ret.push(r.data[fieldName]);
+        });
+
+        return ret;
+    }
+
     function spyOnEvent(object, eventName, fn) {
-        var obj = {
-            fn: fn || Ext.emptyFn
-        },
-        spy = spyOn(obj, "fn");
+        var obj = { fn: fn || Ext.emptyFn };
+
+        var spy = spyOn(obj, "fn");
 
         object.addListener(eventName, obj.fn);
 
@@ -75,7 +84,7 @@ topSuite("Ext.data.ChainedStore", [
         abeRaw = { name: 'Abe Elias',    email: 'abe@sencha.com',   evilness: 70,  group: 'admin', old: false, age: 20, valid: 'yes' };
         aaronRaw = { name: 'Aaron Conran', email: 'aaron@sencha.com', evilness: 5,   group: 'admin', old: true, age: 26, valid: 'yes' };
         tommyRaw = { name: 'Tommy Maintz', email: 'tommy@sencha.com', evilness: -15, group: 'code',  old: true, age: 70, valid: 'yes' };
-            
+
         User = Ext.define('spec.User', {
             extend: 'Ext.data.Model',
             idProperty: 'email',
@@ -90,11 +99,11 @@ topSuite("Ext.data.ChainedStore", [
                 { name: 'age',       type: 'int' }
             ]
         });
-        
+
         createSource();
         addSourceData();
     });
-    
+
     afterEach(function() {
         MockAjaxManager.removeMethods();
         Ext.data.Model.schema.clear();
@@ -102,7 +111,7 @@ topSuite("Ext.data.ChainedStore", [
         User = source = store = Ext.destroy(source, store);
         Ext.data.Model.schema.clear(true);
     });
-    
+
     describe("constructing", function() {
         it("should inherit the model from the backing store", function() {
             createStore();
@@ -111,7 +120,7 @@ topSuite("Ext.data.ChainedStore", [
 
         it("should have the data from the backing store", function() {
             createStore();
-            
+
             var sourceData = source.getRange(),
                 storeData = store.getRange(),
                 len = sourceData.length,
@@ -125,15 +134,20 @@ topSuite("Ext.data.ChainedStore", [
         });
 
         it("should not fire a refresh or datachanged event", function() {
-            var spy = jasmine.createSpy();
+            var called = 0;
 
             createStore({
                 listeners: {
-                    refresh: spy,
-                    datachanged: spy
+                    refresh: function() {
+                        called += 1;
+                    },
+                    datachanged: function() {
+                        called += 2;
+                    }
                 }
             });
-            expect(spy).not.toHaveBeenCalled();
+
+            expect(called).toBe(0);
         });
 
         it("should accept an id of a store as the source", function() {
@@ -278,7 +292,7 @@ topSuite("Ext.data.ChainedStore", [
             createStore();
             addSourceData();
         });
-        
+
         describe("first", function() {
             it("should return the first record", function() {
                 expect(store.first()).toBe(edRec);
@@ -288,7 +302,7 @@ topSuite("Ext.data.ChainedStore", [
                 store.remove([edRec, abeRec, tommyRec]);
                 expect(store.first()).toBe(aaronRec);
             });
-            
+
             it("should return null with an empty store", function() {
                 store.removeAll();
                 expect(store.first()).toBeNull();
@@ -302,7 +316,7 @@ topSuite("Ext.data.ChainedStore", [
                 expect(store.first()).toBe(abeRec);
             });
         });
-        
+
         describe("last", function() {
             it("should return the last record", function() {
                 expect(store.last()).toBe(tommyRec);
@@ -312,7 +326,7 @@ topSuite("Ext.data.ChainedStore", [
                 store.remove([edRec, abeRec, tommyRec]);
                 expect(store.last()).toBe(aaronRec);
             });
-            
+
             it("should return null with an empty store", function() {
                 store.removeAll();
                 expect(store.last()).toBeNull();
@@ -326,56 +340,56 @@ topSuite("Ext.data.ChainedStore", [
                 expect(store.last()).toBe(aaronRec);
             });
         });
-        
+
         describe("getAt", function() {
             it("should return the record at the specified index", function() {
                 expect(store.getAt(1)).toBe(abeRec);
             });
-            
+
             it("should return null when the index is outside the store bounds", function() {
                 expect(store.getAt(100)).toBe(null);
             });
-            
+
             it("should return null when the store is empty", function() {
                 store.removeAll();
                 expect(store.getAt(0)).toBe(null);
             });
         });
-        
+
         describe("getById", function() {
             it("should return the record with the matching id", function() {
                 expect(store.getById('tommy@sencha.com')).toBe(tommyRec);
             });
-            
+
             it("should return null if a matching id is not found", function() {
                 expect(store.getById('foo@sencha.com')).toBe(null);
             });
-            
+
             it("should return null when the store is empty", function() {
                 store.removeAll();
                 expect(store.getById('ed@sencha.com')).toBe(null);
             });
-            
+
             it("should ignore filters", function() {
                 store.filter('email', 'ed@sencha.com');
                 expect(store.getById('aaron@sencha.com')).toBe(aaronRec);
             });
         });
-        
+
         describe("getByInternalId", function() {
             it("should return the record with the matching id", function() {
                 expect(store.getByInternalId(tommyRec.internalId)).toBe(tommyRec);
             });
-            
+
             it("should return null if a matching id is not found", function() {
                 expect(store.getByInternalId('foo@sencha.com')).toBe(null);
             });
-            
+
             it("should return null when the store is empty", function() {
                 store.removeAll();
                 expect(store.getByInternalId('ed@sencha.com')).toBe(null);
             });
-            
+
             it("should ignore filters", function() {
                 store.filter('email', 'ed@sencha.com');
                 expect(store.getByInternalId(aaronRec.internalId)).toBe(aaronRec);
@@ -392,20 +406,20 @@ topSuite("Ext.data.ChainedStore", [
                 expect(store.getByInternalId(aaronRec.internalId)).toBe(aaronRec);
             });
         });
-        
+
         describe("getRange", function() {
             it("should default to the full store range", function() {
                 expect(store.getRange()).toEqual([edRec, abeRec, aaronRec, tommyRec]);
             });
-            
+
             it("should return from the start index", function() {
                 expect(store.getRange(2)).toEqual([aaronRec, tommyRec]);
             });
-            
+
             it("should use the end index, and include it", function() {
                 expect(store.getRange(0, 2)).toEqual([edRec, abeRec, aaronRec]);
             });
-            
+
             it("should ignore an end index greater than the store range", function() {
                 expect(store.getRange(1, 100)).toEqual([abeRec, aaronRec, tommyRec]);
             });
@@ -423,18 +437,18 @@ topSuite("Ext.data.ChainedStore", [
                 expect(coders.contains(aaronRec)).toBe(false);
                 expect(coders.contains(abeRec)).toBe(false);
             });
-            
+
             it("should return null if a matching id is not found", function() {
                 slackers = store.query('group', 'slackers');
                 expect(slackers.length).toBe(0);
             });
-            
+
             it("should return null when the store is empty", function() {
                 store.removeAll();
                 coders = store.query('group', 'code');
                 expect(coders.length).toBe(0);
             });
-            
+
             it("should ignore filters", function() {
                 store.filter('email', 'ed@sencha.com');
                 expect(store.getCount()).toBe(1);
@@ -513,9 +527,10 @@ topSuite("Ext.data.ChainedStore", [
                 expectOrder(source.getRange(), store);
             });
 
-            it("should have a record present in the store when added to the source but filtered out", function() {
+            it("should have record in store when added to source but filtered out", function() {
                 createStore();
                 source.filter('group', 'code');
+
                 var rec = makeUser('foo@sencha.com', {
                     group: 'admin'
                 });
@@ -538,10 +553,15 @@ topSuite("Ext.data.ChainedStore", [
                 });
 
                 it("should fire the refresh event on the store", function() {
-                    store.on('refresh', spy);
+                    var called = 0;
+
+                    store.on('refresh', function() {
+                        ++called;
+                    });
+
                     source.filter('group', 'code');
-                    expect(spy).toHaveBeenCalled();
-                    expect(spy.callCount).toBe(1);
+
+                    expect(called).toBe(1);
                 });
 
                 it("should fire the datachanged event on the store", function() {
@@ -631,23 +651,30 @@ topSuite("Ext.data.ChainedStore", [
 
             describe("events", function() {
                 it("should fire the refresh event", function() {
-                    var spy = jasmine.createSpy();
+                    var called = 0;
 
                     createStore();
-                    store.on('refresh', spy);
+
+                    store.on('refresh', function() {
+                        ++called;
+                    });
+
                     store.filter('group', 'code');
-                    expect(spy).toHaveBeenCalled();
-                    expect(spy.callCount).toBe(1);
+
+                    expect(called).toBe(1);
                 });
 
                 it("should fire the datachanged event", function() {
-                    var spy = jasmine.createSpy();
+                    var called = 0;
 
                     createStore();
-                    store.on('datachanged', spy);
+                    store.on('datachanged', function() {
+                        ++called;
+                    });
+
                     store.filter('group', 'code');
-                    expect(spy).toHaveBeenCalled();
-                    expect(spy.callCount).toBe(1);
+
+                    expect(called).toBe(1);
                 });
 
                 it("should fire the filterchange event", function() {
@@ -729,7 +756,7 @@ topSuite("Ext.data.ChainedStore", [
                     // The only record is filtered out
                     expect(store.getCount()).toBe(0);
                     expect(chained.getCount()).toBe(0);
-                    
+
                     // Source should have fired the update event
                     expect(sourceFiredUpdate).toBe(true);
 
@@ -762,7 +789,7 @@ topSuite("Ext.data.ChainedStore", [
                 expect(store.getCount()).toBe(1);
                 expect(store.getAt(0)).toBe(source.getAt(0));
             });
-            
+
             describe("events", function() {
                 it("should not fire the add, remove or clear events", function() {
                     source.removeAll();
@@ -808,20 +835,20 @@ topSuite("Ext.data.ChainedStore", [
                     expect(spy.mostRecentCall.args[2]).toBe(true);
                     expect(spy.mostRecentCall.args[3]).toBe(readSpy.mostRecentCall.args[0]);
                 });
-                    
+
                 it("should fire the refresh and datachanged event", function() {
                     createStore();
                     var dataChangedSpy = jasmine.createSpy(),
                         refreshSpy = jasmine.createSpy();
-                        
+
                     store.on('refresh', refreshSpy);
                     store.on('datachanged', dataChangedSpy);
-                    
+
                     source.load();
                     completeWithData([abeRaw, tommyRaw, edRaw, aaronRaw]);
                     expect(refreshSpy).toHaveBeenCalled();
                     expect(refreshSpy.mostRecentCall.args[0]).toBe(store);
-                    
+
                     expect(dataChangedSpy).toHaveBeenCalled();
                     expect(dataChangedSpy.mostRecentCall.args[0]).toBe(store);
                 });
@@ -875,7 +902,7 @@ topSuite("Ext.data.ChainedStore", [
                 expect(store.getCount()).toBe(1);
                 expect(store.getAt(0)).toBe(source.getAt(0));
             });
-            
+
             it("should not fire the add event", function() {
                 source.removeAll();
                 createStore();
@@ -885,7 +912,7 @@ topSuite("Ext.data.ChainedStore", [
                 source.loadData([edRaw, tommyRaw, aaronRaw, abeRaw]);
                 expect(spy).not.toHaveBeenCalled();
             });
-            
+
             it("should not fire the remove event", function() {
                 createStore();
                 var spy = jasmine.createSpy();
@@ -894,19 +921,19 @@ topSuite("Ext.data.ChainedStore", [
                 source.loadData([edRaw, tommyRaw, aaronRaw, abeRaw]);
                 expect(spy).not.toHaveBeenCalled();
             });
-            
+
             it("should fire the refresh and datachanged event", function() {
                 createStore();
                 var dataChangedSpy = jasmine.createSpy(),
                     refreshSpy = jasmine.createSpy();
-                    
+
                 store.on('refresh', refreshSpy);
                 store.on('datachanged', dataChangedSpy);
-                
+
                 source.loadData([edRaw, tommyRaw, aaronRaw, abeRaw]);
                 expect(refreshSpy).toHaveBeenCalled();
                 expect(refreshSpy.mostRecentCall.args[0]).toBe(store);
-                
+
                 expect(dataChangedSpy).toHaveBeenCalled();
                 expect(dataChangedSpy.mostRecentCall.args[0]).toBe(store);
             });
@@ -928,7 +955,7 @@ topSuite("Ext.data.ChainedStore", [
                 expect(store.getCount()).toBe(1);
                 expect(store.getAt(0)).toBe(source.getAt(0));
             });
-            
+
             it("should not fire the add event", function() {
                 source.removeAll();
                 createStore();
@@ -938,7 +965,7 @@ topSuite("Ext.data.ChainedStore", [
                 source.loadRawData([edRaw, tommyRaw, aaronRaw, abeRaw]);
                 expect(spy).not.toHaveBeenCalled();
             });
-            
+
             it("should not fire the remove event", function() {
                 createStore();
                 var spy = jasmine.createSpy();
@@ -947,19 +974,19 @@ topSuite("Ext.data.ChainedStore", [
                 source.loadRawData([edRaw, tommyRaw, aaronRaw, abeRaw]);
                 expect(spy).not.toHaveBeenCalled();
             });
-            
+
             it("should fire the refresh and datachanged event", function() {
                 createStore();
                 var dataChangedSpy = jasmine.createSpy(),
                     refreshSpy = jasmine.createSpy();
-                    
+
                 store.on('refresh', refreshSpy);
                 store.on('datachanged', dataChangedSpy);
-                
+
                 source.loadRawData([edRaw, tommyRaw, aaronRaw, abeRaw]);
                 expect(refreshSpy).toHaveBeenCalled();
                 expect(refreshSpy.mostRecentCall.args[0]).toBe(store);
-                
+
                 expect(dataChangedSpy).toHaveBeenCalled();
                 expect(dataChangedSpy.mostRecentCall.args[0]).toBe(store);
             });
@@ -1052,18 +1079,28 @@ topSuite("Ext.data.ChainedStore", [
                 describe("with the source sorted", function() {
                     it("should use the position from the source", function() {
                         source.sort('email');
-                        var rec = source.add({
-                            email: 'aaaa@sencha.com'
-                        })[0];
 
-                        expect(source.getAt(0)).toBe(rec);
-                        expect(store.getAt(0)).toBe(rec);
+                        source.add({
+                            email: 'aaaa@sencha.com'
+                        });
+
+                        expect(getRecValues(source, 'email')).toEqual([
+                            'aaaa@sencha.com', 'aaron@sencha.com', 'abe@sencha.com',
+                            'ed@sencha.com', 'tommy@sencha.com'
+                        ]);
+
+                        expect(getRecValues(store, 'email')).toEqual([
+                            'ed@sencha.com', 'abe@sencha.com',
+                            'aaaa@sencha.com', // add before aaron
+                            'aaron@sencha.com', 'tommy@sencha.com'
+                        ]);
                     });
                 });
 
                 describe("with the store sorted", function() {
-                    it("should add to the end of the source and insert into the sorted position in the store", function() {
+                    it("should add to source and insert in sorted position in store", function() {
                         store.sort('email');
+
                         var rec = source.add({
                             email: 'bbb@sencha.com'
                         })[0];
@@ -1077,6 +1114,7 @@ topSuite("Ext.data.ChainedStore", [
                     it("should insert into the correct sorted position", function() {
                         store.sort('email');
                         source.sort('email', 'desc');
+
                         var rec = source.add({
                             email: 'aazzon@sencha.com'
                         })[0];
@@ -1255,12 +1293,21 @@ topSuite("Ext.data.ChainedStore", [
                 describe("with the source sorted", function() {
                     it("should use the position from the source", function() {
                         source.sort('email');
-                        var rec = source.insert(2, {
-                            email: 'aaaa@sencha.com'
-                        })[0];
 
-                        expect(source.getAt(0)).toBe(rec);
-                        expect(store.getAt(0)).toBe(rec);
+                        source.insert(2, {
+                            email: 'aaaa@sencha.com'
+                        });
+
+                        expect(getRecValues(source, 'email')).toEqual([
+                            'aaaa@sencha.com', 'aaron@sencha.com', 'abe@sencha.com',
+                            'ed@sencha.com', 'tommy@sencha.com'
+                        ]);
+
+                        expect(getRecValues(store, 'email')).toEqual([
+                            'ed@sencha.com', 'abe@sencha.com',
+                            'aaaa@sencha.com', // before aaron
+                            'aaron@sencha.com', 'tommy@sencha.com'
+                        ]);
                     });
                 });
 
@@ -1419,7 +1466,7 @@ topSuite("Ext.data.ChainedStore", [
         beforeEach(function() {
             createStore();
         });
-        
+
         describe("remove", function() {
             describe("removing from the source", function() {
                 it("should also remove from the store", function() {
@@ -1508,7 +1555,7 @@ topSuite("Ext.data.ChainedStore", [
                 });
             });
         });
-        
+
         describe("removeAll", function() {
             it("should not fire a remove event", function() {
                 var spy = jasmine.createSpy();
@@ -1517,7 +1564,7 @@ topSuite("Ext.data.ChainedStore", [
                 source.removeAll();
                 expect(spy).not.toHaveBeenCalled();
             });
-            
+
             it("should fire the clear event", function() {
                 var spy = jasmine.createSpy();
 
@@ -1526,7 +1573,7 @@ topSuite("Ext.data.ChainedStore", [
                 expect(spy).toHaveBeenCalled();
                 expect(spy.mostRecentCall.args[0]).toBe(store);
             });
-            
+
             it("should fire the datachanged event", function() {
                 var spy = jasmine.createSpy();
 
@@ -1535,7 +1582,7 @@ topSuite("Ext.data.ChainedStore", [
                 expect(spy).toHaveBeenCalled();
                 expect(spy.mostRecentCall.args[0]).toBe(store);
             });
-            
+
             describe("with silent: true", function() {
                 it("should not fire the clear event", function() {
                     var spy = jasmine.createSpy();
@@ -1544,7 +1591,7 @@ topSuite("Ext.data.ChainedStore", [
                     source.removeAll(true);
                     expect(spy).not.toHaveBeenCalled();
                 });
-            
+
                 it("should not fire the datachanged event", function() {
                     var spy = jasmine.createSpy();
 
@@ -1671,7 +1718,7 @@ topSuite("Ext.data.ChainedStore", [
                 expect(spy).not.toHaveBeenCalled();
             });
         });
-        
+
         describe("via reject", function() {
             it("should fire the update event on the source & pass the store, record, type & modified fields", function() {
                 var args;
@@ -1774,8 +1821,7 @@ topSuite("Ext.data.ChainedStore", [
             Ext.undefine('spec.OrderItem');
         });
 
-        it("should add records from source store to chained store in sorted order if chained store is sorted", function() {
-
+        it("should add records from source in sorted order of chained store", function() {
             source.add({
                 id: 2
             });
@@ -1786,7 +1832,7 @@ topSuite("Ext.data.ChainedStore", [
             expect(store.getAt(2)).toBe(source.getById(3));
         });
 
-        it("should prepend records from source store to chained store if chained store is not sorted", function() {
+        it("should prepend records from source if chained store is not sorted", function() {
             store.setAutoSort(false);
 
             source.add({
@@ -1794,9 +1840,9 @@ topSuite("Ext.data.ChainedStore", [
             });
 
             // The new id:2 record should have been appended
-            expect(store.getAt(0)).toBe(source.getById(2));
-            expect(store.getAt(1)).toBe(source.getById(1));
-            expect(store.getAt(2)).toBe(source.getById(3));
+            expect(getRecValues(store, 'id')).toEqual([ 1, 3, 2 ]);
+
+            expect(getRecValues(source, 'id')).toEqual([ 1, 3, 2 ]);
         });
 
         it('should fire idchanged when the source collection updates a key', function() {
@@ -2095,7 +2141,7 @@ topSuite("Ext.data.ChainedStore", [
                         { group: 'g2', rate: 99 },
                         { group: 'g2', rate: 100 }
                     ]);
-                    
+
                     var r = getSummaryFor('g1');
 
                     expect(r.get('rate')).toBe(81.5);
@@ -2121,7 +2167,6 @@ topSuite("Ext.data.ChainedStore", [
                 expect(r.get('rate')).toBe(12);
                 expect(r.get('maxRate')).toBe(15);
             });
-
 
             describe("dynamic changes", function() {
                 beforeEach(function() {

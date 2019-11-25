@@ -31,7 +31,7 @@
 Ext.define('Ext.selection.CellModel', {
     extend: 'Ext.selection.DataViewModel',
     alias: 'selection.cellmodel',
-    
+
     requires: [
         'Ext.grid.CellContext'
     ],
@@ -111,9 +111,9 @@ Ext.define('Ext.selection.CellModel', {
 
     getViewListeners: function() {
         var result = this.callParent();
-        
+
         result.refresh = this.onViewRefresh;
-        
+
         return result;
     },
 
@@ -139,7 +139,7 @@ Ext.define('Ext.selection.CellModel', {
     selectWithEvent: function(record, e) {
         this.select(record);
     },
-    
+
     /** 
      * Selects a cell by row / column.
      *
@@ -205,7 +205,7 @@ Ext.define('Ext.selection.CellModel', {
         if (pos || pos === 0) {
             if (pos.isModel) {
                 row = store.indexOf(pos);
-                
+
                 if (row !== -1) {
                     pos = {
                         row: row,
@@ -311,7 +311,7 @@ Ext.define('Ext.selection.CellModel', {
                 ? pos.clone()
                 : new Ext.grid.CellContext(me.view).setPosition(pos);
         }
-        
+
         if (!preventCheck && last) {
             // If the position is the same, jump out & don't fire the event
             if (pos && (pos.record === last.record && pos.column === last.column &&
@@ -325,22 +325,22 @@ Ext.define('Ext.selection.CellModel', {
 
         if (pos) {
             me.nextSelection = pos;
-            
+
             // set this flag here so we know to use nextSelection
             // if the node is updated during a select
             me.selecting = true;
             me.onCellSelect(me.nextSelection, suppressEvent);
             me.selecting = false;
-            
+
             // Deselect triggered by new selection will kill the selection property,
             // so restore it here.
             return (me.selection = pos);
         }
-        
-        // <debug>
+
+        //<debug>
         // Enforce code correctness in unbuilt source.
         return null;
-        // </debug>
+        //</debug>
     },
 
     isCellSelected: function(view, row, column) {
@@ -357,7 +357,7 @@ Ext.define('Ext.selection.CellModel', {
                     ? view.getColumnManager().getColumns()[column]
                     : column
             });
-            
+
             return (testPos.record === pos.record) && (testPos.column === pos.column);
         }
     },
@@ -368,11 +368,11 @@ Ext.define('Ext.selection.CellModel', {
             pos = me.getPosition();
 
         me.callParent(arguments);
-        
+
         if (pos && store.isMoving(pos.record)) {
             return;
         }
-        
+
         if (pos && store.getCount() && store.indexOf(pos.record) !== -1) {
             pos.setRow(pos.record);
         }
@@ -380,18 +380,18 @@ Ext.define('Ext.selection.CellModel', {
             me.selection = null;
         }
     },
-    
+
     onStoreClear: function() {
         this.callParent(arguments);
         this.selection = null;
     },
-    
+
     onStoreAdd: function() {
         var me = this,
             pos = me.getPosition();
 
         me.callParent(arguments);
-        
+
         if (pos) {
             pos.setRow(pos.record);
         }
@@ -418,7 +418,7 @@ Ext.define('Ext.selection.CellModel', {
         }
 
         this.callParent([selected]);
-        
+
         // If the record has been removed, fix up the position.
         if (selected.length === 0 && selRec) {
             this.selection = null;
@@ -512,16 +512,16 @@ Ext.define('Ext.selection.CellModel', {
      */
     onColumnMove: function(headerCt, header, fromIdx, toIdx) {
         var grid = headerCt.up('tablepanel');
-        
+
         if (grid) {
             this.onViewRefresh(grid.view);
         }
     },
-    
+
     onUpdate: function(record) {
         var me = this,
             pos;
-            
+
         if (me.isSelected(record)) {
             pos = me.selecting ? me.nextSelection : me.selection;
             me.view.onCellSelect(pos);
@@ -563,7 +563,7 @@ Ext.define('Ext.selection.CellModel', {
                         row: record,
                         column: column
                     });
-                    
+
                     me.setPosition(newPos);
                 }
             }

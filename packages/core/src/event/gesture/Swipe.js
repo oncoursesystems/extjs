@@ -177,6 +177,6 @@ Ext.define('Ext.event.gesture.Swipe', {
     }
 }, function(Swipe) {
     var gestures = Ext.manifest.gestures;
-    
+
     Swipe.instance = new Swipe(gestures && gestures.swipe);
 });

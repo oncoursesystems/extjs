@@ -43,13 +43,13 @@
             // against 10.53, 11.51 and 11.61.
             return this.constructor.apply(this, arguments) || null;
         }
-        
+
         //<debug>
         if (className) {
             constructor.name = className;
         }
         //</debug>
-        
+
         return constructor;
     }
 
@@ -84,25 +84,27 @@
     };
 
     Ext.apply(ExtClass, {
-        
+
         makeCtor: makeCtor,
-        
+
         /**
          * @private
          */
         onBeforeCreated: function(Class, data, hooks) {
             //<debug>
-            Ext.classSystemMonitor &&
+            if (Ext.classSystemMonitor) {
                 Ext.classSystemMonitor(Class, '>> Ext.Class#onBeforeCreated', arguments);
+            }
             //</debug>
-        
+
             Class.addMembers(data);
 
             hooks.onCreated.call(Class, Class);
 
             //<debug>
-            Ext.classSystemMonitor &&
+            if (Ext.classSystemMonitor) {
                 Ext.classSystemMonitor(Class, '<< Ext.Class#onBeforeCreated', arguments);
+            }
             //</debug>
         },
 
@@ -176,7 +178,7 @@
 
             this.doProcess(Class, data, hooks);
         },
-        
+
         doProcess: function(Class, data, hooks) {
             var me = this,
                 preprocessors = hooks.preprocessors,
@@ -190,7 +192,7 @@
                     return;
                 }
             }
-            
+
             hooks.onBeforeCreated.apply(me, arguments);
         },
 
@@ -366,10 +368,11 @@
             Parent, parentPrototype, i;
 
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(Class, 'Ext.Class#extendPreProcessor', arguments);
+        }
         //</debug>
-        
+
         delete data.extend;
 
         if (extend && extend !== Object) {
@@ -484,8 +487,9 @@
             privacy = privates.privacy || true;
 
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(Class, 'Ext.Class#privatePreprocessor', arguments);
+        }
         //</debug>
 
         delete data.privates;
@@ -495,7 +499,7 @@
         // by the config system. This also catches duplication in the public part of the
         // class since it is an error to override a private method with a public one.
         Class.addMembers(privates, false, privacy);
-        
+
         if (statics) {
             Class.addMembers(statics, true, privacy);
         }
@@ -521,10 +525,11 @@
      */
     ExtClass.registerPreprocessor('statics', function(Class, data) {
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(Class, 'Ext.Class#staticsPreprocessor', arguments);
+        }
         //</debug>
-        
+
         Class.addStatics(data.statics);
 
         delete data.statics;
@@ -539,10 +544,11 @@
      */
     ExtClass.registerPreprocessor('inheritableStatics', function(Class, data) {
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(Class, 'Ext.Class#inheritableStaticsPreprocessor', arguments);
+        }
         //</debug>
-        
+
         Class.addInheritableStatics(data.inheritableStatics);
 
         delete data.inheritableStatics;
@@ -554,27 +560,27 @@
             '$c', 'with($c) { try { return (' + code + '); } catch(e) { return false;}}'
         );
     };
-    
+
     Ext.expressionCache = new Ext.util.Cache({
         miss: Ext.createRuleFn
     });
 
     Ext.ruleKeySortFn = ruleKeySortFn;
-    
+
     Ext.getPlatformConfigKeys = function(platformConfig) {
         var ret = [],
             platform, rule;
 
         for (platform in platformConfig) {
             rule = Ext.expressionCache.get(platform);
-            
+
             if (rule(Ext.platformTags)) {
                 ret.push(platform);
             }
         }
 
         ret.sort(ruleKeySortFn);
-        
+
         return ret;
     };
 
@@ -698,7 +704,7 @@
         if (data.hasOwnProperty('$configPrefixed')) {
             Class.prototype.$configPrefixed = data.$configPrefixed;
         }
-        
+
         Class.addConfig(data.config);
 
         // We need to remove this or it will be applied by addMembers and smash the
@@ -707,7 +713,7 @@
         delete data.config;
     });
     //</feature>
-    
+
     //<feature classSystem.cachedConfig>
     /**
      * @cfg {Object} cachedConfig
@@ -726,7 +732,7 @@
         if (data.hasOwnProperty('$configPrefixed')) {
             Class.prototype.$configPrefixed = data.$configPrefixed;
         }
-        
+
         Class.addCachedConfig(data.cachedConfig);
 
         // Remove this so it won't be placed on the prototype.
@@ -775,16 +781,21 @@
             onCreated = hooks.onCreated;
 
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(Class, 'Ext.Class#mixinsPreprocessor', arguments);
+        }
         //</debug>
-        
+
         delete data.mixins;
 
         hooks.onCreated = function() {
             //<debug>
             /* eslint-disable-next-line max-len */
-            Ext.classSystemMonitor && Ext.classSystemMonitor(Class, 'Ext.Class#mixinsPreprocessor#beforeCreated', arguments);
+            if (Ext.classSystemMonitor) {
+                Ext.classSystemMonitor(
+                    Class, 'Ext.Class#mixinsPreprocessor#beforeCreated', arguments
+                );
+            }
             //</debug>
 
             // Put back the original onCreated before processing mixins. This allows a
@@ -806,10 +817,11 @@
         var cls, m;
 
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(Class, 'Ext.Class#extend-backwards-compatible', arguments);
+        }
         //</debug>
-            
+
         if (arguments.length === 2 && Ext.isObject(Parent)) {
             members = Parent;
             Parent = Class;
@@ -822,7 +834,7 @@
         }
 
         members.extend = Parent;
-        
+
         /* eslint-disable comma-style */
         members.preprocessors = [
             'extend'

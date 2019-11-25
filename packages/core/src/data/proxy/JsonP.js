@@ -221,7 +221,7 @@ Ext.define('Ext.data.proxy.JsonP', {
             if (request === me.lastRequest) {
                 me.lastRequest = null;
             }
-            
+
             me.processResponse(success, operation, request, response);
         };
     },
@@ -255,13 +255,13 @@ Ext.define('Ext.data.proxy.JsonP', {
         params = request.getParams();
         filters = params.filters;
         delete params.filters;
-        
+
         if (filters && filters.length) {
             for (i = 0; i < filters.length; i++) {
                 filter = filters[i];
 
                 v = filter.getValue();
-                
+
                 if (v) {
                     params[filter.getProperty()] = v;
                 }
@@ -291,7 +291,7 @@ Ext.define('Ext.data.proxy.JsonP', {
      */
     abort: function(request) {
         request = request || this.lastRequest;
-        
+
         if (request) {
             Ext.data.JsonP.abort(request.getRawRequest());
         }

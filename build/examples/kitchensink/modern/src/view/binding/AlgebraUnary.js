@@ -53,7 +53,7 @@ Ext.define('KitchenSink.view.binding.AlgebraUnary', {
         bind: '{-x}'
     }, {
         label: 'Globals',
-        //expressions should have at least one token to be evaluated
+        // expressions should have at least one token to be evaluated
         bind: 'Ext JS version: {@Ext.versions.ext.version}'
     }]
 });

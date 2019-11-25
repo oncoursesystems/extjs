@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Sales', {
         'Ext.d3.HeatMap'
     ],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [
         {
@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Sales', {
             path: 'app/store/SalesPerEmployee.js'
         }
     ],
-    // </example>
+    //</example>
 
     width: 960,
     height: 600,

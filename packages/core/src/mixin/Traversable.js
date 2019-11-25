@@ -95,24 +95,24 @@ Ext.define('Ext.mixin.Traversable', {
         if (parent) {
             for (it = parent.items.items, i = Ext.Array.indexOf(it, node) - 1; i > -1; i--) {
                 sibling = it[i];
-                
+
                 if (sibling.query) {
                     result = sibling.query(selector);
                     result = result[result.length - 1];
-                    
+
                     if (result) {
                         return result;
                     }
                 }
-                
+
                 if (!selector || sibling.is(selector)) {
                     return sibling;
                 }
             }
-            
+
             return parent.previousNode(selector, true);
         }
-        
+
         return null;
     },
 
@@ -138,7 +138,7 @@ Ext.define('Ext.mixin.Traversable', {
         if (parent) {
             it = parent.items;
             idx = it.indexOf(this);
-            
+
             if (idx !== -1) {
                 if (selector) {
                     for (--idx; idx >= 0; idx--) {
@@ -154,7 +154,7 @@ Ext.define('Ext.mixin.Traversable', {
                 }
             }
         }
-        
+
         return null;
     },
 
@@ -184,23 +184,23 @@ Ext.define('Ext.mixin.Traversable', {
             // eslint-disable-next-line max-len
             for (it = parent.items.items, i = Ext.Array.indexOf(it, node) + 1, len = it.length; i < len; i++) {
                 sibling = it[i];
-                
+
                 if (!selector || sibling.is(selector)) {
                     return sibling;
                 }
-                
+
                 if (sibling.down) {
                     result = sibling.down(selector);
-                    
+
                     if (result) {
                         return result;
                     }
                 }
             }
-            
+
             return parent.nextNode(selector);
         }
-        
+
         return null;
     },
 
@@ -226,7 +226,7 @@ Ext.define('Ext.mixin.Traversable', {
         if (parent) {
             it = parent.items;
             idx = it.indexOf(this) + 1;
-            
+
             if (idx) {
                 if (selector) {
                     for (last = it.getCount(); idx < last; idx++) {
@@ -242,7 +242,7 @@ Ext.define('Ext.mixin.Traversable', {
                 }
             }
         }
-        
+
         return null;
     }
 });

@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.form.combobox.CustomTemplate', {
         'KitchenSink.model.State',
         'KitchenSink.store.States'
     ],
-    
+
     exampleTitle: 'Custom Template ComboBox',
     otherContent: [{
         type: 'Model',
@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.form.combobox.CustomTemplate', {
         path: 'app/store/States.js'
     }],
     //</example>
-    
+
     profiles: {
         classic: {
             labelWidth: 110
@@ -31,13 +31,17 @@ Ext.define('KitchenSink.view.form.combobox.CustomTemplate', {
         },
         graphite: {
             labelWidth: 140
+        },
+        'classic-material': {
+            labelWidth: 140
         }
     },
     title: 'Custom Template  ComboBox',
     width: 500,
     layout: 'form',
+    cls: 'simple-combo',
     viewModel: {},
-    
+
     items: [{
         xtype: 'fieldset',
         layout: 'anchor',

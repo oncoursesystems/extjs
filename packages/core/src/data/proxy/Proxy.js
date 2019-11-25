@@ -125,7 +125,7 @@ Ext.define('Ext.data.proxy.Proxy', {
      * Identifies the proxy as (a)synchronous.
      */
     isSynchronous: false,
-     
+
     /**
      * @event metachange
      * Fires when this proxy's reader provides new metadata. Metadata usually consists
@@ -144,27 +144,27 @@ Ext.define('Ext.data.proxy.Proxy', {
     constructor: function(config) {
         // Will call initConfig
         this.mixins.observable.constructor.call(this, config);
-        
+
         // We need to abort all pending operations when destroying
         this.pendingOperations = {};
     },
-     
+
     applyModel: function(model) {
         return Ext.data.schema.Schema.lookupEntity(model);
     },
 
     updateModel: function(model) {
         var reader;
-        
+
         if (model) {
             reader = this.getReader();
-                
+
             if (reader && !reader.getModel()) {
                 reader.setModel(model);
             }
         }
     },
-    
+
     applyReader: function(reader) {
         // Synchronous proxies need to force keepRawData to allow Grid features
         // like Summary and Grouping access rawData after the Reader processed records.
@@ -174,20 +174,20 @@ Ext.define('Ext.data.proxy.Proxy', {
             reader = reader || {};
             reader.keepRawData = true;
         }
-        
+
         return Ext.Factory.reader(reader);
     },
-    
+
     updateReader: function(reader) {
         var me = this,
             model;
-        
+
         if (reader) {
             model = me.getModel();
-                
+
             if (!model) {
                 model = reader.getModel();
-                
+
                 if (model) {
                     me.setModel(model);
                 }
@@ -195,7 +195,7 @@ Ext.define('Ext.data.proxy.Proxy', {
             else {
                 reader.setModel(model);
             }
-            
+
             if (reader.responseType != null) {
                 me.responseType = reader.responseType;
             }
@@ -211,15 +211,15 @@ Ext.define('Ext.data.proxy.Proxy', {
         // If not set, but the Reader has a record config, use the Reader's record config.
         if (writer.getRecord && !writer.getRecord() && reader && reader.getRecord) {
             reader = reader.getRecord();
-            
+
             if (reader) {
                 writer.setRecord(reader);
             }
         }
-        
+
         return writer;
     },
-    
+
     abort: Ext.emptyFn,
 
     /**
@@ -371,7 +371,7 @@ Ext.define('Ext.data.proxy.Proxy', {
             single: true,
             priority: 1000
         });
-        
+
         batch.$destroyOwner = options.$destroyOwner;
 
         actions = me.getBatchOrder().split(',');
@@ -406,7 +406,7 @@ Ext.define('Ext.data.proxy.Proxy', {
         }
 
         batch.start();
-        
+
         return batch;
     },
 
@@ -430,7 +430,7 @@ Ext.define('Ext.data.proxy.Proxy', {
         if (Ext.isFunction(batchOptions.callback)) {
             Ext.callback(batchOptions.callback, scope, [batch, batchOptions]);
         }
-        
+
         // In certain cases when the batch was created by a ProxyStore we need to
         // defer destruction until the store can process the batch results.
         // The store will then destroy the batch.
@@ -438,17 +438,17 @@ Ext.define('Ext.data.proxy.Proxy', {
             batch.destroy();
         }
     },
-    
+
     createOperation: function(action, config) {
         var operation = Ext.createByAlias('data.operation.' + action, config);
-        
+
         operation.setProxy(this);
-        
+
         this.pendingOperations[operation._internalId] = operation;
-        
+
         return operation;
     },
-    
+
     completeOperation: function(operation) {
         delete this.pendingOperations[operation._internalId];
     },
@@ -456,23 +456,23 @@ Ext.define('Ext.data.proxy.Proxy', {
     clone: function() {
         return new this.self(this.getInitialConfig());
     },
-    
+
     destroy: function() {
         var ops = this.pendingOperations,
             opId, op;
-        
+
         for (opId in ops) {
             op = ops[opId];
-            
+
             if (op && op.isRunning()) {
                 op.abort();
             }
-            
+
             op.destroy();
         }
-        
+
         this.pendingOperations = null;
-        
+
         this.callParent();
     }
 });

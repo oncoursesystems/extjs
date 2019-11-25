@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.binding.Selection', {
         type: 'binding-selection'
     },
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'ViewModel',
         path: 'modern/src/view/binding/SelectionModel.js'
@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.binding.Selection', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     referenceHolder: true,
     width: '${width}',

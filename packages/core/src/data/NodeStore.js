@@ -63,7 +63,7 @@ Ext.define('Ext.data.NodeStore', {
         var data = this.getData();
 
         data.setTrackGroups(false);
-        
+
         if (folderSort) {
             data.setGrouper({
                 groupFn: this.folderSortFn
@@ -80,7 +80,7 @@ Ext.define('Ext.data.NodeStore', {
 
     afterReject: function(record) {
         var me = this;
-        
+
         // Must pass the 5th param (modifiedFieldNames) as null, otherwise the
         // event firing machinery appends the listeners "options" object to the arg list
         // which may get used as the modified fields array by a handler.
@@ -94,11 +94,11 @@ Ext.define('Ext.data.NodeStore', {
 
     afterCommit: function(record, modifiedFieldNames) {
         var me = this;
-        
+
         if (!modifiedFieldNames) {
             modifiedFieldNames = null;
         }
-        
+
         if (me.contains(record)) {
             me.onUpdate(record, Ext.data.Model.COMMIT, modifiedFieldNames);
             me.fireEvent('update', me, record, Ext.data.Model.COMMIT, modifiedFieldNames);
@@ -136,12 +136,12 @@ Ext.define('Ext.data.NodeStore', {
             if (!node.isModel) {
                 node = new (this.getModel())(node);
             }
-            
+
             if (!node.isNode) {
                 Ext.data.NodeInterface.decorate(node);
             }
         }
-        
+
         return node;
     },
 
@@ -170,11 +170,11 @@ Ext.define('Ext.data.NodeStore', {
             node.join(me);
 
             data = [];
-            
+
             if (node.childNodes.length) {
                 data = data.concat(me.retrieveChildNodes(node));
             }
-            
+
             if (me.getRootVisible()) {
                 data.push(node);
             }
@@ -186,14 +186,14 @@ Ext.define('Ext.data.NodeStore', {
             me.fireEvent('clear', me);
 
             me.suspendEvents();
-            
+
             if (me.isInitializing) {
                 me.inlineData = data;
             }
             else {
                 me.add(data);
             }
-            
+
             me.resumeEvents();
 
             if (data.length === 0) {
@@ -229,7 +229,7 @@ Ext.define('Ext.data.NodeStore', {
 
             parent = parent.parentNode;
         }
-        
+
         return true;
     },
 
@@ -257,7 +257,7 @@ Ext.define('Ext.data.NodeStore', {
             while (child) {
                 if (child._added) {
                     delete child._added;
-                    
+
                     if (child === root) {
                         break;
                     }
@@ -269,7 +269,7 @@ Ext.define('Ext.data.NodeStore', {
                     if (child !== root) {
                         added.push(child);
                     }
-                    
+
                     if (child.firstChild) {
                         child._added = true;
                         child = child.firstChild;

@@ -25,7 +25,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
     useIndex: Ext.isIE8m,
 
     useFormat: true,
-    
+
     propNameRe: /^[\w\d$]*$/,
 
     compile: function(tpl) {
@@ -52,7 +52,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
             'var c0=values, a0=' + me.createArrayTest(0) +
             ', p0=parent, n0=xcount, i0=xindex, k0, v;\n'
         ];
-        
+
         if (me.definitions) {
             if (typeof me.definitions === 'string') {
                 me.definitions = [me.definitions, definitions ];
@@ -64,7 +64,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
         else {
             me.definitions = [ definitions ];
         }
-        
+
         me.switches = [];
 
         me.parse(tpl);
@@ -92,7 +92,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
             out = me.body;
 
         text = text.replace(me.aposRe, "\\'").replace(me.newLineRe, '\\n');
-        
+
         if (me.useIndex) {
             out.push('out[out.length]=\'', text, '\'\n');
         }
@@ -103,7 +103,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
 
     doExpr: function(expr) {
         var out = this.body;
-        
+
         out.push('if ((v=' + expr + ') != null) out');
 
         // Do not coerce individual values in the buffer.
@@ -118,7 +118,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
 
     doTag: function(tag) {
         var expr = this.parseTag(tag);
-        
+
         if (expr) {
             this.doExpr(expr);
         }
@@ -151,7 +151,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
         else {
             me.body.push('if (', me.addFn(action), me.callFn, ') {\n');
         }
-        
+
         if (actions.exec) {
             me.doExec(actions.exec);
         }
@@ -172,7 +172,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
         else {
             me.body.push('} else if (', me.addFn(action), me.callFn, ') {\n');
         }
-        
+
         if (actions.exec) {
             me.doExec(actions.exec);
         }
@@ -195,7 +195,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
         else {
             me.body.push('switch (', me.addFn(action), me.callFn, ') {\n');
         }
-        
+
         me.switches.push(0);
     },
 
@@ -333,14 +333,14 @@ Ext.define('Ext.util.XTemplateCompiler', {
             me.maxLevel = L;
             me.body.push('var ');
         }
-        
+
         if (action === '.') {
             parentAssignment = 'c' + L;
         }
         else {
             parentAssignment = 'a' + up + '?c' + up + '[i' + up + ']:c' + up;
         }
-        
+
         me.body.push(
             'i', L, '=0,n', L, '=0,c', L, '=', s, ',a', L, '=', me.createArrayTest(L),
             ',r', L, '=values,p', L, ',k', L, ';\n',
@@ -352,13 +352,13 @@ Ext.define('Ext.util.XTemplateCompiler', {
             'for (xcount=n', L, ';i', L, '<n' + L + ';++i', L, '){\n',
             'values=c', L, '[i', L, ']'
         );
-        
+
         if (actions.propName) {
             me.body.push('.', actions.propName);
         }
-        
+
         me.body.push('\n', 'xindex=i', L, '+1\n');
-        
+
         if (actions.between) {
             me.body.push('if(xindex>1){ out.push("', actions.between, '"); } \n');
         }
@@ -406,7 +406,6 @@ Ext.define('Ext.util.XTemplateCompiler', {
                 xkey = k2;
                 values = c2[k2]; // values is the property value
 
-
         The body of the loop is whatever comes between the tpl and /tpl statements (which
         is handled by doEnd).
         */
@@ -416,14 +415,14 @@ Ext.define('Ext.util.XTemplateCompiler', {
             me.maxLevel = L;
             me.body.push('var ');
         }
-        
+
         if (action === '.') {
             parentAssignment = 'c' + L;
         }
         else {
             parentAssignment = 'a' + up + '?c' + up + '[i' + up + ']:c' + up;
         }
-        
+
         me.body.push(
             'i', L, '=-1,n', L, '=0,c', L, '=', s, ',a', L, '=',
             me.createArrayTest(L), ',r', L, '=values,p', L, ',k', L, ';\n',
@@ -433,11 +432,11 @@ Ext.define('Ext.util.XTemplateCompiler', {
             'xkey=k', L, ';\n',
             'values=c', L, '[k', L, '];'
         );
-        
+
         if (actions.propName) {
             me.body.push('.', actions.propName);
         }
-        
+
         if (actions.between) {
             me.body.push('if(xindex>1){ out.push("', actions.between, '"); } \n');
         }
@@ -534,7 +533,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
                 me.definitions.push('var validTypes={string:1,number:1,boolean:1};');
                 me.validTypes = true;
             }
-            
+
             v = 'validTypes[typeof values] || ts.call(values) === "[object Date]" ? values : ""';
         }
         // name = "#" - Use the xindex
@@ -564,7 +563,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
 
         if (format && me.useFormat) {
             args = args ? ',' + args : "";
-            
+
             if (format.substr(0, 5) !== "this.") {
                 format = "fm." + format + '(';
             }
@@ -589,7 +588,7 @@ Ext.define('Ext.util.XTemplateCompiler', {
         // with eval containing a return statement, so instead we assign to "$" and return
         // that. Because we use "eval", we are automatically sandboxed properly.
         eval($);
-        
+
         return $;
     },
 

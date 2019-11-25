@@ -190,7 +190,7 @@ Ext.define('Ext.util.Filter', {
 
             return false;
         },
-        
+
         /**
          * Checks whether the filter will produce a meaningful value. Since filters
          * may be used in conjunction with data binding, this is a sanity check to
@@ -207,11 +207,11 @@ Ext.define('Ext.util.Filter', {
                 if (!cfg.property) {
                     return 'A Filter requires either a property or a filterFn to be set';
                 }
-                
+
                 if (!cfg.hasOwnProperty('value') && !cfg.operator) {
                     return 'A Filter requires either a property and value, or a filterFn to be set';
                 }
-                
+
             }
 
             return false;
@@ -438,7 +438,7 @@ Ext.define('Ext.util.Filter', {
     updateValue: function(value) {
         // Need to clear any generated local filter fn and increment generation
         this.onConfigMutation();
-        
+
         if (this.getDisableOnEmpty()) {
             this.setDisabled(Ext.isEmpty(value));
         }

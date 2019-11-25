@@ -6,11 +6,11 @@ topSuite("Ext.data.proxy.LocalStorage", ['Ext.data.ArrayStore'], function() {
             Ext.ClassManager.enableNamespaceParseCache = false;
             proxy = new Ext.data.proxy.LocalStorage({ id: 1 });
         });
-        
+
         afterEach(function() {
             Ext.ClassManager.enableNamespaceParseCache = true;
         });
-        
+
         describe("instantiation", function() {
             it("should extend Ext.data.proxy.WebStorage", function() {
                 expect(proxy.superclass).toEqual(Ext.data.proxy.WebStorage.prototype);
@@ -22,14 +22,15 @@ topSuite("Ext.data.proxy.LocalStorage", ['Ext.data.ArrayStore'], function() {
                 it("should return localStorage object", function() {
                     // IE8 throw Class doesn't support Automation when comparing localStorage to itself (or sessionStorage)
                     var automationBug = false;
-                    
+
                     try {
+                        // eslint-disable-next-line no-unused-expressions
                         localStorage === localStorage;
                     }
                     catch (e) {
                         automationBug = true;
                     }
-                    
+
                     if (!automationBug) {
                         expect(proxy.getStorageObject()).toEqual(localStorage);
                     }

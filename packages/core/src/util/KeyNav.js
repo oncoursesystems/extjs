@@ -145,15 +145,15 @@ Ext.define('Ext.util.KeyNav', {
     constructor: function(config) {
         var me = this,
             keymapCfg, map;
-        
+
         //<debug>
         if (arguments.length === 2) {
             Ext.raise("2-argument KeyNav constructor is removed. Use a config object instead.");
         }
         //</debug>
-        
+
         config = config || {};
-        
+
         keymapCfg = {
             target: config.target,
             ignoreInputFields: config.ignoreInputFields,
@@ -163,7 +163,7 @@ Ext.define('Ext.util.KeyNav', {
             ),
             capture: config.capture
         };
-        
+
         if (me.map) {
             me.map.destroy();
         }
@@ -175,7 +175,7 @@ Ext.define('Ext.util.KeyNav', {
             keymapCfg.processEvent = config.processEvent;
             keymapCfg.processEventScope = config.processEventScope || me;
         }
-        
+
         if (config.priority) {
             keymapCfg.priority = config.priority;
         }
@@ -193,7 +193,7 @@ Ext.define('Ext.util.KeyNav', {
         me.addBindings(config);
 
         map.disable();
-        
+
         if (!config.disabled) {
             map.enable();
         }
@@ -209,7 +209,7 @@ Ext.define('Ext.util.KeyNav', {
 
         for (keyName in bindings) {
             binding = bindings[keyName];
-            
+
             // There is a property named after a key name.
             // It may be a function or an binding spec containing handler, scope and
             // defaultEventAction configs
@@ -219,11 +219,11 @@ Ext.define('Ext.util.KeyNav', {
             keyCode = keyName.length === 1
                 ? keyName.charCodeAt(0)
                 : (keyCodes[keyName] || Event[keyName.toUpperCase()]);
-            
+
             if (keyCode != null) {
                 keyName = keyCode;
             }
-            
+
             if (binding && (keyName.length === 1 || !isNaN(keyName = parseInt(keyName, 10)))) {
                 if (typeof binding === 'function') {
                     binding = {
@@ -233,7 +233,7 @@ Ext.define('Ext.util.KeyNav', {
                             : me.defaultEventAction
                     };
                 }
-                
+
                 map.addBinding({
                     key: keyName,
                     ctrl: binding.ctrl,
@@ -269,17 +269,17 @@ Ext.define('Ext.util.KeyNav', {
      */
     destroy: function(removeEl) {
         var me = this;
-        
+
         if (removeEl) {
             Ext.raise("removeEl argument in KeyNav destructor is not supported anymore.");
         }
-        
+
         if (me.destroyKeyMap) {
             me.map.destroy(removeEl);
         }
-        
+
         me.map = null;
-        
+
         me.callParent();
     },
 
@@ -302,7 +302,7 @@ Ext.define('Ext.util.KeyNav', {
         if (this.map) {
             this.map.disable();
         }
-        
+
         this.disabled = true;
     },
 
@@ -314,7 +314,7 @@ Ext.define('Ext.util.KeyNav', {
         this.map.setDisabled(disabled);
         this.disabled = disabled;
     },
-    
+
     isEnabled: function() {
         return !this.disabled;
     },

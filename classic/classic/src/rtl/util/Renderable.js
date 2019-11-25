@@ -38,7 +38,7 @@ Ext.define('Ext.rtl.util.Renderable', {
 
     beforeRender: function() {
         var rtl = this.getInherited().rtl;
-        
+
         if (rtl) {
             this.addCls(this._rtlCls);
         }

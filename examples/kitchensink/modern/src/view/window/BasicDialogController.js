@@ -2,18 +2,18 @@ Ext.define('KitchenSink.view.window.BasicDialogController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.basic-dialog',
 
-    destroy: function () {
+    destroy: function() {
         Ext.destroy(this.dialog);
 
         this.callParent();
     },
 
-    onCancel: function (button) {
+    onCancel: function(button) {
         console.log('onCancel');
         this.dialog.hide();
     },
 
-    onOK: function (button) {
+    onOK: function(button) {
         console.log('onOK');
         this.dialog.hide();
     },

@@ -9,7 +9,7 @@ Ext.define('Ext.chart.legend.LegendBase', {
             '<span class=\"', Ext.baseCSSPrefix, 'legend-item-marker {[ values.disabled ? Ext.baseCSSPrefix + \'legend-item-inactive\' : \'\' ]}\" style=\"background:{mark};\"></span>{name}'
         ],
         /* eslint-enable max-len, no-useless-escape */
-        
+
         inline: true,
 
         scrollable: false // for IE11 vertical align
@@ -17,7 +17,7 @@ Ext.define('Ext.chart.legend.LegendBase', {
 
     constructor: function(config) {
         var scroller, onDrag;
-        
+
         this.callParent([config]);
 
         scroller = this.getScrollable();

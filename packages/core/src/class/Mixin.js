@@ -247,9 +247,9 @@ Ext.define('Ext.Mixin', function(Mixin) { return { // eslint-disable-line brace-
                     var a = arguments,
                         fn = isFunc ? hookFn : mixinClassPrototype[hookFn],
                         result = this.callParent(a);
-                    
+
                     fn.apply(this, a);
-                    
+
                     return result;
                 },
                 existingFn = targetClass.hasOwnProperty(methodName) &&
@@ -299,11 +299,11 @@ Ext.define('Ext.Mixin', function(Mixin) { return { // eslint-disable-line brace-
             if (mixinConfig.beforeHooks) {
                 Ext.raise('Use of "beforeHooks" is deprecated - use "before" instead');
             }
-            
+
             if (mixinConfig.hooks) {
                 Ext.raise('Use of "hooks" is deprecated - use "after" instead');
             }
-            
+
             if (mixinConfig.afterHooks) {
                 Ext.raise('Use of "afterHooks" is deprecated - use "after" instead');
             }
@@ -326,7 +326,7 @@ Ext.define('Ext.Mixin', function(Mixin) { return { // eslint-disable-line brace-
 
                 if (befores) {
                     Ext.Object.each(befores, function(key, value) {
-                        targetClass.addMember(key, function() {
+                        targetClass.hookMember(key, function() {
                             if (mixin[value].apply(this, arguments) !== false) {
                                 return this.callParent(arguments);
                             }
@@ -336,11 +336,11 @@ Ext.define('Ext.Mixin', function(Mixin) { return { // eslint-disable-line brace-
 
                 if (afters) {
                     Ext.Object.each(afters, function(key, value) {
-                        targetClass.addMember(key, function() {
+                        targetClass.hookMember(key, function() {
                             var ret = this.callParent(arguments);
-                            
+
                             mixin[value].apply(this, arguments);
-                            
+
                             return ret;
                         });
                     });
@@ -355,9 +355,9 @@ Ext.define('Ext.Mixin', function(Mixin) { return { // eslint-disable-line brace-
                 if (extended) {
                     targetClass.onExtended(function() {
                         var args = Ext.Array.slice(arguments, 0);
-                        
+
                         args.unshift(targetClass);
-                        
+
                         return extended.apply(this, args);
                     }, this);
                 }

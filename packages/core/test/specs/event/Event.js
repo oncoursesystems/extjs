@@ -1,15 +1,15 @@
 topSuite("Ext.event.Event", function() {
     var E = Ext.event.Event,
         e;
-    
+
     function makeKeyEvent(config) {
         e = new E(Ext.apply({
             type: 'keydown'
         }, config));
-        
+
         return e;
     }
-    
+
     // The following key specs have their behaviour taken from the listed browsers.
     // IE/WebKit share the same behaviour, however Gecko behaves differently in various
     // cases.
@@ -275,7 +275,7 @@ topSuite("Ext.event.Event", function() {
             })());
         }
     });
-    
+
     describe("isNavKeyPress", function() {
         function makeSuite(scrollableOnly) {
             describe("scrollableOnly: " + scrollableOnly, function() {

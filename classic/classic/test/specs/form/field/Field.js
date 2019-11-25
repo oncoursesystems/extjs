@@ -13,11 +13,11 @@ function() {
 
     function createAction(config) {
         config = config || {};
-        
+
         if (!config.form) {
             config.form = {};
         }
-        
+
         Ext.applyIf(config.form, {
             isValid: function() { return true; },
             afterAction: Ext.emptyFn,
@@ -25,7 +25,7 @@ function() {
             hasUpload: function() { return false; },
             markInvalid: Ext.emptyFn
         });
-        
+
         action = new Ext.form.action.Submit(config);
     }
 
@@ -56,12 +56,12 @@ function() {
                     }
                 ]
             }, cfg || {}));
-            
+
             tf = form.down('textfield');
-            
+
             errorDom = tf.errorEl.dom;
         }
-        
+
         afterEach(function() {
             tip = Ext.destroy(tip);
         });
@@ -80,7 +80,7 @@ function() {
                 title: 'quicktip'
             });
             tf.validate();
-     
+
             tip = Ext.form.Labelable.tip;
             expect(tip.hidden).toBe(true);
             jasmine.fireMouseEvent(errorDom, 'mouseover');
@@ -189,7 +189,7 @@ function() {
                 validator = Ext.data.validator.Validator.create({
                     type: 'custom'
                 });
-                
+
                 Ext.define('spec.Person', {
                     extend: 'Ext.data.Model',
                     fields: ['name', 'age', 'address'],
@@ -291,7 +291,7 @@ function() {
             });
         });
     });
-    
+
     describe('getModelData', function() {
         var form;
 
@@ -313,7 +313,7 @@ function() {
 
             expect(field1.getModelData()).toEqual({ field1: 'foo' });
             expect(field2.getModelData()).toEqual({ field2: '' });
-            
+
             Ext.destroy(field1, field2);
         });
 
@@ -346,12 +346,12 @@ function() {
 
     describe('getSubmitData', function() {
         var file;
-        
+
         afterEach(function() {
             Ext.destroy(file);
             file = null;
         });
-        
+
         it('should not be able to get the submit data for a filefield by default, non-submission', function() {
             file = new Ext.form.field.File({
                 name: 'foo'
@@ -411,11 +411,11 @@ function() {
                     value: 'bar'
                 })
             ]);
-            
+
             form = new Ext.form.Basic(ct, {
                 jsonSubmit: true
             });
-            
+
             createAction({ form: form });
 
             action.run();
@@ -439,7 +439,7 @@ function() {
             form = new Ext.form.Basic(ct, {
                 jsonSubmit: true
             });
-            
+
             createAction({ form: form });
 
             action.run();
@@ -462,7 +462,7 @@ function() {
             form = new Ext.form.Basic(ct, {
                 jsonSubmit: true
             });
-            
+
             createAction({ form: form });
 
             action.run();
@@ -489,7 +489,7 @@ function() {
             form = new Ext.form.Basic(ct, {
                 jsonSubmit: true
             });
-            
+
             createAction({ form: form });
 
             action.run();

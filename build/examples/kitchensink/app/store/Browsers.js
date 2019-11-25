@@ -5,7 +5,7 @@ Ext.define('KitchenSink.store.Browsers', {
     //                   IE    Firefox  Chrome   Safari
     fields: ['month', 'data1', 'data2', 'data3', 'data4', 'other'],
 
-    constructor: function (config) {
+    constructor: function(config) {
         config = config || {};
 
         config.data = [

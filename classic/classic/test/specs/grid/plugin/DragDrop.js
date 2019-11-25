@@ -19,14 +19,14 @@ function() {
     function buildData(columns, rowNum) {
         var data = [],
             row;
-        
+
         for (var i = 0; i < rowNum; i++) {
             row = {};
-            
+
             for (var j = 0; j < columns.length; j++) {
                 row[columns[j]] = columns[j] + ' - row #' + i;
             }
-            
+
             data.push(row);
         }
 
@@ -41,9 +41,9 @@ function() {
 
     function selectRow(grid, rowIdx) {
         var target = findCell(grid, rowIdx, 0);
-        
+
         jasmine.fireMouseEvent(target, 'click', 0, 0, false, false, true, false);
-        
+
         return target;
     }
 

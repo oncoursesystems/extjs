@@ -47,7 +47,7 @@ Ext.define('Ext.data.query.Parser', function(QueryParser) {  // eslint-disable-l
                     is: { operator: true }
                 },
 
-                in: {
+                'in': {
                     type: 'operator',
                     name: 'in',
                     value: 'in',
@@ -114,7 +114,7 @@ Ext.define('Ext.data.query.Parser', function(QueryParser) {  // eslint-disable-l
                 }
             },
 
-            in: {
+            'in': {
                 priority: 40,
 
                 led: function(left) {

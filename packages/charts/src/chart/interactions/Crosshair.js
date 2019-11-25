@@ -289,7 +289,7 @@ Ext.define('Ext.chart.interactions.Crosshair', {
                 axisTheme = Ext.merge({}, axesTheme.defaults, axesTheme[axisPosition]);
                 axisLabelConfig = Ext.apply({}, axis.config.label, axisTheme.label);
                 crosshairLabelConfig = axesConfig.label || axesConfig[axisPosition].label;
-                
+
                 axisLabel.labelText = axisLabel.addSprite(
                     Ext.apply(axisLabelConfig, crosshairLabelConfig, {
                         type: 'text',
@@ -315,7 +315,7 @@ Ext.define('Ext.chart.interactions.Crosshair', {
         if (me.getLocks()[me.getGesture()] !== me) {
             return;
         }
-        
+
         // eslint-disable-next-line vars-on-top, one-var
         var chart = me.getChart(),
             surface = chart.getSurface('overlay'),
@@ -493,13 +493,13 @@ Ext.define('Ext.chart.interactions.Crosshair', {
 
                     return titlePadding + (axisSize - titlePadding - tickPadding) / 2 -
                            halfLineWidth;
-                
+
                 case 'end':
                     titlePadding = titleBBox ? axisSize - titleBBox[pointProp] : 0;
 
                     return tickPadding + (axisSize - tickPadding - titlePadding) / 2 +
                            halfLineWidth;
-                
+
                 default:
                     return 0;
             }

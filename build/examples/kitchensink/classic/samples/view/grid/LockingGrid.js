@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.grid.LockingGrid', {
     }, {
         type: 'Store',
         path: 'app/store/Companies.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/Company.js'
     }],
@@ -47,6 +47,11 @@ Ext.define('KitchenSink.view.grid.LockingGrid', {
             gainColor: 'unset',
             lossColor: 'unset',
             percentageChangeWidth: 135
+        },
+        'classic-material': {
+            gainColor: 'unset',
+            lossColor: 'unset',
+            percentageChangeWidth: 150
         }
     },
     //</example>

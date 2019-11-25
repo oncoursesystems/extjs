@@ -70,7 +70,7 @@ var me = this,
         else if (typeof o === "function") {
             return "null";
         }
-        
+
         return 'undefined';
     },
     m = {
@@ -88,7 +88,7 @@ var me = this,
     encodeString = function(s) {
         return '"' + s.replace(charToReplace, function(a) {
             var c = m[a];
-            
+
             return typeof c === 'string'
                 ? c
                 : '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
@@ -123,13 +123,13 @@ var me = this,
 
         for (i in o) {
             val = o[i];
-            
+
             if (!useHasOwn || o.hasOwnProperty(i)) {
                 // To match JSON.stringify, we shouldn't encode functions or undefined
                 if (typeof val === 'function' || val === undefined || val.isInstance) {
                     continue;
                 }
-                
+
                 a.push(me.encodeValue(i) + ': ' + me.encodeValue(val, cnewline), sep);
             }
         }
@@ -149,14 +149,14 @@ var me = this,
         var a = ["[", ""], // Note empty string in case there are no serializable members.
             len = o.length,
             i;
-        
+
         for (i = 0; i < len; i += 1) {
             a.push(me.encodeValue(o[i]), ',');
         }
-        
+
         // Overwrite trailing comma (or empty string)
         a[a.length - 1] = ']';
-        
+
         return a.join("");
     },
 
@@ -168,26 +168,26 @@ var me = this,
         /* eslint-disable-next-line vars-on-top */
         var a = ["{", ""], // Note empty string in case there are no serializable members.
             i, val;
-        
+
         for (i in o) {
             val = o[i];
-            
+
             if (!useHasOwn || o.hasOwnProperty(i)) {
                 // To match JSON.stringify, we shouldn't encode functions or undefined
                 if (typeof val === 'function' || val === undefined) {
                     continue;
                 }
-                
+
                 a.push(me.encodeValue(i), ":", me.encodeValue(val), ',');
             }
         }
-        
+
         // Overwrite trailing comma (or empty string)
         a[a.length - 1] = '}';
-        
+
         return a.join("");
     };
-    
+
     /**
      * Encodes a String. This returns the actual string which is inserted into the JSON string
      * as the literal expression. **The returned value includes enclosing double quotation marks.**
@@ -256,7 +256,7 @@ var me = this,
         if (hasNative && Ext.USE_NATIVE_JSON) {
             return JSON.stringify(o);
         }
-        
+
         return me.encodeValue(o);
     };
 
@@ -275,14 +275,14 @@ var me = this,
             if (hasNative && Ext.USE_NATIVE_JSON) {
                 return JSON.parse(json);
             }
-            
+
             return doDecode(json);
         }
         catch (e) {
             if (safe) {
                 return null;
             }
-            
+
             Ext.raise({
                 sourceClass: "Ext.JSON",
                 sourceMethod: "decode",
@@ -297,7 +297,7 @@ var me = this,
     if (!Ext.util) {
         Ext.util = {};
     }
-    
+
     Ext.util.JSON = me;
 
     /**

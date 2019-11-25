@@ -99,7 +99,7 @@ Ext.define('Ext.drag.Item', {
         if (typeof group === 'string') {
             group = [group];
         }
-        
+
         return group;
     },
 
@@ -109,13 +109,15 @@ Ext.define('Ext.drag.Item', {
 
         me.destroying = true;
         me.setElement(null);
-        
+
         if (el && me.getAutoDestroy()) {
             el.destroy();
         }
-        
+
         me.callParent();
-        me.destroying = false;
+
+        // This just makes it hard to ask "was destroy() called?":
+        // me.destroying = false; // removed in 7.0
     },
 
     privates: {

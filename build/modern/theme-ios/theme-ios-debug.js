@@ -21,6 +21,16 @@ Ext.define('Ext.theme.ios.TitleBar', {
     }
 });
 
+Ext.define('Ext.theme.triton.dataview.ListCollapser', {
+    override: 'Ext.dataview.ListCollapser',
+    config: {
+        tool: {
+            weight: -100,
+            zone: 'start'
+        }
+    }
+});
+
 Ext.define('Ext.theme.ios.dataview.IndexBar', {
     override: 'Ext.dataview.IndexBar',
     config: {

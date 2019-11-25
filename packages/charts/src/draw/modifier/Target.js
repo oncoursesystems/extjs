@@ -32,9 +32,9 @@ Ext.define('Ext.draw.modifier.Target', {
                 plain: { dirty: true },
                 transform: { dirty: true }
             };
-            
+
             attr.dirty = true;
-            
+
             /*
             Maps updaters that have to be called to the attributes that triggered the update.
             It is basically a reversed `triggers` map (see Ext.draw.sprite.AttributeDefinition),
@@ -45,9 +45,9 @@ Ext.define('Ext.draw.modifier.Target', {
             but a flag indicating that the attribute should be applied directly to a canvas
             context.
             */
-            
+
             attr.pendingUpdaters = {};
-            
+
             /*
             Holds the attributes that triggered the canvas update (attr.pendingUpdaters.canvas).
             Canvas attributes are applied directly to a canvas context

@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.charts.line.RealTimeDateController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.line-real-time-date',
 
-    onChartRendered: function (chart) {
+    onChartRendered: function(chart) {
         chart.getStore().removeAll();
         this.addNewData();
         this.chartTask = Ext.TaskManager.start({
@@ -13,17 +13,17 @@ Ext.define('KitchenSink.view.charts.line.RealTimeDateController', {
         });
     },
 
-    onAxisLabelRender: function (axis, label, layoutContext) { // only render interger values
+    onAxisLabelRender: function(axis, label, layoutContext) { // only render interger values
         return Math.abs(layoutContext.renderer(label) % 1) < 1e-5 ? Math.round(label) : '';
     },
 
-    onChartDestroy: function () {
+    onChartDestroy: function() {
         if (this.chartTask) {
             Ext.TaskManager.stop(this.chartTask);
         }
     },
 
-    getNextValue: function (previousValue, min, max, delta) {
+    getNextValue: function(previousValue, min, max, delta) {
         delta = delta || 3;
         min = min || 0;
         max = max || 20;
@@ -33,6 +33,7 @@ Ext.define('KitchenSink.view.charts.line.RealTimeDateController', {
         if (Ext.isNumber(previousValue)) {
             return Ext.Number.constrain(previousValue + delta, min, max);
         }
+
         return Ext.Number.randomInt(min, max);
     },
 
@@ -49,18 +50,21 @@ Ext.define('KitchenSink.view.charts.line.RealTimeDateController', {
         if (count > 0) {
             lastRecord = store.getAt(count - 1);
             xValue = lastRecord.get('xValue') + second;
+
             if (xValue - me.startTime > visibleRange) {
                 me.startTime = xValue - visibleRange;
                 xAxis.setMinimum(this.startTime);
                 xAxis.setMaximum(xValue);
             }
+
             store.add({
                 xValue: xValue,
                 metric1: me.getNextValue(lastRecord.get('metric1')),
                 metric2: me.getNextValue(lastRecord.get('metric2'))
             });
 
-        } else {
+        }
+        else {
             chart.animationSuspended = true;
             me.startTime = Math.floor(Ext.Date.now() / second) * second;
             xAxis.setMinimum(me.startTime);

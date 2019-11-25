@@ -24,6 +24,7 @@ Ext.define('KitchenSink.view.AnchoredToolTipsController', {
 
         this.tips = Ext.Array.map(tips, function(cfg) {
             cfg.showOnTap = true;
+
             return new Ext.tip.ToolTip(cfg);
         });
     },

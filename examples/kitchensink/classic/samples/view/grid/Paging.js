@@ -43,7 +43,13 @@ Ext.define('KitchenSink.view.grid.Paging', {
             width: 1000,
             height: 600,
             repliesWidth: 150,
-            lastpostWidth: 250	
+            lastpostWidth: 250
+        },
+        'classic-material': {
+            width: 1000,
+            height: 600,
+            repliesWidth: 150,
+            lastpostWidth: 250
         }
     },
     //</example>
@@ -85,21 +91,21 @@ Ext.define('KitchenSink.view.grid.Paging', {
         flex: 1,
         sortable: false,
         renderer: 'renderTopic'
-    },{
+    }, {
         text: "Author",
         dataIndex: 'username',
 
         width: 100,
         hidden: true,
         sortable: true
-    },{
+    }, {
         text: "Replies",
         dataIndex: 'replycount',
 
         width: '${repliesWidth}',
         align: 'right',
         sortable: true
-    },{
+    }, {
         text: "Last Post",
         dataIndex: 'lastpost',
 

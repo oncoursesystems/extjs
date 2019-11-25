@@ -83,9 +83,9 @@ product.getProducts((function(provider, response) {
 /* eslint-enable max-len */
 Ext.define('Ext.direct.AmfRemotingProvider', {
     alias: 'direct.amfremotingprovider',
-    
+
     extend: 'Ext.direct.Provider',
-    
+
     requires: [
         'Ext.util.MixedCollection',
         'Ext.util.DelayedTask',
@@ -98,7 +98,7 @@ Ext.define('Ext.direct.AmfRemotingProvider', {
         'Ext.data.amf.RemotingMessage',
         'Ext.direct.ExceptionEvent'
     ],
-   
+
     /**
      * @cfg {Object} actions
      * Object literal defining the server side actions and methods. For example, if
@@ -147,21 +147,21 @@ TestAction.multiply(
      * arguments (2 and 4).  The "multiply" method should return the value 8 which will be
      * available as the <tt>result</tt> in the example above. 
      */
-    
+
     /**
      * @cfg {String/Object} namespace
      * Namespace for the Remoting Provider (defaults to the browser global scope of <i>window</i>).
      * Explicitly specify the namespace Object, or specify a String to have a
      * {@link Ext#namespace namespace created} implicitly.
      */
-    
+
     /**
      * @cfg {String} url
      * <b>Required</b>. The URL to connect to the Flex remoting server (LCDS, BlazeDS, etc).
      * This should include the /messagebroker/amf suffix as defined in the services-config.xml
      * and remoting-config.xml files.
      */
-    
+
     /**
      * @cfg {String} endpoint
      * <b>Requred</b>. This is the channel id defined in services-config.xml on the server
@@ -173,7 +173,7 @@ TestAction.multiply(
      * Specify which param will hold the arguments for the method.
      * Defaults to <tt>'data'</tt>.
      */
-    
+
     /**
      * @cfg {String} binary
      * If true, use AMF binary encoding instead of AMFX XML-based encoding. Note that on some
@@ -183,13 +183,13 @@ TestAction.multiply(
      * in older browsers.
      */
     binary: false,
-    
+
     /**
      * @cfg {Number} maxRetries
      * Number of times to re-attempt delivery on failure of a call.
      */
     maxRetries: 1,
-    
+
     /**
      * @cfg {Number} timeout
      * The timeout to use for each request.
@@ -205,7 +205,7 @@ TestAction.multiply(
      * @param {Ext.direct.Transaction} transaction
      * @param {Object} meta The meta data
      */            
-            
+
     /**
      * @event call
      * Fires immediately after the request to the server-side is sent. This does
@@ -214,12 +214,12 @@ TestAction.multiply(
      * @param {Ext.direct.Transaction} transaction
      * @param {Object} meta The meta data
      */            
-    
+
     constructor: function(config) {
         var me = this;
-        
+
         me.callParent(arguments);
-        
+
         me.namespace = (Ext.isString(me.namespace)) ? Ext.ns(me.namespace) : me.namespace || window;
         me.transactions = new Ext.util.MixedCollection();
         me.callBuffer = [];
@@ -233,7 +233,7 @@ TestAction.multiply(
         var actions = this.actions,
             namespace = this.namespace,
             action, cls, methods, i, len, method;
-        
+
         for (action in actions) {
             if (actions.hasOwnProperty(action)) {
                 cls = namespace[action];
@@ -241,9 +241,9 @@ TestAction.multiply(
                 if (!cls) {
                     cls = namespace[action] = {};
                 }
-                
+
                 methods = actions[action];
-                
+
                 for (i = 0, len = methods.length; i < len; ++i) {
                     method = new Ext.direct.RemotingMethod(methods[i]);
                     cls[method.name] = this.createHandler(action, method);
@@ -251,7 +251,7 @@ TestAction.multiply(
             }
         }
     },
-    
+
     /**
      * Create a handler function for a direct call.
      * @private
@@ -262,7 +262,7 @@ TestAction.multiply(
     createHandler: function(action, method) {
         var me = this,
             handler;
-        
+
         if (!method.formHandler) {
             handler = function() {
                 me.configureRequest(action, method, Array.prototype.slice.call(arguments, 0));
@@ -281,14 +281,14 @@ TestAction.multiply(
 
         return handler;
     },
-    
+
     isConnected: function() {
         return !!this.connected;
     },
 
     connect: function() {
         var me = this;
-        
+
         if (me.url) {
             // Generate a unique ID for this client
             me.clientId = Ext.data.amf.XmlEncoder.generateFlexUID();
@@ -306,13 +306,13 @@ TestAction.multiply(
 
     disconnect: function() {
         var me = this;
-        
+
         if (me.connected) {
             me.connected = false;
             me.fireEvent('disconnect', me);
         }
     },
-    
+
     /**
      * Run any callbacks related to the transaction.
      * @private
@@ -327,7 +327,7 @@ TestAction.multiply(
         if (transaction && transaction.callback) {
             callback = transaction.callback;
             result = Ext.isDefined(event.result) ? event.result : event.data;
-            
+
             if (Ext.isFunction(callback)) {
                 callback(result, event, success);
             }
@@ -337,7 +337,7 @@ TestAction.multiply(
             }
         }
     },
-    
+
     /**
      * React to the ajax request being completed
      * @private
@@ -346,7 +346,7 @@ TestAction.multiply(
         var me = this,
             i = 0,
             len, events, event, transaction, transactions;
-        
+
         if (success) {
             events = me.createEvents(response);
 
@@ -378,7 +378,7 @@ TestAction.multiply(
                         message: 'Unable to connect to the server.',
                         xhr: response
                     });
-                    
+
                     me.fireEvent('data', me, event);
 
                     if (transaction) {
@@ -389,7 +389,7 @@ TestAction.multiply(
             }
         }
     },
-    
+
     /**
      * Get transaction from XHR options
      * @private
@@ -399,7 +399,7 @@ TestAction.multiply(
     getTransaction: function(options) {
         return options && options.tid ? Ext.direct.Manager.getTransaction(options.tid) : null;
     },
-    
+
     /**
      * Configure a direct request
      * @private
@@ -430,7 +430,7 @@ TestAction.multiply(
             me.fireEvent('call', me, transaction, method);
         }
     },
-    
+
     /**
      * Gets the Flex remoting message info for a transaction
      * @private
@@ -463,7 +463,7 @@ TestAction.multiply(
                 });
         }
     },
-    
+
     /**
      * Sends a request to the server
      * @private
@@ -483,7 +483,6 @@ TestAction.multiply(
             encoder,
             amfMessages = [],
             amfHeaders = [];
-        
 
         // prepare AMFX messages
         if (Ext.isArray(data)) {
@@ -492,7 +491,7 @@ TestAction.multiply(
                 Ext.raise("Mutltiple messages in the same call are not supported in AMFX");
             }
             //</debug>
-            
+
             for (len = data.length; i < len; ++i) {
                 amfMessages.push(me.getCallData(data[i]));
             }
@@ -500,11 +499,11 @@ TestAction.multiply(
         else {
             amfMessages.push(me.getCallData(data));
         }
-        
+
         if (me.binary) {
             // AMF message sending always uses AMF0
             encoder = new Ext.data.amf.Encoder({ format: 0 });
-            
+
             // encode packet
             encoder.writeAmfPacket(amfHeaders, amfMessages);
             request.binaryData = encoder.bytes;
@@ -517,11 +516,11 @@ TestAction.multiply(
             encoder.writeAmfxRemotingPacket(amfMessages[0]);
             request.xmlData = encoder.body;
         }
-        
+
         // prepare Ajax request
         Ext.Ajax.request(request);
     },
-    
+
     /**
      * Add a new transaction to the queue
      * @private
@@ -530,13 +529,13 @@ TestAction.multiply(
     queueTransaction: function(transaction) {
         var me = this,
             enableBuffer = false; // no queueing for AMFX
-        
+
         if (transaction.form) {
             me.sendFormRequest(transaction);
 
             return;
         }
-        
+
         me.callBuffer.push(transaction);
 
         if (enableBuffer) {
@@ -550,7 +549,7 @@ TestAction.multiply(
             me.combineAndSend();
         }
     },
-    
+
     /**
      * Combine any buffered requests and send them off
      * @private
@@ -558,13 +557,13 @@ TestAction.multiply(
     combineAndSend: function() {
         var buffer = this.callBuffer,
             len = buffer.length;
-        
+
         if (len > 0) {
             this.sendRequest(len === 1 ? buffer[0] : buffer);
             this.callBuffer = [];
         }
     },
-    
+
     /**
      * Configure a form submission request
      * @private
@@ -578,7 +577,7 @@ TestAction.multiply(
         //<debug>
         Ext.raise("Form requests are not supported for AmfRemoting");
         //</debug>
-        
+
         /*
          var me = this,
          transaction = new Ext.direct.Transaction({
@@ -621,7 +620,7 @@ TestAction.multiply(
          }
          */
     },
-    
+
     /**
      * Sends a form request
      * @private
@@ -631,7 +630,7 @@ TestAction.multiply(
         //<debug>
         Ext.raise("Form requests are not supported for AmfRemoting");
         //</debug>
-        
+
         /*
          Ext.Ajax.request({
              url: this.url,
@@ -745,7 +744,7 @@ TestAction.multiply(
             Ext.raise("Unknown AMF return status: " + status[statusIndex]);
             //</debug>
         }
-        
+
         return event;
     }
 });

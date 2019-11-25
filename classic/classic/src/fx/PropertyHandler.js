@@ -14,30 +14,30 @@ Ext.define('Ext.fx.PropertyHandler', {
                 var unitRE = this.unitRE,
                     match = unitRE.exec(from),
                     start, units;
-                
+
                 damper = (typeof damper === 'number') ? damper : 1;
-                
+
                 if (match) {
                     from = match[1];
                     units = match[2];
-                    
+
                     if (!this.scrollRE.test(attr) && !units && this.pixelDefaultsRE.test(attr)) {
                         units = 'px';
                     }
                 }
-                
+
                 from = +from || 0;
 
                 match = unitRE.exec(end);
-                
+
                 if (match) {
                     end = match[1];
                     units = match[2] || units;
                 }
-                
+
                 end = +end || 0;
                 start = (initial != null) ? initial : from;
-                
+
                 return {
                     from: from,
                     delta: (end - start) * damper,
@@ -153,7 +153,7 @@ Ext.define('Ext.fx.PropertyHandler', {
                     match, base, re, i;
 
                 damper = (typeof damper === 'number') ? damper : 1;
-                
+
                 for (i = 0; i < length; i++) {
                     re = reList[i];
 
@@ -231,19 +231,19 @@ Ext.define('Ext.fx.PropertyHandler', {
                     if (val) {
                         from = val.from;
                         delta = val.delta;
-                        
+
                         // multiple checks to reformat the color if it can't be
                         // recognized by computeDelta.
                         val = (typeof val === 'object' && 'red' in val)
                             ? 'rgb(' + val.red + ', ' + val.green + ', ' + val.blue + ')'
                             : val;
-                        
+
                         val = (typeof val === 'object' && val.length) ? val[0] : val;
-                        
+
                         if (typeof val === 'undefined') {
                             return [];
                         }
-                        
+
                         parsedString = typeof val === 'string'
                             ? val
                             : 'rgb(' + [
@@ -251,7 +251,7 @@ Ext.define('Ext.fx.PropertyHandler', {
                                 (from.green + Math.round(delta.green * easing)) % 256,
                                 (from.blue + Math.round(delta.blue * easing)) % 256
                             ].join(',') + ')';
-                        
+
                         out.push([
                             values[i][0],
                             parsedString
@@ -268,7 +268,7 @@ Ext.define('Ext.fx.PropertyHandler', {
                     p;
 
                 damper = (typeof damper === 'number') ? damper : 1;
-                
+
                 for (p in prop) {
                     out[p] = parseFloat(prop[p]) * damper;
                 }
@@ -279,7 +279,7 @@ Ext.define('Ext.fx.PropertyHandler', {
             computeDelta: function(from, end, damper, initial) {
                 from = this.interpolate(from);
                 end = this.interpolate(end, damper);
-                
+
                 // eslint-disable-next-line vars-on-top
                 var start = initial ? initial : from,
                     delta = {},
@@ -444,7 +444,7 @@ Ext.define('Ext.fx.PropertyHandler', {
         prop = props[i];
         this[prop] = this.color;
     }
-    
+
     // set string properties to string
     props = ['cursor'];
     length = props.length;

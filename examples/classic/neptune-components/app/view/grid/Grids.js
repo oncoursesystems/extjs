@@ -28,6 +28,7 @@ Ext.define('Neptune.view.grid.Grids', {
                 listeners: {
                     drop: function(node, data, dropRec, dropPosition) {
                         var dropOn = dropRec ? ' ' + dropPosition + ' ' + dropRec.get('company') : ' on empty view';
+
                         Ext.Msg.alert("Drag from right to left", 'Dropped ' + data.records[0].get('company') + dropOn);
                     }
                 }
@@ -70,8 +71,9 @@ Ext.define('Neptune.view.grid.Grids', {
                         '<p><b>Change:</b> {change:this.formatChange}</p><br>',
                         '<p><b>Summary:</b> {desc}</p>',
                         {
-                            formatChange: function (v) {
+                            formatChange: function(v) {
                                 var color = v >= 0 ? 'green' : 'red';
+
                                 return '<span style="color: ' + color + ';">' + Ext.util.Format.usMoney(v) + '</span>';
                             }
                         })

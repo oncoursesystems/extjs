@@ -16,13 +16,20 @@ Ext.define('KitchenSink.view.binding.AlgebraUnary', {
     width: '${width}',
     profiles: {
         classic: {
-            width: 370
+            width: 370,
+            textWidth: 120
         },
         neptune: {
-            width: 370
+            width: 370,
+            textWidth: 120
         },
         graphite: {
-            width: 430
+            width: 430,
+            textWidth: 120
+        },
+        'classic-material': {
+            width: 370,
+            textWidth: 150
         }
     },
     bodyPadding: '10 20',
@@ -38,13 +45,13 @@ Ext.define('KitchenSink.view.binding.AlgebraUnary', {
     items: [{
         fieldLabel: 'Negate (!x)',
         bind: '{!x}'
-    },{
+    }, {
         fieldLabel: 'Unary plus (+x)',
         bind: '{+x}'
-    },{
+    }, {
         fieldLabel: 'Unary minus (-x)',
         bind: '{-x}'
-    },{
+    }, {
         fieldLabel: 'Globals',
         bind: 'Ext JS version: {@Ext.versions.ext.version}'
     }],
@@ -60,7 +67,7 @@ Ext.define('KitchenSink.view.binding.AlgebraUnary', {
 
             labelWidth: 20,
             margin: '0 0 0 10',
-            width: 120
+            width: '${textWidth}'
         }]
     }
 });

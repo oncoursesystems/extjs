@@ -11,7 +11,7 @@ Ext.define('Ext.layout.component.Dock', {
     alternateClassName: 'Ext.layout.component.AbstractDock',
 
     type: 'dock',
-    
+
     horzAxisProps: {
         name: 'horz',
         oppositeName: 'vert',
@@ -222,7 +222,7 @@ Ext.define('Ext.layout.component.Dock', {
         else if (collapsedHorz) {
             ownerContext.widthModel = shrinkWrap;
         }
-        
+
         shrinkWrapDock = shrinkWrapDock === true ? 3 : (shrinkWrapDock || 0);
         ownerContext.shrinkWrapDockHeight = (shrinkWrapDock & 1) &&
                                             ownerContext.heightModel.shrinkWrap;
@@ -374,11 +374,13 @@ Ext.define('Ext.layout.component.Dock', {
             framing, horz, vert, forward, backward;
 
         // make sure we can use these value w/o calling methods to get them
+        /* eslint-disable */
         ownerContext.borderInfo || ownerContext.getBorderInfo();
         ownerContext.paddingInfo || ownerContext.getPaddingInfo();
         ownerContext.frameInfo || ownerContext.getFrameInfo();
         bodyContext.borderInfo || bodyContext.getBorderInfo();
         bodyContext.paddingInfo || bodyContext.getPaddingInfo();
+        /* eslint-enable */
 
         // On CSS3 browsers, the border and padding frame the outer el. On non-CSS3
         // browsers, the outer el has no border or padding - all that appears on the
@@ -437,11 +439,11 @@ Ext.define('Ext.layout.component.Dock', {
                 me.dockChild(ownerContext, vert, backward, forward);
             }
         }
-        
+
         if (horz && me.finishAxis(ownerContext, horz)) {
             state.horzDone = horzDone = horz;
         }
-        
+
         if (vert && me.finishAxis(ownerContext, vert)) {
             state.vertDone = vertDone = vert;
         }
@@ -815,7 +817,7 @@ Ext.define('Ext.layout.component.Dock', {
         if (isNaN(axis.maxChildSize)) {
             return false;
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var axisBegin = axis.begin,
             size = axis.end - axisBegin,
@@ -877,7 +879,7 @@ Ext.define('Ext.layout.component.Dock', {
                 // one item, we just poke its dockedAt.x/y property so that when we add
                 // axis.begin the padding will cancel out. (Note: when we are collapsed
                 // paddingBegin will be 0).
-                
+
                 ignoreFrameBegin.dockedAt[axis.posProp] -= paddingBegin;
             }
             else {
@@ -930,7 +932,7 @@ Ext.define('Ext.layout.component.Dock', {
 
         return !isNaN(size);
     },
-    
+
     beforeInvalidateShrinkWrapDock: function(itemContext, options) {
         var sizeModelName = options.axis.sizeModelName;
 
@@ -940,7 +942,7 @@ Ext.define('Ext.layout.component.Dock', {
             itemContext[sizeModelName] = Ext.layout.SizeModel.calculated;
         }
     },
-    
+
     afterInvalidateShrinkWrapDock: function(itemContext, options) {
         var axis = options.axis,
             me = options.layout,
@@ -951,7 +953,7 @@ Ext.define('Ext.layout.component.Dock', {
             itemContext.setProp(axis.posProp, axis.delta + pos);
         }
     },
-    
+
     /**
      * Finishes processing of each axis by applying the min/max size constraints.
      * @private
@@ -969,7 +971,7 @@ Ext.define('Ext.layout.component.Dock', {
         // we are dock shrink wrapping in that direction, otherwise it is not measured.
         // As such, the additions are done to simplify the logic, even though in most
         // cases, it will have no impact on the overall result.
-        
+
         if (publishWidth) {
             size = horz.size;
             minSize = horz.collapsed ? 0 : horz.minSize;
@@ -1060,7 +1062,7 @@ Ext.define('Ext.layout.component.Dock', {
             // We're not invalidating, the ownerContext, so if we're shrink wrapping we'll need to
             // tell any docked items to invalidate themselves if necessary.'
             me.invalidateAxes(ownerContext, horz, vert);
-            
+
         }
 
         // we only publish the sizes if we are not invalidating the result...
@@ -1083,7 +1085,7 @@ Ext.define('Ext.layout.component.Dock', {
 
         return true;
     },
-    
+
     /**
      * 
      * The default weighting of docked items produces this arrangement:
@@ -1148,7 +1150,7 @@ Ext.define('Ext.layout.component.Dock', {
                     itemSize = vertSize;
                     axis = vert;
                 }
-                
+
                 if (axis) {
                     // subtract any margins
                     itemSize -= itemContext.getMarginInfo()[sizeProp];
@@ -1341,11 +1343,11 @@ Ext.define('Ext.layout.component.Dock', {
 
         return bodyContext.el.getHeight() - bodyContext.getBorderInfo().height;
     },
-    
+
     redoLayout: function(ownerContext) {
         var me = this,
             owner = me.owner;
-        
+
         // If we are collapsing...
         if (ownerContext.isCollapsingOrExpanding === 1) {
             if (owner.reExpander) {
@@ -1363,7 +1365,7 @@ Ext.define('Ext.layout.component.Dock', {
             ownerContext.bodyContext.redo();
         }
     },
-    
+
     getRenderTarget: function() {
         return this.owner.bodyWrap;
     },
@@ -1419,7 +1421,7 @@ Ext.define('Ext.layout.component.Dock', {
             for (i = 0; i < dockedItemCount; i++) {
                 item = items[i];
                 dockedItemIds[item.id] = item;
-                
+
                 if (item.dockToEl) {
                     hasDockedToEl = true;
                 }
@@ -1435,11 +1437,11 @@ Ext.define('Ext.layout.component.Dock', {
             //
             for (i = 0; i < childNodeCount; ++i) {
                 dom = childNodes[i];
-                
+
                 // Regardless of whether framing is used, bodyEl will be contained
                 // in the bodyWrap element.
                 elFound = dom === bodyDom;
-                
+
                 if (elFound) {
                     // We want top/left dockedItems to be inserted before the body, so
                     // use the bodyEl's index as the base.
@@ -1451,7 +1453,7 @@ Ext.define('Ext.layout.component.Dock', {
                     ++gap;
                 }
             }
-            
+
             //<debug>
             if (!elFound) {
                 Ext.log.error('Dock layout error for ' + owner.id + ': bodyEl not found!');
@@ -1470,19 +1472,19 @@ Ext.define('Ext.layout.component.Dock', {
             if (hasDockedToEl) {
                 elFound = false;
                 gap = 0;
-                
+
                 childNodes = owner.el.dom.childNodes;
                 childNodeCount = childNodes.length;
-                
+
                 for (i = 0; i < childNodeCount; i++) {
                     dom = childNodes[i];
-                    
+
                     // When extra framing elements are used, bodyWrap will be contained
                     // in the frameBody, which in turn might be contained in other
                     // framing elements.
                     if (hasFrame) {
                         elFound = dom === bodyWrapDom || dom === bodyContainer;
-                        
+
                         // Cache the found body container to speed up subsequent layouts
                         if (!elFound && Ext.fly(dom).contains(bodyWrapDom)) {
                             elFound = true;
@@ -1492,12 +1494,12 @@ Ext.define('Ext.layout.component.Dock', {
                     else {
                         elFound = dom === bodyWrapDom;
                     }
-                    
+
                     if (elFound) {
                         wrapBaseIndex = i;
                         break;
                     }
-                    
+
                     if (dockedItemIds[dom.id]) {
                         ++gap;
                     }
@@ -1508,14 +1510,14 @@ Ext.define('Ext.layout.component.Dock', {
                     Ext.log.error('Dock layout error for ' + owner.id + ': bodyWrapEl not found!');
                 }
                 //</debug>
-                
+
                 // We need to adjust wrapBaseIndex the same way as bodyBaseIndex above,
                 // because docked-to-el header may already exist when this method is called.
                 wrapBaseIndex -= gap;
             }
-            
+
             bodyDockIndex = wrapDockIndex = 0;
-            
+
             // Finally loop over the dockedItems again and ensure that the top/left and
             // bottom/right items are at the proper DOM offset, immediately surrounding
             // the bodyEl or bodyWrap if they're docked to the main el.
@@ -1523,15 +1525,15 @@ Ext.define('Ext.layout.component.Dock', {
             //
             for (i = 0; i < dockedItemCount; i++) {
                 item = items[i];
-                
+
                 // Header is rendered to the el instead of bodyWrap
                 if (item.dockToEl) {
                     insertTarget = owner.el;
                     insertPosition = wrapBaseIndex + wrapDockIndex++;
-                    
+
                     if (item.dock === 'right' || item.dock === 'bottom') {
                         insertPosition++; // skip over the bodyWrap
-                        
+
                         // frameBody consists of 3 elements, wrapBaseIndex points
                         // to the middle one. Skip the bottom one, too.
                         if (hasFrame) {
@@ -1546,7 +1548,7 @@ Ext.define('Ext.layout.component.Dock', {
                 else {
                     insertTarget = target;
                     insertPosition = bodyBaseIndex + bodyDockIndex++;
-                    
+
                     if (item.dock === 'right' || item.dock === 'bottom') {
                         insertPosition++; // skip over the bodyEl or frameBody
                     }
@@ -1562,11 +1564,11 @@ Ext.define('Ext.layout.component.Dock', {
             }
         }
     },
-    
+
     undoLayout: function(ownerContext) {
         var me = this,
             owner = me.owner;
-        
+
         // If we are collapsing...
         if (ownerContext.isCollapsingOrExpanding === 1) {
 

@@ -48,7 +48,7 @@ Ext.define('Ext.window.Toast', {
     extend: 'Ext.window.Window',
 
     xtype: 'toast',
-    
+
     isToast: true,
 
     /**
@@ -94,7 +94,7 @@ Ext.define('Ext.window.Toast', {
      * @inheritdoc
      */
     shadow: false,
-    
+
     focus: Ext.emptyFn,
 
     /**
@@ -144,7 +144,7 @@ Ext.define('Ext.window.Toast', {
      * also sets defaults for various other properties. This config controls only the
      * final position of the toast.
      */
-    
+
     /**
      * @cfg {Boolean} [animate=true]
      * Set this to `false` to make toasts appear and disappear without animation.
@@ -200,7 +200,7 @@ Ext.define('Ext.window.Toast', {
      * The number of milliseconds a Toast waits before automatically closing.
      */
     autoCloseDelay: 3000,
-    
+
     /**
      * @cfg {Boolean} stickOnClick
      * This config will prevent the Toast from closing when you click on it. If this is set
@@ -251,11 +251,11 @@ Ext.define('Ext.window.Toast', {
 
     constructor: function(config) {
         config = config || {};
-        
+
         if (config.animate === undefined) {
             config.animate = Ext.isBoolean(this.animate) ? this.animate : Ext.enableFx;
         }
-        
+
         this.enableAnimations = config.animate;
         delete config.animate;
 
@@ -271,7 +271,7 @@ Ext.define('Ext.window.Toast', {
         if (me.autoClose && me.closable == null) {
             me.closable = false;
         }
-        
+
         me.updateAlignment(me.align);
         me.setAnchor(me.anchor);
         me.callParent();
@@ -588,7 +588,7 @@ Ext.define('Ext.window.Toast', {
 
     afterPositioned: function() {
         var me = this;
-        
+
         // This method can be called from afteranimation event being fired
         // during destruction sequence.
         if (!me.destroying && !me.destroyed && me.autoClose) {
@@ -623,7 +623,7 @@ Ext.define('Ext.window.Toast', {
             }
 
             me.stopAnimation();
-            
+
             if (me.enableAnimations) {
                 el.animate({
                     to: {
@@ -672,7 +672,7 @@ Ext.define('Ext.window.Toast', {
             me.closeOnMouseOut = true;
         }
     },
-    
+
     doDestroy: function() {
         this.removeFromAnchor();
         this.cancelAutoClose();
@@ -701,7 +701,7 @@ Ext.define('Ext.window.Toast', {
         if (me.anchor) {
             activeToasts = me.getToasts();
             index = Ext.Array.indexOf(activeToasts, me);
-            
+
             if (index !== -1) {
                 Ext.Array.erase(activeToasts, index, 1);
 
@@ -720,7 +720,7 @@ Ext.define('Ext.window.Toast', {
             el = me.el;
 
         me.cancelAutoClose();
-        
+
         if (me.isHiding) {
             if (!me.isFading) {
                 me.callParent(arguments);
@@ -744,9 +744,9 @@ Ext.define('Ext.window.Toast', {
                             scope: me,
                             afteranimate: function() {
                                 var me = this;
-                                
+
                                 me.isFading = false;
-                                
+
                                 if (!me.destroying && !me.destroyed) {
                                     me.hide(me.animateTarget, me.doClose, me);
                                 }
@@ -774,7 +774,7 @@ Ext.define('Ext.window.Toast', {
                 html: message,
                 iconCls: iconCls
             };
-            
+
             if (align) {
                 config.align = align;
             }
@@ -782,7 +782,7 @@ Ext.define('Ext.window.Toast', {
 
         toast = new Toast(config);
         toast.show();
-        
+
         return toast;
     };
 });

@@ -30,7 +30,7 @@ Ext.define('Ext.data.PageMap', {
     // for the previous generation
     clear: function(initial) {
         var me = this;
-        
+
         me.pageMapGeneration = (me.pageMapGeneration || 0) + 1;
 
         // Map of internalId to recordIndex
@@ -57,15 +57,15 @@ Ext.define('Ext.data.PageMap', {
         for (i = 0; i < pageCount; i++) {
             pageNumbers[i] = +pageNumbers[i];
         }
-        
+
         Ext.Array.sort(pageNumbers, Ext.Array.numericSortFn);
         scope = scope || me;
-        
+
         for (i = 0; i < pageCount; i++) {
             pageNumber = pageNumbers[i];
             page = me.getPage(pageNumber);
             len = page.length;
-            
+
             for (j = 0; j < len; j++) {
                 if (fn.call(scope, page[j], (pageNumber - 1) * pageSize + j) === false) {
                     return;
@@ -102,15 +102,15 @@ Ext.define('Ext.data.PageMap', {
             result = null;
 
         scope = scope || me;
-        
+
         me.forEach(function(rec, index) {
             if (fn.call(scope, rec, index)) {
                 result = rec;
-                
+
                 return false;
             }
         });
-        
+
         return result;
     },
 
@@ -142,15 +142,15 @@ Ext.define('Ext.data.PageMap', {
             result = -1;
 
         scope = scope || me;
-        
+
         me.forEach(function(rec, index) {
             if (fn.call(scope, rec)) {
                 result = index;
-                
+
                 return false;
             }
         });
-        
+
         return result;
     },
 
@@ -192,7 +192,7 @@ Ext.define('Ext.data.PageMap', {
             Ext.raise('Cannot addAll to a non-empty PageMap');
         }
         //</debug>
-        
+
         this.addPage(1, records);
     },
 
@@ -213,7 +213,7 @@ Ext.define('Ext.data.PageMap', {
             for (i = 0, len = page.length; i < len; i++) {
                 indexMap[page[i].internalId] = storeIndex++;
             }
-            
+
             me.add(pageNumber, page);
             me.fireEvent('pageadd', me, pageNumber, page);
         }
@@ -221,17 +221,17 @@ Ext.define('Ext.data.PageMap', {
 
     getCount: function() {
         var result = this.callParent();
-        
+
         if (result) {
             result = (result - 1) * this.getPageSize() + this.last.value.length;
         }
-        
+
         return result;
     },
 
     getByInternalId: function(internalId) {
         var index = this.indexMap[internalId];
-        
+
         if (index != null) {
             return this.getAt(index);
         }
@@ -239,15 +239,15 @@ Ext.define('Ext.data.PageMap', {
 
     indexOf: function(record) {
         var result = -1;
-        
+
         if (record) {
             result = this.indexMap[record.internalId];
-            
+
             if (result == null) {
                 result = -1;
             }
         }
-        
+
         return result;
     },
 
@@ -278,11 +278,11 @@ Ext.define('Ext.data.PageMap', {
         if (thePage) {
             if (me.fireEvent('beforepageremove', me, page, thePage) !== false) {
                 len = thePage.length;
-                
+
                 for (i = 0; i < len; i++) {
                     delete me.indexMap[thePage[i].internalId];
                 }
-                
+
                 result = me.callParent(arguments);
                 me.fireEvent('pageremove', me, page, thePage);
 
@@ -290,7 +290,7 @@ Ext.define('Ext.data.PageMap', {
                 thePage.length = 0;
             }
         }
-        
+
         return result;
     },
 
@@ -308,7 +308,7 @@ Ext.define('Ext.data.PageMap', {
                 return false;
             }
         }
-        
+
         // Check that the last page is filled enough to encapsulate the range.
         return (endPageNumber - 1) * me._pageSize + me.getPage(endPageNumber).length > end;
     },
@@ -337,7 +337,7 @@ Ext.define('Ext.data.PageMap', {
         if (!this.hasRange(start, end)) {
             Ext.raise('PageMap asked for range which it does not have');
         }
-        
+
         /* eslint-disable-next-line vars-on-top */
         var me = this,
             Array = Ext.Array,
@@ -361,7 +361,7 @@ Ext.define('Ext.data.PageMap', {
                 sliceBegin = 0;
                 doSlice = false;
             }
-            
+
             if (pageNumber === endPageNumber) {
                 sliceEnd = pageSize - (dataEnd - end);
                 doSlice = doSlice || sliceEnd < pageSize;
@@ -375,7 +375,7 @@ Ext.define('Ext.data.PageMap', {
                 Array.push(result, me.getPage(pageNumber));
             }
         }
-        
+
         return result;
     }
 });

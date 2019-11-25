@@ -75,7 +75,7 @@ Ext.define('Ext.app.bind.Binding', {
      */
     bindValidation: function(callback, scope) {
         var stub = this.stub;
-        
+
         return stub && stub.bindValidation(callback, scope);
     },
 
@@ -90,7 +90,7 @@ Ext.define('Ext.app.bind.Binding', {
      */
     bindValidationField: function(callback, scope) {
         var stub = this.stub;
-        
+
         return stub && stub.bindValidationField(callback, scope);
     },
 
@@ -125,7 +125,7 @@ Ext.define('Ext.app.bind.Binding', {
      */
     isAvailable: function() {
         var stub = this.stub;
-        
+
         return stub && stub.isAvailable();
     },
 
@@ -141,7 +141,7 @@ Ext.define('Ext.app.bind.Binding', {
      */
     isLoading: function() {
         var stub = this.stub;
-        
+
         return stub && stub.isLoading();
     },
 
@@ -190,14 +190,14 @@ Ext.define('Ext.app.bind.Binding', {
             Ext.raise('Cannot setValue on a readonly binding');
         }
         //</debug>
-        
+
         this.stub.set(value);
     },
 
     privates: {
         getDataObject: function() {
             var stub = this.stub;
-            
+
             return stub && stub.getDataObject();
         },
 
@@ -225,7 +225,7 @@ Ext.define('Ext.app.bind.Binding', {
                 this.callParent();
             }
         },
-        
+
         sort: function() {
             var stub = this.stub;
 

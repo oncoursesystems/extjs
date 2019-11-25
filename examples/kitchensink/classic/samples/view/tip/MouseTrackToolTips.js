@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.tip.MouseTrackToolTips', {
         align: 'start',
         pack: 'center'
     },
-    
+
     defaultType: 'button',
     defaults: {
         margin: '0 40 0 0',

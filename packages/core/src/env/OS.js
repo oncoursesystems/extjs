@@ -98,7 +98,7 @@ Ext.env.OS = function(userAgent, platform, browserScope) {
         if (this.is.Android2 || this.is.Android3 || browserScope.version.shortVersion === 501) {
             browserScope.setFlag("AndroidStock");
         }
-        
+
         if (this.is.Android4) {
             browserScope.setFlag("AndroidStock");
             browserScope.setFlag("AndroidStock4");
@@ -190,7 +190,7 @@ Ext.env.OS.prototype = {
         if (this.flags) {
             this.flags[name] = value;
         }
-        
+
         this.is[name] = value;
         this.is[name.toLowerCase()] = value;
 

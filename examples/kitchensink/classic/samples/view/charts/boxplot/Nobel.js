@@ -3,7 +3,7 @@ Ext.define('KitchenSink.view.charts.boxplot.Nobel', {
     xtype: 'boxplot-nobel',
     controller: 'boxplot',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.charts.boxplot.Nobel', {
         type: 'Outlier Store',
         path: 'classic/samples/store/NobelOutlier.js'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
     width: 800,

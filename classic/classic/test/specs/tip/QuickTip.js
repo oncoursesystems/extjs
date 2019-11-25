@@ -7,7 +7,7 @@ topSuite("Ext.tip.QuickTip", function() {
 
     function mouseoverTarget(theTarget) {
         theTarget = theTarget || target;
-        
+
         if (jasmine.supportsTouch && !Ext.os.is.Desktop) {
             jasmine.fireMouseEvent(theTarget, 'click');
         }
@@ -21,7 +21,7 @@ topSuite("Ext.tip.QuickTip", function() {
             showOnTap: jasmine.supportsTouch
         }, cfg, { showDelay: 1 }));
     }
-    
+
     beforeEach(function() {
         // We test a private instance.
         // Do not disturb the system QuickTip
@@ -30,16 +30,15 @@ topSuite("Ext.tip.QuickTip", function() {
 
     afterEach(function() {
         Ext.QuickTips.enable();
-        
+
         if (target) {
             target.destroy();
         }
-        
+
         if (tip) {
             tip.destroy();
         }
     });
-
 
     describe("element attributes", function() {
         function setup(attrs) {
@@ -130,7 +129,7 @@ topSuite("Ext.tip.QuickTip", function() {
 
         it("should show when registering tooltip as Ext.Element", function() {
             setup({ text: 'test text' });
-            
+
             runs(function() {
                 expect(tip.isVisible()).toBe(true);
             });
@@ -170,21 +169,21 @@ topSuite("Ext.tip.QuickTip", function() {
                 expect(tip.autoHide).toBeFalsy();
             });
         });
-        
+
         it("should use the 'dismissDelay' parameter for the tooltip's dismissDelay value", function() {
             setup({ dismissDelay: 123 });
             runs(function() {
                 expect(tip.dismissDelay).toEqual(123);
             });
         });
-        
+
         it("should accept a dismissDelay of 0", function() {
             setup({ dismissDelay: 0 });
             runs(function() {
                 expect(tip.dismissDelay).toEqual(0);
             });
         });
-        
+
         it("should default to the main tip dismissDelay", function() {
             setup({ dismissDelay: null });
             runs(function() {
@@ -291,7 +290,7 @@ topSuite("Ext.tip.QuickTip", function() {
         it("should size to the title of the title is larger than the text", function() {
             var body = Ext.htmlEncode('<div style="width: 50px;">a</div>'),
                 title = Ext.htmlEncode('<div style="width: 100px;">a</div>');
-                
+
             runs(function() {
                 createTargetEl('data-qtip="' + body + '" data-qtitle="' + title + '"');
                 createTip();

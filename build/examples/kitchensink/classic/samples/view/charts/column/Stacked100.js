@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.charts.column.Stacked100', {
     xtype: 'column-stacked-100',
     controller: 'column-stacked-100',
     requires: ['Ext.chart.theme.Muted'],
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.charts.column.Stacked100', {
         type: 'Store',
         path: 'app/store/Cars.js'
     }],
-    // </example>
+    //</example>
 
     width: 650,
 

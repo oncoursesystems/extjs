@@ -127,18 +127,20 @@ topSuite("Ext.util.CSV", function() {
             expect(CSV.decode(test1)).toEqual([
                 ['John', 'Doe', '42'],
                 ['Jane', 'Henry', '31'],
-                ['', '', '']
+                ['', '', ''],
+                ['']
             ]);
 
             // one row of data, one empty row, another row of data with \n end variant
             expect(CSV.decode(test2)).toEqual([
                 ['John', 'Doe', '42'],
                 ['', '', ''],
-                ['Jane', 'Henry', '31']
+                ['Jane', 'Henry', '31'],
+                ['']
             ]);
 
             // just one row of data with \r end variant
-            expect(CSV.decode(test3)).toEqual([['John', 'Doe', '42']]);
+            expect(CSV.decode(test3)).toEqual([['John', 'Doe', '42'], ['']]);
         });
     });
 });

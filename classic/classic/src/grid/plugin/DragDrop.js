@@ -179,7 +179,7 @@ Ext.define('Ext.grid.plugin.DragDrop', {
      * @param {String} dropPosition `"before"` or `"after"` depending on whether the 
      * cursor is above or below the mid-line of the node.
      */
-    
+
     /**
      * @cfg {Boolean} [copy=false]
      * Set as `true` to copy the records from the source grid to the destination drop 
@@ -190,7 +190,7 @@ Ext.define('Ext.grid.plugin.DragDrop', {
      * 
      * See {@link #allowCopy} to allow only control-drag operations to copy records.
      */
-    
+
     /**
      * @cfg {Boolean} [allowCopy=false]
      * Set as `true` to allow the user to hold down the control key at the start of the 
@@ -250,7 +250,7 @@ Ext.define('Ext.grid.plugin.DragDrop', {
      * `false` to disallow dragging items from the View.
      */
     enableDrag: true,
-    
+
     /**
      * `true` to register this container with the Scrollmanager for auto scrolling during drag
      * operations. A {@link Ext.dd.ScrollManager} configuration may also be passed.
@@ -340,7 +340,7 @@ Ext.define('Ext.grid.plugin.DragDrop', {
             dragZone = me.dragZone || {};
 
         ownerGrid.relayEvents(view, ['beforedrop', 'drop']);
-        
+
         if (me.enableDrag) {
             if (me.containerScroll) {
                 dragZone.scrollEl = view.getEl();

@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.grid.TreeListController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.tree-list',
 
-    onChange: function (segmented, value) {
+    onChange: function(segmented, value) {
         var treelist = this.lookup('treelist'),
             navBtn = this.lookup('navBtn'),
             hasNav = value.indexOf('nav') !== -1,
@@ -10,7 +10,8 @@ Ext.define('KitchenSink.view.grid.TreeListController', {
 
         if (value.length === 1 && !hasNav) {
             segmented.setValue(['nav', 'micro']);
-        } else {
+        }
+        else {
             treelist.setExpanderFirst(!hasNav);
             treelist.setMicro(hasMicro);
             treelist.setUi(hasNav ? 'nav' : null);

@@ -20,6 +20,10 @@ Ext.define('KitchenSink.view.binding.Associations', {
         graphite: {
             width: 600,
             flexValue: 1
+        },
+        'classic-material': {
+            width: 600,
+            flexValue: 1
         }
     },
     referenceHolder: true,
@@ -31,13 +35,13 @@ Ext.define('KitchenSink.view.binding.Associations', {
     otherContent: [{
         type: 'Model',
         path: 'app/model/Company.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/Order.js'
-    },{
+    }, {
         type: 'Data',
         path: 'app/data/Company.js'
-    },{
+    }, {
         type: 'Data',
         path: 'app/data/Order.js'
     }],

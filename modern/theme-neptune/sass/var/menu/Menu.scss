@@ -1106,4 +1106,12 @@ $menu-component-textfield-vertical-spacing-big: dynamic(10px);
             }
         }
     }
+
+    .#{$prefix}#{$xtype}#{$ui-suffix} .#{$prefix}#{$xtype}-boxscroller {
+        @if $body-background-color == null {
+            background-color: $panel-body-background-color;
+        } @else {
+            background-color: $body-background-color;
+        }
+    }
 }

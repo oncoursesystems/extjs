@@ -738,7 +738,7 @@ Ext.define('Ext.grid.selection.Model', {
      */
     deselectAll: function(suppressEvent) {
         var sel = this.getSelection();
-        
+
         if (sel && sel.getCount()) {
             sel.clear(suppressEvent);
         }
@@ -1063,7 +1063,7 @@ Ext.define('Ext.grid.selection.Model', {
             }
 
             me.stopAutoScroller();
-            
+
             // Will fire when outside cells (on borders, row bodies and headers/footers).
             // We must only process cells.
             if (!Ext.fly(e.target).up(view.eventDelegate)) {
@@ -1324,6 +1324,7 @@ Ext.define('Ext.grid.selection.Model', {
          */
         onNavigate: function(navigateEvent) {
             var me = this,
+                view = me.getView(),
                 store = me.getStore(),
                 selectingRows = me.getRows(),
                 selectingCells = me.getCells(),
@@ -1339,7 +1340,7 @@ Ext.define('Ext.grid.selection.Model', {
                 shiftKey = navigateEvent.shiftKey,
                 adding = true,
                 isSpace = navigateEvent.getKey() === navigateEvent.SPACE,
-                count, changedRow, selectionChanged, selected;
+                count, changedRow, selectionChanged, selected, continueLocation;
 
             // Honour the stopSelection flag which any prior handlers may set.
             // A SelectionColumn handles its own processing.
@@ -1415,7 +1416,14 @@ Ext.define('Ext.grid.selection.Model', {
 
                             sel.setRangeStart(me.selectionStart);
                         }
+                        else {
+                            // Because a range has already been started, and we are shift-selecting,
+                            // we need to continue selection from the last selected location
+                            continueLocation = new Ext.grid.Location(view, me.getLastSelected());
+                            sel.setRangeStart(continueLocation.recordIndex);
+                        }
 
+                        // end the range selection at the current location
                         sel.setRangeEnd(location.recordIndex);
                         selectionChanged = true;
                     }
@@ -1778,7 +1786,7 @@ Ext.define('Ext.grid.selection.Model', {
 
         updateReducible: function(reducible) {
             var extensible;
-            
+
             extensible = this.getConfig('extensible', null, true);
 
             if (extensible) {

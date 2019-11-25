@@ -1,5 +1,5 @@
 $gridfilters-menu-filters-icon: dynamic($fa-var-search);
-$gridfilters-menu-filters-manage-icon: dynamic($fa-var-gear);
+$gridfilters-menu-filters-manage-icon: dynamic($fa-var-cog);
 $gridfilters-menu-filters-more-icon: dynamic($fa-var-ellipsis-h);
 $gridfilters-menu-filters-save-icon: dynamic($fa-var-save);
 
@@ -24,9 +24,9 @@ $gridfilters-menu-filters-save-icon: dynamic($fa-var-save);
 
 $gridfilters-menu-filters-icon: dynamic($ios-search);
 $gridfilters-menu-filters-manage-icon: dynamic($ios-gear);
-$gridfilters-menu-filters-more-icon: dynamic($fa-var-ellipsis-h 'FontAwesome');
+$gridfilters-menu-filters-more-icon: dynamic($fa-var-ellipsis-h 'Font Awesome 5 Free');
 //$gridfilters-menu-filters-save-icon: dynamic($ios-save);
-$gridfilters-menu-filters-save-icon: dynamic($fa-var-folder-o 'FontAwesome');
+$gridfilters-menu-filters-save-icon: dynamic($fa-var-folder 'Font Awesome 5 Free');
 
 
 // Material

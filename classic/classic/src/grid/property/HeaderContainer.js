@@ -63,15 +63,15 @@ Ext.define('Ext.grid.property.HeaderContainer', {
         me.store = source;
         me.callParent([{
             isRootHeader: true,
-            
+
             enableColumnResize: Ext.isDefined(grid.enableColumnResize)
                 ? grid.enableColumnResize
                 : me.enableColumnResize,
-            
+
             enableColumnMove: Ext.isDefined(grid.enableColumnMove)
                 ? grid.enableColumnMove
                 : me.enableColumnMove,
-            
+
             items: [{
                 header: me.nameText,
                 width: grid.nameColumnWidth || me.nameWidth,

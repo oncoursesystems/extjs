@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.dataview.Inline', {
         'Ext.dataview.plugin.ItemTip'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Model',
         path: 'modern/src/model/Speaker.js'
@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.dataview.Inline', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     layout: 'fit',

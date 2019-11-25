@@ -40,7 +40,7 @@ Ext.define('Ext.parse.symbol.Paren', {
         }
 
         parser.advance(')');
-        
+
         return me;
     },
 
@@ -50,7 +50,7 @@ Ext.define('Ext.parse.symbol.Paren', {
             ret = parser.parseExpression();
 
         parser.advance(")");
-        
+
         return ret;
     }
 });

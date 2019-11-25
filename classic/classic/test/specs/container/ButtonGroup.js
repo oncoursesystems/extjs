@@ -11,17 +11,17 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
     function createButtonGroup(config) {
         // ARIA warnings are expected
         spyOn(Ext.log, 'warn');
-        
+
         group = new Ext.container.ButtonGroup(config || {});
 
         return group;
     }
-    
+
     function makeGroup(cfg) {
         cfg = Ext.apply({
             renderTo: Ext.getBody()
         }, cfg);
-        
+
         return createButtonGroup(cfg);
     }
 
@@ -48,11 +48,10 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
             });
 
             expect(panel.items.getAt(0) instanceof Ext.container.ButtonGroup).toBeTruthy();
-            
+
             panel.destroy();
         });
     });
-
 
     describe("Layout", function() {
         it("should default to table layout", function() {
@@ -66,7 +65,7 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
             });
             expect(group.getLayout() instanceof Ext.layout.container.HBox).toBeTruthy();
         });
-        
+
         // TODO: move this spec to a future TableLayout test suite
         xit("should default to one table row", function() {
             createButtonGroup({
@@ -84,11 +83,10 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
                 items: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
                 renderTo: Ext.getBody()
             });
-            
+
             expect(group.getLayout().columns).toEqual(5);
         });
     });
-
 
     describe("Children", function() {
         it("should default child items to an xtype of 'button'", function() {
@@ -103,7 +101,6 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
             expect(group.items.getAt(1).xtype).toEqual('splitbutton');
         });
     });
-
 
     describe("Title", function() {
         it("should have no title by default", function() {
@@ -125,7 +122,6 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
             expect(group.el.select('.x-btn-group-header').getCount()).toEqual(1);
         });
     });
-
 
     describe("Element classes", function() {
         it("should have a className of 'x-btn-group-notitle' when no title is configured", function() {
@@ -166,7 +162,6 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
         });
     });
 
-
     describe("Framing", function() {
         it("should default to having a frame", function() {
             createButtonGroup({
@@ -174,7 +169,7 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
             });
 
             expect(group.frame).toBeTruthy();
-            
+
             expect(group.el).toHaveCls('x-btn-group-default-framed');
         });
 
@@ -188,26 +183,26 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
             expect(group.el).not.toHaveCls('x-btn-group-default-framed');
         });
     });
-    
+
     describe("ARIA", function() {
         describe("general", function() {
             beforeEach(function() {
                 makeGroup();
             });
-            
+
             it("should be a FocusableContainer", function() {
                 expect(group.focusableContainer).toBe(true);
             });
-            
+
             it("should have presentation role on main el", function() {
                 expect(group.el).toHaveAttr('role', 'presentation');
             });
-            
+
             it("should have toolbar role on body el", function() {
                 expect(group.body).toHaveAttr('role', 'toolbar');
             });
         });
-        
+
         describe("labels", function() {
             describe("with header", function() {
                 beforeEach(function() {
@@ -215,16 +210,16 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
                         title: 'frobbe'
                     });
                 });
-                
+
                 it("should have aria-labelledby", function() {
                     expect(group.body).toHaveAttr('aria-labelledby', group.header.titleCmp.textEl.id);
                 });
-                
+
                 it("should not have aria-label", function() {
                     expect(group.body).not.toHaveAttr('aria-label');
                 });
             });
-            
+
             describe("with title but no header", function() {
                 beforeEach(function() {
                     makeGroup({
@@ -232,44 +227,44 @@ topSuite("Ext.container.ButtonGroup", ['Ext.button.Button', 'Ext.button.Split'],
                         header: false
                     });
                 });
-                
+
                 it("should have aria-label", function() {
                     expect(group.body).toHaveAttr('aria-label', 'bonzo');
                 });
-                
+
                 it("should not have aria-labelledby", function() {
                     expect(group.body).not.toHaveAttr('aria-labelledby');
                 });
             });
-            
+
             describe("with title but header updated to none", function() {
                 beforeEach(function() {
                     makeGroup({
                         title: 'throbbe',
                         header: false
                     });
-                    
+
                     group.setIconCls('guzzard');
                 });
-                
+
                 it("should have aria-label", function() {
                     expect(group.body).toHaveAttr('aria-label', 'throbbe');
                 });
-                
+
                 it("should not have aria-labelledby", function() {
                     expect(group.body).not.toHaveAttr('aria-labelledby');
                 });
             });
-            
+
             describe("no header no title", function() {
                 beforeEach(function() {
                     makeGroup();
                 });
-                
+
                 it("should not have aria-labelledby", function() {
                     expect(group.body).not.toHaveAttr('aria-labelledby');
                 });
-                
+
                 it("should not have aria-label", function() {
                     expect(group.body).not.toHaveAttr('aria-label');
                 });

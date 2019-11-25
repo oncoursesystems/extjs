@@ -182,7 +182,6 @@ topSuite('Ext.grid.filters.menu.Base', [
                 var menu = colMap.colf1.getMenu(),
                     gridfilter = menu.getComponent('filter');
 
-
                 gridfilter.getMenu().innerItems[0].setValue('Don');
 
                 waits(500);

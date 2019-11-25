@@ -75,7 +75,7 @@ Ext.define('Ext.data.amf.XmlEncoder', {
             }
 
             uid += "-";
-            
+
             // add timestamp
             // get the String representation of milliseconds in hex format
             // eslint-disable-next-line newline-per-chained-call
@@ -239,7 +239,7 @@ Ext.define('Ext.data.amf.XmlEncoder', {
         if (typeof(num) !== "number" && !(num instanceof Number)) {
             Ext.log.warn("Encoder: writeNumber argument is not numeric. Can't coerce.");
         }
-        // </debug>
+        //</debug>
 
         // switch to the primitive value for handling:
         if (num instanceof Number) {
@@ -320,7 +320,7 @@ Ext.define('Ext.data.amf.XmlEncoder', {
             if (ordinals[i] === undefined) {
                 //  we have a gap in the array. Mark it - the rest of the items become ECMA elements
                 firstNonOrdinal = i;
-                
+
                 break;
             }
         }
@@ -464,7 +464,7 @@ Ext.define('Ext.data.amf.XmlEncoder', {
                     Ext.raise("Byte array value out of bounds: " + array[i]);
                 }
                 //</debug>
-                
+
                 h = array[i].toString(16).toUpperCase();
 
                 if (array[i] < 0x10) {
@@ -612,7 +612,7 @@ Ext.define('Ext.data.amf.XmlEncoder', {
 
         return str;
     },
-    
+
     /**
      * Tries to determine if an object is an XML document
      * @param {Object} item to identify

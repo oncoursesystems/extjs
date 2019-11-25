@@ -32,7 +32,7 @@ Ext.define('Ext.grid.RowHeader', {
                 for (i = 0; i < len; ++i) {
                     p = partners[i];
                     column = p.getColumnForField(data.groupField);
-                    
+
                     if (column) {
                         break;
                     }

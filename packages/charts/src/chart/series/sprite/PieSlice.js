@@ -116,11 +116,11 @@ Ext.define('Ext.chart.series.sprite.PieSlice', {
                 startRho: Math.min(attr.startRho, attr.endRho),
                 endRho: Math.max(attr.startRho, attr.endRho)
             };
-            
+
             changes = Ext.callback(attr.renderer, null,
                                    [me, itemCfg, me.getRendererData(), me.getRendererIndex()],
                                    0, me.getSeries());
-            
+
             me.setAttributes(changes);
             me.useAttributes(ctx, rect);
         }

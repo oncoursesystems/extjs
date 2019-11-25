@@ -30,24 +30,24 @@ Ext.define('Ext.sparkline.Bullet', {
          * @cfg {String} [targetColor=#f33] The colour of the vertical target marker.
          */
         targetColor: '#f33',
-        
+
         /**
          * @cfg {Number} [targetWidth=3] Width of the target bar in pixels.
          */
         targetWidth: 3,
-        
+
         /**
          * @cfg {String} [performanceColor=#33f] The color of the performance measure
          * horizontal bar.
          */
         performanceColor: '#33f',
-        
+
         /**
          * @cfg {String[]} [rangeColors] An array of colors to use for each qualitative range
          * background color.
          */
         rangeColors: ['#d3dafe', '#a8b6ff', '#7f94ff'],
-        
+
         /**
          * @cfg {Number} [base] Set this to a number to change the base start number.
          */
@@ -73,7 +73,7 @@ Ext.define('Ext.sparkline.Bullet', {
     // Ensure values is an array of normalized values
     applyValues: function(newValues) {
         newValues = Ext.Array.map(Ext.Array.from(newValues), this.normalizeValue);
-        
+
         this.disabled = !(newValues && newValues.length);
         this.updateConfigChange();
 

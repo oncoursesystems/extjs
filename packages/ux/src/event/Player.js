@@ -89,10 +89,10 @@ var defaults = {},
     mouseEvents = {},
     keyEvents = {},
     doc,
-    
+
     // HTML events supported
     uiEvents = {},
-    
+
     // events that bubble by default
     bubbleEvents = {
         // scroll: 1,
@@ -156,7 +156,7 @@ var inputSpecialKeys = {
                 target.value = target.value.substring(0, --start) +
                                target.value.substring(end);
             }
-            
+
             this.setTextSelection(target, start, start);
         },
         46: function(target, start, end) { // delete: 46
@@ -168,7 +168,7 @@ var inputSpecialKeys = {
                 target.value = target.value.substring(0, start) +
                                target.value.substring(start + 1);
             }
-            
+
             this.setTextSelection(target, start, start);
         }
     };
@@ -203,7 +203,7 @@ return {
     speed: 1.0,
 
     stallTime: 0,
-    
+
     _inputSpecialKeys: {
         INPUT: inputSpecialKeys,
 
@@ -215,7 +215,7 @@ return {
     },
 
     tagPathRegEx: /(\w+)(?:\[(\d+)\])?/,
-    
+
     /**
      * @event beforeplay
      * Fires before an event is played.
@@ -233,13 +233,13 @@ return {
 
     constructor: function(config) {
         var me = this;
-        
+
         me.callParent(arguments);
 
         me.timerFn = function() {
             me.onTick();
         };
-        
+
         me.attachTo = me.attachTo || window;
 
         doc = me.attachTo.document;
@@ -269,7 +269,7 @@ return {
                     if (count === 1) {
                         break;
                     }
-                    
+
                     --count;
                 }
             }
@@ -290,16 +290,16 @@ return {
 
     setTextSelection: function(el, startOffset, endOffset) {
         var range, startCharMove;
-        
+
         // See https://code.google.com/p/rangyinputs/source/browse/trunk/rangyinputs_jquery.js
         if (startOffset < 0) {
             startOffset += el.value.length;
         }
-        
+
         if (endOffset == null) {
             endOffset = startOffset;
         }
-        
+
         if (endOffset < 0) {
             endOffset += el.value.length;
         }
@@ -328,7 +328,7 @@ return {
 
     getTimeIndex: function() {
         var t = this.getTimestamp() - this.stallTime;
-        
+
         return t * this.speed;
     },
 
@@ -436,7 +436,7 @@ return {
             if (animations && animations.getCount()) {
                 return true;
             }
-            
+
             if (eventDescriptor.keyframe) {
                 if (!me.processKeyFrame(eventDescriptor)) {
                     return false;
@@ -603,12 +603,12 @@ return {
                     else if (event.selection) {
                         me.setTextSelection(target, event.selection[0], event.selection[1]);
                     }
-                    
+
                     return me.injectTypeEvent(target, event);
                 }
-                
+
                 handler.call(this, target, sel[0], sel[1]);
-                
+
                 return true;
             }
         }
@@ -738,7 +738,7 @@ return {
                 event.wheelDeltaY = event.wheelDelta = -40 * eventDescriptor.dy;
             }
         }
-    
+
         return event;
     },
 

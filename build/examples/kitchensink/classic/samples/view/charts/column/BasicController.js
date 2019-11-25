@@ -3,36 +3,43 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
     alias: 'controller.column-basic',
 
     onDownload: function() {
+        var chart;
+
         if (Ext.isIE8) {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
+
             return;
         }
-        var chart = this.lookup('chart');
+
+        chart = this.lookup('chart');
+
         if (Ext.os.is.Desktop) {
             chart.download({
                 filename: 'Redwood City Climate Data Chart'
             });
-        } else {
+        }
+        else {
             chart.preview();
         }
     },
 
     onReloadData: function() {
         var chart = this.lookup('chart');
+
         chart.getStore().refreshData();
     },
 
     // The 'target' here is an object that contains information
     // about the target value when the drag operation on the column ends.
-    onEditTipRender: function (tooltip, item, target, e) {
+    onEditTipRender: function(tooltip, item, target, e) {
         tooltip.setHtml('Temperature °F: ' + target.yValue.toFixed(1));
     },
 
-    onSeriesLabelRender: function (value) {
+    onSeriesLabelRender: function(value) {
         return value.toFixed(1);
     },
 
-    onColumnEdit: function (chart, data) {
+    onColumnEdit: function(chart, data) {
         var threshold = 65,
             delta = 20,
             yValue = data.target.yValue,
@@ -40,17 +47,19 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
 
         if (yValue < threshold) {
             coldness = Ext.Number.constrain((threshold - yValue) / delta, 0, 1);
+
             return {
                 fillStyle: 'rgba(133, 231, 252, ' + coldness.toString() + ')'
             };
-        } else {
+        }
+        else {
             return {
                 fillStyle: 'none'
             };
         }
     },
 
-    onAfterRender: function () {
+    onAfterRender: function() {
         var me = this,
             chart = this.lookup('chart'),
             axis = chart.getAxis(0),
@@ -66,7 +75,7 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
         });
     },
 
-    onAxisRangeChange: function (axis, range) {
+    onAxisRangeChange: function(axis, range) {
         // this.lookup('chart') will fail here,
         // as at the time of this call
         // the chart is not yet in the component tree,
@@ -82,10 +91,11 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
                     title: {
                         text: 'Average high: ' + average.toFixed(2) + '°F'
                     },
-                    lineDash: [2,2]
+                    lineDash: [2, 2]
                 }
             });
-        } else {
+        }
+        else {
             axis.setLimits(null);
         }
     },
@@ -93,7 +103,7 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
     itemAnimationDuration: 0,
 
     // Disable item's animaton for editing.
-    onBeginItemEdit: function (chart, interaction, item) {
+    onBeginItemEdit: function(chart, interaction, item) {
         var itemsMarker = item.sprite.getMarker(item.category),
             animation = itemsMarker.getTemplate().getAnimation(); // animation modifier
 
@@ -102,7 +112,7 @@ Ext.define('KitchenSink.view.charts.column.BasicController', {
     },
 
     // Restore item's animation when editing is done.
-    onEndItemEdit: function (chart, interaction, item, target) {
+    onEndItemEdit: function(chart, interaction, item, target) {
         var itemsMarker = item.sprite.getMarker(item.category),
             animation = itemsMarker.getTemplate().getAnimation();
 

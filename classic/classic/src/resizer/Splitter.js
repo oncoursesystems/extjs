@@ -17,7 +17,7 @@
 Ext.define('Ext.resizer.Splitter', {
     extend: 'Ext.Component',
     xtype: 'splitter',
-    
+
     requires: ['Ext.XTemplate'],
     uses: ['Ext.resizer.SplitterTracker'],
 
@@ -39,7 +39,7 @@ Ext.define('Ext.resizer.Splitter', {
 
     baseCls: Ext.baseCSSPrefix + 'splitter',
     collapsedClsInternal: Ext.baseCSSPrefix + 'splitter-collapsed',
-    
+
     // Default to tree, allow internal classes to disable resizing
     canResize: true,
 
@@ -112,17 +112,17 @@ Ext.define('Ext.resizer.Splitter', {
      * width for horizontal splitters.
      */
     size: 5,
-    
+
     /**
      * @cfg {Object} [tracker]
      * Any configuration options to be passed to the underlying {@link Ext.resizer.SplitterTracker}.
      */
     tracker: null,
-    
+
     ariaRole: 'separator',
-    
+
     focusable: true,
-    
+
     tabIndex: 0,
 
     applyTouchAction: function(touchAction, oldTouchAction) {
@@ -166,9 +166,9 @@ Ext.define('Ext.resizer.Splitter', {
             collapseDir: me.getCollapseDirection(),
             collapsible: (collapsible !== null) ? collapsible : target.collapsible
         });
-        
+
         me.ariaRenderAttributes = me.ariaRenderAttributes || {};
-        
+
         // Calling getCollapseDirection() above will set the orientation property
         me.ariaRenderAttributes['aria-orientation'] = me.orientation;
 
@@ -196,7 +196,7 @@ Ext.define('Ext.resizer.Splitter', {
         // when the target is collapsed/expanded by any means.
         // Make sure we're only listening to collapse/expand events on Panels!
         target = me.getCollapseTarget();
-        
+
         if (target && target.isPanel) {
             target.on({
                 collapse: me.onTargetCollapse,
@@ -241,7 +241,7 @@ Ext.define('Ext.resizer.Splitter', {
                 //        1              0             = prev, horizontal
                 //        1              1             = prev, vertical
                 type = me.ownerCt.layout.type;
-                
+
                 if (collapseTarget.isComponent) {
                     items = me.ownerCt.items;
                     idx = Number(items.indexOf(collapseTarget) === items.indexOf(me) - 1) << 1 |
@@ -270,7 +270,7 @@ Ext.define('Ext.resizer.Splitter', {
             ? me.collapseTarget
             : me.collapseTarget === 'prev' ? me.previousSibling() : me.nextSibling();
     },
-    
+
     setCollapseEl: function(display) {
         var el = this.collapseEl;
 
@@ -278,11 +278,11 @@ Ext.define('Ext.resizer.Splitter', {
             el.setDisplayed(display);
         }
     },
-    
+
     onBeforeTargetExpand: function(target) {
         this.setCollapseEl('none');
     },
-    
+
     onBeforeTargetCollapse: function() {
         this.setCollapseEl('none');
     },
@@ -297,13 +297,13 @@ Ext.define('Ext.resizer.Splitter', {
             target[me.orientation === 'vertical' ? 'collapsedHorizontal' : 'collapsedVertical']()) {
             me.el.addCls(me.collapsedClsInternal + ' ' + (me.collapsedCls || ''));
         }
-        
+
         me.setCollapseEl('');
     },
 
     onTargetExpand: function(target) {
         var me = this;
-        
+
         me.el.removeCls(me.collapsedClsInternal + ' ' + (me.collapsedCls || ''));
         me.setCollapseEl('');
     },
@@ -385,7 +385,7 @@ Ext.define('Ext.resizer.Splitter', {
             me.applyOrientation();
         }
     },
-    
+
     updateOrientation: function() {
         delete this.collapseDirection; // recompute
         this.getCollapseDirection();
@@ -433,10 +433,10 @@ Ext.define('Ext.resizer.Splitter', {
             me.el.repaint();
         }
     },
-    
+
     doDestroy: function() {
         Ext.destroy(this.tracker);
-        
+
         this.callParent();
     }
 });

@@ -45,7 +45,7 @@ Ext.define('KitchenSink.view.panels.HeaderPosition', {
         }
     },
 
-    padding: '${padding}', //give room for the panel's shadow
+    padding: '${padding}', // give room for the panel's shadow
     shadow: false,
     //</example>
 

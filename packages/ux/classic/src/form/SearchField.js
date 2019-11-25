@@ -31,13 +31,13 @@ Ext.define('Ext.ux.form.SearchField', {
             proxy;
 
         me.callParent(arguments);
-        
+
         me.on('specialkey', function(f, e) {
             if (e.getKey() === e.ENTER) {
                 me.onSearchClick();
             }
         });
-        
+
         if (!store || !store.isStore) {
             store = me.store = Ext.data.StoreManager.lookup(store);
         }

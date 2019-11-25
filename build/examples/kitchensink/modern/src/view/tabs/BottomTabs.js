@@ -1,6 +1,7 @@
 /**
- * Demonstrates usage of the Ext.tab.Panel component with the tabBar docked to the bottom of the screen.
- * See also app/view/Tabs.js for an example with the tabBar docked to the top
+ * Demonstrates usage of the Ext.tab.Panel component with the tabBar docked to 
+ * the bottom of the screen. See also app/view/Tabs.js for an example with the
+ * tabBar docked to the top
  */
 Ext.define('KitchenSink.view.tabs.BottomTabs', {
     extend: 'Ext.tab.Panel',
@@ -51,7 +52,8 @@ Ext.define('KitchenSink.view.tabs.BottomTabs', {
         iconCls: 'x-fa fa-info-circle'
     }, {
         title: 'Favorites',
-        html: 'Badges <em>(like the 4, below)</em> can be added by setting <code>badgeText</code> when creating a tab or by using <code>setBadgeText()</code> on the tab later.',
+        html: 'Badges <em>(like the 4, below)</em> can be added by setting <code>badgeText</code>' +
+               'when creating a tab or by using <code>setBadgeText()</code> on the tab later.',
         cls: 'card',
         iconCls: 'x-fa fa-star',
         badgeText: '4'
@@ -66,7 +68,7 @@ Ext.define('KitchenSink.view.tabs.BottomTabs', {
         title: 'Settings',
         html: 'Tabbars are <code>ui:"dark"</code> by default, but also have light variants.',
         cls: 'card',
-        iconCls: 'x-fa fa-gear'
+        iconCls: 'x-fa fa-cog'
     }, {
         title: 'User',
         html: '<span class="action">User tapped User</span>',

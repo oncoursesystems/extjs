@@ -154,7 +154,7 @@ Ext.define('Ext.draw.Matrix', {
             if (arguments.length === 2) {
                 return this.createPanZoomFromTwoPair.apply(this, x0.concat(y0));
             }
-            
+
             // eslint-disable-next-line vars-on-top
             var dx = x1 - x0,
                 dy = y1 - y0,

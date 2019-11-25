@@ -117,8 +117,9 @@ function() {
         expect(grid.getView().getNode(2).firstChild).not.toHaveCls(cellSelectedCls);
     });
 
-    itNotTouch = jasmine.supportsTouch ? xit : it,
-        ('SINGLE select mode should not select on CTRL/click (EXTJS-18592)', function() {
+    itNotTouch = jasmine.supportsTouch ? xit : it;
+
+    itNotTouch('SINGLE select mode should not select on CTRL/click (EXTJS-18592)', function() {
         createGrid({}, {
             selType: 'rowmodel', // rowmodel is the default selection model
             mode: 'SINGLE',
@@ -129,7 +130,7 @@ function() {
         // Select row 1
         cell = grid.view.getCell(0, columns[0]);
         jasmine.fireMouseEvent(cell, 'click');
-        
+
         var selection = selModel.getSelection();
 
         // Row 0 should be selected
@@ -140,7 +141,7 @@ function() {
         // CTRL/click on row 2. Should NOT select that row
         cell = grid.view.getCell(1, columns[0]);
         jasmine.fireMouseEvent(cell, 'click', null, null, null, false, true);
-        
+
         selection = selModel.getSelection();
 
         // Row 0 should be still be selected
@@ -161,7 +162,7 @@ function() {
         // Select row 2 by clicking on its first column
         cell = grid.view.getCell(1, columns[0]);
         jasmine.fireMouseEvent(cell, 'click');
-        
+
         var selection = selModel.getSelection();
 
         // Row 2 should be selected
@@ -171,7 +172,7 @@ function() {
 
         // LEFT from there should select row 1
         jasmine.fireKeyEvent(navModel.getPosition().getCell(true), 'keydown', Ext.event.Event.LEFT);
-        
+
         selection = selModel.getSelection();
 
         // Row 1 should be now be selected
@@ -181,7 +182,7 @@ function() {
 
         // RIGHT from there should select row 2
         jasmine.fireKeyEvent(navModel.getPosition().getCell(true), 'keydown', Ext.event.Event.RIGHT);
-        
+
         selection = selModel.getSelection();
 
         // Row 2 should be now be selected

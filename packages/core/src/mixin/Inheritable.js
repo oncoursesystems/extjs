@@ -110,7 +110,7 @@ Ext.define('Ext.mixin.Inheritable', {
             if (ownerCt) {
                 // For classic, this will only be true if the item is a "child" of its owning
                 // container. For example, a docked item will not get the inner inheritedState.
-                
+
                 // For modern, we currently don't have a decent way of telling the difference
                 // between a child item, or an item that belongs to the component. We may
                 // need to determine this in future, but currently have no use for it.
@@ -314,7 +314,7 @@ Ext.define('Ext.mixin.Inheritable', {
      */
     getRefOwner: function() {
         var me = this;
-        
+
         // Look for both ownerCt (classic toolkit) and parent (modern toolkit)
         // Look for ownerCmp before all containment links for scenarios like a button
         // menu inside a floating window, or a submenu of a menu item.
@@ -337,7 +337,7 @@ Ext.define('Ext.mixin.Inheritable', {
      */
     bubble: function(fn, scope, args) {
         var target;
-        
+
         for (target = this; target; target = target.getRefOwner()) {
             if (fn.apply(scope || target, args || [target]) === false) {
                 break;
@@ -367,10 +367,10 @@ Ext.define('Ext.mixin.Inheritable', {
             if (possibleDescendant.getRefOwner() === this) {
                 return true;
             }
-            
+
             possibleDescendant = possibleDescendant.getRefOwner();
         }
-        
+
         return false;
     },
 
@@ -411,19 +411,6 @@ Ext.define('Ext.mixin.Inheritable', {
     },
 
     privates: {
-        _fixName: function() {
-            var me = this,
-                owner;
-
-            if (me.name) {
-                owner = me.lookupNameHolder();
-                
-                if (owner && !owner.destroyed) {
-                    owner.attachNameRef(me);
-                }
-            }
-        },
-
         /**
          * Sets up a reference on our current reference holder.
          *
@@ -431,13 +418,21 @@ Ext.define('Ext.mixin.Inheritable', {
          */
         _fixReference: function() {
             var me = this,
-                refHolder;
+                holder;
+
+            if (me.name && me.nameable) {
+                holder = me.lookupNameHolder();
+
+                if (holder && !holder.destroyed) {
+                    holder.attachNameRef(me);
+                }
+            }
 
             if (me.reference) {
-                refHolder = me.lookupReferenceHolder();
-                
-                if (refHolder) {
-                    refHolder.attachReference(me);
+                holder = me.lookupReferenceHolder();
+
+                if (holder && !holder.destroyed) {
+                    holder.attachReference(me);
                 }
             }
         },
@@ -457,9 +452,7 @@ Ext.define('Ext.mixin.Inheritable', {
                 me.invalidateInheritedState();
             }
 
-            if (me.name || me.reference) {
-                Ext.ComponentManager.markReferencesDirty();
-            }
+            Ext.ComponentManager.markReferencesDirty();
         },
 
         /**
@@ -469,9 +462,7 @@ Ext.define('Ext.mixin.Inheritable', {
         onInheritedRemove: function(destroying) {
             var me = this;
 
-            if (me.name || me.reference) {
-                Ext.ComponentManager.markReferencesDirty();
-            }
+            Ext.ComponentManager.markReferencesDirty();
 
             if (me.inheritedState && !destroying) {
                 me.invalidateInheritedState();

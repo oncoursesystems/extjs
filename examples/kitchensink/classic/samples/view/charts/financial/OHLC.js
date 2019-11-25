@@ -19,7 +19,7 @@ Ext.define('KitchenSink.view.charts.financial.OHLC', {
         'Ext.chart.interactions.ItemHighlight'
     ],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.charts.financial.OHLC', {
         type: 'Store',
         path: 'classic/samples/store/StockPrice.js'
     }],
-    // </example>
+    //</example>
     profiles: {
         classic: {
             width: 650,
@@ -41,10 +41,14 @@ Ext.define('KitchenSink.view.charts.financial.OHLC', {
         graphite: {
             width: 800,
             itemWidth: 400
+        },
+        'classic-material': {
+            width: 800,
+            itemWidth: 400
         }
     },
     layout: 'fit',
-    width:' ${width}',
+    width: '${width}',
     tbar: [
         '->',
         {

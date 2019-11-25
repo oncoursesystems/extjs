@@ -19,10 +19,10 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/ExporterController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
@@ -31,19 +31,29 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
             width: 600,
             height: 350,
             companyWidth: 100,
-            totalWidth: 100
+            totalWidth: 100,
+            columnLines: true
         },
         neptune: {
             width: 750,
             height: 350,
             companyWidth: 100,
-            totalWidth: 100
+            totalWidth: 100,
+            columnLines: true
         },
         graphite: {
             width: 750,
             height: 600,
             companyWidth: 120,
-            totalWidth: 120
+            totalWidth: 120,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 800,
+            height: 600,
+            companyWidth: 150,
+            totalWidth: 150,
+            columnLines: false
         }
     },
     //</example>
@@ -53,6 +63,7 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
     height: '${height}',
     collapsible: true,
     multiSelect: true,
+    columnLines: '${columnLines}',
 
     selModel: {
         type: 'spreadsheet'
@@ -209,7 +220,7 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
                     italic: true
                 }
             }]
-        },{
+        }, {
             dataIndex: 'value',
             header: 'Count',
             aggregator: 'count',
@@ -261,71 +272,72 @@ Ext.define('KitchenSink.view.pivot.Exporter', {
         items: [{
             ui: 'default-toolbar',
             xtype: 'button',
+            cls: 'dock-tab-btn',
             text: 'Export to ...',
             menu: {
                 defaults: {
                     handler: 'exportTo'
                 },
                 items: [{
-                    text:   'Excel xlsx (pivot table definition)',
+                    text: 'Excel xlsx (pivot table definition)',
                     handler: 'exportToPivotXlsx'
-                },{
-                    text:   'Excel xlsx (all items)',
+                }, {
+                    text: 'Excel xlsx (all items)',
                     cfg: {
                         type: 'excel07',
                         ext: 'xlsx'
                     }
-                },{
-                    text:   'Excel xlsx (visible items)',
+                }, {
+                    text: 'Excel xlsx (visible items)',
                     cfg: {
                         type: 'excel07',
                         onlyExpandedNodes: true,
                         ext: 'xlsx'
                     }
-                },{
+                }, {
                     text: 'Excel xml (all items)',
                     cfg: {
                         type: 'excel03',
                         ext: 'xml'
                     }
-                },{
-                    text:   'Excel xml (visible items)',
+                }, {
+                    text: 'Excel xml (visible items)',
                     cfg: {
                         type: 'excel03',
                         onlyExpandedNodes: true,
                         ext: 'xml'
                     }
-                },{
-                    text:   'CSV (all items)',
+                }, {
+                    text: 'CSV (all items)',
                     cfg: {
                         type: 'csv'
                     }
-                },{
-                    text:   'CSV (visible items)',
+                }, {
+                    text: 'CSV (visible items)',
                     cfg: {
                         type: 'csv',
                         onlyExpandedNodes: true
                     }
-                },{
-                    text:   'TSV (all items)',
+                }, {
+                    text: 'TSV (all items)',
                     cfg: {
                         type: 'tsv',
                         ext: 'csv'
                     }
-                },{
-                    text:   'TSV (visible items)',
+                }, {
+                    text: 'TSV (visible items)',
                     cfg: {
                         type: 'tsv',
                         onlyExpandedNodes: true,
                         ext: 'csv'
                     }
-                },{
-                    text:   'HTML (all items)',
+                }, {
+                    text: 'HTML (all items)',
                     cfg: {
                         type: 'html'
                     }
-                },{
-                    text:   'HTML (visible items)',
+                }, {
+                    text: 'HTML (visible items)',
                     cfg: {
                         type: 'html',
                         onlyExpandedNodes: true

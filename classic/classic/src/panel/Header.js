@@ -4,7 +4,7 @@
 Ext.define('Ext.panel.Header', {
     extend: 'Ext.panel.Bar',
     xtype: 'header',
-    
+
     requires: [
         'Ext.panel.Title',
         'Ext.panel.Tool'
@@ -29,7 +29,7 @@ Ext.define('Ext.panel.Header', {
     titleAlign: 'left',
     titlePosition: 0,
     titleRotation: 'default',
-    
+
     autoEl: {
         role: 'presentation'
     },
@@ -172,7 +172,7 @@ Ext.define('Ext.panel.Header', {
          * @accessor
          */
         titlePosition: null,
-        
+
         /**
          * @cfg {'default'/0/1/2} [titleRotation='default']
          * @accessor
@@ -262,10 +262,10 @@ Ext.define('Ext.panel.Header', {
         me.addCls(cls);
 
         me.syncNoBorderCls();
-        
+
         // Add Tools
         Ext.Array.push(items, me.tools);
-        
+
         // Clear the tools so we can have only the instances.
         // Intentional mutation of passed in array.
         // Owning code in Panel uses this array as its public tools property.
@@ -286,11 +286,11 @@ Ext.define('Ext.panel.Header', {
      */
     addTool: function(tool) {
         var me = this;
-        
+
         // Even though the defaultType is tool, it may be changed,
         // so let's be safe and forcibly specify tool
         me.add(Ext.ComponentManager.create(tool, 'tool'));
-        
+
         me.checkFocusableTools();
     },
 
@@ -346,10 +346,10 @@ Ext.define('Ext.panel.Header', {
 
             title.ui = me.ui;
             configHasRotation = ('rotation' in title);
-            
+
             // Important Panel attribute aria-labelledby depends on title textEl id
             title.id = me.id + '-title';
-            
+
             if (me.isAccordionHeader) {
                 title.ariaRole = 'tab';
                 title.textElRole = null;
@@ -357,7 +357,7 @@ Ext.define('Ext.panel.Header', {
             }
 
             title = Ext.create(title);
-            
+
             // avoid calling the title's rotation updater on initial startup in the default scenario
             if (!configHasRotation && me.vertical && me.titleRotation === 'default') {
                 title.rotation = 1;
@@ -392,10 +392,10 @@ Ext.define('Ext.panel.Header', {
         if (itemPosition !== undefined) {
             me.insert(itemPosition, me._userItems);
         }
-        
+
         me.checkFocusableTools();
     },
-    
+
     checkFocusableTools: function() {
         var me = this,
             tools = me.tools,
@@ -403,10 +403,10 @@ Ext.define('Ext.panel.Header', {
 
         if (me.isAccordionHeader) {
             me.focusableContainer = false;
-            
+
             return;
         }
-        
+
         // We only need to enable FocusableContainer behavior when there are focusable tools.
         // For instance, Windows and Accordion panels can have Close tool that is not focusable,
         // in which case there is no sense in making the header behave like focusable container.
@@ -416,12 +416,12 @@ Ext.define('Ext.panel.Header', {
                 break;
             }
         }
-        
+
         if (haveFocusableTool) {
             if (!me.initialConfig.hasOwnProperty('focusableContainer') || me.focusableContainer) {
                 me.ariaRole = 'toolbar';
                 me.focusableContainer = true;
-                
+
                 if (me.rendered) {
                     me.ariaEl.dom.setAttribute('role', 'toolbar');
                     me.initFocusableContainer(true);
@@ -431,7 +431,7 @@ Ext.define('Ext.panel.Header', {
         else {
             me.ariaRole = 'presentation';
             me.focusableContainer = false;
-            
+
             if (me.rendered) {
                 me.ariaEl.dom.setAttribute('role', 'presentation');
                 me.initFocusableContainer(true);
@@ -484,7 +484,7 @@ Ext.define('Ext.panel.Header', {
             if (rotation !== titleRotation) {
                 title.setRotation(rotation);
             }
-            
+
             if (me.rendered) {
                 // remove margins set on items by box layout last time around.
                 // TODO: this will no longer be needed when EXTJS-13359 is fixed
@@ -587,7 +587,7 @@ Ext.define('Ext.panel.Header', {
 
                 afterCls = item.afterTitleCls ||
                            (item.afterTitleCls = item.baseCls + '-after-title');
-                
+
                 beforeCls = item.beforeTitleCls ||
                             (item.beforeTitleCls = item.baseCls + '-before-title');
 

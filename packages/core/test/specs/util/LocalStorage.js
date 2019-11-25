@@ -8,7 +8,7 @@ topSuite("Ext.util.LocalStorage", function() {
     beforeEach(function() {
         store = createStore();
     });
-    
+
     afterEach(function() {
         store.clear();
         store.destroy();
@@ -46,7 +46,7 @@ topSuite("Ext.util.LocalStorage", function() {
         beforeEach(function() {
             store2 = createStore2();
         });
-        
+
         afterEach(function() {
             store2.clear();
             store2.destroy();

@@ -55,8 +55,8 @@ const chunkify = (options) => {
                     ...(pingTimeout ? { pingTimeout } : {}),
                     ...(testStartTimeout ? { testStartTimeout } : {}),
                     browserCapabilities: {
-                        ...cap,
                         ...(options.sessionOptions || {}),
+                        ...cap,
                         // These properties are not exactly capabilities
                         // but they are logged in session metadata.
                         // Comes handy sometimes to verify which session was which

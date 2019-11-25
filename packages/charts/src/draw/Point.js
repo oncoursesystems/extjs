@@ -369,7 +369,7 @@ Ext.define('Ext.draw.Point', {
      */
     getDistanceToLine: function(p1, p2) {
         var n, pp1;
-        
+
         if (arguments.length === 4) {
             p1 = new Ext.draw.Point(arguments[0], arguments[1]);
             p2 = new Ext.draw.Point(arguments[2], arguments[3]);

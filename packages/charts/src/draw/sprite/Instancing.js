@@ -27,7 +27,7 @@ Ext.define('Ext.draw.sprite.Instancing', {
 
     applyTemplate: function(template) {
         var surface;
-        
+
         //<debug>
         if (!Ext.isObject(template)) {
             Ext.raise("A template of an instancing sprite must either be " +
@@ -66,7 +66,7 @@ Ext.define('Ext.draw.sprite.Instancing', {
         }
 
         template.setSurface(this.getSurface());
-        
+
         // ownAttr is used to get a reference to the template's attributes
         // when one of the instances is rendering, as at that moment the template's
         // attributes (template.attr) are the instance's attributes.
@@ -78,7 +78,7 @@ Ext.define('Ext.draw.sprite.Instancing', {
 
     updateInstances: function(instances) {
         var i, ln;
-        
+
         this.clearAll();
 
         if (Ext.isArray(instances)) {
@@ -205,7 +205,7 @@ Ext.define('Ext.draw.sprite.Instancing', {
         }
 
         template.attr = instances[index];
-        
+
         // TODO This is clearly a bug, fix it
         // eslint-disable-next-line no-undef
         result = template.isVisible(point, options);
@@ -220,7 +220,7 @@ Ext.define('Ext.draw.sprite.Instancing', {
             Ext.raise('An instancing sprite must have a template.');
         }
         //</debug>
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             template = me.getTemplate(),

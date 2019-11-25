@@ -54,7 +54,7 @@ Ext.define('Ext.dd.DragSource', {
      */
     constructor: function(el, config) {
         this.el = Ext.get(el);
-        
+
         if (!this.dragData) {
             this.dragData = {};
         }
@@ -67,7 +67,7 @@ Ext.define('Ext.dd.DragSource', {
                 animRepair: this.animRepair
             });
         }
-        
+
         this.callParent(
             [this.el.dom, this.ddGroup || this.group,
              { dragElId: this.proxy.id, resizeFrame: false, isTarget: false,
@@ -297,7 +297,7 @@ Ext.define('Ext.dd.DragSource', {
         // To preserve backwards compat, it only passes the event object
         // Here we correct the arguments.
         var me = this;
-        
+
         if (!e) {
             e = target;
             target = null;
@@ -359,11 +359,11 @@ Ext.define('Ext.dd.DragSource', {
      */
     handleMouseDown: function(e) {
         var data;
-        
+
         if (this.dragging) {
             return;
         }
-        
+
         data = this.getDragData(e);
 
         if (data && this.onBeforeDrag(data, e) !== false) {
@@ -478,7 +478,7 @@ Ext.define('Ext.dd.DragSource', {
 
     destroy: function() {
         Ext.destroy(this.proxy);
-        
+
         this.callParent();
     }
 });

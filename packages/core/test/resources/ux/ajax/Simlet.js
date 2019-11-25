@@ -172,7 +172,7 @@ Ext.define('Ext.ux.ajax.Simlet', function() {
 
                     params = url;
                     // fall...
-                
+
                 // eslint-disable-next-line no-fallthrough
                 case 1:
                     url = method;

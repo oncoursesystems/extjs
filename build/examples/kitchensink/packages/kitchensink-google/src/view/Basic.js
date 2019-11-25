@@ -8,11 +8,11 @@ Ext.define('KitchenSink.view.map.Basic', {
     //<example>
     sourcePreviewPath: 'packages/kitchensink-google/src/view/Basic.js',
     //</example>
-    
+
     requires: [
         'Ext.ux.google.Map'
     ],
-    
+
     layout: 'fit',
     shadow: true,
 

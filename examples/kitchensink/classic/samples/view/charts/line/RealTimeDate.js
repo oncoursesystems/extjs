@@ -3,7 +3,7 @@ Ext.define('KitchenSink.view.charts.line.RealTimeDate', {
     xtype: 'line-real-time-date',
     controller: 'line-real-time-date',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.charts.line.RealTimeDate', {
         type: 'vbox',
         pack: 'center'
     },
-    // </example>
+    //</example>
     width: 650,
 
     items: {
@@ -82,6 +82,5 @@ Ext.define('KitchenSink.view.charts.line.RealTimeDate', {
             destroy: 'onChartDestroy'
         }
     }
-
 
 });

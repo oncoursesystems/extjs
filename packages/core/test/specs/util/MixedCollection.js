@@ -4,7 +4,7 @@ topSuite("Ext.util.MixedCollection", function() {
             id: "fakeScope",
             fakeScope: true
         };
-    
+
     it("should get the correct count", function() {
         mc = new Ext.util.MixedCollection();
 
@@ -12,7 +12,7 @@ topSuite("Ext.util.MixedCollection", function() {
 
         expect(mc.getCount()).toEqual(2);
     });
-    
+
     describe("adding with separate key", function() {
         it("should find using a linear search if the key is not found", function() {
             mc = new Ext.util.MixedCollection();
@@ -154,26 +154,26 @@ topSuite("Ext.util.MixedCollection", function() {
 
             expect(executed).toBe(true);
         });
-        
+
         describe("falsy values", function() {
             it("should be able to add a 0", function() {
                 mc.add('mykey', 0);
                 expect(mc.containsKey('mykey')).toBe(true);
                 expect(mc.get('mykey')).toBe(0);
             });
-            
+
             it("should be able to add an empty string", function() {
                 mc.add('mykey', '');
                 expect(mc.containsKey('mykey')).toBe(true);
                 expect(mc.get('mykey')).toBe('');
             });
-            
+
             it("should be able to add null", function() {
                 mc.add('mykey', null);
                 expect(mc.containsKey('mykey')).toBe(true);
                 expect(mc.get('mykey')).toBeNull();
             });
-            
+
             it("should be able to add undefined", function() {
                 mc.add('mykey', undefined);
                 expect(mc.containsKey('mykey')).toBe(true);
@@ -208,18 +208,18 @@ topSuite("Ext.util.MixedCollection", function() {
                 item9
             ]);
         });
-        
+
         describe("remove", function() {
             it("should remove a single item", function() {
                 mc.remove(item1);
 
                 expect(mc.getCount()).toEqual(8);
             });
-            
+
             it("should return the removed item", function() {
                 expect(mc.remove(item1)).toBe(item1);
             });
-            
+
             it("should return false if no item was found", function() {
                 expect(mc.remove({})).toBe(false);
             });
@@ -239,18 +239,18 @@ topSuite("Ext.util.MixedCollection", function() {
                 expect(eventKey).toBe(1);
             });
         });
-        
+
         describe("removeAt", function() {
             it("should remove a single item", function() {
                 mc.removeAt(1);
 
                 expect(mc.getCount()).toEqual(8);
             });
-            
+
             it("should return the removed item", function() {
                 expect(mc.removeAt(1)).toBe(item2);
             });
-            
+
             it("should return false if no item was found", function() {
                 expect(mc.removeAt(9)).toBe(false);
             });
@@ -270,7 +270,7 @@ topSuite("Ext.util.MixedCollection", function() {
                     expect(eventO).toBe(item2);
                     expect(eventKey).toBe(2);
                 });
-                
+
                 it("should update the collection during a remove", function() {
                     var count, item;
 
@@ -284,13 +284,13 @@ topSuite("Ext.util.MixedCollection", function() {
                 });
             });
         });
-        
+
         describe("bulkRemove", function() {
             it("should limit the length to that of the collection", function() {
                 mc.removeRange(4, 100);
                 expect(mc.getCount()).toBe(4);
             });
-                
+
             it("should remove the correct items", function() {
                 mc.removeRange(3, 2);
                 expect(mc.getCount()).toBe(7);
@@ -298,18 +298,18 @@ topSuite("Ext.util.MixedCollection", function() {
                 expect(mc.getAt(3)).toBe(item6);
             });
         });
-        
+
         describe("removeAtKey", function() {
             it("should remove a single item", function() {
                 mc.removeAtKey(1);
 
                 expect(mc.getCount()).toEqual(8);
             });
-            
+
             it("should return the removed item", function() {
                 expect(mc.removeAtKey(1)).toBe(item1);
             });
-            
+
             it("should return false if no item was found", function() {
                 expect(mc.removeAtKey(10)).toBe(false);
             });
@@ -329,18 +329,18 @@ topSuite("Ext.util.MixedCollection", function() {
                 expect(eventKey).toBe(2);
             });
         });
-        
+
         describe("removeAll", function() {
             it("should remove all items", function() {
                 mc.removeAll();
                 expect(mc.getCount()).toBe(0);
             });
-            
+
             it("should the passed items", function() {
                 mc.removeAll([item2]);
                 expect(mc.getCount()).toBe(8);
             });
-            
+
             it("should fire the remove event with no passed items", function() {
                 var called = 0;
 
@@ -350,7 +350,7 @@ topSuite("Ext.util.MixedCollection", function() {
                 mc.removeAll();
                 expect(called).toBe(9);
             });
-            
+
             it("should fire the remove event when passing items", function() {
                 var called = 0;
 
@@ -446,7 +446,7 @@ topSuite("Ext.util.MixedCollection", function() {
 
             mc.addAll([item1, item2, item3]);
         });
-        
+
         describe("updateKey", function() {
             it("should do nothing if the old key doesn't exist", function() {
                 mc.updateKey('foo', 'bar');
@@ -501,26 +501,26 @@ topSuite("Ext.util.MixedCollection", function() {
 
                 expect(mc.items[0]).toEqual(item4);
             });
-            
+
             describe("falsy values", function() {
                 it("should be able to insert a 0", function() {
                     mc.insert(0, 'mykey', 0);
                     expect(mc.containsKey('mykey')).toBe(true);
                     expect(mc.get('mykey')).toBe(0);
                 });
-            
+
                 it("should be able to insert an empty string", function() {
                     mc.insert(0, 'mykey', '');
                     expect(mc.containsKey('mykey')).toBe(true);
                     expect(mc.get('mykey')).toBe('');
                 });
-            
+
                 it("should be able to insert null", function() {
                     mc.insert(0, 'mykey', null);
                     expect(mc.containsKey('mykey')).toBe(true);
                     expect(mc.get('mykey')).toBeNull();
                 });
-            
+
                 it("should be able to insert undefined", function() {
                     mc.insert(0, 'mykey', undefined);
                     expect(mc.containsKey('mykey')).toBe(true);
@@ -566,7 +566,7 @@ topSuite("Ext.util.MixedCollection", function() {
                 expect(mc2.items[1]).toEqual(item2);
                 expect(mc2.items[2]).toEqual(item3);
             });
-            
+
             it("should keep the getKey fn", function() {
                 var fn = function(o) {
                         return o.id;
@@ -575,7 +575,7 @@ topSuite("Ext.util.MixedCollection", function() {
                         getKey: fn
                     }),
                     mc2 = mc1.clone();
-                
+
                 expect(mc2.getKey).toBe(fn);
                 mc1 = mc2 = null;
             });
@@ -627,7 +627,7 @@ topSuite("Ext.util.MixedCollection", function() {
             });
 
             describe("when getting a range", function() {
-                
+
                 var fill = function() {
                     mc.clear();
                     mc.addAll([
@@ -642,7 +642,7 @@ topSuite("Ext.util.MixedCollection", function() {
                         item9
                     ]);
                 };
-                
+
                 it("should honor the start and limit params", function() {
                     fill();
                     var items = mc.getRange(1, 2);
@@ -672,7 +672,7 @@ topSuite("Ext.util.MixedCollection", function() {
                     expect(items[1]).toEqual(item3);
                     expect(items[7]).toEqual(item9);
                 });
-                
+
                 it("should normalize the start value if < 0", function() {
                     fill();
                     var items = mc.getRange(-3, 2);
@@ -680,7 +680,7 @@ topSuite("Ext.util.MixedCollection", function() {
                     expect(items.length).toBe(3);
                     expect(items[0]).toEqual(item1);
                 });
-                
+
                 it("should normalize the end value the collection max", function() {
                     fill();
                     var items = mc.getRange(6, 200);
@@ -688,14 +688,14 @@ topSuite("Ext.util.MixedCollection", function() {
                     expect(items.length).toBe(3);
                     expect(items[0]).toBe(item7);
                 });
-                
+
                 it("should return empty if start > length", function() {
                     fill();
                     var items = mc.getRange(10, 15);
 
                     expect(items.length).toBe(0);
                 });
-                
+
                 it("should return in reverse order when start > end", function() {
                     fill();
                     var items = mc.getRange(6, 3);
@@ -769,7 +769,7 @@ topSuite("Ext.util.MixedCollection", function() {
                 }
             });
         });
-        
+
         describe("copying", function() {
             it("should return a new MixedCollection", function() {
                 filtered = mc.filter('name', 'Ed');
@@ -777,18 +777,18 @@ topSuite("Ext.util.MixedCollection", function() {
                 expect(filtered instanceof Ext.util.MixedCollection).toBe(true);
                 expect(filtered).not.toEqual(mc);
             });
-            
+
             it("should keep the getKey function when using filter", function() {
                 var fn = function(o) { return o.id; },
                     mc1 = new Ext.util.MixedCollection({
                         getKey: fn
                     }),
                     mc2 = mc1.filter('name', 'Ed');
-                
+
                 expect(mc2.getKey).toBe(fn);
                 mc1 = mc2 = null;
             });
-            
+
             it("should keep the getKey function when using filterBy", function() {
                 var fn = function(o) { return o.id; },
                     mc1 = new Ext.util.MixedCollection({
@@ -797,7 +797,7 @@ topSuite("Ext.util.MixedCollection", function() {
                     mc2 = mc1.filterBy(function() {
                         return true;
                     });
-                
+
                 expect(mc2.getKey).toBe(fn);
                 mc1 = mc2 = null;
             });
@@ -1019,7 +1019,7 @@ topSuite("Ext.util.MixedCollection", function() {
             expect(executed).toBe(true);
         });
     });
-    
+
     describe('adding a MixedCollection to a MixedCollection', function() {
         it('Should add a MixedCollection as a single new item', function() {
             var mc1 = new Ext.util.MixedCollection(false, function(object) {

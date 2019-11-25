@@ -18,7 +18,7 @@
 }
 
 .#{$prefix}column-header-checkbox {
-    border-color: $grid-header-background-color;
+    border-color: $grid-header-border-color;
     .#{$prefix}column-header-text {
         overflow: visible;
     }

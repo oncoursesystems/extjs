@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.chart.line.CrossZoom', {
     xtype: 'line-crosszoom',
     controller: 'line-crosszoom',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/line/CrossZoomController.js'
@@ -47,9 +47,9 @@ Ext.define('KitchenSink.view.chart.line.CrossZoom', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -116,7 +116,7 @@ Ext.define('KitchenSink.view.chart.line.CrossZoom', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

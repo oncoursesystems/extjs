@@ -14,12 +14,15 @@ Ext.define('KitchenSink.view.tree.TreeGridController', {
     ],
 
     formatHours: function(v) {
+        var min;
+
         if (v < 1) {
             return Math.round(v * 60) + ' mins';
         }
 
         if (Math.floor(v) !== v) {
-            var min = v - Math.floor(v);
+            min = v - Math.floor(v);
+
             return Math.floor(v) + 'h ' + Math.round(min * 60) + 'm';
         }
 
@@ -32,11 +35,11 @@ Ext.define('KitchenSink.view.tree.TreeGridController', {
     },
 
     onEditRowAction: function(grid, rowIndex, colIndex, actionItem, event, record, row) {
-        Ext.Msg.alert('Editing' + (record.get('done') ? ' completed task' : '') ,
-            record.get('task'));
+        Ext.Msg.alert('Editing' + (record.get('done') ? ' completed task' : ''),
+                      record.get('task'));
     },
 
-    exportTo: function(btn){
+    exportTo: function(btn) {
         var cfg = Ext.merge({
             title: 'Tree grid export demo',
             fileName: 'TreeGridExport' + '.' + (btn.cfg.ext || btn.cfg.type)
@@ -45,14 +48,14 @@ Ext.define('KitchenSink.view.tree.TreeGridController', {
         this.getView().saveDocumentAs(cfg);
     },
 
-    onBeforeDocumentSave: function(view){
+    onBeforeDocumentSave: function(view) {
         view.mask({
             xtype: 'loadmask',
             message: 'Document is prepared for export. Please wait ...'
         });
     },
 
-    onDocumentSave: function(view){
+    onDocumentSave: function(view) {
         view.unmask();
     }
 

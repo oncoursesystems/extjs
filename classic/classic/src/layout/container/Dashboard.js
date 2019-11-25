@@ -312,7 +312,7 @@ Ext.define('Ext.layout.container.Dashboard', {
             itemMarginWidth = itemContext.marginInfo.width; // always set by above loop
             itemWidth = itemContext.target.columnWidth;
             itemWidth = Math.floor(itemWidth * availableWidth) - itemMarginWidth;
-            
+
             // Get the width of splitter item. We calculate the half value for width
             // since splitter must form a part of both items between which it lies equally.
             if (splitterItemWidth === 0 && (rowindex + 1 < rowLen)) {
@@ -334,11 +334,11 @@ Ext.define('Ext.layout.container.Dashboard', {
                     itemWidth -= halfSplitterItemWidth;
                 }
             }
-            
+
             itemWidth = itemContext.setWidth(itemWidth); // constrains to min/maxWidth
             contentWidth += itemWidth + itemMarginWidth;
         }
-        
+
         return contentWidth;
     }
 });

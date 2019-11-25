@@ -118,7 +118,7 @@ Ext.define('Ext.form.Basic', {
      * @param {Ext.form.Basic} this
      * @param {Boolean} dirty `true` if the form is now dirty, `false` if it is no longer dirty.
      */
-    
+
     /**
      * @event errorchange
      * Fires when the error of one (or more) of the fields in the form changes.
@@ -144,7 +144,7 @@ Ext.define('Ext.form.Basic', {
          * The container component to which this BasicForm is attached.
          */
         me.owner = owner;
-        
+
         me.fieldMonitors = {
             validitychange: me.checkValidityDelay,
             enable: me.checkValidityDelay,
@@ -157,7 +157,7 @@ Ext.define('Ext.form.Basic', {
         me.checkValidityTask = new Ext.util.DelayedTask(me.checkValidity, me);
         me.checkDirtyTask = new Ext.util.DelayedTask(me.checkDirty, me);
         me.checkErrorTask = new Ext.util.DelayedTask(me.checkError, me);
-        
+
         // We use the monitor here as opposed to event bubbling.
         // The problem with bubbling is it doesn't let us react to items being added/remove
         // at different places in the hierarchy which may have an impact on the dirty/valid state.
@@ -176,7 +176,7 @@ Ext.define('Ext.form.Basic', {
         if (Ext.isString(me.paramOrder)) {
             me.paramOrder = me.paramOrder.split(/[\s,|]/);
         }
-        
+
         reader = me.reader;
 
         if (reader && !reader.isReader) {
@@ -188,7 +188,7 @@ Ext.define('Ext.form.Basic', {
 
             me.reader = Ext.createByAlias('reader.' + reader.type, reader);
         }
-        
+
         reader = me.errorReader;
 
         if (reader && !reader.isReader) {
@@ -212,7 +212,6 @@ Ext.define('Ext.form.Basic', {
         this.initialized = true;
         this.onValidityChange(!this.hasInvalidField());
     },
-
 
     /**
      * @cfg {String} method
@@ -309,7 +308,7 @@ Ext.define('Ext.form.Basic', {
      * configuration.
      */
     paramsAsHash: false,
-    
+
     /**
      * @cfg {Object/Array} [metadata]
      * Optional metadata to pass with the actions when Ext Direct {@link #api} is used.
@@ -380,23 +379,23 @@ Ext.define('Ext.form.Basic', {
         me.checkValidityTask = me.checkDirtyTask = me.checkErrorTask = null;
         me.callParent();
     },
-    
+
     onFieldAdd: function(field) {
         field.on(this.fieldMonitors);
         this.onMonitorInvalidate();
     },
-    
+
     onFieldRemove: function(field) {
         field.un(this.fieldMonitors);
         this.onMonitorInvalidate();
     },
-    
+
     onMonitorInvalidate: function() {
         if (this.initialized) {
             this.checkValidityDelay();
         }
     },
-    
+
     /**
      * Return all the {@link Ext.form.field.Field} components in the owner container.
      * @return {Ext.util.MixedCollection} Collection of the Field objects
@@ -412,12 +411,12 @@ Ext.define('Ext.form.Basic', {
      */
     getBoundItems: function() {
         var boundItems = this._boundItems;
-        
+
         if (!boundItems || boundItems.getCount() === 0) {
             boundItems = this._boundItems = new Ext.util.MixedCollection();
             boundItems.addAll(this.owner.query('[formBind]'));
         }
-        
+
         return boundItems;
     },
 
@@ -465,11 +464,11 @@ Ext.define('Ext.form.Basic', {
     checkValidity: function() {
         var me = this,
             valid;
-        
+
         if (me.destroyed) {
             return;
         }
-            
+
         valid = !me.hasInvalidField();
 
         if (valid !== me.wasValid) {
@@ -478,7 +477,7 @@ Ext.define('Ext.form.Basic', {
             me.wasValid = valid;
         }
     },
-    
+
     checkValidityDelay: function() {
         var timer = this.taskDelay;
 
@@ -551,7 +550,7 @@ Ext.define('Ext.form.Basic', {
             return f.isDirty();
         });
     },
-    
+
     checkDirtyDelay: function() {
         var timer = this.taskDelay;
 
@@ -571,11 +570,11 @@ Ext.define('Ext.form.Basic', {
     checkDirty: function() {
         var me = this,
             dirty;
-            
+
         if (me.destroyed) {
             return;
         }
-            
+
         dirty = this.isDirty();
 
         if (dirty !== this.wasDirty) {
@@ -694,12 +693,12 @@ Ext.define('Ext.form.Basic', {
                 'formaction.' + action, Ext.apply({}, options, { form: me })
             );
         }
-        
+
         if (me.fireEvent('beforeaction', me, action) !== false) {
             me.beforeAction(action);
             me.actionTimer = Ext.defer(action.run, 100, action);
         }
-        
+
         return me;
     },
 
@@ -759,16 +758,16 @@ Ext.define('Ext.form.Basic', {
     submit: function(options) {
         var me = this,
             action;
-            
+
         options = options || {};
-        
+
         if (options.standardSubmit || me.standardSubmit) {
             action = 'standardsubmit';
         }
         else {
             action = me.api ? 'directsubmit' : 'submit';
         }
-            
+
         return me.doAction(action, options);
     },
 
@@ -796,10 +795,10 @@ Ext.define('Ext.form.Basic', {
             //<debug>
             Ext.raise("A record is required.");
             //</debug>
-            
+
             return this;
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var fields = record.self.fields,
             values = this.getFieldValues(),
@@ -942,7 +941,6 @@ Ext.define('Ext.form.Basic', {
         }
     },
 
-
     /**
      * Find a specific {@link Ext.form.field.Field} in this form by id or name.
      * @param {String} id The value to search for (specify either a {@link Ext.Component#id id} or
@@ -954,7 +952,6 @@ Ext.define('Ext.form.Basic', {
             return f.id === id || f.name === id || f.dataIndex === id;
         });
     },
-
 
     /**
      * This method allows you to mark one or more fields in a form as invalid along with 
@@ -1266,7 +1263,7 @@ Ext.define('Ext.form.Basic', {
         }
 
         Ext.resumeLayouts(true);
-        
+
         if (resetRecord === true) {
             delete me._record;
         }

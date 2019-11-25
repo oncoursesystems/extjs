@@ -249,7 +249,7 @@ Ext.define('Ext.Editor', {
      * @param {Ext.form.field.Field} field The field attached to this editor
      * @param {Ext.event.Event} event The event object
      */
-    
+
     preventDefaultAlign: true,
     useBoundValue: true,
     specialKeyDelay: 1,
@@ -259,7 +259,7 @@ Ext.define('Ext.Editor', {
             field = me.field = Ext.ComponentManager.create(me.field || {}, 'textfield');
 
         field.msgTarget = field.msgTarget || 'qtip';
-        
+
         me.mon(field, {
             scope: me,
             specialkey: me.onSpecialKey
@@ -268,11 +268,11 @@ Ext.define('Ext.Editor', {
         if (field.grow) {
             me.mon(field, 'autosize', me.onFieldAutosize, me, { delay: 1 });
         }
-        
+
         me.floating = {
             constrain: me.constrain
         };
-        
+
         me.items = field;
 
         me.callParent();
@@ -301,7 +301,7 @@ Ext.define('Ext.Editor', {
         // Ensure the field doesn't get submitted as part of any form
         if (inputEl) {
             inputEl.dom.name = '';
-            
+
             if (me.swallowKeys) {
                 inputEl.swallowEvent([
                     'keypress', // *** Opera
@@ -323,20 +323,20 @@ Ext.define('Ext.Editor', {
 
         if (complete || cancel) {
             event.stopEvent();
-            
+
             if (!task) {
                 me.specialKeyTask = task = new Ext.util.DelayedTask();
             }
-            
+
             // Must defer this slightly to prevent exiting edit mode before the field's own
             // key nav can handle the enter key, e.g. selecting an item in a combobox list
             task.delay(me.specialKeyDelay, complete ? me.completeEdit : me.cancelEdit, me);
-            
+
             //<debug>
             // Makes unit testing easier
             if (me.specialKeyDelay === 0) {
                 task.cancel();
-                
+
                 if (complete) {
                     me.completeEdit();
                 }
@@ -385,7 +385,7 @@ Ext.define('Ext.Editor', {
             // Indeed, it's better if we do not so that we do not interfere with layout's
             // child management.
             Ext.suspendLayouts();
-            
+
             if (!me.rendered) {
                 ownerCt = me.ownerCt;
                 renderTo = me.renderTo || (ownerCt && ownerCt.getEl()) || Ext.getBody();
@@ -403,15 +403,15 @@ Ext.define('Ext.Editor', {
             field.setValue(value);
             field.resetOriginalValue();
             field.resumeEvents();
-            
+
             if (doFocus !== false) {
                 field.focus(field.selectOnFocus ? true : [Ext.Number.MAX_SAFE_INTEGER]);
             }
-            
+
             if (field.autoSize) {
                 field.autoSize();
             }
-            
+
             Ext.resumeLayouts(true);
             me.toggleBoundEl(false);
             me.editing = true;
@@ -425,11 +425,11 @@ Ext.define('Ext.Editor', {
      */
     realign: function(autoSize) {
         var me = this;
-        
+
         if (autoSize === true) {
             me.updateLayout();
         }
-        
+
         me.alignTo(me.boundEl, me.alignment, me.offsets);
     },
 
@@ -456,29 +456,29 @@ Ext.define('Ext.Editor', {
         }
 
         value = me.getValue();
-        
+
         if (!field.isValid()) {
             if (me.revertInvalid !== false) {
                 me.cancelEdit(remainVisible);
             }
-            
+
             return;
         }
 
         if (me.ignoreNoChange && !field.didValueChange(value, startValue)) {
             me.onEditComplete(remainVisible);
-            
+
             return;
         }
 
         if (me.fireEvent('beforecomplete', me, value, startValue) !== false) {
             // Grab the value again, may have changed in beforecomplete
             value = me.getValue();
-            
+
             if (me.updateEl && me.boundEl) {
                 me.boundEl.setHtml(value);
             }
-            
+
             me.onEditComplete(remainVisible, cancel);
             me.fireEvent('complete', me, value, startValue);
         }
@@ -506,17 +506,17 @@ Ext.define('Ext.Editor', {
         if (me.editing) {
             if (field) {
                 value = me.editedValue = me.getValue();
-                
+
                 // temporarily suspend events on field to prevent the "change" event from firing
                 // when setValue() is called
                 field.suspendEvents();
                 me.setValue(startValue);
                 field.resumeEvents();
             }
-            
+
             me.onEditComplete(remainVisible, true);
             me.fireEvent('canceledit', me, value, startValue);
-            
+
             delete me.editedValue;
         }
     },
@@ -526,7 +526,7 @@ Ext.define('Ext.Editor', {
      */
     onEditComplete: function(remainVisible, canceling) {
         this.editing = false;
-        
+
         if (remainVisible !== true) {
             this.hide();
             this.toggleBoundEl(true);
@@ -539,7 +539,7 @@ Ext.define('Ext.Editor', {
         if (me.allowBlur === true && me.editing) {
             me.completeEdit();
         }
-        
+
         me.callParent([e]);
     },
 
@@ -553,7 +553,7 @@ Ext.define('Ext.Editor', {
         else if (field.collapse) {
             field.collapse();
         }
-        
+
         me.callParent(arguments);
     },
 
@@ -588,7 +588,7 @@ Ext.define('Ext.Editor', {
         }
 
         Ext.destroy(me.field);
-        
+
         me.callParent();
     }
 });

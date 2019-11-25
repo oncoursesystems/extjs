@@ -58,11 +58,11 @@ Ext.define('Ext.event.gesture.Tap', {
 
     reset: function() {
         this.startPoint = null;
-        
+
         return this.callParent();
     }
 }, function(Tap) {
     var gestures = Ext.manifest.gestures;
-    
+
     Tap.instance = new Tap(gestures && gestures.tap);
 });

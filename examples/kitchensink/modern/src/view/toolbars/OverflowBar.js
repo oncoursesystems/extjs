@@ -49,21 +49,21 @@ Ext.define('KitchenSink.view.toolbars.OverflowBar', {
         }
     }, {
         text: 'Cut',
-        iconCls: 'x-fa fa-scissors',
+        iconCls: 'x-fa fa-cut',
         menu: [{
             text: 'Cut Menu Item'
         }]
     }, {
-        iconCls: 'x-fa fa-files-o',
+        iconCls: 'x-far fa-copy',
         text: 'Copy'
     }, {
         text: 'Paste',
-        iconCls: 'x-fa fa-clipboard',
+        iconCls: 'x-far fa-clipboard',
         menu: [{
             text: 'Paste Menu Item'
         }]
     }, {
-        iconCls: 'x-fa fa-file-o',
+        iconCls: 'x-far fa-file',
         text: 'Format'
     }, {
         iconCls: 'x-fa fa-bold',

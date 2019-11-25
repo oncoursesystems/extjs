@@ -116,7 +116,7 @@
  */
 Ext.define('Ext.Spacer', {
     extend: 'Ext.Component',
-    alias: 'widget.spacer',
+    xtype: 'spacer',
 
     config: {
         /**

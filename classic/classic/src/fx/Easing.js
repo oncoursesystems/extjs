@@ -33,10 +33,10 @@ Ext.define('Ext.fx.Easing', function() {
         sqrt = math.sqrt,
         abs = math.abs,
         backInSeed = 1.70158;
-        
+
     return {
         singleton: true,
-        
+
         requires: [
             'Ext.fx.CubicBezier'
         ],
@@ -92,7 +92,7 @@ Ext.define('Ext.fx.Easing', function() {
             if (n === 0 || n === 1) {
                 return n;
             }
-            
+
             return pow(2, -10 * n) * sin((n - s) * (2 * pi) / p) + 1;
         },
 

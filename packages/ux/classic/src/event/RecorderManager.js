@@ -39,7 +39,7 @@ Ext.define('Ext.ux.event.RecorderManager', {
                 scope: me
             }
         });
-        
+
         me.recorder.eventsToRecord = Ext.apply({}, me.recorder.eventsToRecord);
 
         function speed(text, value) {
@@ -113,7 +113,7 @@ Ext.define('Ext.ux.event.RecorderManager', {
                 }
             }
         ];
-        
+
         me.fbar = [
             {
                 xtype: 'tbtext',
@@ -246,7 +246,7 @@ Ext.define('Ext.ux.event.RecorderManager', {
         Ext.each(me.query('[whenIdle]'), function(btn) {
             btn.setDisabled(!idle);
         });
-        
+
         Ext.each(me.query('[whenActive]'), function(btn) {
             btn.setDisabled(idle);
         });

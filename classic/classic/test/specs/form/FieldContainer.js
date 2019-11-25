@@ -9,7 +9,7 @@ topSuite("Ext.form.FieldContainer", ['Ext.form.field.*', 'Ext.form.Panel'], func
         if (component) {
             component.destroy();
         }
-        
+
         component = null;
     });
 
@@ -29,7 +29,7 @@ topSuite("Ext.form.FieldContainer", ['Ext.form.field.*', 'Ext.form.Panel'], func
             component.items.first().setValue('Foo');
             expect(called).toBe(true);
         });
-        
+
         it("should fire an event whenever errorchange fires on a child item", function() {
             var called;
 
@@ -193,7 +193,6 @@ topSuite("Ext.form.FieldContainer", ['Ext.form.field.*', 'Ext.form.Panel'], func
             expect(component.getFieldLabel()).toEqual('');
         });
     });
-
 
     xdescribe("combineErrors", function() {
         it("should display no error when there are no sub-field errors", function() {

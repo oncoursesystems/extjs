@@ -10,7 +10,7 @@ Ext.define('Ext.app.bind.RootStub', {
     ],
 
     isRootStub: true,
-    
+
     depth: 0,
 
     createRootChild: function(name, direct) {
@@ -36,7 +36,7 @@ Ext.define('Ext.app.bind.RootStub', {
 
         return stub;
     },
-    
+
     createStubChild: function(name) {
         return this.createRootChild(name, true);
     },
@@ -102,11 +102,11 @@ Ext.define('Ext.app.bind.RootStub', {
             // Setting the value.
             // Ensure the Stub exists for the name, and set its value.
             v = value[key];
-            
+
             if (v !== undefined) {
                 stub = children[key];
                 setSelf = preventClimb || !me.shouldClimb(key);
-                
+
                 if (!stub) {
                     stub = me.createRootChild(key, setSelf);
                     created = true;
@@ -118,7 +118,7 @@ Ext.define('Ext.app.bind.RootStub', {
                 if (!created || !data.hasOwnProperty(value)) {
                     owner.invalidateChildLinks(key);
                 }
-                
+
                 stub.set(v, setSelf);
             }
             // Clearing the value. Delete the data item
@@ -127,12 +127,12 @@ Ext.define('Ext.app.bind.RootStub', {
                 delete data[key];
 
                 stub = children[key];
-                
+
                 if (stub) {
                     if (!stub.isLinkStub && parentVM) {
                         stub = me.createRootChild(key);
                     }
-                    
+
                     owner.invalidateChildLinks(key, true);
                     stub.invalidate(true);
                 }
@@ -141,7 +141,7 @@ Ext.define('Ext.app.bind.RootStub', {
     },
 
     schedule: Ext.emptyFn,
-    
+
     unschedule: Ext.emptyFn,
 
     privates: {
@@ -160,11 +160,11 @@ Ext.define('Ext.app.bind.RootStub', {
 
             if (stub && stub.isLinkStub && !stub.getLinkFormulaStub()) {
                 stub = this.createRootChild(name);
-                
+
                 if (clear) {
                     stub.invalidate(true);
                 }
-                
+
                 this.owner.invalidateChildLinks(name, clear);
             }
         },
@@ -176,7 +176,7 @@ Ext.define('Ext.app.bind.RootStub', {
                 if (parent.getData().hasOwnProperty(name)) {
                     return true;
                 }
-                
+
                 parent = parent.getParent();
             }
 

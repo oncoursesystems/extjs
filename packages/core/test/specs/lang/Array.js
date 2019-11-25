@@ -393,6 +393,128 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
         });
     });
 
+    describe('findInsertionIndex', function() {
+        var items = [
+            //    [0]         [1]         [2]         [3]         [4]         [5]
+            { id: 10 }, { id: 20 }, { id: 30 }, { id: 30 }, { id: 40 }, { id: 50 }
+        ];
+
+        function cmpId(a, b) {
+            return a.id - b.id;
+        }
+
+        it('should return largest valid index if no index is given', function() {
+            var ret;
+
+            ret = Ext.Array.findInsertionIndex({ id: 5 }, items, cmpId);
+            expect(ret).toBe(0);
+
+            ret = Ext.Array.findInsertionIndex({ id: 10 }, items, cmpId);
+            expect(ret).toBe(1);
+
+            ret = Ext.Array.findInsertionIndex({ id: 15 }, items, cmpId);
+            expect(ret).toBe(1);
+
+            ret = Ext.Array.findInsertionIndex({ id: 20 }, items, cmpId);
+            expect(ret).toBe(2);
+
+            ret = Ext.Array.findInsertionIndex({ id: 25 }, items, cmpId);
+            expect(ret).toBe(2);
+
+            ret = Ext.Array.findInsertionIndex({ id: 30 }, items, cmpId);
+            expect(ret).toBe(4);
+
+            ret = Ext.Array.findInsertionIndex({ id: 35 }, items, cmpId);
+            expect(ret).toBe(4);
+
+            ret = Ext.Array.findInsertionIndex({ id: 40 }, items, cmpId);
+            expect(ret).toBe(5);
+
+            ret = Ext.Array.findInsertionIndex({ id: 45 }, items, cmpId);
+            expect(ret).toBe(5);
+
+            ret = Ext.Array.findInsertionIndex({ id: 50 }, items, cmpId);
+            expect(ret).toBe(6);
+
+            ret = Ext.Array.findInsertionIndex({ id: 55 }, items, cmpId);
+            expect(ret).toBe(6);
+        });
+
+        it('should ignore index if invalid', function() {
+            var ret;
+
+            ret = Ext.Array.findInsertionIndex({ id: 5 }, items, cmpId, 1);
+            expect(ret).toBe(0);
+
+            ret = Ext.Array.findInsertionIndex({ id: 5 }, items, cmpId, 2);
+            expect(ret).toBe(0);
+
+            ret = Ext.Array.findInsertionIndex({ id: 5 }, items, cmpId, 5);
+            expect(ret).toBe(0);
+
+            ret = Ext.Array.findInsertionIndex({ id: 5 }, items, cmpId, 6);
+            expect(ret).toBe(0);
+
+            ret = Ext.Array.findInsertionIndex({ id: 15 }, items, cmpId, 0);
+            expect(ret).toBe(1);
+
+            ret = Ext.Array.findInsertionIndex({ id: 15 }, items, cmpId, 2);
+            expect(ret).toBe(1);
+
+            ret = Ext.Array.findInsertionIndex({ id: 15 }, items, cmpId, 5);
+            expect(ret).toBe(1);
+
+            ret = Ext.Array.findInsertionIndex({ id: 15 }, items, cmpId, 6);
+            expect(ret).toBe(1);
+
+            ret = Ext.Array.findInsertionIndex({ id: 30 }, items, cmpId, 0);
+            expect(ret).toBe(4);
+
+            ret = Ext.Array.findInsertionIndex({ id: 30 }, items, cmpId, 1);
+            expect(ret).toBe(4);
+
+            ret = Ext.Array.findInsertionIndex({ id: 30 }, items, cmpId, 5);
+            expect(ret).toBe(4);
+
+            ret = Ext.Array.findInsertionIndex({ id: 30 }, items, cmpId, 6);
+            expect(ret).toBe(4);
+
+            ret = Ext.Array.findInsertionIndex({ id: 60 }, items, cmpId, 5);
+            expect(ret).toBe(6);
+        });
+
+        it('should return given index if valid', function() {
+            var ret;
+
+            ret = Ext.Array.findInsertionIndex({ id: 5 }, items, cmpId, 0);
+            expect(ret).toBe(0);
+
+            ret = Ext.Array.findInsertionIndex({ id: 10 }, items, cmpId, 0);
+            expect(ret).toBe(0);
+
+            ret = Ext.Array.findInsertionIndex({ id: 20 }, items, cmpId, 1);
+            expect(ret).toBe(1);
+
+            ret = Ext.Array.findInsertionIndex({ id: 20 }, items, cmpId, 2);
+            expect(ret).toBe(2);
+
+            ret = Ext.Array.findInsertionIndex({ id: 30 }, items, cmpId, 2);
+            expect(ret).toBe(2);
+
+            ret = Ext.Array.findInsertionIndex({ id: 30 }, items, cmpId, 3);
+            expect(ret).toBe(3);
+
+            ret = Ext.Array.findInsertionIndex({ id: 30 }, items, cmpId, 4);
+            expect(ret).toBe(4);
+
+            ret = Ext.Array.findInsertionIndex({ id: 50 }, items, cmpId, 5);
+            expect(ret).toBe(5);
+
+            ret = Ext.Array.findInsertionIndex({ id: 50 }, items, cmpId, 6);
+            expect(ret).toBe(6);
+        });
+    });
+
     describe("from", function() {
         it("should return an empty array for an undefined value", function() {
             expect(Ext.Array.from(undefined)).toEqual([]);
@@ -420,7 +542,7 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
                 fn = function() {
                     test = Ext.Array.from(arguments);
                 };
-            
+
             fn(1, 2, 3);
             expect(test instanceof Array).toBeTruthy();
             expect(test).toEqual([1, 2, 3]);
@@ -438,11 +560,11 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
             expect(result).toEqual([node1, node2, node3]);
             document.body.removeChild(ct);
         });
-        
+
         it("should convert a single string", function() {
             expect(Ext.Array.from('Foo')).toEqual(['Foo']);
         });
-        
+
         it("should convert a single function", function() {
             var fn = function() {};
 
@@ -470,7 +592,7 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
                 fn = function() {
                     test = Ext.Array.toArray(arguments);
                 };
-            
+
             fn(-1, -2, -3);
             expect(test instanceof Array).toBeTruthy();
             expect(test).toEqual([-1, -2, -3]);
@@ -753,7 +875,7 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
                             values.push(val);
                         });
                     };
-                
+
                 fn(1, 2, 3);
                 expect(values).toEqual([1, 2, 3]);
             });
@@ -783,7 +905,7 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
             });
             expect(count).toEqual(1);
         });
-        
+
         describe("reverse iteraction", function() {
             it("should iterate backwards", function() {
                 var output = [],
@@ -1043,7 +1165,6 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
                 expect(sarray).toEqual(['addda', 'bbb', 'de3', 'erere', 'fff']);
            });
 
-
            it("should be able to use a sortFn that returns a Number", function() {
                 Ext.Array.sort(sarray, function(a, b) {
                     if (a === b) {
@@ -1061,7 +1182,6 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
                 Ext.Array.sort(narray);
                 expect(narray).toEqual([1, 2, 3, 4, 6, 7]);
            });
-
 
            it("should be able to use a sortFn that returns a Number", function() {
                 Ext.Array.sort(narray, function(a, b) {
@@ -1227,7 +1347,6 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
     describe('replace with _replaceSim', testReplace(Ext.Array._replaceSim));
         // and test the wrapper on other browsers
     describe('replace with native implementation', testReplace(Ext.Array.replace));
-
 
     describe('splice', function() {
         it('returns proper result array at the front', function() {
@@ -1525,7 +1644,7 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
             });
         });
     });
-    
+
     describe('flatten', function() {
         var flatten = Ext.Array.flatten;
 
@@ -1561,46 +1680,46 @@ topSuite("Ext.Array", ["Ext.JSON"], function() {
             expect(push([1, 2], [3, 4], 5)).toEqual([1, 2, 3, 4, 5]);
         });
     });
-    
+
     describe("equals", function() {
         var equals = Ext.Array.equals;
-        
+
         it("should match 2 empty arrays", function() {
             expect(equals([], [])).toBe(true);
         });
-        
+
         it("should not match if the arrays are a different size", function() {
             expect(equals([1, 2, 3, 4], [1, 2, 3])).toBe(false);
         });
-        
+
         it("should use strict equality matching", function() {
             expect(equals([1], ['1'])).toBe(false);
         });
-        
+
         it("should have items in the same order", function() {
             expect(equals(['baz', 'bar', 'foo'], ['foo', 'bar', 'baz'])).toBe(false);
         });
-        
+
         it("should match strings", function() {
             expect(equals(['foo', 'bar', 'baz'], ['foo', 'bar', 'baz'])).toBe(true);
         });
-        
+
         it("should match numbers", function() {
             expect(equals([1, 2, 3, 4], [1, 2, 3, 4])).toBe(true);
         });
-        
+
         it("should match booleans", function() {
             expect(equals([false, false, false, true], [false, false, false, true])).toBe(true);
         });
-        
+
         it("should match objects", function() {
             var o1 = {},
                 o2 = {},
                 o3 = {};
-                
+
             expect(equals([o1, o2, o3], [o1, o2, o3])).toBe(true);
         });
-        
+
         it("should match the same array", function() {
             var arr = [1, 2, 3];
 

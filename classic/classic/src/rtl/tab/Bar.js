@@ -13,7 +13,7 @@ Ext.define('Ext.rtl.tab.Bar', {
 
             if (this.isOppositeRootDirection()) {
                 closeXY = closeEl.getXY();
-                
+
                 if (direction === 'right') {
                     closeX = tabX + closeXY[1] - tabY;
                     closeY = tabY + tabHeight - (closeXY[0] - (tabX + tabWidth - tabHeight)) -
@@ -23,7 +23,7 @@ Ext.define('Ext.rtl.tab.Bar', {
                     closeX = tabX + tabWidth - (closeXY[1] - tabY) - closeHeight;
                     closeY = tabY + (closeXY[0] - (tabX + tabWidth - tabHeight));
                 }
-                
+
                 xy = [closeX, closeY];
             }
             else {

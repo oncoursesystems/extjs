@@ -234,7 +234,7 @@ var makeCtor = Ext.Class.makeCtor,
          * @private
          */
         classes: {},
-        
+
         //<debug>
         classCount: 0,
         //</debug>
@@ -284,7 +284,7 @@ var makeCtor = Ext.Class.makeCtor,
             }
 
             Manager.triggerCreated(className);
-            
+
             return true;
         },
 
@@ -353,7 +353,7 @@ var makeCtor = Ext.Class.makeCtor,
                             listener = listeners[j];
                             listener.fn.call(listener.scope, name);
                         }
-                        
+
                         delete nameListeners[name];
                     }
                 }
@@ -368,17 +368,17 @@ var makeCtor = Ext.Class.makeCtor,
          */
         addListener: function(fn, scope, className, listeners, nameListeners) {
             var i;
-            
+
             if (Ext.isArray(className)) {
                 fn = Ext.Function.createBarrier(className.length, fn, scope);
-                
+
                 for (i = 0; i < className.length; i++) {
                     this.addListener(fn, null, className[i], listeners, nameListeners);
                 }
-                
+
                 return;
             }
-            
+
             /* eslint-disable-next-line vars-on-top */
             var listener = {
                 fn: fn,
@@ -388,7 +388,7 @@ var makeCtor = Ext.Class.makeCtor,
             if (className) {
                 if (this.isCreated(className)) {
                     fn.call(scope, className);
-                    
+
                     return;
                 }
 
@@ -416,7 +416,7 @@ var makeCtor = Ext.Class.makeCtor,
          */
         addRootNamespaces: function(namespaces) {
             var name;
-            
+
             for (name in namespaces) {
                 namespaceCache[name] = {
                     name: name,
@@ -435,7 +435,7 @@ var makeCtor = Ext.Class.makeCtor,
          */
         clearNamespaceCache: function() {
             var name;
-            
+
             nameLookupStack.length = 0;
 
             for (name in namespaceCache) {
@@ -461,7 +461,7 @@ var makeCtor = Ext.Class.makeCtor,
          */
         getNamespaceEntry: function(namespace) {
             var entry, i;
-            
+
             if (typeof namespace !== 'string') {
                 return namespace; // assume we've been given an entry object
             }
@@ -592,7 +592,7 @@ var makeCtor = Ext.Class.makeCtor,
             var targetName = Manager.getName(value);
 
             Manager.classes[name] = Manager.setNamespace(name, value);
-            
+
             //<debug>
             Manager.classCount++;
             //</debug>
@@ -660,17 +660,17 @@ var makeCtor = Ext.Class.makeCtor,
             }
             else {
                 name = config.xtype;
-                
+
                 if (name) {
                     aliasPrefix = 'widget.';
                 }
                 else {
                     name = config.type;
                 }
-                
+
                 name = Manager.getNameByAlias(aliasPrefix + name);
             }
-            
+
             return Manager.get(name);
         },
 
@@ -710,7 +710,7 @@ var makeCtor = Ext.Class.makeCtor,
          */
         create: function(className, data, createdFn) {
             var ctor;
-            
+
             //<debug>
             if (className != null && typeof className !== 'string') {
                 throw new Error("[Ext.define] Invalid class name '" + className +
@@ -719,7 +719,7 @@ var makeCtor = Ext.Class.makeCtor,
             //</debug>
 
             ctor = makeCtor(className);
-            
+
             if (typeof data === 'function') {
                 data = data(ctor);
             }
@@ -730,7 +730,7 @@ var makeCtor = Ext.Class.makeCtor,
                     Ext.log.warn("[Ext.define] Duplicate class name '" + className +
                                  "' specified, must be a non-empty string");
                 }
-                
+
                 ctor.name = className;
             }
             //</debug>
@@ -761,7 +761,7 @@ var makeCtor = Ext.Class.makeCtor,
 
                                 if (data.hasOwnProperty(postprocessorProperty)) {
                                     postprocessors.push(postprocessor.fn);
-                                    
+
                                     break;
                                 }
                             }
@@ -785,8 +785,9 @@ var makeCtor = Ext.Class.makeCtor,
 
             if (!postprocessor) {
                 //<debug>
-                Ext.classSystemMonitor &&
+                if (Ext.classSystemMonitor) {
                     Ext.classSystemMonitor(className, 'Ext.ClassManager#classCreated', arguments);
+                }
                 //</debug>
 
                 if (className) {
@@ -802,7 +803,7 @@ var makeCtor = Ext.Class.makeCtor,
                 if (className) {
                     me.triggerCreated(className);
                 }
-                
+
                 return;
             }
 
@@ -821,7 +822,7 @@ var makeCtor = Ext.Class.makeCtor,
                 compat = 1, // default if 'compatibility' is not specified
                 dependenciesLoaded,
                 classReady;
-                
+
             classReady = function() {
                 var cls, dependencies, i, key, temp;
 
@@ -846,13 +847,13 @@ var makeCtor = Ext.Class.makeCtor,
                     }
 
                     dependenciesLoaded = true;
-                    
+
                     if (dependencies.length) {
                         // Since the override is going to be used (its target class is
                         // now created), we need to fetch the required classes for the
                         // override and call us back once they are loaded:
                         Ext.require(dependencies, classReady);
-                        
+
                         return;
                     }
                     // else we have no dependencies, so proceed
@@ -916,7 +917,7 @@ var makeCtor = Ext.Class.makeCtor,
             //
             if ('compatibility' in data) {
                 compat = data.compatibility;
-                
+
                 if (!compat) {
                     // Cast '', null, undefined, 0 to false.
                     compat = false;
@@ -941,7 +942,7 @@ var makeCtor = Ext.Class.makeCtor,
             }
 
             me.triggerCreated(className, 2);
-            
+
             return me;
         },
 
@@ -989,7 +990,7 @@ var makeCtor = Ext.Class.makeCtor,
             //<debug>
             Ext.log.warn('Ext.ClassManager.instantiate() is deprecated. Use Ext.create() instead.');
             //</debug>
-            
+
             return Ext.create.apply(Ext, arguments);
         },
         //</deprecated>
@@ -1027,7 +1028,7 @@ var makeCtor = Ext.Class.makeCtor,
                 instantiator = instantiators[length] = new Function(
                     'c', 'a', 'return new c(' + args.join(',') + ')'
                 );
-                
+
                 //<debug>
                 instantiator.name = "Ext.create" + length;
                 //</debug>
@@ -1270,10 +1271,11 @@ var makeCtor = Ext.Class.makeCtor,
      */
     Manager.registerPostprocessor('alias', function(name, cls, data) {
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(name, 'Ext.ClassManager#aliasPostProcessor', arguments);
+        }
         //</debug>
-        
+
         /* eslint-disable-next-line vars-on-top */
         var aliases = Ext.Array.from(data.alias),
             i, ln;
@@ -1304,17 +1306,18 @@ var makeCtor = Ext.Class.makeCtor,
      */
     Manager.registerPostprocessor('singleton', function(name, cls, data, fn) {
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(name, 'Ext.ClassManager#singletonPostProcessor', arguments);
+        }
         //</debug>
-        
+
         if (data.singleton) {
             fn.call(this, name, new cls(), data);
         }
         else {
             return true;
         }
-        
+
         return false;
     });
     //</feature>
@@ -1343,10 +1346,13 @@ var makeCtor = Ext.Class.makeCtor,
             i, ln, alternate;
 
         //<debug>
-        /* eslint-disable-next-line max-len */
-        Ext.classSystemMonitor && Ext.classSystemMonitor(name, 'Ext.ClassManager#alternateClassNamePostprocessor', arguments);
+        if (Ext.classSystemMonitor) {
+            Ext.classSystemMonitor(
+                name, 'Ext.ClassManager#alternateClassNamePostprocessor', arguments
+            );
+        }
         //</debug>
-        
+
         if (!(alternates instanceof Array)) {
             alternates = [alternates];
         }
@@ -1401,9 +1407,11 @@ var makeCtor = Ext.Class.makeCtor,
      */
     Manager.registerPostprocessor('debugHooks', function(name, Class, data) {
         var target;
-        
+
         //<debug>
-        Ext.classSystemMonitor && Ext.classSystemMonitor(Class, 'Ext.Class#debugHooks', arguments);
+        if (Ext.classSystemMonitor) {
+            Ext.classSystemMonitor(Class, 'Ext.Class#debugHooks', arguments);
+        }
 
         if (Ext.isDebugEnabled(Class.$className, data.debugHooks.$enabled)) {
             delete data.debugHooks.$enabled;
@@ -1514,9 +1522,11 @@ var makeCtor = Ext.Class.makeCtor,
      */
     Manager.registerPostprocessor('deprecated', function(name, Class, data) {
         var target;
-        
+
         //<debug>
-        Ext.classSystemMonitor && Ext.classSystemMonitor(Class, 'Ext.Class#deprecated', arguments);
+        if (Ext.classSystemMonitor) {
+            Ext.classSystemMonitor(Class, 'Ext.Class#deprecated', arguments);
+        }
         //</debug>
 
         // may already have an instance here in the case of singleton
@@ -1592,10 +1602,10 @@ var makeCtor = Ext.Class.makeCtor,
             else {
                 if (nameType !== 'string' && args.length === 0) {
                     args = [name];
-                    
+
                     if (!(name = name.xclass)) {
                         name = args[0].xtype;
-                        
+
                         if (name) {
                             name = 'widget.' + name;
                         }
@@ -1618,10 +1628,11 @@ var makeCtor = Ext.Class.makeCtor,
             if (!cls) {
                 //<debug>
                 //<if nonBrowser>
-                !isNonBrowser &&
+                if (!isNonBrowser) {
+                    Ext.log.warn("[Ext.Loader] Synchronously loading '" + name +
+                        "'; consider adding " + "Ext.require('" + name + "') above Ext.onReady");
+                }
                 //</if>
-                Ext.log.warn("[Ext.Loader] Synchronously loading '" + name + "'; consider adding " +
-                             "Ext.require('" + name + "') above Ext.onReady");
                 //</debug>
 
                 Ext.syncRequire(name);
@@ -1701,7 +1712,7 @@ var makeCtor = Ext.Class.makeCtor,
             if (!T) {
                 return Ext.create(className || alias, config);
             }
-            
+
             return new T(config);
         },
 
@@ -1961,18 +1972,19 @@ var makeCtor = Ext.Class.makeCtor,
          */
         define: function(className, data, createdFn) {
             //<debug>
-            Ext.classSystemMonitor &&
+            if (Ext.classSystemMonitor) {
                 Ext.classSystemMonitor(className, 'ClassManager#define', arguments);
+            }
             //</debug>
-            
+
             if (data.override) {
                 Manager.classState[className] = 20;
-                
+
                 return Manager.createOverride.apply(Manager, arguments);
             }
 
             Manager.classState[className] = 10;
-            
+
             return Manager.create.apply(Manager, arguments);
         },
 
@@ -1997,10 +2009,11 @@ var makeCtor = Ext.Class.makeCtor,
             var classes = Manager.classes;
 
             //<debug>
-            Ext.classSystemMonitor &&
+            if (Ext.classSystemMonitor) {
                 Ext.classSystemMonitor(className, 'Ext.ClassManager#undefine', arguments);
+            }
             //</debug>
-        
+
             //<debug>
             if (classes[className]) {
                 Manager.classCount--;
@@ -2010,7 +2023,7 @@ var makeCtor = Ext.Class.makeCtor,
             delete classes[className];
             delete Manager.existCache[className];
             delete Manager.classState[className];
-            
+
             Manager.removeName(className);
             // Indiscriminately clear all factory caches here. It might be slightly inefficient
             // however undefine is typically only called during unit testing.
@@ -2023,7 +2036,7 @@ var makeCtor = Ext.Class.makeCtor,
 
             if (scope) {
                 entryName = entry.name;
-                
+
                 // Old IE blows up on attempt to delete window property
                 try {
                     delete scope[entryName];
@@ -2032,7 +2045,7 @@ var makeCtor = Ext.Class.makeCtor,
                     scope[entryName] = undefined;
                 }
             }
-            
+
             // We need to know entry name in unit tests
             //<debug>
             return entryName;
@@ -2168,19 +2181,21 @@ var makeCtor = Ext.Class.makeCtor,
             cls.displayName = cls.$className;
             //</debug>
         }
-        
+
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(cls, 'Ext.ClassManager#classNamePreprocessor', arguments);
+        }
         //</debug>
     }, true, 'first');
 
     Class.registerPreprocessor('alias', function(cls, data) {
         //<debug>
-        Ext.classSystemMonitor &&
+        if (Ext.classSystemMonitor) {
             Ext.classSystemMonitor(cls, 'Ext.ClassManager#aliasPreprocessor', arguments);
+        }
         //</debug>
-        
+
         /* eslint-disable-next-line vars-on-top */
         var prototype = cls.prototype,
             xtypes = arrayFrom(data.xtype),
@@ -2228,12 +2243,16 @@ var makeCtor = Ext.Class.makeCtor,
                 prototype = cls.prototype,
                 mixins = prototype.mixins,
                 key, mixin;
-            
+
             //<debug>
-            /* eslint-disable-next-line max-len */
-            Ext.classSystemMonitor && Ext.classSystemMonitor(cls, 'Ext.ClassManager#aliasPreprocessor#afterClassCreated', arguments);
+
+            if (Ext.classSystemMonitor) {
+                Ext.classSystemMonitor(
+                    cls, 'Ext.ClassManager#aliasPreprocessor#afterClassCreated', arguments
+                );
+            }
             //</debug>
-        
+
             for (key in mixins) {
                 if (mixins.hasOwnProperty(key)) {
                     mixin = mixins[key];
@@ -2287,14 +2306,14 @@ var makeCtor = Ext.Class.makeCtor,
             // paths before processing
             if (manifest.bootRelative) {
                 baseUrl = Ext.Boot.baseUrl;
-                
+
                 for (path in paths) {
                     if (paths.hasOwnProperty(path)) {
                         paths[path] = baseUrl + paths[path];
                     }
                 }
             }
-            
+
             Manager.setPath(paths);
         }
 
@@ -2303,11 +2322,11 @@ var makeCtor = Ext.Class.makeCtor,
                 alternates[className] = [];
                 aliases[className] = [];
                 obj = classes[className];
-                
+
                 if (obj.alias) {
                     aliases[className] = obj.alias;
                 }
-                
+
                 if (obj.alternates) {
                     alternates[className] = obj.alternates;
                 }

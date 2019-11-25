@@ -494,7 +494,7 @@ Ext.define('Ext.scroll.VirtualScroller', {
         }
 
         if (xIndicator || yIndicator) {
-            defaultsConfig = Ext.getScrollbarSize().width && type !== 'overlay'
+            defaultsConfig = Ext.scrollbar.width() && type !== 'overlay'
                 ? 'barIndicator'
                 : 'overlayIndicator';
         }
@@ -1107,7 +1107,7 @@ Ext.define('Ext.scroll.VirtualScroller', {
 
                     me.fireScroll(logicalX, logicalY, deltaX, deltaY);
 
-                    me.callPartners('fireScroll', logicalX, logicalY, deltaX, deltaY);
+                    me.callPartners('fireScroll', logicalX, logicalY);
                 }
             }
         },
@@ -1149,11 +1149,11 @@ Ext.define('Ext.scroll.VirtualScroller', {
 
                 me.callIndicators('onScrollStart');
 
-                me.callPartners('onPartnerScrollStart', x, y, 0, 0);
+                me.callPartners('onPartnerScrollStart', x, y);
 
                 me.fireScrollStart(x, y, 0, 0);
 
-                me.callPartners('fireScrollStart', x, y, 0, 0);
+                me.callPartners('fireScrollStart', x, y);
             }
         },
 
@@ -1268,7 +1268,7 @@ Ext.define('Ext.scroll.VirtualScroller', {
             var me = this,
                 indicators = me.getIndicators(),
                 barSize = me.scrollbarSize,
-                scrollbarSize = Ext.getScrollbarSize(),
+                scrollbarSize = Ext.scrollbar.size(),
                 xIndicator, yIndicator;
 
             if (indicators) {
@@ -1302,7 +1302,7 @@ Ext.define('Ext.scroll.VirtualScroller', {
                 scrollbarSize = me.scrollbarSize;
                 scrollbarWidth = scrollbarSize.width;
                 scrollbarHeight = scrollbarSize.height;
-                globalScrollbarSize = Ext.getScrollbarSize();
+                globalScrollbarSize = Ext.scrollbar.size();
                 hasVerticalScrollbar = false;
                 hasHorizontalScrollbar = false;
                 indicators = me.getIndicators();
@@ -1556,7 +1556,7 @@ Ext.define('Ext.scroll.VirtualScroller', {
             var me = this,
                 element = me.getElement(),
                 method, innerElement;
-            
+
             if (element) {
                 innerElement = me.getInnerElement();
                 method = autoRefresh ? 'on' : 'un';

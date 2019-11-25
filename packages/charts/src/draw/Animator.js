@@ -81,7 +81,7 @@ Ext.define('Ext.draw.Animator', {
     empty: function() {
         return this.animations.length === 0;
     },
-    
+
     idle: function() {
         return this.scheduled === 0 && this.animations.length === 0;
     },
@@ -122,18 +122,18 @@ Ext.define('Ext.draw.Animator', {
      */
     schedule: function(callback, scope) {
         var id = 'frameCallback' + (this.frameCallbackId++);
-        
+
         scope = scope || this;
 
         if (Ext.isString(callback)) {
             callback = scope[callback];
         }
-        
+
         Ext.draw.Animator.frameCallbacks[id] = { fn: callback, scope: scope, once: true };
         this.scheduled++;
-        
+
         Ext.draw.Animator.ignite();
-        
+
         return id;
     },
 
@@ -150,7 +150,7 @@ Ext.define('Ext.draw.Animator', {
             cb, id;
 
         scope = scope || this;
-        
+
         if (Ext.isString(callback)) {
             callback = scope[callback];
         }
@@ -176,7 +176,7 @@ Ext.define('Ext.draw.Animator', {
             delete Ext.draw.Animator.frameCallbacks[id];
             Ext.draw.Draw.endUpdateIOS();
         }
-        
+
         if (this.idle()) {
             this.extinguish();
         }
@@ -203,9 +203,9 @@ Ext.define('Ext.draw.Animator', {
         if (Ext.isString(callback)) {
             callback = scope[callback];
         }
-        
+
         Ext.draw.Animator.frameCallbacks[id] = { fn: callback, scope: scope };
-        
+
         return id;
     },
 
@@ -215,7 +215,7 @@ Ext.define('Ext.draw.Animator', {
      */
     removeFrameCallback: function(id) {
         delete Ext.draw.Animator.frameCallbacks[id];
-        
+
         if (this.idle()) {
             this.extinguish();
         }
@@ -250,7 +250,7 @@ Ext.define('Ext.draw.Animator', {
 
         me.step(me.animationTime());
         me.fireFrameCallbacks();
-        
+
         if (me.idle()) {
             me.extinguish();
         }
@@ -263,7 +263,7 @@ Ext.define('Ext.draw.Animator', {
             Ext.draw.Draw.beginUpdateIOS();
         }
     },
-    
+
     extinguish: function() {
         this.running = false;
         Ext.AnimationQueue.stop(this.handleFrame, this);

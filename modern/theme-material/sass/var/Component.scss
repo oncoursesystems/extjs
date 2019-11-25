@@ -103,6 +103,10 @@ $reverse-alt-background-color: dynamic(if($dark-mode, #f5f5f5, #3a3a3a));
 // Used for subtle overlays on top of items (picker bar, etc)
 $overlay-color: dynamic(if($dark-mode, rgba(#fff, .03), rgba(#000, .03)));
 
+// Used for froala editor
+$reverse-border-color: dynamic(if($dark-mode, #212121, #e0e0e0));
+$reverse-alt-border-color: dynamic(if($dark-mode, #3a3a3a, #e0e0e0));
+
 //----------------------------------------------------------------------------------
 // Font Icons
 

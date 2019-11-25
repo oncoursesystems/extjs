@@ -205,7 +205,7 @@ Ext.define('Ext.tree.Column', {
 
         rendererData =
             me.initTemplateRendererData(value, metaData, record, rowIdx, colIdx, store, view);
-        
+
         return me.lookupTpl('cellTpl').apply(rendererData);
     },
 
@@ -219,7 +219,7 @@ Ext.define('Ext.tree.Column', {
             parentData,
             glyph,
             glyphFontFamily;
-        
+
         while (parent && (rootVisible || parent.data.depth > 0)) {
             parentData = parent.data;
             lines[rootVisible ? parentData.depth : parentData.depth - 1] =
@@ -238,14 +238,14 @@ Ext.define('Ext.tree.Column', {
         else {
             metaData = {};
         }
-        
+
         // Call renderer now so that we can use metaData properties that it may set.
         value = innerRenderer ? innerRenderer.apply(me.rendererScope, arguments) : value;
 
         // If a glyph was specified, then
         // transform glyph to the useful parts
         glyph = metaData.glyph || data.glyph;
-        
+
         if (glyph) {
             glyph = Ext.Glyph.fly(glyph);
             glyphFontFamily = glyph.fontFamily;
@@ -296,13 +296,13 @@ Ext.define('Ext.tree.Column', {
         if (me.hasCustomRenderer) {
             return 1;
         }
-        
+
         if (changedFieldNames) {
             len = changedFieldNames.length;
 
             for (; i < len; ++i) {
                 field = changedFieldNames[i];
-                
+
                 // Check for fields which always require a full row update.
                 if (me.rowFields[field]) {
                     return 1;

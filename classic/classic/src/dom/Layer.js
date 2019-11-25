@@ -79,7 +79,7 @@ Ext.define('Ext.dom.Layer', {
      */
     constructor: function(config, existingEl) {
         config = config || {};
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             dh = Ext.DomHelper,

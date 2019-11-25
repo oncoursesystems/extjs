@@ -26,7 +26,7 @@ function() {
         if (c) {
             c.destroy();
         }
-        
+
         splitter = c = null;
     });
 
@@ -50,7 +50,7 @@ function() {
                 expect(splitter.tracker.foo).toBe('baz');
             });
         });
-        
+
         describe("collapsing", function() {
             function makeContainer(splitterCfg) {
                 c = new Ext.container.Container({
@@ -72,33 +72,33 @@ function() {
                         html: 'bar'
                     }]
                 });
-                
+
                 splitter = c.down('splitter');
             }
-            
+
             describe("listeners", function() {
                 it("should not attach collapse listeners when target is not a panel", function() {
                     makeContainer({ collapseTarget: 'prev' });
-                    
+
                     var item = c.down('#foo');
-                    
+
                     expect(item.hasListeners.collapse).not.toBeDefined();
                 });
-                
+
                 it("should attach listeners when target is a panel", function() {
                     makeContainer();
-                    
+
                     var item = c.down('#bar');
-                    
+
                     expect(item.hasListeners.collapse).toBe(1);
                 });
             });
         });
     });
-    
+
     describe("splitter with border layout and iframes", function() {
         var iframe;
-        
+
         beforeEach(function() {
             iframe = new Ext.Component({
                 autoEl: {
@@ -156,15 +156,15 @@ function() {
         beforeEach(function() {
             makeContainer();
         });
-        
+
         it("should be tabbable", function() {
             expect(splitter.el.isTabbable()).toBe(true);
         });
-        
+
         it("should have separator role", function() {
             expect(splitter).toHaveAttr('role', 'separator');
         });
-        
+
         it("should have aria-orientation", function() {
             expect(splitter).toHaveAttr('aria-orientation', 'vertical');
         });

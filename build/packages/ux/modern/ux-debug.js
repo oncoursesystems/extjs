@@ -730,7 +730,9 @@ Ext.define('Ext.ux.ajax.SimXhr', {
         var me = this;
         me.timer = null;
         me.onComplete();
-        me.onreadystatechange && me.onreadystatechange();
+        if (me.onreadystatechange) {
+            me.onreadystatechange();
+        }
     }
 });
 
@@ -3405,7 +3407,9 @@ Ext.define('Ext.ux.gauge.Gauge', {
             gradient.appendChild(stopEl);
             stopEl.setAttribute('offset', stopCfg.offset);
             stopEl.setAttribute('stop-color', stopCfg.color);
-            ('opacity' in stopCfg) && stopEl.setAttribute('stop-opacity', stopCfg.opacity);
+            if ('opacity' in stopCfg) {
+                stopEl.setAttribute('stop-opacity', stopCfg.opacity);
+            }
         }
     },
     getTrackGradient: function() {
@@ -4692,9 +4696,9 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
                     ];
                     break;
                 default:
-                    // <debug>
+                    //<debug>
                     console.error("unknown color " + h + ' ' + s + " " + v);
-                    // </debug>
+                    //</debug>
                     break;
             }
             m = v - c;
@@ -6200,12 +6204,12 @@ Ext.define('Ext.ux.colorpick.Slider', {
             html: '<div class="' + Ext.baseCSSPrefix + 'colorpicker-draghandle"></div>'
         }
     },
-    // <debug>
+    //<debug>
     // Called via data binding whenever selectedColor.h changes;
     setHue: function() {
         Ext.raise('Must implement setHue() in a child class!');
     },
-    // </debug>
+    //</debug>
     getDragHandle: function() {
         return this.lookupReference('dragHandle');
     },

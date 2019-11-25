@@ -56,7 +56,6 @@ topSuite("Ext.form.field.Time", function() {
 
     });
 
-
     describe("defaults", function() {
         beforeEach(function() {
             makeComponent();
@@ -96,7 +95,6 @@ topSuite("Ext.form.field.Time", function() {
         });
     });
 
-
     describe("rendering", function() {
         // Mostly handled by Trigger and Picker tests
 
@@ -110,7 +108,6 @@ topSuite("Ext.form.field.Time", function() {
             expect(component.getTrigger('picker').el).toHaveCls('x-form-time-trigger');
         });
     });
-
 
     describe("trigger", function() {
         beforeEach(function() {
@@ -231,7 +228,7 @@ topSuite("Ext.form.field.Time", function() {
                 component.setValue('6:::37');
                 expect(component.getValue()).toBeNull();
             });
-            
+
             it("should ignore the date part when setting the value", function() {
                 makeComponent({
                     minValue: '9:00 AM',
@@ -272,7 +269,7 @@ topSuite("Ext.form.field.Time", function() {
                     component.expand();
                     jasmine.fireMouseEvent(component.getPicker().getNode(component.store.getAt(0)), 'click');
                     expect(component.getValue()).toEqualTime(0, 0);
-                    
+
                 });
             });
 
@@ -306,7 +303,7 @@ topSuite("Ext.form.field.Time", function() {
                     component.setValue('21');
                     expect(component.inputEl.getValue()).toBe('21');
                 });
-                
+
                 describe("validating as you type", function() {
                     it("should validate date format", function() {
                         var raw, errors;
@@ -316,7 +313,7 @@ topSuite("Ext.form.field.Time", function() {
                         });
                         component.inputEl.dom.value = 'foo';
                         component.doRawQuery();
-                        
+
                         raw = component.getRawValue();
                         errors = component.getErrors();
 
@@ -334,7 +331,7 @@ topSuite("Ext.form.field.Time", function() {
                         });
                         component.inputEl.dom.value = 1;
                         component.doRawQuery();
-                        
+
                         raw = component.getRawValue();
                         errors = component.getErrors();
 
@@ -352,7 +349,7 @@ topSuite("Ext.form.field.Time", function() {
                         });
                         component.inputEl.dom.value = 9;
                         component.doRawQuery();
-                        
+
                         raw = component.getRawValue();
                         errors = component.getErrors();
 
@@ -432,7 +429,7 @@ topSuite("Ext.form.field.Time", function() {
             });
         });
     });
-    
+
     describe("submit value", function() {
         it("should use the format as the default", function() {
             makeComponent({
@@ -441,7 +438,7 @@ topSuite("Ext.form.field.Time", function() {
             });
             expect(component.getSubmitValue()).toBe('15:30');
         });
-        
+
         it("should give precedence to submitFormat", function() {
             makeComponent({
                 value: new Date(2010, 0, 15, 15, 45),
@@ -449,7 +446,7 @@ topSuite("Ext.form.field.Time", function() {
             });
             expect(component.getSubmitValue()).toBe('15:45');
         });
-        
+
         it("should still return null if the value isn't a valid date", function() {
             makeComponent({
                 value: 'wontparse',
@@ -479,7 +476,6 @@ topSuite("Ext.form.field.Time", function() {
             expect(component.getModelData()).toEqual({ myname: null });
         });
     });
-
 
     describe("minValue", function() {
         describe("minValue config", function() {
@@ -693,21 +689,21 @@ topSuite("Ext.form.field.Time", function() {
                 renderTo: Ext.getBody()
             });
         });
-        
+
         it('should format the raw value', function() {
             jasmine.focusAndWait(component);
-            
+
             runs(function() {
                 component.setRawValue('123');
 
                 // Programmatic blur fails on IEs. Focus then remove a button
                 Ext.getBody().createChild({ tag: 'button' }).focus().remove();
             });
-            
+
             waitsFor(function() {
                 return !component.hasFocus;
             }, 'the TimeField to blur', 1000);
-            
+
             runs(function() {
                 expect(component.getRawValue()).toEqual('1:23 AM');
             });
@@ -715,21 +711,21 @@ topSuite("Ext.form.field.Time", function() {
 
         it('should not reset the hours, minutes or seconds', function() {
             var parts, d;
-            
+
             parts = component.initDateParts;
             d = new Date(parts[0], parts[1], parts[2], 13, 22, 42);
 
             jasmine.focusAndWait(component);
-            
+
             runs(function() {
                 component.setValue(d);
                 component.blur();
             });
-            
+
             waitsFor(function() {
                 return !component.hasFocus;
             }, 'the TimeField to blur', 1000);
-            
+
             runs(function() {
                 expect(component.getValue()).toEqual(d);
             });

@@ -7,12 +7,12 @@ Ext.define('KitchenSink.view.chart.combination.BindingTabs', {
     xtype: 'combination-bindingtabs',
     controller: 'combination-bindingtabs',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/combination/BindingTabsController.js'
     }],
-    // </example>
+    //</example>
 
     viewModel: {
         stores: {

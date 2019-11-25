@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.dataview.Basic', {
         'Ext.plugin.Responsive'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Model',
         path: 'modern/src/model/Speaker.js'
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.dataview.Basic', {
     },
 
     cls: 'ks-basic demo-solid-background',
-    // </example>
+    //</example>
 
     height: '${height}',
     layout: 'fit',

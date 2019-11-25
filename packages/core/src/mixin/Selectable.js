@@ -158,7 +158,7 @@ Ext.define('Ext.mixin.Selectable', {
      */
     applyMode: function(mode) {
         mode = mode ? mode.toUpperCase() : 'SINGLE';
-        
+
         // set to mode specified unless it doesnt exist, in that case
         // use single.
         return this.modes[mode] ? mode : 'SINGLE';
@@ -226,7 +226,7 @@ Ext.define('Ext.mixin.Selectable', {
     selectWithEvent: function(record) {
         var me = this,
             isSelected = me.isSelected(record);
-        
+
         switch (me.getMode()) {
             case 'MULTI':
             case 'SIMPLE':
@@ -236,9 +236,9 @@ Ext.define('Ext.mixin.Selectable', {
                 else {
                     me.select(record, true);
                 }
-                
+
                 break;
-            
+
             case 'SINGLE':
                 if (me.getAllowDeselect() && isSelected) {
                     // if allowDeselect is on and this record isSelected, deselect it
@@ -248,7 +248,7 @@ Ext.define('Ext.mixin.Selectable', {
                     // select the record and do NOT maintain existing selections
                     me.select(record, false);
                 }
-                
+
                 break;
         }
     },
@@ -281,7 +281,7 @@ Ext.define('Ext.mixin.Selectable', {
         for (i = startRecord; i <= endRecord; i++) {
             records.push(store.getAt(i));
         }
-        
+
         this.doMultiSelect(records, keepExisting);
     },
 
@@ -333,7 +333,7 @@ Ext.define('Ext.mixin.Selectable', {
         if (records === null || this.getDisableSelection()) {
             return;
         }
-        
+
         records = !Ext.isArray(records) ? [records] : records;
 
         // eslint-disable-next-line vars-on-top
@@ -351,7 +351,7 @@ Ext.define('Ext.mixin.Selectable', {
         // Ensure they are all records
         for (i = 0, len = records.length; i < len; i++) {
             record = records[i];
-            
+
             if (typeof record === 'number') {
                 records[i] = store.getAt(record);
             }
@@ -387,7 +387,7 @@ Ext.define('Ext.mixin.Selectable', {
         // Ensure they are all records
         for (i = 0, len = records.length; i < len; i++) {
             record = records[i];
-            
+
             if (typeof record === 'number') {
                 records[i] = store.getAt(record);
             }
@@ -475,7 +475,7 @@ Ext.define('Ext.mixin.Selectable', {
      */
     isSelected: function(record) {
         record = Ext.isNumber(record) ? this.getStore().getAt(record) : record;
-        
+
         return this.getSelected().indexOf(record) !== -1;
     },
 
@@ -548,16 +548,16 @@ Ext.define('Ext.mixin.Selectable', {
 
         for (i = 0; i < ln; i++) {
             record = records[i];
-            
+
             if (selected.remove(record)) {
                 if (me.getLastSelected() == record) { // eslint-disable-line eqeqeq
                     me.setLastSelected(null);
                 }
-                
+
                 if (me.getLastFocused() == record) { // eslint-disable-line eqeqeq
                     me.setLastFocused(null);
                 }
-                
+
                 removed = removed || [];
                 removed.push(record);
             }
@@ -570,7 +570,7 @@ Ext.define('Ext.mixin.Selectable', {
 
     onSelectionStoreClear: function(store) {
         var records = store.getData().items;
-        
+
         this.onSelectionStoreRemove(store, records);
     },
 

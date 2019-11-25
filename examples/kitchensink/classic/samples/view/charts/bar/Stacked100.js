@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.charts.bar.Stacked100', {
     xtype: 'bar-stacked-100',
     controller: 'bar-stacked-100',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.charts.bar.Stacked100', {
         type: 'Store',
         path: 'app/store/Browsers.js'
     }],
-    // </example>
+    //</example>
 
     width: 650,
 
@@ -35,7 +35,7 @@ Ext.define('KitchenSink.view.charts.bar.Stacked100', {
         captions: {
             title: 'Bar Charts - 100% Stacked Bars',
             credits: {
-                text: 'Data: Browser Stats 2012\n'+
+                text: 'Data: Browser Stats 2012\n' +
                     'Source: http://www.w3schools.com/',
                 align: 'left'
             }

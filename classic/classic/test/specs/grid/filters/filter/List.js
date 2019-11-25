@@ -8,11 +8,11 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
         storeLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             storeLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -43,9 +43,9 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
             width: 400,
             renderTo: Ext.getBody()
         }, gridCfg));
-        
+
         synchronousLoad = true;
-        
+
         if (store.hasPendingLoad()) {
             store.flushLoad();
         }
@@ -58,11 +58,11 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
         runs(function() {
             showMenu();
         });
-        
+
         waitsFor(function() {
             return columnMenu.isVisible();
         });
-        
+
         runs(function() {
             jasmine.fireMouseEvent(filterMenu.items.getAt(index).el, 'click');
         });
@@ -97,7 +97,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
 
         // Show the menu through platform-independent keystrokes.
         Ext.testHelper.showHeaderMenu(column || filterCol);
-        
+
         runs(function() {
             columnMenu = column.activeMenu;
             filterItem = columnMenu.down('#filters');
@@ -125,7 +125,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
     function tearDown() {
         // Undo the overrides.
         Ext.data.ProxyStore.prototype.load = storeLoad;
-        
+
         Ext.destroy(store, grid);
         filterCol = filterItem = listFilter = grid = store = null;
         MockAjaxManager.removeMethods();
@@ -192,7 +192,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                 'extjs-18225': Ext.emptyFn
             };
         });
-        
+
         afterEach(function() {
             Ext.grid.filters.filter.List.prototype.gridStoreListenersCfg = oldGridStoreListenersCfg;
             oldGridStoreListenersCfg = null;
@@ -239,7 +239,6 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                                     active: active,
                                     value: value
                                 }, null, getGridCfg());
-
 
                                 grid.getViewModel().notify();
                                 listFilter = filterCol.filter;
@@ -511,7 +510,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                     var items;
 
                     showMenu();
-                    
+
                     runs(function() {
                         items = filterMenu.query('[checked]');
                         expect(items.length).toBe(2);
@@ -559,7 +558,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                         options: opt
                     });
                     showMenu();
-                    
+
                     runs(function() {
                         expect(filterMenu.items.getCount()).toBe(3);
                         expect(filterMenu.items.getAt(0).text).toBe('foo');
@@ -573,7 +572,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                         options: opt
                     });
                     clickItem(1);
-                    
+
                     runs(function() {
                         var filter = store.getFilters().first();
 
@@ -592,7 +591,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                         options: opt
                     });
                     showMenu();
-                    
+
                     runs(function() {
                         expect(filterMenu.items.getCount()).toBe(3);
                         expect(filterMenu.items.getAt(0).text).toBe('Foo');
@@ -606,7 +605,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                         options: opt
                     });
                     clickItem(1);
-                    
+
                     runs(function() {
                         var filter = store.getFilters().first();
 
@@ -627,7 +626,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                         labelField: 'text'
                     });
                     showMenu();
-                    
+
                     runs(function() {
                         expect(filterMenu.items.getCount()).toBe(3);
                         expect(filterMenu.items.getAt(0).text).toBe('Foo');
@@ -643,7 +642,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                         labelField: 'text'
                     });
                     clickItem(1);
-                    
+
                     runs(function() {
                         var filter = store.getFilters().first();
 
@@ -683,7 +682,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                         store: options
                     });
                     showMenu();
-                    
+
                     runs(function() {
                         expect(options.load).not.toHaveBeenCalled();
                     });
@@ -695,7 +694,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                         store: options
                     });
                     showMenu();
-                    
+
                     runs(function() {
                         expect(filterMenu.items.getCount()).toBe(2);
                         expect(filterMenu.items.getAt(0).text).toBe('Type 1');
@@ -709,7 +708,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                         store: options
                     });
                     clickItem(0);
-                    
+
                     runs(function() {
                         var filter = store.getFilters().first();
 
@@ -749,7 +748,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                             store: options
                         });
                         showMenu();
-                        
+
                         runs(function() {
                             expect(filterMenu.items.getCount()).toBe(1);
                             expect(filterMenu.items.getAt(0).text).toBe(listFilter.loadingText);
@@ -762,7 +761,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                             store: options
                         });
                         showMenu();
-                        
+
                         runs(function() {
                             completeRequest([{
                                 id: 't1',
@@ -794,7 +793,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                                 loadOnShow: true
                             });
                             showMenu();
-                            
+
                             runs(function() {
                                 expect(options.load).toHaveBeenCalled();
                             });
@@ -810,7 +809,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                                 loadOnShow: true
                             });
                             showMenu();
-                            
+
                             runs(function() {
                                 expect(options.load).not.toHaveBeenCalled();
                             });
@@ -827,7 +826,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                                 loadOnShow: true
                             });
                             showMenu();
-                            
+
                             runs(function() {
                                 expect(options.load).not.toHaveBeenCalled();
                             });
@@ -841,7 +840,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                                 loadOnShow: true
                             });
                             showMenu();
-                            
+
                             runs(function() {
                                 completeRequest([{
                                     id: 't1',
@@ -869,7 +868,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                                 loadOnShow: false
                             });
                             showMenu();
-                            
+
                             runs(function() {
                                 expect(options.load).not.toHaveBeenCalled();
                             });
@@ -886,7 +885,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                             labelField: 'text'
                         });
                         showMenu();
-                        
+
                         runs(function() {
                             completeRequest([{
                                 id: 't1',
@@ -917,7 +916,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                             labelField: 'text'
                         });
                         showMenu();
-                        
+
                         runs(function() {
                             completeRequest([{
                                 id: 't1',
@@ -935,7 +934,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                         });
                         runs(function() {
                             clickItem(1);
-                            
+
                             runs(function() {
                                 var filter = store.getFilters().first();
 
@@ -967,7 +966,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                             store: options
                         });
                         showMenu();
-                        
+
                         runs(function() {
                             grid.destroy();
                             expect(options.hasListeners.load || 0).toBe(load);
@@ -983,7 +982,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                             store: options
                         });
                         showMenu();
-                        
+
                         runs(function() {
                             completeRequest([]);
                             grid.destroy();
@@ -1010,7 +1009,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                     labelField: 'text'
                 });
                 showMenu();
-                
+
                 runs(function() {
                     expect(filterMenu.items.getCount()).toBe(2);
                     expect(filterMenu.items.getAt(0).text).toBe('A');
@@ -1032,7 +1031,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                     labelField: 'text'
                 });
                 showMenu();
-                
+
                 runs(function() {
                     expect(filterMenu.items.getCount()).toBe(2);
                     expect(filterMenu.items.getAt(0).text).toBe('A');
@@ -1264,7 +1263,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                     runs(function() {
                         expect(filterMenu.items.getCount()).toBeGreaterThan(0);
                         clickItem(1);
-                        
+
                         runs(function() {
                             var filter = store.getFilters().first();
 
@@ -1318,7 +1317,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                 it("should not load the store", function() {
                     spyOn(store, 'load');
                     showMenu();
-                    
+
                     runs(function() {
                         expect(store.load).not.toHaveBeenCalled();
                     });
@@ -1327,7 +1326,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                 it("should use the unique dataIndex values as the menu text and exclude nulls when the store loads", function() {
                     store.load();
                     showMenu();
-                    
+
                     runs(function() {
                         completeRequest(loadData);
                     });
@@ -1346,12 +1345,12 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                 it("should use the dataIndex as the filter value when the store loads", function() {
                     store.load();
                     showMenu();
-                    
+
                     runs(function() {
                         completeRequest(loadData);
                     });
                     clickItem(1);
-                    
+
                     runs(function() {
                         var filter = store.getFilters().first();
 
@@ -1365,11 +1364,11 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                     it("should not destroy the store when destroying the grid", function() {
                         store.load();
                         showMenu();
-                    
+
                         runs(function() {
                             completeRequest(loadData);
                         });
-                        
+
                         runs(function() {
                             spyOn(store, 'destroy').andCallThrough();
                             grid.destroy();
@@ -1721,7 +1720,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                 });
 
                 showMenu();
-                
+
                 runs(function() {
                     items = filterMenu.items;
                     expect(items.getAt(0).text).toBe('Foo');
@@ -1733,7 +1732,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                 });
 
                 showMenu();
-                
+
                 runs(function() {
                     items = filterMenu.items;
                     expect(items.getAt(0).text).toBe('Foo');
@@ -1792,7 +1791,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                     grid.view.on('refresh', spy);
 
                     showMenu(grid.down('#filterCol1'));
-                    
+
                     runs(function() {
                         jasmine.fireMouseEvent(filterItem.checkEl.dom, 'click');
                         filterMenu.hide();
@@ -1819,7 +1818,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
             describe("the filter menu item", function() {
                 it("should not recreate when unchecking the Filters menu item", function() {
                     clickItem(2);
-                    
+
                     runs(function() {
                         expect(listFilter.createListStore.callCount).toBe(0);
                         expect(listFilter.createMenuItems.callCount).toBe(0);
@@ -1831,7 +1830,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
                     clickItem(2);
                     // Check.
                     clickItem(2);
-                    
+
                     runs(function() {
                         expect(listFilter.createListStore.callCount).toBe(0);
                         expect(listFilter.createMenuItems.callCount).toBe(0);
@@ -2043,7 +2042,7 @@ topSuite("Ext.grid.filters.filter.List", ['Ext.grid.Panel', 'Ext.grid.filters.Fi
 
                             // Trigger a filter and respond to the Ajax request  with some data
                             clickItem(1);
-                            
+
                             runs(function() {
                                 completeRequest(responseData);
 

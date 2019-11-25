@@ -5,7 +5,7 @@ exports.init = function(runtime) {
 
             if (map2) {
                 for (var items = map2.items, i = 0; i < items.length; i += 2) {
-                    ret.put(items[i], items[i+1]);
+                    ret.put(items[i], items[i + 1]);
                 }
             }
 
@@ -46,7 +46,7 @@ exports.init = function(runtime) {
 
             for (name in currentScopeArgs) {
                 translatedName = name.replace(/_/g, '-');
-                
+
                 if (supportedArgs1[translatedName] && supportedArgs2[translatedName]) {
                     args.put(runtime.box(translatedName.substr(1)), currentScopeArgs[name]);
                 }

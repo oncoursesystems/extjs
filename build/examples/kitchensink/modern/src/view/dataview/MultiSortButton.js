@@ -7,11 +7,11 @@ Ext.define('KitchenSink.view.dataview.MultiSortButton', {
         dataIndex: undefined
     },
 
-    getHandler: function () {
+    getHandler: function() {
         this.toggleDirection();
     },
 
-    applyDirection: function (direction) {
+    applyDirection: function(direction) {
         if (direction) {
             direction = direction.toUpperCase();
         }
@@ -19,13 +19,14 @@ Ext.define('KitchenSink.view.dataview.MultiSortButton', {
         return direction;
     },
 
-    updateDirection: function (direction) {
-        this.setIconCls('x-fa fa-sort-' + direction.toLowerCase());
+    updateDirection: function(direction) {
+        var dir = direction === 'ASC' ? 'up' : 'down';
 
+        this.setIconCls('x-fa fa-sort-' + dir);
         this.fireEvent('changeDirection', direction);
     },
 
-    toggleDirection: function () {
+    toggleDirection: function() {
         this.setDirection(Ext.String.toggle(this.getDirection(), 'ASC', 'DESC'));
     }
 });

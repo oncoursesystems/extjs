@@ -6,7 +6,7 @@ $inactive-heart-icon-color: dynamic(#b2b2b2);
         color: $active-heart-icon-color;
     }
 
-    .fa-heart-o:before {
+    .fa-heart.inactive:before {
         color: $inactive-heart-icon-color;
     }
 

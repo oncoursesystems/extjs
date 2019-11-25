@@ -89,7 +89,7 @@ Ext.define('Ext.data.validator.Currency', {
         parseValue: function(v) {
             // If we're at the front, replace -/+$1 with -/+1
             v = v.replace(this.currencyMatcher, this.atEnd ? '' : '$1');
-            
+
             return this.callParent([v]);
         },
 

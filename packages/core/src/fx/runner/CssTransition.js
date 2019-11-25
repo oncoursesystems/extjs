@@ -22,9 +22,13 @@ Ext.define('Ext.fx.runner.CssTransition', {
     },
 
     attachListeners: function() {
+        // NOTE: Ext.getWin() has been used for many years but it doesn't appear to work
+        // in the test runner iframe.
+        var target = (top === window) ? Ext.getWin() : Ext.getBody();
+
         this.listenersAttached = true;
 
-        Ext.getWin().on('transitionend', 'onTransitionEnd', this);
+        target.on('transitionend', 'onTransitionEnd', this);
     },
 
     onTransitionEnd: function(e) {
@@ -172,7 +176,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
                         delete map[name];
                         Ext.Array.remove(list, name);
                         session.length--;
-                        
+
                         if (--nameMap[name] === 0) {
                             delete nameMap[name];
                             Ext.Array.remove(nameList, name);
@@ -223,20 +227,20 @@ Ext.define('Ext.fx.runner.CssTransition', {
             if (testElement.ownerDocument.defaultView !== iframe.contentWindow) {
                 iframeDocument = iframe.contentDocument;
                 iframeDocument.body.appendChild(testElement);
-                
+
                 // eslint-disable-next-line max-len
                 me.testElementComputedStyle = iframeDocument.defaultView.getComputedStyle(testElement);
             }
         }
         else {
             iframe = me.iframe = document.createElement('iframe');
-            
+
             //<debug>
             // Set an attribute that tells the test runner to ignore this node when checking
             // for dom cleanup
             iframe.setAttribute('data-sticky', true);
             //</debug>
-            
+
             iframe.setAttribute('tabIndex', -1);
             iframeStyle = iframe.style;
             iframeStyle.setProperty('visibility', 'hidden', 'important');
@@ -256,7 +260,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
             me.testElement = testElement = iframeDocument.createElement('div');
             testElement.style.setProperty('position', 'absolute', 'important');
             iframeDocument.body.appendChild(testElement);
-            
+
             me.testElementComputedStyle = iframeDocument.defaultView.getComputedStyle(testElement);
         }
 
@@ -273,6 +277,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
         if (Ext.browser.is.Firefox) {
             // We force a repaint of the element in Firefox to make sure the computedStyle
             // to be updated
+            // eslint-disable-next-line no-unused-expressions
             testElement.offsetHeight;
         }
 
@@ -322,7 +327,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
             data[elementId] = data = Ext.merge({}, animation.getData());
 
             onBeforeStart = animation.getOnBeforeStart();
-            
+
             if (onBeforeStart) {
                 onBeforeStart.call(animation.scope || me, element);
             }
@@ -375,7 +380,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
 
             if (propertiesLength === 0) {
                 me.onAnimationEnd(element, data, animation);
-                
+
                 continue;
             }
 
@@ -393,7 +398,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
             runningNameList = runningData.nameList;
 
             sessionNameMap = {};
-            
+
             for (j = 0; j < propertiesLength; j++) {
                 name = toPropertyNames[j];
                 sessionNameMap[name] = true;
@@ -415,7 +420,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
                 data: data,
                 animation: animation
             };
-            
+
             runningSessions.push(runningSession);
 
             animation.on('stop', 'onAnimationStop', me);
@@ -441,7 +446,7 @@ Ext.define('Ext.fx.runner.CssTransition', {
 
             animation.startTime = Date.now();
         }
-        
+
         me.activeElement = null;
 
         message = me.$className;
@@ -458,9 +463,9 @@ Ext.define('Ext.fx.runner.CssTransition', {
         if (!me.messageTimerId) {
             messageTimerFn = function() {
                 var messageFollowupFn;
-                
+
                 me.messageTimerId = null;
-                
+
                 if (Ext.isIE) {
                     // https://sencha.jira.com/browse/EXTJS-22362
                     // In some cases IE will fail to animate if the "to" and "transition" styles
@@ -470,18 +475,18 @@ Ext.define('Ext.fx.runner.CssTransition', {
                     // animating properties, or, the "to" properties. The second delay
                     // is what actually starts the animation.
                     me.applyStyles(me.transitionQueue.transitionData);
-                    
+
                     if (!me.messageFollowupId) {
                         messageFollowupFn = function() {
                             me.messageFollowupId = null;
                             window.addEventListener('message', doApplyTo, false);
                             window.postMessage(message, '*');
                         };
-                        
+
                         //<debug>
                         messageFollowupFn.$skipTimerCheck = true;
                         //</debug>
-                        
+
                         me.messageFollowupId = Ext.raf(messageFollowupFn);
                     }
                 }
@@ -493,11 +498,11 @@ Ext.define('Ext.fx.runner.CssTransition', {
                     window.postMessage(message, '*');
                 }
             };
-            
+
             //<debug>
             messageTimerFn.$skipTimerCheck = true;
             //</debug>
-            
+
             me.messageTimerId = Ext.raf(messageTimerFn);
         }
 
@@ -522,11 +527,11 @@ Ext.define('Ext.fx.runner.CssTransition', {
 
                 for (i = 0, ln = sessions.length; i < ln; i++) {
                     session = sessions[i];
-                    
+
                     if (session.animation === animation) {
                         me.refreshRunningAnimationsData(session.element, session.list.slice(),
                                                         false);
-                        
+
                         if (animation.destroying) {
                             stoppedAnimations++;
                         }
@@ -534,18 +539,18 @@ Ext.define('Ext.fx.runner.CssTransition', {
                 }
             }
         }
-        
+
         if (activeAnimations === stoppedAnimations) {
             if (me.messageFollowupId) {
                 Ext.unraf(me.messageFollowupId);
                 me.messageFollowupId = null;
             }
-            
+
             if (me.messageTimerId) {
                 Ext.unraf(me.messageTimerId);
                 me.messageTimerId = null;
             }
-            
+
             Ext.apply(me.transitionQueue, {
                 toData: {},
                 transitionData: {}

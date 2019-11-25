@@ -1,12 +1,13 @@
 /**
  * @class KitchenSink.controller.Main
  *
- * This is an abstract base class that is extended by both the phone and tablet versions. This controller is
- * never directly instantiated, it just provides a set of common functionality that the phone and tablet
- * subclasses both extend.
+ * This is an abstract base class that is extended by both the phone and tablet versions. 
+ * This controller is never directly instantiated, it just provides a set of common functionality 
+ * that the phone and tablet subclasses both extend.
  *
- * We provide a default view source code behavior here that displays the source in a card that is animated into view.
- * The card fills the screen.  It optionally contains tabs for multiple source files for those demos that have them.
+ * We provide a default view source code behavior here that displays the source in a card that is 
+ * animated into view. The card fills the screen.  It optionally contains tabs for multiple source 
+ * files for those demos that have them.
  */
 Ext.define('KitchenSink.controller.Main', {
     extend: 'Ext.app.Controller',
@@ -50,8 +51,8 @@ Ext.define('KitchenSink.controller.Main', {
     },
 
     /**
-     * @cfg {Ext.data.Model} currentDemo The Demo that is currently loaded. This is set whenever a new demo
-     * is shown and used to fetch the source code for the current demo.
+     * @cfg {Ext.data.Model} currentDemo The Demo that is currently loaded. This is set 
+     * whenever a new demo is shown and used to fetch the source code for the current demo.
      */
     currentDemo: undefined,
 
@@ -61,7 +62,7 @@ Ext.define('KitchenSink.controller.Main', {
      */
     emptyLineRe: /^\s*$/,
     noPropRe: /^ *:/,
-    exampleRe: /^\s*\/\/\s*(\<\/?example\>)\s*$/,
+    exampleRe: /^\s*\/\/\s*(<\/?example>)\s*$/,
     profilePropRe: /^(\n?)(\s*)(['${}\w]+) *: *'?([-${}\w ]+)'?(,?)$/g,
     propVarRe: /^'?\${([\w-]+)}'?$/,
     isNumberRe: /^[0-9]+$/,
@@ -127,8 +128,11 @@ Ext.define('KitchenSink.controller.Main', {
         accentColor: 'orange'
     }],
 
-    init: function () {
-        var darkMode = Ext.String.trim(window.getComputedStyle(document.body).getPropertyValue('--dark-mode')) === 'true';
+    init: function() {
+        var computedStyles = window.getComputedStyle(document.body),
+            darkModeProperty = computedStyles.getPropertyValue('--dark-mode'),
+            darkMode = Ext.String.trim(darkModeProperty) === 'true';
+
         /**
          * In a build, the path to the `KitchenSink` namespace
          * is incorrect. Correct it here.
@@ -157,19 +161,21 @@ Ext.define('KitchenSink.controller.Main', {
             }]);
 
             me.setOverlayTier(node.get('tier'));
-        } else {
+        }
+        else {
             me.loadOverlayContent(demo, view);
         }
 
         return me;
     },
 
-    changeLocale: function (item) {
+    changeLocale: function(item) {
         var params = Ext.Object.fromQueryString(location.search);
 
         if (item.locale) {
             params.locale = item.locale;
-        } else {
+        }
+        else {
             delete params.locale;
         }
 
@@ -177,17 +183,19 @@ Ext.define('KitchenSink.controller.Main', {
 
         if (location.search === params) {
             location.reload();
-        } else {
+        }
+        else {
             location.search = params;
         }
     },
 
-    changeProfile: function (item) {
+    changeProfile: function(item) {
         var params = Ext.Object.fromQueryString(location.search);
 
         if (item.profile) {
             params.profile = item.profile;
-        } else {
+        }
+        else {
             delete params.profile;
         }
 
@@ -195,7 +203,8 @@ Ext.define('KitchenSink.controller.Main', {
 
         if (location.search === params) {
             location.reload();
-        } else {
+        }
+        else {
             location.search = params;
         }
     },
@@ -207,7 +216,8 @@ Ext.define('KitchenSink.controller.Main', {
 
         if (view.self.prototype.$cachedContent) {
             me.setOverlayContent(view.$cachedContent);
-        } else {
+        }
+        else {
             overlay.setMasked({
                 xtype: 'loadmask',
                 message: 'Loading Source'
@@ -231,7 +241,8 @@ Ext.define('KitchenSink.controller.Main', {
                         if (Ext.isString(cls)) {
                             cls = Ext.ClassManager.get(cls);
                         }
-                    } else {
+                    }
+                    else {
                         cls = me.getClassFromPath(content.path);
                     }
 
@@ -269,7 +280,7 @@ Ext.define('KitchenSink.controller.Main', {
         overlay.setContent(items);
     },
 
-    setOverlayTier: function (tier) {
+    setOverlayTier: function(tier) {
         var overlay = this.getSourceOverlay();
 
         overlay.setTier(tier);
@@ -298,7 +309,7 @@ Ext.define('KitchenSink.controller.Main', {
                 type: options.type,
                 html: me.processText(src, info)
             };
-        }, function (e) {
+        }, function(e) {
             //<debug>
             Ext.raise(e);
             //</debug>
@@ -306,13 +317,13 @@ Ext.define('KitchenSink.controller.Main', {
             return null;
         //<debug>
         })
-        .catch(function (e) {
+        .catch(function(e) {
             Ext.raise(e);
         //</debug>
         });
     },
 
-    processText: function (text, profileInfo) {
+    processText: function(text, profileInfo) {
         var me = this,
             lines = text.split('\n'),
             removing = false,
@@ -324,7 +335,7 @@ Ext.define('KitchenSink.controller.Main', {
             noPropRe = me.noPropRe,
             profilePropRe = me.profilePropRe,
             propVarRe = me.propVarRe,
-            encodeTheme = function (text, newline, indention, property, value, comma) {
+            encodeTheme = function(text, newline, indention, property, value, comma) {
                 var propMatches = property.match(propVarRe),
                     valueMatches = value.match(propVarRe);
 
@@ -346,7 +357,8 @@ Ext.define('KitchenSink.controller.Main', {
 
                 if (typeof value === 'object') {
                     value = Ext.JSON.encodeValue(value, '\n' + indention);
-                } else if (!isNumberRe.test(value)) {
+                }
+                else if (!isNumberRe.test(value)) {
                     value = "'" + value + "'";
                 }
 
@@ -361,9 +373,11 @@ Ext.define('KitchenSink.controller.Main', {
                 if (exampleRe.test(line)) {
                     removing = false;
                 }
-            } else if (exampleRe.test(line)) {
+            }
+            else if (exampleRe.test(line)) {
                 removing = true;
-            } else if (profileInfo) {
+            }
+            else if (profileInfo) {
                 /**
                  * Replace `foo: '${foo}'` strings with match in the profile object.
                  */
@@ -374,18 +388,22 @@ Ext.define('KitchenSink.controller.Main', {
                     (
                         emptyLineRe.test(replaced) &&
                         (
-                            line !== replaced ||        // The config was undefined, line should be removed
-                            emptyLineRe.test(previous)  // Multiple blank lines in a row, line should be removed
+                            // The config was undefined, line should be removed
+                            line !== replaced ||
+                            // Multiple blank lines in a row, line should be removed
+                            emptyLineRe.test(previous)
                         )
                     )
                 ) {
                     previous = replaced;
 
                     continue;
-                } else {
+                }
+                else {
                     keepLines.push(previous = replaced);
                 }
-            } else if (!emptyLineRe.test(line) || !emptyLineRe.test(previous)) {
+            }
+            else if (!emptyLineRe.test(line) || !emptyLineRe.test(previous)) {
                 previous = line;
 
                 keepLines.push(line);
@@ -402,12 +420,12 @@ Ext.define('KitchenSink.controller.Main', {
      * the class will then be looked up via the legacy (and deprecated) `view`
      * config on the node.
      */
-    getViewClass: function (node) {
+    getViewClass: function(node) {
         var id = node.getId(),
             viewName = Ext.ClassManager.getNameByAlias('widget.' + id);
 
         if (!viewName) {
-            //fallback on the node's view data
+            // fallback on the node's view data
             viewName = this.getViewName(node);
         }
 
@@ -421,7 +439,7 @@ Ext.define('KitchenSink.controller.Main', {
      * @param {String/Ext.Base} cls The class to resolve.
      * @return {String} The path of the class.
      */
-    getSourcePath: function (cls) {
+    getSourcePath: function(cls) {
         if (cls && cls.prototype && cls.prototype.sourcePreviewPath) {
             return cls.prototype.sourcePreviewPath;
         }
@@ -444,7 +462,7 @@ Ext.define('KitchenSink.controller.Main', {
      * @param {String} path The path to the file.
      * @return {Ext.Base} The resolved class.
      */
-    getClassFromPath: function (path) {
+    getClassFromPath: function(path) {
         var cls = path
             .replace(/^(modern\/src|app)(.+)\.js$/, 'KitchenSink$2')
             .replace(/\//g, '.');
@@ -454,7 +472,7 @@ Ext.define('KitchenSink.controller.Main', {
 
     handleRoute: Ext.emptyFn,
 
-    beforeHandleRoute: function (id, action) {
+    beforeHandleRoute: function(id, action) {
         var me = this,
             node = Ext.StoreMgr.get('Navigation').getNodeById(id),
             packages;
@@ -465,16 +483,19 @@ Ext.define('KitchenSink.controller.Main', {
             if (packages) {
                 Ext.Promise
                     .all(packages.map(Ext.Package.load.bind(Ext.Package)))
-                    .then(function () {
+                    .then(function() {
                         action.resume();
-                    }); //TODO error handle
-            } else {
+                    }); // TODO error handle
+            }
+            else {
                 action.resume();
             }
-        } else {
+        }
+        else {
             Ext.Msg.alert(
                 'Route Failure',
-                'The view for ' + id + ' could not be found. You will be taken to the application\'s start',
+                'The view for ' + id +
+                ' could not be found. You will be taken to the application\'s start',
                 function() {
                     me.redirectTo(
                         me.getApplication().getDefaultToken(),
@@ -489,54 +510,65 @@ Ext.define('KitchenSink.controller.Main', {
         }
     },
 
-    beforeBurgerMenuShow: function (burgerMenu) {
+    beforeBurgerMenuShow: function(burgerMenu) {
+        var me = this,
+            items;
+
         if (!this.burgerActions) {
-            var me = this,
-                items = this.getAvailableThemes();
-
+            items = this.getAvailableThemes();
             me.burgerActions = burgerMenu;
-
             burgerMenu.add(items);
         }
     },
 
-    onNavigationBarPainted: function () {
+    onNavigationBarPainted: function() {
         var materialThemeMenuButton = this.getMaterialThemeMenuButton();
-        if (materialThemeMenuButton && Ext.supports.CSSVariables && Ext.theme.is.Material && window.Fashion && Fashion.css && !!Fashion.css.setVariables) {
+
+        if (materialThemeMenuButton &&
+            Ext.supports.CSSVariables &&
+            Ext.theme.is.Material &&
+            window.Fashion &&
+            Fashion.css &&
+            !!Fashion.css.setVariables
+        ) {
             materialThemeMenuButton.show();
         }
     },
 
-    beforeMaterialThemeMenuShow: function (materialThemeMenu) {
-        if (!this.materialThemeMenu) {
-            var me = this,
-                items = me.materialThemes.map(me.parseMaterialTheme(me));
+    beforeMaterialThemeMenuShow: function(materialThemeMenu) {
+        var me = this,
+            items;
 
-            me.materialThemeMenu = materialThemeMenu;
-
-            items.unshift({
-                xtype: 'togglefield',
-                listeners: {
-                    change: 'onDarkModeChange',
-                    scope: me
-                },
-                value: Ext.String.trim(window.getComputedStyle(document.body).getPropertyValue('--dark-mode')) === 'true',
-                boxLabel: 'Dark Mode',
-                margin: null,
-                shadow: false
-            });
-
-            items.push({
-                text: 'Cancel',
-                ui: 'decline',
-                handler: function() {
-                    materialThemeMenu.hide();
-                },
-                separator: true
-            });
-
-            materialThemeMenu.add(items);
+        if (this.materialThemeMenu) {
+            return;
         }
+
+        items = me.materialThemes.map(me.parseMaterialTheme(me));
+
+        me.materialThemeMenu = materialThemeMenu;
+
+        items.unshift({
+            xtype: 'togglefield',
+            listeners: {
+                change: 'onDarkModeChange',
+                scope: me
+            },
+            value: Ext.String.trim(window.getComputedStyle(document.body).getPropertyValue('--dark-mode')) === 'true',
+            boxLabel: 'Dark Mode',
+            margin: null,
+            shadow: false
+        });
+
+        items.push({
+            text: 'Cancel',
+            ui: 'decline',
+            handler: function() {
+                materialThemeMenu.hide();
+            },
+            separator: true
+        });
+
+        materialThemeMenu.add(items);
     },
 
     onDarkModeChange: function(toggle) {
@@ -547,7 +579,7 @@ Ext.define('KitchenSink.controller.Main', {
         Ext.getBody().toggleCls('dark-mode', darkMode);
     },
 
-    getAvailableThemes: function () {
+    getAvailableThemes: function() {
         var me = this,
             items = me.availableThemes.map(me.parseAvailableThemes(me));
 
@@ -565,8 +597,8 @@ Ext.define('KitchenSink.controller.Main', {
         return items;
     },
 
-    parseAvailableThemes: function (me) {
-        return function (theme) {
+    parseAvailableThemes: function(me) {
+        return function(theme) {
             theme.xtype = 'menuradioitem';
             theme.checked = Ext.theme.name === theme.name;
             theme.group = 'theme_chooser';
@@ -578,8 +610,8 @@ Ext.define('KitchenSink.controller.Main', {
         };
     },
 
-    parseMaterialTheme: function (me) {
-        return function (theme) {
+    parseMaterialTheme: function(me) {
+        return function(theme) {
             theme.scope = me;
             theme.handler = me.onMaterialThemeClick;
 
@@ -587,14 +619,16 @@ Ext.define('KitchenSink.controller.Main', {
         };
     },
 
-    onMaterialThemeClick: function (item) {
-        var me = this;
-        var darkMode = Ext.String.trim(window.getComputedStyle(document.body).getPropertyValue('--dark-mode')) === 'true';
+    onMaterialThemeClick: function(item) {
+        var me = this,
+            darkMode = Ext.String.trim(window.getComputedStyle(document.body).getPropertyValue('--dark-mode')) === 'true';
+
         me.updateMaterialTheme(darkMode, item.baseColor, item.accentColor);
     },
 
     updateMaterialTheme: function(darkMode, base, accent) {
         var me = this;
+
         if (Ext.theme.Material) {
             Ext.theme.Material.setColors({
                 'darkMode': darkMode,
@@ -612,15 +646,15 @@ Ext.define('KitchenSink.controller.Main', {
         }
     },
 
-    getAvailableLocales: function () {
+    getAvailableLocales: function() {
         var me = this,
             items = me.availableLocales.map(me.parseAvailableLocales(me));
 
         return items;
     },
 
-    parseAvailableLocales: function (me) {
-        return function (locale) {
+    parseAvailableLocales: function(me) {
+        return function(locale) {
             locale.xtype = 'menuradioitem';
             locale.checked = KitchenSink.locale === locale.locale;
             locale.group = 'theme_chooser';

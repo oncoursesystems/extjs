@@ -1,7 +1,7 @@
 var shortLorem =
-    '<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed metus nibh, '+
-    'sodales a, porta at, vulputate eget, dui. Pellentesque ut nisl. Maecenas tortor turpis, interdum non, sodales '+
-    'non, iaculis ac, lacus. Vestibulum auctor, tortor quis iaculis malesuada, libero lectus bibendum purus, sit amet '+
+    '<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed metus nibh, ' +
+    'sodales a, porta at, vulputate eget, dui. Pellentesque ut nisl. Maecenas tortor turpis, interdum non, sodales ' +
+    'non, iaculis ac, lacus. Vestibulum auctor, tortor quis iaculis malesuada, libero lectus bibendum purus, sit amet ' +
     'tincidunt quam turpis vel lacus. In pellentesque nisl non sem. Suspendisse nunc sem, pretium eget, cursus a, fringilla.</p>';
 
 /**
@@ -9,7 +9,7 @@ var shortLorem =
  */
 Ext.define('Portal.view.main.Main', {
     extend: 'Ext.container.Container',
-    
+
     requires: [
         'Ext.button.Split',
         'Ext.dashboard.Dashboard',
@@ -21,7 +21,7 @@ Ext.define('Portal.view.main.Main', {
         'Portal.view.stocks.Stocks',
         'Portal.view.user.User'
     ],
-    
+
     layout: {
         type: 'border'
     },
@@ -32,7 +32,7 @@ Ext.define('Portal.view.main.Main', {
         id: 'app-header',
         xtype: 'app-header',
         region: 'north'
-    },{
+    }, {
         id: 'app-options',
         title: 'Options',
         region: 'west',
@@ -42,7 +42,7 @@ Ext.define('Portal.view.main.Main', {
         maxWidth: 400,
         split: true,
         collapsible: true,
-        layout:{
+        layout: {
             type: 'accordion',
             animate: true
         },
@@ -59,19 +59,19 @@ Ext.define('Portal.view.main.Main', {
         },
         items: [{
             html: '<div class="portlet-content">' + shortLorem + '</div>',
-            title:'Navigation',
+            title: 'Navigation',
             scrollable: true,
             border: false,
             glyph: '9798@'
-            //iconCls: 'nav'
-        },{
-            title:'Settings',
+            // iconCls: 'nav'
+        }, {
+            title: 'Settings',
             html: '<div class="portlet-content">' + shortLorem + '</div>',
             border: false,
             scrollable: true,
             iconCls: 'settings'
         }]
-    },{
+    }, {
         xtype: 'dashboard',
         reference: 'dashboard',
         region: 'center',
@@ -99,7 +99,7 @@ Ext.define('Portal.view.main.Main', {
                     }]
                 }
             },
-            
+
             userForm: {
                 viewTemplate: {
                     title: 'New User',

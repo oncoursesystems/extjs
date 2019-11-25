@@ -8,19 +8,19 @@ Ext.define('KitchenSink.view.chart.scatter.BubbleController', {
 
     seed: 1.3,
 
-    init: function (view) {
+    init: function(view) {
         this.callParent([view]);
         this.onRefresh();
     },
 
-    random: function () {
+    random: function() {
         this.seed *= 7.3;
         this.seed -= Math.floor(this.seed);
 
         return this.seed;
     },
 
-    createData: function (count) {
+    createData: function(count) {
         var me = this,
             record = {
                 id: 0,
@@ -46,18 +46,18 @@ Ext.define('KitchenSink.view.chart.scatter.BubbleController', {
         return data;
     },
 
-    onRefresh: function () {
+    onRefresh: function() {
         var chart = this.lookup('chart'),
             store = chart.getStore();
 
         store.setData(this.createData(40));
     },
 
-    interpolate: function (lambda, minSrc, maxSrc, minDst, maxDst) {
+    interpolate: function(lambda, minSrc, maxSrc, minDst, maxDst) {
         return minDst + (maxDst - minDst) * Math.max(0, Math.min(1, (lambda - minSrc) / (maxSrc - minSrc)));
     },
 
-    interpolateColor: function (lambda, minSrc, maxSrc) {
+    interpolateColor: function(lambda, minSrc, maxSrc) {
         var fromHSL = Ext.util.Color.fly('blue').getHSL(),
             toHSL = Ext.util.Color.fly('red').getHSL();
 
@@ -70,7 +70,7 @@ Ext.define('KitchenSink.view.chart.scatter.BubbleController', {
         ).toString();
     },
 
-    seriesStyleRenderer: function (sprite, config, rendererData, index) {
+    seriesStyleRenderer: function(sprite, config, rendererData, index) {
         var store = rendererData.store,
             storeItem = store.getData().items[index];
 

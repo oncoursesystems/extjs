@@ -343,7 +343,7 @@ Ext.define('Ext.util.TaskRunner', {
                     if (fireIdleEvent === null && task.fireIdleEvent !== false) {
                         fireIdleEvent = true;
                     }
-                    
+
                     task.taskRunCount++;
 
                     if (task.args) {
@@ -370,7 +370,7 @@ Ext.define('Ext.util.TaskRunner', {
                         }
                         catch (taskError) {
                             try {
-                                // <debug>
+                                //<debug>
                                 Ext.log({
                                     fn: task.run,
                                     prefix: 'Error while running task',
@@ -379,7 +379,7 @@ Ext.define('Ext.util.TaskRunner', {
                                     level: 'error'
                                 });
 
-                                // </debug>
+                                //</debug>
                                 if (task.onError) {
                                     rt = task.onError.call(task.scope || task, task, taskError);
                                 }
@@ -391,7 +391,7 @@ Ext.define('Ext.util.TaskRunner', {
                     //<debug>
                     }
                     //</debug>
-                    
+
                     task.taskRunTime = now;
 
                     if (rt === false || task.taskRunCount === task.repeat) {
@@ -517,13 +517,13 @@ Ext.define('Ext.util.TaskRunner', {
          * @private
          */
         stopped: true, // this avoids the odd combination of !stopped && !pending
-        
+
         fireOnStart: false,
-        
+
         constructor: function(config) {
             Ext.apply(this, config);
         },
-        
+
         /**
          * Restarts this task, clearing it duration, expiration and run count.
          * @param {Number} [interval] Optionally reset this task's interval.
@@ -532,10 +532,10 @@ Ext.define('Ext.util.TaskRunner', {
             if (interval !== undefined) {
                 this.interval = interval;
             }
-            
+
             this.manager.start(this);
         },
-    
+
         /**
          * Starts this task if it is not already started.
          * @param {Number} [interval] Optionally reset this task's interval.
@@ -545,21 +545,21 @@ Ext.define('Ext.util.TaskRunner', {
                 this.restart(interval);
             }
         },
-        
+
         /**
          * Stops this task.
          */
         stop: function(andRemove) {
             this.manager.stop(this, andRemove);
         },
-        
+
         destroy: function() {
             this.stop(true);
         }
     });
 
     proto = me.Task.prototype;
-        
+
     /**
      * Destroys this instance, stopping this task's execution.
      * @method destroy

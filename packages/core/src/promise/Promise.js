@@ -172,7 +172,7 @@ return {
             for (i = 0; i < len; ++i) {
                 deferred.resolve(promises[i]);
             }
-            
+
             return deferred.promise;
         },
 
@@ -267,11 +267,11 @@ return {
             if (onFulfilled) {
                 onFulfilled = onFulfilled.bind(scope);
             }
-            
+
             if (onRejected) {
                 onRejected = onRejected.bind(scope);
             }
-            
+
             if (onProgress) {
                 onProgress = onProgress.bind(scope);
             }
@@ -352,7 +352,7 @@ return {
             catch (e) {
                 ExtPromise.rethrowError(e);
             }
-            
+
             return value;
         }, function(reason) {
             try {
@@ -361,7 +361,7 @@ return {
             catch (e) {
                 ExtPromise.rethrowError(e);
             }
-            
+
             throw reason;
         });
     },
@@ -415,7 +415,7 @@ return {
         if (reason == null) {
             reason = null;
         }
-        
+
         this.owner.reject(new this.self.CancellationError(reason));
     },
 
@@ -433,14 +433,14 @@ return {
         if (identifier == null) {
             identifier = '';
         }
-        
+
         return this.owner.then(function(value) {
             Ext.log("" + (identifier || 'Promise') + " resolved with value: " + value);
-            
+
             return value;
         }, function(reason) {
             Ext.log("" + (identifier || 'Promise') + " rejected with reason: " + reason);
-            
+
             throw reason;
         });
     }

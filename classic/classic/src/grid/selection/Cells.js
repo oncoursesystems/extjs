@@ -218,7 +218,7 @@ Ext.define('Ext.grid.selection.Cells', {
                 newEndCell = me.endCell.clone().setPosition(
                     me.getLastRowIndex(), me.getLastColumnIndex()
                 );
-                
+
                 me.startCell = extensionVector.start.clone();
                 me.setRangeEnd(newEndCell);
                 me.view.getNavigationModel().setPosition(extensionVector.start);
@@ -227,7 +227,7 @@ Ext.define('Ext.grid.selection.Cells', {
                 me.startCell = me.startCell.setPosition(
                     me.getFirstRowIndex(), me.getFirstColumnIndex()
                 );
-                
+
                 me.setRangeEnd(extensionVector.end);
                 me.view.getNavigationModel().setPosition(extensionVector.end);
             }

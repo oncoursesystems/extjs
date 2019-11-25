@@ -9,19 +9,19 @@ Ext.define('Ext.overrides.event.publisher.Dom', {
         focusout: true,
         blur: true
     };
-    
+
     if (Ext.isIE10m) {
         DomPublisher.override({
             isEventBlocked: function(e) {
                 if (!focusEvents[e.type]) {
                     return this.callParent([e]);
                 }
-                
+
                 // eslint-disable-next-line vars-on-top
                 var body = document.body,
                     ev = e.browserEvent,
                     el = Ext.synchronouslyFocusing;
-                
+
                 /* eslint-disable max-len, brace-style */
                 // This horrid hack is necessary to work around the issue with input elements
                 // in IE10m that can fail to focus under certain conditions. See comment in
@@ -34,12 +34,12 @@ Ext.define('Ext.overrides.event.publisher.Dom', {
                     return true;
                 }
                 /* eslint-enable max-len, brace-style */
-                
+
                 return false;
             }
         });
     }
-    
+
     if (Ext.isIE9m) {
         // eslint-disable-next-line vars-on-top
         var docElement = document.documentElement,
@@ -55,7 +55,7 @@ Ext.define('Ext.overrides.event.publisher.Dom', {
         onDirectEvent = function(e, publisher, capture) {
             e.target = e.srcElement || window;
             e.currentTarget = this;
-            
+
             if (capture) {
                 // Although directly attached capture listeners are not supported in IE9m
                 // we still need to call the handler so at least the event fires.
@@ -96,7 +96,7 @@ Ext.define('Ext.overrides.event.publisher.Dom', {
                                (directBoundListeners[eventName] = {});
 
                 handlers[dom.id] = boundFn;
-                
+
                 // may be called with an SVG element here, which
                 // does not have the attachEvent method on IE 9 strict
                 if (dom.attachEvent) {
@@ -141,14 +141,14 @@ Ext.define('Ext.overrides.event.publisher.Dom', {
         // can't capture any events without addEventListener.  Have to have direct
         // listeners for every event that does not bubble.
         Ext.apply(prototype.directEvents, prototype.captureEvents);
-        
+
         // These do not bubble in IE9m so have to attach direct listeners as well.
         Ext.apply(prototype.directEvents, {
             change: 1,
             input: 1,
             paste: 1
         });
-        
+
         prototype.captureEvents = {};
     }
 });

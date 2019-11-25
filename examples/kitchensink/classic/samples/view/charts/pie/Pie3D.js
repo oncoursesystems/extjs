@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.charts.pie.Pie3D', {
     requires: [
         'Ext.chart.PolarChart'
     ],
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.charts.pie.Pie3D', {
         type: 'Store',
         path: 'app/store/Pie.js'
     }],
-    // </example>
+    //</example>
 
     layout: 'vbox',
     width: 650,

@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.tip.TipAligningModel', {
         targetOffset: 50,
         anchor: true
     },
-    
+
     formulas: {
         alignSpec: function(getter) {
             var edges = 'trbl',

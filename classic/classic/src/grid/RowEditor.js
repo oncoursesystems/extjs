@@ -15,7 +15,7 @@
 Ext.define('Ext.grid.RowEditor', {
     extend: 'Ext.form.Panel',
     alias: 'widget.roweditor',
-    
+
     requires: [
         'Ext.tip.ToolTip',
         'Ext.util.KeyNav',
@@ -70,9 +70,9 @@ Ext.define('Ext.grid.RowEditor', {
     // Change the hideMode to offsets so that we get accurate measurements when
     // the roweditor is hidden for laying out things like a TriggerField.
     hideMode: 'offsets',
-    
+
     defaultFocus: 'field:canfocus',
-    
+
     layout: {
         type: 'hbox',
         align: 'middle'
@@ -204,7 +204,7 @@ Ext.define('Ext.grid.RowEditor', {
             return false;
         }
     },
-    
+
     syncAllFieldWidths: function() {
         var me = this,
             editors = me.query('[isEditorComponent]'),
@@ -235,7 +235,7 @@ Ext.define('Ext.grid.RowEditor', {
 
         // Avoid negative width as this will throw Invalid Argument errors in IE
         width = Math.max(column.getWidth() - field._marginWidth, 0);
-        
+
         field.setWidth(width);
 
         if (field.xtype === 'displayfield') {
@@ -260,7 +260,7 @@ Ext.define('Ext.grid.RowEditor', {
 
     updateButton: function(valid) {
         var buttons = this.floatingButtons;
- 
+
         if (buttons) {
             buttons.child('#update').setDisabled(!valid);
         }
@@ -312,7 +312,7 @@ Ext.define('Ext.grid.RowEditor', {
         });
 
         me.syncAllFieldWidths();
-        
+
         if (me.floatingButtons) {
             me.body.dom.setAttribute('aria-owns', me.floatingButtons.id);
         }
@@ -385,7 +385,7 @@ Ext.define('Ext.grid.RowEditor', {
             grid = plugin.grid;
             store = grid.getStore();
             gridView = me.editingPlugin.view;
-            
+
             // Checking if this is a deleted record or an element being derendered
             if (store.getById(me.getRecord().getId()) && !me._cachedNode) {
                 // if this is an item being derendered and is also being edited
@@ -629,7 +629,7 @@ Ext.define('Ext.grid.RowEditor', {
             forwards = !e.shiftKey,
             target = activeField[forwards ? 'nextNode' : 'previousNode'](':focusable'),
             count;
-        
+
         // We must control where the focus goes on Tab key press in fields.
         // The reason is that if there are elements with tabIndex > 0 elsewhere
         // in the document, natural tabbing might go out of the RowEditor, and
@@ -645,10 +645,10 @@ Ext.define('Ext.grid.RowEditor', {
             }
             else {
                 count = me.view.dataSource.getCount();
-                
+
                 // Editor is clean - navigate to next or previous row
                 rowIdx = rowIdx + (forwards ? 1 : -1);
-                
+
                 // Wrap around if we reached the end
                 if (rowIdx < 0) {
                     rowIdx = count - 1;
@@ -656,7 +656,7 @@ Ext.define('Ext.grid.RowEditor', {
                 else if (rowIdx >= count) {
                     rowIdx = 0;
                 }
-                
+
                 if (forwards) {
                     target = me.down(':focusable:not([isButton]):first');
 
@@ -670,14 +670,14 @@ Ext.define('Ext.grid.RowEditor', {
                 else {
                     target = me.down(':focusable:not([isButton]):last');
                 }
-                
+
                 // We need to park focus on a tab guard while the fields
                 // are being updated with the values from new row. Also
                 // we might need to scroll the view, and RowEditor transition
                 // can be animated. We don't want screen readers to announce
                 // the transitions.
                 me.tabGuardBeforeEl.focus();
-                
+
                 me.editingPlugin.startEdit(rowIdx, target.column);
             }
         }
@@ -748,13 +748,13 @@ Ext.define('Ext.grid.RowEditor', {
         else {
             result = me.callParent(arguments);
         }
-        
+
         buttons = me.getFloatingButtons();
-        
+
         if (buttons) {
             result.push.apply(result, buttons.getRefItems(deep));
         }
-        
+
         return result;
     },
 
@@ -785,7 +785,7 @@ Ext.define('Ext.grid.RowEditor', {
             afterPosition = function() {
                 me.syncEditorClip();
                 me.wrapAnim = null;
-                
+
                 if (!fromScrollHandler) {
                     if (deltaY) {
                         me.scroller.scrollBy(0, deltaY, true);
@@ -838,15 +838,15 @@ Ext.define('Ext.grid.RowEditor', {
                 clientHeight = scrollingViewDom.clientHeight;
                 scrollHeight = scrollingViewDom.scrollHeight;
                 editorHeight = me.getHeight() + me.floatingButtons.getHeight();
-                
+
                 // There might be not enough height to scroll
                 if (clientHeight === scrollHeight && editorHeight > clientHeight) {
                     return 0;
                 }
-                
+
                 deltaY =
                     Math.max(deltaY + editorHeight - clientHeight - body.getBorderWidth('b'), 0);
-                
+
                 if (deltaY > 0) {
                     deltaY -= body.getBorderPadding().afterY;
                 }
@@ -880,7 +880,7 @@ Ext.define('Ext.grid.RowEditor', {
         else {
             result -= this.body.getBorderPadding().beforeY;
         }
-        
+
         return result;
     },
 
@@ -931,7 +931,7 @@ Ext.define('Ext.grid.RowEditor', {
         if (column.getEditor) {
             // Get a default display field if necessary
             field = column.getEditor(null, me.getDefaultFieldCfg());
-            
+
             // Focus is managed by RowEditor
             field.preventRefocus = true;
 
@@ -956,7 +956,7 @@ Ext.define('Ext.grid.RowEditor', {
                 }
 
                 field.fieldStyle = style;
-                
+
             }
 
             if (column.xtype === 'actioncolumn') {
@@ -983,7 +983,7 @@ Ext.define('Ext.grid.RowEditor', {
             }
         }
     },
-    
+
     getDefaultFieldCfg: function() {
         return {
             xtype: 'displayfield',
@@ -1102,13 +1102,13 @@ Ext.define('Ext.grid.RowEditor', {
             else if (me.errorSummary) {
                 // Scroll the visible RowEditor that is in error state back into view
                 scrollDelta = me.getScrollDelta();
-                
+
                 if (scrollDelta) {
                     me.scrollingViewEl.scrollBy(0, scrollDelta, true);
                 }
-                
+
                 me.showToolTip();
-                
+
                 return false;
             }
         }
@@ -1140,20 +1140,20 @@ Ext.define('Ext.grid.RowEditor', {
         if (!wasRendered) {
             me.width = me.getClientWidth();
             me.render(grid.el, grid.el.dom.firstChild);
-            
+
             // The wrapEl is a container for the editor and buttons.  We use a wrap el
             // (instead of rendering the buttons inside the editor) so that the editor and
             // buttons can be clipped separately when overflowing.
             // See https://sencha.jira.com/browse/EXTJS-13851
             wrapEl = me.wrapEl = me.el.wrap();
-            
+
             // Change the visibilityMode to offsets so that we get accurate measurements
             // when the roweditor is hidden for laying out things like a TriggerField.
             wrapEl.setVisibilityMode(3);
 
             wrapEl.addCls(me._wrapCls);
             me.getFloatingButtons().render(wrapEl);
-            
+
             // On first show we need to ensure that we have the scroll positions cached
             me.onViewScroll();
         }
@@ -1165,7 +1165,7 @@ Ext.define('Ext.grid.RowEditor', {
             row: record,
             column: columnHeader
         });
-        
+
         if (me.rendered && me.formAriaLabel) {
             label =
                 Ext.String.formatEncode(me.formAriaLabel, me.formAriaLabelRowBase + context.rowIdx);
@@ -1187,7 +1187,7 @@ Ext.define('Ext.grid.RowEditor', {
             // scrollIntoView right after startEdit as this will be
             // handled by the Editing plugin.
             me.skipFocusScroll = true;
-            
+
             me.show();
         }
 
@@ -1220,7 +1220,7 @@ Ext.define('Ext.grid.RowEditor', {
             overflow = scrollDelta - (scrollHeight - me.scroller.getPosition().y);
 
         floatingButtons.show();
-        
+
         // If that's the last visible row, buttons should be at the top regardless of scrolling,
         // but not if there is just one row which is both first and last.
         if (overflow > 0 || (context.rowIdx > 0 && context.isLastRenderedRow())) {
@@ -1258,7 +1258,7 @@ Ext.define('Ext.grid.RowEditor', {
             // we cannot use the lockingView's el because that *contains* two grids.
             // We must use the scroller el.
             clipRegion = me.scroller.getElement().getConstrainRegion();
-    
+
         me.clipTo(clipRegion);
         me.floatingButtons.clipTo(clipRegion);
 
@@ -1269,11 +1269,11 @@ Ext.define('Ext.grid.RowEditor', {
 
     focusColumnField: function(column) {
         var field, didFocus;
-        
+
         if (column && !column.destroyed) {
             if (column.isVisible()) {
                 field = this.getEditor(column);
-   
+
                 if (field && field.isFocusable(true)) {
                     didFocus = true;
                     field.focus();
@@ -1298,7 +1298,7 @@ Ext.define('Ext.grid.RowEditor', {
         if (me._cachedNode) {
             me.clearCache();
         }
-        
+
         me.hide();
 
         // If we are editing a new record, and we cancel still in invalid state, then remove it.
@@ -1355,7 +1355,7 @@ Ext.define('Ext.grid.RowEditor', {
 
         me.wrapEl.show();
         me.callParent(arguments);
-        
+
         if (me.needsSyncFieldWidths) {
             me.suspendLayouts();
             me.preventReposition = true;
@@ -1363,9 +1363,9 @@ Ext.define('Ext.grid.RowEditor', {
             me.preventReposition = false;
             me.resumeLayouts(true);
         }
-        
+
         delete me.needsSyncFieldWidths;
-        
+
         if (me.rendered) {
             me.initTabGuards(true);
         }
@@ -1390,24 +1390,24 @@ Ext.define('Ext.grid.RowEditor', {
         else {
             column = context.column;
         }
-        
+
         // Hiding could have been caused by removing our column
         if (column && !column.destroyed) {
             focusContext =
                 new Ext.grid.CellContext(column.getView()).setPosition(context.record, column);
             focusContext.view.getNavigationModel().setPosition(focusContext);
         }
-        
+
         me.activeField = null;
         me.wrapEl.hide();
-        
+
         me.callParent(arguments);
-        
+
         // RowEditor is hidden via offsets so need to deactivate tab guards manually
         if (me.rendered) {
             me.initTabGuards(false);
         }
-        
+
         if (me.tooltip) {
             me.hideToolTip();
         }
@@ -1435,7 +1435,7 @@ Ext.define('Ext.grid.RowEditor', {
                 closeAction: 'disable',
                 anchor: 'left',
                 anchorToTarget: true,
-                targetOffset: [Ext.getScrollbarSize().width, 0],
+                targetOffset: [Ext.scrollbar.width(), 0],
                 constrainPosition: true,
                 constrainTo: document.body
             });
@@ -1530,7 +1530,7 @@ Ext.define('Ext.grid.RowEditor', {
 
     doDestroy: function() {
         var me = this;
-        
+
         if (me.wrapAnim) {
             Ext.fx.Manager.removeAnim(me.wrapAnim);
             me.wrapAnim = null;
@@ -1539,7 +1539,7 @@ Ext.define('Ext.grid.RowEditor', {
         // Properties must be cleared because class-specific getRefItems explicitly references them.
         me.keyNav = me.floatingButtons = me.tooltip =
             Ext.destroy(me.keyNav, me.floatingButtons, me.tooltip, me.wrapEl);
-        
+
         me.callParent();
     }
 });

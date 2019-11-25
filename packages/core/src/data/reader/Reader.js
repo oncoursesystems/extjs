@@ -272,7 +272,7 @@ Ext.define('Ext.data.reader.Reader', {
          * @private
          */
         proxy: null,
-    
+
         /**
         * @cfg {Boolean} [readRecordsOnFailure]
         * True to extract the records from a data packet even if the {@link #successProperty}
@@ -466,7 +466,7 @@ Ext.define('Ext.data.reader.Reader', {
         */
         typeProperty: ''
     },
-    
+
     /**
      * @property {Object} rawData
      * The raw data object that was last passed to {@link #readRecords}. rawData is populated 
@@ -478,7 +478,7 @@ Ext.define('Ext.data.reader.Reader', {
      * Since Ext JS 5.1.1 you can use the {@link #keepRawData} config option to
      * control this behavior.
      */
-    
+
     /**
      * @property {Object} metaData
      * The raw meta data that was most recently read, if any. Meta data can include existing
@@ -498,13 +498,13 @@ Ext.define('Ext.data.reader.Reader', {
      * via the reader directly in certain cases.
      * @readonly
      */
-    
+
     /**
      * @property {Boolean} isReader
      * `true` in this class to identify an object as an instantiated Reader, or subclass thereof.
      */
     isReader: true,
-    
+
     /**
      * @event exception
      * Fires when the reader receives improperly encoded data from the server
@@ -519,12 +519,12 @@ Ext.define('Ext.data.reader.Reader', {
      */
     constructor: function(config) {
         var me = this;
-        
+
         if (config && config.hasOwnProperty('root')) {
             config = Ext.apply({}, config);
             config.rootProperty = config.root;
             delete config.root;
-            
+
             //<debug>
             Ext.log.error('Ext.data.reader.Reader: Using the deprecated "root" configuration. ' +
                           'Use "rootProperty" instead.');
@@ -535,10 +535,10 @@ Ext.define('Ext.data.reader.Reader', {
         // Will call initConfig
         me.mixins.observable.constructor.call(me, config);
         --me.duringInit;
-        
+
         me.buildExtractors();
     },
-    
+
     forceBuildExtractors: function() {
         if (!this.duringInit) {
             this.buildExtractors(true);
@@ -548,7 +548,7 @@ Ext.define('Ext.data.reader.Reader', {
     updateGroupRootProperty: function() {
         this.forceBuildExtractors();
     },
-    
+
     updateMessageProperty: function() {
         this.forceBuildExtractors();
     },
@@ -560,7 +560,7 @@ Ext.define('Ext.data.reader.Reader', {
     updateSuccessProperty: function() {
         this.forceBuildExtractors();
     },
-    
+
     updateTotalProperty: function() {
         this.forceBuildExtractors();
     },
@@ -573,10 +573,10 @@ Ext.define('Ext.data.reader.Reader', {
             else if (transform.charAt) { // faster than Ext.isString()
                 transform = { fn: this[transform] };
             }
-            
+
             return transform.fn.bind(transform.scope || this);
         }
-        
+
         return transform;
     },
 
@@ -598,10 +598,10 @@ Ext.define('Ext.data.reader.Reader', {
 
         if (response) {
             responseText = response.responseText;
-            
+
             if (response.responseType || responseText) {
                 result = this.getResponseData(response);
-                
+
                 if (result && result.__$isError) {
                     return new Ext.data.ResultSet({
                         total: 0,
@@ -669,46 +669,45 @@ Ext.define('Ext.data.reader.Reader', {
         // If found reconfigure accordingly.
         // The calling Proxy fires its metachange event if it finds metadata in the ResultSet.
         meta = me.getMeta ? me.getMeta(data) : data.metaData;
-        
+
         if (meta) {
             me.onMetaChange(meta);
         }
 
         transform = me.getTransform();
-        
+
         if (transform) {
             data = transform(data);
         }
-          
+
         me.buildExtractors();
-        
+
         if (me.getKeepRawData()) {
             me.rawData = data;
         }
-        
+
         if (me.hasListeners.rawdata) {
             me.fireEventArgs('rawdata', [data]);
         }
 
         data = me.getData(data);
-        
+
         success = true;
         recordCount = 0;
         records = [];
-            
+
         if (me.getSuccessProperty()) {
             value = me.getSuccess(data);
-            
+
             if (value === false || value === 'false') {
                 success = false;
             }
         }
-        
+
         if (me.getMessageProperty()) {
             message = me.getMessage(data);
         }
 
-        
         // Only try and extract other data if call was successful
         if (success || me.getReadRecordsOnFailure()) {
             // If we pass an array as the data, we don't use getRoot on the data.
@@ -721,7 +720,7 @@ Ext.define('Ext.data.reader.Reader', {
 
             if (me.getTotalProperty()) {
                 value = parseInt(me.getTotal(data), 10);
-                
+
                 if (!isNaN(value)) {
                     remoteTotal = total = value;
                 }
@@ -734,28 +733,28 @@ Ext.define('Ext.data.reader.Reader', {
 
             if (me.getGroupRootProperty()) {
                 root = me.getGroupRoot(data);
-                
+
                 if (root) {
                     summaryOptions = {
                         includes: false,
                         model: me.getModel().getSummaryModel()
                     };
-                    
+
                     groupData = me.extractData(root, summaryOptions) || null;
                 }
             }
 
             if (me.getSummaryRootProperty()) {
                 root = me.getSummaryRoot(data);
-                
+
                 if (root) {
                     summaryOptions = summaryOptions || {
                         includes: false,
                         model: me.getModel().getSummaryModel()
                     };
-                    
+
                     summaryData = me.extractData(root, summaryOptions) || null;
-                    
+
                     // This always returns an array, so transform it
                     if (summaryData) {
                         summaryData = summaryData[0];
@@ -802,7 +801,7 @@ Ext.define('Ext.data.reader.Reader', {
             records = new Array(length),
             typeProperty = me.getTypeProperty(),
             reader, node, nodeType, record, i;
-            
+
         if (!length && Ext.isObject(root)) {
             root = [root];
             length = 1;
@@ -810,7 +809,7 @@ Ext.define('Ext.data.reader.Reader', {
 
         for (i = 0; i < length; i++) {
             record = root[i];
-            
+
             if (!record.isModel) {
                 // If we're given a model instance in the data, just push it on
                 // without doing any conversion. Otherwise, create a record.
@@ -837,7 +836,7 @@ Ext.define('Ext.data.reader.Reader', {
                     record = me.extractRecord(node, readOptions, entityType, includes,
                                               fieldExtractorInfo);
                 }
-                
+
                 // Generally we don't want to have references to XML documents
                 // or XML nodes to hang around in memory but Trees need to be able
                 // to access the raw XML node data in order to process its children.
@@ -847,11 +846,11 @@ Ext.define('Ext.data.reader.Reader', {
                     record.raw = node;
                 }
             }
-            
+
             if (record.onLoad) {
                 record.onLoad();
             }
-            
+
             records[i] = record;
         }
 
@@ -866,13 +865,13 @@ Ext.define('Ext.data.reader.Reader', {
         switch (typeof typeProperty) {
             case 'string':
                 return schema.getEntity(rawNode[typeProperty]);
-            
+
             case 'object':
                 namespace = typeProperty.namespace;
-                
+
                 return schema.getEntity((namespace ? namespace + '.' : '') +
                        rawNode[typeProperty.name]);
-            
+
             case 'function':
                 return schema.getEntity(typeProperty(rawNode));
         }
@@ -890,24 +889,24 @@ Ext.define('Ext.data.reader.Reader', {
         var me = this,
             creatorFn = (readOptions && readOptions.recordCreator) || me.defaultRecordCreator,
             modelData, record;
-            
+
         // Create a record with an empty data object.
         // Populate that data object by extracting and converting field values from raw data.
         // Must pass the ID to use because we pass no data for the constructor to pluck an ID from
         modelData = me.extractModelData(node, fieldExtractorInfo);
         record = creatorFn.call(me, modelData, entityType || me.getModel(), readOptions);
-        
+
         if (includes && record.isModel) {
             me.readAssociated(record, node, readOptions);
         }
-        
+
         return record;
     },
-    
+
     getFieldExtractorInfo: function(entityType) {
         var extractors = entityType.fieldExtractors,
             type, extractor;
-        
+
         // If the base Ext.data.Model class is being used, there will be no extractor info
         // The raw data block will be imported unchanged.
         if (!extractors) {
@@ -916,16 +915,16 @@ Ext.define('Ext.data.reader.Reader', {
 
         type = this.$className;
         extractor = extractors[type];
-            
+
         // If we have no extractors, buildFieldExtractors will return null,
         // so we never need to rebuild them
         if (extractor === undefined) {
             extractors[type] = extractor = this.buildFieldExtractors(entityType);
         }
-        
+
         return extractor;
     },
-    
+
     buildFieldExtractors: function(entityType) {
         var fields = entityType.getFields(),
             len = fields.length,
@@ -934,11 +933,11 @@ Ext.define('Ext.data.reader.Reader', {
             out = null,
             cnt = 0,
             field, name, i, extractor;
-        
+
         for (i = 0; i < len; ++i) {
             field = fields[i];
             extractor = this.createFieldAccessor(field);
-            
+
             if (extractor) {
                 name = field.name;
                 // Use [] property access since we may have non-JS looking field names
@@ -949,7 +948,7 @@ Ext.define('Ext.data.reader.Reader', {
                 ++cnt;
             }
         }
-        
+
         if (buffer.length) {
             out = {
                 extractors: extractors,
@@ -958,39 +957,39 @@ Ext.define('Ext.data.reader.Reader', {
                 )
             };
         }
-        
+
         return out;
     },
-    
+
     defaultRecordCreator: function(data, Model) {
         return new Model(data);
     },
 
     defaultRecordCreatorFromServer: function(data, Model) {
         var record = new Model(data);
-        
+
         // If the server did not include an id in the response data, the Model constructor will
         // mark the record as phantom. We need to set phantom to false here because records created
         // from a server response using a reader by definition are not phantom records.
         record.phantom = false;
-        
+
         return record;
     },
-    
+
     getModelData: function(raw) {
         return {};
     },
-    
+
     extractModelData: function(raw, fieldExtractorInfo) {
         var data = this.getModelData(raw),
             fn;
-            
+
         // We may not have any mappings to process
         if (fieldExtractorInfo) {
             fn = fieldExtractorInfo.fn;
             fn(raw, data, fieldExtractorInfo.extractors, this);
         }
-        
+
         return data;
     },
 
@@ -1005,11 +1004,11 @@ Ext.define('Ext.data.reader.Reader', {
     readAssociated: function(record, data, readOptions) {
         var roles = record.associations,
             key, role;
-            
+
         for (key in roles) {
             if (roles.hasOwnProperty(key)) {
                 role = roles[key];
-                
+
                 // The class for the other role may not have loaded yet
                 if (role.cls) {
                     role.read(record, data, this, readOptions);
@@ -1066,46 +1065,46 @@ Ext.define('Ext.data.reader.Reader', {
         var me = this,
             fields = meta.fields,
             model, newModel, clientIdProperty, proxy;
-        
+
         // save off the raw meta data
         me.metaData = meta;
-        
+
         // set any reader-specific configs from meta if available
         if (meta.root) {
             me.setRootProperty(meta.root);
         }
-        
+
         if (meta.totalProperty) {
             me.setTotalProperty(meta.totalProperty);
         }
-        
+
         if (meta.successProperty) {
             me.setSuccessProperty(meta.successProperty);
         }
-        
+
         if (meta.messageProperty) {
             me.setMessageProperty(meta.messageProperty);
         }
 
         clientIdProperty = meta.clientIdProperty;
-        
+
         if (fields) {
             newModel = Ext.define(null, {
                 extend: 'Ext.data.Model',
                 fields: fields,
                 clientIdProperty: clientIdProperty
             });
-            
+
             me.setModel(newModel);
             proxy = me.getProxy();
-            
+
             if (proxy) {
                 proxy.setModel(newModel);
             }
         }
         else if (clientIdProperty) {
             model = me.getModel();
-            
+
             if (model) {
                 model.self.prototype.clientIdProperty = clientIdProperty;
             }
@@ -1122,7 +1121,7 @@ Ext.define('Ext.data.reader.Reader', {
     buildExtractors: function(force) {
         var me = this,
             totalProp, successProp, messageProp;
-            
+
         if (force || !me.hasExtractors) {
             totalProp = me.getTotalProperty();
             successProp = me.getSuccessProperty();
@@ -1140,9 +1139,9 @@ Ext.define('Ext.data.reader.Reader', {
             if (messageProp) {
                 me.getMessage = me.getAccessor(messageProp);
             }
-            
+
             me.hasExtractors = true;
-            
+
             return true;
         }
     },
@@ -1154,14 +1153,14 @@ Ext.define('Ext.data.reader.Reader', {
 
         if (typeof prop === 'string') {
             key = me.getAccessorKey(prop);
-            
+
             if (key) {
                 ret = cache.get(key);
             }
-            
+
             if (!ret) {
                 ret = me.createAccessor(prop);
-                
+
                 if (key) {
                     cache.add(key, ret);
                 }
@@ -1170,31 +1169,31 @@ Ext.define('Ext.data.reader.Reader', {
         else {
             ret = me.createAccessor(prop);
         }
-        
+
         return ret;
     },
 
     getAccessorKey: function(prop) {
         var className = this.$className;
-        
+
         return className ? className + prop : '';
     },
-    
+
     createAccessor: Ext.emptyFn,
-    
+
     createFieldAccessor: Ext.emptyFn,
 
     destroy: function() {
         var me = this;
 
         me.model = me.getTotal = me.getSuccess = me.getMessage = me.rawData = null;
-        
+
         // Proxy could have created a sequence
         me.onMetaChange = null;
-        
+
         // Transform function can be bound
         me.transform = null;
-        
+
         me.callParent();
     },
 
@@ -1218,7 +1217,7 @@ Ext.define('Ext.data.reader.Reader', {
     }
 }, function(Cls) {
     var proto = Cls.prototype;
-    
+
     Ext.apply(proto, {
         // Private. Empty ResultSet to return when response is falsy (null|undefined|empty string)
         nullResultSet: new Ext.data.ResultSet({

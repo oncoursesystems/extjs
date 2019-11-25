@@ -393,10 +393,10 @@ Ext.define('Ext.picker.Date', {
         if (me.isConfiguring) {
             return;
         }
-        
+
         value = me.getValue(true);
         daySlot = me.getDaySlot();
-        
+
         me.callParent(arguments);
 
         // This method only deals with number of days adjustments

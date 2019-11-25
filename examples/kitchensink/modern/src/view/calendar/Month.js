@@ -8,12 +8,12 @@ Ext.define('KitchenSink.view.calendar.Month', {
         'Ext.calendar.List'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Store',
         path: 'samples/data/calendar/Month.js'
     }],
-    // </example>
+    //</example>
 
     viewModel: {
         data: {

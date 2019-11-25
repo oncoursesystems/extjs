@@ -24,6 +24,7 @@ Ext.define('Ext.grid.selection.Columns', {
         if (columns) {
             result.selectedColumns = Ext.Array.slice(columns);
         }
+
         return result;
     },
 
@@ -42,6 +43,7 @@ Ext.define('Ext.grid.selection.Columns', {
 
         if (columns) {
             len = columns.length;
+
             for (i = 0; i < len; i++) {
                 if (fn.call(scope || me, columns[i], i) === false) {
                     return false;
@@ -60,12 +62,22 @@ Ext.define('Ext.grid.selection.Columns', {
         if (columns) {
             len = columns.length;
 
-            // Use Store#each instead of copying the entire dataset into an array and iterating that.
+            // Use Store#each instead of copying the entire dataset into an 
+            // array and iterating that.
             view.getStore().each(function(record) {
                 context = context.clone({ record: record });
+
                 for (i = 0; i < len; i++) {
                     context = context.clone({ column: columns[i] });
-                    if (fn.call(scope || me, context, context.columnIndex, context.recordIndex) === false) {
+
+                    if (
+                        fn.call(
+                            scope || me,
+                            context,
+                            context.columnIndex,
+                            context.recordIndex
+                        ) === false
+                    ) {
                         return false;
                     }
                 }
@@ -97,6 +109,7 @@ Ext.define('Ext.grid.selection.Columns', {
      */
     getCount: function() {
         var selectedColumns = this.selectedColumns;
+
         return selectedColumns ? selectedColumns.length : 0;
     },
 
@@ -132,6 +145,7 @@ Ext.define('Ext.grid.selection.Columns', {
             Ext.Array.include((me.selectedColumns || (me.selectedColumns = [])), column);
             me.refreshColumns(column);
             selModel.updateHeaderState();
+
             if (!suppressEvent) {
                 selModel.fireSelectionChange();
                 me.fireColumnSelection();
@@ -150,6 +164,7 @@ Ext.define('Ext.grid.selection.Columns', {
                 me.selectedColumns = [];
                 me.refreshColumns.apply(me, prevSelection);
                 selModel.updateHeaderState();
+
                 if (!suppressEvent) {
                     selModel.fireSelectionChange();
                     me.fireColumnSelection();
@@ -184,10 +199,12 @@ Ext.define('Ext.grid.selection.Columns', {
             }
 
             me.selectedColumns = [];
+
             for (i = start; i <= end; i++) {
                 me.selectedColumns.push(columns[i]);
                 prevSelection.push(columns[i]);
             }
+
             me.refreshColumns.apply(me, prevSelection);
             me.fireColumnSelection();
         },
@@ -197,10 +214,17 @@ Ext.define('Ext.grid.selection.Columns', {
          * @private
          */
         isAllSelected: function() {
-            var selectedColumns = this.selectedColumns;
+            var selectedColumns = this.selectedColumns,
+                headerContainer;
+
+            if (!selectedColumns) {
+                return false;
+            }
+
+            headerContainer = this.view.getHeaderContainer();
 
             // All selected means all columns, across both views if we are in a locking assembly.
-            return selectedColumns && selectedColumns.length === this.view.getHeaderContainer().getVisibleColumns().length;
+            return selectedColumns.length === headerContainer.getVisibleColumns().length;
         },
 
         /**
@@ -223,12 +247,15 @@ Ext.define('Ext.grid.selection.Columns', {
 
                 for (rowIdx = renderInfo.indexTop; rowIdx < renderInfo.indexBottom; rowIdx++) {
                     location = new Ext.grid.Location(view, store.getAt(rowIdx));
+
                     for (colIdx = 0; colIdx < len; colIdx++) {
-                        // Note colIdx is not the column's visible index. setColumn must be passed the column object
+                        // Note colIdx is not the column's visible index. setColumn 
+                        // must be passed the column object
                         location = location.cloneForColumn(columns[colIdx]);
+
                         if (selected[colIdx]) {
                             view.onCellSelect(location);
-                        } 
+                        }
                         else {
                             view.onCellDeselect(location);
                         }
@@ -261,6 +288,7 @@ Ext.define('Ext.grid.selection.Columns', {
                 if (column.getGrid() && column.isVisible()) {
                     me.refreshColumns(column);
                     selModel.updateHeaderState();
+
                     if (!suppressEvent) {
                         selModel.fireSelectionChange();
                         me.fireColumnSelection();
@@ -294,7 +322,7 @@ Ext.define('Ext.grid.selection.Columns', {
                 columns = me.view.getHeaderContainer().getVisibleColumns(),
                 i;
 
-            for (i = extensionVector.start.columnIndex; i <=  extensionVector.end.columnIndex; i++) {
+            for (i = extensionVector.start.columnIndex; i <= extensionVector.end.columnIndex; i++) {
                 me.add(columns[i]);
             }
         },
@@ -319,25 +347,41 @@ Ext.define('Ext.grid.selection.Columns', {
                 start, end;
 
             if (range) {
-                start = new Ext.grid.Location(me.view, {record: 0, column: range[0]});
-                end = new Ext.grid.Location(me.view, {record: me.view.getStore().getCount() - 1, column: range[1]});
+                start = new Ext.grid.Location(
+                    me.view, {
+                        record: 0,
+                        column: range[0]
+                    }
+                );
+                end = new Ext.grid.Location(
+                    me.view, {
+                        record: me.view.getStore().getCount() - 1, column: range[1]
+                    }
+                );
 
                 me.getSelectionModel().onSelectionFinish(me, start, end);
-            } 
+            }
             else {
                 me.getSelectionModel().onSelectionFinish(me);
             }
         },
 
         /**
-         * @return {Array} `[startColumn, endColumn]` if the selection represents a visually contiguous set of columns.
-         * The SelectionReplicator is only enabled if there is a contiguous block.
+         * @return {Array} `[startColumn, endColumn]` if the selection represents a visually 
+         * contiguous set of columns. The SelectionReplicator is only enabled if there is a 
+         * contiguous block.
          * @private
          */
         getContiguousSelection: function() {
             var selection = Ext.Array.sort(this.getColumns(), function(c1, c2) {
-                    // Use index *in ownerGrid* so that a locking assembly can order columns correctly
-                    return c1.getGrid().ownerGrid.getHeaderContainer().indexOfLeaf(c1) - c2.getGrid().ownerGrid.getHeaderContainer().indexOfLeaf(c2);
+                    // Use index *in ownerGrid* so that a locking assembly can order 
+                    // columns correctly
+                    var c1Grid = c1.getGrid().ownerGrid,
+                        c1IndexOfLeaf = c1Grid.getHeaderContainer().indexOfLeaf(c1),
+                        c2Grid = c2.getGrid().ownerGrid,
+                        c2IndexOfLeaf = c2Grid.getHeaderContainer().indexOfLeaf(c2);
+
+                    return c1IndexOfLeaf - c2IndexOfLeaf;
                 }),
                 len = selection.length,
                 i;
@@ -348,6 +392,7 @@ Ext.define('Ext.grid.selection.Columns', {
                         return false;
                     }
                 }
+
                 return [selection[0], selection[len - 1]];
             }
         }

@@ -46,7 +46,7 @@ Ext.define('KitchenSink.view.forms.FormValidation', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
     //</example>
 

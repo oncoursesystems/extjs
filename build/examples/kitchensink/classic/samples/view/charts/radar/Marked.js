@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.charts.radar.Marked', {
     extend: 'Ext.Panel',
     xtype: 'radar-marked',
     controller: 'radar-basic',
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -23,8 +23,8 @@ Ext.define('KitchenSink.view.charts.radar.Marked', {
         type: 'vbox',
         pack: 'center'
     },
-    // </example>
-    
+    //</example>
+
     width: 650,
 
     tbar: [
@@ -138,7 +138,7 @@ Ext.define('KitchenSink.view.charts.radar.Marked', {
     }, {
         style: 'padding-top: 10px;',
         xtype: 'gridpanel',
-        columns : {
+        columns: {
             defaults: {
                 sortable: false,
                 menuDisabled: true,

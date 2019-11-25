@@ -775,12 +775,12 @@ Ext.define('Ext.app.ViewModel', {
             }
             else if (value && value.constructor === Object) {
                 ret = {};
-                
+
                 for (key in value) {
                     ret[key] = this.escape(value[key]);
                 }
             }
-            
+
             return ret;
         }
     },
@@ -1012,7 +1012,7 @@ Ext.define('Ext.app.ViewModel', {
             key, store, autoDestroy, storeBinding;
 
         me.destroying = true;
-        
+
         if (task) {
             task.cancel();
             me.collectTask = null;
@@ -1036,11 +1036,11 @@ Ext.define('Ext.app.ViewModel', {
                 // Properties are cleared on destroy
                 storeBinding = store.$binding;
                 autoDestroy = store.autoDestroy;
-                
+
                 if (autoDestroy || (!store.$wasInstance && autoDestroy !== false)) {
                     store.destroy();
                 }
-                
+
                 Ext.destroy(storeBinding);
             }
         }
@@ -1049,7 +1049,6 @@ Ext.define('Ext.app.ViewModel', {
             parent.unregisterChild(me);
         }
 
-        
         me.getRoot().destroy();
 
         for (key in bindings) {
@@ -1064,8 +1063,9 @@ Ext.define('Ext.app.ViewModel', {
         me.children = me.storeInfo = me._session = me._view = me._scheduler =
                       me.bindings = me._root = me._parent = me.formulaFn = me.$formulaData = null;
 
-        me.destroying = false;
-        
+        // This just makes it hard to ask "was destroy() called?":
+        // me.destroying = false; // removed in 7.0
+
         me.callParent();
     },
 
@@ -1153,7 +1153,7 @@ Ext.define('Ext.app.ViewModel', {
 
         return session || null;
     },
-    
+
     /**
      * Gets a store configured via the {@link #stores} configuration.
      * @param {String} key The name of the store.
@@ -1162,14 +1162,14 @@ Ext.define('Ext.app.ViewModel', {
     getStore: function(key) {
         var storeInfo = this.storeInfo,
             store;
-        
+
         if (storeInfo) {
             store = storeInfo[key];
         }
-        
+
         return store || null;
     },
-    
+
     /**
      * @method getStores
      * @hide
@@ -1196,34 +1196,34 @@ Ext.define('Ext.app.ViewModel', {
                 id: reference.id
             };
         }
-        
+
         // reference is backwards compat, type is preferred.
         modelType = reference.type || reference.reference;
         create = reference.create;
-        
+
         if (modelType) {
             // It's a record
             id = reference.id;
-            
+
             //<debug>
             if (!reference.create && Ext.isEmpty(id)) {
                 Ext.raise('No id specified. To create a phantom model, specify "create: true" ' +
                           'as part of the reference.');
             }
             //</debug>
-            
+
             if (create) {
                 id = undefined;
             }
-            
+
             rec = me.getRecord(modelType, id);
-            
+
             if (Ext.isObject(create)) {
                 rec.set(create);
                 rec.commit();
                 rec.phantom = true;
             }
-            
+
             // Force creation at the root level. If an existing stub is there
             // it will be grafted in place here.
             stub = me.getRoot().createStubChild(key);
@@ -1231,14 +1231,14 @@ Ext.define('Ext.app.ViewModel', {
         }
         else {
             stub = me.getStub(key);
-            
+
             if (!stub.isLinkStub) {
                 // Pass parent=null since we will graft in this new stub to replace us:
                 linkStub = new Ext.app.bind.LinkStub(me, stub.name);
                 stub.graft(linkStub);
                 stub = linkStub;
             }
-            
+
             stub.link(reference);
         }
     },
@@ -1249,7 +1249,7 @@ Ext.define('Ext.app.ViewModel', {
      */
     notify: function() {
         var scheduler = this.getScheduler();
-        
+
         if (!scheduler.firing) {
             scheduler.notify();
         }
@@ -1327,17 +1327,17 @@ Ext.define('Ext.app.ViewModel', {
     privates: {
         registerChild: function(child) {
             var children = this.children;
-            
+
             if (!children) {
                 this.children = children = {};
             }
-            
+
             children[child.getId()] = child;
         },
-        
+
         unregisterChild: function(child) {
             var children = this.children;
-            
+
             // If we're destroying we'll be wiping this collection shortly, so
             // just ignore it here
             if (!this.destroying && children) {
@@ -1370,14 +1370,14 @@ Ext.define('Ext.app.ViewModel', {
             else {
                 if (!Model.$isClass) {
                     Model = this.getSchema().getEntity(Model);
-                    
+
                     //<debug>
                     if (!Model) {
                         Ext.raise('Invalid model name: ' + type);
                     }
                     //</debug>
                 }
-                
+
                 if (hasId) {
                     record = Model.createWithId(id);
                     record.load();
@@ -1386,13 +1386,13 @@ Ext.define('Ext.app.ViewModel', {
                     record = new Model();
                 }
             }
-            
+
             return record;
         },
 
         bindExpression: function(descriptor, callback, scope, options) {
             var stub = this.getStub(descriptor);
-            
+
             return stub.bind(callback, scope, options);
         },
 
@@ -1401,17 +1401,17 @@ Ext.define('Ext.app.ViewModel', {
                 if (scheduler === true) {
                     scheduler = {};
                 }
-                
+
                 if (!('preSort' in scheduler)) {
                     scheduler = Ext.apply({
                         preSort: 'kind,-depth'
                     }, scheduler);
                 }
-                
+
                 scheduler = new Ext.util.Scheduler(scheduler);
                 scheduler.$owner = this;
             }
-            
+
             return scheduler;
         },
 
@@ -1426,7 +1426,7 @@ Ext.define('Ext.app.ViewModel', {
                         // See Session#scheduler
                         preSort: 'kind,-depth'
                     });
-                    
+
                     scheduler.$owner = me;
                 }
                 else {
@@ -1447,7 +1447,7 @@ Ext.define('Ext.app.ViewModel', {
          */
         getStub: function(bindDescr) {
             var root = this.getRoot();
-            
+
             return bindDescr ? root.getChild(bindDescr) : root;
         },
 
@@ -1458,7 +1458,7 @@ Ext.define('Ext.app.ViewModel', {
 
             if (parent) {
                 parent.collect();
-                
+
                 return;
             }
 
@@ -1478,7 +1478,7 @@ Ext.define('Ext.app.ViewModel', {
         doCollect: function() {
             var children = this.children,
                 key;
-            
+
             // We need to loop over the children first, since they may have link stubs
             // that create bindings inside our VM. Attempt to clean them up first.
             if (children) {
@@ -1486,7 +1486,7 @@ Ext.define('Ext.app.ViewModel', {
                     children[key].doCollect();
                 }
             }
-            
+
             this.getRoot().collect();
         },
 
@@ -1514,7 +1514,7 @@ Ext.define('Ext.app.ViewModel', {
             }
 
             parent = me.getParent();
-            
+
             if (parent) {
                 parent.onBindDestroy(binding, true);
             }
@@ -1533,7 +1533,7 @@ Ext.define('Ext.app.ViewModel', {
 
             // Force any session to be invoked so we can access it
             me.getSession();
-            
+
             if (!data) {
                 parent = me.getParent();
 
@@ -1569,28 +1569,28 @@ Ext.define('Ext.app.ViewModel', {
             if (parent) {
                 parent.registerChild(this);
             }
-            
+
             return parent;
         },
-        
+
         applyStores: function(stores) {
             var me = this,
                 root = me.getRoot(),
                 key, cfg, storeBind, stub, listeners;
-            
+
             me.storeInfo = {};
-            
+
             me.listenerScopeFn = function() {
                 return me.getView().getInheritedConfig('defaultListenerScope');
             };
-            
+
             for (key in stores) {
                 cfg = stores[key];
-                
+
                 if (cfg.isStore) {
                     cfg.$wasInstance = true;
                     me.setupStore(cfg, key);
-                    
+
                     continue;
                 }
                 else if (Ext.isString(cfg)) {
@@ -1601,13 +1601,13 @@ Ext.define('Ext.app.ViewModel', {
                 else {
                     cfg = Ext.apply({}, cfg);
                 }
-                
+
                 // Get rid of listeners so they don't get considered as a bind
                 listeners = cfg.listeners;
                 delete cfg.listeners;
-                
+
                 storeBind = me.bind(cfg, me.onStoreBind, me, { trackStatics: true });
-                
+
                 if (storeBind.isStatic()) {
                     // Everything is static, we don't need to wait, so remove the
                     // binding because it will only fire the first time.
@@ -1622,7 +1622,7 @@ Ext.define('Ext.app.ViewModel', {
                 }
             }
         },
-        
+
         onStoreBind: function(cfg, oldValue, binding) {
             var info = this.storeInfo,
                 key = binding.$storeKey,
@@ -1635,13 +1635,13 @@ Ext.define('Ext.app.ViewModel', {
             else {
                 cfg = Ext.merge({}, binding.pruneStaticKeys());
                 proxy = cfg.proxy;
-                
+
                 delete cfg.type;
                 delete cfg.model;
                 delete cfg.fields;
                 delete cfg.proxy;
                 delete cfg.listeners;
-                
+
                 // TODO: possibly optimize this so we can figure out what has changed
                 // instead of smashing the whole lot
                 if (proxy) {
@@ -1649,7 +1649,7 @@ Ext.define('Ext.app.ViewModel', {
                     delete proxy.writer;
                     store.getProxy().setConfig(proxy);
                 }
-                
+
                 store.setConfig(cfg);
             }
         },
@@ -1663,7 +1663,7 @@ Ext.define('Ext.app.ViewModel', {
             if (cfg.session) {
                 cfg.session = session;
             }
-            
+
             if (cfg.source) {
                 cfg.type = cfg.type || 'chained';
             }
@@ -1682,14 +1682,14 @@ Ext.define('Ext.app.ViewModel', {
         setupStore: function(store, key) {
             var me = this,
                 obj = {};
-            
+
             // Force data object creation
             me.getData();
-            
+
             // May have been given a store instance
             store.resolveListenerScope = me.listenerScopeFn;
             me.storeInfo[key] = store;
-            
+
             obj[key] = store;
             me.setData(obj);
         },
@@ -1707,20 +1707,20 @@ Ext.define('Ext.app.ViewModel', {
                     Ext.raise('Formula names cannot contain dots: ' + name);
                 }
                 //</debug>
-                
+
                 // Force a stub to be created
                 root.createStubChild(name);
 
                 stub = me.getStub(name);
                 stub.setFormula(formulas[name]);
             }
-            
+
             return formulas;
         },
 
         applyLinks: function(links) {
             var link;
-            
+
             for (link in links) {
                 this.linkTo(link, links[link]);
             }
@@ -1754,9 +1754,9 @@ Ext.define('Ext.app.ViewModel', {
                     return me.$formulaData[name];
                 };
             }
-            
+
             me.$formulaData = data;
-            
+
             return fn;
         }
 

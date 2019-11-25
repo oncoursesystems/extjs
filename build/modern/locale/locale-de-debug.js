@@ -470,8 +470,8 @@ Ext.define("Ext.locale.de.grid.filters.menu.Base", {
     }
 });
 
-Ext.define("Ext.locale.de.grid.LockedGrid", {
-    override: "Ext.grid.LockedGrid",
+Ext.define('Ext.locale.de.grid.locked.Grid', {
+    override: 'Ext.grid.locked.Grid',
 
     config: {
         columnMenu: {
@@ -493,4 +493,9 @@ Ext.define("Ext.locale.de.grid.LockedGrid", {
             }
         }
     }
+});
+
+Ext.define("Ext.locale.de.grid.plugin.RowDragDrop", {
+    override: "Ext.grid.plugin.RowDragDrop",
+    dragText: "{0} Zeile(n) ausgewählt"
 });

@@ -68,7 +68,7 @@ Ext.define('Ext.util.Offset', {
 
     round: function(to) {
         var factor;
-        
+
         if (!isNaN(to)) {
             factor = Math.pow(10, to);
 

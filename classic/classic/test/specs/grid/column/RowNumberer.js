@@ -6,11 +6,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -40,7 +40,7 @@ function() {
         }, gridCfg));
         view = panel.getView();
     }
-    
+
     function checkNumbererCellValues() {
         var rows = view.all,
             i, cell;
@@ -98,7 +98,7 @@ function() {
         // Override so that we can control asynchronous loading
         Ext.data.ProxyStore.prototype.load = loadStore;
     });
-    
+
     afterEach(function() {
         // Undo the overrides.
         Ext.data.ProxyStore.prototype.load = proxyStoreLoad;
@@ -158,7 +158,7 @@ function() {
                 rec.commit();
             }).not.toThrow();
         });
-        
+
         it('should update subsequent cells on record remove', function() {
             createGrid();
             store.removeAt(1, 1);
@@ -170,7 +170,7 @@ function() {
                 checkNumbererCellValues();
             });
         });
-        
+
         it('should update subsequent cells on record insert', function() {
             createGrid();
             store.insert(1, {

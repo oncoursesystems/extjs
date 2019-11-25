@@ -63,11 +63,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         getVisMode = function(el) {
             var data = el.getData(),
                 visMode = data[VISMODE];
-                
+
             if (visMode === undefined) {
                 data[VISMODE] = visMode = Element.VISIBILITY;
             }
-            
+
             return visMode;
         },
         emptyRange = DOC.createRange ? DOC.createRange() : null,
@@ -91,22 +91,22 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 for (i = 0; i < len; i++) {
                     garbageBin.appendChild(destroyQueue[i]);
                 }
-                
+
                 garbageBin.innerHTML = '';
                 destroyQueue.length = 0;
             };
-            
+
         //<debug>
         clearGarbageFn.$skipTimerCheck = true;
         //</debug>
-        
+
         clearGarbage = Ext.Function.createBuffered(clearGarbageFn, 10);
     }
     //</feature>
 
     return {
         override: 'Ext.dom.Element',
-        
+
         mixins: [
             'Ext.util.Animate'
         ],
@@ -123,7 +123,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
         _init: function(E) {
             Element = E; // now we can poke this into closure scope
-            
+
             // We want to expose destroyQueue on the prototype for testing purposes
             //<debug>
             if (WIN.__UNIT_TESTING__) {
@@ -137,7 +137,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (prop === 'float') {
                     prop = Ext.supports.Float ? 'cssFloat' : 'styleFloat';
                 }
-                
+
                 // For '-ms-foo' we need msFoo
                 return propertyCache[prop] ||
                       (propertyCache[prop] = prop.replace(msRe, 'ms-')
@@ -160,7 +160,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         addKeyListener: function(key, fn, scope) {
             var config;
-            
+
             if (typeof key !== 'object' || Ext.isArray(key)) {
                 config = {
                     target: this,
@@ -180,7 +180,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     scope: scope
                 };
             }
-            
+
             return new Ext.util.KeyMap(config);
         },
 
@@ -251,7 +251,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         anchorAnimX: function(anchor) {
             var xName = (anchor === 'l') ? 'right' : 'left';
-            
+
             this.dom.style[xName] = '0px';
         },
 
@@ -302,7 +302,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 to: Ext.apply({}, config),
                 userConfig: config
             };
-            
+
             Ext.apply(animConfig.to, config.to);
 
             // Anim API properties - backward compat
@@ -323,7 +323,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             delete animConfig.to.block;
             delete animConfig.to.stopAnimation;
             delete animConfig.to.delay;
-            
+
             return animConfig;
         },
 
@@ -337,7 +337,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         animate: function(config) {
             this.addAnimation(config);
-            
+
             return this;
         },
 
@@ -377,15 +377,15 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     listeners = config.listeners;
                     delete config.listeners;
                 }
-                
+
                 if (config.internalListeners) {
                     config.listeners = config.internalListeners;
                     delete config.internalListeners;
                 }
-                
+
                 end = config.autoEnd;
                 delete config.autoEnd;
-                
+
                 anim = new Ext.fx.Anim(me.anim(config));
                 anim.on({
                     afteranimate: 'afterAnimate',
@@ -393,13 +393,13 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     scope: me,
                     single: true
                 });
-                
+
                 if (listeners) {
                     anim.on(listeners);
                 }
-                
+
                 Ext.fx.Manager.queueFx(anim);
-                
+
                 if (end) {
                     anim.jumpToEnd();
                 }
@@ -452,16 +452,16 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         boxWrap: function(cls) {
             var el;
-            
+
             cls = cls || Ext.baseCSSPrefix + 'box';
             el = Ext.get(this.insertHtml(
                 "beforeBegin",
                 "<div class='" + cls + "' role='presentation'>" +
                     Ext.String.format(boxMarkup, cls) + "</div>")
             );
-            
+
             el.selectNode('.' + cls + '-mc').appendChild(this.dom);
-            
+
             return el;
         },
 
@@ -485,7 +485,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
             while (n) {
                 nx = n.nextSibling;
-                
+
                 if (n.nodeType === 3) {
                     // Remove empty/whitespace text nodes
                     if (!(nonSpaceRe.test(n.nodeValue))) {
@@ -504,12 +504,12 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     Ext.fly(n, '_clean').clean();
                     n.nodeIndex = ++ni;
                 }
-                
+
                 n = nx;
             }
 
             data.isCleaned = true;
-            
+
             return me;
         },
 
@@ -520,7 +520,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         empty: emptyRange
             ? function() {
                 var dom = this.dom;
-    
+
                 if (dom.firstChild) {
                     emptyRange.setStartBefore(dom.firstChild);
                     emptyRange.setEndAfter(dom.lastChild);
@@ -529,7 +529,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             }
             : function() {
                 var dom = this.dom;
-    
+
                 while (dom.lastChild) {
                     dom.removeChild(dom.lastChild);
                 }
@@ -548,7 +548,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         clearPositioning: function(value) {
             value = value || '';
-            
+
             return this.setStyle({
                 left: value,
                 right: value,
@@ -581,12 +581,12 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
             proxy.setVisibilityMode(Element.DISPLAY);
             proxy.hide();
-            
+
             // check to make sure Element_position.js is loaded
             if (matchBox && me.setBox && me.getBox) {
                 proxy.setBox(me.getBox());
             }
-            
+
             return proxy;
         },
 
@@ -610,20 +610,20 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
             if (!data[ISCLIPPED]) {
                 data[ISCLIPPED] = true;
-                
+
                 style = me.getStyle([OVERFLOW, OVERFLOWX, OVERFLOWY]);
-                
+
                 data[ORIGINALCLIP] = {
                     o: style[OVERFLOW],
                     x: style[OVERFLOWX],
                     y: style[OVERFLOWY]
                 };
-                
+
                 me.setStyle(OVERFLOW, HIDDEN);
                 me.setStyle(OVERFLOWX, HIDDEN);
                 me.setStyle(OVERFLOWY, HIDDEN);
             }
-            
+
             return me;
         },
 
@@ -637,10 +637,10 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (me.isAnimate) {
                     me.stopAnimation(true);
                 }
-                
+
                 me.removeAnchor();
             }
-            
+
             if (me.deferredFocusTimer) {
                 Ext.undefer(me.deferredFocusTimer);
                 me.deferredFocusTimer = null;
@@ -658,7 +658,6 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             if (dom && Ext.isIE8 && (dom.window != dom) && (dom.nodeType !== 9) &&
                     (dom.tagName !== 'BODY') && (dom.tagName !== 'HTML')) {
                 destroyQueue[destroyQueue.length] = dom;
-
 
                 // Will perform extra IE8 cleanup in 10 milliseconds
                 // see http://social.msdn.microsoft.com/Forums/ie/en-US/c76967f0-dcf8-47d0-8984-8fe1282a94f5/ie-appendchildremovechild-memory-problem?forum=iewebdevelopment
@@ -722,7 +721,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             var me = this,
                 dom = me.dom,
                 animFly = new Ext.dom.Fly();
-                
+
             me.animate(Ext.apply({}, options, {
                 opacity: 1,
                 internalListeners: {
@@ -742,7 +741,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     }
                 }
             }));
-            
+
             return this;
         },
 
@@ -774,7 +773,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             var me = this,
                 dom = me.dom,
                 animFly = new Ext.dom.Fly();
-                
+
             options = Ext.apply({
                 opacity: 0,
                 internalListeners: {
@@ -787,7 +786,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                             // Reattach to the DOM in case the caller animated a Fly
                             // in which case the dom reference will have changed by now.
                             animFly.attach(dom);
-                            
+
                             if (options.useDisplay) {
                                 animFly.setDisplayed(false);
                             }
@@ -798,9 +797,9 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     }
                 }
             }, options);
-            
+
             me.animate(options);
-            
+
             return me;
         },
 
@@ -809,11 +808,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         fixDisplay: function() {
             var me = this;
-            
+
             if (me.isStyle(DISPLAY, NONE)) {
                 me.setStyle(VISIBILITY, HIDDEN);
                 me.setStyle(DISPLAY, me._getDisplay()); // first try reverting to default
-                
+
                 if (me.isStyle(DISPLAY, NONE)) { // if that fails, default to block
                     me.setStyle(DISPLAY, "block");
                 }
@@ -858,7 +857,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 // in which case the dom reference will have changed by now.
                 animFly.attach(dom);
                 animFly.show();
-                
+
                 box = animFly.getBox();
                 proxy = Ext.getBody().createChild({
                     role: 'presentation',
@@ -870,7 +869,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                         border: '0px solid ' + color
                     }
                 });
-                
+
                 proxyAnim = new Ext.fx.Anim({
                     target: proxy,
                     duration: obj.duration || 1000,
@@ -894,7 +893,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 });
                 proxyAnim.on('afteranimate', function() {
                     proxy.destroy();
-                    
+
                     // kill the no-op element animation created below
                     animScope.end();
                 });
@@ -911,7 +910,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 callback: obj.callback,
                 scope: obj.scope
             });
-            
+
             return me;
         },
 
@@ -932,11 +931,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             if (!v || (/transparent|inherit/.test(v))) {
                 return defaultValue;
             }
-            
+
             if (/^r/.test(v)) {
                 v = v.slice(4, v.length - 1).split(',');
                 len = v.length;
-                
+
                 for (i = 0; i < len; i++) {
                     h = parseInt(v[i], 10);
                     color += (h < 16 ? '0' : '') + h.toString(16);
@@ -946,7 +945,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 v = v.replace('#', '');
                 color += v.length === 3 ? v.replace(/^(\w)(\w)(\w)$/, '$1$1$2$2$3$3') : v;
             }
-            
+
             return (color.length > 5 ? color.toLowerCase() : defaultValue);
         },
 
@@ -964,7 +963,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     target: me
                 });
             }
-            
+
             return loader;
         },
 
@@ -983,7 +982,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (styles.left === 'auto') {
                     styles.left = dom.offsetLeft + 'px';
                 }
-                
+
                 if (styles.top === 'auto') {
                     styles.top = dom.offsetTop + 'px';
                 }
@@ -1021,7 +1020,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 beforeAnim;
 
             anchor = anchor || "b";
-            
+
             beforeAnim = function() {
                 // Reattach to the DOM in case the caller animated a Fly
                 // in which case the dom reference will have changed by now.
@@ -1040,40 +1039,40 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     case 't':
                         to.y = xy[1] - height;
                         break;
-                    
+
                     case 'l':
                         to.x = xy[0] - width;
                         break;
-                    
+
                     case 'r':
                         to.x = xy[0] + width;
                         break;
-                    
+
                     case 'b':
                         to.y = xy[1] + height;
                         break;
-                    
+
                     case 'tl':
                         to.x = xy[0] - width;
                         to.y = xy[1] - height;
                         break;
-                    
+
                     case 'bl':
                         to.x = xy[0] - width;
                         to.y = xy[1] + height;
                         break;
-                    
+
                     case 'br':
                         to.x = xy[0] + width;
                         to.y = xy[1] + height;
                         break;
-                    
+
                     case 'tr':
                         to.x = xy[0] + width;
                         to.y = xy[1] - height;
                         break;
                 }
-                
+
                 this.to = to;
                 this.on('afteranimate', function() {
                     // Reattach to the DOM in case the caller animated a Fly
@@ -1095,14 +1094,14 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     beforeanimate: beforeAnim
                 }
             }));
-            
+
             return me;
         },
 
         //<feature legacyBrowser>
         getTextSelection: function() {
             var ret, dom, doc, range, textRange;
-            
+
             ret = this.callParent();
 
             if (typeof ret[0] !== 'number') {
@@ -1132,12 +1131,12 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             // hideMode override
             if (typeof animate === 'string') {
                 this.setVisible(false, animate);
-                
+
                 return this;
             }
-            
+
             this.setVisible(false, this.anim(animate));
-            
+
             return this;
         },
 
@@ -1194,16 +1193,16 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     // Reattach to the DOM in case the caller animated a Fly
                     // in which case the dom reference will have changed by now.
                     animFly.attach(dom);
-                    
+
                     restore = dom.style[attr];
                     animFly.clearOpacity();
                     animFly.show();
 
                     event = lns.beforeanimate;
-                    
+
                     if (event) {
                         fn = event.fn || event;
-                        
+
                         return fn.apply(event.scope || lns.scope || WIN, arguments);
                     }
                 },
@@ -1213,7 +1212,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     }
 
                     event = lns.afteranimate;
-                    
+
                     if (event) {
                         fn = event.fn || event;
                         fn.apply(event.scope || lns.scope || WIN, arguments);
@@ -1227,7 +1226,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 from: from,
                 to: to
             }));
-            
+
             return me;
         },
 
@@ -1241,7 +1240,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         initDD: function(group, config, overrides) {
             var dd = new Ext.dd.DD(Ext.id(this.dom), group, config);
-            
+
             return Ext.apply(dd, overrides);
         },
 
@@ -1255,7 +1254,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         initDDProxy: function(group, config, overrides) {
             var dd = new Ext.dd.DDProxy(Ext.id(this.dom), group, config);
-            
+
             return Ext.apply(dd, overrides);
         },
 
@@ -1269,7 +1268,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         initDDTarget: function(group, config, overrides) {
             var dd = new Ext.dd.DDTarget(Ext.id(this.dom), group, config);
-            
+
             return Ext.apply(dd, overrides);
         },
 
@@ -1294,17 +1293,17 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (maskMsg) {
                     maskMsg.center(me);
                 }
-                
+
                 hasMask = true;
             }
             else if (deep) {
                 parent = me.findParentNode();
-                
+
                 if (parent) {
                     return Ext.fly(parent).isMasked(deep);
                 }
             }
-            
+
             return hasMask;
         },
 
@@ -1317,7 +1316,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         load: function(options) {
             this.getLoader().load(options);
-            
+
             return this;
         },
 
@@ -1367,7 +1366,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     }
                 }
             }, true);
-            
+
             maskMsg = Ext.fly(maskEl.dom.firstChild);
 
             data.maskEl = maskEl;
@@ -1386,7 +1385,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             if (dom === DOC.body) {
                 maskEl.addCls(Ext.baseCSSPrefix + 'mask-fixed');
             }
-            
+
             // When masking the body, don't touch its tabbable state
             me.saveTabbableState({
                 skipSelf: dom === DOC.body
@@ -1396,7 +1395,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             if (Ext.isIE9m && dom !== DOC.body && me.isStyle('height', 'auto')) {
                 maskEl.setSize(undefined, elHeight || me.getHeight());
             }
-            
+
             return maskEl;
         },
 
@@ -1426,7 +1425,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 beforeAnim,
                 box = me.getBox(),
                 originalStyles;
-            
+
             originalStyles = me.getStyle(['width', 'height', 'left', 'right', 'top', 'bottom',
                                           'position', 'z-index', 'font-size', 'opacity'], true);
 
@@ -1440,10 +1439,10 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 // Reattach to the DOM in case the caller animated a Fly
                 // in which case the dom reference will have changed by now.
                 animFly.attach(dom);
-                
+
                 animFly.clearOpacity();
                 animFly.show();
-                
+
                 this.to = {
                     width: box.width * 2,
                     height: box.height * 2,
@@ -1452,7 +1451,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     opacity: 0,
                     fontSize: '200%'
                 };
-                
+
                 this.on('afteranimate', function() {
                     // Reattach to the DOM in case the caller animated a Fly
                     // in which case the dom reference will have changed by now.
@@ -1464,7 +1463,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     else {
                         animFly.hide();
                     }
-                    
+
                     animFly.setStyle(originalStyles);
                     Ext.callback(obj.callback, obj.scope);
                 });
@@ -1479,7 +1478,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     }
                 }
             });
-            
+
             return me;
         },
 
@@ -1492,7 +1491,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         // http://msdn.microsoft.com/en-us/library/windows/desktop/ms646262(v=vs.85).aspx
         setCapture: function() {
             var dom = this.dom;
-            
+
             if (Ext.isIE9m && dom.setCapture) {
                 dom.setCapture();
             }
@@ -1531,7 +1530,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (!Ext.isObject(animate)) {
                     animate = {};
                 }
-                
+
                 me.animate(Ext.applyIf({
                     to: {
                         height: height
@@ -1552,7 +1551,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 cls = me.verticalCls;
 
             delete me.vertical;
-            
+
             if (cls) {
                 delete me.verticalCls;
                 me.removeCls(cls);
@@ -1561,7 +1560,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             // delete the inverted methods and revert to inheriting from the prototype 
             delete me.setWidth;
             delete me.setHeight;
-            
+
             if (!Ext.isIE8) {
                 delete me.getWidth;
                 delete me.getHeight;
@@ -1584,13 +1583,13 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
             if (dom) {
                 textNode = dom.firstChild;
-                
+
                 if (!textNode || (textNode.nodeType !== 3 || textNode.nextSibling)) {
                     textNode = DOC.createTextNode();
                     me.empty();
                     dom.appendChild(textNode);
                 }
-                
+
                 if (text) {
                     textNode.data = text;
                 }
@@ -1621,7 +1620,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             if (!me.dom) {
                 return me;
             }
-            
+
             html = html || '';
             dom = me.dom;
 
@@ -1641,7 +1640,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
                 dom.innerHTML = html;
                 Ext.callback(callback, me);
-                
+
                 return me;
             }
 
@@ -1667,11 +1666,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                         s = DOC.createElement("script");
                         s.src = srcMatch[2];
                         typeMatch = attrs.match(typeRe);
-                       
+
                         if (typeMatch && typeMatch[2]) {
                             s.type = typeMatch[2];
                         }
-                       
+
                         hd.appendChild(s);
                     }
                     else if (match[2] && match[2].length > 0) {
@@ -1688,7 +1687,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             }, 20);
 
             dom.innerHTML = html.replace(replaceScriptTagRe, '');
-            
+
             return me;
         },
 
@@ -1724,7 +1723,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     }
                 }, animate));
             }
-            
+
             return me;
         },
 
@@ -1756,14 +1755,14 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 proto = Element.prototype;
 
             me.vertical = true;
-            
+
             if (cls) {
                 me.addCls(me.verticalCls = cls);
             }
 
             me.setWidth = proto.setHeight;
             me.setHeight = proto.setWidth;
-            
+
             if (!Ext.isIE8) {
                 // In browsers that use CSS3 transforms we must invert getHeight and
                 // get Width. In IE8 no adjustment is needed because we use
@@ -1818,7 +1817,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (animate === true) {
                     animate = {};
                 }
-                
+
                 me.animate(Ext.applyIf({
                     to: {
                         width: width,
@@ -1854,20 +1853,20 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     case DISPLAY:
                         visMode = Element.DISPLAY;
                         break;
-                    
+
                     case VISIBILITY:
                         visMode = Element.VISIBILITY;
                         break;
-                    
+
                     case OFFSETS:
                         visMode = Element.OFFSETS;
                         break;
-                    
+
                     case CLIP:
                         visMode = Element.CLIP;
                         break;
                 }
-                
+
                 me.setVisibilityMode(visMode);
                 animate = false;
             }
@@ -1895,16 +1894,16 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     me.setOpacity(0.01);
                     me.setVisible(true);
                 }
-                
+
                 if (!Ext.isObject(animate)) {
                     animate = {
                         duration: 350,
                         easing: 'ease-in'
                     };
                 }
-                
+
                 animFly = new Ext.dom.Fly();
-                
+
                 me.animate(Ext.applyIf({
                     callback: function() {
                         if (!visible) {
@@ -1918,7 +1917,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     }
                 }, animate));
             }
-            
+
             me.getData()[ISVISIBLE] = visible;
 
             if (me.shadow || me.shim) {
@@ -1952,7 +1951,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         setWidth: function(width, animate) {
             var me = this;
-            
+
             if (!animate || !me.anim) {
                 me.callParent(arguments);
             }
@@ -1960,14 +1959,14 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (!Ext.isObject(animate)) {
                     animate = {};
                 }
-                
+
                 me.animate(Ext.applyIf({
                     to: {
                         width: width
                     }
                 }, animate));
             }
-            
+
             return me;
         },
 
@@ -1985,10 +1984,10 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (!Ext.isObject(animate)) {
                     animate = {};
                 }
-                
+
                 me.animate(Ext.applyIf({ to: { x: xy[0], y: xy[1] } }, animate));
             }
-            
+
             return this;
         },
 
@@ -2009,12 +2008,12 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             // hideMode override
             if (typeof animate === 'string') {
                 this.setVisible(true, animate);
-                
+
                 return this;
             }
-            
+
             this.setVisible(true, this.anim(animate));
-            
+
             return this;
         },
 
@@ -2073,7 +2072,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 }
 
                 box = animFly.getBox();
-                
+
                 if ((anchor === 't' || anchor === 'b') && box.height === 0) {
                     box.height = dom.scrollHeight;
                 }
@@ -2098,14 +2097,14 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                         visibility: slideOut ? 'visible' : 'hidden'
                     }
                 });
-                
+
                 wrapDomParentNode = wrap.dom.parentNode;
                 wrap.setPositioning(animFly.getPositioning());
-                
+
                 if (wrap.isStyle('position', 'static')) {
                     wrap.position('relative');
                 }
-                
+
                 animFly.clearPositioning('auto');
                 wrap.clip();
 
@@ -2123,7 +2122,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     visibility: '',
                     position: 'absolute'
                 });
-                
+
                 if (slideOut) {
                     wrap.setSize(box.width, box.height);
                 }
@@ -2140,11 +2139,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                                 height: box.height + 'px'
                             }
                         };
-                        
+
                         elStyle.bottom = '0px';
-                        
+
                         break;
-                    
+
                     case 'l':
                         anim = {
                             from: {
@@ -2156,11 +2155,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                                 height: box.height + 'px'
                             }
                         };
-                        
+
                         me.anchorAnimX(anchor);
-                        
+
                         break;
-                    
+
                     case 'r':
                         anim = {
                             from: {
@@ -2174,11 +2173,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                                 height: box.height + 'px'
                             }
                         };
-                        
+
                         me.anchorAnimX(anchor);
-                        
+
                         break;
-                    
+
                     case 'b':
                         anim = {
                             from: {
@@ -2192,9 +2191,9 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                                 height: box.height + 'px'
                             }
                         };
-                        
+
                         break;
-                    
+
                     case 'tl':
                         anim = {
                             from: {
@@ -2208,12 +2207,12 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                                 height: box.height + 'px'
                             }
                         };
-                        
+
                         elStyle.bottom = '0px';
                         me.anchorAnimX('l');
-                        
+
                         break;
-                    
+
                     case 'bl':
                         anim = {
                             from: {
@@ -2227,11 +2226,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                                 height: box.height + 'px'
                             }
                         };
-                        
+
                         me.anchorAnimX('l');
-                        
+
                         break;
-                    
+
                     case 'br':
                         anim = {
                             from: {
@@ -2247,11 +2246,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                                 height: box.height + 'px'
                             }
                         };
-                        
+
                         me.anchorAnimX('r');
-                        
+
                         break;
-                    
+
                     case 'tr':
                         anim = {
                             from: {
@@ -2265,18 +2264,18 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                                 height: box.height + 'px'
                             }
                         };
-                        
+
                         elStyle.bottom = '0px';
                         me.anchorAnimX('r');
-                        
+
                         break;
                 }
 
                 wrap.show();
-                
+
                 wrapAnim = Ext.apply({}, options);
                 delete wrapAnim.listeners;
-                
+
                 wrapAnim = new Ext.fx.Anim(Ext.applyIf(wrapAnim, {
                     target: wrap,
                     duration: 500,
@@ -2290,9 +2289,9 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     // Reattach to the DOM in case the caller animated a Fly
                     // in which case the dom reference will have changed by now.
                     animFly.attach(dom);
-                    
+
                     animFly.setStyle(originalStyles);
-                    
+
                     if (slideOut) {
                         if (options.useDisplay) {
                             animFly.setDisplayed(false);
@@ -2301,7 +2300,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                             animFly.hide();
                         }
                     }
-                    
+
                     if (wrap.dom) {
                         if (wrap.dom.parentNode) {
                             wrap.dom.parentNode.insertBefore(dom, wrap.dom);
@@ -2309,20 +2308,20 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                         else {
                             wrapDomParentNode.appendChild(dom);
                         }
-                        
+
                         wrap.destroy();
                     }
-                    
+
                     // The unwrap will have reset all descendant scrollTops.
                     // Restore them if we cached them.
                     if (restoreScroll) {
                         restoreScroll();
                     }
-                    
+
                     // kill the no-op element animation created below
                     animScope.end();
                 });
-                
+
                 // Add configured listeners after
                 if (listeners) {
                     wrapAnim.on(listeners);
@@ -2336,7 +2335,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     beforeanimate: beforeAnim // kick off the wrap animation
                 }
             });
-            
+
             return me;
         },
 
@@ -2412,13 +2411,13 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 // Reattach to the DOM in case the caller animated a Fly
                 // in which case the dom reference will have changed by now.
                 animFly.attach(dom);
-                
+
                 // eslint-disable-next-line vars-on-top
                 var animScope = this,
                     size = animFly.getSize(),
                     xy = animFly.getXY(),
                     keyframe, position;
-                    
+
                 animFly.clearOpacity();
                 animFly.clip();
                 position = animFly.getPositioning();
@@ -2441,28 +2440,28 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                         }
                     }
                 });
-                
+
                 keyframe.on('afteranimate', function() {
                     // Reattach to the DOM in case the caller animated a Fly
                     // in which case the dom reference will have changed by now.
                     animFly.attach(dom);
-                    
+
                     if (options.useDisplay) {
                         animFly.setDisplayed(false);
                     }
                     else {
                         animFly.hide();
                     }
-                    
+
                     animFly.clearOpacity();
                     animFly.setPositioning(position);
                     animFly.setSize(size);
-                    
+
                     // kill the no-op element animation created below
                     animScope.end();
                 });
             };
-            
+
             me.animate({
                 // See "A Note About Wrapped Animations" at the top of this class:
                 duration: (Math.max(options.duration, 500) * 2),
@@ -2474,7 +2473,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 callback: options.callback,
                 scope: options.scope
             });
-            
+
             return me;
         },
 
@@ -2489,7 +2488,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         syncContent: function(source) {
             source = Ext.getDom(source);
-            
+
             // eslint-disable-next-line vars-on-top
             var sourceNodes = source.childNodes,
                 sourceLen = sourceNodes.length,
@@ -2507,11 +2506,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             // Update any attributes who's values have changed..
             newAttrs = source.attributes;
             attLen = newAttrs.length;
-            
+
             for (i = 0; i < attLen; i++) {
                 attName = newAttrs[i].name;
                 value = newAttrs[i].value;
-                
+
                 if (attName !== 'id' && dest.getAttribute(attName) !== value) {
                     dest.setAttribute(attName, newAttrs[i].value);
                 }
@@ -2525,7 +2524,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             // If the number of child nodes does not match, fall back to replacing innerHTML
             if (sourceLen !== destLen) {
                 dest.innerHTML = source.innerHTML;
-                
+
                 return;
             }
 
@@ -2541,10 +2540,10 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (nodeType !== destNode.nodeType ||
                     (nodeType === 1 && sourceNode.tagName !== destNode.tagName)) {
                     dest.innerHTML = source.innerHTML;
-                    
+
                     return;
                 }
-    
+
                 // Update non-Element node (text, comment)
                 if (!sourceStyle) {
                     destNode.data = sourceNode.data;
@@ -2554,7 +2553,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     if (sourceNode.id && destNode.id !== sourceNode.id) {
                         destNode.id = sourceNode.id;
                     }
-                    
+
                     destNode.style.cssText = sourceStyle.cssText;
                     destNode.className = sourceNode.className;
                     syncContentFly.attach(destNode).syncContent(sourceNode);
@@ -2570,9 +2569,9 @@ Ext.define('Ext.overrides.dom.Element', (function() {
          */
         toggle: function(animate) {
             var me = this;
-            
+
             me.setVisible(!me.isVisible(), me.anim(animate));
-            
+
             return me;
         },
 
@@ -2587,7 +2586,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
             if (maskEl) {
                 style = maskEl.dom.style;
-                
+
                 // Remove resource-intensive CSS expressions as soon as they are not required.
                 if (style.clearExpression) {
                     style.clearExpression('width');
@@ -2601,7 +2600,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
                 me.removeCls([XMASKED, XMASKEDRELATIVE]);
             }
-            
+
             me.restoreTabbableState(me.dom === DOC.body);
         },
 
@@ -2617,20 +2616,20 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             if (data[ISCLIPPED]) {
                 data[ISCLIPPED] = false;
                 clip = data[ORIGINALCLIP];
-                
+
                 if (clip.o) {
                     me.setStyle(OVERFLOW, clip.o);
                 }
-                
+
                 if (clip.x) {
                     me.setStyle(OVERFLOWX, clip.x);
                 }
-                
+
                 if (clip.y) {
                     me.setStyle(OVERFLOWY, clip.y);
                 }
             }
-            
+
             return me;
         },
 
@@ -2642,7 +2641,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 if (x != null) {
                     this.dom.style.left = x + 'px';
                 }
-                
+
                 if (y != null) {
                     this.dom.style.top = y + 'px';
                 }
@@ -2665,11 +2664,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                      */
                     pause: function(ms) {
                         var me = this;
-                        
+
                         Ext.fx.Manager.setFxDefaults(me.id, {
                             delay: ms
                         });
-                        
+
                         return me;
                     },
 
@@ -2707,7 +2706,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                             width: width,
                             height: height
                         }));
-                        
+
                         return this;
                     },
 
@@ -2741,12 +2740,12 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                      */
                     shift: function(options) {
                         this.animate(options);
-                        
+
                         return this;
                     }
                 }
             },
-            
+
             '4.2': {
                 methods: {
                     /**
@@ -2834,7 +2833,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     }
                 }
             },
-            
+
             '5.0': {
                 methods: {
                     /**
@@ -2921,21 +2920,20 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                         }
 
                         s = me.getStyle(['height', 'width'], true);  // seek inline
-                        
+
                         // Use Styles if they are set
                         if (s.width && s.width !== 'auto') {
                             w = parseFloat(s.width);
                         }
-                        
+
                         // Use Styles if they are set
                         if (s.height && s.height !== 'auto') {
                             h = parseFloat(s.height);
                         }
-                        
+
                         // Use getWidth/getHeight if style not set.
                         return { width: w || me.getWidth(true), height: h || me.getHeight(true) };
                     },
-
 
                     /**
                      * @method isBorderBox
@@ -3001,19 +2999,19 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             get: function(dom) {
                 var filter = dom.style.filter,
                     match, opacity;
-                
+
                 if (filter.match) {
                     match = filter.match(opacityRe);
-                    
+
                     if (match) {
                         opacity = parseFloat(match[1]);
-                        
+
                         if (!isNaN(opacity)) {
                             return opacity ? opacity / 100 : 0;
                         }
                     }
                 }
-                
+
                 return 1;
             },
             set: function(dom, value) {
@@ -3033,7 +3031,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             }
         });
     }
-    
+
     if (!supports.matchesSelector) {
         // Match basic tagName.ClassName selector syntax for is implementation
         // eslint-disable-next-line vars-on-top
@@ -3042,22 +3040,22 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             fragment,
             classMatcher = function(tag, cls) {
                 var classRe = new RegExp('(?:^|\\s+)' + cls.replace(dashRe, '\\-') + '(?:\\s+|$)');
-                
+
                 if (tag && tag !== '*') {
                     tag = tag.toUpperCase();
-                    
+
                     return function(el) {
                         return el.tagName === tag && classRe.test(el.className);
                     };
                 }
-                
+
                 return function(el) {
                     return classRe.test(el.className);
                 };
             },
             tagMatcher = function(tag) {
                 tag = tag.toUpperCase();
-                
+
                 return function(el) {
                     return el.tagName === tag;
                 };
@@ -3065,7 +3063,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             cache = {};
 
         proto.matcherCache = cache;
-        
+
         proto.is = function(selector) {
             var dom = this.dom,
                 cls, match, testFn, root, isOrphan, is, tag;
@@ -3098,7 +3096,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     if (isOrphan) {
                         fragment.removeChild(dom);
                     }
-                    
+
                     return is;
                 }
 
@@ -3128,7 +3126,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 values = {};
                 prop = props[0];
                 i = 0;
-                
+
                 if (!(len = props.length)) {
                     return values;
                 }
@@ -3186,7 +3184,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             if (style[this.styleName] === 'none') {
                 return '0px';
             }
-            
+
             return style[this.name];
         };
 
@@ -3203,7 +3201,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 get: getBorderWidth
             };
         }
-        
+
         // IE8 has an odd bug with handling font icons in pseudo elements;
         // it will render the icon once and not update it when something
         // like text color is changed via style addition or removal.
@@ -3214,38 +3212,38 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         // and this: https://github.com/twbs/bootstrap/issues/13863
         // eslint-disable-next-line vars-on-top
         var syncRepaintCls = Ext.baseCSSPrefix + 'sync-repaint';
-        
+
         proto.syncRepaint = function() {
             this.addCls(syncRepaintCls);
-            
+
             // Measuring element width will make the browser to repaint it
             this.getWidth();
-            
+
             // Removing empty content makes the icon to appear again and be redrawn
             this.removeCls(syncRepaintCls);
         };
     }
-    
+
     if (Ext.isIE10m) {
         Ext.override(Element, {
             focus: function(defer, dom) {
                 var me = this,
                     ex;
-                
+
                 dom = dom || me.dom;
-                
+
                 if (me.deferredFocusTimer) {
                     Ext.undefer(me.deferredFocusTimer);
                 }
-                
+
                 me.deferredFocusTimer = null;
-                
+
                 if (Number(defer)) {
                     me.deferredFocusTimer = Ext.defer(me.focus, defer, me, [null, dom]);
                 }
                 else {
                     Ext.GlobalEvents.fireEvent('beforefocus', dom);
-                    
+
                     // IE10m has an acute problem with focusing input elements;
                     // when the element was just shown and did not have enough
                     // time to initialize, focusing it might fail. The problem
@@ -3273,7 +3271,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     if (dom && (dom.tagName === 'INPUT' || dom.tagname === 'TEXTAREA')) {
                         Ext.synchronouslyFocusing = document.activeElement;
                     }
-                    
+
                     // Also note that trying to focus an unfocusable element
                     // might throw an exception in IE8. What a cute idea, MS. :(
                     try {
@@ -3282,7 +3280,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     catch (xcpt) {
                         ex = xcpt;
                     }
-                    
+
                     // Ok so now we have this situation when we tried to focus
                     // the first time but did not succeed. Let's try again but
                     // not if there was an exception the first time - when the
@@ -3290,10 +3288,10 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     if (Ext.synchronouslyFocusing && document.activeElement !== dom && !ex) {
                         dom.focus();
                     }
-                    
+
                     Ext.synchronouslyFocusing = null;
                 }
-                
+
                 return me;
             }
         });
@@ -3355,7 +3353,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             // does query multiple times
             var cache = {},
                 parts, b, s;
-            
+
             if (!Ext.isReady) {
                 Ext.onInternalReady(function() {
                     Ext.addBehaviors(obj);
@@ -3365,15 +3363,15 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 for (b in obj) {
                     if ((parts = b.split('@'))[1]) { // for Object prototype breakers
                         s = parts[0];
-                        
+
                         if (!cache[s]) {
                             cache[s] = Ext.fly(document).select(s, true);
                         }
-                        
+
                         cache[s].on(parts[1], obj[b]);
                     }
                 }
-                
+
                 cache = null;
             }
         }
@@ -3400,7 +3398,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 // for normal elements getElementById is the best solution, but if the el is
                 // not part of the document.body, we need to use all[]
                 el = (useDocForId && DOC.getElementById(id)) || dom.all[id];
-                
+
                 if (el) {
                     if (asDom) {
                         ret = el;
@@ -3409,7 +3407,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                         // calling Element.get here is a real hit (2x slower) because it has to
                         // redetermine that we are giving it a dom el.
                         entry = Ext.cache[id];
-                        
+
                         if (entry) {
                             if (entry.skipGarbageCollection || !Ext.isGarbage(entry.dom)) {
                                 ret = entry;
@@ -3420,11 +3418,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                                     "' found in Element cache. " +
                                     "Make sure to clean up Element instances using destroy()");
                                 //</debug>
-                                
+
                                 entry.destroy();
                             }
                         }
-                        
+
                         ret = ret || new Ext.Element(el);
                     }
                 }
@@ -3442,7 +3440,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
         proto.getById = function(id, asDom) {
             var dom = DOC.getElementById(id);
-            
+
             return asDom ? dom : (dom ? Ext.get(dom) : null);
         };
     }
@@ -3463,21 +3461,21 @@ Ext.define('Ext.overrides.dom.Element', (function() {
         proto.getAttribute = function(name, ns) {
             var d = this.dom,
                 type;
-            
+
             if (ns) {
                 type = typeof d[ns + ":" + name];
-                
+
                 if (type !== 'undefined' && type !== 'unknown') {
                     return d[ns + ":" + name] || null;
                 }
-                
+
                 return null;
             }
-            
+
             if (name === "for") {
                 name = "htmlFor";
             }
-            
+
             return d[name] || null;
         };
     }
@@ -3516,12 +3514,13 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
                     if (needsFix) {
                         // repaint
+                        // eslint-disable-next-line no-unused-expressions
                         dom.scrollWidth;
                         style.display = origDisplay;
                     }
                 }
             };
-            
+
             proto.setWidth = function(width, animate) {
                 var me = this,
                     dom = me.dom,
@@ -3537,13 +3536,14 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
                 if (needsFix && !animate) {
                     // repaint
+                    // eslint-disable-next-line no-unused-expressions
                     dom.scrollWidth;
                     style.display = origDisplay;
                 }
-                
+
                 return me;
             };
-            
+
             proto.setSize = function(width, height, animate) {
                 var me = this,
                     dom = me.dom,
@@ -3559,10 +3559,11 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
                 if (needsFix && !animate) {
                     // repaint
+                    // eslint-disable-next-line no-unused-expressions
                     dom.scrollWidth;
                     style.display = origDisplay;
                 }
-                
+
                 return me;
             };
         }
@@ -3577,10 +3578,10 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
                     if (component && component._syncFrameHeight && el === component.el) {
                         frameBodyStyle = component.frameBody.dom.style;
-                        
+
                         if (pxRe.test(value)) {
                             frameInfo = component.getFrameInfo();
-                            
+
                             if (frameInfo) {
                                 frameBodyStyle.height = (parseInt(value, 10) - frameInfo.height) +
                                                         'px';
@@ -3601,13 +3602,13 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
                 if (component && component._syncFrameHeight && this === component.el) {
                     frameBodyStyle = component.frameBody.dom.style;
-                    
+
                     if (!height || height === 'auto') {
                         frameBodyStyle.height = '';
                     }
                     else {
                         frameInfo = component.getFrameInfo();
-                        
+
                         if (frameInfo) {
                             frameBodyStyle.height = (height - frameInfo.height) + 'px';
                         }
@@ -3623,13 +3624,13 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
                 if (component && component._syncFrameHeight && this === component.el) {
                     frameBodyStyle = component.frameBody.dom.style;
-                    
+
                     if (!height || height === 'auto') {
                         frameBodyStyle.height = '';
                     }
                     else {
                         frameInfo = component.getFrameInfo();
-                        
+
                         if (frameInfo) {
                             frameBodyStyle.height = (height - frameInfo.height) + 'px';
                         }
@@ -3649,7 +3650,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                     while (dom.lastChild && dom.lastChild.nodeType !== 3) {
                         dom.removeChild(dom.lastChild);
                     }
-                    
+
                     dom.appendChild(document.createTextNode());
                 }
 
@@ -3659,7 +3660,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
             proto.unselectable = function() {
                 origUnselectable.call(this);
-                
+
                 this.dom.onselectstart = function() {
                     return false;
                 };
@@ -3669,7 +3670,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
         function fixTransparent(dom, el, inline, style) {
             var value = style[this.name] || '';
-            
+
             return transparentRe.test(value) ? 'transparent' : value;
         }
 
@@ -3776,7 +3777,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
 
         if (!supports.TransparentColor) {
             colorStyles = ['background-color', 'border-color', 'color', 'outline-color'];
-            
+
             for (i = colorStyles.length; i--;) {
                 name = colorStyles[i];
                 camel = Element.normalize(name);

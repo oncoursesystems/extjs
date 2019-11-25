@@ -8,13 +8,13 @@ topSuite("Ext.util.CSS", 'Ext.dom.Element', function() {
         });
         div.dom.className = 'ext-css-test';
     });
-    
+
     afterEach(function() {
         div.destroy();
     });
 
     it('should create a stylesheet, and apply and update rules', function() {
-        
+
         // Create a stylesheet with a single rule in it
         var stylesheet = Ext.util.CSS.createStyleSheet('.ext-css-test { background-color:red}', 'unit-test-stylesheet');
 

@@ -33,7 +33,7 @@ Ext.define('Ext.layout.component.Component', {
             dirty = !body,
             isTopLevel = ownerContext.isTopLevel,
             ownerLayout, v, width, height, scroller;
-        
+
         me.callParent([ownerContext, firstCycle]);
 
         if (firstCycle) {
@@ -82,7 +82,7 @@ Ext.define('Ext.layout.component.Component', {
             // DOM (e.g., it is rendered in the markup initially). If the width is not
             // correct in the DOM, this is only going to be the case on the first cycle.
             width = owner[widthModel.names.width];
-            
+
             if (isTopLevel && widthModel.calculatedFrom) {
                 width = lastBox.width;
             }
@@ -160,7 +160,7 @@ Ext.define('Ext.layout.component.Component', {
 
         // Cache the currently layed out size
         me.lastComponentSize = owner.el.lastBox = props = ownerContext.props;
-        
+
         // lastBox is a copy of the defined props to allow save/restore of these (panel
         // collapse needs this)
         lastBox = owner.lastBox || (owner.lastBox = {});
@@ -169,10 +169,10 @@ Ext.define('Ext.layout.component.Component', {
         lastBox.width = props.width;
         lastBox.height = props.height;
         lastBox.invalid = false;
-        
+
         me.callParent([ownerContext]);
     },
-    
+
     notifyOwner: function(ownerContext) {
         var me = this,
             currentSize = me.lastComponentSize,

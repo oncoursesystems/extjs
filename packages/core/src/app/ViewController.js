@@ -41,15 +41,15 @@
 Ext.define('Ext.app.ViewController', {
     extend: 'Ext.app.BaseController',
     alias: 'controller.controller',
-    
+
     requires: [
         'Ext.app.domain.View'
     ],
-    
+
     mixins: [
         'Ext.mixin.Factoryable'
     ],
-    
+
     isViewController: true,
 
     /**
@@ -147,10 +147,10 @@ Ext.define('Ext.app.ViewController', {
 
         if (me.$hasBinds) {
             bind = me.getBindings();
-            
+
             for (key in bind) {
                 b = bind[key];
-                
+
                 if (b) {
                     b.destroy();
                 }
@@ -161,7 +161,7 @@ Ext.define('Ext.app.ViewController', {
             domain.unlisten(me);
             domain.destroy();
         }
-        
+
         me.compDomain = me.view = null;
         me.callParent();
     },
@@ -185,7 +185,7 @@ Ext.define('Ext.app.ViewController', {
 
     control: function(selectors, listeners) {
         var obj = selectors;
-        
+
         if (Ext.isString(selectors)) {
             obj = {};
             obj[selectors] = listeners;
@@ -193,16 +193,16 @@ Ext.define('Ext.app.ViewController', {
 
         this.compDomain.listen(obj, this);
     },
-    
+
     listen: function(to, controller) {
         var component = to.component;
-        
+
         if (component) {
             to = Ext.apply({}, to);
             delete to.component;
             this.control(component);
         }
-        
+
         this.callParent([to, controller]);
     },
 
@@ -210,7 +210,7 @@ Ext.define('Ext.app.ViewController', {
         if (!id) {
             id = Ext.id(null, 'controller-');
         }
-        
+
         return id;
     },
 
@@ -221,7 +221,7 @@ Ext.define('Ext.app.ViewController', {
      */
     getReferences: function() {
         var view = this.view;
-        
+
         return view && view.getReferences();
     },
 
@@ -245,7 +245,7 @@ Ext.define('Ext.app.ViewController', {
      */
     lookup: function(key) {
         var view = this.view;
-        
+
         return view && view.lookup(key);
     },
 
@@ -273,7 +273,7 @@ Ext.define('Ext.app.ViewController', {
      */
     getSession: function() {
         var view = this.view;
-        
+
         return view && view.lookupSession();
     },
 
@@ -287,7 +287,7 @@ Ext.define('Ext.app.ViewController', {
      */
     getViewModel: function() {
         var view = this.view;
-        
+
         return view && view.lookupViewModel();
     },
 
@@ -302,7 +302,7 @@ Ext.define('Ext.app.ViewController', {
      */
     getStore: function(name) {
         var viewModel = this.getViewModel();
-        
+
         return viewModel ? viewModel.getStore(name) : null;
     },
 
@@ -349,7 +349,7 @@ Ext.define('Ext.app.ViewController', {
             b, fn, descriptor;
 
         me.$hasBinds = true;
-        
+
         //<debug>
         if (!viewModel) {
             Ext.raise('Cannot use bind config without a viewModel');
@@ -364,7 +364,7 @@ Ext.define('Ext.app.ViewController', {
                 b = viewModel.bind(descriptor, fn, me);
                 b.getTemplateScope = getBindTemplateScope;
             }
-            
+
             bindings[fn] = b;
         }
 
@@ -382,7 +382,7 @@ Ext.define('Ext.app.ViewController', {
          */
         attachReference: function(component) {
             var view = this.view;
-            
+
             if (view) {
                 view.attachReference(component);
             }

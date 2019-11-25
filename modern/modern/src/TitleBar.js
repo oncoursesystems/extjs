@@ -401,7 +401,6 @@ Ext.define('Ext.TitleBar', {
         titleLeft = titleBox.left;
         titleRight = titleBox.right;
 
-
         if (widthDiff > 0) {
             halfWidthDiff = widthDiff / 2;
             titleLeft += halfWidthDiff;

@@ -28,7 +28,7 @@ topSuite("Ext.layout.component.field.FieldContainer", ['Ext.form.field.*'], func
 
                 expect(fc.items.first().getWidth()).toBe(298);
             });
-            
+
             it("should account for vertical padding supplied by the fieldBodyCls", function() {
                 fc = new Ext.form.FieldContainer({
                     renderTo: Ext.getBody(),
@@ -186,7 +186,7 @@ topSuite("Ext.layout.component.field.FieldContainer", ['Ext.form.field.*'], func
 
                 ct.destroy();
             });
-            
+
             it("should account for vertical padding supplied by the fieldBodyCls", function() {
                 var ct = new Ext.container.Container({
                     floating: true,

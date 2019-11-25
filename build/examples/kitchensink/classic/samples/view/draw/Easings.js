@@ -13,12 +13,12 @@ Ext.define('KitchenSink.view.draw.Easings', {
         'Ext.draw.Component'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/draw/EasingsController.js'
     }],
-    // </example>
+    //</example>
 
     profiles: {
         classic: {
@@ -29,6 +29,9 @@ Ext.define('KitchenSink.view.draw.Easings', {
         },
         graphite: {
             strokeStyle: '#fff'
+        },
+        'classic-material': {
+            strokeStyle: '#2196f3'
         }
     },
     layout: 'fit',

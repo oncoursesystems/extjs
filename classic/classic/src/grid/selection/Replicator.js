@@ -85,7 +85,7 @@ Ext.define('Ext.grid.selection.Replicator', {
             colCount, i, j, column, values, startIdx, endIdx, increment, store, record,
             prevValues, prevValue, x, y;
 
-        colCount = columns.length,
+        colCount = columns.length;
         store = columns[0].getView().dataSource;
 
         // Single row, just duplicate values into extension

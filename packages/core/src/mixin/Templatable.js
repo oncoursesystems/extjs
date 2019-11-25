@@ -20,9 +20,9 @@ Ext.define('Ext.mixin.Templatable', {
 
     getElementTemplate: function() {
         var elementTemplate = document.createDocumentFragment();
-        
+
         elementTemplate.appendChild(Ext.Element.create(this.getElementConfig(), true));
-        
+
         return elementTemplate;
     },
 

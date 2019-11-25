@@ -26,10 +26,10 @@ Ext.define('Ext.ComponentManager', {
 
     count: 0,
 
-    referencesDirty: true,
+    fixReferencesTimer: null,
 
     referenceRepairs: 0,
-    
+
     typeName: 'xtype',
 
     bufferableMethods: {
@@ -41,17 +41,15 @@ Ext.define('Ext.ComponentManager', {
      */
     constructor: function(config) {
         var me = this;
-        
+
         Ext.apply(me, config);
 
         me.all = {};
         me.byInstanceId = {};
         me.holders = {};
-        me.names = {};
-        me.references = {};
         me.onAvailableCallbacks = {};
     },
-    
+
     /**
      * Creates a new Component from the specified config object using the config object's
      * `xtype` to determine the class to instantiate.
@@ -69,7 +67,7 @@ Ext.define('Ext.ComponentManager', {
         if (config.isComponent) {
             return config;
         }
-        
+
         if ('xclass' in config) {
             return Ext.create(config.xclass, config);
         }
@@ -108,20 +106,12 @@ Ext.define('Ext.ComponentManager', {
         me.all[id] = component;
         me.byInstanceId[component.$iid] = component;
 
-        if (component.reference) {
-            me.references[id] = component;
-        }
-
-        if (component.name && component.nameable) {
-            me.names[id] = component;
-        }
-
         if (component.nameHolder || component.referenceHolder) {
             me.holders[id] = component;
         }
 
         ++me.count;
-        
+
         if (!me.hasFocusListener) {
             me.installFocusListener();
         }
@@ -138,8 +128,6 @@ Ext.define('Ext.ComponentManager', {
             all = me.all,
             byInstanceId = me.byInstanceId,
             holders = me.holders,
-            references = me.references,
-            names = me.names,
             id = component.getId();
 
         if (id in holders) {
@@ -150,59 +138,75 @@ Ext.define('Ext.ComponentManager', {
             delete holders[id];
         }
 
-        if (id in names) {
-            names[id] = null;
-            delete names[id];
-        }
-
-        if (id in references) {
-            references[id] = null;
-            delete references[id];
-        }
-
         all[id] = null;
         delete all[id];
-        
+
         id = component.$iid;
         byInstanceId[id] = null;
         delete byInstanceId[id];
 
         --me.count;
     },
-    
+
     markReferencesDirty: function() {
         var me = this,
             holders = me.holders,
-            key;
+            holder, id;
 
-        if (!me.referencesDirty) {
+        if (!Ext.referencesDirty) {
             // Clear all collections (no stale entries)
-            for (key in holders) {
-                holders[key].refs = holders[key].nameRefs = null;
+            for (id in holders) {
+                holder = holders[id];
+
+                holder.refs = holder.nameRefs = null;
+
+                if (holder.invalidateChildDirty) {
+                    holder.invalidateChildDirty();
+                }
             }
 
-            me.referencesDirty = true;
+            Ext.referencesDirty = true;
+
+            me.fixReferencesTimer = Ext.asap(function() {
+                me.fixReferencesTimer = null;
+                me.fixReferences();
+            });
         }
     },
-    
+
     fixReferences: function() {
         var me = this,
-            references = me.references,
-            names = me.names,
-            key;
+            all = me.all,
+            holders = me.holders,
+            holder, id;
 
-        if (me.referencesDirty) {
+        if (Ext.referencesDirty) {
+            me.fixReferencesTimer = Ext.unasap(me.fixReferencesTimer);
+            // Falsy value but also !== false so we can tell we're fixing the refs
+            Ext.referencesDirty = 0;
             ++me.referenceRepairs;
 
-            for (key in references) {
-                references[key]._fixReference();
+            for (id in holders) {
+                holder = holders[id];
+
+                if (holder.beginSyncChildDirty) {
+                    holder.beginSyncChildDirty();
+                }
             }
 
-            for (key in names) {
-                names[key]._fixName();
+            for (id in all) {
+                all[id]._fixReference();
             }
 
-            me.referencesDirty = false;
+            for (id in holders) {
+                holder = holders[id];
+
+                if (holder.finishSyncChildDirty) {
+                    holder.finishSyncChildDirty();
+                }
+            }
+
+            Ext.referencesDirty = false;
         }
     },
 
@@ -223,10 +227,8 @@ Ext.define('Ext.ComponentManager', {
         if (id in all) { // if already an instance, callback immediately
             item = all[id];
             fn.call(scope || item, item);
-
         }
         else if (id) { // otherwise, queue for dispatch
-
             if (!Ext.isArray(callbacks[id])) {
                 callbacks[id] = [ ];
             }
@@ -294,7 +296,7 @@ Ext.define('Ext.ComponentManager', {
             event = info.event.chain(),
             infoCopy = Ext.applyIf({ event: event }, info),
             to, from, ancestor, target;
-            
+
         to = event.toComponent = infoCopy.toComponent = Ext.Component.from(info.toElement);
         from = event.fromComponent = infoCopy.fromComponent = Ext.Component.from(info.fromElement);
         ancestor = me.getCommonAncestor(from, to);
@@ -346,7 +348,7 @@ Ext.define('Ext.ComponentManager', {
 
         return compA;
     },
-    
+
     privates: {
         /**
          * This method reorders the DOM structure of floated components to arrange that the
@@ -384,19 +386,17 @@ Ext.define('Ext.ComponentManager', {
 
         installFocusListener: function() {
             var me = this;
-            
+
             Ext.on('focus', me.onGlobalFocus, me);
             me.hasFocusListener = true;
         },
 
         clearAll: function() {
             var me = this;
-            
+
             me.all = {};
             me.byInstanceId = {};
             me.holders = {};
-            me.names = {};
-            me.references = {};
             me.onAvailableCallbacks = {};
         },
 
@@ -423,7 +423,7 @@ Ext.define('Ext.ComponentManager', {
             if (el && el.isEvent) {
                 el = el.target;
             }
-            
+
             target = Ext.getDom(el);
 
             if (typeof limit !== 'number') {
@@ -455,6 +455,18 @@ Ext.define('Ext.ComponentManager', {
     // Backwards compat:
     ComponentManager.fromElement = ComponentManager.from;
 
+    // No components yet, so nothing is dirty. We need this to be false when the first
+    // component is created so that it sets our fixup timer.
+    Ext.referencesDirty = false;
+
+    Ext.fixReferences = function() {
+        ComponentManager.fixReferences();
+    };
+
+    Ext.markReferencesDirty = function() {
+        ComponentManager.markReferencesDirty();
+    };
+
     /**
      * This is shorthand reference to {@link Ext.ComponentManager#get}.
      * Looks up an existing {@link Ext.Component Component} by {@link Ext.Component#id id}
@@ -472,7 +484,7 @@ Ext.define('Ext.ComponentManager', {
     Ext.iidToCmp = function(iid) {
         return ComponentManager.byInstanceId[iid] || null;
     };
-    
+
     /**
      * @private
      * @deprecated 6.6.0 Inline event handlers are deprecated

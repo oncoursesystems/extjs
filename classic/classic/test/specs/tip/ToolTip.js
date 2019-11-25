@@ -25,7 +25,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
             '<a href="#" id="tipTarget" style="position:absolute; left:100px; top:100px; width: 50px; height: 50px;background-color:red">x</a>',
             true
         );
-                
+
     });
 
     afterEach(function() {
@@ -229,7 +229,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
             });
         });
     });
-    
+
     describe("showAt", function() {
         it("should at the specified position", function() {
             createTip();
@@ -412,7 +412,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
                 expect(tip.el).toBePositionedAt(xy[0] - 15, xy[1] - 18 - tip.anchorSize.y - tip.el.getHeight());
             });
         });
-        
+
         it("should allow anchoring the left of the tooltip to the mouse pointer", function() {
             var xy = target.getXY();
 
@@ -497,11 +497,11 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
                     waitsForEvent(tip, 'show');
                 }
             });
-            
+
             waitsFor(function() {
                 return !tip.isVisible();
             });
-            
+
             runs(function() {
                 expect(tip.triggerElement).toBe(null);
             });
@@ -519,7 +519,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
                 showDelay: 0,
                 dismissDelay: 1
             });
-            
+
             delegatedTarget = Ext.get('delegate-child-1');
 
             runs(function() {
@@ -539,7 +539,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
 
             runs(function() {
                 expect(tip.triggerElement).toBe(null);
-                
+
                 showSpy = spyOnEvent(tip, 'show');
 
                 // Now move from delegate-child-1 into delegate-child-2
@@ -554,7 +554,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
             runs(function() {
                 expect(showSpy).not.toHaveBeenCalled();
                 expect(tip.triggerElement).toBe(null);
-                
+
                 showSpy = spyOnEvent(tip, 'show');
 
                 // Now move from delegate-child-2 into delegate-child-2-2
@@ -592,13 +592,13 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
 
         it("should show at the 'pointerEvent' position if there's no target", function() {
             createTip({ target: null, html: 'Shown by pointer event', showOnTap: true });
-            
+
             if (jasmine.supportsTouch) {
                 Ext.getBody().on({
                     touchstart: showTip,
                     single: true
                 });
-                
+
                 Ext.testHelper.touchStart(document.body, { x: 100, y: 100 });
             }
             else {
@@ -606,7 +606,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
                     mouseover: showTip,
                     single: true
                 });
-                
+
                 jasmine.fireMouseEvent(document.body, triggerEvent, 100, 100);
             }
         });
@@ -661,7 +661,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
                     xtype: "textfield"
                 }]
             }).show();
-            
+
             // This will not be the topmost window.
             // The "Top Window" will be above its mask and visible
             // That "Top Window" should not automatically attract focus
@@ -685,7 +685,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
             combo = centerWindow.down('combobox');
             combo.focus();
             combo.expand();
-            
+
             tipTarget = Ext.get(combo.getPicker().getNode(0));
 
             toolTip = new Ext.tip.ToolTip({
@@ -745,7 +745,7 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
             tip.showDelay = 1;
 
             mouseOverTarget();
-            
+
             waitsFor(function() {
                 return tip.isVisible();
             }, 1000, 'tooltip to show');
@@ -761,14 +761,14 @@ topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function(
                     '<div><div style="height: 5000px"></div><a href="#" id="tipTarget2" style="position:relative; width: 50px; height: 50px;background-color:red;">x</a></div>',
                     true
                 );
-            
+
             target.destroy();
             target = container.down('a');
 
             createTip();
             window.scrollTo(0, 5000);
             mouseOverTarget();
-            
+
             waitsForEvent(tip, 'show');
             runs(function() {
                 // within 10px is close enough

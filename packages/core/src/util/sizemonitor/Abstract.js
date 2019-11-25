@@ -153,7 +153,7 @@ Ext.define('Ext.util.sizemonitor.Abstract', {
         }
 
         delete me._element;
-        
+
         // This is a closure so Base destructor won't null it
         me.refresh = null;
 

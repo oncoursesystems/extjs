@@ -7,11 +7,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -129,7 +129,7 @@ function() {
                 activeItem = menu.down('[text="' + item.text + '"]');
                 activeItem.activated = true;
                 activeItem.expandMenu(null, 0);
-                
+
                 switch (item.text) {
                     case "On":
                         on = activeItem.menu.down('datepicker');
@@ -167,7 +167,7 @@ function() {
         // Undo the overrides.
         Ext.data.ProxyStore.prototype.load = proxyStoreLoad;
         Ext.destroy(store, grid);
-        
+
         grid = plugin = store = columnFilter = menu = headerCt = rootMenuItem = null;
         datepicker = pickerEl = headerNode = selectedNode = before = after = on = null;
     }
@@ -416,7 +416,7 @@ function() {
                 spyOn(columnFilter, 'addStoreFilter');
 
                 showMenu();
-                
+
                 runs(function() {
                     expect(columnFilter.addStoreFilter).not.toHaveBeenCalled();
                 });
@@ -463,7 +463,7 @@ function() {
         describe("the After datepicker", function() {
             function afterAndBefore() {
                 showPicker('Before');
-                
+
                 runs(function() {
                     setPicker('12/8/2014');
 
@@ -478,7 +478,7 @@ function() {
             function selectOn() {
                 // Now select a date that would result in an empty result set.
                 showPicker('On');
-                
+
                 runs(function() {
                     setPicker('9/26/2009');
 
@@ -498,7 +498,7 @@ function() {
 
             beforeEach(function() {
                 createGrid();
-                
+
                 showPicker('After');
 
                 runs(function() {
@@ -520,7 +520,7 @@ function() {
             it("should disable and deactivate the After bits if an unsupported Before selection is made", function() {
                 // Now select a date that would result in an empty result set.
                 showPicker('Before');
-                
+
                 runs(function() {
                     setPicker('8/7/1992');
 
@@ -546,7 +546,7 @@ function() {
         describe("the Before datepicker", function() {
             function afterAndBefore() {
                 showPicker('After');
-                
+
                 runs(function() {
                     setPicker('8/8/1992');
 
@@ -561,7 +561,7 @@ function() {
             function selectOn() {
                 // Now select a date that would result in an empty result set.
                 showPicker('On');
-                
+
                 runs(function() {
                     setPicker('9/26/2009');
 
@@ -582,7 +582,7 @@ function() {
             beforeEach(function() {
                 createGrid();
                 showPicker('Before');
-                
+
                 runs(function() {
                     setPicker('12/8/2014');
                     filters = store.getFilters();
@@ -662,7 +662,7 @@ function() {
             beforeEach(function() {
                 createGrid();
                 on = showPicker('On');
-                
+
                 runs(function() {
                     setPicker('1/22/1972');
                     filters = store.getFilters();
@@ -761,7 +761,7 @@ function() {
                         });
 
                         showPicker('On');
-                        
+
                         runs(function() {
                             columnFilter.setValue({
                                 eq: Ext.Date.parse('1972-01-22T12:30:01', 'c')
@@ -785,7 +785,7 @@ function() {
                 createGrid();
 
                 showPicker('Before');
-                
+
                 runs(function() {
                     setPicker('12/10/1992');
                     column = columnFilter.column;

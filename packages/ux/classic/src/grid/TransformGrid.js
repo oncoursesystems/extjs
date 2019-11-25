@@ -75,9 +75,9 @@ Ext.define('Ext.ux.grid.TransformGrid', {
             width: width,
             height: height
         });
-        
+
         this.callParent([config]);
-        
+
         if (config.remove !== false) {
             // Don't use table.remove() as that destroys the row/cell data in the table in
             // IE6-7 so it cannot be read by the data reader.

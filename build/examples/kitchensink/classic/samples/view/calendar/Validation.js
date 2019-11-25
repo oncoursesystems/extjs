@@ -59,4 +59,4 @@ Ext.define('KitchenSink.view.calendar.Validation', {
         }
     }]
 
-})
+});

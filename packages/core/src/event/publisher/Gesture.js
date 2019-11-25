@@ -174,7 +174,7 @@ Ext.define('Ext.event.publisher.Gesture', {
         if (!me.gestureTargets) {
             if (ln > 1) {
                 targetGroups = [];
-                
+
                 for (i = 0; i < ln; i++) {
                     touch = changedTouches[i];
                     targetGroups.push(touch.targets);
@@ -220,7 +220,6 @@ Ext.define('Ext.event.publisher.Gesture', {
             i = 1,
             target, targets, j;
 
-
         if (ln === 1) {
             return firstTargetGroup;
         }
@@ -260,7 +259,7 @@ Ext.define('Ext.event.publisher.Gesture', {
 
         for (i = 0; i < ln; i++) {
             recognizer = recognizers[i];
-            
+
             if (recognizer.isActive && recognizer[methodName].call(recognizer, e) === false) {
                 recognizer.isActive = false;
             }
@@ -290,7 +289,7 @@ Ext.define('Ext.event.publisher.Gesture', {
             }
             else {
                 recognizer = eventToRecognizer[type];
-                
+
                 // if there is no claimed recognizer it means the user must have invoked
                 // claimGesture on a dom event (touchstart, touchmove etc).  If this is the
                 // case we need to cease firing all gesture events, otherwise we allow only
@@ -527,7 +526,7 @@ Ext.define('Ext.event.publisher.Gesture', {
                 e.type = Ext.dom.Element.prototype.eventMap.touchend;
                 e.button = 0;
                 me.onTouchEnd(e);
-                
+
                 return;
             }
 
@@ -553,7 +552,7 @@ Ext.define('Ext.event.publisher.Gesture', {
 
         if (!isStarted) {
             me.publishGestures();
-            
+
             return;
         }
 
@@ -589,7 +588,7 @@ Ext.define('Ext.event.publisher.Gesture', {
                             Ext.dom.GarbageCollector.resume();
                         }
                     }
-                    
+
                     // The parent code may not to be reached in this case
                     me.reEnterCountAdjusted = true;
                     me.reEnterCount--;
@@ -619,7 +618,7 @@ Ext.define('Ext.event.publisher.Gesture', {
             me.reEnterCount++;
 
             this.onTouchMove(new Ext.event.Event(e));
-            
+
             if (!me.reEnterCountAdjusted) {
                 me.reEnterCount--;
             }
@@ -662,7 +661,7 @@ Ext.define('Ext.event.publisher.Gesture', {
             me.reEnterCount++;
 
             me.onTouchEnd(new Ext.event.Event(e));
-            
+
             if (!me.reEnterCountAdjusted) {
                 me.reEnterCount--;
             }
@@ -713,11 +712,11 @@ Ext.define('Ext.event.publisher.Gesture', {
             }
 
             i = activeTouches.length;
-            
+
             while (i--) {
                 touch = activeTouches[i];
                 id = touch.identifier;
-                
+
                 if (!touches[id]) {
                     Ext.Array.remove(activeTouches, touch);
                     delete map[id];
@@ -740,7 +739,7 @@ Ext.define('Ext.event.publisher.Gesture', {
                 // User called stop propagation on a native event used by the gesture publisher
                 // to synthesize gesture events. Cancel gesture recognition and reset the publisher.
                 e = new Ext.event.Event(me);
-                
+
                 publisher.updateTouches(e);
                 publisher.invokeRecognizers('onTouchCancel', e);
                 publisher.reset();

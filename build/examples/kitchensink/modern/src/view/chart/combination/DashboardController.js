@@ -2,17 +2,19 @@ Ext.define('KitchenSink.view.chart.combination.DashboardController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.combination-dashboard',
 
-    onColumnRender: function (value) {
+    onColumnRender: function(value) {
         return value + '%';
     },
 
-    onBarChartAxisLabelRender: function (axis, label, layoutContext) {
+    onBarChartAxisLabelRender: function(axis, label, layoutContext) {
         return Ext.String.ellipsis(label, 15, false);
     },
 
-    onChartHighlight: function (chart, item) {
+    onChartHighlight: function(chart, item) {
+        var grid;
+
         if (item) {
-            var grid = this.lookup('grid');
+            grid = this.lookup('grid');
 
             grid.ensureVisible(item.record, {
                 select: true
@@ -20,9 +22,8 @@ Ext.define('KitchenSink.view.chart.combination.DashboardController', {
         }
     },
 
-    onGridSelect: function (model, record) {
-        var me = this,
-            form, fields;
+    onGridSelect: function(model, record) {
+        var me = this;
 
         if (Ext.isArray(record)) {
             record = record[0];
@@ -37,21 +38,21 @@ Ext.define('KitchenSink.view.chart.combination.DashboardController', {
 
     // Loads fresh records into the radar store
     // based upon the passed company record.
-    updateRadarChart: function (record) {
+    updateRadarChart: function(record) {
         var chart = this.lookup('radarChart'),
             store = chart.getStore();
 
         store.setData([
-            { Name: 'Price',     Data: record.get('price') },
+            { Name: 'Price', Data: record.get('price') },
             { Name: 'Revenue %', Data: record.get('revenue') },
-            { Name: 'Growth %',  Data: record.get('growth') },
+            { Name: 'Growth %', Data: record.get('growth') },
             { Name: 'Product %', Data: record.get('product') },
-            { Name: 'Market %',  Data: record.get('market') }
+            { Name: 'Market %', Data: record.get('market') }
         ]);
     },
 
     // Performs the highlight of an item in the bar series.
-    highlightCompanyPriceBar: function (record) {
+    highlightCompanyPriceBar: function(record) {
         var barChart = this.lookup('barChart'),
             store = barChart.getStore(),
             series = barChart.getSeries()[0];
@@ -61,7 +62,7 @@ Ext.define('KitchenSink.view.chart.combination.DashboardController', {
         return this;
     },
 
-    onStoreChange: function () {
+    onStoreChange: function() {
         var vm = this.getViewModel(),
             record = vm.get('selected');
 

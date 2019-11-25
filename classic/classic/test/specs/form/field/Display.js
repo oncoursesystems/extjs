@@ -6,7 +6,7 @@ topSuite("Ext.form.field.Display", ['Ext.app.ViewController'], function() {
             name: 'fieldname',
             renderTo: Ext.getBody()
         }, config);
-        
+
         component = new Ext.form.field.Display(config);
     }
 
@@ -226,7 +226,7 @@ topSuite("Ext.form.field.Display", ['Ext.app.ViewController'], function() {
                 });
                 expect(component.inputEl.dom).hasHTML('false');
             });
-            
+
             it("should accept setting an array value", function() {
                 makeComponent({
                     value: [1, 2, 3, 4],
@@ -236,7 +236,7 @@ topSuite("Ext.form.field.Display", ['Ext.app.ViewController'], function() {
                 });
                 expect(component.inputEl.dom).hasHTML('1,2,3,4');
             });
-            
+
             it("should accept setting an object value", function() {
                 makeComponent({
                     value: {
@@ -253,7 +253,7 @@ topSuite("Ext.form.field.Display", ['Ext.app.ViewController'], function() {
         });
 
     });
-    
+
     describe("renderer", function() {
         it("should set the innerHTML to the value specified by the renderer", function() {
             makeComponent({
@@ -264,7 +264,7 @@ topSuite("Ext.form.field.Display", ['Ext.app.ViewController'], function() {
             });
             expect(component.inputEl.dom).hasHTML('foobar');
         });
-        
+
         it("should not change the raw value", function() {
             makeComponent({
                 value: 'foo',
@@ -274,7 +274,7 @@ topSuite("Ext.form.field.Display", ['Ext.app.ViewController'], function() {
             });
             expect(component.rawValue).toBe('foo');
         });
-        
+
         it("should default the scope to the field", function() {
             var scope;
 
@@ -286,11 +286,11 @@ topSuite("Ext.form.field.Display", ['Ext.app.ViewController'], function() {
             });
             expect(scope).toBe(component);
         });
-        
+
         it("should use the passed scope", function() {
             var o = {},
                 scope;
-                
+
             makeComponent({
                 value: 'foo',
                 scope: o,
@@ -300,11 +300,11 @@ topSuite("Ext.form.field.Display", ['Ext.app.ViewController'], function() {
             });
             expect(scope).toBe(o);
         });
-        
+
         it("should pass the raw value and the field to the renderer", function() {
             var arg1,
                 arg2;
-                
+
             makeComponent({
                 value: 'foo',
                 renderer: function(a, b) {
@@ -312,11 +312,11 @@ topSuite("Ext.form.field.Display", ['Ext.app.ViewController'], function() {
                     arg2 = b;
                 }
             });
-            
+
             expect(arg1).toBe('foo');
             expect(arg2).toBe(component);
         });
-        
+
         it("should pass an empty string to the renderer if the value is undefined", function() {
             var arg1;
 

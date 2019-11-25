@@ -20,7 +20,6 @@ topSuite("Ext.state.Stateful", ['Ext.Component'], function() {
             comp = new Ext.Component(cfg);
         };
 
-
     });
 
     afterEach(function() {
@@ -402,7 +401,6 @@ topSuite("Ext.state.Stateful", ['Ext.Component'], function() {
 
             container = comp = null;
         });
-
 
         it("should have 'add, move and remove' in the container's stateEventsByName and be stateful with itemstate plugin specified", function() {
 

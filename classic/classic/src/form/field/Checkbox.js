@@ -324,22 +324,22 @@ Ext.define('Ext.form.field.Checkbox', {
      * @private
      */
     checkChangeEvents: [],
-    
+
     // See IE8 override
     changeEventName: 'change',
-    
+
     /**
      * @cfg inputType
      * @inheritdoc
      */
     inputType: 'checkbox',
-    
+
     /**
      * @cfg isTextInput
      * @inheritdoc
      */
     isTextInput: false,
-    
+
     /**
      * @property ariaRole
      * @inheritdoc
@@ -358,16 +358,16 @@ Ext.define('Ext.form.field.Checkbox', {
     initComponent: function() {
         var me = this,
             value = me.value;
-            
+
         if (value !== undefined) {
             me.checked = me.isChecked(value, me.inputValue);
         }
-        
+
         me.callParent();
-        
+
         me.getManager().add(me);
     },
-    
+
     // Checkboxes and Radio buttons may have their names managed by their respective group.
     // This happens in CheckboxGroup.onAdd() so we skip default name assignment here.
     initDefaultName: Ext.emptyFn,
@@ -395,7 +395,7 @@ Ext.define('Ext.form.field.Checkbox', {
         if (me.isChecked(me.rawValue, me.inputValue)) {
             me.addCls(me.checkedCls);
         }
-        
+
         if (!me.fieldLabel) {
             me.skipLabelForAttribute = true;
         }
@@ -433,7 +433,7 @@ Ext.define('Ext.form.field.Checkbox', {
             labelAlignedBefore: labelAlignedBefore,
             afterLabelCls: labelAlignedBefore ? me.afterLabelCls : '',
             noBoxLabelCls: !boxLabel ? me.noBoxLabelCls : '',
-            
+
             // We need to have name attribute on the <input> element
             // even if it wasn't specified in component config;
             // some browsers (Chrome, Safari) will treat missing name
@@ -442,24 +442,24 @@ Ext.define('Ext.form.field.Checkbox', {
             // with regards to keyboard navigation.
             inputName: me.name || me.id
         });
-        
+
         inputElAttr = data.inputElAriaAttributes;
-        
+
         if (inputElAttr) {
             // aria-readonly is not valid for Checkboxes and Radio buttons
             delete inputElAttr['aria-readonly'];
         }
-        
+
         return data;
     },
 
     initEvents: function() {
         var me = this;
-        
+
         me.callParent();
-        
+
         me.inputEl.on(me.changeEventName, me.onChangeEvent, me, { delegated: false });
-        
+
         // In all IE versions it is possible to focus ANY element by clicking
         // regardless of tabIndex attribute. In this case, clicking on boxLabelEl
         // will end up focusing its parent bodyEl before focusing and activating
@@ -469,7 +469,7 @@ Ext.define('Ext.form.field.Checkbox', {
         if (Ext.isIE) {
             me.bodyEl.on('mousedown', me.onBodyElMousedown, me);
         }
-        
+
         // Conversely in Safari and Firefox on Mac clicking either box label or input
         // itself will result in input activation, value change, and immediate blur
         // to the document body. We place more faith in consistency over platform
@@ -480,14 +480,14 @@ Ext.define('Ext.form.field.Checkbox', {
             me.inputEl.on('mousedown', me.onBoxLabelOrInputMousedown, me);
         }
     },
-    
+
     /**
      * Sets the {@link #boxLabel} for this checkbox.
      * @param {String} boxLabel The new label
      */
     setBoxLabel: function(boxLabel) {
         var me = this;
-        
+
         me.boxLabel = boxLabel;
 
         if (me.rendered) {
@@ -496,7 +496,7 @@ Ext.define('Ext.form.field.Checkbox', {
             me.updateLayout();
         }
     },
-    
+
     /**
      * @private
      * Handle mousedown events on bodyEl. See explanations in initEvents().
@@ -506,7 +506,7 @@ Ext.define('Ext.form.field.Checkbox', {
             e.preventDefault();
         }
     },
-    
+
     /**
      * @private
      * Handle mousedown events on boxLabelEl and inputEl.
@@ -524,29 +524,29 @@ Ext.define('Ext.form.field.Checkbox', {
     onChangeEvent: function(e) {
         this.updateValueFromDom();
     },
-    
+
     /**
      * @private
      */
     updateValueFromDom: function() {
         var me = this,
             inputEl = me.inputEl && me.inputEl.dom;
-        
+
         if (inputEl) {
             me.checked = me.rawValue = me.value = inputEl.checked;
-            
+
             me.checkChange();
         }
     },
-    
+
     /**
      * @private
      */
     updateCheckedCls: function(checked) {
         var me = this;
-        
+
         checked = checked != null ? checked : me.getValue();
-        
+
         me[checked ? 'addCls' : 'removeCls'](me.checkedCls);
     },
 
@@ -556,7 +556,7 @@ Ext.define('Ext.form.field.Checkbox', {
      */
     getRawValue: function() {
         var inputEl = this.inputEl && this.inputEl.dom;
-        
+
         return inputEl ? inputEl.checked : this.checked;
     },
 
@@ -566,7 +566,7 @@ Ext.define('Ext.form.field.Checkbox', {
      */
     getValue: function() {
         var inputEl = this.inputEl && this.inputEl.dom;
-        
+
         return inputEl ? inputEl.checked : this.checked;
     },
 
@@ -578,7 +578,7 @@ Ext.define('Ext.form.field.Checkbox', {
     getSubmitValue: function() {
         var unchecked = this.uncheckedValue,
             uncheckedVal = Ext.isDefined(unchecked) ? unchecked : null;
-        
+
         return this.getValue() ? this.inputValue : uncheckedVal;
     },
 
@@ -621,16 +621,16 @@ Ext.define('Ext.form.field.Checkbox', {
             me.duringSetRawValue = true;
             inputEl.checked = checked;
             me.duringSetRawValue = false;
-            
+
             me.updateCheckedCls(checked);
         }
-        
+
         me.checked = me.rawValue = checked;
-        
+
         if (!me.duringSetValue) {
             me.lastValue = checked;
         }
-        
+
         return checked;
     },
 
@@ -690,7 +690,7 @@ Ext.define('Ext.form.field.Checkbox', {
             handler = me.handler;
 
         me.updateCheckedCls(newVal);
-        
+
         if (handler) {
             Ext.callback(handler, me.scope, [me, newVal], 0, me);
         }
@@ -708,12 +708,12 @@ Ext.define('Ext.form.field.Checkbox', {
     resetOriginalValue: function(fromBoxInGroup) {
         var me = this,
             boxes, box, len, i;
-            
+
         // If we're resetting the value of a field in a group, also reset the others.
         if (!fromBoxInGroup) {
             boxes = me.getManager().getByName(me.name, me.getFormId()).items;
             len = boxes.length;
-            
+
             for (i = 0; i < len; ++i) {
                 box = boxes[i];
 
@@ -728,7 +728,7 @@ Ext.define('Ext.form.field.Checkbox', {
 
     doDestroy: function() {
         this.getManager().removeAtKey(this.id);
-        
+
         this.callParent();
     },
 
@@ -739,9 +739,9 @@ Ext.define('Ext.form.field.Checkbox', {
     onEnable: function() {
         var me = this,
             inputEl = me.inputEl && me.inputEl.dom;
-        
+
         me.callParent();
-        
+
         if (inputEl) {
             // Can still be disabled if the field is readOnly
             inputEl.disabled = me.readOnly;
@@ -751,12 +751,12 @@ Ext.define('Ext.form.field.Checkbox', {
     setReadOnly: function(readOnly) {
         var me = this,
             inputEl = me.inputEl && me.inputEl.dom;
-        
+
         if (inputEl) {
             // Set the button to disabled when readonly
             inputEl.disabled = !!readOnly || me.disabled;
         }
-        
+
         me.callParent(arguments);
     },
 

@@ -60,7 +60,7 @@ topSuite("Ext.picker.Time", function() {
             runs(function() {
                 expect(component.getNodes().length).toEqual(96);
             });
-            
+
         });
 
         it("should render formatted times into the items", function() {
@@ -85,7 +85,6 @@ topSuite("Ext.picker.Time", function() {
         });
     });
 
-
     describe("increment", function() {
         it("should set the number of minutes between times in the list", function() {
             makeComponent({
@@ -101,7 +100,6 @@ topSuite("Ext.picker.Time", function() {
             });
         });
     });
-
 
     describe("minValue", function() {
         it("should be used as the minimum time in the list", function() {

@@ -46,9 +46,9 @@ Ext.define('Ext.draw.overrides.hittest.Path', {
                     firstX = lastX = params[j];
                     firstY = lastY = params[j + 1];
                     j += 2;
-                    
+
                     break;
-                
+
                 case 'L':
                     // eslint-disable-next-line max-len
                     if (solver.linesIntersection(lastX, lastY, params[j], params[j + 1], origin.x, origin.y, x, y)) {
@@ -58,9 +58,9 @@ Ext.define('Ext.draw.overrides.hittest.Path', {
                     lastX = params[j];
                     lastY = params[j + 1];
                     j += 2;
-                    
+
                     break;
-                
+
                 case 'C':
                     count += solver.cubicLineIntersections(
                         lastX, params[j], params[j + 2], params[j + 4],
@@ -70,9 +70,9 @@ Ext.define('Ext.draw.overrides.hittest.Path', {
                     lastX = params[j + 4];
                     lastY = params[j + 5];
                     j += 6;
-                    
+
                     break;
-                
+
                 case 'Z':
                     if (firstX !== null) {
                         // eslint-disable-next-line max-len
@@ -80,7 +80,7 @@ Ext.define('Ext.draw.overrides.hittest.Path', {
                             count += 1;
                         }
                     }
-                    
+
                     break;
             }
         }
@@ -119,9 +119,9 @@ Ext.define('Ext.draw.overrides.hittest.Path', {
                     firstX = lastX = params[j];
                     firstY = lastY = params[j + 1];
                     j += 2;
-                    
+
                     break;
-                    
+
                 case 'L':
                     if (solver.pointOnLine(lastX, lastY, params[j], params[j + 1], x, y)) {
                         return true;
@@ -130,9 +130,9 @@ Ext.define('Ext.draw.overrides.hittest.Path', {
                     lastX = params[j];
                     lastY = params[j + 1];
                     j += 2;
-                    
+
                     break;
-                    
+
                 case 'C':
                     if (solver.pointOnCubic(
                         lastX, params[j], params[j + 2], params[j + 4],
@@ -143,16 +143,16 @@ Ext.define('Ext.draw.overrides.hittest.Path', {
                     lastX = params[j + 4];
                     lastY = params[j + 5];
                     j += 6;
-                    
+
                     break;
-                    
+
                 case 'Z':
                     if (firstX !== null) {
                         if (solver.pointOnLine(firstX, firstY, lastX, lastY, x, y)) {
                             return true;
                         }
                     }
-                    
+
                     break;
             }
         }
@@ -339,7 +339,7 @@ Ext.define('Ext.draw.overrides.hittest.Path', {
                                                                params[j + 1], params[j + 2],
                                                                params[j + 3], params[j + 4],
                                                                params[j + 5]);
-                    
+
                     intersections.push.apply(intersections, points);
                     lastX = params[j + 4];
                     lastY = params[j + 5];

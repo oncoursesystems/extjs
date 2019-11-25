@@ -4,7 +4,7 @@ Ext.define('KitchenSink.store.Spline', {
 
     fields: ['theta', 'sin', 'cos', 'tan' ],
 
-    constructor: function (config) {
+    constructor: function(config) {
         config = config || {};
 
         // Create data in construct time instead of defining it

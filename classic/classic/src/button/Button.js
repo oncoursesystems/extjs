@@ -452,7 +452,7 @@ Ext.define('Ext.button.Button', {
      * @inheritdoc
      */
     focusable: true,
-    
+
     /**
      * @property ariaRole
      * @inheritdoc
@@ -592,7 +592,6 @@ Ext.define('Ext.button.Button', {
      * The scope (**this** reference) in which the `{@link #handler}` and `{@link #toggleHandler}`
      * is executed. Defaults to this Button.
      */
-
 
     /**
      * @cfg {String} arrowAlign
@@ -843,7 +842,7 @@ Ext.define('Ext.button.Button', {
 
         // preventDefault defaults to false for links
         me.configuredWithPreventDefault = me.hasOwnProperty('preventDefault');
-        
+
         if (me.href && !me.configuredWithPreventDefault) {
             me.preventDefault = false;
         }
@@ -868,14 +867,14 @@ Ext.define('Ext.button.Button', {
             if (!me.disabled) {
                 config.tabIndex = me.tabIndex;
             }
-            
+
             if (href) {
                 // https://sencha.jira.com/browse/EXTJS-11964
                 // Disabled links are clickable on iPad, and right clickable on desktop browsers.
                 // The only way to completely disable navigation is removing the href
                 if (!me.disabled) {
                     config.href = href;
-                    
+
                     if (hrefTarget) {
                         config.target = hrefTarget;
                     }
@@ -938,13 +937,13 @@ Ext.define('Ext.button.Button', {
             if (destroyMenu !== false && me.destroyMenu) {
                 oldMenu.destroy();
             }
-            
+
             oldMenu.ownerCmp = null;
         }
 
         if (menu) {
             instanced = menu.isMenu;
-            
+
             // Retrieve menu by id or instantiate instance if needed.
             menu = Ext.menu.Manager.get(menu, {
                 // Use ownerCmp as the upward link. Menus *must have no ownerCt* - they are
@@ -952,7 +951,7 @@ Ext.define('Ext.button.Button', {
                 // Upward navigation is done using the up() method.
                 ownerCmp: me
             });
-            
+
             // We need to forcibly set this here because we could be passed an existing menu,
             // which means the config above won't get applied during creation.
             menu.setOwnerCmp(me, instanced);
@@ -974,7 +973,7 @@ Ext.define('Ext.button.Button', {
             // then we need to poke the split classes onto the btnWrap dom element.
             if (!oldMenu && me.getArrowVisible()) {
                 me.split = true;
-                
+
                 if (me.rendered) {
                     me._addSplitCls();
                     me.updateLayout();
@@ -1048,7 +1047,7 @@ Ext.define('Ext.button.Button', {
                 mouseout: me.onMouseOut,
                 mousedown: me.onMouseDown
             };
-            
+
             if (me.split) {
                 btnListeners.mousemove = me.onMouseMove;
             }
@@ -1098,7 +1097,7 @@ Ext.define('Ext.button.Button', {
 
     onFocusLeave: function(e) {
         this.callParent([e]);
-        
+
         if (this.menu) {
             this.menu.hide();
         }
@@ -1194,7 +1193,7 @@ Ext.define('Ext.button.Button', {
 
         if (me.rendered) {
             dom = me.el.dom;
-            
+
             // https://sencha.jira.com/browse/EXTJS-11964
             // Disabled links are clickable on iPad, and right clickable on desktop browsers.
             // The only way to completely disable navigation is removing the href
@@ -1204,7 +1203,7 @@ Ext.define('Ext.button.Button', {
             }
             else {
                 dom.href = me.getHref();
-                
+
                 if (hrefTarget) {
                     dom.target = hrefTarget;
                 }
@@ -1262,7 +1261,7 @@ Ext.define('Ext.button.Button', {
         // The only way to completely disable navigation is removing the href
         if (me.rendered) {
             dom = me.el.dom;
-            
+
             if (me.disabled) {
                 dom.removeAttribute('href');
             }
@@ -1274,7 +1273,7 @@ Ext.define('Ext.button.Button', {
 
     getSplitCls: function() {
         var me = this;
-        
+
         // eslint-disable-next-line max-len
         return me.split ? (me.baseCls + '-' + me.arrowCls) + ' ' + (me.baseCls + '-' + me.arrowCls + '-' + me.arrowAlign) : '';
     },
@@ -1291,28 +1290,28 @@ Ext.define('Ext.button.Button', {
             oldIcon = me.icon || '';
 
         icon = icon || '';
-        
+
         // If setIcon is called when we are configured with a glyph, clear the glyph
         if (me.glyph) {
             me.setGlyph(null);
         }
-        
+
         me.icon = icon;
-        
+
         if (icon !== oldIcon) {
             if (btnIconEl) {
                 btnIconEl.removeCls(me.iconCls);
                 btnIconEl.setStyle('background-image', icon ? 'url(' + icon + ')' : '');
                 me._syncHasIconCls();
-                
+
                 if (me.didIconStateChange(oldIcon, icon)) {
                     me.updateLayout();
                 }
             }
-            
+
             me.fireEvent('iconchange', me, oldIcon, icon);
         }
-        
+
         return me;
     },
 
@@ -1333,9 +1332,9 @@ Ext.define('Ext.button.Button', {
         if (me.glyph) {
             me.setGlyph(null);
         }
-        
+
         me.iconCls = cls;
-        
+
         if (oldCls !== cls) {
             if (btnIconEl) {
                 // In case it had been set to 'none' by a glyph setting.
@@ -1345,15 +1344,15 @@ Ext.define('Ext.button.Button', {
                 btnIconEl.removeCls(oldCls);
                 btnIconEl.addCls(cls);
                 me._syncHasIconCls();
-                
+
                 if (me.didIconStateChange(oldCls, cls)) {
                     me.updateLayout();
                 }
             }
-            
+
             me.fireEvent('iconchange', me, oldCls, cls);
         }
-        
+
         return me;
     },
 
@@ -1362,12 +1361,12 @@ Ext.define('Ext.button.Button', {
             if (!glyph.isGlyph) {
                 glyph = new Ext.Glyph(glyph);
             }
-            
+
             if (glyph.isEqual(oldGlyph)) {
                 glyph = undefined;
             }
         }
-        
+
         return glyph;
     },
 
@@ -1379,7 +1378,7 @@ Ext.define('Ext.button.Button', {
         if (btnIconEl) {
             me.icon = null;
             btnIconEl.setStyle('background-image', '');
-            
+
             if (glyph) {
                 btnIconEl.dom.innerHTML = glyph.character;
                 btnIconEl.addCls(glyphCls);
@@ -1391,7 +1390,7 @@ Ext.define('Ext.button.Button', {
             }
 
             me._syncHasIconCls();
-            
+
             if (me.didIconStateChange(oldGlyph, glyph)) {
                 me.updateLayout();
             }
@@ -1399,7 +1398,7 @@ Ext.define('Ext.button.Button', {
 
         me.fireEvent('glyphchange', me, glyph && glyph.glyphConfig,
                      oldGlyph && oldGlyph.glyphConfig);
-        
+
         return me;
     },
 
@@ -1422,13 +1421,13 @@ Ext.define('Ext.button.Button', {
             if (!initial || !tooltip) {
                 me.clearTip();
             }
-            
+
             if (tooltip) {
                 if (Ext.quickTipsActive && Ext.isObject(tooltip)) {
                     Ext.tip.QuickTipManager.register(Ext.apply({
                         target: me.el.id
                     }, tooltip));
-                    
+
                     me.tooltip = tooltip;
                 }
                 else {
@@ -1439,7 +1438,7 @@ Ext.define('Ext.button.Button', {
         else {
             me.tooltip = tooltip;
         }
-        
+
         return me;
     },
 
@@ -1455,7 +1454,7 @@ Ext.define('Ext.button.Button', {
             if (oldAlign) {
                 btnEl.removeCls(hasIconCls + '-' + oldAlign);
             }
-            
+
             btnEl.addCls(hasIconCls + '-' + align);
 
             // move the iconWrap to the correct position in the dom - before the btnInnerEl
@@ -1466,7 +1465,7 @@ Ext.define('Ext.button.Button', {
             else {
                 btnEl.appendChild(btnIconEl);
             }
-            
+
             me.updateLayout();
         }
     },
@@ -1497,10 +1496,10 @@ Ext.define('Ext.button.Button', {
             if (deep) {
                 items = menu.getRefItems(deep);
             }
-            
+
             items.unshift(menu);
         }
-        
+
         return items;
     },
 
@@ -1522,7 +1521,7 @@ Ext.define('Ext.button.Button', {
     doDestroy: function() {
         var me = this,
             menu = me.menu;
-        
+
         if (me.deferFocusTimer) {
             Ext.undefer(me.deferFocusTimer);
             me.deferFocusTimer = null;
@@ -1552,11 +1551,11 @@ Ext.define('Ext.button.Button', {
      */
     setHandler: function(handler, scope) {
         this.handler = handler;
-        
+
         if (arguments.length > 1) {
             this.scope = scope;
         }
-        
+
         return this;
     },
 
@@ -1575,7 +1574,7 @@ Ext.define('Ext.button.Button', {
             btnEl[text ? 'removeCls' : 'addCls'](me._noTextCls);
             me.updateLayout();
         }
-        
+
         me.fireEvent('textchange', me, oldText, text);
     },
 
@@ -1589,7 +1588,7 @@ Ext.define('Ext.button.Button', {
      */
     didIconStateChange: function(old, current) {
         var currentEmpty = Ext.isEmpty(current);
-        
+
         return Ext.isEmpty(old) ? !currentEmpty : currentEmpty;
     },
 
@@ -1648,7 +1647,7 @@ Ext.define('Ext.button.Button', {
                 }
             }
         }
-        
+
         return me;
     },
 
@@ -1710,7 +1709,7 @@ Ext.define('Ext.button.Button', {
         if (this.hasVisibleMenu()) {
             this.menu.hide();
         }
-        
+
         return this;
     },
 
@@ -1720,7 +1719,7 @@ Ext.define('Ext.button.Button', {
      */
     hasVisibleMenu: function() {
         var menu = this.menu;
-        
+
         return menu && menu.rendered && menu.isVisible();
     },
 
@@ -1779,7 +1778,7 @@ Ext.define('Ext.button.Button', {
 
     doToggle: function() {
         var me = this;
-        
+
         if (me.allowDepress !== false || !me.pressed) {
             me.toggle();
         }
@@ -1808,7 +1807,7 @@ Ext.define('Ext.button.Button', {
      */
     onMouseOver: function(e) {
         var me = this;
-        
+
         if (!me.disabled && !e.within(me.el, true, true)) {
             me.onMouseEnter(e);
         }
@@ -1823,12 +1822,12 @@ Ext.define('Ext.button.Button', {
      */
     onMouseOut: function(e) {
         var me = this;
-        
+
         if (!e.within(me.el, true, true)) {
             if (me.overMenuTrigger) {
                 me.onMenuTriggerOut(e);
             }
-            
+
             me.onMouseLeave(e);
         }
     },
@@ -1870,7 +1869,7 @@ Ext.define('Ext.button.Button', {
 
         overPosition = (me.arrowAlign === 'right') ? e.getX() - me.getX() : e.getY() - el.getY();
         triggerRegion = me.getTriggerRegion();
-        
+
         return overPosition > triggerRegion.begin && overPosition < triggerRegion.end;
     },
 
@@ -1889,7 +1888,7 @@ Ext.define('Ext.button.Button', {
 
         region.begin = btnSize - (me.el[getEnd]() - me.btnEl[getEnd]());
         region.end = btnSize;
-        
+
         return region;
     },
 
@@ -1926,7 +1925,7 @@ Ext.define('Ext.button.Button', {
             arrowTip = me.arrowTooltip;
 
         me.overMenuTrigger = true;
-        
+
         // We don't have a hoverable arrow element, so we only add the tip attribute if
         // we're over that part of the button
         if (me.split && arrowTip) {
@@ -1946,7 +1945,7 @@ Ext.define('Ext.button.Button', {
         var me = this;
 
         delete me.overMenuTrigger;
-        
+
         // See onMenuTriggerOver
         if (me.split && me.arrowTooltip) {
             me.btnWrap.dom.setAttribute(me.getTipAttr(), '');
@@ -1972,7 +1971,7 @@ Ext.define('Ext.button.Button', {
         if (href) {
             dom.href = href;
         }
-        
+
         if (hrefTarget) {
             dom.target = hrefTarget;
         }
@@ -1995,7 +1994,7 @@ Ext.define('Ext.button.Button', {
         if (me.href) {
             dom.removeAttribute('href');
         }
-        
+
         if (me.hrefTarget) {
             dom.removeAttribute('target');
         }
@@ -2046,10 +2045,10 @@ Ext.define('Ext.button.Button', {
             }
 
             activeEl = Ext.Element.getActiveElement();
-            
+
             me.deferFocusTimer = Ext.defer(function() {
                 var focusEl;
-                
+
                 me.deferFocusTimer = null;
 
                 // We can't proceed if we've been destroyed, or the app has since controlled
@@ -2058,9 +2057,9 @@ Ext.define('Ext.button.Button', {
                     (Ext.Element.getActiveElement() !== activeEl) || !me.canFocus()) {
                     return;
                 }
-                
+
                 focusEl = me.getFocusEl();
-                
+
                 // Deferred to give other mousedown handlers the chance to preventDefault
                 if (focusEl && !e.defaultPrevented) {
                     focusEl.focus();
@@ -2095,7 +2094,7 @@ Ext.define('Ext.button.Button', {
      */
     onMenuShow: function() {
         var me = this;
-        
+
         me.addCls(me._menuActiveCls);
         me.fireEvent('menushow', me, me.menu);
     },
@@ -2119,7 +2118,7 @@ Ext.define('Ext.button.Button', {
         if (me.menu && !me.disabled) {
             me.showMenu(e);
             e.stopEvent();
-            
+
             return false;
         }
     },
@@ -2235,7 +2234,7 @@ Ext.define('Ext.button.Button', {
                 el = me[key];
                 mapCls = elClsMap[key];
                 cls = me[mapCls];
-                
+
                 if (el && cls) {
                     el[state](cls + '-' + ui);
                 }

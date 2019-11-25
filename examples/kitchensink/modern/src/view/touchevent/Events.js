@@ -1,12 +1,13 @@
 /**
- * Presents a large touch zone and reports all of the touch events fired when the user interacts with it
+ * Presents a large touch zone and reports all of the touch 
+ * events fired when the user interacts with it
  */
 Ext.define('KitchenSink.view.touchevent.Events', {
     extend: 'Ext.Container',
     xtype: 'touch-events',
     controller: 'touch-events',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/touchevent/EventsController.js'
@@ -19,7 +20,7 @@ Ext.define('KitchenSink.view.touchevent.Events', {
     }],
 
     shadow: false,
-    // </example>
+    //</example>
 
     layout: {
         type: 'hbox',

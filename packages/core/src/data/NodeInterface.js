@@ -398,11 +398,11 @@ Ext.define('Ext.data.NodeInterface', {
             var model = Ext.data.schema.Schema.lookupEntity(modelClass),
                 proto = model.prototype,
                 idName, idField, idType;
-            
+
             if (!model.prototype.isObservable) {
                 model.mixin(Ext.mixin.Observable.prototype.mixinId, Ext.mixin.Observable);
             }
-            
+
             if (proto.isNode) { // if (already decorated)
                 return;
             }
@@ -412,7 +412,7 @@ Ext.define('Ext.data.NodeInterface', {
             idType = idField.type;
 
             model.override(this.getPrototypeBody());
-            
+
             /* eslint-disable max-len, no-multi-spaces */
             model.addFields([
                 { name: 'parentId',   type: idType,    defaultValue: null,  allowNull: idField.allowNull  },
@@ -650,7 +650,7 @@ Ext.define('Ext.data.NodeInterface', {
 
                             if (reader) {
                                 typeProperty = reader.getTypeProperty();
-                                
+
                                 if (typeProperty) {
                                     T = reader.getChildType(me.schema, node, typeProperty);
                                 }
@@ -666,7 +666,7 @@ Ext.define('Ext.data.NodeInterface', {
                     if (!node.childNodes) {
                         node.firstChild = node.lastChild = node.parentNode =
                         node.previousSibling = node.nextSibling = null;
-                        
+
                         node.childNodes = [];
                     }
 
@@ -730,7 +730,7 @@ Ext.define('Ext.data.NodeInterface', {
                         childInfo = {
                             depth: info.depth + 1
                         };
-                        
+
                         children = me.childNodes;
                         childCount = children.length;
 
@@ -738,7 +738,7 @@ Ext.define('Ext.data.NodeInterface', {
                             children[i].updateInfo(commit, childInfo);
                         }
                     }
-                    
+
                     result = me.set(info, commit);
 
                     // Restore phantom flag which might get cleared by a commit.
@@ -783,10 +783,10 @@ Ext.define('Ext.data.NodeInterface', {
                         return !(me.isLeaf() ||
                                 (me.isLoaded() && !me.phantom && !me.hasChildNodes()));
                     }
-                    
+
                     return false;
                 },
-                
+
                 triggerUIUpdate: function() {
                     // This isn't ideal, however none of the underlying fields have changed
                     // but we still need to update the UI
@@ -830,11 +830,11 @@ Ext.define('Ext.data.NodeInterface', {
                         result = new Array(ln);
                         // Suspend view updating and data syncing during update
                         me.callTreeStore('beginFill');
-                        
+
                         for (i = 0; i < ln; i++) {
                             result[i] = me.appendChild(node[i], suppressEvents, commit);
                         }
-                        
+
                         // Resume view updating and data syncing after appending all new children.
                         // This will fire the add event to any views (if its the top level append)
                         me.callTreeStore('endFill', [result]);
@@ -846,7 +846,7 @@ Ext.define('Ext.data.NodeInterface', {
                         /* eslint-disable-next-line max-len */
                         if (suppressEvents !== true && me.fireBubbledEvent('beforeappend', [me, node]) === false) {
                             Ext.resumeLayouts(true);
-                            
+
                             return false;
                         }
 
@@ -858,15 +858,15 @@ Ext.define('Ext.data.NodeInterface', {
                             /* eslint-disable-next-line max-len */
                             if (suppressEvents !== true && node.fireBubbledEvent('beforemove', [node, oldParent, me, index]) === false) {
                                 Ext.resumeLayouts(true);
-                                
+
                                 return false;
                             }
-                            
+
                             // Return false if a beforeremove listener vetoed the remove
                             /* eslint-disable-next-line max-len */
                             if (oldParent.removeChild(node, false, suppressEvents, oldParent.getTreeStore() === treeStore) === false) {
                                 Ext.resumeLayouts(true);
-                                
+
                                 return false;
                             }
                         }
@@ -874,10 +874,12 @@ Ext.define('Ext.data.NodeInterface', {
                         // Coalesce sync operations across this operation
                         // Node field setting (loaded, expanded) and node addition both trigger
                         // a sync if autoSync is set.
-                        treeStore && treeStore.beginUpdate();
+                        if (treeStore) {
+                            treeStore.beginUpdate();
+                        }
 
                         index = me.childNodes.length;
-                        
+
                         if (index === 0) {
                             me.setFirstChild(node);
                         }
@@ -889,15 +891,15 @@ Ext.define('Ext.data.NodeInterface', {
                         me.setLastChild(node);
 
                         previousSibling = me.childNodes[index - 1];
-                        
+
                         if (previousSibling) {
                             node.previousSibling = previousSibling;
                             previousSibling.nextSibling = node;
-                            
+
                             previousSibling.updateInfo(commit, {
                                 isLast: false
                             });
-                            
+
                             // No need to trigger a ui update if we're doing a bulk update
                             if (!bulkUpdate) {
                                 previousSibling.triggerUIUpdate();
@@ -948,7 +950,7 @@ Ext.define('Ext.data.NodeInterface', {
                         // deeply here to ensure everything is captured.
                         if (treeStore) {
                             treeStore.registerNode(me, !bulkUpdate);
-                            
+
                             if (bulkUpdate) {
                                 treeStore.registerNode(node);
                             }
@@ -998,7 +1000,7 @@ Ext.define('Ext.data.NodeInterface', {
                 */
                 getOwnerTree: function() {
                     var store = this.getTreeStore();
-                    
+
                     return store && store.ownerTree;
                 },
 
@@ -1012,7 +1014,7 @@ Ext.define('Ext.data.NodeInterface', {
                     while (root && !root.treeStore) {
                         root = root.parentNode;
                     }
-                    
+
                     return root && root.treeStore;
                 },
 
@@ -1044,7 +1046,9 @@ Ext.define('Ext.data.NodeInterface', {
                     Ext.suspendLayouts();
 
                     // Coalesce sync operations across this operation
-                    treeStore && treeStore.beginUpdate();
+                    if (treeStore) {
+                        treeStore.beginUpdate();
+                    }
 
                     // remove it from childNodes collection
                     Ext.Array.erase(me.childNodes, index, 1);
@@ -1053,18 +1057,18 @@ Ext.define('Ext.data.NodeInterface', {
                     if (me.firstChild === node) {
                         me.setFirstChild(node.nextSibling);
                     }
-                    
+
                     if (me.lastChild === node) {
                         me.setLastChild(node.previousSibling);
                     }
 
                     // Update previous sibling to point to its new next.
                     previousSibling = node.previousSibling;
-                    
+
                     if (previousSibling) {
                         node.previousSibling.nextSibling = node.nextSibling;
                     }
-                    
+
                     // Update the next sibling to point to its new previous
                     if (node.nextSibling) {
                         node.nextSibling.previousSibling = node.previousSibling;
@@ -1121,7 +1125,7 @@ Ext.define('Ext.data.NodeInterface', {
                             previousSibling: node.previousSibling,
                             nextSibling: node.nextSibling
                         };
-                        
+
                         // Inform the TreeStore so that descendant nodes can be removed.
                         me.callTreeStore('beforeNodeRemove', [[node], !!isMove, removeRange]);
 
@@ -1188,7 +1192,7 @@ Ext.define('Ext.data.NodeInterface', {
                     else if (arguments.length < 3) {
                         deep = session;
                     }
-                    
+
                     result = me.callParent(args);
 
                     // Move child nodes across to the copy if required
@@ -1197,7 +1201,7 @@ Ext.define('Ext.data.NodeInterface', {
                             result.appendChild(me.childNodes[i].copy(undefined, true));
                         }
                     }
-                    
+
                     return result;
                 },
 
@@ -1213,16 +1217,16 @@ Ext.define('Ext.data.NodeInterface', {
 
                     // clear any references from the node
                     me.parentNode = me.previousSibling = me.nextSibling = null;
-                    
+
                     if (erase) {
                         me.firstChild = me.lastChild = me.childNodes = null;
                     }
-                    
+
                     // This is used by TreeStore for clearing root node state on reload
                     if (resetChildren) {
                         me.firstChild = me.lastChild = null;
                         me.childNodes.length = 0;
-                        
+
                         if (me.data) {
                             me.data.children = null;
                         }
@@ -1258,7 +1262,9 @@ Ext.define('Ext.data.NodeInterface', {
                     // After this point, no descendant nodes have a connection to the TreeStore.
 
                     // Coalesce sync operations across this operation
-                    treeStore && treeStore.beginUpdate();
+                    if (treeStore) {
+                        treeStore.beginUpdate();
+                    }
 
                     // Recurse down dropping all descendants.
                     // This will NOT remove them from the store's data collection
@@ -1274,7 +1280,9 @@ Ext.define('Ext.data.NodeInterface', {
                     }
 
                     // Coalesce sync operations across this operation
-                    treeStore && treeStore.endUpdate();
+                    if (treeStore) {
+                        treeStore.endUpdate();
+                    }
                 },
 
                 /**
@@ -1296,7 +1304,7 @@ Ext.define('Ext.data.NodeInterface', {
                     // this method has to recurse to do all its stuff.
                     me.clear(true);
                     me.callParent([options]);
-                    
+
                     for (i = 0; i < len; i++) {
                         node = childNodes[i];
 
@@ -1355,7 +1363,7 @@ Ext.define('Ext.data.NodeInterface', {
                         if (suppressEvents !== true && node.fireBubbledEvent('beforemove', [node, oldParent, me, index, refNode]) === false) {
                             return false;
                         }
-                        
+
                         // Return false if a beforeremove listener vetoed the remove
                         /* eslint-disable-next-line max-len */
                         if (oldParent.removeChild(node, false, suppressEvents, oldParent.getTreeStore() === treeStore) === false) {
@@ -1368,7 +1376,9 @@ Ext.define('Ext.data.NodeInterface', {
                     // if autoSync is set.
                     // Nodes acquire a treeStore early now by virtue of getting a parentNode, so
                     // set operations on them will arrive to this Store's onCollectionUpdate
-                    treeStore && treeStore.beginUpdate();
+                    if (treeStore) {
+                        treeStore.beginUpdate();
+                    }
 
                     if (refIndex === 0) {
                         me.setFirstChild(node);
@@ -1381,7 +1391,7 @@ Ext.define('Ext.data.NodeInterface', {
                     refNode.previousSibling = node;
 
                     previousSibling = me.childNodes[refIndex - 1];
-                    
+
                     if (previousSibling) {
                         node.previousSibling = previousSibling;
                         previousSibling.nextSibling = node;
@@ -1404,11 +1414,11 @@ Ext.define('Ext.data.NodeInterface', {
                     // Update the index for all following siblings.
                     for (i = refIndex + 1, childCount = me.childNodes.length; i < childCount; i++) {
                         sibling = me.childNodes[i];
-                        
+
                         siblingModifiedFields = sibling.updateInfo(false, {
                             index: i
                         });
-                        
+
                         if (siblingModifiedFields) {
                             sibling.callJoined('afterEdit', [siblingModifiedFields]);
                         }
@@ -1472,7 +1482,7 @@ Ext.define('Ext.data.NodeInterface', {
                  */
                 insertChild: function(index, node) {
                     var sibling = this.childNodes[index];
-                    
+
                     if (sibling) {
                         return this.insertBefore(node, sibling);
                     }
@@ -1501,13 +1511,13 @@ Ext.define('Ext.data.NodeInterface', {
                             if (next.data.visible) {
                                 return false;
                             }
-                            
+
                             next = next.nextSibling;
                         }
-                        
+
                         return true;
                     }
-                    
+
                     return result;
                 },
 
@@ -1544,7 +1554,7 @@ Ext.define('Ext.data.NodeInterface', {
                         // If we don't have a parent, just erase it
                         me.erase(true);
                     }
-                    
+
                     return me;
                 },
 
@@ -1616,11 +1626,11 @@ Ext.define('Ext.data.NodeInterface', {
                     me.firstChild = me.lastChild = null;
 
                     childNodes.length = 0;
-                    
+
                     if (!fromParent) {
                         me.triggerUIUpdate();
                     }
-                    
+
                     return me;
                 },
 
@@ -1645,7 +1655,7 @@ Ext.define('Ext.data.NodeInterface', {
 
                     this.removeChild(oldChild, false, suppressEvents);
                     this.insertBefore(newChild, s, suppressEvents);
-                    
+
                     return oldChild;
                 },
 
@@ -1657,7 +1667,7 @@ Ext.define('Ext.data.NodeInterface', {
                 indexOf: function(child) {
                     return Ext.Array.indexOf(this.childNodes, child);
                 },
-                
+
                 /**
                  * Returns the index of a child node that matches the id
                  * @param {String} id The id of the node to find
@@ -1667,13 +1677,13 @@ Ext.define('Ext.data.NodeInterface', {
                     var childNodes = this.childNodes,
                         len = childNodes.length,
                         i = 0;
-                        
+
                     for (; i < len; ++i) {
                         if (childNodes[i].getId() === id) {
                             return i;
                         }
                     }
-                    
+
                     return -1;
                 },
 
@@ -1696,7 +1706,7 @@ Ext.define('Ext.data.NodeInterface', {
                         path.unshift(parent.get(field));
                         parent = parent.parentNode;
                     }
-                    
+
                     return separator + path.join(separator);
                 },
 
@@ -1720,12 +1730,12 @@ Ext.define('Ext.data.NodeInterface', {
                  */
                 bubble: function(fn, scope, args) {
                     var p = this;
-                    
+
                     while (p) {
                         if (fn.apply(scope || p, args || [p]) === false) {
                             break;
                         }
-                        
+
                         p = p.parentNode;
                     }
                 },
@@ -1842,13 +1852,13 @@ Ext.define('Ext.data.NodeInterface', {
 
                     for (i = 0, len = cs.length; i < len; i++) {
                         n = cs[i];
-                        
+
                         if (fn.call(scope || n, n) === true) {
                             return n;
                         }
                         else if (deep) {
                             res = n.findChildBy(fn, scope, deep);
-                            
+
                             if (res !== null) {
                                 return res;
                             }
@@ -1874,15 +1884,15 @@ Ext.define('Ext.data.NodeInterface', {
                  */
                 isAncestor: function(node) {
                     var p = this.parentNode;
-                    
+
                     while (p) {
                         if (p === node) {
                             return true;
                         }
-                        
+
                         p = p.parentNode;
                     }
-                    
+
                     return false;
                 },
 
@@ -1909,7 +1919,7 @@ Ext.define('Ext.data.NodeInterface', {
                         if (!sortFn) {
                             sortFn = me.getTreeStore().getSortFn();
                         }
-                        
+
                         Ext.Array.sort(childNodes, sortFn);
                         me.setFirstChild(childNodes[0]);
                         me.setLastChild(childNodes[ln - 1]);
@@ -1918,7 +1928,7 @@ Ext.define('Ext.data.NodeInterface', {
                             n = childNodes[i];
                             n.previousSibling = childNodes[i - 1];
                             n.nextSibling = childNodes[i + 1];
-                            
+
                             // Update the index and first/last status of children
                             info.isLast = (i === ln - 1);
                             info.index = i;
@@ -1955,7 +1965,7 @@ Ext.define('Ext.data.NodeInterface', {
                 isLoaded: function() {
                     return this.get('loaded');
                 },
-                
+
                 /**
                  * Returns true if this node is a branch node, and the entire branch is fully
                  * loaded.
@@ -1973,11 +1983,11 @@ Ext.define('Ext.data.NodeInterface', {
                             if (!node.isLeaf()) {
                                 isBranchLoaded = isBranchLoaded || node.isBranchLoaded();
                             }
-                            
+
                             return isBranchLoaded;
                         });
                     }
-                    
+
                     return isBranchLoaded;
                 },
 
@@ -2006,15 +2016,15 @@ Ext.define('Ext.data.NodeInterface', {
                  */
                 isVisible: function() {
                     var parent = this.parentNode;
-                    
+
                     while (parent) {
                         if (!parent.isExpanded()) {
                             return false;
                         }
-                        
+
                         parent = parent.parentNode;
                     }
-                    
+
                     return true;
                 },
 
@@ -2070,7 +2080,7 @@ Ext.define('Ext.data.NodeInterface', {
                                         }
                                         else {
                                             treeStore = me.getTreeStore();
-                                            
+
                                             if (treeStore.getProxy().isSynchronous ||
                                                 me.isBranchLoaded()) {
                                                 me.isSynchronousRecursiveExpand = true;
@@ -2097,7 +2107,7 @@ Ext.define('Ext.data.NodeInterface', {
                                         treeStore.fireEvent('datachanged', treeStore);
                                         treeStore.fireEvent('refresh', treeStore);
                                     }
-                                    
+
                                     me.isSynchronousRecursiveExpand = false;
                                 }
 
@@ -2162,7 +2172,7 @@ Ext.define('Ext.data.NodeInterface', {
                         // [+] icon to [-] in response.
                         for (i = 1; i < collapsedAncestors.length; i++) {
                             ancestor = collapsedAncestors[i];
-                            
+
                             if (bulkUpdate || !treeStore.isVisible(ancestor)) {
                                 ancestor.data.expanded = true;
                             }
@@ -2227,19 +2237,19 @@ Ext.define('Ext.data.NodeInterface', {
                         treeStore = me.getTreeStore();
                         singleExpand = treeStore && treeStore.singleExpand;
                     }
-                    
+
                     allNodes = me.childNodes;
                     expandNodes = [];
                     ln = singleExpand ? Math.min(allNodes.length, 1) : allNodes.length;
 
                     for (i = 0; i < ln; ++i) {
                         node = allNodes[i];
-                        
+
                         if (!node.isLeaf()) {
                             expandNodes[expandNodes.length] = node;
                         }
                     }
-                    
+
                     ln = expandNodes.length;
 
                     for (i = 0; i < ln; ++i) {
@@ -2290,7 +2300,7 @@ Ext.define('Ext.data.NodeInterface', {
                                         me.childNodes[i].setCollapsed(true);
                                     }
                                 };
-                                
+
                                 if (callback) {
                                     /* eslint-disable-next-line max-len */
                                     callback = Ext.Function.createSequence(collapseChildren, Ext.Function.bind(callback, scope, [me.childNodes]));
@@ -2392,12 +2402,12 @@ Ext.define('Ext.data.NodeInterface', {
                     // Only bother with loaded, expanded, non-leaf nodes
                     for (i = 0; i < ln; ++i) {
                         node = allNodes[i];
-                        
+
                         if (!node.isLeaf() && node.isLoaded() && node.isExpanded()) {
                             collapseNodes.push(node);
                         }
                     }
-                    
+
                     ln = collapseNodes.length;
 
                     if (ln) {
@@ -2405,7 +2415,7 @@ Ext.define('Ext.data.NodeInterface', {
                         // Pass our callback to the last one.
                         for (i = 0; i < ln; ++i) {
                             node = collapseNodes[i];
-                            
+
                             if (i === ln - 1) {
                                 node.collapse(recursive, callback, scope);
                             }
@@ -2457,13 +2467,13 @@ Ext.define('Ext.data.NodeInterface', {
                         // tree fragment with no TreeStore)
                         if (result !== false) {
                             eventSource = topNode.getTreeStore();
-                            
+
                             if (eventSource && eventSource.hasListeners &&
                                 eventSource.hasListeners[eventName = 'node' + eventName]) {
                                 result = eventSource.fireEventArgs(eventName, args);
                             }
                         }
-                        
+
                         return result;
                     }
                     // Event does not bubble.
@@ -2486,12 +2496,12 @@ Ext.define('Ext.data.NodeInterface', {
 
                     if (len > 0) {
                         result.children = children = [];
-                        
+
                         for (i = 0; i < len; i++) {
                             children.push(childNodes[i].serialize(writer));
                         }
                     }
-                    
+
                     return result;
                 },
 
@@ -2504,11 +2514,11 @@ Ext.define('Ext.data.NodeInterface', {
 
                     if (target && fn) {
                         args = args || [];
-                        
+
                         if (args[0] !== me) {
                             args.unshift(me);
                         }
-                        
+
                         fn.apply(target, args);
                     }
                 },
@@ -2530,7 +2540,7 @@ Ext.define('Ext.data.NodeInterface', {
                     }
 
                     parts = this._parseCls(newCls);
-                    
+
                     if (parts.length) {
                         pieces = Ext.Array.unique(pieces.concat(parts));
                     }
@@ -2540,7 +2550,7 @@ Ext.define('Ext.data.NodeInterface', {
 
                 toggleCls: function(cls, state) {
                     var pieces, parts, len, i, p;
-                    
+
                     if (state === undefined) {
                         pieces = this._parseCls(this.data.cls);
                         parts = this._parseCls(cls);
@@ -2570,7 +2580,7 @@ Ext.define('Ext.data.NodeInterface', {
                 privates: {
                     _noCls: [],
                     spacesRe: /\s+/,
-                    
+
                     join: function(store) {
 
                         // Only the root node is linked to the TreeStore
@@ -2598,11 +2608,11 @@ Ext.define('Ext.data.NodeInterface', {
                         if (!cls) {
                             return this._noCls;
                         }
-                        
+
                         if (typeof cls === 'string') {
                             return cls.split(this.spacesRe);
                         }
-                        
+
                         return cls;
                     }
                 }

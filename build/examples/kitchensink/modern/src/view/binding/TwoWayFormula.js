@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.binding.TwoWayFormula', {
         type: 'binding-twowayformula'
     },
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'ViewModel',
         path: 'modern/src/view/binding/TwoWayFormulaModel.js'
@@ -24,7 +24,7 @@ Ext.define('KitchenSink.view.binding.TwoWayFormula', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     defaultType: 'spinnerfield',
     padding: 10,

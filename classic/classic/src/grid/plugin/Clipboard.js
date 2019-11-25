@@ -20,7 +20,7 @@
 Ext.define('Ext.grid.plugin.Clipboard', {
     extend: 'Ext.plugin.AbstractClipboard',
     alias: 'plugin.clipboard',
-    
+
     requires: [
         'Ext.util.Format',
         'Ext.util.TSV'
@@ -54,7 +54,7 @@ Ext.define('Ext.grid.plugin.Clipboard', {
 
         if (selection) {
             selection.eachCell(function(cellContext) {
-                column = cellContext.column,
+                column = cellContext.column;
                 view = cellContext.column.getView();
                 record = cellContext.record;
 

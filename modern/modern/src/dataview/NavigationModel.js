@@ -477,13 +477,13 @@ Ext.define('Ext.dataview.NavigationModel', {
             e.preventDefault();
 
             if (!me.location.actionable && !me.floatingItems) {
-                view = me.getView(),
+                view = me.getView();
 
                 y = (
                     view.infinite
                         ? view.getItemTop(me.location.child)
                         : me.location.child.el.dom.offsetTop
-                ) - view.el.getClientRegion().height,
+                ) - view.el.getClientRegion().height;
 
                 candidate = me.createLocation(view.getItemFromPoint(0, y));
 

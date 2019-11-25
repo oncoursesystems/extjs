@@ -7,7 +7,7 @@ Ext.define('Ext.chart.axis.layout.CombineDuplicate', {
 
     getCoordFor: function(value, field, idx, items) {
         var result;
-        
+
         if (!(value in this.labelMap)) {
             result = this.labelMap[value] = this.labels.length;
 

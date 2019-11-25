@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.chart.line.Plot', {
     xtype: 'line-plot',
     controller: 'line-plot',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/line/PlotController.js'
@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.chart.line.Plot', {
             buttonShadow: true,
             insetPadding: '20 10',
             padding: 8,
-            panIcon: 'x-fa fa-arrows',
+            panIcon: 'x-fa fa-arrows-alt',
             panText: 'Pan',
             refreshText: 'Refresh',
             segBtnWidth: 200,
@@ -45,9 +45,9 @@ Ext.define('KitchenSink.view.chart.line.Plot', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -136,7 +136,7 @@ Ext.define('KitchenSink.view.chart.line.Plot', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             margin: '0 10 0 0',
             menu: {
@@ -164,7 +164,7 @@ Ext.define('KitchenSink.view.chart.line.Plot', {
             }
         }, {
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             margin: '0 10 0 0',
             handler: 'onRefresh'
         }]

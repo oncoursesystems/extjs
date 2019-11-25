@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.chart.drawing.BounceController', {
     deceleration: 0.95,
     surface: null,
 
-    init: function () {
+    init: function() {
         var me = this,
             draw = me.lookup('draw'),
             surface = draw.getSurface(),
@@ -26,13 +26,13 @@ Ext.define('KitchenSink.view.chart.drawing.BounceController', {
         me.reset();
     },
 
-    destroy: function () {
+    destroy: function() {
         Ext.AnimationQueue.stop(this.onRender, this);
 
         this.callParent();
     },
 
-    reset: function () {
+    reset: function() {
         var me = this;
 
         Ext.AnimationQueue.stop(me.onRender, me);
@@ -53,7 +53,7 @@ Ext.define('KitchenSink.view.chart.drawing.BounceController', {
         Ext.AnimationQueue.start(me.onRender, me);
     },
 
-    onRender: function () {
+    onRender: function() {
         var me = this,
             rect = me.surface.getRect(),
             bbox = me.logo.getBBox(true),
@@ -71,6 +71,7 @@ Ext.define('KitchenSink.view.chart.drawing.BounceController', {
             me.velocity.setX(-me.velocity.x);
             bounced = true;
         }
+
         if (p.y + bbox.height > rect[3] || p.y < rect[1]) {
             me.velocity.setY(-me.velocity.y);
             bounced = true;
@@ -79,11 +80,13 @@ Ext.define('KitchenSink.view.chart.drawing.BounceController', {
         if (bounced) {
             // A bounce gives the logo acceleration equal to velocity.
             me.acceleration.set(me.velocity);
-        } else {
+        }
+        else {
             // Decrease the logo's acceleration on every move after a bounce.
             if (me.acceleration.length > 1) {
                 me.acceleration = me.acceleration.mul(me.deceleration);
-            } else {
+            }
+            else {
                 me.acceleration.set(0);
             }
         }
@@ -100,7 +103,7 @@ Ext.define('KitchenSink.view.chart.drawing.BounceController', {
         me.surface.renderFrame();
     },
 
-    onResize: function (chart, width, height) {
+    onResize: function(chart, width, height) {
         this.reset();
     }
 

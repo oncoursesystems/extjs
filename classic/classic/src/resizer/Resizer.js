@@ -40,7 +40,7 @@ Ext.define('Ext.resizer.Resizer', {
     mixins: {
         observable: 'Ext.util.Observable'
     },
-    
+
     uses: [
         'Ext.resizer.ResizeTracker',
         'Ext.Component'
@@ -217,7 +217,6 @@ Ext.define('Ext.resizer.Resizer', {
             resizeTarget, handleCls, possibles, tag,
             len, i, pos, box, handle, handles, handleEl,
             wrapTarget, positioning, targetBaseCls;
-            
 
         if (Ext.isString(config) || Ext.isElement(config) || config.dom) {
             resizeTarget = config;
@@ -545,13 +544,13 @@ Ext.define('Ext.resizer.Resizer', {
 
         for (i = 0; i < len; i++) {
             pos = positions[handles[i]];
-            
+
             if ((handle = me[pos])) {
                 handle.destroy();
                 me[pos] = null;
             }
         }
-        
+
         me.callParent();
     }
 });

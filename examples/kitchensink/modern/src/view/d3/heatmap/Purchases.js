@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Purchases', {
         'Ext.d3.HeatMap'
     ],
 
-    // <example>
+    //<example>
     otherContent: [
         {
             type: 'Controller',

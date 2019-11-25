@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.chart.line.Spline', {
     xtype: 'line-spline',
     controller: 'line-spline',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/line/SplineController.js'
@@ -44,9 +44,9 @@ Ext.define('KitchenSink.view.chart.line.Spline', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -106,7 +106,7 @@ Ext.define('KitchenSink.view.chart.line.Spline', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

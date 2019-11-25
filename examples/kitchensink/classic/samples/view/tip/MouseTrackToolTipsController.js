@@ -18,6 +18,7 @@ Ext.define('KitchenSink.view.MouseTrackToolTipsController', {
 
         this.tips = Ext.Array.map(tips, function(cfg) {
             cfg.showOnTap = true;
+
             return new Ext.tip.ToolTip(cfg);
         });
     },

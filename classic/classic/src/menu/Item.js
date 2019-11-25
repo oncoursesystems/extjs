@@ -159,19 +159,19 @@ Ext.define('Ext.menu.Item', {
      * The type of tooltip to use. Either 'qtip' for QuickTips or 'title' for title attribute.
      */
     tooltipType: 'qtip',
-    
+
     /**
      * @property focusable
      * @inheritdoc
      */
     focusable: true,
-    
+
     /**
      * @property ariaRole
      * @inheritdoc
      */
     ariaRole: 'menuitem',
-    
+
     /**
      * @property ariaEl
      * @inheritdoc
@@ -200,7 +200,7 @@ Ext.define('Ext.menu.Item', {
     childEls: [
         'itemEl', 'iconEl', 'textEl', 'arrowEl'
     ],
-    
+
     /* eslint-disable indent, max-len */
     /**
      * @cfg renderTpl
@@ -250,7 +250,7 @@ Ext.define('Ext.menu.Item', {
             '</a>' +
         '</tpl>',
     /* eslint-enable indent, max-len */
-    
+
     /**
      * @cfg autoEl
      * @inheritdoc
@@ -258,7 +258,7 @@ Ext.define('Ext.menu.Item', {
     autoEl: {
         role: 'presentation'
     },
-    
+
     /**
      * @property maskOnDisable
      * @inheritdoc
@@ -345,7 +345,7 @@ Ext.define('Ext.menu.Item', {
 
     canFocus: function() {
         var me = this;
-        
+
         // This is an override of the implementation in Focusable.
         // We do not refuse focus if the Item is disabled.
         // http://www.w3.org/TR/2013/WD-wai-aria-practices-20130307/#menu
@@ -412,7 +412,7 @@ Ext.define('Ext.menu.Item', {
      */
     deferHideParentMenus: function() {
         var menu;
-        
+
         // eslint-disable-next-line max-len
         for (menu = this.getRefOwner(); menu && ((menu.isMenu && menu.floating) || menu.isMenuItem); menu = menu.getRefOwner()) {
             if (menu.isMenu) {
@@ -438,7 +438,7 @@ Ext.define('Ext.menu.Item', {
 
             // Allow configuration of zero to perform immediate expansion.
             delay = delay == null ? me.menuExpandDelay : delay;
-            
+
             if (delay === 0) {
                 me.doExpandMenu(event);
             }
@@ -520,7 +520,7 @@ Ext.define('Ext.menu.Item', {
             // trigger the touch call-out menu to show.  If this is the case, the tap 
             // event object's browser event type will be 'touchcancel', and we do not 
             // want to hide the menu.
-            
+
             // items with submenus are activated by touchstart on mobile browsers, so
             // we cannot hide the menu on "tap"
             if (!clickHideDelay) {
@@ -534,7 +534,7 @@ Ext.define('Ext.menu.Item', {
 
         // Click event may have destroyed the menu, don't do anything further
         clickResult = me.fireEvent('click', me, e);
-        
+
         // Click listener could have destroyed the menu and/or item.
         if (me.destroyed) {
             return;
@@ -543,7 +543,7 @@ Ext.define('Ext.menu.Item', {
         if (clickResult !== false && me.handler) {
             Ext.callback(me.handler, me.scope, [me, e], 0, me);
         }
-        
+
         // And the handler could have done the same. We check this twice
         // because if the menu was destroyed in the click listener, the handler
         // should not have been called.
@@ -579,7 +579,7 @@ Ext.define('Ext.menu.Item', {
         if (!me.hideOnClick && !me.hasFocus) {
             me.focus();
         }
-        
+
         return clickResult;
     },
 
@@ -601,13 +601,13 @@ Ext.define('Ext.menu.Item', {
         if (me.rendered) {
             me.clearTip();
         }
-        
+
         me.cancelDeferExpand();
         me.cancelDeferHide();
         Ext.undefer(me.deferHideParentMenusTimer);
 
         me.setMenu(null);
-        
+
         me.callParent();
     },
 
@@ -626,7 +626,7 @@ Ext.define('Ext.menu.Item', {
         if (me.plain) {
             me.ariaEl = 'el';
         }
-        
+
         me.callParent();
 
         if (hasIcon) {
@@ -725,19 +725,19 @@ Ext.define('Ext.menu.Item', {
             if (destroyMenu === true || (destroyMenu !== false && me.destroyMenu)) {
                 Ext.destroy(oldMenu);
             }
-            
+
             if (ariaDom) {
                 ariaDom.removeAttribute('aria-haspopup');
                 ariaDom.removeAttribute('aria-owns');
             }
             else {
                 ariaAttr = (me.ariaRenderAttributes || (me.ariaRenderAttributes = {}));
-                
+
                 delete ariaAttr['aria-haspopup'];
                 delete ariaAttr['aria-owns'];
             }
         }
-        
+
         if (menu) {
             instanced = menu.isMenu;
             menu = me.menu = Ext.menu.Manager.get(menu, {
@@ -748,14 +748,14 @@ Ext.define('Ext.menu.Item', {
             // an existing menu, which means the config above won't get applied
             // during creation.
             menu.setOwnerCmp(me, instanced);
-            
+
             if (ariaDom) {
                 ariaDom.setAttribute('aria-haspopup', true);
                 ariaDom.setAttribute('aria-owns', menu.id);
             }
             else {
                 ariaAttr = (me.ariaRenderAttributes || (me.ariaRenderAttributes = {}));
-                
+
                 ariaAttr['aria-haspopup'] = true;
                 ariaAttr['aria-owns'] = menu.id;
             }
@@ -908,11 +908,11 @@ Ext.define('Ext.menu.Item', {
     getFocusEl: function() {
         return this.plain ? this.el : this.itemEl;
     },
-    
+
     getFocusClsEl: function() {
         return this.el;
     },
-    
+
     privates: {
         cancelDeferExpand: function() {
             window.clearTimeout(this.expandMenuTimer);

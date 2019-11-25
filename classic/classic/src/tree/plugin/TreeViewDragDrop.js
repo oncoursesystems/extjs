@@ -173,7 +173,7 @@ Ext.define('Ext.tree.plugin.TreeViewDragDrop', {
      * @param {String} dropPosition `"before"` or `"after"` depending on whether the 
      * cursor is above or below the mid-line of the node.
      */
-    
+
     /**
      * @cfg {Boolean} [copy=false]
      * Set as `true` to copy the records from the source grid to the destination drop 
@@ -184,7 +184,7 @@ Ext.define('Ext.tree.plugin.TreeViewDragDrop', {
      * 
      * See {@link #allowCopy} to allow only control-drag operations to copy records.
      */
-    
+
     /**
      * @cfg {Boolean} [allowCopy=false]
      * Set as `true` to allow the user to hold down the control key at the start of the 
@@ -238,7 +238,7 @@ Ext.define('Ext.tree.plugin.TreeViewDragDrop', {
      * objects in the same group.
      */
     ddGroup: "TreeDD",
-    
+
     /**
      * True to register this container with the Scrollmanager for auto scrolling during
      * drag operations. A {@link Ext.dd.ScrollManager} configuration may also be passed.
@@ -358,7 +358,7 @@ Ext.define('Ext.tree.plugin.TreeViewDragDrop', {
 
     destroy: function() {
         var me = this;
-        
+
         me.dragZone = me.dropZone = Ext.destroy(me.dragZone, me.dropZone);
         me.callParent();
     },
@@ -369,12 +369,12 @@ Ext.define('Ext.tree.plugin.TreeViewDragDrop', {
             scrollEl;
 
         ownerGrid.relayEvents(view, ['beforedrop', 'drop']);
-        
+
         if (me.enableDrag) {
             if (me.containerScroll) {
                 scrollEl = view.getEl();
             }
-            
+
             me.dragZone = new Ext.tree.ViewDragZone(Ext.apply({
                 view: view,
                 ddGroup: me.dragGroup || me.ddGroup,
@@ -403,6 +403,6 @@ Ext.define('Ext.tree.plugin.TreeViewDragDrop', {
     }
 }, function() {
     var proto = this.prototype;
-    
+
     proto.nodeHighlightOnDrop = proto.nodeHighlightOnRepair = Ext.enableFx;
 });

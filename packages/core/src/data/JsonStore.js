@@ -42,7 +42,7 @@
 Ext.define('Ext.data.JsonStore', {
     extend: 'Ext.data.Store',
     alias: 'store.json',
-    
+
     requires: [
         'Ext.data.proxy.Ajax',
         'Ext.data.reader.Json',
@@ -57,7 +57,7 @@ Ext.define('Ext.data.JsonStore', {
                 writer: 'json'
             }
         }, config);
-        
+
         this.callParent([config]);
     }
 });

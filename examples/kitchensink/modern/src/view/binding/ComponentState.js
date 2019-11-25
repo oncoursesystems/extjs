@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.binding.ComponentState', {
 
     viewModel: true,
 
-    // <example>
+    //<example>
     profiles: {
         defaults: {
             width: 400
@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.binding.ComponentState', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     padding: 20,
     width: '${width}',

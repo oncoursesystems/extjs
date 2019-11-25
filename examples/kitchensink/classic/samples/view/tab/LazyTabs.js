@@ -14,13 +14,14 @@
 Ext.define('KitchenSink.view.tab.LazyTabs', {
     extend: 'Ext.tab.Panel',
     xtype: 'lazy-tabs',
-    
+
     requires: [
         'Ext.plugin.LazyItems'
     ],
-    
+
     //<example>
     exampleTitle: 'Lazy Tabs',
+    cls: Ext.baseCSSPrefix + 'shadow',
     //</example>
 
     width: 600,

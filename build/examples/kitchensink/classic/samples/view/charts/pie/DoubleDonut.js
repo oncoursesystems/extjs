@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.charts.pie.DoubleDonut', {
     xtype: 'pie-double-donut',
     controller: 'pie-double-donut',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.charts.pie.DoubleDonut', {
         type: 'vbox',
         pack: 'center'
     },
-    // </example>
+    //</example>
     width: 650,
 
     tbar: [

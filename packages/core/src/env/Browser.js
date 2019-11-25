@@ -93,13 +93,13 @@
 
     if (browserMatch) {
         browserName = browserNames[Ext.Object.getKey(browserPrefixes, browserMatch[1])];
-        
+
         //<feature legacyBrowser>
         if (browserName === 'Safari' && /^Opera/.test(userAgent)) {
             // Prevent Opera 12 and earlier from being incorrectly reported as Safari
             browserName = 'Opera';
         }
-        
+
         //</feature>
         browserVersion = new Ext.Version(browserMatch[2]);
     }
@@ -111,19 +111,19 @@
 
     if (engineName === 'Trident' && browserName !== 'IE') {
         browserName = 'IE';
-        
+
         var version = userAgent.match(/.*rv:(\d+.\d+)/); // eslint-disable-line vars-on-top
-        
+
         if (version && version.length) {
             version = version[1];
             browserVersion = new Ext.Version(version);
         }
     }
-    
+
     if (browserName && browserVersion) {
         Ext.setVersion(browserName, browserVersion);
     }
-    
+
     /**
      * @property chromeVersion
      * The current version of Chrome (0 if the browser is not Chrome).
@@ -366,7 +366,7 @@
     }
     else {
         browserMatch = userAgent.match(/OPR\/(\d+.\d+)/);
-        
+
         if (browserMatch) {
             browserName = 'Opera';
             browserVersion = new Ext.Version(browserMatch[1]);
@@ -391,7 +391,7 @@
 
             for (i = 7; i <= 11; ++i) {
                 prefix = 'isIE' + i;
-                
+
                 Ext[prefix] = majorVer === i;
                 Ext[prefix + 'm'] = majorVer <= i;
                 Ext[prefix + 'p'] = majorVer >= i;
@@ -578,7 +578,7 @@ Ext.env.Browser.prototype = {
 
         this.is[name] = value;
         this.is[name.toLowerCase()] = value;
-        
+
         if (publish) {
             Ext['is' + name] = value;
         }

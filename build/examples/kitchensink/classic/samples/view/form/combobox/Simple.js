@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.form.combobox.Simple', {
         'KitchenSink.model.State',
         'KitchenSink.store.States'
     ],
-    
+
     exampleTitle: 'Simple ComboBox',
     otherContent: [{
         type: 'Model',
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.form.combobox.Simple', {
         path: 'app/store/States.js'
     }],
     //</example>
-    
+
     profiles: {
         classic: {
             labelWidth: 110
@@ -30,13 +30,17 @@ Ext.define('KitchenSink.view.form.combobox.Simple', {
         },
         graphite: {
             labelWidth: 140
+        },
+        'classic-material': {
+            labelWidth: 140
         }
     },
     title: 'Simple ComboBox',
     width: 500,
     layout: 'form',
+    cls: 'simple-combo',
     viewModel: {},
-    
+
     items: [{
         xtype: 'fieldset',
         layout: 'anchor',

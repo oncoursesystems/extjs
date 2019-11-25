@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.drag.FileController', {
 
     requires: ['Ext.drag.Target'],
 
-    //defaultText: 'Drag your files here',
+    // defaultText: 'Drag your files here',
 
     init: function(view) {
         view.addCls('drag-file-ct');
@@ -50,7 +50,8 @@ Ext.define('KitchenSink.view.drag.FileController', {
 
         if (len > 1) {
             s = 'Dropped ' + len + ' files.';
-        } else {
+        }
+        else {
             s = 'Dropped ' + files[0].name;
         }
 

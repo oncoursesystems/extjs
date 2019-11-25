@@ -52,7 +52,7 @@ Ext.define('KitchenSink.view.direct.Grid', {
         }
     },
 
-    padding: '${padding}', //give room for the grid's shadow
+    padding: '${padding}', // give room for the grid's shadow
     shadow: false,
     //</example>
 
@@ -110,7 +110,7 @@ Ext.define('KitchenSink.view.direct.Grid', {
                 fields: ['table', 'desc'],
                 data: [
                     { table: 'companies', desc: 'Existing companies' },
-                    { table: 'leads',     desc: 'Sales leads' }
+                    { table: 'leads', desc: 'Sales leads' }
                 ]
             },
             listeners: {

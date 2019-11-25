@@ -44,7 +44,7 @@ Ext.onReady(function() {
 
         Ext.Date.formatCodes.a = "(this.getHours() < 12 ? '午前' : '午後')";
         Ext.Date.formatCodes.A = "(this.getHours() < 12 ? '午前' : '午後')"; // no case difference
-        
+
         parseCodes = {
             g: 1,
             c: "if (/(午前)/i.test(results[{0}])) {\n" +

@@ -66,7 +66,7 @@ Ext.define('Ext.layout.container.Editor', {
             autoSize = owner.autoSize,
             fieldWidth,
             fieldHeight;
-            
+
         if (autoSize === true) {
             autoSize = me.autoSizeDefault;
         }

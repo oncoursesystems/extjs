@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.pivot.LayoutTabular', {
         'Ext.pivot.Grid'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/pivot/PivotController.js'
@@ -49,9 +49,9 @@ Ext.define('KitchenSink.view.pivot.LayoutTabular', {
         }
     },
 
-    padding: '${padding}', //give room for the grid's shadow
+    padding: '${padding}', // give room for the grid's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     height: '${height}',
     layout: 'fit',

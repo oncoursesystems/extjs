@@ -68,7 +68,7 @@ Ext.define('KitchenSink.view.direct.Form', {
         }, {
             label: 'Email',
             errorTarget: 'side',
-            vtype:'email',
+            vtype: 'email',
             name: 'email'
         }, {
             label: 'Company',

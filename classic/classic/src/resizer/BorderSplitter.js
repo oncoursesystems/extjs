@@ -21,7 +21,7 @@ Ext.define('Ext.resizer.BorderSplitter', {
 
     onTargetCollapse: function(target) {
         this.callParent([target]);
-        
+
         if (this.performCollapse !== false && target.collapseMode === 'mini') {
             target.addCls(target.baseCls + '-' + target.collapsedCls + '-mini');
         }
@@ -29,7 +29,7 @@ Ext.define('Ext.resizer.BorderSplitter', {
 
     onTargetExpand: function(target) {
         this.callParent([target]);
-        
+
         if (this.performCollapse !== false && target.collapseMode === 'mini') {
             target.removeCls(target.baseCls + '-' + target.collapsedCls + '-mini');
         }

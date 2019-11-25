@@ -33,7 +33,7 @@ Ext.define('Ext.util.Memento', (function() {
 
     function doMany(doOne, src, target, props, prefix) {
         var p, pLen;
-        
+
         if (src) {
             if (Ext.isArray(props)) {
                 for (p = 0, pLen = props.length; p < pLen; p++) {

@@ -3,12 +3,12 @@ Ext.define('KitchenSink.view.chart.line.RealTimeNumber', {
     xtype: 'line-real-time-number',
     controller: 'line-real-time-number',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/line/RealTimeNumberController.js'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
 

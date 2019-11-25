@@ -11,10 +11,10 @@ topSuite("Ext.form.field.Trigger", function() {
                 name: 'test',
                 width: 100
             });
-            
+
             // Suppress console warning about Trigger field being deprecated
             spyOn(Ext.log, 'warn');
-            
+
             component = new Ext.form.field.Trigger(config);
         };
     });
@@ -36,16 +36,14 @@ topSuite("Ext.form.field.Trigger", function() {
         jasmine.fireMouseEvent(el, 'click', xy[0], xy[1]);
     }
 
-
     it("should be registered with xtype 'triggerfield'", function() {
         // Suppress console warning about Trigger field being deprecated
         spyOn(Ext.log, 'warn');
-        
+
         component = Ext.create("Ext.form.field.Trigger", { name: 'test' });
         expect(component instanceof Ext.form.field.Trigger).toBe(true);
         expect(Ext.getClass(component).xtype).toBe("triggerfield");
     });
-
 
     describe("defaults", function() {
         beforeEach(function() {
@@ -61,7 +59,6 @@ topSuite("Ext.form.field.Trigger", function() {
             expect(component.readOnly).toBe(false);
         });
     });
-
 
     describe("rendering", function() {
         beforeEach(function() {
@@ -102,7 +99,6 @@ topSuite("Ext.form.field.Trigger", function() {
         });
     });
 
-
     describe("onTriggerClick method", function() {
         var spy;
 
@@ -137,7 +133,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 component.triggerEl.each(function(e) {
                     if (e.isVisible()) {
                         allTriggersHidden = false;
-                        
+
                         return false;
                     }
                 });
@@ -152,7 +148,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 component.triggerEl.each(function(e) {
                     if (e.isVisible()) {
                         allTriggersHidden = false;
-                        
+
                         return false;
                     }
                 });
@@ -173,7 +169,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 component.triggerEl.each(function(e) {
                     if (e.isVisible()) {
                         allTriggersHidden = false;
-                        
+
                         return false;
                     }
                 });
@@ -194,7 +190,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 component.triggerEl.each(function(e) {
                     if (!e.isVisible()) {
                         allTriggersVisible = false;
-                        
+
                         return false;
                     }
                 });
@@ -244,7 +240,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 component.triggerEl.each(function(e) {
                     if (e.isVisible()) {
                         allTriggersHidden = false;
-                        
+
                         return false;
                     }
                 });
@@ -264,7 +260,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 component.triggerEl.each(function(e) {
                     if (e.isVisible()) {
                         allTriggersHidden = false;
-                        
+
                         return false;
                     }
                 });
@@ -280,7 +276,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 component.triggerEl.each(function(e) {
                     if (!e.isVisible()) {
                         allTriggersVisible = false;
-                        
+
                         return false;
                     }
                 });
@@ -303,7 +299,7 @@ topSuite("Ext.form.field.Trigger", function() {
                     component.triggerEl.each(function(e) {
                         if (e.isVisible()) {
                             allTriggersHidden = false;
-                            
+
                             return false;
                         }
                     });
@@ -325,7 +321,7 @@ topSuite("Ext.form.field.Trigger", function() {
                     component.triggerEl.each(function(e) {
                         if (!e.isVisible()) {
                             allTriggersVisible = false;
-                            
+
                             return false;
                         }
                     });
@@ -334,7 +330,6 @@ topSuite("Ext.form.field.Trigger", function() {
             });
         });
     });
-
 
     describe("editable", function() {
         describe("editable config", function() {
@@ -375,7 +370,6 @@ topSuite("Ext.form.field.Trigger", function() {
             });
         });
     });
-
 
     describe("readOnly", function() {
         var spy;
@@ -498,13 +492,13 @@ topSuite("Ext.form.field.Trigger", function() {
             });
         });
     });
-    
+
     // Focus issues in the test runner
     (Ext.isWebKit ? describe : xdescribe)("focus/blur", function() {
         it("should blur when focusing another field", function() {
             var called = false,
                 tf;
-            
+
             makeComponent({
                 renderTo: Ext.getBody(),
                 listeners: {
@@ -513,11 +507,11 @@ topSuite("Ext.form.field.Trigger", function() {
                     }
                 }
             });
-        
+
             tf = new Ext.form.field.Text({
                 renderTo: Ext.getBody()
             });
-            
+
             component.focus();
             expect(component.hasFocus).toBe(true);
             tf.focus();
@@ -536,7 +530,7 @@ topSuite("Ext.form.field.Trigger", function() {
             makeComponent({
                 renderTo: Ext.getBody()
             });
-        
+
             component.focus();
             component.on('blur', function() {
                 called = true;
@@ -544,24 +538,23 @@ topSuite("Ext.form.field.Trigger", function() {
 
             jasmine.fireMouseEvent(component.getTrigger('trigger1').el.dom, 'click');
 
-
             expect(called).toBe(false);
             expect(component.hasFocus).toBe(true);
             expect(Ext.Element.getActiveElement()).toBe(component.inputEl.dom);
         });
     });
-    
+
     describe("trigger classes", function() {
         function triggerEvent(type, idx, x, y, button) {
             var el = component.triggerEl.item(idx);
 
             jasmine.fireMouseEvent(el.dom, type, x, y, button);
         }
-        
+
         function hasCls(cls, idx) {
             return component.triggerEl.item(idx).hasCls(cls);
         }
-        
+
         // Need to trigger different synthetic events for IE
         var overEvent = Ext.supports.MouseEnterLeave ? 'mouseenter' : 'mouseover',
             outEvent = Ext.supports.MouseEnterLeave ? 'mouseleave' : 'mouseout',
@@ -573,31 +566,31 @@ topSuite("Ext.form.field.Trigger", function() {
                     renderTo: Ext.getBody()
                 });
             });
-            
+
             itNotTouch("should add the base overCls on mouseover", function() {
                 triggerEvent(overEvent, 0);
                 expect(hasCls(baseCls + '-over', 0)).toBe(true);
             });
-        
+
             itNotTouch("should remove the base overCls on mouseout", function() {
                 triggerEvent(overEvent, 0);
                 triggerEvent(outEvent, 0);
                 expect(hasCls(baseCls + '-over', 0)).toBe(false);
             });
-        
+
             it("should add the base clickCls on mousedown", function() {
                 triggerEvent('mousedown', 0);
                 expect(hasCls(baseCls + '-click', 0)).toBe(true);
                 triggerEvent('mouseup', 0);
             });
-        
+
             it("should remove the base clickCls on mouseup", function() {
                 triggerEvent('mousedown', 0);
                 triggerEvent('mouseup', 0);
                 expect(hasCls(baseCls + '-click', 0)).toBe(false);
             });
         });
-        
+
         describe("multi trigger", function() {
             beforeEach(function() {
                 makeComponent({
@@ -606,31 +599,31 @@ topSuite("Ext.form.field.Trigger", function() {
                     onTrigger2Click: Ext.emptyFn
                 });
             });
-            
+
             itNotTouch("should add the base overCls on mouseover to the 2nd trigger", function() {
                 triggerEvent(overEvent, 1);
                 expect(hasCls(baseCls + '-over', 1)).toBe(true);
             });
-        
+
             itNotTouch("should remove the base overCls on mouseout", function() {
                 triggerEvent(overEvent, 1);
                 triggerEvent(outEvent, 1);
                 expect(hasCls(baseCls + '-over', 1)).toBe(false);
             });
-        
+
             it("should add the base clickCls on mousedown", function() {
                 triggerEvent('mousedown', 1);
                 expect(hasCls(baseCls + '-click', 1)).toBe(true);
                 triggerEvent('mouseup', 1);
             });
-        
+
             it("should remove the base clickCls on mouseup", function() {
                 triggerEvent('mousedown', 1);
                 triggerEvent('mouseup', 1);
                 expect(hasCls(baseCls + '-click', 1)).toBe(false);
             });
         });
-        
+
         describe("custom trigger cls", function() {
             it("should add a custom overCls on mouseover if specified", function() {
                 makeComponent({
@@ -640,7 +633,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 triggerEvent(overEvent, 0);
                 expect(hasCls('bar-over', 0)).toBe(true);
             });
-            
+
             it("should remove a custom overCls on mouseout if specified", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
@@ -650,7 +643,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 triggerEvent(outEvent, 0);
                 expect(hasCls('bar-over', 0)).toBe(false);
             });
-            
+
             it("should add a custom clickCls on mousedown if specified", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
@@ -660,7 +653,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 expect(hasCls('bar-click', 0)).toBe(true);
                 triggerEvent('mouseup', 0);
             });
-            
+
             it("should remove a custom clickCls on mouseup if specified", function() {
                 makeComponent({
                     renderTo: Ext.getBody(),
@@ -670,7 +663,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 triggerEvent('mouseup', 0);
                 expect(hasCls('bar-click', 0)).toBe(false);
             });
-            
+
             it("should not attempt to add an overCls if none exists", function() {
                 makeComponent({
                     renderTo: Ext.getBody()
@@ -678,7 +671,7 @@ topSuite("Ext.form.field.Trigger", function() {
                 triggerEvent(overEvent, 0);
                 expect(hasCls('undefined-over', 0)).toBe(false);
             });
-            
+
             it("should not attempt to add a clickCls if none exists", function() {
                 makeComponent({
                     renderTo: Ext.getBody()

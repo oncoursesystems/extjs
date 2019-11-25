@@ -18,22 +18,30 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/DataChangesController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
     }],
     profiles: {
         classic: {
             width: 600,
-            height: 550
+            height: 550,
+            columnLines: true
         },
         neptune: {
             width: 750,
-            height: 600
+            height: 600,
+            columnLines: true
         },
         graphite: {
             width: 950,
-            height: 600
+            height: 600,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 600,
+            height: 600,
+            columnLines: false
         }
     },
     //</example>
@@ -45,6 +53,7 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
     height: '${height}',
     collapsible: true,
     multiSelect: true,
+    columnLines: '${columnLines}',
 
     selModel: {
         type: 'spreadsheet'
@@ -72,7 +81,7 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
             dataIndex: 'value',
             header: 'Total',
             aggregator: 'sum'
-        },{
+        }, {
             dataIndex: 'value',
             header: 'Count',
             aggregator: 'count'
@@ -106,13 +115,13 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
     tbar: [{
         text: 'Add data',
         handler: 'onAddData'
-    },{
+    }, {
         text: 'Update data',
         handler: 'onUpdateData'
-    },{
+    }, {
         text: 'Remove data',
         handler: 'onRemoveData'
-    },{
+    }, {
         text: 'Clear all data',
         handler: 'onClearData'
     }]

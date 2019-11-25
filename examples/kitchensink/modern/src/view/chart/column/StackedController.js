@@ -2,14 +2,16 @@ Ext.define('KitchenSink.view.chart.column.StackedController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.column-stacked',
 
-    init: function (view) {
+    init: function(view) {
+        var chart, interaction, button, segButton, toolbar;
+
         this.callParent([view]);
 
-        var toolbar = view.child('toolbar');
+        toolbar = view.child('toolbar');
 
         if (Ext.supports.Touch) {
             if (Ext.platformTags.phone) {
-                var segButton = toolbar.getAt(2);
+                segButton = toolbar.getAt(2);
 
                 toolbar.insert(2, {
                     xtype: 'component',
@@ -19,22 +21,23 @@ Ext.define('KitchenSink.view.chart.column.StackedController', {
 
                 segButton.setMargin(null);
             }
-        } else {
+        }
+        else {
             /**
              * Touch devices do not need the toggle buttons
              * as the panzoom interaction can determine which
              * interaction to use based on how many touches.
              * 1 touch point is a pan, 2 touch points is a zoom.
              */
-            var chart = view.lookup('chart'),
-                interaction = chart.getInteraction('panzoom'),
-                button = interaction.getModeToggleButton();
+            chart = view.lookup('chart');
+            interaction = chart.getInteraction('panzoom');
+            button = interaction.getModeToggleButton();
 
             toolbar.add(button);
         }
     },
 
-    onStackedToggle: function (segmentedButton, button, pressed) {
+    onStackedToggle: function(segmentedButton, button, pressed) {
         var chart = this.lookup('chart'),
             series = chart.getSeries()[0],
             value = segmentedButton.getValue();

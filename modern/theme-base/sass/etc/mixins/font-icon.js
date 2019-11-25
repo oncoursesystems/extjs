@@ -31,6 +31,7 @@ exports.init = function(runtime) {
                 else if (len === 3) {
                     if (items[1].$isFashionNumber) {
                         newItems[1] = items[1];
+
                         if (items[2].$isFashionNumber) {
                             newItems[3] = items[2];
                         }

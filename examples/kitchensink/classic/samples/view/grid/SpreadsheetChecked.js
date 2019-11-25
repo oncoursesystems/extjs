@@ -24,10 +24,10 @@ Ext.define('KitchenSink.view.grid.SpreadsheetChecked', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/grid/SpreadsheetController.js'
-    },{
+    }, {
         type: 'Store',
         path: 'app/store/MonthlySales.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/MonthlySales.js'
     }],
@@ -53,6 +53,10 @@ Ext.define('KitchenSink.view.grid.SpreadsheetChecked', {
             columnWidth: 50
         },
         graphite: {
+            width: 930,
+            columnWidth: 65
+        },
+        'classic-material': {
             width: 930,
             columnWidth: 65
         }
@@ -107,20 +111,20 @@ Ext.define('KitchenSink.view.grid.SpreadsheetChecked', {
         reference: 'status'
     }],
 
-    columns:[
+    columns: [
         { text: 'Year', dataIndex: 'year', flex: 1, minWidth: 70 },
-        { text: 'Jan',  dataIndex: 'jan', width: '${columnWidth}' },
-        { text: 'Feb',  dataIndex: 'feb', width: '${columnWidth}' },
-        { text: 'Mar',  dataIndex: 'mar', width: '${columnWidth}' },
-        { text: 'Apr',  dataIndex: 'apr', width: '${columnWidth}' },
-        { text: 'May',  dataIndex: 'may', width: '${columnWidth}' },
-        { text: 'Jun',  dataIndex: 'jun', width: '${columnWidth}' },
-        { text: 'Jul',  dataIndex: 'jul', width: '${columnWidth}' },
-        { text: 'Aug',  dataIndex: 'aug', width: '${columnWidth}' },
-        { text: 'Sep',  dataIndex: 'sep', width: '${columnWidth}' },
-        { text: 'Oct',  dataIndex: 'oct', width: '${columnWidth}' },
-        { text: 'Nov',  dataIndex: 'nov', width: '${columnWidth}' },
-        { text: 'Dec',  dataIndex: 'dec', width: '${columnWidth}' }
+        { text: 'Jan', dataIndex: 'jan', width: '${columnWidth}' },
+        { text: 'Feb', dataIndex: 'feb', width: '${columnWidth}' },
+        { text: 'Mar', dataIndex: 'mar', width: '${columnWidth}' },
+        { text: 'Apr', dataIndex: 'apr', width: '${columnWidth}' },
+        { text: 'May', dataIndex: 'may', width: '${columnWidth}' },
+        { text: 'Jun', dataIndex: 'jun', width: '${columnWidth}' },
+        { text: 'Jul', dataIndex: 'jul', width: '${columnWidth}' },
+        { text: 'Aug', dataIndex: 'aug', width: '${columnWidth}' },
+        { text: 'Sep', dataIndex: 'sep', width: '${columnWidth}' },
+        { text: 'Oct', dataIndex: 'oct', width: '${columnWidth}' },
+        { text: 'Nov', dataIndex: 'nov', width: '${columnWidth}' },
+        { text: 'Dec', dataIndex: 'dec', width: '${columnWidth}' }
     ],
     forceFit: true,
 

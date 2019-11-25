@@ -266,7 +266,7 @@ Ext.define('Ext.list.Tree', {
             //
             for (c = wasOver; c; c = this.getItem(node.parentNode)) {
                 node = c.getNode();
-                
+
                 if (map[node.internalId]) {
                     break;
                 }
@@ -282,7 +282,7 @@ Ext.define('Ext.list.Tree', {
 
     applySelection: function(selection, oldSelection) {
         var store = this.getStore();
-        
+
         if (!store) {
             selection = null;
         }
@@ -294,7 +294,7 @@ Ext.define('Ext.list.Tree', {
         if (selection && selection.get('selectable') === false) {
             selection = oldSelection;
         }
-        
+
         return selection;
     },
 
@@ -307,13 +307,13 @@ Ext.define('Ext.list.Tree', {
             // getItem has guards around null, so we don't
             // need to check for oldSelection/selection here
             item = me.getItem(oldSelection);
-            
+
             if (item) {
                 item.setSelected(false);
             }
 
             item = me.getItem(selection);
-            
+
             if (item) {
                 item.setSelected(true);
 
@@ -322,7 +322,7 @@ Ext.define('Ext.list.Tree', {
                     item = parent;
                 }
             }
-            
+
             me.fireEvent('selectionchange', me, selection);
         }
     },
@@ -345,7 +345,7 @@ Ext.define('Ext.list.Tree', {
                     me.storeListeners.destroy();
                 }
             }
-            
+
             me.removeRoot();
             me.storeListeners = null;
         }
@@ -365,7 +365,7 @@ Ext.define('Ext.list.Tree', {
             });
 
             root = store.getRoot();
-            
+
             if (root) {
                 me.createRootItem(root);
             }
@@ -407,7 +407,7 @@ Ext.define('Ext.list.Tree', {
         if (oldValue) {
             el.removeCls(uiPrefix + oldValue);
         }
-        
+
         if (ui) {
             el.addCls(uiPrefix + ui);
         }
@@ -460,7 +460,7 @@ Ext.define('Ext.list.Tree', {
     privates: {
         checkForOutsideClick: function(e) {
             var floater = this.activeFloater;
-            
+
             if (!floater.element.contains(e.target)) {
                 this.unfloatAll();
             }
@@ -484,10 +484,10 @@ Ext.define('Ext.list.Tree', {
 
             if (parent.isRootListItem) {
                 toolEl = item.getToolElement();
-                
+
                 if (toolEl) {
                     previousSibling = me.findVisiblePreviousSibling(node);
-                    
+
                     if (!previousSibling) {
                         toolsElement.insertFirst(toolEl);
                     }
@@ -495,14 +495,14 @@ Ext.define('Ext.list.Tree', {
                         previousSibling = me.getItem(previousSibling);
                         toolEl.insertAfter(previousSibling.getToolElement());
                     }
-                    
+
                     toolEl.dom.setAttribute('data-recordId', node.internalId);
                     toolEl.isTool = true;
                 }
             }
 
             me.itemMap[node.internalId] = item;
-            
+
             return item;
         },
 
@@ -530,15 +530,15 @@ Ext.define('Ext.list.Tree', {
 
         findVisiblePreviousSibling: function(node) {
             var sibling = node.previousSibling;
-            
+
             while (sibling) {
                 if (sibling.data.visible) {
                     return sibling;
                 }
-                
+
                 sibling = sibling.previousSibling;
             }
-            
+
             return null;
         },
 
@@ -575,7 +575,7 @@ Ext.define('Ext.list.Tree', {
                     item.getToolElement().monitorMouseLeave(300, me.checkForMouseLeave, me);
                 me.floaterMouseListeners =
                     (item.floater || item).el.monitorMouseLeave(300, me.checkForMouseLeave, me);
-                
+
                 floater.element.on('mouseover', 'onMouseOver', me);
             }
             else {
@@ -607,7 +607,7 @@ Ext.define('Ext.list.Tree', {
             if (item) {
                 id = item.getAttribute('data-recordId');
                 item = me.itemMap[id];
-                
+
                 if (item && me.shouldRippleItem(item, e)) {
                     this.rippleItem(item, e);
                 }
@@ -627,7 +627,7 @@ Ext.define('Ext.list.Tree', {
             if (item) {
                 id = item.getAttribute('data-recordId');
                 item = this.itemMap[id];
-                
+
                 if (item) {
                     item.onClick(e);
                 }
@@ -669,7 +669,7 @@ Ext.define('Ext.list.Tree', {
          */
         onNodeAppend: function(parentNode, node) {
             var item;
-            
+
             // If it's a root we'll handle it on rootchange
             if (parentNode) {
                 item = this.itemMap[parentNode.internalId];
@@ -710,15 +710,15 @@ Ext.define('Ext.list.Tree', {
                     me.collapsingForExpand = true;
                     parentNode = (item.getParentItem() || me.rootItem).getNode();
                     childNodes = parentNode.childNodes;
-                    
+
                     for (i = 0, len = childNodes.length; i < len; ++i) {
                         child = childNodes[i];
-                        
+
                         if (child !== node) {
                             child.collapse();
                         }
                     }
-                    
+
                     me.collapsing = false;
                 }
 
@@ -752,7 +752,7 @@ Ext.define('Ext.list.Tree', {
          */
         onNodeRemove: function(parentNode, node, isMove) {
             var item;
-            
+
             // If it's a move we don't need to do anything, we won't process it
             // as a removal, the addition will handle it all.
             // Also if the node being removed is the root we'll handle it in rootchange
@@ -826,16 +826,16 @@ Ext.define('Ext.list.Tree', {
 
             if (map) {
                 item = map[id];
-                
+
                 // If it's null, it means it's a root level item
                 if (item.getParentItem() === null) {
                     toolEl = item.getToolElement();
-                    
+
                     if (toolEl) {
                         this.toolsElement.removeChild(toolEl);
                     }
                 }
-                
+
                 delete map[id];
             }
         },
@@ -863,7 +863,7 @@ Ext.define('Ext.list.Tree', {
             if (item) {
                 id = item.getAttribute('data-recordId');
                 item = this.itemMap[id];
-                
+
                 if (item) {
                     if (item === this.activeFloater) {
                         this.unfloatAll();
@@ -888,7 +888,7 @@ Ext.define('Ext.list.Tree', {
             if (item) {
                 id = item.getAttribute('data-recordId');
                 item = this.itemMap[id];
-                
+
                 if (item) {
                     this.floatItem(item, true);
                 }
@@ -918,7 +918,7 @@ Ext.define('Ext.list.Tree', {
 
                         me.floaterMouseListeners = me.toolMouseListeners = null;
                     }
-                    
+
                     floater.element.un('mouseover', 'onMouseOver', me);
                 }
                 else {

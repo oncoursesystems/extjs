@@ -18,10 +18,10 @@ Ext.define('KitchenSink.view.pivot.Locked', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/LayoutController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
@@ -30,19 +30,29 @@ Ext.define('KitchenSink.view.pivot.Locked', {
             width: 600,
             height: 350,
             totalColumnWidth: 90,
-            companyColumnWidth: 80
+            companyColumnWidth: 80,
+            columnLines: true
         },
         neptune: {
             width: 750,
             height: 350,
             totalColumnWidth: 90,
-            companyColumnWidth: 80
+            companyColumnWidth: 80,
+            columnLines: true
         },
         graphite: {
             width: 750,
             height: 600,
             totalColumnWidth: 130,
-            companyColumnWidth: 110
+            companyColumnWidth: 110,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 750,
+            height: 600,
+            totalColumnWidth: 130,
+            companyColumnWidth: 110,
+            columnLines: false
         }
     },
     //</example>
@@ -52,6 +62,7 @@ Ext.define('KitchenSink.view.pivot.Locked', {
     height: '${height}',
     collapsible: true,
     multiSelect: true,
+    columnLines: '${columnLines}',
 
     selModel: {
         type: 'rowmodel'
@@ -117,11 +128,11 @@ Ext.define('KitchenSink.view.pivot.Locked', {
         menu: [{
             text: 'Collapse all',
             handler: 'collapseAll'
-        },{
+        }, {
             text: 'Expand all',
             handler: 'expandAll'
         }]
-    },{
+    }, {
         text: 'Subtotals position',
         menu: {
             defaults: {
@@ -132,13 +143,13 @@ Ext.define('KitchenSink.view.pivot.Locked', {
             items: [{
                 text: 'First',
                 checked: true
-            },{
+            }, {
                 text: 'Last'
-            },{
+            }, {
                 text: 'None'
             }]
         }
-    },{
+    }, {
         text: 'Totals position',
         menu: {
             defaults: {
@@ -148,10 +159,10 @@ Ext.define('KitchenSink.view.pivot.Locked', {
             },
             items: [{
                 text: 'First'
-            },{
+            }, {
                 text: 'Last',
                 checked: true
-            },{
+            }, {
                 text: 'None'
             }]
         }

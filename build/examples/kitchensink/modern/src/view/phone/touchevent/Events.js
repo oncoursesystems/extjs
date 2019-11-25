@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.phone.touchevent.Events', {
         'KitchenSink.view.touchevent.Pad'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/phone/touchevent/EventsController.js'
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.phone.touchevent.Events', {
         type: 'Pad',
         path: 'modern/src/view/touchevent/Pad.js'
     }],
-    // </example>
+    //</example>
 
     layout: {
         type: 'vbox',

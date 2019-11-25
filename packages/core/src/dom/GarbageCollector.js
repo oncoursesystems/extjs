@@ -23,7 +23,7 @@ Ext.define('Ext.dom.GarbageCollector', {
 
         me.lastTime = Ext.now();
         me.onTick = me.onTick.bind(me);
-        
+
         //<debug>
         me.onTick.$skipTimerCheck = true;
         //</debug>
@@ -43,7 +43,7 @@ Ext.define('Ext.dom.GarbageCollector', {
         var me = this,
             cache = Ext.cache,
             eid, dom, el, t, isGarbage, tagName;
-        
+
         //<debug>
         var collectedIds = []; // eslint-disable-line vars-on-top, one-var
         //</debug>
@@ -67,7 +67,7 @@ Ext.define('Ext.dom.GarbageCollector', {
                 Ext.raise('Missing DOM node in element garbage collection: ' + eid);
             }
             //</debug>
-            
+
             try {
                 // In IE, accessing any properties of the window object of an orphaned iframe
                 // can result in a "Permission Denied" error.  The same error also occurs
@@ -87,35 +87,35 @@ Ext.define('Ext.dom.GarbageCollector', {
                 //</debug>
                 continue;
             }
-            
+
             if (isGarbage) {
                 isGarbage = false;
-                
+
                 if (el && el.dom) {
                     //<debug>
                     tagName = el.dom.tagName;
                     //</debug>
-                    
+
                     el.collect();
-                    
+
                     //<debug>
                     collectedIds.push((tagName ? tagName : '') + '#' + el.id);
                     //</debug>
                 }
             }
         }
-        
+
         //<feature legacyBrowser>
         // Cleanup IE Object leaks
         if (Ext.isIE9m) {
             t = {};
-            
+
             for (eid in cache) {
                 if (cache.hasOwnProperty(eid)) {
                     t[eid] = cache[eid];
                 }
             }
-            
+
             Ext.cache = Ext.dom.Element.cache = t;
         }
         //</feature>

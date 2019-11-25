@@ -7,6 +7,8 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
     requires: [
         'Ext.data.summary.Average',
 
+        'Ext.grid.filters.Plugin',
+
         'Ext.grid.plugin.Editable',
         'Ext.grid.plugin.ViewOptions',
         'Ext.grid.plugin.PagingToolbar',
@@ -20,7 +22,7 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
         'Ext.ux.rating.Picker'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/grid/advanced/BigDataController.js'
@@ -31,10 +33,21 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
         type: 'Model',
         path: 'modern/src/model/Employee.js'
     }],
-    // </example>
+    //</example>
 
     grouped: true,
     rowLines: true,
+
+    collapsible: {
+        // Show the group footer when collapsed:
+        footer: true,
+
+        // Move the collapse tool from the far right to just after
+        // the group header text
+        tool: {
+            zone: 'tail'
+        }
+    },
 
     plugins: {
         grideditable: true,
@@ -123,7 +136,10 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
             type: 'grid-bigdata-row'
         },
         body: {
-            tpl: '<img src="{avatar}" height="100px" style="float:left;margin:0 10px 5px 0"><b>{name}<br></b>{dob:date}'
+            tpl: [
+                '<img src="{avatar}" height="100px" style="float:left;margin:0 10px 5px 0">',
+                '<b>{name}<br></b>{dob:date}'
+            ]
         }
     },
 
@@ -141,6 +157,7 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
         dataIndex: 'employeeNo',
         flex: 1,
         minWidth: 100,
+        summary: 'none',
         exportStyle: {
             format: 'General Number',
             alignment: {
@@ -197,7 +214,6 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
         dataIndex: 'dob',
         editable: true,
         xtype: 'datecolumn',
-        format: 'd-m-Y',
         width: 115,
         // you can define an export style for a column
         // you can set alignment, format etc
@@ -247,7 +263,6 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
         dataIndex: 'joinDate',
         editable: true,
         xtype: 'datecolumn',
-        format: 'd-m-Y',
         width: 115,
         exportStyle: {
             format: 'Medium Date',
@@ -317,7 +332,12 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
         text: 'Salary',
         dataIndex: 'salary',
         formatter: 'usMoney',
-        editable: true,
+        editor: {
+            xtype: 'numberfield',
+            validators: [
+                { type: 'bound', max: 1e7, min: 1e4 }
+            ]
+        },
         width: 150,
         align: 'right',
         summary: 'average',

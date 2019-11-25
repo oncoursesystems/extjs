@@ -6,18 +6,18 @@ topSuite("Ext.data.virtual.Store", function() {
         extend: 'Ext.data.Model',
         fields: ['id', 'group', 'rate']
     });
-    
+
     beforeAll(function() {
         Ext.data.operation.Operation.prototype.clearPrototypeOnDestroy = false;
         Ext.data.operation.Operation.prototype.clearPropertiesOnDestroy = false;
-        
+
         // Stack capture is expensive
         oldJasmineCaptureStack = jasmine.CAPTURE_CALL_STACK;
         oldTimerCaptureStack = Ext.Timer.captureStack;
         jasmine.CAPTURE_CALL_STACK = false;
         Ext.Timer.captureStack = false;
     });
-    
+
     afterAll(function() {
         delete Ext.data.operation.Operation.prototype.clearPrototypeOnDestroy;
         delete Ext.data.operation.Operation.prototype.clearPropertiesOnDestroy;
@@ -395,6 +395,26 @@ topSuite("Ext.data.virtual.Store", function() {
                 });
             });
         });
+
+        describe("range for 0 records", function() {
+            it("should reload store with 0 record", function() {
+                // Loading store with total count of 5000
+                store.reload();
+                completeLatest();
+                flushNextLoad();
+                expect(store.getCount()).toBe(5000);
+
+                // reload store with total count of 0
+                total = 0;
+                store.reload();
+                completeLatest();
+
+                // https://sencha.jira.com/browse/EXTJS-27063
+                // This proves that no error is thrown for 0 record
+                expect(range.goto(0, 1)).toBeUndefined();
+                expect(store.getCount()).toBe(0);
+            });
+        });
     });
 
     describe("totalcountchange", function() {
@@ -530,7 +550,7 @@ topSuite("Ext.data.virtual.Store", function() {
                     f = op.getFilters();
 
                 expect(op.getPage()).toBe(page);
-                
+
                 if (!filter) {
                     expect(f.length).toBe(0);
                 }
@@ -1025,7 +1045,7 @@ topSuite("Ext.data.virtual.Store", function() {
                     s = op.getSorters();
 
                 expect(op.getPage()).toBe(page);
-                
+
                 if (!sorter) {
                     expect(s.length).toBe(0);
                 }
@@ -1609,7 +1629,7 @@ topSuite("Ext.data.virtual.Store", function() {
                 var op = spyCall.args[0];
 
                 expect(op.getPage()).toBe(page);
-                
+
                 if (grouper) {
                     expect(op.getGrouper().serialize()).toEqual(grouper);
                 }
@@ -2708,4 +2728,160 @@ topSuite("Ext.data.virtual.Store", function() {
         });
     });
 
+    describe("autoLoad", function() {
+       it("should not load the store when autoLoad is undefined", function() {
+            makeStore({
+               autoLoad: false
+           });
+
+           expect(Ext.Ajax.mockGetAllRequests().length).toBe(0);
+       });
+
+       it("should not load the store when autoLoad is false", function() {
+            makeStore({
+               autoLoad: false
+           });
+
+           expect(Ext.Ajax.mockGetAllRequests().length).toBe(0);
+       });
+
+       it("should load the store when autoLoad is true", function() {
+            makeStore({
+               autoLoad: true
+           });
+
+           expect(Ext.Ajax.mockGetAllRequests().length).toBe(1);
+       });
+   });
+
+    describe("events", function() {
+       beforeEach(function() {
+                makeStore();
+                makeRange({
+                    prefetch: true
+                });
+
+              total = 500;
+              range.goto(100, 200);
+        });
+
+        it('should fire beforeload event', function() {
+             var spy = jasmine.createSpy();
+
+            store.on('beforeload', spy);
+            flushAllLoads();
+            expect(spy).toHaveBeenCalled();
+        });
+
+        it('should fire load event', function() {
+            var spy = jasmine.createSpy();
+
+            store.on('load', spy);
+            expect(spy).not.toHaveBeenCalled();
+            flushAllLoads();
+            expect(spy).toHaveBeenCalled();
+        });
+
+        it('should fire beforesort event', function() {
+            var spy = jasmine.createSpy();
+
+            store.on('beforesort', spy);
+            store.sort('group', 'ASC');
+            completeReload();
+            flushAllLoads();
+            expect(spy.callCount).toBe(1);
+        });
+
+        it('should fire sort event', function() {
+            var spy = jasmine.createSpy();
+
+            store.on('sort', spy);
+            store.sort('group', 'ASC');
+            completeReload();
+            flushAllLoads();
+            expect(spy.callCount).toBe(1);
+        });
+
+        it('should fire update event', function() {
+            var spy = jasmine.createSpy(),
+                rec;
+
+            store.on('update', spy);
+            total = 1000;
+            range.goto(0, 500);
+            flushAllLoads();
+            expect(spy).not.toHaveBeenCalled();
+            rec = store.getAt(100);
+            rec.set('id', 9999);
+            expect(spy.callCount).toBe(1);
+        });
+
+        it('should fire datachanged event', function() {
+            var spy = jasmine.createSpy(),
+                rec;
+
+            store.on('datachanged', spy);
+            total = 1000;
+            range.goto(0, 500);
+            flushAllLoads();
+            expect(spy).not.toHaveBeenCalled();
+            rec = store.getAt(120);
+            rec.set('id', 9999);
+            expect(spy.callCount).toBe(1);
+        });
+
+        it('should fire clear event', function() {
+            var spy = jasmine.createSpy();
+
+            store.on('clear', spy);
+            total = 1000;
+            range.goto(0, 500);
+            flushAllLoads();
+            expect(spy).not.toHaveBeenCalled();
+            store.removeAll();
+            expect(spy.callCount).toBe(1);
+        });
+
+        xit('should fire beforesync event', function() {
+            var spy = jasmine.createSpy(),
+                rec;
+
+            store.on('beforesync', spy);
+            total = 1000;
+            range.goto(0, 500);
+            flushAllLoads();
+
+            expect(spy).not.toHaveBeenCalled();
+            rec = store.getAt(120);
+            rec.set('id', 9999);
+            store.sync();
+            expect(spy.callCount).toBe(1);
+        });
+
+        it('should not fire load event if beforeload returns false', function() {
+            flushAllLoads();
+            proxySpy.reset();
+
+            store.on('beforeload', function() {
+                return false;
+            });
+            store.reload();
+
+            expect(proxySpy).not.toHaveBeenCalled();
+        });
+
+        it('should return store and operation', function() {
+            var virtualStore, op;
+
+            store.on('beforeload', function(vstore, operation) {
+                virtualStore = vstore;
+                op = operation;
+            });
+            flushAllLoads();
+            completeReload();
+
+            expect(store).toEqual(virtualStore);
+            expect(op).not.toBeNull();
+        });
+    });
 });

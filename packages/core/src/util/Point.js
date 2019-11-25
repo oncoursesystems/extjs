@@ -10,7 +10,7 @@ Ext.define('Ext.util.Point', {
     isPoint: true,
 
     radianToDegreeConstant: 180 / Math.PI,
-    
+
     origin: { x: 0, y: 0 },
 
     statics: {

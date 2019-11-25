@@ -22,7 +22,7 @@ topSuite("Ext.chart.AbstractChart", ['Ext.chart.*', 'Ext.data.ArrayStore'], func
             data: data
         });
     }
-    
+
     beforeEach(function() {
         // Tons of warnings regarding Sencha download server in the console
         spyOn(Ext.log, 'warn');

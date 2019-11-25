@@ -170,7 +170,7 @@ Ext.define('Ext.util.ElementContainer', {
                 if (newValue instanceof Array) {
                     for (i = newValue.length; i--;) {
                         val = newValue[i];
-                        
+
                         if (!mixinClass || !(val in childEls)) {
                             if (typeof val === 'string') {
                                 childEls[val] = { name: val, itemId: val };
@@ -186,7 +186,7 @@ Ext.define('Ext.util.ElementContainer', {
                         for (i in newValue) {
                             if (!mixinClass || !(i in childEls)) {
                                 val = newValue[i];
-                                
+
                                 if (val === true) {
                                     childEls[i] = { itemId: i };
                                 }
@@ -195,12 +195,12 @@ Ext.define('Ext.util.ElementContainer', {
                                 }
                                 else {
                                     childEls[i] = val;
-                                    
+
                                     if (!('itemId' in val)) {
                                         val.itemId = i;
                                     }
                                 }
-                                
+
                                 childEls[i].name = i;
                             }
                         }
@@ -230,7 +230,7 @@ Ext.define('Ext.util.ElementContainer', {
                     child.component = null;
                     child.destroy();
                 }
-                
+
                 me[childName] = null;
             }
         }
@@ -293,13 +293,13 @@ Ext.define('Ext.util.ElementContainer', {
             for (childName in childEls) {
                 // hasOwnProperty is a no-go here since we use prototype chains...
                 entry = childEls[childName];
-                
+
                 if (unframed && entry.frame) {
                     continue;
                 }
 
                 selector = entry.select;
-                
+
                 if (selector) {
                     value = el.select(selector, true); // a CompositeElement
                 }
@@ -327,7 +327,7 @@ Ext.define('Ext.util.ElementContainer', {
                     }
                     else if (value.isComposite && !value.isLite) {
                         elements = value.elements;
-                        
+
                         for (k = elements.length; k--;) {
                             elements[k].component = comp;
                         }

@@ -16,7 +16,7 @@ Ext.define('Ext.util.Region', function() {
         // So 'tl-br' is equal to 't0-b100'.
         // The offset factor defaults to 'c' or 50 meaning the 't-b' is equivalent to
         // 't50-b50' or 'tc-bc'
-        
+
         LTROffsetFactors = { l: 0, r: 100, t: 0, b: 100, c: 50 },
         RTLOffsetFactors = { l: 100, r: 0, t: 0, b: 100, c: 50 },
         relativePositions = { b: 0, l: 1, t: 2, r: 3 },
@@ -94,7 +94,7 @@ Ext.define('Ext.util.Region', function() {
         },
 
         magnitude = [-1, 1, 1, -1],
-        
+
         // Depending on the "relativePosition" which will be 0,1,2 or 3 for T,R,B,L
         // extend the adjacent edge of the target to account for the offset.
         // Also, shrink the adjacent edge to create overlap for the anchor to center in.
@@ -162,7 +162,7 @@ Ext.define('Ext.util.Region', function() {
 
                     isBefore = relativePosition === 3;
                     x = isBefore ? result.right : result.left;
-                    
+
                     // eslint-disable-next-line max-len
                     overlapLine = new ExtUtil.Region(Math.max(result.top, target.top), x, Math.min(result.bottom, target.bottom), x);
 
@@ -201,7 +201,7 @@ Ext.define('Ext.util.Region', function() {
                     // If there is not enough overlap. coerce the result to create enough overlap
                     isBefore = relativePosition === 0;
                     y = isBefore ? result.bottom : result.top;
-                    
+
                     // eslint-disable-next-line max-len
                     overlapLine = new ExtUtil.Region(y, Math.min(result.right, target.right), y, Math.max(result.left, target.left));
 
@@ -335,7 +335,7 @@ Ext.define('Ext.util.Region', function() {
             // Convert left to right alignments which are specified using top/bottom
             // corner definitions.
             align = (rtl ? rtlAlignMap : alignMap)[align] || align;
-            
+
             // eslint-disable-next-line vars-on-top
             var offsetFactors = rtl ? RTLOffsetFactors : LTROffsetFactors,
                 constrain,
@@ -521,7 +521,7 @@ Ext.define('Ext.util.Region', function() {
      */
     getOutOfBoundOffset: function(axis, p) {
         var d;
-        
+
         if (!Ext.isObject(axis)) {
             if (axis === 'x') {
                 return this.getOutOfBoundOffsetX(p);
@@ -623,7 +623,7 @@ Ext.define('Ext.util.Region', function() {
      */
     restrict: function(axis, p, factor) {
         var newP;
-        
+
         if (Ext.isObject(axis)) {
             factor = p;
             p = axis;
@@ -820,7 +820,7 @@ Ext.define('Ext.util.Region', function() {
             }
             //</debug>
         }
-    
+
         if (inside && !inside.isRegion) {
             if (Ext.getDom(inside) === document.body) {
                 inside = new Region(0, Element.getDocumentWidth(), Element.getDocumentHeight(), 0);
@@ -1077,7 +1077,7 @@ Ext.define('Ext.util.Region', function() {
         else {
             centerOnSideChange = false;
         }
-        
+
         /* eslint-enable max-len */
 
         // Sort the exclusion vectors into order, shortest first
@@ -1115,7 +1115,7 @@ Ext.define('Ext.util.Region', function() {
                         position: t[3],
                         distance: t[4]
                     };
-                    
+
                     break;
                 }
 
@@ -1257,19 +1257,19 @@ Ext.define('Ext.util.Region', function() {
     getAnchorPoint_t: function(offset) {
         return [this.x + Math.round(this.getWidth() * (offset / 100)), this.y];
     },
-    
+
     getAnchorPoint_b: function(offset) {
         return [this.x + Math.round(this.getWidth() * (offset / 100)), this.bottom];
     },
-    
+
     getAnchorPoint_l: function(offset) {
         return [this.x, this.y + Math.round(this.getHeight() * (offset / 100))];
     },
-    
+
     getAnchorPoint_r: function(offset) {
         return [this.right, this.y + Math.round(this.getHeight() * (offset / 100))];
     },
-    
+
     getAnchorPoint_c: function() {
         return [this.x + Math.round(this.getWidth() / 2),
                 this.y + Math.round(this.getHeight() / 2)];
@@ -1377,7 +1377,7 @@ Ext.define('Ext.util.Region', function() {
             y = x.y;
             x = x.x;
         }
-        
+
         me.top = me.y += y;
         me.right += x;
         me.bottom += y;
@@ -1433,11 +1433,11 @@ Ext.define('Ext.util.Region', function() {
         });
 
         highlightEl.setBox(this);
-        
+
         Ext.defer(function() {
             highlightEl.destroy();
         }, 5000);
-        
+
         return highlightEl;
     }
     //</debug>
@@ -1445,7 +1445,7 @@ Ext.define('Ext.util.Region', function() {
 }, function(Region) {
     Region.prototype.getAlignInfo = Region.getAlignInfo;
     Region.EMPTY = new Region(0, 0, 0, 0);
-    
+
     //<debug>
     if (Object.freeze) {
         Object.freeze(Region.EMPTY);

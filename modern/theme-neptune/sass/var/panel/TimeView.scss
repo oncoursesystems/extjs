@@ -132,24 +132,63 @@ $timeview-analog-picker-hand-dot-color: dynamic($background-color);
 
         $size: 2px;
         $centerSize: 8px;
-        $outerSize: 40px;
+        $outerSize: 30px;
         $dotSize: 4px;
+
+        .#{$prefix}analog-picker-12hr-format {
+            display: block;
+            padding-left: 12px
+        }
+
+         .#{$prefix}analog-picker-24hr-format {
+            display: none;
+            padding-left: 0
+        }
+
+        .hour-picker-el {
+            &.align-pm-inside {
+                font-size: 14px;
+            }
+
+            &.inner-track {
+                opacity: 0.7;
+            }
+        }
+
+        &.#{$prefix}header-position-left {
+            .#{$prefix}analog-picker-hand-el {
+                &.inner-dial {
+                    width: 30%;
+                }
+            }  
+        }
+
         .#{$prefix}analog-picker-hand-el {
             position: absolute;
             top: 50%;
             left: 50%;
             background-color: $analog-picker-hand-color;
-            width: 48%;
             height: $size;
             transform-origin: center left;
             transform: rotate(0deg);
             margin-top: -$size/2;
+            width: 46%;
 
             .#{$prefix}edge & {
                 background-color: $edge-analog-time-hand-background-color;
 
                 &:before, &:after {
                     background-color: $edge-analog-time-hand-background-color;
+                }
+            }
+
+            &.inner-dial {
+                width: 32%;
+            }
+
+            &.format-24hr {
+                &:after {
+                    box-shadow: 0 0 0 14px $analog-picker-hand-color;
                 }
             }
 

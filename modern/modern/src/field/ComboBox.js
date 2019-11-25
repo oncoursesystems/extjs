@@ -384,6 +384,10 @@ Ext.define('Ext.field.ComboBox', {
         // Keep our config up to date:
         me._inputValue = value;
 
+        if (!me.hasFocus && me.getLabelAlign() === 'placeholder') {
+            me.syncLabelPlaceholder(true);
+        }
+
         if (!me.getForceSelection() || (value === '' && !me.getRequired())) {
             // If we are allowing addition of multiple new values, do so on receipt of
             // the delimiter character.
@@ -895,7 +899,9 @@ Ext.define('Ext.field.ComboBox', {
                 oldFilters = oldStore.getFilters();
 
                 // Filter collection might not exist.
-                oldFilters && oldFilters.remove(primaryFilter);
+                if (oldFilters) {
+                    oldFilters.remove(primaryFilter);
+                }
             }
 
             // Add the primary filter to the (possibly new, but possibly just

@@ -35,7 +35,7 @@ Ext.define('Ext.util.ComponentDragger', {
      * @cfg {Boolean} constrainDelegate
      * Specify as `true` to constrain the drag handles within the {@link #constrainTo} region.
      */
-    
+
     /**
      * @cfg {Boolean} [liveDrag=false]
      * @member Ext.Component
@@ -123,7 +123,7 @@ Ext.define('Ext.util.ComponentDragger', {
             constraintInsets = Ext.isObject(constraintInsets)
                 ? constraintInsets
                 : Ext.Element.parseBox(constraintInsets);
-            
+
             constrainTo.adjust(
                 constraintInsets.top, constraintInsets.right, constraintInsets.bottom,
                 constraintInsets.left
@@ -149,7 +149,7 @@ Ext.define('Ext.util.ComponentDragger', {
                 elRegion.left - delegateRegion.left
             );
         }
-        
+
         return constrainTo;
     },
 
@@ -164,15 +164,15 @@ Ext.define('Ext.util.ComponentDragger', {
 
     onEnd: function(e) {
         var comp = this.comp;
-        
+
         if (comp.destroyed || comp.destroying) {
             return;
         }
-        
+
         if (this.proxy && !comp.liveDrag) {
             comp.unghost();
         }
-        
+
         if (comp.endDrag) {
             comp.endDrag();
         }

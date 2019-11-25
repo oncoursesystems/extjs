@@ -9,12 +9,12 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
             cfg = cfg || {};
             comp = new Ext.Component(cfg);
         };
-        
+
         makeContainer = function(cfg) {
             cfg = cfg || {};
             comp = new Ext.container.Container(cfg);
         };
-        
+
         makeLoader = function(cfg) {
             cfg = cfg || {};
             Ext.applyIf(cfg, {
@@ -23,29 +23,29 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
             });
             loader = new Ext.ComponentLoader(cfg);
         };
-        
+
         mockComplete = function(responseText, status) {
             Ext.Ajax.mockComplete({
                 status: status || 200,
                 responseText: responseText || 'response'
             });
         };
-        
+
         loadAndComplete = function(responseText, options) {
             loader.load(options);
             mockComplete(responseText);
         };
-        
+
         loadAndFail = function(responseText, options) {
             loader.load(options);
             mockComplete(responseText, 500);
         };
-        
+
         getAjaxOptions = function() {
             return Ext.Ajax.mockGetRequestXHR().options;
         };
     });
-    
+
     afterEach(function() {
         MockAjaxManager.removeMethods();
 
@@ -58,18 +58,18 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
         }
 
         getAjaxOptions = loadAndFail = loadAndComplete = mockComplete = makeLoader = makeContainer = makeComponent = loader = comp = null;
-         
+
     });
-    
+
     describe("defaults", function() {
         beforeEach(function() {
             loader = new Ext.ComponentLoader();
         });
-        
+
         it("should default removeAll to false", function() {
             expect(loader.removeAll).toBeFalsy();
         });
-        
+
         it("should default the renderer to html", function() {
             expect(loader.renderer).toEqual('html');
         });
@@ -130,15 +130,15 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
             });
         });
     });
-    
+
     describe("masking", function() {
-        
+
         beforeEach(function() {
             makeComponent({
                 renderTo: document.body
             });
         });
-        
+
         afterEach(function() {
             if (Ext.WindowManager.mask) {
                 Ext.WindowManager.mask.remove();
@@ -150,7 +150,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
             loader.load();
             expect(comp.loadMask).toBeFalsy();
         });
-        
+
         it("should unmask after the request completes", function() {
 
             makeLoader({
@@ -161,7 +161,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
             mockComplete();
             expect(comp.loadMask.isVisible()).toBeFalsy();
         });
-        
+
         it("should accept a masking config", function() {
             makeLoader({
                 loadMask: {
@@ -172,7 +172,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
             expect(comp.loadMask.msg).toEqual('Waiting');
             mockComplete();
         });
-        
+
         it("should use the masking load option", function() {
             makeLoader();
             loader.load({
@@ -181,7 +181,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
             expect(comp.loadMask != null).toBe(true);
             mockComplete();
         });
-        
+
         it("should give precedence to the load option", function() {
             makeLoader({
                 loadMask: {
@@ -197,24 +197,24 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
             mockComplete();
         });
     });
-    
+
     describe("target", function() {
         var C;
-        
+
         beforeEach(function() {
             C = Ext.ComponentLoader;
         });
-        
+
         afterEach(function() {
             C = null;
         });
-        
+
         it("should take the target from the config object", function() {
             makeComponent();
             makeLoader();
             expect(loader.getTarget()).toEqual(comp);
         });
-        
+
         it("should take a string config", function() {
             makeComponent({
                 id: 'id'
@@ -224,14 +224,14 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
             });
             expect(loader.getTarget()).toEqual(comp);
         });
-        
+
         it("should assign the target", function() {
             makeComponent();
             loader = new C();
             loader.setTarget(comp);
             expect(loader.getTarget()).toEqual(comp);
         });
-        
+
         it("should assign a new target", function() {
             var other = new Ext.Component();
 
@@ -239,10 +239,10 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
             makeLoader();
             loader.setTarget(other);
             expect(loader.getTarget()).toEqual(other);
-            
+
             other.destroy();
         });
-        
+
         it("should assign a new target via id", function() {
             makeComponent({
                 id: 'id'
@@ -263,7 +263,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                 loadAndComplete('New content');
                 expect(comp.getEl().dom).hasHTML('New content');
             });
-        
+
             it("should use html if it's specified", function() {
                 makeComponent({
                     renderTo: document.body
@@ -275,7 +275,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                 expect(comp.getEl().dom).hasHTML('New content');
             });
         });
-        
+
         describe("data", function() {
             it("should work with array data - data renderer", function() {
                 makeComponent({
@@ -288,7 +288,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                 loadAndComplete('[{"name": "foo"}, {"name": "bar"}, {"name": "baz"}]');
                 expect(comp.getEl().dom).hasHTML('foobarbaz');
             });
-            
+
             it("should work with an object", function() {
                 makeComponent({
                     renderTo: document.body,
@@ -300,7 +300,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                 loadAndComplete('{"name": "foo", "age": 21}');
                 expect(comp.getEl().dom).hasHTML('foo - 21');
             });
-            
+
             it("should fail if the data could not be decoded", function() {
                 var o = {
                         fn: function(loader, success) {
@@ -308,9 +308,9 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                         }
                     },
                     result;
-                
+
                 spyOn(o, 'fn').andCallThrough();
-                
+
                 makeComponent({
                     renderTo: document.body,
                     tpl: '{name}'
@@ -319,10 +319,10 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                     renderer: 'data',
                     callback: o.fn
                 });
-                
+
                 // avoid Ext.Error console pollution
                 var global = Ext.global;
-                
+
                 Ext.global = {};
                 loadAndComplete('not data');
                 Ext.global = global;
@@ -330,7 +330,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                 expect(comp.getEl().dom).hasHTML('');
             });
         });
-        
+
         describe("component", function() {
             beforeEach(function() {
                 makeContainer({
@@ -340,7 +340,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                     renderer: 'component'
                 });
             });
-            
+
             it("should exception if using a non-container", function() {
                 comp.destroy();
                 makeComponent({
@@ -352,20 +352,20 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                     mockComplete('{"html": "foo"}');
                 }).toThrow('Components can only be loaded into a container');
             });
-            
+
             it("should add a single item", function() {
                 loader.load();
                 mockComplete('{"xtype": "component", "html": "new item"}');
                 expect(comp.items.first().getEl().dom).hasHTML('new item');
             });
-            
+
             it("should add multiple items", function() {
                 loader.load();
                 mockComplete('[{"xtype": "component", "html": "new item1"}, {"xtype": "component", "html": "new item2"}]');
                 expect(comp.items.first().getEl().dom).hasHTML('new item1');
                 expect(comp.items.last().getEl().dom).hasHTML('new item2');
             });
-            
+
             it("should respect the removeAll option", function() {
                 loader.removeAll = true;
                 loader.load();
@@ -375,7 +375,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                 mockComplete('[{"xtype": "component", "html": "new item1"}, {"xtype": "component", "html": "new item2"}]');
                 expect(comp.items.getCount()).toEqual(2);
             });
-            
+
             it("should give precedence to removeAll in the config options", function() {
                 loader.load({
                     removeAll: true
@@ -386,7 +386,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                 mockComplete('[{"xtype": "component", "html": "new item1"}, {"xtype": "component", "html": "new item2"}]');
                 expect(comp.items.getCount()).toEqual(2);
             });
-            
+
             it("should fail if items could not be decoded", function() {
                 var o = {
                         fn: function(loader, success) {
@@ -394,13 +394,13 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                         }
                     },
                     result;
-                
+
                 spyOn(o, 'fn').andCallThrough();
                 loader.callback = o.fn;
-                
+
                 // avoid Ext.Error console pollution
                 var global = Ext.global;
-                
+
                 Ext.global = {};
                 loadAndComplete('not items');
                 Ext.global = global;
@@ -408,7 +408,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                 expect(comp.items.getCount()).toEqual(0);
             });
         });
-        
+
         describe("panel", function() {
             beforeEach(function() {
                 comp = new Ext.panel.Panel({
@@ -433,7 +433,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                     scope: callbackScope
                 });
                 mockComplete('<script>this.setTitle("New title");</script>New content');
-                
+
                 waitsFor(function() {
                     return comp.getTitle() === 'New title';
                 }, 'the inline script to be executed');
@@ -465,7 +465,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                 });
             });
         });
-        
+
         describe("custom renderer", function() {
             it("should use a custom renderer if one is specified", function() {
                 var o = {
@@ -473,9 +473,9 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                         loader.getTarget().update('This is the ' + response.responseText);
                     }
                 };
-                
+
                 spyOn(o, 'fn').andCallThrough();
-                
+
                 makeComponent({
                     renderTo: document.body
                 });
@@ -486,7 +486,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                 expect(o.fn).toHaveBeenCalled();
                 expect(comp.getEl().dom).hasHTML('This is the response');
             });
-            
+
             it("should fail if the renderer returns false", function() {
                 var result;
 
@@ -497,7 +497,7 @@ topSuite("Ext.ComponentLoader", 'Ext.Container', function() {
                     renderer: function() {
                         return false;
                     },
-                    
+
                     callback: function(loader, success) {
                         result = success;
                     }

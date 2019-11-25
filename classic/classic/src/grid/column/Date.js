@@ -41,7 +41,7 @@ Ext.define('Ext.grid.column.Date', {
     extend: 'Ext.grid.column.Column',
     alias: ['widget.datecolumn'],
     alternateClassName: 'Ext.grid.DateColumn',
-    
+
     requires: ['Ext.Date'],
 
     isDateColumn: true,

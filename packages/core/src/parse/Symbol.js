@@ -42,14 +42,14 @@ Ext.define('Ext.parse.Symbol', {
             ret.lhs = me.lhs.dump();
             ret.rhs = me.rhs.dump();
         }
-        
+
         if (me.operand) {
             ret.operand = me.operand.dump();
         }
-        
+
         if (me.args) {
             ret.args = [];
-            
+
             for (i = 0; i < me.args.length; ++i) {
                 ret.args.push(me.args[i].dump());
             }
@@ -98,11 +98,11 @@ Ext.define('Ext.parse.Symbol', {
             if (me.priority <= priority) {
                 me.priority = priority;
             }
-            
+
             if (led) {
                 me.led = led;
             }
-            
+
             if (nud) {
                 me.nud = nud;
             }

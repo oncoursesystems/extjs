@@ -20,7 +20,7 @@ function() {
         oldGetOrientation, oldGetViewWidth, oldGetViewHeight, oldResponsiveContext,
         panel;
 
-    function createPanel () {
+    function createPanel() {
         panel = Ext.create({
             xtype: 'panel',
             layout: {
@@ -32,7 +32,7 @@ function() {
             referenceHolder: true,
 
             responsiveFormulas: {
-                narrow: function (state) {
+                narrow: function(state) {
                     return state.width < 800;
                 }
             },
@@ -61,7 +61,7 @@ function() {
         });
     }
 
-    beforeEach(function () {
+    beforeEach(function() {
         Responsive = Ext.mixin.Responsive;
 
         oldGetOrientation = Ext.dom.Element.getOrientation;
@@ -70,20 +70,20 @@ function() {
 
         oldResponsiveContext = Responsive.context;
 
-        Ext.dom.Element.getOrientation = function () {
+        Ext.dom.Element.getOrientation = function() {
             return env.orientation;
         };
 
-        Ext.dom.Element.getViewportWidth = function () {
+        Ext.dom.Element.getViewportWidth = function() {
             return env.width;
         };
 
-        Ext.dom.Element.getViewportHeight = function () {
+        Ext.dom.Element.getViewportHeight = function() {
             return env.height;
         };
     });
 
-    afterEach(function () {
+    afterEach(function() {
         panel = Ext.destroy(panel);
 
         env = environments.ipad.landscape; // reset to default
@@ -98,8 +98,8 @@ function() {
         expect(Responsive.count).toBe(0);
     });
 
-    describe('creation', function () {
-        it('should be created using config object', function () {
+    describe('creation', function() {
+        it('should be created using config object', function() {
             createPanel();
 
             // tests to make sure plugin didn't set plugin configs
@@ -108,8 +108,8 @@ function() {
         });
     });
 
-    describe('reaction', function () {
-        it('should react to viewport change', function () {
+    describe('reaction', function() {
+        it('should react to viewport change', function() {
             createPanel('responsive');
 
             var layout = panel.getLayout();

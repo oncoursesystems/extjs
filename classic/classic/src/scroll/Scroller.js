@@ -224,7 +224,7 @@ Ext.define('Ext.scroll.Scroller', {
 
             return standard ? doc.documentElement : doc.body;
         },
-        
+
         /**
          * @private
          */
@@ -258,11 +258,11 @@ Ext.define('Ext.scroll.Scroller', {
         // Clear any overflow styles
         me.setX(Ext.emptyString);
         me.setY(Ext.emptyString);
-        
+
         if (me._spacer) {
             me._spacer.destroy();
         }
-        
+
         if (me.scrollListener) {
             me.scrollListener.destroy();
         }
@@ -400,7 +400,7 @@ Ext.define('Ext.scroll.Scroller', {
             dom = element.dom;
 
             if (x || y) {
-                scrollbarSize = Ext.getScrollbarSize();
+                scrollbarSize = Ext.scrollbar.size();
             }
 
             if (x === 'scroll') {
@@ -493,7 +493,6 @@ Ext.define('Ext.scroll.Scroller', {
             x = dom.scrollWidth - dom.clientWidth;
             y = dom.scrollHeight - dom.clientHeight;
         }
-
 
         return {
             x: x,
@@ -1351,14 +1350,14 @@ Ext.define('Ext.scroll.Scroller', {
 
                 if (animate) {
                     translatable = me.translatable;
-                    
+
                     if (!translatable) {
                         me.translatable = translatable =
                             new Ext.util.translatable.ScrollPosition({ element: element });
                     }
 
                     deferred = new Ext.Deferred();
-                    
+
                     // Use onFrame here to let the scroll complete and animations to fire.
                     translatable.on('animationend', function() {
                         // Check destroyed vs destroying since we're onFrame here
@@ -1369,9 +1368,9 @@ Ext.define('Ext.scroll.Scroller', {
                             deferred.resolve();
                         }
                     }, Ext.global, { single: true, onFrame: true });
-                    
+
                     translatable.translate(x, y, animate);
-                    
+
                     ret = deferred.promise;
                 }
                 else {
@@ -1382,7 +1381,7 @@ Ext.define('Ext.scroll.Scroller', {
                     if (x != null) {
                         dom.scrollLeft = x;
                     }
-                    
+
                     ret = Ext.Deferred.getCachedResolved();
                 }
 
@@ -1392,7 +1391,7 @@ Ext.define('Ext.scroll.Scroller', {
             else {
                 ret = Ext.Deferred.getCachedRejected();
             }
-            
+
             return ret;
         },
 

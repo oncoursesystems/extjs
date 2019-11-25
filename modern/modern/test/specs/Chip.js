@@ -11,18 +11,18 @@ topSuite("Ext.Chip", ['Ext.Container'], function() {
         });
     }
 
-    afterEach(function () {
+    afterEach(function() {
         chip = container = Ext.destroy(container);
     });
 
-    describe('close handler', function () {
+    describe('close handler', function() {
         var passedChip;
 
         it('should pass the chip', function() {
             makeChip({
                 text: 'Test Closable',
                 closable: true,
-                closeHandler: function (chip, e) {
+                closeHandler: function(chip, e) {
                     passedChip = chip;
                 }
             });
@@ -31,65 +31,65 @@ topSuite("Ext.Chip", ['Ext.Container'], function() {
         });
     });
 
-    describe('configuration', function () {
+    describe('configuration', function() {
 
         it('should make isChip to true', function() {
             makeChip({
-                text: 'Test',                
+                text: 'Test'
             });
             expect(chip.isChip).toBe(true);
         });
 
         it('should make focusable false by default', function() {
             makeChip({
-                text: 'Test',                
+                text: 'Test'
             });
             expect(chip.focusable).toBe(false);
         });
 
         it('should not have closable class if closable proerty not available', function() {
             makeChip({
-                text: 'Test', 
-                closable: false,               
+                text: 'Test',
+                closable: false
             });
             expect(chip.element).not.toHaveCls(chip.closableCls);
         });
 
         it('should not have closable class if closable proerty is false', function() {
             makeChip({
-                text: 'Test', 
-                closable: false,               
+                text: 'Test',
+                closable: false
             });
             expect(chip.element).not.toHaveCls(chip.closableCls);
         });
 
         it('should have closable class if closable proerty is true', function() {
             makeChip({
-                text: 'Test', 
-                closable: true,               
+                text: 'Test',
+                closable: true
             });
             expect(chip.element).toHaveCls(chip.closableCls);
         });
-       
+
         it('should have proper class on closable item', function() {
             makeChip({
-                text: 'Test', 
-                closable: true,               
+                text: 'Test',
+                closable: true
             });
             expect(chip.closeElement).toHaveCls(Ext.baseCSSPrefix + 'close-el');
-            expect(chip.closeElement).toHaveCls(Ext.baseCSSPrefix + 'font-icon');            
+            expect(chip.closeElement).toHaveCls(Ext.baseCSSPrefix + 'font-icon');
         });
 
         it('should have proper class on body element', function() {
             makeChip({
-                text: 'Test', 
+                text: 'Test'
             });
             expect(chip.bodyElement).toHaveCls(Ext.baseCSSPrefix + 'body-el');
         });
 
         it('should have proper class on icon element', function() {
             makeChip({
-                text: 'Test', 
+                text: 'Test'
             });
             expect(chip.iconElement).toHaveCls(Ext.baseCSSPrefix + 'icon-el');
             expect(chip.iconElement).toHaveCls(Ext.baseCSSPrefix + 'font-icon');
@@ -97,14 +97,14 @@ topSuite("Ext.Chip", ['Ext.Container'], function() {
 
         it('should have proper class on text element', function() {
             makeChip({
-                text: 'Test', 
+                text: 'Test'
             });
             expect(chip.textElement).toHaveCls(Ext.baseCSSPrefix + 'text-el');
         });
 
         it('should not make close button visible if closable is not provided', function() {
             makeChip({
-                text: 'Test',                
+                text: 'Test'
             });
 
             expect(chip.closeElement.isVisible()).toBe(false);
@@ -112,8 +112,8 @@ topSuite("Ext.Chip", ['Ext.Container'], function() {
 
         it('should not make close button visible if closable false', function() {
             makeChip({
-                text: 'Test', 
-                closable: false                              
+                text: 'Test',
+                closable: false
             });
 
             expect(chip.closeElement.isVisible()).toBe(false);
@@ -121,12 +121,12 @@ topSuite("Ext.Chip", ['Ext.Container'], function() {
 
         it('should make close button visible if closable false', function() {
             makeChip({
-                text: 'Test', 
-                closable: true,               
+                text: 'Test',
+                closable: true
             });
             expect(chip.closeElement.isVisible()).toBe(true);
         });
-       
+
     });
 
     describe("icon", function() {
@@ -156,7 +156,7 @@ topSuite("Ext.Chip", ['Ext.Container'], function() {
             beforeEach(function() {
                 makeChip({});
             });
-            
+
             it("should set the icon", function() {
                 chip.setIcon('resources/images/another.gif');
                 expect(chip.getIcon()).toEqual('resources/images/another.gif');
@@ -305,7 +305,7 @@ topSuite("Ext.Chip", ['Ext.Container'], function() {
             beforeEach(function() {
                 makeChip({});
             });
-            
+
             it("should set the text", function() {
                 chip.setText('text');
                 expect(chip.getText()).toEqual('text');
@@ -345,6 +345,5 @@ topSuite("Ext.Chip", ['Ext.Container'], function() {
             });
         });
     });
-
 
 });

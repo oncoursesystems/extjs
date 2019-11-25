@@ -1953,20 +1953,20 @@ Ext.define('KitchenSink.data.FileTree', {
         ]
     }]
 },
-function () {
-    var data = this.prototype.tree;
+           function() {
+               var data = this.prototype.tree;
 
-    Ext.ux.ajax.SimManager.register({
-        '/tree/get-nodes.php': {
-            type: 'json',
-            tree: Ext.clone(data)
-        },
-        '/xml-tree/get-nodes.php': {
-            type: 'xml',
-            xmlTpl: '',
-            tree: Ext.clone(data),
-            rootProperty: 'nodes',
-            recordProperty: 'node'
-        }
-    });
-});
+               Ext.ux.ajax.SimManager.register({
+                   '/tree/get-nodes.php': {
+                       type: 'json',
+                       tree: Ext.clone(data)
+                   },
+                   '/xml-tree/get-nodes.php': {
+                       type: 'xml',
+                       xmlTpl: '',
+                       tree: Ext.clone(data),
+                       rootProperty: 'nodes',
+                       recordProperty: 'node'
+                   }
+               });
+           });

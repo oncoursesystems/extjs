@@ -8,32 +8,32 @@ Ext.define('KitchenSink.view.pivot.DataChangesController', {
 
     rand: 37,
 
-    onAddData: function(){
+    onAddData: function() {
         var store = this.getView().getMatrix().store;
 
         store.add(KitchenSink.data.PivotData.getData(1));
     },
 
-    onUpdateData: function(){
+    onUpdateData: function() {
         var store = this.getView().getMatrix().store,
             data = KitchenSink.data.PivotData.getData(1)[0],
             record = KitchenSink.data.PivotData.getRandomItem(store.data.items);
 
-        if(record) {
+        if (record) {
             record.set(data);
         }
     },
 
-    onRemoveData: function(){
+    onRemoveData: function() {
         var store = this.getView().getMatrix().store,
             record = KitchenSink.data.PivotData.getRandomItem(store.data.items);
 
-        if(record) {
+        if (record) {
             store.remove(record);
         }
     },
 
-    onClearData: function(){
+    onClearData: function() {
         var store = this.getView().getMatrix().store;
 
         store.removeAll();

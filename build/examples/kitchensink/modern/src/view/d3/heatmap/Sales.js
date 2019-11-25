@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.d3.heatmap.Sales', {
         'Ext.d3.HeatMap'
     ],
 
-    // <example>
+    //<example>
     otherContent: [
         {
             type: 'Controller',
@@ -38,11 +38,11 @@ Ext.define('KitchenSink.view.d3.heatmap.Sales', {
             '!phone': {
                 hidden: false,
                 items: [{
-                    iconCls: 'x-fa fa-refresh',
+                    iconCls: 'x-fa fa-sync',
                     text: 'Refresh Data',
                     handler: 'onRefreshData'
                 }, {
-                    iconCls: 'x-fa fa-refresh fa-table',
+                    iconCls: 'x-fa fa-sync fa-table',
                     text: 'Refresh Size',
                     handler: 'onRefreshDataAndSize'
                 }]

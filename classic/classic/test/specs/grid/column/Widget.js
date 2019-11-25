@@ -7,11 +7,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -84,7 +84,7 @@ function() {
         navModel = view.getNavigationModel();
         colRef = grid.getColumnManager().getColumns();
     }
-    
+
     beforeEach(function() {
         // Override so that we can control asynchronous loading
         Ext.data.ProxyStore.prototype.load = loadStore;
@@ -109,7 +109,7 @@ function() {
 
         return parseInt(cell.getStyle('padding-left'), 10) + parseInt(cell.getStyle('padding-right'), 10);
     }
-    
+
     describe("refocusing after using a column widget to trigger a delete", function() {
         it("should refocus the next row upon deletion", function() {
             createGrid([{
@@ -144,7 +144,7 @@ function() {
 
             // Wait for the widget to be focused
             waitsForFocus(widget0);
-            
+
             runs(function() {
                 jasmine.fireKeyEvent(widget0.focusEl, 'keydown', Ext.event.Event.SPACE);
 
@@ -268,7 +268,7 @@ function() {
         it("should select the row on click of the widget with stopSelection: false", function() {
             colRef[0].stopSelection = false;
             navModel.setPosition(new Ext.grid.CellContext(view).setPosition(0, 0));
-            
+
             waitsForFocus(view);
 
             // Wait for focus to be in the view.
@@ -399,7 +399,7 @@ function() {
                         enableToggle: true,
                         pressed: true
                     })]);
-                    
+
                     var widget = getWidget(0);
 
                     expect(widget.pressed).toBe(true);
@@ -547,7 +547,7 @@ function() {
                     expect(spy.calls[0].args[1].isButton).toBe(true);
                     expect(spy.calls[0].args[2]).toBe(rec);
                 });
-                
+
                 it("should be called after rendering the widget", function() {
                     var isAttached = false,
                         cfg = getColCfg({
@@ -555,15 +555,15 @@ function() {
                         });
 
                     cfg.onWidgetAttach = spy;
-                    
+
                     makeGrid([cfg]);
-                    
+
                     spy.andCallFake(function(column, widget) {
                         isAttached = Ext.getBody().isAncestor(widget.el);
                     });
-                    
+
                     store.insert(2, {});
-                    
+
                     expect(isAttached).toBe(true);
                 });
 
@@ -571,31 +571,31 @@ function() {
                     describe("buffered rendering", function() {
                         var recordSize = 10000,
                             data, i;
-                        
+
                         beforeEach(function() {
                              var cfg = getColCfg({
                                 xtype: 'button'
                             });
-                            
+
                             cfg.onWidgetAttach = spy;
-                            
+
                             data = [];
-                            
+
                             for (i = 1; i <= recordSize; ++i) {
                                 data.push({
                                     id: 'rec' + i
                                 });
                             }
-                            
+
                             makeGrid([cfg], data);
                         });
-                        
+
                         it("should only be called for records in the view", function() {
                             var view = grid.getView(),
                                 nodes = view.getNodes(),
                                 firstNode = nodes[0],
                                 len = nodes.length;
-    
+
                             expect(spy.callCount).toBeLessThan(recordSize);
 
                             for (i = 0; i < len; ++i) {
@@ -603,19 +603,19 @@ function() {
                             }
 
                             checkPositions();
-    
+
                             spy.reset();
                             // Force it to the end, wait for the re-render
                             grid.bufferedRenderer.scrollTo(recordSize * 100);
                             waitsFor(function() {
                                 return view.getNodes()[0] !== firstNode;
                             });
-    
+
                             runs(function() {
                                 nodes = view.getNodes();
                                 len = nodes.length;
                                 var offset = recordSize - len;
-    
+
                                 for (i = 0; i < len; ++i) {
                                     expect(spy.calls[i].args[2]).toBe(store.getAt(i + offset));
                                 }
@@ -623,20 +623,20 @@ function() {
                                 checkPositions(offset);
                             });
                         });
-                        
+
                         // https://sencha.jira.com/browse/EXTJS-19251
                         it("should be called after reattaching the widget to DOM", function() {
                             var isAttached = false;
-                            
+
                             spy.andCallFake(function(column, widget) {
                                 isAttached = isAttached || Ext.getBody().isAncestor(widget.el);
                             });
                             spy.reset();
-                            
+
                             grid.bufferedRenderer.scrollTo(recordSize * 100);
-                            
+
                             waitForSpy(spy, 'scrolling to occur', 1000);
-                            
+
                             runs(function() {
                                 expect(isAttached).toBe(true);
                             });
@@ -671,9 +671,9 @@ function() {
                         var cfg = getColCfg({
                             xtype: 'button'
                         });
-                        
+
                         var ctrl = new Ext.app.ViewController();
-                        
+
                         ctrl.doSomething = spy;
                         cfg.onWidgetAttach = 'doSomething';
                         makeGrid([cfg], null, {
@@ -976,7 +976,7 @@ function() {
                         });
                         store.first().set('a', 'NewValue');
                         grid.render(document.body);
-                        
+
                         // Dirty class should be rendered into the cell
                         expect(view.getCellByPosition({
                             row: 0,
@@ -1018,14 +1018,14 @@ function() {
 
                         updateText: function(text) {
                             col = this.getWidgetColumn();
-                            
+
                             if (text === 'foo') {
                                 fooRec = this.getWidgetRecord();
                             }
                             else if (text === 'bar') {
                                 barRec = this.getWidgetRecord();
                             }
-                            
+
                             this.callParent(arguments);
                         }
                     });
@@ -1169,7 +1169,7 @@ function() {
                     expect(childNodes.length).toBe(1);
 
                     store.removeAt(1);
-                    
+
                     expect(childNodes.length).toBe(1);
                 });
             });
@@ -1367,7 +1367,7 @@ function() {
 
                     jasmine.fireMouseEvent(getWidget(0).focusEl, 'click');
                     expect(getWidget(0).menu.isVisible()).toBe(false);
-                    
+
                     jasmine.fireMouseEvent(view.getCellByPosition({
                         row: 0,
                         column: 0
@@ -1387,11 +1387,10 @@ function() {
                     var normalGrid, lockedGrid, firstNormalRow, firstLockedRow;
 
                     afterEach(function() {
-                        normalGrid = lockedGrid = firstNormalRow, firstLockedRow = null;
+                        normalGrid = lockedGrid = firstNormalRow = firstLockedRow = null;
                     });
 
                     it("should keep line heights synced after sorting", function() {
-                        
 
                         createGrid(null, null, {
                             columns: [Ext.apply(getColCfg({

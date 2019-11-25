@@ -41,19 +41,19 @@ Ext.define('Ext.button.Cycle', {
      * @deprecated 4.0 Use the {@link #cfg-menu} config instead. All menu items will be created as
      * {@link Ext.menu.CheckItem CheckItems}.
      */
-    
+
     /**
      * @cfg {Boolean} [showText=false]
      * True to display the active item's text as the button text. The Button will show its
      * configured {@link #text} if this config is omitted.
      */
-    
+
     /**
      * @cfg {String} [prependText='']
      * A static string to prepend before the active item's text when displayed as the button's text
      * (only applies when showText = true).
      */
-    
+
     /**
      * @cfg {Function/String} [changeHandler=undefined]
      * A callback function that will be invoked each time the active menu item in the button's menu
@@ -62,7 +62,7 @@ Ext.define('Ext.button.Cycle', {
      * the following argument list: (SplitButton this, Ext.menu.CheckItem item)
      * @controllable
      */
-    
+
     /**
      * @cfg {String} forceIcon
      * A css class which sets an image to be used as the static icon for this button. This icon will
@@ -78,7 +78,7 @@ Ext.define('Ext.button.Cycle', {
      * the default behavior of changing the button's icon to match the selected item's icon
      * on change. This property expects a format consistent with that of {@link #glyph}
      */
-    
+
     /**
      * @property {Ext.menu.Menu} menu
      * The {@link Ext.menu.Menu Menu} object used to display the
@@ -105,12 +105,12 @@ Ext.define('Ext.button.Cycle', {
             if (me.prependText) {
                 text += me.prependText;
             }
-            
+
             text += item.text;
-            
+
             return text;
         }
-        
+
         return me.text;
     },
 
@@ -127,31 +127,31 @@ Ext.define('Ext.button.Cycle', {
             forceGlyph = me.forceGlyph;
 
         me.settingActive = true;
-        
+
         if (!Ext.isObject(item)) {
             item = me.menu.getComponent(item);
         }
-        
+
         if (item) {
             me.setText(me.getButtonText(item));
             me.setIconCls(forceIcon ? forceIcon : item.iconCls);
             me.setGlyph(forceGlyph ? forceGlyph : item.glyph);
 
             me.activeItem = item;
-            
+
             if (!item.checked) {
                 item.setChecked(true, false);
             }
-            
+
             if (!suppressEvent) {
                 if (changeHandler) {
                     Ext.callback(changeHandler, me.scope, [me, item], 0, me);
                 }
-                
+
                 me.fireEvent('change', me, item);
             }
         }
-        
+
         me.settingActive = false;
     },
 
@@ -182,11 +182,11 @@ Ext.define('Ext.button.Cycle', {
             "Authoring guide: http://www.w3.org/TR/wai-aria-practices/#menubutton"
         );
         //</debug>
-        
+
         // Allow them to specify a menu config which is a standard Button config.
         // Remove direct use of "items" in 5.0.
         items = (me.menu.items || []).concat(me.items || []);
-        
+
         me.menu = Ext.applyIf({
             cls: Ext.baseCSSPrefix + 'cycle-menu',
             items: []
@@ -214,9 +214,9 @@ Ext.define('Ext.button.Cycle', {
         }
 
         me.itemCount = me.menu.items.length;
-        
+
         me.callParent(arguments);
-        
+
         me.on('click', me.toggleSelected, me);
         me.setActiveItem(checked, true);
     },

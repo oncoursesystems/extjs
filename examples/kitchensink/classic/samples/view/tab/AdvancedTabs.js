@@ -13,6 +13,7 @@ Ext.define('KitchenSink.view.tab.AdvancedTabs', {
     controller: 'advanced-tabs',
 
     //<example>
+    cls: Ext.baseCSSPrefix + 'shadow',
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/tab/AdvancedTabsController.js'
@@ -29,7 +30,7 @@ Ext.define('KitchenSink.view.tab.AdvancedTabs', {
             icon1: 'classic/resources/images/icons/fam/cog.gif',
             icon2: 'classic/resources/images/icons/fam/user.gif',
             icon3: 'classic/resources/images/icons/fam/accept.gif',
-            iconAdd: 'classic/resources/images/icons/fam/add.gif'           
+            iconAdd: 'classic/resources/images/icons/fam/add.gif'
         },
         neptune: {
             height: 400,
@@ -42,7 +43,7 @@ Ext.define('KitchenSink.view.tab.AdvancedTabs', {
             icon1: null,
             icon2: null,
             icon3: null,
-            iconAdd: null          
+            iconAdd: null
         },
         'neptune-touch': {
             width: 740,
@@ -52,9 +53,17 @@ Ext.define('KitchenSink.view.tab.AdvancedTabs', {
             width: 700,
             height: 400
         },
-          graphite: {
+        graphite: {
             width: 1025,
             height: 450
+        },
+        'classic-material': {
+            width: 1025,
+            height: 450,
+            icon1: 'classic/resources/images/icons/fam/cog.gif',
+            icon2: 'classic/resources/images/icons/fam/user.gif',
+            icon3: 'classic/resources/images/icons/fam/accept.gif',
+            iconAdd: 'classic/resources/images/icons/fam/add.gif'
         }
     },
     //</example>

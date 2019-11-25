@@ -4,7 +4,7 @@ topSuite("Ext.data.proxy.JsonP", ['Ext.data.ArrayStore'], function() {
     beforeEach(function() {
         proxy = new Ext.data.proxy.JsonP({ noCache: false });
     });
-    
+
     afterEach(function() {
         Ext.data.Model.schema.clear();
     });
@@ -17,7 +17,6 @@ topSuite("Ext.data.proxy.JsonP", ['Ext.data.ArrayStore'], function() {
         it("should have default writer to be json", function() {
             expect(proxy.getWriter() instanceof Ext.data.writer.Json).toBe(true);
         });
-
 
         it("should have callbackKey equal to callback", function() {
             expect(proxy.getCallbackKey()).toEqual('callback');
@@ -35,7 +34,7 @@ topSuite("Ext.data.proxy.JsonP", ['Ext.data.ArrayStore'], function() {
     describe("methods", function() {
         describe("buildUrl and encodeRecords", function() {
                 var nicolas, request;
-                
+
             beforeEach(function() {
                 Ext.ClassManager.enableNamespaceParseCache = false;
                 Ext.define('spec.Human', {
@@ -45,13 +44,13 @@ topSuite("Ext.data.proxy.JsonP", ['Ext.data.ArrayStore'], function() {
                         { name: 'age',   type: 'int' },
                         { name: 'planet', type: 'string' }
                     ]
-                }),
+                });
                 nicolas = new spec.Human({
                     id: 1,
                     name: 'Nicolas',
                     age: 27,
                     planet: 'Earth'
-                }),
+                });
                 request = new Ext.data.Request({
                     url: 'somewhere',
                     records: [nicolas],
@@ -68,7 +67,7 @@ topSuite("Ext.data.proxy.JsonP", ['Ext.data.ArrayStore'], function() {
                     })
                 });
             });
-            
+
             afterEach(function() {
                Ext.undefine('spec.Human');
             });

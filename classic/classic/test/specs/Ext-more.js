@@ -160,40 +160,40 @@ topSuite("Ext-more", ['Ext.dom.Element', 'Ext.app.Application'], function() {
 
     describe("Ext.removeNode", function() {
         var el, id, dom;
-        
+
         beforeEach(function() {
             el = Ext.getBody().createChild({
                 tag: 'span',
                 html: 'foobar'
             });
-            
+
             id = el.id;
             dom = el.dom;
         });
-        
+
         afterEach(function() {
             el = id = dom = null;
         });
-        
+
         if (Ext.isIE8) {
             it("should schedule element for garbage collection", function() {
                 var queue = Ext.Element.destroyQueue,
                     len = queue.length;
-                
+
                 Ext.removeNode(dom);
-                
+
                 expect(queue.length).toBe(len + 1);
                 expect(queue[len]).toBe(dom);
             });
-            
+
             it("should finally destroy the element after a timeout", function() {
                 runs(function() {
                     Ext.removeNode(dom);
                 });
-                
+
                 // The timeout is hardcoded in Element override
                 waits(32);
-                
+
                 runs(function() {
                     expect(dom.parentNode).toBeFalsy();
                 });
@@ -211,7 +211,7 @@ topSuite("Ext-more", ['Ext.dom.Element', 'Ext.app.Application'], function() {
             Ext.removeNode(el.dom);
             expect(Ext.cache[id]).toBeUndefined();
         });
-        
+
         it("should remove all listeners from the dom element", function() {
             var listener = jasmine.createSpy();
 
@@ -372,7 +372,7 @@ topSuite("Ext-more", ['Ext.dom.Element', 'Ext.app.Application'], function() {
                 });
             });
         });
-        
+
         describe('including prototype properties', function() {
             var CopyToSource = function(obj) {
                 Ext.apply(this, obj);
@@ -459,7 +459,7 @@ topSuite("Ext-more", ['Ext.dom.Element', 'Ext.app.Application'], function() {
                 });
             });
         });
-        
+
         describe('including prototype properties', function() {
             var CopyToSource = function(obj) {
                 Ext.apply(this, obj);
@@ -550,15 +550,15 @@ topSuite("Ext-more", ['Ext.dom.Element', 'Ext.app.Application'], function() {
             expect(Ext.escapeId('1<>234.567')).toBe('\\0031 \\<\\>234\\.567');
         });
     });
-    
+
     describe("Ext.application", function() {
         beforeEach(function() {
             spyOn(Ext.Loader, 'setPath').andReturn();
         });
-        
+
         afterEach(function() {
             Ext.app.Application.instance.destroy();
-            
+
             Ext.undefine('Test.$application');
             Ext.undefine('Test');
 
@@ -569,16 +569,16 @@ topSuite("Ext-more", ['Ext.dom.Element', 'Ext.app.Application'], function() {
                 window.Test = undefined;
             }
         });
-        
+
         it("should set application path", function() {
             Ext.application({
                 name: 'Test',
                 appFolder: 'fooFolder'
             });
-            
+
             expect(Ext.Loader.setPath).toHaveBeenCalledWith('Test', 'fooFolder');
         });
-        
+
         it("should process appFolder and paths array", function() {
             Ext.application({
                 name: 'Test',
@@ -588,9 +588,9 @@ topSuite("Ext-more", ['Ext.dom.Element', 'Ext.app.Application'], function() {
                     qux: 'quxFolder'
                 }
             });
-            
+
             var args = Ext.Loader.setPath.argsForCall;
-            
+
             expect(args).toEqual([
                 ['Test', 'barFolder'],
                 ['baz', 'bazFolder'],

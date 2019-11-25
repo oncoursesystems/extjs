@@ -6,7 +6,7 @@
 Ext.define('Ext.data.request.Ajax', {
     extend: 'Ext.data.request.Base',
     alias: 'request.ajax',
-    
+
     requires: [
         'Ext.data.flash.BinaryXhr'
     ],
@@ -25,14 +25,14 @@ Ext.define('Ext.data.request.Ajax', {
             if (response) {
                 // We have to account for binary and other response types
                 type = response.responseType;
-                
+
                 if (type === 'arraybuffer') {
                     len = response.byteLength;
                 }
                 else if (type === 'blob') {
                     len = response.response.size;
                 }
-                else if (type === 'json' || type === 'document') {
+                else if ((type === 'json' || type === 'document') && response.response) {
                     len = 0;
                 }
                 else if ((type === 'text' || type === '' || !type) && response.responseText) {
@@ -44,7 +44,7 @@ Ext.define('Ext.data.request.Ajax', {
             status = status === 1223 ? 204 : status;
 
             isException = false;
-            
+
             // Status can be 0 for file:/// requests
             success = (status >= 200 && status < 300) || status === 304 ||
                       (status === 0 && Ext.isNumber(len));
@@ -68,14 +68,14 @@ Ext.define('Ext.data.request.Ajax', {
             };
         }
     },
-    
+
     start: function(data) {
         var me = this,
             options = me.options,
             requestOptions = me.requestOptions,
             isXdr = me.isXdr,
             xhr;
-        
+
         xhr = me.xhr = me.openRequest(options, requestOptions, me.async, me.username, me.password);
 
         // XDR doesn't support setting any headers
@@ -92,20 +92,20 @@ Ext.define('Ext.data.request.Ajax', {
         if (isXdr) {
             me.processXdrRequest(me, xhr);
         }
-        
+
         // Parent will set the timeout if needed
         me.callParent([data]);
-        
+
         // start the request!
         xhr.send(data);
-        
+
         if (!me.async) {
             return me.onComplete();
         }
-        
+
         return me;
     },
-    
+
     /**
      * Aborts an active request.
      */
@@ -127,16 +127,16 @@ Ext.define('Ext.data.request.Ajax', {
                 // http://www.quirksmode.org/blog/archives/2005/09/xmlhttp_notes_a_1.html
                 xhr.onreadystatechange = Ext.emptyFn;
             }
-            
+
             xhr.abort();
-            
+
             me.callParent([force]);
-            
+
             me.onComplete();
             me.cleanup();
         }
     },
-    
+
     /**
      * Cleans up any left over information from the request
      */
@@ -144,7 +144,7 @@ Ext.define('Ext.data.request.Ajax', {
         this.xhr = null;
         delete this.xhr;
     },
-    
+
     isLoading: function() {
         var me = this,
             xhr = me.xhr,
@@ -203,7 +203,7 @@ Ext.define('Ext.data.request.Ajax', {
             //</debug>
             }
         }
-        
+
         if (options.responseType) {
             xhr.responseType = options.responseType;
         }
@@ -278,7 +278,7 @@ Ext.define('Ext.data.request.Ajax', {
                     }
                 }
             }
-            
+
             headers[type] = contentType;
         }
 
@@ -305,7 +305,7 @@ Ext.define('Ext.data.request.Ajax', {
             // TODO Request shouldn't fire events from its owner
             me.owner.fireEvent('exception', key, header);
         }
-        
+
         return headers;
     },
 
@@ -356,11 +356,11 @@ Ext.define('Ext.data.request.Ajax', {
         response.getAllResponseHeaders = function() {
             return [];
         };
-        
+
         response.getResponseHeader = function() {
             return '';
         };
-        
+
         response.contentType = xhr.contentType || this.defaultXdrContentType;
     },
 
@@ -381,13 +381,13 @@ Ext.define('Ext.data.request.Ajax', {
         // Using CORS with IE doesn't support readyState so we fake it.
         if ((xhr && xhr.readyState === 4) || me.isXdr) {
             me.clearTimer();
-            
+
             me.onComplete(xdrResult);
-            
+
             me.cleanup();
         }
     },
-    
+
     /**
      * To be called when the request has come back from the server
      * @param {Object} xdrResult
@@ -401,14 +401,14 @@ Ext.define('Ext.data.request.Ajax', {
             xhr = me.xhr,
             failure = { success: false, isException: false },
             result, success, response;
-        
+
         if (!xhr || me.destroyed) {
             return me.result = failure;
         }
-        
+
         try {
             result = Ext.data.request.Ajax.parseStatus(xhr.status, xhr);
-            
+
             if (result.success) {
                 // This is quite difficult to reproduce, however if we abort a request
                 // just before it returns from the server, occasionally the status will be
@@ -421,16 +421,16 @@ Ext.define('Ext.data.request.Ajax', {
             // so the request has failed
             result = failure;
         }
-        
+
         success = me.success = me.isXdr ? xdrResult : result.success;
 
         if (success) {
             response = me.createResponse(xhr);
-            
+
             if (owner.hasListeners.requestcomplete) {
                 owner.fireEvent('requestcomplete', owner, response, options);
             }
-            
+
             if (options.success) {
                 Ext.callback(options.success, options.scope, [response, options]);
             }
@@ -442,26 +442,26 @@ Ext.define('Ext.data.request.Ajax', {
             else {
                 response = me.createResponse(xhr);
             }
-            
+
             if (owner.hasListeners.requestexception) {
                 owner.fireEvent('requestexception', owner, response, options);
             }
-            
+
             if (options.failure) {
                 Ext.callback(options.failure, options.scope, [response, options]);
             }
         }
-        
+
         me.result = response;
-        
+
         if (options.callback) {
             Ext.callback(options.callback, options.scope, [options, success, response]);
         }
-        
+
         owner.onRequestComplete(me);
-        
+
         me.callParent([xdrResult]);
-        
+
         return response;
     },
 
@@ -481,18 +481,18 @@ Ext.define('Ext.data.request.Ajax', {
         while (count--) {
             line = lines[count];
             index = line.indexOf(':');
-            
+
             if (index >= 0) {
                 key = line.substr(0, index).toLowerCase();
-                
+
                 if (line.charAt(index + 1) === ' ') {
                     ++index;
                 }
-                
+
                 headers[key] = line.substr(index + 1);
             }
         }
-        
+
         response = {
             request: me,
             requestId: me.id,
@@ -517,7 +517,7 @@ Ext.define('Ext.data.request.Ajax', {
             if (xhr.responseType) {
                 response.responseType = xhr.responseType;
             }
-            
+
             if (xhr.responseType === 'blob') {
                 response.responseBlob = xhr.response;
             }
@@ -542,10 +542,10 @@ Ext.define('Ext.data.request.Ajax', {
 
     destroy: function() {
         this.xhr = null;
-        
+
         this.callParent();
     },
-    
+
     privates: {
         /**
          * Gets binary data from the xhr response object and returns it as a byte array
@@ -558,7 +558,7 @@ Ext.define('Ext.data.request.Ajax', {
                 responseBody = xhr.responseBody,
                 Cls = Ext.data.flash && Ext.data.flash.BinaryXhr,
                 byteArray, responseText, len, i;
-            
+
             if (xhr instanceof Cls) {
                 // If this was a BinaryXHR request via flash, we already have the bytes ready
                 byteArray = xhr.responseBytes;
@@ -596,7 +596,7 @@ Ext.define('Ext.data.request.Ajax', {
                 if (!this.self.vbScriptInjected) {
                     this.injectVBScript();
                 }
-                
+
                 /* eslint-disable-next-line no-undef */
                 getIEByteArray(xhr.responseBody, byteArray = []);
             }
@@ -606,7 +606,7 @@ Ext.define('Ext.data.request.Ajax', {
                 byteArray = [];
                 responseText = xhr.responseText;
                 len = responseText.length;
-                
+
                 for (i = 0; i < len; i++) {
                     // Some characters have an extra byte 0xF7 in the high order
                     // position. Throw away the high order byte and then push the
@@ -614,7 +614,7 @@ Ext.define('Ext.data.request.Ajax', {
                     byteArray.push(responseText.charCodeAt(i) & 0xFF);
                 }
             }
-            
+
             return byteArray;
         },
 
@@ -625,9 +625,9 @@ Ext.define('Ext.data.request.Ajax', {
          */
         injectVBScript: function() {
             var scriptTag = document.createElement('script');
-            
+
             scriptTag.type = 'text/vbscript';
-            
+
             /* eslint-disable indent */
             scriptTag.text = [
                 'Function getIEByteArray(byteArray, out)',
@@ -639,9 +639,9 @@ Ext.define('Ext.data.request.Ajax', {
                 'End Function'
             ].join('\n');
             /* eslint-enable indent */
-            
+
             Ext.getHead().dom.appendChild(scriptTag);
-            
+
             this.self.vbScriptInjected = true;
         }
     }

@@ -29,7 +29,7 @@ Ext.define('KitchenSink.view.chart.column3d.Stacked', {
     profiles: {
         defaults: {
             buttonShadow: true,
-            groupIcon: 'x-fa fa-bar-chart',
+            groupIcon: 'x-far fa-chart-bar',
             insetPadding: '40 20 10 10',
             padding: 8,
             shadow: true,
@@ -61,7 +61,7 @@ Ext.define('KitchenSink.view.chart.column3d.Stacked', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
     //</example>
 
@@ -130,7 +130,7 @@ Ext.define('KitchenSink.view.chart.column3d.Stacked', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             margin: '0 10 0 0',
             menu: {

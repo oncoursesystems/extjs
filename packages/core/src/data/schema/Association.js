@@ -288,7 +288,7 @@ Ext.define('Ext.data.schema.Association', {
      *
      * @return {Ext.data.Store} The store.
      */
-    
+
     /**
      * @method recordGetter
      * **This is not a real method, it is placeholder documentation for a generated method on
@@ -329,7 +329,7 @@ Ext.define('Ext.data.schema.Association', {
      * @return {Ext.data.Model} The record. `null` if the reference has been previously specified
      * as empty.
      */
-    
+
     /**
      * @method recordSetter **This is not a real method, it is placeholder documentation
      * for a generated method on a `Ext.data.Model`.**
@@ -400,14 +400,14 @@ Ext.define('Ext.data.schema.Association', {
         left.inverse = right;
         right.inverse = left;
     },
-    
+
     hasField: function() {
         return !!this.field;
     },
-    
+
     getFieldName: function() {
         var field = this.field;
-        
+
         return field ? field.name : '';
     }
 });

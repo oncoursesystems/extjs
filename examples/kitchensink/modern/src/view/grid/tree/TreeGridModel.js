@@ -24,7 +24,7 @@ Ext.define('KitchenSink.view.grid.tree.TreeGridModel', {
                         children: [{
                             text: 'First',
                             numItems: 7,
-                            iconCls: 'x-fa fa-sliders',
+                            iconCls: 'x-fa fa-sliders-h',
                             leaf: true
                         }, {
                             text: 'No Icon',
@@ -54,13 +54,13 @@ Ext.define('KitchenSink.view.grid.tree.TreeGridModel', {
                     }, {
                         text: 'Inactive',
                         numItems: 9,
-                        iconCls: 'x-fa fa-trash',
+                        iconCls: 'x-fa fa-trash-alt',
                         leaf: true
                     }]
                 }, {
                     text: 'Groups',
                     numItems: 3,
-                    iconCls: 'x-fa fa-group',
+                    iconCls: 'x-fa fa-users',
                     leaf: true
                 }, {
                     text: 'Settings',

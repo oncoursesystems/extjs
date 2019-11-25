@@ -37,7 +37,7 @@ Ext.define('Ext.dom.ElementEvent', {
             if (isDirectEvent && options.delegate) {
                 options.capture = true;
             }
-            
+
             if (options.capture) {
                 directCaptures = me.directCaptures ||
                     (me.directCaptures = new Ext.util.Event(me.observable, name));
@@ -88,7 +88,7 @@ Ext.define('Ext.dom.ElementEvent', {
                 }
                 else if (directCaptures) {
                     index = directCaptures.findListener(fn, scope);
-                    
+
                     if (index !== -1) {
                         removed = directCaptures.removeListener(fn, scope, index);
                     }

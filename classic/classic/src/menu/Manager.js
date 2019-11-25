@@ -26,11 +26,11 @@ Ext.define('Ext.menu.Manager', {
         me.onShow = function() {
             // This is a separate method to allow calling eagerly in unit tests
             me.registerGlobalListeners();
-            
+
             return me.onShow.apply(me, arguments); // do the real thing
         };
     },
-    
+
     onGlobalScroll: function(scroller) {
         var allMenus = this.visible,
             len = allMenus.length,
@@ -64,7 +64,7 @@ Ext.define('Ext.menu.Manager', {
         if (len) {
             // Clone here, we may modify this collection while the loop is active
             allMenus = allMenus.slice();
-            
+
             for (i = 0; i < len; ++i) {
                 menu = allMenus[i];
 
@@ -131,7 +131,7 @@ Ext.define('Ext.menu.Manager', {
      */
     get: function(menu, config) {
         var result;
-        
+
         if (typeof menu === 'string') { // menu id
             result = Ext.getCmp(menu);
 
@@ -198,7 +198,7 @@ Ext.define('Ext.menu.Manager', {
             }
         }
     },
-    
+
     /**
      * @private
      */

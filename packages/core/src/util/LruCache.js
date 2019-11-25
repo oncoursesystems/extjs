@@ -35,7 +35,6 @@ Ext.define('Ext.util.LruCache', {
             value: newValue
         };
 
-        
         if (last) {
             // If the list is not empty, update the last entry
             last.next = entry;
@@ -291,17 +290,17 @@ Ext.define('Ext.util.LruCache', {
      * @method containsKey
      * @private
      */
-    
+
     /**
      * @method contains
      * @private
      */
-    
+
     /**
      * @method getKeys
      * @private
      */
-    
+
     /**
      * @method getValues
      * @private

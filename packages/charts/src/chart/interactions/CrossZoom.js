@@ -157,7 +157,7 @@ Ext.define('Ext.chart.interactions.CrossZoom', {
          * with the default axis options.
          */
         axes: true,
-        
+
         gestures: {
             dragstart: 'onGestureStart',
             drag: 'onGesture',
@@ -232,7 +232,7 @@ Ext.define('Ext.chart.interactions.CrossZoom', {
     getSurface: function() {
         return this.getChart() && this.getChart().getSurface('overlay');
     },
-    
+
     setSeriesOpacity: function(opacity) {
         var surface = this.getChart() && this.getChart().getSurface('series');
 

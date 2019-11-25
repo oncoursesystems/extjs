@@ -84,21 +84,21 @@ Ext.define('Ext.draw.sprite.Image', {
 
             imageLoader.onload = function() {
                 var item;
-                
+
                 if (!loadingStub.done) {
                     loadingStub.done = true;
-                    
+
                     for (i = 0; i < loadingStub.pendingSprites.length; i++) {
                         item = loadingStub.pendingSprites[i];
-                        
+
                         if (!item.destroyed) {
                             item.setDirty(true);
                         }
                     }
-                    
+
                     for (i = 0; i < loadingStub.pendingSurfaces.length; i++) {
                         item = loadingStub.pendingSurfaces[i];
-                        
+
                         if (!item.destroyed) {
                             item.renderFrame();
                         }
@@ -140,8 +140,8 @@ Ext.define('Ext.draw.sprite.Image', {
         // eslint-disable-next-line vars-on-top
         var debug = attr.debug || this.statics().debug || Ext.draw.sprite.Sprite.debug;
 
-        if (debug) {
-            debug.bbox && this.renderBBox(surface, ctx);
+        if (debug && debug.bbox) {
+            this.renderBBox(surface, ctx);
         }
         //</debug>
     },

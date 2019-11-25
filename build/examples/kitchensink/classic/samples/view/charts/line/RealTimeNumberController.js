@@ -2,11 +2,11 @@ Ext.define('KitchenSink.view.charts.line.RealTimeNumberController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.line-real-time-number',
 
-    onAxisLabelRender: function (axis, label, layoutContext) { // only render interger values
+    onAxisLabelRender: function(axis, label, layoutContext) { // only render interger values
         return Math.abs(layoutContext.renderer(label) % 1) < 1e-5 ? Math.round(label) : '';
     },
 
-    onChartRendered: function (chart) {
+    onChartRendered: function(chart) {
         chart.getStore().removeAll();
         this.addNewData();
         this.chartTask = Ext.TaskManager.start({
@@ -17,13 +17,13 @@ Ext.define('KitchenSink.view.charts.line.RealTimeNumberController', {
         });
     },
 
-    onChartDestroy: function () {
+    onChartDestroy: function() {
         if (this.chartTask) {
             Ext.TaskManager.stop(this.chartTask);
         }
     },
 
-    getNextValue: function (previousValue, min, max, delta) {
+    getNextValue: function(previousValue, min, max, delta) {
         delta = delta || 3;
         min = min || 0;
         max = max || 20;
@@ -33,6 +33,7 @@ Ext.define('KitchenSink.view.charts.line.RealTimeNumberController', {
         if (Ext.isNumber(previousValue)) {
             return Ext.Number.constrain(previousValue + delta, min, max);
         }
+
         return Ext.Number.randomInt(min, max);
     },
 
@@ -50,16 +51,19 @@ Ext.define('KitchenSink.view.charts.line.RealTimeNumberController', {
         if (count > 0) {
             lastRecord = store.getAt(count - 1);
             xValue = lastRecord.get('xValue') + 1;
+
             if (xValue > visibleRange) {
                 xAxis.setMinimum(xValue - visibleRange);
                 xAxis.setMaximum(xValue);
             }
+
             store.add({
                 xValue: xValue,
                 yValue: this.getNextValue(lastRecord.get('yValue'), minY, maxY, deltaY)
             });
 
-        } else {
+        }
+        else {
             xAxis.setMinimum(0);
             xAxis.setMaximum(visibleRange);
 

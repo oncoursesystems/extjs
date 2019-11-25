@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.binding.TwoWay', {
         }
     },
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/binding/TwoWayController.js'
@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.binding.TwoWay', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     padding: 10,
     width: '${width}',

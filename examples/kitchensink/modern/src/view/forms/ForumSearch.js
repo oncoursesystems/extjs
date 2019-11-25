@@ -100,7 +100,7 @@ Ext.define('KitchenSink.view.forms.ForumSearch', {
                 },
                 itemTpl: '<a class="search-item" ' +
                         'href="http://www.sencha.com/forum/showthread.php?t={topicId}&p={id}">' +
-                    '<h3><span>{[Ext.Date.format(values.lastPost, "M j, Y")]}' + 
+                    '<h3><span>{[Ext.Date.format(values.lastPost, "M j, Y")]}' +
                         '<br>by {author}</span>{title}' +
                     '</h3>' +
                     '{excerpt}' +

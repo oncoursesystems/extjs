@@ -32,6 +32,9 @@ Ext.define('KitchenSink.view.button.SplitButtons', {
         },
         graphite: {
             width: 830
+        },
+        'classic-material': {
+            width: 830
         }
     },
     //</example>
@@ -52,11 +55,11 @@ Ext.define('KitchenSink.view.button.SplitButtons', {
         },
         defaults: {
             menu: [{
-                text:'Menu Item 1'
-            },{
-                text:'Menu Item 2'
-            },{
-                text:'Menu Item 3'
+                text: 'Menu Item 1'
+            }, {
+                text: 'Menu Item 2'
+            }, {
+                text: 'Menu Item 3'
             }]
         },
 

@@ -6,7 +6,7 @@
  */
 Ext.define('Ext.grid.locking.View', {
     alternateClassName: 'Ext.grid.LockingView',
-    
+
     requires: [
         'Ext.view.AbstractView',
         'Ext.view.Table'
@@ -300,10 +300,10 @@ Ext.define('Ext.grid.locking.View', {
         if (normalView.componentLayoutCounter &&
             !(lockedView.blockRefresh && normalView.blockRefresh)) {
             Ext.suspendLayouts();
-            
+
             lockedView.doFirstRefresh(store);
             normalView.doFirstRefresh(store);
-            
+
             Ext.resumeLayouts(true);
         }
     },
@@ -343,7 +343,7 @@ Ext.define('Ext.grid.locking.View', {
         this.relayFn('onBeginUpdate', arguments);
         Ext.resumeLayouts(true);
     },
-    
+
     onEndUpdate: function() {
         Ext.suspendLayouts();
         this.relayFn('onEndUpdate', arguments);
@@ -470,7 +470,7 @@ Ext.define('Ext.grid.locking.View', {
 
         Ext.resumeLayouts(true);
     },
-    
+
     setScrollable: function(scrollable) {
         Ext.suspendLayouts();
         this.lockedView.setScrollable(scrollable);
@@ -524,7 +524,7 @@ Ext.define('Ext.grid.locking.View', {
             // Access lastFocused directly because getter nulls it if the record
             // is no longer in view and all we are interested in is the lastFocused View.
             lastFocused = this.getNavigationModel().lastFocused;
-    
+
         view = lastFocused ? lastFocused.view : this.normalView;
         view.focusRow(row);
     },
@@ -536,7 +536,7 @@ Ext.define('Ext.grid.locking.View', {
     onRowFocus: function() {
         this.relayFn('onRowFocus', arguments);
     },
-    
+
     cancelFocusTask: function() {
         this.lockedView.cancelFocusTask();
         this.normalView.cancelFocusTask();
@@ -551,7 +551,7 @@ Ext.define('Ext.grid.locking.View', {
     getCellInclusive: function(pos, returnDom) {
         var col = pos.column,
             lockedSize = this.lockedGrid.getColumnManager().getColumns().length;
-            
+
         // Normalize view
         if (col >= lockedSize) {
             // Make a copy so we don't mutate the passed object
@@ -621,7 +621,7 @@ Ext.define('Ext.grid.locking.View', {
 
         return result;
     },
-    
+
     scrollBy: function() {
         var scroller = this.ownerGrid.getScrollable();
 
@@ -657,19 +657,19 @@ Ext.define('Ext.grid.locking.View', {
     removeRowCls: function() {
         this.relayFn('removeRowCls', arguments);
     },
-    
+
     destroy: function() {
         var me = this;
-        
+
         me.rendered = false;
 
         // Unbind from the dataSource we bound to in constructor
         me.bindStore(null, false, 'dataSource');
-        
+
         Ext.destroy(me.selModel, me.navigationModel, me.loadMask);
-        
+
         me.lockedView.lockingPartner = me.normalView.lockingPartner = null;
-        
+
         me.callParent();
     }
 

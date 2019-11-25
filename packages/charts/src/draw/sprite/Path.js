@@ -115,8 +115,13 @@ Ext.define('Ext.draw.sprite.Path', {
         var debug = attr.debug || this.statics().debug || Ext.draw.sprite.Sprite.debug;
 
         if (debug) {
-            debug.bbox && this.renderBBox(surface, ctx);
-            debug.xray && this.renderXRay(surface, ctx);
+            if (debug.bbox) {
+                this.renderBBox(surface, ctx);
+            }
+
+            if (debug.xray) {
+                this.renderXRay(surface, ctx);
+            }
         }
         //</debug>
     },

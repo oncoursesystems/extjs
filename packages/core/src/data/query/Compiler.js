@@ -180,7 +180,7 @@ Ext.define('Ext.data.query.Compiler', {
                 }
             },
 
-            in: function(me, body, vars, indent, node, last, childIndent) {
+            'in': function(me, body, vars, indent, node, last, childIndent) {
                 var operands = node.on;
 
                 body[last] += 'O.in(';
@@ -299,7 +299,7 @@ Ext.define('Ext.data.query.Compiler', {
                 return ret;
             },
 
-            in: function(val, values) {
+            'in': function(val, values) {
                 return Ext.Array.contains(values, val);
             },
 

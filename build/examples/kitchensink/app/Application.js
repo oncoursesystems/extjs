@@ -7,8 +7,8 @@ Ext.define('KitchenSink.BaseApplication', {
 
     defaultToken: 'all',
 
-    destroyLoader: function () {
-        var top     = Ext.get('loadingSplashTop'),
+    destroyLoader: function() {
+        var top = Ext.get('loadingSplashTop'),
             wrapper = Ext.fly('loadingSplash');
 
         top.on('transitionend', wrapper.destroy, wrapper, { single: true });

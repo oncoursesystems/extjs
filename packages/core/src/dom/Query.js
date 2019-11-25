@@ -1,23 +1,26 @@
-/* eslint-disable max-len */
 /**
  * @class Ext.dom.Query
  * @alternateClassName Ext.DomQuery
  * @alternateClassName Ext.core.DomQuery
  * @singleton
  *
- * Provides high performance selector/xpath processing by compiling queries into reusable functions. New pseudo classes
- * and matchers can be plugged. It works on HTML and XML documents (if a content node is passed in).
+ * Provides high performance selector/xpath processing by compiling queries 
+ * into reusable functions. New pseudo classes and matchers can be plugged. It works 
+ * on HTML and XML documents (if a content node is passed in).
  *
- * DomQuery supports most of the [CSS3 selectors spec][1], along with some custom selectors and basic XPath.
+ * DomQuery supports most of the [CSS3 selectors spec][1], along with some custom selectors 
+ * and basic XPath.
  *
- * All selectors, attribute filters and pseudos below can be combined infinitely in any order. For example
- * `div.foo:nth-child(odd)[@foo=bar].bar:first` would be a perfectly valid selector. Node filters are processed
- * in the order in which they appear, which allows you to optimize your queries for your document structure.
+ * All selectors, attribute filters and pseudos below can be combined infinitely in any order. 
+ * For example `div.foo:nth-child(odd)[@foo=bar].bar:first` would be a perfectly valid selector. 
+ * Node filters are processed in the order in which they appear, which allows you to optimize 
+ * your queries for your document structure.
  * 
  * ## Simple Selectors
  * 
- * For performance reasons, some query methods accept selectors that are termed as **simple selectors**. A simple
- * selector is a selector that does not include contextual information about any parent/sibling elements.
+ * For performance reasons, some query methods accept selectors that are termed as 
+ * **simple selectors**. A simple selector is a selector that does not include contextual
+ * information about any parent/sibling elements.
  * 
  * Some examples of valid simple selectors:
  * 
@@ -25,7 +28,8 @@
  *     var simple = 'div.bar'; // Only asking for the tag/class name on the element
  *     var simple = '[href];' // Asking for an attribute on the element.
  *     var simple = ':not(.foo)'; // Only asking for the non-matches against the class name
- *     var simple = 'span:first-child'; // Doesn't require any contextual information about the parent node
+ *     var simple = 'span:first-child'; // Doesn't require any contextual information about 
+ *                                      // the parent node
  * 
  * Simple examples of invalid simple selectors:
  * 
@@ -38,12 +42,14 @@
  *   - **`E`** an element with the tag E
  *   - **`E F`** All descendent elements of E that have the tag F
  *   - **`E > F`** or **E/F** all direct children elements of E that have the tag F
- *   - **`E + F`** all elements with the tag F that are immediately preceded by an element with the tag E
+ *   - **`E + F`** all elements with the tag F that are immediately preceded by an element 
+ *                 with the tag E
  *   - **`E ~ F`** all elements with the tag F that are preceded by a sibling element with the tag E
  *
  * ## Attribute Selectors:
  *
- * The use of `@` and quotes are optional. For example, `div[@foo='bar']` is also a valid attribute selector.
+ * The use of `@` and quotes are optional. For example, `div[@foo='bar']` is also a valid attribute 
+ * selector.
  *
  *   - **`E[foo]`** has an attribute "foo"
  *   - **`E[foo=bar]`** has an attribute "foo" that equals "bar"
@@ -61,7 +67,8 @@
  *   - **`E:nth-child(odd)`** E is an odd child of its parent
  *   - **`E:nth-child(even)`** E is an even child of its parent
  *   - **`E:only-child`** E is the only child of its parent
- *   - **`E:checked`** E is an element that is has a checked attribute that is true (e.g. a radio or checkbox)
+ *   - **`E:checked`** E is an element that is has a checked attribute that is true 
+ *                     (e.g. a radio or checkbox)
  *   - **`E:first`** the first E in the resultset
  *   - **`E:last`** the last E in the resultset
  *   - **`E:nth(_n_)`** the _n_th E in the resultset (1 based)
@@ -74,7 +81,8 @@
  *   - **`E:next(S)`** an E element whose next sibling matches simple selector S
  *   - **`E:prev(S)`** an E element whose previous sibling matches simple selector S
  *   - **`E:any(S1|S2|S2)`** an E element which matches any of the simple selectors S1, S2 or S3
- *   - **`E:visible(true)`** an E element which is deeply visible according to {@link Ext.dom.Element#isVisible}
+ *   - **`E:visible(true)`** an E element which is deeply visible according to 
+ *                           {@link Ext.dom.Element#isVisible}
  *
  * ## CSS Value Selectors:
  *
@@ -89,11 +97,11 @@
  *   - **`ns|E`** an element with tag E and namespace prefix ns
  *
  * [1]: http://www.w3.org/TR/2005/WD-css3-selectors-20051215/#selectors
+ *
  */
-/* eslint-enable max-len */
-/* eslint-disable eqeqeq, no-undef, no-unused-vars, no-cond-assign, no-useless-escape */
-/* eslint-disable vars-on-top */
 Ext.define('Ext.dom.Query', function() {
+    /* eslint-disable eqeqeq, no-undef, no-unused-vars, no-cond-assign, no-useless-escape */
+    /* eslint-disable vars-on-top */
     var DQ,
         doc = document,
         cache, simpleCache, valueCache,
@@ -101,9 +109,9 @@ Ext.define('Ext.dom.Query', function() {
         useElementPointer = !!doc.documentElement.firstElementChild,
         useChildrenCollection = (function() {
             var d = doc.createElement('div');
-            
+
             d.innerHTML = '<!-- -->text<!-- -->';
-            
+
             return d.children && (d.children.length === 0);
         })(),
         nonSpace = /\S/,
@@ -152,18 +160,18 @@ Ext.define('Ext.dom.Query', function() {
             while ($1.length < 6) {
                 $1 = '0' + $1;
             }
-            
+
             return '\\' + $1;
         },
 
         // converts a single char escape to long escape form
         charToLongHex = function($0, $1) {
             num = $1.charCodeAt(0).toString(16);
-            
+
             if (num.length === 1) {
                 num = '0' + num;
             }
-            
+
             return '\\0000' + num;
         },
 
@@ -177,14 +185,14 @@ Ext.define('Ext.dom.Query', function() {
         // checks if the path has escaping & does any appropriate replacements
         setupEscapes = function(path) {
             hasEscapes = (path.indexOf('\\') > -1);
-            
+
             if (hasEscapes) {
                 path = path
                     .replace(shortHex, shortToLongHex)
                     .replace(nonHex, charToLongHex)
                     .replace(escapes, '\\\\');  // double the '\' for js compilation
             }
-            
+
             return path;
         };
 
@@ -201,17 +209,17 @@ Ext.define('Ext.dom.Query', function() {
         : function child(parent, index) {
             var i = 0,
                 n = parent.firstChild;
-            
+
             while (n) {
                 if (n.nodeType == 1) {
                     if (++i == index) {
                         return n;
                     }
                 }
-                
+
                 n = n.nextSibling;
             }
-            
+
             return null;
         };
 
@@ -224,7 +232,7 @@ Ext.define('Ext.dom.Query', function() {
             while ((n = n.nextSibling) && n.nodeType != 1) {
                 // This block is intentionally left blank
             }
-            
+
             return n;
         };
 
@@ -237,7 +245,7 @@ Ext.define('Ext.dom.Query', function() {
             while ((n = n.previousSibling) && n.nodeType != 1) {
                 // This block is intentionally left blank
             }
-            
+
             return n;
         };
 
@@ -250,7 +258,7 @@ Ext.define('Ext.dom.Query', function() {
 
         while (n) {
             nextNode = n.nextSibling;
-            
+
             // clean worthless empty nodes.
             if (n.nodeType == 3 && !nonSpace.test(n.nodeValue)) {
                 parent.removeChild(n);
@@ -259,10 +267,10 @@ Ext.define('Ext.dom.Query', function() {
                 // add an expando nodeIndex
                 n.nodeIndex = ++nodeIndex;
             }
-            
+
             n = nextNode;
         }
-        
+
         return this;
     }
 
@@ -272,18 +280,18 @@ Ext.define('Ext.dom.Query', function() {
     byClassName = useClassList
         ? function(nodeSet, cls) {
             cls = unescapeCssSelector(cls);
-            
+
             if (!cls) {
                 return nodeSet;
             }
-            
+
             var result = [],
                 ri = -1,
                 i, ci, classList;
 
             for (i = 0; ci = nodeSet[i]; i++) {
                 classList = ci.classList;
-                
+
                 if (classList) {
                     if (classList.contains(cls)) {
                         result[++ri] = ci;
@@ -295,16 +303,16 @@ Ext.define('Ext.dom.Query', function() {
                     result[++ri] = ci;
                 }
             }
-            
+
             return result;
         }
         : function(nodeSet, cls) {
             cls = unescapeCssSelector(cls);
-            
+
             if (!cls) {
                 return nodeSet;
             }
-            
+
             var result = [],
                 ri = -1,
                 i, ci;
@@ -314,7 +322,7 @@ Ext.define('Ext.dom.Query', function() {
                     result[++ri] = ci;
                 }
             }
-            
+
             return result;
         };
 
@@ -323,7 +331,7 @@ Ext.define('Ext.dom.Query', function() {
         if (!n.tagName && typeof n.length != "undefined") {
             n = n[0];
         }
-        
+
         if (!n) {
             return null;
         }
@@ -331,11 +339,11 @@ Ext.define('Ext.dom.Query', function() {
         if (attr == "for") {
             return n.htmlFor;
         }
-        
+
         if (attr == "class" || attr == "className") {
             return n.className;
         }
-        
+
         return n.getAttribute(attr) || n[attr];
 
     }
@@ -347,13 +355,13 @@ Ext.define('Ext.dom.Query', function() {
         var result = [],
             ri = -1,
             cs, i, ni, j, ci, cn, utag, n, cj;
-        
+
         if (!ns) {
             return result;
         }
-        
+
         tagName = tagName.replace('|', ':') || "*";
-        
+
         // convert to array
         if (typeof ns.getElementsByTagName != "undefined") {
             ns = [ns];
@@ -363,7 +371,7 @@ Ext.define('Ext.dom.Query', function() {
         // at any depth
         if (!mode) {
             tagName = unescapeCssSelector(tagName);
-            
+
             if (!supportsColonNsSeparator && DQ.isXml(ns[0]) && tagName.indexOf(':') !== -1) {
                 // Some browsers (e.g. WebKit and Opera do not support the following syntax
                 // in xml documents: getElementsByTagName('ns:tagName'). To work around
@@ -373,7 +381,7 @@ Ext.define('Ext.dom.Query', function() {
                 // the proper namespace.
                 for (i = 0; ni = ns[i]; i++) {
                     cs = ni.getElementsByTagName(tagName.split(':').pop());
-                    
+
                     for (j = 0; ci = cs[j]; j++) {
                         if (ci.tagName === tagName) {
                             result[++ri] = ci;
@@ -384,7 +392,7 @@ Ext.define('Ext.dom.Query', function() {
             else {
                 for (i = 0; ni = ns[i]; i++) {
                     cs = ni.getElementsByTagName(tagName);
-                    
+
                     for (j = 0; ci = cs[j]; j++) {
                         result[++ri] = ci;
                     }
@@ -395,10 +403,10 @@ Ext.define('Ext.dom.Query', function() {
         }
         else if (mode == "/" || mode == ">") {
             utag = tagName.toUpperCase();
-            
+
             for (i = 0; ni = ns[i]; i++) {
                 cn = ni.childNodes;
-                
+
                 for (j = 0; cj = cn[j]; j++) {
                     if (cj.nodeName == utag || cj.nodeName == tagName || tagName == '*') {
                         result[++ri] = cj;
@@ -411,12 +419,12 @@ Ext.define('Ext.dom.Query', function() {
         }
         else if (mode == "+") {
             utag = tagName.toUpperCase();
-            
+
             for (i = 0; n = ns[i]; i++) {
                 while ((n = n.nextSibling) && n.nodeType != 1) {
                     // This block is intentionally left blank
                 }
-                
+
                 if (n && (n.nodeName == utag || n.nodeName == tagName || tagName == '*')) {
                     result[++ri] = n;
                 }
@@ -427,7 +435,7 @@ Ext.define('Ext.dom.Query', function() {
         }
         else if (mode == "~") {
             utag = tagName.toUpperCase();
-            
+
             for (i = 0; n = ns[i]; i++) {
                 while ((n = n.nextSibling)) {
                     if (n.nodeName == utag || n.nodeName == tagName || tagName == '*') {
@@ -436,13 +444,13 @@ Ext.define('Ext.dom.Query', function() {
                 }
             }
         }
-        
+
         return result;
     }
 
     function concat(a, b) {
         a.push.apply(a, b);
-        
+
         return a;
     }
 
@@ -450,49 +458,49 @@ Ext.define('Ext.dom.Query', function() {
         if (cs.tagName || cs === doc) {
             cs = [cs];
         }
-        
+
         if (!tagName) {
             return cs;
         }
-        
+
         var result = [],
             ri = -1,
             i, ci;
-        
+
         tagName = tagName.toLowerCase();
-        
+
         for (i = 0; ci = cs[i]; i++) {
             if (ci.nodeType == 1 && ci.tagName.toLowerCase() == tagName) {
                 result[++ri] = ci;
             }
         }
-        
+
         return result;
     }
 
     function byId(cs, id) {
         id = unescapeCssSelector(id);
-        
+
         if (cs.tagName || cs === doc) {
             cs = [cs];
         }
-        
+
         if (!id) {
             return cs;
         }
-        
+
         var result = [],
             ri = -1,
             i, ci;
-        
+
         for (i = 0; ci = cs[i]; i++) {
             if (ci && ci.id == id) {
                 result[++ri] = ci;
-                
+
                 return result;
             }
         }
-        
+
         return result;
     }
 
@@ -540,42 +548,42 @@ Ext.define('Ext.dom.Query', function() {
                 else {
                     a = ci.getAttribute(attr);
                 }
-                
+
                 if ((fn && fn(a, value)) || (!fn && a)) {
                     result[++ri] = ci;
                 }
             }
         }
-        
+
         return result;
     }
 
     function byPseudo(cs, name, value) {
         value = unescapeCssSelector(value);
-        
+
         return DQ.pseudos[name](cs, value);
     }
 
     function nodupIEXml(cs) {
         var d = ++key,
             r, i, len, c;
-        
+
         cs[0].setAttribute("_nodup", d);
         r = [cs[0]];
-        
+
         for (i = 1, len = cs.length; i < len; i++) {
             c = cs[i];
-            
+
             if (!c.getAttribute("_nodup") != d) {
                 c.setAttribute("_nodup", d);
                 r[r.length] = c;
             }
         }
-        
+
         for (i = 0, len = cs.length; i < len; i++) {
             cs[i].removeAttribute("_nodup");
         }
-        
+
         return r;
     }
 
@@ -583,45 +591,45 @@ Ext.define('Ext.dom.Query', function() {
         if (!cs) {
             return [];
         }
-        
+
         var len = cs.length,
             r = cs,
             ri = -1,
             c, cj, i, d, j;
-        
+
         if (!len || typeof cs.nodeType != "undefined" || len == 1) {
             return cs;
         }
-        
+
         if (isIE && typeof cs[0].selectSingleNode != "undefined") {
             return nodupIEXml(cs);
         }
-        
+
         d = ++key;
         cs[0]._nodup = d;
-        
+
         for (i = 1; c = cs[i]; i++) {
             if (c._nodup != d) {
                 c._nodup = d;
             }
             else {
                 r = [];
-                
+
                 for (j = 0; j < i; j++) {
                     r[++ri] = cs[j];
                 }
-                
+
                 for (j = i + 1; cj = cs[j]; j++) {
                     if (cj._nodup != d) {
                         cj._nodup = d;
                         r[++ri] = cj;
                     }
                 }
-                
+
                 return r;
             }
         }
-        
+
         return r;
     }
 
@@ -629,21 +637,21 @@ Ext.define('Ext.dom.Query', function() {
         var d = ++key,
             r = [],
             i, len;
-        
+
         for (i = 0, len = c1.length; i < len; i++) {
             c1[i].setAttribute("_qdiff", d);
         }
-        
+
         for (i = 0, len = c2.length; i < len; i++) {
             if (c2[i].getAttribute("_qdiff") != d) {
                 r[r.length] = c2[i];
             }
         }
-        
+
         for (i = 0, len = c1.length; i < len; i++) {
             c1[i].removeAttribute("_qdiff");
         }
-        
+
         return r;
     }
 
@@ -652,40 +660,40 @@ Ext.define('Ext.dom.Query', function() {
             d = ++key,
             r = [],
             i, len;
-        
+
         if (!len1) {
             return c2;
         }
-        
+
         if (isIE && typeof c1[0].selectSingleNode != "undefined") {
             return quickDiffIEXml(c1, c2);
         }
-        
+
         for (i = 0; i < len1; i++) {
             c1[i]._qdiff = d;
         }
-        
+
         for (i = 0, len = c2.length; i < len; i++) {
             if (c2[i]._qdiff != d) {
                 r[r.length] = c2[i];
             }
         }
-        
+
         return r;
     }
 
     function quickId(ns, mode, root, id) {
         var d;
-        
+
         if (ns == root) {
             id = unescapeCssSelector(id);
             d = root.ownerDocument || root;
-            
+
             return d.getElementById(id);
         }
-        
+
         ns = getNodes(ns, mode, "*");
-        
+
         return byId(ns, id);
     }
 
@@ -761,7 +769,7 @@ Ext.define('Ext.dom.Query', function() {
             while (path && lastPath != path) {
                 lastPath = path;
                 tokenMatch = path.match(tagTokenRe);
-                
+
                 if (type == "select") {
                     if (tokenMatch) {
                         // ID Selector
@@ -771,7 +779,7 @@ Ext.define('Ext.dom.Query', function() {
                         else {
                             fn[fn.length] = 'n = getNodes(n, mode, "' + tokenMatch[2] + '");';
                         }
-                        
+
                         path = path.replace(tokenMatch[0], "");
                     }
                     else if (path.substr(0, 1) != '@') {
@@ -787,30 +795,30 @@ Ext.define('Ext.dom.Query', function() {
                         else {
                             fn[fn.length] = 'n = byTag(n, "' + tokenMatch[2] + '");';
                         }
-                        
+
                         path = path.replace(tokenMatch[0], "");
                     }
                 }
-                
+
                 while (!(modeMatch = path.match(modeRe))) {
                     matched = false;
-                    
+
                     for (j = 0; j < matchersLn; j++) {
                         t = matchers[j];
                         m = path.match(t.re);
-                        
+
                         if (m) {
                             fn[fn.length] = t.select.replace(tplRe, function(x, i) {
                                 return m[i];
                             });
-                            
+
                             path = path.replace(m[0], "");
                             matched = true;
-                            
+
                             break;
                         }
                     }
-                    
+
                     // prevent infinite loop on bad selector
                     if (!matched) {
                         Ext.raise({
@@ -820,19 +828,19 @@ Ext.define('Ext.dom.Query', function() {
                         });
                     }
                 }
-                
+
                 if (modeMatch[1]) {
                     fn[fn.length] = 'mode="' + modeMatch[1].replace(trimRe, "") + '";';
                     path = path.replace(modeMatch[1], "");
                 }
             }
-            
+
             // close fn out
             fn[fn.length] = "return nodup(n);\n}";
 
             // eval fn and return it
             eval(fn.join(""));
-            
+
             return f;
         },
 
@@ -854,7 +862,7 @@ Ext.define('Ext.dom.Query', function() {
             if (typeof root == "string") {
                 root = doc.getElementById(root);
             }
-            
+
             var paths = Ext.splitAndUnescape(path, ","),
                 results = [],
                 query, i, len, subPath, result;
@@ -864,11 +872,11 @@ Ext.define('Ext.dom.Query', function() {
                 subPath = paths[i].replace(trimRe, "");
                 // compile and place in cache
                 query = cache.get(subPath);
-                
+
                 if (!query) {
                     // When we compile, escaping is handled inside the compile method
                     query = DQ.compile(subPath, type);
-                    
+
                     if (!query) {
                         Ext.raise({
                             sourceClass: 'Ext.DomQuery',
@@ -876,7 +884,7 @@ Ext.define('Ext.dom.Query', function() {
                             msg: subPath + ' is not a valid selector'
                         });
                     }
-                    
+
                     cache.add(subPath, query);
                 }
                 else {
@@ -884,9 +892,9 @@ Ext.define('Ext.dom.Query', function() {
                     // selector has escaping and setup the appropriate flags
                     setupEscapes(subPath);
                 }
-                
+
                 result = query(root);
-                
+
                 if (result && result !== doc) {
                     results = results.concat(result);
                 }
@@ -897,13 +905,13 @@ Ext.define('Ext.dom.Query', function() {
             if (paths.length > 1) {
                 return nodup(results);
             }
-            
+
             return results;
         },
 
         isXml: function(el) {
             var docEl = (el ? el.ownerDocument || el : 0).documentElement;
-            
+
             return docEl ? docEl.nodeName !== "HTML" : false;
         },
 
@@ -928,7 +936,7 @@ Ext.define('Ext.dom.Query', function() {
         select: doc.querySelectorAll
             ? function(path, root, type, single) {
                 root = root || doc;
-                
+
                 if (!DQ.isXml(root)) {
                     try {
                         /*
@@ -949,7 +957,7 @@ Ext.define('Ext.dom.Query', function() {
                             path = Ext.makeIdSelector(Ext.id(root)) + ' ' + path;
                             root = root.parentNode;
                         }
-                        
+
                         return single
                             ? [ root.querySelector(path) ]
                             : Ext.Array.toArray(root.querySelectorAll(path));
@@ -958,7 +966,7 @@ Ext.define('Ext.dom.Query', function() {
                         // This block is intentionally left blank
                     }
                 }
-                
+
                 return DQ.jsSelect.call(this, path, root, type);
             }
             : function(path, root, type) {
@@ -984,7 +992,7 @@ Ext.define('Ext.dom.Query', function() {
          */
         selectValue: function(path, root, defaultValue) {
             path = path.replace(trimRe, "");
-            
+
             var query = valueCache.get(path),
                 n;
 
@@ -997,7 +1005,7 @@ Ext.define('Ext.dom.Query', function() {
             }
 
             n = query(root);
-            
+
             return DQ.getNodeValue(n[0] || n, defaultValue);
         },
 
@@ -1039,7 +1047,7 @@ Ext.define('Ext.dom.Query', function() {
          */
         selectNumber: function(path, root, defaultValue) {
             var v = DQ.selectValue(path, root, defaultValue || 0);
-            
+
             return parseFloat(v);
         },
 
@@ -1053,10 +1061,10 @@ Ext.define('Ext.dom.Query', function() {
             if (typeof el == "string") {
                 el = doc.getElementById(el);
             }
-            
+
             var isArray = Ext.isArray(el),
                 result = DQ.filter(isArray ? el : [el], ss);
-            
+
             return isArray ? (result.length == el.length) : (result.length > 0);
         },
 
@@ -1071,7 +1079,7 @@ Ext.define('Ext.dom.Query', function() {
          */
         filter: function(els, ss, nonMatches) {
             ss = ss.replace(trimRe, "");
-            
+
             var query = simpleCache.get(ss),
                 result;
 
@@ -1084,7 +1092,7 @@ Ext.define('Ext.dom.Query', function() {
             }
 
             result = query(els);
-            
+
             return nonMatches ? quickDiff(result, els) : result;
         },
 
@@ -1162,17 +1170,17 @@ Ext.define('Ext.dom.Query', function() {
                 var r = [],
                     ri = -1,
                     n, i, ci;
-                
+
                 for (i = 0; (ci = n = c[i]); i++) {
                     while ((n = n.previousSibling) && n.nodeType != 1) {
                         // This block is intentionally left blank
                     }
-                    
+
                     if (!n) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1180,17 +1188,17 @@ Ext.define('Ext.dom.Query', function() {
                 var r = [],
                     ri = -1,
                     n, i, ci;
-                
+
                 for (i = 0; (ci = n = c[i]); i++) {
                     while ((n = n.nextSibling) && n.nodeType != 1) {
                         // This block is intentionally left blank
                     }
-                    
+
                     if (!n) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1201,22 +1209,22 @@ Ext.define('Ext.dom.Query', function() {
                     f = (m[1] || 1) - 0,
                     l = m[2] - 0,
                     i, n, j, cn, pn;
-                
+
                 for (i = 0; n = c[i]; i++) {
                     pn = n.parentNode;
-                    
+
                     if (batch != pn._batch) {
                         j = 0;
-                        
+
                         for (cn = pn.firstChild; cn; cn = cn.nextSibling) {
                             if (cn.nodeType == 1) {
                                 cn.nodeIndex = ++j;
                             }
                         }
-                        
+
                         pn._batch = batch;
                     }
-                    
+
                     if (f == 1) {
                         if (l === 0 || n.nodeIndex == l) {
                             r[++ri] = n;
@@ -1234,13 +1242,13 @@ Ext.define('Ext.dom.Query', function() {
                 var r = [],
                     ri = -1,
                     i, ci;
-                
+
                 for (i = 0; ci = c[i]; i++) {
                     if (!prev(ci) && !next(ci)) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1248,27 +1256,27 @@ Ext.define('Ext.dom.Query', function() {
                 var r = [],
                     ri = -1,
                     i, ci, cns, j, cn, empty;
-                
+
                 for (i = 0; ci = c[i]; i++) {
                     cns = ci.childNodes;
                     j = 0;
                     empty = true;
-                    
+
                     while (cn = cns[j]) {
                         ++j;
-                        
+
                         if (cn.nodeType == 1 || cn.nodeType == 3) {
                             empty = false;
-                            
+
                             break;
                         }
                     }
-                    
+
                     if (empty) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1276,13 +1284,13 @@ Ext.define('Ext.dom.Query', function() {
                 var r = [],
                     ri = -1,
                     i, ci;
-                
+
                 for (i = 0; ci = c[i]; i++) {
                     if ((ci.textContent || ci.innerText || ci.text || '').indexOf(v) != -1) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1290,13 +1298,13 @@ Ext.define('Ext.dom.Query', function() {
                 var r = [],
                     ri = -1,
                     i, ci;
-                
+
                 for (i = 0; ci = c[i]; i++) {
                     if (ci.firstChild && ci.firstChild.nodeValue == v) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1304,13 +1312,13 @@ Ext.define('Ext.dom.Query', function() {
                 var r = [],
                     ri = -1,
                     i, ci;
-                
+
                 for (i = 0; ci = c[i]; i++) {
                     if (ci.checked === true) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1323,17 +1331,17 @@ Ext.define('Ext.dom.Query', function() {
                     r = [],
                     ri = -1,
                     s, i, ci, j;
-                
+
                 for (i = 0; ci = c[i]; i++) {
                     for (j = 0; s = ss[j]; j++) {
                         if (DQ.is(ci, s)) {
                             r[++ri] = ci;
-                            
+
                             break;
                         }
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1362,13 +1370,13 @@ Ext.define('Ext.dom.Query', function() {
                     r = [],
                     ri = -1,
                     i, ci;
-                
+
                 for (i = 0; ci = c[i]; i++) {
                     if (s(ss, ci).length > 0) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1377,15 +1385,15 @@ Ext.define('Ext.dom.Query', function() {
                     r = [],
                     ri = -1,
                     i, ci, n;
-                
+
                 for (i = 0; ci = c[i]; i++) {
                     n = next(ci);
-                    
+
                     if (n && is(n, ss)) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1394,15 +1402,15 @@ Ext.define('Ext.dom.Query', function() {
                     r = [],
                     ri = -1,
                     i, ci, n;
-                
+
                 for (i = 0; ci = c[i]; i++) {
                     n = prev(ci);
-                    
+
                     if (n && is(n, ss)) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             },
 
@@ -1414,7 +1422,7 @@ Ext.define('Ext.dom.Query', function() {
 
                 for (; i < len; i++) {
                     c = candidates[i];
-                    
+
                     if (Ext.fly(c, '_DomQuery').isFocusable()) {
                         results.push(c);
                     }
@@ -1422,7 +1430,7 @@ Ext.define('Ext.dom.Query', function() {
 
                 return results;
             },
-            
+
             visible: function(candidates, deep) {
                 var len = candidates.length,
                     results = [],
@@ -1431,7 +1439,7 @@ Ext.define('Ext.dom.Query', function() {
 
                 for (; i < len; i++) {
                     c = candidates[i];
-                    
+
                     if (Ext.fly(c, '_DomQuery').isVisible(deep)) {
                         results.push(c);
                     }
@@ -1444,15 +1452,15 @@ Ext.define('Ext.dom.Query', function() {
                 var r = [],
                     ri = -1,
                     i, ci, s;
-                
+
                 for (i = 0; ci = c[i]; i++) {
                     s = Ext.fly(ci, '_DomQuery').getScroll();
-                    
+
                     if (s.top > 0 || s.left > 0) {
                         r[++ri] = ci;
                     }
                 }
-                
+
                 return r;
             }
         }

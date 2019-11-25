@@ -61,7 +61,7 @@ Ext.define('Ext.ux.ajax.SimXhr', {
     schedule: function() {
         var me = this,
             delay = me.mgr.delay;
-            
+
         if (delay) {
             me.timer = Ext.defer(function() {
                 me.onTick();
@@ -123,6 +123,9 @@ Ext.define('Ext.ux.ajax.SimXhr', {
 
         me.timer = null;
         me.onComplete();
-        me.onreadystatechange && me.onreadystatechange();
+
+        if (me.onreadystatechange) {
+            me.onreadystatechange();
+        }
     }
 });

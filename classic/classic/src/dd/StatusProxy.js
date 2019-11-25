@@ -16,11 +16,11 @@ Ext.define('Ext.dd.StatusProxy', {
         '<div id="{id}-ghost" data-ref="ghost" class="' + Ext.baseCSSPrefix + 'dd-drag-ghost" role="presentation"></div>'
     ],
     /* eslint-enable indent, max-len */
-    
+
     repairCls: Ext.baseCSSPrefix + 'dd-drag-repair',
-    
+
     ariaRole: 'presentation',
-    
+
     skipLayout: true,
     alignOnScroll: false,
 
@@ -42,9 +42,9 @@ Ext.define('Ext.dd.StatusProxy', {
             shadow: config.shadow || false,
             renderTo: Ext.getDetachedBody()
         });
-        
+
         me.callParent(arguments);
-        
+
         this.dropStatus = this.dropNotAllowed;
     },
 
@@ -99,7 +99,7 @@ Ext.define('Ext.dd.StatusProxy', {
      */
     update: function(html) {
         var el;
-        
+
         if (typeof html === "string") {
             this.ghost.setHtml(html);
         }
@@ -108,7 +108,7 @@ Ext.define('Ext.dd.StatusProxy', {
             html.style.margin = "0";
             this.ghost.dom.appendChild(html);
         }
-        
+
         el = this.ghost.dom.firstChild;
 
         if (el) {
@@ -192,7 +192,7 @@ Ext.define('Ext.dd.StatusProxy', {
      */
     afterRepair: function() {
         var me = this;
-    
+
         me.hide(true);
         me.el.removeCls(me.repairCls);
 

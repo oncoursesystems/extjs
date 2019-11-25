@@ -42,7 +42,6 @@ Ext.define('Ext.ux.colorpick.SliderHue', {
         });
     },
 
-
     // Called via data binding whenever selectedColor.h changes; hue param is 0-1
     setHue: function(hue) {
 

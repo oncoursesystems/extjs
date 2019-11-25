@@ -254,7 +254,6 @@ topSuite("Ext.grid.feature.GroupingSummary", ['Ext.grid.Panel'], function() {
             var row = grid.getView().getEl().dom.querySelector(selector),
                 cell = row.querySelector(grid.down('#markColumn').getCellSelector());
 
-
             var content = cell.querySelector(grid.getView().innerSelector).innerHTML;
 
             expect(content).toBe('48');

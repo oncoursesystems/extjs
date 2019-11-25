@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.pivot.RowStyling', {
     xtype: 'grandtotals-pivot-grid',
     controller: 'pivot',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/pivot/PivotController.js'
@@ -26,20 +26,20 @@ Ext.define('KitchenSink.view.pivot.RowStyling', {
         type: 'Model',
         path: 'modern/src/view/pivot/PivotRowModel.js'
     }],
-    // </example>
+    //</example>
 
     itemConfig: {
         viewModel: {
             // use a default viewModel when using bind templates
             type: 'default'
             // or a user defined viewModel when using bind formulas
-            //type: 'pivot-row-model'
+            // type: 'pivot-row-model'
         },
         bind: {
             // bind template usage
             userCls: '{record.isRowGrandTotal ? "pivotRowGrandTotal" : (record.isRowGroupHeader ? "pivotRowHeader" : (record.isRowGroupTotal ? "pivotRowTotal" : ""))}'
             // or bind formula
-            //userCls: '{rowStyle}'
+            // userCls: '{rowStyle}'
         }
     },
 

@@ -5,7 +5,7 @@ Ext.define('KitchenSink.view.drag.SimpleController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.drag-simple',
 
-    afterRender: function (view) {
+    afterRender: function(view) {
         this.source = new Ext.drag.Source({
             element: view.el.down('.simple-source'),
             constrain: view.body,
@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.drag.SimpleController', {
                 dragmove: function(source, info) {
                     var pos = info.element.current,
                         html;
-                    
+
                     html = Ext.String.format(
                         'X: {0}<br>Y: {1}',
                         Ext.Number.roundToPrecision(pos.x, 2),

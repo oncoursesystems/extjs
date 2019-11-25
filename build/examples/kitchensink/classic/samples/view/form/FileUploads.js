@@ -6,19 +6,19 @@ Ext.define('KitchenSink.view.form.FileUploads', {
     extend: 'Ext.container.Container',
     xtype: 'form-fileuploads',
     controller: 'form-fileuploads',
-    
+
     //<example>
     requires: [
         'KitchenSink.view.form.FileUploadsController'
     ],
-    
+
     exampleTitle: 'File Upload fields',
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/form/FileUploadsController.js'
     }],
     //</example>
-    
+
     profiles: {
         classic: {
             labelWidth: 70
@@ -28,6 +28,9 @@ Ext.define('KitchenSink.view.form.FileUploads', {
         },
         graphite: {
             labelWidth: 120
+        },
+        'classic-material': {
+            labelWidth: 120
         }
     },
     width: 600,
@@ -35,7 +38,7 @@ Ext.define('KitchenSink.view.form.FileUploads', {
         type: 'vbox',
         align: 'stretch'
     },
-    
+
     defaults: {
         xtype: 'form',
         layout: 'anchor',
@@ -44,12 +47,12 @@ Ext.define('KitchenSink.view.form.FileUploads', {
         style: {
             'margin-bottom': '20px'
         },
-        
+
         defaults: {
             anchor: '100%'
         }
     },
-    
+
     items: [{
         items: [{
             xtype: 'component',
@@ -145,7 +148,7 @@ Ext.define('KitchenSink.view.form.FileUploads', {
             fieldLabel: 'Photo',
             name: 'photo-path',
             buttonConfig: {
-                text : '',
+                text: '',
                 iconCls: 'file-uploads-image-add'
             }
         }, {

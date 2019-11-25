@@ -60,13 +60,13 @@ topSuite("Ext.dom.Query", function() {
             expect(result).toBe('empty');
         });
     });
-    
+
     describe("jsSelect", function() {
 
         it("should throw error for an invalid query", function() {
             try {
                 var found = Ext.dom.Query("$#@$%", elem);
-                
+
                 expect(false).toBe(true);
             }
             catch (ex) {
@@ -185,8 +185,8 @@ topSuite("Ext.dom.Query", function() {
                 expect(len).toBe(1);
                 expect(found[0]).toBe(elem.childNodes[5]);
 
-                found = doQuery('div[role]', elem),
-                    len = found.length;
+                found = doQuery('div[role]', elem);
+                len = found.length;
 
                 expect(len).toBe(3);
                 expect(found[0]).toBe(elem.childNodes[5]);
@@ -245,7 +245,6 @@ topSuite("Ext.dom.Query", function() {
 
                 expect(len).toBe(1);
                 expect(found[0]).toBe(elem.childNodes[5]);
-
 
                 found = doQuery("#\\\\nn", elem);
                 len = found.length;
@@ -307,7 +306,7 @@ topSuite("Ext.dom.Query", function() {
                 expect(len).toBe(1);
                 expect(found[0]).toBe(elem.childNodes[5]);
             });
-            
+
             it("should handle escape sequences for class names", function() {
                 var found = doQuery("div.\\#odd-class-name", elem),
                     len = found.length;
@@ -397,7 +396,6 @@ topSuite("Ext.dom.Query", function() {
                     expect(found[0]).toBe(elem.childNodes[6]);
                 }
 
-
                 found = doQuery('div[role="my\\\\tvalue"]', elem);
                 len = found.length;
 
@@ -461,7 +459,7 @@ topSuite("Ext.dom.Query", function() {
                     expect(yResult[1].firstChild.nodeValue).toBe('y2');
                 });
             });
-            
+
             describe("selecting attributes with non-word characters", function() {
                 var doc;
 

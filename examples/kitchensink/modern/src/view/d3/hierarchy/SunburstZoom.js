@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.SunburstZoom', {
         'Ext.d3.hierarchy.partition.Sunburst'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/d3/hierarchy/SunburstZoomController.js'
@@ -22,7 +22,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.SunburstZoom', {
         type: 'ViewModel',
         path: 'modern/src/view/d3/hierarchy/TreeViewModel.js'
     }],
-    // </example>
+    //</example>
 
     viewModel: {
         type: 'tree'
@@ -45,7 +45,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.SunburstZoom', {
             select: false
         },
         listeners: {
-            selectionchange: function (sunburst, node) {
+            selectionchange: function(sunburst, node) {
                 sunburst.zoomInNode(node);
             }
         },

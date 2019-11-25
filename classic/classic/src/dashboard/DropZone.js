@@ -72,7 +72,7 @@ Ext.define('Ext.dashboard.DropZone', {
             if (yOffset <= h) {
                 yOffset = h;
             }
-            
+
             if (items[i + 1]) {
                 // This is for splitter
                 w += items[i + 1].lastBox.width;
@@ -88,22 +88,22 @@ Ext.define('Ext.dashboard.DropZone', {
 
                 if (!t || !over.extensible) {
                     childItems = item.items.items;
-                    
+
                     // if we are not on an edge OR reached maxColumns
                     // (which means "insert the panel in between the columns"),
                     // we need to dig one more level down
                     for (k = 0, childCount = childItems.length; k < childCount; ++k) {
                         childItem = childItems[k];
                         ht = childItem.el.getHeight();
-                        
+
                         if (y < ht / 2) {
                             // if mouse is above the current child's top, Y coord, it
                             // is considered as "above" the previous child
                             over.above = childItem;
-                            
+
                             break;
                         }
-                        
+
                         y -= ht;
                     }
 
@@ -140,7 +140,7 @@ Ext.define('Ext.dashboard.DropZone', {
 
             if (colEl) {
                 width = colWidth = colEl.getWidth();
-                
+
                 // A floating column was targeted
                 if (over.beforeAfter) {
 
@@ -156,11 +156,11 @@ Ext.define('Ext.dashboard.DropZone', {
                     else {
                         dd.panelProxy.moveProxy(colEl.dom, null);
                     }
-                    
+
                     proxyProxy.setWidth('auto');
 
                 }
-                
+
                 proxyProxy.setStyle({
                     'float': 'none',
                     'clear': 'none',
@@ -172,13 +172,13 @@ Ext.define('Ext.dashboard.DropZone', {
             }
             else {
                 padding = dashboard.body.getPadding('lr');
-                
+
                 proxyProxy.setStyle({
                     'float': 'left',
                     'clear': 'left',
                     'margin': '0 7px 0 7px'
                 });
-                
+
                 proxyProxy.setWidth(dashboard.body.getWidth() - padding);
 
                 // Target the innerCt for the move
@@ -200,7 +200,7 @@ Ext.define('Ext.dashboard.DropZone', {
             dashboard = me.dashboard,
             maxColumns = dashboard.getMaxColumns() || 1,
             items;
-        
+
         items = dashboard.query('>dashboard-column[rowIndex=' + rowIndex + ']');
 
         return Ext.Array.from(items).length < maxColumns;
@@ -228,12 +228,12 @@ Ext.define('Ext.dashboard.DropZone', {
             if (fromCt.items.getCount() === 1) {
                 return;
             }
-            
+
             if (!side) {
                 if (currentIndex < newIndex) {
                     --newIndex;
                 }
-                
+
                 if (currentIndex === newIndex) {
                     return;
                 }
@@ -248,7 +248,7 @@ Ext.define('Ext.dashboard.DropZone', {
         Ext.suspendLayouts();
 
         panel.isMoving = true;
-        
+
         if (side) {
             colIndex = dashboard.items.indexOf(toCt);
 

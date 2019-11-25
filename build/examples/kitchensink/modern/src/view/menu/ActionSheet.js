@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.menu.ActionSheet', {
         'Ext.ActionSheet'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/menu/ActionSheetController.js'
@@ -27,7 +27,7 @@ Ext.define('KitchenSink.view.menu.ActionSheet', {
             }
         }
     },
-    // </example>
+    //</example>
 
     autoSize: true,
     bodyPadding: 20,

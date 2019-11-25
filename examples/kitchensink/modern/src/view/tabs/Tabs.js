@@ -34,7 +34,7 @@ Ext.define('KitchenSink.view.tabs.Tabs', {
     defaults: {
         scrollable: true,
         userSelectable: {
-           bodyElement: true
+            bodyElement: true
         }
     },
 

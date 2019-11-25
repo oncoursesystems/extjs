@@ -183,9 +183,9 @@ topSuite("Ext.layout.container.Dashboard", ['Ext.Panel', 'Ext.layout.container.F
         }
 
         function getDashboard() {
-            dashboard = Ext.ComponentQuery.query('dashboard')[0],
-            outerCt = dashboardCt.items,
-            column = outerCt.items[0].items,
+            dashboard = Ext.ComponentQuery.query('dashboard')[0];
+            outerCt = dashboardCt.items;
+            column = outerCt.items[0].items;
             panels = column.items;
         }
 
@@ -202,7 +202,7 @@ topSuite("Ext.layout.container.Dashboard", ['Ext.Panel', 'Ext.layout.container.F
             var columnWidths = [0.5, 0.5],
             maxColumns = columnWidths.length,
             columnIndex = columnWidths.length - 1;
-            
+
             makePanel(maxColumns, columnWidths, [{
                 type: 'part1',
                 title: 'Test 1',
@@ -225,7 +225,7 @@ topSuite("Ext.layout.container.Dashboard", ['Ext.Panel', 'Ext.layout.container.F
             var columnWidths = [0.25, 0.25, 0.25, 0.25],
             maxColumns = columnWidths.length,
             columnIndex = columnWidths.length - 1;
-            
+
             makePanel(maxColumns, columnWidths, [{
                 type: 'part1',
                 title: 'Test 1',
@@ -263,7 +263,7 @@ topSuite("Ext.layout.container.Dashboard", ['Ext.Panel', 'Ext.layout.container.F
                 maxColumns = columnWidths.length,
                 columnIndex = columnWidths.length - 1,
                 splitterWidth, availableWidth, dashBodyEl;
-            
+
             makePanel(maxColumns, columnWidths, [{
                 type: 'part1',
                 title: 'Test 1',
@@ -299,7 +299,7 @@ topSuite("Ext.layout.container.Dashboard", ['Ext.Panel', 'Ext.layout.container.F
                     title: 'Foo',
                     height: 200,
                     width: 100
-    
+
                 }, {
                     id: 'theMiddle',
                     xtype: 'panel',

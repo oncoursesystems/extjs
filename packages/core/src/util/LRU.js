@@ -111,7 +111,7 @@
          */
         each: function(fn, scope) {
             var head, ent;
-            
+
             scope = scope || this;
 
             for (head = this.head, ent = head.next; ent !== head; ent = ent.next) {

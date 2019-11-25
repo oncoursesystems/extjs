@@ -5,7 +5,7 @@ Ext.define('KitchenSink.view.menu.ActionSheetController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.actionsheets',
 
-    init: function () {
+    init: function() {
         this.menu = Ext.create({
             xtype: 'actionsheet',
             displayed: false,
@@ -13,12 +13,12 @@ Ext.define('KitchenSink.view.menu.ActionSheetController', {
             reveal: true,
             items: [{
                 text: 'Settings',
-                iconCls: 'x-fa fa-gear',
+                iconCls: 'x-fa fa-cog',
                 scope: this,
                 handler: 'hideMenu'
             }, {
                 text: 'New Item',
-                iconCls: 'x-fa fa-pencil',
+                iconCls: 'x-fa fa-pencil-alt',
                 scope: this,
                 handler: 'hideMenu'
             }, {
@@ -30,13 +30,13 @@ Ext.define('KitchenSink.view.menu.ActionSheetController', {
             }]
         });
     },
-    
-    destroy: function () {
+
+    destroy: function() {
         this.menu = Ext.destroy(this.menu);
         this.callParent();
     },
 
-    toggleMenu: function () {
+    toggleMenu: function() {
         var menu = this.menu,
             mode = this.lookup('styleButton').getValue();
 

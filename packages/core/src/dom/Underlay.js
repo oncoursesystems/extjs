@@ -57,16 +57,16 @@ Ext.define('Ext.dom.Underlay', {
     hide: function() {
         var me = this,
             el = me.el;
-        
+
         if (el) {
             if (el.dom) {
                 el.hide();
                 me.getPool().checkIn(el);
             }
-            
+
             me.el = null;
         }
-        
+
         me.hidden = true;
     },
 
@@ -164,7 +164,7 @@ Ext.define('Ext.dom.Underlay', {
         el.setStyle('position', me.fixed ? 'fixed' : '');
 
         dom = el.dom;
-        
+
         if (dom.nextSibling !== insertionTarget) {
             // inserting the underlay as the previous sibling of the target ensures that
             // it will show behind the target, as long as its z-index is less than or equal

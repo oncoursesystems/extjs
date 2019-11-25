@@ -34,10 +34,10 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
             Slider2Width: 100,
             textFieldWidth: 80,
             checkboxfieldWidth: 80
-            
+
         },
         neptune: {
-            width: 750,           
+            width: 750,
             height: 500,
             Slider1Width: 100,
             Slider2Width: 100,
@@ -50,7 +50,15 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
             Slider1Width: 110,
             Slider2Width: 110,
             textFieldWidth: 100,
-            checkboxfieldWidth: 100   
+            checkboxfieldWidth: 100
+        },
+        'classic-material': {
+            width: 1050,
+            height: 550,
+            Slider1Width: 110,
+            Slider2Width: 110,
+            textFieldWidth: 100,
+            checkboxfieldWidth: 100
         }
     },
     height: '${height}',
@@ -61,7 +69,7 @@ Ext.define('KitchenSink.view.tip.TipAligning', {
     listeners: {
         boxready: 'showButton'
     },
-    
+
     viewModel: {
         type: 'tip-aligning'
     },

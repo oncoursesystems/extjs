@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.buttons.Basic', {
         'Ext.Button'
     ],
 
-    // <example>
+    //<example>
     profiles: {
         defaults: {
             labelCls: 'button-group-label button-group-right',
@@ -36,7 +36,7 @@ Ext.define('KitchenSink.view.buttons.Basic', {
     },
 
     cls: 'demo-buttons-basic demo-solid-background',
-    // </example>
+    //</example>
 
     scrollable: 'y',
     width: '${width}',

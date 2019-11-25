@@ -20,6 +20,7 @@ Ext.define('KitchenSink.view.draw.SpriteEvents', {
     //</example>
     layout: 'fit',
     width: 650,
+    cls: 'sprite-events-panel',
 
     items: [
         {

@@ -93,7 +93,7 @@ Ext.define('Ext.app.bind.Parser', {
                 parser.advance(")");
                 // restore priority of `:`
                 symbol.priority = temp;
-                
+
                 return ret;
             }
 
@@ -140,10 +140,10 @@ Ext.define('Ext.app.bind.Parser', {
 
         //<debug>
         debug = me.token.value === '@' && me.tokenizer.peek();
-        
+
         if (debug) {
             debug = debug.value === 'debugger';
-            
+
             if (debug) {
                 me.advance();
                 me.advance();
@@ -268,7 +268,7 @@ Ext.define('Ext.app.bind.Parser', {
             defs = Ext.Array.insert(defs, 0, [code]);
             body = Ext.Array.insert(body, 0, [temp]);
             body = body.join('\n');
-            
+
             //<debug>
             if (debug) {
                 body = 'debugger;\n' + body;
@@ -350,10 +350,10 @@ Ext.define('Ext.app.bind.Parser', {
                 if (!op.isIdent) {
                     return this.syntaxError(expr.at, 'Compile error! Unexpected symbol');
                 }
-                
+
                 return op.value;
             }
-            
+
             return '';
         },
 
@@ -399,7 +399,7 @@ Ext.define('Ext.app.bind.Parser', {
 
             if (fmt.length) {
                 body.push('ret = ' + me.compileFormatFn(fmt[0], me.compile(expr.operand)) + ';');
-                
+
                 for (i = 1; i < length; i++) {
                     body.push('ret = ' + me.compileFormatFn(fmt[i], 'ret') + ';');
                 }
@@ -441,13 +441,13 @@ Ext.define('Ext.app.bind.Parser', {
                     return this.syntaxError(expr.at, 'Compile error! Invalid format specified "' +
                                             fmt + '"');
                 }
-                
+
                 fmt = 'fm.' + fmt;
             }
 
             code += value;
             length = args.length;
-            
+
             for (i = 0; i < length; i++) {
                 code += ', ' + this.compile(args[i]);
             }
@@ -470,7 +470,7 @@ Ext.define('Ext.app.bind.Parser', {
                 body,
                 '}'
             );
-            
+
             return name + '()';
         },
 
@@ -482,7 +482,7 @@ Ext.define('Ext.app.bind.Parser', {
          */
         evalFn: function($) {
             eval($);
-            
+
             return $;
         },
 

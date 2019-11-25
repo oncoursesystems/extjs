@@ -194,7 +194,7 @@ Ext.define('Ext.promise.Deferred', {
         if (this.completed) {
             return;
         }
-        
+
         this.complete('reject', reason);
     },
 
@@ -208,11 +208,11 @@ Ext.define('Ext.promise.Deferred', {
     update: function(progress) {
         var consequences = this.consequences,
             consequence, i, len;
-        
+
         if (this.completed) {
             return;
         }
-        
+
         for (i = 0, len = consequences.length; i < len; i++) {
             consequence = consequences[i];
             consequence.update(progress);

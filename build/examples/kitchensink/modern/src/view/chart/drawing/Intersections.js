@@ -12,12 +12,12 @@ Ext.define('KitchenSink.view.chart.drawing.Intersections', {
         'KitchenSink.view.chart.drawing.IntersectionsComponent'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Component',
         path: 'modern/src/view/chart/drawing/IntersectionsComponent.js'
     }],
-    // </example>
+    //</example>
 
     cls: 'demo-solid-background',
     layout: 'fit',

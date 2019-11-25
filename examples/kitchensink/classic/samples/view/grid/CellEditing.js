@@ -28,7 +28,8 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
             indoorWidth: 55,
             priceWidth: 70,
             availableWidth: 95,
-            lightWidth: 130
+            lightWidth: 130,
+            selectOnFocus: false
         },
         neptune: {
             width: 680,
@@ -36,7 +37,8 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
             indoorWidth: 90,
             priceWidth: 70,
             availableWidth: 95,
-            lightWidth: 130
+            lightWidth: 130,
+            selectOnFocus: false
         },
         graphite: {
             width: 800,
@@ -44,12 +46,23 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
             indoorWidth: 150,
             priceWidth: 110,
             availableWidth: 150,
-            lightWidth: 150
+            lightWidth: 150,
+            selectOnFocus: false
+        },
+        'classic-material': {
+            width: 850,
+            height: 600,
+            indoorWidth: 150,
+            priceWidth: 150,
+            availableWidth: 150,
+            lightWidth: 150,
+            selectOnFocus: true
         },
         'neptune-touch': {
             priceWidth: 115,
             availableWidth: 120,
-            lightWidth: 130
+            lightWidth: 130,
+            selectOnFocus: false
         }
     },
     //</example>
@@ -104,7 +117,7 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
 
         sorters: [{
             property: 'common',
-            direction:'ASC'
+            direction: 'ASC'
         }]
     },
 
@@ -114,7 +127,8 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
 
         flex: 1,
         editor: {
-            allowBlank: false
+            allowBlank: false,
+            selectOnFocus: '${selectOnFocus}'
         }
     }, {
         header: 'Light',
@@ -125,12 +139,13 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
             xtype: 'combo',
             typeAhead: true,
             triggerAction: 'all',
+            selectOnFocus: '${selectOnFocus}',
             store: [
-                ['Shade','Shade'],
-                ['Mostly Shady','Mostly Shady'],
-                ['Sun or Shade','Sun or Shade'],
-                ['Mostly Sunny','Mostly Sunny'],
-                ['Sunny','Sunny']
+                ['Shade', 'Shade'],
+                ['Mostly Shady', 'Mostly Shady'],
+                ['Sun or Shade', 'Sun or Shade'],
+                ['Mostly Sunny', 'Mostly Sunny'],
+                ['Sunny', 'Sunny']
             ]
         }
     }, {
@@ -142,7 +157,7 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
         formatter: 'usMoney',
         editor: {
             xtype: 'numberfield',
-
+            selectOnFocus: '${selectOnFocus}',
             allowBlank: false,
             minValue: 0,
             maxValue: 100000
@@ -156,6 +171,7 @@ Ext.define('KitchenSink.view.grid.CellEditing', {
         format: 'M d, Y',
         editor: {
             xtype: 'datefield',
+            selectOnFocus: '${selectOnFocus}',
             format: 'm/d/y',
             minValue: '01/01/06',
             disabledDays: [0, 6],

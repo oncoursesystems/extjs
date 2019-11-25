@@ -63,6 +63,9 @@ Ext.define('KitchenSink.view.tree.Reorder', {
         }, {
             text: 'Collapse All',
             handler: 'onCollapseAllClick'
+        }, {
+            text: 'Reset',
+            handler: 'onResetClick'
         }]
     }
 });

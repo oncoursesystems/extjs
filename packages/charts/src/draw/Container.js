@@ -333,7 +333,7 @@ Ext.define('Ext.draw.Container', {
 
     applySprites: function(sprites) {
         var result, surface, sprite, i, ln;
-        
+
         // Never update.
         if (!sprites) {
             return;
@@ -482,7 +482,7 @@ Ext.define('Ext.draw.Container', {
         var me = this,
             surfaces = me.getItems(),
             surface;
-        
+
         id = this.getId() + '-' + (id || 'main');
         surface = surfaces.get(id);
 

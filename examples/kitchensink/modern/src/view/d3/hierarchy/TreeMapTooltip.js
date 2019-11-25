@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeMapTooltip', {
         'Ext.d3.hierarchy.TreeMap'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/d3/hierarchy/TreeMapTooltipController.js'
@@ -30,7 +30,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeMapTooltip', {
         type: 'Styles',
         path: 'modern/sass/src/view/d3/hierarchy/TreeMap.scss'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -69,7 +69,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeMapTooltip', {
         },
         selectEventName: null,
         expandEventName: null,
-        nodeValue: function (node) {
+        nodeValue: function(node) {
             return node.data.cap;
         },
         noParentValue: true,
@@ -87,8 +87,9 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeMapTooltip', {
                 range: ['#E45649', '#ECECEC', '#50A14F']
             },
             field: 'change',
-            processor: function (axis, scale, node, field) {
+            processor: function(axis, scale, node, field) {
                 var record = node.data;
+
                 return record.isLeaf() ? scale(record.get(field)) : '#ececec';
             }
         }

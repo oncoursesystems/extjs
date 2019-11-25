@@ -43,11 +43,11 @@ Ext.define('Ext.util.AbstractMixedCollection', {
         // Old constructor signature
         else {
             me.allowFunctions = allowFunctions === true;
-            
+
             if (keyFn) {
                 me.getKey = keyFn;
             }
-            
+
             me.initialConfig = {
                 allowFunctions: me.allowFunctions,
                 getKey: me.getKey
@@ -143,7 +143,7 @@ Ext.define('Ext.util.AbstractMixedCollection', {
         else {
             out = this.insert(len, key, obj);
         }
-        
+
         return out;
     },
 
@@ -208,22 +208,22 @@ Ext.define('Ext.util.AbstractMixedCollection', {
             o = arguments[0];
             key = me.getKey(o);
         }
-        
+
         old = me.map[key];
-        
+
         if (typeof key === 'undefined' || key === null || typeof old === 'undefined') {
             return me.add(key, o);
         }
-        
+
         me.generation++;
         index = me.indexOfKey(key);
         me.items[index] = o;
         me.map[key] = o;
-        
+
         if (me.hasListeners.replace) {
             me.fireEvent('replace', key, old, o);
         }
-        
+
         return o;
     },
 
@@ -1233,7 +1233,7 @@ Ext.define('Ext.util.AbstractMixedCollection', {
      */
     createValueMatcher: function(value, anyMatch, caseSensitive, exactMatch) {
         var er;
-        
+
         if (!value.exec) { // not a regex
             er = Ext.String.escapeRegex;
             value = String(value);

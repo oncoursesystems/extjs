@@ -3,25 +3,25 @@ topSuite("Ext.app.bind.Template", function() {
 
     function getNumFragments(tpl) {
         var count = 0;
-        
+
         for (var i = tpl.buffer.length; i-- > 0;) {
             if (tpl.buffer[i]) {
                 ++count;
             }
         }
-        
+
         return count;
     }
 
     function getNumSlots(tpl) {
         var count = 0;
-        
+
         for (var i = tpl.slots.length; i-- > 0;) {
             if (tpl.slots[i]) {
                 ++count;
             }
         }
-        
+
         return count;
     }
 
@@ -483,7 +483,7 @@ topSuite("Ext.app.bind.Template", function() {
             var s = tpl.apply([4], {
                 fn: function() { return false; }
             });
-            
+
             expect(s).toBe('Hello 6');
         });
 
@@ -818,7 +818,6 @@ topSuite("Ext.app.bind.Template", function() {
 
             expect(s).toBe('Hello 19.00!');
         });
-
 
     });
 

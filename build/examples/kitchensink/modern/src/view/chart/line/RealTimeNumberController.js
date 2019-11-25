@@ -2,10 +2,10 @@ Ext.define('KitchenSink.view.chart.line.RealTimeNumberController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.line-real-time-number',
 
-    init: function (view) {
+    init: function(view) {
         this.callParent([view]);
 
-        //put this here for onActiveItemChange to start
+        // put this here for onActiveItemChange to start
         this.numberChartTask = Ext.TaskManager.start({
             run: this.addNewData,
             fireOnStart: true,
@@ -16,17 +16,17 @@ Ext.define('KitchenSink.view.chart.line.RealTimeNumberController', {
         });
     },
 
-    destroy: function () {
+    destroy: function() {
         Ext.TaskManager.stop(this.numberChartTask);
 
         this.callParent();
     },
 
-    onAxisLabelRender: function (axis, label, layoutContext) { // only render integer values
+    onAxisLabelRender: function(axis, label, layoutContext) { // only render integer values
         return Math.abs(layoutContext.renderer(label) % 1) < 1e-5 ? Math.round(label) : '';
     },
 
-    getNextValue: function (previousValue, min, max, delta) {
+    getNextValue: function(previousValue, min, max, delta) {
         delta = delta || 3;
         min = min || 0;
         max = max || 20;
@@ -67,7 +67,8 @@ Ext.define('KitchenSink.view.chart.line.RealTimeNumberController', {
                     xValue: xValue,
                     yValue: this.getNextValue(lastRecord.get('yValue'), minY, maxY, deltaY)
                 });
-            } else {
+            }
+            else {
                 chart.animationSuspended = true;
 
                 xAxis.setMinimum(0);

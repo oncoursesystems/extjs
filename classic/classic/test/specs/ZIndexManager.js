@@ -46,7 +46,7 @@ function() {
         afterEach(function() {
             Ext.destroy(c1, c2, c3, c4);
         });
-        
+
         it("should order the windows as they are rendered", function() {
             c1.show();
             c2.show();
@@ -70,7 +70,7 @@ function() {
             c1.onMouseDown({
                 target: c1.el.dom
             });
-            
+
             // Mousedown moves to top
             // Order bottom up should be c2, c3, c1
             expect(c1.el.getZIndex()).toBeGreaterThan(c3.el.getZIndex());
@@ -265,63 +265,63 @@ function() {
                 expect(mask.isVisible()).toBe(false);
             });
         });
-        
+
         describe("element tabbability", function() {
             var btn, tabbables;
-            
+
             beforeEach(function() {
                 btn = new Ext.button.Button({
                     renderTo: Ext.getBody(),
                     text: 'foo'
                 });
             });
-            
+
             afterEach(function() {
                 Ext.destroy(btn);
                 btn = null;
             });
-            
+
             describe("components below mask", function() {
                 beforeEach(function() {
                     makeWindow();
                 });
-                
+
                 it("button should become untabbable on mask show", function() {
                     // skipSelf = true, skipChildren = false, excludeRoot = w.el
                     tabbables = Ext.getBody().findTabbableElements({
                         skipSelf: true,
                         excludeRoot: w.el
                     });
-                    
+
                     expect(tabbables.length).toBe(0);
                 });
-                
+
                 it("button should become tabbable on mask hide", function() {
                     w.hide();
-                    
+
                     // skipSelf = true, skipChildren = false, excludeRoot = w.el
                     tabbables = Ext.getBody().findTabbableElements({
                         skipSelf: true,
                         excludeRoot: w.el
                     });
-                    
+
                     expect(tabbables).toEqual([ btn.getFocusEl().dom ]);
                 });
-                
+
                 it("button should become untabbable on mask show/hide/show", function() {
                     w.hide();
                     w.show();
-                    
+
                     // skipSelf = true, skipChildren = false, excludeRoot = w.el
                     tabbables = Ext.getBody().findTabbableElements({
                         skipSelf: true,
                         excludeRoot: w.el
                     });
-                    
+
                     expect(tabbables.length).toBe(0);
                 });
             });
-            
+
             describe("components above mask", function() {
                 beforeEach(function() {
                     makeWindow({
@@ -329,18 +329,18 @@ function() {
                             { xtype: 'textfield', fieldLabel: 'Login' },
                             { xtype: 'textfield', fieldLabel: 'Password' }
                         ],
-                        
+
                         buttons: [
                             { text: 'OK' }
                         ]
                     });
                 });
-                
+
                 it("should keep items above the mask tabbable", function() {
                     tabbables = w.getEl().findTabbableElements({
                         skipSelf: true
                     });
-                    
+
                     // 6 tababbles:
                     // - Top focus trap
                     // - textfield 1
@@ -672,7 +672,7 @@ function() {
             // The combo dropdown should be below the window
             combo.expand();
             expect(combo.getPicker().el.getZIndex()).toBeLessThan(window.el.getZIndex());
-            
+
             Ext.destroy(combo, dateField, window);
         });
     });
@@ -705,7 +705,7 @@ function() {
             win.destroy();
         });
     });
-    
+
     // This test would better fit a Floating test suite but it's not clear
     // where the concerns are separated since Floating code is private
     // and is supposed to be called by ZIndexManager only. So let it be here.
@@ -714,13 +714,13 @@ function() {
             waitForFocus = jasmine.waitForFocus,
             expectFocused = jasmine.expectFocused,
             btn, win, input1, input2;
-        
+
         beforeEach(function() {
             btn = new Ext.button.Button({
                 renderTo: Ext.getBody(),
                 text: 'foo'
             });
-            
+
             win = new Ext.window.Window({
                 title: 'bar',
                 width: 200,
@@ -728,7 +728,7 @@ function() {
                 x: 30,
                 y: 30,
                 closeAction: 'hide',
-                
+
                 items: [{
                     xtype: 'textfield',
                     itemId: 'input1'
@@ -738,58 +738,58 @@ function() {
                     allowBlank: false
                 }]
             });
-            
+
             input1 = win.down('#input1');
             input2 = win.down('#input2');
-            
+
             focusAndWait(btn);
         });
-        
+
         afterEach(function() {
             Ext.destroy(win, btn);
-            
+
             btn = win = input1 = input2 = null;
         });
 
         describe("focusable floater show/hide with no animation", function() {
             beforeEach(function() {
                 win.show();
-            
+
                 waitForFocus(win);
             });
-            
+
             it("should focus the window on show", function() {
                 expectFocused(win);
             });
-        
+
             it("should focus the button back on window hide", function() {
                 win.close();
-            
+
                 expectFocused(btn);
             });
         });
-        
+
         describe("focusable floater show/hide with animation", function() {
             beforeEach(function() {
                 win.show(btn);
-            
+
                 waitForFocus(win);
             });
-            
+
             it("should focus the window on show", function() {
                 expectFocused(win);
             });
-        
+
             it("should focus the button back on window hide", function() {
                 win.close(btn);
-            
+
                 expectFocused(btn);
             });
         });
-        
+
         describe("non-focusable floater show/hide", function() {
             var panel;
-            
+
             beforeEach(function() {
                 panel = new Ext.panel.Panel({
                     floating: true,
@@ -800,36 +800,36 @@ function() {
                     y: 30,
                     html: 'floating panel'
                 });
-                
+
                 win.show();
-                
+
                 focusAndWait(input2);
             });
-            
+
             afterEach(function() {
                 Ext.destroy(panel);
             });
-            
+
             it("should not steal focus on floater show", function() {
                 panel.show();
-            
+
                 expectFocused(input2);
             });
-            
+
             it("should not munge focus on floater hide", function() {
                 panel.show();
                 panel.hide();
-                
+
                 expectFocused(input2);
             });
         });
-        
+
         describe("event order", function() {
             it("should fire floater hide event after sorting zIndexStack", function() {
                 var oldOnCollectionSort = Ext.WindowManager.onCollectionSort,
                     events = [],
                     win;
-                
+
                 win = new Ext.window.Window({
                     title: 'foo',
                     width: 300,
@@ -843,23 +843,23 @@ function() {
                         }
                     }
                 }).show();
-                
+
                 // Can't use jasmine spy here because it can't be chained
                 Ext.WindowManager.onCollectionSort = function() {
                     events.push('sort');
                     oldOnCollectionSort.call(Ext.WindowManager);
                 };
-                
+
                 // Event flow is synchronous here
                 win.close();
-                
+
                 expect(events).toEqual(['sort', 'hide']);
 
                 // Fall back to the prototype
                 delete Ext.WindowManager.onCollectionSort;
-                
+
                 win.destroy();
-                
+
                 win = null;
             });
         });
@@ -867,15 +867,15 @@ function() {
 
     describe("focus restoration after window drag", function() {
         var win;
-        
+
         afterEach(function() {
             win.destroy();
             win = null;
         });
-        
+
         it("should restore focus after showing", function() {
             var xy, headerXY, x, y, child, text;
-            
+
             win = new Ext.window.Window({
                 title: 'Test Window',
                 width: 410,
@@ -906,7 +906,7 @@ function() {
 
             runs(function() {
                 xy = win.getXY();
-                headerXY = win.header.el.getAnchorXY('c'),
+                headerXY = win.header.el.getAnchorXY('c');
                 x = headerXY[0];
                 y = headerXY[1];
 
@@ -932,7 +932,7 @@ function() {
             });
         });
     });
-    
+
     describe("Menu with modal window and MessageBox", function() {
         it("should render the menu after the MessageBox has been closed", function() {
             var container = Ext.create('Ext.Container', {
@@ -954,39 +954,39 @@ function() {
                             msg = Ext.Msg.alert('Foo', 'Bar');
                         }
                     }],
-                    
+
                     renderTo: document.body,
                     width: 300
                 }),
                 msg, menuBtn, modalBtn;
-            
+
             menuBtn = container.getComponent('menu-button');
             modalBtn = container.getComponent('modal-button');
-    
+
             // necessary for having another ZIndex'd component in the stack
             var win = Ext.create('Ext.window.Window', {
                 title: 'MyWindow',
                 width: 100,
                 height: 100
             }).show();
-            
+
             // click the menu to expand and then button to display the MessageBox,
             // then click the first visible button to close
             runs(function() {
                 jasmine.fireMouseEvent(menuBtn.el, 'click');
                 jasmine.fireMouseEvent(modalBtn.el, 'click');
-                
+
                 var btn = Ext.Array.findBy(msg.msgButtons, function(btn) { return btn.isVisible(); });
 
                 jasmine.fireMouseEvent(btn.el, 'click');
             });
             waits(500);
-            
+
             // clicking the menu again should make it visible in the stack
             runs(function() {
                 jasmine.fireMouseEvent(menuBtn.el, 'click');
                 expect(menuBtn.menu.isVisible()).toBe(true);
-                
+
                 container = win = Ext.destroy(container, win);
             });
         });

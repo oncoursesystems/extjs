@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.icons.VectorIcons', {
         'KitchenSink.view.icons.VectorIconsMixin'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/icons/VectorIconsController.js'
@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.icons.VectorIcons', {
     }],
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     layout: 'fit',
 

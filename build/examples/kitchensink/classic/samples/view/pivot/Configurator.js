@@ -19,10 +19,10 @@ Ext.define('KitchenSink.view.pivot.Configurator', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/ConfiguratorController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
@@ -31,19 +31,29 @@ Ext.define('KitchenSink.view.pivot.Configurator', {
             width: 600,
             height: 350,
             columnWidth: 100,
-            menuWidth: 100
+            menuWidth: 100,
+            columnLines: true
         },
         neptune: {
             width: 750,
             height: 350,
             columnWidth: 100,
-            menuWidth: 100
+            menuWidth: 100,
+            columnLines: true
         },
         graphite: {
             width: 950,
             height: 600,
             columnWidth: 120,
-            menuWidth: 120
+            menuWidth: 120,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 950,
+            height: 600,
+            columnWidth: 120,
+            menuWidth: 150,
+            columnLines: false
         }
     },
     //</example>
@@ -53,6 +63,7 @@ Ext.define('KitchenSink.view.pivot.Configurator', {
     height: '${height}',
     collapsible: true,
     multiSelect: true,
+    columnLines: '${columnLines}',
 
     selModel: {
         type: 'spreadsheet'
@@ -221,22 +232,23 @@ Ext.define('KitchenSink.view.pivot.Configurator', {
         items: [{
             ui: 'default-toolbar',
             xtype: 'button',
+            cls: 'dock-tab-btn',
             text: 'Dock',
             menu: {
                 defaults: {
                     xtype: 'menucheckitem',
-                    group:  'docking',
+                    group: 'docking',
                     checkHandler: 'changeDock'
                 },
                 width: '${menuWidth}',
                 items: [{
                     text: 'Top'
-                },{
+                }, {
                     text: 'Right',
                     checked: true
-                },{
+                }, {
                     text: 'Bottom'
-                },{
+                }, {
                     text: 'Left'
                 }]
             }

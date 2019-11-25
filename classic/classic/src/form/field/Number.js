@@ -100,7 +100,7 @@ Ext.define('Ext.form.field.Number', {
      * @cfg {RegExp} maskRe
      * @private
      */
-     
+
     /**
      * @cfg {Boolean} [allowExponential=true]
      * Set to `false` to disallow Exponential number notation
@@ -217,17 +217,17 @@ Ext.define('Ext.form.field.Number', {
         me.setMinValue(me.minValue);
         me.setMaxValue(me.maxValue);
     },
-    
+
     getSubTplData: function(fieldData) {
         var me = this,
             min = me.minValue,
             max = me.maxValue,
             data, inputElAttr, value;
-        
+
         data = me.callParent([fieldData]);
-        
+
         inputElAttr = data.inputElAriaAttributes;
-        
+
         if (inputElAttr) {
             // The checks are to skip the default min and max values,
             // in which case we don't want to set corresponding ARIA
@@ -235,18 +235,18 @@ Ext.define('Ext.form.field.Number', {
             if (min > Number.NEGATIVE_INFINITY) {
                 inputElAttr['aria-valuemin'] = min;
             }
-            
+
             if (max < Number.MAX_VALUE) {
                 inputElAttr['aria-valuemax'] = max;
             }
-            
+
             value = me.getValue();
-            
+
             if (value != null && value >= min && value <= max) {
                 inputElAttr['aria-valuenow'] = value;
             }
         }
-        
+
         return data;
     },
 
@@ -313,7 +313,6 @@ Ext.define('Ext.form.field.Number', {
             errors.push(format(me.maxText, me.maxValue));
         }
 
-
         return errors;
     },
 
@@ -339,24 +338,24 @@ Ext.define('Ext.form.field.Number', {
 
         return value;
     },
-    
+
     getSubmitValue: function() {
         var me = this,
             value = me.callParent();
-            
+
         if (!me.submitLocaleSeparator) {
             value = value.replace(me.decimalSeparator, '.');
         }
-  
+
         return value;
     },
 
     onChange: function(newValue) {
         var ariaDom = this.ariaEl.dom;
-        
+
         this.toggleSpinners();
         this.callParent(arguments);
-        
+
         if (ariaDom) {
             if (Ext.isNumber(newValue) && isFinite(newValue)) {
                 ariaDom.setAttribute('aria-valuenow', newValue);
@@ -365,23 +364,22 @@ Ext.define('Ext.form.field.Number', {
                 ariaDom.removeAttribute('aria-valuenow');
             }
         }
-        
+
     },
-    
+
     toggleSpinners: function() {
         var me = this,
             value = me.getValue(),
             valueIsNull = value === null,
             enabled;
-        
+
         // If it's disabled, only allow it to be re-enabled if we are
         // the ones who are disabling it.
         if (me.spinUpEnabled || me.spinUpDisabledByToggle) {
             enabled = valueIsNull || value < me.maxValue;
             me.setSpinUpEnabled(enabled, true);
         }
-        
-        
+
         if (me.spinDownEnabled || me.spinDownDisabledByToggle) {
             enabled = valueIsNull || value > me.minValue;
             me.setSpinDownEnabled(enabled, true);
@@ -396,10 +394,10 @@ Ext.define('Ext.form.field.Number', {
         var me = this,
             ariaDom = me.ariaEl.dom,
             minValue, allowed;
-        
+
         me.minValue = minValue = Ext.Number.from(value, Number.NEGATIVE_INFINITY);
         me.toggleSpinners();
-        
+
         // May not be rendered yet
         if (ariaDom) {
             if (minValue > Number.NEGATIVE_INFINITY) {
@@ -409,11 +407,11 @@ Ext.define('Ext.form.field.Number', {
                 ariaDom.removeAttribute('aria-valuemin');
             }
         }
-        
+
         // Build regexes for masking and stripping based on the configured options
         if (me.disableKeyFilter !== true) {
             allowed = me.baseChars + '';
-            
+
             if (me.allowExponential) {
                 allowed += me.decimalSeparator + 'e+-';
             }
@@ -426,7 +424,7 @@ Ext.define('Ext.form.field.Number', {
                     allowed += '-';
                 }
             }
-            
+
             allowed = Ext.String.escapeRegex(allowed);
             me.maskRe = new RegExp('[' + allowed + ']');
 
@@ -443,9 +441,9 @@ Ext.define('Ext.form.field.Number', {
     setMaxValue: function(value) {
         var ariaDom = this.ariaEl.dom,
             maxValue;
-        
+
         this.maxValue = maxValue = Ext.Number.from(value, Number.MAX_VALUE);
-        
+
         // May not be rendered yet
         if (ariaDom) {
             if (maxValue < Number.MAX_VALUE) {
@@ -455,7 +453,7 @@ Ext.define('Ext.form.field.Number', {
                 ariaDom.removeAttribute('aria-valuemax');
             }
         }
-        
+
         this.toggleSpinners();
     },
 
@@ -510,7 +508,7 @@ Ext.define('Ext.form.field.Number', {
 
     onSpinUp: function() {
         var me = this;
-            
+
         if (!me.readOnly) {
             me.setSpinValue(
                 Ext.Number.constrain(me.getValue() + me.step, me.minValue, me.maxValue)
@@ -531,17 +529,17 @@ Ext.define('Ext.form.field.Number', {
 
     onSpinDown: function() {
         var me = this;
-        
+
         if (!me.readOnly) {
             me.setSpinValue(
                 Ext.Number.constrain(me.getValue() - me.step, me.minValue, me.maxValue)
             );
         }
     },
-    
+
     setSpinValue: function(value) {
         var me = this;
-            
+
         if (me.enforceMaxLength) {
             // We need to round the value here, otherwise we could end up with a
             // very long number (think 0.1 + 0.2)

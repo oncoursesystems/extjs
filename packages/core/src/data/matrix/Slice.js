@@ -26,7 +26,7 @@ Ext.define('Ext.data.matrix.Slice', {
 
     attach: function(store) {
         var me = this;
-        
+
         //<debug>
         Ext.Assert.falsey(me.store, 'Store is already attached');
         //</debug>
@@ -80,11 +80,11 @@ Ext.define('Ext.data.matrix.Slice', {
             if (state < 0 && assoc && assoc[2] === 1) {
                 delete members[otherId];
                 otherSlice = otherSlices[otherId];
-                
+
                 if (otherSlice) {
                     delete otherSlice.members[id];
                 }
-                
+
                 call = 1;
             }
             else {
@@ -97,11 +97,11 @@ Ext.define('Ext.data.matrix.Slice', {
 
                     members[otherId] = assoc;
                     otherSlice = otherSlices[otherId];
-                    
+
                     if (!otherSlice) {
                         otherSlices[otherId] = otherSlice = new MatrixSlice(otherSide, otherId);
                     }
-                    
+
                     otherSlice.members[id] = assoc;
                     call = 1;
                 }
@@ -120,7 +120,7 @@ Ext.define('Ext.data.matrix.Slice', {
                 if (me.notify) {
                     me.notify.call(me.scope, me, otherId, state);
                 }
-                
+
                 if (otherSlice && otherSlice.notify) {
                     otherSlice.notify.call(otherSlice.scope, otherSlice, id, state);
                 }

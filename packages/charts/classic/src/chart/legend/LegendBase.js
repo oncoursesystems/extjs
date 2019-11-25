@@ -21,7 +21,7 @@ Ext.define('Ext.chart.legend.LegendBase', {
             '</div>'
         ],
         /* eslint-enable indent,max-len */
-        
+
         // element that contains rows (see AbstractView)
         nodeContainerSelector: 'div.' + Ext.baseCSSPrefix + 'legend-inner',
         // row element (see AbstractView)

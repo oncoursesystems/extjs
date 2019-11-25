@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.draw.CompositeController', {
 
     animate: false,
 
-    onMouseDown: function (e) {
+    onMouseDown: function(e) {
         var draw = this.lookupReference('draw'),
             surface = draw.getSurface(),
             sprite = surface.get('protractor'),
@@ -15,16 +15,18 @@ Ext.define('KitchenSink.view.draw.CompositeController', {
                 toX: xy[0],
                 toY: xy[1]
             });
-        } else {
+        }
+        else {
             sprite.setAttributes({
                 fromX: xy[0],
                 fromY: xy[1]
             });
         }
+
         surface.renderFrame();
     },
 
-    onMouseMove: function (e) {
+    onMouseMove: function(e) {
         var draw = this.lookupReference('draw'),
             surface = draw.getSurface(),
             xy = surface.getEventXY(e);
@@ -38,7 +40,7 @@ Ext.define('KitchenSink.view.draw.CompositeController', {
         }
     },
 
-    onToggle: function (segmentedButton, button, pressed) {
+    onToggle: function(segmentedButton, button, pressed) {
         var draw = this.lookupReference('draw'),
             surface = draw.getSurface(),
             sprite = surface.get('protractor'),

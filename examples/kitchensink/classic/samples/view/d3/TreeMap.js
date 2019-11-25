@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
         'Ext.d3.hierarchy.TreeMap'
     ],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [
         {
@@ -36,7 +36,7 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
             path: 'data/tree/stocks.json'
         }
     ],
-    // </example>
+    //</example>
 
     width: '${width}',
     height: 600,
@@ -51,6 +51,10 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
             companyPanelWidth: 215
         },
         graphite: {
+            width: 1000,
+            companyPanelWidth: 300
+        },
+        'classic-material': {
             width: 1000,
             companyPanelWidth: 300
         }
@@ -125,8 +129,9 @@ Ext.define('KitchenSink.view.d3.TreeMap', {
                         range: ['#E45649', '#ECECEC', '#50A14F']
                     },
                     field: 'change',
-                    processor: function (axis, scale, node, field) {
+                    processor: function(axis, scale, node, field) {
                         var record = node.data;
+
                         return record.isLeaf() ? scale(record.get(field)) : '#ececec';
                     }
                 }

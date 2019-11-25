@@ -159,6 +159,6 @@ Ext.define('Admin.view.widgets.Widgets', {
         scale: 'large',
         quantity: 244,
         description: 'Files',
-        iconCls: 'x-fa fa-file-text'
+        iconCls: 'x-fa fa-file-alt'
     }]
 });

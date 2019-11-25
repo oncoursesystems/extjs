@@ -4,8 +4,8 @@ Ext.define('KitchenSink.model.field.PhoneNumber', {
     alias: 'data.field.phonenumber',
 
     validators: [
-        { 
-            type: 'format', 
+        {
+            type: 'format',
             matcher: /^\d{3}-?\d{3}-?\d{4}$/,
             message: 'Must be in the format xxx-xxx-xxxx'
         }

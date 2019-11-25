@@ -16,12 +16,31 @@ Ext.define('KitchenSink.view.binding.TwoWay', {
     //</example>
 
     width: 300,
-    bodyPadding: 10,
+    bodyPadding: '${bodyPadding}',
 
     controller: 'binding.twoway',
     viewModel: {
         data: {
             title: 'The title'
+        }
+    },
+
+    profiles: {
+        classic: {
+            width: 'auto',
+            bodyPadding: 10
+        },
+        neptune: {
+            width: 'auto',
+            bodyPadding: 10
+        },
+        graphite: {
+            width: 'auto',
+            bodyPadding: 10
+        },
+        'classic-material': {
+            width: 260,
+            bodyPadding: 20
         }
     },
 
@@ -33,6 +52,7 @@ Ext.define('KitchenSink.view.binding.TwoWay', {
         xtype: 'textfield',
         fieldLabel: 'Title',
         labelWidth: 50,
+        width: '${width}',
         // The default config for textfield in a bind is "value" (two-way):
         bind: '{title}'
     },

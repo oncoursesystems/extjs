@@ -28,6 +28,18 @@
 	color: #555;
 }
 
+@if $theme-name == 'theme-material' {
+    .binding-selection-view .customer {
+        background-color: #ffffff;
+    }
+    .binding-selection-view .customer.x-item-selected .indicator {
+	    border-color: $base-color !important;
+    }
+    .binding-selection-view .customer .indicator:after {
+        background-color: $base-color !important;
+    }
+}
+
 .binding-selection-view .customer.x-item-selected {
 	color: black;
 }
@@ -91,6 +103,14 @@
 	left: 0px;
 }
 
+@if $theme-name == 'theme-material' {
+    .binding-selection-view .customer.x-item-selected .indicator:after {
+        left: 2px;
+        top: 2px;
+        height: 8px;
+	    width: 8px;
+    }
+}
 
 
 /* DATAVIEW ITEM - RTL INDICATOR  :: hidden unless RTL */

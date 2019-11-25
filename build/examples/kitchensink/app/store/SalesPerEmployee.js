@@ -3,10 +3,10 @@ Ext.define('KitchenSink.store.SalesPerEmployee', {
     alias: 'store.salesperemployee',
 
     fields: [
-        {name: 'employee', type: 'string'},
-        {name: 'dayNumber', type: 'int'},
-        {name: 'day', type: 'string'},
-        {name: 'sales', type: 'number'}
+        { name: 'employee', type: 'string' },
+        { name: 'dayNumber', type: 'int' },
+        { name: 'day', type: 'string' },
+        { name: 'sales', type: 'number' }
     ],
 
     employees: [
@@ -30,7 +30,7 @@ Ext.define('KitchenSink.store.SalesPerEmployee', {
         'Friday'
     ],
 
-    generateData: function (iCount, jCount) {
+    generateData: function(iCount, jCount) {
         var me = this,
             data = [],
             min = 20,
@@ -54,11 +54,11 @@ Ext.define('KitchenSink.store.SalesPerEmployee', {
         return data;
     },
 
-    refreshData: function () {
+    refreshData: function() {
         this.setData(this.generateData());
     },
 
-    refreshDataAndSize: function () {
+    refreshDataAndSize: function() {
         var minSize = 1;
 
         this.setData(this.generateData(
@@ -71,12 +71,13 @@ Ext.define('KitchenSink.store.SalesPerEmployee', {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
-    randomItem: function(data){
+    randomItem: function(data) {
         var k = this.getRandomInt(0, data.length - 1);
+
         return data[k];
     },
 
-    refreshRandomData: function(size){
+    refreshRandomData: function(size) {
         var me = this,
             data = [],
             delta = 20 + Math.floor(Math.random() * 260),
@@ -84,7 +85,7 @@ Ext.define('KitchenSink.store.SalesPerEmployee', {
 
         size = size || 500;
 
-        for (i = 0; i < size; i++){
+        for (i = 0; i < size; i++) {
             day = me.randomItem(me.days);
             data.push({
                 employee: me.randomItem(me.employees),
@@ -93,10 +94,11 @@ Ext.define('KitchenSink.store.SalesPerEmployee', {
                 sales: 20 + Math.floor(Math.random() * delta)
             });
         }
+
         this.setData(data);
     },
 
-    constructor: function (config) {
+    constructor: function(config) {
         config = Ext.apply({
             data: this.generateData()
         }, config);

@@ -144,7 +144,7 @@ function() {
             if (jasmine.supportsTouch) {
                 waits(1500);
             }
-            
+
             runs(function() {
                 jasmine.fireMouseEvent(cell, 'mousemove', 5, 20);
                 expect(Ext.fly(dragZone.dragData.item).contains(cell)).toBe(true);

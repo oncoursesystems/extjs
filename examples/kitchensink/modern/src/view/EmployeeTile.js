@@ -17,14 +17,14 @@ Ext.define('KitchenSink.view.EmployeeTile', {
         tag: 'img',
         reference: 'avatarElement',
         src: 'modern/resources/images/employee.png',
-        cls:  Ext.baseCSSPrefix + 'employee-tile-avatar'
+        cls: Ext.baseCSSPrefix + 'employee-tile-avatar'
     }, {
         children: [{
             reference: 'nameElement',
-            cls:  Ext.baseCSSPrefix + 'employee-tile-name'
+            cls: Ext.baseCSSPrefix + 'employee-tile-name'
         }, {
             reference: 'roleElement',
-            cls:  Ext.baseCSSPrefix + 'employee-tile-role'
+            cls: Ext.baseCSSPrefix + 'employee-tile-role'
         }]
     }],
 

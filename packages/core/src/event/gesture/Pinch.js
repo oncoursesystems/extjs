@@ -100,11 +100,11 @@ Ext.define('Ext.event.gesture.Pinch', {
     reset: function() {
         this.lastTouches = null;
         this.startDistance = 0;
-        
+
         return this.callParent();
     }
 }, function(Pinch) {
     var gestures = Ext.manifest.gestures;
-    
+
     Pinch.instance = new Pinch(gestures && gestures.pinch);
 });

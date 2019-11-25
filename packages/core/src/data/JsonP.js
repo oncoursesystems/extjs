@@ -134,12 +134,11 @@ Ext.define('Ext.data.JsonP', {
             request,
             script;
 
-
         // Add cachebuster param unless it has already been done
         if (disableCaching && !params[cacheParam]) {
             params[cacheParam] = Ext.Date.now();
         }
-        
+
         options.params = params;
 
         params[callbackKey] = name + '.data.JsonP.' + callbackName;
@@ -165,7 +164,7 @@ Ext.define('Ext.data.JsonP', {
         me.setupErrorHandling(request);
         me[callbackName] = me.bindResponse(request);
         me.loadScript(request);
-        
+
         return request;
     },
 
@@ -193,7 +192,7 @@ Ext.define('Ext.data.JsonP', {
             if (!request.id) {
                 request = requests[request];
             }
-            
+
             me.handleAbort(request);
         }
         else {
@@ -292,11 +291,11 @@ Ext.define('Ext.data.JsonP', {
      */
     createScript: function(url, params, options) {
         var script = document.createElement('script');
-        
+
         script.setAttribute("src", Ext.urlAppend(url, Ext.Object.toQueryString(params)));
         script.setAttribute("async", true);
         script.setAttribute("type", "text/javascript");
-        
+
         return script;
     },
 

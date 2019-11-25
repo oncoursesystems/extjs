@@ -35,7 +35,7 @@ Ext.define('KitchenSink.view.forms.ContainerField', {
         }
     },
 
-    padding: '${padding}', //give room for the form's shadow
+    padding: '${padding}', // give room for the form's shadow
     shadow: false,
     //</example>
 

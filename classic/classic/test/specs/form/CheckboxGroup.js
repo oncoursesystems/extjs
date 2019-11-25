@@ -19,26 +19,26 @@ topSuite("Ext.form.CheckboxGroup", ['Ext.app.ViewModel'], function() {
                 name: 'zurg',
                 items: [{}, {}]
             });
-            
+
             expect(component.items.getAt(0)).toHaveAttr('name', 'zurg');
             expect(component.items.getAt(1)).toHaveAttr('name', 'zurg');
         });
-        
+
         it("should assign its id as group name to child items", function() {
             makeComponent({
                 items: [{}, {}]
             });
-            
+
             expect(component.items.getAt(0)).toHaveAttr('name', component.id);
             expect(component.items.getAt(1)).toHaveAttr('name', component.id);
         });
-        
+
         it("should not override child name config", function() {
             makeComponent({
                 name: 'throbbe',
                 items: [{ name: 'gurgle' }, {}]
             });
-            
+
             expect(component.items.getAt(0)).toHaveAttr('name', 'gurgle');
             expect(component.items.getAt(1)).toHaveAttr('name', 'throbbe');
         });
@@ -93,7 +93,7 @@ topSuite("Ext.form.CheckboxGroup", ['Ext.app.ViewModel'], function() {
                             xtype: 'checkbox'
                         });
                     }
-   
+
                     return checkboxes;
                 })()
             });
@@ -189,7 +189,7 @@ topSuite("Ext.form.CheckboxGroup", ['Ext.app.ViewModel'], function() {
             });
             expect(component.isValid()).toBe(true);
         });
-        
+
         it("should fire the validitychange event with true when checking a box previously undefined", function() {
             makeComponent({
                 allowBlank: false,
@@ -205,7 +205,7 @@ topSuite("Ext.form.CheckboxGroup", ['Ext.app.ViewModel'], function() {
             });
             expect(isValid).toBe(true);
         });
-        
+
         it("should fire the validitychange event with true when unchecking a box", function() {
             makeComponent({
                 allowBlank: false,
@@ -297,7 +297,7 @@ topSuite("Ext.form.CheckboxGroup", ['Ext.app.ViewModel'], function() {
             });
         });
     });
-    
+
     describe("ARIA", function() {
         beforeEach(function() {
             makeComponent({
@@ -311,13 +311,13 @@ topSuite("Ext.form.CheckboxGroup", ['Ext.app.ViewModel'], function() {
                 }]
             });
         });
-        
+
         describe("ariaEl", function() {
             it("should have containerEl as ariaEl", function() {
                 expect(component.ariaEl).toBe(component.containerEl);
             });
         });
-        
+
         describe("attributes", function() {
             it("should have group role", function() {
                 expect(component).toHaveAttr('role', 'group');

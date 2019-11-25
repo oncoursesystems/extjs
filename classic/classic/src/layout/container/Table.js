@@ -68,13 +68,13 @@ Ext.define('Ext.layout.container.Table', {
      */
 
     type: 'table',
-    
+
     createsInnerCt: true,
 
     targetCls: Ext.baseCSSPrefix + 'table-layout-ct',
     tableCls: Ext.baseCSSPrefix + 'table-layout',
     cellCls: Ext.baseCSSPrefix + 'table-layout-cell',
-    
+
     childEls: [ 'table', 'tbody' ],
 
     /**
@@ -112,7 +112,7 @@ Ext.define('Ext.layout.container.Table', {
     getItemSizePolicy: function(item) {
         return this.autoSizePolicy;
     },
-    
+
     initInheritedState: function(inheritedState, inheritedStateInner) {
         inheritedStateInner.inShrinkWrapTable = true;
     },
@@ -134,13 +134,13 @@ Ext.define('Ext.layout.container.Table', {
 
         return result;
     },
-    
+
     getHiddenItems: function() {
         var result = [],
             items = this.owner.items.items,
             len = items.length,
             i, item;
-            
+
         for (i = 0; i < len; ++i) {
             item = items[i];
 
@@ -148,7 +148,7 @@ Ext.define('Ext.layout.container.Table', {
                 result.push(item);
             }
         }
-    
+
         return result;
     },
 
@@ -231,14 +231,14 @@ Ext.define('Ext.layout.container.Table', {
         while (tbody.rows[rowIdx]) {
             tbody.deleteRow(rowIdx);
         }
-        
+
         // Check if we've removed any cells that contain a component, we need to move
         // them so they don't get cleaned up by the gc
         for (i = 0, len = hiddenItems.length; i < len; ++i) {
             me.ensureInDocument(hiddenItems[i].getEl());
         }
     },
-    
+
     ensureInDocument: function(el) {
         var dom = el.dom.parentNode;
 
@@ -249,7 +249,7 @@ Ext.define('Ext.layout.container.Table', {
 
             dom = dom.parentNode;
         }
-        
+
         Ext.getDetachedBody().appendChild(el, true);
     },
 
@@ -363,7 +363,7 @@ Ext.define('Ext.layout.container.Table', {
 
         for (i = 0; i < len; i++) {
             item = items[i];
-            
+
             curCell = cells[i];
             rowIdx = curCell.rowIdx;
             cellIdx = curCell.cellIdx;
@@ -415,25 +415,25 @@ Ext.define('Ext.layout.container.Table', {
 
         return item.el.dom.parentNode === this.tbody.dom.rows[rowIdx].cells[cellIdx];
     },
-    
+
     destroy: function() {
         var targetEl, cells, i, len;
-        
+
         // Table layout cells will be referenced by child items who will create
         // Element instances for their container (layout cell). We need to clean up
         // these Element instances.
         if (this.owner.rendered) {
             targetEl = this.getRenderTarget();
-            
+
             if (targetEl) {
                 cells = targetEl.query('.' + this.cellCls, false);
-                
+
                 for (i = 0, len = cells.length; i < len; i++) {
                     cells[i].destroy();
                 }
             }
         }
-        
+
         this.callParent();
     }
 });

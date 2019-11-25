@@ -9,8 +9,8 @@ Ext.define('KitchenSink.model.grid.ForumThread', {
 
     fields: [
         'title', 'forumtitle', 'forumid', 'username',
-        {name: 'replycount', type: 'int'},
-        {name: 'lastpost', mapping: 'lastpost', type: 'date', dateFormat: 'timestamp'},
+        { name: 'replycount', type: 'int' },
+        { name: 'lastpost', mapping: 'lastpost', type: 'date', dateFormat: 'timestamp' },
         'lastposter', 'excerpt', 'threadid'
     ],
 

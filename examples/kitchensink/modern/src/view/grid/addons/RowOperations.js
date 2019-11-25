@@ -69,7 +69,7 @@ Ext.define('KitchenSink.view.grid.addons.RowOperations', {
                         handler: 'onArchive'
                     }, {
                         text: 'Delete',
-                        iconCls: 'x-fa fa-trash',
+                        iconCls: 'x-fa fa-trash-alt',
                         handler: 'onDelete'
                     }]
                 }

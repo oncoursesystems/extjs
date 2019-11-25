@@ -335,6 +335,9 @@ Ext.define('Ext.dataview.Abstract', {
          * in a loading div and the view's contents will be cleared while loading,
          * otherwise the view's contents will continue to display normally until the new
          * data is loaded and the contents are replaced.
+         * 
+         * **Note**: For virtual stores, the load mask will be shown frequently as the user
+         * scrolls. To inhibit that, set loadingText to the empty string.
          * @locale
          */
         loadingText: 'Loading...',
@@ -380,7 +383,6 @@ Ext.define('Ext.dataview.Abstract', {
     }, // cachedConfig
 
     config: {
-
         /**
          * @cfg {boolean} itemButtonMode
          * True to cause items to act like buttons for interaction styling.
@@ -605,7 +607,7 @@ Ext.define('Ext.dataview.Abstract', {
      * @inheritdoc
      */
     defaultBindProperty: 'store',
-    
+
     /**
      * @property
      * @inheritdoc
@@ -640,6 +642,8 @@ Ext.define('Ext.dataview.Abstract', {
     hasLoadedStore: false,
 
     scrollDockedItems: null,
+    storeListeners: null,
+    _trueStore: null,
 
     beforeInitialize: function(config) {
         /**
@@ -687,7 +691,7 @@ Ext.define('Ext.dataview.Abstract', {
 
         // If there are space-taking scrollbars, prevent mousedown on a scrollbar
         // from focusing the view.
-        if (Ext.getScrollbarSize().width) {
+        if (Ext.scrollbar.width()) {
             me.bodyElement.on('touchstart', '_onContainerTouchStart', me);
         }
 
@@ -1000,10 +1004,14 @@ Ext.define('Ext.dataview.Abstract', {
         return item || null;
     },
 
+    /* eslint-disable max-len */
     /**
      * Converts the given parameter to a {@link Ext.data.Model record}. Not all items
      * in a dataview correspond to records (such as group headers in `Ext.List`). In these
      * cases `null` is returned.
+     *
+     * If `item` is a {@link Ext.data.Model record}, it will be returned if it belongs to
+     * this dataview's `store`. Otherwise, `null` will be returned.
      *
      * An "item" can be simply an element or a component depending on the type of dataview.
      *
@@ -1015,17 +1023,26 @@ Ext.define('Ext.dataview.Abstract', {
      * Negative index values are treated as relative to the end such that `-1` is the last
      * item, `-2` is the next-to-last and so on.
      *
-     * @param {Ext.event.Event/Number/HTMLElement/Ext.dom.Element/Ext.Component} value
+     * @param {Ext.event.Event/Number/HTMLElement/Ext.dom.Element/Ext.Component/Ext.data.Model} value
      * @return {Ext.data.Model} The associated record or `null` if there is none.
      * @since 6.5.0
      */
     mapToRecord: function(value) {
+        /* eslint-enable max-len */
         var me = this,
             item = value,
             el = me.element,
+            store = me.store,
             dom, rec;
 
-        if (item && item.isEvent) {
+        if (item && item.isEntity) {
+            if (store && store.getById(item.id) === item) {
+                rec = item;
+            }
+
+            item = null;
+        }
+        else if (item && item.isEvent) {
             item = item.getTarget(me.itemSelector, el);
         }
         else if (item && (item.isElement || item.nodeType === 1)) {
@@ -1040,9 +1057,10 @@ Ext.define('Ext.dataview.Abstract', {
             dom = item.isWidget ? item.el : item;
             dom = dom.dom || dom;  // unwrap Ext.Elements
 
-            if (this.itemSelector(dom)) {
+            // If we have been handed a detached DOM, ignore it.
+            if (me.itemSelector(dom)) {
                 rec = dom.getAttribute('data-recordid');
-                rec = rec && me.store.getByInternalId(+rec);
+                rec = rec && store.getByInternalId(+rec);
             }
         }
 
@@ -1066,42 +1084,25 @@ Ext.define('Ext.dataview.Abstract', {
      * item, `-2` is the next-to-last and so on.
      *
      * @param {Ext.event.Event/Number/HTMLElement/Ext.dom.Element/Ext.Component/Ext.data.Model} value
+     * @param {Boolean} [uncollapsed] Pass `true` to return the record index in the
+     * underlying (uncollapsed) store, bypassing collapsed groups. This applies only to
+     * `list` and derived classes.
      * @return {Number} The record's index in the store or -1 if not found.
      * @since 6.5.0
      */
-    mapToRecordIndex: function(value) {
+    mapToRecordIndex: function(value, uncollapsed) {
         /* eslint-enable max-len */
         var me = this,
-            item = value,
+            rec = me.mapToRecord(value),
             index = -1,
-            el = me.element,
-            dom;
+            store = me.store;
 
-        if (item && item.isEntity) {
-            index = me.store.indexOf(item);
-        }
-        else {
-            if (item && item.isEvent) {
-                item = item.getTarget(me.itemSelector, el);
-            }
-            else if (item && (item.isElement || item.nodeType === 1)) {
-                item = Ext.fly(item).findParent(me.itemSelector, el);
-            }
-            else if (typeof item === 'number') {
-                item = me.mapToItem(item);
+        if (rec) {
+            if (uncollapsed && store.isGroupStore) {
+                store = store.getSource();
             }
 
-            if (item) {
-                // Items are either components or elements
-                dom = item.isWidget ? item.el : item;
-                dom = dom.dom || dom;  // unwrap Ext.Elements
-
-                // If we have been handed a detached DOM, ignore it.
-                if (me.itemSelector(dom)) {
-                    index = dom.getAttribute('data-recordindex');
-                    index = index ? +index : -1;
-                }
-            }
+            index = store.indexOf(rec);
         }
 
         return index;
@@ -1269,6 +1270,10 @@ Ext.define('Ext.dataview.Abstract', {
         this.whenVisible('runRefresh');
     },
 
+    setLocation: function(location, options) {
+        return this.getNavigationModel().setLocation(location, options);
+    },
+
     //---------------------------------------------------
     // Event handlers
 
@@ -1301,7 +1306,7 @@ Ext.define('Ext.dataview.Abstract', {
             if (e.relatedTarget) {
                 e.relatedTarget.focus();
             }
-            
+
             return;
         }
 
@@ -1811,7 +1816,7 @@ Ext.define('Ext.dataview.Abstract', {
             me.syncEmptyState();
         }
     },
-    
+
     // enableTextSelection
 
     updateEnableTextSelection: function(enableTextSelection) {
@@ -1820,10 +1825,26 @@ Ext.define('Ext.dataview.Abstract', {
 
     // inline
     updateInline: function(inline) {
-        var me = this;
+        var me = this,
+            noWrap = inline && inline.wrap === false;
 
         me.toggleCls(me.inlineCls, !!inline);
-        me.toggleCls(me.noWrapCls, inline && inline.wrap === false);
+
+        if (Ext.isEdge && noWrap) {
+            // Edge has a bug that causes wrapping to persist even when we add nowrap,
+            // but this can be overcome by forcing a reflow between toggling the two
+            // classes. Other techniques that worked:
+            //
+            //  - me.el.repaint(me.noWrapCls, !noWrap)
+            //  - add/remove/measure/add noWrapCls
+            //
+            // Measuring after add alone does not resolve it. It needs a delay (repaint)
+            // in that case.
+            //
+            me.el.measure('w');
+        }
+
+        me.toggleCls(me.noWrapCls, noWrap);
     },
 
     // itemCls
@@ -1887,7 +1908,7 @@ Ext.define('Ext.dataview.Abstract', {
             }
         }
     },
-    
+
     // selectable
 
     applySelectable: function(selectable, oldSelectable) {
@@ -1957,13 +1978,17 @@ Ext.define('Ext.dataview.Abstract', {
     },
 
     // store
+
     applyStore: function(store) {
-        return store ? Ext.data.StoreManager.lookup(store) : null;
+        var ret = store ? Ext.data.StoreManager.lookup(store) : null;
+
+        this.store = this._trueStore = ret;
+
+        return ret;
     },
 
     updateStore: function(newStore, oldStore) {
         var me = this,
-            storeEvents = Ext.apply({ scope: me }, me.getStoreEventListeners()),
             mask = me.autoMask,
             newLoad;
 
@@ -1973,11 +1998,11 @@ Ext.define('Ext.dataview.Abstract', {
                     oldStore.destroy();
                 }
                 else {
-                    oldStore.un(storeEvents);
+                    Ext.destroy(me.storeListeners);
                 }
             }
 
-            me.dataRange = me.store = Ext.destroy(me.dataRange);
+            me.dataRange = me.storeListeners = Ext.destroy(me.dataRange);
 
             // If we are not destroying, refresh is triggered below if there is a newStore
             if (!me.destroying && !me.destroyed && !newStore) {
@@ -1986,20 +2011,21 @@ Ext.define('Ext.dataview.Abstract', {
         }
 
         if (newStore) {
-            me.store = newStore;
-
             if (me.destroying) {
                 return;
             }
 
-            newStore.on(storeEvents);
+            me.attachStoreEvents(newStore, Ext.apply({
+                scope: me,
+                destroyable: true
+            }, me.getStoreEventListeners()));
 
             if (newStore.isLoaded()) {
                 me.hasLoadedStore = true;
             }
 
             // Ignore TreeStore pending loads. They kick off loads while
-            // content is still perfecty valid and renderable.
+            // content is still perfectly valid and renderable.
             newLoad = !newStore.isTreeStore && newStore.hasPendingLoad();
 
             me.bindStore(newStore);
@@ -2044,6 +2070,16 @@ Ext.define('Ext.dataview.Abstract', {
             bottom: 'end'
         },
 
+        attachStoreEvents: function(store, listeners) {
+            this.storeListeners = store.on(listeners);
+        },
+
+        createLocation: function() {
+            var nav = this.getNavigationModel();
+
+            return nav.createLocation.apply(nav, arguments);
+        },
+
         getSelection: function() {
             // Preserve the Selectable API which offered a getSelection method.
             // The SelectionModel base class uses the "selection" property
@@ -2080,6 +2116,7 @@ Ext.define('Ext.dataview.Abstract', {
         },
 
         bindStore: function(store) {
+            this._trueStore = store;
             this.dataRange = store.createActiveRange();
         },
 
@@ -2231,7 +2268,7 @@ Ext.define('Ext.dataview.Abstract', {
             // exist in the store...
             if (recIndex < 0 || recIndex >= store.getCount()) {
                 //<debug>
-                Ext.raise('Invalid record passed to List#ensureVisible');
+                Ext.raise('Invalid record passed to ensureVisible');
                 //</debug>
 
                 plan.promise = Ext.Deferred.getCachedRejected();
@@ -2344,7 +2381,7 @@ Ext.define('Ext.dataview.Abstract', {
                     plan.promise = plan.promise.then(function(o) {
                         // We're being called as a Grid with a column, so select the cell.
                         if (plan.column) {
-                            cell = me.getNavigationModel().createLocation(plan);
+                            cell = me.createLocation(plan);
                             selectable.selectCells(cell, cell);
                         }
                         else {
@@ -2357,7 +2394,7 @@ Ext.define('Ext.dataview.Abstract', {
                 else {
                     // We're being called as a Grid with a column, so select the cell.
                     if (plan.column) {
-                        cell = me.getNavigationModel().createLocation(plan);
+                        cell = me.createLocation(plan);
                         selectable.selectCells(cell, cell);
                     }
                     else {
@@ -2775,7 +2812,7 @@ Ext.define('Ext.dataview.Abstract', {
         _onChildEvent: function(fn, e) {
             var me = this,
                 last = me.lastPressedLocation,
-                location = me.getNavigationModel().createLocation(e);
+                location = me.createLocation(e);
 
             if (location.child) {
                 location.pressing = !!(last && last.child === location.child);

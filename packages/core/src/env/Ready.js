@@ -175,12 +175,12 @@ Ext.env.Ready = {
             }
             else {
                 me.bound = 1;
-                
+
                 if (Ext.browser.is.PhoneGap && !Ext.os.is.Desktop) {
                     me.bound = 2;
                     doc.addEventListener('deviceready', me.onReadyEvent, false);
                 }
-                
+
                 doc.addEventListener('DOMContentLoaded', me.onReadyEvent, false);
                 window.addEventListener('load', me.onReadyEvent, false);
             }
@@ -304,7 +304,7 @@ Ext.env.Ready = {
             // Since DOM is ready and we have no blocks, we mark the framework as ready.
             Ext.isReady = true;
         }
-        
+
         me.firing = true;
 
         // NOTE: We cannot cache this length because each time through the loop a callback
@@ -321,13 +321,13 @@ Ext.env.Ready = {
             }
 
             listener = listeners.pop();
-            
+
             if (me.blocks && !listener.dom) {
                 // If we are blocked (i.e., only DOM ready) and this listener is not a
                 // DOM-ready listener we have reached the end of the line. The remaining
                 // listeners are Framework ready listeners.
                 listeners.push(listener);
-                
+
                 break;
             }
 
@@ -361,13 +361,13 @@ Ext.env.Ready = {
             dom: false,
             priority: 0
         };
-        
+
         if (options) {
             Ext.apply(ret, options);
         }
-        
+
         ret.phase = ret.dom ? 0 : 1; // to simplify the sortFn
-        
+
         return ret;
     },
 

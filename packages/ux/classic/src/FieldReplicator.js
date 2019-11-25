@@ -45,7 +45,7 @@ Ext.define('Ext.ux.FieldReplicator', {
             if (field.onReplicate) {
                 field.onReplicate();
             }
-            
+
             clone = field.cloneConfig({ replicatorId: replicatorId });
             idx = ownerCt.items.indexOf(field);
             ownerCt.add(idx + 1, clone);

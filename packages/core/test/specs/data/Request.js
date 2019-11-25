@@ -9,7 +9,7 @@ topSuite("Ext.data.Request", function() {
 
         it("should have correct configuration options", function() {
             var request = new Request();
-            
+
             expect(request.getAction()).toBeUndefined();
             expect(request.getParams()).toBeUndefined();
             expect(request.getMethod()).toEqual('GET');

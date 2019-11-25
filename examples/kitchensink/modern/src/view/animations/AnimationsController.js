@@ -2,12 +2,12 @@ Ext.define('KitchenSink.view.animations.AnimationsController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.animations',
 
-    init: function (view) {
+    init: function(view) {
         var me = this,
             anims = view.anims,
             items = [];
 
-        anims.forEach(function (button) {
+        anims.forEach(function(button) {
             if (Ext.isObject(button)) {
                 items.push(
                     me.createButton(button.group + ' Left'),
@@ -17,7 +17,8 @@ Ext.define('KitchenSink.view.animations.AnimationsController', {
                         margin: '0 0 10 0'
                     })
                 );
-            } else {
+            }
+            else {
                 items.push(me.createButton(button));
             }
         });
@@ -29,7 +30,7 @@ Ext.define('KitchenSink.view.animations.AnimationsController', {
         }]);
     },
 
-    createButton: function (name, cfg) {
+    createButton: function(name, cfg) {
         return Ext.apply({
             text: name,
             handler: 'onButtonTap'

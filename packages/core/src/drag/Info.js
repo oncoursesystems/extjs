@@ -99,7 +99,7 @@ Ext.define('Ext.drag.Info', {
 
         proxy.isElement = proxyEl === source.getElement();
         proxy.element = proxyEl;
-        
+
         if (proxyEl) {
             proxy.width = proxyEl.getWidth();
             proxy.height = proxyEl.getHeight();
@@ -350,9 +350,9 @@ Ext.define('Ext.drag.Info', {
                 Ext.raise('Unable to call getData until the drop is complete');
             }
             //</debug>
-            
+
             ret = data[type];
-            
+
             if (typeof ret === 'function') {
                 data[type] = ret = ret.call(me.source, me);
             }
@@ -361,7 +361,7 @@ Ext.define('Ext.drag.Info', {
                 ret = '';
             }
         }
-        
+
         return Ext.Promise.resolve(ret);
     },
 
@@ -450,7 +450,7 @@ Ext.define('Ext.drag.Info', {
                 target = me.target;
 
             me.finalized = true;
-            
+
             if (target) {
                 target.info = null;
                 target.handleDrop(me);
@@ -489,7 +489,7 @@ Ext.define('Ext.drag.Info', {
                     xy = constrain.constrain(xy, me);
                 }
             }
-            
+
             return xy;
         },
 
@@ -509,13 +509,13 @@ Ext.define('Ext.drag.Info', {
 
             me.valid = target.accepts(me);
             target.info = me;
-            
+
             me.copyNativeData(target, e);
         },
 
         onNativeDragLeave: function(target, e) {
             var me = this;
-            
+
             // With native events, enter fires before leave, so when the leave fires
             // check that we are the current target, another target may have already
             // taken over here
@@ -560,7 +560,7 @@ Ext.define('Ext.drag.Info', {
                     target.handleDragEnter(me);
                     target.info = me;
                 }
-                
+
                 target.handleDragMove(me);
             }
             else {

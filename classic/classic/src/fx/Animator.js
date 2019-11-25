@@ -215,7 +215,7 @@ Ext.define('Ext.fx.Animator', {
      */
     constructor: function(config) {
         var me = this;
-        
+
         config = Ext.apply(me, config || {});
         me.config = config;
         me.id = Ext.id(null, 'ext-animator-');
@@ -223,7 +223,7 @@ Ext.define('Ext.fx.Animator', {
         me.mixins.observable.constructor.call(me, config);
         me.timeline = [];
         me.createTimeline(me.keyframes);
-        
+
         if (me.target) {
             me.applyAnimator(me.target);
             Ext.fx.Manager.addAnim(me);
@@ -253,7 +253,7 @@ Ext.define('Ext.fx.Animator', {
         for (pct in keyframes) {
             if (keyframes.hasOwnProperty(pct) && me.animKeyFramesRE.test(pct)) {
                 attr = { attrs: Ext.apply(keyframes[pct], to) };
-                
+
                 // CSS3 spec allow for from/to to be specified.
                 if (pct === "from") {
                     pct = 0;
@@ -261,22 +261,22 @@ Ext.define('Ext.fx.Animator', {
                 else if (pct === "to") {
                     pct = 100;
                 }
-                
+
                 // convert % values into integers
                 attr.pct = parseInt(pct, 10);
                 attrs.push(attr);
             }
         }
-        
+
         // Sort by pct property
         Ext.Array.sort(attrs, me.sorter);
-        
+
         ln = attrs.length;
-        
+
         for (i = 0; i < ln; i++) {
             prevMs = (attrs[i - 1]) ? duration * (attrs[i - 1].pct / 100) : 0;
             ms = duration * (attrs[i].pct / 100);
-            
+
             me.timeline.push({
                 duration: ms - prevMs,
                 attrs: attrs[i].attrs
@@ -304,7 +304,7 @@ Ext.define('Ext.fx.Animator', {
                 damper = attrs.damper || me.damper;
                 delete attrs.easing;
                 delete attrs.damper;
-                
+
                 anim = new Ext.fx.Anim({
                     target: target,
                     easing: easing,
@@ -313,26 +313,26 @@ Ext.define('Ext.fx.Animator', {
                     paused: true,
                     to: attrs
                 });
-                
+
                 anims.push(anim);
             }
-            
+
             me.animations = anims;
             me.target = anim.target;
-            
+
             for (i = 0; i < ln - 1; i++) {
                 anim = anims[i];
                 anim.nextAnim = anims[i + 1];
-                
+
                 anim.on('afteranimate', function() {
                     this.nextAnim.paused = false;
                 });
-                
+
                 anim.on('afteranimate', function() {
                     this.fireEvent('keyframe', this, ++this.keyframeStep);
                 }, me);
             }
-            
+
             anims[ln - 1].on('afteranimate', function() {
                 this.lastFrame();
             }, me);
@@ -348,16 +348,16 @@ Ext.define('Ext.fx.Animator', {
             delay = me.delay,
             delayStart = me.delayStart,
             delayDelta;
-        
+
         if (delay) {
             if (!delayStart) {
                 me.delayStart = startTime;
-                
+
                 return;
             }
             else {
                 delayDelta = startTime - delayStart;
-                
+
                 if (delayDelta < delay) {
                     return;
                 }
@@ -367,7 +367,7 @@ Ext.define('Ext.fx.Animator', {
                 }
             }
         }
-        
+
         if (me.fireEvent('beforeanimate', me) !== false) {
             me.startTime = startTime;
             me.running = true;
@@ -386,7 +386,7 @@ Ext.define('Ext.fx.Animator', {
             iterCount = me.currentIteration;
 
         iterCount++;
-        
+
         if (iterCount < iter) {
             me.startTime = new Date();
             me.currentIteration = iterCount;
@@ -407,14 +407,14 @@ Ext.define('Ext.fx.Animator', {
      */
     end: function() {
         var me = this;
-        
+
         me.fireEvent('afteranimate', me, me.startTime, new Date() - me.startTime);
     },
-    
+
     isReady: function() {
         return this.paused === false && this.running === false && this.iterations > 0;
     },
-    
+
     isRunning: function() {
         // Explicitly return false, we don't want to be run continuously by the manager
         return false;

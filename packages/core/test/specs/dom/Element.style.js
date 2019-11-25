@@ -1,18 +1,18 @@
 // false in dependencies to avoid loading "Ext.dom.Element.style"
 topSuite("Ext.dom.Element.style", [false, 'Ext.dom.Element'], function() {
     var testEl;
-    
+
     beforeEach(function() {
         testEl = Ext.getBody().createChild({
             id: 'ExtElementHelper',
             style: 'position:absolute;'
         });
     });
-    
+
     afterEach(function() {
         testEl.destroy();
     });
-    
+
     describe('addCls', function() {
         xit('should add one class', function() {
             testEl.addCls('foo');
@@ -115,7 +115,7 @@ topSuite("Ext.dom.Element.style", [false, 'Ext.dom.Element'], function() {
         });
 
     });
-    
+
     describe('setStyle', function() {
         var el, dom;
 

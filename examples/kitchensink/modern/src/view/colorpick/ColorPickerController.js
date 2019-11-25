@@ -5,7 +5,7 @@ Ext.define('KitchenSink.view.colorpick.ColorPickerController', {
 
     onChange: function(picker) {
         this.view.getItems().items[1].setTitle(
-            '<p style="color: #'+picker.getValue()+'">Selected Color: #'+picker.getValue()+'</p>'
+            '<p style="color: #' + picker.getValue() + '">Selected Color: #' + picker.getValue() + '</p>'
         );
     }
 });

@@ -23,7 +23,16 @@ Ext.define('Ext.panel.Collapsible', {
          *
          * @since 6.5.0
          */
-        collapsible: null
+        collapsible: null,
+
+        /**
+         * @cfg {Boolean} titleCollapse
+         * `true` to allow expanding and collapsing the panel (when `{@link #collapsible} = true`)
+         * by clicking anywhere in the header bar, `false` to allow it only by clicking to tool
+         * button.
+         * @since 7.0
+         */
+        titleCollapse: null
     },
 
     /**
@@ -81,6 +90,11 @@ Ext.define('Ext.panel.Collapsible', {
      * @since 6.5.0
      */
     hasCollapsible: true,
+
+    collapsed: false,
+    collapsing: false,
+    expanded: false,
+    expanding: false,
 
     defaultCollapserCls: 'Ext.panel.Collapser',
 

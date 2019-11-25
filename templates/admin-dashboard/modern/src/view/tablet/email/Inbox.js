@@ -52,7 +52,7 @@ Ext.define('Admin.view.tablet.email.Inbox', {
         cell: {
             align: 'center',
             bind: {
-                bodyCls: 'x-fa {record.favorite:pick("fa-heart-o", "fa-heart inbox-favorite-icon")}'
+                bodyCls: 'x-fa {record.favorite:pick("fa-heart inactive", "fa-heart inbox-favorite-icon")}'
             }
         }
     }, {

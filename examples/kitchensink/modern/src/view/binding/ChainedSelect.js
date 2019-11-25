@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.binding.ChainedSelect', {
         type: 'binding-chainedselect'
     },
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'ViewModel',
         path: 'modern/src/view/binding/ChainedSelectModel.js'
@@ -30,7 +30,7 @@ Ext.define('KitchenSink.view.binding.ChainedSelect', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     padding: 20,
     referenceHolder: true,

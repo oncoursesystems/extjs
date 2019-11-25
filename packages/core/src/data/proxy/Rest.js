@@ -110,14 +110,14 @@ Ext.define('Ext.data.proxy.Rest', {
      * {@link Ext#override Ext.override} - the {@link #getMethod} function can be overridden
      * instead.
      */
-    
+
     defaultActionMethods: {
         create: 'POST',
         read: 'GET',
         update: 'PUT',
         destroy: 'DELETE'
     },
-    
+
     slashRe: /\/$/,
     periodRe: /\.$/,
 
@@ -129,7 +129,7 @@ Ext.define('Ext.data.proxy.Rest', {
          * details.
          */
         appendId: true,
-    
+
         /**
          * @cfg {String} format
          * Optional data format to send to the server when making any request (e.g.
@@ -142,7 +142,7 @@ Ext.define('Ext.data.proxy.Rest', {
          * True to batch actions of a particular type when synchronizing the store.
          */
         batchActions: false,
-        
+
         /**
          * @cfg actionMethods
          * @inheritdoc
@@ -185,7 +185,7 @@ Ext.define('Ext.data.proxy.Rest', {
 
             url += encodeURIComponent(id);
             params = request.getParams();
-            
+
             if (params) {
                 delete params[me.getIdParam()];
             }
@@ -203,7 +203,7 @@ Ext.define('Ext.data.proxy.Rest', {
 
         return me.callParent([request]);
     },
-    
+
     isValidId: function(id) {
         return id || id === 0;
     }

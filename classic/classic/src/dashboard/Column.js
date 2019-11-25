@@ -41,7 +41,7 @@ Ext.define('Ext.dashboard.Column', {
                     return c !== me;
                 }
             );
-            
+
             numRemaining = remainingSiblings.length;
 
             // If this column is not destroyed, then remove this column (unless it is the last one!)

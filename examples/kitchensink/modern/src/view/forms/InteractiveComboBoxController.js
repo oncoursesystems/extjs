@@ -5,7 +5,7 @@ Ext.define('KitchenSink.view.forms.InteractiveComboBoxController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.form-interactive-combo',
 
-    log: function (event, combo) {
+    log: function(event, combo) {
         var args = Ext.Array.slice(arguments);
 
         args.shift();
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.forms.InteractiveComboBoxController', {
         console.log.apply(console, args);
     },
 
-    onFreeTextAction: function (combo) {
+    onFreeTextAction: function(combo) {
         this.log('action', combo);
     },
 
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.forms.InteractiveComboBoxController', {
         this.log('change', combo, '(new=', newValue, ') (old=', oldValue, ')');
     },
 
-    onFreeTextSelect: function (combo, record) {
+    onFreeTextSelect: function(combo, record) {
         this.log('select', combo, 'record.id', record && record.id);
     },
 
@@ -36,7 +36,7 @@ Ext.define('KitchenSink.view.forms.InteractiveComboBoxController', {
         this.log('change', combo, '(new=', newValue, ') (old=', oldValue, ')');
     },
 
-    onForceSelectSelect: function (combo, record) {
+    onForceSelectSelect: function(combo, record) {
         this.log('select', combo, 'record.id', record && record.id);
     },
 
@@ -44,8 +44,9 @@ Ext.define('KitchenSink.view.forms.InteractiveComboBoxController', {
         this.log('change', combo, '(new=', newValue, ') (old=', oldValue, ')');
     },
 
-    onAutoClearSelect: function (combo, record) {
+    onAutoClearSelect: function(combo, record) {
         this.log('select', combo, 'record.id', record && record.id);
+
         return false;
     }
 });

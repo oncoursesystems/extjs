@@ -11,7 +11,7 @@ Ext.define('Ext.selection.TreeModel', {
      * @cfg {Boolean} pruneRemoved
      * @hide
      */
-    
+
     /**
      * @cfg {Boolean} selectOnExpanderClick
      * `true` to select the row when clicking on the icon to collapse or expand
@@ -40,7 +40,7 @@ Ext.define('Ext.selection.TreeModel', {
             result = me.callParent();
 
         result.noderemove = me.onNodeRemove;
-        
+
         return result;
     },
 
@@ -49,9 +49,9 @@ Ext.define('Ext.selection.TreeModel', {
         if (!isMove) {
             // eslint-disable-next-line vars-on-top
             var toDeselect = [];
-            
+
             this.gatherSelected(node, toDeselect);
-            
+
             if (toDeselect.length) {
                 this.deselect(toDeselect);
             }
@@ -70,7 +70,7 @@ Ext.define('Ext.selection.TreeModel', {
         var view = this.view,
             select = this.selectOnExpanderClick,
             veto;
-        
+
         veto = !select && e.type === 'click' &&
                e.getTarget(
                    view.expanderSelector ||

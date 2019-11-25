@@ -270,7 +270,7 @@ Ext.define('Ext.tree.Panel', {
     extend: 'Ext.panel.Table',
     alias: 'widget.treepanel',
     alternateClassName: ['Ext.tree.TreePanel', 'Ext.TreePanel'],
-    
+
     requires: [
         'Ext.tree.View',
         'Ext.selection.TreeModel',
@@ -278,7 +278,7 @@ Ext.define('Ext.tree.Panel', {
         'Ext.data.TreeStore',
         'Ext.tree.NavigationModel'
     ],
-    
+
     viewType: 'treeview',
 
     treeCls: Ext.baseCSSPrefix + 'tree-panel',
@@ -383,19 +383,19 @@ Ext.define('Ext.tree.Panel', {
     normalCfgCopy: ['displayField', 'root', 'singleExpand', 'useArrows', 'lines', 'rootVisible',
                     'scroll'],
     lockedCfgCopy: ['displayField', 'root', 'singleExpand', 'useArrows', 'lines', 'rootVisible'],
-    
+
     isTree: true,
 
     /**
      * @cfg {Boolean} folderSort
      * True to automatically prepend a leaf sorter to the store.
      */
-     
+
     /**
      * @cfg {Ext.data.TreeStore} store (required)
      * The {@link Ext.data.TreeStore Store} the tree should use as its data source.
      */
-    
+
     arrowCls: Ext.baseCSSPrefix + 'tree-arrows',
     linesCls: Ext.baseCSSPrefix + 'tree-lines',
     noLinesCls: Ext.baseCSSPrefix + 'tree-no-lines',
@@ -403,11 +403,11 @@ Ext.define('Ext.tree.Panel', {
 
     constructor: function(config) {
         config = config || {};
-        
+
         if (config.animate === undefined) {
             config.animate = Ext.isBoolean(this.animate) ? this.animate : Ext.enableFx;
         }
-        
+
         this.enableAnimations = config.animate;
         delete config.animate;
 
@@ -487,7 +487,7 @@ Ext.define('Ext.tree.Panel', {
             * @param {Ext.event.Event} e The click event.
             */
             'beforecheckchange',
-            
+
             /**
             * @event checkchange
             * Fires when a node with a checkbox's checked property changes.
@@ -496,13 +496,13 @@ Ext.define('Ext.tree.Panel', {
             * @param {Ext.event.Event} e The click event.
             */
             'checkchange',
-            
+
             /**
             * @event afteritemexpand
             * @inheritdoc Ext.tree.View#afteritemexpand
             */
             'afteritemexpand',
-            
+
             /**
             * @event afteritemcollapse
             * @inheritdoc Ext.tree.View#afteritemcollapse
@@ -526,34 +526,34 @@ Ext.define('Ext.tree.Panel', {
                 type: 'tree',
                 proxy: 'memory'
             }, store);
-            
+
             if (me.root) {
                 store.root = me.root;
             }
-            
+
             if (me.fields) {
                 store.fields = me.fields;
             }
             else if (me.model) {
                 store.model = me.model;
             }
-            
+
             if (me.folderSort) {
                 store.folderSort = me.folderSort;
             }
-            
+
             store = me.store = Ext.StoreMgr.lookup(store);
         }
         else if (me.root) {
             store = me.store = Ext.data.StoreManager.lookup(store);
             store.setRoot(me.root);
-            
+
             if (me.folderSort !== undefined) {
                 store.folderSort = me.folderSort;
                 store.sort();
             }
         }
-        
+
         return store;
     },
 
@@ -667,7 +667,7 @@ Ext.define('Ext.tree.Panel', {
             me.rootRelayers.destroy();
             me.rootRelayers = null;
         }
-        
+
         // Relay store events with prefix. Return a Destroyable object
         me.rootRelayers = me.mon(newRoot, {
             destroyable: true,
@@ -798,7 +798,7 @@ Ext.define('Ext.tree.Panel', {
     isItemChecked: function(rec) {
         return rec.get('checked');
     },
-    
+
     /**
      * Expands a record that is loaded in the tree.
      * @param {Ext.data.Model} record The record to expand
@@ -850,14 +850,14 @@ Ext.define('Ext.tree.Panel', {
         if (root) {
             Ext.suspendLayouts();
             scope = scope || me;
-            
+
             if (view.rootVisible) {
                 root.collapse(true, callback, scope);
             }
             else {
                 root.collapseChildren(true, callback, scope);
             }
-            
+
             Ext.resumeLayouts(true);
         }
     },
@@ -925,7 +925,7 @@ Ext.define('Ext.tree.Panel', {
         // If they began the path with '/', this indicates starting from the root ID.
         // otherwise, then can start at any *existing* node id.
         rooted = !keys[0];
-        
+
         if (rooted) {
             current = me.getRootNode();
             index = 1;
@@ -953,11 +953,11 @@ Ext.define('Ext.tree.Panel', {
                 if (select) {
                     view.getSelectionModel().select(node);
                 }
-                
+
                 if (doFocus) {
                     view.getNavigationModel().setPosition(node, 0);
                 }
-                
+
                 return Ext.callback(callback, scope || me, [true, node, view.getNode(node)]);
             }
 
@@ -966,11 +966,11 @@ Ext.define('Ext.tree.Panel', {
                 // The ids paths may be numeric, so cast the value to a string for comparison
                 node = newChildren[i];
                 value = node.get(field);
-                
+
                 if (value || value === 0) {
                     value = value.toString();
                 }
-                
+
                 if (value === keys[index]) {
                     return node.expand(false, expander);
                 }
@@ -980,7 +980,7 @@ Ext.define('Ext.tree.Panel', {
             node = this;
             Ext.callback(callback, scope || me, [false, node, view.getNode(node)]);
         };
-        
+
         current.expand(false, expander);
     },
 
@@ -1018,12 +1018,12 @@ Ext.define('Ext.tree.Panel', {
             separator = (options && options.separator) || '/',
             callback, scope, keys, rooted, last, node, parentNode,
             onLastExpanded;
-            
+
         onLastExpanded = function(success, lastExpanded, lastExpandedHtmlNode, targetNode) {
             if (!targetNode && success && lastExpanded) {
                 targetNode = lastExpanded.findChild(field, last);
             }
-            
+
             // Once we have the node, we can use the TablePanel's ensureVisible method
             if (targetNode) {
                 me.doEnsureVisible(targetNode, options);
@@ -1049,14 +1049,14 @@ Ext.define('Ext.tree.Panel', {
         // If the path was "foo" or "/foo"
         else {
             node = me.store.findNode(field, last);
-            
+
             if (node) {
                 parentNode = node.parentNode;
-                
+
                 if (parentNode && !parentNode.isExpanded()) {
                     parentNode.expand();
                 }
-                
+
                 // Pass the target node as the 4th parameter
                 // so the callback doesn't have to look it up
                 onLastExpanded(true, null, null, node);

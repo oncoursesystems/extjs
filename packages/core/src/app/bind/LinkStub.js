@@ -18,12 +18,12 @@ Ext.define('Ext.app.bind.LinkStub', {
         if (binding) {
             me.binding = null;
             binding.destroy();
-            
+
             if (owner) {
                 delete owner.linkData[me.name];
             }
         }
-        
+
         me.target = null;
 
         me.callParent();
@@ -31,7 +31,7 @@ Ext.define('Ext.app.bind.LinkStub', {
 
     getFullName: function() {
         var me = this;
-        
+
         return me.fullName ||
               (me.fullName = '(' + me.callParent() + ' -> ' + me.binding.getFullName() + ')');
     },
@@ -44,7 +44,7 @@ Ext.define('Ext.app.bind.LinkStub', {
 
         if (root.isRootStub && !root.shouldClimb(name)) {
             rootData = root.owner.getData();
-            
+
             if (!rootData.hasOwnProperty(name)) {
                 rootData[name] = ret = {};
             }
@@ -52,13 +52,13 @@ Ext.define('Ext.app.bind.LinkStub', {
         else {
             ret = binding && binding.getDataObject();
         }
-        
+
         return ret;
     },
 
     getRawValue: function() {
         var binding = this.binding;
-        
+
         return binding && binding.getRawValue();
     },
 
@@ -70,7 +70,7 @@ Ext.define('Ext.app.bind.LinkStub', {
 
     getTargetStub: function() {
         var binding = this.binding;
-        
+
         return binding && binding.stub;
     },
 
@@ -109,19 +109,19 @@ Ext.define('Ext.app.bind.LinkStub', {
             linkData = me.owner.linkData;
 
         linkData[me.name] = me.getValue();
-        
+
         me.callParent();
     },
-    
+
     privates: {
         collect: function() {
             var me = this,
                 result = me.callParent(),
                 binding = me.binding ? 1 : 0;
-            
+
             return result + binding;
         },
-        
+
         sort: function() {
             var binding = this.binding;
 

@@ -79,7 +79,7 @@ Ext.define('Ext.slider.Multi', {
      * config is larger, it will be used instead.
      */
     keyIncrement: 1,
-    
+
     /**
      * @cfg {Number} pageSize
      * How many units to change the Slider when using PageUp and PageDown keys.
@@ -162,7 +162,7 @@ Ext.define('Ext.slider.Multi', {
      * @controllable
      */
     tipText: null,
-    
+
     /**
      * @property defaultBindProperty
      * @inheritdoc
@@ -253,14 +253,14 @@ Ext.define('Ext.slider.Multi', {
      */
     focusable: true,
     needArrowKeys: true,
-    
+
     /**
      * @cfg tabIndex
      * @inheritdoc
      */
     tabIndex: 0,
     skipLabelForAttribute: true,
-    
+
     /**
      * @cfg focusCls
      * @inheritdoc
@@ -307,7 +307,7 @@ Ext.define('Ext.slider.Multi', {
                     thumb = thumbs[i];
                     thumbConfig = thumb.getElConfig();
                     thumbConfig.id = me.id + '-thumb-' + i;
-                    
+
                     Ext.DomHelper.generateMarkup(thumbConfig, out);
                 }
             },
@@ -323,7 +323,7 @@ Ext.define('Ext.slider.Multi', {
             extValueFrom = Ext.valueFrom,
             thumbPerValue = me.thumbPerValue,
             values;
-        
+
         // Fallback for initial values: values config -> value config -> minValue config -> 0
         values = extValueFrom(me.values, [extValueFrom(me.value, extValueFrom(me.minValue, 0))]);
 
@@ -334,7 +334,7 @@ Ext.define('Ext.slider.Multi', {
         me.initializingValues = true;
         me.updateValues(values);
         me.initializingValues = false;
-        
+
         // restore config
         me.thumbPerValue = thumbPerValue;
     },
@@ -457,20 +457,20 @@ Ext.define('Ext.slider.Multi', {
             tabIdx: me.tabIndex,
             childElCls: ''
         });
-        
+
         ariaAttr = data.inputElAriaAttributes;
-        
+
         if (ariaAttr) {
             if (!ariaAttr['aria-labelledby']) {
                 ariaAttr['aria-labelledby'] = me.id + '-labelEl';
             }
-            
+
             ariaAttr['aria-orientation'] = me.vertical ? 'vertical' : 'horizontal';
             ariaAttr['aria-valuemin'] = me.minValue;
             ariaAttr['aria-valuemax'] = me.maxValue;
             ariaAttr['aria-valuenow'] = me.value;
         }
-        
+
         return data;
     },
 
@@ -497,9 +497,9 @@ Ext.define('Ext.slider.Multi', {
      */
     initEvents: function() {
         var me = this;
-        
+
         me.callParent();
-        
+
         me.mon(me.el, {
             scope: me,
             mousedown: me.onMouseDown,
@@ -543,7 +543,7 @@ Ext.define('Ext.slider.Multi', {
     },
 
     transformTrackPoints: Ext.identityFn,
-    
+
     // Base field checkChange method will fire 'change' event with signature common to all fields,
     // but Slider fires the same event with different signature. Hence we disable checkChange here
     // to avoid breakage.
@@ -607,7 +607,7 @@ Ext.define('Ext.slider.Multi', {
 
         if (!thumb.disabled) {
             index = thumb.index;
-            
+
             me.setValue(
                 index,
                 Ext.util.Format.round(me.reversePixelValue(trackPoint), me.decimalPrecision),
@@ -645,12 +645,12 @@ Ext.define('Ext.slider.Multi', {
                     thumb.index > nearest.index) {
                     continue;
                 }
-                
+
                 nearest = thumb;
                 nearestDistance = dist;
             }
         }
-        
+
         return nearest;
     },
 
@@ -665,7 +665,7 @@ Ext.define('Ext.slider.Multi', {
         var me = this,
             ariaDom = me.ariaEl.dom,
             k, val;
-        
+
         k = e.getKey();
 
         /*
@@ -678,7 +678,7 @@ Ext.define('Ext.slider.Multi', {
             if (k !== e.TAB) {
                 e.preventDefault();
             }
-            
+
             return;
         }
 
@@ -687,24 +687,24 @@ Ext.define('Ext.slider.Multi', {
             case e.RIGHT:
                 val = e.ctrlKey ? me.maxValue : me.getValue(0) + me.keyIncrement;
                 break;
-            
+
             case e.DOWN:
             case e.LEFT:
                 val = e.ctrlKey ? me.minValue : me.getValue(0) - me.keyIncrement;
                 break;
-            
+
             case e.HOME:
                 val = me.minValue;
                 break;
-            
+
             case e.END:
                 val = me.maxValue;
                 break;
-            
+
             case e.PAGE_UP:
                 val = me.getValue(0) + me.pageSize;
                 break;
-            
+
             case e.PAGE_DOWN:
                 val = me.getValue(0) - me.pageSize;
                 break;
@@ -712,11 +712,11 @@ Ext.define('Ext.slider.Multi', {
 
         if (val !== undefined) {
             e.stopEvent();
-            
+
             val = me.normalizeValue(val);
-            
+
             me.setValue(0, val, undefined, true);
-            
+
             if (ariaDom) {
                 ariaDom.setAttribute('aria-valuenow', val);
             }
@@ -737,7 +737,7 @@ Ext.define('Ext.slider.Multi', {
         value = Ext.Number[snapFn](value, me.increment, me.minValue, me.maxValue);
         value = Ext.util.Format.round(value, me.decimalPrecision);
         value = Ext.Number.constrain(value, me.minValue, me.maxValue);
-        
+
         return value;
     },
 
@@ -757,12 +757,12 @@ Ext.define('Ext.slider.Multi', {
 
         for (i = 0; i < len; ++i) {
             thumb = thumbs[i];
-            
+
             if (thumb.value < val) {
                 me.setValue(i, val, false);
             }
         }
-        
+
         if (ariaDom) {
             ariaDom.setAttribute('aria-valuemin', val);
         }
@@ -786,16 +786,16 @@ Ext.define('Ext.slider.Multi', {
 
         for (i = 0; i < len; ++i) {
             thumb = thumbs[i];
-            
+
             if (thumb.value > val) {
                 me.setValue(i, val, false);
             }
         }
-        
+
         if (ariaDom) {
             ariaDom.setAttribute('aria-valuemax', val);
         }
-        
+
         me.syncThumbs();
     },
 
@@ -828,7 +828,7 @@ Ext.define('Ext.slider.Multi', {
 
         if (Ext.isArray(index)) {
             me.updateValues(index, value);
-            
+
             return me;
         }
 
@@ -839,7 +839,7 @@ Ext.define('Ext.slider.Multi', {
         if (value !== thumb.value &&
             me.fireEvent('beforechange', me, value, thumb.value, thumb, 'update') !== false) {
             thumb.value = value;
-            
+
             if (me.rendered) {
                 if (Ext.isDefined(animate)) {
                     animate = animate === false ? false : animate;
@@ -847,9 +847,9 @@ Ext.define('Ext.slider.Multi', {
                 else {
                     animate = me.animate;
                 }
-                
+
                 thumb.move(me.calculateThumbPosition(value), animate);
-                
+
                 // At this moment we can only handle one thumb wrt ARIA
                 if (index === 0 && ariaDom) {
                     ariaDom.setAttribute('aria-valuenow', value);
@@ -1039,7 +1039,7 @@ Ext.define('Ext.slider.Multi', {
 
     getSubmitValue: function() {
         var me = this;
-        
+
         return (me.disabled || !me.submitValue) ? null : me.getValue();
     },
 
@@ -1049,7 +1049,7 @@ Ext.define('Ext.slider.Multi', {
 
         me.updateValues(arr);
         me.clearInvalid();
-        
+
         // delete here so we reset back to the original state
         delete me.wasValid;
     },
@@ -1074,7 +1074,7 @@ Ext.define('Ext.slider.Multi', {
             newValues = [],
             skipEvents = me.initializingValues || supressEvents,
             i, thumb, value, addLen, removeLen;
-        
+
         for (i = 0; i < len; i++) {
             thumb = thumbs[i];
             value = values[i];
@@ -1091,18 +1091,17 @@ Ext.define('Ext.slider.Multi', {
             addLen = newValues.length;
             removeLen = thumbLen - len;
 
-
             for (i = 0; i < addLen; i++) {
                 value = newValues[i];
 
                 if (skipEvents ||
                     me.fireEvent('beforechange', me, value, null, null, 'add') !== false) {
                     thumb = me.addThumb(me.normalizeValue(value));
-                    
+
                     if (!skipEvents) {
                         me.fireEvent('change', me, value, thumb, 'add');
                     }
-                    
+
                     me.checkDirty();
                 }
             }
@@ -1117,7 +1116,7 @@ Ext.define('Ext.slider.Multi', {
                     if (!skipEvents) {
                         me.fireEvent('change', me, null, null, 'remove');
                     }
-                    
+
                     me.checkDirty();
                 }
             }
@@ -1147,10 +1146,10 @@ Ext.define('Ext.slider.Multi', {
         if (thumb && Ext.isNumber(index)) {
             // remove from tracking array
             thumbs.splice(index, 1);
-            
+
             // reset the thumb stack
             me.thumbStack = Ext.Array.slice(me.thumbs);
-            
+
             // now destroy the thumb
             Ext.destroy(thumb);
         }
@@ -1171,7 +1170,7 @@ Ext.define('Ext.slider.Multi', {
         for (i = 0; i < len; i++) {
             if (thumbs[i] === thumb) {
                 index = i;
-                
+
                 break;
             }
         }
@@ -1200,16 +1199,16 @@ Ext.define('Ext.slider.Multi', {
 
     doDestroy: function() {
         var me = this;
-        
+
         if (me.rendered) {
             Ext.destroy(me.thumbs);
         }
-        
+
         if (me.thumbHolder) {
             me.thumbHolder.destroy();
             me.thumbHolder = null;
         }
-        
+
         me.callParent();
     }
 });

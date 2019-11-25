@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Organization', {
     controller: 'd3-organization',
     title: 'Organization Chart',
 
-    // <example>
+    //<example>
     otherContent: [
         {
             type: 'Org Chart',
@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Organization', {
             path: 'app/store/OrgChart.js'
         }
     ],
-    // </example>
+    //</example>
 
     layout: 'fit',
 

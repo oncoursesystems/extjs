@@ -25,7 +25,7 @@ Ext.define('Ext.scroll.TableScroller', {
 
             newPosition =
                 Ext.fly(el).getScrollIntoViewXY(this.getElement(), position.x, position.y);
-            
+
             newPosition.x = (options.x === false) ? position.x : newPosition.x;
 
             if (lockingScroller) {
@@ -58,7 +58,7 @@ Ext.define('Ext.scroll.TableScroller', {
             if (lockedPromise) {
                 ret = Ext.Promise.all([ret, lockedPromise]);
             }
-            
+
             return ret;
         },
 

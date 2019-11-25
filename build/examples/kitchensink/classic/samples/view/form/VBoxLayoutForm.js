@@ -4,31 +4,44 @@
 Ext.define('KitchenSink.view.form.VBoxLayoutForm', {
     extend: 'Ext.window.Window',
     xtype: 'form-vboxlayout',
-    
+
     //<example>
     requires: [
         'Ext.form.field.Text',
         'Ext.form.field.TextArea',
         'Ext.layout.container.VBox'
     ],
-    
+
     exampleTitle: 'VBox Layout Form',
     //</example>
     profiles: {
         classic: {
             width: 500,
             height: 300,
-            labelWidth: 60
+            labelWidth: 60,
+            textareaEmptyText: '',
+            bodyPadding: 5
         },
         neptune: {
             width: 500,
             height: 300,
-            labelWidth: 60
+            labelWidth: 60,
+            textareaEmptyText: '',
+            bodyPadding: 5
         },
         graphite: {
             width: 600,
             height: 400,
-            labelWidth: 80
+            labelWidth: 80,
+            textareaEmptyText: '',
+            bodyPadding: 5
+        },
+        'classic-material': {
+            width: 600,
+            height: 400,
+            labelWidth: 80,
+            textareaEmptyText: 'Enter Text',
+            bodyPadding: '5 17'
         }
     },
     title: 'Resize Me',
@@ -38,7 +51,7 @@ Ext.define('KitchenSink.view.form.VBoxLayoutForm', {
     minHeight: 220,
     layout: 'fit',
     plain: true,
-    
+
     items: [{
         xtype: 'form',
 
@@ -46,13 +59,13 @@ Ext.define('KitchenSink.view.form.VBoxLayoutForm', {
         fieldDefaults: {
             labelWidth: '${labelWidth}'
         },
-        
+
         layout: {
             type: 'vbox',
             align: 'stretch'
         },
-        
-        bodyPadding: 5,
+
+        bodyPadding: '${bodyPadding}',
         border: false,
 
         items: [{
@@ -65,7 +78,7 @@ Ext.define('KitchenSink.view.form.VBoxLayoutForm', {
             xtype: 'textarea',
             hideLabel: true,
             name: 'msg',
-            
+            emptyText: '${textareaEmptyText}',
             // Setting flex to 1 for textarea when no other component has flex
             // is effectively tells the layout to strech the textarea vertically,
             // taking all the space left after the fields above have been laid out.
@@ -75,7 +88,7 @@ Ext.define('KitchenSink.view.form.VBoxLayoutForm', {
 
     buttons: [{
         text: 'Send'
-    },{
+    }, {
         text: 'Cancel'
     }]
 });

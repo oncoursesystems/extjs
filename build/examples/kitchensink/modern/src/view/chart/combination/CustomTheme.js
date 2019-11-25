@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.chart.combination.CustomTheme', {
         'KitchenSink.view.chart.combination.theme.CustomTheme'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Theme',
         path: 'modern/src/view/chart/combination/theme/CustomTheme.js'
@@ -54,9 +54,9 @@ Ext.define('KitchenSink.view.chart.combination.CustomTheme', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 

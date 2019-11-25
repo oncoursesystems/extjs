@@ -43,6 +43,11 @@ Ext.define('KitchenSink.view.binding.ChainedStores', {
             removeWidth: 140,
             labelWidth: 150,
             width: 345
+        },
+        'classic-material': {
+            removeWidth: 140,
+            labelWidth: 150,
+            width: 345
         }
     },
 
@@ -56,6 +61,7 @@ Ext.define('KitchenSink.view.binding.ChainedStores', {
     viewModel: 'binding.chainedstores',
     controller: 'binding.chainedstores',
 
+    cls: 'binding-chained-stores',
     items: [{
         xtype: 'grid',
         bind: '{everyone}',

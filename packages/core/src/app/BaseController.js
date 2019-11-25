@@ -9,7 +9,7 @@ Ext.define('Ext.app.BaseController', {
         'Ext.app.EventBus',
         'Ext.app.domain.Global'
     ],
-    
+
     uses: [
         'Ext.app.domain.Controller'
     ],
@@ -33,7 +33,7 @@ Ext.define('Ext.app.BaseController', {
          * @accessor
          */
         id: undefined,
-       
+
         /**
          * @cfg {Object} control
          * @accessor
@@ -240,7 +240,7 @@ Ext.define('Ext.app.BaseController', {
      */
     updateControl: function(control) {
         this.getId();
-        
+
         if (control) {
             this.control(control);
         }
@@ -252,7 +252,7 @@ Ext.define('Ext.app.BaseController', {
      */
     updateListen: function(listen) {
         this.getId();
-        
+
         if (listen) {
             this.listen(listen);
         }
@@ -448,7 +448,7 @@ Ext.define('Ext.app.BaseController', {
             bus.unlisten(me);
             me.eventbus = null;
         }
-        
+
         me.callParent();
     }
 });

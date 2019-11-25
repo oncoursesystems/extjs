@@ -43,7 +43,7 @@ Ext.define('Ext.util.SorterCollection', {
      * @readonly
      */
     sortFn: null,
-    
+
     config: {
         /**
          * @cfg {Function} applySorterOptionsFn
@@ -51,7 +51,7 @@ Ext.define('Ext.util.SorterCollection', {
          * @private
          */
         sorterOptionsFn: null,
-        
+
         /**
          * @cfg {Object} applySorterOptionsScope
          * The scope to execute the {@link #applySorterOptionsFn}
@@ -121,7 +121,7 @@ Ext.define('Ext.util.SorterCollection', {
                           mode + '"');
             }
             //</debug>
-            
+
             mode = me._sortModes[mode || 'replace'];
 
             primary = me.getAt(0);
@@ -173,7 +173,7 @@ Ext.define('Ext.util.SorterCollection', {
     getSortFn: function() {
         return this.sortFn;
     },
-    
+
     /**
      * Get the first matching sorter with a matching property.
      * @param {String} prop The property name
@@ -184,7 +184,7 @@ Ext.define('Ext.util.SorterCollection', {
         var items = this.items,
             len = items.length,
             i, item;
-        
+
         for (i = 0; i < len; ++i) {
             item = items[i];
 
@@ -243,11 +243,11 @@ Ext.define('Ext.util.SorterCollection', {
             // this case we create an instance of Sorter passing this configuration.
             else {
                 // Finally we get to the point where it has to be invalid
-                // <debug>
+                //<debug>
                 if (!Ext.isObject(sorter)) {
                     Ext.raise('Invalid sorter specified: ' + sorter);
                 }
-                // </debug>
+                //</debug>
 
                 sorterConfig = Ext.apply(sorterConfig, sorter);
 
@@ -267,7 +267,7 @@ Ext.define('Ext.util.SorterCollection', {
 
         return sorter;
     },
-    
+
     setSorterConfigure: function(fn, scope) {
         this.setSorterOptionsFn(fn);
         this.setSorterOptionsScope(scope);

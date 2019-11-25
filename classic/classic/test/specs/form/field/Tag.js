@@ -338,7 +338,6 @@ function() {
                 expectChange([2, 4, 6, 8], [1, 3, 5, 7]);
             });
 
-
             it("should accept an array and use the last value if multiSelect: false", function() {
                 makeField({ multiSelect: false });
                 tagField.setValue([1, 2]);
@@ -521,7 +520,7 @@ function() {
                     expectChange([2, 4], [2, 4, 5], 3);
                 });
             });
-            
+
             describeNotIE9_10("typing values", function() {
                 it("should erase the inputEl when selecting a typed value", function() {
                     doTyping('Item1');
@@ -705,7 +704,7 @@ function() {
                     expectValue([6, 4, 10, 13]);
                     expectChange([6, 4, 10, 13], [6, 4, 10, 13, 2]);
                 });
-                
+
                 it("should not remove a tag on backspace with empty value when clearOnBackspace == false", function() {
                     tagField.clearOnBackspace = false;
                     fireInputKey(E.BACKSPACE);
@@ -760,10 +759,10 @@ function() {
                     // Select the first tag
                     fireInputKey(E.LEFT);
                 });
-                
+
                 it("should set aria-activedescendant", function() {
                     var node = tagField.getAriaListNode(tagField.valueCollection.last());
-                    
+
                     expect(tagField.inputEl).toHaveAttr('aria-activedescendant', node.id);
                 });
 
@@ -890,7 +889,7 @@ function() {
                     expectSelected(13);
                     expectSelected(2);
                 });
-                
+
                 it("should deselect all when pressing Esc", function() {
                     fireInputKey(E.ESC);
                     expectNotSelected(6);
@@ -899,10 +898,10 @@ function() {
                     expectNotSelected(13);
                     expectNotSelected(2);
                 });
-                
+
                 it("should remove aria-activedescendant when pressing Esc", function() {
                     fireInputKey(E.ESC);
-                    
+
                     expect(tagField.inputEl).not.toHaveAttr('aria-activedescendant');
                 });
             });
@@ -928,7 +927,7 @@ function() {
                     expectValue([6, 4, 13, 2]);
                     expectChange([6, 4, 13, 2], [6, 4, 10, 13, 2]);
                 });
-                
+
                 it("should select the next item when deleting", function() {
                     fireInputKey(E.LEFT);
                     fireInputKey(E.DELETE);
@@ -985,7 +984,7 @@ function() {
 
             it("should select a tag when clicking", function() {
                 focusAndWait(tagField);
-                
+
                 runs(function() {
                     clickTag(4);
                     fireInputKey(Ext.event.Event.DELETE);
@@ -1205,7 +1204,6 @@ function() {
 
                 expect(tagField.getHeight()).toBeGreaterThan(height);
 
-
             });
         });
     });
@@ -1223,7 +1221,7 @@ function() {
                 rec6 = valueStore.getAt(2);
 
             expect(store.getCount()).toBe(17);
-            
+
             // The three picked values should not be found in the filtered store
             expect(store.indexOf(rec0)).toBe(-1);
             expect(store.indexOf(rec3)).toBe(-1);
@@ -1258,7 +1256,7 @@ function() {
                 rec1 = store.getAt(0);
 
             expect(store.getCount()).toBe(17);
-            
+
             // The tree picked values should not be found in the filtered store
             expect(store.indexOf(rec0)).toBe(-1);
             expect(store.indexOf(rec3)).toBe(-1);
@@ -1673,114 +1671,114 @@ function() {
             expect(selectSpy.mostRecentCall.args).toEqual([tagField, []]);
         });
     });
-    
+
     describe("ARIA", function() {
         beforeEach(function() {
             makeField({
                 value: [1, 4, 7]
             });
         });
-        
+
         describe("attributes", function() {
             it("should set aria-label on the picker", function() {
                 tagField.expand();
-                
+
                 expect(tagField.picker.ariaEl).toHaveAttr('aria-label', tagField.ariaAvailableListLabel);
             });
-            
+
             it("should have combobox role on ariaEl", function() {
                 expect(tagField).toHaveAttr('role', 'combobox');
             });
-            
+
             it("should have aria-owns on ariaEl", function() {
                 var id = tagField.id;
-                
+
                 expect(tagField).toHaveAttr('aria-owns', id + '-inputEl ' + id + '-picker ' + id + '-ariaList');
             });
-            
+
             it("should have textbox role on inputEl", function() {
                 expect(tagField.inputEl).toHaveAttr('role', 'textbox');
             });
-            
+
             it("should have aria-describedby on inputEl", function() {
                 var id = tagField.id;
-                
+
                 expect(tagField.inputEl).toHaveAttr('aria-describedby', id + '-selectedText ' +
                     id + '-ariaStatusEl ' + id + '-ariaHelpEl');
             });
         });
-        
+
         describe("markup", function() {
             var el, nodes;
-            
+
             afterEach(function() {
                 el = nodes = null;
             });
-            
+
             describe("selectedText", function() {
                 beforeEach(function() {
                     el = tagField.selectedText;
                 });
-                
+
                 it("should be rendered", function() {
                     expect(el.dom.tagName).toBe('SPAN');
                 });
-                
+
                 it("should have aria-hidden = true", function() {
                     expect(el).toHaveAttr('aria-hidden', 'true');
                 });
-                
+
                 it("should have x-hidden-clip", function() {
                     expect(el.hasCls('x-hidden-clip')).toBe(true);
                 });
-                
+
                 it("should be set", function() {
                     expect(el.dom.innerHTML).toBe('Selected Item1, Item4, Item7.');
                 });
             });
-            
+
             describe("ariaList", function() {
                 beforeEach(function() {
                     el = tagField.ariaList;
                 });
-                
+
                 it("should be rendered", function() {
                     expect(el.dom.tagName).toBe('UL');
                 });
-                
+
                 it("should have listbox role", function() {
                     expect(el).toHaveAttr('role', 'listbox');
                 });
-                
+
                 it("should have aria-label", function() {
                     expect(el).toHaveAttr('aria-label', tagField.ariaSelectedListLabel);
                 });
-                
+
                 it("should have aria-multiselectable", function() {
                     expect(el).toHaveAttr('aria-multiselectable', 'true');
                 });
-                
+
                 describe("list item", function() {
                     beforeEach(function() {
                         nodes = el.dom.children;
                     });
-                    
+
                     it("should be rendered", function() {
                         expect(nodes.length).toBe(3);
                     });
-                    
+
                     it("should contain proper markup", function() {
                         expect(nodes[0].tagName).toBe('LI');
                     });
-                    
+
                     it("should have option role", function() {
                         expect(nodes[0]).toHaveAttr('role', 'option');
                     });
-                    
+
                     it("should have CSS class", function() {
                         expect(Ext.fly(nodes[0]).hasCls('x-tagfield-arialist-item')).toBe(true);
                     });
-                    
+
                     it("should have content", function() {
                         expect(nodes[0].innerHTML).toBe('Item1');
                     });

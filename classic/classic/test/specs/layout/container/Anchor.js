@@ -191,7 +191,7 @@ function() {
                             beforeEach(function() {
                                 makePanel(overflowParentConfig, { anchor: '-2', height: 79 });
                             });
-                            
+
                             var todoIt = Ext.isIE9m && !shrinkWrap ? xit : it;
 
                             todoIt("should have the correct scroll height", function() {
@@ -211,7 +211,7 @@ function() {
                             beforeEach(function() {
                                 makePanel(overflowParentConfig, { height: 20, width: 180 });
                             });
-                            
+
                             var todoIt = Ext.isIE9 ? xit : it;
 
                             it("should have the correct scroll width", function() {
@@ -306,7 +306,7 @@ function() {
                         beforeEach(function() {
                             makePanel(parentConfig, { style: 'height: 50%; width: 50%;' });
                         });
-                        
+
                         it("should width the child correctly", function() {
                             expect(panel.child().getWidth()).toBe(43);
                         });
@@ -352,13 +352,12 @@ function() {
                 });
             });
 
-
             describe("configured height, shrink wrap width", function() {
                 var parentConfig = {
                     height: 100,
                     shrinkWrap: 1
                 };
-                 
+
                 describe("anchoring items using percentages", function() {
                     beforeEach(function() {
                         makePanel(parentConfig, [
@@ -435,7 +434,7 @@ function() {
                         xit("should shrink wrap the width", function() {
                             expect(panel.getWidth()).toBe(100);
                         });
-                        
+
                         // TODO: enable this spec when https://sencha.jira.com/browse/EXTJSIV-5895 is fixed.
                         xit("should not have horizontal overflow", function() {
                             expect(panel.body.dom.scrollWidth).toBe(panel.getWidth() - scrollbarWidth);
@@ -528,7 +527,7 @@ function() {
                     it("should naturally width the child", function() {
                         expect(panel.child().getWidth()).toBe(78);
                     });
-                    
+
                     it("should shrink wrap the height", function() {
                         expect(panel.getHeight()).toBe(42);
                     });
@@ -936,7 +935,7 @@ function() {
 
     createSuite();
     createSuite(true);
-    
+
     describe("layout failures", function() {
         it("should work with a minHeight child", function() {
             var ct = new Ext.container.Container({

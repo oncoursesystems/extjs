@@ -1,4 +1,4 @@
-$image-search-path: '/home/teamcity/buildAgent/work/c3ba32b860f36a62/sencha/ext/build/classic/theme-crisp/resources' !default;
+$image-search-path: '/home/teamcity/buildAgent/work/ad7452ab2017f48b/sencha/ext/build/classic/theme-crisp/resources' !default;
 $theme-name:  '${theme.name}' !default;
 $include-ext-abstractcomponent: dynamic(true);;
 $include-ext-abstractcontainer: dynamic(true);;
@@ -252,6 +252,7 @@ $include-ext-data-summary-base: dynamic(true);;
 $include-ext-data-summary-count: dynamic(true);;
 $include-ext-data-summary-max: dynamic(true);;
 $include-ext-data-summary-min: dynamic(true);;
+$include-ext-data-summary-none: dynamic(true);;
 $include-ext-data-summary-sum: dynamic(true);;
 $include-ext-data-validator-abstractdate: dynamic(true);;
 $include-ext-data-validator-bound: dynamic(true);;

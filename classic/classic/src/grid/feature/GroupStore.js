@@ -68,6 +68,10 @@ Ext.define('Ext.grid.feature.GroupStore', {
         this.on(listeners);
     },
 
+    each: function(fn, scope, includeOptions) {
+        this.store.each(fn, scope, includeOptions);
+    },
+
     processStore: function(store) {
         var me = this,
             groupingFeature = me.groupingFeature,
@@ -118,7 +122,7 @@ Ext.define('Ext.grid.feature.GroupStore', {
                         store.getGroups().remove(group);
                         groupingFeature.startCollapsed = collapseAll;
                         store.group(featureGrouper);
-                        
+
                         return;
                     }
 
@@ -178,7 +182,7 @@ Ext.define('Ext.grid.feature.GroupStore', {
         if (options && options.callback) {
             options.callback.call(options.scope || this, result, start, end, options);
         }
-        
+
         return result;
     },
 
@@ -234,11 +238,11 @@ Ext.define('Ext.grid.feature.GroupStore', {
         if (items.length && (startIdx = me.data.indexOf(placeholder)) !== -1) {
             // Any event handlers must see the new state
             metaGroup.isCollapsed = false;
-            
+
             if (lockingPartner) {
                 lockingPartner.getMetaGroup(group).isCollapsed = false;
             }
-            
+
             me.isExpandingOrCollapsing = 1;
 
             // Remove the collapsed group placeholder record
@@ -274,11 +278,11 @@ Ext.define('Ext.grid.feature.GroupStore', {
         if (items && (len = items.length) && (startIdx = me.data.indexOf(items[0])) !== -1) {
             // Any event handlers must see the new state
             groupingFeature.getMetaGroup(group).isCollapsed = true;
-            
+
             if (lockingPartner) {
                 lockingPartner.getMetaGroup(group).isCollapsed = true;
             }
-            
+
             me.isExpandingOrCollapsing = 2;
 
             // Remove the group child records
@@ -389,7 +393,7 @@ Ext.define('Ext.grid.feature.GroupStore', {
                     Ext.Array.contains(modifiedFieldNames, groupingFeature.getGroupField())) {
                     me.onDataChanged();
                     delete record.group;
-                    
+
                     return;
                 }
 
@@ -422,14 +426,14 @@ Ext.define('Ext.grid.feature.GroupStore', {
                         me.fireEvent('update', me, firstRec, 'edit', modifiedFieldNames);
                         delete firstRec.group;
                     }
-                    
+
                     if (lastRec !== record && lastRec !== firstRec &&
                         groupingFeature.showSummaryRow) {
                         lastRec.group = group;
                         me.fireEvent('update', me, lastRec, 'edit', modifiedFieldNames);
                         delete lastRec.group;
                     }
-                    
+
                     Ext.resumeLayouts(true);
                 }
             }
@@ -447,7 +451,7 @@ Ext.define('Ext.grid.feature.GroupStore', {
         if (!grouper) {
             this.processStore(store);
         }
-        
+
         this.fireEvent('groupchange', store, grouper);
     },
 
@@ -461,7 +465,7 @@ Ext.define('Ext.grid.feature.GroupStore', {
 
         me.bindStore(null);
         Ext.destroy(me.data);
-        
+
         me.groupingFeature = null;
 
         me.callParent();

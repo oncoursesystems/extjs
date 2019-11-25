@@ -124,7 +124,7 @@ Ext.define('Ext.data.query.Converter', {
                 };
             },
 
-            in: function(expr, ident, value) {
+            'in': function(expr, ident, value) {
                 var i = 0,
                     list = value.value;
 
@@ -174,7 +174,7 @@ Ext.define('Ext.data.query.Converter', {
                 };
             },
 
-            in: function(filter) {
+            'in': function(filter) {
                 return {
                     type: 'in',
                     on: [{

@@ -59,7 +59,7 @@ Ext.onReady(function() {
         Ext.Date.firstDayOfWeek = 0;
         Ext.Date.weekendDays = [6, 0];
     }
-    
+
     if (Ext.util && Ext.util.Format) {
         Ext.apply(Ext.util.Format, {
             thousandSeparator: ',',

@@ -5,12 +5,12 @@ Ext.define('KitchenSink.view.chart.line.Line', {
     extend: 'Ext.Container',
     xtype: 'line-basic',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Store',
         path: 'app/store/USD2EUR.js'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
 

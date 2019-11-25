@@ -132,6 +132,6 @@ Ext.define('Ext.event.gesture.Rotate', {
     }
 }, function(Rotate) {
     var gestures = Ext.manifest.gestures;
-    
+
     Rotate.instance = new Rotate(gestures && gestures.rotate);
 });

@@ -153,11 +153,11 @@ Ext.define('Ext.ux.Explorer', {
         if (treeSelectionModel.getSelection()[0] !== node) {
             treeSelectionModel.select([node]);
             parentNode = node.parentNode;
-            
+
             if (parentNode) {
                 parentNode.expand();
             }
-            
+
             treeView = tree.getView();
             treeView.scrollRowIntoView(treeView.getRow(node));
         }

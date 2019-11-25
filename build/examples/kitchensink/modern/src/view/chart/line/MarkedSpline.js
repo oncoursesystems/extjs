@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.chart.line.MarkedSpline', {
     xtype: 'line-marked-spline',
     controller: 'line-marked-spline',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/line/MarkedSplineController.js'
@@ -42,9 +42,9 @@ Ext.define('KitchenSink.view.chart.line.MarkedSpline', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -154,7 +154,7 @@ Ext.define('KitchenSink.view.chart.line.MarkedSpline', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

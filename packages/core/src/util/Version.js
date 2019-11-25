@@ -141,7 +141,7 @@
                                                         .replace(plusMinusRe, '');
 
         ch = ver.charAt(0);
-        
+
         if (ch in padModes) {
             ver = ver.substring(1);
             pad = padModes[ch];
@@ -149,7 +149,7 @@
         else {
             pad = defaultMode ? padModes[defaultMode] : 0; // careful - NaN is falsey!
         }
-        
+
         me.pad = pad;
 
         releaseStartIndex = ver.search(endOfVersionRe);
@@ -172,11 +172,11 @@
          * @private
          */
         me.parts = parts = ver.split('.');
-        
+
         for (i = parts.length; i--;) {
             parts[i] = parseInt(parts[i], 10);
         }
-        
+
         if (pad === Infinity) {
             // have to add this to the end to create an upper bound:
             parts.push(pad);
@@ -265,7 +265,7 @@
                 if (lhs < rhs) {
                     return -1;
                 }
-                
+
                 if (lhs > rhs) {
                     return 1;
                 }
@@ -274,18 +274,18 @@
             // same comments about NaN apply here...
             lhs = me.releaseValue;
             rhs = rhsVersion.releaseValue;
-            
+
             if (lhs < rhs) {
                 return -1;
             }
-            
+
             if (lhs > rhs) {
                 return 1;
             }
 
             return 0;
         },
-               
+
         /**
          * Override the native `toString` method
          * @private
@@ -413,7 +413,7 @@
          */
         match: function(target) {
             target = String(target);
-            
+
             return this.version.substr(0, target.length) === target;
         },
 
@@ -423,7 +423,7 @@
          */
         toArray: function() {
             var me = this;
-            
+
             return [me.getMajor(), me.getMinor(), me.getPatch(), me.getBuild(), me.getRelease()];
         },
 
@@ -525,7 +525,7 @@
          */
         compare: function(current, target) {
             var ver = current.isVersion ? current : new Version(current);
-            
+
             return ver.compareTo(target);
         },
 
@@ -535,7 +535,7 @@
                 i;
 
             collection[packageName] = ver;
-            
+
             if (aliases) {
                 for (i = aliases.length; i-- > 0;) {
                     collection[aliases[i]] = ver;
@@ -616,9 +616,9 @@
             if (packageName in toolkitNames) {
                 Ext.toolkit = packageName;
             }
-            
+
             Ext.lastRegisteredVersion = Version.set(Ext.versions, packageName, version);
-            
+
             return this;
         },
 
@@ -770,7 +770,7 @@
             for (i = 0; i < length; ++i) {
                 if (!Ext.isString(spec = compat[i])) {
                     matches = Ext.checkVersion(spec.and || spec.or, !spec.or);
-                    
+
                     if (spec.not) {
                         matches = !matches;
                     }
@@ -783,32 +783,32 @@
                     // For "name@..." syntax, we need to find the package by the given name
                     // as a registered package.
                     index = spec.indexOf('@');
-                    
+
                     if (index < 0) {
                         range = spec;
                         ver = frameworkVer;
                     }
                     else {
                         packageName = spec.substring(0, index);
-                        
+
                         if (!(ver = versions[aliases[packageName] || packageName])) {
                             // The package is not registered, so if we must matchAll then
                             // we are done - FAIL:
                             if (matchAll) {
                                 return false;
                             }
-                            
+
                             // Otherwise this spec is not a match so we can move on to the
                             // next...
                             continue;
                         }
-                        
+
                         range = spec.substring(index + 1);
                     }
 
                     // Now look for a version, version range or partial range:
                     index = range.indexOf('-');
-                    
+
                     if (index < 0) {
                         // just a version or "1.0+"
                         if (range.charAt(index = range.length - 1) === '+') {
@@ -831,12 +831,12 @@
                     }
 
                     matches = true;
-                    
+
                     if (minVer) {
                         minVer = new Version(minVer, '~'); // prefix matching
                         matches = minVer.ltEq(ver);
                     }
-                    
+
                     if (matches && maxVer) {
                         maxVer = new Version(maxVer, '~'); // prefix matching
                         matches = maxVer.gtEq(ver);
@@ -894,10 +894,10 @@
     var packages = (manifest && manifest.packages) || {},
         compat = manifest && manifest.compatibility,
         name, pkg;
-    
+
     for (name in packages) {
         pkg = packages[name];
-        
+
         if (pkg && pkg.version) {
             Ext.setVersion(name, pkg.version);
         }
@@ -915,6 +915,6 @@
     }
 
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext','6.7.0.210');Ext.setVersion('core','6.7.0.210');
+        Ext.setVersion('ext','7.0.0.156');Ext.setVersion('core','7.0.0.156');
     }
 })(Ext.manifest);

@@ -32,7 +32,7 @@
 Ext.define('Ext.button.Segmented', {
     extend: 'Ext.container.Container',
     xtype: 'segmentedbutton',
-    
+
     requires: [
         'Ext.button.Button',
         'Ext.layout.container.SegmentedButton'
@@ -166,13 +166,13 @@ Ext.define('Ext.button.Segmented', {
      * @inheritdoc
      */
     layout: 'segmentedbutton',
-    
+
     /**
      * @cfg defaultType
      * @inheritdoc
      */
     defaultType: 'button',
-    
+
     /**
      * @property maskOnDisable
      * @inheritdoc
@@ -235,7 +235,7 @@ Ext.define('Ext.button.Segmented', {
         if (!me.rendered) {
             // first time - add values of buttons with an initial config of pressed:true
             items = me.items.items;
-            
+
             for (i = items.length - 1; i >= 0; i--) {
                 button = items[i];
 
@@ -244,11 +244,11 @@ Ext.define('Ext.button.Segmented', {
                 if (me.forceSelection && !i && !hasPressed) {
                     button.pressed = true;
                 }
-                
+
                 if (button.pressed) {
                     hasPressed = true;
                     buttonValue = button.value;
-                    
+
                     if (buttonValue == null) {
                         buttonValue = me.items.indexOf(button);
                     }
@@ -300,7 +300,7 @@ Ext.define('Ext.button.Segmented', {
         // unpress buttons for the old values, if they do not exist in the new values array
         for (i = 0, ln = oldValues.length; i < ln; i++) {
             oldValue = oldValues[i];
-            
+
             if (!Ext.Array.contains(values, oldValue)) {
                 me._lookupButtonByValue(oldValue).setPressed(false);
             }
@@ -331,7 +331,7 @@ Ext.define('Ext.button.Segmented', {
 
         me.addCls(me.baseCls + me._getClsSuffix());
         me._syncItemClasses(true);
-        
+
         me.callParent();
     },
 
@@ -348,7 +348,7 @@ Ext.define('Ext.button.Segmented', {
 
         if (item.ui === 'default' && !item.hasOwnProperty('ui')) {
             defaultUI = me.getDefaultUI();
-            
+
             if (defaultUI !== 'default') {
                 item.ui = defaultUI;
             }
@@ -357,7 +357,7 @@ Ext.define('Ext.button.Segmented', {
         for (; i < ln; i++) {
             if (items[i] !== item) {
                 value = items[i].value;
-                
+
                 if (value != null && value === item.value) {
                     Ext.raise("Segmented button '" + me.id +
                               "' cannot contain multiple items with value: '" + value + "'");
@@ -376,7 +376,7 @@ Ext.define('Ext.button.Segmented', {
 
         if (me.getAllowToggle()) {
             item.enableToggle = true;
-            
+
             if (!me.getAllowMultiple()) {
                 item.toggleGroup = me.getId();
                 item.allowDepress = me.getAllowDepress();
@@ -385,7 +385,7 @@ Ext.define('Ext.button.Segmented', {
 
         item.addCls(me.itemCls + me._getClsSuffix());
         me._syncItemClasses();
-        
+
         me.callParent([item]);
     },
 
@@ -394,7 +394,7 @@ Ext.define('Ext.button.Segmented', {
 
         item.removeCls(me.itemCls + me._getClsSuffix());
         me._syncItemClasses();
-        
+
         me.callParent([item]);
     },
 
@@ -416,9 +416,11 @@ Ext.define('Ext.button.Segmented', {
             //    });
             //
             // reading offsetWidth corrects the issue.
+
+            // eslint-disable-next-line no-unused-expressions
             this.el.dom.offsetWidth;
         }
-        
+
         this.callParent();
     },
 
@@ -435,10 +437,10 @@ Ext.define('Ext.button.Segmented', {
             if (items.items) { // Mixed collection already created
                 items = items.items;
             }
-            
+
             for (i = 0, ln = items.length; i < ln; i++) {
                 item = items[i];
-                
+
                 if (item.ui === 'default' && defaultUI !== 'default' &&
                     !item.hasOwnProperty('ui')) {
                     items[i].ui = defaultUI;
@@ -508,7 +510,7 @@ Ext.define('Ext.button.Segmented', {
             for (; i < ln; i++) {
                 btn = items[i];
                 buttonValue = btn.value;
-                
+
                 if ((buttonValue != null) && buttonValue === value) {
                     button = btn;
                     break;
@@ -522,7 +524,7 @@ Ext.define('Ext.button.Segmented', {
 
             return button;
         },
-        
+
         _onBeforeItemToggle: function(button, pressed) {
             // If we allow multiple selections, and we are forcing a selection, and we are
             // unpressing and we only have one value, then veto this. we are not allowing
@@ -543,7 +545,7 @@ Ext.define('Ext.button.Segmented', {
             if (this._isApplyingValue) {
                 return;
             }
-            
+
             // eslint-disable-next-line vars-on-top
             var me = this,
                 Array = Ext.Array,
@@ -609,7 +611,7 @@ Ext.define('Ext.button.Segmented', {
 
             for (i = 0; i < ln; i++) {
                 item = items[i];
-                
+
                 if (!item.hidden) {
                     visibleItems.push(item);
                 }

@@ -31,7 +31,7 @@ Ext.define('Ext.grid.CellContext', {
      * @property {Ext.grid.column.Column} column
      * The grid column which owns the referenced cell.
      */
-    
+
     /**
      * @readonly
      * @property {Ext.data.Model} record
@@ -55,7 +55,7 @@ Ext.define('Ext.grid.CellContext', {
      * *Be aware that after the initial call to {@link #setPosition}, this value may become stale
      * due to subsequent column mutation.*
      */
-    
+
     generation: 0,
 
     /**
@@ -68,7 +68,7 @@ Ext.define('Ext.grid.CellContext', {
     constructor: function(view) {
         this.view = view;
     },
-    
+
     /**
      * Binds this cell context to a logical cell defined by the {@link #record} and {@link #column}.
      *
@@ -102,7 +102,7 @@ Ext.define('Ext.grid.CellContext', {
                 if (row.view) {
                     me.view = row.view;
                 }
-                
+
                 col = row.column;
                 row = row.row;
             }
@@ -110,7 +110,7 @@ Ext.define('Ext.grid.CellContext', {
 
         me.setRow(row);
         me.setColumn(col);
-        
+
         return me;
     },
 
@@ -123,7 +123,7 @@ Ext.define('Ext.grid.CellContext', {
         me.record = record;
         me.column = columnHeader;
         me.generation++;
-        
+
         return me;
     },
 
@@ -132,14 +132,14 @@ Ext.define('Ext.grid.CellContext', {
             dataSource = me.view.dataSource,
             oldRecord = me.record,
             count;
-        
+
         // eslint-disable-next-line eqeqeq
         if (row != undefined) {
             // Row index passed, < 0 meaning count from the tail (-1 is the last, etc)
             if (typeof row === 'number') {
                 count = dataSource.getCount();
                 row = row < 0 ? Math.max(count + row, 0) : Math.max(Math.min(row, count - 1), 0);
-                
+
                 me.rowIdx = row;
                 me.record = dataSource.getAt(row);
             }
@@ -157,14 +157,14 @@ Ext.define('Ext.grid.CellContext', {
                 me.rowIdx = me.record ? (me.record.isCollapsedPlaceholder ? dataSource.indexOfPlaceholder(me.record) : dataSource.indexOf(me.record)) : -1;
             }
         }
-        
+
         if (me.record !== oldRecord) {
             me.generation++;
         }
-        
+
         return me;
     },
-    
+
     setColumn: function(col) {
         var me = this,
             colMgr = me.view.getVisibleColumnManager(),
@@ -288,7 +288,7 @@ Ext.define('Ext.grid.CellContext', {
                 return !cell.nextSibling;
             }
         },
-        
+
         isLastRenderedRow: function() {
             return this.view.all.endIndex === this.rowIdx;
         },
@@ -336,7 +336,7 @@ Ext.define('Ext.grid.CellContext', {
                     } while (!me.getCell(true));
 
                     break;
-                
+
                 case 1:
                     do {
                         // If we iterate off the end, wrap back to the start.

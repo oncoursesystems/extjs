@@ -8,20 +8,20 @@ Ext.define('Ext.ux.PreviewPlugin', {
     extend: 'Ext.plugin.Abstract',
     alias: 'plugin.preview',
     requires: ['Ext.grid.feature.RowBody'],
-    
+
     /**
      * @private
      * css class to use to hide the body
      */
     hideBodyCls: 'x-grid-row-body-hidden',
-    
+
     /**
      * @cfg {String} bodyField
      * Field to display in the preview. Must be a field within the Model definition
      * that the store is using.
      */
     bodyField: '',
-    
+
     /**
      * @cfg {Boolean} previewExpanded
      */

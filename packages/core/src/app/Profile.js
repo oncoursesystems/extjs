@@ -284,7 +284,7 @@ Ext.define('Ext.app.Profile', {
             // Process name and namespace configs here since we need to use the namespace
             // in the dependency calculation
             name = data.name;
-            
+
             if (name) {
                 delete data.name;
             }
@@ -292,7 +292,7 @@ Ext.define('Ext.app.Profile', {
                 name = className.split('.');
                 name = name[name.length - 1];
             }
-            
+
             cls._name = name;
 
             cls._namespace = name = (data.namespace || name).toLowerCase();

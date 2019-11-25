@@ -129,7 +129,7 @@ Ext.define('Ext.draw.sprite.Composite', {
      */
     addAll: function(sprites) {
         var i = 0;
-        
+
         if (sprites.isSprite || sprites.type) {
             this.add(sprites);
         }

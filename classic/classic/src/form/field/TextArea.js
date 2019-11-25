@@ -34,7 +34,7 @@ Ext.define('Ext.form.field.TextArea', {
     extend: 'Ext.form.field.Text',
     alias: ['widget.textareafield', 'widget.textarea'],
     alternateClassName: 'Ext.form.TextArea',
-    
+
     requires: [
         'Ext.XTemplate',
         'Ext.util.DelayedTask'
@@ -106,13 +106,13 @@ Ext.define('Ext.form.field.TextArea', {
      * overflow: hidden.
      */
     preventScrollbars: false,
-    
+
     returnRe: /\r/g,
 
     inputCls: Ext.baseCSSPrefix + 'form-textarea',
 
     extraFieldBodyCls: Ext.baseCSSPrefix + 'form-textarea-body',
-    
+
     ariaAttributes: {
         'aria-multiline': true
     },
@@ -120,7 +120,7 @@ Ext.define('Ext.form.field.TextArea', {
     //<debug>
     constructor: function(config) {
         this.callParent([config]);
-        
+
         if (this.cols) {
             Ext.log.warn('Ext.form.field.TextArea "cols" config was removed in Ext 5.0. ' +
                          'Please specify a "width" or use a layout instead.');
@@ -154,12 +154,12 @@ Ext.define('Ext.form.field.TextArea', {
 
         me.needsMaxCheck = me.enforceMaxLength && me.maxLength !== Number.MAX_VALUE &&
                            !Ext.supports.TextAreaMaxLength;
-        
+
         if (me.needsMaxCheck) {
             me.inputEl.on('paste', me.onPaste, me);
         }
     },
-    
+
     // The following overrides deal with an issue whereby some browsers
     // will strip carriage returns from the textarea input, while others
     // will not. Since there's no way to be sure where to insert returns,
@@ -169,41 +169,41 @@ Ext.define('Ext.form.field.TextArea', {
     transformRawValue: function(value) {
         return this.stripReturns(value);
     },
-    
+
     getValue: function() {
         return this.stripReturns(this.callParent());
     },
-    
+
     valueToRaw: function(value) {
         value = this.stripReturns(value);
-        
+
         return this.callParent([value]);
     },
-    
+
     stripReturns: function(value) {
         if (value && typeof value === 'string') {
             value = value.replace(this.returnRe, '');
         }
-        
+
         return value;
     },
 
     onPaste: function() {
         var me = this;
-        
+
         if (!me.pasteTask) {
             me.pasteTask = new Ext.util.DelayedTask(me.pasteCheck, me);
         }
-        
+
         // since we can't get the paste data, we'll give the area a chance to populate
         me.pasteTask.delay(1);
     },
-    
+
     pasteCheck: function() {
         var me = this,
             value = me.getValue(),
             max = me.maxLength;
-            
+
         if (value.length > max) {
             value = value.substr(0, max);
             me.setValue(value);
@@ -217,7 +217,7 @@ Ext.define('Ext.form.field.TextArea', {
         var me = this,
             key = e.getKey(),
             value;
-            
+
         if (e.isSpecialKey() && (me.enterIsSpecial || (key !== e.ENTER || e.hasModifier()))) {
             me.fireEvent('specialkey', me, e);
         }
@@ -225,18 +225,18 @@ Ext.define('Ext.form.field.TextArea', {
         if (me.needsMaxCheck && key !== e.BACKSPACE && key !== e.DELETE && !e.isNavKeyPress() &&
             !me.isCutCopyPasteSelectAll(e, key)) {
             value = me.getValue();
-            
+
             if (value.length >= me.maxLength) {
                 e.stopEvent();
             }
         }
     },
-    
+
     isCutCopyPasteSelectAll: function(e, key) {
         if (e.ctrlKey) {
             return key === e.A || key === e.C || key === e.V || key === e.X;
         }
-        
+
         return false;
     },
 
@@ -280,11 +280,11 @@ Ext.define('Ext.form.field.TextArea', {
 
     doDestroy: function() {
         var task = this.pasteTask;
-        
+
         if (task) {
             task.cancel();
         }
-        
+
         this.callParent();
     }
 });

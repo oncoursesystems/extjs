@@ -28,7 +28,7 @@ Ext.define('Ext.ZIndexManager', {
         zBase: 9000,
         activeCounter: 0
     },
-    
+
     reflowSuspended: 0,
 
     /**
@@ -47,11 +47,11 @@ Ext.define('Ext.ZIndexManager', {
             sorters: {
                 sorterFn: function(comp1, comp2) {
                     var ret = (comp1.alwaysOnTop || 0) - (comp2.alwaysOnTop || 0);
-                    
+
                     if (!ret) {
                         ret = comp1.getActiveCounter() - comp2.getActiveCounter();
                     }
-                    
+
                     return ret;
                 }
             },
@@ -91,12 +91,12 @@ Ext.define('Ext.ZIndexManager', {
                     scope: me,
                     destroyable: true
                 });
-                
+
                 me.zseed = Ext.Number.from(
                     me.rendered ? container.getEl().getStyle('zIndex') : undefined,
                     me.getNextZSeed()
                 );
-                
+
                 // The containing element we will be dealing with (eg masking) is the content target
                 me.targetEl = container.getTargetEl();
                 me.container = container;
@@ -108,7 +108,7 @@ Ext.define('Ext.ZIndexManager', {
                     scope: me,
                     destroyable: true
                 });
-                
+
                 me.zseed = me.getNextZSeed();
                 me.targetEl = Ext.get(container);
             }
@@ -117,7 +117,7 @@ Ext.define('Ext.ZIndexManager', {
         // DOM must be ready to collect that ref.
         else {
             me.zseed = me.getNextZSeed();
-            
+
             Ext.onInternalReady(function() {
                 // We need to use lowest possible priority here to give enough time
                 // for layouts to run and resize if we're masking a contained component
@@ -127,7 +127,7 @@ Ext.define('Ext.ZIndexManager', {
                     destroyable: true,
                     priority: -10000
                 });
-                
+
                 me.targetEl = Ext.getBody();
             });
         }
@@ -144,7 +144,7 @@ Ext.define('Ext.ZIndexManager', {
 
     setBase: function(baseZIndex) {
         this.zseed = baseZIndex;
-        
+
         return this.onCollectionSort();
     },
 
@@ -158,7 +158,7 @@ Ext.define('Ext.ZIndexManager', {
             doFocus = !oldFront || oldFront.isVisible();
 
         me.sortCount++;
-        
+
         for (i = 0; i < len; i++) {
             comp = a[i];
 
@@ -225,7 +225,7 @@ Ext.define('Ext.ZIndexManager', {
                 // This one has been bumped from top.
                 me.topMost.onZIndexChange(false);
             }
-            
+
             if (topMost) {
                 // This one is now at the top.
                 topMost.onZIndexChange(true);
@@ -236,7 +236,7 @@ Ext.define('Ext.ZIndexManager', {
         me.front = topFocusable;
         me.topModal = topModal;
         me.topMost = topMost;
-    
+
         // Ensure the top-most component is the front
         if (!me.front && me.topMost) {
             me.front = me.topMost;
@@ -258,7 +258,7 @@ Ext.define('Ext.ZIndexManager', {
             this.zIndexStack.sort();
         }
     },
-    
+
     suspendReflow: function() {
         this.reflowSuspended++;
     },
@@ -295,7 +295,7 @@ Ext.define('Ext.ZIndexManager', {
             if (me.tempHidden) {
                 Ext.Array.remove(me.tempHidden, comp);
             }
-            
+
             zIndexStack.beginUpdate();
 
             // Showing. If it should go to front on show; nudge the active
@@ -306,7 +306,7 @@ Ext.define('Ext.ZIndexManager', {
                     comp.setActiveCounter(++Ext.ZIndexManager.activeCounter);
                 }
             }
-            
+
             // Hiding
             else {
                 zIndexStack.itemChanged(comp, 'hidden');
@@ -315,7 +315,7 @@ Ext.define('Ext.ZIndexManager', {
             // We must update the frontmost according to the new stack order
             // even if there has been no sort (Collection will not autosort if only one member)
             zIndexStack.endUpdate();
-            
+
             if (me.sortCount === sortCount && !me.reflowSuspended) {
                 me.onCollectionSort();
             }
@@ -342,9 +342,9 @@ Ext.define('Ext.ZIndexManager', {
         if (comp.zIndexManager) {
             comp.zIndexManager.unregister(comp);
         }
-        
+
         comp.zIndexManager = me;
-        
+
         if (!comp.rendered) {
             // Checking for rendered as opposed to hide/show is important because
             // it's still possible to render a floating component and have it be visible.
@@ -352,7 +352,7 @@ Ext.define('Ext.ZIndexManager', {
             // component and update the state in the collection after render.
             comp.on('afterrender', me.onAfterComponentRender, me, { single: true });
         }
-        
+
         me.zIndexStack.add(comp);
     },
 
@@ -368,7 +368,7 @@ Ext.define('Ext.ZIndexManager', {
         delete comp.zIndexManager;
         comp.un('afterrender', me.onAfterComponentRender, me);
         me.zIndexStack.remove(comp);
-        
+
         me.onCollectionSort();
     },
 
@@ -396,7 +396,7 @@ Ext.define('Ext.ZIndexManager', {
             zIndexStack = me.zIndexStack,
             oldFront = zIndexStack.last(),
             newFront, preventFocusSetting;
-            
+
         comp = me.get(comp);
 
         // Refuse to perform this operation if we do not own the passed component.
@@ -425,11 +425,11 @@ Ext.define('Ext.ZIndexManager', {
      */
     sendToBack: function(comp) {
         comp = this.get(comp);
-        
+
         if (comp) {
             comp.setActiveCounter(0);
         }
-        
+
         return comp || null;
     },
 
@@ -443,11 +443,11 @@ Ext.define('Ext.ZIndexManager', {
             i;
 
         me.hidingAll = true;
-        
+
         for (i = 0; i < len; i++) {
             all[i].hide();
         }
-        
+
         me.hidingAll = false;
         me.hideModalMask();
         me.front = null;
@@ -469,16 +469,16 @@ Ext.define('Ext.ZIndexManager', {
         // If any of the components contained focus, we must restore it on show.
         me.focusRestoreElement = null;
         (me.tempHidden || (me.tempHidden = [])).length = 0;
-        
+
         for (i = 0; i < len; i++) {
             comp = all[i];
-            
+
             // Only hide currently visible floaters
             if (comp.isVisible()) {
                 if (comp.el.contains(activeElement)) {
                     me.focusRestoreElement = activeElement;
                 }
-                
+
                 comp.el.hide();
                 comp.pendingShow = comp.hidden = true;
                 me.tempHidden.push(comp);
@@ -499,7 +499,7 @@ Ext.define('Ext.ZIndexManager', {
         for (i = 0; i < len; i++) {
             comp = tempHidden[i];
             comp.hidden = false;
-            
+
             if (comp.pendingShow) {
                 comp.el.show();
                 comp.pendingShow = false;
@@ -513,9 +513,9 @@ Ext.define('Ext.ZIndexManager', {
                 comp.hide();
             }
         }
-        
+
         me.tempHidden = null;
-        
+
         if (me.focusRestoreElement) {
             me.focusRestoreElement.focus();
         }
@@ -569,7 +569,7 @@ Ext.define('Ext.ZIndexManager', {
 
         for (i = 0; i < len; i++) {
             comp = stack[i];
-            
+
             if (comp.isComponent && fn.call(scope || comp, comp) === false) {
                 return;
             }
@@ -590,7 +590,7 @@ Ext.define('Ext.ZIndexManager', {
 
         for (i = stack.length; i-- > 0;) {
             comp = stack[i];
-            
+
             if (comp.isComponent && fn.call(scope || comp, comp) === false) {
                 return;
             }
@@ -606,9 +606,9 @@ Ext.define('Ext.ZIndexManager', {
         for (i = 0; i < len; i++) {
             Ext.destroy(stack[i]);
         }
-        
+
         Ext.destroy(me.mask, me.maskShim, me.zIndexStack, me.globalListeners, me.resizeListeners);
-        
+
         me.callParent();
     },
 
@@ -648,7 +648,7 @@ Ext.define('Ext.ZIndexManager', {
                 mask = me.mask,
                 maskShim = me.maskShim,
                 viewSize;
-            
+
             me.containerResizeTimer = null;
 
             if (mask && mask.isVisible()) {
@@ -656,18 +656,18 @@ Ext.define('Ext.ZIndexManager', {
                 // so to find the valid client size to mask, we must temporarily unmask
                 // the parent node.
                 mask.hide();
-                
+
                 if (maskShim) {
                     maskShim.hide();
                 }
 
                 viewSize = me.getMaskBox();
-                
+
                 if (maskShim) {
                     maskShim.setSize(viewSize);
                     maskShim.show();
                 }
-                
+
                 mask.setSize(viewSize);
                 mask.show();
             }
@@ -713,21 +713,21 @@ Ext.define('Ext.ZIndexManager', {
                     // tell the spec runner to ignore this element when checking if the dom is clean
                     'data-sticky': true,
                     //</debug>
-                    
+
                     role: 'presentation',
                     cls: Ext.baseCSSPrefix + 'mask ' + Ext.baseCSSPrefix + 'border-box',
                     style: 'height:0;width:0'
                 });
-                
+
                 mask.setVisibilityMode(Ext.Element.DISPLAY);
-                
+
                 mask.on({
                     mousedown: me.onMaskMousedown,
                     click: me.onMaskClick,
                     scope: me
                 });
             }
-            
+
             // If the mask is already shown, hide it before showing again
             // to ensure underlying elements' tabbability is restored
             else {
@@ -735,7 +735,7 @@ Ext.define('Ext.ZIndexManager', {
             }
 
             mask.maskTarget = maskTarget;
-            
+
             // Since there is no fast and reliable way to find elements above or below
             // a given z-index, we just cheat and prevent tabbable elements within the
             // topmost component from being made untabbable.
@@ -759,22 +759,22 @@ Ext.define('Ext.ZIndexManager', {
                 shim.show();
                 shim.setBox(viewSize);
             }
-            
+
             mask.setZIndex(zIndex);
             mask.show();
             mask.setBox(viewSize);
         },
-        
+
         hideModalMask: function() {
             var mask = this.mask,
                 maskShim = this.maskShim;
 
             if (mask && mask.isVisible()) {
                 mask.maskTarget.restoreTabbableState();
-                
+
                 mask.maskTarget = undefined;
                 mask.hide();
-                
+
                 if (maskShim) {
                     maskShim.hide();
                 }

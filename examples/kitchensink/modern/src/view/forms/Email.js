@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.forms.Email', {
         'KitchenSink.model.Employee'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/forms/EmailController.js'
@@ -35,7 +35,7 @@ Ext.define('KitchenSink.view.forms.Email', {
             }
         }
     },
-    // </example>
+    //</example>
 
     bodyPadding: 20,
     maxHeight: '${maxHeight}',

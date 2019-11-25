@@ -21,16 +21,15 @@ Ext.define('KitchenSink.model.StaffMember', {
                 return value;
             }
         }
-    }, 
-    {
-        name: 'imagePath',
-        convert: function(value, record) {
-            if (record.data.avatar && record.data.avatar.length) {
-                return Ext.getResourcePath('images/staff/' + record.data.avatar, 'shared');
-            }
-        }
-    }],
-
+    },
+             {
+                 name: 'imagePath',
+                 convert: function(value, record) {
+                     if (record.data.avatar && record.data.avatar.length) {
+                         return Ext.getResourcePath('images/staff/' + record.data.avatar, 'shared');
+                     }
+                 }
+             }],
 
     proxy: {
         type: 'ajax',

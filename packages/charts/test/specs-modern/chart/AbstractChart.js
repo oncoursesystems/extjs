@@ -73,11 +73,11 @@ function() {
                 });
                 panel.setItems([chart]);
             });
-            
+
             waitsFor(function() {
                 return layoutDone;
             });
-            
+
             runs(function() {
                 // Fetch the first pixel and check if it's white.
                 // That should be enough

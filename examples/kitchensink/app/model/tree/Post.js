@@ -13,7 +13,7 @@ Ext.define('KitchenSink.model.tree.Post', {
     }, {
         name: "userid",
         convert: undefined
-    },  {
+    }, {
         name: "dateline",
         type: 'date',
         dateFormat: 'timestamp'

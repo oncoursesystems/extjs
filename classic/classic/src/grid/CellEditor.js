@@ -5,7 +5,7 @@
 Ext.define('Ext.grid.CellEditor', {
     extend: 'Ext.Editor',
     alias: 'widget.celleditor',
-    
+
     /**
      * @property {Boolean} isCellEditor
      * @readonly
@@ -13,7 +13,7 @@ Ext.define('Ext.grid.CellEditor', {
      * or subclass thereof.
      */
     isCellEditor: true,
-    
+
     alignment: 'l-l!',
 
     hideEl: false,
@@ -56,7 +56,7 @@ Ext.define('Ext.grid.CellEditor', {
             if (me.isForTree) {
                 innerCell = innerCell.querySelector(me.treeNodeSelector);
             }
-            
+
             Ext.fly(innerCell).hide();
         }
 
@@ -108,7 +108,7 @@ Ext.define('Ext.grid.CellEditor', {
         }
 
         me.cacheElement();
-        
+
         // Bypass Editor's onFocusLeave
         Ext.container.Container.prototype.onFocusLeave.apply(me, arguments);
     },
@@ -235,7 +235,7 @@ Ext.define('Ext.grid.CellEditor', {
             if (me.isForTree) {
                 innerCell = innerCell.querySelector(me.treeNodeSelector);
             }
-            
+
             Ext.fly(innerCell).show();
         }
     },
@@ -258,7 +258,7 @@ Ext.define('Ext.grid.CellEditor', {
             });
         }
     },
-    
+
     /**
      * @private
      * Because when checkbox is clicked it loses focus  completeEdit is bypassed.
@@ -266,7 +266,7 @@ Ext.define('Ext.grid.CellEditor', {
     onCheckBoxMouseDown: function() {
         this.completeEdit = Ext.emptyFn;
     },
-     
+
     /**
      * @private
      * Restore checkbox focus and completeEdit method.
@@ -275,7 +275,7 @@ Ext.define('Ext.grid.CellEditor', {
         delete this.completeEdit;
         this.field.focus(false, 10);
     },
-    
+
     /**
      * @private
      * Realigns the Editor to the grid cell, or to the text node in the grid inner cell

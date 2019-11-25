@@ -35,11 +35,11 @@ Ext.define('KitchenSink.view.charts.boxplot.BoxPlotController', {
         boxplot.preview();
     },
 
-    onBoxPlotRender: function (sprite, config, data, index) {
+    onBoxPlotRender: function(sprite, config, data, index) {
         return this.colors[index % this.colors.length];
     },
 
-    onBoxPlotTooltip: function (tooltip, record, item) {
+    onBoxPlotTooltip: function(tooltip, record, item) {
         var category = record.get('field'),
             high = record.get('high'),
             q3 = record.get('q3'),
@@ -47,12 +47,12 @@ Ext.define('KitchenSink.view.charts.boxplot.BoxPlotController', {
             q1 = record.get('q1'),
             low = record.get('low');
 
-        tooltip.setHtml('<strong>' + category + '</strong><br>'
-            + '<br>High: ' + high
-            + '<br>Q3: ' + q3
-            + '<br>Median: ' + median
-            + '<br>Q1: ' + q1
-            + '<br>Low : ' + low);
+        tooltip.setHtml('<strong>' + category + '</strong><br>' +
+            '<br>High: ' + high +
+            '<br>Q3: ' + q3 +
+            '<br>Median: ' + median +
+            '<br>Q1: ' + q1 +
+            '<br>Low : ' + low);
     }
 
 });

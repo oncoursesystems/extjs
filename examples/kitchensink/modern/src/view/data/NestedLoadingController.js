@@ -2,14 +2,14 @@ Ext.define('KitchenSink.view.data.NestedLoadingController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.nestedloading',
 
-    onLoad: function () {
+    onLoad: function() {
         var dataview = this.lookup('dataview'),
             store = dataview.getStore();
 
         store.load();
     },
 
-    onExplain: function () {
+    onExplain: function() {
         Ext.Msg.alert(
             'Loading Nested Data',
 

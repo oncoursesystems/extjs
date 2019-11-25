@@ -7,11 +7,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -62,7 +62,7 @@ function() {
         while (!column.getEditor()) {
             column = column.nextSibling() || grid.columns[0];
         }
-        
+
         cellediting.startEdit(record, column);
         field = column.field;
         waitsForFocus(field);
@@ -75,11 +75,11 @@ function() {
             case "copy" :
                 key = 67;
                 break;
-            
+
             case "paste" :
                 key = 86;
                 break;
-            
+
             case "cut" :
                 key = 88;
                 break;
@@ -87,7 +87,6 @@ function() {
 
         jasmine.fireKeyEvent(clipboard.getTarget(grid), 'keydown', key, /* shift */ null, /* ctrl */ true);
     }
-
 
     beforeEach(function() {
         // Override so that we can control asynchronous loading
@@ -117,7 +116,7 @@ function() {
             spyOn(clipboard, 'validateAction').andCallThrough();
 
             startEdit(0, 0);
-            
+
             runs(function() {
                 field.selectText();
 
@@ -129,7 +128,7 @@ function() {
                 // way of testing that the clipboard plugin did not disturb the system's
                 // clipboard action.
                 expect(clipboard.validateAction.callCount).toBe(3);
-                
+
                 for (var i = 0; i < clipboard.validateAction.callCount; i++) {
                     expect(clipboard.validateAction.calls[i].result).toBe(false);
                 }

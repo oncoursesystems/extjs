@@ -6,17 +6,17 @@
  * This illustrates multi column sorting.
  */
 Ext.define('KitchenSink.view.grid.core.LockingGrid', {
-    extend: 'Ext.grid.LockedGrid',
+    extend: 'Ext.grid.locked.Grid',
     xtype: 'locking-grid',
     controller: 'basic-grid',
-    title: 'Basic Grid',
+    title: 'Locked Grid',
 
     requires: [
         'Ext.grid.plugin.CellEditing',
         'Ext.grid.plugin.Editable'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/grid/core/BasicGridController.js'
@@ -42,7 +42,7 @@ Ext.define('KitchenSink.view.grid.core.LockingGrid', {
             }
         }
     },
-    // </example>
+    //</example>
 
     /**
      * We can pass any grid config or plugin we want to apply to 'gridDefaults'

@@ -72,7 +72,7 @@
  */
 Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable-line brace-style
     extend: 'Ext.Mixin',
-    
+
     mixinConfig: {
         id: 'keyboard'
     },
@@ -114,7 +114,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
 
             merge: function(value, baseValue, cls, mixin) {
                 var ret, key, ucKey, v, vs;
-                
+
                 // Allow nulling out parent class config
                 if (value === null) {
                     return value;
@@ -126,7 +126,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
                 // to overwrite a class baseValue with an instances value since those
                 // are additive (in applyKeyMap/combineKeyMaps).
                 ret = (baseValue && !cls.isInstance) ? Ext.Object.chain(baseValue) : {};
-                
+
                 for (key in value) {
                     if (key !== 'scope') {
                         ucKey = key.toUpperCase();
@@ -134,7 +134,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
                         if (!mixin || ret[ucKey] === undefined) {
                             // Promote to an object so we can always store the scope.
                             v = value[key];
-                            
+
                             if (v) {
                                 if (typeof v === 'string' || typeof v === 'function') {
                                     v = {
@@ -266,7 +266,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
                     Ext.Array.sort(entries, me.comparePriorities);
                     entries.sorted = true;
                 }
-                
+
                 len = entries.length;
 
                 for (i = 0; i < len; i++) {
@@ -297,7 +297,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
                 entry = entries[i];
                 result = Ext.callback(entry.handler, entry.scope, [e, this], 0, this);
             }
-            
+
             return result;
         },
 
@@ -320,7 +320,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
 
                 if (enabled) {
                     eventSource = me[me.keyMapTarget];
-                    
+
                     if (typeof eventSource === 'function') {
                         eventSource = eventSource.call(me); // eg, 'getFocusEl'
                     }
@@ -454,7 +454,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
                         if (Ext.String.startsWith(event.code, 'Key')) {
                             return event.key.substr(3);
                         }
-                        
+
                         if (Ext.String.startsWith(event.code, 'Digit')) {
                             return event.key.substr(5);
                         }
@@ -526,7 +526,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
 
                 if (parts) {
                     name = parts[3];
-                    
+
                     if (parts[4]) {
                         entry.group = parts[4];
                     }
@@ -537,7 +537,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
                         // Otherwise set flags according to modifer names if any.
                         parts = parts[2].split(me._delimiterRe);
                         n = parts.length;
-                        
+
                         for (i = 0; i < n; i++) {
                             //<debug>
                             if (!keyFlags[parts[i]]) {
@@ -577,7 +577,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
                     }
 
                     entry.event = entry.event || me._keyMapEvents[type];
-                    
+
                     return !isNaN(code) && (entry[type] = code);
                 }
             }

@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.grid.tree.TreeGrid', {
         type: 'tree-grid'
     },
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'ViewModel',
         path: 'modern/src/view/grid/tree/TreeGridModel.js'
@@ -30,7 +30,7 @@ Ext.define('KitchenSink.view.grid.tree.TreeGrid', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     width: '${width}',

@@ -110,7 +110,7 @@ function() {
         Ext.undefine('spec.Restaurant');
         schema.clear(true);
         grid = view = store = menu = schema = groupingFeature = Ext.destroy(grid, store);
-        
+
         MockAjaxManager.removeMethods();
 
         // Undo the overrides.
@@ -766,11 +766,11 @@ function() {
                     return true;
                 }
             }, 'cell editor to become focused', 500);
-            
+
             runs(function() {
                 expect(document.activeElement).toBe(cellEditingPlugin.activeEditor.field.inputEl.dom);
             });
-            
+
             runs(function() {
                 jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.TAB);
             });
@@ -802,7 +802,6 @@ function() {
 
         beforeEach(function() {
             grouping = new Ext.grid.feature.Grouping({});
-
 
             grid = new Ext.grid.Panel({
                 renderTo: Ext.getBody(),
@@ -1256,7 +1255,7 @@ function() {
                 jasmine.fireMouseEvent(header.el.dom, 'mousedown');
                 jasmine.fireMouseEvent(header.triggerEl.dom, 'click');
                 // Click 'Group by this field'.
-                
+
                 waitsFor(function() {
                     menu = header.activeMenu;
 
@@ -1370,7 +1369,7 @@ function() {
 
             // Trigger the menu.
             Ext.testHelper.showHeaderMenu(header);
-            
+
             runs(function() {
                 menu = header.activeMenu;
 
@@ -1446,7 +1445,6 @@ function() {
             roman = groupingFeature.getMetaGroup('Roman');
         }
 
-
         afterEach(function() {
             roman = greek = viewBody = null;
         });
@@ -1520,7 +1518,7 @@ function() {
                     var initialState = method === 'expand';
 
                     collapsible = collapsible !== false;
-                    
+
                     describe('Group: "' + group + '", method: "' + method + '", filterValue: "' + filterValue + '"' + '", collapsible: "' + collapsible + '"', function() {
                         it('should retain its state of ' + !initialState, function() {
                             makeUI(null, {
@@ -1587,7 +1585,7 @@ function() {
 
                 it("should cancel actionableMode while collapsing", function() {
                     var cell, plugin;
-                    
+
                     makeUI(null, null, {
                         columns: [{
                             text: 'Name',
@@ -1615,7 +1613,7 @@ function() {
                         expect(function() {
                             groupingFeature.collapse('Greek');
                         }).not.toThrow();
-                    
+
                         expect(plugin.editing).toBe(false);
                     });
                 });
@@ -1719,7 +1717,7 @@ function() {
                 // Note that the metaGroups should be present for filtered groups b/c the filter could be cleared.
                 it(specName + ', method: "' + method + '", groupName: "' + groupName + '"', function() {
                     makeUI();
-                    
+
                     store.getGroups().emptyGroupRetainTime = 100;
 
                     grid.store.addFilter({
@@ -2023,7 +2021,6 @@ function() {
             }
 
             beforeEach(function() {
-                
 
                 storeCfg = {
                     buffered: buffered,
@@ -2075,7 +2072,7 @@ function() {
 
                     // Not specifying a column here will default to column[0].
                     clickItem('groupMenuItem');
-                    
+
                     // Clicking the menu item above to re-group causes the store
                     // to load. Since this is deferred for a BufferedStore, we
                     // must wait for the store to start loading before completing
@@ -2087,7 +2084,7 @@ function() {
                         if (buffered) {
                             completeWithData(getData());
                         }
-    
+
                         var headers = view.body.query('.x-group-hd-container', true);
 
                         expect(headers.length).toBe(1);
@@ -2398,7 +2395,7 @@ function() {
                     { name: "World Service", cuisine: "Poncy" }
                 ]
             });
-            
+
             grid = new Ext.grid.Panel({
                 renderTo: Ext.getBody(),
                 store: store,
@@ -2653,32 +2650,32 @@ function() {
 
                 expect(groupingFeature.getMetaGroup(groupName).isCollapsed).toBe(false);
             });
-            
+
             describe("events", function() {
                 var spy;
-                
+
                 beforeEach(function() {
                     spy = jasmine.createSpy('event');
                 });
-                
+
                 afterEach(function() {
                     spy = null;
                 });
-                
+
                 it("should fire groupcollapse event on the grid", function() {
                     grid.on('groupcollapse', spy);
-                    
+
                     groupingFeature.collapse(groupName);
-                    
+
                     expect(spy.callCount).toBe(1);
                 });
-                
+
                 it("should fire groupexpand event on the grid", function() {
                     grid.on('groupexpand', spy);
-                    
+
                     groupingFeature.collapse(groupName);
                     groupingFeature.expand(groupName);
-                    
+
                     expect(spy.callCount).toBe(1);
                 });
             });
@@ -2815,14 +2812,14 @@ function() {
                     it('should work, startCollapsed: ' + startCollapsed, function() {
                         expect(function() {
                             doGrid(startCollapsed);
-    
+
                             groupingFeature.expand(groupKey);
                             callback(data);
                             groupingFeature.collapse(groupKey);
                         }).not.toThrow();
                     });
                 }
-                
+
                 doTest(true);
                 doTest(false);
             });
@@ -2876,11 +2873,11 @@ function() {
             grid.getStore().filter('name', 'Sulla');
             var name = grid.down('[text=Name]'),
                 cuisine = grid.down('[text=Cuisine]');
-            
+
             dragColumn(name, cuisine, true);
         });
     });
-    
+
     describe('initially null id', function() {
         it('should be able to remove it after changing the id', function() {
             makeGrid({
@@ -2927,7 +2924,7 @@ function() {
                     type: 'string'
                 }]
             });
-            
+
             store = new Ext.data.Store({
                 model: spec.Test,
                 groupField: 'category',
@@ -2965,7 +2962,7 @@ function() {
                       "category": "Category 4"
                     }
                   ]
-            }),
+            });
 
             grid = new Ext.grid.Panel(Ext.apply({
                 renderTo: Ext.getBody(),
@@ -3155,9 +3152,9 @@ function() {
             });
 
             groupSummaryFeature = lockedGrid.view.getFeature('group');
-            
+
         });
-        
+
         it('should set body top to 0 on click', function() {
             var view = lockedGrid.getView(),
             scroller = view.getScrollable();

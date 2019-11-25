@@ -34,7 +34,6 @@ topSuite("Ext.grid.plugin.RowExpander", ['Ext.grid.Panel'], function() {
         ],
         store, groupStore, expander, grid, view, scroller, bufferedRenderer, columns, i;
 
-
     // add in some dummy descriptions
     for (i = 0; i < dummyData.length; i++) {
         dummyData[i].push('Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed metus nibh, sodales a, porta at, vulputate eget, dui. Pellentesque ut nisl. Maecenas tortor turpis, interdum non, sodales non, iaculis ac, lacus. Vestibulum auctor, tortor quis iaculis malesuada, libero lectus bibendum purus, sit amet tincidunt quam turpis vel lacus. In pellentesque nisl non sem. Suspendisse nunc sem, pretium eget, cursus a, fringilla vel, urna.<br/><br/>Aliquam commodo ullamcorper erat. Nullam vel justo in neque porttitor laoreet. Aenean lacus dui, consequat eu, adipiscing eget, nonummy non, nisi. Morbi nunc est, dignissim non, ornare sed, luctus eu, massa. Vivamus eget quam. Vivamus tincidunt diam nec urna. Curabitur velit.');
@@ -114,8 +113,8 @@ topSuite("Ext.grid.plugin.RowExpander", ['Ext.grid.Panel'], function() {
         }, gridCfg));
 
         view = grid.getView();
-        groupStore = view.dataSource,
-            scroller = view.isLockingView ? view.normalView.getScrollable() : view.getScrollable();
+        groupStore = view.dataSource;
+        scroller = view.isLockingView ? view.normalView.getScrollable() : view.getScrollable();
         bufferedRenderer = view.bufferedRenderer;
     }
 

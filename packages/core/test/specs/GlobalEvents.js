@@ -37,7 +37,6 @@ function() {
                 ]
             };
 
-
         function completeRequest(url, data) {
             Ext.data.JsonP.mockComplete(url, data);
         }
@@ -46,17 +45,17 @@ function() {
             MockAjaxManager.addMethods();
             loadSpy = jasmine.createSpy('store load');
             idleSpy = jasmine.createSpy('idle');
-            
+
             Ext.on('idle', idleSpy);
         });
 
         afterEach(function() {
             Ext.un('idle', idleSpy);
-            
+
             if (store) {
                 store.destroy();
             }
-            
+
             MockAjaxManager.removeMethods();
             loadSpy = idleSpy = store = null;
         });
@@ -76,7 +75,7 @@ function() {
 
             expect(mousedownSpy.callCount).toBe(2);
             expect(idleSpy).toHaveBeenCalled();
-            
+
             Ext.testHelper.touchCancel(element);
 
             element.destroy();
@@ -98,14 +97,14 @@ function() {
                     load: loadSpy
                 }
             });
-            
+
             store.loadPage(1);
             completeRequest('fakeForumUrl', forumData);
-            
+
             waitForSpy(loadSpy);
-            
+
             waits(delay);
-            
+
             runs(function() {
                 expect(idleSpy).toHaveBeenCalled();
             });
@@ -116,30 +115,30 @@ function() {
                 url: 'fakeRequest',
                 callback: loadSpy
             });
-            
+
             completeRequest(request, forumData);
-            
+
             waitForSpy(loadSpy);
-            
+
             waits(delay);
-            
+
             runs(function() {
                 expect(idleSpy).toHaveBeenCalled();
             });
         });
-        
+
         it("should fire after an Ajax request is processed", function() {
             var request = Ext.Ajax.request({
                 url: 'fakeUrl',
                 callback: loadSpy
             });
-            
+
             Ext.Ajax.mockCompleteWithData({}, request.id);
-            
+
             waitForSpy(loadSpy);
-            
+
             waits(delay);
-            
+
             runs(function() {
                 expect(idleSpy).toHaveBeenCalled();
             });
@@ -151,55 +150,55 @@ function() {
                 repeat: 1,
                 interval: 1
             }).start();
-            
+
             waitForSpy(loadSpy);
-            
+
             waits(delay);
-            
+
             runs(function() {
                 expect(idleSpy).toHaveBeenCalled();
             });
         });
     });
-    
+
     (Ext.isClassic ? xdescribe : describe)("pressedComponent", function() {
         var button;
-        
+
         beforeEach(function() {
             button = new Ext.Button({
                 renderTo: Ext.getBody(),
                 text: 'foo'
             });
         });
-        
+
         afterEach(function() {
             button = Ext.destroy(button);
         });
-        
+
         it("should capture the pressed component on mousedown", function() {
             jasmine.fireMouseEvent(button.el, 'mousedown');
-            
+
             expect(Ext.GlobalEvents.pressedComponent).toBe(button);
-            
+
             jasmine.fireMouseEvent(button.el, 'mouseup');
         });
-        
+
         it("should call onRelease method when mouse is released", function() {
             var event,
                 spy = spyOn(button, 'onRelease');
-            
+
             spy.andCallFake(function(e) {
                 event = e;
             });
-            
+
             jasmine.fireMouseEvent(button.el, 'click');
-            
+
             expect(spy).toHaveBeenCalled();
             expect(event.type).toBe('mouseup');
             expect(event.target).toBe(button.el.dom);
         });
     });
-    
+
     describe('scroll event', function() {
         var stretcher,
             scrollingPanel,
@@ -217,7 +216,7 @@ function() {
         afterEach(function() {
             Ext.un('scroll', onGlobalScroll);
             scrolledElements = [];
-            
+
             stretcher.destroy();
             scrollingPanel.destroy();
         });
@@ -229,7 +228,7 @@ function() {
             stretcher = Ext.getBody().createChild({
                 style: 'height:10000px'
             });
-            
+
             // Use Ext.Panel class - it will work in Classic and Modern
             scrollingPanel = new Ext.Panel({
                 renderTo: document.body,
@@ -238,7 +237,7 @@ function() {
                 top: 0,
                 width: 300,
                 height: 300,
-                
+
                 // Modern defaults to 'card', so explicitly use 'auto'
                 layout: 'auto',
                 scrollable: true,
@@ -252,7 +251,7 @@ function() {
             Ext.on({
                 scroll: onGlobalScroll
             });
-            
+
             var viewportScroller = Ext.getViewportScroller();
 
             viewportScroller.on({
@@ -263,7 +262,7 @@ function() {
 
             // Wait for scroll events to fire (may be async)
             waitsForSpy(viewportScrollEndSpy);
-            
+
             runs(function() {
                 expect(scrolledElements.length).toBe(1);
                 expect(scrolledElements[0]).toBe(Ext.scroll.Scroller.viewport.getElement());
@@ -272,7 +271,7 @@ function() {
             scrollingPanel.getScrollable().on({
                 scrollend: panelScrollEndSpy
             });
-            
+
             runs(function() {
                 scrollingPanel.getScrollable().scrollBy(null, 100);
             });

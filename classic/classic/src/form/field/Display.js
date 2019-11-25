@@ -41,7 +41,7 @@ Ext.define('Ext.form.field.Display', {
         'Ext.util.Format',
         'Ext.XTemplate'
     ],
-    
+
     /* eslint-disable indent, max-len */
     /**
      * @cfg fieldSubTpl
@@ -59,14 +59,14 @@ Ext.define('Ext.form.field.Display', {
         }
     ],
     /* eslint-enable indent, max-len */
-    
+
     // We have the ARIA markup pre-rendered so we don't want it to be applied
     /**
      * @property ariaRole
      * @inheritdoc
      */
     ariaRole: undefined,
-    
+
     /**
      * @property focusable
      * @inheritdoc
@@ -101,7 +101,7 @@ Ext.define('Ext.form.field.Display', {
      * True to escape HTML in text when rendering it.
      */
     htmlEncode: false,
-    
+
     /**
      * @cfg {Function/String} renderer
      * A function to transform the raw value for display in the field.
@@ -128,7 +128,7 @@ Ext.define('Ext.form.field.Display', {
      * @return {String} displayValue The HTML string to be rendered
      * @controllable
      */
-    
+
     /**
      * @cfg {Object} scope
      * The scope to execute the {@link #renderer} function. Defaults to this.
@@ -139,7 +139,7 @@ Ext.define('Ext.form.field.Display', {
      * @inheritdoc
      */
     noWrap: false,
-    
+
     /**
      * @cfg validateOnChange
      * @inheritdoc
@@ -171,7 +171,7 @@ Ext.define('Ext.form.field.Display', {
             return '';
         }
     },
-    
+
     isDirty: function() {
         return false;
     },
@@ -186,7 +186,7 @@ Ext.define('Ext.form.field.Display', {
 
     setRawValue: function(value) {
         var me = this;
-            
+
         value = Ext.valueFrom(value, '');
         me.rawValue = value;
 
@@ -217,7 +217,7 @@ Ext.define('Ext.form.field.Display', {
 
         return display;
     },
-        
+
     getSubTplData: function(fieldData) {
         var ret = this.callParent(arguments);
 
@@ -230,17 +230,17 @@ Ext.define('Ext.form.field.Display', {
      * @cfg {String} inputType
      * @private
      */
-    
+
     /**
      * @cfg {Boolean} disabled
      * @private
      */
-    
+
     /**
      * @cfg {Number} checkChangeEvents
      * @private
      */
-    
+
     /**
      * @cfg {Number} checkChangeBuffer
      * @private

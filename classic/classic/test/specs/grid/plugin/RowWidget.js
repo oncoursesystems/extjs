@@ -868,7 +868,7 @@ function() {
 
         return Ext.fly(view.all.item(index).down('.' + Ext.baseCSSPrefix + 'grid-rowbody-tr', true));
     }
-    
+
     beforeEach(function() {
         componentCount = Ext.ComponentQuery.query('*').length;
     });
@@ -891,7 +891,7 @@ function() {
             jasmine.fireMouseEvent(grid.view.el.query('.x-grid-row-expander')[0], 'mousedown');
 
             expect(getRowBodyTr(0).isVisible()).toBe(false);
-            
+
             jasmine.fireMouseEvent(grid.view.el.query('.x-grid-row-expander')[0], 'mouseup');
         });
 
@@ -934,7 +934,7 @@ function() {
             // Collapsing ust lay out in case it triggers underflow
             expect(grid.view.componentLayoutCounter).toBe(layoutCounter + 1);
         });
-        
+
         it('should only create widgets for the rendered viewSize', function() {
             makeGrid();
 
@@ -954,11 +954,11 @@ function() {
                     jasmine.fireMouseEvent(node.query('.x-grid-row-expander')[0], 'click');
                     item++;
                 }
-                
+
                 if (item === storeCount) {
                     return done();
                 }
-                
+
                 // When we hit the end of the rendered block, ask that the required
                 // row be scrolled into view.
                 grid.ensureVisible(item, {
@@ -978,13 +978,13 @@ function() {
 
         it("should keep the widget in place when a column updates", function() {
             makeGrid();
-            
+
             var rec = store.getAt(0);
 
             expander.toggleRow(0, rec);
-            
+
             var btn = grid.down('[isExpanderButton]');
-            
+
             expect(btn.el.parent(null, true)).toHaveCls('x-grid-rowbody');
             rec.set('company', 'Foo');
             expect(expect(btn.el.parent(null, true)).toHaveCls('x-grid-rowbody'));
@@ -1070,7 +1070,7 @@ function() {
                         expect(rowBottom).not.toBeGreaterThan(viewBottom);
                     });
                 });
-                
+
                 it("should use the widget content (when it is taller) to determine scroll distance", function() {
                     var viewBottom, rowBottom;
 
@@ -1133,7 +1133,7 @@ function() {
                 jasmine.fireMouseEvent(grid.lockedGrid.view.el.query('.x-grid-row-expander')[0], 'click');
 
                 expect(getRowBodyTr(0, true).isVisible()).toBe(true);
-                
+
                 expect(grid.lockedGrid.view.body.getHeight()).toBe(grid.normalGrid.view.body.getHeight());
             });
 
@@ -1485,7 +1485,7 @@ function() {
             });
             loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough();
         });
-        
+
         itNotIE8('should work', function() {
             var layoutCount = view.componentLayoutCounter,
                 scrollRange = scroller.getSize().y;
@@ -1528,34 +1528,34 @@ function() {
                 expect(loadSpy.callCount).toBe(2);
             });
         });
-    
+
         itNotIE8('should correctly resize rendered block when last row expands', function() {
             var lastRow;
-        
+
             waitsFor(function() {
                 if (scroller.getPosition().y === scroller.getMaxUserPosition().y &&
                     view.all.endIndex === store.getCount() - 1) {
                     return true;
                 }
-            
+
                 scroller.scrollBy(null, 100);
             }, 'scroll to end', 500);
-        
+
             runs(function() {
                 lastRow = view.all.last(true);
                 jasmine.fireMouseEvent(Ext.fly(lastRow).down('.x-grid-row-expander', true), 'click');
             });
-        
+
             waitsFor(function() {
-            
+
                 if (scroller.getPosition().y === scroller.getMaxUserPosition().y &&
                     view.all.endIndex === store.getCount() - 1) {
                     return true;
                 }
-            
+
                 scroller.scrollBy(null, 100);
             }, 'scroll to end after row expansion', 500);
-        
+
             // Last row should still be the same
             runs(function() {
                 expect(view.all.last(true)).toBe(lastRow);

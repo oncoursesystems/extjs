@@ -20,6 +20,9 @@ Ext.define('KitchenSink.view.calendar.Days', {
         },
         graphite: {
             calendarWidth: 180
+        },
+        'classic-material': {
+            calendarWidth: 180
         }
     },
 
@@ -42,6 +45,7 @@ Ext.define('KitchenSink.view.calendar.Days', {
         }
     },
 
+    cls: 'calendar-view',
     layout: 'border',
     bind: {
         title: '{value:date("M Y")}'
@@ -71,4 +75,4 @@ Ext.define('KitchenSink.view.calendar.Days', {
         }
     }]
 
-})
+});

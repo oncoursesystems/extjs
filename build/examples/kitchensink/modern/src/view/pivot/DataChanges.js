@@ -48,7 +48,7 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
         }
     },
 
-    padding: '${padding}', //give room for the grid's shadow
+    padding: '${padding}', // give room for the grid's shadow
     shadow: false,
     //</example>
 
@@ -138,7 +138,7 @@ Ext.define('KitchenSink.view.pivot.DataChanges', {
                 handler: 'onRemoveData'
             }, {
                 text: 'Clear all',
-                iconCls: 'x-fa fa-trash',
+                iconCls: 'x-fa fa-trash-alt',
                 handler: 'onClearData'
             }]
         }]

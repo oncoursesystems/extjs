@@ -6,11 +6,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -40,7 +40,7 @@ function() {
 
             if (Ext.supports.CssTransforms && !Ext.isIE9m) {
                 transform = dom.style[transformStyleName];
-                
+
                 return transform ? parseInt(transform.split(',')[1], 10) : 0;
             }
             else {
@@ -50,7 +50,7 @@ function() {
 
     describe("In a Window", function() {
         var win, grid, cell00;
-        
+
         afterEach(function() {
             Ext.destroy(win);
         });
@@ -81,10 +81,10 @@ function() {
                     }]
                 }
             });
-            
+
             win.show();
             grid = win.child('grid');
-            
+
             cell00 = new Ext.grid.CellContext(grid.view).setPosition(0, 0);
 
             // Focus cell 0,0

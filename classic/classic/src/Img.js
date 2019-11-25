@@ -127,7 +127,7 @@ Ext.define('Ext.Img', {
             config.html = glyph.character;
             config.style = config.style || {};
             config.style.fontFamily = glyph.fontFamily;
-            
+
             // A glyph is a graphic which is not an <img> tag so it should have
             // the corresponding role for Accessibility interface to recognize
             config.role = 'img';
@@ -163,7 +163,7 @@ Ext.define('Ext.Img', {
             // base-64 encoded string. :/
             // That will make the application totally unusable for blind people.
             (img || config).alt = '';
-            
+
             //<debug>
             Ext.log.warn('For WAI-ARIA compliance, IMG elements SHOULD have an alt attribute.');
             //</debug>
@@ -184,7 +184,7 @@ Ext.define('Ext.Img', {
         me.callParent(arguments);
 
         el = me.el;
-        
+
         if (autoEl === 'img' || (Ext.isObject(autoEl) && autoEl.tag === 'img')) {
             me.imgEl = el;
         }
@@ -202,9 +202,9 @@ Ext.define('Ext.Img', {
         if (imgEl && me.el !== imgEl) {
             imgEl.destroy();
         }
-        
+
         me.imgEl = null;
-        
+
         me.callParent();
     },
 
@@ -230,7 +230,7 @@ Ext.define('Ext.Img', {
     afterComponentLayout: function(width, height, oldWidth, oldHeight) {
         var heightModel = this.getSizeModel().height,
             h;
-                
+
         // If we have our height set, then size the glyph as requested to make image scalable.
         if ((heightModel.calculated || heightModel.configured) && height && this.glyph) {
             h = height + 'px';
@@ -239,7 +239,7 @@ Ext.define('Ext.Img', {
                 'font-size': h
             });
         }
-        
+
         this.callParent([width, height, oldWidth, oldHeight]);
     },
 
@@ -322,12 +322,12 @@ Ext.define('Ext.Img', {
             if (!glyph.isGlyph) {
                 glyph = new Ext.Glyph(glyph);
             }
-            
+
             if (glyph.isEqual(oldGlyph)) {
                 glyph = undefined;
             }
         }
-        
+
         return glyph;
     },
 

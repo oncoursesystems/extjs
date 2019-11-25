@@ -14,25 +14,25 @@ Ext.define('Ext.tip.Tip', {
      * @cfg {Boolean} [closable=false]
      * True to render a close tool button into the tooltip header.
      */
-    
+
     /**
      * @cfg {Number} [width='auto']
      * Width in pixels of the tip.  Width will be ignored if it
      * exceeds the bounds of {@link #minWidth} or {@link #maxWidth}.
      */
-    
+
     /**
      * @cfg {Number} minWidth
      * The minimum width of the tip in pixels.
      */
     minWidth: 40,
-    
+
     /**
      * @cfg {Number} maxWidth
      * The maximum width of the tip in pixels.
      */
     maxWidth: 500,
-    
+
     /**
      * @cfg {Boolean/String} shadow
      * `true` or "sides" for the default effect, "frame" for 4-way shadow, and "drop"
@@ -81,7 +81,7 @@ Ext.define('Ext.tip.Tip', {
         me.floating = Ext.apply({}, {
             shadow: me.shadow
         }, me.self.prototype.floating);
-        
+
         me.callParent(arguments);
 
         // Or in the deprecated config. Floating.doConstrain only constrains

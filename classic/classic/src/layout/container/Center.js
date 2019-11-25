@@ -35,14 +35,14 @@
 Ext.define('Ext.layout.container.Center', {
     extend: 'Ext.layout.container.Fit',
     alternateClassName: 'Ext.ux.layout.Center',
-    
+
     alias: [
         'layout.center',
         'layout.ux.center'
     ],
 
     type: 'center',
-    
+
     percentRe: /^\d+(?:\.\d+)?%$/,
 
     itemCls: Ext.baseCSSPrefix + 'center-layout-item',
@@ -67,17 +67,17 @@ Ext.define('Ext.layout.container.Center', {
             childItems, len, i, itemContext, item;
 
         me.callParent([ownerContext]);
-        
+
         childItems = ownerContext.childItems;
 
         for (i = 0, len = childItems.length; i < len; ++i) {
             itemContext = childItems[i];
             item = itemContext.target;
-            
+
             if (percentRe.test(item.width)) {
                 item.getEl().setStyle('width', '');
             }
-            
+
             if (percentRe.test(item.height)) {
                 item.getEl().setStyle('height', '');
             }

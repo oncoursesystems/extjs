@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.d3.sencha.TreeController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.sencha-tree',
 
-    onTooltip: function (component, tooltip, node, element, event) {
+    onTooltip: function(component, tooltip, node, element, event) {
         var record = node.data,
             name = record.get('name'),
             title = record.get('title'),

@@ -15,7 +15,7 @@ Ext.define('Admin.view.phone.email.Compose', {
     title: 'Compose',
 
     tools: [{
-        iconCls: 'x-fa fa-send',
+        iconCls: 'x-fa fa-paper-plane',
         handler: 'onSendMessage'
     }],
 

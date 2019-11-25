@@ -3,9 +3,9 @@ Ext.define('Portal.view.main.MainController', {
 
     alias: 'controller.main',
 
-    onAddUser: function (item) {
+    onAddUser: function(item) {
         var dashboard = this.lookupReference('dashboard');
-        
+
         dashboard.addView({
             type: 'userForm'
         });

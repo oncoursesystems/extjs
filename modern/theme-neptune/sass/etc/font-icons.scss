@@ -195,14 +195,14 @@ $fi-var-filter: dynamic($fa-var-filter);
  * @var {string}
  * The "gear" font-icon
  */
-$fi-var-gear: dynamic($fa-var-gear);
+$fi-var-gear: dynamic($fa-var-cog);
 @include fi(gear, $fi-var-gear);
 
 /**
  * @var {string}
  * The "group" font-icon
  */
-$fi-var-group: dynamic($fa-var-group);
+$fi-var-group: dynamic($fa-var-users);
 @include fi(group, $fi-var-group);
 
 /**
@@ -211,6 +211,13 @@ $fi-var-group: dynamic($fa-var-group);
  */
 $fi-var-home: dynamic($fa-var-home);
 @include fi(home, $fi-var-home);
+
+/**
+ * @var {string}
+ * The "lock" font-icon
+ */
+$fi-var-lock: dynamic($fa-var-lock);
+@include fi(lock, $fi-var-lock);
 
 /**
  * @var {string}
@@ -242,9 +249,16 @@ $fi-var-print: dynamic($fa-var-print);
 
 /**
  * @var {string}
+ * The "redo" font-icon
+ */
+$fi-var-redo: dynamic($fa-var-sync);
+@include fi(redo, $fi-var-redo);
+
+/**
+ * @var {string}
  * The "refresh" font-icon
  */
-$fi-var-refresh: dynamic($fa-var-refresh);
+$fi-var-refresh: dynamic($fa-var-sync);
 @include fi(refresh, $fi-var-refresh);
 
 /**
@@ -295,6 +309,20 @@ $fi-var-th: dynamic($fa-var-th);
  */
 $fi-var-th-list: dynamic($fa-var-th-list);
 @include fi(th-list, $fi-var-th-list);
+
+/**
+ * @var {string}
+ * The "undo" font-icon
+ */
+$fi-var-undo: dynamic($fa-var-undo);
+@include fi(undo, $fi-var-undo);
+
+/**
+ * @var {string}
+ * The "unlock" font-icon
+ */
+$fi-var-unlock: dynamic($fa-var-unlock);
+@include fi(unlock, $fi-var-unlock);
 
 /**
  * @var {string}

@@ -30,17 +30,6 @@ Ext.define('Ext.theme.material.list.Tree', {
     }
 });
 
-Ext.define('Ext.theme.material.Tool', {
-    override: 'Ext.Tool',
-    config: {
-        ripple: {
-            bound: false,
-            color: 'default',
-            centered: true
-        }
-    }
-});
-
 Ext.define('Ext.theme.material.Button', {
     override: 'Ext.Button',
     config: {
@@ -68,6 +57,17 @@ Ext.define('Ext.theme.material.Button', {
     }
 });
 
+Ext.define('Ext.theme.material.Tool', {
+    override: 'Ext.Tool',
+    config: {
+        ripple: {
+            bound: false,
+            color: 'default',
+            centered: true
+        }
+    }
+});
+
 Ext.define('Ext.theme.material.Panel', {
     override: 'Ext.Panel',
     config: {
@@ -75,21 +75,6 @@ Ext.define('Ext.theme.material.Panel', {
         buttonToolbar: {
             defaultButtonUI: null
         }
-    }
-});
-
-Ext.define('Ext.theme.material.field.Field', {
-    override: 'Ext.field.Field',
-    config: {
-        labelAlign: 'top'
-    }
-});
-
-Ext.define('Ext.theme.material.field.Text', {
-    override: 'Ext.field.Text',
-    config: {
-        labelAlign: 'placeholder',
-        animateUnderline: true
     }
 });
 
@@ -143,6 +128,41 @@ Ext.define('Ext.theme.material.SplitButton', {
     }
 });
 
+Ext.define('Ext.theme.material.layout.overflow.Scroller', {
+    override: 'Ext.layout.overflow.Scroller',
+    config: {
+        backwardTool: {
+            ripple: {
+                centered: false,
+                bound: true,
+                diameterLimit: false
+            }
+        },
+        forwardTool: {
+            ripple: {
+                centered: false,
+                bound: true,
+                diameterLimit: false
+            }
+        }
+    }
+});
+
+Ext.define('Ext.theme.material.field.Field', {
+    override: 'Ext.field.Field',
+    config: {
+        labelAlign: 'top'
+    }
+});
+
+Ext.define('Ext.theme.material.field.Text', {
+    override: 'Ext.field.Text',
+    config: {
+        labelAlign: 'placeholder',
+        animateUnderline: true
+    }
+});
+
 Ext.define('Ext.theme.neptune.Titlebar', {
     override: 'Ext.TitleBar',
     config: {
@@ -155,6 +175,13 @@ Ext.define('Ext.theme.material.TitleBar', {
     config: {
         titleAlign: 'left',
         defaultButtonUI: 'alt'
+    }
+});
+
+Ext.define('Ext.theme.material.Toast', {
+    override: 'Ext.Toast',
+    config: {
+        alignment: 'b-b'
     }
 });
 
@@ -319,26 +346,6 @@ Ext.define('Ext.theme.material.grid.Grid', {
     config: {
         rowLines: true,
         striped: false
-    }
-});
-
-Ext.define('Ext.theme.material.layout.overflow.Scroller', {
-    override: 'Ext.layout.overflow.Scroller',
-    config: {
-        backwardTool: {
-            ripple: {
-                centered: false,
-                bound: true,
-                diameterLimit: false
-            }
-        },
-        forwardTool: {
-            ripple: {
-                centered: false,
-                bound: true,
-                diameterLimit: false
-            }
-        }
     }
 });
 

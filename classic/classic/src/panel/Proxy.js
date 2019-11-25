@@ -6,7 +6,7 @@
  */
 Ext.define('Ext.panel.Proxy', {
     alternateClassName: 'Ext.dd.PanelProxy',
-    
+
     /**
      * @cfg {Boolean} [moveOnDrag=true]
      * True to move the panel to the dragged position when dropped
@@ -20,7 +20,7 @@ Ext.define('Ext.panel.Proxy', {
      */
     constructor: function(panel, config) {
         var me = this;
-        
+
         /**
          * @property panel
          * @type Ext.panel.Panel
@@ -74,7 +74,7 @@ Ext.define('Ext.panel.Proxy', {
      */
     hide: function() {
         var me = this;
-        
+
         if (me.ghost) {
             if (me.proxy) {
                 me.proxy.destroy();
@@ -93,7 +93,7 @@ Ext.define('Ext.panel.Proxy', {
     show: function() {
         var me = this,
             panelSize;
-            
+
         if (!me.ghost) {
             panelSize = me.panel.getSize();
             me.panel.el.setVisibilityMode(Ext.Element.DISPLAY);

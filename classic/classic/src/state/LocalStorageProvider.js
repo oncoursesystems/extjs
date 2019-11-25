@@ -10,9 +10,9 @@ Ext.define('Ext.state.LocalStorageProvider', {
     requires: [
         'Ext.util.LocalStorage'
     ],
-    
+
     alias: 'state.localstorage',
-   
+
     constructor: function() {
         var me = this;
 
@@ -27,14 +27,14 @@ Ext.define('Ext.state.LocalStorageProvider', {
             me.state = {};
         }
     },
-    
+
     readLocalStorage: function() {
         var store = this.store,
             data = {},
             keys = store.getKeys(),
             i = keys.length,
             key;
-            
+
         while (i--) {
             key = keys[i];
             data[key] = this.decodeValue(store.getItem(key));
@@ -42,10 +42,10 @@ Ext.define('Ext.state.LocalStorageProvider', {
 
         return data;
     },
-    
+
     set: function(name, value) {
         var me = this;
-        
+
         me.clear(name);
 
         if (value != null) { // !== undefined && !== null
@@ -61,7 +61,7 @@ Ext.define('Ext.state.LocalStorageProvider', {
         this.store.removeItem(name);
         this.callParent(arguments);
     },
-    
+
     getStorageObject: function() {
         var prefix = this.prefix,
             id = prefix,

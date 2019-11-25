@@ -120,7 +120,7 @@ Ext.define('Ext.form.Panel', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.form',
     alternateClassName: ['Ext.FormPanel', 'Ext.form.FormPanel'],
-    
+
     requires: [
         'Ext.form.Basic',
         'Ext.util.TaskRunner'
@@ -129,7 +129,7 @@ Ext.define('Ext.form.Panel', {
     mixins: {
         fieldAncestor: 'Ext.form.FieldAncestor'
     },
-    
+
     /**
      * @cfg {Boolean} pollForChanges
      * If set to `true`, sets up an interval task (using the {@link #pollInterval}) in which the
@@ -153,7 +153,7 @@ Ext.define('Ext.form.Panel', {
     layout: 'anchor',
 
     bodyAriaRole: 'form',
-    
+
     basicFormConfigs: [
         /**
          * @cfg api
@@ -310,12 +310,12 @@ Ext.define('Ext.form.Panel', {
             len = props.length,
             i = 0,
             prop;
-            
+
         for (; i < len; ++i) {
             prop = props[i];
             cfg[prop] = this[prop];
         }
-        
+
         return new Ext.form.Basic(this, cfg);
     },
 
@@ -348,7 +348,7 @@ Ext.define('Ext.form.Panel', {
     getRecord: function() {
         return this.getForm().getRecord();
     },
-    
+
     /**
      * Persists the values in this form into the passed {@link Ext.data.Model} object
      * in a beginEdit/endEdit block. If the record is not specified, it will attempt to update
@@ -370,7 +370,7 @@ Ext.define('Ext.form.Panel', {
     getValues: function(asString, dirtyOnly, includeEmptyText, useDataValues) {
         return this.getForm().getValues(asString, dirtyOnly, includeEmptyText, useDataValues);
     },
-    
+
     /**
      * @method isDirty
      * Convenience function to check if the form has any dirty fields. This is the same as calling
@@ -381,7 +381,7 @@ Ext.define('Ext.form.Panel', {
     isDirty: function() {
         return this.form.isDirty();
     },
-    
+
     /**
      * @method isValid
      * Convenience function to check if the form has all valid fields. This is the same as calling
@@ -403,7 +403,7 @@ Ext.define('Ext.form.Panel', {
     reset: function(resetRecord) {
         return this.form.reset(resetRecord);
     },
-    
+
     /**
      * @method hasInvalidField
      * Convenience function to check if the form has any invalid fields. This is the same as calling
@@ -418,7 +418,7 @@ Ext.define('Ext.form.Panel', {
     doDestroy: function() {
         this.stopPolling();
         this.form.destroy();
-        
+
         this.callParent();
     },
 
@@ -460,7 +460,7 @@ Ext.define('Ext.form.Panel', {
      */
     stopPolling: function() {
         var task = this.pollTask;
-        
+
         if (task) {
             Ext.util.TaskManager.stop(task, true);
             this.pollTask = null;

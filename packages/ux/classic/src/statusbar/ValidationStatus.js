@@ -23,7 +23,7 @@ Ext.define('Ext.ux.statusbar.ValidationStatus', {
      * to the status message when the form validates.
      */
     validIconCls: 'x-status-valid',
-    
+
     /**
      * @cfg {String} showText
      * The {@link Ext.ux.statusbar.StatusBar#text text} value to be applied when
@@ -113,7 +113,7 @@ Ext.define('Ext.ux.statusbar.ValidationStatus', {
      */
     stopMonitoring: function() {
         var form = this.basicForm;
-        
+
         if (!form.destroyed) {
             form.getFields().each(function(f) {
                 f.un('validitychange', this.onFieldValidation, this);
@@ -223,9 +223,9 @@ Ext.define('Ext.ux.statusbar.ValidationStatus', {
         me.getMsgEl().alignTo(me.statusBar.getEl(), me.listAlign).slideIn(
             'b', { duration: 300, easing: 'easeOut' }
         );
-        
+
         me.statusBar.setText(me.hideText);
-        
+
         // hide if the user clicks directly into the form
         me.formPanel.body.on('click', me.hideErrors, me, { single: true });
     },

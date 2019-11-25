@@ -67,7 +67,7 @@
 Ext.define('Ext.form.FieldSet', {
     extend: 'Ext.container.Container',
     alias: 'widget.fieldset',
-    
+
     mixins: {
         fieldAncestor: 'Ext.form.FieldAncestor'
     },
@@ -78,7 +78,7 @@ Ext.define('Ext.form.FieldSet', {
         'Ext.layout.container.Anchor',
         'Ext.layout.component.FieldSet'
     ],
-    
+
     /**
      * @cfg {String} title
      * A title to be displayed in the fieldset's legend. May contain HTML markup.
@@ -144,14 +144,14 @@ Ext.define('Ext.form.FieldSet', {
      * The {@link Ext.container.Container#layout} for the fieldset's immediate child items.
      */
     layout: 'anchor',
-    
+
     /**
      * @cfg {String} descriptionText
      * Fieldset description to be announced by screen readers.
      * @locale
      */
     descriptionText: '{0} field set',
-    
+
     /**
      * @cfg {String} expandText
      * Text to be announced by screen readers when toggle tool
@@ -161,7 +161,7 @@ Ext.define('Ext.form.FieldSet', {
     expandText: 'Expand field set',
 
     componentLayout: 'fieldset',
-    
+
     /**
      * @property ariaRole
      * @inheritdoc
@@ -255,16 +255,16 @@ Ext.define('Ext.form.FieldSet', {
     initComponent: function() {
         var me = this,
             baseCls = me.baseCls;
-        
+
         // We need to render the aria-label attribute instead of relying on
         // aria-labelledby because the contents of these differ.
         if (me.ariaRole && !me.ariaLabel) {
             me.ariaLabel = Ext.String.formatEncode(me.descriptionText, me.title || '');
         }
-        
+
         me.ariaRenderAttributes = me.ariaRenderAttributes || {};
         me.ariaRenderAttributes['aria-expanded'] = !me.collapsed;
-        
+
         me.initFieldAncestor();
 
         me.callParent();
@@ -285,12 +285,12 @@ Ext.define('Ext.form.FieldSet', {
             me.addCls(baseCls + '-collapsed');
             me.collapse();
         }
-        
+
         if (me.title || me.checkboxToggle || me.collapsible) {
             me.addTitleClasses();
             me.legend = me.createLegendCt();
         }
-        
+
         me.initMonitor();
     },
 
@@ -320,7 +320,7 @@ Ext.define('Ext.form.FieldSet', {
             legend.destroy();
             me.legend = null;
         }
-        
+
         me.callParent();
     },
 
@@ -372,9 +372,9 @@ Ext.define('Ext.form.FieldSet', {
 
         // Title
         items.push(me.createTitleCmp());
-        
+
         legend = new Ext.container.Container(legendCfg);
-        
+
         return legend;
     },
 
@@ -403,12 +403,12 @@ Ext.define('Ext.form.FieldSet', {
                     fn: me.toggle
                 }
             };
-            
+
             cfg.cls += ' ' + me.baseCls + '-header-text-collapsible';
         }
-        
+
         me.titleCmp = new Ext.Component(cfg);
-        
+
         return me.titleCmp;
     },
 
@@ -448,7 +448,7 @@ Ext.define('Ext.form.FieldSet', {
             },
             ariaLabel: me.expandText
         }, me.checkbox));
-        
+
         return checkboxCmp;
     },
 
@@ -479,7 +479,7 @@ Ext.define('Ext.form.FieldSet', {
             handler: me.toggle,
             id: me.id + '-legendToggle',
             scope: me,
-            
+
             // This tool is akin to a checkbox; its is considered "checked"
             // when fieldset is expanded, and vice versa.
             ariaRole: 'checkbox',
@@ -488,7 +488,7 @@ Ext.define('Ext.form.FieldSet', {
                 'aria-checked': !me.collapsed
             }
         });
-        
+
         return toggleCmp;
     },
 
@@ -499,7 +499,7 @@ Ext.define('Ext.form.FieldSet', {
         var me = renderData.$comp,
             legend = me.legend,
             tree;
-            
+
         // Create the Legend component if needed
         if (legend) {
             legend.ownerLayout.configureItem(legend);
@@ -527,10 +527,10 @@ Ext.define('Ext.form.FieldSet', {
     setTitle: function(title) {
         var me = this,
             legend = me.legend;
-            
+
         me.title = title;
         me.ariaLabel = Ext.String.formatEncode(me.descriptionText, title || '');
-        
+
         if (me.rendered) {
             if (!legend) {
                 me.legend = legend = me.createLegendCt();
@@ -539,9 +539,9 @@ Ext.define('Ext.form.FieldSet', {
                 me.setLegendCollapseImmunity(legend);
                 legend.render(me.el, 0);
             }
-            
+
             me.titleCmp.update(title);
-            
+
             // ariaLabel property was htmlEncoded in initComponent
             me.ariaEl.dom.setAttribute('aria-label', me.ariaLabel);
         }
@@ -552,19 +552,19 @@ Ext.define('Ext.form.FieldSet', {
             me.addTitleClasses();
             me.legend = me.createLegendCt();
         }
-        
+
         return me;
     },
-    
+
     addTitleClasses: function() {
         var me = this,
             title = me.title,
             baseCls = me.baseCls;
-            
+
         if (title) {
             me.addCls(baseCls + '-with-title');
         }
-        
+
         if (title || me.checkboxToggle || me.collapsible) {
             me.addCls(baseCls + '-with-legend');
         }
@@ -622,20 +622,20 @@ Ext.define('Ext.form.FieldSet', {
             else {
                 me.addCls(me.baseCls + '-collapsed');
             }
-            
+
             if (me.ariaEl.dom) {
                 me.ariaEl.dom.setAttribute('aria-expanded', !!expanded);
             }
-            
+
             me.collapsed = !expanded;
-            
+
             if (expanded) {
                 delete me.getInherited().collapsed;
             }
             else {
                 me.getInherited().collapsed = true;
             }
-            
+
             if (me.rendered) {
                 // say explicitly we are not root because when we have a fixed/configured height
                 // our ownerLayout would say we are root and so would not have it's height
@@ -644,10 +644,10 @@ Ext.define('Ext.form.FieldSet', {
                 me.fireEvent(operation, me);
             }
         }
-        
+
         return me;
     },
-    
+
     getRefItems: function(deep) {
         var refItems = this.callParent(arguments),
             legend = this.legend;
@@ -655,12 +655,12 @@ Ext.define('Ext.form.FieldSet', {
         // Prepend legend items to ensure correct order
         if (legend) {
             refItems.unshift(legend);
-            
+
             if (deep) {
                 refItems.unshift.apply(refItems, legend.getRefItems(true));
             }
         }
-        
+
         return refItems;
     },
 

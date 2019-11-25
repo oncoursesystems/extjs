@@ -5,13 +5,13 @@ topSuite("Ext.data.proxy.SessionStorage", ['Ext.data.ArrayStore'], function() {
         beforeEach(function() {
             proxy = new Ext.data.proxy.SessionStorage({ id: 1 });
         });
-    
+
         describe("instantiation", function() {
             it("should extend Ext.data.proxy.WebStorage", function() {
                 expect(proxy.superclass).toEqual(Ext.data.proxy.WebStorage.prototype);
             });
         });
-    
+
         describe("methods", function() {
             describe("getStorageObject", function() {
                 it("should return localStorage object", function() {
@@ -19,12 +19,13 @@ topSuite("Ext.data.proxy.SessionStorage", ['Ext.data.ArrayStore'], function() {
                     var automationBug = false;
 
                     try {
+                        // eslint-disable-next-line no-unused-expressions
                         sessionStorage === sessionStorage;
                     }
                     catch (e) {
                         automationBug = true;
                     }
-                    
+
                     if (!automationBug) {
                         expect(proxy.getStorageObject()).toEqual(sessionStorage);
                     }

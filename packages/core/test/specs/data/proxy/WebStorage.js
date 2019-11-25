@@ -7,7 +7,7 @@ function() {
         id: "fakeScope",
         fakeScope: true
     };
-    
+
     var fakeStorageObject = {
         items: {},
         getItem: function(key) {
@@ -34,7 +34,7 @@ function() {
                 { name: 'hired', type: 'date', dateFormat: 'd/m/Y' }
             ]
         });
-        
+
         Ext.define('spec.Storage', {
             extend: 'Ext.data.proxy.WebStorage',
             getStorageObject: function() {
@@ -42,7 +42,7 @@ function() {
             }
         });
     });
-    
+
     afterEach(function() {
         fakeStorageObject.clear();
         Ext.undefine('spec.User');
@@ -169,7 +169,6 @@ function() {
             it("should extend Ext.data.proxy.Client", function() {
                 expect(proxy.superclass.superclass).toEqual(Ext.data.proxy.Client.prototype);
             });
-
 
             it("should test getStorageObject in constructor", function() {
                expect(proxy.getStorageObject()).toBe(fakeStorageObject);
@@ -357,7 +356,7 @@ function() {
             expect(proxy.getRecord(4)).toBeNull();
             expect(proxy.getRecord(5)).toBeNull();
         });
-        
+
         it("should remove the ids for the node and its descendants", function() {
             node1.erase();
 
@@ -551,7 +550,6 @@ function() {
 
             spyOn(proxy, 'setRecord').andCallThrough();
 
-
             record = new spec.User({ id: 100, name: 'Ed' });
 
             operation = new Ext.data.operation.Update({
@@ -674,7 +672,7 @@ function() {
                 decodedData;
 
             delete data.id;
-            
+
             proxy.setRecord(record);
             decodedData = Ext.decode(fakeStorageObject.getItem(proxy.getRecordKey(100)));
 
@@ -1157,7 +1155,7 @@ function() {
 
             proxy.clear();
         });
-        
+
         it("should remove all the records", function() {
             expect(fakeStorageObject.getItem('clear-test-1')).toBeNull();
             expect(fakeStorageObject.getItem('clear-test-2')).toBeNull();

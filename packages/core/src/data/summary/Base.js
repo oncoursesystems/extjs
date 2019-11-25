@@ -59,10 +59,10 @@ Ext.define('Ext.data.summary.Base', {
             if (root) {
                 record = record[root];
             }
-            
+
             ret = record[property];
         }
-        
+
         return ret;
     }
 }, function() {

@@ -5,7 +5,7 @@ Ext.define('KitchenSink.view.tab.BasicTabs', {
     extend: 'Ext.tab.Panel',
     xtype: 'basic-tabs',
     controller: 'tab-view',
-    
+
     //<example>
     requires: [
         'KitchenSink.view.tab.TabController'
@@ -15,6 +15,7 @@ Ext.define('KitchenSink.view.tab.BasicTabs', {
         path: 'classic/samples/view/tab/TabController.js'
     }],
     exampleTitle: 'Basic Tabs',
+    cls: Ext.baseCSSPrefix + 'shadow',
     //</example>
     width: 500,
     height: 300,

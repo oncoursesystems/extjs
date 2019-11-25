@@ -25,17 +25,28 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
     // Base container layout using a <center> tag gives us centering.
     profiles: {
         classic: {
-            width: 600
+            width: 600,
+            anchor: '95%'
         },
         neptune: {
-            width: 600
+            width: 600,
+            anchor: '95%'
         },
         graphite: {
-            width: 850
+            width: 850,
+            anchor: '95%'
+        },
+        'classic-material': {
+            width: 800,
+            anchor: '100%'
         }
     },
     layout: 'container',
     autoEl: 'center',
+    // including class to change textAlign for fieldLabel
+    // as its aligning center in theme-material because of 
+    // @autoEl property aligned to center
+    cls: 'status-bar-container',
     defaults: {
         style: 'margin-bottom: 20px'
     },
@@ -57,8 +68,8 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
 
             // defaults to use when the status is cleared:
             defaultText: 'Default status text',
-            //defaultIconCls: 'default-icon',
-        
+            // defaultIconCls: 'default-icon',
+
             // values to set initially:
             text: 'Ready',
             iconCls: 'x-status-valid',
@@ -77,8 +88,8 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
                 text: 'Clear status',
                 handler: 'clearStatus'
             },
-            '-',
-            'Plain Text'
+                    '-',
+                    'Plain Text'
             ]
         }
     }, {
@@ -91,16 +102,16 @@ Ext.define('KitchenSink.view.toolbar.StatusBar', {
         bodyPadding: 10,
         waitMsgTarget: true,
         defaults: {
-            anchor: '95%',
+            anchor: '${anchor}',
             allowBlank: false,
             selectOnFocus: true,
             msgTarget: 'side'
         },
-        items:[{
+        items: [{
             xtype: 'textfield',
             fieldLabel: 'Name',
             blankText: 'Name is required'
-        },{
+        }, {
             xtype: 'datefield',
             fieldLabel: 'Birthdate',
             blankText: 'Birthdate is required'

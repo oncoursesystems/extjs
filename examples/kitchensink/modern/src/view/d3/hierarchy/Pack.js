@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Pack', {
         'Ext.d3.hierarchy.Pack'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/d3/hierarchy/PackController.js'
@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.Pack', {
         type: 'ViewModel',
         path: 'modern/src/view/d3/hierarchy/TreeViewModel.js'
     }],
-    // </example>
+    //</example>
 
     viewModel: {
         type: 'tree'

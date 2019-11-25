@@ -11,6 +11,7 @@ Ext.define('KitchenSink.view.tab.ReorderableTabs', {
     controller: 'reorderable-tabs',
 
     //<example>
+    cls: Ext.baseCSSPrefix + 'shadow',
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/tab/ReorderableTabsController.js'
@@ -44,7 +45,7 @@ Ext.define('KitchenSink.view.tab.ReorderableTabs', {
         html: "I can't be moved",
         reorderable: false
 
-    },{
+    }, {
         title: 'Tab 4',
         html: KitchenSink.DummyText.extraLongText
     }],

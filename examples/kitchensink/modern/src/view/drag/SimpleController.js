@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.drag.SimpleController', {
         });
     },
 
-    onDragMove: function (source, info) {
+    onDragMove: function(source, info) {
         var pos = info.element.current,
             html = Ext.String.format('X: {0}, Y: {1}', Math.round(pos.x), Math.round(pos.y));
 

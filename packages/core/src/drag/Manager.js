@@ -7,7 +7,7 @@
  */
 Ext.define('Ext.drag.Manager', {
     singleton: true,
-    
+
     uses: [
         'Ext.mixin.Inheritable'
     ],
@@ -32,7 +32,7 @@ Ext.define('Ext.drag.Manager', {
     constructor: function() {
         this.targets = {};
         this.nativeTargets = [];
-        
+
         Ext.onReady(this.init, this);
     },
 
@@ -72,7 +72,9 @@ Ext.define('Ext.drag.Manager', {
         me.targets = null;
 
         me.callParent();
-        me.destroying = false;
+
+        // This just makes it hard to ask "was destroy() called?":
+        // me.destroying = false; // removed in 7.0
     },
 
     privates: {
@@ -109,16 +111,16 @@ Ext.define('Ext.drag.Manager', {
             if (proxyEl) {
                 proxyEl.style.visibility = 'hidden';
             }
-            
+
             el = this.elementFromPoint(current.x, current.y);
-            
+
             if (proxyEl) {
                 proxyEl.style.visibility = 'visible';
             }
 
             while (el) {
                 target = elementMap[el.id];
-                
+
                 if (target) {
                     return target;
                 }
@@ -138,12 +140,12 @@ Ext.define('Ext.drag.Manager', {
          */
         getNativeDragInfo: function(e) {
             var info = this.nativeDragInfo;
-            
+
             if (!info) {
                 this.nativeDragInfo = info = new Ext.drag.Info();
                 info.isNative = true;
             }
-            
+
             return info;
         },
 
@@ -235,7 +237,7 @@ Ext.define('Ext.drag.Manager', {
                         possibleTargets[id] = target;
                     }
                 }
-                
+
                 targetMap[id] = target;
                 elementMap[target.getElement().id] = target;
             }
@@ -261,7 +263,7 @@ Ext.define('Ext.drag.Manager', {
 
             // Need to preventDefault to stop browser navigating to the dropped item.
             e.preventDefault();
-            
+
             if (nativeTargets[nativeTargets.length - 1] !== target) {
                 nativeTargets.push(target);
             }
@@ -276,9 +278,9 @@ Ext.define('Ext.drag.Manager', {
          */
         onNativeDragLeave: function(e) {
             var nativeTargets = this.nativeTargets;
-            
+
             Ext.Array.remove(nativeTargets, e.target);
-            
+
             if (nativeTargets.length === 0) {
                 this.nativeDragInfo = null;
             }
@@ -304,7 +306,7 @@ Ext.define('Ext.drag.Manager', {
         onNativeDrop: function(e) {
             // Need to preventDefault to stop browser navigating to the dropped item.
             e.preventDefault();
-            
+
             this.nativeTargets.length = 0;
             this.nativeDragInfo = null;
         },
@@ -339,13 +341,13 @@ Ext.define('Ext.drag.Manager', {
          */
         unregister: function(target) {
             var id;
-            
+
             if (this.destroying) {
                 return;
             }
-            
+
             id = target.getId();
-            
+
             this.targets[id] = null;
             delete this.targets[id];
         }

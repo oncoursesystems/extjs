@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.enterprise.AMF0', {
         'Ext.data.amf.Proxy'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Model',
         path: 'modern/src/model/Pangram.js'
@@ -16,16 +16,16 @@ Ext.define('KitchenSink.view.enterprise.AMF0', {
     profiles: {
         defaults: {
             height: 400,
-            width : 500
+            width: 500
         },
         phone: {
             defaults: {
                 height: undefined,
-                width : undefined
+                width: undefined
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     width: '${width}',

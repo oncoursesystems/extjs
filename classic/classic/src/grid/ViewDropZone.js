@@ -19,7 +19,7 @@ Ext.define('Ext.grid.ViewDropZone', {
         // If the copy flag is set, create a copy of the models
         if (data.copy) {
             records = data.records;
-            
+
             for (i = 0, len = records.length; i < len; i++) {
                 records[i] = records[i].copy();
             }

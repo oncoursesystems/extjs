@@ -61,7 +61,7 @@ Ext.define('Ext.util.Schedulable', {
                 }
             }
         },
-        
+
         /**
          * Unschedules this item with the associated `Ext.util.Scheduler`.
          */
@@ -71,7 +71,7 @@ Ext.define('Ext.util.Schedulable', {
 
             if (me.scheduled) {
                 scheduler = me.getScheduler();
-                
+
                 if (scheduler && !scheduler.destroyed) {
                     scheduler.unscheduleItem(me);
                 }
@@ -79,7 +79,7 @@ Ext.define('Ext.util.Schedulable', {
                 me.scheduled = false;
             }
         },
-        
+
         /**
          * @method sort
          * This method should be overridden by items that have dependencies to insert. The

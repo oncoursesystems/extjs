@@ -217,13 +217,13 @@ Ext.define('Ext.grid.Panel', {
     alternateClassName: ['Ext.list.ListView', 'Ext.ListView', 'Ext.grid.GridPanel'],
 
     requires: ['Ext.view.Table'],
-    
+
     /**
      * @cfg viewType
      * @inheritdoc
      */
     viewType: 'tableview',
-    
+
     /**
      * @property ariaRole
      * @inheritdoc

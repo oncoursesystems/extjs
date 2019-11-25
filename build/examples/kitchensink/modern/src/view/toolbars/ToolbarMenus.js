@@ -93,7 +93,8 @@ Ext.define('KitchenSink.view.toolbars.ToolbarMenus', {
                     }
                 }, {
                     text: 'I like Ext JS',
-                    checked: true,       // when checked has a boolean value, it is assumed to be a CheckItem
+                    // when checked has a boolean value, it is assumed to be a CheckItem
+                    checked: true,
                     checkHandler: 'onItemCheck'
                 }, {
                     xtype: 'menucheckitem',
@@ -132,24 +133,20 @@ Ext.define('KitchenSink.view.toolbars.ToolbarMenus', {
                         items: [{
                             text: 'iOS',
                             checked: true,
-                            group: 'theme',
                             checkHandler: 'onItemCheck',
 
                             // menuradioitems are unique within a named group
                             group: 'theme-choice'
                         }, {
                             text: 'Material',
-                            group: 'theme',
                             checkHandler: 'onItemCheck',
                             group: 'theme-choice'
                         }, {
                             text: 'Neptune',
-                            group: 'theme',
                             checkHandler: 'onItemCheck',
                             group: 'theme-choice'
                         }, {
                             text: 'Triton',
-                            group: 'theme',
                             checkHandler: 'onItemCheck',
                             group: 'theme-choice'
                         }]

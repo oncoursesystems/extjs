@@ -33,7 +33,7 @@ Ext.Configurator = function(cls) {
      * @readonly
      */
     me.superCfg = superCfg;
-    
+
     if (superCfg) {
         /**
          * This object holds an `Ext.Config` value for each config property keyed by name.
@@ -46,7 +46,7 @@ Ext.Configurator = function(cls) {
          * @readonly
          */
         me.configs = ExtObject.chain(superCfg.configs);
-        
+
         /**
          * This object holds a bool value for each cachedConfig property keyed by name.
          * 
@@ -157,7 +157,7 @@ Ext.Configurator.prototype = {
             isObject = value && value.constructor === Object;
             meta = isObject && '$value' in value ? value : null;
             isCached = false;
-            
+
             if (meta) {
                 isCached = !!meta.cached;
                 value = meta.$value;
@@ -167,16 +167,16 @@ Ext.Configurator.prototype = {
             merge = meta && meta.merge;
 
             cfg = configs[name];
-            
+
             if (cfg) {
                 // Only proceed with a mixin if we have a custom merge.
                 if (mixinClass) {
                     merge = cfg.merge;
-                    
+
                     if (!merge) {
                         continue;
                     }
-                    
+
                     // Don't want the mixin meta modifying our own
                     meta = null;
                 }
@@ -230,7 +230,7 @@ Ext.Configurator.prototype = {
                 }
 
                 configs[name] = cfg;
-                
+
                 if (cfg.cached || isCached) {
                     cachedConfigs[name] = true;
                 }
@@ -260,11 +260,11 @@ Ext.Configurator.prototype = {
                 // a "config" (obscure case certainly).
                 //
                 names = cfg.names;
-                
+
                 if (!prototype[s = names.get]) {
                     prototype[s] = cfg.getter || cfg.getGetter();
                 }
-                
+
                 if (!prototype[s = names.set]) {
                     prototype[s] = (meta && meta.evented)
                         ? (cfg.eventedSetter || cfg.getEventedSetter())
@@ -277,9 +277,9 @@ Ext.Configurator.prototype = {
                     configs[name] = cfg = Ext.Object.chain(cfg);
                     cfg.owner = Cls;
                 }
-                
+
                 Ext.apply(cfg, meta);
-                
+
                 delete cfg.$value;
             }
 
@@ -301,14 +301,14 @@ Ext.Configurator.prototype = {
                 else {
                     prototype[configs[name].name] = null;
                 }
-                
+
                 if (name in initMap) {
                     // Only set this to false if we already have it in the map, otherwise,
                     // just leave it out!
                     initMap[name] = false;
                 }
             }
-            
+
             values[name] = value;
         }
     },
@@ -429,7 +429,7 @@ Ext.Configurator.prototype = {
         // calls on a non-cached cfg)
 
         ln = cachedInitList && cachedInitList.length;
-        
+
         if (ln) {
             // This is only ever done on the first instance we configure. Any config in
             // cachedInitList has to be set to the default value to allow any side-effects
@@ -485,7 +485,7 @@ Ext.Configurator.prototype = {
         // IMPORTANT: "this.hasOwnProperty('config')" is how a config applier/updater can
         // tell it is processing the cached config value vs an instance config value.
         instance.config = values;
-        
+
         // There are 2 possibilities here:
         // 1) If it's the first time in this function, we may have had cachedConfigs running.
         //    these configs may have called the getters for any of the normal getters, which
@@ -576,7 +576,7 @@ Ext.Configurator.prototype = {
                 if (!cfg) {
                     //<debug>
                     field = instance.self.prototype[name];
-                    
+
                     if (instance.$configStrict && (typeof field === 'function') && !field.$nullFn) {
                         // In strict mode you cannot override functions
                         Ext.raise('Cannot override method ' + name + ' on ' + instance.$className +
@@ -594,7 +594,7 @@ Ext.Configurator.prototype = {
                     if (!cfg.lazy) {
                         ++remaining;
                     }
-                    
+
                     if (!initListMap[name]) {
                         instance[cfg.names.get] = cfg.initGetter || cfg.getInitGetter();
                     }
@@ -637,7 +637,7 @@ Ext.Configurator.prototype = {
                 // above. Further, since we only process proper Config's here we would
                 // not be skipping them anyway.
                 cfg = configs[name];
-                
+
                 if (cfg && !cfg.lazy) {
                     --remaining;
                     // A proper "config" property so call the setter to set the value.
@@ -802,7 +802,7 @@ Ext.Configurator.prototype = {
             if (this.deprecations[name]) {
                 // See similar logic doc in configure() method.
                 Ext.log.warn(this.deprecations[name]);
-                
+
                 if (!cfg) {
                     continue;
                 }
@@ -823,14 +823,14 @@ Ext.Configurator.prototype = {
                 // because calling setConfig a second time should have the same results -
                 // the first call may have set a function on the instance.
                 prop = instance.self.prototype[name];
-                
+
                 if (strict) {
                     if ((typeof prop === 'function') && !prop.$nullFn) {
                         //<debug>
                         Ext.Error.raise("Cannot override method " + name + " on " +
                                         instance.$className + " instance.");
                         //</debug>
-                        
+
                         continue;
                     }
                     //<debug>
@@ -862,7 +862,7 @@ Ext.Configurator.prototype = {
                     // we go and set it here, taking the value from our definition config
                     // and passing it through finally clear off the getter.
                     instance[names.set](instanceConfig[name]);
-                    
+
                     delete instance[getter];
                 }
             }
@@ -905,7 +905,7 @@ Ext.Configurator.prototype = {
 
             if (n) {
                 ret = Ext.merge({}, ret); // this deep copies sub-objects
-                
+
                 for (i = 0, n = keys.length; i < n; ++i) {
                     this.merge(instance, ret, platformConfig[keys[i]]);
                 }

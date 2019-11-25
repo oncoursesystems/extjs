@@ -24,55 +24,55 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
         if (reader) {
             reader.destroy();
         }
-        
+
         reader = null;
-        
+
         Ext.ClassManager.enableNamespaceParseCache = true;
         Ext.undefine('spec.JsonReader');
         Ext.data.Model.schema.clear(true);
     });
-    
+
     describe("raw data", function() {
         var data, rec;
-        
+
         beforeEach(function() {
             data = {
                 inter: 1
             };
         });
-        
+
         afterEach(function() {
             rec = null;
         });
-        
+
         it("should not set raw data reference by default", function() {
             rec = reader.readRecords([data]).getRecords()[0];
-            
+
             expect(rec.raw).not.toBeDefined();
         });
-        
+
         it('should set raw data reference for a TreeStore record', function() {
             // Simulate TreeStore node
             spec.JsonReader.prototype.isNode = true;
-            
+
             rec = reader.readRecords([data]).getRecords()[0];
-            
+
             expect(rec.raw).toBe(data);
         });
     });
 
     describe("copyFrom", function() {
         var Model, copy;
-        
+
         beforeEach(function() {
             Model = Ext.define(null, {
                 extend: 'Ext.data.Model'
             });
-            
+
             reader.destroy();
             reader = null;
         });
-        
+
         afterEach(function() {
             copy.destroy();
             Model = copy = null;
@@ -176,26 +176,26 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
             var o = {
                 inter: 1
             };
-            
+
             var rec = reader.readRecords([o]).getRecords()[0];
-            
+
             rec.set('inter', 2);
             expect(o.inter).toBe(1);
         });
-        
+
         it("should be able to modify the raw data object for the model if set to false", function() {
             reader.setPreserveRawData(false);
             var o = {
                 inter: 1
             };
-            
+
             var rec = reader.readRecords([o]).getRecords()[0];
-            
+
             rec.set('inter', 2);
             expect(o.inter).toBe(2);
         });
     });
-    
+
     describe("extractors", function() {
         function createReader(cfg) {
             cfg = cfg || {};
@@ -204,10 +204,10 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
             }, cfg));
             reader.buildExtractors(true);
         }
-        
+
         it("should run function extractors in the reader scope", function() {
             var actual;
-            
+
             createReader({
                 successProperty: function() {
                     actual = this;
@@ -220,7 +220,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
             });
             expect(actual).toBe(reader);
         });
-        
+
         /**
          * While testing all of these individually is a bit redundant, it's for completeness
          * to ensure that all of them are run through the proper extractors.
@@ -232,14 +232,14 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     total: 5
                 })).toBe(5);
             });
-            
+
             it("should have no getTotal method if the totalProperty isn't specified", function() {
                 createReader({
                     totalProperty: ''
                 });
                 expect(reader.getTotal).toBeUndefined();
             });
-            
+
             it("should read the specified property name", function() {
                 createReader({
                     totalProperty: 'foo'
@@ -248,7 +248,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     foo: 10
                 })).toBe(10);
             });
-            
+
             it("should accept a function configuration", function() {
                 createReader({
                     totalProperty: function(data) {
@@ -263,7 +263,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     }
                 })).toBe(65);
             });
-            
+
             describe("JSON", function() {
                 it("should read dot notation", function() {
                     createReader({
@@ -277,7 +277,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         }
                     })).toBe(43);
                 });
-                
+
                 it("should read array notation for numeric values", function() {
                     createReader({
                         totalProperty: 'values[0]'
@@ -286,7 +286,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         values: [9]
                     })).toBe(9);
                 });
-                
+
                 it("should read array notation for property names", function() {
                     createReader({
                         totalProperty: '["foo-bar"]'
@@ -295,7 +295,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         'foo-bar': 16
                     })).toBe(16);
                 });
-                
+
                 it("should read array/dot notation", function() {
                     createReader({
                         totalProperty: 'big[0].chain.total'
@@ -308,7 +308,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         }]
                     })).toBe(17);
                 });
-                
+
                 it("should not read dot chains if simple accessors are used", function() {
                     createReader({
                         totalProperty: 'some.big.chain',
@@ -320,7 +320,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 });
             });
         });
-        
+
         describe("success", function() {
             it("should default to success", function() {
                 createReader();
@@ -328,14 +328,14 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     success: true
                 })).toBe(true);
             });
-            
+
             it("should have no getSuccess method if the successProperty isn't specified", function() {
                 createReader({
                     successProperty: ''
                 });
                 expect(reader.getSuccess).toBeUndefined();
             });
-            
+
             it("should read the specified property name", function() {
                 createReader({
                     successProperty: 'foo'
@@ -344,7 +344,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     foo: false
                 })).toBe(false);
             });
-            
+
             it("should accept a function configuration", function() {
                 createReader({
                     successProperty: function(data) {
@@ -359,7 +359,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     }
                 })).toBe(true);
             });
-            
+
             describe("JSON", function() {
                 it("should read dot notation", function() {
                     createReader({
@@ -373,7 +373,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         }
                     })).toBe(true);
                 });
-                
+
                 it("should read array notation for numeric values", function() {
                     createReader({
                         successProperty: 'values[0]'
@@ -382,7 +382,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         values: [false]
                     })).toBe(false);
                 });
-                
+
                 it("should read array notation for property names", function() {
                     createReader({
                         successProperty: '["foo-bar"]'
@@ -391,7 +391,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         'foo-bar': false
                     })).toBe(false);
                 });
-                
+
                 it("should read array/dot notation", function() {
                     createReader({
                         successProperty: 'big[0].chain.success'
@@ -404,7 +404,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         }]
                     })).toBe(true);
                 });
-                
+
                 it("should not read dot chains if simple accessors are used", function() {
                     createReader({
                         successProperty: 'some.big.chain',
@@ -416,20 +416,20 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 });
             });
         });
-        
+
         describe("message", function() {
             it("should default to undefined", function() {
                 createReader();
                 expect(reader.getMessage).toBeUndefined();
             });
-            
+
             it("should have no getMessage method if the messageProperty isn't specified", function() {
                 createReader({
                     successProperty: ''
                 });
                 expect(reader.getSuccess).toBeUndefined();
             });
-            
+
             it("should read the specified property name", function() {
                 createReader({
                     messageProperty: 'foo'
@@ -438,7 +438,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     foo: false
                 })).toBe(false);
             });
-            
+
             it("should accept a function configuration", function() {
                 createReader({
                     messageProperty: function(data) {
@@ -453,7 +453,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     }
                 })).toBe('msg');
             });
-            
+
             describe("JSON", function() {
                 it("should read dot notation", function() {
                     createReader({
@@ -467,7 +467,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         }
                     })).toBe('some message');
                 });
-                
+
                 it("should read array notation for numeric values", function() {
                     createReader({
                         messageProperty: 'values[0]'
@@ -476,7 +476,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         values: ['a message']
                     })).toBe('a message');
                 });
-                
+
                 it("should read array notation for property names", function() {
                     createReader({
                         messageProperty: '["foo-bar"]'
@@ -485,7 +485,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         'foo-bar': 'new msg'
                     })).toBe('new msg');
                 });
-                
+
                 it("should read array/dot notation", function() {
                     createReader({
                         messageProperty: 'big[0].chain.message'
@@ -498,7 +498,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         }]
                     })).toBe('stuff');
                 });
-                
+
                 it("should not read dot chains if simple accessors are used", function() {
                     createReader({
                         messageProperty: 'some.big.chain',
@@ -510,7 +510,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 });
             });
         });
-        
+
         describe("root", function() {
             it("should default to a function returning the main object", function() {
                 var data = [];
@@ -518,7 +518,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 createReader();
                 expect(reader.getRoot(data)).toBe(data);
             });
-            
+
             it("default to a function returning the main object root isn't specified", function() {
                 var data = [];
 
@@ -527,7 +527,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 });
                 expect(reader.getRoot(data)).toBe(data);
             });
-            
+
             it("should read the specified property name", function() {
                 var data = [];
 
@@ -538,7 +538,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     foo: data
                 })).toBe(data);
             });
-            
+
             it("should accept a function configuration", function() {
                 var data = [];
 
@@ -555,7 +555,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     }
                 })).toBe(data);
             });
-            
+
             describe("JSON", function() {
                 it("should read dot notation", function() {
                     var data = [];
@@ -571,7 +571,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         }
                     })).toBe(data);
                 });
-                
+
                 it("should read array notation for numeric values", function() {
                     var data = [];
 
@@ -582,7 +582,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         values: [data]
                     })).toBe(data);
                 });
-                
+
                 it("should read array notation for property names", function() {
                     var data = [];
 
@@ -593,7 +593,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         'foo-bar': data
                     })).toBe(data);
                 });
-                
+
                 it("should read array/dot notation", function() {
                     var data = [];
 
@@ -608,7 +608,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         }]
                     })).toBe(data);
                 });
-                
+
                 it("should not read dot chains if simple accessors are used", function() {
                     var data = [];
 
@@ -667,11 +667,11 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                             model: M,
                             rootProperty: 'data'
                         });
-                        
+
                         var resultSet = reader.read({
                             data: []
                         });
-                        
+
                         expect(resultSet.getGroupData()).toBeNull();
                     });
                 });
@@ -723,7 +723,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                             groups: groupData
                         }));
                     });
-                    
+
                     it("should accept a function configuration", function() {
                         createReader({
                             model: M,
@@ -818,7 +818,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                         createReader({
                             model: M
                         });
-                        
+
                         var resultSet = reader.read([]);
 
                         expect(resultSet.getSummaryData()).toBeNull();
@@ -829,7 +829,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                             model: M,
                             rootProperty: 'data'
                         });
-                        
+
                         var resultSet = reader.read({
                             data: []
                         });
@@ -868,7 +868,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                             summary: summaryData
                         }));
                     });
-                    
+
                     it("should accept a function configuration", function() {
                         createReader({
                             model: M,
@@ -938,7 +938,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 makeSuite(true);
             });
         });
-        
+
         describe("fields", function() {
             var rawOptions = {
                 recordCreator: Ext.identityFn
@@ -955,18 +955,18 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     useSimpleAccessors: simple || false
                 });
             }
-            
+
             afterEach(function() {
                 Ext.undefine('spec.JsonFieldTest');
             });
-            
+
             it("should read the name if no mapping is specified", function() {
                 createReader(['field']);
                 var result = reader.readRecords([{ field: 'val' }], rawOptions).getRecords()[0];
 
                 expect(result.field).toBe('val');
             });
-            
+
             it("should give precedence to the mapping", function() {
                 createReader([{
                     name: 'field',
@@ -976,7 +976,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
                 expect(result.field).toEqual('a value');
             });
-            
+
             it("should accept a function", function() {
                 createReader([{
                     name: 'field',
@@ -994,7 +994,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
                 expect(result.field).toBe(2);
             });
-            
+
             it("should ignore certain falsy mapping values", function() {
                 createReader([{
                     name: 'field',
@@ -1011,7 +1011,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     field2: 'val2',
                     field3: 'val3'
                 }], rawOptions).getRecords()[0];
-                
+
                 expect(result.field).toBe('val');
                 expect(result.field2).toBe('val2');
                 expect(result.field3).toBe('val3');
@@ -1061,7 +1061,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
                     expect(result.field).toBe('mapped');
                 });
-                
+
                 it("should handle dot notation with an undefined property", function() {
                     createReader([{
                         name: 'field',
@@ -1075,7 +1075,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
                     expect(result.field).toBeUndefined(); // default value
                 });
-                
+
                 it("should handle dot notation with nested undefined properties", function() {
                     createReader([{
                         name: 'field',
@@ -1089,7 +1089,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
                     expect(result.field).toBeUndefined(); // default value
                 });
-                
+
                  it("should read array notation for numeric values", function() {
                      createReader([{
                         name: 'field',
@@ -1101,7 +1101,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
                     expect(result.field).toBe('a');
                 });
-                
+
                 it("should read array notation for property names", function() {
                     createReader([{
                         name: 'field',
@@ -1113,7 +1113,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
                     expect(result.field).toBe('woo');
                 });
-                
+
                 it("should read array/dot notation", function() {
                     createReader([{
                         name: 'field',
@@ -1129,7 +1129,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
                     expect(result.field).toBe(45);
                 });
-                
+
                 it("should handle array/dot notation with nested undefined properties", function() {
                     createReader([{
                         name: 'field',
@@ -1145,7 +1145,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
                     expect(result.field).toBeUndefined(); // default value
                 });
-                
+
                 it("should not read dot chains if simple accessors are used", function() {
                     createReader([{
                         name: 'field',
@@ -1154,10 +1154,10 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     var result = reader.readRecords([{
                         'a.long.name': 'sixty'
                     }], rawOptions).getRecords()[0];
-                    
+
                     expect(result.field).toBe('sixty');
                 });
-                
+
                 it("should handle dot chains with undefined values if simple accessors are used", function() {
                     createReader([{
                         name: 'field',
@@ -1431,7 +1431,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     }
                 ]
             });
-            
+
             // Created in global beforeEach
             reader.destroy();
 
@@ -1474,14 +1474,14 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 totalProp: 6,
                 message: 'Failed'
             });
-            
+
             result3 = reader.readRecords({
                 data: data2,
                 successProp: true,
                 totalProp: 6
             });
         });
-        
+
         afterEach(function() {
             Ext.undefine("spec.JsonReaderTest");
         });
@@ -1504,26 +1504,26 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
             expect(recData.bool).toBe(data1.bool);
             expect(recData.inter).toBe(data1.inter);
         });
-        
+
         it("should be able to have fields as reserved words", function() {
             var recData = result1.getRecords()[0].getData();
 
             expect(recData['class']).toBe('person');
         });
-        
+
         it("should read records correctly if there was just a single object instead of an array of data", function() {
             var recData = result3.getRecords()[0].getData();
-            
+
             expect(recData.id).toBe(data2.id);
             expect(recData.floater).toBe(data2.floater);
             expect(recData.bool).toBe(data2.bool);
             expect(recData.inter).toBe(data2.inter);
         });
-        
+
         it("should still read on failure by default", function() {
             expect(result2.getRecords()[0].getId()).toBe(2);
         });
-        
+
         it("should ignore values records/total when success is false & readRecordsOnFailure is false", function() {
             reader.setReadRecordsOnFailure(false);
             result2 = reader.readRecords({
@@ -1542,30 +1542,30 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
             expect(recData.string).toBe('modified/Ed');
         });
-        
+
         it("should be able to load a single record", function() {
             var data = reader.readRecords({
                 data: data1
             }).getRecords()[0].getData();
-            
+
             expect(data.id).toBe(data1.id);
             expect(data.floater).toBe(data1.floater);
             expect(data.bool).toBe(data1.bool);
             expect(data.inter).toBe(data1.inter);
         });
-        
+
         it("should handle record instances being in the data", function() {
             var data = reader.readRecords({
                 data: [data1, new spec.JsonReaderTest(data2)],
                 successProp: true
             }).getRecords()[1].getData();
-            
+
             expect(data.id).toBe(data2.id);
             expect(data.floater).toBe(data2.floater);
             expect(data.bool).toBe(data2.bool);
             expect(data.inter).toBe(data2.inter);
         });
-        
+
         describe("readOptions", function() {
             it("should return what we construct when we pass recordCreator", function() {
                 var records = reader.readRecords({
@@ -1579,7 +1579,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 expect(records[0]).toEqual(data1);
                 expect(records[1]).toEqual(data2);
             });
-            
+
             it("should process mappings", function() {
                 var records = reader.readRecords({
                     data: [{
@@ -1609,7 +1609,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     'id', 'name', 'email'
                 ]
             });
-            
+
             // Created in global beforeEach
             reader.destroy();
 
@@ -1640,7 +1640,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
             resultSet = reader.readRecords(data);
         });
-        
+
         afterEach(function() {
             Ext.undefine('spec.User');
         });
@@ -1801,7 +1801,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     }
                 }
             });
-            
+
             spyOn(Ext.log, 'warn');
 
             Ext.define('spec.Address', {
@@ -1846,11 +1846,11 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     }
                 }
             });
-            
+
             // Created in global beforeEach
             reader.destroy();
         });
-        
+
         afterEach(function() {
             Ext.undefine('spec.User');
             Ext.undefine('spec.Address');
@@ -1933,21 +1933,21 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
 
         it("should call onMetaChange", function() {
             var meta = { some: 'meta data' };
-            
+
             spyOn(reader, 'onMetaChange').andReturn();
             spyOn(reader, 'getRoot').andReturn([]);
-            
+
             reader.readRecords({ metaData: meta });
             expect(reader.onMetaChange).toHaveBeenCalledWith(meta);
         });
-        
+
         it("should accept a custom meta property", function() {
             reader.setMetaProperty('foo.bar.baz');
             reader.buildExtractors(true);
-            
+
             spyOn(reader, 'onMetaChange').andReturn();
             spyOn(reader, 'getRoot').andReturn([]);
-            
+
             var o = {};
 
             var meta = {
@@ -1961,7 +1961,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
             reader.readRecords(meta);
             expect(reader.onMetaChange).toHaveBeenCalledWith(o);
         });
-        
+
     });
 
     describe("reading xhr", function() {
@@ -1990,11 +1990,11 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 }
             });
          });
-         
+
          afterEach(function() {
              Ext.undefine('spec.User');
          });
-        
+
         function doRead(response) {
             return reader.read(response);
         }
@@ -2008,7 +2008,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 it("should return the expected number of records", function() {
                     expect(doRead(goodResponse).getCount()).toBe(3);
                 });
-    
+
                 it("should not return a non-empty dataset", function() {
                     expect(doRead(goodResponse).getRecords().length).toBe(3);
                 });
@@ -2019,7 +2019,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     spyOn(Ext, 'log');
                     spyOn(Ext.Logger, 'warn');
                 });
-                
+
                 it("should not be successful", function() {
                     expect(doRead(badResponse).getSuccess()).toBe(false);
                 });
@@ -2027,7 +2027,7 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                 it("should not return any records", function() {
                     expect(doRead(badResponse).getTotal()).toBe(0);
                 });
-    
+
                 it("should return any empty dataset", function() {
                     expect(doRead(badResponse).getRecords().length).toBe(0);
                 });

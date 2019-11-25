@@ -687,7 +687,7 @@ Ext.define('Ext.chart.AbstractChart', {
         if (this.isConfiguring) {
             return;
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var seriesList = this.getSeries(),
             ln = seriesList.length,
@@ -1051,7 +1051,7 @@ Ext.define('Ext.chart.AbstractChart', {
         var me = this,
             map = me.surfaceMap,
             surface;
-        
+
         id = id || 'main';
         type = type || id;
 
@@ -1384,9 +1384,9 @@ Ext.define('Ext.chart.AbstractChart', {
         var me = this,
             chartSurface,
             sprites, styles, sprite, style, key, attr, isText, i, ln;
-        
+
         me.getSprites();
-        
+
         chartSurface = me.getSurface('chart');
         sprites = chartSurface.getItems();
         styles = theme.getSprites();
@@ -1885,7 +1885,7 @@ Ext.define('Ext.chart.AbstractChart', {
             legendRect;
 
         me.cancelChartLayout();
-        
+
         //<debug>
         // Unlike the 'layout' event that is called after all chart layouts are done
         // and none are pending, this event fires before the start of each layout.
@@ -2178,7 +2178,7 @@ Ext.define('Ext.chart.AbstractChart', {
 
     applyHighlightItem: function(newHighlightItem, oldHighlightItem) {
         var i1, i2, s1, s2;
-        
+
         if (newHighlightItem === oldHighlightItem) {
             return;
         }
@@ -2186,7 +2186,7 @@ Ext.define('Ext.chart.AbstractChart', {
         if (Ext.isObject(newHighlightItem) && Ext.isObject(oldHighlightItem)) {
             i1 = newHighlightItem;
             i2 = oldHighlightItem;
-            s1 = i1.sprite && (i1.sprite[0] || i1.sprite),
+            s1 = i1.sprite && (i1.sprite[0] || i1.sprite);
             s2 = i2.sprite && (i2.sprite[0] || i2.sprite);
 
             if (s1 === s2 && i1.index === i2.index) {

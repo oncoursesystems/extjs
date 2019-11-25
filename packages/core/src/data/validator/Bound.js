@@ -117,7 +117,7 @@ Ext.define('Ext.data.validator.Bound', {
         if (value === undefined || value === null) {
             return this.getEmptyMessage();
         }
-        
+
         return true;
     },
 

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-global-assign
 Ext = window.Ext || {};
 Ext.samples = {
     samplesCatalog: [

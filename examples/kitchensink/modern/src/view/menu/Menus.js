@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.menu.Menus', {
         'Ext.menu.Menu'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/menu/MenusController.js'
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.menu.Menus', {
     },
 
     cls: 'demo-center-text',
-    // </example>
+    //</example>
 
     autoSize: true,
     bodyPadding: 20,

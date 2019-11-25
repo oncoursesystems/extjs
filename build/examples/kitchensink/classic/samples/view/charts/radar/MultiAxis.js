@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.charts.radar.MultiAxis', {
     extend: 'Ext.Panel',
     xtype: 'radar-multi-axis',
     controller: 'radar-basic',
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.charts.radar.MultiAxis', {
         path: 'app/store/Climate.js'
     }],
     layout: 'vbox',
-    // </example>
+    //</example>
 
     width: 650,
 

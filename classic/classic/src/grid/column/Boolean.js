@@ -85,7 +85,7 @@ Ext.define('Ext.grid.column.Boolean', {
         if (!value || value === 'false') {
             return this.falseText;
         }
-        
+
         return this.trueText;
     },
 

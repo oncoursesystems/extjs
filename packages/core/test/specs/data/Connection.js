@@ -2,7 +2,7 @@
 topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
     var originalExtAsap,
         makeConnection, connection, request;
-        
+
     beforeEach(function() {
         MockAjaxManager.addMethods();
 
@@ -17,7 +17,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             if (scope != null || parameters != null) {
                 fn = Ext.Function.bind(fn, scope, parameters);
             }
-            
+
             fn();
         };
     });
@@ -32,14 +32,14 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
     describe("beforerequest", function() {
         it("should fire a beforerequest event", function() {
             makeConnection();
-            
+
             var o = {
                     fn: Ext.emptyFn
                 },
                 options = {
                     url: 'foo'
                 };
-            
+
             spyOn(o, 'fn');
             connection.on('beforerequest', o.fn);
             connection.request(options);
@@ -55,7 +55,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             request = connection.request({
                 url: 'foo'
             });
-            
+
             expect(Ext.promise.Promise.is(request)).toBe(true);
         });
 
@@ -67,7 +67,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     }
                 },
                 options, scope;
-            
+
             spyOn(o, 'fn').andCallThrough();
             options = {
                 url: 'foo',
@@ -417,7 +417,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
 
             it("should use the passed scope and should have the options passed", function() {
                 makeConnection();
-                
+
                 var o = {},
                     options = {
                         url: 'foo',
@@ -593,11 +593,11 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             makeConnection({
                 async: false
             });
-            
+
             var response = connection.request({
                 url: 'foo'
             });
-            
+
             expect(response.request.async).toBeFalsy();
         });
     });
@@ -674,7 +674,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                 });
                 expect(request.xhr.headers['Content-Type']).toBeUndefined();
             });
-            
+
             it("should not set the content type if we explicitly set null", function() {
                 makeConnection();
                 request = connection.request({
@@ -686,7 +686,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                 });
                 expect(request.xhr.headers['Content-Type']).toBeUndefined();
             });
-            
+
             it("should not set the content type if we explicitly set undefined", function() {
                 makeConnection();
                 request = connection.request({
@@ -826,7 +826,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             makeConnection();
             expect(connection.isLoading()).toBe(false);
         });
-        
+
         it("should use the most recent request if one is not passed", function() {
             makeConnection();
             connection.request({
@@ -834,7 +834,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             });
             expect(connection.isLoading()).toBe(true);
         });
-        
+
         it("should return false if the most recent request has loaded", function() {
             makeConnection();
             request = connection.request({
@@ -890,7 +890,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             var r1 = connection.request({
                 url: 'r1'
             });
-    
+
             var r2 = connection.request({
                 url: 'r2'
             });
@@ -902,18 +902,18 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
 
         it("should fire failure/callback", function() {
             makeConnection();
-            
+
             var o = {
                     fn: Ext.emptyFn
                 },
                 spy = spyOn(o, 'fn');
-            
+
             request = connection.request({
                 url: 'foo',
                 failure: o.fn,
                 callback: o.fn
             });
-            
+
             connection.abort(request);
             expect(spy.callCount).toEqual(2);
         });
@@ -950,7 +950,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             expect(fn).toHaveBeenCalled();
         });
     });
-    
+
     describe("abortAll", function() {
         it("should do nothing if there's no active requests", function() {
             makeConnection();
@@ -963,18 +963,18 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             connection.abortAll();
             expect(request.aborted).toBeFalsy();
         });
-        
+
         it("should abort all active requests", function() {
             makeConnection();
-            
+
             var r1 = connection.request({
                 url: 'r1'
             });
-            
+
             var r2 = connection.request({
                 url: 'r2'
             });
-            
+
             connection.abortAll();
             expect(r1.aborted).toBe(true);
             expect(r2.aborted).toBe(true);
@@ -1008,9 +1008,9 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     status: 200
                 });
             });
-            
+
             waits(1);
-            
+
             runs(function() {
                 expect(fn).not.toHaveBeenCalled();
             });
@@ -1018,7 +1018,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
 
         it("should fire failure/callback", function() {
             var fn = jasmine.createSpy('failure and callback');
-            
+
             runs(function() {
                 makeConnection();
                 request = connection.request({
@@ -1032,7 +1032,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             waitsFor(function() {
                 return fn.callCount === 2;
             }, "fn was never called");
-            
+
             runs(function() {
                 expect(fn.callCount).toBe(2);
             });
@@ -1078,7 +1078,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
         beforeEach(function() {
             makeConnection();
         });
-        
+
         it("should fire the success handler on a successful request", function() {
             var o = {
                     fn: function() {
@@ -1086,7 +1086,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     }
                 },
                 scope;
-            
+
             spyOn(o, 'fn').andCallThrough();
             request = connection.request({
                 url: 'foo',
@@ -1107,7 +1107,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     }
                 },
                 scope;
-            
+
             spyOn(o, 'fn').andCallThrough();
             request = connection.request({
                 url: 'foo',
@@ -1126,7 +1126,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     fn: Ext.emptyFn
                 },
                 scope;
-            
+
             spyOn(o, 'fn');
             connection.on('requestcomplete', o.fn);
             request = connection.request({
@@ -1142,7 +1142,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
 
         it("should copy properties to response", function() {
             var o = {};
-            
+
             request = connection.request({
                 url: 'foo',
                 success: function(response) {
@@ -1163,10 +1163,10 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             expect(o.responseText).toEqual('response');
             expect(o.responseXML).toEqual({});
         });
-        
+
         it("should not fire the requestexception event", function() {
             var fn = jasmine.createSpy("request successful");
-            
+
             connection.on('requestexception', fn);
             request = connection.request({
                 url: 'foo'
@@ -1176,10 +1176,10 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             });
             expect(fn).not.toHaveBeenCalled();
         });
-        
+
         describe("response headers", function() {
             var response;
-            
+
             beforeEach(function() {
                 connection.request({
                     url: 'foo',
@@ -1187,7 +1187,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                         response = r;
                     }
                 });
-                
+
                 connection.mockComplete({
                     status: 200,
                     statusText: 'statusText',
@@ -1196,20 +1196,20 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     responseXML: {}
                 });
             });
-            
+
             afterEach(function() {
                 response = null;
             });
-            
+
             it("should have getAllResponseHeaders method", function() {
                 var headers = response.getAllResponseHeaders();
-                
+
                 expect(headers).toEqual({ foo: 'bar', baz: 'qux' });
             });
-            
+
             it("should have getResponseHeader method", function() {
                 var header = response.getResponseHeader('FOO');
-                
+
                 expect(header).toBe('bar');
             });
         });
@@ -1219,7 +1219,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
         beforeEach(function() {
             makeConnection();
         });
-        
+
         it("should fire the failure handler on a failed request", function() {
             var o = {
                     fn: function() {
@@ -1227,7 +1227,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     }
                 },
                 scope;
-            
+
             spyOn(o, 'fn').andCallThrough();
             request = connection.request({
                 url: 'foo',
@@ -1248,7 +1248,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     }
                 },
                 scope;
-            
+
             spyOn(o, 'fn').andCallThrough();
             request = connection.request({
                 url: 'foo',
@@ -1267,7 +1267,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     fn: Ext.emptyFn
                 },
                 scope;
-            
+
             spyOn(o, 'fn');
             connection.on('requestexception', o.fn);
             request = connection.request({
@@ -1280,10 +1280,10 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             });
             expect(o.fn).toHaveBeenCalled();
         });
-        
+
         describe("response headers", function() {
             var response;
-            
+
             beforeEach(function() {
                 connection.request({
                     url: 'foo',
@@ -1291,7 +1291,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                         response = r;
                     }
                 });
-                
+
                 connection.mockComplete({
                     status: 404,
                     statusText: 'statusText',
@@ -1300,98 +1300,98 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     responseXML: {}
                 });
             });
-            
+
             afterEach(function() {
                 response = null;
             });
-            
+
             it("should have getAllResponseHeaders method", function() {
                 var headers = response.getAllResponseHeaders();
-                
+
                 expect(headers).toEqual({ foo: 'bar', baz: 'qux' });
             });
-            
+
             it("should have getResponseHeader method", function() {
                 var header = response.getResponseHeader('FOO');
-                
+
                 expect(header).toBe('bar');
             });
         });
     });
-    
+
     xdescribe("uploads", function() {
         var form, submitSpy, request;
-        
+
         function makeForm(cfg) {
             form = document.createElement('form');
-            
+
             if (cfg) {
                 Ext.fly(form).set(cfg);
             }
-            
+
             submitSpy = spyOn(form, 'submit');
         }
-        
+
         function makeRequest(cfg) {
             cfg = Ext.apply({
                 url: 'frobbe',
                 form: form,
                 isUpload: true
             }, cfg);
-            
+
             request = connection.request(cfg);
-            
+
             return request;
         }
-        
+
         beforeEach(function() {
             makeConnection();
         });
-        
+
         afterEach(function() {
             if (request) {
                 request.destroy();
             }
-            
+
             if (form) {
                 form.submit = null;
                 Ext.removeNode(form);
             }
-            
+
             form = submitSpy = request = null;
         });
-        
+
         describe("creating", function() {
             it("should create Form request when isUpload flag is set", function() {
                 makeForm();
                 makeRequest();
-                
+
                 expect(request instanceof Ext.data.request.Form).toBe(true);
             });
-            
+
             it("should create Form request when form has multipart enoding", function() {
                 makeForm({
                     isUpload: false,
                     enctype: 'multipart/form-data'
                 });
                 makeRequest();
-                
+
                 expect(request instanceof Ext.data.request.Form).toBe(true);
             });
         });
-        
+
         describe("submitting", function() {
             describe("params", function() {
                 var nodes;
-                
+
                 beforeEach(function() {
                     makeForm();
-                    
+
                     submitSpy.andCallFake(function() {
                         var childNodes = this.childNodes;
-                        
+
                         nodes = [];
-                        
+
                         for (var i = 0, len = childNodes.length; i < len; i++) {
                             nodes[i] = {
                                 name: childNodes[i].getAttribute('name'),
@@ -1400,136 +1400,136 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                         }
                     });
                 });
-                
+
                 afterEach(function() {
                     nodes = null;
                 });
-                
+
                 it("should pass params as hidden input fields", function() {
                     makeRequest({
                         params: {
                             foo: 'bar'
                         }
                     });
-                    
+
                     expect(nodes[0].name).toBe('foo');
                     expect(nodes[0].value).toBe('bar');
                 });
-                
+
                 it("should pass array params", function() {
                     makeRequest({
                         params: {
                             frobbe: ['throbbe', 'durgle']
                         }
                     });
-                    
+
                     expect(nodes[0].name).toBe('frobbe');
                     expect(nodes[0].value).toBe('throbbe');
-                    
+
                     expect(nodes[1].name).toBe('frobbe');
                     expect(nodes[1].value).toBe('durgle');
                 });
-                
+
                 it("should clean up child nodes after submitting", function() {
                     makeRequest({
                         params: {
                             bonzo: 'xyzzy'
                         }
                     });
-                    
+
                     expect(nodes[0].name).toBe('bonzo');
                     expect(form.childNodes.length).toBe(0);
                 });
             });
         });
-        
+
         describe("cleaning up", function() {
             var frame;
-            
+
             function mockComplete() {
                 request.onComplete();
             }
-            
+
             beforeEach(function() {
                 makeForm();
             });
-            
+
             afterEach(function() {
                 frame = null;
             });
-            
+
             describe("after onComplete", function() {
                 beforeEach(function() {
                     makeRequest();
-            
+
                     frame = request.frame;
-                    
+
                     mockComplete();
                 });
-                
+
                 it("should null iframe reference", function() {
                     expect(request.frame).toBe(null);
                 });
-                
+
                 it("should remove iframe DOM node", function() {
                     expect(frame.dom).toBe(null);
                 });
             });
-            
+
             describe("after abort", function() {
                 beforeEach(function() {
                     makeRequest();
-            
+
                     frame = request.frame;
-                    
+
                     request.abort();
                 });
-                
+
                 it("should null iframe reference", function() {
                     expect(request.frame).toBe(null);
                 });
-                
+
                 it("should remove iframe DOM node", function() {
                     expect(frame.dom).toBe(null);
                 });
             });
-            
+
             describe("after timeout", function() {
                 beforeEach(function() {
                     runs(function() {
                         makeRequest({ timeout: 1 });
-                        
+
                         frame = request.frame;
                     });
-                    
+
                     jasmine.waitAWhile();
                 });
-                
+
                 it("should null iframe reference", function() {
                     expect(request.frame).toBe(null);
                 });
-                
+
                 it("should remove iframe DOM node", function() {
                     expect(frame.dom).toBe(null);
                 });
             });
         });
-        
+
         describe("successful requests", function() {
             var frame, successSpy, callbackSpy, fakeScope;
-            
+
             function mockComplete(data) {
                 if (data) {
                     request.frame.dom.contentDocument.body.innerText = Ext.JSON.encode(data);
                 }
-                
+
                 request.onComplete();
             }
-            
+
             beforeEach(function() {
                 runs(function() {
                     makeForm();
-                
+
                     successSpy = jasmine.createSpy('success');
                     callbackSpy = jasmine.createSpy('callback');
                     fakeScope = {};
@@ -1539,49 +1539,49 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                         callback: callbackSpy,
                         scope: fakeScope
                     });
-                
+
                     frame = request.frame;
                 });
-                
+
                 jasmine.waitAWhile();
             });
-            
+
             afterEach(function() {
                 // This is to avoid making tests asynchronous
                 if (frame) {
                     frame.destroy();
                 }
-                
+
                 frame = successSpy = callbackSpy = fakeScope = null;
             });
-            
+
             describe("success handler", function() {
                 it("should fire the handler", function() {
                     mockComplete('foo');
-                    
+
                     expect(successSpy).toHaveBeenCalled();
                 });
-                
+
                 it("should call the handler in proper scope", function() {
                     mockComplete('bar');
-                    
+
                     expect(successSpy.mostRecentCall.scope).toBe(fakeScope);
                 });
-                
+
                 it("should pass response as the first argument", function() {
                     mockComplete('bonzo');
-                    
+
                     var response = successSpy.mostRecentCall.args[0];
-                    
+
                     expect(response.status).toBe(200);
                     expect(response.responseText).toBe('"bonzo"');
                 });
-                
+
                 it("should pass the original options as the second argument", function() {
                     mockComplete('mymse');
-                    
+
                     var options = successSpy.mostRecentCall.args[1];
-                    
+
                     expect(options).toEqual({
                         url: 'frobbe',
                         isUpload: true,
@@ -1592,25 +1592,25 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("callback", function() {
                 it("should fire the callback", function() {
                     mockComplete('frob');
-                    
+
                     expect(callbackSpy).toHaveBeenCalled();
                 });
-                
+
                 it("should fire callback in the proper scope", function() {
                     mockComplete('qux');
-                    
+
                     expect(callbackSpy.mostRecentCall.scope).toBe(fakeScope);
                 });
-                
+
                 it("should pass original options as the first argument", function() {
                     mockComplete('xyzzy');
-                    
+
                     var options = callbackSpy.mostRecentCall.args[0];
-                    
+
                     expect(options).toEqual({
                         form: form,
                         isUpload: true,
@@ -1620,71 +1620,71 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                         scope: fakeScope
                     });
                 });
-                
+
                 it("should pass success flag as the second argument", function() {
                     mockComplete('zymbo');
-                    
+
                     var success = callbackSpy.mostRecentCall.args[1];
-                    
+
                     expect(success).toBe(true);
                 });
-                
+
                 it("should pass response as the third argument", function() {
                     mockComplete('blergo');
-                    
+
                     var response = callbackSpy.mostRecentCall.args[2];
-                    
+
                     // responseXML is a reference to the already-deceased iframe document
                     delete response.responseXML;
-                    
+
                     expect(response).toEqual({
                         status: 200,
                         responseText: '"blergo"'
                     });
                 });
             });
-            
+
             describe("events", function() {
                 var eventSpy;
-                
+
                 beforeEach(function() {
                     eventSpy = jasmine.createSpy('requestcomplete');
-                    
+
                     connection.on('requestcomplete', eventSpy);
-                    
+
                     mockComplete('foo');
                 });
-                
+
                 afterEach(function() {
                     connection.un('requestcomplete', eventSpy);
-                    
+
                     eventSpy = null;
                 });
-                
+
                 it("should fire requestcomplete event", function() {
                     expect(eventSpy).toHaveBeenCalled();
                 });
-                
+
                 it("should pass the connection as the first argument", function() {
                     var owner = eventSpy.mostRecentCall.args[0];
-                    
+
                     expect(owner).toBe(connection);
                 });
-                
+
                 it("should pass response as the second argument", function() {
                     var response = eventSpy.mostRecentCall.args[1];
-                    
+
                     delete response.responseXML;
-                    
+
                     expect(response).toEqual({
                         status: 200,
                         responseText: '"foo"'
                     });
                 });
-                
+
                 it("should pass original options as the third argument", function() {
                     var options = eventSpy.mostRecentCall.args[2];
-                    
+
                     expect(options).toEqual({
                         form: form,
                         isUpload: true,
@@ -1695,40 +1695,40 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("promises", function() {
                 var resolveSpy, rejectSpy;
-                
+
                 beforeEach(function() {
                     resolveSpy = jasmine.createSpy('resolve');
                     rejectSpy  = jasmine.createSpy('reject');
-                    
+
                     request.then(resolveSpy, rejectSpy);
-                    
+
                     runs(function() {
                         mockComplete('frumble');
                     });
-                    
+
                     waitsForSpy(resolveSpy, 'promise to resolve', 1000);
                 });
-                
+
                 afterEach(function() {
                     resolveSpy = rejectSpy = null;
                 });
-                
+
                 it("should resolve promise", function() {
                     expect(resolveSpy).toHaveBeenCalled();
                 });
-                
+
                 it("should not reject promise", function() {
                     expect(rejectSpy).not.toHaveBeenCalled();
                 });
-                
+
                 it("should pass response to the resolve callback", function() {
                     var response = resolveSpy.mostRecentCall.args[0];
-                    
+
                     delete response.responseXML;
-                    
+
                     expect(response).toEqual({
                         status: 200,
                         responseText: '"frumble"'
@@ -1736,25 +1736,25 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                 });
             });
         });
-        
+
         function makeFailSuite(options) {
             var name = options.name,
                 requestOptions = options.options, // duh!
                 wantResponse = options.want,
                 failFn = options.failFn;
-            
+
             describe(name, function() {
                 var frame, failureSpy, callbackSpy, fakeScope,
                     eventSpy, resolveSpy, rejectSpy;
-                
+
                 function mockComplete() {
                     // Error messages are expected
                     spyOn(Ext, 'log');
-                    
+
                     spyOn(request, 'getDoc');
                     request.onComplete();
                 }
-                
+
                 function expectResponse(response, relevant) {
                     relevant = Ext.apply({
                         request: request,
@@ -1763,20 +1763,20 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                         getResponseHeader: request._getHeader,
                         getAllResponseHeaders: request._getHeaders
                     }, relevant);
-                    
+
                     expect(response).toEqual(relevant);
                 }
-                
+
                 function expectOptions(options, relevant) {
                     relevant = Ext.apply({
                         form: form,
                         isUpload: true,
                         url: 'frobbe'
                     }, relevant, requestOptions);
-                    
+
                     expect(options).toEqual(relevant);
                 }
-                
+
                 function completeOrFail(request) {
                     if (failFn) {
                         failFn(request);
@@ -1785,75 +1785,75 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                         mockComplete();
                     }
                 }
-                
+
                 beforeEach(function() {
                     runs(function() {
                         makeForm();
                     });
-                    
+
                     runs(function() {
                         failureSpy = jasmine.createSpy('failure');
                         callbackSpy = jasmine.createSpy('callback');
                         fakeScope = {};
-                    
+
                         eventSpy = jasmine.createSpy('requestexception');
                         connection.on('requestexception', eventSpy);
-                        
+
                         resolveSpy = jasmine.createSpy('resolve');
                         rejectSpy  = jasmine.createSpy('reject');
-                        
+
                         makeRequest(Ext.apply({
                             failure: failureSpy,
                             callback: callbackSpy,
                             scope: fakeScope
                         }, requestOptions));
-                    
+
                         request.then(resolveSpy, rejectSpy);
-                        
+
                         frame = request.frame;
                     });
-                    
+
                     jasmine.waitAWhile();
                 });
-                
+
                 afterEach(function() {
                     // This is to avoid making tests asynchronous
                     if (frame) {
                         frame.destroy();
                     }
-                    
+
                     connection.un('requestexception', eventSpy);
-                    
+
                     frame = failureSpy = callbackSpy = fakeScope = null;
                     eventSpy = resolveSpy = rejectSpy = null;
                 });
-                
+
                 describe("failure handler", function() {
                     beforeEach(function() {
                         runs(function() {
                             completeOrFail(request);
                         });
-                        
+
                         waitsForSpy(failureSpy, 'failure handler', 1000);
                     });
-                    
+
                     it("should fire the handler", function() {
                         expect(failureSpy).toHaveBeenCalled();
                     });
-                    
+
                     it("should fire the handler in the proper scope", function() {
                         expect(failureSpy.mostRecentCall.scope).toBe(fakeScope);
                     });
-                    
+
                     it("should pass response as the first argument", function() {
                         var response = failureSpy.mostRecentCall.args[0];
-                        
+
                         expectResponse(response, wantResponse);
                     });
-                    
+
                     it("should pass original options as the second argument", function() {
                         var options = failureSpy.mostRecentCall.args[1];
-                        
+
                         expectOptions(options, {
                             callback: callbackSpy,
                             failure: failureSpy,
@@ -1861,75 +1861,75 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                         });
                     });
                 });
-                
+
                 describe("callback", function() {
                     beforeEach(function() {
                         runs(function() {
                             completeOrFail(request);
                         });
-                        
+
                         waitsForSpy(callbackSpy, 'callback', 1000);
                     });
-                    
+
                     it("should fire the callback", function() {
                         expect(callbackSpy).toHaveBeenCalled();
                     });
-                    
+
                     it("should fire the callback in the proper scope", function() {
                         expect(callbackSpy.mostRecentCall.scope).toBe(fakeScope);
                     });
-                    
+
                     it("should pass original options as the first argument", function() {
                         var options = callbackSpy.mostRecentCall.args[0];
-                        
+
                         expectOptions(options, {
                             callback: callbackSpy,
                             failure: failureSpy,
                             scope: fakeScope
                         });
                     });
-                    
+
                     it("should pass success flag as the second argument", function() {
                         var success = callbackSpy.mostRecentCall.args[1];
-                        
+
                         expect(success).toBe(false);
                     });
-                    
+
                     it("should pass response as the third argument", function() {
                         var response = callbackSpy.mostRecentCall.args[2];
-                        
+
                         expectResponse(response, wantResponse);
                     });
                 });
-                
+
                 describe("events", function() {
                     beforeEach(function() {
                         runs(function() {
                             completeOrFail(request);
                         });
-                        
+
                         waitsForSpy(eventSpy, 'requestexception event', 1000);
                     });
-                    
+
                     it("should fire requestexception event", function() {
                         expect(eventSpy).toHaveBeenCalled();
                     });
-                    
+
                     it("should pass the connection as the first argument", function() {
                         var owner = eventSpy.mostRecentCall.args[0];
-                        
+
                         expect(owner).toBe(connection);
                     });
-                    
+
                     it("should pass response as the second argument", function() {
                         var response = eventSpy.mostRecentCall.args[1];
-                        
+
                         expectResponse(response, wantResponse);
                     });
-                    
+
                     it("should pass original options as the third argument", function() {
                         var options = eventSpy.mostRecentCall.args[2];
-                        
+
                         expectOptions(options, {
                             callback: callbackSpy,
                             failure: failureSpy,
@@ -1937,33 +1937,33 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                         });
                     });
                 });
-                
+
                 describe("promises", function() {
                     beforeEach(function() {
                         runs(function() {
                             completeOrFail(request);
                         });
-                        
+
                         waitsForSpy(rejectSpy, 'promise to be rejected', 1000);
                     });
-                    
+
                     it("should not resolve promise", function() {
                         expect(resolveSpy).not.toHaveBeenCalled();
                     });
-                    
+
                     it("should reject promise", function() {
                         expect(rejectSpy).toHaveBeenCalled();
                     });
-                    
+
                     it("should pass response to the reject callback", function() {
                         var response = rejectSpy.mostRecentCall.args[0];
-                        
+
                         expectResponse(response, wantResponse);
                     });
                 });
             });
         }
-        
+
         makeFailSuite({
             name: "failed requests",
             want: {
@@ -1972,7 +1972,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                 responseText: '{"success":false, "message":"Could not acquire a suitable connection for the file upload service."}'
             }
         });
-        
+
         makeFailSuite({
             name: "aborted requests",
             want: {
@@ -1985,7 +1985,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                 request.abort();
             }
         });
-        
+
         makeFailSuite({
             name: "timed out requests",
             options: {
@@ -2003,12 +2003,12 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
 
     describe("promises", function() {
         var request, resolveSpy, rejectSpy;
-        
+
         function mockRequest(options, complete, status) {
             var request = makeRequest(options);
 
             attachSpies();
-            
+
             if (complete) {
                 connection.mockComplete({
                     status: status || 200
@@ -2022,7 +2022,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             });
 
             request = connection.request(options);
-            
+
             return request;
         }
 
@@ -2035,22 +2035,22 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
         function attachSpies(qq) {
             request.then(resolveSpy, rejectSpy);
         }
-        
+
         beforeEach(function() {
             makeConnection();
-            
+
             resolveSpy = jasmine.createSpy('resolve');
             rejectSpy  = jasmine.createSpy('reject');
         });
-        
+
         afterEach(function() {
             if (request) {
                 request.destroy();
             }
-            
+
             request = resolveSpy = rejectSpy = null;
         });
-        
+
         describe("success", function() {
             function makeSuite(name, beforeFn) {
                 describe(name, function() {
@@ -2064,14 +2064,14 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     it("should resolve promise", function() {
                         expect(resolveSpy).toHaveBeenCalled();
                     });
-                    
+
                     it("should not reject promise", function() {
                         expect(rejectSpy).not.toHaveBeenCalled();
                     });
-                    
+
                     it("should pass result to the resolve callback", function() {
                         var args = resolveSpy.mostRecentCall.args[0];
-                        
+
                         expect(args.status).toBe(200);
                     });
                 });
@@ -2087,41 +2087,41 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                 attachSpies(true);
             });
         });
-        
+
         describe("beforerequest handler returning false", function() {
             var options;
-            
+
             beforeEach(function() {
                 runs(function() {
                     options = {};
                     connection.on('beforerequest', function() { return false; });
                     mockRequest(options);
                 });
-                
+
                 waitsForSpy(rejectSpy, 'promise to be rejected', 1000);
             });
-            
+
             afterEach(function() {
                 options = null;
             });
-            
+
             it("should reject promise", function() {
                 expect(rejectSpy).toHaveBeenCalled();
             });
-            
+
             it("should not resolve promise", function() {
                 expect(resolveSpy).not.toHaveBeenCalled();
             });
-            
+
             it("should pass options to the reject callback", function() {
                 var args = rejectSpy.mostRecentCall.args[0];
-                
+
                 expect(args).toEqual([options, false, {
                     status: -1, statusText: 'Request cancelled in beforerequest event handler'
                 }]);
             });
         });
-        
+
         describe("timeout", function() {
             function makeSuite(name, beforeFn) {
                 describe(name, function() {
@@ -2132,14 +2132,14 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     it("should reject promise", function() {
                         expect(rejectSpy).toHaveBeenCalled();
                     });
-                    
+
                     it("should not resolve promise", function() {
                         expect(resolveSpy).not.toHaveBeenCalled();
                     });
-                    
+
                     it("should pass result to the reject callback", function() {
                         var args = rejectSpy.mostRecentCall.args[0];
-                        
+
                         expect(args.timedout).toBe(true);
                     });
                 });
@@ -2159,7 +2159,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                 waitsForSpy(rejectSpy, 'promise to be rejected', 1000);
             });
         });
-        
+
         describe("abort", function() {
             function makeSuite(name, beforeFn) {
                 describe(name, function() {
@@ -2173,14 +2173,14 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     it("should reject promise", function() {
                         expect(rejectSpy).toHaveBeenCalled();
                     });
-                    
+
                     it("should not resolve promise", function() {
                         expect(resolveSpy).not.toHaveBeenCalled();
                     });
-                    
+
                     it("should pass result to the reject callback", function() {
                         var args = rejectSpy.mostRecentCall.args[0];
-                        
+
                         expect(args.aborted).toBe(true);
                     });
                 });
@@ -2197,7 +2197,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                 attachSpies();
             });
         });
-        
+
         describe("failure", function() {
             function makeSuite(name, beforeFn) {
                 describe(name, function() {
@@ -2211,14 +2211,14 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                     it("should reject promise", function() {
                         expect(rejectSpy).toHaveBeenCalled();
                     });
-                
+
                     it("should not resolve promise", function() {
                         expect(resolveSpy).not.toHaveBeenCalled();
                     });
-                
+
                     it("should pass result to the reject callback", function() {
                         var args = rejectSpy.mostRecentCall.args[0];
-                    
+
                         expect(args.status).toBe(404);
                     });
                 });
@@ -2241,7 +2241,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
             makeConnection({
                 async: false
             });
-            
+
             var response = connection.request({
                 url: 'foo'
             }),
@@ -2264,7 +2264,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                 url: 'foo',
                 binaryData: [0, 1, 2, 3]
             });
-            
+
             if (nativeBinaryPost) {
                 expect(request.xhr).not.toEqual(jasmine.any(Ext.data.flash.BinaryXhr));
             }
@@ -2273,7 +2273,7 @@ topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
                 Ext.data.flash.BinaryXhr.flashPolyfillEl.remove();
             }
         });
-        
+
         // Tests in case of browser support for binary posting
         if (nativeBinaryPost) {
             it("should create a typed array", function() {

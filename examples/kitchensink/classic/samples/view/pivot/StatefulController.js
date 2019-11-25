@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.pivot.StatefulController', {
 
     alias: 'controller.statefulpivot',
 
-    onConfigure: function(){
+    onConfigure: function() {
         var view = this.getView();
 
         view.reconfigurePivot({
@@ -46,7 +46,7 @@ Ext.define('KitchenSink.view.pivot.StatefulController', {
         });
     },
 
-    onClearState: function(){
+    onClearState: function() {
         Ext.state.Manager.getProvider().clear(this.getView().stateId);
         this.getView().reconfigurePivot({
             aggregate: [],

@@ -138,7 +138,7 @@ Ext.define('Ext.chart.navigator.Navigator', {
     constructor: function(config) {
         var me = this,
             visibleRange, overlay;
-        
+
         config = config || {};
         visibleRange = [
             config.minimum || 0.8,
@@ -294,7 +294,6 @@ Ext.define('Ext.chart.navigator.Navigator', {
         config.style = config.style || {};
         config.subStyle = config.subStyle || {};
 
-
         fillStyle = style && (style.fillStyle || style.fill);
         strokeStyle = style && (style.strokeStyle || style.stroke);
 
@@ -305,7 +304,6 @@ Ext.define('Ext.chart.navigator.Navigator', {
         if (strokeStyle) {
             config.style.strokeStyle = strokeStyle;
         }
-
 
         fillStyle = subStyle && (subStyle.fillStyle || subStyle.fill);
         strokeStyle = subStyle && (subStyle.strokeStyle || subStyle.stroke);
@@ -405,7 +403,7 @@ Ext.define('Ext.chart.navigator.Navigator', {
             case 'pan':
                 style.cursor = 'move';
                 break;
-            
+
             default:
                 style.cursor = 'default';
         }
@@ -436,7 +434,7 @@ Ext.define('Ext.chart.navigator.Navigator', {
     onDragStart: function(e) {
         var me = this,
             x, dragType;
-        
+
         // Limit drags to single touch.
         if (me.dragType || e && e.touches && e.touches.length > 1) {
             return;

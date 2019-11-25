@@ -31,7 +31,7 @@ Ext.define('Ext.util.StoreHolder', {
     bindStore: function(store, initial, propertyName) {
         var me = this,
             oldStore;
-        
+
         // Private params
         // @param {Boolean} [initial=false] True to not remove listeners from existing store.
         // @param {String} [propertyName="store"] The property in this object under which
@@ -63,7 +63,7 @@ Ext.define('Ext.util.StoreHolder', {
             if (store) {
                 me[propertyName] = store = Ext.data.StoreManager.lookup(store);
                 me.bindStoreListeners(store);
-                
+
                 if (!me.onBindStore.$emptyFn) {
                     me.onBindStore(store, oldStore, initial);
                 }
@@ -107,7 +107,7 @@ Ext.define('Ext.util.StoreHolder', {
     unbindStoreListeners: function(store) {
         // Can be overridden in the subclass for more complex removal
         var listeners = this.storeListeners;
-        
+
         if (listeners) {
             store.un(listeners);
         }
@@ -126,11 +126,11 @@ Ext.define('Ext.util.StoreHolder', {
 
         if (listeners) {
             listeners = Ext.apply({}, listeners);
-            
+
             if (!listeners.scope) {
                 listeners.scope = this;
             }
-            
+
             this.storeListeners = listeners;
             store.on(listeners);
         }

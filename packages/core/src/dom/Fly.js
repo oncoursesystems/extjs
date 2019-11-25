@@ -39,7 +39,7 @@ Ext.define('Ext.dom.Fly', {
         if (!dom) {
             return me.detach();
         }
-        
+
         // Sometimes we want to attach to the DOM of Ext.Element instance
         me.dom = Ext.getDom(dom);
 
@@ -48,7 +48,7 @@ Ext.define('Ext.dom.Fly', {
         // with reality.
         if (!Ext.cache[dom.id]) {
             data = me.peekData();
-            
+
             if (data) {
                 data.isSynchronized = false;
             }
@@ -131,7 +131,7 @@ Ext.define('Ext.dom.Fly', {
 
         if (dom) {
             nodeType = dom.nodeType;
-            
+
             // check if we have a valid node type or if the el is a window object before
             // proceeding. This allows elements, document fragments, and document/window
             // objects (even those inside iframes) to be wrapped.
@@ -152,18 +152,18 @@ Ext.define('Ext.dom.Fly', {
                     if (named === 'constructor') {
                         named = '$constructor';
                     }
-                    
+
                     fly = flyweights[named] || (flyweights[named] = new Fly());
                     fly.dom = dom;
                     data = fly.peekData();
-                    
+
                     if (data) {
                         data.isSynchronized = false;
                     }
                 }
             }
         }
-        
+
         return fly;
     };
 

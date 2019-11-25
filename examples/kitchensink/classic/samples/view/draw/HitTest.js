@@ -20,18 +20,21 @@ Ext.define('KitchenSink.view.draw.HitTest', {
         },
         graphite: {
             strokeStyle: '#fff'
+        },
+        'classic-material': {
+            strokeStyle: '#2196f3'
         }
     },
     layout: 'fit',
     width: 650,
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Component',
         path: 'classic/samples/view/draw/HitTestComponent.js'
     }],
-    // </example>
+    //</example>
 
     items: [
         {

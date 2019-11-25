@@ -195,21 +195,21 @@ Ext.define('Ext.form.RadioGroup', {
      * @private
      */
     groupCls: Ext.baseCSSPrefix + 'form-radio-group',
-    
+
     ariaRole: 'radiogroup',
-    
+
     initRenderData: function() {
         var me = this,
             data, ariaAttr;
-        
+
         data = me.callParent();
         ariaAttr = data.ariaAttributes;
-        
+
         if (ariaAttr) {
             ariaAttr['aria-required'] = !me.allowBlank;
             ariaAttr['aria-invalid'] = false;
         }
-        
+
         return data;
     },
 
@@ -222,23 +222,23 @@ Ext.define('Ext.form.RadioGroup', {
         if (this.local) {
             result.formId = this.getId();
         }
-        
+
         return result;
     },
-    
+
     getBoxes: function(query, root) {
         return (root || this).query('[isRadio]' + (query || ''));
     },
-    
+
     checkChange: function() {
         var me = this,
             value, key;
-        
+
         value = me.getValue();
 
         // Safari might throw an exception on trying to get the keys of a Number
         key = typeof value === 'object' && Ext.Object.getKeys(value)[0];
-            
+
         // If the value is an array we skip out here because it's during a change
         // between multiple items, so we never want to fire a change
         if (me.simpleValue || (key && !Ext.isArray(value[key]))) {
@@ -250,7 +250,7 @@ Ext.define('Ext.form.RadioGroup', {
         if (this.simpleValue) {
             return value1 === value2;
         }
-        
+
         return this.callParent([ value1, value2 ]);
     },
 
@@ -258,7 +258,7 @@ Ext.define('Ext.form.RadioGroup', {
         var me = this,
             items = me.items.items,
             i, item, ret;
-        
+
         if (me.simpleValue) {
             for (i = items.length; i-- > 0;) {
                 item = items[i];
@@ -272,7 +272,7 @@ Ext.define('Ext.form.RadioGroup', {
         else {
             ret = me.callParent();
         }
-        
+
         return ret;
     },
 
@@ -346,22 +346,22 @@ Ext.define('Ext.form.RadioGroup', {
 
         return this;
     },
-    
+
     markInvalid: function(errors) {
         var ariaDom = this.ariaEl.dom;
-        
+
         this.callParent([errors]);
-        
+
         if (ariaDom) {
             ariaDom.setAttribute('aria-invalid', true);
         }
     },
-    
+
     clearInvalid: function() {
         var ariaDom = this.ariaEl.dom;
-        
+
         this.callParent();
-        
+
         if (ariaDom) {
             ariaDom.setAttribute('aria-invalid', false);
         }
@@ -378,7 +378,7 @@ Ext.define('Ext.form.RadioGroup', {
     // in the group, and restoring their tabbable state upon focusleave.
     // This works exactly the same way regardless of having or not a checked button
     // in the group, so we keep the code simple.
-    
+
     // This condition should get more version specific when this bug is fixed:
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1267488
     if (Ext.isGecko) {
@@ -386,23 +386,23 @@ Ext.define('Ext.form.RadioGroup', {
             onFocusEnter: function(e) {
                 var target = e.toComponent,
                     radios, i, len;
-                
+
                 if (target.isRadio) {
                     radios = target.getManager().getByName(target.name, target.getFormId()).items;
-                    
+
                     for (i = 0, len = radios.length; i < len; i++) {
                         radios[i].disableTabbing();
                     }
                 }
             },
-            
+
             onFocusLeave: function(e) {
                 var target = e.fromComponent,
                     radios, i, len;
-                
+
                 if (target.isRadio) {
                     radios = target.getManager().getByName(target.name, target.getFormId()).items;
-                    
+
                     for (i = 0, len = radios.length; i < len; i++) {
                         radios[i].enableTabbing();
                     }

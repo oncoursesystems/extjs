@@ -172,11 +172,11 @@ function() {
 
             // Trigger click 
             colMap.colf1.showMenu();
-            
+
             // To check that the initially filter is not checked
             expect(colMap.colf1.getMenu().getComponent('filter').getChecked()).toBe(false);
         });
-        
+
         it('should update placeholder', function() {
             // Sort Ascending column menu item must be checked, Sort Descending one unchecked
             colMap.colf1.showMenu();
@@ -184,7 +184,7 @@ function() {
 
             // To check that the initially filters is not checked
             expect(colMap.colf1.getMenu().getComponent('filter').getChecked()).toBe(false);
-            
+
             submenu.show();
             expect(submenu.innerItems[0].getPlaceholder()).toEqual("Like...");
 
@@ -201,7 +201,6 @@ function() {
 
             // To check initial render correctly
             expect(cells[0].getValue()).toBe('f11');
-
 
             // To check that the initially filters is not checked
             expect(colMap.colf1.getMenu().getComponent('filter').getChecked()).toBe(false);
@@ -230,7 +229,6 @@ function() {
 
             // To check initial render correctly
             expect(cells[0].getValue()).toBe('f11');
-
 
             // To check that the initially filters is not checked
             expect(colMap.colf1.getMenu().getComponent('filter').getChecked()).toBe(false);

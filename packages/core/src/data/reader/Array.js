@@ -45,7 +45,7 @@ Ext.define('Ext.data.reader.Array', {
          * @inheritdoc
          */
         successProperty: undefined
-        
+
         /**
          * @cfg {Boolean} preserveRawData
          * @hide
@@ -58,7 +58,7 @@ Ext.define('Ext.data.reader.Array', {
      * Create a new ArrayReader
      * @param {Object} meta Metadata configuration options.
      */
-    
+
     createFieldAccessor: function(field) {
         // In the absence of a mapping property, use the original ordinal position
         // at which the Model inserted the field into its collection.
@@ -70,10 +70,10 @@ Ext.define('Ext.data.reader.Array', {
         field.mapping = index;
         result = this.callParent(arguments);
         field.mapping = oldMap;
-        
+
         return result;
     },
-    
+
     getModelData: function(raw) {
         // Can't preserve raw data here
         return {};

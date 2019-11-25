@@ -58,7 +58,7 @@ Ext.define('Ext.overrides.dom.Helper', (function() {
             if (ns) {
                 ns = el;
                 el = document.createDocumentFragment();
-                
+
                 while (ns) {
                     nx = ns.nextSibling;
                     el.appendChild(ns);

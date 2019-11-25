@@ -58,7 +58,7 @@ Ext.define('KitchenSink.store.Files', {
         ]
     },
 
-    constructor: function (config) {
+    constructor: function(config) {
         // Since records claim the data object given to them, clone the data
         // for each instance.
         config = Ext.apply({

@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.ClosableToolTipsController', {
             target: this.lookup('rich').el,
             anchor: 'left',
             html: '<ul style="margin-bottom: 15px;">' +
-                      '<li>5 bedrooms</li>' + 
+                      '<li>5 bedrooms</li>' +
                       '<li>Close to transport</li>' +
                       '<li>Large backyard</li>' +
                   '</ul>' +
@@ -26,6 +26,7 @@ Ext.define('KitchenSink.view.ClosableToolTipsController', {
 
         this.tips = Ext.Array.map(tips, function(cfg) {
             cfg.showOnTap = true;
+
             return new Ext.tip.ToolTip(cfg);
         });
     },

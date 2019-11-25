@@ -24,6 +24,10 @@ Ext.define('KitchenSink.view.calendar.Week', {
         graphite: {
             width: 1200,
             calendarWidth: 180
+        },
+        'classic-material': {
+            width: 1200,
+            calendarWidth: 180
         }
     },
     viewModel: {
@@ -39,6 +43,7 @@ Ext.define('KitchenSink.view.calendar.Week', {
                 },
                 set: function(val) {
                     var work = val === 'workweek';
+
                     this.set('visibleDays', work ? 5 : 7);
                     this.set('firstDayOfWeek', work ? 1 : 0);
                 }
@@ -56,6 +61,7 @@ Ext.define('KitchenSink.view.calendar.Week', {
         }
     },
 
+    cls: 'calendar-view',
     layout: 'border',
     bind: {
         title: '{value:date("M Y")}'
@@ -95,4 +101,4 @@ Ext.define('KitchenSink.view.calendar.Week', {
         }
     }]
 
-})
+});

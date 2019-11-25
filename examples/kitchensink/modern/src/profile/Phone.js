@@ -10,7 +10,7 @@ Ext.define('KitchenSink.profile.Phone', {
         'touch-events': 'KitchenSink.view.phone.touchevent.Events'
     },
 
-    isActive: function () {
+    isActive: function() {
         return Ext.os.is.Phone; // || Ext.os.is.Desktop;
     }
 });

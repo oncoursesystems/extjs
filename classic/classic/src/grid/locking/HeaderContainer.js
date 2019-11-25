@@ -6,7 +6,7 @@
  */
 Ext.define('Ext.grid.locking.HeaderContainer', {
     extend: 'Ext.grid.header.Container',
-    
+
     requires: [
         'Ext.grid.ColumnManager'
     ],
@@ -69,7 +69,7 @@ Ext.define('Ext.grid.locking.HeaderContainer', {
             lockable.visibleColumnManager =
             me.visibleColumnManager =
                 new Ext.grid.ColumnManager(true, lockedGrid.headerCt, normalGrid.headerCt);
-            
+
         lockedGrid.columnManager.rootColumns =
             normalGrid.columnManager.rootColumns =
             lockable.columnManager =
@@ -121,7 +121,7 @@ Ext.define('Ext.grid.locking.HeaderContainer', {
         for (i = 0; i < length; i++) {
             column = columns[i];
             colState = columnsState[column.getStateId()];
-            
+
             if (colState) {
                 // See if the state being applied needs to cause column movement
                 // Coerce possibly absent locked config to boolean.
@@ -138,7 +138,7 @@ Ext.define('Ext.grid.locking.HeaderContainer', {
                 }
             }
         }
-        
+
         lockedCount = lockedHeaderCt.items.items.length;
 
         // We must now restore state in each side's HeaderContainer.
@@ -148,7 +148,7 @@ Ext.define('Ext.grid.locking.HeaderContainer', {
         for (i = 0; i < length; i++) {
             column = columns[i];
             colState = columnsState[column.getStateId()];
-            
+
             if (colState && !column.locked) {
                 colState.index = Math.max(0, colState.index - lockedCount);
             }

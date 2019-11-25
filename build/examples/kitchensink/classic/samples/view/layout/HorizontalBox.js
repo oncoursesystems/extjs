@@ -25,19 +25,25 @@ Ext.define('KitchenSink.view.layout.HorizontalBox', {
             panel1Flex: 3,
             panelWidth: 120,
             panel2Flex: 4
+        },
+        'classic-material': {
+            panel1Flex: 3,
+            panelWidth: 150,
+            panel2Flex: 4
         }
     },
     width: 500,
     height: 400,
-    
+    cls: Ext.baseCSSPrefix + 'shadow',
+
     layout: {
         type: 'hbox',
         pack: 'start',
         align: 'stretch'
     },
-    
+
     bodyPadding: 10,
-    
+
     defaults: {
         frame: true,
         bodyPadding: 10
@@ -46,7 +52,7 @@ Ext.define('KitchenSink.view.layout.HorizontalBox', {
     items: [
         {
             title: 'Panel 1',
-            flex:'${panel1Flex}',
+            flex: '${panel1Flex}',
             margin: '0 10 0 0',
             html: 'flex: ${panel1Flex}'
         },

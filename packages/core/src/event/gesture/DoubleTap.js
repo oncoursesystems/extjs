@@ -145,13 +145,13 @@ Ext.define('Ext.event.gesture.DoubleTap', {
         Ext.undefer(me.singleTapTimer);
 
         me.startTime = me.lastTapTime = 0;
- 
+
         me.lastStartPoint = me.startPoint = me.singleTapTimer = null;
 
         return me.callParent();
     }
 }, function(DoubleTap) {
     var gestures = Ext.manifest.gestures;
-    
+
     DoubleTap.instance = new DoubleTap(gestures && gestures.doubleTap);
 });

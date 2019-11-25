@@ -12,7 +12,7 @@ Ext.define('Admin.view.profile.ShareUpdate', {
     padding: 10,
 
     bbar: [{
-        iconCls: 'x-fa fa-video-camera',
+        iconCls: 'x-fa fa-video',
         ui: 'header'
     }, {
         iconCls: 'x-fa fa-camera',

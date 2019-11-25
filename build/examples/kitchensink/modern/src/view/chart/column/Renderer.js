@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.chart.column.Renderer', {
         'Ext.chart.interactions.ItemHighlight'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/column/RendererController.js'
@@ -52,9 +52,9 @@ Ext.define('KitchenSink.view.chart.column.Renderer', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -118,7 +118,7 @@ Ext.define('KitchenSink.view.chart.column.Renderer', {
         },
         items: [{
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }]
     }]

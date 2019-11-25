@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.lists.BasicAccordion', {
         'Ext.dataview.listswiper.ListSwiper'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/lists/BasicSwiperController.js'
@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.lists.BasicAccordion', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     itemTpl: '{firstName} {lastName}',
@@ -55,7 +55,7 @@ Ext.define('KitchenSink.view.lists.BasicAccordion', {
                 text: 'Message',
                 commit: 'onMessage'
             }, {
-                iconCls: 'x-fa fa-gear',
+                iconCls: 'x-fa fa-cog',
                 text: 'Gear',
                 commit: 'onGear'
             }]

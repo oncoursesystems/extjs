@@ -15,8 +15,9 @@ Ext.define('KitchenSink.view.chart.ChartController', {
         this.callParent([view]);
     },
 
-    onRefresh: function () {
+    onRefresh: function() {
         var store = this.lookup('chart').getStore();
+
         store.generateData(store.getNumRecords());
     }
 });

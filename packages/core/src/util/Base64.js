@@ -110,7 +110,7 @@ Ext.define('Ext.util.Base64', {
             c, n, len;
 
         string = string.replace(/\r\n/g, "\n");
-        
+
         for (n = 0, len = string.length; n < len; n++) {
             c = string.charCodeAt(n);
 

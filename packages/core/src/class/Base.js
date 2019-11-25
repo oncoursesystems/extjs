@@ -38,7 +38,7 @@ var noArgs = [],
         if (!message) {
             message = '"' + oldName + '" is deprecated.';
         }
-        
+
         if (newName) {
             message += ' Please use "' + newName + '" instead.';
         }
@@ -205,7 +205,7 @@ var noArgs = [],
 
                 while (deprecate) {
                     names = deprecate.methods;
-                    
+
                     if (names) {
                         for (oldName in names) {
                             member = names[oldName];
@@ -303,7 +303,7 @@ var noArgs = [],
                                  * abuse.
                                  */
                                 message = '';
-                                
+
                                 if (member.message || member.fn) {
                                     //<debug>
                                     message = member.message;
@@ -319,7 +319,7 @@ var noArgs = [],
                                     //<debug>
                                     member.name = displayName + oldName;
                                     //</debug>
-                                    
+
                                     if (existing) {
                                         member.$previous = existing;
                                     }
@@ -345,7 +345,7 @@ var noArgs = [],
                     //<debug>
 
                     names = deprecate.configs;
-                    
+
                     if (names) {
                         //
                         //  '6.0': {
@@ -364,7 +364,7 @@ var noArgs = [],
                     }
 
                     names = deprecate.properties;
-                    
+
                     if (names && !enabled) {
                         // For properties about the only thing we can do is (on Good
                         // Browsers), add warning shims for accessing them. So if the
@@ -456,8 +456,9 @@ var noArgs = [],
          */
         triggerExtended: function() {
             //<debug>
-            Ext.classSystemMonitor &&
+            if (Ext.classSystemMonitor) {
                 Ext.classSystemMonitor(this, 'Ext.Base#triggerExtended', arguments);
+            }
             //</debug>
 
             /* eslint-disable-next-line vars-on-top */
@@ -507,7 +508,7 @@ var noArgs = [],
          */
         addStatics: function(members) {
             this.addMembers(members, true);
-            
+
             return this;
         },
 
@@ -537,17 +538,17 @@ var noArgs = [],
                 if (members.hasOwnProperty(name)) {
                     member = members[name];
                     current = me[name];
-                    
+
                     //<debug>
                     if (typeof member === 'function') {
                         member.name = className + name;
                     }
                     //</debug>
-                    
+
                     if (typeof current === 'function' && !current.$isClass && !current.$nullFn) {
                         member.$previous = current;
                     }
-                    
+
                     me[name] = member;
                     inheritableStatics[name] = true;
                 }
@@ -599,7 +600,7 @@ var noArgs = [],
                 // This won't run for normal class private members but will pick up all
                 // others (statics, overrides, etc).
                 delete members.privates;
-                
+
                 if (!isStatic) {
                     privateStatics = privates.statics;
                     delete privates.statics;
@@ -610,7 +611,7 @@ var noArgs = [],
                 //</debug>
 
                 me.addMembers(privates, isStatic, subPrivacy);
-                
+
                 if (privateStatics) {
                     me.addMembers(privateStatics, true, subPrivacy);
                 }
@@ -624,7 +625,7 @@ var noArgs = [],
                     if (privacy === true) {
                         privacy = 'framework';
                     }
-                    
+
                     if (member && member.$nullFn && privacy !== member.$privacy) {
                         Ext.raise('Cannot use stock function for private method ' +
                             (me.$className ? me.$className + '#' : '') + name);
@@ -677,7 +678,7 @@ var noArgs = [],
                         // This is a config property so it must be added to the configs
                         // collection not just smashed on the prototype...
                         (configs || (configs = {}))[name] = member;
-                        
+
                         continue;
                     }
 
@@ -726,13 +727,20 @@ var noArgs = [],
          * @inheritable
          * @param name
          * @param member
+         * @param privacy
          */
-        addMember: function(name, member) {
+        addMember: function(name, member, privacy) {
             oneMember[name] = member;
-            this.addMembers(oneMember);
+            this.addMembers(oneMember, false, privacy);
             delete oneMember[name];
-            
+
             return this;
+        },
+
+        hookMember: function(name, member) {
+            var existing = this.prototype[name];
+
+            return this.addMember(name, member, existing && existing.$privacy);
         },
 
         /**
@@ -765,7 +773,9 @@ var noArgs = [],
          */
         borrow: function(fromClass, members) {
             //<debug>
-            Ext.classSystemMonitor && Ext.classSystemMonitor(this, 'Ext.Base#borrow', arguments);
+            if (Ext.classSystemMonitor) {
+                Ext.classSystemMonitor(this, 'Ext.Base#borrow', arguments);
+            }
             //</debug>
 
             /* eslint-disable-next-line vars-on-top */
@@ -871,11 +881,11 @@ var noArgs = [],
             delete members.mixins;
 
             me.addMembers(members);
-            
+
             if (mixins) {
                 me.mixin(mixins);
             }
-            
+
             return me;
         },
 
@@ -976,7 +986,7 @@ var noArgs = [],
 
             if (typeof name !== 'string') {
                 mixins = name;
-                
+
                 if (mixins instanceof Array) {
                     for (i = 0, ln = mixins.length; i < ln; i++) {
                         mixin = mixins[i];
@@ -992,7 +1002,7 @@ var noArgs = [],
                         me.mixin(mixinName, mixins[mixinName]);
                     }
                 }
-                
+
                 return;
             }
 
@@ -1014,7 +1024,7 @@ var noArgs = [],
 
             for (key in mixin) {
                 mixinValue = mixin[key];
-                
+
                 if (key === 'mixins') {
                     // if 2 superclasses (e.g. a base class and a mixin) of this class both
                     // have a mixin with the same id, the first one wins, that is to say,
@@ -1040,13 +1050,13 @@ var noArgs = [],
 
             if (statics) {
                 mixinStatics = {};
-                
+
                 for (staticName in statics) {
                     if (!me.hasOwnProperty(staticName)) {
                         mixinStatics[staticName] = mixinClass[staticName];
                     }
                 }
-                
+
                 me.addInheritableStatics(mixinStatics);
             }
             //</feature>
@@ -1081,7 +1091,7 @@ var noArgs = [],
          */
         addConfig: function(config, mixinClass) {
             var cfg = this.$config || this.getConfigurator();
-            
+
             cfg.add(config, mixinClass);
         },
 
@@ -1095,7 +1105,7 @@ var noArgs = [],
                     $value: config[key]
                 };
             }
-            
+
             this.addConfig(cached, isMixin);
         },
 
@@ -1164,9 +1174,9 @@ var noArgs = [],
             aliasOneMember[alias] = function() {
                 return this[origin].apply(this, arguments);
             };
-            
+
             this.override(aliasOneMember);
-            
+
             delete aliasOneMember[alias];
         })
     });
@@ -1248,10 +1258,9 @@ var noArgs = [],
         /**
          * @property {Boolean} destroyed
          * This property is set to `true` after the `destroy` method is called.
-         * @protected
          */
         destroyed: false,
-        
+
         /**
          * @property {Boolean/"async"} [clearPropertiesOnDestroy=true]
          * Setting this property to `false` will prevent nulling object references
@@ -1261,7 +1270,7 @@ var noArgs = [],
          * @since 6.2.0
          */
         clearPropertiesOnDestroy: true,
-        
+
         /**
          * @property {Boolean} [clearPrototypeOnDestroy=false]
          * Setting this property to `true` will result in setting the object's
@@ -1443,7 +1452,7 @@ var noArgs = [],
             //<debug>
             if (!superMethod) {
                 method = this.callParent.caller;
-                
+
                 /* eslint-disable-next-line vars-on-top */
                 var parentClass, methodName;
 
@@ -1534,7 +1543,7 @@ var noArgs = [],
             //<debug>
             if (!superMethod) {
                 method = this.callSuper.caller;
-                
+
                 /* eslint-disable-next-line vars-on-top */
                 var parentClass, methodName;
 
@@ -1661,7 +1670,7 @@ var noArgs = [],
 
             if (name) {
                 cfg = me.self.$config.configs[name];
-                
+
                 if (cfg) {
                     propName = me.$configPrefixed ? cfg.names.internal : name;
 
@@ -1690,7 +1699,7 @@ var noArgs = [],
             else {
                 ret = me.getCurrentConfig();
             }
-            
+
             return ret;
         },
 
@@ -1717,7 +1726,7 @@ var noArgs = [],
                 cfg = configs[name];
                 name = cfg && me.$configPrefixed ? cfg.names.internal : name;
                 value = me.hasOwnProperty(name) && me[name];
-                
+
                 if (value) {
                     Ext.destroy(value);
                     me[name] = null;
@@ -1737,7 +1746,7 @@ var noArgs = [],
                     Ext.raise('Cannot change frozen config "' + name + '"');
                 }
                 //</debug>
-                
+
                 return me;
             };
 
@@ -1781,17 +1790,17 @@ var noArgs = [],
 
                 if (typeof name === 'string') {
                     config = configurator.configs[name];
-                    
+
                     if (!config) {
                         if (me.$configStrict) {
                             prop = me.self.prototype[name];
-                            
+
                             if ((typeof prop === 'function') && !prop.$nullFn) {
                                 //<debug>
                                 Ext.Error.raise("Cannot override method " + name + " on " +
                                                 me.$className + " instance.");
                                 //</debug>
-                                
+
                                 return me;
                             }
                             //<debug>
@@ -1803,10 +1812,10 @@ var noArgs = [],
                             }
                             //</debug>
                         }
-                        
+
                         config = Ext.Config.map[name] || Ext.Config.get(name);
                     }
-                    
+
                     if (me[config.names.set]) {
                         me[config.names.set](value);
                     }
@@ -1967,30 +1976,31 @@ var noArgs = [],
 
         $reap: function() {
             var me = this,
-                protectedProps = me.$noClearOnDestroy,
-                props, prop, value, type, i, len;
-            
+                keepers = me.$noClearOnDestroy,
+                props, prop, val, t, i, len;
+
             // This only returns own keys which is *much* faster than iterating
             // over the whole prototype chain and calling hasOwnProperty()
             props = Ext.Object.getKeys(me);
-            
+
             for (i = 0, len = props.length; i < len; i++) {
                 prop = props[i];
-                
-                if (!protectedProps || !protectedProps[prop]) {
-                    value = me[prop];
-                    type = typeof value;
+                val = me[prop];
+
+                // typeof null === 'object' :(
+                if (val && !(keepers && keepers[prop])) {
+                    t = typeof val;
 
                     // Object may retain references to other objects. Functions can do too
                     // if they are closures, and most of the *own* function properties
                     // are closures indeed. We skip Ext.emptyFn and the like though,
                     // they're mostly harmless.
-                    if (type === 'object' || (type === 'function' && !value.$noClearOnDestroy)) {
+                    if (t === 'object' || (t === 'function' && !val.$noClearOnDestroy)) {
                         me[prop] = null;
                     }
                 }
             }
-            
+
             me.$nulled = true;
 
             //<debug>
@@ -1999,18 +2009,18 @@ var noArgs = [],
             if (Object.setPrototypeOf) {
                 if (me.clearPrototypeOnDestroy && !me.$vetoClearingPrototypeOnDestroy) {
                     props = me.$preservePrototypeProperties;
-                    
+
                     if (props) {
                         for (i = 0, len = props.length; i < len; i++) {
                             prop = props[i];
-                            
+
                             if (!me.hasOwnProperty(prop)) {
                                 /* eslint-disable-next-line no-self-assign */
                                 me[prop] = me[prop];
                             }
                         }
                     }
-                    
+
                     Object.setPrototypeOf(me, null);
                 }
             }
@@ -2035,9 +2045,9 @@ var noArgs = [],
                 me.$links = null;
                 me.unlink(Ext.Object.getKeys(links));
             }
-            
+
             me.destroy = Ext.emptyFn;
-            
+
             // isDestroyed added for compat reasons
             me.isDestroyed = me.destroyed = true;
 
@@ -2130,7 +2140,7 @@ var noArgs = [],
             Ext.raise(msg);
         }
     };
-    
+
     Ext.Reaper.tick.$skipTimerCheck = true;
     //</debug>
 

@@ -549,7 +549,7 @@ Ext.define('Ext.chart.series.Pie', {
         var me = this,
             store = me.getStore(),
             items, labelField, xField, hidden, i, style, fill;
-        
+
         if (store) {
             items = store.getData().items;
             labelField = me.getLabel().getTemplate().getField();

@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.chart.scatter.CustomIcons', {
     xtype: 'scatter-custom-icons',
     controller: 'scatter-custom-icons',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/scatter/CustomIconsController.js'
@@ -44,9 +44,9 @@ Ext.define('KitchenSink.view.chart.scatter.CustomIcons', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -94,10 +94,10 @@ Ext.define('KitchenSink.view.chart.scatter.CustomIcons', {
                 scale: 10,
                 lineWidth: 2,
                 path: [
-                    ['M',  0,  1],
-                    ['L',  1,  0],
-                    ['L',  0, -1],
-                    ['L', -1,  0],
+                    ['M', 0, 1],
+                    ['L', 1, 0],
+                    ['L', 0, -1],
+                    ['L', -1, 0],
                     ['Z']
                 ]
             }
@@ -112,16 +112,16 @@ Ext.define('KitchenSink.view.chart.scatter.CustomIcons', {
                 scalingX: 0.1,
                 scalingY: -0.1,
                 path: [
-                    ['M', 0,    -145],
-                    ['L', 48,   -50],
-                    ['L', 153,  -36],
-                    ['L', 76,    39],
-                    ['L', 93,    143],
-                    ['L', 0,     95],
-                    ['L', -93,   143],
-                    ['L', -76,   39],
+                    ['M', 0, -145],
+                    ['L', 48, -50],
+                    ['L', 153, -36],
+                    ['L', 76, 39],
+                    ['L', 93, 143],
+                    ['L', 0, 95],
+                    ['L', -93, 143],
+                    ['L', -76, 39],
                     ['L', -153, -36],
-                    ['L', -48,  -50],
+                    ['L', -48, -50],
                     ['Z']
                 ]
             }
@@ -142,7 +142,7 @@ Ext.define('KitchenSink.view.chart.scatter.CustomIcons', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {
@@ -169,7 +169,7 @@ Ext.define('KitchenSink.view.chart.scatter.CustomIcons', {
             }
         }, {
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }]
     }]

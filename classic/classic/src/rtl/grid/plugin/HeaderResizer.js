@@ -13,12 +13,12 @@ Ext.define('Ext.rtl.grid.plugin.HeaderResizer', {
                 // This will be the xDelta during the following drag operation.
                 me.xDelta = me.dragHd.getX() - me.tracker.getXY()[0];
                 this.tracker.constrainTo = this.getConstrainRegion();
-                
+
                 return true;
             }
             else {
                 me.headerCt.dragging = false;
-                
+
                 return false;
             }
         }
@@ -31,7 +31,7 @@ Ext.define('Ext.rtl.grid.plugin.HeaderResizer', {
         if (this.headerCt.isOppositeRootDirection()) {
             offsetX = -offsetX;
         }
-        
+
         this.callParent([offsetX]);
     },
 
@@ -44,7 +44,7 @@ Ext.define('Ext.rtl.grid.plugin.HeaderResizer', {
     calculateDragX: function(gridSection) {
         var gridX = gridSection.getX(),
             mouseX = this.tracker.getXY('point')[0];
-        
+
         if (this.headerCt.isOppositeRootDirection()) {
             return mouseX - gridX + this.xDelta;
         }
@@ -64,7 +64,7 @@ Ext.define('Ext.rtl.grid.plugin.HeaderResizer', {
 
     setMarkerX: function(marker, x) {
         var headerCt = this.headerCt;
-        
+
         if (headerCt.getInherited().rtl && !headerCt.isOppositeRootDirection()) {
             marker.rtlSetLocalX(x);
         }

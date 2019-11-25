@@ -11,12 +11,12 @@ Ext.define('KitchenSink.view.chart.drawing.HitTest', {
         'KitchenSink.view.chart.drawing.HitTestComponent'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Component',
         path: 'modern/src/view/chart/drawing/HitTestComponent.js'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
 

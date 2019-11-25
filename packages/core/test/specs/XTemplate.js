@@ -177,7 +177,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
                     '<p>Nina</p><p>Dad: Nicolas Ferrero</p>' +
                     '<p>Solomon</p><p>Daddy: Nicolas Ferrero</p><p>!</p>');
             });
-            
+
             it('should handle verbatim block', function() {
                 tpl = new Ext.XTemplate(
                     '<tpl for=\'kids\'>',
@@ -278,7 +278,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
                     );
             });
         });
-        
+
         describe("switch", function() {
             it('should handle switch, case and default with numbers', function() {
                 tpl = new Ext.XTemplate(
@@ -315,7 +315,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
 
                 expect(s).toEqual('<p>Joshua is a boy</p><p>Nina is a girl!</p><p>Solomon is a boy</p><p>!</p>');
             });
-            
+
             it("should be able to switch on xindex", function() {
                 tpl = new Ext.XTemplate([
                     '<tpl for=".">',
@@ -327,7 +327,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
                             '<tpl default>Bigger',
                         '</tpl>',
                     '</tpl>']);
-      
+
                 expect(tpl.apply([1, 2, 3, 4, 5, 6])).toBe('OneTwoThreeFourBiggerBigger');
             });
 
@@ -351,7 +351,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
 
                 expect(s).toEqual('<p>Kids: <p>1. Joshua</p><p>2. Nina</p><p>3. Solomon</p></p>');
             });
-            
+
             it('should insert "between" values', function() {
                 tpl = new Ext.XTemplate(
                     '<p>Kids: ',
@@ -456,7 +456,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
 
                 expect(s).toEqual("<p>Nicolas Ferrero's:</p><p>Foo</p>");
             });
-            
+
             describe("parent", function() {
 
                 it("should be able to access parent object member via the parent object", function() {
@@ -474,7 +474,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
 
                     expect(s).toEqual("<p>Name: Nicolas Ferrero</p><p>Kids: <p>Joshua</p><p>Dad: Nicolas Ferrero</p><p>Nina</p><p>Dad: Nicolas Ferrero</p></p>");
                 });
-            
+
                 it("should set the parent to the parent array if the action is '.'", function() {
                     var tpl = new Ext.XTemplate(
                         '<tpl for=".">',
@@ -484,19 +484,19 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
                             '</tpl>',
                         '</tpl>'
                     );
-                
+
                     var data = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
 
                     data.specialProp = 'test';
                     data[0].specialProp = 'foo';
                     data[1].specialProp = 'bar';
                     data[2].specialProp = 'baz';
-                
+
                     var s = tpl.apply(data);
 
                     expect(s).toBe('testfoo1foo2foo3testbar4bar5bar6testbaz7baz8baz9');
                 });
-            
+
                 it("should work with nested parents", function() {
                     var tpl = new Ext.XTemplate(
                         '{name}',
@@ -507,7 +507,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
                                 '</tpl>',
                         '</tpl>'
                     );
-    
+
                     var s = tpl.apply({
                         name: 'A1',
                         children: [{
@@ -583,7 +583,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
                             '</tpl>',
                         '</tpl>'
                     );
-                    
+
                     expect(tpl.apply(data)).toBe([
                         'level 1: id: 1',
                         'level 2: id: 11, parent.id: 1',
@@ -645,7 +645,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
                 expect(result).toBe('1231245');
             });
         }); // for
-        
+
         describe("foreach", function() {
 
             it('should examine the data object provided if foreach="." is specified', function() {
@@ -717,7 +717,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
 
                 expect(tpl.apply(objectData)).toEqual('<p>x xValue</p>a: aValue</p><p>y yValue</p>a: aValue</p></p>');
             });
-            
+
             it('should insert "between" values', function() {
                 var tpl = new Ext.XTemplate(
                     '<tpl foreach="b" between=",">',
@@ -748,7 +748,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
 
                 expect(tpl.apply(data)).toEqual("<p>Nicolas Ferrero's:</p><p>Foo</p>");
             });
-            
+
             describe("parent", function() {
 
                 it("should be able to access parent object member via the parent object", function() {
@@ -760,7 +760,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
 
                     expect(tpl.apply(objectData)).toEqual("<p>cValue</p><p>cValue</p>");
                 });
-            
+
                 it("should set the parent to the parent object if the action is '.'", function() {
                     var tpl = new Ext.XTemplate(
                             '<tpl foreach=".">',
@@ -772,7 +772,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
                             y: 2,
                             z: 3
                         };
-                
+
                     expect(tpl.apply(data)).toBe('111');
                 });
             });
@@ -1020,7 +1020,6 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
                     expect(tpl.spy.calls.length).toEqual(3);
                 });
 
-
                 it("should be run for each item in the array with index of the loop you are in, values of the current scope, and scope of ancestor template", function() {
                     tpl.apply(data);
                     expect(tpl.spy.calls[0].args).toEqual([data.kids[0], 1, data]);
@@ -1122,13 +1121,13 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
             expect(tpl.apply(data)).toEqual("<p>8 -4 9 1.5</p><p>13</p><p>7 -5 6 1</p><p>12</p><p>5 -7 0 0</p><p>10</p>");
         });
     });
-    
+
     describe("special characters", function() {
         it("should handle newlines", function() {
             tpl = new Ext.XTemplate('<div>\n</div>');
             expect(tpl.apply()).toBe('<div>\n</div>');
         });
-        
+
         it("should handle empty braces", function() {
             var s = 'cfg = cfg || {};';
 
@@ -1292,7 +1291,7 @@ topSuite("Ext.XTemplate", ['Ext.dom.Element'], function() {
             }).toThrow();
         });
     });
-    
+
     describe('single token', function() {
         it('should not coerce a single token to be a string', function() {
             expect(new Ext.XTemplate('{foo}').apply({ foo: 1 })).toBe(1);

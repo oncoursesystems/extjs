@@ -464,7 +464,6 @@ Ext.define('Ext.SegmentedButton', {
             defaultUI = me.getDefaultUI(),
             value = item.getValue();
 
-
         // Force allowDepress to be configured if needed
         me.getAllowMultiple();
 
@@ -588,7 +587,6 @@ Ext.define('Ext.SegmentedButton', {
     },
 
     doDestroy: function() {
-        this.destroying = true;
         this.valueMap = null;
         this.callParent();
     },

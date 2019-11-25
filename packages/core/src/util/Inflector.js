@@ -112,7 +112,7 @@ Ext.define('Ext.util.Inflector', {
     ],
 
     /* eslint-enable no-multi-spaces */
-    
+
     /**
      * @private
      * The registered uncountable words

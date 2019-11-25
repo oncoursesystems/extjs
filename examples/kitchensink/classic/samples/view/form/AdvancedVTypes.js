@@ -5,13 +5,13 @@ Ext.define('KitchenSink.view.form.AdvancedVTypes', {
     extend: 'Ext.container.Container',
     xtype: 'form-advtypes',
     controller: 'form-advtypes',
-    
+
     //<example>
     requires: [
         'KitchenSink.AdvancedVType',
         'KitchenSink.view.form.AdvancedVTypesController'
     ],
-    
+
     exampleTitle: 'Advanced VTypes',
     otherContent: [{
         type: 'Controller',
@@ -21,15 +21,15 @@ Ext.define('KitchenSink.view.form.AdvancedVTypes', {
         path: 'classic/samples/AdvancedVType.js'
     }],
     //</example>
-    
+
     defaults: {
         style: {
             'margin-bottom': '20px'
         }
     },
-    
+
     width: 500,
-    
+
     items: [{
         xtype: 'box', // same as 'component'
         html: [
@@ -42,20 +42,20 @@ Ext.define('KitchenSink.view.form.AdvancedVTypes', {
         title: 'Date Range',
         frame: true,
         bodyPadding: '5 5 0',
-        
+
         style: {
             'margin-bottom': '40px'
         },
-        
+
         fieldDefaults: {
             msgTarget: 'side',
             autoFitErrors: false
         },
-        
+
         layout: 'form',
-        
+
         defaultType: 'datefield',
-        
+
         items: [{
             fieldLabel: 'Start Date',
             name: 'startdt',
@@ -80,19 +80,19 @@ Ext.define('KitchenSink.view.form.AdvancedVTypes', {
         frame: true,
         title: 'Password Verification',
         bodyPadding: '5 5 0',
-        
+
         layout: 'form',
-        
+
         fieldDefaults: {
             msgTarget: 'side',
             autoFitErrors: false
         },
-        
+
         defaults: {
             inputType: 'password'
         },
         defaultType: 'textfield',
-        
+
         items: [{
             fieldLabel: 'Password',
             name: 'pass',

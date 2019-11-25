@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.forms.RemoteCombo', {
     requires: [
         'Ext.field.ComboBox'
     ],
-    
+
     controller: 'form-remote-combo',
 
     //<example>
@@ -43,7 +43,7 @@ Ext.define('KitchenSink.view.forms.RemoteCombo', {
     height: '${height}',
     autoSize: true,
 
-    items:[{
+    items: [{
         xtype: 'combobox',
         label: 'Forum threads',
         triggerAction: 'query',
@@ -56,7 +56,6 @@ Ext.define('KitchenSink.view.forms.RemoteCombo', {
             type: 'form-forum-posts'
         },
         displayField: 'title',
-        forceSelection: true,
         floatedPicker: {
             maxHeight: '${pickerMaxHeight}'
         },

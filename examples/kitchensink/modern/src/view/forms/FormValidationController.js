@@ -18,9 +18,11 @@ Ext.define('KitchenSink.view.forms.FormValidationController', {
         if (azonly.replace(/[a-z]*/, '').length) {
             errors.azonly = 'a to z only';
         }
+
         if (nonblank.length === 0) {
             errors.nonblank = ['is required', 'non blank' ];
         }
+
         form.setErrors(errors);
         messages.setHtml('<h2>setErrors() called</h2>');
     },

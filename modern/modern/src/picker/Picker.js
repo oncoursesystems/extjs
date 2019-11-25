@@ -299,7 +299,7 @@ Ext.define('Ext.picker.Picker', {
      * @inheritdoc
      */
     focusable: true,
-    
+
     /**
      * @cfg tabIndex
      * @inheritdoc
@@ -540,10 +540,10 @@ Ext.define('Ext.picker.Picker', {
         this.fireEvent('pick', this, this.getValue(true), slot);
     },
 
-    afterShow: function(me) {
-        me.callParent([me]);
+    afterShow: function() {
+        this.callParent();
 
-        me.scrollSlotsIntoView();
+        this.scrollSlotsIntoView();
 
         Ext.util.InputBlocker.blockInputs();
     },

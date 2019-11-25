@@ -9,28 +9,28 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
         ajaxResponse,
         doc = document,
         DQ;
-    
+
     function parseXml(str) {
         if (window.ActiveXObject) {
             var doc = new ActiveXObject('Microsoft.XMLDOM');
-            
+
             doc.loadXML(str);
-            
+
             return doc;
         }
         else if (window.DOMParser) {
             return (new DOMParser()).parseFromString(str, 'text/xml');
         }
-        
+
         return '';
     }
-    
+
     function getXml(str) {
         str = '<root>' + str + '</root>';
 
         return parseXml(str);
     }
-        
+
     beforeEach(function() {
         DQ = Ext.DomQuery;
         Ext.DomQuery = {
@@ -56,26 +56,26 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
             }
         };
     });
-    
+
     afterEach(function() {
         Ext.DomQuery = DQ;
-        
+
         if (reader) {
             reader.destroy();
         }
-        
+
         reader = null;
     });
-    
+
     describe("raw data", function() {
         var Model, xml, rec;
-        
+
         beforeEach(function() {
             Model = Ext.define('spec.Xml', {
                 extend: 'Ext.data.Model',
                 fields: ['name']
             });
-            
+
             xml = getXml('<dog><name>Utley</name></dog><dog><name>Molly</name></dog>');
 
             reader = new Ext.data.reader.Xml({
@@ -83,26 +83,26 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 record: 'dog'
             });
         });
-        
+
         afterEach(function() {
             Ext.data.Model.schema.clear(true);
             Ext.undefine('spec.Xml');
-            
+
             rec = xml = Model = null;
         });
-        
+
         it("should not set raw data reference by default", function() {
             rec = reader.readRecords(xml).getRecords()[0];
-            
+
             expect(rec.raw).not.toBeDefined();
         });
-        
+
         it("should set raw data reference for a TreeStore record", function() {
             // Simulate TreeStore node
             spec.Xml.prototype.isNode = true;
-            
+
             rec = reader.readRecords(xml).getRecords()[0];
-            
+
             expect(rec.raw).toBe(xml.firstChild.firstChild);
         });
     });
@@ -217,7 +217,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 extend: 'Ext.data.Model',
                 fields: ['field']
             });
-            
+
             cfg = cfg || {};
             reader = new Ext.data.reader.Xml(Ext.apply({
                 model: 'spec.FooXmlTest'
@@ -228,10 +228,10 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
             Ext.data.Model.schema.clear();
             Ext.undefine('spec.FooXmlTest');
         });
-        
+
         it("should run function extractors in the reader scope", function() {
             var actual;
-            
+
             createReader({
                 successProperty: function() {
                     actual = this;
@@ -244,27 +244,27 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
             });
             expect(actual).toBe(reader);
         });
-        
+
         describe("getTotal", function() {
             it("should default to total", function() {
                 createReader();
                 expect(reader.getTotal(getXml('<total>10</total>'))).toBe('10');
             });
-            
+
             it("should have no getTotal method if the totalProperty isn't specified", function() {
                 createReader({
                     totalProperty: ''
                 });
                 expect(reader.getTotal).toBeUndefined();
             });
-            
+
             it("should read the specified property name", function() {
                 createReader({
                     totalProperty: 'foo'
                 });
                 expect(reader.getTotal(getXml('<foo>17</foo>'))).toBe('17');
             });
-            
+
             it("should accept a function configuration", function() {
                 createReader({
                     totalProperty: function(root) {
@@ -273,14 +273,14 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 });
                 expect(reader.getTotal(getXml('<node1>1</node1><node2>2</node2><node3>3</node3>'))).toBe('3');
             });
-            
+
             it("should be able to use some xpath", function() {
                 createReader({
                     totalProperty: 'foo/bar'
                 });
                 expect(reader.getTotal(getXml('<foo><bar>18</bar></foo>'))).toBe('18');
             });
-            
+
             it("should support attribute reading", function() {
                 createReader({
                     totalProperty: '@total'
@@ -288,27 +288,27 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 expect(reader.getTotal(parseXml('<node total="11" />').firstChild)).toBe('11');
             });
         });
-        
+
         describe("getSuccess", function() {
             it("should default to success", function() {
                 createReader();
                 expect(reader.getSuccess(getXml('<success>true</success>'))).toBe('true');
             });
-            
+
             it("should have no getSuccess method if the successProperty isn't specified", function() {
                 createReader({
                     successProperty: ''
                 });
                 expect(reader.getSuccess).toBeUndefined();
             });
-            
+
             it("should read the specified property name", function() {
                 createReader({
                     successProperty: 'foo'
                 });
                 expect(reader.getSuccess(getXml('<foo>false</foo>'))).toBe('false');
             });
-            
+
             it("should accept a function configuration", function() {
                 createReader({
                     successProperty: function(root) {
@@ -317,14 +317,14 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 });
                 expect(reader.getSuccess(getXml('<node1>true</node1><node2>false</node2><node3>false</node3>'))).toBe('true');
             });
-            
+
             it("should be able to use some xpath", function() {
                 createReader({
                     successProperty: 'a/node/path'
                 });
                 expect(reader.getSuccess(getXml('<a><node><path>false</path></node></a>'))).toBe('false');
             });
-            
+
             it("should support attribute reading", function() {
                 createReader({
                     totalProperty: '@success'
@@ -332,27 +332,27 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 expect(reader.getTotal(parseXml('<node success="true" />').firstChild)).toBe('true');
             });
         });
-        
+
         describe("getMessage", function() {
             it("should default to undefined", function() {
                 createReader();
                 expect(reader.getMessage).toBeUndefined();
             });
-            
+
             it("should have no getMessage method if the messageProperty isn't specified", function() {
                 createReader({
                     messageProperty: ''
                 });
                 expect(reader.getMessage).toBeUndefined();
             });
-            
+
             it("should read the specified property name", function() {
                 createReader({
                     messageProperty: 'foo'
                 });
                 expect(reader.getMessage(getXml('<foo>a msg</foo>'))).toBe('a msg');
             });
-            
+
             it("should accept a function configuration", function() {
                 createReader({
                     messageProperty: function(root) {
@@ -361,14 +361,14 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 });
                 expect(reader.getMessage(getXml('<node1>msg1</node1><node2>msg2</node2><node3>msg3</node3>'))).toBe('msg2');
             });
-            
+
             it("should be able to use some xpath", function() {
                 createReader({
                     messageProperty: 'some/nodes'
                 });
                 expect(reader.getMessage(getXml('<some><nodes>message here</nodes></some>'))).toBe('message here');
             });
-            
+
             it("should support attribute reading", function() {
                 createReader({
                     totalProperty: '@message'
@@ -465,7 +465,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                         });
                         expectData(reader.read(getXml('<groups>' + groupData + '</groups>')));
                     });
-                    
+
                     it("should accept a function configuration", function() {
                         createReader({
                             model: M,
@@ -586,7 +586,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                         });
                         expectData(reader.read(getXml('<summary>' + summaryData + '</summary>')));
                     });
-                    
+
                     it("should accept a function configuration", function() {
                         createReader({
                             model: M,
@@ -628,7 +628,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 makeSuite(true);
             });
         });
-        
+
         describe("fields", function() {
             var rawOptions = {
                 recordCreator: Ext.identityFn
@@ -649,14 +649,14 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 Ext.data.Model.schema.clear();
                 Ext.undefine('spec.XmlFieldTest');
             });
-            
+
             it("should read the name if no mapping is specified", function() {
                 createReader(['field']);
                 var result = reader.readRecords(getXml('<field>val</field>').firstChild, rawOptions).getRecords()[0];
 
                 expect(result.field).toBe('val');
             });
-            
+
             it("should give precedence to the mapping", function() {
                 createReader([{
                     name: 'field',
@@ -666,7 +666,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
 
                 expect(result.field).toBe('real value');
             });
-            
+
             it("should handle dot notation mapping with nested undefined properties", function() {
                 createReader([{
                     name: 'field',
@@ -676,7 +676,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
 
                 expect(result.field).toBeUndefined(); // default value
             });
-            
+
             it("should accept a function", function() {
                 createReader([{
                     name: 'field',
@@ -688,7 +688,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
 
                 expect(result.field).toBe('b');
             });
-            
+
             it("should allow basic xpath", function() {
                 createReader([{
                     name: 'field',
@@ -698,7 +698,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
 
                 expect(result.field).toBe('a value');
             });
-            
+
             it("should support attribute reading", function() {
                 createReader([{
                     name: 'field',
@@ -732,7 +732,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
             });
         });
     });
-    
+
     describe("reading data", function() {
         var readData, user;
 
@@ -754,7 +754,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 model: 'spec.XmlReader',
                 record: 'user'
             });
-            
+
             ajaxResponse = new MockAjax();
 
             // FIXME: Has to be a better way?
@@ -769,7 +769,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                     '</user>',
                 '</data>',
             '</results>'].join('');
-            
+
             ajaxResponse.complete({
                 status: 200,
                 statusText: 'OK',
@@ -778,7 +778,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                     "Content-type": "application/xml"
                 }
             });
-            
+
             readData = reader.read(ajaxResponse);
             user = readData.getRecords()[0];
         });
@@ -787,7 +787,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
             Ext.data.Model.schema.clear();
             Ext.undefine('spec.XmlReader');
         });
-        
+
         it("should extract the correct total", function() {
             expect(readData.getTotal()).toBe(2300);
         });
@@ -795,7 +795,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
         it("should extract success", function() {
             expect(readData.getSuccess()).toBe(true);
         });
-        
+
         it("should extract count", function() {
             expect(readData.getCount()).toBe(1);
         });
@@ -811,12 +811,12 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
         it("should respect field mappings", function() {
             expect(user.get('name')).toBe("Ed Spencer");
         });
-        
+
         it("should respect field mappings containing @", function() {
             expect(user.get('email')).toBe("ed@sencha.com");
         });
     });
-    
+
     xdescribe("loading nested data", function() {
         // We have four models - User, Order, OrderItem and Product
         beforeEach(function() {
@@ -964,7 +964,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
             Ext.undefine('spec.OrderItem');
             Ext.undefine('spec.Product');
         });
-        
+
         it("should set implicitIncludes to true by default", function() {
             reader = createReader();
 
@@ -1042,7 +1042,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
             Ext.data.Model.schema.clear();
             Ext.undefine('spec.User');
         });
-        
+
         function doRead(response) {
             return reader.read(response);
         }
@@ -1053,7 +1053,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                     doRead(goodResponse);
                     expect(reader.readRecords).toHaveBeenCalled();
                 });
-    
+
                 it("should be successful", function() {
                     expect(doRead(goodResponse).getSuccess()).toBe(true);
                 });
@@ -1062,7 +1062,6 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                     expect(doRead(goodResponse).getCount()).toBe(3);
                 });
 
-     
                 it("should not return a non-empty dataset", function() {
                     expect(doRead(goodResponse).getRecords().length).toBeGreaterThan(0);
                 });
@@ -1073,12 +1072,12 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                     spyOn(Ext, 'log');
                     spyOn(Ext.Logger, 'log');
                 });
-                
+
                 it("should not call readRecords", function() {
                     doRead(badResponse);
                     expect(reader.readRecords).not.toHaveBeenCalled();
                 });
-    
+
                 it("should not be successful", function() {
                     expect(doRead(badResponse).getSuccess()).toBe(false);
                 });
@@ -1086,7 +1085,7 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                 it("should not return any records", function() {
                     expect(doRead(badResponse).getTotal()).toBe(0);
                 });
-    
+
                 it("should return any empty dataset", function() {
                     expect(doRead(badResponse).getRecords().length).toBe(0);
                 });

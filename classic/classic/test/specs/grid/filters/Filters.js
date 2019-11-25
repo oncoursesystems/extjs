@@ -29,7 +29,7 @@ function() {
             fields: ['name', 'email', 'phone', 'age', 'dob'],
             data: data
         }, storeCfg));
-        
+
         Ext.override(store, {
             load: function() {
                 this.callParent(arguments);
@@ -76,9 +76,9 @@ function() {
             width: 500,
             renderTo: Ext.getBody()
         }, gridCfg));
-        
+
         synchronousLoad = true;
-        
+
         if (store.hasPendingLoad()) {
             store.flushLoad();
         }
@@ -105,15 +105,15 @@ function() {
                 }]
             }
         }, storeCfg));
-        
+
         Ext.override(store, {
             load: function() {
                 this.callParent(arguments);
-                
+
                 if (synchronousLoad) {
                     this.flushLoad.apply(this, arguments);
                 }
-                
+
                 return this;
             },
 
@@ -292,11 +292,11 @@ function() {
 
     describe("events", function() {
         var activateSpy, deactivateSpy;
-        
+
         beforeEach(function() {
             activateSpy = jasmine.createSpy('filteractivate');
             deactivateSpy = jasmine.createSpy('filterdeactivate');
-            
+
             createGrid(null, {
                 columns: [{
                     dataIndex: 'name',
@@ -309,47 +309,47 @@ function() {
                     filterdeactivate: deactivateSpy
                 }
             });
-            
+
             filter = grid.columnManager.getHeaderByDataIndex('name').filter;
         });
-        
+
         afterEach(function() {
             activateSpy = deactivateSpy = null;
         });
-        
+
         describe("activate", function() {
             beforeEach(function() {
                 filter.setValue('Jimmy');
             });
-            
+
             it("should fire when filter is activated programmatically", function() {
                 expect(activateSpy).toHaveBeenCalled();
             });
-            
+
             it("should pass filter and column", function() {
                 var args = Ext.Array.slice(activateSpy.mostRecentCall.args, 0, 2);
-                
+
                 expect(args).toEqual([filter, filter.column]);
             });
-            
+
             it("should not fire deactivate event", function() {
                 expect(deactivateSpy).not.toHaveBeenCalled();
             });
         });
-        
+
         describe("deactivate", function() {
             beforeEach(function() {
                 filter.setValue('Jimmy');
                 grid.clearFilters();
             });
-            
+
             it("should fire when filter is cleared programmatically", function() {
                 expect(deactivateSpy).toHaveBeenCalled();
             });
-            
+
             it("should pass filter and column", function() {
                 var args = Ext.Array.slice(deactivateSpy.mostRecentCall.args, 0, 2);
-                
+
                 expect(args).toEqual([filter, filter.column]);
             });
         });
@@ -599,9 +599,9 @@ function() {
                     property: 'age',
                     value: 60
                 });
-                
+
                 var current = store.getCount();
-                
+
                 store.getFilters().add(f);
                 expect(store.getCount()).toBe(0);
 
@@ -618,9 +618,9 @@ function() {
                     property: 'name',
                     value: 'invalid'
                 });
-                
+
                 var current = store.getCount();
-                
+
                 store.getFilters().add(f);
                 expect(store.getCount()).toBe(0);
 
@@ -1457,7 +1457,7 @@ function() {
                         menu;
 
                     Ext.testHelper.showHeaderMenu(column);
-                    
+
                     runs(function() {
                         menu = column.activeMenu;
                         // Showing the menu will have the filters plugin create the column filter menu.
@@ -1491,7 +1491,7 @@ function() {
                         // Replace...
                         filtersPlugin.addFilter({ dataIndex: 'name', value: 'alex' });
                     });
-                    
+
                     // ...and show to trigger the plugin to create the new column filter menu.
                     Ext.testHelper.showHeaderMenu(column);
 
@@ -3367,7 +3367,7 @@ function() {
                                 filter: true
                             }]
                         });
-                        column = grid.columnManager.getColumns()[0],
+                        column = grid.columnManager.getColumns()[0];
 
                         Ext.testHelper.showHeaderMenu(column);
                         runs(function() {
@@ -3448,7 +3448,7 @@ function() {
                         createGrid(null, {
                             columns: columns
                         });
-                        
+
                         grid.reconfigure(store, columns);
 
                         column = grid.getColumnManager().getColumns()[1];

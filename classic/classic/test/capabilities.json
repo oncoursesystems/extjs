@@ -20,20 +20,6 @@
     {
         "platform": "Windows 7",
         "browserName": "internet explorer",
-        "version": "8",
-        "prerun": {
-            "executable": "http://aria-test.sencha.com/aria/js-fix-ie8.bat"
-        },
-        "enablePersistentHover": false,
-        "chunks": 10,
-        "pingTimeout": 60000,
-        "remoteOptions": {
-            "queueSizeThreshold": 400
-        }
-    },
-    {
-        "platform": "Windows 7",
-        "browserName": "internet explorer",
         "version": "11",
         "enablePersistentHover": false,
         "chunks": 10,
@@ -56,6 +42,7 @@
         "browserName": "safari",
         "version": "9.0",
         "chunks": 10,
+        "seleniumVersion": "2.48.0",
         "pingTimeout": 60000,
         "remoteOptions": {
             "queueSizeThreshold": 500

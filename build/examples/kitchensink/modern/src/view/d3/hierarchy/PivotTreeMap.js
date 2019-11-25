@@ -13,12 +13,12 @@ Ext.define('KitchenSink.view.d3.hierarchy.PivotTreeMap', {
         'KitchenSink.store.Sales'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/d3/hierarchy/PivotTreeMapController.js'
     }],
-    // </example>
+    //</example>
 
     parentTpl: [
         '<div class="tip-title">{data.name}</div>',
@@ -51,14 +51,14 @@ Ext.define('KitchenSink.view.d3.hierarchy.PivotTreeMap', {
         },
 
         aggregate: [{
-            dataIndex:  'value',
-            header:     'Value',
+            dataIndex: 'value',
+            header: 'Value',
             aggregator: 'sum'
         }],
 
         leftAxis: [{
-            dataIndex:  'person',
-            header:     'Person'
+            dataIndex: 'person',
+            header: 'Person'
         }]
     },
 
@@ -75,8 +75,8 @@ Ext.define('KitchenSink.view.d3.hierarchy.PivotTreeMap', {
         // It is possible to configure a list of fields that can be used to configure the pivot matrix
         // If no fields list is supplied then all fields from the Store model are fetched automatically
         fields: [{
-            dataIndex:  'quantity',
-            header:     'Qty',
+            dataIndex: 'quantity',
+            header: 'Qty',
             // You can even provide a default aggregator function to be used when this field is dropped
             // on the agg dimensions
             aggregator: 'sum',
@@ -96,8 +96,8 @@ Ext.define('KitchenSink.view.d3.hierarchy.PivotTreeMap', {
                 }
             }
         }, {
-            dataIndex:  'value',
-            header:     'Value',
+            dataIndex: 'value',
+            header: 'Value',
 
             settings: {
                 // Define here in which areas this field could be used
@@ -119,8 +119,8 @@ Ext.define('KitchenSink.view.d3.hierarchy.PivotTreeMap', {
                 }
             }
         }, {
-            dataIndex:  'company',
-            header:     'Company',
+            dataIndex: 'company',
+            header: 'Company',
 
             settings: {
                 // Define here what aggregator functions can be used when this field is
@@ -128,8 +128,8 @@ Ext.define('KitchenSink.view.d3.hierarchy.PivotTreeMap', {
                 aggregators: ['count']
             }
         }, {
-            dataIndex:  'country',
-            header:     'Country',
+            dataIndex: 'country',
+            header: 'Country',
 
             settings: {
                 // Define here what aggregator functions can be used when this field is
@@ -146,17 +146,17 @@ Ext.define('KitchenSink.view.d3.hierarchy.PivotTreeMap', {
                 aggregators: 'count'
             }
         }, {
-            dataIndex:  'year',
-            header:     'Year',
+            dataIndex: 'year',
+            header: 'Year',
 
             settings: {
                 // Define here in which areas this field could be used
                 allowed: ['leftAxis', 'topAxis']
             }
         }, {
-            dataIndex:      'month',
-            header:         'Month',
-            labelRenderer:  'monthLabelRenderer',
+            dataIndex: 'month',
+            header: 'Month',
+            labelRenderer: 'monthLabelRenderer',
 
             settings: {
                 // Define here in which areas this field could be used

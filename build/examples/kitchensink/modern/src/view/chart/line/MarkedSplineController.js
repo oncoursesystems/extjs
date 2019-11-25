@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.chart.bar.MarkedSplineController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.line-marked-spline',
 
-    onAxisLabelRender: function (axis, label, layoutContext) {
+    onAxisLabelRender: function(axis, label, layoutContext) {
         return Ext.util.Format.number(label, '0.0');
     },
 
@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.chart.bar.MarkedSplineController', {
             record.get(item.field) + '%');
     },
 
-    onColumnRender: function (v) {
+    onColumnRender: function(v) {
         return v + '%';
     }
 

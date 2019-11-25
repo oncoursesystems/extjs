@@ -66,19 +66,19 @@ Ext.define('Ext.layout.component.Auto', {
 
     waitForOuterHeightInDom: false,
     waitForOuterWidthInDom: false,
-    
+
     beginLayoutCycle: function(ownerContext, firstCycle) {
         var me = this,
             lastWidthModel = me.lastWidthModel,
             lastHeightModel = me.lastHeightModel,
             el = me.owner.el;
-            
+
         me.callParent(arguments);
-            
+
         if (lastWidthModel && lastWidthModel.fixed && ownerContext.widthModel.shrinkWrap) {
             el.setWidth(null);
         }
-            
+
         if (lastHeightModel && lastHeightModel.fixed && ownerContext.heightModel.shrinkWrap) {
             el.setHeight(null);
         }
@@ -178,7 +178,7 @@ Ext.define('Ext.layout.component.Auto', {
                     ownerContext.invalidate({ heightModel: heightModel });
                 }
             }
-            
+
             ownerContext.setHeight(height, dirty);
         }
     },

@@ -203,7 +203,6 @@ Ext.define('Ext.chart.series.sprite.CandleStick', {
 
         ctx.restore();
 
-
         // Render drops.
         ctx.save();
         template = me.dropTemplate;

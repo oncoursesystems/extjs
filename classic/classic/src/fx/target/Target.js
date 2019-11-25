@@ -28,11 +28,11 @@ Ext.define('Ext.fx.target.Target', {
         this.target = target;
         this.id = this.getId();
     },
-    
+
     getId: function() {
         return this.target.id;
     },
-    
+
     remove: function() {
         Ext.destroy(this.target);
     }

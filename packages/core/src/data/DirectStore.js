@@ -22,20 +22,20 @@
  */
 Ext.define('Ext.data.DirectStore', {
     /* Begin Definitions */
-    
+
     extend: 'Ext.data.Store',
-    
+
     alias: 'store.direct',
-    
+
     requires: ['Ext.data.proxy.Direct'],
-   
+
     /* End Definitions */
 
     constructor: function(config) {
         var proxy;
-        
+
         config = Ext.apply({}, config);
-        
+
         if (!config.proxy) {
             proxy = {
                 type: 'direct',
@@ -43,13 +43,13 @@ Ext.define('Ext.data.DirectStore', {
                     type: 'json'
                 }
             };
-            
+
             /* eslint-disable-next-line max-len */
             Ext.copyTo(proxy, config, 'paramOrder,paramsAsHash,directFn,api,simpleSortMode,extraParams');
             Ext.copyTo(proxy.reader, config, 'totalProperty,root,rootProperty,idProperty');
             config.proxy = proxy;
         }
-        
+
         this.callParent([config]);
     }
 });

@@ -28,15 +28,21 @@ Ext.define('KitchenSink.view.grid.RowExpander', {
             width: 750,
             pricechangeWidth: 110,
             percentChangeColumnWidth: 120,
-            lastUpdatedColumnWidth: 150          
+            lastUpdatedColumnWidth: 150
+        },
+        'classic-material': {
+            width: 750,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 150,
+            lastUpdatedColumnWidth: 150
         }
     },
     columns: [
-        { text: "Company", flex: 1, dataIndex: 'name'},
-        { text: "Price", formatter: 'usMoney', dataIndex: 'price', width: 100},
-        { text: "Change", dataIndex: 'priceChange', width: '${pricechangeWidth}'},
-        { text: "% Change", dataIndex: 'priceChangePct', width: '${percentChangeColumnWidth}'},
-        { text: "Last Updated", formatter: 'date("m/d/Y")', dataIndex: 'priceLastChange', width: '${lastUpdatedColumnWidth}'}
+        { text: "Company", flex: 1, dataIndex: 'name' },
+        { text: "Price", formatter: 'usMoney', dataIndex: 'price', width: 100 },
+        { text: "Change", dataIndex: 'priceChange', width: '${pricechangeWidth}' },
+        { text: "% Change", dataIndex: 'priceChangePct', width: '${percentChangeColumnWidth}' },
+        { text: "Last Updated", formatter: 'date("m/d/Y")', dataIndex: 'priceLastChange', width: '${lastUpdatedColumnWidth}' }
     ],
     width: '${width}',
     height: 300,
@@ -45,7 +51,7 @@ Ext.define('KitchenSink.view.grid.RowExpander', {
     otherContent: [{
         type: 'Store',
         path: 'app/store/Companies.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/Company.js'
     }],
@@ -57,8 +63,9 @@ Ext.define('KitchenSink.view.grid.RowExpander', {
                 '<p><b>Company:</b> {name}</p>',
                 '<p><b>Change:</b> {change:this.formatChange}</p>',
                 {
-                    formatChange: function (v) {
+                    formatChange: function(v) {
                         var color = v >= 0 ? 'green' : 'red';
+
                         return '<span style="color: ' + color + ';">' +
                             Ext.util.Format.usMoney(v) + '</span>';
                     }

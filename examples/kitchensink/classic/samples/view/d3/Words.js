@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.d3.Words', {
         'KitchenSink.view.d3.TreeViewModel',
         'Ext.d3.hierarchy.Pack'
     ],
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [
         {
@@ -33,7 +33,7 @@ Ext.define('KitchenSink.view.d3.Words', {
             path: 'classic/sass/src/view/d3/Words.scss'
         }
     ],
-    // </example>
+    //</example>
 
     width: 930,
     height: 900,
@@ -48,11 +48,11 @@ Ext.define('KitchenSink.view.d3.Words', {
         padding: 0,
         nodeText: 'word',
         textPadding: [-8, 0],
-        nodeValue: function (node) {
+        nodeValue: function(node) {
             // Instead of using `nodeValue: 'count'` as a config,
             // take a qubic root of the 'count' to downplay
             // differences in the relative size of nodes.
-            return Math.pow(node.data.count, 1/3);
+            return Math.pow(node.data.count, 1 / 3);
         },
         colorAxis: {
             // For this example, we want all nodes to have the same color.

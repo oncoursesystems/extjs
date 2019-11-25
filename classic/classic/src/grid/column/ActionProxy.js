@@ -33,7 +33,7 @@ Ext.define('Ext.grid.column.ActionProxy', {
         this.item.glyph = glyph;
         this.column.getView().refreshView();
     },
-    
+
     setHidden: function(hidden) {
         this.item.hidden = hidden;
         this.column.getView().refreshView();

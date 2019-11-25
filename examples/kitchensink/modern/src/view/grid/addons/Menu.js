@@ -89,7 +89,7 @@ Ext.define('KitchenSink.view.grid.addons.Menu', {
         }, {
             text: 'Share',
             margin: '10 0 0',
-            iconCls: 'x-fa fa-share-square-o'
+            iconCls: 'x-far fa-share-square'
         }, {
             text: 'Rate Speaker',
             margin: '10 0 0',

@@ -8,7 +8,7 @@
  */
 Ext.define('Ext.picker.SelectPicker', {
     extend: 'Ext.picker.Picker',
-    alias: 'widget.selectpicker',
+    xtype: 'selectpicker',
 
     constructor: function(config) {
         var ownerField = config.ownerCmp,

@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.chart.combination.Pareto', {
     xtype: 'combination-pareto',
     controller: 'combination-pareto',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/combination/ParetoController.js'
@@ -48,9 +48,9 @@ Ext.define('KitchenSink.view.chart.combination.Pareto', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 

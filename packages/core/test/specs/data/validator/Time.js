@@ -3,7 +3,7 @@ xdescribe("Ext.data.validator.Time", function() {
 
     function validate(value) {
         v = new Ext.data.validator.Time();
-        
+
         return v.validate(value);
     }
 

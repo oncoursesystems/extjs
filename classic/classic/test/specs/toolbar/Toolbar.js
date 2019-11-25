@@ -16,7 +16,7 @@ function() {
         Ext.destroy(toolbar);
         toolbar = null;
     });
-    
+
     describe("alternate class name", function() {
         it("should have Ext.Toolbar as the alternate class name", function() {
             expect(Ext.toolbar.Toolbar.prototype.alternateClassName).toEqual("Ext.Toolbar");
@@ -94,12 +94,12 @@ function() {
                 });
                 menu = toolbar.layout.overflowHandler.menu;
                 menu.show();
-                
+
                 menufield = menu.down('textfield');
                 barfield = menufield.masterComponent;
 
                 menufield.setValue('Foo');
-                
+
                 expect(menufield.getValue()).toBe(barfield.getValue());
             });
 
@@ -125,9 +125,9 @@ function() {
 
                 barfield = toolbar.down('radio');
                 menufield = barfield.overflowClone;
-                
+
                 barfield.setValue(true);
-                
+
                 expect(menufield.getValue()).toBe(barfield.getValue());
             });
 
@@ -153,12 +153,12 @@ function() {
 
                 barfield = toolbar.down('radio');
                 menufield = barfield.overflowClone;
-                
+
                 jasmine.fireMouseEvent(menu.el, 'click');
                 jasmine.fireMouseEvent(menufield.el, 'click');
 
                 expect(menufield.getValue()).toBe(true);
-                
+
                 expect(menufield.getValue()).toBe(barfield.getValue());
             });
 
@@ -203,7 +203,7 @@ function() {
             // This test causes layout failure in IE8, but otherwise tests out fine.
             // Since it's not about layout, silencing the error is OK.
             spyOn(Ext.log, 'error');
-            
+
             createToolbar({
                 height: 30,
                 defaultButtonUI: 'foo',
@@ -218,7 +218,7 @@ function() {
         it("should not use the defaultButtonUI for child buttons with ui configured on the instance", function() {
             // See above
             spyOn(Ext.log, 'error');
-            
+
             createToolbar({
                 height: 30,
                 defaultButtonUI: 'foo',
@@ -327,7 +327,7 @@ function() {
             expect(toolbar.items.getAt(0).ui).toBe('default');
         });
     });
-    
+
     describe("FocusableContainer", function() {
         it("should be on with buttons", function() {
             createToolbar({
@@ -337,10 +337,10 @@ function() {
                     xtype: 'button'
                 }]
             });
-            
+
             expect(toolbar.isFocusableContainerActive()).toBeTruthy();
         });
-        
+
         it("should be off with input fields", function() {
             createToolbar({
                 items: [{
@@ -349,10 +349,10 @@ function() {
                     xtype: 'textfield'
                 }]
             });
-            
+
             expect(toolbar.isFocusableContainerActive()).toBeFalsy();
         });
-        
+
         it("should be off with sliders", function() {
             createToolbar({
                 items: [{
@@ -361,10 +361,10 @@ function() {
                     xtype: 'slider'
                 }]
             });
-            
+
             expect(toolbar.isFocusableContainerActive()).toBeFalsy();
         });
-        
+
         describe("forced to true", function() {
             beforeEach(function() {
                 createToolbar({
@@ -376,17 +376,17 @@ function() {
                     }]
                 });
             });
-            
+
             it("should activate container", function() {
                 expect(toolbar.isFocusableContainerActive()).toBeTruthy();
             });
-            
+
             it("should keep the role of toolbar", function() {
                 expect(toolbar).toHaveAttr('role', 'toolbar');
             });
         });
     });
-    
+
     describe("ARIA", function() {
         it("should have toolbar role with buttons", function() {
             createToolbar({
@@ -394,10 +394,10 @@ function() {
                     xtype: 'button'
                 }]
             });
-            
+
             expect(toolbar).toHaveAttr('role', 'toolbar');
         });
-        
+
         it("should have group role with input fields", function() {
             createToolbar({
                 items: [{
@@ -406,10 +406,10 @@ function() {
                     xtype: 'textfield'
                 }]
             });
-            
+
             expect(toolbar).toHaveAttr('role', 'group');
         });
-        
+
         it("should have group role with sliders", function() {
             createToolbar({
                 items: [{
@@ -418,11 +418,11 @@ function() {
                     xtype: 'slider'
                 }]
             });
-            
+
             expect(toolbar).toHaveAttr('role', 'group');
         });
     });
-    
+
     describe('trackMenus', function() {
         itNotTouch('should maintain menu active state when mouseovering sibling buttons when trackMenus is true', function() {
             createToolbar({
@@ -478,13 +478,13 @@ function() {
                 jasmine.fireMouseEvent(b2.el, 'mouseout');
                 jasmine.fireMouseEvent(b3.el, 'mouseover');
             });
-            
+
             waitsFor(function() {
                 return m3.isVisible(true);
             });
 
         });
-        
+
         itNotTouch("should not hide button menu when trackMenus is false", function() {
             createToolbar({
                 trackMenus: false,
@@ -518,7 +518,7 @@ function() {
                 m1 = b1.getMenu(),
                 m3 = b3.getMenu(),
                 i1 = m1.down('menuitem');
-            
+
             jasmine.fireMouseEvent(b1.el, 'mouseover');
             jasmine.fireMouseEvent(b1.el, 'click');
 
@@ -534,26 +534,26 @@ function() {
                 jasmine.fireMouseEvent(i1.el, 'mouseenter');
                 jasmine.fireMouseEvent(i1.el, 'mouseover');
             });
-            
+
             waitsFor(function() {
                 return !!m1.containsFocus;
             }, 'menu 1 to contain focus');
-            
+
             // Timer is set to 50 ms, give it a bit of slack
             waits(100);
-            
+
             // Menu should not hide
             runs(function() {
                 expect(m1.isVisible(true)).toBe(true);
-                
+
                 jasmine.fireMouseEvent(i1.el, 'mouseout');
                 jasmine.fireMouseEvent(m1.el, 'mouseout');
                 jasmine.fireMouseEvent(b3.el, 'mouseenter');
                 jasmine.fireMouseEvent(b3.el, 'mouseover');
             });
-            
+
             waits(100);
-            
+
             // Nothing should have changed w/r/t menus
             runs(function() {
                 expect(b3.el).toHaveCls('x-btn-over');

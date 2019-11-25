@@ -110,7 +110,6 @@ Ext.define('Ext.data.Range', {
         me.callParent();
     },
 
-    /* eslint-disable-next-line id-blacklist */
     goto: function(begin, end) {
         var me = this,
             buffer = me.buffer,
@@ -124,7 +123,7 @@ Ext.define('Ext.data.Range', {
             if (!task) {
                 me.task = task = new Ext.util.DelayedTask(me.doGoto, me);
             }
-            
+
             task.delay(buffer);
         }
         else {

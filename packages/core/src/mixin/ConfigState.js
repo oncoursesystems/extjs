@@ -22,11 +22,11 @@ Ext.define('Ext.mixin.ConfigState', {
 
         if (isAlternate) {
             state = {};
-            
+
             for (key in cfg) {
                 state[key] = me.getConfig(key);
             }
-            
+
             me.capturedConfigState = state;
             me.setConfig(cfg);
             // Capture

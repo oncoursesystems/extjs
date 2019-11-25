@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.lists.NestedListController', {
         this.callParent();
     },
 
-    hideDialog: function () {
+    hideDialog: function() {
         var dialog = this.dialog;
 
         if (dialog) {
@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.lists.NestedListController', {
         }
     },
 
-    showDialog: function () {
+    showDialog: function() {
         var dialog = this.dialog,
             view;
 
@@ -32,7 +32,7 @@ Ext.define('KitchenSink.view.lists.NestedListController', {
         dialog.show();
     },
 
-    onCancel: function () {
+    onCancel: function() {
         var vm = this.getViewModel(),
             node = vm.get('selected');
 
@@ -43,11 +43,11 @@ Ext.define('KitchenSink.view.lists.NestedListController', {
         }
     },
 
-    onOK: function () {
+    onOK: function() {
         this.hideDialog();
     },
 
-    onLeafChildTap: function (nestedlist, location) {
+    onLeafChildTap: function(nestedlist, location) {
         var vm = this.getViewModel();
 
         this.showDialog();

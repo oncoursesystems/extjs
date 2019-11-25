@@ -13,7 +13,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Nativ
         if (typeof x !== 'number') {
             x = 5;
         }
-        
+
         if (typeof y !== 'number') {
             y = 5;
         }
@@ -34,7 +34,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Nativ
         if (typeof x !== 'number') {
             x = 50;
         }
-        
+
         if (typeof y !== 'number') {
             y = 50;
         }
@@ -397,7 +397,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Nativ
                     element: el
                 });
             }
-            
+
             afterEach(function() {
                 Ext.destroy(drop1, drop2, drop3);
             });
@@ -431,8 +431,8 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Nativ
             });
 
             it("should not move to a lower z-index if the topmost doesn't accept the drop", function() {
-                drop1 = makeZIndexDrop(300, 'red'),
-                drop2 = makeZIndexDrop(200, 'blue'),
+                drop1 = makeZIndexDrop(300, 'red');
+                drop2 = makeZIndexDrop(200, 'blue');
                 drop3 = makeZIndexDrop(100, 'green');
 
                 makeDragEl();

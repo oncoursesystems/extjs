@@ -8,7 +8,10 @@ Ext.define('Ext.data.LocalStore', {
     requires: ['Ext.data.Group'],
 
     mixinConfig: {
-        id: 'localstore'
+        id: 'localstore',
+        after: {
+            fireGroupChangeEvent: 'onGrouperChange'
+        }
     },
 
     config: {
@@ -55,6 +58,9 @@ Ext.define('Ext.data.LocalStore', {
 
     constructDataCollection: function() {
         var result = new Ext.util.Collection({
+            //<debug>
+            id: this.getId() + '-data',
+            //</debug>
             rootProperty: 'data',
             groupConfig: {
                 xclass: 'Ext.data.Group',
@@ -65,7 +71,7 @@ Ext.define('Ext.data.LocalStore', {
         // Add this store as an observer immediately so that we are informed of any
         // synchronous autoLoad which may occur in this event.
         result.addObserver(this);
-        
+
         return result;
     },
 
@@ -83,7 +89,7 @@ Ext.define('Ext.data.LocalStore', {
             Model = this.getModel();
             record = new Model(record, session);
         }
-        
+
         return record;
     },
 
@@ -93,9 +99,9 @@ Ext.define('Ext.data.LocalStore', {
 
     createSortersCollection: function() {
         var sorters = this.getData().getSorters();
-        
+
         sorters.setSorterConfigure(this.addFieldTransform, this);
-        
+
         return sorters;
     },
 
@@ -127,7 +133,7 @@ Ext.define('Ext.data.LocalStore', {
     onCollectionBeginUpdate: function() {
         this.beginUpdate();
     },
-    
+
     onCollectionEndUpdate: function() {
         this.endUpdate();
     },
@@ -146,10 +152,14 @@ Ext.define('Ext.data.LocalStore', {
         this.onFilterEndUpdate();
     },
 
+    onGrouperChange: function(grouper) {
+        this.callObservers('GrouperChange', [ grouper ]);
+    },
+
     notifySorterChange: function() {
         this.getData().onSorterChange();
     },
-    
+
     forceLocalSort: function() {
         var sorters = this.getSorters();
 
@@ -191,19 +201,19 @@ Ext.define('Ext.data.LocalStore', {
         if (bypassFilters && data.filtered) {
             data = data.getSource();
         }
-        
+
         data = data.items.slice(0); // safe for re-entrant calls
         len = data.length;
 
         for (i = 0; i < len; ++i) {
             record = data[i];
-            
+
             if (fn.call(scope || record, record, i, len) === false) {
                 break;
             }
         }
     },
-    
+
     /**
      * Collects unique values for a particular dataIndex from this store.
      *
@@ -241,7 +251,7 @@ Ext.define('Ext.data.LocalStore', {
         var me = this,
             allowNull = includeOptions,
             data = me.getData();
-        
+
         if (typeof includeOptions === 'object') {
             filtered = includeOptions.filtered;
             allowNull = includeOptions.allowNull;
@@ -265,11 +275,11 @@ Ext.define('Ext.data.LocalStore', {
      */
     getById: function(id) {
         var data = this.getData();
-        
+
         if (data.filtered) {
             data = data.getSource();
         }
-        
+
         return data.get(id) || null;
     },
 
@@ -293,7 +303,7 @@ Ext.define('Ext.data.LocalStore', {
                 data.setExtraKeys(keyCfg);
                 data.$hasExtraKeys = true;
             }
-            
+
             data = data.getSource();
         }
 
@@ -311,7 +321,7 @@ Ext.define('Ext.data.LocalStore', {
      */
     getDataSource: function() {
         var data = this.getData();
-        
+
         return data.getSource() || data;
     },
 
@@ -352,7 +362,7 @@ Ext.define('Ext.data.LocalStore', {
     insert: function(index, records) {
         var me = this,
             len, i;
-        
+
         if (records) {
             if (!Ext.isIterable(records)) {
                 records = [records];
@@ -360,23 +370,23 @@ Ext.define('Ext.data.LocalStore', {
             else {
                 records = Ext.Array.clone(records);
             }
-            
+
             len = records.length;
         }
-        
+
         if (!len) {
             return [];
         }
-        
+
         for (i = 0; i < len; ++i) {
             records[i] = me.createModel(records[i]);
         }
-        
+
         me.getData().insert(index, records);
-        
+
         return records;
     },
-    
+
     /**
      * Query all the cached records in this Store using a filtering function. The specified function
      * will be called with each record in this Store. If the function returns `true` the record is
@@ -470,7 +480,7 @@ Ext.define('Ext.data.LocalStore', {
      */
     sum: function(field, grouped) {
         var data = this.getData();
-        
+
         return (grouped && this.isGrouped()) ? data.sumByGroup(field) : data.sum(field);
     },
 
@@ -487,7 +497,7 @@ Ext.define('Ext.data.LocalStore', {
      */
     count: function(grouped) {
         var data = this.getData();
-        
+
         return (grouped && this.isGrouped()) ? data.countByGroup() : data.count();
     },
 
@@ -505,7 +515,7 @@ Ext.define('Ext.data.LocalStore', {
      */
     min: function(field, grouped) {
         var data = this.getData();
-        
+
         return (grouped && this.isGrouped()) ? data.minByGroup(field) : data.min(field);
     },
 
@@ -523,7 +533,7 @@ Ext.define('Ext.data.LocalStore', {
      */
     max: function(field, grouped) {
         var data = this.getData();
-        
+
         return (grouped && this.isGrouped()) ? data.maxByGroup(field) : data.max(field);
     },
 
@@ -541,7 +551,7 @@ Ext.define('Ext.data.LocalStore', {
      */
     average: function(field, grouped) {
         var data = this.getData();
-        
+
         return (grouped && this.isGrouped()) ? data.averageByGroup(field) : data.average(field);
     },
 
@@ -563,7 +573,7 @@ Ext.define('Ext.data.LocalStore', {
     aggregate: function(fn, scope, grouped, field) {
         var me = this,
             groups, len, out, group, i;
-        
+
         if (grouped && me.isGrouped()) {
             groups = me.getGroups().items;
             len = groups.length;
@@ -573,7 +583,7 @@ Ext.define('Ext.data.LocalStore', {
                 group = groups[i];
                 out[group.getGroupKey()] = me.getAggregate(fn, scope || me, group.items, field);
             }
-            
+
             return out;
         }
         else {
@@ -590,7 +600,7 @@ Ext.define('Ext.data.LocalStore', {
         for (i = 0; i < len; ++i) {
             values[i] = records[i].get(field);
         }
-        
+
         return fn.call(scope || this, records, values);
     },
 
@@ -603,7 +613,7 @@ Ext.define('Ext.data.LocalStore', {
 
         observers.add(observer);
     },
-    
+
     removeObserver: function(observer) {
         var observers = this.observers;
 
@@ -611,25 +621,25 @@ Ext.define('Ext.data.LocalStore', {
             observers.remove(observer);
         }
     },
-    
+
     callObservers: function(action, args) {
         var observers = this.observers,
             len, items, i, methodName, item;
-        
+
         if (observers) {
             items = observers.items;
-            
+
             if (args) {
                 args.unshift(this);
             }
             else {
                 args = [this];
             }
-            
+
             for (i = 0, len = items.length; i < len; ++i) {
                 item = items[i];
                 methodName = 'onSource' + action;
-                
+
                 if (item[methodName]) {
                     item[methodName].apply(item, args);
                 }
@@ -663,12 +673,12 @@ Ext.define('Ext.data.LocalStore', {
 
         for (i = 0, len = data.length; i < len; ++i) {
             record = data[i];
-            
+
             if (fn.call(scope, record) === true) {
                 matches.push(record);
             }
         }
-        
+
         return matches;
     },
 
@@ -693,12 +703,12 @@ Ext.define('Ext.data.LocalStore', {
 
         for (i = 0, len = data.length; i < len; ++i) {
             record = data[i];
-            
+
             if (record.get(field) === value) {
                 matches.push(record);
             }
         }
-        
+
         return matches;
     },
 
@@ -716,5 +726,4 @@ Ext.define('Ext.data.LocalStore', {
             };
         }
     }
-
 });

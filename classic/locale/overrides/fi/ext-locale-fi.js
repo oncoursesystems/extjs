@@ -51,7 +51,7 @@ Ext.onReady(function() {
             // Finnish Euro
             dateFormat: 'j.n.Y'
         });
-        
+
         Ext.util.Format.date = function(v, format) {
             if (!v) {
                 return "";
@@ -63,7 +63,7 @@ Ext.onReady(function() {
 
             return Ext.Date.format(v, format || "j.n.Y");
         };
-        
+
     }
 });
 

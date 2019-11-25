@@ -4,7 +4,7 @@ topSuite('Ext.parse.Parser', function() {
     beforeEach(function() {
         parser = Ext.parse.Parser.fly();
     });
-    
+
     afterEach(function() {
         parser.release();
         parser = null;

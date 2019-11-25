@@ -285,7 +285,10 @@ Ext.define('Ext.dataview.Component', {
          * current use. This array will contain no more then `maxItemCache` items.
          * @private
          */
-        this.itemCache = [];
+        this.itemCache = {
+            max: 0,
+            unused: []
+        };
 
         this.callParent([ config ]);
     },
@@ -308,7 +311,7 @@ Ext.define('Ext.dataview.Component', {
 
     doDestroy: function() {
         // dataItems are also in this container, so they will be handled...
-        Ext.destroy(this.itemCache, this.dataRange);
+        Ext.destroy(this.itemCache.unused, this.dataRange);
 
         this.callParent();
     },
@@ -341,7 +344,7 @@ Ext.define('Ext.dataview.Component', {
 
     onStoreAdd: function(store, records, index) {
         var me = this;
-        
+
         me.callParent(arguments);
 
         me.setItemCount(store.getCount());
@@ -371,7 +374,7 @@ Ext.define('Ext.dataview.Component', {
     },
 
     //--------------------------------------------
-    // Private Configs
+    // Configs
 
     // itemInnerCls
 
@@ -445,6 +448,12 @@ Ext.define('Ext.dataview.Component', {
         return Ext.dataview.DataItem.parseDataMap(dataMap);
     },
 
+    // maxItemCache
+
+    updateMaxItemCache: function(max) {
+        this.itemCache.max = max;
+    },
+
     // striped
 
     updateStriped: function(striped) {
@@ -494,7 +503,7 @@ Ext.define('Ext.dataview.Component', {
             }
 
             // Pull from the itemCache first
-            if (!(item = me.itemCache.pop())) {
+            if (!(item = me.itemCache.unused.pop())) {
                 // Failing that, create new ones
                 item = me.createDataItem(cfg);
                 item = me.addDataItem(item, at);
@@ -549,7 +558,8 @@ Ext.define('Ext.dataview.Component', {
                 datasetIndex = recordIndex + (page ? ((page - 1) * store.pageSize) : 0),
                 dataItems = me.dataItems,
                 realIndex = (itemIndex < 0) ? dataItems.length + itemIndex : itemIndex,
-                item = dataItems[realIndex],
+                record = me.dataRange.records[recordIndex],
+                item = me.getItemForRecord(realIndex, record, recordIndex),
                 storeCount = store.getCount(),
                 handlers = me._itemChangeHandlers,
                 options = {
@@ -557,7 +567,7 @@ Ext.define('Ext.dataview.Component', {
                     isLast: recordIndex === storeCount - 1,
                     item: item,
                     itemIndex: realIndex,
-                    record: me.dataRange.records[recordIndex],
+                    record: record,
                     recordIndex: recordIndex,
                     datasetIndex: datasetIndex
                 },
@@ -677,7 +687,7 @@ Ext.define('Ext.dataview.Component', {
         },
 
         clearItemCaches: function() {
-            var cache = this.itemCache;
+            var cache = this.itemCache.unused;
 
             Ext.destroy(cache);
 
@@ -688,7 +698,7 @@ Ext.define('Ext.dataview.Component', {
             var me = this,
                 dataItems = me.dataItems,
                 len = dataItems.length,
-                itemCache = me.itemCache,
+                itemCache = me.itemCache.unused,
                 i;
 
             for (i = 0; i < len; ++i) {
@@ -773,19 +783,28 @@ Ext.define('Ext.dataview.Component', {
             }
         },
 
+        getCacheForItem: function() {
+            return this.itemCache;
+        },
+
         getFastItems: function() {
             return this.getInnerItems();
+        },
+
+        getItemForRecord: function(viewIndex) {
+            return this.dataItems[viewIndex];
         },
 
         getStoreChangeSyncIndex: function(index) {
             return index;
         },
 
-        removeCachedItem: function(item, preventCache, cache, max, preventRemoval) {
+        removeCachedItem: function(item, preventCache, cache, preventRemoval) {
             var me = this,
-                ret = false;
+                ret = false,
+                unused = !preventCache && cache && cache.unused;
 
-            if (!preventCache && cache.length < max) {
+            if (unused && unused.length < cache.max) {
                 // If we are allowed to do so, then cache what we don't
                 // need right now
                 if (preventRemoval) {
@@ -795,7 +814,7 @@ Ext.define('Ext.dataview.Component', {
                     me.remove(item, /* destroy= */false);
                 }
 
-                cache.push(item);
+                unused.push(item);
             }
             else {
                 item.destroy();
@@ -806,8 +825,8 @@ Ext.define('Ext.dataview.Component', {
         },
 
         removeDataItem: function(item, preventCache) {
-            return this.removeCachedItem(item, preventCache, this.itemCache,
-                                         this.getMaxItemCache());
+            return this.removeCachedItem(item, preventCache,
+                                         !preventCache && this.getCacheForItem(item));
         },
 
         syncItemRange: function(start, end) {
@@ -864,6 +883,17 @@ Ext.define('Ext.dataview.Component', {
                 item.setRecord(record);
 
                 item.el.dom.setAttribute('data-recordid', record.internalId);
+
+                // Update dragging row highlighted cls while dragging in case of infinite grid
+                // where same dom will be reused.
+                if (item.isDragging) {
+                    if (item.draggingRecordId === record.id) {
+                        itemClasses[item.dragMarkerCls] = true;
+                    }
+                    else {
+                        delete itemClasses[item.dragMarkerCls];
+                    }
+                }
             }
 
             if (dataMap) {

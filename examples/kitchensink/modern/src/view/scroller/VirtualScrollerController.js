@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.scroller.VirtualScrollerController', {
 
     increment: 100000000000000,
 
-    init: function () {
+    init: function() {
         var view = this.getView(),
             scroller = view.getScrollable();
 
@@ -19,59 +19,59 @@ Ext.define('KitchenSink.view.scroller.VirtualScrollerController', {
         this.syncStatus();
     },
 
-    onScroll: function () {
+    onScroll: function() {
         this.syncStatus();
     },
 
-    scrollForwardY: function () {
+    scrollForwardY: function() {
         var scroller = this.getView().getScrollable();
 
         scroller.scrollBy(null, this.increment);
     },
 
-    scrollBackwardY: function () {
+    scrollBackwardY: function() {
         var scroller = this.getView().getScrollable();
 
         scroller.scrollBy(null, -this.increment);
     },
 
-    scrollToStartY: function () {
+    scrollToStartY: function() {
         var scroller = this.getView().getScrollable();
 
         scroller.scrollTo(null, 0);
     },
 
-    scrollToEndY: function () {
+    scrollToEndY: function() {
         var scroller = this.getView().getScrollable();
 
         scroller.scrollTo(null, scroller.getMaxPosition().y);
     },
 
-    scrollForwardX: function () {
+    scrollForwardX: function() {
         var scroller = this.getView().getScrollable();
 
         scroller.scrollBy(this.increment, null);
     },
 
-    scrollBackwardX: function () {
+    scrollBackwardX: function() {
         var scroller = this.getView().getScrollable();
 
         scroller.scrollBy(-this.increment, null);
     },
 
-    scrollToStartX: function () {
+    scrollToStartX: function() {
         var scroller = this.getView().getScrollable();
 
         scroller.scrollTo(0, null);
     },
 
-    scrollToEndX: function () {
+    scrollToEndX: function() {
         var scroller = this.getView().getScrollable();
 
         scroller.scrollTo(scroller.getMaxPosition().x, null);
     },
 
-    syncStatus: function () {
+    syncStatus: function() {
         var Format = Ext.util.Format,
             format = '0,000',
             scroller = this.getView().getScrollable(),

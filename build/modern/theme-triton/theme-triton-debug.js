@@ -5,6 +5,16 @@ Ext.define('Ext.theme.neptune.Titlebar', {
     }
 });
 
+Ext.define('Ext.theme.triton.dataview.ListCollapser', {
+    override: 'Ext.dataview.ListCollapser',
+    config: {
+        tool: {
+            weight: -100,
+            zone: 'start'
+        }
+    }
+});
+
 Ext.define('Ext.theme.neptune.panel.Date', {
     override: 'Ext.panel.Date',
     border: true

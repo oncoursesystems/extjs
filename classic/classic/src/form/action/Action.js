@@ -178,14 +178,14 @@ Ext.define('Ext.form.action.Action', {
      */
     constructor: function(config) {
         var params;
-        
+
         if (config) {
             Ext.apply(this, config);
         }
 
         // Normalize the params option to an Object
         params = config.params;
-        
+
         if (Ext.isString(params)) {
             this.params = Ext.Object.fromQueryString(params);
         }
@@ -221,10 +221,10 @@ Ext.define('Ext.form.action.Action', {
     onFailure: function(response) {
         var form = this.form,
             formActive = form && !form.destroying && !form.destroyed;
-        
+
         this.response = response;
         this.failureType = Ext.form.action.Action.CONNECT_FAILURE;
-        
+
         if (formActive) {
             form.afterAction(this, false);
         }
@@ -240,11 +240,11 @@ Ext.define('Ext.form.action.Action', {
      */
     processResponse: function(response) {
         this.response = response;
-        
+
         if (!response.responseText && !response.responseXML) {
             return true;
         }
-        
+
         return (this.result = this.handleResponse(response));
     },
 

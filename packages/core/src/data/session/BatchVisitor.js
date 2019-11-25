@@ -30,7 +30,7 @@ Ext.define('Ext.data.session.BatchVisitor', {
                 batchActions = proxy.getBatchActions();
 
                 delete bucket.entity; // so we don't think its an operation
-                
+
                 for (operationType in bucket) {
                     if (batchActions) {
                         operation = proxy.createOperation(operationType, {
@@ -41,7 +41,7 @@ Ext.define('Ext.data.session.BatchVisitor', {
                     }
                     else {
                         records = bucket[operationType];
-                        
+
                         for (i = 0, len = records.length; i < len; ++i) {
                             operation = proxy.createOperation(operationType, {
                                 records: [records[i]]

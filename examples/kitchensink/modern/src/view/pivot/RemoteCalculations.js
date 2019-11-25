@@ -13,26 +13,26 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
         'Ext.pivot.plugin.DrillDown'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Model',
         path: 'modern/src/model/Sale.js'
     }],
-    // </example>
+    //</example>
 
     plugins: {
         pivotdrilldown: {
             // define the columns used by the grid
             columns: [
-                {dataIndex: 'company', text: 'Company'},
-                {dataIndex: 'continent', text: 'Continent'},
-                {dataIndex: 'country', text: 'Country'},
-                {dataIndex: 'person', text: 'Person'},
-                {dataIndex: 'date', text: 'Date', xtype: 'datecolumn'},
-                {dataIndex: 'value', text: 'Value', xtype: 'numbercolumn', align: 'right'},
-                {dataIndex: 'quantity', text: 'Qty', xtype: 'numbercolumn', align: 'right'},
-                {dataIndex: 'year', text: 'Year', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right'},
-                {dataIndex: 'month', text: 'Month', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right'}
+                { dataIndex: 'company', text: 'Company' },
+                { dataIndex: 'continent', text: 'Continent' },
+                { dataIndex: 'country', text: 'Country' },
+                { dataIndex: 'person', text: 'Person' },
+                { dataIndex: 'date', text: 'Date', xtype: 'datecolumn' },
+                { dataIndex: 'value', text: 'Value', xtype: 'numbercolumn', align: 'right' },
+                { dataIndex: 'quantity', text: 'Qty', xtype: 'numbercolumn', align: 'right' },
+                { dataIndex: 'year', text: 'Year', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right' },
+                { dataIndex: 'month', text: 'Month', xtype: 'numbercolumn', formatter: 'number(0)', align: 'right' }
             ],
 
             // define a remote store that will be used to filter the records
@@ -64,7 +64,7 @@ Ext.define('KitchenSink.view.pivot.RemoteCalculations', {
         // "pivot" package
         // Beware that you also need to change the remoteStore of the
         // DrillDown plugin to point to another script that filters that table.
-        //url: 'path_to_remote.php'
+        // url: 'path_to_remote.php'
 
         // Set layout type to "outline". If this config is missing then the
         // default layout is "outline"

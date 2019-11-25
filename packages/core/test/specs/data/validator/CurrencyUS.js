@@ -3,7 +3,7 @@ topSuite("Ext.data.validator.CurrencyUS", function() {
 
     function validate(value) {
         v = new Ext.data.validator.CurrencyUS();
-        
+
         return v.validate(value);
     }
 

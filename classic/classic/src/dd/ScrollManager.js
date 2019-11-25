@@ -105,15 +105,15 @@ Ext.define('Ext.dd.ScrollManager', {
                 scrollComponent = proc.component,
                 ddScrollConfig = proc.el.ddScrollConfig,
                 distance, animate, afterScroll;
-                
+
             distance = ddScrollConfig && ddScrollConfig.increment
                 ? ddScrollConfig.increment
                 : me.increment;
-            
+
             animate = ddScrollConfig && 'animate' in ddScrollConfig
                 ? ddScrollConfig.animate
                 : me.animate;
-            
+
             afterScroll = function() {
                 me.triggerRefresh();
             };
@@ -149,7 +149,7 @@ Ext.define('Ext.dd.ScrollManager', {
             else {
                 procEl.scroll(proc.dir, distance, animate);
             }
-            
+
             if (!animate) {
                 afterScroll();
             }
@@ -224,7 +224,7 @@ Ext.define('Ext.dd.ScrollManager', {
                         continue;
                     }
                 }
-                
+
                 if (elementRegion.bottom - pt.y <= configSource.vthresh) {
                     if (proc.el !== el) {
                         me.startProc(el, "down");
@@ -266,7 +266,7 @@ Ext.define('Ext.dd.ScrollManager', {
      */
     register: function(el) {
         var i, len;
-        
+
         if (Ext.isArray(el)) {
             for (i = 0, len = el.length; i < len; i++) {
                 this.register(el[i]);
@@ -285,7 +285,7 @@ Ext.define('Ext.dd.ScrollManager', {
      */
     unregister: function(el) {
         var i, len;
-        
+
         if (Ext.isArray(el)) {
             for (i = 0, len = el.length; i < len; i++) {
                 this.unregister(el[i]);

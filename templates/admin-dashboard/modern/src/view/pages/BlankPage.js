@@ -14,7 +14,7 @@ Ext.define('Admin.view.pages.BlankPage', {
 
     items: [{
         cls: 'blank-page-container',
-        html: '<div class=\'fa-outer-class\'><span class=\'x-fa fa-clock-o\'></span></div>' +
+        html: '<div class=\'fa-outer-class\'><span class=\'x-fa fa-clock\'></span></div>' +
             '<h1>Coming Soon!</h1><span class=\'blank-page-text\'>Stay tuned for updates</span>'
     }]
 });

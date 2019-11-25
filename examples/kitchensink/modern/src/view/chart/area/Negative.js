@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.chart.area.Negative', {
     xtype: 'area-negative',
     controller: 'area-negative',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/area/NegativeController.js'
@@ -41,9 +41,9 @@ Ext.define('KitchenSink.view.chart.area.Negative', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -98,7 +98,7 @@ Ext.define('KitchenSink.view.chart.area.Negative', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

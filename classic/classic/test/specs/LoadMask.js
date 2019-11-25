@@ -1,10 +1,9 @@
 topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
     var mask, target, mockComplete;
-    
+
     beforeEach(function() {
         MockAjaxManager.addMethods();
     });
-    
 
     function makeTarget(targetCfg) {
         target = Ext.widget(targetCfg && targetCfg.xtype || 'component', Ext.apply({
@@ -13,7 +12,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
             renderTo: Ext.getBody()
         }, targetCfg));
     }
-   
+
     function createMask(cfg, targetCfg) {
        if (!target) {
            makeTarget(targetCfg);
@@ -29,14 +28,14 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
         mask = target = null;
         MockAjaxManager.removeMethods();
     });
-    
+
     describe("mask options", function() {
         describe("msg", function() {
             it("should default the message to Loading...", function() {
                 createMask().show();
                 expect(mask.msgTextEl.dom.innerHTML).toEqual('Loading...');
             });
-            
+
             it("should accept a custom message", function() {
                 createMask({
                     msg: 'Foo'
@@ -44,13 +43,13 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                 expect(mask.msgTextEl.dom.innerHTML).toEqual('Foo');
             });
         });
-        
+
         describe("msgCls", function() {
             it("should default to x-mask-loading", function() {
                 createMask().show();
                 expect(mask.msgEl.hasCls('x-mask-loading')).toBe(true);
             });
-            
+
             it("should accept a custom class", function() {
                 createMask({
                     msgCls: 'foo'
@@ -58,58 +57,58 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                 expect(mask.msgEl.hasCls('foo')).toBe(true);
             });
         });
-        
+
         describe("msgWrapCls", function() {
             it("should default to x-mask-msg", function() {
                 createMask().show();
                 expect(mask.msgWrapEl.hasCls('x-mask-msg')).toBe(true);
             });
-            
+
             it("should accept a custom class", function() {
                 createMask({
                     msgWrapCls: 'foo'
                 }).show();
                 expect(mask.msgWrapEl.hasCls('foo')).toBe(true);
             });
-            
+
             it("should accept legacy maskCls config", function() {
                 // Deprecated warning is expected
                 spyOn(Ext.log, 'warn');
-                
+
                 createMask({
                     maskCls: 'foo'
                 }).show();
-                
+
                 expect(mask.msgWrapEl.hasCls('foo')).toBe(true);
             });
-            
+
             it("should favor msgWrapCls over maskCls if both are present", function() {
                 // Deprecated warning is expected
                 spyOn(Ext.log, 'warn');
-                
+
                 createMask({
                     maskCls: 'foo',
                     msgWrapCls: 'bar'
                 }).show();
-                
+
                 expect(mask.msgWrapEl.hasCls('bar')).toBe(true);
                 expect(mask.msgWrapEl.hasCls('foo')).toBe(false);
             });
         });
-        
+
         describe("useMsg", function() {
             it("should default to true", function() {
                 createMask().show();
                 expect(mask.el.isVisible()).toBe(true);
             });
-            
+
             it("should respect the useMsg: false", function() {
                 createMask({
                     useMsg: false
                 }).show();
                 expect(mask.msgWrapEl.isVisible()).toBe(false);
             });
-            
+
             it("should should still show the mask even when useMsg: false", function() {
                 createMask({
                     useMsg: false
@@ -117,7 +116,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                 expect(mask.el.isVisible()).toBe(true);
             });
         });
-        
+
         describe("useTargetEl", function() {
             it("should size to the targetEl & should default to false", function() {
                 createMask().show();
@@ -126,7 +125,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                 expect(size.width).toBe(100);
                 expect(size.height).toBe(100);
             });
-            
+
             it("should size to the targetEl when useTargetEl: true", function() {
                 createMask({
                     useTargetEl: true
@@ -137,15 +136,15 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     renderTo: Ext.getBody(),
                     title: 'Title'
                 }).show();
-                
+
                 var size = mask.el.getSize(),
                     bodySize = target.body.getViewSize();
-                
+
                 expect(size.width).toBe(bodySize.width);
                 expect(size.height).toBe(bodySize.height);
             });
         });
-            
+
     });
 
     describe("z-index on show", function() {
@@ -209,7 +208,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
             });
         });
     });
-    
+
     describe("updating to target changes", function() {
         describe("root level component", function() {
             describe("floating target", function() {
@@ -223,38 +222,38 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     });
                     target.show();
                 });
-        
+
                 it("should set the position of the mask to match the floater", function() {
                     createMask().show();
-                    
+
                     var xy = mask.el.getXY();
-                    
+
                     expect(xy[0]).toBe(100);
                     expect(xy[1]).toBe(100);
                 });
-                
+
                 it("should change the position when the component moves", function() {
                     createMask().show();
                     target.setPosition(200, 200);
-                    
+
                     var xy = mask.el.getXY();
-                    
+
                     expect(xy[0]).toBe(200);
                     expect(xy[1]).toBe(200);
                 });
             });
-            
+
             describe("sizing", function() {
                 it("should update the mask size when the component resizes", function() {
                     createMask().show();
                     target.setSize(150, 200);
-                    
+
                     var size = mask.el.getSize();
-                    
+
                     expect(size.width).toBe(150);
                     expect(size.height).toBe(200);
                 });
-        
+
                 it("should update the mask size to the targetEl when the component resizes", function() {
                     createMask({
                         useTargetEl: true
@@ -266,15 +265,15 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                         title: 'Title'
                     }).show();
                     target.setSize(150, 200);
-                    
+
                     var size = mask.el.getSize(),
                         bodySize = target.body.getViewSize();
-                    
+
                     expect(size.width).toBe(bodySize.width);
                     expect(size.height).toBe(bodySize.height);
                 });
             });
-            
+
             describe("hide/show", function() {
                 it("should hide the mask when the component is hidden", function() {
                     createMask(null, {
@@ -285,7 +284,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     target.hide();
                     expect(mask.isVisible()).toBe(false);
                 });
-                
+
                 it("should re-show the mask when toggling the hidden state", function() {
                     createMask(null, {
                         getMaskTarget: function() {
@@ -296,7 +295,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     target.show();
                     expect(mask.isVisible()).toBe(true);
                 });
-                
+
                 it("should not show the mask if it's hidden during a toggle", function() {
                     createMask(null, {
                         getMaskTarget: function() {
@@ -337,7 +336,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
 
                     store = panel.store;
                     store.load();
-                    
+
                     waitsFor(function() {
                         panelMask = panel.view.loadMask;
 
@@ -347,19 +346,19 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     runs(function() {
                         spyOn(panelMask, 'show').andCallThrough();
                         expect(panelMask.show.callCount).toBe(0);
-                        
+
                         panelMask.setDisabled(true);
                         store.load();
                         panelMask.setDisabled(false);
-                        
+
                         store.load();
                         expect(panelMask.show.callCount).toBe(1);
                         panel.destroy();
-                       
+
                     });
                 });
             });
-            
+
             describe("expand/collapse", function() {
                 beforeEach(function() {
                     target = new Ext.panel.Panel({
@@ -373,21 +372,20 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                         }
                     });
                 });
-                
+
                 it("should hide the mask when the component is collapsed", function() {
                     createMask().show();
                     target.collapse();
                     expect(mask.isVisible()).toBe(false);
                 });
-                
-                
+
                 it("should re-show the mask after expanding", function() {
                     createMask().show();
                     target.collapse();
                     target.expand();
                     expect(mask.isVisible()).toBe(true);
                 });
-                
+
                 it("should not show the mask if it's hidden during a toggle", function() {
                     createMask().show();
                     target.collapse();
@@ -396,12 +394,12 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     expect(mask.isVisible()).toBe(false);
                 });
             });
-            
+
             describe("focus handling", function() {
                 var waitForFocus = jasmine.waitForFocus,
                     expectFocused = jasmine.expectFocused,
                     fooBtn, barBtn, panel;
-                
+
                 beforeEach(function() {
                     target = new Ext.panel.Panel({
                         width: 100,
@@ -412,16 +410,16 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                             text: 'foo'
                         }]
                     });
-                    
+
                     createMask();
-                
+
                     fooBtn = target.down('button');
-                
+
                     fooBtn.focus();
-                    
+
                     waitForFocus(fooBtn);
                 });
-                
+
                 afterEach(function() {
                     Ext.destroy(barBtn, panel);
                 });
@@ -461,7 +459,6 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                         menuItem.focus(false, true);
                         waitsForFocus(menuItem);
                     });
-                    
 
                     runs(function() {
                         // Show the mask and it should focus
@@ -479,7 +476,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                         expect(menuItem.hasFocus).toBe(true);
                         panelStore.fireEvent('load', panelStore);
                     });
-                    
+
                     waitsFor(function() {
                         return !panelMask.isVisible();
                     }, 'LoadMask to hide');
@@ -489,30 +486,30 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                         expect(menuItem.hasFocus).toBe(true);
                     });
                 });
-                
+
                 it("should steal focus from within target on show", function() {
                     mask.show();
-                    
+
                     waitForFocus(mask);
-                    
+
                     expectFocused(mask);
                 });
-                
+
                 describe("restoring focus on hide", function() {
                     beforeEach(function() {
                         mask.show();
-                    
+
                         waitForFocus(mask);
                     });
-                    
+
                     it("should go to previously focused element", function() {
                         mask.hide();
-                    
+
                         waitForFocus(fooBtn);
-                    
+
                         expectFocused(fooBtn);
                     });
-                    
+
                     it("should not restore focus if mask el is not focused", function() {
                         barBtn = new Ext.button.Button({
                             renderTo: Ext.getBody(),
@@ -520,33 +517,33 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                         });
 
                         barBtn.focus();
-                        
+
                         waitForFocus(barBtn);
-                        
+
                         runs(function() {
                             mask.hide();
                         });
-                        
+
                         waitForFocus(barBtn);
-                        
+
                         expectFocused(barBtn);
                     });
                 });
             });
         });
-        
+
         describe("in a container", function() {
             var ct1, ct2, makeCt;
-            
+
             beforeEach(function() {
                 makeCt = function(floating) {
-                    
+
                     target = new Ext.Component({
                         getMaskTarget: function() {
                             return null;
                         }
                     });
-                    
+
                     ct2 = new Ext.panel.Panel({
                         animCollapse: false,
                         title: 'Title2',
@@ -554,7 +551,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                         layout: 'fit',
                         items: target
                     });
-                    
+
                     ct1 = new Ext.panel.Panel({
                         animCollapse: false,
                         width: 200,
@@ -571,7 +568,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct1.show();
                 };
             });
-            
+
             afterEach(function() {
                 Ext.destroy(ct1);
                 makeCt = ct1 = ct2 = null;
@@ -580,27 +577,27 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                 it("should set the position of the mask to match the floater", function() {
                     makeCt(true);
                     createMask().show();
-                    
+
                     var xy = mask.el.getXY(),
                         compXY = target.getPosition();
-                        
+
                     expect(xy[0]).toBe(compXY[0]);
                     expect(xy[1]).toBe(compXY[1]);
                 });
-                
+
                 it("should change the position when the component moves", function() {
                     makeCt(true);
                     createMask().show();
                     ct1.setPosition(200, 200);
-                    
+
                     var xy = mask.el.getXY(),
                         compXY = target.getPosition();
-                        
+
                     expect(xy[0]).toBe(compXY[0]);
                     expect(xy[1]).toBe(compXY[1]);
                 });
             });
-            
+
             describe("sizing", function() {
                 it("should update the mask size when the component resizes", function() {
                     makeCt(null, {
@@ -610,16 +607,16 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     });
                     createMask().show();
                     ct1.setSize(250, 300);
-                    
+
                     var size = mask.el.getSize(),
                         compSize = target.getSize();
-                        
+
                     expect(size.width).toBe(compSize.width);
                     expect(size.height).toBe(compSize.height);
                 });
-        
+
             });
-            
+
             describe("hide/show", function() {
                 it("should hide the mask when the top-most container is hidden", function() {
                     makeCt(null, {
@@ -631,7 +628,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct1.hide();
                     expect(mask.isVisible()).toBe(false);
                 });
-                
+
                 it("should hide the mask when the direct parent container is hidden", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -642,7 +639,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct2.hide();
                     expect(mask.isVisible()).toBe(false);
                 });
-                
+
                 it("should re-show the mask when the top-most container is shown", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -654,7 +651,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct1.show();
                     expect(mask.isVisible()).toBe(true);
                 });
-                
+
                 it("should re-show the mask when the direct parent container is shown", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -666,7 +663,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct2.show();
                     expect(mask.isVisible()).toBe(true);
                 });
-                
+
                 it("should not re-show the mask when the mask is hidden during the top-most toggle", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -679,7 +676,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct1.show();
                     expect(mask.isVisible()).toBe(false);
                 });
-                
+
                 it("should not re-show the mask when the mask is hidden during the parent container toggle", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -693,9 +690,9 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     expect(mask.isVisible()).toBe(false);
                 });
             });
-            
+
             describe("expand/collapse", function() {
-                
+
                 it("should hide the mask when the top-most container is collapsed", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -706,7 +703,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct1.collapse();
                     expect(mask.isVisible()).toBe(false);
                 });
-                
+
                 it("should hide the mask when the direct parent container is collapsed", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -717,8 +714,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct2.collapse();
                     expect(mask.isVisible()).toBe(false);
                 });
-                
-                
+
                 it("should re-show the mask after the top-most container expands", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -730,7 +726,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct1.expand();
                     expect(mask.isVisible()).toBe(true);
                 });
-                
+
                 it("should re-show the mask after the direct parent container expands", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -742,7 +738,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct2.expand();
                     expect(mask.isVisible()).toBe(true);
                 });
-                
+
                 it("should not re-show the mask when the mask is hidden during the top-most toggle", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -755,7 +751,7 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
                     ct1.expand();
                     expect(mask.isVisible()).toBe(false);
                 });
-                
+
                 it("should not re-show the mask when the mask is hidden during the parent container toggle", function() {
                     makeCt(null, {
                         getMaskTarget: function() {
@@ -787,7 +783,6 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
             expect(mask.el.shim instanceof Ext.dom.Shim).toBe(true);
             expect(mask.el.shim.el.isVisible()).toBe(true);
         });
-
 
         it("should have a shim if Ext.useShims is true", function() {
             Ext.useShims = true;
@@ -856,55 +851,55 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
             expect(mask.el.shim.el).toBeNull();
         });
     });
-    
+
     describe("detached owner", function() {
         it("should not show", function() {
             createMask();
-            
+
             target.detachFromBody();
-            
+
             mask.loading = true;
             mask.maybeShow();
-            
+
             expect(mask.isVisible()).toBe(false);
         });
     });
-    
+
     describe("ARIA", function() {
         beforeEach(function() {
             createMask();
         });
-        
+
         it("should have progressbar role", function() {
             expect(mask).toHaveAttr('role', 'progressbar');
         });
-        
+
         it("should not have aria-valuemin attribute", function() {
             expect(mask).not.toHaveAttr('aria-valuemin');
         });
-        
+
         it("should not have aria-valuemax attribute", function() {
             expect(mask).not.toHaveAttr('aria-valuemax');
         });
-        
+
         it("should not have aria-valuenow attribute", function() {
             expect(mask).not.toHaveAttr('aria-valuenow');
         });
-        
+
         it("should not have aria-valuetext by default", function() {
             expect(mask).not.toHaveAttr('aria-valuetext');
         });
-        
+
         it("should have aria-valuetext after show", function() {
             mask.show();
-            
+
             expect(mask).toHaveAttr('aria-valuetext', 'Loading...');
         });
-        
+
         it("should remove aria-valuetext if useMsg is false", function() {
             mask.useMsg = false;
             mask.show();
-            
+
             expect(mask).not.toHaveAttr('aria-valuetext');
         });
     });

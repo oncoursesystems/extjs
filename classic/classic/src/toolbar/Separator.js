@@ -23,8 +23,8 @@ Ext.define('Ext.toolbar.Separator', {
     // Toolbar required here because we'll try to decorate it's alternateClassName
     // with this class' alternate name
     requires: ['Ext.toolbar.Toolbar'],
-    
+
     baseCls: Ext.baseCSSPrefix + 'toolbar-separator',
-    
+
     ariaRole: 'separator'
 });

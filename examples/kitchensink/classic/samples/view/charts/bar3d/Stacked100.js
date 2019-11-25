@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked100', {
     controller: 'bar-stacked-100-3d',
     requires: ['Ext.chart.theme.Muted'],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -24,7 +24,7 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked100', {
         type: 'Store',
         path: 'app/store/Browsers.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     items: [{
@@ -43,11 +43,13 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked100', {
         legend: {
             docked: 'right'
         },
-        animation: Ext.isIE8 ? false : {
-            easing: 'backOut',
-            duration: 500
-        },
-        store: {type: 'browsers'},
+        animation: Ext.isIE8
+            ? false
+            : {
+                easing: 'backOut',
+                duration: 500
+            },
+        store: { type: 'browsers' },
         flipXY: true,
         axes: [{
             type: 'numeric3d',
@@ -95,7 +97,7 @@ Ext.define('KitchenSink.view.charts.bar3d.Stacked100', {
                 { text: 'Other', dataIndex: 'other' }
             ]
         },
-        store: {type: 'browsers'},
+        store: { type: 'browsers' },
         width: '100%'
         //</example>
     }],

@@ -21,6 +21,7 @@ Ext.define('Ext.dataview.Location', {
      * `true` in this class to identify an object this type, or subclass thereof.
      */
     isDataViewLocation: true,
+    isLocation: true,
 
     /**
      * @property {Ext.Component/Ext.dom.Element} child

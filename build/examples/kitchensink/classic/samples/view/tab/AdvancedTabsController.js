@@ -11,8 +11,9 @@ Ext.define('KitchenSink.view.tab.AdvancedTabsController', {
     onAddTabClick: function() {
         var tabPanel = this.lookupReference('tabpanel'),
             counter = ++this.counter,
-            html = counter % 2 ? KitchenSink.DummyText.longText :
-                KitchenSink.DummyText.extraLongText,
+            html = counter % 2
+                ? KitchenSink.DummyText.longText
+                : KitchenSink.DummyText.extraLongText,
             tab = tabPanel.add({
                 title: 'Tab ' + counter,
                 html: html
@@ -30,7 +31,8 @@ Ext.define('KitchenSink.view.tab.AdvancedTabsController', {
             }, 500);
 
             me.doCycle();
-        } else {
+        }
+        else {
             me.cycleInterval = Ext.uninterval(me.cycleInterval);
         }
     },
@@ -50,7 +52,7 @@ Ext.define('KitchenSink.view.tab.AdvancedTabsController', {
 
         Ext.resumeLayouts(true);
     },
-    
+
     destroy: function() {
         Ext.uninterval(this.cycleInterval);
 

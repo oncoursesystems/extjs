@@ -38,6 +38,9 @@ Ext.define('KitchenSink.view.charts.column3d.Stacked', {
         },
         graphite: {
             width: 900
+        },
+        'classic-material': {
+            width: 900
         }
     },
 
@@ -68,7 +71,7 @@ Ext.define('KitchenSink.view.charts.column3d.Stacked', {
         captions: {
             title: 'Major economies by GDP sector composition (2011)'
         },
-        store: {type: 'economy-sectors'},
+        store: { type: 'economy-sectors' },
         theme: 'Muted',
         width: '100%',
         height: 500,

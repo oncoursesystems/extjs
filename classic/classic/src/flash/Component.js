@@ -141,7 +141,7 @@ Ext.define('Ext.flash.Component', {
 
     initComponent: function() {
         /* global swfobject */
-        // <debug>
+        //<debug>
         if (!('swfobject' in window)) {
             Ext.raise('The SWFObject library is not loaded. Ext.flash.Component requires ' +
                       'SWFObject version 2.2 or later: http://code.google.com/p/swfobject/');
@@ -150,14 +150,14 @@ Ext.define('Ext.flash.Component', {
         if (!this.url) {
             Ext.raise('The "url" config is required for Ext.flash.Component');
         }
-        // </debug>
+        //</debug>
 
         this.callParent();
     },
-    
+
     beforeRender: function() {
         this.callParent();
-        
+
         Ext.applyIf(this.renderData, {
             swfId: this.getSwfId()
         });
@@ -231,12 +231,12 @@ Ext.define('Ext.flash.Component', {
     doDestroy: function() {
         var me = this,
             swf = me.swf;
-        
+
         if (swf) {
             swfobject.removeSWF(me.getSwfId());
             me.swf = Ext.destroy(swf);
         }
-        
+
         me.callParent();
     },
 

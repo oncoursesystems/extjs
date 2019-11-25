@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.charts.column3d.Renderer', {
     controller: 'column-renderer-3d',
     requires: ['Ext.chart.theme.Muted'],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -23,7 +23,7 @@ Ext.define('KitchenSink.view.charts.column3d.Renderer', {
         type: 'Store',
         path: 'app/store/Browsers.js'
     }],
-    // </example>
+    //</example>
     width: '${width}',
 
     profiles: {
@@ -34,6 +34,9 @@ Ext.define('KitchenSink.view.charts.column3d.Renderer', {
             width: 650
         },
         graphite: {
+            width: 900
+        },
+        'classic-material': {
             width: 900
         }
     },

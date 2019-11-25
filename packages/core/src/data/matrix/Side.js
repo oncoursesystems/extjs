@@ -64,13 +64,13 @@ Ext.define('Ext.data.matrix.Side', {
 
     update: function(id1, id2, state) {
         var slice = this.get(id1);
-        
+
         return slice.update(id2, state);
     },
 
     updateId: function(oldId, newId) {
         var slice = this.get(oldId);
-        
+
         if (slice) {
             slice.updateId(newId);
         }

@@ -24,7 +24,7 @@ Ext.define('Ext.panel.Resizable', {
      *
      * @since 6.5.0
      */
-    
+
     /**
      * @event resizedragstart
      * Fires when the resize starts.
@@ -35,7 +35,7 @@ Ext.define('Ext.panel.Resizable', {
      *
      * @since 6.5.0
      */
-    
+
     /**
      * @event resizedrag
      * Fires for each tick while a drag is active.
@@ -48,7 +48,7 @@ Ext.define('Ext.panel.Resizable', {
      *
      * @since 6.5.0
      */
-    
+
     /**
      * @event resizedragend
      * Fires when the drag resize is complete.
@@ -61,7 +61,7 @@ Ext.define('Ext.panel.Resizable', {
      *
      * @since 6.5.0
      */
-    
+
     /**
      * @event resizedragcancel
      * Fires when the drag resize is cancelled.
@@ -73,7 +73,7 @@ Ext.define('Ext.panel.Resizable', {
      * @since 6.5.0
      */
 
-     /**
+    /**
       * @property {Boolean} hasResizable
       * `true` if this panel has the resizable override added.
       *
@@ -88,12 +88,14 @@ Ext.define('Ext.panel.Resizable', {
             if (resizable === true) {
                 resizable = {};
             }
+
             resizable = Ext.create(Ext.apply({
                 xclass: this.defaultResizerCls,
                 target: this,
                 ui: this.getUi()
             }, resizable));
         }
+
         return resizable;
     },
 
@@ -111,6 +113,7 @@ Ext.define('Ext.panel.Resizable', {
     privates: {
         onResizableUiChange: function(ui, oldUi) {
             var resizable = this.getResizable();
+
             if (resizable) {
                 resizable.setUi(ui);
             }

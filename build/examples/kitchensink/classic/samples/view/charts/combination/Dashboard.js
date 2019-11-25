@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.charts.combination.Dashboard', {
         'Ext.form.field.Number'
     ],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -29,7 +29,7 @@ Ext.define('KitchenSink.view.charts.combination.Dashboard', {
         type: 'Store',
         path: 'app/store/Dashboard.js'
     }],
-    // </example>
+    //</example>
     profiles: {
         classic: {
             width: 700,
@@ -40,6 +40,10 @@ Ext.define('KitchenSink.view.charts.combination.Dashboard', {
             height: 535
         },
         graphite: {
+            width: 800,
+            height: 635
+        },
+        'classic-material': {
             width: 800,
             height: 635
         }
@@ -79,7 +83,7 @@ Ext.define('KitchenSink.view.charts.combination.Dashboard', {
                     margin: '0 0 3 0',
                     cls: 'x-panel-body-default',
                     interactions: 'itemhighlight',
-                    style:  {
+                    style: {
                         border: 0
                     },
                     animation: {
@@ -135,11 +139,11 @@ Ext.define('KitchenSink.view.charts.combination.Dashboard', {
                     store: {
                         fields: ['Name', 'Data'],
                         data: [
-                            { 'Name': 'Price',     'Data': 100 },
+                            { 'Name': 'Price', 'Data': 100 },
                             { 'Name': 'Revenue %', 'Data': 100 },
-                            { 'Name': 'Growth %',  'Data': 100 },
+                            { 'Name': 'Growth %', 'Data': 100 },
                             { 'Name': 'Product %', 'Data': 100 },
-                            { 'Name': 'Market %',  'Data': 100 }
+                            { 'Name': 'Market %', 'Data': 100 }
                         ]
                     },
                     theme: 'Blue',
@@ -245,7 +249,7 @@ Ext.define('KitchenSink.view.charts.combination.Dashboard', {
                         flex: 3,
                         layout: {
                             type: 'vbox',
-                            align:'stretch'
+                            align: 'stretch'
                         },
                         margin: '0 0 0 5',
                         items: [{

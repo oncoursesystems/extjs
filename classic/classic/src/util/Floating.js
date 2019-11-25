@@ -166,11 +166,11 @@ Ext.define('Ext.util.Floating', {
                 mode: (shadow === true) ? 'sides' : shadow
             };
             shadowOffset = me.shadowOffset;
-            
+
             if (shadowOffset) {
                 shadowConfig.offset = shadowOffset;
             }
-            
+
             shadowConfig.animate = me.animateShadow;
             shadowConfig.fixed = me.fixed;
             el.enableShadow(shadowConfig, false);
@@ -217,14 +217,14 @@ Ext.define('Ext.util.Floating', {
             dom = alignEl.dom;
             destroyed = !dom || Ext.isGarbage(dom);
         }
-        
+
         if (destroyed) {
             me._lastAlignTarget = null;
-            
+
             if (me.alignListeners) {
                 me.alignListeners.destroy();
             }
-            
+
             return;
         }
 
@@ -276,7 +276,7 @@ Ext.define('Ext.util.Floating', {
             if (me.alignOnScroll && !alignEl.contains(me.el)) {
                 listeners.scroll = me.doRealign;
             }
-            
+
             me.alignListeners = Ext.on(listeners);
         }
     },
@@ -345,7 +345,7 @@ Ext.define('Ext.util.Floating', {
         var me = this,
             focusTask = me.focusTask,
             owner = me.getRefOwner(),
-            
+
             // Do not autofocus the Component (which delegates onto the getFocusEl() descendant)
             // for touch events.
             preventFocus = e.pointerType === 'touch',
@@ -367,7 +367,7 @@ Ext.define('Ext.util.Floating', {
 
             target = e.target;
             dom = me.el.dom;
-            
+
             // loop the target's ancestors to see if we clicked on a focusable element
             // or a descendant of a focusable element,  If so we don't want to focus
             // this floating component. If we end up with no target, it probably means
@@ -377,10 +377,10 @@ Ext.define('Ext.util.Floating', {
                 if (Ext.fly(target).isFocusable()) {
                     preventFocus = { ownsFocus: true };
                 }
-                
+
                 target = target.parentNode;
             }
-            
+
             // We can skip toFront() if we're already active and the click was
             // within our element but not on something focusable.
             skipFronting = Ext.WindowManager.getActive() === me &&
@@ -391,7 +391,7 @@ Ext.define('Ext.util.Floating', {
             if (!skipFronting) {
                 me.toFront(preventFocus);
             }
-            
+
             // If we have not hit a focusable element, and our owner
             // contains focus, then prevent the default action of mousedown (focus movement)
             if (!preventFocus && owner && owner.containsFocus) {
@@ -406,7 +406,7 @@ Ext.define('Ext.util.Floating', {
 
     onAfterFloatLayout: function() {
         var el = this.el;
-        
+
         if (el.shadow || el.shim) {
             // An element's underlays (shadow and shim) are automatically synced in response
             // to any calls to Ext.Element APIs that change the element's size or position
@@ -437,7 +437,7 @@ Ext.define('Ext.util.Floating', {
             }
             else if (pendingShow) {
                 delete me.pendingShow;
-                
+
                 if (pendingShow.length) {
                     me.show.apply(me, pendingShow);
                 }
@@ -470,7 +470,7 @@ Ext.define('Ext.util.Floating', {
         if (me.floatingDescendants) {
             index = Math.floor(me.floatingDescendants.setBase(index) / 100) * 100 + 10000;
         }
-        
+
         return index;
     },
 
@@ -546,7 +546,7 @@ Ext.define('Ext.util.Floating', {
                 me.fireEvent('tofront', me, me.el.getZIndex());
             }
         }
-        
+
         return me;
     },
 
@@ -605,7 +605,7 @@ Ext.define('Ext.util.Floating', {
      */
     toBack: function() {
         this.zIndexManager.sendToBack(this);
-        
+
         return this;
     },
 
@@ -625,10 +625,10 @@ Ext.define('Ext.util.Floating', {
         else {
             me.needsCenter = true;
         }
-        
+
         return me;
     },
-    
+
     onFloatShow: function() {
         var me = this,
             target = me._lastAlignTarget;
@@ -645,7 +645,7 @@ Ext.define('Ext.util.Floating', {
                 me.alignTo(target, me._lastAlignToPos, me._lastAlignToOffsets, false, !me.fixed);
             }
         }
-        
+
         me.needsCenter = false;
     },
 
@@ -710,7 +710,7 @@ Ext.define('Ext.util.Floating', {
                     next = next && next._lastAlignTarget;
                 }
             }
-            
+
             return result;
         },
 
@@ -720,12 +720,12 @@ Ext.define('Ext.util.Floating', {
             if (me._lastAlignTarget) {
                 me.alignListeners = Ext.destroy(me.alignListeners);
                 Ext.un('scroll', me.doRealign, me);
-                
+
                 me._lastAlignToPos = me._lastAlignTarget = me._lastAlignToOffsets =
                     me._topAlignTarget = null;
             }
         },
-        
+
         alignOnResize: function() {
             this.doRealign();
         },
@@ -788,19 +788,19 @@ Ext.define('Ext.util.Floating', {
             if (anchorBox.top < scrollerBox.top) {
                 sides = 1;
             }
-            
+
             if (anchorBox.right > scrollerBox.right) {
                 sides = sides | 2;
             }
-            
+
             if (anchorBox.bottom > scrollerBox.bottom) {
                 sides = sides | 4;
             }
-            
+
             if (anchorBox.left < scrollerBox.left) {
                 sides = sides | 8;
             }
-            
+
             if (sides) {
                 me.clipTo(scrollerBox, sides);
             }

@@ -61,7 +61,7 @@ Ext.define('Ext.form.CheckboxGroup', {
     mixins: {
         field: 'Ext.form.field.Field'
     },
-    
+
     requires: [
         'Ext.layout.container.CheckboxGroup',
         'Ext.form.field.Checkbox',
@@ -139,14 +139,14 @@ Ext.define('Ext.form.CheckboxGroup', {
     layout: 'checkboxgroup',
 
     componentCls: Ext.baseCSSPrefix + 'form-checkboxgroup',
-    
+
     ariaRole: 'group',
     ariaEl: 'containerEl',
 
     // containerEl is a div, it cannot be referenced by a <label for="...">
     // We set aria-labelledby on the containerEl instead
     skipLabelForAttribute: true,
-    
+
     // Checkbox and radio groups start as valid
     ariaRenderAttributes: {
         'aria-invalid': false
@@ -154,33 +154,33 @@ Ext.define('Ext.form.CheckboxGroup', {
 
     initComponent: function() {
         var me = this;
-        
+
         me.name = me.name || me.id;
-        
+
         me.callParent();
         me.initField();
     },
-    
+
     initRenderData: function() {
         var me = this,
             data, ariaAttr;
-        
+
         data = me.callParent();
-        
+
         // ariaEl is yet a string
         data.inputId = me.id + '-' + me.ariaEl;
-        
+
         ariaAttr = data.ariaAttributes;
-        
+
         if (ariaAttr) {
             if (!ariaAttr['aria-labelledby']) {
                 ariaAttr['aria-labelledby'] = me.id + '-labelTextEl';
             }
         }
-        
+
         return data;
     },
-    
+
     /**
      * Initializes the field's value based on the initial config. If the {@link #value} config
      * is specified then we use that to set the value; otherwise we initialize the originalValue
@@ -214,7 +214,7 @@ Ext.define('Ext.form.CheckboxGroup', {
             if (field.name == null) {
                 field.name = me.name;
             }
-            
+
             me.mon(field, 'change', me.checkChange, me);
         }
         else if (field.isContainer) {
@@ -371,7 +371,6 @@ Ext.define('Ext.form.CheckboxGroup', {
         me.checkDirty();
     },
 
-
     /**
      * Sets the value(s) of all checkboxes in the group. The expected format is an Object
      * of name-value pairs corresponding to the names of the checkboxes in the group. Each pair
@@ -461,7 +460,6 @@ Ext.define('Ext.form.CheckboxGroup', {
 
         return me;
     },
-
 
     /**
      * Returns an object containing the values of all checked checkboxes within the group.

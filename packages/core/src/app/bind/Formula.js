@@ -166,7 +166,7 @@ Ext.define('Ext.app.bind.Formula', {
             }
 
             parser = cache.get(name);
-            
+
             if (!parser) {
                 // Unescaped: [^\.a-z0-9_]NAMEHERE\(\s*(['"])(.*?)\1\s*\)
                 s = '[^\\.a-z0-9_]' + Ext.String.escapeRegex(name) +
@@ -174,7 +174,7 @@ Ext.define('Ext.app.bind.Formula', {
                 parser = new RegExp(s, 'gi');
                 cache.add(name, parser);
             }
-            
+
             return parser;
         }
     },
@@ -322,14 +322,14 @@ Ext.define('Ext.app.bind.Formula', {
 
         if (this.fnKeywordRe.test(str)) {
             match = this.fnKeywordArgumentNamesRe.exec(str);
-            
+
             if (match) {
                 getterProp = match[1];
             }
         }
         else {
             match = str.split('=>')[0];
-            
+
             if (match) {
                 match = Ext.String.trim(match.replace(this.replaceParenRe, '')).split(',');
                 getterProp = match[0];
@@ -365,7 +365,7 @@ Ext.define('Ext.app.bind.Formula', {
         else {
             arg = owner.getFormulaFn(data);
         }
-        
+
         me.settingValue = true;
         me.stub.set(me.calculation = me.get.call(owner, arg));
         me.settingValue = false;
@@ -382,10 +382,10 @@ Ext.define('Ext.app.bind.Formula', {
     privates: {
         getScheduler: function() {
             var owner = this.owner;
-            
+
             return owner && owner.getScheduler();
         },
-        
+
         sort: function() {
             var me = this,
                 binding = me.binding;

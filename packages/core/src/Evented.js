@@ -15,7 +15,7 @@ Ext.define('Ext.Evented', {
         //<debug>
         this.callParent();
         //</debug>
-        
+
         this.mixins.observable.constructor.call(this, config);
         this.initialized = true;
     },

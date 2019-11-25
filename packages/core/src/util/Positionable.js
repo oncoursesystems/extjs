@@ -318,7 +318,7 @@ Ext.define('Ext.util.Positionable', {
 
         return [newRegion.x, newRegion.y];
     },
-    
+
     getAlignToRegion: function(alignToEl, posSpec, offset, minHeight) {
         var me = this,
             inside, newRegion, bodyScroll;
@@ -350,7 +350,7 @@ Ext.define('Ext.util.Positionable', {
                 // Otherwise, use this Positionable's element's parent node.
                 inside = me.constrainTo || me.container || me.el.parent();
             }
-            
+
             inside = Ext.fly(inside.el || inside).getConstrainRegion();
         }
 
@@ -368,7 +368,7 @@ Ext.define('Ext.util.Positionable', {
             align: posSpec,
             axisLock: true
         });
-        
+
         return newRegion;
     },
 
@@ -626,7 +626,7 @@ Ext.define('Ext.util.Positionable', {
             constraintInsets = Ext.isObject(constraintInsets)
                 ? constraintInsets
                 : Ext.Element.parseBox(constraintInsets);
-            
+
             constrainTo.adjust(constraintInsets.top, constraintInsets.right,
                                constraintInsets.bottom, constraintInsets.left);
         }
@@ -726,7 +726,7 @@ Ext.define('Ext.util.Positionable', {
             if (scrollbarWidth) {
                 scrollbarWidth = scrollSize.width;
                 isRTL = el.getStyle('direction') === 'rtl' && !Ext.supports.rtlVertScrollbarOnRight;
-                
+
                 if (isRTL) {
                     padding = el.getPadding('l');
                     viewContentBox.left -= padding + Math.max(padding, scrollbarWidth);
@@ -841,7 +841,7 @@ Ext.define('Ext.util.Positionable', {
         me.constrainBox(box);
         x = box.x;
         y = box.y;
-     
+
         // Position to the contrained position
         // Call setSize *last* so that any possible layout has the last word on position.
         me.setXY([x, y]);
@@ -949,8 +949,8 @@ Ext.define('Ext.util.Positionable', {
             x, y;
 
         if (offsetParent) {
-            relative = el.isStyle('position', 'relative'),
-            offsetParentXY = Ext.fly(offsetParent).getXY(),
+            relative = el.isStyle('position', 'relative');
+            offsetParentXY = Ext.fly(offsetParent).getXY();
 
             x = xy[0] + offsetParentXY[0] + offsetParent.clientLeft;
             y = xy[1] + offsetParentXY[1] + offsetParent.clientTop;

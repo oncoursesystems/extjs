@@ -123,6 +123,8 @@ Ext.define('Ext.SplitButton', {
      * @private
      */
     doTap: function(me, e) {
+        var menu;
+
         // this is done so if you hide the button in the handler, the tap event will not fire
         // on the new element where the button was.
         if (me.preventDefaultAction) {
@@ -143,15 +145,17 @@ Ext.define('Ext.SplitButton', {
                 }
             }
             else {
-                if (me.getMenu().isVisible()) {
-                    me.hideMenu(e, me.getMenu());
+                // Check menu - can throw error in Breadcrumb when there is no menu items
+                menu = me.getMenu();
+
+                if (menu && menu.isVisible()) {
+                    me.hideMenu(e, menu);
                 }
 
                 Ext.callback(me.getHandler(), me.getScope(), [me, e], 0, me);
             }
         }
     },
-
     onDownKey: function(e) {
         if (e.target === this.splitArrowCoverElement.dom) {
             this.callParent([e]);

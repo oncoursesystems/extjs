@@ -38,7 +38,9 @@ Ext.define('KitchenSink.Application', {
         }
     },
 
-    launch: function () {
+    launch: function() {
+        var view;
+
         if (Ext.os.deviceType === 'Phone') {
             Ext.Msg.show({
                 title: 'Unsupported Device',
@@ -48,17 +50,19 @@ Ext.define('KitchenSink.Application', {
             });
 
             // don't let any routes fire
-            Ext.on('beforeroute', function () {
+            Ext.on('beforeroute', function() {
                 return false;
             });
 
             return;
         }
 
-        var view = 'KitchenSink.view.main.Main';
+        view = 'KitchenSink.view.main.Main';
+
         if (/[?&]solo\b/.test(location.search)) {
             view = 'KitchenSink.view.main.Solo';
         }
+
         this.setMainView({
             xclass: view
         });
@@ -66,14 +70,17 @@ Ext.define('KitchenSink.Application', {
         this.destroyLoader();
     },
 
-    destroyLoader: function () {
+    destroyLoader: function() {
+        var circles, bottom, top, wrapper;
+
         if (Ext.supports.Transitions) {
             this.callParent();
-        } else {
-            var circles = Ext.fly('loadingSplashCircles'),
-                bottom = Ext.get('loadingSplashBottom'),
-                top = Ext.get('loadingSplashTop'),
-                wrapper = Ext.fly('loadingSplash');
+        }
+        else {
+            circles = Ext.fly('loadingSplashCircles');
+            bottom = Ext.get('loadingSplashBottom');
+            top = Ext.get('loadingSplashTop');
+            wrapper = Ext.fly('loadingSplash');
 
             circles.destroy();
 
@@ -99,7 +106,7 @@ Ext.define('KitchenSink.Application', {
                 },
                 listeners: {
                     single: true,
-                    delay: 500, //afteranimate event and callback fn are executing right away
+                    delay: 500, // afteranimate event and callback fn are executing right away
                     scope: wrapper,
                     afteranimate: wrapper.destroy
                 }
@@ -107,7 +114,7 @@ Ext.define('KitchenSink.Application', {
         }
     }
 }, function() {
-    KitchenSink.toast = function (title) {
+    KitchenSink.toast = function(title) {
         var html = Ext.String.format.apply(String, Array.prototype.slice.call(arguments, 1));
 
         if (!html) {

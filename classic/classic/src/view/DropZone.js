@@ -5,7 +5,7 @@ Ext.define('Ext.view.DropZone', {
     extend: 'Ext.dd.DropZone',
 
     indicatorCls: Ext.baseCSSPrefix + 'grid-drop-indicator',
-    
+
     indicatorHtml: [
         '<div class="', Ext.baseCSSPrefix, 'grid-drop-indicator-left" role="presentation"></div>',
         '<div class="' + Ext.baseCSSPrefix + 'grid-drop-indicator-right" role="presentation"></div>'
@@ -13,7 +13,7 @@ Ext.define('Ext.view.DropZone', {
 
     constructor: function(config) {
         var me = this;
-        
+
         Ext.apply(me, config);
 
         // Create a ddGroup unless one has been configured.
@@ -41,7 +41,7 @@ Ext.define('Ext.view.DropZone', {
         me.lock();
         result = me.view.fireEvent.apply(me.view, arguments);
         me.unlock();
-        
+
         return result;
     },
 
@@ -54,17 +54,17 @@ Ext.define('Ext.view.DropZone', {
         // (or there are no nodes), we'll get an onContainerOver call.
         if (!node) {
             mouseY = e.getY();
-            
+
             for (i = 0, nodeList = this.view.getNodes(), len = nodeList.length; i < len; i++) {
                 testNode = nodeList[i];
                 box = Ext.fly(testNode).getBox();
-                
+
                 if (mouseY <= box.bottom) {
                     return testNode;
                 }
             }
         }
-        
+
         return node;
     },
 
@@ -82,7 +82,7 @@ Ext.define('Ext.view.DropZone', {
                 shadow: false
             });
         }
-        
+
         return me.indicator;
     },
 
@@ -97,7 +97,7 @@ Ext.define('Ext.view.DropZone', {
         else {
             pos = "after";
         }
-        
+
         return pos;
     },
 
@@ -114,7 +114,7 @@ Ext.define('Ext.view.DropZone', {
         if (!record) {
             return false;
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var view = this.view,
             recordIndex = view.indexOf(record),
@@ -144,10 +144,10 @@ Ext.define('Ext.view.DropZone', {
                 container = (scrollableEl && scrollableEl.isScrollable())
                     ? scrollableEl
                     : Ext.fly(view.getNodeContainer());
-                
+
                 containerY = container.getY();
                 indicatorY = Ext.fly(node).getY() - containerY - 1;
-                
+
                 if (pos === 'after') {
                     indicatorY += Ext.fly(node).getHeight();
                 }
@@ -178,7 +178,7 @@ Ext.define('Ext.view.DropZone', {
         if (!Ext.Array.contains(data.records, me.view.getRecord(node))) {
             me.positionIndicator(node, data, e);
         }
-        
+
         return me.valid ? me.dropAllowed : me.dropNotAllowed;
     },
 
@@ -188,10 +188,10 @@ Ext.define('Ext.view.DropZone', {
         var me = this;
 
         me.callParent([node, dragZone, e, data]);
-        
+
         me.overRecord = me.currentPosition = null;
         me.valid = false;
-        
+
         if (me.indicator) {
             me.indicator.hide();
         }
@@ -214,7 +214,7 @@ Ext.define('Ext.view.DropZone', {
             me.getIndicator().setWidth(Ext.fly(view.el).getWidth()).showAt(0, 0);
             me.valid = true;
         }
-        
+
         return me.dropAllowed;
     },
 
@@ -227,7 +227,7 @@ Ext.define('Ext.view.DropZone', {
             dropHandled = false,
             overRecord = me.overRecord,
             currentPosition = me.currentPosition,
- 
+
             // Create a closure to perform the operation which the event handler may use.
             // Users may now set the wait parameter in the beforedrop handler, and perform any kind
             // of asynchronous processing such as an Ext.Msg.confirm, or an Ajax request,
@@ -241,23 +241,23 @@ Ext.define('Ext.view.DropZone', {
                     dropHandled = true;
                     me.fireViewEvent('drop', targetNode, data, overRecord, currentPosition);
                 },
- 
+
                 cancelDrop: function() {
                     me.invalidateDrop();
                     dropHandled = true;
                 }
             },
             performOperation = false;
- 
+
         if (me.valid) {
             performOperation = me.fireViewEvent(
                 'beforedrop', targetNode, data, overRecord, currentPosition, dropHandlers
             );
-            
+
             if (dropHandlers.wait) {
                 return;
             }
- 
+
             if (performOperation !== false) {
                 // If either of the drop handlers were called in the event handler,
                 // do not do it again.
@@ -269,7 +269,7 @@ Ext.define('Ext.view.DropZone', {
 
         return performOperation;
     },
-    
+
     destroy: function() {
         this.indicator = Ext.destroy(this.indicator);
         this.callParent();

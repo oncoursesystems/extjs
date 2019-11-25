@@ -9,7 +9,7 @@ Ext.define('Ext.fx.target.Element', {
     extend: 'Ext.fx.target.Target',
 
     type: 'element',
-    
+
     constructor: function(target) {
         this.callParent([target]);
 
@@ -55,7 +55,7 @@ Ext.define('Ext.fx.target.Element', {
     setAttr: function(targetData) {
         var ln = targetData.length,
             attrs, attr, o, i, j, ln2;
-            
+
         for (i = 0; i < ln; i++) {
             attrs = targetData[i].attrs;
 
@@ -71,7 +71,7 @@ Ext.define('Ext.fx.target.Element', {
             }
         }
     },
-    
+
     setElVal: function(element, attr, value) {
         if (attr === 'x') {
             if (this.isAbsoluteOnPage) {

@@ -4,7 +4,7 @@
 Ext.define('Ext.ux.TreePicker', {
     extend: 'Ext.form.field.Picker',
     xtype: 'treepicker',
-    
+
     uses: [
         'Ext.tree.Panel'
     ],
@@ -49,7 +49,7 @@ Ext.define('Ext.ux.TreePicker', {
          */
         minPickerHeight: 100
     },
-   
+
     editable: false,
 
     /**
@@ -177,15 +177,14 @@ Ext.define('Ext.ux.TreePicker', {
             value = this.value,
             node;
 
-        
         if (value) {
             node = store.getNodeById(value);
         }
-        
+
         if (!node) {
             node = store.getRoot();
         }
-        
+
         picker.ensureVisible(node, {
             select: true,
             focus: true
@@ -207,7 +206,7 @@ Ext.define('Ext.ux.TreePicker', {
             // Called while the Store is loading. Ensure it is processed by the onLoad method.
             return me;
         }
-            
+
         // try to find a record in the store that matches the value
         record = value ? me.store.getNodeById(value) : me.store.getRoot();
 
@@ -224,7 +223,7 @@ Ext.define('Ext.ux.TreePicker', {
 
         return me;
     },
-    
+
     getSubmitValue: function() {
         return this.value;
     },
@@ -248,10 +247,10 @@ Ext.define('Ext.ux.TreePicker', {
             this.setValue(value);
         }
     },
-    
+
     onUpdate: function(store, rec, type, modifiedFieldNames) {
         var display = this.displayField;
-        
+
         if (type === 'edit' && modifiedFieldNames &&
             Ext.Array.contains(modifiedFieldNames, display) && this.value === rec.getId()) {
             this.setRawValue(rec.get(display));

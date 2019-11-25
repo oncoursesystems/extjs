@@ -155,7 +155,6 @@ Ext.define("Ext.locale.hu.form.field.VTypes", {
     alphaText: 'A mező csak betűket és aláhúzást (_) tartalmazhat',
     alphanumText: 'A mező csak betűket, számokat és aláhúzást (_) tartalmazhat'
 });
-    
 
 Ext.define("Ext.locale.hu.form.field.HtmlEditor", {
     override: "Ext.form.field.HtmlEditor",

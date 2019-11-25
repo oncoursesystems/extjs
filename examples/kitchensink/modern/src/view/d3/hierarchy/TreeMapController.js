@@ -5,7 +5,7 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeMapController', {
     parentTemplate: null,
     leafTemplate: null,
 
-    getParentHtml: function (record) {
+    getParentHtml: function(record) {
         var template = this.parentTemplate;
 
         if (!template) {
@@ -17,10 +17,11 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeMapController', {
                 '</tpl>'
             );
         }
+
         return template.apply(record);
     },
 
-    getLeafHtml: function (record) {
+    getLeafHtml: function(record) {
         var template = this.leafTemplate;
 
         if (!template) {
@@ -29,17 +30,19 @@ Ext.define('KitchenSink.view.d3.hierarchy.TreeMapController', {
                 '<div>Change:&nbsp;<tpl if="data.change &gt; 0">+</tpl>{data.change}%</div>'
             );
         }
+
         return template.apply(record);
     },
 
-    onTooltip: function (component, tooltip, node, element, event) {
+    onTooltip: function(component, tooltip, node, element, event) {
         var record = node.data;
 
         component.setSelection(record);
 
         if (record.isLeaf()) {
             tooltip.setHtml(this.getLeafHtml(record));
-        } else {
+        }
+        else {
             tooltip.setHtml(this.getParentHtml(record));
         }
     }

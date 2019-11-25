@@ -20,7 +20,7 @@ Ext.define('Ext.grid.ColumnComponentLayout', {
 
     beginLayout: function(ownerContext) {
         this.callParent(arguments);
-        
+
         ownerContext.titleContext = ownerContext.getEl('titleEl');
     },
 
@@ -35,7 +35,7 @@ Ext.define('Ext.grid.ColumnComponentLayout', {
         if (shrinkWrap) {
             owner.el.setWidth('');
         }
-        
+
         // eslint-disable-next-line max-len
         owner.textContainerEl[shrinkWrap && !owner.isGroupHeader ? 'addCls' : 'removeCls'](me.columnAutoCls);
         owner.titleEl.setStyle(me._paddingReset);
@@ -46,13 +46,13 @@ Ext.define('Ext.grid.ColumnComponentLayout', {
         var me = this,
             owner = me.owner,
             innerHeight;
-            
+
         // TreePanels (and grids with hideHeaders: true) set their column container height to zero
         // to hide them. This is because they need to lay out in order to calculate widths
         // for the columns (eg flexes). If there is no height to lay out, bail out early.
         if (owner.getRootHeaderCt().hiddenHeaders) {
             ownerContext.setProp('innerHeight', 0);
-            
+
             return;
         }
 
@@ -62,7 +62,7 @@ Ext.define('Ext.grid.ColumnComponentLayout', {
             // We do not have enough information to get the height of the titleEl
             if (owner.headerWrap && !ownerContext.hasDomProp('width')) {
                 me.done = false;
-                
+
                 return;
             }
 
@@ -104,7 +104,7 @@ Ext.define('Ext.grid.ColumnComponentLayout', {
             // the final height of the text el
             return null;
         }
-        
+
         return result;
     },
 
@@ -126,10 +126,10 @@ Ext.define('Ext.grid.ColumnComponentLayout', {
                 owner.textEl.getWidth() + ownerContext.titleContext.getPaddingInfo().width
             );
         }
-        
+
         return inner + padWidth + triggerOffset;
     },
-    
+
     getTriggerOffset: function(owner, ownerContext) {
         var width = 0;
 
@@ -139,7 +139,7 @@ Ext.define('Ext.grid.ColumnComponentLayout', {
                 width = owner.getTriggerElWidth();
             }
         }
-        
+
         return width;
     }
 });

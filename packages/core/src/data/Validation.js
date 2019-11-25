@@ -109,7 +109,7 @@ Ext.define('Ext.data.Validation', {
 
                 if (field.validate !== Ext.emptyFn) {
                     msg = field.validate(val, sep, null, record);
-                    
+
                     if (msg !== true) {
                         error = msg || defaultMessage;
                     }
@@ -118,7 +118,7 @@ Ext.define('Ext.data.Validation', {
                 if (!error) {
                     error = true; // valid state is stored as true
                 }
-                
+
                 if (error !== currentValue) {
                     (values || (values = {}))[name] = error;
                 }

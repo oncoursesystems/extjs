@@ -7,11 +7,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -152,7 +152,7 @@ function() {
             makeGrid(undefined, {
                 selModel: selModel
             });
-            
+
             record = grid.store.getAt(0);
             column = grid.columns[0];
             expect(function() {
@@ -538,7 +538,7 @@ function() {
                 grid.unlock(grid.columns[0], 0);
                 node = grid.normalGrid.view.getNode(0);
                 jasmine.fireMouseEvent(Ext.fly(node).down('.x-grid-cell-inner', true), 'dblclick');
-                
+
                 expect(grid.columns[0].getEditor().ownerCt).toBe(plugin.editor.normalColumnContainer);
             });
 
@@ -553,7 +553,7 @@ function() {
                 grid.lock(grid.columns[1], 0);
                 node = grid.lockedGrid.view.getNode(0);
                 jasmine.fireMouseEvent(Ext.fly(node).down('.x-grid-cell-inner', true), 'dblclick');
-                
+
                 expect(grid.columns[0].getEditor().ownerCt).toBe(plugin.editor.lockedColumnContainer);
             });
         });
@@ -826,7 +826,7 @@ function() {
             });
         });
     });
-    
+
     describe("button position", function() {
         describe("not enough space to fit the editor", function() {
             beforeEach(function() {
@@ -841,16 +841,16 @@ function() {
                     ]
                 });
             });
-            
+
             it("should position buttons at the bottom when editing first row", function() {
                 plugin.startEdit(store.getAt(0), grid.columns[0]);
-                
+
                 expect(plugin.editor.floatingButtons.el.hasCls('x-grid-row-editor-buttons-bottom')).toBe(true);
             });
-            
+
             it("should position buttons at the top when editing last row", function() {
                 plugin.startEdit(store.getAt(1), grid.columns[0]);
-                
+
                 expect(plugin.editor.floatingButtons.el.hasCls('x-grid-row-editor-buttons-top')).toBe(true);
             });
         });

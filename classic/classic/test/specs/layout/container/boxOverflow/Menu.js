@@ -194,7 +194,7 @@ function() {
             });
             overflowHandler = toolbar.layout.overflowHandler;
             master = toolbar.down('#text1');
-            
+
             overflowHandler.menu.show();
             clone = overflowHandler.menu.down('[name=text1]');
 

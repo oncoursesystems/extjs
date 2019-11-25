@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.chart.column3d.Grouped', {
     xtype: 'column-grouped-3d',
     controller: 'column-grouped-3d',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/column3d/GroupedController.js'
@@ -43,9 +43,9 @@ Ext.define('KitchenSink.view.chart.column3d.Grouped', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -126,7 +126,7 @@ Ext.define('KitchenSink.view.chart.column3d.Grouped', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

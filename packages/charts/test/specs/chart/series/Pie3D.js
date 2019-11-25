@@ -40,7 +40,7 @@ topSuite("Ext.chart.series.Pie3D", ['Ext.chart.*', 'Ext.data.ArrayStore'], funct
             });
         });
     });
-    
+
     describe("renderer", function() {
         var chart,
             red = '#ff0000',

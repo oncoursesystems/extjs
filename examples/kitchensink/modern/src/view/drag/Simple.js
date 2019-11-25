@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.drag.Simple', {
     xtype: 'drag-simple',
     controller: 'drag-simple',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/drag/SimpleController.js'
@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.drag.Simple', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     height: '${height}',
     padding: 5,

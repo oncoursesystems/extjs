@@ -22,6 +22,9 @@ Ext.define('KitchenSink.view.form.FieldTypes', {
         },
         graphite: {
             displayfieldColor: '#ccc'
+        },
+        'classic-material': {
+            displayfieldColor: '#2196F3'
         }
     },
     frame: true,
@@ -39,7 +42,7 @@ Ext.define('KitchenSink.view.form.FieldTypes', {
         xtype: 'hiddenfield',
         name: 'hidden1',
         value: 'Hidden field value'
-    },{
+    }, {
         xtype: 'textfield',
         name: 'password1',
         inputType: 'password',

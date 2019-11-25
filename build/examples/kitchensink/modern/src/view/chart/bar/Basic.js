@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.chart.bar.Basic', {
     xtype: 'bar-basic',
     controller: 'bar-basic',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/bar/BasicController.js'
@@ -44,9 +44,9 @@ Ext.define('KitchenSink.view.chart.bar.Basic', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 

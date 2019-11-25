@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.charts.area.Basic', {
     xtype: 'area-basic',
     controller: 'area-basic',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.charts.area.Basic', {
         type: 'Store',
         path: 'classic/samples/store/GDP.js'
     }],
-    // </example>
+    //</example>
     width: '${width}',
     profiles: {
         classic: {
@@ -31,6 +31,9 @@ Ext.define('KitchenSink.view.charts.area.Basic', {
             width: 650
         },
         graphite: {
+            width: 900
+        },
+        'classic-material': {
             width: 900
         }
     },

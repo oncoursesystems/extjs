@@ -34,7 +34,7 @@
 Ext.define('Ext.ProgressBar', {
     extend: 'Ext.Component',
     xtype: 'progressbar',
-    
+
     mixins: [
         'Ext.ProgressBase'
     ],
@@ -105,11 +105,11 @@ Ext.define('Ext.ProgressBar', {
     /* eslint-enable indent, max-len */
 
     componentLayout: 'progressbar',
-    
+
     ariaRole: 'progressbar',
     focusable: true,
     tabIndex: 0,
-    
+
     autoEl: {
         'aria-valuemin': '0',
         'aria-valuenow': '0',
@@ -128,9 +128,9 @@ Ext.define('Ext.ProgressBar', {
         var me = this,
             value = me.value || 0,
             data;
-        
+
         data = me.callParent();
-        
+
         return Ext.apply(data, {
             internalText: !me.hasOwnProperty('textEl'),
             text: me.text || Math.round(value * 100) + '%',
@@ -155,12 +155,12 @@ Ext.define('Ext.ProgressBar', {
             me.textEl = me.el.select('.' + me.baseCls + '-text');
         }
     },
-    
+
     afterRender: function() {
         var me = this;
-        
+
         me.callParent(arguments);
-        
+
         if (me.text) {
             me.ariaEl.dom.setAttribute('aria-valuetext', me.text);
         }
@@ -219,7 +219,7 @@ Ext.define('Ext.ProgressBar', {
         else if (me.text && me.ariaEl.dom) {
             me.ariaEl.dom.removeAttribute('aria-valuetext');
         }
-        
+
         if (me.rendered && !me.destroyed) {
             if (animate === true || (animate !== false && me.animate)) {
                 me.bar.stopAnimation();
@@ -235,12 +235,12 @@ Ext.define('Ext.ProgressBar', {
             else {
                 me.bar.setStyle('width', (value * 100) + '%');
             }
-            
+
             me.ariaEl.dom.setAttribute('aria-valuenow', Math.round(value * 100));
         }
-        
+
         me.fireEvent('update', me, value, text);
-        
+
         return me;
     },
 
@@ -256,10 +256,10 @@ Ext.define('Ext.ProgressBar', {
         if (!me.autoText) {
             me.text = text;
         }
-        
+
         if (me.rendered) {
             me.textEl.setHtml(text);
-            
+
             if (!me.autoText) {
                 me.ariaEl.dom.setAttribute('aria-valuetext', text);
             }
@@ -267,14 +267,14 @@ Ext.define('Ext.ProgressBar', {
                 me.ariaEl.dom.removeAttribute('aria-valuetext');
             }
         }
-        
+
         return me;
     },
 
     applyText: function(text) {
         this.updateText(text);
     },
-    
+
     getText: function() {
         return this.text;
     },
@@ -341,21 +341,21 @@ Ext.define('Ext.ProgressBar', {
     wait: function(config) {
         var me = this,
             scope;
-            
+
         if (!me.waitTimer) {
             scope = me;
             config = config || {};
-            
+
             if (config.text != null) {
                 me.autoText = false;
             }
-            
+
             me.updateText(config.text);
-            
+
             me.waitTimer = Ext.TaskManager.start({
                 run: function(i) {
                     var inc = config.increment || 10;
-                    
+
                     i -= 1;
                     me.updateProgress(((((i + inc) % inc) + 1) * (100 / inc)) * 0.01, null,
                                       config.animate);
@@ -366,13 +366,13 @@ Ext.define('Ext.ProgressBar', {
                     if (config.fn) {
                         config.fn.apply(config.scope || me);
                     }
-                    
+
                     me.reset();
                 },
                 scope: scope
             });
         }
-        
+
         return me;
     },
 
@@ -392,18 +392,18 @@ Ext.define('Ext.ProgressBar', {
      */
     reset: function(hide) {
         var me = this;
-        
+
         me.updateProgress(0);
         me.clearTimer();
-        
+
         if (hide === true) {
             me.hide();
         }
-        
+
         if (me.rendered) {
             me.ariaEl.dom.removeAttribute('aria-valuetext');
         }
-        
+
         return me;
     },
 
@@ -412,7 +412,7 @@ Ext.define('Ext.ProgressBar', {
      */
     clearTimer: function() {
         var me = this;
-        
+
         if (me.waitTimer) {
             me.waitTimer.onStop = null; // prevent recursion
             Ext.TaskManager.stop(me.waitTimer);
@@ -424,27 +424,27 @@ Ext.define('Ext.ProgressBar', {
         var me = this,
             bar = me.bar,
             nodes, el, i, len;
-        
+
         me.clearTimer();
-        
+
         if (me.rendered) {
             if (me.textEl.isComposite) {
                 // Clean up Element references created by the layout
                 nodes = me.textEl.slice();
-                
+
                 for (i = 0, len = nodes.length; i < len; i++) {
                     el = Ext.get(nodes[i]);
                     el.destroy();
                 }
             }
-            
+
             Ext.destroyMembers(me, 'textEl', 'progressBar');
-            
+
             if (bar && me.animate) {
                 bar.stopAnimation();
             }
         }
-        
+
         me.callParent();
     }
 });

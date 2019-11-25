@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.progress.Decorated', {
         'KitchenSink.view.progress.DecoratedModel'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/progress/DecoratedController.js'
@@ -34,7 +34,7 @@ Ext.define('KitchenSink.view.progress.Decorated', {
     },
 
     shadow: false,
-    // </example>
+    //</example>
 
     layout: {
         type: 'vbox',

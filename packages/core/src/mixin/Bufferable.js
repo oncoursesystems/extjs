@@ -41,8 +41,13 @@ Ext.define('Ext.mixin.Bufferable', function(Bufferable) { return { // eslint-dis
     mixinConfig: {
         id: 'bufferable',
 
-        before: {
+        after: {
             destroy: 'cancelAllCalls'
+        },
+
+        before: {
+            // The bufferables need to be destroyed before they get nulled
+            $reap: 'cancelAllCalls'
         },
 
         extended: function(baseClass, derivedClass, classBody) {
@@ -239,6 +244,11 @@ Ext.define('Ext.mixin.Bufferable', function(Bufferable) { return { // eslint-dis
             },
 
             delayCall: function(target, def, args) {
+                if (target.destroying) {
+                    return;
+                }
+
+                // eslint-disable-next-line vars-on-top
                 var bufferables = target.bufferables || target.initBufferables(),
                     name = def.name,
                     timer = bufferables[name] || (bufferables[name] = Ext.apply({

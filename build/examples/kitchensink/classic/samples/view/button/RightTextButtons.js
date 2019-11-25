@@ -11,6 +11,7 @@ Ext.define('KitchenSink.view.button.RightTextButtons', {
 
     layout: 'vbox',
     width: '${width}',
+    cls: 'icons-button-padding',
     profiles: {
         classic: {
             width: 680,
@@ -23,6 +24,10 @@ Ext.define('KitchenSink.view.button.RightTextButtons', {
         graphite: {
             width: 880,
             buttonWidth: 200
+        },
+        'classic-material': {
+            width: 680,
+            buttonWidth: 150
         }
     },
 
@@ -85,16 +90,16 @@ Ext.define('KitchenSink.view.button.RightTextButtons', {
             html: 'Icon and Text (left)'
         }, {
             xtype: 'button',
-            iconCls: 'button-home-small',
+            iconCls: 'button-home-small padding-text-btn-left',
             text: 'Small'
         }, {
             xtype: 'button',
-            iconCls: 'button-home-medium',
+            iconCls: 'button-home-medium padding-text-btn-left',
             text: 'Medium',
             scale: 'medium'
         }, {
             xtype: 'button',
-            iconCls: 'button-home-large',
+            iconCls: 'button-home-large padding-text-btn-left',
             text: 'Large',
             scale: 'large'
         }, {
@@ -122,18 +127,18 @@ Ext.define('KitchenSink.view.button.RightTextButtons', {
             html: 'Icon and Text (right)'
         }, {
             xtype: 'button',
-            iconCls: 'button-home-small',
+            iconCls: 'button-home-small padding-text-btn-right',
             text: 'Small',
             iconAlign: 'right'
         }, {
             xtype: 'button',
-            iconCls: 'button-home-medium',
+            iconCls: 'button-home-medium padding-text-btn-right',
             text: 'Medium',
             scale: 'medium',
             iconAlign: 'right'
         }, {
             xtype: 'button',
-            iconCls: 'button-home-large',
+            iconCls: 'button-home-large padding-text-btn-right',
             text: 'Large',
             scale: 'large',
             iconAlign: 'right'

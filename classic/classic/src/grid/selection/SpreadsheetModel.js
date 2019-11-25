@@ -210,7 +210,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
      * @since 6.0.1
      */
     checkColumnHeaderText: null,
-    
+
     /**
      * @cfg {Number/String} [checkboxHeaderWidth=24]
      * Width of checkbox column.
@@ -423,7 +423,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
 
             // The selection model listens to the navigation model to select/deselect
             setRecordCheck: Ext.emptyFn,
-            
+
             // It uses our isRowSelected to test whether a row is checked
             isRecordChecked: Ext.emptyFn
         };
@@ -509,7 +509,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
         var me = this;
 
         position = new Ext.grid.CellContext(me.view).setPosition(position.row, position.column);
-        
+
         if (me.getCellSelect()) {
             me.selectCells(position, position);
         }
@@ -576,7 +576,6 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
         if (columns) {
             Ext.suspendLayouts();
 
-
             if (me.numbererColumn) {
                 me.numbererColumn.ownerCt.remove(me.numbererColumn, false);
                 columns.unshift(me.numbererColumn);
@@ -641,7 +640,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
         else if (!keepExisting) {
             sel.clear();
         }
-        
+
         if (!Ext.isArray(records)) {
             records = [records];
         }
@@ -786,7 +785,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
         rangeStart = rangeStart.isCellContext
             ? rangeStart.clone()
             : new Ext.grid.CellContext(view).setPosition(rangeStart);
-        
+
         rangeEnd = rangeEnd.isCellContext
             ? rangeEnd.clone()
             : new Ext.grid.CellContext(view).setPosition(rangeEnd);
@@ -868,7 +867,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
     deselectAll: function(suppressEvent) {
         var me = this,
             sel = me.selected;
-        
+
         if (sel && sel.getCount()) {
             sel.clear();
             sel.allSelected = false;
@@ -1004,7 +1003,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
 
         me.selected = me.gridListeners = me.viewListeners = me.selectionData =
             me.navigationListeners = me.scrollEls = null;
-        
+
         me.callParent();
     },
 
@@ -1094,7 +1093,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
         onColumnsChanged: function() {
             var me = this,
                 selectionChanged = me.onViewChanged(me.view, true);
-            
+
             // This event is fired directly from the HeaderContainer before the view updates.
             // So we have to wait until idle to update the selection UI.
             // NB: fireSelectionChange calls updateSelectionExtender after firing its event.
@@ -1114,7 +1113,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
         onViewRefresh: function(view) {
             var me = this,
                 selectionChanged = me.onViewChanged(view);
-            
+
             // The selection may have acquired or lost contiguity, so the replicator may need
             // enabling or disabling
             // NB: fireSelectionChange calls updateSelectionExtender after firing its event.
@@ -1135,7 +1134,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                 }
             }
         },
-    
+
         /**
          * When the view has changed, whether it be to a refresh or a column change, we need
          * to check the current selection and deselect anything that may no longer be valid.
@@ -1151,12 +1150,12 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                 store = view.store,
                 selectionChanged = false,
                 rowRange, colCount, colIdx, rowIdx, context;
-    
+
             // When columns have changed, we have to deselect *every* cell in the row range
             // because we do not know where the columns have gone to.
             if (selData) {
                 view = selData.view;
-    
+
                 if (isColumnChange) {
                     if (selData.isCells) {
                         context = new Ext.grid.CellContext(view);
@@ -1176,7 +1175,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                                     if (context.column) {
                                         view.onCellDeselect(context);
                                     }
-                        
+
                                     // Selection may still reference a hidden column and may need
                                     // to be cleared
                                     if (me.maybeClearSelection(context)) {
@@ -1190,7 +1189,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                             selectionChanged = true;
                         }
                     }
-        
+
                     // We have to deselect columns which have been hidden/removed
                     else if (selData.isColumns) {
                         selectionChanged = false;
@@ -1217,11 +1216,11 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                                 selectionChanged = true;
                             }
                         }
-            
+
                     });
                 }
             }
-            
+
             return selectionChanged;
         },
 
@@ -1388,7 +1387,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                     sel = me.selected = new Ext.grid.selection.Cells(view);
                 }
             }
-            
+
             startDragSelect = resumingSelection || !e.shiftKey;
 
             if (!resumingSelection) {
@@ -1451,9 +1450,9 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                     }
                 }
             }
-            
+
             me.isDragging = true;
-            
+
             // Disable until a valid new selection is announced in fireSelectionChange
             if (me.extensible) {
                 me.extensible.disable();
@@ -1568,7 +1567,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                 scrollBy[1] = 0;
                 scrollTask.start();
             }
-            
+
             else if (point[0] < viewRegion.left) {
                 scrollBy[0] = -3;
                 scrollBy[1] = 0;
@@ -1967,17 +1966,17 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                 colIdx = removedContext.colIdx,
                 rowIdx = removedContext.rowIdx,
                 changed;
-    
+
             if (startCell && (startCell.column === column || startCell.colIdx === colIdx) &&
                 startCell.rowIdx === rowIdx) {
                 selData.startCell = changed = null;
             }
-    
+
             if (endCell && (endCell.column === column || endCell.colIdx === colIdx) &&
                 endCell.rowIdx === rowIdx) {
                 selData.endCell = changed = null;
             }
-    
+
             return changed === null;
         },
 
@@ -2077,7 +2076,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
                           'of Ext.grid.selection.Selection');
             }
             //</debug>
-            
+
             return selected;
         },
 
@@ -2249,7 +2248,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
             }
             else if (sel.isCells) {
                 me.selected.allSelected = false;
-                
+
                 // eslint-disable-next-line max-len
                 me.fireEvent('selectionchange', me, sel.getCount() ? me.store.getRange.apply(sel.view.dataSource, sel.getRowRange()) : []);
             }
@@ -2275,7 +2274,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
 
         updateSelectionExtender: function() {
             var sel = this.selected;
-            
+
             if (sel) {
                 sel.onSelectionFinish();
             }
@@ -2334,7 +2333,7 @@ Ext.define('Ext.grid.selection.SpreadsheetModel', {
         updateReducible: function(reducible) {
             // do not call getExtensible() here to avoid creation
             var extensible = this.extensible;
-            
+
             if (extensible) {
                 extensible.allowReduceSelection = reducible;
             }

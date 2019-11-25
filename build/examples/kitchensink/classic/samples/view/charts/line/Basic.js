@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.charts.line.Basic', {
     xtype: 'line-basic',
     controller: 'line-basic',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -22,7 +22,7 @@ Ext.define('KitchenSink.view.charts.line.Basic', {
         type: 'Store',
         path: 'app/store/Browsers.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     items: {

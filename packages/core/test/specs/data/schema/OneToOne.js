@@ -2,7 +2,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
     var schema, User, Address, userRole, addressRole, assoc,
         userCalled = false,
         addressCalled = false;
-    
+
     function defineUser(refCfg) {
         User = Ext.define('spec.User', {
             extend: 'Ext.data.Model',
@@ -21,7 +21,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
         });
         userRole = Address.associations.user;
         addressRole = User.associations.address;
-        
+
         if (userRole) {
             assoc = userRole.association;
         }
@@ -36,13 +36,13 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
             responseText: Ext.JSON.encode(data)
         });
     }
-    
+
     beforeEach(function() {
         addressCalled = userCalled = false;
         MockAjaxManager.addMethods();
         schema = Ext.data.Model.schema;
         schema.setNamespace('spec');
-        
+
         Address = Ext.define('spec.Address', {
             extend: 'Ext.data.Model',
             fields: ['id', 'street', 'city', 'zip'],
@@ -52,106 +52,106 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                 this.callParent(arguments);
             }
         });
-        
+
     });
-    
+
     afterEach(function() {
         MockAjaxManager.removeMethods();
         Ext.undefine('spec.User');
         Ext.undefine('spec.Address');
-        
+
         schema.clear(true);
         assoc = User = userRole = Address = addressRole = schema = null;
         addressCalled = userCalled = false;
     });
-    
+
     describe("Model.associations", function() {
         it("should have an association role on each model", function() {
             defineUser();
             expect(User.associations.address).toBeDefined();
             expect(Address.associations.user).toBeDefined();
         });
-        
+
         it("should have a reference back to the association for each role", function() {
             defineUser();
             expect(Address.associations.user.association).toBe(User.associations.address.association);
             expect(Address.associations.user.association.isOneToOne).toBe(true);
         });
     });
-    
+
     describe("association default config", function() {
-        
+
         beforeEach(function() {
             defineUser();
         });
-        
+
         it("should have a schema set", function() {
             expect(assoc.schema).toBe(schema);
         });
-        
+
         it("should have the reference field set", function() {
             expect(assoc.field).toBe(User.getField('addressId'));
         });
-        
+
         it("should have the left part be set to the key holder", function() {
             expect(assoc.left).toBe(userRole);
         });
-        
+
         it("should set definedBy to the key holder", function() {
             expect(assoc.definedBy).toBe(User);
         });
-        
+
         it("should have the right part be set to the non key holder", function() {
             expect(assoc.right).toBe(addressRole);
         });
-        
+
         it("should have the owner as null", function() {
             expect(assoc.owner).toBeNull();
         });
-        
+
         it("should set the assoc name to {SingularRight}{SingularLeft}", function() {
             expect(assoc.name).toBe('AddressUser');
         });
     });
-    
+
     describe("left", function() {
         beforeEach(function() {
             defineUser();
         });
-        
+
         it("should set the role to be singular lowercase & the type to be the entity name", function() {
             expect(userRole.role).toBe('user');
             expect(userRole.type).toBe('User');
         });
-        
+
         it("should set the inverse role to the right", function() {
             expect(userRole.inverse).toBe(addressRole);
         });
-        
+
         it("should set the entity", function() {
             expect(userRole.cls).toBe(User);
         });
     });
-    
+
     describe("right", function() {
         beforeEach(function() {
             defineUser();
         });
-        
+
         it("should set the role to be singular lowercase & the type to be the entity name", function() {
             expect(addressRole.role).toBe('address');
             expect(addressRole.type).toBe('Address');
         });
-        
+
         it("should set the inverse role to the left", function() {
             expect(addressRole.inverse).toBe(userRole);
         });
-        
+
         it("should set the entity", function() {
             expect(addressRole.cls).toBe(Address);
         });
     });
-    
+
     describe("configuring", function() {
         it("should set an association name", function() {
             defineUser({
@@ -159,7 +159,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
             });
             expect(assoc.name).toBe('CustomName');
         });
-        
+
         it("should set the owner based on the child param", function() {
             defineUser({
                 child: true
@@ -168,7 +168,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
             expect(userRole.owner).toBe(true);
             expect(addressRole.owner).toBe(false);
         });
-        
+
         it("should set the owner based on the parent param", function() {
             defineUser({
                 parent: true
@@ -177,7 +177,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
             expect(addressRole.owner).toBe(true);
             expect(userRole.owner).toBe(false);
         });
-        
+
         it("should be able to set a custom role", function() {
             defineUser({
                 role: 'foo'
@@ -187,7 +187,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
             expect(assoc.name).toBe('AddressFooUser');
             expect(addressRole.role).toBe('foo');
         });
-        
+
         describe("inverse", function() {
             it("should set with a string", function() {
                 defineUser({
@@ -197,7 +197,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                 userRole = Address.associations.foo;
                 expect(userRole.role).toBe('foo');
             });
-            
+
             it("should set with an object", function() {
                 defineUser({
                     inverse: {
@@ -210,41 +210,41 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
             });
         });
     });
-    
+
     describe("model decoration", function() {
         function expectFn(Type, member) {
             expect(typeof Type.prototype[member]).toBe('function');
         }
-        
+
         it("should generate a getter on the key holder", function() {
             defineUser();
             expectFn(User, 'getAddress');
         });
-        
+
         it("should generate a setter on the key holder", function() {
             defineUser();
             expectFn(User, 'setAddress');
         });
-        
+
         it("should define a getter on the inverse", function() {
             defineUser();
             expectFn(Address, 'getUser');
         });
-        
+
         it("should allow a custom getter name on the key holder", function() {
             defineUser({
                 getterName: 'getCoolUser'
             });
             expectFn(User, 'getCoolUser');
         });
-        
+
         it("should allow a custom setter name on the key holder", function() {
             defineUser({
                 setterName: 'setCoolUser'
             });
             expectFn(User, 'setCoolUser');
         });
-        
+
         it("should allow a custom getter name on the inverse", function() {
             defineUser({
                 inverse: {
@@ -253,7 +253,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
             });
             expectFn(Address, 'getCoolAddress');
         });
-        
+
         it("should decorate the model based on the role", function() {
             Ext.define('spec.OtherUser', {
                 extend: 'Ext.data.Model',
@@ -271,10 +271,10 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                     }
                 }]
             });
-            
+
             expectFn(spec.OtherUser, 'getUseralAddress');
             expectFn(spec.OtherUser, 'getHomeAddress');
-            
+
             Ext.undefine('spec.OtherUser');
         });
     });
@@ -492,7 +492,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
         createSuite(false);
         createSuite(true);
     });
-    
+
     describe("getters/setters", function() {
         function createSuite(withSession) {
             describe(withSession ? "with session" : "without session", function() {
@@ -506,7 +506,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                         session = new Ext.data.Session();
                     }
                 });
-                
+
                 afterEach(function() {
                     if (withSession) {
                         session.destroy();
@@ -514,14 +514,14 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
 
                     session = spy = user = address = null;
                 });
-                
+
                 describe("the key holder", function() {
                     describe("getter", function() {
                         beforeEach(function() {
                             user = new User({
                                 id: 4
                             }, session);
-                            
+
                         });
                         describe("without an instance", function() {
                             describe("with no foreign key value", function() {
@@ -560,20 +560,20 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                         expect(call.args[2]).toBe(true);
                                         expect(call.object).toBe(user);
                                     });
-                                    
+
                                     it("should accept a function with a scope", function() {
                                         var o = {};
 
                                         user.getAddress(spy, o);
                                         expect(spy.mostRecentCall.object).toBe(o);
                                     });
-                                    
+
                                     it("should accept an options object with success and default the scope to the model", function() {
                                         user.getAddress({
                                             success: spy
                                         });
                                         var call = spy.mostRecentCall;
- 
+
                                         expect(call.args[0]).toBe(address);
                                         expect(call.args[1]).toBeNull();
                                         expect(call.object).toBe(user);
@@ -596,13 +596,13 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                             callback: spy
                                         });
                                         var call = spy.mostRecentCall;
- 
+
                                         expect(call.args[0]).toBe(address);
                                         expect(call.args[1]).toBeNull();
                                         expect(call.args[2]).toBe(true);
                                         expect(call.object).toBe(user);
                                     });
-                                    
+
                                     it("should accept an options object with callback and a scope", function() {
                                         var o = {},
                                             call;
@@ -716,7 +716,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                             expect(call.args[2]).toBe(true);
                                             expect(call.object).toBe(user);
                                         });
-                                    
+
                                         it("should accept a function with a scope", function() {
                                             var o = {};
 
@@ -724,14 +724,14 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                             complete({});
                                             expect(spy.mostRecentCall.object).toBe(o);
                                         });
-                                    
+
                                         it("should accept an options object with success and default the scope to the model", function() {
                                             address = user.getAddress({
                                                 success: spy
                                             });
                                             complete({});
                                             var call = spy.mostRecentCall;
- 
+
                                             expect(call.args[0]).toBe(address);
                                             expect(call.args[1].isOperation).toBe(true);
                                             expect(call.object).toBe(user);
@@ -756,13 +756,13 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                             });
                                             complete({});
                                             var call = spy.mostRecentCall;
- 
+
                                             expect(call.args[0]).toBe(address);
                                             expect(call.args[1].isOperation).toBe(true);
                                             expect(call.args[2]).toBe(true);
                                             expect(call.object).toBe(user);
                                         });
-                                    
+
                                         it("should accept an options object with callback and a scope", function() {
                                             var o = {},
                                                 call;
@@ -788,7 +788,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                             expect(call.args[2]).toBe(false);
                                             expect(call.object).toBe(user);
                                         });
-                                    
+
                                         it("should accept a function with a scope", function() {
                                             var o = {};
 
@@ -796,14 +796,14 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                             complete(null, 500);
                                             expect(spy.mostRecentCall.object).toBe(o);
                                         });
-                                    
+
                                         it("should accept an options object with failure and default the scope to the model", function() {
                                             address = user.getAddress({
                                                 failure: spy
                                             });
                                             complete(null, 500);
                                             var call = spy.mostRecentCall;
- 
+
                                             expect(call.args[0]).toBe(address);
                                             expect(call.args[1].isOperation).toBe(true);
                                             expect(call.object).toBe(user);
@@ -828,13 +828,13 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                             });
                                             complete(null, 500);
                                             var call = spy.mostRecentCall;
- 
+
                                             expect(call.args[0]).toBe(address);
                                             expect(call.args[1].isOperation).toBe(true);
                                             expect(call.args[2]).toBe(false);
                                             expect(call.object).toBe(user);
                                         });
-                                    
+
                                         it("should accept an options object with callback and a scope", function() {
                                             var o = {},
                                                 call;
@@ -857,7 +857,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                 address = new Address({
                                     id: 2
                                 }, session);
-                                
+
                                 user.setAddress(address);
                             });
 
@@ -912,20 +912,20 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                     expect(call.args[2]).toBe(true);
                                     expect(call.object).toBe(user);
                                 });
-                                
+
                                 it("should accept a function with a scope", function() {
                                     var o = {};
 
                                     user.getAddress(spy, o);
                                     expect(spy.mostRecentCall.object).toBe(o);
                                 });
-                                
+
                                 it("should accept an options object with success and default the scope to the model", function() {
                                     user.getAddress({
                                         success: spy
                                     });
                                     var call = spy.mostRecentCall;
- 
+
                                     expect(call.args[0]).toBe(address);
                                     expect(call.args[1]).toBeNull();
                                     expect(call.object).toBe(user);
@@ -948,13 +948,13 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                         callback: spy
                                     });
                                     var call = spy.mostRecentCall;
- 
+
                                     expect(call.args[0]).toBe(address);
                                     expect(call.args[1]).toBeNull();
                                     expect(call.args[2]).toBe(true);
                                     expect(call.object).toBe(user);
                                 });
-                                
+
                                 it("should accept an options object with callback and a scope", function() {
                                     var o = {},
                                         call;
@@ -969,7 +969,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                             });
                         });
                     });
-                
+
                     describe("setter", function() {
                         beforeEach(function() {
                             user = new User({
@@ -994,7 +994,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                 it("should have the same record reference", function() {
                                     expect(user.getAddress()).toBe(address);
                                 });
-                            
+
                                 it("should set the underlying key value", function() {
                                     expect(user.get('addressId')).toBe(3);
                                 });
@@ -1050,7 +1050,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                 });
                             });
                         });
-                        
+
                         describe("value", function() {
                             describe("with nothing existing", function() {
                                 it("should set the underlying key", function() {
@@ -1169,7 +1169,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                 expect(val).toBeNull();
                             });
                         });
-                        
+
                         describe("callbacks", function() {
                             it("should accept a function as the second arg, scope should default to the model", function() {
                                 user.setAddress(16, spy);
@@ -1179,7 +1179,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                 expect(call.args[0]).toBe(user);
                                 expect(call.object).toBe(user);
                             });
-                            
+
                             it("should accept a function with a scope", function() {
                                 var o = {};
 
@@ -1187,7 +1187,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                 complete({});
                                 expect(spy.mostRecentCall.object).toBe(o);
                             });
-                            
+
                             describe("options object", function() {
                                 var successSpy, failureSpy, callbackSpy;
 
@@ -1292,7 +1292,7 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                 id: 3
                             }, session);
                             user.setAddress(address);
-                            
+
                             user.set('addressId', 123);
                             expect(user.getAddress().getId()).toBe(123);
                         });
@@ -1392,7 +1392,6 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                             expect(addressCalled).toBe(false);
                         });
 
-                        
                         it("should clear the foreign key", function() {
                             makeUser(1, 101);
                             user.drop();
@@ -1466,7 +1465,6 @@ topSuite("Ext.data.schema.OneToOne", ['Ext.data.ArrayStore', 'Ext.data.Session']
                                     Ext.data.Model.schema.processKeyChecks(true);
                                     expect(address.dropped).toBe(true);
                                 });
-
 
                                 it("should clear the owner on the inverse", function() {
                                     user.drop();

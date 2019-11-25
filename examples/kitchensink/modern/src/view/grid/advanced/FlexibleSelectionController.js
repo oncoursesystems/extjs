@@ -5,11 +5,11 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelectionController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.flexible-selection',
 
-    getSelectable: function () {
+    getSelectable: function() {
         return this.lookup('selectionGrid').getSelectable();
     },
 
-    onSelectionChange: function (grid, records, selecting, selection) {
+    onSelectionChange: function(grid, records, selecting, selection) {
         var status = this.lookup('status'),
             message = '??',
             firstRowIndex,
@@ -26,8 +26,9 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelectionController', {
             lastRowIndex = selection.getLastRowIndex();
             lastColumnIndex = selection.getLastColumnIndex();
 
-            message = 'Selected cells: ' + (lastColumnIndex - firstColumnIndex + 1) + 'x' + (lastRowIndex - firstRowIndex + 1) +
-                ' at (' + firstColumnIndex + ',' + firstRowIndex + ')';
+            message = 'Selected cells: ' + (lastColumnIndex - firstColumnIndex + 1) +
+                       'x' + (lastRowIndex - firstRowIndex + 1) +
+                       ' at (' + firstColumnIndex + ',' + firstRowIndex + ')';
         }
         else if (selection.isRows) {
             message = 'Selected rows: ' + selection.getCount();
@@ -39,7 +40,7 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelectionController', {
         status.setHtml(message);
     },
 
-    onSelectableChange: function (menuitem, checked) {
+    onSelectableChange: function(menuitem, checked) {
         var sel = this.getSelectable(),
             fn = menuitem.fn;
 
@@ -50,9 +51,11 @@ Ext.define('KitchenSink.view.grid.advanced.FlexibleSelectionController', {
         sel[fn](checked);
     },
 
-    onExtensibleChange: function (menuitem, checked) {
+    onExtensibleChange: function(menuitem, checked) {
+        var sel;
+
         if (checked) {
-            var sel = this.getSelectable();
+            sel = this.getSelectable();
 
             sel.setExtensible(menuitem.getValue());
         }

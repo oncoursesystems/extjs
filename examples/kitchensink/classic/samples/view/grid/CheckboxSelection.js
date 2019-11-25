@@ -25,13 +25,20 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
             percentChangeColumnWidth: 100,
             lastUpdatedColumnWidth: 120
         },
-         graphite: {
+        graphite: {
             width: 950,
             priceWidth: 100,
             pricechangeWidth: 110,
             percentChangeColumnWidth: 120,
             lastUpdatedColumnWidth: 170
-        }    
+        },
+        'classic-material': {
+            width: 950,
+            priceWidth: 150,
+            pricechangeWidth: 150,
+            percentChangeColumnWidth: 150,
+            lastUpdatedColumnWidth: 170
+        }
     },
     //</example>
 
@@ -39,7 +46,7 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
     width: '${width}',
     height: 700,
     frame: true,
-    
+
     layout: {
         type: 'vbox',
         align: 'stretch'
@@ -49,11 +56,11 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
         xtype: 'grid',
         flex: 0.5,
         title: 'checkOnly: false',
-        
+
         store: 'Companies',
         columnLines: true,
         selType: 'checkboxmodel',
-    
+
         columns: [{
             text: "Company",
             dataIndex: 'name',
@@ -61,7 +68,7 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
         }, {
             text: "Price",
             dataIndex: 'price',
-            width: '${priceWidth}',       
+            width: '${priceWidth}',
             formatter: 'usMoney'
         }, {
             text: "Change",
@@ -75,21 +82,21 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
             text: "Last Updated",
             width: '${lastUpdatedColumnWidth}',
             dataIndex: 'priceLastChange',
-    
+
             formatter: 'date("m/d/Y")'
         }]
     }, {
         xtype: 'grid',
         flex: 0.5,
         title: 'checkOnly: true',
-        
+
         store: 'Companies',
         columnLines: true,
         selModel: {
             type: 'checkboxmodel',
             checkOnly: true
         },
-    
+
         columns: [{
             text: "Company",
             dataIndex: 'name',
@@ -98,7 +105,7 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
             text: "Price",
             width: '${priceWidth}',
             dataIndex: 'price',
-    
+
             formatter: 'usMoney'
         }, {
             text: "Change",
@@ -112,7 +119,7 @@ Ext.define('KitchenSink.view.grid.CheckboxSelection', {
             text: "Last Updated",
             width: '${lastUpdatedColumnWidth}',
             dataIndex: 'priceLastChange',
-    
+
             formatter: 'date("m/d/Y")'
         }]
     }]

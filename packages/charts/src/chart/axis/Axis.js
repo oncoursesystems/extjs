@@ -1,31 +1,36 @@
-/* eslint-disable max-len */
 /**
  * @class Ext.chart.axis.Axis
  *
  * Defines axis for charts.
  *
- * Using the current model, the type of axis can be easily extended. By default, Sencha Charts provide three different
- * types of axis:
+ * Using the current model, the type of axis can be easily extended. By default, Sencha Charts 
+ * provide three different types of axis:
  *
  *  * **numeric** - the data attached to this axis is numeric and continuous.
- *  * **time** - the data attached to this axis is (or gets converted into) a date/time value; it is continuous.
- *  * **category** - the data attached to this axis belongs to a finite set. The data points are evenly placed along the axis.
+ *  * **time** - the data attached to this axis is (or gets converted into) a date/time value; 
+ *               it is continuous.
+ *  * **category** - the data attached to this axis belongs to a finite set. The data points
+ *                   are evenly placed along the axis.
  *
- * The behavior of an axis can be easily changed by setting different types of axis layout and axis segmenter to the axis.
+ * The behavior of an axis can be easily changed by setting different types of axis layout and 
+ * axis segmenter to the axis.
  *
- * Axis layout defines how the data points are placed. Using continuous layout, the data points will be distributed by
- * the numeric value. Using discrete layout the data points will be spaced evenly. Furthermore, if you want to combine
- * the data points with the duplicate values in a discrete layout, you should use combineDuplicate layout.
+ * Axis layout defines how the data points are placed. Using continuous layout, the data points 
+ * will be distributed by the numeric value. Using discrete layout the data points will be spaced 
+ * evenly. Furthermore, if you want to combine the data points with the duplicate values in a 
+ * discrete layout, you should use combineDuplicate layout.
  *
- * Segmenter defines the way to segment data range. For example, if you have a Date-type data range from Jan 1, 1997 to
- * Jan 1, 2017, the segmenter will segement the data range into years, months or days based on the current zooming
- * level.
+ * Segmenter defines the way to segment data range. For example, if you have a Date-type data range 
+ * from Jan 1, 1997 to Jan 1, 2017, the segmenter will segement the data range into years, months or
+ * days based on the current zooming level.
  *
- * It is possible to write custom axis layouts and segmenters to extends this behavior by simply implementing interfaces
- * {@link Ext.chart.axis.layout.Layout} and {@link Ext.chart.axis.segmenter.Segmenter}.
+ * It is possible to write custom axis layouts and segmenters to extends this behavior by simply 
+ * implementing interfaces {@link Ext.chart.axis.layout.Layout} and
+ * {@link Ext.chart.axis.segmenter.Segmenter}.
  *
  * Here's an example for the axes part of a chart definition:
- * An example of axis for a series (in this case for an area chart that has multiple layers of yFields) could be:
+ * An example of axis for a series (in this case for an area chart that has multiple layers of 
+ * yFields) could be:
  *
  *     axes: [{
  *         type: 'numeric',
@@ -52,12 +57,13 @@
  *         }
  *     }]
  *
- * In this case we use a `numeric` axis for displaying the values of the Area series and a `category` axis for displaying the names of
- * the store elements. The numeric axis is placed on the left of the screen, while the category axis is placed at the bottom of the chart.
- * Both the category and numeric axes have `grid` set, which means that horizontal and vertical lines will cover the chart background. In the
- * category axis the labels will be rotated so they can fit the space better.
+ * In this case we use a `numeric` axis for displaying the values of the Area series and a 
+ * `category` axis for displaying the names of the store elements. The numeric axis is placed 
+ * on the left of the screen, while the category axis is placed at the bottom of the chart.
+ * Both the category and numeric axes have `grid` set, which means that horizontal and vertical 
+ * lines will cover the chart background. In the category axis the labels will be rotated so 
+ * they can fit the space better.
  */
-/* eslint-enable max-len */
 Ext.define('Ext.chart.axis.Axis', {
     xtype: 'axis',
 
@@ -675,7 +681,7 @@ Ext.define('Ext.chart.axis.Axis', {
             }
         }
     },
-    
+
     updateMinorTickSteps: function(minorTickSteps) {
         var me = this,
             sprites = me.getSprites(),
@@ -825,7 +831,7 @@ Ext.define('Ext.chart.axis.Axis', {
 
     applyVisibleRange: function(visibleRange, oldVisibleRange) {
         var temp;
-        
+
         this.getChart();
 
         // If it is in reversed order swap them
@@ -907,7 +913,7 @@ Ext.define('Ext.chart.axis.Axis', {
             if (!me.masterAxis.destroyed) {
                 link('un', me, me.masterAxis);
             }
-            
+
             me.masterAxis = null;
         }
 
@@ -1264,7 +1270,7 @@ Ext.define('Ext.chart.axis.Axis', {
         if (!this.getChart()) {
             return;
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             range = me.getRange(),
@@ -1340,7 +1346,7 @@ Ext.define('Ext.chart.axis.Axis', {
         if (this.isConfiguring) {
             return;
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             sprites = me.getSprites(),
@@ -1380,12 +1386,12 @@ Ext.define('Ext.chart.axis.Axis', {
                         textBaseline: 'top',
                         textAlign: 'center'
                     }, true);
-                    
+
                     title.applyTransformations();
                     me.titleOffset = title.getBBox().height + titleMargin;
-                    
+
                     break;
-                    
+
                 case 'bottom':
                     title.setAttributes({
                         x: anchor,
@@ -1393,12 +1399,12 @@ Ext.define('Ext.chart.axis.Axis', {
                         textBaseline: 'top',
                         textAlign: 'center'
                     }, true);
-                    
+
                     title.applyTransformations();
                     me.titleOffset = title.getBBox().height + titleMargin;
-                    
+
                     break;
-                
+
                 case 'left':
                     title.setAttributes({
                         x: margin + titleMargin / 2,
@@ -1409,12 +1415,12 @@ Ext.define('Ext.chart.axis.Axis', {
                         rotationCenterY: anchor,
                         rotationRads: -Math.PI / 2
                     }, true);
-                    
+
                     title.applyTransformations();
                     me.titleOffset = title.getBBox().width + titleMargin;
-                    
+
                     break;
-                
+
                 case 'right':
                     title.setAttributes({
                         x: thickness - margin + titleMargin / 2,
@@ -1425,10 +1431,10 @@ Ext.define('Ext.chart.axis.Axis', {
                         rotationCenterY: anchor,
                         rotationRads: Math.PI / 2
                     }, true);
-                    
+
                     title.applyTransformations();
                     me.titleOffset = title.getBBox().width + titleMargin;
-                    
+
                     break;
             }
         }

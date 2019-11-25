@@ -3,7 +3,7 @@
  * Simple wrapper class that represents a set of records returned by a Proxy.
  */
 Ext.define('Ext.data.ResultSet', {
-    
+
     /**
      * @property {Boolean} isResultSet
      * Identifies this class as a result set.
@@ -11,7 +11,7 @@ Ext.define('Ext.data.ResultSet', {
     isResultSet: true,
 
     $configPrefixed: false,
-    
+
     config: {
         /**
          * @cfg {Boolean} loaded
@@ -90,12 +90,12 @@ Ext.define('Ext.data.ResultSet', {
 
         if (!count) {
             records = this.getRecords();
-            
+
             if (records) {
                 count = records.length;
             }
         }
-        
+
         return count;
     }
 });

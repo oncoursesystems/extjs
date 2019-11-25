@@ -7,7 +7,7 @@
  */
 Ext.define('Ext.fx.target.Component', {
     extend: 'Ext.fx.target.Target',
-    
+
     type: 'component',
 
     // Methods to call to retrieve unspecified "from" values from a target Component
@@ -69,7 +69,7 @@ Ext.define('Ext.fx.target.Component', {
                     o = attrs[attr][j];
                     methodProps = methodsToCall[me.setMethods[attr]] ||
                                   (methodsToCall[me.setMethods[attr]] = {});
-                    
+
                     methodProps.target = o[0];
                     methodProps[attr] = o[1];
                 }
@@ -89,7 +89,7 @@ Ext.define('Ext.fx.target.Component', {
 
             if (methodsToCall.setSize) {
                 o = methodsToCall.setSize;
-                
+
                 // Dimensions not being animated MUST NOT be autosized.
                 // They must remain at current value.
                 w = (o.width === undefined) ? o.target.getWidth() : parseFloat(o.width);

@@ -77,13 +77,13 @@ Ext.define("Ext.util.Sortable", {
                     var result = sorters[0].sort(r1, r2),
                         length = sorters.length,
                         i = 1;
-    
+
                     // While we have not established a comparison value,
                     // loop through subsequent sorters asking for a comparison value
                     for (; !result && i < length; i++) {
                         result = sorters[i].sort.call(sorters[i], r1, r2);
                     }
-    
+
                     return result;
                 }
                 : function() {
@@ -100,7 +100,7 @@ Ext.define("Ext.util.Sortable", {
     applySorters: function(sorters) {
         var me = this,
             sortersCollection;
-        
+
         sortersCollection = me.getSorters() || new Ext.util.MixedCollection(false, Ext.returnId);
 
         // We have been configured with a non-default value.
@@ -223,24 +223,24 @@ Ext.define("Ext.util.Sortable", {
                     if (overFlow > 0) {
                         currentSorters.removeRange(me.multiSortLimit, overFlow);
                     }
-                    
+
                     break;
-                
+
                 case "prepend":
                     currentSorters.insert(0, sorters);
                     break;
-                
+
                 case "append":
                     currentSorters.addAll(sorters);
                     break;
-                
+
                 case undefined:
                 case null:
                 case "replace":
                     currentSorters.clear();
                     currentSorters.addAll(sorters);
                     break;
-                
+
                 default:
                     //<debug>
                     Ext.raise('Sorter insertion point must be "multi", "prepend", ' +

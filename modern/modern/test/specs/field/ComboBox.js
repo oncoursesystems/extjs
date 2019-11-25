@@ -2,7 +2,7 @@ topSuite("Ext.field.ComboBox",
     ['Ext.app.ViewModel', 'Ext.form.Panel', 'Ext.Dialog',
      'Ext.data.ArrayStore', 'Ext.layout.Fit'],
 function() {
-    
+
     var component,
         store,
         picker,
@@ -17,9 +17,11 @@ function() {
         storeFlushLoad = Ext.data.ProxyStore.prototype.flushLoad,
         loadStore = function() {
             storeLoad.apply(this, arguments);
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
+
             return this;
         };
 
@@ -61,11 +63,11 @@ function() {
         }
     }
 
-    function getRawValue () {
+    function getRawValue() {
         return component.inputElement.dom.value;
     }
 
-    function setRawValue (v) {
+    function setRawValue(v) {
         component.inputElement.dom.value = v;
     }
 
@@ -97,7 +99,7 @@ function() {
         pickerStore = component._pickerStore;
 
         Ext.override(component, {
-            getPicker: function () {
+            getPicker: function() {
                 picker = this.callParent(arguments);
 
                 // It's a picker which contains a "slot" which is a List.
@@ -119,8 +121,9 @@ function() {
         });
     }
 
-    function getTextSelectionIndices (field) {
+    function getTextSelectionIndices(field) {
         var indices = [];
+
         if (document.selection) {
             var range = document.selection.createRange(),
                 stored = range.duplicate(),
@@ -150,28 +153,28 @@ function() {
         CBTestModel = Ext.define(null, {
             extend: 'Ext.data.Model',
             fields: [
-                {type: 'string', name: 'text'},
-                {type: 'string', name: 'value'}
+                { type: 'string', name: 'text' },
+                { type: 'string', name: 'value' }
             ]
         });
 
-        Ext.define('spec.MyStore',{
-            extend : 'Ext.data.Store',
-            alias : 'store.foo',
+        Ext.define('spec.MyStore', {
+            extend: 'Ext.data.Store',
+            alias: 'store.foo',
             proxy: {
                 type: 'memory'
             },
             model: CBTestModel,
             data: [
-                {id: 1, text: 'text 1', value: 'value 1'},
-                {id: 2, text: 'text 2', value: 'value 2'},
-                {id: 3, text: 'text 3', value: 'value 3'},
-                {id: 4, text: 'text 31', value: 'value 31'},
-                {id: 5, text: 'text 32', value: 'value 32'},
-                {id: 6, text: 'text 33', value: 'value 33'},
-                {id: 7, text: 'text 34', value: 'value 34'},
-                {id: 8, text: 'Foo', value: 'foo1'},
-                {id: 9, text: 'Foo', value: 'foo2'}
+                { id: 1, text: 'text 1', value: 'value 1' },
+                { id: 2, text: 'text 2', value: 'value 2' },
+                { id: 3, text: 'text 3', value: 'value 3' },
+                { id: 4, text: 'text 31', value: 'value 31' },
+                { id: 5, text: 'text 32', value: 'value 32' },
+                { id: 6, text: 'text 33', value: 'value 33' },
+                { id: 7, text: 'text 34', value: 'value 34' },
+                { id: 8, text: 'Foo', value: 'foo1' },
+                { id: 9, text: 'Foo', value: 'foo2' }
             ]
         });
         store = new spec.MyStore();
@@ -185,19 +188,23 @@ function() {
         if (store) {
             store.destroy();
         }
+
         if (component) {
             component.destroy();
         }
+
         Ext.undefine('spec.MyStore');
         component = store = null;
     });
 
     function findRecord(value, theStore) {
         var found;
+
         theStore = theStore || store;
         theStore.each(function(rec) {
             if (rec.get(component.getValueField()) === value || rec.get(component.getDisplayField()) === value) {
                 found = rec;
+
                 return false;
             }
         });
@@ -207,6 +214,7 @@ function() {
 
     function clickListItem(value, theStore) {
         var picker;
+
         component.expand();
         picker = component.getPicker();
         picker.refresh();
@@ -223,7 +231,7 @@ function() {
         }
     }
 
-    it("should encode the input value in the template", function(){
+    it("should encode the input value in the template", function() {
         makeComponent({
             renderTo: Ext.getBody(),
             value: 'test "  <br/> test'
@@ -316,7 +324,7 @@ function() {
             expect(component.getValue()).toBe('abc');
         });
 
-        it('should respond properly to the clear trigger', function () {
+        it('should respond properly to the clear trigger', function() {
             makeComponent({
                 clearable: true,
                 displayField: 'text',
@@ -385,6 +393,7 @@ function() {
                 forceSelection: false
             });
             var count = 0;
+
             component.on('select', function() {
                 count++;
             });
@@ -409,6 +418,7 @@ function() {
                 forceSelection: false
             });
             var selectCount = 0;
+
             var value;
 
             component.on('action', function() {
@@ -479,11 +489,12 @@ function() {
             expect(filters.getCount()).toBe(1);
 
             var filter = filters.getAt(0);
+
             expect(filter.getProperty()).toBe('text');
             expect(filter.getValue()).toBe('text 3');
         });
 
-        it('should respond properly to the clear trigger', function () {
+        it('should respond properly to the clear trigger', function() {
             makeComponent({
                 clearable: true,
                 displayField: 'text',
@@ -498,7 +509,9 @@ function() {
             expect(component.getValue()).toBe('value 3');
 
             var trigger = component.getTriggers().clear;
+
             var v = component.getInputValue();
+
             var vc = component.getValueCollection();
 
             expect(v).toBe('text 3');
@@ -520,7 +533,7 @@ function() {
             expect(v).toBe('');
         });
 
-        it('should clear incomplete values on the clear trigger', function () {
+        it('should clear incomplete values on the clear trigger', function() {
             makeComponent({
                 clearable: true,
                 displayField: 'text',
@@ -531,7 +544,8 @@ function() {
             });
 
             doTyping("abc");
-            var trigger, vc, v = component.getValue();
+            var trigger, vc,
+v = component.getValue();
 
             expect(v).toBe(null);
 
@@ -682,6 +696,7 @@ function() {
         });
         it("should pass a ChainedStore to the BoundList when queryMode: 'local'", function() {
             var pickerStore = component.getPicker().getStore();
+
             expect(pickerStore.isChainedStore).toBe(true);
             expect(pickerStore.getSource()).toBe(component.getStore());
         });
@@ -736,7 +751,6 @@ function() {
             });
         });
     });
-
 
     describe("setting value", function() {
         describe("value config", function() {
@@ -885,6 +899,7 @@ function() {
             describe('change event', function() {
                 it("should not fire the change event when the value stays the same - single value", function() {
                     var spy = jasmine.createSpy();
+
                     makeComponent({
                         valueField: 'value',
                         value: 'value1',
@@ -898,6 +913,7 @@ function() {
                 });
                 it("should fire the change event when the value changes - single value", function() {
                     var spy = jasmine.createSpy();
+
                     makeComponent({
                         valueField: 'value',
                         value: 'value1',
@@ -914,6 +930,7 @@ function() {
                 });
                 it("should not fire the change event when the value stays the same - multiple values", function() {
                     var spy = jasmine.createSpy();
+
                     makeComponent({
                         multiSelect: true,
                         valueField: 'value',
@@ -928,6 +945,7 @@ function() {
                 });
                 it("should fire the change event when the value changes - multiple values", function() {
                     var spy = jasmine.createSpy();
+
                     makeComponent({
                         multiSelect: true,
                         valueField: 'value',
@@ -973,7 +991,7 @@ function() {
                     component.getStore().on({
                         refresh: spy
                     });
-                    doTyping('a');                    
+                    doTyping('a');
                     waitsForSpy(spy, 'first refresh event');
                     runs(function() {
                         spy.reset();
@@ -1068,8 +1086,10 @@ function() {
                 });
                 doTyping('text 3');
                 var filters = component._pickerStore.getFilters();
+
                 expect(filters.getCount()).toBe(1);
                 var filter = filters.getAt(0);
+
                 expect(filter.getProperty()).toBe('text');
                 expect(filter.getValue()).toBe('text 3');
                 // Value not set during filtering.
@@ -1087,6 +1107,7 @@ function() {
                 });
                 doTyping('');
                 var filters = component._pickerStore.getFilters();
+
                 expect(filters.first().getDisabled()).toBe(true);
                 // Value not set during filtering.
                 // TODO: Should it?
@@ -1118,7 +1139,7 @@ function() {
                 });
             });
 
-            //\\TDODO: implement stripCharsRe?
+            // \\TDODO: implement stripCharsRe?
             xdescribe("with stripCharsRe", function() {
                 beforeEach(function() {
                     makeComponent({
@@ -1130,7 +1151,7 @@ function() {
                     });
                 });
 
-                it("should remove unwanted characters", function(){
+                it("should remove unwanted characters", function() {
                     doTyping('a');
                     waits(100);
                     runs(function() {
@@ -1145,7 +1166,7 @@ function() {
                         doTyping('a');
                     });
                     waits(100);
-                    runs(function(){
+                    runs(function() {
                         expect(component.inputElement.dom.value).toBe('');
                     });
                 });
@@ -1316,14 +1337,14 @@ function() {
                 doTyping('v');
                 doTyping('');
                 doTyping('v');
-                
+
                 expect(component.expanded).toBe(false);
                 expect(component._pickerStore.getCount()).toBe(0);
             });
         });
     });
 
-    xdescribe("growToLongestValue", function () {
+    xdescribe("growToLongestValue", function() {
         var bodyEl,
             beforeWidth,
             afterWidth,
@@ -1331,9 +1352,9 @@ function() {
             longText = 'this text is veeeeeeeeeeeeeeeeeeeeeeeeeeeery long',
             longestText = 'this text is much, much, much, much, much, much, much, much, much much, much, much, much, much, much, much, much too long';
 
-        describe("when true", function () {
-            describe("adding a value to store", function () {
-                it("should not grow when a longer record is added to store when not set to grow", function () {
+        describe("when true", function() {
+            describe("adding a value to store", function() {
+                it("should not grow when a longer record is added to store when not set to grow", function() {
                     makeComponent({
                         grow: false,
                         growToLongestValue: true,
@@ -1343,13 +1364,13 @@ function() {
                     bodyEl = component.bodyEl;
 
                     beforeWidth = bodyEl.getWidth();
-                    store.add({text: longText, value: 'value 4'});
+                    store.add({ text: longText, value: 'value 4' });
                     afterWidth = bodyEl.getWidth();
 
                     expect(beforeWidth).toEqual(afterWidth);
                 });
 
-                it("should grow when a longer record is added to store", function () {
+                it("should grow when a longer record is added to store", function() {
                     makeComponent({
                         grow: true,
                         growToLongestValue: true,
@@ -1359,13 +1380,13 @@ function() {
                     bodyEl = component.bodyEl;
 
                     beforeWidth = bodyEl.getWidth();
-                    store.add({text: longText, value: 'value 4'});
+                    store.add({ text: longText, value: 'value 4' });
                     afterWidth = bodyEl.getWidth();
 
                     expect(afterWidth).toBeGreaterThan(beforeWidth);
                 });
 
-                it("should not grow when a shorter record is added to store", function () {
+                it("should not grow when a shorter record is added to store", function() {
                     makeComponent({
                         grow: true,
                         growToLongestValue: true,
@@ -1375,13 +1396,13 @@ function() {
                     var inputEl = component.inputElement;
 
                     beforeWidth = inputEl.getWidth();
-                    store.add({text: shortText, value: 'value 4'});
+                    store.add({ text: shortText, value: 'value 4' });
                     afterWidth = inputEl.getWidth();
 
                     expect(beforeWidth).toEqual(afterWidth);
                 });
 
-                it("should grow when growToLongestValue is set", function () {
+                it("should grow when growToLongestValue is set", function() {
                     makeComponent({
                         grow: true,
                         growToLongestValue: true,
@@ -1391,13 +1412,13 @@ function() {
                     bodyEl = component.bodyEl;
 
                     beforeWidth = bodyEl.getWidth();
-                    store.add({text: longText, value: 'value 4'});
+                    store.add({ text: longText, value: 'value 4' });
                     afterWidth = bodyEl.getWidth();
 
                     expect(afterWidth).toBeGreaterThan(beforeWidth);
                 });
 
-                it("should not grow when growToLongestValue isn't set", function () {
+                it("should not grow when growToLongestValue isn't set", function() {
                     makeComponent({
                         grow: true,
                         growToLongestValue: false,
@@ -1407,13 +1428,13 @@ function() {
                     bodyEl = component.bodyEl;
 
                     beforeWidth = bodyEl.getWidth();
-                    store.add({text: longText, value: 'value 4'});
+                    store.add({ text: longText, value: 'value 4' });
                     afterWidth = bodyEl.getWidth();
 
                     expect(beforeWidth).toEqual(afterWidth);
                 });
 
-                it("should not grow larger than growMax when growMax is exceeded", function () {
+                it("should not grow larger than growMax when growMax is exceeded", function() {
                     makeComponent({
                         grow: true,
                         growMax: 200,
@@ -1421,14 +1442,14 @@ function() {
                         renderTo: Ext.getBody()
                     });
 
-                    store.add({text: longestText, value: 'value 4'});
+                    store.add({ text: longestText, value: 'value 4' });
 
                     expect(component.bodyEl.getWidth()).toEqual(component.growMax);
                 });
             });
 
-            describe('removing store values', function () {
-                it('should shrink when largest item is removed', function () {
+            describe('removing store values', function() {
+                it('should shrink when largest item is removed', function() {
                     makeComponent({
                         grow: true,
                         growToLongestValue: true,
@@ -1437,7 +1458,7 @@ function() {
 
                     bodyEl = component.bodyEl;
 
-                    store.add({text: longText, value: 'value 4'});
+                    store.add({ text: longText, value: 'value 4' });
                     beforeWidth = bodyEl.getWidth();
 
                     store.removeAt(store.getCount() - 1);
@@ -1446,7 +1467,7 @@ function() {
                     expect(afterWidth).toBeLessThan(beforeWidth);
                 });
 
-                it('should not shrink when item other than largest item is removed', function () {
+                it('should not shrink when item other than largest item is removed', function() {
                     makeComponent({
                         grow: true,
                         growToLongestValue: true,
@@ -1455,7 +1476,7 @@ function() {
 
                     bodyEl = component.bodyEl;
 
-                    store.add({text: longText, value: 'value 4'});
+                    store.add({ text: longText, value: 'value 4' });
                     beforeWidth = bodyEl.getWidth();
 
                     store.removeAt(0);
@@ -1464,7 +1485,7 @@ function() {
                     expect(afterWidth).toEqual(beforeWidth);
                 });
 
-                it('should not shrink below growMin width', function () {
+                it('should not shrink below growMin width', function() {
                     makeComponent({
                         grow: true,
                         growMin: 100,
@@ -1473,7 +1494,7 @@ function() {
                     });
 
                     bodyEl = component.bodyEl;
-                    store.add({text: longText, value: 'value 4'});
+                    store.add({ text: longText, value: 'value 4' });
 
                     beforeWidth = bodyEl.getWidth();
                     store.removeAll();
@@ -1484,8 +1505,8 @@ function() {
             });
         });
 
-        describe('when false', function () {
-            beforeEach(function () {
+        describe('when false', function() {
+            beforeEach(function() {
                 Ext.util.CSS.createStyleSheet(
                     // make the input el have a 9px character width
                     '.x-form-text { font:15px monospace;letter-spacing:0px; }',
@@ -1493,11 +1514,11 @@ function() {
                 );
             });
 
-            afterEach(function () {
+            afterEach(function() {
                 Ext.util.CSS.removeStyleSheet('growStyleSheet');
             });
 
-            it('should start out at growMin', function () {
+            it('should start out at growMin', function() {
                 makeComponent({
                     renderTo: document.body,
                     grow: true,
@@ -1508,7 +1529,7 @@ function() {
                 expect(component.getWidth()).toBe(50);
             });
 
-            it('should initially render at the width of the text', function () {
+            it('should initially render at the width of the text', function() {
                 makeComponent({
                     renderTo: document.body,
                     value: 'mmmmmmmmmm',
@@ -1520,7 +1541,7 @@ function() {
                 expect(component.getWidth()).toBe(component.bodyEl.getWidth());
             });
 
-            it('should initially render with a width of growMax if initial text width exceeds growMax', function () {
+            it('should initially render with a width of growMax if initial text width exceeds growMax', function() {
                 makeComponent({
                     renderTo: document.body,
                     value: 'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm',
@@ -1532,7 +1553,7 @@ function() {
                 expect(component.getWidth()).toBe(200);
             });
 
-            it('should grow and shrink', function () {
+            it('should grow and shrink', function() {
                 makeComponent({
                     renderTo: document.body,
                     grow: true,
@@ -1607,7 +1628,7 @@ function() {
                 });
                 var spy = jasmine.createSpy(),
                     store = component.getStore();
-                    
+
                 component._pickerStore.on('filterchange', spy);
                 component.doFilter({
                     query: 'value 2'
@@ -1646,19 +1667,19 @@ function() {
                 expect(filterSpy).toHaveBeenCalled();
             });
 
-            it("should add to existing filters", function(){
+            it("should add to existing filters", function() {
                 makeComponent({
                     queryMode: 'local',
                     displayField: 'value'
-                });    
+                });
                 store.filter('value', 'value');
                 component.doFilter({
                     query: 'value 3'
                 });
                 expect(component._pickerStore.getCount()).toBe(5);
             });
-            
-            it("should remove only the filters added by the combo", function(){
+
+            it("should remove only the filters added by the combo", function() {
                 makeComponent({
                     queryMode: 'local',
                     displayField: 'value'
@@ -1678,11 +1699,11 @@ function() {
                     queryMode: 'local',
                     displayField: 'value'
                 });
-                
+
                 var ret = component.doFilter({
                     query: 'value 2'
                 });
-                
+
                 expect(ret).toBe(true);
             });
         });
@@ -1699,17 +1720,17 @@ function() {
                 });
                 expect(component.getStore().load.callCount).toEqual(1);
             });
-            
+
             it("should return true if the query was not vetoed", function() {
                 makeComponent({
                     queryMode: 'remote',
                     displayField: 'value'
                 });
-                
+
                 var ret = component.doFilter({
                     query: 'blerg'
                 });
-                
+
                 expect(ret).toBe(true);
             });
 
@@ -1808,11 +1829,12 @@ function() {
         describe("beforeFilter event", function() {
             it("should fire the 'beforeFilter' event", function() {
                 makeComponent();
-                
+
                 var lastQuery = component.lastQuery;
+
                 var queryPlan = null;
 
-                component.on('beforequery', function (qp) {
+                component.on('beforequery', function(qp) {
                     expect(queryPlan).toBe(null);
                     queryPlan = qp;
                 });
@@ -1835,56 +1857,56 @@ function() {
                 });
                 expect(component.lastQuery).toBeDefined();
             });
-            
+
             it("should not query if a 'beforeFilter' handler returns false", function() {
                 makeComponent();
-                
+
                 component.on('beforequery', function() {
                     return false;
                 });
                 expect(component.hasOwnProperty('lastQuery')).toBe(false);
             });
-            
+
             it("should not query if a 'beforeFilter' handler sets the query event object's cancel property to true", function() {
                 makeComponent();
-                
+
                 component.on('beforequery', function(qe) {
                     qe.cancel = true;
                 });
                 expect(component.hasOwnProperty('lastQuery')).toBe(false);
             });
-            
+
             it("should return false when local query was vetoed", function() {
                 makeComponent({
                     queryMode: 'local',
                     displayField: 'value'
                 });
-                
+
                 component.on('beforequery', function() {
                     return false;
                 });
-                
+
                 var ret = component.doFilter({
                     query: 'bonzo'
                 });
-                
+
                 expect(ret).toBe(false);
             });
-            
+
             it("should return false when remote query was vetoed", function() {
                 makeComponent({
                     queryMode: 'remote',
                     displayField: 'value'
                 });
-                
+
                 component.on('beforequery', function() {
                     return false;
                 });
-                
+
                 var ret = component.doFilter({
                     query: 'throbbe'
                 });
-                
+
                 expect(ret).toBe(false);
             });
         });
@@ -1921,8 +1943,8 @@ function() {
         });
     });
 
-    xdescribe('doAutoSelect method', function () {
-        it('should highlight the selected item', function () {
+    xdescribe('doAutoSelect method', function() {
+        it('should highlight the selected item', function() {
             var node;
 
             makeComponent({
@@ -1943,7 +1965,7 @@ function() {
             expect(Ext.fly(node).hasCls('x-boundlist-item-over')).toBe(true);
         });
 
-        it('should scroll the selected item into view', function () {
+        it('should scroll the selected item into view', function() {
             makeComponent({
                 queryMode: 'local',
                 displayField: 'value',
@@ -1958,7 +1980,7 @@ function() {
 
             expect(component.getPicker().getScrollable().ensureVisible).toHaveBeenCalled();
         });
-        
+
         it("should select first item when autoSelectLast == false", function() {
             makeComponent({
                 autoSelectLast: false,
@@ -1966,19 +1988,19 @@ function() {
                 displayField: 'value',
                 renderTo: Ext.getBody()
             });
-            
+
             component.expand();
             component.setValue('value 32');
-            
+
             spyOn(component.getPicker().getNavigationModel(), 'setPosition').andCallThrough();
 
             component.expand();
             component.doAutoSelect();
 
             expect(component.getPicker().getNavigationModel().setPosition).toHaveBeenCalled();
-            
+
             var firstNode = component.getPicker().getNode(0);
-            
+
             expect(Ext.fly(firstNode).hasCls('x-boundlist-item-over')).toBe(true);
         });
 
@@ -2053,11 +2075,11 @@ function() {
             });
         });
 
-        describe('emptyText list config and no store data', function () {
+        describe('emptyText list config and no store data', function() {
             var wasCalled = false,
                 defaultCfg;
 
-            beforeEach(function () {
+            beforeEach(function() {
                 defaultCfg = {
                     queryMode: 'local',
                     store: new Ext.data.Store({
@@ -2071,11 +2093,11 @@ function() {
                 };
             });
 
-            afterEach(function () {
+            afterEach(function() {
                 wasCalled = false;
             });
 
-            it('should expand the bound list and display the empty text if configured', function () {
+            it('should expand the bound list and display the empty text if configured', function() {
                 makeComponent(Ext.apply(defaultCfg, {
                     floatedPicker: {
                         emptyText: 'derp',
@@ -2090,7 +2112,7 @@ function() {
                 expect(component.getPicker().getEmptyText()).toBe('derp');
             });
 
-            it('should not expand the bound list and display the empty text if not configured', function () {
+            it('should not expand the bound list and display the empty text if not configured', function() {
                 makeComponent(defaultCfg);
 
                 spyOn(component, 'expand');
@@ -2098,14 +2120,14 @@ function() {
                 expect(component.expand).not.toHaveBeenCalled();
             });
 
-            it('should expand the bound list and fire the `expand` event if configured', function () {
+            it('should expand the bound list and fire the `expand` event if configured', function() {
                 makeComponent(Ext.apply(defaultCfg, {
                     floatedPicker: {
                         emptyText: 'derp',
                         type: 'floated'
                     },
                     listeners: {
-                        expand: function () {
+                        expand: function() {
                             wasCalled = true;
                         }
                     }
@@ -2139,7 +2161,7 @@ function() {
                 return component.doFilter.callCount > 0;
             }, 'query not executed');
             runs(function() {
-                expect(component.doFilter.mostRecentCall.args).toEqual([{query: 'foob'}]);
+                expect(component.doFilter.mostRecentCall.args).toEqual([{ query: 'foob' }]);
             });
         });
         it("should not respond to special keys", function() {
@@ -2220,213 +2242,213 @@ function() {
                 expect(getRawValue()).toBe(selModel.getSelections()[0].get(component.displayField));
             });
         });
-        
+
         describe("keyboard interaction", function() {
             var expandSpy, collapseSpy;
-            
+
             function pressKey(key, options) {
                 jasmine.asyncPressKey(component.inputElement, key, options);
             }
-            
+
             function expectItem(wantText) {
                 runs(function() {
                     var navModel = component.getPicker().getNavigationModel(),
                         rec = navModel.getRecord(),
                         haveText = rec && rec.get('text');
-                
+
                     expect(haveText).toBe(wantText);
                 });
             }
-            
+
             beforeEach(function() {
                 expandSpy = jasmine.createSpy('expand');
                 collapseSpy = jasmine.createSpy('collapse');
-                
+
                 component.on({
                     expand: expandSpy,
                     collapse: collapseSpy
                 });
             });
-            
+
             afterEach(function() {
                 expandSpy = collapseSpy = null;
             });
-            
+
             describe("expand", function() {
                 it("should expand on down arrow", function() {
                     pressKey('down');
-                    
+
                     waitForSpy(expandSpy, 'expand');
-                    
+
                     runs(function() {
                         expect(component.expanded).toBeTruthy();
                     });
                 });
-                
+
                 it("should expand on alt-down arrow", function() {
                     pressKey('down', { alt: true });
-                    
+
                     waitForSpy(expandSpy, 'expand');
-                    
+
                     runs(function() {
                         expect(component.expanded).toBeTruthy();
                     });
                 });
             });
-            
+
             describe("collapse", function() {
                 beforeEach(function() {
                     pressKey('down');
-                    
+
                     waitForSpy(expandSpy, 'expand');
                 });
-                
+
                 it("should collapse on Esc", function() {
                     pressKey('esc');
-                    
+
                     waitForSpy(collapseSpy, 'collapse');
-                    
+
                     runs(function() {
                         expect(component.expanded).toBe(false);
                     });
                 });
-                
+
                 it("should collapse on Alt-Up arrow", function() {
                     pressKey('up', { alt: true });
-                    
+
                     waitForSpy(collapseSpy, 'collapse');
-                    
+
                     runs(function() {
                         expect(component.expanded).toBe(false);
                     });
                 });
-                
+
                 it("should remove aria-activedescendant", function() {
                     pressKey('esc');
-                    
+
                     waitForSpy(collapseSpy, 'collapse');
-                    
+
                     runs(function() {
                         expect(component).not.toHaveAttr('aria-activedescendant');
                     });
                 });
             });
-            
+
             describe("arrow keys", function() {
                 describe("down arrow", function() {
                     beforeEach(function() {
                         pressKey('down');
-                        
+
                         waitForSpy(expandSpy, 'expand');
                     });
-                    
+
                     describe("initial", function() {
                         it("should select first item", function() {
                             expectItem('text 1');
                         });
-                        
+
                         it("should set aria-activedescendant to first item", function() {
                             var item = component.getPicker().getNode(0);
-                        
+
                             // aria-activedescendant is set on the inputEl!
                             expect(component).toHaveAttr('aria-activedescendant', item.id);
                         });
                     });
-                    
+
                     describe("subsequent", function() {
                         beforeEach(function() {
                             pressKey('down');
-                            
+
                             jasmine.waitAWhile();
                         });
-                        
+
                         it("should select 2nd item", function() {
                             expectItem('text 2');
                         });
-                        
+
                         it("should set aria-activedescendant to 2nd item", function() {
                             var item = component.getPicker().getNode(1);
-                            
+
                             expect(component).toHaveAttr('aria-activedescendant', item.id);
                         });
                     });
                 });
-                
+
                 describe("alt-down arrow", function() {
                     beforeEach(function() {
                         pressKey('down', { alt: true });
-                        
+
                         waitForSpy(expandSpy, 'expand', 1000);
                     });
-                    
+
                     describe("initial", function() {
                         it("should not highlight items after expanding", function() {
                             expect(component.getPicker().highlightedItem).not.toBeDefined();
                         });
                     });
-                    
+
                     describe("subsequent", function() {
                         beforeEach(function() {
                             pressKey('down', { alt: true });
-                            
+
                             waitAWhile();
                         });
-                        
+
                         it("should not highlight items on subsequent alt-down arrow key", function() {
                             expect(component.getPicker().highlightedItem).not.toBeDefined();
                         });
                     });
                 });
-                
+
                 describe("up arrow", function() {
                     beforeEach(function() {
                         pressKey('down');
-                        
+
                         waitForSpy(expandSpy, 'expand', 1000);
-                        
+
                         pressKey('down');
                         pressKey('down');
                         pressKey('down');
                         pressKey('up');
                     });
-                    
+
                     it("should select 3rd item", function() {
                         expectItem('text 3');
                     });
-                    
+
                     it("should set aria-activedescendant to 3rd item", function() {
                         var item = component.getPicker().getNode(2);
-                        
+
                         expect(component).toHaveAttr('aria-activedescendant', item.id);
                     });
                 });
-                
+
                 describe("alt-up arrow", function() {
                     beforeEach(function() {
                         pressKey('down', { alt: true });
-                        
+
                         waitForSpy(expandSpy, 'expand', 1000);
                     });
-                    
+
                     describe("initial", function() {
                         beforeEach(function() {
                             pressKey('up', { alt: true });
-                            
+
                             waitAWhile();
                         });
-                        
+
                         it("should not highlight items", function() {
                             expect(component.getPicker().highlightedItem).not.toBeDefined();
                         });
-                        
+
                         // This should operate on the closed picker
                         describe("subsequent", function() {
                             beforeEach(function() {
                                 pressKey('up', { alt: true });
-                                
+
                                 waitAWhile();
                             });
-                            
+
                             it("should not highlight items either", function() {
                                 expect(component.getPicker().highlightedItem).not.toBeDefined();
                             });
@@ -2546,7 +2568,7 @@ function() {
         });
     });
 
-    describe("forceSelection", function(){
+    describe("forceSelection", function() {
         it('should not clear the raw value', function() {
             store.load();
             makeComponent({
@@ -2559,6 +2581,7 @@ function() {
             });
 
             var typeaheadSpy = spyOn(component, 'onTypeAhead').andCallThrough();
+
             setRawValue('t');
             component.doRawFilter();
 
@@ -2745,7 +2768,7 @@ function() {
                             expect(component.getValue()).toBe('foo2');
                         });
                     });
-                    
+
                     it("should not restore the value if it has been cleared and required is false", function() {
                         makeWithValue('foo2');
                         jasmine.focusAndWait(component);
@@ -2758,10 +2781,10 @@ function() {
                             expect(component.getValue()).toBe(null);
                         });
                     });
-                    
+
                     itNotIE9m('should not clear the combobox custom itemTpl and calling setValue on blur', function() {
 
-                        makeWithValue('value 1',{
+                        makeWithValue('value 1', {
                             itemTpl: 'Id= {val} - {text}'
                         });
                         jasmine.focusAndWait(component);
@@ -3136,9 +3159,11 @@ function() {
             Ext.override(combo, {
                 beforeFilter: function() {
                     var result = Ext.field.ComboBox.prototype.beforeFilter.apply(this, arguments);
+
                     if (this.getPicker().isVisible()) {
                         result.cancel = false;
                     }
+
                     return result;
                 }
             });
@@ -3151,14 +3176,14 @@ function() {
             combo.doFilter({
                 query: 'first-1'
             });
-            
+
             // Should filter out all except the 'first-1' value
             expect(combo._pickerStore.getCount()).toEqual(1);
 
             combo.doFilter({
                 query: 'first'
             });
-            
+
             // Should show all the values which match 'first' - that is 5 values
             expect(combo._pickerStore.getCount()).toEqual(5);
         });
@@ -3186,7 +3211,7 @@ function() {
             combo.doFilter({
                 query: 'rs'
             });
-                        
+
             // Should show all the values which contain "rs" - that is 5 values
             expect(combo._pickerStore.getCount()).toEqual(5);
         });
@@ -3214,7 +3239,7 @@ function() {
             combo.doFilter({
                 query: 'FIRST'
             });
-                        
+
             // Should do case sensitive filtering
             expect(combo._pickerStore.getCount()).toEqual(0);
         });
@@ -3227,9 +3252,11 @@ function() {
                 valueField: 'value',
                 renderTo: Ext.getBody()
             };
+
             if (value) {
                 cfg.value = value;
             }
+
             makeComponent(cfg);
         }
 
@@ -3344,6 +3371,7 @@ function() {
                 renderTo: Ext.getBody()
             });
             var count = store.getCount();
+
             // Simulate user typing 'text 3'
             setRawValue('text 3');
             component.expand();
@@ -3370,36 +3398,36 @@ function() {
             });
         });
 
-        describe('should create from string', function () {
+        describe('should create from string', function() {
             beforeEach(function() {
                 makeComponent({
-                   itemTpl : '{[typeof values === "string" ? values : values["foo"]]}'
+                   itemTpl: '{[typeof values === "string" ? values : values["foo"]]}'
                 });
             });
 
-            it('itemTpl should be an XTemplate', function () {
+            it('itemTpl should be an XTemplate', function() {
                 expect(component.getPicker().getItemTpl().isTemplate).toBe(true);
             });
 
-            it('itemTpl html match', function () {
+            it('itemTpl html match', function() {
                 expect(component.getPicker().getItemTpl().html).toBe('{[typeof values === "string" ? values : values["foo"]]}');
             });
         });
 
-        describe('should create from array of strings', function () {
+        describe('should create from array of strings', function() {
             beforeEach(function() {
                 makeComponent({
-                    itemTpl : [
+                    itemTpl: [
                         '{[typeof values === "string" ? values : values["foo"]]}'
                     ]
                 });
             });
 
-            it('itemTpl should be an XTemplate', function () {
+            it('itemTpl should be an XTemplate', function() {
                 expect(component.getPicker().getItemTpl().isTemplate).toBe(true);
             });
 
-            it('itemTpl html match', function () {
+            it('itemTpl html match', function() {
                 expect(component.getPicker().getItemTpl().html).toBe('{[typeof values === "string" ? values : values["foo"]]}');
             });
         });
@@ -3445,7 +3473,7 @@ function() {
         }
 
         xdescribe("specialkey", function() {
-            beforeEach(function(){
+            beforeEach(function() {
                 makeEventCombo({
                     listeners: {
                         specialkey: spy
@@ -3468,6 +3496,7 @@ function() {
         describe("change", function() {
             function expectArgs(newVal, oldVal) {
                 var args = spy.mostRecentCall.args;
+
                 expect(args[0]).toBe(component);
                 expect(args[1]).toBe(newVal);
                 expect(args[2]).toBe(oldVal);
@@ -3499,14 +3528,15 @@ function() {
                     component.setValue('value 1');
                     expect(spy.callCount).toBe(1);
                     expectArgs('value 1', 'value 2');
-                }); 
+                });
 
                 it("should fire once when nulling the value", function() {
                     makeEventCombo();
                     component.setValue('value 2');
 
                     var calls = 0;
-                    component.on('change', function (c, v, old) {
+
+                    component.on('change', function(c, v, old) {
                         expect(c).toBe(component);
                         expect(v).toBe('');
                         expect(old).toBe('value 2');
@@ -3534,7 +3564,7 @@ function() {
                     clickListItem('value 1');
                     expect(spy.callCount).toBe(1);
                     expectArgs('value 1', 'value 2');
-                }); 
+                });
             });
         });
     });
@@ -3563,6 +3593,7 @@ function() {
         describe("view model selection", function() {
             function getByVal(val) {
                 var index = store.findExact('value', val);
+
                 return store.getAt(index);
             }
 
@@ -3585,14 +3616,17 @@ function() {
 
                     it("should publish null by default", function() {
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBeNull();
                         expect(args[1]).toBeUndefined();
                     });
 
                     it("should publish the value when selected", function() {
                         var rec = getByVal('value 1');
+
                         selectNotify(rec);
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(rec);
                         expect(args[1]).toBeNull();
                         expect(component.getValue()).toBe('value 1');
@@ -3606,6 +3640,7 @@ function() {
                         spy.reset();
                         selectNotify(rec2);
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(rec2);
                         expect(args[1]).toBe(rec1);
                         expect(component.getValue()).toBe('value 2');
@@ -3615,6 +3650,7 @@ function() {
                         component.setValue('value 1');
                         viewModel.notify();
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(getByVal('value 1'));
                         expect(args[1]).toBeNull();
                     });
@@ -3626,6 +3662,7 @@ function() {
                         component.setValue('value 2');
                         viewModel.notify();
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(getByVal('value 2'));
                         expect(args[1]).toBe(getByVal('value 1'));
                     });
@@ -3637,6 +3674,7 @@ function() {
                         component.setValue(null);
                         viewModel.notify();
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBeNull();
                         expect(args[1]).toBe(getByVal('value 1'));
                     });
@@ -3654,6 +3692,7 @@ function() {
 
                     it("should publish the record", function() {
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(getByVal('value 2'));
                         expect(args[1]).toBeUndefined();
                     });
@@ -3675,8 +3714,10 @@ function() {
                     describe("changing the selection", function() {
                         it("should trigger the binding when adding a selection", function() {
                             var rec = getByVal('value 1');
+
                             selectNotify(rec);
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(rec);
                             expect(args[1]).toBeUndefined();
                         });
@@ -3689,6 +3730,7 @@ function() {
                             spy.reset();
                             selectNotify(rec2);
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(rec2);
                             expect(args[1]).toBe(rec1);
                         });
@@ -3697,6 +3739,7 @@ function() {
                             component.setValue('value 1');
                             viewModel.notify();
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(getByVal('value 1'));
                             expect(args[1]).toBeUndefined();
                         });
@@ -3708,6 +3751,7 @@ function() {
                             component.setValue('value 2');
                             viewModel.notify();
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBe(getByVal('value 2'));
                             expect(args[1]).toBe(getByVal('value 1'));
                         });
@@ -3719,6 +3763,7 @@ function() {
                             component.setValue(null);
                             viewModel.notify();
                             var args = spy.mostRecentCall.args;
+
                             expect(args[0]).toBeNull();
                             expect(args[1]).toBe(getByVal('value 1'));
                         });
@@ -3727,6 +3772,7 @@ function() {
                     describe("changing the view model value", function() {
                         it("should set the value when setting the record", function() {
                             var rec = getByVal('value 1');
+
                             viewModel.set('foo', rec);
                             viewModel.notify();
                             expect(component.getValue()).toBe('value 1');
@@ -3762,6 +3808,7 @@ function() {
                         });
                         viewModel.notify();
                         var args = spy.mostRecentCall.args;
+
                         expect(args[0]).toBe(getByVal('value 2'));
                         expect(args[1]).toBeUndefined();
                     });
@@ -3799,8 +3846,8 @@ function() {
                             Ext.Ajax.mockComplete({
                                 status: 200,
                                 responseText: Ext.encode([
-                                    {id: 1, text: 'text 1', value: 'value 1'},
-                                    {id: 2, text: 'text 2', value: 'value 2'}
+                                    { id: 1, text: 'text 1', value: 'value 1' },
+                                    { id: 2, text: 'text 2', value: 'value 2' }
                                 ])
                             });
 
@@ -3831,24 +3878,24 @@ function() {
             });
         });
     });
-    
+
     describe("bindStore", function() {
         var newData, newStore;
 
         beforeEach(function() {
             newData = [
-                {text: 'text 1', value: 1},
-                {text: 'text 2', value: 2},
-                {text: 'text 3', value: 3},
-                {text: 'text 4', value: 4},
-                {text: 'text 5', value: 5}
+                { text: 'text 1', value: 1 },
+                { text: 'text 2', value: 2 },
+                { text: 'text 3', value: 3 },
+                { text: 'text 4', value: 4 },
+                { text: 'text 5', value: 5 }
             ];
         });
 
         afterEach(function() {
             newStore = Ext.destroy(newStore);
         });
-        
+
         it("should apply a filter when binding a new store", function() {
             makeComponent({
                 queryMode: 'local',
@@ -3857,16 +3904,16 @@ function() {
             component.doFilter({
                 query: 'text 3'
             });
-            
+
             newStore = new Ext.data.Store({
                 model: CBTestModel,
                 data: newData
             });
-            
+
             component.setStore(newStore);
             expect(component._pickerStore.getCount()).toBe(1);
         });
-        
+
         it("should be able to filter the store after binding a new one", function() {
             makeComponent({
                 queryMode: 'local',
@@ -3875,12 +3922,12 @@ function() {
             component.doFilter({
                 query: 'text 3'
             });
-            
+
             newStore = new Ext.data.Store({
                 model: CBTestModel,
                 data: newData
             });
-            
+
             component.setStore(newStore);
             component.doFilter({
                 query: 'text 2'
@@ -3924,7 +3971,7 @@ function() {
             expect(component.getValue()).toBe('2');
         });
     });
-    
+
     describe("setting value with different store states", function() {
         describe("with a store not bound", function() {
             it("should not display the raw value and resolve when the store is bound", function() {
@@ -3955,9 +4002,9 @@ function() {
                 });
 
                 store.add([
-                    {text: 'text 1', value: 'value 1'},
-                    {text: 'text 2', value: 'value 2'},
-                    {text: 'text 3', value: 'value 3'}
+                    { text: 'text 1', value: 'value 1' },
+                    { text: 'text 2', value: 'value 2' },
+                    { text: 'text 3', value: 'value 3' }
                 ]);
 
                 makeComponent({
@@ -3975,7 +4022,7 @@ function() {
         describe("setting a value with a remote store", function() {
             var fakeData, remoteStore,
                 ComboModel;
-            
+
             function createStore(cfg) {
                 remoteStore = new Ext.data.Store(Ext.apply({
                     model: ComboModel,
@@ -3985,21 +4032,21 @@ function() {
                     }
                 }, cfg));
             }
-            
+
             function completeWithData(data) {
                 Ext.Ajax.mockComplete({
                     status: 200,
                     responseText: Ext.JSON.encode(data || fakeData)
                 });
             }
-            
+
             beforeEach(function() {
                 MockAjaxManager.addMethods();
                 ComboModel = Ext.define(null, {
                     extend: 'Ext.data.Model',
                     fields: ['id', 'name']
                 });
-                
+
                 fakeData = [{
                     id: 1,
                     name: 'Foo'
@@ -4011,13 +4058,13 @@ function() {
                     name: 'Baz'
                 }];
             });
-            
+
             afterEach(function() {
                 Ext.destroy(remoteStore);
                 MockAjaxManager.removeMethods();
                 ComboModel = null;
             });
-            
+
             describe("while the store is loading", function() {
                 function makeLoadCombo(valueIsName, cfg) {
                     makeComponent(Ext.apply({
@@ -4031,7 +4078,7 @@ function() {
                 beforeEach(function() {
                     createStore();
                 });
-                
+
                 it("should not trigger a second load", function() {
                     makeLoadCombo();
                     remoteStore.load();
@@ -4039,7 +4086,7 @@ function() {
                     component.setValue(1);
                     expect(remoteStore.load).not.toHaveBeenCalled();
                 });
-                
+
                 it("should not trigger a second load with autoLoadOnValue", function() {
                     makeLoadCombo({
                         autoLoadOnValue: true
@@ -4049,7 +4096,7 @@ function() {
                     component.setValue(1);
                     expect(remoteStore.load).not.toHaveBeenCalled();
                 });
-                
+
                 describe("display value", function() {
                     it("should not put the id as the display value while loading", function() {
                         makeLoadCombo();
@@ -4117,7 +4164,6 @@ function() {
                         expect(component.getSelection() === valueRecord).toBe(false);
                     });
 
-
                     it("should use the store's model raw value as the display value before a store arrives from a bind", function() {
                         var valueRecord;
 
@@ -4168,7 +4214,7 @@ function() {
                         expect(getRawValue()).toBe('');
                     });
 
-                    it("should not set the raw value when the set value has no match in the store, and value is provided by a bind", function () {
+                    it("should not set the raw value when the set value has no match in the store, and value is provided by a bind", function() {
                         var vm;
 
                         makeLoadCombo(true, {
@@ -4187,19 +4233,20 @@ function() {
                     });
                 });
             });
-            
+
             describe("while having a pending auto load", function() {
                 var flushLoadSpy;
 
                 beforeEach(function() {
                     synchronousLoad = false;
                     var extAsap = Ext.asap;
-                    
+
                     flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough();
 
                     Ext.asap = function(fn, scope) {
                         return Ext.defer(fn, 100, scope);
                     };
+
                     createStore({
                         autoLoad: true
                     });
@@ -4215,26 +4262,26 @@ function() {
                     synchronousLoad = true;
                     Ext.data.ProxyStore.prototype.flushLoad = storeFlushLoad;
                 });
-                
+
                 it("should not trigger a load", function() {
                     spyOn(remoteStore, 'load');
                     component.setValue(1);
                     expect(remoteStore.load).not.toHaveBeenCalled();
                 });
-                
+
                 it("should not trigger a load with autoLoadOnValue", function() {
                     component.autoLoadOnValue = true;
                     spyOn(remoteStore, 'load');
                     component.setValue(1);
                     expect(remoteStore.load).not.toHaveBeenCalled();
                 });
-                
+
                 it("should not put the id as the raw value while loading", function() {
                     spyOn(remoteStore, 'load');
                     component.setValue(1);
                     expect(getRawValue()).toBe('');
                 });
-                
+
                 it("should update the display value when the store loads", function() {
                     component.setValue(1);
                     // Wait for autoLoad
@@ -4245,7 +4292,7 @@ function() {
                     });
                 });
             });
-            
+
             describe("not loading & without autoLoad", function() {
                 beforeEach(function() {
                     createStore();
@@ -4264,13 +4311,13 @@ function() {
                     component.setValue(1);
                     expect(remoteStore.load).not.toHaveBeenCalled();
                 });
-                
+
                 it("should not trigger a load if the value is undefined", function() {
                     spyOn(remoteStore, 'load');
                     component.setValue(undefined);
                     expect(remoteStore.load).not.toHaveBeenCalled();
                 });
-                
+
                 it("should not trigger a load if the value is null", function() {
                     spyOn(remoteStore, 'load');
                     component.setValue(null);
@@ -4314,6 +4361,7 @@ function() {
                         id: 3,
                         name: 'Baz'
                     });
+
                     component.setValue(initialRec);
 
                     completeWithData();
@@ -4326,7 +4374,7 @@ function() {
                     expect(component.getSelection() === initialRec).toBe(false);
                 });
             });
-            
+
             describe("while not having a store bound", function() {
                 beforeEach(function() {
                     createStore();
@@ -4336,12 +4384,12 @@ function() {
                         renderTo: Ext.getBody()
                     }, true);
                 });
-                
+
                 it("should not put the id as the raw value when nothing is bound", function() {
                     component.setValue(1);
                     expect(getRawValue()).toBe('');
                 });
-                
+
                 it("should update the display value when a loaded store is bound", function() {
                     remoteStore.load();
                     completeWithData();
@@ -4349,7 +4397,7 @@ function() {
                     component.setStore(remoteStore);
                     expect(getRawValue()).toBe('Foo');
                 });
-                
+
                 it("should update the display value when a loading store is bound", function() {
                     remoteStore.load();
                     component.setValue(1);
@@ -4357,17 +4405,17 @@ function() {
                     completeWithData();
                     expect(getRawValue()).toBe('Foo');
                 });
-                
+
                 describe("with unloaded store", function() {
                     it("should not trigger a load with autoLoadOnValue: false", function() {
                         component.setAutoLoadOnValue(false);
-                        component.setOptions([{name: 'one', id: 1}]);
+                        component.setOptions([{ name: 'one', id: 1 }]);
                         component.setValue(1);
                         spyOn(remoteStore, 'load');
                         component.setStore(remoteStore);
                         expect(remoteStore.load).not.toHaveBeenCalled();
                     });
-                    
+
                     it("should trigger a load with autoLoadOnValue: true", function() {
                         component.setAutoLoadOnValue(true);
                         component.setValue(1);
@@ -4526,6 +4574,7 @@ function() {
             var chained = new Ext.data.ChainedStore({
                 source: store
             });
+
             makeComponent({
                 store: chained,
                 displayField: 'text',
@@ -4538,14 +4587,14 @@ function() {
         });
     });
 
-    xdescribe('alternate components as the picker', function () {
+    xdescribe('alternate components as the picker', function() {
         // See EXTJS-13089 and EXTJS-14151.
         var c, panel, dom;
 
-        describe('grid as picker', function () {
-            beforeEach(function () {
+        describe('grid as picker', function() {
+            beforeEach(function() {
                 c = new Ext.form.field.ComboBox({
-                    createPicker: function () {
+                    createPicker: function() {
                         panel = new Ext.grid.Panel({
                             id: 'foo',
                             columns: [
@@ -4554,8 +4603,8 @@ function() {
                             ],
                             store: new Ext.data.ArrayStore({
                                 fields: [
-                                    {name: 'company'},
-                                    {name: 'price', type: 'float'}
+                                    { name: 'company' },
+                                    { name: 'price', type: 'float' }
                                 ],
                                 data: [
                                     ['3m Co', 71.72],
@@ -4577,20 +4626,20 @@ function() {
                 c.expand();
             });
 
-            afterEach(function () {
+            afterEach(function() {
                 Ext.destroy(c);
                 c = panel = dom = null;
             });
 
-            it('should have an ownerCmp reference to the combo', function () {
+            it('should have an ownerCmp reference to the combo', function() {
                 expect(panel.ownerCmp === c).toBe(true);
             });
 
-            it('should be able to be looked up by CQ', function () {
+            it('should be able to be looked up by CQ', function() {
                 expect(c.owns(panel.el)).toBe(true);
             });
 
-            it('should be able to use the ghost panel in the CQ hierarchy when dragging', function () {
+            it('should be able to use the ghost panel in the CQ hierarchy when dragging', function() {
                 dom = c.getPicker().header.el.dom;
 
                 jasmine.fireMouseEvent(dom, 'mousedown');
@@ -4605,7 +4654,7 @@ function() {
                 jasmine.fireMouseEvent(dom, 'mouseup');
             });
 
-            it('should inject a getRefOwner API that returns a reference to the combo', function () {
+            it('should inject a getRefOwner API that returns a reference to the combo', function() {
                 dom = c.getPicker().header.el.dom;
 
                 jasmine.fireMouseEvent(dom, 'mousedown');
@@ -4617,7 +4666,7 @@ function() {
                 jasmine.fireMouseEvent(dom, 'mouseup');
             });
 
-            it('should share the same reference between the picker and the ghost panel', function () {
+            it('should share the same reference between the picker and the ghost panel', function() {
                 dom = c.getPicker().header.el.dom;
 
                 jasmine.fireMouseEvent(dom, 'mousedown');
@@ -4661,27 +4710,27 @@ function() {
                 valueField: 'value',
                 queryDelay: 1
             });
-            
+
             jasmine.focusAndWait(component);
 
             doTyping('t');
             completeWithData([
-                {text: 'text 10', value: 'value 10'},
-                {text: 'text 11', value: 'value 11'},
-                {text: 'text 12', value: 'value 12'},
-                {text: 'text 31', value: 'value 31'},
-                {text: 'text 32', value: 'value 32'},
-                {text: 'text 33', value: 'value 33'},
-                {text: 'text 34', value: 'value 34'}
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' },
+                { text: 'text 31', value: 'value 31' },
+                { text: 'text 32', value: 'value 32' },
+                { text: 'text 33', value: 'value 33' },
+                { text: 'text 34', value: 'value 34' }
             ]);
             expect(component.getPicker().getViewItems().length).toBe(7);
 
             doTyping('text 1');
 
             completeWithData([
-                {text: 'text 10', value: 'value 10'},
-                {text: 'text 11', value: 'value 11'},
-                {text: 'text 12', value: 'value 12'}
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' }
             ]);
             expect(component.getPicker().getViewItems().length).toBe(3);
 
@@ -4700,7 +4749,9 @@ function() {
                 valueField: 'value',
                 getRecordDisplayData: function(record) {
                     var data = Ext.apply({}, record.data);
+
                     data.text += 'foo';
+
                     return data;
                 }
             });
@@ -4710,10 +4761,10 @@ function() {
         });
     });
 
-    describe('readOnly', function () {
-        describe('should not react to mutation events', function () {
+    describe('readOnly', function() {
+        describe('should not react to mutation events', function() {
             function runTest(expectation, method, cfg) {
-                it(expectation, function () {
+                it(expectation, function() {
                     makeComponent(Ext.apply({
                         readOnly: true,
                         renderTo: Ext.getBody()
@@ -4728,7 +4779,7 @@ function() {
                     // Since it's called on a delayed task, we'll need to use waits() here, unfortunately.
                     waits(10);
 
-                    runs(function () {
+                    runs(function() {
                         expect(component[method].callCount).toBe(0);
                     });
                 });
@@ -4761,11 +4812,11 @@ function() {
 
         var panel;
 
-        afterEach(function () {
+        afterEach(function() {
             panel = Ext.destroy(panel);
         });
 
-        function create (config) {
+        function create(config) {
             var combo = Ext.merge({
                 xtype: 'combobox',
                 value: 'Red',
@@ -4815,6 +4866,7 @@ function() {
             expect(comboBox.getValue()).toBe('Red');
 
             var rec = comboBox.getSelection();
+
             expect(rec).toBe(null);
 
             store.addFilter({
@@ -4847,6 +4899,7 @@ function() {
             expect(component.getValue()).toBe('Red');
 
             var rec = component.getSelection();
+
             expect(rec).toBe(null);
 
             doTyping('Blue');
@@ -4868,6 +4921,7 @@ function() {
 
     describe("complex binding", function() {
         var panel;
+
         afterEach(function() {
             if (panel) {
                 panel.destroy();
@@ -4923,7 +4977,7 @@ function() {
                 store = vm.get('foo');
 
             vm.notify();
-            
+
             expect(targetComp.getInnerHtmlElement().dom.innerHTML).toBe('text 1');
             expect(vm.get('bar')).toBe(store.byText.get('text 1'));
         });
@@ -4936,7 +4990,7 @@ function() {
                 store = vm.get('foo');
 
             vm.notify();
-            
+
             expect(targetComp.getInnerHtmlElement().dom.innerHTML).toBe('text 1');
             expect(vm.get('bar')).toBe(store.byText.get('text 1'));
         });
@@ -4952,7 +5006,7 @@ function() {
             comboBox.setValue('text 1');
 
             vm.notify();
-            
+
             expect(targetComp.getInnerHtmlElement().dom.innerHTML).toBe('text 1');
             expect(vm.get('bar')).toBe(store.byText.get('text 1'));
         });
@@ -4968,7 +5022,7 @@ function() {
             comboBox.setValue('text 1');
 
             vm.notify();
-            
+
             expect(targetComp.getInnerHtmlElement().dom.innerHTML).toBe('text 1');
             expect(vm.get('bar')).toBe(store.byText.get('text 1'));
         });
@@ -4981,7 +5035,7 @@ function() {
                 store = vm.get('foo');
 
             vm.notify();
-            
+
             expect(targetComp.getInnerHtmlElement().dom.innerHTML).toBe('text 1');
             expect(vm.get('bar')).toBe(store.byText.get('text 1'));
         });
@@ -5037,13 +5091,13 @@ function() {
             makeComponent({
                 queryMode: 'local',
                 autoLoadOnValue: true,
-                viewModel : {
+                viewModel: {
                     data: {
                         name: null
                     }
                 },
                 bind: {
-                    value : '{name}'
+                    value: '{name}'
                 },
                 displayField: 'text',
                 valueField: 'text',
@@ -5070,17 +5124,18 @@ function() {
 
         it("should not clear the combobox while typing and forceSelection is true", function() {
             var vm;
+
             makeComponent({
                 queryMode: 'local',
                 autoLoadOnValue: true,
-                forceSelection : true,
-                viewModel : {
+                forceSelection: true,
+                viewModel: {
                     data: {
                         address: 1
                     }
                 },
                 bind: {
-                    value : '{address}'
+                    value: '{address}'
                 },
                 displayField: 'text',
                 valueField: 'id',
@@ -5088,13 +5143,13 @@ function() {
             });
 
             vm = component.getViewModel();
-            
+
             component.setValue(9);
             vm.notify();
 
             jasmine.focusAndWait(component);
 
-            runs(function(){
+            runs(function() {
                 doTyping('t');
                 vm.notify();
 
@@ -5105,16 +5160,17 @@ function() {
 
         it("should be able to set an Array value using binding while the field is focused", function() {
             var vm;
+
             makeComponent({
                 queryMode: 'local',
                 multiSelect: true,
-                viewModel : {
+                viewModel: {
                     data: {
-                        foo: [1,2]
+                        foo: [1, 2]
                     }
                 },
                 bind: {
-                    value : '{foo}'
+                    value: '{foo}'
                 },
                 displayField: 'text',
                 valueField: 'id',
@@ -5126,7 +5182,7 @@ function() {
 
             jasmine.focusAndWait(component);
 
-            runs(function(){
+            runs(function() {
                 vm.set('foo', [1]);
                 vm.notify();
                 expect(component.getValue()).toEqual([1]);
@@ -5137,13 +5193,13 @@ function() {
     describe("forceSelection: true", function() {
         beforeEach(function() {
             makeComponent({
-                renderTo        : document.body,
-                valueField      : 'value',
-                displayField	: 'text',
-                queryMode       : 'local',
-                required        : true,
-                forceSelection  : true,
-                queryCaching    : false
+                renderTo: document.body,
+                valueField: 'value',
+                displayField: 'text',
+                queryMode: 'local',
+                required: true,
+                forceSelection: true,
+                queryCaching: false
             });
         });
 
@@ -5159,7 +5215,7 @@ function() {
             waitsFor(function() {
                 return component.getPicker() && component.getPicker().isVisible() === true;
             }, 'picker to show');
-            
+
             runs(function() {
                 // Down to the '31' value
                 jasmine.fireKeyEvent(component.inputElement, 'keydown', Ext.event.Event.DOWN);
@@ -5174,9 +5230,9 @@ function() {
                 component.setValue('');
                 component.inputElement.dom.focus();
             });
-            
+
             jasmine.focusAndWait(component);
-            
+
             runs(function() {
                 // Do not select a record
                 jasmine.fireKeyEvent(component.inputElement, 'keydown', Ext.event.Event.TAB);
@@ -5189,7 +5245,7 @@ function() {
             runs(function() {
                 expect(component.getValue()).toBeNull();
             });
-            
+
         });
     });
 
@@ -5210,8 +5266,8 @@ function() {
 
     // This test is for mouse clicks
     if (!jasmine.supportsTouch) {
-        describe("editable", function () {
-            it("should expand on inputEl click when NOT editable", function () {
+        describe("editable", function() {
+            it("should expand on inputEl click when NOT editable", function() {
                 makeComponent({
                     renderTo: document.body,
                     editable: false
@@ -5257,7 +5313,7 @@ function() {
             waitsFor(function() {
                 return getRawValue() === 'text 1';
             });
-            
+
             runs(function() {
                 // get initial selection indicies
                 indices = getTextSelectionIndices(component.inputElement.dom);
@@ -5268,10 +5324,10 @@ function() {
                 // Erasing the selected typeahead chars "t 1", should not typeahead
                 doTyping('tex');
             });
-            
+
             // We are testing that nothing happens here, so we just have to wait.
             waits(100);
-            
+
             // After the erasure, it must not have done typeahead.
             runs(function() {
                 // Ensure no typeahead has been done
@@ -5291,7 +5347,7 @@ function() {
             });
         });
 
-        it("should clear any selected text after selection is made", function () {
+        it("should clear any selected text after selection is made", function() {
             var indices;
 
             store.load();
@@ -5314,7 +5370,7 @@ function() {
             waitsFor(function() {
                 return getRawValue() === 'text 1';
             });
-            
+
             runs(function() {
                 // get initial selection indicies
                 indices = getTextSelectionIndices(component.inputElement.dom);
@@ -5333,7 +5389,7 @@ function() {
             });
         });
 
-        it('should reopen picker after a previous typeahead query', function () {
+        it('should reopen picker after a previous typeahead query', function() {
             makeComponent({
                 displayField: 'text',
                 valueField: 'value',
@@ -5349,17 +5405,17 @@ function() {
                 doTyping('tex');
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return getRawValue() === 'text 1';
             });
 
             jasmine.blurAndWait(component);
 
-            runs(function () {
+            runs(function() {
                 component.onExpandTap();
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return component.getPicker().isVisible();
             });
         });
@@ -5367,6 +5423,7 @@ function() {
         var testTypeAheadOnBlur = function(enableForceSelection) {
             it("should select the appropriate record on blur with forceSelection: " + enableForceSelection, function() {
                 var spy = jasmine.createSpy();
+
                 store.load();
                 makeComponent({
                     displayField: 'text',
@@ -5411,6 +5468,7 @@ function() {
 
             it("should not fire events if we did not change values (no value) with forceSelection: " + enableForceSelection, function() {
                 var spy = jasmine.createSpy();
+
                 store.load();
                 makeComponent({
                     displayField: 'text',
@@ -5445,7 +5503,8 @@ function() {
                     if (enableForceSelection) {
                         // selectfield casts '' into null for forceSelection: true
                         expect(component.getValue()).toBeNull();
-                    } else {
+                    }
+ else {
                         // selectfield casts null into '' for forceSelection: false
                         expect(component.getValue()).toBe('');
                     }
@@ -5458,6 +5517,7 @@ function() {
 
             it("should not fire events if we did not change values (with value) with forceSelection: " + enableForceSelection, function() {
                 var spy = jasmine.createSpy();
+
                 store.load();
                 makeComponent({
                     displayField: 'text',
@@ -5571,19 +5631,19 @@ function() {
                 renderTo: Ext.getBody()
             });
         });
- 
+
         it("should set the value correctly when the display value contains unix line feeds", function() {
             var rec = store.first();
- 
+
             rec.set('text', 'foo\nbar');
             clickListItem(1);
             expect(component.getSelection()).toBe(rec);
             expect(component.getValue()).toBe(1);
         });
- 
+
         it("should set the value correctly when the display value contains windows line feeds", function() {
             var rec = store.first();
- 
+
             rec.set('text', 'foo\r\nbar');
             clickListItem(1);
             expect(component.getSelection()).toBe(rec);

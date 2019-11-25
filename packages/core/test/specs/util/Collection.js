@@ -1,6 +1,29 @@
+/* eslint-disable vars-on-top, one-var */
+
 topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
     var collection,
         fakeScope = {};
+
+    function joinProps(coll) {
+        var props = Ext.Array.slice(arguments, 1),
+            ret = [];
+
+        coll.each(function(item) {
+            var parts = [];
+
+            Ext.each(props, function(p) {
+                parts.push(item[p]);
+            });
+
+            ret.push(parts.length > 1 ? parts.join(':') : parts[0]);
+        });
+
+        return ret;
+    }
+
+    function getIds(coll) {
+        return joinProps(coll, 'id');
+    }
 
     function logEvents(col, log, property) {
         property = property || 'id';
@@ -52,13 +75,10 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
             collection.destroy();
         });
 
-        it('should honour the new insertion point', function() {
+        it('should honor the new insertion point', function() {
             collection.sort({ property: 'id' });
 
-            expect(collection.getAt(0)).toBe(item1);
-            expect(collection.getAt(1)).toBe(item2);
-            expect(collection.getAt(2)).toBe(item3);
-            expect(collection.getAt(3)).toBe(item4);
+            expect(getIds(collection)).toEqual([ 1, 2, 3, 4 ]);
 
             // A filter which filters in all items
             collection.filterBy(function() {
@@ -67,11 +87,8 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
             // Because of autoSort, this should sort back to sorted order
             collection.insert(0, item4);
-            
-            expect(collection.getAt(0)).toBe(item1);
-            expect(collection.getAt(1)).toBe(item2);
-            expect(collection.getAt(2)).toBe(item3);
-            expect(collection.getAt(3)).toBe(item4);
+
+            expect(getIds(collection)).toEqual([ 1, 2, 3, 4 ]);
 
             // From now on, we should NOT always be in sorted order
             collection.setAutoSort(false);
@@ -79,24 +96,18 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
             // Should not sort, item 4 should be first
             collection.insert(0, item4);
 
-            expect(collection.getAt(0)).toBe(item4);
-            expect(collection.getAt(1)).toBe(item1);
-            expect(collection.getAt(2)).toBe(item2);
-            expect(collection.getAt(3)).toBe(item3);
-
+            expect(getIds(collection)).toEqual([ 4, 1, 2, 3 ]);
         });
 
-        it('should honour the new insertion point if we have a source collection', function() {
+        it('should honor the new insertion point if we have a source collection', function() {
             var downstreamCollection = new Ext.util.Collection({
                 source: collection
             });
 
             downstreamCollection.sort({ property: 'id' });
 
-            expect(downstreamCollection.getAt(0)).toBe(item1);
-            expect(downstreamCollection.getAt(1)).toBe(item2);
-            expect(downstreamCollection.getAt(2)).toBe(item3);
-            expect(downstreamCollection.getAt(3)).toBe(item4);
+            expect(getIds(collection)).toEqual([ 4, 3, 2, 1 ]);
+            expect(getIds(downstreamCollection)).toEqual([ 1, 2, 3, 4 ]);
 
             // A filter which filters in all items
             downstreamCollection.filterBy(function() {
@@ -105,43 +116,39 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
             // Because of autoSort, this should sort back to sorted order
             collection.insert(0, item4);
-            
-            expect(downstreamCollection.getAt(0)).toBe(item1);
-            expect(downstreamCollection.getAt(1)).toBe(item2);
-            expect(downstreamCollection.getAt(2)).toBe(item3);
-            expect(downstreamCollection.getAt(3)).toBe(item4);
+
+            expect(getIds(collection)).toEqual([ 4, 3, 2, 1 ]);
+            expect(getIds(downstreamCollection)).toEqual([ 1, 2, 3, 4 ]);
 
             // From now on, we should NOT always be in sorted order
             downstreamCollection.setAutoSort(false);
+
+            expect(getIds(collection)).toEqual([ 4, 3, 2, 1 ]);
+            expect(getIds(downstreamCollection)).toEqual([ 1, 2, 3, 4 ]);
 
             // Will still be sorted in the downstream Collection.
             // autoSort only applies to immediate mutations
             collection.add(item1);
 
-            expect(downstreamCollection.getAt(0)).toBe(item1);
-            expect(downstreamCollection.getAt(1)).toBe(item2);
-            expect(downstreamCollection.getAt(2)).toBe(item3);
-            expect(downstreamCollection.getAt(3)).toBe(item4);
+            expect(getIds(collection)).toEqual([ 4, 3, 2, 1 ]);
+            // the above "add(item1) after item2" is reflected:
+            expect(getIds(downstreamCollection)).toEqual([ 2, 1, 3, 4 ]);
 
             // The refresh of upstream should still cause a sort.
             collection.filterBy(function() {
                 return true;
             });
 
-            expect(downstreamCollection.getAt(0)).toBe(item1);
-            expect(downstreamCollection.getAt(1)).toBe(item2);
-            expect(downstreamCollection.getAt(2)).toBe(item3);
-            expect(downstreamCollection.getAt(3)).toBe(item4);
+            expect(getIds(collection)).toEqual([ 4, 3, 2, 1 ]);
+            expect(getIds(downstreamCollection)).toEqual([ 2, 1, 3, 4 ]);
 
             // Inserted into a specific position in upstream Collection.
             // Should just get appended into our collection
             collection.insert(0, item5);
 
-            expect(downstreamCollection.getAt(0)).toBe(item5);
-            expect(downstreamCollection.getAt(1)).toBe(item1);
-            expect(downstreamCollection.getAt(2)).toBe(item2);
-            expect(downstreamCollection.getAt(3)).toBe(item3);
-            expect(downstreamCollection.getAt(4)).toBe(item4);
+            expect(getIds(collection)).toEqual([ 5, 4, 3, 2, 1 ]);
+            // reflects "insert item5 before item4":
+            expect(getIds(downstreamCollection)).toEqual([ 2, 1, 3, 5, 4 ]);
         });
     });
 
@@ -174,12 +181,12 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
             expect(collection.get('a')).toBe(item1);
             expect(collection.get('b')).toBe(item2);
         });
-        
+
         it("should contain the source items when configured with a source", function() {
             var source = new Ext.util.Collection();
 
             source.add({ id: 1 }, { id: 2 }, { id: 3 });
-            
+
             collection = new Ext.util.Collection({
                 source: source
             });
@@ -266,42 +273,57 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
             item1 = item2 = item3 = item4 = null;
         });
 
+        it('should remove duplicates successfully', function() {
+            collection.add([item1, item2, item3, item4]);
+
+            // NOTE: This used to expect item1 to move after item2, but if you think about
+            // it in two steps, you see why that isn't correct:
+            //
+            // Before removing duplicates, you would have:
+            //
+            //      [ item1, item1, item2, item3, item4 ]
+            //                 ^
+            //              index=1
+            //
+            // After removing duplicates, you're back to the original
+            //
+            collection.insert(1, item1);
+
+            expect(getIds(collection)).toEqual([ 1, 2, 3, 4 ]);
+        });
+
         it('should move an item down by one index successfully', function() {
             collection.add([item1, item2, item3, item4]);
-            
-            collection.insert(1, item1);
-            expect(collection.getAt(0)).toBe(item2);
-            expect(collection.getAt(1)).toBe(item1);
-            expect(collection.getAt(2)).toBe(item3);
-            expect(collection.getAt(3)).toBe(item4);
+
+            collection.insert(2, item1);
+
+            // NOTE: This expectation used to be for insert(1, item1), see above
+            expect(getIds(collection)).toEqual([ 2, 1, 3, 4 ]);
         });
 
         it("should get the correct count when adding an array", function() {
             collection.add([item1, item2]);
 
+            expect(getIds(collection)).toEqual([ 1, 2 ]);
             expect(collection.getCount()).toBe(2);
             expect(collection.length).toBe(2);
-            expect(collection.getAt(0)).toBe(item1);
-            expect(collection.getAt(1)).toBe(item2);
         });
 
         it("should get the correct count when adding varargs", function() {
             collection.add(item1, item2);
 
+            expect(getIds(collection)).toEqual([ 1, 2 ]);
             expect(collection.getCount()).toBe(2);
             expect(collection.length).toBe(2);
-            expect(collection.getAt(0)).toBe(item1);
-            expect(collection.getAt(1)).toBe(item2);
         });
 
         it("should get the correct count when adding sequentially", function() {
             collection.add(item1);
             collection.add(item2);
 
+            expect(getIds(collection)).toEqual([ 1, 2 ]);
             expect(collection.getCount()).toBe(2);
             expect(collection.length).toBe(2);
-            expect(collection.getAt(0)).toBe(item1);
-            expect(collection.getAt(1)).toBe(item2);
         });
 
         it("should fire the add event", function() {
@@ -315,20 +337,20 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
             expect(executed).toBe(true);
         });
-        
+
         describe("with replaceAll", function() {
             it("should add when the collection is empty", function() {
                 collection.replaceAll(item1);
                 expect(collection.getCount()).toBe(1);
             });
-            
+
             it("should remove all existing items", function() {
                 collection.add(item1, item2, item3);
                 collection.replaceAll(item4);
                 expect(collection.getCount()).toBe(1);
                 expect(collection.first()).toBe(item4);
             });
-            
+
             it("should remove even when no items are added", function() {
                 collection.add(item1, item2, item3);
                 collection.setDecoder(function() {
@@ -384,7 +406,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 describe("with items", function() {
                     var items = (function() {
                         var records = [];
-                        
+
                         for (var i = 0; i < 30; i++) {
                             records.push({
                                 id: i,
@@ -394,11 +416,12 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                         return records;
 
-                    })(),
-                    item1 = { id: 30, order: 'mac' },
-                    item2 = { id: 31, order: 'and' },
-                    item3 = { id: 32, order: 'cheese' };
-                    
+                    })();
+
+                    var item1 = { id: 30, order: 'mac' },
+                        item2 = { id: 31, order: 'and' },
+                        item3 = { id: 32, order: 'cheese' };
+
                     beforeEach(function() {
                         collection.getSorters().add('order');
                         collection.add(items);
@@ -563,7 +586,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                             else {
                                 expectPos();
                             }
-                            
+
                             ++count;
                         });
                         collection.add(item4, item2);
@@ -600,14 +623,14 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 item9
             ]);
         });
-        
+
         describe("remove", function() {
             it("should remove a single item", function() {
                 collection.remove(item1);
 
                 expect(collection.getCount()).toBe(8);
             });
-            
+
             it("should return the removed item count", function() {
                 expect(collection.remove(item1)).toBe(1);
             });
@@ -666,12 +689,12 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(details.items.length).toBe(1);
                 expect(details.items[0]).toBe(item1);
             });
-            
+
             it("should only fire a single event if the items are in a large contiguous range", function() {
                 var spy = jasmine.createSpy(),
                     items = [],
                     i;
-                    
+
                 for (i = 0; i < 1000; ++i) {
                     items.push({
                         id: i + 1
@@ -684,18 +707,18 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(spy.callCount).toBe(1);
             });
         });
-        
+
         describe("removeAt", function() {
             it("should remove a single item", function() {
                 collection.removeAt(1);
 
                 expect(collection.getCount()).toBe(8);
             });
-            
+
             it("should return the removed item", function() {
                 expect(collection.removeAt(1)).toBe(item2);
             });
-            
+
             it("should return false if no item was found", function() {
                 expect(collection.removeAt(9)).toBeFalsy();
             });
@@ -718,7 +741,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     expect(details.keys.length).toBe(1);
                     expect(details.keys[0]).toBe(2);
                 });
-                
+
                 it("should update the collection during a remove", function() {
                     var count, item;
 
@@ -744,13 +767,13 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 });
             });
         });
-        
+
         describe("bulkRemove", function() {
             it("should limit the length to that of the collection", function() {
                 collection.removeAt(4, 100);
                 expect(collection.getCount()).toBe(4);
             });
-                
+
             it("should remove the correct items", function() {
                 collection.removeAt(3, 2);
                 expect(collection.getCount()).toBe(7);
@@ -758,18 +781,18 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(collection.getAt(3)).toBe(item6);
             });
         });
-        
+
         describe("removeByKey", function() {
             it("should remove a single item", function() {
                 collection.removeByKey(1);
 
                 expect(collection.getCount()).toBe(8);
             });
-            
+
             it("should return the removed item", function() {
                 expect(collection.removeByKey(1)).toBe(item1);
             });
-            
+
             it("should return false if no item was found", function() {
                 expect(collection.removeByKey(10)).toBeFalsy();
             });
@@ -792,13 +815,13 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(details.keys[0]).toBe(2);
             });
         });
-        
+
         describe("removeAll", function() {
             it("should remove all items", function() {
                 collection.removeAll();
                 expect(collection.getCount()).toBe(0);
             });
-            
+
             it("should fire the remove event with no passed items", function() {
                 var called = 0,
                     source, details;
@@ -911,7 +934,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
             item7 = { id: 7, name: 'seventh' },
             item8 = { id: 8, name: 'eighth' },
             item9 = { id: 9, name: 'ninth' };
-            
+
         function fill() {
             collection.clear();
             collection.add([
@@ -935,7 +958,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
             collection.add([item1, item2, item3]);
             generation = collection.generation;
         });
-        
+
         describe("updateKey", function() {
             it("should do nothing if the old key doesn't exist for member item", function() {
                 collection.updateKey(item1, 'bar');
@@ -1066,7 +1089,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         expect(child.getAt(0)).toBe(newItem);
                     });
 
-                    it("should have the correct position when inserting into the middle", function() {
+                    it("should have correct position when inserting in the middle", function() {
                         collection.insert(4, newItem);
                         expect(child.getAt(4)).toBe(newItem);
                     });
@@ -1089,50 +1112,87 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                                 return n1 < n2 ? -1 : 1;
                             });
                             newItem.name = 'a';
+
+                            expect(joinProps(child, 'id', 'name')).toEqual([
+                                '1:first', '2:second', '3:third', '4:fourth',
+                                '5:fifth', '6:sixth', '7:seventh', '8:eighth', '9:ninth'
+                            ]);
+
                             collection.insert(100, newItem);
-                            expect(child.getAt(0)).toBe(newItem);
+
+                            expect(joinProps(collection, 'id', 'name')).toEqual([
+                                '100:a', '8:eighth', '5:fifth', '1:first', '4:fourth',
+                                '9:ninth', '2:second', '7:seventh', '6:sixth', '3:third'
+                            ]);
+
+                            // 100 comes before 8 in the source, so likewise in child:
+                            expect(joinProps(child, 'id', 'name')).toEqual([
+                                '1:first', '2:second', '3:third', '4:fourth',
+                                '5:fifth', '6:sixth', '7:seventh', '100:a', '8:eighth',
+                                '9:ninth'
+                            ]);
                         });
                     });
 
                     describe("with the child filtered", function() {
-                        it("should have the correct position when inserting at the start", function() {
-                            child.getFilters().add(function(item) {
-                                return item.name === 'third' || item.name === 'seventh' || item.name === 'Foo';
-                            });
+                        function foo17(item) {
+                            return item.name === 'first' || item.name === 'seventh' ||
+                                item.name === 'Foo';
+                        }
+
+                        function foo37(item) {
+                            return item.name === 'third' || item.name === 'seventh' ||
+                                item.name === 'Foo';
+                        }
+
+                        function foo7(item) {
+                            return item.name === 'seventh' || item.name === 'Foo';
+                        }
+
+                        it("should have correct position when inserting at start", function() {
+                            child.getFilters().add(foo37);
+                            expect(joinProps(collection, 'id', 'name')).toEqual([
+                                '1:first', '2:second', '3:third', '4:fourth',
+                                '5:fifth', '6:sixth', '7:seventh', '8:eighth', '9:ninth'
+                            ]);
                             collection.insert(0, newItem);
-                            expect(child.getAt(0)).toBe(newItem);
+                            expect(joinProps(child, 'id', 'name')).toEqual([
+                                '100:Foo', '3:third', '7:seventh'
+                            ]);
                         });
 
-                        it("should have the correct position when inserting into the middle", function() {
-                            child.getFilters().add(function(item) {
-                                return item.name === 'third' || item.name === 'seventh' || item.name === 'Foo';
-                            });
-                            collection.insert(5, newItem);
-                            expect(child.getAt(1)).toBe(newItem);
+                        it("should have correct position when inserting in the middle", function() {
+                            child.getFilters().add(foo37);
+                            collection.insert(3, newItem);
+                            expect(joinProps(child, 'id', 'name')).toEqual([
+                                '3:third', '100:Foo', '7:seventh'
+                            ]);
                         });
 
-                        it("should have the correct position when inserting at the end", function() {
-                            child.getFilters().add(function(item) {
-                                return item.name === 'third' || item.name === 'seventh' || item.name === 'Foo';
-                            });
+                        it("should have correct position when inserting at end", function() {
                             collection.insert(100, newItem);
-                            expect(child.getAt(2)).toBe(newItem);
+                            expect(joinProps(child, 'id', 'name')).toEqual([
+                                '1:first', '2:second', '3:third', '4:fourth',
+                                '5:fifth', '6:sixth', '7:seventh', '8:eighth', '9:ninth',
+                                '100:Foo'
+                            ]);
                         });
 
-                        it("should have the correct position when the nearest item in the child is the first item in the source", function() {
-                            child.getFilters().add(function(item) {
-                                return item.name === 'first' || item.name === 'seventh' || item.name === 'Foo';
-                            });
-                            collection.insert(3, newItem);
-                            expect(child.getAt(1)).toBe(newItem);
+                        it("should have correct position when nearest item is front", function() {
+                            collection.insert(0, newItem);
+                            expect(joinProps(child, 'id', 'name')).toEqual([
+                                '100:Foo',
+                                '1:first', '2:second', '3:third', '4:fourth',
+                                '5:fifth', '6:sixth', '7:seventh', '8:eighth', '9:ninth'
+                            ]);
                         });
 
-                        it("should have the correct position when there is no nearest item in the source", function() {
-                            child.getFilters().add(function(item) {
-                                return item.name === 'seventh' || item.name === 'Foo';
-                            });
+                        it("should have correct position with no nearest item", function() {
+                            child.getFilters().add(foo7);
                             collection.insert(3, newItem);
-                            expect(child.getAt(0)).toBe(newItem);
+                            expect(joinProps(child, 'id', 'name')).toEqual([
+                                '7:seventh', '100:Foo'
+                            ]);
                         });
                     });
                 });
@@ -1240,57 +1300,57 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(mc2.items[1]).toBe(item2);
                 expect(mc2.items[2]).toBe(item3);
             });
-            
+
             it("should keep the getKey fn", function() {
                 var fn = function(o) { return o.id; },
                     mc1 = new Ext.util.Collection({
                         keyFn: fn
                     });
-                
+
                 var mc2 = mc1.clone();
-                
+
                 expect(mc2.getKey).toBe(fn);
                 mc1 = mc2 = null;
             });
         });
 
         describe("getting items", function() {
-            
+
             it("should get an item's key", function() {
                 expect(collection.getKey(item1)).toBe(1);
             });
-            
+
             describe("first", function() {
                 it("should get the first item", function() {
                     expect(collection.first()).toBe(item1);
                 });
-                
+
                 it("should return undefined if the collection is empty", function() {
                     collection = new Ext.util.Collection();
                     expect(collection.first()).toBeUndefined();
                 });
             });
-            
+
             describe("last", function() {
                 it("should get the last item", function() {
                     expect(collection.last()).toBe(item3);
                 });
-                
+
                 it("should return undefined if the collection is empty", function() {
                     collection = new Ext.util.Collection();
                     expect(collection.last()).toBeUndefined();
                 });
             });
-            
+
             describe("get", function() {
                 it("should get by key", function() {
                     expect(collection.get(2)).toBe(item2);
                 });
-                
+
                 it("should return undefined if the key doesn't exist", function() {
                     expect(collection.get(100)).toBeUndefined();
                 });
-                
+
                 it("should get an newly added item", function() {
                     var item5 = { id: 'a', name: 'fifth item' };
 
@@ -1303,41 +1363,41 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 it("should return the correct indexOf an item", function() {
                     expect(collection.indexOf(item1)).toBe(0);
                 });
-                
+
                 it("should return -1 if the item does not exist in the collection", function() {
                     expect(collection.indexOf({ id: 73 })).toBe(-1);
                 });
-                
+
                 it("should handle null", function() {
                     expect(collection.indexOf(null)).toBe(-1);
                 });
             });
-            
+
             describe("indexOfKey", function() {
                 it("should return the correct indexOfKey", function() {
                     expect(collection.indexOfKey(2)).toBe(1);
                 });
-                
+
                 it("should return -1 if the key does not exist", function() {
                     expect(collection.indexOfKey(42)).toBe(-1);
                 });
             });
-            
+
             describe("get by key", function() {
                 it("should return the correct key", function() {
                     expect(collection.getByKey(3)).toBe(item3);
                 });
-                
+
                 it("should return undefined if the key does not exist", function() {
                     expect(collection.getByKey(1200)).toBeUndefined();
                 });
             });
-            
+
             describe("getAt", function() {
                 it("should get an item by index", function() {
                     expect(collection.getAt(2)).toBe(item3);
                 });
-                
+
                 it("should return undefined if the index is out of bounds", function() {
                     expect(collection.getAt(33)).toBeUndefined();
                 });
@@ -1373,7 +1433,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     expect(items[1]).toBe(item3);
                     expect(items[7]).toBe(item9);
                 });
-                
+
                 it("should wrap the start value if negative", function() {
                     fill();
                     var items = collection.getRange(-6, 6);
@@ -1383,7 +1443,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     expect(items[1]).toBe(item5);
                     expect(items[2]).toBe(item6);
                 });
-                
+
                 it("should normalize the end value the collection max", function() {
                     fill();
                     var items = collection.getRange(6, 200);
@@ -1391,7 +1451,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     expect(items.length).toBe(3);
                     expect(items[0]).toBe(item7);
                 });
-                
+
                 it("should return empty if start > length", function() {
                     fill();
                     var items = collection.getRange(10, 15);
@@ -1406,7 +1466,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 beforeEach(function() {
                     fill();
                 });
-                
+
                 it("should find an item using a passed function", function() {
                     var matched = collection.findBy(function(item) {
                         return item.name === 'third';
@@ -1414,7 +1474,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                     expect(matched).toBe(item3);
                 });
-                
+
                 it("should stop iterating once a match is found", function() {
                     var count = 0;
 
@@ -1426,7 +1486,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                     expect(count).toBe(3);
                 });
-                
+
                 it("should return null if the item is not matched", function() {
                     var matched = collection.findBy(function(item) {
                         return false;
@@ -1434,14 +1494,14 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                     expect(matched).toBeNull();
                 });
-                
+
                 it("should pass the item and the key", function() {
                     var spy = jasmine.createSpy().andReturn(true);
 
                     collection.findBy(spy);
                     expect(spy).toHaveBeenCalledWith(item1, 1);
                 });
-                
+
                 describe("scope", function() {
                     it("should default the scope to the collection", function() {
                         var scope;
@@ -1453,7 +1513,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         });
                         expect(scope).toBe(collection);
                     });
-                    
+
                     it("should use the passed scope", function() {
                         var scope;
 
@@ -1465,7 +1525,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         expect(scope).toBe(fakeScope);
                     });
                 });
-                
+
                 describe("start", function() {
                     it("should not iterate at all if start > length", function() {
                         var count = 0;
@@ -1475,7 +1535,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         }, null, 1000);
                         expect(count).toBe(0);
                     });
-                    
+
                     it("should start from the passed index", function() {
                         var keys = [];
 
@@ -1484,7 +1544,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         }, null, 4);
                         expect(keys.join(',')).toBe('5,6,7,8,9');
                     });
-                    
+
                     it("should not wrap around", function() {
                         var matched = collection.findBy(function(item) {
                             return item.name === 'second';
@@ -1492,7 +1552,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                         expect(matched).toBeNull();
                     });
-                    
+
                     it("should find an item after the start", function() {
                         var matched = collection.findBy(function(item) {
                             return item.name === 'third' || item.name === 'ninth';
@@ -1502,12 +1562,12 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("findIndexBy", function() {
                 beforeEach(function() {
                     fill();
                 });
-                
+
                 it("should find an item using a passed function", function() {
                     var index = collection.findIndexBy(function(item) {
                         return item.name === 'third';
@@ -1515,7 +1575,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                     expect(index).toBe(2);
                 });
-                
+
                 it("should stop iterating once a match is found", function() {
                     var count = 0;
 
@@ -1527,7 +1587,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                     expect(count).toBe(3);
                 });
-                
+
                 it("should return -1 if the item is not matched", function() {
                     var index = collection.findIndexBy(function(item) {
                         return false;
@@ -1535,14 +1595,14 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                     expect(index).toBe(-1);
                 });
-                
+
                 it("should pass the item and the key", function() {
                     var spy = jasmine.createSpy().andReturn(true);
 
                     collection.findIndexBy(spy);
                     expect(spy).toHaveBeenCalledWith(item1, 1);
                 });
-                
+
                 describe("scope", function() {
                     it("should default the scope to the collection", function() {
                         var scope;
@@ -1554,7 +1614,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         });
                         expect(scope).toBe(collection);
                     });
-                    
+
                     it("should use the passed scope", function() {
                         var scope;
 
@@ -1566,7 +1626,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         expect(scope).toBe(fakeScope);
                     });
                 });
-                
+
                 describe("start", function() {
                     it("should not iterate at all if start > length", function() {
                         var count = 0;
@@ -1576,7 +1636,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         }, null, 1000);
                         expect(count).toBe(0);
                     });
-                    
+
                     it("should start from the passed index", function() {
                         var keys = [];
 
@@ -1585,7 +1645,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         }, null, 4);
                         expect(keys.join(',')).toBe('5,6,7,8,9');
                     });
-                    
+
                     it("should not wrap around", function() {
                         var index = collection.findIndexBy(function(item) {
                             return item.name === 'second';
@@ -1593,7 +1653,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                         expect(index).toBe(-1);
                     });
-                    
+
                     it("should find an item after the start", function() {
                         var index = collection.findIndexBy(function(item) {
                             return item.name === 'third' || item.name === 'ninth';
@@ -1608,19 +1668,19 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 beforeEach(function() {
                     fill();
                 });
-                
+
                 it("should find an item's index", function() {
                     var index = collection.findIndex('name', 'third');
 
                     expect(index).toBe(2);
                 });
-                
+
                 it("should return -1 if there is no match", function() {
                     var index = collection.findIndex('name', 'foo');
 
                     expect(index).toBe(-1);
                 });
-                
+
                 it("should respect the root property", function() {
                     collection = new Ext.util.Collection({
                         rootProperty: 'root'
@@ -1645,7 +1705,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                     expect(index).toBe(1);
                 });
-                
+
                 describe("options", function() {
                     describe("startIndex", function() {
                         it("should match from the startIndex, including the start", function() {
@@ -1653,26 +1713,26 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                             expect(index).toBe(6);
                         });
-                    
+
                         it("should find items after the startIndex", function() {
                             var index = collection.findIndex('name', 's', 4, null, false);
 
                             expect(index).toBe(5);
                         });
-                    
+
                         it("should return -1 if the startIndex is larger than the length", function() {
                             var index = collection.findIndex('name', 's', 100);
 
                             expect(index).toBe(-1);
                         });
-                    
+
                         it("should not 'wrap' over the collection", function() {
                             var index = collection.findIndex('name', 'one', 2);
 
                             expect(index).toBe(-1);
                         });
                     });
-                    
+
                     describe("regex options", function() {
                         describe("startsWith/endsWith", function() {
                             it("should default startsWith & endsWith to true", function() {
@@ -1684,7 +1744,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                                 index = collection.findIndex('name', 'econd');
                                 expect(index).toBe(-1);
                             });
-                            
+
                             it("should match the start of the string when passing endsWith: false", function() {
                                 var index = collection.findIndex('name', 'second', null, null, false);
 
@@ -1694,7 +1754,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                                 index = collection.findIndex('name', 'econd', null, null, false);
                                 expect(index).toBe(-1);
                             });
-                        
+
                             it("should match the end of the string when passing startsWith: false", function() {
                                 var index = collection.findIndex('name', 'second', null, false);
 
@@ -1704,21 +1764,21 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                                 index = collection.findIndex('name', 'secon', null, false);
                                 expect(index).toBe(-1);
                             });
-                            
+
                             it("should match anywhere in the string when using startsWith/endsWith false", function() {
                                 var index = collection.findIndex('name', 'con', null, false, false);
 
                                 expect(index).toBe(1);
                             });
                         });
-                        
+
                         describe("case", function() {
                             it("should be case insensitive by default", function() {
                                 var index = collection.findIndex('name', 'SEVENTH');
 
                                 expect(index).toBe(6);
                             });
-                            
+
                             it("should respect case when passing the ignoreCase flag", function() {
                                 var index = collection.findIndex('name', 'SEVENTH', null, null, null, false);
 
@@ -1771,7 +1831,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 }
             });
         });
-        
+
         describe("copying", function() {
             it("should return a new Collection", function() {
                 filtered = collection.createFiltered('name', 'Ed');
@@ -1779,18 +1839,18 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(filtered instanceof Ext.util.Collection).toBe(true);
                 expect(filtered).not.toBe(collection);
             });
-            
+
             it("should keep the getKey function when using filter", function() {
                 var fn = function(o) { return o.id; },
                     mc1 = new Ext.util.Collection({
                         keyFn: fn
                     }),
                     mc2 = mc1.createFiltered('name', 'Ed');
-                
+
                 expect(mc2.getKey).toBe(fn);
                 mc1 = mc2 = null;
             });
-            
+
             it("should keep the getKey function when using filterBy", function() {
                 var fn = function(o) { return o.id; },
                     mc1 = new Ext.util.Collection({
@@ -1799,7 +1859,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     mc2 = mc1.createFiltered(function() {
                         return true;
                     });
-                
+
                 expect(mc2.getKey).toBe(fn);
                 mc1 = mc2 = null;
             });
@@ -1818,7 +1878,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                 expect(filtered.length).toBe(2);
             });
-            
+
             it("should respect the root property", function() {
                 collection = new Ext.util.Collection({
                     rootProperty: 'root'
@@ -1845,7 +1905,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                 expect(filtered.length).toBe(2);
             });
-            
+
             it("should respect the root property", function() {
                 collection = new Ext.util.Collection({
                     rootProperty: 'root'
@@ -1867,13 +1927,13 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 }));
                 expect(filtered.getCount()).toBe(1);
             });
-            
+
             describe("array of filters", function() {
                 it("should accept an array of Filters", function() {
                     filtered = collection.createFiltered([filter]);
                     expect(filtered.length).toBe(2);
                 });
-                
+
                 it("should respect the root property", function() {
                     collection = new Ext.util.Collection({
                         rootProperty: 'root'
@@ -2222,7 +2282,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(collection.items[2]).toBe(item10);
             });
         });
-        
+
         describe("events", function() {
             it("should fire the filter event after filtering has taken place", function() {
                 var count;
@@ -2239,36 +2299,36 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
             });
         });
     });
-    
+
     describe("grouping", function() {
         var item0, item1, item2, item3, item4, item5, item6, item7, item8, item9,
             groups;
-            
+
         function groupBy(property, direction) {
             collection.setGrouper({
                 property: property || 'group',
                 direction: direction
             });
         }
-        
+
         function clearGroup() {
             collection.setGrouper(null);
         }
-        
+
         function sortBy(property, direction) {
             collection.getSorters().add({
                 property: property || 'sortKey',
                 direction: direction
             });
         }
-        
+
         function filterBy(property, value) {
             collection.getFilters().add({
                 property: property || 'isFilter',
                 value: Ext.isDefined(value) ? value : true
             });
         }
-        
+
         beforeEach(function() {
             collection = new Ext.util.Collection();
             collection.add(
@@ -2284,24 +2344,24 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 (item9 = { id: 9, name: 'Item9', group: 'D', sortKey: 1, groupOrder: 2, isFilter: true,  age: 100 })
             );
         });
-        
+
         afterEach(function() {
             collection.destroy();
             collection = groups = item0 = item2 = item3 = item4 = item5 = item6 = item7 = item8 = item9 = null;
         });
-        
+
         it("should return an Ext.util.GroupCollection", function() {
             groupBy();
             groups = collection.getGroups();
             expect(groups instanceof Ext.util.GroupCollection).toBe(true);
         });
-        
+
         it("should group by the specified key", function() {
             groupBy();
             groups = collection.getGroups();
             expect(groups.length).toBe(4);
         });
-        
+
         it("should have the appropriate item in each group", function() {
             groupBy();
             groups = collection.getGroups();
@@ -2313,13 +2373,13 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 });
             });
         });
-        
+
         describe("clearing groups", function() {
             it("should return no groups by default", function() {
                 collection = new Ext.util.Collection();
                 expect(collection.getGroups()).toBeNull();
             });
-            
+
             it("should return no groups once the grouper has cleared", function() {
                 groupBy();
                 collection.getGroups();
@@ -2327,34 +2387,34 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(collection.getGroups()).toBeNull();
             });
         });
-        
+
         describe("dynamic manipulation", function() {
             describe("adding", function() {
                 it("should add to an existing group", function() {
                     groupBy();
-                    
+
                     var o = {
                             id: 'new',
                             group: 'D'
                         },
                         d;
-                    
+
                     collection.add(o);
                     d = collection.getGroups().get('D');
                     expect(d.length).toBe(2);
                     expect(d.contains(o)).toBe(true);
                 });
-                
+
                 it("should create a new group", function() {
                     groupBy();
                     expect(collection.getGroups().get('E')).toBeUndefined();
-                    
+
                     var o = {
                             id: 'new',
                             group: 'E'
                         },
                         e;
-                    
+
                     collection.add(o);
                     e = collection.getGroups().get('E');
                     expect(e.length).toBe(1);
@@ -2363,7 +2423,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                 it("should position correctly when adding multiple items", function() {
                     groupBy();
-                    
+
                     var new1 = {
                             id: 'new1',
                             group: 'D'
@@ -2383,7 +2443,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         groupRef = function(name) {
                             return collection.getGroups().getByKey(name);
                         };
-                    
+
                     beforeEach(function() {
                         new1 = { id: 'new1', group: 'A' };
                         new2 = { id: 'new2', group: 'B' };
@@ -2435,7 +2495,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("removing", function() {
                 it("should remove from an existing group", function() {
                     groupBy();
@@ -2445,23 +2505,23 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     expect(a.length).toBe(2);
                     expect(a.contains(item0)).toBe(false);
                 });
-                
+
                 it("should remove a group", function() {
                     groupBy();
                     collection.remove(item9);
                     expect(collection.getGroups().get('D')).toBeUndefined();
                 });
             });
-            
+
             describe("updating", function() {
                 it("should move the item if the group changes", function() {
                     groupBy();
                     item0.group = 'D';
                     collection.itemChanged(item0);
-                    
+
                     var a = collection.getGroups().get('A'),
                         d = collection.getGroups().get('D');
-                        
+
                     expect(d.length).toBe(2);
                     expect(d.contains(item0)).toBe(true);
                     expect(a.length).toBe(2);
@@ -2479,7 +2539,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                 it("should position if the update is caused by an id change", function() {
                     groupBy();
-                    
+
                     // We are moving an item out of the "A" collction into tge "B" collection,
                     var collectionALength = collection.getGroups().get('A').length;
 
@@ -2542,44 +2602,44 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 });
             });
         });
-        
+
         describe("sorting", function() {
             function expectOrder(items, c) {
                 var len = items.length,
                     i;
-                
+
                 c = c || collection;
 
                 for (i = 0; i < len; ++i) {
                     expect(c.getAt(i)).toBe(items[i]);
                 }
             }
-            
+
             describe("the groups", function() {
                 function expectGroupOrder(keys) {
                     var groups = collection.getGroups(),
                         len = keys.length,
                         i;
-                    
+
                     for (i = 0; i < len; ++i) {
                         expect(groups.getAt(i).getGroupKey()).toBe(keys[i]);
                     }
                 }
-                
+
                 it("should sort the groups", function() {
                     collection = new Ext.util.Collection();
                     collection.add(item6, item4, item2, item1, item3, item9, item8, item0, item5, item7);
                     groupBy('group');
                     expectGroupOrder('A', 'B', 'C', 'D');
                 });
-                
+
                 it("should sort the groups according to the group direction", function() {
                     collection = new Ext.util.Collection();
                     collection.add(item6, item4, item2, item1, item3, item9, item8, item0, item5, item7);
                     groupBy('group', 'DESC');
                     expectGroupOrder('D', 'C', 'B', 'A');
                 });
-                
+
                 it("should update the group order when the grouper changes", function() {
                     collection = new Ext.util.Collection();
                     collection.add(item6, item4, item2, item1, item3, item9, item8, item0, item5, item7);
@@ -2587,7 +2647,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     groupBy('group', 'DESC');
                     expectGroupOrder('D', 'C', 'B', 'A');
                 });
-                
+
                 it("should add new groups in the correct position", function() {
                     collection = new Ext.util.Collection();
                     groupBy('group');
@@ -2627,7 +2687,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     expectGroupOrder(['C', 'A', 'D', 'B']);
                 });
             });
-            
+
             describe("inside the groups", function() {
                 it("should sort the items in the collection by group", function() {
                     collection = new Ext.util.Collection();
@@ -2635,14 +2695,14 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     groupBy('group', 'ASC');
                     expectOrder([item0, item3, item6, item9]);
                 });
-        
+
                 it("should sort the groups according to the group direction", function() {
                     collection = new Ext.util.Collection();
                     collection.add(item0, item3, item6, item9);
                     groupBy('group', 'DESC');
                     expectOrder([item9, item6, item3, item0]);
                 });
-            
+
                 it("should use the natural order inside the groups", function() {
                     collection = new Ext.util.Collection();
                     collection.add(item5, item4, item3, item2, item1, item0);
@@ -2653,7 +2713,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     expectOrder([item2, item1, item0], groups.get('A'));
                     expectOrder([item5, item4, item3], groups.get('B'));
                 });
-            
+
                 it("should insert the record into the correct collection position", function() {
                     collection = new Ext.util.Collection();
                     collection.add({
@@ -2667,20 +2727,20 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         id: 3,
                         name: 'Nige'
                     };
-  
+
                     groupBy('name');
                     collection.add(nige);
                     expect(collection.indexOf(nige)).toBe(1);
                 });
             });
-            
+
             describe("with sorters", function() {
                 it("should sort the collection by grouper first", function() {
                     sortBy();
                     groupBy();
                     expectOrder([item1, item2, item0, item5, item3, item4, item6, item7, item8, item9]);
                 });
-                
+
                 it("should sort the new groups by the sorter", function() {
                     sortBy();
                     groupBy();
@@ -2691,7 +2751,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     expectOrder([item6, item7, item8], groups.get('C'));
                     expectOrder([item9], groups.get('D'));
                 });
-                
+
                 it("should sort existing groups by the sorter", function() {
                     groupBy();
                     sortBy();
@@ -2702,7 +2762,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     expectOrder([item6, item7, item8], groups.get('C'));
                     expectOrder([item9], groups.get('D'));
                 });
-                
+
                 it("should sort by the sorter after the groups have been cleared", function() {
                     sortBy();
                     groupBy();
@@ -2711,70 +2771,70 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 });
             });
         });
-        
+
         describe("filters", function() {
             it("should respect existing filters while grouping", function() {
                 filterBy();
                 groupBy();
-                
+
                 var groups = collection.getGroups(),
                     a = groups.get('A'),
                     b = groups.get('B'),
                     c = groups.get('C'),
                     d = groups.get('D');
-                    
+
                 expect(a.length).toBe(1);
                 expect(a.first()).toBe(item1);
-                
+
                 expect(b.length).toBe(2);
                 expect(b.first()).toBe(item3);
                 expect(b.last()).toBe(item5);
-                
+
                 expect(c.length).toBe(1);
                 expect(c.first()).toBe(item7);
-                
+
                 expect(d.length).toBe(1);
                 expect(d.first()).toBe(item9);
             });
-            
+
             it("should filter existing groups", function() {
                 groupBy();
                 filterBy();
-                
+
                 var groups = collection.getGroups(),
                     a = groups.get('A'),
                     b = groups.get('B'),
                     c = groups.get('C'),
                     d = groups.get('D');
-                    
+
                 expect(a.length).toBe(1);
                 expect(a.first()).toBe(item1);
-                
+
                 expect(b.length).toBe(2);
                 expect(b.first()).toBe(item3);
                 expect(b.last()).toBe(item5);
-                
+
                 expect(c.length).toBe(1);
                 expect(c.first()).toBe(item7);
-                
+
                 expect(d.length).toBe(1);
                 expect(d.first()).toBe(item9);
             });
-            
+
             it("should update groups when filters are cleared", function() {
                 filterBy();
                 groupBy();
-                
+
                 collection.getFilters().removeAll();
-                
+
                 var groups = collection.getGroups();
-                    
+
                 expect(groups.get('A').length).toBe(3);
                 expect(groups.get('B').length).toBe(3);
                 expect(groups.get('C').length).toBe(3);
                 expect(groups.get('D').length).toBe(1);
             });
-            
+
             it("should remove groups when required", function() {
                 groupBy();
                 collection.getFilters().add({
@@ -2782,15 +2842,15 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         return o.name === 'Item0';
                     }
                 });
-                
+
                 var groups = collection.getGroups();
-                
+
                 expect(groups.get('A').length).toBe(1);
                 expect(groups.get('B')).toBeUndefined();
                 expect(groups.get('C')).toBeUndefined();
                 expect(groups.get('D')).toBeUndefined();
             });
-            
+
             it("should add groups when required", function() {
                 groupBy();
                 var filters = collection.getFilters();
@@ -2804,20 +2864,20 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         return o.name === 'Item0';
                     }
                 });
-                
+
                 var groups = collection.getGroups();
-                
+
                 expect(groups.get('A').length).toBe(1);
                 expect(groups.get('D')).toBeUndefined();
-                
+
                 filters.remove(filters.last());
-                
+
                 groups = collection.getGroups();
                 expect(groups.get('A').length).toBe(1);
                 expect(groups.get('D').length).toBe(1);
             });
         });
-        
+
         describe("aggregation", function() {
             describe("first", function() {
                 it("should return the first item in each group", function() {
@@ -2829,12 +2889,12 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         D: item9
                     });
                 });
-                
+
                 it("should ignore the group paramter if not grouped", function() {
                     expect(collection.first(true)).toBe(item0);
                 });
             });
-            
+
             describe("last", function() {
                 it("should return the last item in each group", function() {
                     groupBy();
@@ -2845,12 +2905,12 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         D: item9
                     });
                 });
-                
+
                 it("should ignore the group paramter if not grouped", function() {
                     expect(collection.last(true)).toBe(item9);
                 });
             });
-            
+
             describe("average", function() {
                 it("should get the average for each group", function() {
                     groupBy();
@@ -2862,7 +2922,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("bounds", function() {
                 it("should return the bounds for each group", function() {
                     groupBy();
@@ -2874,7 +2934,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("count", function() {
                 it("should return the number of items in each group", function() {
                     groupBy();
@@ -2886,7 +2946,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("extremes", function() {
                 it("should return the extremes for each group", function() {
                     groupBy();
@@ -2898,7 +2958,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("max", function() {
                 it("should return the max for each group", function() {
                     groupBy();
@@ -2910,7 +2970,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("maxItem", function() {
                 it("should return the maxItem for each group", function() {
                     groupBy();
@@ -2922,7 +2982,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("min", function() {
                 it("should return the min for each group", function() {
                     groupBy();
@@ -2934,7 +2994,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("minItem", function() {
                 it("should return the minItem for each group", function() {
                     groupBy();
@@ -2946,7 +3006,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("sum", function() {
                 it("should return the sum for each group", function() {
                     groupBy();
@@ -2958,13 +3018,13 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     });
                 });
             });
-            
+
             describe("with a custom aggregator", function() {
                 var fn = function(records, items) {
                         var total = 0,
                             len = items.length,
                             i;
-                        
+
                         for (i = 0; i < len; ++i) {
                             total += (items[i] * 2);
                         }
@@ -2974,7 +3034,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         return total;
                     },
                     scope;
-                
+
                 it("should call the custom aggregator", function() {
                     groupBy();
                     expect(collection.aggregateByGroup('age', fn)).toEqual({
@@ -2984,7 +3044,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                         D: 200
                     });
                 });
-                
+
                 it("should use the passed scope", function() {
                     groupBy();
                     collection.aggregateByGroup('age', fn, fakeScope);
@@ -3263,10 +3323,10 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
             expect(collection.items[1].name).toBe('Ed');
             expect(collection.items[2].name).toBe('Edward');
         });
-        
+
         it("should not fire the sort event when removing all the sorters", function() {
             var spy = jasmine.createSpy();
-            
+
             collection.getSorters().add('name');
             collection.on('sort', spy);
             collection.getSorters().remove('name');
@@ -3724,7 +3784,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
             item0.uid += 'a';
             collection.itemChanged(item0);
-            
+
             expect(collection.byUid.get(item0.uid)).toBe(item0);
         });
 
@@ -3982,7 +4042,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                     expect(collection.bounds('amount', 0, 2)).toEqual([20, 40]);
                 });
             });
-            
+
             describe("count", function() {
                 it("should return the count", function() {
                     expect(collection.count()).toBe(4);
@@ -4234,7 +4294,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
 
                 listeners[name] = function() {
                     ++events[name];
-                    
+
                     argList = Ext.Array.slice(arguments, 0);
 
                     // Copy the event info object because two events might use the same object
@@ -4423,7 +4483,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(beforeitemchange.oldIndex).toBe(0);
                 expect(beforeitemchange.oldKey).toBe(undefined);
                 expect(beforeitemchange.wasFiltered).toBe(false);
-                
+
                 expect(itemchange.newIndex).toBe(4);
 
                 // Don's name change to Zaphod should have moved him to the end
@@ -4745,7 +4805,7 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(beforeitemchange.wasFiltered).toBe(true);
             });
         }); // sorted / filtered
-        
+
         describe("with a source", function() {
             it("should pass along the onCollectionBeforeItemChanged to the child", function() {
                 var source = new Ext.util.Collection(),
@@ -4763,18 +4823,18 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(args[0]).toBe(source);
                 expect(args[1].modified).toEqual(['name']);
             });
-            
+
             it("should pass along the onCollectionItemChanged to the child", function() {
                 var source = new Ext.util.Collection(),
                     spy = jasmine.createSpy(),
                     args;
-                    
+
                 source.add(Don);
                 collection = new Ext.util.Collection({
                     source: source
                 });
                 collection.onCollectionItemChange = spy;
-                
+
                 source.itemChanged(Don, ['name']);
                 args = spy.mostRecentCall.args;
                 expect(args[0]).toBe(source);

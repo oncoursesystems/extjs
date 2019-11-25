@@ -97,7 +97,7 @@ Ext.define('Ext.chart.interactions.ItemEdit', {
 
     applyTooltip: function(tooltip) {
         var config;
-        
+
         if (tooltip) {
             config = Ext.apply({}, tooltip, {
                 renderer: this.defaultTooltipRenderer,

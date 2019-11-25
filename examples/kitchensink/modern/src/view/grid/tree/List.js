@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.grid.tree.List', {
         type: 'tree-list'
     },
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/grid/tree/ListController.js'
@@ -33,7 +33,7 @@ Ext.define('KitchenSink.view.grid.tree.List', {
             }
         }
     },
-    // </example>
+    //</example>
 
     bodyPadding: 10,
     height: '${height}',

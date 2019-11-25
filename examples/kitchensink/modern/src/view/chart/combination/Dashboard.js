@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.chart.combination.Dashboard', {
     xtype: 'combination-dashboard',
     controller: 'combination-dashboard',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/combination/DashboardController.js'
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.chart.combination.Dashboard', {
         type: 'Store',
         path: 'app/store/Dashboard.js'
     }],
-    // </example>
+    //</example>
 
     layout: {
         type: 'vbox',
@@ -95,11 +95,11 @@ Ext.define('KitchenSink.view.chart.combination.Dashboard', {
             store: {
                 fields: ['Name', 'Data'],
                 data: [
-                    { 'Name': 'Price',     'Data': 100 },
+                    { 'Name': 'Price', 'Data': 100 },
                     { 'Name': 'Revenue %', 'Data': 100 },
-                    { 'Name': 'Growth %',  'Data': 100 },
+                    { 'Name': 'Growth %', 'Data': 100 },
                     { 'Name': 'Product %', 'Data': 100 },
-                    { 'Name': 'Market %',  'Data': 100 }
+                    { 'Name': 'Market %', 'Data': 100 }
                 ]
             },
             theme: 'Blue',

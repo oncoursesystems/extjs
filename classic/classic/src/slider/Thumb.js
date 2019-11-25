@@ -9,7 +9,7 @@ Ext.define('Ext.slider.Thumb', {
         'Ext.dd.DragTracker',
         'Ext.util.Format'
     ],
-    
+
     overCls: Ext.baseCSSPrefix + 'slider-thumb-over',
 
     /**
@@ -37,13 +37,13 @@ Ext.define('Ext.slider.Thumb', {
              */
             constrain: false
         });
-        
+
         //<debug>
         if (me.id == null) {
             Ext.id(me, 'ext-slider-thumb-');
         }
         //</debug>
-        
+
         me.callParent([config]);
     },
 
@@ -52,7 +52,7 @@ Ext.define('Ext.slider.Thumb', {
      */
     render: function() {
         var me = this;
-        
+
         me.el = me.slider.innerEl.insertFirst(me.getElConfig());
         me.onRender();
     },
@@ -64,11 +64,11 @@ Ext.define('Ext.slider.Thumb', {
 
         touchAction[panDisable] = false;
         me.el.setTouchAction(touchAction);
-        
+
         if (me.disabled) {
             me.disable();
         }
-        
+
         me.initEvents();
     },
 
@@ -79,7 +79,7 @@ Ext.define('Ext.slider.Thumb', {
 
         style[slider.vertical ? 'bottom' : slider.horizontalProp] =
             slider.calculateThumbPosition(slider.normalizeValue(me.value)) + '%';
-        
+
         return {
             style: style,
             id: me.id,
@@ -122,7 +122,7 @@ Ext.define('Ext.slider.Thumb', {
                 scope: me,
                 callback: me.onAnimComplete
             };
-            
+
             if (animate !== true) {
                 Ext.apply(animCfg, animate);
             }
@@ -142,7 +142,7 @@ Ext.define('Ext.slider.Thumb', {
         var el = this.el;
 
         this.disabled = false;
-        
+
         if (el) {
             el.removeCls(this.slider.disabledCls);
         }
@@ -155,7 +155,7 @@ Ext.define('Ext.slider.Thumb', {
         var el = this.el;
 
         this.disabled = true;
-        
+
         if (el) {
             el.addCls(this.slider.disabledCls);
         }
@@ -176,22 +176,22 @@ Ext.define('Ext.slider.Thumb', {
             tolerance: 3,
             autoStart: 300
         });
-        
+
         me.el.hover(me.addOverCls, me.removeOverCls, me);
     },
 
     addOverCls: function() {
         var me = this;
-        
+
         if (!me.disabled) {
             me.el.addCls(me.overCls);
         }
     },
-    
+
     removeOverCls: function() {
         this.el.removeCls(this.overCls);
     },
-    
+
     /**
      * @private
      * This is tied into the internal Ext.dd.DragTracker. If the slider is currently disabled,
@@ -214,7 +214,7 @@ Ext.define('Ext.slider.Thumb', {
             delta[0] += Math.floor(el.getWidth() / 2) - trackerXY[0];
             delta[1] += Math.floor(el.getHeight() / 2) - trackerXY[1];
             me.slider.promoteThumb(me);
-            
+
             return true;
         }
     },
@@ -263,7 +263,7 @@ Ext.define('Ext.slider.Thumb', {
                     newValue = above.value;
                 }
             }
-            
+
             slider.setValue(index, newValue, false);
             slider.fireEvent('drag', slider, e, me);
         }
@@ -312,7 +312,7 @@ Ext.define('Ext.slider.Thumb', {
         if (anim) {
             anim.end();
         }
-        
+
         me.el = me.tracker = me.anim = Ext.destroy(me.el, me.tracker);
         me.callParent();
     }

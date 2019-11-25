@@ -4,7 +4,7 @@ topSuite("Ext.app.bind.Parser", function() {
     beforeEach(function() {
         parser = Ext.app.bind.Parser.fly();
     });
-    
+
     afterEach(function() {
         parser.release();
         parser = null;
@@ -12,13 +12,13 @@ topSuite("Ext.app.bind.Parser", function() {
 
     function dump(data) {
         var s = JSON.stringify(data, null, '    ');
-        
+
         console.log(s);
     }
 
     function parseExpression(text) {
         parser.reset(text);
-        
+
         return parser.parseExpression();
     }
 
@@ -514,7 +514,7 @@ topSuite("Ext.app.bind.Parser", function() {
             }
             catch (e) {
                 expect(parser.error).not.toBeNull();
-                
+
                 return;
             }
 
@@ -527,7 +527,7 @@ topSuite("Ext.app.bind.Parser", function() {
             }
             catch (e) {
                 expect(parser.error).not.toBeNull();
-                
+
                 return;
             }
 

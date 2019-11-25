@@ -22,7 +22,7 @@ Ext.define('Admin.view.dashboard.Earnings', {
 
     platformConfig: {
         '!phone': {
-            iconCls: 'x-fa fa-dollar'
+            iconCls: 'x-fa fa-dollar-sign'
         }
     },
 

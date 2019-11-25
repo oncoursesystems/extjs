@@ -134,6 +134,11 @@ Ext.define('Ext.data.virtual.Range', {
                 activePages, page, pg, direction,
                 prefetchBegin, prefetchEnd, prefetchPages;
 
+            // If store.totalCount is 0: no need to goto any page, just return from here
+            if (limit === 0) {
+                return;
+            }
+
             adjustingPages.length = 0;
 
             // Forwards
@@ -206,12 +211,12 @@ Ext.define('Ext.data.virtual.Range', {
 
             if (prefetch) {
                 me.prefetchBegin = prefetchBegin = Math.max(0, begin - beginBufferZone);
-                
+
                 // If we don't know the size of the store yet, don't try and limit the pages
                 if (limit === null) {
                     limit = Number.MAX_VALUE;
                 }
-                
+
                 me.prefetchEnd = prefetchEnd = Math.min(limit, end + endBufferZone);
 
                 me.prefetchPages = prefetchPages = pageMap.getPages(prefetchBegin, prefetchEnd);
@@ -313,7 +318,7 @@ Ext.define('Ext.data.virtual.Range', {
             if (activePages) {
                 delete activePages[n];
             }
-            
+
             if (prefetchPages) {
                 delete prefetchPages[n];
             }
@@ -359,7 +364,7 @@ Ext.define('Ext.data.virtual.Range', {
             me.begin = me.end = 0;
             me.direction = 1;
             me.prefetchPages = me.activePages = null;
-            
+
             /* eslint-disable-next-line dot-notation */
             me.goto(begin, end);
         }

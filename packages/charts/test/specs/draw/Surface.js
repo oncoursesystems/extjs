@@ -89,16 +89,16 @@ topSuite("Ext.draw.Surface", function() {
 
     describe('remove', function() {
         var oldClearPrototype;
-        
+
         beforeEach(function() {
             oldClearPrototype = Ext.Base.prototype.clearPrototypeOnDestroy;
             Ext.Base.prototype.clearPrototypeOnDestroy = false;
         });
-        
+
         afterEach(function() {
             Ext.Base.prototype.clearPrototypeOnDestroy = oldClearPrototype;
         });
-        
+
         it("should be able to remove the sprite (instance or id), should return removed sprite", function() {
             var givenId = 'testing',
                 sprite = new Ext.draw.sprite.Rect({}),
@@ -303,7 +303,7 @@ topSuite("Ext.draw.Surface", function() {
             s1.add(sprite);
             s1.setDirty(false);
             s1.destroy();
-            
+
             expect(s1._dirty).toBe(false);
         });
 

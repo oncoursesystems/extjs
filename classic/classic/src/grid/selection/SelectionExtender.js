@@ -1,8 +1,8 @@
 Ext.define('Ext.grid.selection.SelectionExtender', {
     extend: 'Ext.dd.DragTracker',
-    
+
     maskBox: {},
-    
+
     constructor: function(config) {
         var me = this;
 
@@ -30,13 +30,13 @@ Ext.define('Ext.grid.selection.SelectionExtender', {
             cls: Ext.baseCSSPrefix + 'ssm-extender-drag-handle',
             style: 'display:none'
         }).setVisibilityMode(displayMode);
-        
+
         me.handle.on({
             contextmenu: function(e) {
                 e.stopEvent();
             }
         });
-        
+
         me.mask = me.el.createChild({
             cls: Ext.baseCSSPrefix + 'ssm-extender-mask',
             style: 'display:none'
@@ -52,7 +52,7 @@ Ext.define('Ext.grid.selection.SelectionExtender', {
             scope: me,
             destroyable: true
         });
-        
+
         me.gridListeners = me.view.ownerGrid.on({
             columnResize: me.alignHandle,
             scope: me,
@@ -178,7 +178,7 @@ Ext.define('Ext.grid.selection.SelectionExtender', {
                 scrollTask.start();
             }
         }
-        
+
         // Near top of view
         else if (me.lastXY[1] < viewTop + 10) {
             if (me.extendY) {
@@ -194,7 +194,7 @@ Ext.define('Ext.grid.selection.SelectionExtender', {
                 scrollTask.start();
             }
         }
-        
+
         // Near left edge of view
         else if (me.lastXY[0] < viewLeft + 10) {
             if (me.extendX) {
@@ -202,7 +202,7 @@ Ext.define('Ext.grid.selection.SelectionExtender', {
                 scrollTask.start();
             }
         }
-        
+
         // Not near an edge, cancel autoscrolling
         else {
             scrollBy[0] = scrollBy[1] = 0;
@@ -248,7 +248,7 @@ Ext.define('Ext.grid.selection.SelectionExtender', {
             me.view.getSelectionModel().extendSelection(me.extensionDescriptor);
         }
     },
-    
+
     onViewScroll: function() {
         var me = this;
 
@@ -336,7 +336,7 @@ Ext.define('Ext.grid.selection.SelectionExtender', {
                 mousePosition: me.lastXY,
                 reduce: true
             };
-            
+
             me.mask.dom.style.borderTopWidth = '0';
             maskBox.x = selRegion.x;
             maskBox.y = selRegion.top;

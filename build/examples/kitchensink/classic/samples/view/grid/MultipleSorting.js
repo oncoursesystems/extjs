@@ -30,16 +30,20 @@ Ext.define('KitchenSink.view.grid.MultipleSorting', {
         graphite: {
             joindateWidth: 150,
             salaryWidth: 150
+        },
+        'classic-material': {
+            joindateWidth: 150,
+            salaryWidth: 150
         }
     },
 
     title: 'Multiple Sort Grid',
     height: 350,
-    width : 600,
+    width: 600,
 
     bind: '{store}',
     multiColumnSort: true,
-    
+
     bbar: {
         items: [{
             xtype: 'component',
@@ -50,7 +54,7 @@ Ext.define('KitchenSink.view.grid.MultipleSorting', {
     columns: [{
         text: 'Name',
         dataIndex: 'name',
-        
+
         flex: 1
     }, {
         xtype: 'datecolumn',
@@ -61,7 +65,7 @@ Ext.define('KitchenSink.view.grid.MultipleSorting', {
     }, {
         text: 'Salary',
         dataIndex: 'salary',
-        
+
         width: '${salaryWidth}',
         align: 'right',
         formatter: 'usMoney'

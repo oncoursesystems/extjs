@@ -730,7 +730,9 @@ Ext.define('Ext.ux.ajax.SimXhr', {
         var me = this;
         me.timer = null;
         me.onComplete();
-        me.onreadystatechange && me.onreadystatechange();
+        if (me.onreadystatechange) {
+            me.onreadystatechange();
+        }
     }
 });
 
@@ -3418,7 +3420,9 @@ Ext.define('Ext.ux.gauge.Gauge', {
             gradient.appendChild(stopEl);
             stopEl.setAttribute('offset', stopCfg.offset);
             stopEl.setAttribute('stop-color', stopCfg.color);
-            ('opacity' in stopCfg) && stopEl.setAttribute('stop-opacity', stopCfg.opacity);
+            if ('opacity' in stopCfg) {
+                stopEl.setAttribute('stop-opacity', stopCfg.opacity);
+            }
         }
     },
     getTrackGradient: function() {
@@ -4383,13 +4387,51 @@ Ext.define('Ext.ux.overrides.rating.Picker', {
 });
 
 /**
+ * A DragDrop implementation specialized for use with BoxReorderer.
+ */
+Ext.define('Ext.ux.dd.BoxContainerDD', {
+    extend: 'Ext.dd.DD',
+    /**
+     * @method alignElWithMouse
+     * @member Ext.dd.DD
+     * @inheritdoc
+     */
+    alignElWithMouse: function(el, iPageX, iPageY) {
+        var me = this,
+            oCoord = me.getTargetCoord(iPageX, iPageY),
+            x = oCoord.x,
+            y = oCoord.y,
+            fly = el.dom ? el : Ext.fly(el, '_dd'),
+            aCoord, newLeft, newTop;
+        if (!me.deltaSetXY) {
+            aCoord = [
+                Math.max(0, x),
+                Math.max(0, y)
+            ];
+            fly.setXY(aCoord);
+            newLeft = me.getLocalX(fly);
+            newTop = fly.getLocalY();
+            me.deltaSetXY = [
+                newLeft - x,
+                newTop - y
+            ];
+        } else {
+            me.setLocalXY(fly, Math.max(0, x + me.deltaSetXY[0]), Math.max(0, y + me.deltaSetXY[1]));
+        }
+        me.cachePosition(x, y);
+        me.autoScroll(x, y, el.offsetHeight, el.offsetWidth);
+        return oCoord;
+    }
+});
+
+/**
  * Base class from Ext.ux.TabReorderer.
  */
 Ext.define('Ext.ux.BoxReorderer', {
     extend: 'Ext.plugin.Abstract',
     alias: 'plugin.boxreorderer',
     requires: [
-        'Ext.dd.DD'
+        'Ext.ux.dd.BoxContainerDD'
     ],
     mixins: {
         observable: 'Ext.util.Observable'
@@ -4478,13 +4520,7 @@ Ext.define('Ext.ux.BoxReorderer', {
             layout = me.container.getLayout(),
             names = me.names,
             dd;
-        // Create a DD instance. Poke the handlers in.
-        // TODO: Ext5's DD classes should apply config to themselves.
-        // TODO: Ext5's DD classes should not use init internally because it collides with use
-        // as a plugin
-        // TODO: Ext5's DD classes should be Observable.
-        // TODO: When all the above are trus, this plugin should extend the DD class.
-        dd = me.dd = new Ext.dd.DD(layout.innerCt, me.container.id + '-reorderer');
+        dd = me.dd = new Ext.ux.dd.BoxContainerDD(layout.innerCt, me.container.id + '-reorderer');
         Ext.apply(dd, {
             animate: me.animate,
             reorderer: me,
@@ -4512,8 +4548,8 @@ Ext.define('Ext.ux.BoxReorderer', {
     // check if the clicked component is reorderable
     clickValidator: function(e) {
         var cmp = this.getDragCmp(e);
-        // If cmp is null, this expression MUST be coerced to boolean so that createInterceptor
-        // is able to test it against false
+        // If cmp is null, this expression MUST be coerced to boolean so that 
+        // createInterceptor is able to test it against false
         return !!(cmp && cmp.reorderable !== false);
     },
     onMouseDown: function(e) {
@@ -4548,10 +4584,18 @@ Ext.define('Ext.ux.BoxReorderer', {
     },
     startDrag: function() {
         var me = this,
-            dragCmp = me.dragCmp;
+            dragCmp = me.dragCmp,
+            targetEl, dom, left, top, scrollable;
         if (dragCmp) {
-            // For the entire duration of dragging the *Element*, defeat any positioning
+            // For the entire duration of dragging the *Element*, defeat any positioning 
             // and animation of the dragged *Component*
+            scrollable = me.container.getScrollable();
+            if (scrollable) {
+                // TODO remove this workaround
+                scrollable.scrollBy(-1).then(function() {
+                    scrollable.scrollBy(1);
+                });
+            }
             dragCmp.setPosition = Ext.emptyFn;
             dragCmp.animate = false;
             // Animate the BoxLayout just for the duration of the drag operation.
@@ -4566,6 +4610,17 @@ Ext.define('Ext.ux.BoxReorderer', {
             dragCmp.suspendEvents();
             dragCmp.disabled = true;
             dragCmp.el.setStyle('zIndex', 100);
+            // add a spacer to the tab container so it doesn't shrink while we're dragging a tab
+            if (!dragCmp.nextSibling()) {
+                targetEl = me.container.layout.targetEl;
+                dom = targetEl.dom;
+                left = dom.scrollWidth - 1;
+                top = dom.scrollHeight - 1;
+                me.spacerEl = Ext.dom.Helper.append(targetEl, {
+                    tag: 'div',
+                    style: 'width: 1px;' + 'height: 1px;' + 'position: absolute;' + 'left: ' + left + 'px;' + 'top: ' + top + 'px;"'
+                });
+            }
         } else {
             me.dragElId = null;
         }
@@ -4639,41 +4694,42 @@ Ext.define('Ext.ux.BoxReorderer', {
     },
     endDrag: function(e) {
         var me = this,
-            layout = me.container.getLayout(),
+            dragCmp = me.dragCmp,
+            container = me.container,
+            layout = container.getLayout(),
             temp;
         if (e) {
             e.stopEvent();
         }
-        if (me.dragCmp) {
+        if (dragCmp) {
             delete me.dragElId;
-            // Reinstate the Component's positioning method after mouseup, and allow
-            // the layout system to animate it.
-            delete me.dragCmp.setPosition;
-            me.dragCmp.animate = true;
-            // Ensure the lastBox is correct for the animation system to restore to when it creates
-            // the "from" animation frame
-            me.dragCmp.lastBox[me.names.x] = me.dragCmp.getPosition(true)[me.names.widthIndex];
+            // Reinstate the Component's positioning method after mouseup, 
+            // and allow the layout system to animate it.
+            delete dragCmp.setPosition;
+            dragCmp.animate = true;
+            // Ensure the lastBox is correct for the animation system to restore
+            // to when it creates the "from" animation frame
+            dragCmp.lastBox[me.names.x] = dragCmp.getPosition(true)[me.names.widthIndex];
             // Make the Box Container the topmost layout participant during the layout.
-            me.container.updateLayout({
+            container.updateLayout({
                 isRoot: true
             });
-            // Attempt to hook into the afteranimate event of the drag Component
-            // to call the cleanup
-            temp = Ext.fx.Manager.getFxQueue(me.dragCmp.el.id)[0];
+            // Attempt to hook into the afteranimate event of the drag Component to call the cleanup
+            temp = Ext.fx.Manager.getFxQueue(dragCmp.el.id)[0];
             if (temp) {
                 temp.on({
                     afteranimate: me.reorderer.afterBoxReflow,
                     scope: me
                 });
-            } else // If not animated, clean up after the mouseup has happened so that we don't click
-            // the thing being dragged
+            } else // If not animated, clean up after the mouseup has happened so that 
+            // we don't click the thing being dragged
             {
                 Ext.asap(me.reorderer.afterBoxReflow, me);
             }
             if (me.animate) {
                 delete layout.animatePolicy;
             }
-            me.reorderer.fireEvent('drop', me, me.container, me.dragCmp, me.startIndex, me.curIndex);
+            me.reorderer.fireEvent('drop', me, container, dragCmp, me.startIndex, me.curIndex);
         }
     },
     /**
@@ -4682,10 +4738,17 @@ Ext.define('Ext.ux.BoxReorderer', {
      * Re-enabled the dragged Component.
      */
     afterBoxReflow: function() {
-        var me = this;
-        me.dragCmp.el.setStyle('zIndex', '');
-        me.dragCmp.disabled = false;
-        me.dragCmp.resumeEvents();
+        var me = this,
+            spacerEl = Ext.fly(me.spacerEl),
+            dragCmp = me.dragCmp;
+        dragCmp.el.setStyle('zIndex', '');
+        dragCmp.disabled = false;
+        dragCmp.resumeEvents();
+        // remove the spacer that was added when the drag was started
+        if (spacerEl) {
+            spacerEl.remove();
+            me.spacerEl = null;
+        }
     },
     /**
      * @private
@@ -4699,29 +4762,24 @@ Ext.define('Ext.ux.BoxReorderer', {
             i = 0,
             it = me.container.items.items,
             ln = it.length,
-            lastPos = me.lastPos,
-            newIndex = -1;
+            lastPos = me.lastPos;
         me.lastPos = dragBox[me.startAttr];
         for (; i < ln; i++) {
             targetEl = it[i].getEl();
             // Only look for a drop point if this found item is an item according to our selector
-            // and is not the item being dragged
             if (targetEl.dom !== dragEl && targetEl.is(me.reorderer.itemSelector)) {
                 targetBox = targetEl.getBox();
                 targetMidpoint = targetBox[me.startAttr] + (targetBox[me.dim] >> 1);
                 if (i < me.curIndex) {
                     if ((dragBox[me.startAttr] < lastPos) && (dragBox[me.startAttr] < (targetMidpoint - 5))) {
-                        newIndex = i;
+                        return i;
                     }
                 } else if (i > me.curIndex) {
                     if ((dragBox[me.startAttr] > lastPos) && (dragBox[me.endAttr] > (targetMidpoint + 5))) {
-                        newIndex = i;
+                        return i;
                     }
                 }
             }
-        }
-        if (newIndex >= 0) {
-            return newIndex;
         }
     }
 });
@@ -7775,10 +7833,10 @@ Ext.define('Ext.ux.TabCloseMenu', {
      */
     showCloseOthers: true,
     /**
-     * @cfg {String} closeOthersTabsText
+     * @cfg {String} closeOtherTabsText
      * The text for closing all tabs except the current one.
      */
-    closeOthersTabsText: 'Close Other Tabs',
+    closeOtherTabsText: 'Close Other Tabs',
     /**
      * @cfg {Boolean} showCloseAll
      * Indicates whether to show the 'Close All' option.
@@ -7878,7 +7936,7 @@ Ext.define('Ext.ux.TabCloseMenu', {
             if (me.showCloseOthers) {
                 items.push({
                     itemId: 'closeOthers',
-                    text: me.closeOthersTabsText,
+                    text: me.closeOtherTabsText,
                     scope: me,
                     handler: me.onCloseOthers
                 });
@@ -8923,9 +8981,9 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
                     ];
                     break;
                 default:
-                    // <debug>
+                    //<debug>
                     console.error("unknown color " + h + ' ' + s + " " + v);
-                    // </debug>
+                    //</debug>
                     break;
             }
             m = v - c;
@@ -10431,12 +10489,12 @@ Ext.define('Ext.ux.colorpick.Slider', {
             html: '<div class="' + Ext.baseCSSPrefix + 'colorpicker-draghandle"></div>'
         }
     },
-    // <debug>
+    //<debug>
     // Called via data binding whenever selectedColor.h changes;
     setHue: function() {
         Ext.raise('Must implement setHue() in a child class!');
     },
-    // </debug>
+    //</debug>
     getDragHandle: function() {
         return this.lookupReference('dragHandle');
     },

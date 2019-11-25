@@ -1,7 +1,7 @@
 topSuite("Ext.menu.KeyNav", [false, 'Ext.menu.Menu'], function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         menu;
-    
+
     function makeMenu(cfg) {
         menu = new Ext.menu.Menu(Ext.apply({
             text: 'Main Menu',
@@ -31,19 +31,19 @@ topSuite("Ext.menu.KeyNav", [false, 'Ext.menu.Menu'], function() {
             }]
         }, cfg));
     }
-    
+
     afterEach(function() {
         menu.hide();
         Ext.destroy(menu);
         menu = null;
     });
-    
+
     xdescribe('enter key nav', function() {
         describe('href property', function() {
             // Note that the specs were failing in FF 24 without the waitsFor().
             // Note that it's necessary to set the activeItem and focusedItem to test the API!
             var menuItem;
-            
+
             afterEach(function() {
                 menuItem = null;
                 window.location.hash = '';
@@ -126,7 +126,7 @@ topSuite("Ext.menu.KeyNav", [false, 'Ext.menu.Menu'], function() {
             waitsFor(function() {
                 return childMenu.el;
             });
-            
+
             runs(function() {
                 pressKey(childMenu.down('menuitem'), 'left');
             });

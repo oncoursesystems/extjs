@@ -92,7 +92,7 @@ Ext.define('Ext.view.View', {
             keypress: 'KeyPress',
             focus: 'Focus'
         },
-        
+
         /**
          * @private
          * @static
@@ -165,7 +165,7 @@ Ext.define('Ext.view.View', {
      * cancel the default action.
      * @inheritdoc #beforeitemmousedown
      */
-    
+
     /**
      * @event beforeitemlongpress
      * @preventable
@@ -245,7 +245,7 @@ Ext.define('Ext.view.View', {
      * Fires when an item is right clicked.
      * @inheritdoc #beforeitemmousedown
      */
-    
+
     /**
      * @event itemlongpress
      * Fires on a longpress event on an item.
@@ -481,7 +481,7 @@ Ext.define('Ext.view.View', {
         var me = this;
 
         me.callParent();
-        
+
         me.mon(me.el, {
             scope: me,
             click: me.handleEvent,
@@ -560,18 +560,18 @@ Ext.define('Ext.view.View', {
     handleEvent: function(e) {
         var me = this,
             isKeyEvent = me.keyEventRe.test(e.type);
-        
+
         // We need to know if the event target is an input field to block
         // drag n' drop plugin(s) from stopping pointer events as this makes
         // input fields unfocusable and unselectable. We also need to know
         // this for key events to prevent scrolling, see below.
         e.isInputFieldEvent = Ext.fly(e.target).isInputField();
-        
+
         e.view = me;
 
         // Find the item from the event target.
         e.item = e.getTarget(me.itemSelector);
-        
+
         if (e.item) {
             e.record = me.getRecord(e.item);
         }
@@ -580,7 +580,7 @@ Ext.define('Ext.view.View', {
         if (me.processUIEvent(e) !== false && !me.destroyed) {
             me.processSpecialEvent(e);
         }
-        
+
         // We need to prevent default action on navigation keys
         // that can cause View element scroll unless the event is from an input field.
         // We MUST prevent browser's default action on SPACE which is to focus
@@ -591,7 +591,7 @@ Ext.define('Ext.view.View', {
                 e.preventDefault();
             }
         }
-        
+
         e.view = null;
     },
 
@@ -651,7 +651,7 @@ Ext.define('Ext.view.View', {
         }
         else {
             type = touchMap[type] || type;
-            
+
             if (
                 (me.processContainerEvent(e) === false) ||
                 (me['onBeforeContainer' + map[type]](e) === false) ||
@@ -748,7 +748,7 @@ Ext.define('Ext.view.View', {
         if (highlighted !== item) {
             if (highlighted) {
                 Ext.fly(highlighted).removeCls(overItemCls);
-                
+
                 //<feature legacyBrowser>
                 // Work around for an issue in IE8 where the focus/over/selected borders do not
                 // get updated where applied using adjacent sibling selectors.
@@ -757,7 +757,7 @@ Ext.define('Ext.view.View', {
                     me.repaintBorder(highlighted.nextSibling);
                 }
                 //</feature>
-                
+
                 if (me.hasListeners.unhighlightitem) {
                     me.fireEvent('unhighlightitem', me, highlighted);
                 }
@@ -767,7 +767,7 @@ Ext.define('Ext.view.View', {
 
             if (item) {
                 Ext.fly(item).addCls(me.overItemCls);
-                
+
                 //<feature legacyBrowser>
                 // Work around for an issue in IE8 where the focus/over/selected borders do not
                 // get updated where applied using adjacent sibling selectors.
@@ -775,7 +775,7 @@ Ext.define('Ext.view.View', {
                     me.repaintBorder(item.nextSibling);
                 }
                 //</feature>
-                
+
                 if (me.hasListeners.highlightitem) {
                     me.fireEvent('highlightitem', me, item);
                 }
@@ -812,7 +812,7 @@ Ext.define('Ext.view.View', {
 
             if (highlighted && highlighted === node) {
                 delete me.highlightedItem;
-                
+
                 if (newNode) {
                     me.highlightItem(newNode);
                 }
@@ -842,10 +842,10 @@ Ext.define('Ext.view.View', {
         // DOM client dimensions
         elRegion.bottom = elRegion.top + el.dom.clientHeight;
         elRegion.right = elRegion.left + el.dom.clientWidth;
-        
+
         if (node) {
             nodeRegion = node.getRegion();
-            
+
             // node is above
             if (nodeRegion.top < elRegion.top) {
                 adjustmentY = nodeRegion.top - elRegion.top;
@@ -867,7 +867,7 @@ Ext.define('Ext.view.View', {
             if (adjustmentX || adjustmentY) {
                 me.scrollBy(adjustmentX, adjustmentY, false);
             }
-            
+
             // Poke on a tabIndex to make the node focusable.
             node.set({
                 tabIndex: -1

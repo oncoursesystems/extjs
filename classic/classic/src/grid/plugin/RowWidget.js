@@ -12,7 +12,7 @@
 Ext.define('Ext.grid.plugin.RowWidget', {
     extend: 'Ext.grid.plugin.RowExpander',
     alias: 'plugin.rowwidget',
-    
+
     mixins: [
         'Ext.mixin.Identifiable',
         'Ext.mixin.StyleCacher'
@@ -162,10 +162,10 @@ Ext.define('Ext.grid.plugin.RowWidget', {
 
         return features;
     },
-    
+
     setupRowData: function(record, rowIndex, rowValues) {
         var me = this.rowExpander;
-        
+
         me.rowBodyFeature = this;
         rowValues.rowBodyCls = me.recordsExpanded[record.internalId] ? '' : me.rowBodyHiddenCls;
     },
@@ -187,7 +187,7 @@ Ext.define('Ext.grid.plugin.RowWidget', {
             id = me.getId();
 
         me.viewListeners.destroy();
-        
+
         if (me.grid.lockable) {
             me.grid.destroyManagedWidgets(id + '-' + me.lockedView.getId());
             me.grid.destroyManagedWidgets(id + '-' + me.normalView.getId());
@@ -195,7 +195,7 @@ Ext.define('Ext.grid.plugin.RowWidget', {
         else {
             me.grid.destroyManagedWidgets(id + '-' + me.view.getId());
         }
-        
+
         me.callParent();
     },
 
@@ -239,7 +239,7 @@ Ext.define('Ext.grid.plugin.RowWidget', {
                     if (!focusEl) {
                         continue;
                     }
-                    
+
                     if (enableTabbing) {
                         focusEl.restoreTabbableState(restoreOptions);
                     }
@@ -331,7 +331,7 @@ Ext.define('Ext.grid.plugin.RowWidget', {
                     result = me.grid.createManagedWidget(
                         view, me.getId() + '-' + view.getId(), widget, record
                     );
-                    
+
                     result.measurer = me;
                     result.ownerLayout = view.componentLayout;
                 }
@@ -464,7 +464,7 @@ Ext.define('Ext.grid.plugin.RowWidget', {
 
             me.view.fireEvent(wasCollapsed ? 'expandbody' : 'collapsebody', rowNode, record,
                               nextBd, widget);
-            
+
             view.updateLayout();
 
             // Before layouts are resumed, if we have *expanded* the widget row,

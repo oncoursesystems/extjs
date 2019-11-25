@@ -156,15 +156,15 @@ topSuite("Ext.Evented", function() {
                     cmp.on('beforefoochange', function() {
                         order.push(1);
                     });
-                    
+
                     cmp.on('foochange', function() {
                         order.push(2);
                     }, this, null, 'before');
-                    
+
                     cmp.on('foochange', function() {
                         order.push(3);
                     });
-                    
+
                     cmp.on('foochange', function() {
                         order.push(4);
                     }, this, null, 'after');
@@ -183,25 +183,24 @@ topSuite("Ext.Evented", function() {
                     cmp.on('beforefoochange', function() {
                         order.push(1);
                     });
-                    
+
                     cmp.onBefore('foochange', function() {
                         order.push(2);
                     });
-                    
+
                     cmp.on('foochange', function() {
                         order.push(3);
                     });
-                    
+
                     cmp.onAfter('foochange', function() {
                         order.push(4);
                     });
-                    
+
                     cmp.setFoo('bar');
 
                     expect(order).toEqual([1, 2, 3, 4]);
                 });
             });
-
 
             describe("Evented config beforeChange Listener", function() {
                 it("beforeChange event should be given a controller as the 4th parameter with resume/pause functions", function() {
@@ -233,10 +232,10 @@ topSuite("Ext.Evented", function() {
                             },
                             onBeforeFooChange: function(cmp, newValue, oldValue, controller) {
                                 controller.pause();
-                                
+
                                 // Use native setTimeout not the one injected by Jazzman
                                 var setTimeout = jasmine._setTimeout;
-                                
+
                                 setTimeout(function() {
                                     controller.resume();
                                     expect(cmp.updateFoo.callCount).toBe(1);
@@ -255,7 +254,7 @@ topSuite("Ext.Evented", function() {
             });
         });
     }
-    
+
     createSuite('extension');
     createSuite('metadata');
 });

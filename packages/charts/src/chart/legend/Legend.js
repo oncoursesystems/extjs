@@ -44,7 +44,7 @@ Ext.define('Ext.chart.legend.Legend', {
         if (!this.getToggleable()) {
             return;
         }
-        
+
         store = this.getStore();
 
         if (store) {

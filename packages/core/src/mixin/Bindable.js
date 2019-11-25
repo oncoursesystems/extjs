@@ -74,7 +74,7 @@ Ext.define('Ext.mixin.Bindable', {
          *
          */
         controller: null,
-        
+
         /**
          * @method getController
          * Returns the {@link Ext.app.ViewController} instance associated with this 
@@ -360,7 +360,7 @@ Ext.define('Ext.mixin.Bindable', {
             if (!viewModel.isViewModel) {
                 viewModel = me;
             }
-            
+
             inheritedState.viewModel = viewModel;
         }
 
@@ -369,7 +369,7 @@ Ext.define('Ext.mixin.Bindable', {
             if (!session.isSession) {
                 session = me;
             }
-            
+
             inheritedState.session = session;
         }
 
@@ -417,10 +417,10 @@ Ext.define('Ext.mixin.Bindable', {
     lookupSession: function(skipThis) {
         // See lookupViewModel
         var ret = skipThis ? null : this.getSession(); // may be the initGetter!
-        
+
         if (!ret) {
             ret = this.getInheritedConfig('session', skipThis);
-            
+
             if (ret && !ret.isSession) {
                 ret = ret.getInherited().session = ret.getSession();
             }
@@ -442,7 +442,7 @@ Ext.define('Ext.mixin.Bindable', {
 
         if (!ret) {
             ret = this.getInheritedConfig('viewModel', skipThis);
-            
+
             // If what we get back is a component, it means the component was configured
             // with a view model, however the construction of it has been delayed until
             // we need it. As such, go and construct it and store it on the inherited state.
@@ -508,7 +508,7 @@ Ext.define('Ext.mixin.Bindable', {
         }
 
         state = state || (me.publishedState = {});
-        
+
         if (property) {
             if (!publishes[property]) {
                 return;
@@ -521,7 +521,7 @@ Ext.define('Ext.mixin.Bindable', {
                     return;
                 }
             }
-            
+
             path += '.';
             path += property;
         }
@@ -534,7 +534,7 @@ Ext.define('Ext.mixin.Bindable', {
             if (!count) { // if (no properties were put in "state")
                 return;
             }
-            
+
             value = state;
         }
 
@@ -555,7 +555,7 @@ Ext.define('Ext.mixin.Bindable', {
             if (!binds) {
                 return currentBindings;
             }
-            
+
             // eslint-disable-next-line vars-on-top
             var me = this,
                 viewModel = me.lookupViewModel(),
@@ -626,11 +626,11 @@ Ext.define('Ext.mixin.Bindable', {
                 controller = Ext.Factory.controller(controller);
                 controller.setView(this);
             }
-            
+
             // In classic, this is a no-op, in modern it will
             // save a local reference
             this.controller = controller;
-            
+
             return controller;
         },
 
@@ -663,7 +663,7 @@ Ext.define('Ext.mixin.Bindable', {
          */
         applySession: function(session) {
             var parentSession, config;
-            
+
             if (!session) {
                 return null;
             }
@@ -710,7 +710,7 @@ Ext.define('Ext.mixin.Bindable', {
                 };
 
                 config.session = me.getSession();
-                
+
                 if (!session && !config.parent) {
                     config.session = me.lookupSession();
                 }
@@ -726,7 +726,7 @@ Ext.define('Ext.mixin.Bindable', {
 
                 viewModel = Ext.Factory.viewModel(config);
             }
-            
+
             return viewModel;
         },
 
@@ -751,10 +751,10 @@ Ext.define('Ext.mixin.Bindable', {
                 if (session.getAutoDestroy()) {
                     session.destroy();
                 }
-                
+
                 me.setSession(null);
             }
-            
+
             if (controller) {
                 me.setController(null);
                 controller.destroy();
@@ -811,18 +811,18 @@ Ext.define('Ext.mixin.Bindable', {
 
             if (bindings) {
                 binding = bindings[name];
-                
+
                 if (binding) {
                     ret = binding.syncing > 0;
                 }
             }
-            
+
             return ret;
         },
 
         notifyIf: function(skipThis) {
             var vm = this.lookupViewModel(skipThis);
-            
+
             if (vm) {
                 vm.notify();
             }
@@ -856,7 +856,7 @@ Ext.define('Ext.mixin.Bindable', {
                 }
             }
         },
-        
+
         /**
          * Updates the session config.
          * @param {Ext.data.Session} session
@@ -888,7 +888,7 @@ Ext.define('Ext.mixin.Bindable', {
                 me.hasVM = true;
                 state.viewModel = viewModel;
                 viewModel.setView(me);
-                
+
                 if (controller) {
                     controller.initViewModel(viewModel);
                 }
@@ -896,7 +896,7 @@ Ext.define('Ext.mixin.Bindable', {
             else {
                 delete state.viewModel;
             }
-            
+
             // In classic, this is a no-op, in modern it will
             // save a local reference
             me.viewModel = viewModel;

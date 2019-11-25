@@ -23,7 +23,7 @@ Ext.define('Ext.picker.Color', {
     requires: 'Ext.XTemplate',
     alias: 'widget.colorpicker',
     alternateClassName: 'Ext.ColorPalette',
-    
+
     focusable: true,
 
     /**
@@ -115,7 +115,7 @@ Ext.define('Ext.picker.Color', {
      */
 
     colorRe: /(?:^|\s)color-(.{6})(?:\s|$)/,
-    
+
     /* eslint-disable indent, max-len */
     renderTpl: [
         '<tpl for="colors">',
@@ -145,7 +145,6 @@ Ext.define('Ext.picker.Color', {
             me.on('select', me.handler, me.scope, true);
         }
     },
-
 
     /**
      * @private
@@ -223,7 +222,6 @@ Ext.define('Ext.picker.Color', {
             return;
         }
 
-
         if (color !== value || me.allowReselect) {
             el = me.el;
 
@@ -241,7 +239,7 @@ Ext.define('Ext.picker.Color', {
             }
         }
     },
-    
+
     /**
      * Clears any selection and sets the value to `null`.
      */
@@ -249,7 +247,7 @@ Ext.define('Ext.picker.Color', {
         var me = this,
             value = me.value,
             el;
-            
+
         if (value && me.rendered) {
             el = me.el.down('a.color-' + value, true);
             Ext.fly(el).removeCls(me.selectedCls);

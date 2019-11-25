@@ -31,7 +31,7 @@ Ext.define('Ext.overrides.list.TreeItem', {
                 wasExpanded = me.wasExpanded;
                 node = me.getNode();
                 me.setExpanded(wasExpanded);
-                
+
                 if (!wasExpanded && node.isExpanded()) {
                     // If we have been floating and expanded a child, we may have been
                     // expanded as part of the ancestors. Attempt to restore state.
@@ -39,7 +39,7 @@ Ext.define('Ext.overrides.list.TreeItem', {
                     node.collapse();
                     me.preventAnimation = false;
                 }
-                
+
                 me.floater.remove(me, false); // don't destroy
                 el.removeCls(me.floatedCls);
                 placeholder.dom.parentNode.insertBefore(el.dom, placeholder.dom);

@@ -1,10 +1,10 @@
 topSuite("Ext.data.validator.Validator", ['Ext.data.validator.*', 'Ext.data.Model'], function() {
     var v;
-    
+
     afterEach(function() {
         v = null;
     });
-    
+
     describe("construction", function() {
         it("should accept a function to be the validate method", function() {
             var fn = function() {};
@@ -13,14 +13,14 @@ topSuite("Ext.data.validator.Validator", ['Ext.data.validator.*', 'Ext.data.Mode
             expect(v.validate).toBe(fn);
         });
     });
-    
+
     describe("validate", function() {
         it("should return true", function() {
             v = new Ext.data.validator.Validator();
             expect(v.validate()).toBe(true);
         });
     });
-    
+
     describe("factory", function() {
         var factory = function(type, cfg) {
             if (cfg) {
@@ -33,7 +33,7 @@ topSuite("Ext.data.validator.Validator", ['Ext.data.validator.*', 'Ext.data.Mode
             }
         },
             validator;
-        
+
         it("should create a length validator", function() {
             validator = factory('length');
             expect(validator instanceof Ext.data.validator.Length).toBe(true);
@@ -41,28 +41,28 @@ topSuite("Ext.data.validator.Validator", ['Ext.data.validator.*', 'Ext.data.Mode
         it("should cache default length validators", function() {
             expect(factory('length')).toBe(validator);
         });
-        
+
         it("should create a presence validator", function() {
             expect((validator = factory('presence')) instanceof Ext.data.validator.Presence).toBe(true);
         });
         it("should cache default presence validators", function() {
             expect(factory('presence')).toBe(validator);
         });
-        
+
         it("should create an email validator", function() {
             expect((validator = factory('email')) instanceof Ext.data.validator.Email).toBe(true);
         });
         it("should cache default email validators", function() {
             expect(factory('email')).toBe(validator);
         });
-        
+
         it("should create a CIDRv4 validator", function() {
             expect((validator = factory('cidrv4')) instanceof Ext.data.validator.CIDRv4).toBe(true);
         });
         it("should cache default CIDRv4 validators", function() {
             expect(factory('cidrv4')).toBe(validator);
         });
-        
+
         it("should create a CIDRv6 validator", function() {
             expect((validator = factory('cidrv6')) instanceof Ext.data.validator.CIDRv6).toBe(true);
         });
@@ -135,19 +135,19 @@ topSuite("Ext.data.validator.Validator", ['Ext.data.validator.*', 'Ext.data.Mode
                 matcher: /foo/
             }) instanceof Ext.data.validator.Format).toBe(true);
         });
-        
+
         it("should create an inclusion validator", function() {
             expect(factory('inclusion', {
                 list: []
             }) instanceof Ext.data.validator.Inclusion).toBe(true);
         });
-        
+
         it("should create an exclusion validator", function() {
             expect(factory('exclusion', {
                 list: []
             }) instanceof Ext.data.validator.Exclusion).toBe(true);
         });
-        
+
         it("should default to base", function() {
             expect(factory('') instanceof Ext.data.validator.Validator).toBe(true);
         });
@@ -191,7 +191,7 @@ topSuite("Ext.data.validator.Validator", ['Ext.data.validator.*', 'Ext.data.Mode
             record = new Model({
                 test: 'Foo'
             });
-            
+
             record.isValid();
 
             expect(validator.validate).toHaveBeenCalled();

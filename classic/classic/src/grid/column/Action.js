@@ -72,14 +72,14 @@ Ext.define('Ext.grid.column.Action', {
      * @cfg [icon=Ext#BLANK_IMAGE_URL]
      * @inheritdoc Ext.panel.Header#cfg-icon
      */
-    
+
     /**
      * @cfg iconCls
      * @inheritdoc Ext.panel.Header#cfg-iconCls
      * @localdoc **Note:** To determine the class dynamically, configure the Column with
      * a `{@link #getClass}` function.
      */
-    
+
     /**
      * @cfg {Function/String} handler
      * A function called when the icon is clicked.  The handler function is passed the
@@ -94,7 +94,7 @@ Ext.define('Ext.grid.column.Action', {
      * @param {HTMLElement} row The table row clicked upon
      * @controllable
      */
-    
+
     /**
      * @cfg {Object} scope
      * The scope (`this` reference) in which the `{@link #handler}`, 
@@ -102,7 +102,7 @@ Ext.define('Ext.grid.column.Action', {
      * are executed.
      * Defaults to this Column.
      */
-    
+
     /**
      * @cfg {String} tooltip
      * A tooltip message to be displayed on hover.
@@ -111,7 +111,7 @@ Ext.define('Ext.grid.column.Action', {
      * The tooltip may also be determined on a row by row basis by configuring a
      * {@link #getTip} method.
      */
-    
+
     /**
      * @cfg {Boolean} disabled
      * If true, the action will not respond to click events, and will be displayed semi-opaque.
@@ -119,7 +119,7 @@ Ext.define('Ext.grid.column.Action', {
      * This Column may also be disabled on a row by row basis by configuring a
      * {@link #cfg-isActionDisabled} method.
      */
-    
+
     /**
      * @cfg {Boolean} stopSelection
      * Prevent grid selection upon click.
@@ -129,7 +129,7 @@ Ext.define('Ext.grid.column.Action', {
      * contain a focused component.
      */
     stopSelection: true,
-    
+
     /**
      * @cfg {Function} getClass
      * A function which returns the CSS class to apply to the icon image.
@@ -149,7 +149,7 @@ Ext.define('Ext.grid.column.Action', {
      *
      * @controllable
      */
-    
+
     /**
      * @cfg {Function} isDisabled A function which determines whether the action item for any row
      * is disabled and returns `true` or `false`.
@@ -158,7 +158,7 @@ Ext.define('Ext.grid.column.Action', {
      *
      * @controllable
      */
-    
+
     /**
      * @cfg {Function} isActionDisabled A function which determines whether the action
      * item for any row is disabled and returns `true` or `false`.
@@ -174,7 +174,7 @@ Ext.define('Ext.grid.column.Action', {
      *
      * @controllable
      */
-    
+
     /**
      * @cfg {Function} getTip A function which returns the tooltip string for any row.
      * 
@@ -253,7 +253,7 @@ Ext.define('Ext.grid.column.Action', {
      *
      * @controllable
      */
-    
+
     /**
      * @cfg {Object[]} items
      * An Array which may contain multiple icon definitions, each element of which may contain:
@@ -334,14 +334,14 @@ Ext.define('Ext.grid.column.Action', {
      * This item may also be disabled on a row by row basis by configuring an `isActionDisabled`
      * method.
      */
-    
+
     /**
      * @property {Array} items
      * An array of action items copied from the configured {@link #cfg-items items} configuration.
      * Each will have an `enable` and `disable` method added which will enable and disable
      * the associated action, and update the displayed icon accordingly.
      */
-    
+
     actionIdRe: new RegExp(Ext.baseCSSPrefix + 'action-col-(\\d+)'),
 
     /**
@@ -356,13 +356,13 @@ Ext.define('Ext.grid.column.Action', {
      * not specified, menuText will display {@link #text text's} value.
      */
     menuText: '<i>Actions</i>',
-    
+
     /**
      * @cfg {Number} itemTabIndex
      * Default tabIndex attribute value for each action item.
      */
     itemTabIndex: 0,
-    
+
     /**
      * @cfg {String} itemAriaRole
      * Default ARIA role for each action item.
@@ -419,11 +419,11 @@ Ext.define('Ext.grid.column.Action', {
             Ext.log.warn('[Ext.grid.column.Action] The isDisabled config is deprecated. ' +
                       'Use isActionDisabled to avoid conflict with Ext.Component#isDisabled().');
             //</debug>
-            
+
             me.isActionDisabled = me.isDisabled;
             delete me.isDisabled;
         }
-        
+
         // Items is an array property of ActionColumns
         me.items = items;
 
@@ -440,7 +440,7 @@ Ext.define('Ext.grid.column.Action', {
                 Ext.log.warn('[Ext.grid.column.Action] The isDisabled config is deprecated. ' +
                       'Use isActionDisabled to avoid conflict with Ext.Component#isDisabled().');
                 //</debug>
-                
+
                 item.isActionDisabled = item.isDisabled;
                 delete item.isDisabled;
             }
@@ -531,7 +531,7 @@ Ext.define('Ext.grid.column.Action', {
                 (tooltip ? ' data-qtip="' + Ext.util.Format.htmlEncode(tooltip) + '"' : '') + (icon ? '/>' : glyph ? (' style="font-family:' + glyph.fontFamily + '">' + glyph.character + '</div>') : '></div>');
         }
         /* eslint-enable max-len */
-        
+
         return ret;
     },
 
@@ -594,7 +594,7 @@ Ext.define('Ext.grid.column.Action', {
         // Action column items property is an array, unlike the normal Container's MixedCollection.
         // If we don't null it here, parent doDestroy() can blow up.
         this.renderer = this.items = null;
-        
+
         return this.callParent();
     },
 
@@ -635,7 +635,7 @@ Ext.define('Ext.grid.column.Action', {
         // NOTE: The statement below tests the truthiness of an assignment.
         if (target && (match = target.className.match(me.actionIdRe))) {
             item = me.items[parseInt(match[1], 10)];
-            
+
             // eslint-disable-next-line max-len
             disabled = item.disabled || (item.isActionDisabled ? Ext.callback(item.isActionDisabled, item.scope || me.origScope, [view, recordIndex, cellIndex, item, record], 0, me) : false);
 

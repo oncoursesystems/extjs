@@ -33,7 +33,7 @@ Ext.define('Ext.data.Types', {
         STRING: {
             convert: function(v) {
                 var defaultValue = this.getAllowNull() ? null : '';
-                
+
                 return (v === undefined || v === null) ? defaultValue : String(v);
             },
             sortType: SortTypes.asUCString,
@@ -55,7 +55,7 @@ Ext.define('Ext.data.Types', {
                 if (typeof v === 'number') {
                     return parseInt(v, 10);
                 }
-                
+
                 return v !== undefined && v !== null && v !== ''
                     ? parseInt(String(v).replace(Types.stripRe, ''), 10)
                     : (this.getAllowNull() ? null : 0);
@@ -76,7 +76,7 @@ Ext.define('Ext.data.Types', {
                 if (typeof v === 'number') {
                     return v;
                 }
-                
+
                 return v !== undefined && v !== null && v !== ''
                     ? parseFloat(String(v).replace(Types.stripRe, ''), 10)
                     : (this.getAllowNull() ? null : 0);
@@ -97,11 +97,11 @@ Ext.define('Ext.data.Types', {
                 if (typeof v === 'boolean') {
                     return v;
                 }
-                
+
                 if (this.getAllowNull() && (v === undefined || v === null || v === '')) {
                     return null;
                 }
-                
+
                 return v === 'true' || v == 1; // eslint-disable-line eqeqeq
             },
             sortType: SortTypes.none,
@@ -122,19 +122,19 @@ Ext.define('Ext.data.Types', {
                 if (!v) {
                     return null;
                 }
-                
+
                 // instanceof check ~10 times faster than Ext.isDate. Values here will not
                 // be cross-document objects
                 if (v instanceof Date) {
                     return v;
                 }
-                
+
                 if (df) {
                     return Ext.Date.parse(v, df);
                 }
 
                 parsed = Date.parse(v);
-                
+
                 return parsed ? new Date(parsed) : null;
             },
             sortType: SortTypes.asDate,

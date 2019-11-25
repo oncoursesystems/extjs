@@ -93,10 +93,10 @@ Ext.define('Ext.data.field.Date', {
         var lhsIsDate = lhs instanceof Date,
             rhsIsDate = rhs instanceof Date,
             result;
-            
+
         if (rhsIsDate && lhsIsDate) {
             result = lhs.getTime() - rhs.getTime();
-            
+
             if (result === 0) {
                 result = 0;
             }
@@ -110,7 +110,7 @@ Ext.define('Ext.data.field.Date', {
         else {
             result = lhsIsDate ? 1 : -1;
         }
-        
+
         return result;
     },
 
@@ -134,7 +134,7 @@ Ext.define('Ext.data.field.Date', {
         }
 
         parsed = Date.parse(v);
-        
+
         return parsed ? new Date(parsed) : null;
     },
 
@@ -149,7 +149,7 @@ Ext.define('Ext.data.field.Date', {
 
         return result;
     },
-    
+
     /**
      * Gets the dateFormat for this field. See {@link #dateFormat}.
      * @return {String} dateFormat
@@ -157,7 +157,7 @@ Ext.define('Ext.data.field.Date', {
     getDateFormat: function() {
         return this.dateFormat;
     },
-    
+
     /**
      * Gets the dateReadFormat for this field. See {@link #dateReadFormat}.
      * @return {String} dateReadFormat
@@ -165,7 +165,7 @@ Ext.define('Ext.data.field.Date', {
     getDateReadFormat: function() {
         return this.dateReadFormat;
     },
-    
+
     /**
      * Gets the dateWriteFormat for this field. See {@link #dateWriteFormat}.
      * @return {String} dateWriteFormat
@@ -183,7 +183,7 @@ Ext.define('Ext.data.field.Date', {
 
         return me.dateWriteFormat || me.dateFormat || 'timestamp';
     },
-    
+
     getType: function() {
         return 'date';
     }

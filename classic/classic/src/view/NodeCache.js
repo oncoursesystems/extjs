@@ -11,7 +11,7 @@ Ext.define('Ext.view.NodeCache', {
     requires: [
         'Ext.dom.CompositeElementLite'
     ],
-    
+
     statics: {
         range: document.createRange && document.createRange()
     },
@@ -21,16 +21,16 @@ Ext.define('Ext.view.NodeCache', {
         this.clear();
         this.el = new Ext.dom.Fly();
     },
-    
+
     destroy: function() {
         var me = this;
-        
+
         if (!me.destroyed) {
             me.el.destroy();
             me.el = me.view = null;
             me.destroyed = true;
         }
-        
+
         me.callParent();
     },
 
@@ -77,7 +77,7 @@ Ext.define('Ext.view.NodeCache', {
             i, len;
 
         fixedNodes = fixedNodes || 0;
-        
+
         if (!startIndex) {
             startIndex = 0;
         }
@@ -314,7 +314,7 @@ Ext.define('Ext.view.NodeCache', {
             Ext.removeNode(el);
             delete elements[i];
         }
-        
+
         me.count -= removeCount;
         me.view.fireItemMutationEvent(
             'itemremove', me.view.dataSource.getRange(start, end), start, removed, me.view
@@ -487,11 +487,11 @@ Ext.define('Ext.view.NodeCache', {
                     for (i = removeStart; i <= me.endIndex; i++) {
                         el = elements[i];
                         delete elements[i];
-                        
+
                         removedRecords.push(
                             store.getByInternalId(el.getAttribute('data-recordId'))
                         );
-                        
+
                         removedItems.push(el);
                     }
                 }
@@ -500,19 +500,19 @@ Ext.define('Ext.view.NodeCache', {
                         el = elements[i];
                         delete elements[i];
                         Ext.removeNode(el);
-                        
+
                         removedRecords.push(
                             store.getByInternalId(el.getAttribute('data-recordId'))
                         );
-                        
+
                         removedItems.push(el);
                     }
                 }
-                
+
                 view.fireItemMutationEvent(
                     'itemremove', removedRecords, removeStart, removedItems, view
                 );
-                
+
                 me.endIndex -= removeCount;
             }
 
@@ -550,11 +550,11 @@ Ext.define('Ext.view.NodeCache', {
                     for (i = me.startIndex; i < removeEnd; i++) {
                         el = elements[i];
                         delete elements[i];
-                        
+
                         removedRecords.push(
                             store.getByInternalId(el.getAttribute('data-recordId'))
                         );
-                        
+
                         removedItems.push(el);
                     }
                 }
@@ -563,19 +563,19 @@ Ext.define('Ext.view.NodeCache', {
                         el = elements[i];
                         delete elements[i];
                         Ext.removeNode(el);
-                        
+
                         removedRecords.push(
                             store.getByInternalId(el.getAttribute('data-recordId'))
                         );
-                        
+
                         removedItems.push(el);
                     }
                 }
-                
+
                 view.fireItemMutationEvent(
                     'itemremove', removedRecords, me.startIndex, removedItems, view
                 );
-                
+
                 me.startIndex = removeEnd;
             }
 

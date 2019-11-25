@@ -168,7 +168,7 @@ Ext.Config.prototype = {
     getGetter: function() {
         return this.getter || (this.root.getter = this.makeGetter());
     },
-    
+
     getInitGetter: function() {
         return this.initGetter || (this.root.initGetter = this.makeInitGetter());
     },
@@ -209,7 +209,7 @@ Ext.Config.prototype = {
                 }
             }
         }
-        
+
         return ret;
     },
 
@@ -240,7 +240,7 @@ Ext.Config.prototype = {
         if (newValue instanceof Array) {
             for (i = newValue.length; i--;) {
                 val = newValue[i];
-                
+
                 if (!preserveExisting || !(val in ret)) {
                     ret[val] = true;
                 }
@@ -250,7 +250,7 @@ Ext.Config.prototype = {
             if (newValue.constructor === Object) {
                 for (i in newValue) {
                     val = newValue[i];
-                    
+
                     if (!preserveExisting || !(i in ret)) {
                         ret[i] = val;
                     }
@@ -273,7 +273,7 @@ Ext.Config.prototype = {
 
         return function() {
             var internalName = this.$configPrefixed ? prefixedName : name;
-            
+
             return this[internalName];
         };
     },
@@ -357,7 +357,7 @@ Ext.Config.prototype = {
             changeEventName = names.changeEvent,
             updateFn = function(me, value, oldValue, internalName) {
                 me[internalName] = value;
-                
+
                 if (me[updateName]) {
                     me[updateName](value, oldValue);
                 }

@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.tree.TwoTrees', {
 
     //<example>
     //</example>
-    
+
     height: 300,
     width: 550,
 

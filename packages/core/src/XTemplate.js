@@ -352,7 +352,7 @@ Ext.define('Ext.XTemplate', {
 
     apply: function(values, parent, xindex, xcount) {
         var buffer = this.applyOut(values, [], parent, xindex, xcount);
-        
+
         // If only one token, return it as its uncoerced data type.
         // This will allow things like ObjectTemplate to use
         // formatters on non-string values.
@@ -375,7 +375,7 @@ Ext.define('Ext.XTemplate', {
 
         // xindex is 1-based, so 0 is impossible
         xindex = xindex || 1;
-        
+
         // likewise, this tpl exists in the parent, so xcount==0 is not possible
         xcount = xcount || 1;
 
@@ -479,7 +479,7 @@ Ext.define('Ext.XTemplate', {
                         for (owner = instance.self.prototype; owner && !owner.hasOwnProperty(name); owner = owner.superclass) {
                         }
                     }
-                    
+
                     owner[name] = tpl;
                     tpl.owner = owner;
                 }

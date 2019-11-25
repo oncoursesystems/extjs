@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.buttons.Extra', {
         'Ext.Button'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'ViewModel',
         path: 'modern/src/view/buttons/ExtraModel.js'
@@ -61,7 +61,7 @@ Ext.define('KitchenSink.view.buttons.Extra', {
     cls: 'demo-buttons-extra',
     padding: '${padding}',
     shadow: false,
-    // </example>
+    //</example>
 
     scrollable: 'y',
     width: '${width}',
@@ -75,7 +75,7 @@ Ext.define('KitchenSink.view.buttons.Extra', {
         cls: 'demo-solid-background',
         shadow: '${shadow}',
         defaults: {
-            flex: '1 1 auto', //this allows auto-height in vbox
+            flex: '1 1 auto', // this allows auto-height in vbox
             margin: '${stripMargins}',
             layout: {
                 type: '${layout}'

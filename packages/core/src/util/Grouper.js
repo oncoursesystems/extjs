@@ -54,15 +54,15 @@ Ext.define('Ext.util.Grouper', {
      * @return {String}
      */
     getGroupString: function(item) {
-        var group = this._groupFn(item);
+        var group = item.$collapsedGroupPlaceholder ? item.$groupKey : this._groupFn(item);
 
         return (group != null) ? String(group) : '';
     },
 
     sortFn: function(item1, item2) {
         var me = this,
-            lhs = me._groupFn(item1),
-            rhs = me._groupFn(item2),
+            lhs = me.getGroupString(item1),
+            rhs = me.getGroupString(item2),
             property = me._sortProperty, // Sorter's sortFn uses "_property"
             root = me._root,
             sorterFn = me._sorterFn,

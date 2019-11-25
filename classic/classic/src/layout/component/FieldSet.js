@@ -7,7 +7,7 @@ Ext.define('Ext.layout.component.FieldSet', {
     alias: ['layout.fieldset'],
 
     type: 'fieldset',
-    
+
     defaultCollapsedWidth: 100,
 
     beforeLayoutCycle: function(ownerContext) {
@@ -53,11 +53,11 @@ Ext.define('Ext.layout.component.FieldSet', {
             }
         }
     },
-    
+
     finishedLayout: function(ownerContext) {
         var owner = this.owner,
             restore = ownerContext.restoreMinHeight;
-             
+
         this.callParent(arguments);
 
         if (restore) {
@@ -78,7 +78,7 @@ Ext.define('Ext.layout.component.FieldSet', {
     calculateOwnerHeightFromContentHeight: function(ownerContext, contentHeight) {
         var border = ownerContext.getBorderInfo(),
             legendContext = ownerContext.legendContext;
-            
+
         // Height of fieldset is content height plus top border width (which is either the
         // legend height or top border width) plus bottom border width
         return ownerContext.getProp('contentHeight') +

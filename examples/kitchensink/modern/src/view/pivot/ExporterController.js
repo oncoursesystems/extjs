@@ -11,29 +11,29 @@ Ext.define('KitchenSink.view.pivot.ExporterController', {
         'Ext.exporter.excel.PivotXlsx'
     ],
 
-    destroy: function () {
+    destroy: function() {
         Ext.destroy(this.menuExport);
     },
 
-    showConfigurator: function () {
+    showConfigurator: function() {
         this.lookup('pivotgrid').showConfigurator();
     },
 
-    yearLabelRenderer: function (value) {
+    yearLabelRenderer: function(value) {
         return 'Year ' + value;
     },
 
-    monthLabelRenderer: function (value) {
+    monthLabelRenderer: function(value) {
         return Ext.Date.monthNames[value];
     },
 
-    coloredRenderer: function (v, record, dataIndex, cell, column) {
-        cell.setStyle( Ext.String.format('color: {0};', v > 500 ? 'green' : 'red') );
+    coloredRenderer: function(v, record, dataIndex, cell, column) {
+        cell.setStyle(Ext.String.format('color: {0};', v > 500 ? 'green' : 'red'));
 
         return Ext.util.Format.number(v, '0,000.00');
     },
 
-    exportDocument: function (menuitem) {
+    exportDocument: function(menuitem) {
         var pivotgrid = this.lookup('pivotgrid'),
             cfg = menuitem.cfg;
 
@@ -48,18 +48,18 @@ Ext.define('KitchenSink.view.pivot.ExporterController', {
         pivotgrid.saveDocumentAs(menuitem.cfg).then(null, this.onError);
     },
 
-    onError: function (error) {
+    onError: function(error) {
         Ext.Msg.alert('Error', typeof error === 'string' ? error : 'Unknown error');
     },
 
-    onBeforeDocumentSave: function (view) {
+    onBeforeDocumentSave: function(view) {
         view.mask({
             xtype: 'loadmask',
             message: 'Document is prepared for export. Please wait ...'
         });
     },
 
-    onDocumentSave: function (view) {
+    onDocumentSave: function(view) {
         view.unmask();
     }
 });

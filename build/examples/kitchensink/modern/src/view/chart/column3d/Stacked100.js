@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.chart.column3d.Stacked100', {
     xtype: 'column-stacked-100-3d',
     controller: 'column-stacked-100-3d',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/column3d/Stacked100Controller.js'
@@ -46,9 +46,9 @@ Ext.define('KitchenSink.view.chart.column3d.Stacked100', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -118,7 +118,7 @@ Ext.define('KitchenSink.view.chart.column3d.Stacked100', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

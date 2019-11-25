@@ -3,11 +3,11 @@ topSuite("Ext.view.MultiSelector", ['Ext.data.ArrayStore'], function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         },
         Employee, multiSelector;
@@ -54,7 +54,7 @@ topSuite("Ext.view.MultiSelector", ['Ext.data.ArrayStore'], function() {
             } while (map[s = firstNames[k]]);
 
             map[s] = 1;
-            
+
             data.push({
                 id: ++sequence,
                 forename: s,
@@ -167,7 +167,7 @@ topSuite("Ext.view.MultiSelector", ['Ext.data.ArrayStore'], function() {
                     completeRequest(data[0]);
 
                     multiSelector.onShowSearch();
-                    
+
                     // Search grid's store is set to autoload, so wait for it to kick off a load
                     waitsFor(function() {
                         searchGrid = multiSelector.searchPopup.child('gridpanel');
@@ -177,7 +177,7 @@ topSuite("Ext.view.MultiSelector", ['Ext.data.ArrayStore'], function() {
                     }, 'searchStore to kick off a load');
                     runs(function() {
                         completeRequest();
-                        
+
                         expect(searchGrid.getSelectionModel().getSelection()[0].get('name')).toBe(multiSelector.store.getAt(0).get('name'));
                     });
                 });
@@ -239,12 +239,12 @@ topSuite("Ext.view.MultiSelector", ['Ext.data.ArrayStore'], function() {
                             id: 3
                         }]
                     };
-                    
+
                     makeSelector(storeCfg, searchStoreCfg);
                 });
                 it("should select the records in the searcher which match by ID the records in the selector", function() {
                     multiSelector.onShowSearch();
-                    
+
                     expect(multiSelector.down('gridpanel').selModel.getSelection()[0].get('name')).toBe(multiSelector.store.getAt(0).get('name'));
                 });
 
@@ -307,7 +307,7 @@ topSuite("Ext.view.MultiSelector", ['Ext.data.ArrayStore'], function() {
                         id: 3
                     }]
                 };
-                
+
                 makeSelector(storeCfg, searchStoreCfg);
             });
 
@@ -341,41 +341,41 @@ topSuite("Ext.view.MultiSelector", ['Ext.data.ArrayStore'], function() {
                 expect(node).not.toHaveCls('x-grid-item-selected');
             });
         });
-    
+
         describe('focus', function() {
             beforeEach(function() {
                 makeSelector();
             });
-        
+
             it('should move focus to the search field after checkbox selection and scrolling the row out of the buffer', function() {
                 var searchStore, searchGrid, searchField,
                     cell, x, y;
-            
+
                 multiSelector.onShowSearch();
-            
+
                 searchGrid = multiSelector.searchPopup.lookup('searchGrid');
                 searchField = multiSelector.searchPopup.lookup('searchField');
                 searchStore = searchGrid.store;
-            
+
                 // Search grid's store is set to autoload, so wait for it to kick off a load
                 waitsFor(function() {
                     return (searchStore instanceof Ext.data.Store) && searchStore.isLoading();
                 }, 'searchStore to kick off a load');
                 runs(function() {
                     completeRequest();
-                
+
                     cell = new Ext.grid.CellContext(searchGrid.view).setPosition(0, 0).getCell(true);
                     x = Ext.fly(cell).getX() + Ext.fly(cell).getWidth() / 2;
                     y = Ext.fly(cell).getY() + Ext.fly(cell).getHeight() / 2;
-                
+
                     jasmine.fireMouseEvent(cell, 'click', x, y);
                 });
-            
+
                 jasmine.waitsForScroll(searchGrid.getScrollable(), function(scroller, x, y) {
                     if (searchField.inputEl.dom === Ext.dom.Element.getActiveElement()) {
                         return true;
                     }
-                
+
                     scroller.scrollBy(0, 10);
                 }, 'focus to move to the Search field');
             });

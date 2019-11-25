@@ -17,7 +17,7 @@ function() {
     function stashProps(object, backup, props) {
         for (var i = props.length; i-- > 0; /* empty */) {
             var name = props[i];
-            
+
             if (name in backup) {
                 object[name] = backup[name];
             }
@@ -428,11 +428,11 @@ function() {
             expect(bar).toBe('M');
         });
     });
-    
+
     describe('use by responsive plugin', function() {
         var viewport,
             envWidth;
-        
+
         beforeEach(function() {
             env = environments.ipad.landscape;
             envWidth = env.width;
@@ -441,7 +441,7 @@ function() {
             env.width = envWidth;
             Ext.destroy(viewport);
         });
-        
+
         /**
          * This test tests reconfiguring container layouts in response to environment
          * changes.
@@ -547,7 +547,7 @@ function() {
 
             // While we're wide, buttons are in a vbox layout docked left
             expect(buttonContainer.getLayout().getVertical()).toBe(true);
-            
+
             if (Ext.isClassic) { // TODO
                 expect(buttonContainer.region).toBe('west');
                 haveText = Ext.String.trim(center.body.dom.innerText);
@@ -561,10 +561,10 @@ function() {
             // Switch to narrow width, should change the whole arrangement.
             env.width = 400;
             Responsive.notify();
-            
+
             // Now we're narrow, buttons are in a hbox layout docked top
             expect(buttonContainer.getLayout().getVertical()).toBe(false);
-            
+
             if (Ext.isClassic) {
                 expect(buttonContainer.region).toBe('north');
                 haveText = Ext.String.trim(center.body.dom.innerText);

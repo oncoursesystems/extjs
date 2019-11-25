@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
 
     //<example>
     //</example>
-    
+
     profiles: {
         classic: {
             columnWidth: 165
@@ -28,9 +28,11 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
         },
         graphite: {
             columnWidth: 185
+        },
+        'classic-material': {
+            columnWidth: 185
         }
     },
-    
 
     width: 350,
 
@@ -39,7 +41,7 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
             nowShowing: 'primary'
         }
     },
-    
+
     items: [{
         xtype: 'container',
         layout: 'hbox',
@@ -48,6 +50,7 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
         items: [{
             text: 'Primary',
             handler: 'onPrimary',
+            cls: 'btn-primary',
             bind: {
                 disabled: '{nowShowing === "primary"}'
             }
@@ -55,6 +58,7 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
             text: 'Alternate',
             margin: '0 0 0 10',
             handler: 'onAlternate',
+            cls: 'btn-primary',
             bind: {
                 disabled: '{nowShowing === "alternate"}'
             }
@@ -77,7 +81,7 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
                 version: 0.8,
                 borderWidth: 2
             },
-        
+
             config: {
                 borderWidth: {
                     displayName: 'Border Width'
@@ -87,7 +91,7 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
                 }
             }
         },
-        
+
         alternate: {
             source: {
                 firstName: 'Mike',
@@ -96,7 +100,7 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
                 color: 'Red',
                 score: null
             },
-        
+
             config: {
                 firstName: {
                     displayName: 'First Name'
@@ -116,7 +120,7 @@ Ext.define('KitchenSink.view.grid.PropertyGrid', {
                         allowBlank: false
                     },
                     renderer: 'renderColor'
-                }, 
+                },
                 score: {
                     displayName: 'Score',
                     type: 'number'

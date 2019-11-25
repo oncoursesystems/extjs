@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.gauge.NeedleGauge', {
         'Ext.ux.gauge.needle.Arrow'
     ],
 
-    // <example>
+    //<example>
     profiles: {
         defaults: {
             height: 600,
@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.gauge.NeedleGauge', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     title: 'Gauges with various kinds of needles',
     width: '${width}',
@@ -63,32 +63,32 @@ Ext.define('KitchenSink.view.gauge.NeedleGauge', {
             bind: '{liveUpdate}'
         }]
     }, {
-            xtype: 'container',
-            width: '100%',
-            flex: 1,
-            margin: '10 0 10 0',
-            layout: {
-                type: 'hbox',
-                align: 'stretch'
-            },
-            items: [
-                {
-                    xtype: 'gauge',
-                    flex: 1,
-                    bind: '{value}',
-                    valueStyle: {
-                        display: 'none'
-                    },
-                    needle: {
-                        outerRadius: '100%'
-                    }
-                }, {
-                    xtype: 'gauge',
-                    flex: 1,
-                    bind: '{value}',
-                    needle: 'wedge'
+        xtype: 'container',
+        width: '100%',
+        flex: 1,
+        margin: '10 0 10 0',
+        layout: {
+            type: 'hbox',
+            align: 'stretch'
+        },
+        items: [
+            {
+                xtype: 'gauge',
+                flex: 1,
+                bind: '{value}',
+                valueStyle: {
+                    display: 'none'
+                },
+                needle: {
+                    outerRadius: '100%'
                 }
-            ]
+            }, {
+                xtype: 'gauge',
+                flex: 1,
+                bind: '{value}',
+                needle: 'wedge'
+            }
+        ]
     }, {
         xtype: 'container',
         width: '100%',

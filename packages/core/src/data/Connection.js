@@ -515,11 +515,11 @@ Ext.define('Ext.data.Connection', {
 
         // check for xml or json data, and make sure json data is encoded
         data = options.rawData || options.binaryData || options.xmlData || jsonData || null;
-        
+
         if (jsonData && !Ext.isPrimitive(jsonData)) {
             data = Ext.encode(data);
         }
-        
+
         // Check for binary data. Transform if needed
         if (options.binaryData) {
             //<debug>
@@ -528,10 +528,10 @@ Ext.define('Ext.data.Connection', {
                              "Instead got " + typeof(options.binaryData));
             }
             //</debug>
-            
+
             if (me.nativeBinaryPostSupport()) {
                 data = (new Uint8Array(options.binaryData)); // eslint-disable-line no-undef
-                
+
                 if ((Ext.isChrome && Ext.chromeVersion < 22) || Ext.isSafari || Ext.isGecko) {
                     // send the underlying buffer, not the view, since that's not supported
                     // on versions of chrome older than 22
@@ -558,13 +558,13 @@ Ext.define('Ext.data.Connection', {
         // decide the proper method for this request
         method = (options.method || me.getMethod() ||
                   ((params || data) ? 'POST' : 'GET')).toUpperCase();
-        
+
         this.setupMethod(options, method);
 
         disableCache = options.disableCaching !== false
             ? (options.disableCaching || me.getDisableCaching())
             : false;
-        
+
         // if the method is get append date to prevent caching
         if (method === 'GET' && disableCache) {
             url = Ext.urlAppend(url, (options.disableCachingParam || me.getDisableCachingParam()) +

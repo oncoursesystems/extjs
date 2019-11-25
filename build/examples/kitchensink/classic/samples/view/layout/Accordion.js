@@ -30,13 +30,19 @@ Ext.define('KitchenSink.view.layout.Accordion', {
             height: 500,
             gainColor: '#73b51e',
             lossColor: '#cf4c35'
-        
+
         },
         graphite: {
             width: 700,
             height: 650,
             gainColor: 'unset',
             lossColor: 'unset'
+        },
+        'classic-material': {
+            width: 800,
+            height: 650,
+            gainColor: '#4caf50',
+            lossColor: '#f44336'
         }
     },
     //</example>
@@ -45,6 +51,8 @@ Ext.define('KitchenSink.view.layout.Accordion', {
     layout: 'accordion',
     width: '${width}',
     height: '${height}',
+    cls: Ext.baseCSSPrefix + 'shadow',
+
     defaults: {
         bodyPadding: 10
     },
@@ -60,33 +68,33 @@ Ext.define('KitchenSink.view.layout.Accordion', {
     }, {
         title: 'Accordion Item 2',
         tools: [
-            { iconCls: 'x-fa fa-thumb-tack' },
-            { iconCls: 'x-fa fa-thumb-tack fa-rotate-90' },
-            { iconCls: 'x-fa fa-gear' }
+            { iconCls: 'x-fa fa-thumbtack' },
+            { iconCls: 'x-fa fa-thumbtack fa-rotate-90' },
+            { iconCls: 'x-fa fa-cog' }
         ],
         html: 'Empty'
     }, {
         title: 'Accordion Item 3',
         tools: [
-            { glyph: 'xf08d@FontAwesome' },
-            { glyph: 'xf08d@FontAwesome', cls: 'fa-rotate-90' },
-            { glyph: 'xf013@FontAwesome' }
+            { glyph: 'xf08d@\'Font Awesome 5 Free\'' },
+            { glyph: 'xf08d@\'Font Awesome 5 Free\'', cls: 'fa-rotate-90' },
+            { glyph: 'xf013@\'Font Awesome 5 Free\'' }
         ],
         html: 'Empty'
     }, {
         title: 'Accordion Item 4',
         tools: [
-            { iconCls: 'x-fa fa-thumb-tack' },
-            { iconCls: 'x-fa fa-thumb-tack fa-rotate-90' },
-            { iconCls: 'x-fa fa-gear' }
+            { iconCls: 'x-fa fa-thumbtack' },
+            { iconCls: 'x-fa fa-thumbtack fa-rotate-90' },
+            { iconCls: 'x-fa fa-cog' }
         ],
         html: 'Empty'
     }, {
         title: 'Accordion Item 5',
         tools: [
-            { glyph: 'xf08d@FontAwesome' },
-            { glyph: 'xf08d@FontAwesome', cls: 'fa-rotate-90' },
-            { glyph: 'xf013@FontAwesome' }
+            { glyph: 'xf08d@\'Font Awesome 5 Free\'' },
+            { glyph: 'xf08d@\'Font Awesome 5 Free\'', cls: 'fa-rotate-90' },
+            { glyph: 'xf013@\'Font Awesome 5 Free\'' }
         ],
         html: 'Empty'
     }]

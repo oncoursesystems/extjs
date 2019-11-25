@@ -14,7 +14,7 @@ Ext.define('Ext.tree.View', {
             type: 'treemodel'
         }
     },
-    
+
     /**
      * @property {Boolean} isTreeView
      * `true` in this class to identify an object as an instantiated TreeView, or subclass thereof.
@@ -89,7 +89,7 @@ Ext.define('Ext.tree.View', {
                 // so the old values are overwritten
                 rowValues.rowAttr['data-qtip'] = record.get('qtip') || '';
                 rowValues.rowAttr['data-qtitle'] = record.get('qtitle') || '';
-                
+
                 // aria-level is 1-based
                 rowValues.rowAttr['aria-level'] = record.getDepth() + 1;
 
@@ -105,7 +105,7 @@ Ext.define('Ext.tree.View', {
                         rowValues.rowAttr['aria-expanded'] = false;
                     }
                 }
-                
+
                 if (record.isLoading()) {
                     rowValues.rowClasses.push(view.loadingCls);
                 }
@@ -184,7 +184,7 @@ Ext.define('Ext.tree.View', {
 
     refreshPartner: function() {
         var partner = this.lockingPartner;
-        
+
         if (partner) {
             partner.refresh();
         }
@@ -192,9 +192,9 @@ Ext.define('Ext.tree.View', {
 
     afterRender: function() {
         var me = this;
-		
+
         me.callParent();
-		
+
         me.el.on({
             scope: me,
             delegate: me.expanderSelector,
@@ -210,7 +210,7 @@ Ext.define('Ext.tree.View', {
         if (e.getTarget('.' + this.nodeAnimWrapCls, this.el)) {
             return false;
         }
-        
+
         return this.callParent([e]);
     },
 
@@ -220,13 +220,13 @@ Ext.define('Ext.tree.View', {
 
     getChecked: function() {
         var checked = [];
-        
+
         this.node.cascade(function(rec) {
             if (rec.get('checked')) {
                 checked.push(rec);
             }
         });
-        
+
         return checked;
     },
 
@@ -298,13 +298,13 @@ Ext.define('Ext.tree.View', {
         if (bubble !== false) {
             while (!wrap && parent) {
                 parent = parent.parentNode;
-                
+
                 if (parent) {
                     wrap = wraps[parent.internalId];
                 }
             }
         }
-        
+
         return wrap;
     },
 
@@ -369,9 +369,9 @@ Ext.define('Ext.tree.View', {
             if (me.bufferedRenderer) {
                 return me.callParent([ds, records, index]);
             }
-            
+
             oldItems = this.all.slice(index, index + records.length);
-            
+
             // Nothing left, just refresh the view.
             if (empty) {
                 me.refresh();
@@ -381,7 +381,7 @@ Ext.define('Ext.tree.View', {
                 for (i = records.length - 1, index += i; i >= 0; --i, --index) {
                     me.doRemove(records[i], index);
                 }
-                
+
                 me.refreshSizePending = true;
             }
 
@@ -494,17 +494,17 @@ Ext.define('Ext.tree.View', {
                         if (!targetEl.contains(activeEl)) {
                             activeEl = null;
                         }
-                        
+
                         animWrap.el.insertSibling(items, 'before', true);
-                        
+
                         if (activeEl) {
                             Ext.fly(activeEl).focus();
                         }
                     }
-                    
+
                     animWrap.el.destroy();
                     queue[id] = null;
-                    
+
                     if (!me.destroyed) {
                         me.animWraps[animWrap.record.internalId] = null;
                     }
@@ -604,7 +604,7 @@ Ext.define('Ext.tree.View', {
                     // In case lastframe did not fire because the animation was stopped.
                     animWrap.el.destroy();
                     queue[id] = null;
-    
+
                     if (!me.destroyed) {
                         me.animWraps[animWrap.record.internalId] = null;
                     }
@@ -713,20 +713,20 @@ Ext.define('Ext.tree.View', {
             editingPlugin = me.editingPlugin;
 
         me.callParent([record, item, index, e]);
-        
+
         if (me.toggleOnDblClick && record.isExpandable() &&
             !(editingPlugin && editingPlugin.clicksToEdit === 2)) {
             me.toggle(record);
         }
     },
-    
+
     onCellClick: function(cell, cellIndex, record, row, rowIndex, e) {
         var me = this,
             column = e.position.column;
 
         // We're only interested in clicks in the tree column
         if (column.isTreeColumn) {
-            
+
             // Click on the checkbox and there is a defined data value; toggle it.
             if (e.getTarget(me.checkboxSelector, cell) && record.get('checked') != null) {
                 me.onCheckChange(e);
@@ -759,13 +759,13 @@ Ext.define('Ext.tree.View', {
             return me.callParent([cell, cellIndex, record, row, rowIndex, e]);
         }
     },
-    
+
     onCheckChange: function(e) {
         var me = this,
             record = e.record,
             wasChecked = record.get('checked'),
             checked;
-    
+
         // 1 means semi-checked.
         // Toggle of that state checks.
         if (wasChecked === 1) {
@@ -799,7 +799,7 @@ Ext.define('Ext.tree.View', {
         if (meChecked !== 1 && progagateCheck) {
             childNodes = record.childNodes;
             len = childNodes.length;
-            
+
             for (i = 0; i < len; i++) {
 
                 // We are setting child nodes, so pass the
@@ -844,7 +844,7 @@ Ext.define('Ext.tree.View', {
                 }
                 else {
                     foundCheck = foundClear = false;
-                    
+
                     for (i = 0; !(foundCheck && foundClear) & i < len; i++) {
                         if (childNodes[i].data.checked === 1) {
                             foundCheck = foundClear = true;
@@ -856,7 +856,7 @@ Ext.define('Ext.tree.View', {
                             foundCheck = true;
                         }
                     }
-                    
+
                     parentChecked = foundCheck && foundClear
                         ? halfCheckedValue
                         : (foundCheck ? true : false);
@@ -910,7 +910,7 @@ Ext.define('Ext.tree.View', {
             me.rootListeners.destroy();
             me.rootListeners = null;
         }
-        
+
         if (newRoot) {
             me.rootListeners = newRoot.on({
                 beforeexpand: me.onBeforeExpand,
@@ -927,7 +927,7 @@ Ext.define('Ext.tree.View', {
 
     ensureSingleExpand: function(node) {
         var parent = node.parentNode;
-        
+
         if (parent) {
             parent.eachChild(function(child) {
                 if (child !== node && child.isExpanded()) {
@@ -952,14 +952,14 @@ Ext.define('Ext.tree.View', {
             if (ret) {
                 options = store.lastOptions;
                 node = options && options.node;
-                
+
                 // If the root isn't loading, then proceed with the refresh, we'll
                 // add the other nodes as they come in
                 if (node && node !== store.getRoot()) {
                     ret = false;
                 }
             }
-            
+
             return ret;
         }
     }

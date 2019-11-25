@@ -96,7 +96,7 @@ Ext.define('Ext.data.proxy.Memory', {
         var recs = operation.getRecords(),
             len = recs.length,
             i;
-            
+
         for (i = 0; i < len; i++) {
             // Because Memory proxy is synchronous, the commit must call store#afterErase
             recs[i].dropped = !!operation.isDestroyOperation;
@@ -105,7 +105,7 @@ Ext.define('Ext.data.proxy.Memory', {
 
         operation.setSuccessful(true);
     },
-    
+
     /**
      * Currently this is a hard-coded method that simply commits any records and sets the operation
      * to successful, then calls the callback function, if provided. It is essentially mocking
@@ -117,7 +117,7 @@ Ext.define('Ext.data.proxy.Memory', {
     create: function(operation) {
         this.finishOperation(operation);
     },
-    
+
     /**
      * Currently this is a hard-coded method that simply commits any records and sets the operation
      * to successful, then calls the callback function, if provided. It is essentially mocking
@@ -129,7 +129,7 @@ Ext.define('Ext.data.proxy.Memory', {
     update: function(operation) {
         this.finishOperation(operation);
     },
-    
+
     /**
      * Currently this is a hard-coded method that simply commits any records and sets the operation
      * to successful, then calls the callback function, if provided. It is essentially mocking
@@ -212,7 +212,7 @@ Ext.define('Ext.data.proxy.Memory', {
             // This will fire the 'metachange' event which the Store processes to fire its own
             // 'metachange'
             meta = resultSet.getMetadata();
-            
+
             if (meta) {
                 me.onMetaChange(meta);
             }

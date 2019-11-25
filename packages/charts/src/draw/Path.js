@@ -1114,7 +1114,7 @@ Ext.define('Ext.draw.Path', {
      */
     interpolate: function(a, b, c, d, t) {
         var rate;
-        
+
         if (t === 0) {
             return a;
         }

@@ -39,7 +39,7 @@ Ext.define('KitchenSink.view.grid.advanced.ReconfigureGrid', {
         }
     },
 
-    padding: '${padding}', //give room for the grid's shadow
+    padding: '${padding}', // give room for the grid's shadow
     shadow: false,
     //</example>
 

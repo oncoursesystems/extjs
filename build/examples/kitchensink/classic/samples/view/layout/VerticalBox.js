@@ -25,17 +25,23 @@ Ext.define('KitchenSink.view.layout.VerticalBox', {
             panel1Flex: 2,
             panelHeight: 110,
             panel2Flex: 3
+        },
+        'classic-material': {
+            panel1Flex: 2,
+            panelHeight: 110,
+            panel2Flex: 3
         }
     },
     width: 500,
     height: 400,
-    
+    cls: Ext.baseCSSPrefix + 'shadow',
+
     layout: {
         type: 'vbox',
         pack: 'start',
         align: 'stretch'
     },
-    
+
     bodyPadding: 10,
 
     defaults: {

@@ -149,7 +149,10 @@ Ext.define('Ext.draw.sprite.Line', {
             // If it is, we need to re-apply transformations.
             // But the bounding box should always be rendered as is, untransformed.
             this.attr.inverseMatrix.toContext(ctx);
-            debug.bbox && this.renderBBox(surface, ctx);
+
+            if (debug.bbox) {
+                this.renderBBox(surface, ctx);
+            }
         }
         //</debug>
     }

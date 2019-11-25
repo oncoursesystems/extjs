@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.chart.drawing.CompositeController', {
 
     animate: false,
 
-    onShow: function () {
+    onShow: function() {
         var me = this,
             size = me.getView().getSize(),
             draw = me.lookup('draw'),
@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.chart.drawing.CompositeController', {
         surface.renderFrame();
     },
 
-    onMouseDown: function (e) {
+    onMouseDown: function(e) {
         var draw = this.lookup('draw'),
             surface = draw.getSurface(),
             sprite = surface.get('protractor'),
@@ -26,16 +26,18 @@ Ext.define('KitchenSink.view.chart.drawing.CompositeController', {
                 toX: xy[0],
                 toY: xy[1]
             });
-        } else {
+        }
+        else {
             sprite.setAttributes({
                 fromX: xy[0],
                 fromY: xy[1]
             });
         }
+
         surface.renderFrame();
     },
 
-    onMouseMove: function (e) {
+    onMouseMove: function(e) {
         var draw = this.lookup('draw'),
             surface = draw.getSurface(),
             xy = surface.getEventXY(e);
@@ -49,16 +51,16 @@ Ext.define('KitchenSink.view.chart.drawing.CompositeController', {
         }
     },
 
-    resetSprite: function (sprite, size) {
+    resetSprite: function(sprite, size) {
         sprite.setAttributes({
             fromX: size.width / 2,
             fromY: size.height / 2,
-            toX: size.width - size.width * .1,
-            toY: size.height * .1
+            toX: size.width - size.width * 0.1,
+            toY: size.height * 0.1
         });
     },
 
-    onToggle: function (segmentedButton, button, pressed) {
+    onToggle: function(segmentedButton, button, pressed) {
         var me = this,
             size = me.getView().getSize(),
             draw = me.lookup('draw'),

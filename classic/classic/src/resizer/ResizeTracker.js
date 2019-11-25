@@ -4,7 +4,7 @@
  */
 Ext.define('Ext.resizer.ResizeTracker', {
     extend: 'Ext.dd.DragTracker',
-    
+
     dynamic: true,
     preserveRatio: false,
 
@@ -13,7 +13,7 @@ Ext.define('Ext.resizer.ResizeTracker', {
 
     // Default to no constraint
     constrainTo: null,
-    
+
     proxyCls: Ext.baseCSSPrefix + 'resizable-proxy',
 
     constructor: function(config) {

@@ -18,7 +18,7 @@ Ext.define('Ext.ux.DataView.DragSelector', {
             //<debug>
             Ext.log.warn('DragSelector not available on PointerEvent devices');
             //</debug>
-            
+
             return;
         }
 
@@ -28,7 +28,7 @@ Ext.define('Ext.ux.DataView.DragSelector', {
          * The DataView bound to this instance
          */
         this.dataview = dataview;
-        
+
         dataview.mon(dataview, {
             beforecontainerclick: this.cancelClick,
             scope: this,

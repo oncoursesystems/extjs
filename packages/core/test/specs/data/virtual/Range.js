@@ -9,18 +9,18 @@ topSuite("Ext.data.virtual.Range", [
     var Model = Ext.define(null, {
         extend: 'Ext.data.Model'
     });
-    
+
     beforeAll(function() {
         Ext.data.operation.Operation.prototype.clearPrototypeOnDestroy = false;
         Ext.data.operation.Operation.prototype.clearPropertiesOnDestroy = false;
-        
+
         // Stack capture is expensive
         oldJasmineCaptureStack = jasmine.CAPTURE_CALL_STACK;
         oldTimerCaptureStack = Ext.Timer.captureStack;
         jasmine.CAPTURE_CALL_STACK = false;
         Ext.Timer.captureStack = false;
     });
-    
+
     afterAll(function() {
         delete Ext.data.operation.Operation.prototype.clearPrototypeOnDestroy;
         delete Ext.data.operation.Operation.prototype.clearPropertiesOnDestroy;
@@ -132,7 +132,7 @@ topSuite("Ext.data.virtual.Range", [
                 break;
             }
         }
-        
+
         expect(pass).toBe(true);
     }
 
@@ -147,7 +147,7 @@ topSuite("Ext.data.virtual.Range", [
                 break;
             }
         }
-        
+
         expect(pass).toBe(true);
     }
 
@@ -2115,6 +2115,21 @@ topSuite("Ext.data.virtual.Range", [
                     range.goto(0, 9);
                 }).not.toThrow();
             });
+
+            it('should not throw TypeError: Cannot read property internalId of null', function() {
+               makeRange();
+               range.goto(100, 200);
+               flushNextLoad();
+
+               expect(function() {
+                   pageMap.indexOf(range.records[100]);
+               }).not.toThrow();
+
+               expect(function() {
+                   pageMap.indexOf(range.records[200]);
+               }).not.toThrow();
+
+           });
         });
     });
 });

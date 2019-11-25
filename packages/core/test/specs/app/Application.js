@@ -14,14 +14,14 @@ topSuite('Ext.app.Application', function() {
             var me = this,
                 hashRe = me.hashRe,
                 loc = me.win.location;
-    
+
             // may or may not already be prefixed with # or #! already
             hash = hash.replace(hashRe, me.hashbang ? '#!' : '#');
-            
+
             // need to make sure currentToken is not prefixed
             me.currentToken = hash.replace(hashRe, '');
         });
-        
+
         this.addMatchers({
             toBeFunction: function(expected) {
                 var actual = this.actual;

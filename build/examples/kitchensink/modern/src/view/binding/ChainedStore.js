@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.binding.ChainedStore', {
         type: 'binding-chainedstore'
     },
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'ViewModel',
         path: 'modern/src/view/binding/ChainedStoreModel.js'
@@ -29,7 +29,7 @@ Ext.define('KitchenSink.view.binding.ChainedStore', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     height: '${height}',
     referenceHolder: true,

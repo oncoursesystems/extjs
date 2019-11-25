@@ -277,7 +277,7 @@ Ext.define('Ext.util.Format', function() {
             }
 
             value = me.number(value, format);
-            
+
             if (currencySpacer == null) {
                 currencySpacer = me.currencySpacer;
             }
@@ -408,7 +408,7 @@ Ext.define('Ext.util.Format', function() {
          */
         pick: function(value, firstValue, secondValue) {
             var ret;
-            
+
             if (Ext.isNumber(value)) {
                 ret = arguments[value + 1];
 
@@ -498,7 +498,7 @@ Ext.define('Ext.util.Format', function() {
             var byteLimit = 1024,
                 kbLimit = 1048576,
                 mbLimit = 1073741824;
-                
+
             return function(size) {
                 var out;
 
@@ -612,7 +612,7 @@ Ext.define('Ext.util.Format', function() {
          */
         number: function(v, formatString) {
             var formatFn;
-            
+
             if (!formatString) {
                 return v;
             }
@@ -620,7 +620,7 @@ Ext.define('Ext.util.Format', function() {
             if (isNaN(v)) {
                 return '';
             }
-            
+
             formatFn = me.formatFns[formatString];
 
             // Generate formatting function to be cached and reused keyed by the format string.
@@ -689,7 +689,7 @@ Ext.define('Ext.util.Format', function() {
                         trimPart = 'trailingZeroes=new RegExp(Ext.String.escapeRegex(utilFormat.decimalSeparator) + "*0{0,' + len + '}$")';
                     }
                 }
-                
+
                 // The function we create is called immediately and returns a closure
                 // which has access to vars and some fixed values; RegExes and the format string.
                 code = [
@@ -707,7 +707,7 @@ Ext.define('Ext.util.Format', function() {
 
                 if (hasComma) {
                     // If we have to insert commas...
-                    
+
                     // split the string up into whole and decimal parts if there are decimals
                     if (precision) {
                         code[code.length] = 'parts=fnum.split(".");';
@@ -732,7 +732,7 @@ Ext.define('Ext.util.Format', function() {
                     if (precision) {
                         code[code.length] = 'fnum += utilFormat.decimalSeparator+parts[1];';
                     }
-                    
+
                 }
                 else if (precision) {
                     // If they are using a weird decimal separator, split and concat using it
@@ -812,7 +812,7 @@ Ext.define('Ext.util.Format', function() {
          */
         attributes: function(attributes) {
             var result, name;
-            
+
             if (typeof attributes === 'object') {
                 result = [];
 
@@ -1017,7 +1017,7 @@ Ext.define('Ext.util.Format', function() {
         uriCmp: function(value) {
             return encodeURIComponent(value);
         },
-        
+
         wordBreakRe: /[\W\s]+/,
 
         /**
@@ -1035,7 +1035,7 @@ Ext.define('Ext.util.Format', function() {
         word: function(value, index, sep) {
             var re = sep ? (typeof sep === 'string' ? new RegExp(sep) : sep) : me.wordBreakRe,
                 parts = (value || '').split(re);
-            
+
             return parts[index || 0] || '';
         }
     };

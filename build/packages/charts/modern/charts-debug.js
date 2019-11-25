@@ -3448,10 +3448,6 @@ Ext.define('Ext.draw.sprite.Sprite', {
     isSprite: true,
     $configStrict: false,
     statics: {
-        defaultHitTestOptions: {
-            fill: true,
-            stroke: true
-        },
         //<debug>
         /* eslint-disable max-len */
         /**
@@ -3463,10 +3459,14 @@ Ext.define('Ext.draw.sprite.Sprite', {
          * }
          *
          */
-        debug: false
+        debug: false,
+        /* eslint-enable max-len */
+        //</debug>
+        defaultHitTestOptions: {
+            fill: true,
+            stroke: true
+        }
     },
-    /* eslint-enable max-len */
-    //</debug>
     inheritableStatics: {
         def: {
             processors: {
@@ -6403,8 +6403,12 @@ Ext.define('Ext.draw.sprite.Path', {
         // eslint-disable-next-line vars-on-top
         var debug = attr.debug || this.statics().debug || Ext.draw.sprite.Sprite.debug;
         if (debug) {
-            debug.bbox && this.renderBBox(surface, ctx);
-            debug.xray && this.renderXRay(surface, ctx);
+            if (debug.bbox) {
+                this.renderBBox(surface, ctx);
+            }
+            if (debug.xray) {
+                this.renderXRay(surface, ctx);
+            }
         }
     },
     //</debug>
@@ -7611,8 +7615,8 @@ Ext.define('Ext.draw.sprite.Image', {
         //<debug>
         // eslint-disable-next-line vars-on-top
         var debug = attr.debug || this.statics().debug || Ext.draw.sprite.Sprite.debug;
-        if (debug) {
-            debug.bbox && this.renderBBox(surface, ctx);
+        if (debug && debug.bbox) {
+            this.renderBBox(surface, ctx);
         }
     },
     //</debug>
@@ -8043,7 +8047,9 @@ Ext.define('Ext.draw.sprite.Line', {
             // If it is, we need to re-apply transformations.
             // But the bounding box should always be rendered as is, untransformed.
             this.attr.inverseMatrix.toContext(ctx);
-            debug.bbox && this.renderBBox(surface, ctx);
+            if (debug.bbox) {
+                this.renderBBox(surface, ctx);
+            }
         }
     }
 });
@@ -8646,9 +8652,8 @@ Ext.define('Ext.draw.sprite.Text', function() {
                  */
                     fontFamily: 'string',
                     /**
-                 * @cfg {String} [textAlign='start']
+                 * @cfg {"left"/"right"/"center"/"start"/"end"} [textAlign='start']
                  * The alignment of the text displayed.
-                 * {left, right, center, start, end}
                  */
                     textAlign: function(n) {
                         return textAlignments[n] || 'center';
@@ -8661,15 +8666,15 @@ Ext.define('Ext.draw.sprite.Text', function() {
                     textBaseline: function(n) {
                         return textBaselines[n] || 'alphabetic';
                     },
+                    //<debug>
+                    debug: 'default',
+                    //</debug>
                     /**
                  * @cfg {String} [font='10px sans-serif']
                  * The font displayed.
                  */
-                    font: 'string',
-                    //<debug>
-                    debug: 'default'
+                    font: 'string'
                 },
-                //</debug>
                 aliases: {
                     'font-size': 'fontSize',
                     'font-family': 'fontFamily',
@@ -9065,7 +9070,9 @@ Ext.define('Ext.draw.sprite.Text', function() {
                 // If it is, we need to re-apply transformations.
                 // But the bounding box is already transformed, so we remove the transformation.
                 this.attr.inverseMatrix.toContext(ctx);
-                debug.bbox && me.renderBBox(surface, ctx);
+                if (debug.bbox) {
+                    me.renderBBox(surface, ctx);
+                }
             }
         }
     };
@@ -11140,8 +11147,12 @@ Ext.define('Ext.draw.engine.Svg', {
 /**
  * @private
  */
-Ext.draw || (Ext.draw = {});
-Ext.draw.engine || (Ext.draw.engine = {});
+if (!Ext.draw) {
+    Ext.draw = {};
+}
+if (!Ext.draw.engine) {
+    Ext.draw.engine = {};
+}
 Ext.draw.engine.excanvas = true;
 // Copyright 2006 Google Inc.
 //
@@ -17670,7 +17681,9 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                         };
                     };
                     me.iterate(majorTicks, getRightTickFn(majorTickSize));
-                    minorTicks && me.iterate(minorTicks, getRightTickFn(minorTickSize));
+                    if (minorTicks) {
+                        me.iterate(minorTicks, getRightTickFn(minorTickSize));
+                    };
                     break;
                 case 'left':
                     function getLeftTickFn(size) {
@@ -17681,7 +17694,9 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                         };
                     };
                     me.iterate(majorTicks, getLeftTickFn(majorTickSize));
-                    minorTicks && me.iterate(minorTicks, getLeftTickFn(minorTickSize));
+                    if (minorTicks) {
+                        me.iterate(minorTicks, getLeftTickFn(minorTickSize));
+                    };
                     break;
                 case 'bottom':
                     function getBottomTickFn(size) {
@@ -17692,7 +17707,9 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                         };
                     };
                     me.iterate(majorTicks, getBottomTickFn(majorTickSize));
-                    minorTicks && me.iterate(minorTicks, getBottomTickFn(minorTickSize));
+                    if (minorTicks) {
+                        me.iterate(minorTicks, getBottomTickFn(minorTickSize));
+                    };
                     break;
                 case 'top':
                     function getTopTickFn(size) {
@@ -17703,7 +17720,9 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                         };
                     };
                     me.iterate(majorTicks, getTopTickFn(majorTickSize));
-                    minorTicks && me.iterate(minorTicks, getTopTickFn(minorTickSize));
+                    if (minorTicks) {
+                        me.iterate(minorTicks, getTopTickFn(minorTickSize));
+                    };
                     break;
                 case 'angular':
                     me.iterate(majorTicks, function(position, labelText, i) {
@@ -18181,7 +18200,9 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
         if (position === 'left' || position === 'right') {
             for (i = 0 , ln = limits.length; i < ln; i++) {
                 limit = chain(limits[i]);
-                !limit.line && (limit.line = {});
+                if (!limit.line) {
+                    limit.line = {};
+                }
                 value = Ext.isString(limit.value) ? axis.getCoordFor(limit.value) : limit.value;
                 value = value * matrix.getYY() + matrix.getDY();
                 limit.line.y = value + innerPadding.top;
@@ -18213,7 +18234,9 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
         } else if (position === 'top' || position === 'bottom') {
             for (i = 0 , ln = limits.length; i < ln; i++) {
                 limit = chain(limits[i]);
-                !limit.line && (limit.line = {});
+                if (!limit.line) {
+                    limit.line = {};
+                }
                 value = Ext.isString(limit.value) ? axis.getCoordFor(limit.value) : limit.value;
                 value = value * matrix.getXX() + matrix.getDX();
                 limit.line.x = value + innerPadding.left;
@@ -18245,7 +18268,9 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
         } else if (position === 'radial') {
             for (i = 0 , ln = limits.length; i < ln; i++) {
                 limit = chain(limits[i]);
-                !limit.line && (limit.line = {});
+                if (!limit.line) {
+                    limit.line = {};
+                }
                 value = Ext.isString(limit.value) ? axis.getCoordFor(limit.value) : limit.value;
                 if (value > attr.max) {
                     
@@ -18271,7 +18296,9 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
         } else if (position === 'angular') {
             for (i = 0 , ln = limits.length; i < ln; i++) {
                 limit = chain(limits[i]);
-                !limit.line && (limit.line = {});
+                if (!limit.line) {
+                    limit.line = {};
+                }
                 value = Ext.isString(limit.value) ? axis.getCoordFor(limit.value) : limit.value;
                 value = value / (attr.max + 1) * Math.PI * 2 + attr.baseRotation;
                 limit.line.translationX = attr.centerX;
@@ -19206,34 +19233,39 @@ Ext.define('Ext.chart.axis.layout.Continuous', {
     }
 });
 
-/* eslint-disable max-len */
 /**
  * @class Ext.chart.axis.Axis
  *
  * Defines axis for charts.
  *
- * Using the current model, the type of axis can be easily extended. By default, Sencha Charts provide three different
- * types of axis:
+ * Using the current model, the type of axis can be easily extended. By default, Sencha Charts 
+ * provide three different types of axis:
  *
  *  * **numeric** - the data attached to this axis is numeric and continuous.
- *  * **time** - the data attached to this axis is (or gets converted into) a date/time value; it is continuous.
- *  * **category** - the data attached to this axis belongs to a finite set. The data points are evenly placed along the axis.
+ *  * **time** - the data attached to this axis is (or gets converted into) a date/time value; 
+ *               it is continuous.
+ *  * **category** - the data attached to this axis belongs to a finite set. The data points
+ *                   are evenly placed along the axis.
  *
- * The behavior of an axis can be easily changed by setting different types of axis layout and axis segmenter to the axis.
+ * The behavior of an axis can be easily changed by setting different types of axis layout and 
+ * axis segmenter to the axis.
  *
- * Axis layout defines how the data points are placed. Using continuous layout, the data points will be distributed by
- * the numeric value. Using discrete layout the data points will be spaced evenly. Furthermore, if you want to combine
- * the data points with the duplicate values in a discrete layout, you should use combineDuplicate layout.
+ * Axis layout defines how the data points are placed. Using continuous layout, the data points 
+ * will be distributed by the numeric value. Using discrete layout the data points will be spaced 
+ * evenly. Furthermore, if you want to combine the data points with the duplicate values in a 
+ * discrete layout, you should use combineDuplicate layout.
  *
- * Segmenter defines the way to segment data range. For example, if you have a Date-type data range from Jan 1, 1997 to
- * Jan 1, 2017, the segmenter will segement the data range into years, months or days based on the current zooming
- * level.
+ * Segmenter defines the way to segment data range. For example, if you have a Date-type data range 
+ * from Jan 1, 1997 to Jan 1, 2017, the segmenter will segement the data range into years, months or
+ * days based on the current zooming level.
  *
- * It is possible to write custom axis layouts and segmenters to extends this behavior by simply implementing interfaces
- * {@link Ext.chart.axis.layout.Layout} and {@link Ext.chart.axis.segmenter.Segmenter}.
+ * It is possible to write custom axis layouts and segmenters to extends this behavior by simply 
+ * implementing interfaces {@link Ext.chart.axis.layout.Layout} and
+ * {@link Ext.chart.axis.segmenter.Segmenter}.
  *
  * Here's an example for the axes part of a chart definition:
- * An example of axis for a series (in this case for an area chart that has multiple layers of yFields) could be:
+ * An example of axis for a series (in this case for an area chart that has multiple layers of 
+ * yFields) could be:
  *
  *     axes: [{
  *         type: 'numeric',
@@ -19260,12 +19292,13 @@ Ext.define('Ext.chart.axis.layout.Continuous', {
  *         }
  *     }]
  *
- * In this case we use a `numeric` axis for displaying the values of the Area series and a `category` axis for displaying the names of
- * the store elements. The numeric axis is placed on the left of the screen, while the category axis is placed at the bottom of the chart.
- * Both the category and numeric axes have `grid` set, which means that horizontal and vertical lines will cover the chart background. In the
- * category axis the labels will be rotated so they can fit the space better.
+ * In this case we use a `numeric` axis for displaying the values of the Area series and a 
+ * `category` axis for displaying the names of the store elements. The numeric axis is placed 
+ * on the left of the screen, while the category axis is placed at the bottom of the chart.
+ * Both the category and numeric axes have `grid` set, which means that horizontal and vertical 
+ * lines will cover the chart background. In the category axis the labels will be rotated so 
+ * they can fit the space better.
  */
-/* eslint-enable max-len */
 Ext.define('Ext.chart.axis.Axis', {
     xtype: 'axis',
     mixins: {
@@ -24335,7 +24368,8 @@ Ext.define('Ext.chart.AbstractChart', {
         if (Ext.isObject(newHighlightItem) && Ext.isObject(oldHighlightItem)) {
             i1 = newHighlightItem;
             i2 = oldHighlightItem;
-            s1 = i1.sprite && (i1.sprite[0] || i1.sprite) , s2 = i2.sprite && (i2.sprite[0] || i2.sprite);
+            s1 = i1.sprite && (i1.sprite[0] || i1.sprite);
+            s2 = i2.sprite && (i2.sprite[0] || i2.sprite);
             if (s1 === s2 && i1.index === i2.index) {
                 return;
             }
@@ -31817,7 +31851,9 @@ Ext.define('Ext.chart.sprite.BoxPlot', {
             // If it is, we need to re-apply transformations.
             // But the bounding box should always be rendered as is, untransformed.
             this.attr.inverseMatrix.toContext(ctx);
-            debug.bbox && this.renderBBox(surface, ctx);
+            if (debug.bbox) {
+                this.renderBBox(surface, ctx);
+            }
         }
     },
     //</debug>

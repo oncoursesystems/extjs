@@ -69,12 +69,12 @@ topSuite("Ext.Img", function() {
                 expectFontFamily('BarFont');
                 expect(img.el.getStyle('font-size')).toBe('40px');
             });
-            
+
             it("should have img role", function() {
                 makeImage({
                     glyph: '1234'
                 });
-                
+
                 expect(img).toHaveAttr('role', 'img');
             });
         });
@@ -158,19 +158,19 @@ topSuite("Ext.Img", function() {
             });
         });
     });
-    
+
     describe("img tag", function() {
         beforeEach(function() {
             // Warning here is expected
             spyOn(Ext.log, 'warn');
-            
+
             img = new Ext.Img({ renderTo: Ext.getBody() });
         });
-        
+
         it("should have default alt attribute", function() {
             expect(img.el.dom.hasAttribute('alt')).toBe(true);
         });
-        
+
         it("should not have role attribute", function() {
             expect(img.el.dom.hasAttribute('role')).toBe(false);
         });
@@ -203,10 +203,10 @@ topSuite("Ext.Img", function() {
                     makeBaseImage();
                     img.setTitle('Test Title');
                     expect(img.getTitle()).toBe('Test Title');
-                    
+
                     // Warning here is expected
                     spyOn(Ext.log, 'warn');
-                    
+
                     img.render(document.body);
                     expect(img.el.dom.title).toBe('Test Title');
                 });
@@ -217,10 +217,10 @@ topSuite("Ext.Img", function() {
                     makeBaseImage();
                     img.setSrc(senchaPng);
                     expect(img.getSrc()).toBe(senchaPng);
-                    
+
                     // Warning here is expected
                     spyOn(Ext.log, 'warn');
-                    
+
                     img.render(document.body);
                     expect(img.el.dom.src.indexOf('sencha.png')).not.toBe(-1);
                 });
@@ -247,10 +247,10 @@ topSuite("Ext.Img", function() {
                     img.setAlt();
                     expect(img.getTitle()).toBe('');
                     expect(img.getAlt()).toBe('');
-                    
+
                     // Warning here is expected
                     spyOn(Ext.log, 'warn');
-                    
+
                     img.render(document.body);
                     expect(img.el.dom.alt).toBe('');
                     expect(img.el.dom.title).toBe('');
@@ -263,7 +263,7 @@ topSuite("Ext.Img", function() {
                 it("should not have default alt value", function() {
                     // Warning here is expected
                     spyOn(Ext.log, 'warn');
-                    
+
                     img = new Ext.Img({
                         renderTo: document.body
                     });
@@ -273,7 +273,7 @@ topSuite("Ext.Img", function() {
                 it("should be able to set alt value", function() {
                     // Warning here is expected
                     spyOn(Ext.log, 'warn');
-                    
+
                     img = new Ext.Img({
                         renderTo: document.body
                     });

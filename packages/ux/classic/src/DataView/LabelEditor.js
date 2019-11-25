@@ -29,7 +29,7 @@ Ext.define('Ext.ux.DataView.LabelEditor', {
             allowOnlyWhitespace: false,
             selectOnFocus: true
         });
-        
+
         this.callParent([config]);
     },
 
@@ -56,10 +56,10 @@ Ext.define('Ext.ux.DataView.LabelEditor', {
 
         if (Ext.fly(target).hasCls(me.labelSelector) && !me.editing && !e.ctrlKey && !e.shiftKey) {
             e.stopEvent();
-            
+
             item = me.view.findItemByChild(target);
             record = me.view.store.getAt(me.view.indexOf(item));
-            
+
             me.startEdit(target, record.data[me.dataIndex]);
             me.activeRecord = record;
         }

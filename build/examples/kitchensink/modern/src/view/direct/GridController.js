@@ -10,9 +10,11 @@ Ext.define('KitchenSink.view.direct.GridController', {
     },
 
     onTableChange: function(combo, newValue) {
+        var grid, store;
+
         if (newValue) {
-            var grid = this.lookup('grid'),
-                store = grid.getStore();
+            grid = this.lookup('grid');
+            store = grid.getStore();
 
             store.getProxy().setMetadata({
                 table: newValue

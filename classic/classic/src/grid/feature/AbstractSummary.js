@@ -42,7 +42,7 @@ Ext.define('Ext.grid.feature.AbstractSummary', {
     // Listen for store updates. Eg, from an Editor.
     init: function() {
         var me = this;
-        
+
         me.view.summaryFeature = me;
         me.rowTpl = me.view.self.prototype.rowTpl;
 
@@ -67,12 +67,12 @@ Ext.define('Ext.grid.feature.AbstractSummary', {
             me.summaryRowSelector = '.' + me.summaryRowCls;
         }
     },
-    
+
     bindStore: function(grid, store) {
         var me = this;
-        
+
         Ext.destroy(me.readerListeners);
-        
+
         if (me.remoteRoot) {
             me.readerListeners = store.getProxy().getReader().on({
                 scope: me,
@@ -81,7 +81,7 @@ Ext.define('Ext.grid.feature.AbstractSummary', {
             });
         }
     },
-    
+
     onReaderRawData: function(data) {
         // Invalidate potentially existing summaryRows to force recalculation
         this.summaryRows = null;
@@ -100,7 +100,7 @@ Ext.define('Ext.grid.feature.AbstractSummary', {
 
         visible = visible != null ? !!visible : !me.showSummaryRow;
         me.showSummaryRow = visible;
-        
+
         if (visible && visible !== prev) {
             // If being shown, something may have changed while not visible, so
             // force the summary records to recalculate
@@ -119,7 +119,7 @@ Ext.define('Ext.grid.feature.AbstractSummary', {
         else {
             doRefresh = true;
         }
-        
+
         if (doRefresh) {
             me.grid.ownerGrid.getView().refreshView();
         }
@@ -216,33 +216,33 @@ Ext.define('Ext.grid.feature.AbstractSummary', {
             switch (type) {
                 case 'count':
                     return item.count();
-                
+
                 case 'min':
                     return item.min(field);
-                
+
                 case 'max':
                     return item.max(field);
-                
+
                 case 'sum':
                     return item.sum(field);
-                
+
                 case 'average':
                     return item.average(field);
-                
+
                 default:
                     return '';
 
             }
         }
     },
-    
+
     getRawData: function() {
         var data = this.readerRawData;
-        
+
         if (data) {
             return data;
         }
-        
+
         // Synchronous Proxies such as Memory proxy will set keepRawData to true
         // on their Reader instances, and may have been loaded before we were bound
         // to the store. Or the Reader may have been configured with keepRawData: true
@@ -257,33 +257,33 @@ Ext.define('Ext.grid.feature.AbstractSummary', {
             convertedSummaryRow = {},
             remoteData = {},
             storeReader, reader, rawData, i, len, rows, row;
-        
+
         // Summary rows may have been cached by previous run
         if (!summaryRows) {
             rawData = me.getRawData();
-        
+
             if (!rawData) {
                 return;
             }
-            
+
             // Construct a new Reader instance of the same type to avoid
             // munging the one in the Store
             storeReader = me.view.store.getProxy().getReader();
             reader = Ext.create('reader.' + storeReader.type, storeReader.getConfig());
-            
+
             // reset reader root and rebuild extractors to extract summaries data
             reader.setRootProperty(me.remoteRoot);
-            
+
             // At this point summaryRows is still raw data, e.g. XML node
             summaryRows = reader.getRoot(rawData);
-            
+
             if (summaryRows) {
                 rows = [];
-                
+
                 if (!Ext.isArray(summaryRows)) {
                     summaryRows = [summaryRows];
                 }
-                
+
                 len = summaryRows.length;
 
                 for (i = 0; i < len; ++i) {
@@ -291,27 +291,27 @@ Ext.define('Ext.grid.feature.AbstractSummary', {
                     row = reader.extractRecordData(summaryRows[i], me.readDataOptions);
                     rows.push(row);
                 }
-                
+
                 me.summaryRows = summaryRows = rows;
             }
-            
+
             // By the next time the configuration may change
             reader.destroy();
-            
+
             // We also no longer need the whole raw dataset
             me.readerRawData = null;
         }
-        
+
         if (summaryRows) {
             for (i = 0, len = summaryRows.length; i < len; i++) {
                 convertedSummaryRow = summaryRows[i];
-                
+
                 if (groupField) {
                     remoteData[convertedSummaryRow[groupField]] = convertedSummaryRow;
                 }
             }
         }
-        
+
         return groupField ? remoteData : convertedSummaryRow;
     },
 
@@ -322,18 +322,18 @@ Ext.define('Ext.grid.feature.AbstractSummary', {
             if (!summaryData[groupName]) {
                 summaryData[groupName] = {};
             }
-            
+
             summaryData[groupName][colId] = summaryValue;
         }
         else {
             summaryData[colId] = summaryValue;
         }
     },
-    
+
     destroy: function() {
         Ext.destroy(this.readerListeners);
         this.readerRawData = this.summaryRows = null;
-        
+
         this.callParent();
     }
 });

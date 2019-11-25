@@ -15,7 +15,7 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkers', {
         'Ext.chart.axis.Time',
         'Ext.chart.interactions.ItemHighlight'
     ],
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     profiles: {
         classic: {
@@ -26,6 +26,9 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkers', {
         },
         graphite: {
             width: 750
+        },
+        'classic-material': {
+            width: 750
         }
     },
     otherContent: [{
@@ -35,7 +38,7 @@ Ext.define('KitchenSink.view.charts.line.ImageMarkers', {
         type: 'Store',
         path: 'app/store/Pie.js'
     }],
-    // </example>
+    //</example>
 
     layout: 'fit',
 

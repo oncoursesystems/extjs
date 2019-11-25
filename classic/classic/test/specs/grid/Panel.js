@@ -7,11 +7,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -30,17 +30,17 @@ function() {
 
     function triggerCellKeyEvent(rowIdx, cellIdx, type, key) {
         var target = findCell(rowIdx, cellIdx);
-        
+
         jasmine.fireKeyEvent(target, type, key);
     }
 
     function getNames() {
         var result = [];
-        
+
         store.each(function(rec) {
             result.push(rec.get('name'));
         });
-        
+
         return result.join(',');
     }
 
@@ -116,16 +116,16 @@ function() {
 
         expect(failures).toBe(0);
     }
-    
+
     describe('scrollable: false', function() {
         var field;
-        
+
         afterEach(function() {
             if (field) {
                 field.destroy();
             }
         });
-        
+
         it('should disable scrolling with scrollable: false', function() {
             createGrid(null, {
                 scrollable: false
@@ -133,7 +133,7 @@ function() {
             expect(grid.view.getScrollable()).toBe(false);
             expect(grid.view.getScrollable()).toBe(false);
         });
-        
+
         it('should be able to focus for a second time without throwing an error', function() {
             createGrid(null, {
                 viewConfig: {
@@ -165,7 +165,7 @@ function() {
                     grid = this;
                     this.callParent(arguments);
                 },
-                
+
                 afterRender: function() {
                     this.callParent(arguments);
                     this.getStore().loadPage(1);
@@ -180,7 +180,7 @@ function() {
             });
         });
     });
-    
+
     describe('Splitter in locked grid', function() {
         it('should allow configuration of the splitter', function() {
             createGrid(null, {
@@ -211,7 +211,7 @@ function() {
 
             // The HeaderContainer's innerCt needs to be extended to cover the view's vertical scrollbar.
             expect(grid.headerCt.layout.innerCt.dom.offsetWidth).toBe(600 + Ext.getScrollbarSize().width);
-            
+
             view.setScrollX(100);
             waitsFor(function() {
                 return grid.headerCt.getScrollX() === 100;
@@ -518,7 +518,7 @@ function() {
             afterEach(function() {
                 Ext.state.Manager.set(grid.getStateId(), null);
             });
-            
+
             function createCustomSortGrid() {
                 createGrid(null, {
                     stateful: true,
@@ -770,13 +770,13 @@ function() {
             });
             var view = grid.getView(),
                 navModel = grid.getNavigationModel();
-            
+
             navModel.setPosition(0, 0);
-            
+
             waitsFor(function() {
                 return view.containsFocus;
             });
-            
+
             runs(function() {
                 grid.reconfigure(new Ext.data.Store({
                     fields: ['name', 'surname'],
@@ -795,7 +795,7 @@ function() {
             // Same cell by row/column should be focused after the reconfigure even though the record and column are different
             waitsFor(function() {
                 var position = navModel.getPosition();
-                
+
                 return view.containsFocus && position &&
                        position.isEqual(new Ext.grid.CellContext(view).setPosition(0, 0));
             }, 'position to match', 1000);
@@ -1162,7 +1162,7 @@ function() {
                     }
                 }, cfg));
             };
-            
+
         afterEach(function() {
             grid.destroy();
         });
@@ -1211,7 +1211,7 @@ function() {
                 });
                 view = grid.view;
                 grouping = view.findFeature('grouping');
-                
+
                 // Wait for initial render
                 waitsFor(function() {
                     return view.all.getCount() !== 0;
@@ -1219,7 +1219,7 @@ function() {
 
                 runs(function() {
                     var row4 = view.getNode(3);
-                    
+
                     grid.setHeight(row4.offsetTop + row4.offsetHeight + grid.headerCt.getHeight());
 
                     // All records will be represented by a row.
@@ -1234,7 +1234,7 @@ function() {
                     expect(view.all.getCount()).toEqual(view.bufferedRenderer.viewSize);
                 });
             });
-            
+
             it('should reduce the scrollHeight when collapsing groups and increase when expanding', function() {
                 grid = makeLargeGrid({
                     height: 400,
@@ -1247,7 +1247,7 @@ function() {
                 });
                 view = grid.view;
                 grouping = view.findFeature('grouping');
-                
+
                 // Wait for initial render
                 waitsFor(function() {
                     return view.all.getCount() !== 0;
@@ -1272,7 +1272,7 @@ function() {
                     scrollRange = newScrollRange;
                     grouping.expand('Parent');
                     expect(newScrollRange = view.el.dom.scrollHeight).toBeGreaterThan(scrollRange);
-                    
+
                 });
             });
         });
@@ -1281,26 +1281,26 @@ function() {
             function makeRows(n, total) {
                 var data = [],
                     i = 1;
-                    
+
                 for (i = 1; i <= n; ++i) {
                     data.push({
                         id: i,
                         title: 'Title' + i
                     });
                 }
-                
+
                 return {
                     data: data,
                     totalCount: total
                 };
             }
-        
+
             MockAjaxManager.addMethods();
             Ext.define('ForumThread', {
                 extend: 'Ext.data.Model',
                 fields: ['id', 'title']
             });
-        
+
             // create the Data Store
             var store = new Ext.data.BufferedStore({
                 model: 'ForumThread',
@@ -1316,7 +1316,7 @@ function() {
                 },
                 remoteFilter: true
             });
-        
+
             grid = new Ext.grid.Panel({
                 width: 700,
                 height: 500,
@@ -1328,9 +1328,9 @@ function() {
                 }],
                 renderTo: Ext.getBody()
             });
-            
+
             store.load();
-            
+
             Ext.Ajax.mockComplete({
                 status: 200,
                 responseText: Ext.encode(makeRows(350, 5000))
@@ -1343,9 +1343,9 @@ function() {
                 status: 200,
                 responseText: Ext.encode(makeRows(20, 20))
             });
-            
+
             expect(grid.getView().getNodes().length).toBe(20);
-            
+
             MockAjaxManager.removeMethods();
             Ext.undefine('ForumThread');
         });
@@ -1353,18 +1353,18 @@ function() {
         it("should update the view when removing a chunk of records in the middle", function() {
            var data = [],
                 i = 0;
-        
+
             for (; i < 200; ++i) {
                 data.push({
                     name: 'Name' + i
                 });
             }
-    
+
             var store = new Ext.data.Store({
                 fields: ['name'],
                 data: data
             });
-    
+
             grid = new Ext.grid.Panel({
                 renderTo: Ext.getBody(),
                 width: 400,
@@ -1376,7 +1376,7 @@ function() {
                     flex: 1
                 }]
             });
-    
+
             store.remove(store.getRange(1, 198));
             expect(grid.getView().all.getCount()).toBe(2);
         });
@@ -1447,16 +1447,16 @@ function() {
 
             // Scroll last record into view. It should be rendered in selected rendition.
             grid.view.el.setScrollTop(4000);
-            
+
             waits(10);
-            
+
             runs(function() {
                 var lastRow = Ext.get(grid.view.getNode(lastRecord));
 
                 // The row corresponding to the last record should have the selected class.
                 expect(lastRow.hasCls(Ext.view.Table.prototype.selectedItemCls)).toBe(true);
             });
-            
+
             Ext.undefine('ForumThread');
         });
 
@@ -1512,7 +1512,6 @@ function() {
                 wasCalled = false;
             });
 
-            
             it('should reload the current view and buffers', function() {
                 var start, end;
 
@@ -1602,7 +1601,7 @@ function() {
                 expect(grid.view.all.getCount()).toBe(2);
             });
         });
-        
+
         describe('removing larger range than is rendered (buffered rendering does this)', function() {
             it('should only attempt to remove valid element indices', function() {
                 var rows = grid.view.all;
@@ -1749,7 +1748,7 @@ function() {
                 });
             });
         });
-        
+
         it("should size based on the emptyText when shrink wrapping height", function() {
             grid = new Ext.grid.Panel({
                 columns: [
@@ -1771,18 +1770,18 @@ function() {
             expect(grid.getHeight()).toBe(100);
         });
     });
-    
+
     describe("changing record id", function() {
         it("should update the view when changing from phantom to not phantom", function() {
             createGrid();
             var rec = store.first(),
                 oldCount = store.getCount();
-                
+
             rec.setId(1);
             store.remove(rec);
             expect(grid.getView().getNodes().length).toBe(oldCount - 1);
         });
-        
+
         it("should update the view when changing a non phantom id", function() {
             createGrid({
                 data: [
@@ -1812,7 +1811,7 @@ function() {
         beforeEach(function() {
             MockAjaxManager.addMethods();
         });
-            
+
         afterEach(function() {
             if (grid) {
                 Ext.state.Manager.set(grid.getStateId(), null);
@@ -1913,7 +1912,7 @@ function() {
                 });
             });
         });
-        
+
         describe('locked column state', function() {
             // https://sencha.jira.com/browse/EXTJS-19598
             // If the only visible locked column was moved to the locked side
@@ -2815,12 +2814,12 @@ function() {
 
             store.getAt(0).set('phone', "555-111-1111");
             store.getAt(1).set('phone', "555-222-2222");
-            
+
             // After that set of  the phone number ONLY the last cell, [2] must have been replaced
             expect(firstRow.childNodes[0].innerHTML === nameCell).toBe(true);
             expect(firstRow.childNodes[1].innerHTML === emailCell).toBe(true);
             expect(firstRow.childNodes[2].innerHTML === phoneCell).toBe(false);
-            
+
             // cell[2] must contain the new phone number value
             expect(firstRow.childNodes[2].firstChild.firstChild.nodeValue).toBe('555-111-1111');
 
@@ -2831,7 +2830,7 @@ function() {
             // There should only be one more layout caused by the sync.
             // The two record updates in returned data should be bracketed by a suspend.
             layoutCounter = grid.layoutCounter;
-            
+
             // sync should NOT fire refresh.
             refreshCounter = view.refreshCounter;
 
@@ -2844,7 +2843,7 @@ function() {
                     { name: 'Bart',  email: 'bart@simpsons.google.com',  phone: '555-222-2222'  }
                 ])
             });
-                
+
             // Only one more layout should have been performed.
             // The two record updates in returned data should be bracketed by a suspend.
             // sync should NOT fire refresh.
@@ -2858,7 +2857,7 @@ function() {
             expect(firstRow.childNodes[0].innerHTML === nameCell).toBe(true);
             expect(firstRow.childNodes[1].innerHTML === emailCell).toBe(false);
             expect(firstRow.childNodes[2].innerHTML === phoneCell).toBe(true);
-            
+
             // cell[1] must contain the new phone email value
             expect(firstRow.childNodes[1].firstChild.firstChild.nodeValue).toBe('lisa@simpsons.google.com');
         });
@@ -3109,14 +3108,14 @@ function() {
             function makeRows(n, total) {
                 var data = [],
                     i = 1;
-                    
+
                 for (i = 1; i <= n; ++i) {
                     data.push({
                         id: i,
                         title: 'Title' + i
                     });
                 }
-                
+
                 return {
                     data: data,
                     totalCount: total
@@ -3139,7 +3138,7 @@ function() {
                 },
                 remoteFilter: true
             });
-        
+
             grid = new Ext.grid.Panel({
                 width: 700,
                 height: 500,
@@ -3477,7 +3476,6 @@ function() {
             triggerCellMouseEvent('mouseover', 0, 0);
             expect(view.getNode(0)).toHaveCls(overItemCls);
 
-
             triggerCellMouseEvent('mouseout', 0, 0);
             triggerCellMouseEvent('mouseover', 1, 0);
             view.setHighlightedItem(view.getNode(1));
@@ -3549,7 +3547,6 @@ function() {
 //             var tableEl = view.el.down('table.x-grid-table');
             triggerCellMouseEvent('mouseover', 0, 0);
             expect(view.getNode(0)).toHaveCls(overItemCls);
-
 
             triggerCellMouseEvent('mouseout', 0, 0);
             triggerCellMouseEvent('mouseover', 1, 0);
@@ -3643,7 +3640,7 @@ function() {
         it("should preserve the selected classes when the view is refreshed", function() {
             selModel.select([store.getAt(0), store.getAt(1), store.getAt(3)]);
             view.refresh();
-            
+
             expect(view.getNode(0)).toHaveCls(selectedItemCls);
             expect(view.getNode(1)).toHaveCls(selectedItemCls);
             expect(view.getNode(3)).toHaveCls(selectedItemCls);
@@ -3653,7 +3650,7 @@ function() {
             selModel.select([store.getAt(0), store.getAt(1), store.getAt(3)]);
 
             groupingFeature.disable();
-            
+
             expect(view.getNode(0)).toHaveCls(selectedItemCls);
             expect(view.getNode(1)).toHaveCls(selectedItemCls);
             expect(view.getNode(3)).toHaveCls(selectedItemCls);
@@ -3664,7 +3661,7 @@ function() {
 
             groupingFeature.disable();
             groupingFeature.enable();
-            
+
             expect(view.getNode(0)).toHaveCls(selectedItemCls);
             expect(view.getNode(1)).toHaveCls(selectedItemCls);
             expect(view.getNode(3)).toHaveCls(selectedItemCls);
@@ -3689,7 +3686,7 @@ function() {
         it("should update the selected classes when rows before selected rows are removed", function() {
             selModel.select([store.getAt(1), store.getAt(3)]);
             store.remove([0, 2]);
-            
+
             expect(view.getNode(0)).toHaveCls(selectedItemCls);
             expect(view.getNode(1)).toHaveCls(selectedItemCls);
         });
@@ -3793,33 +3790,33 @@ function() {
             width: 400,
             initComponent: function() {
                 this.store = testStore;
-                
+
                 this.columns = [
                     { header: 'Name',  dataIndex: 'name', width: 100 },
                     { header: 'Email', dataIndex: 'email', flex: 1 },
                     { header: 'Phone', dataIndex: 'phone', flex: 1 }
                 ];
-                
+
                 this.enableLocking = true;
-                
+
                 this.plugins = {
                     ptype: 'rowexpander',
                     rowBodyTpl: new Ext.XTemplate(
                         'Expanded data for {name} Simpson'
                     )
                 };
-                
+
                 this.callParent(arguments);
             }
         });
-        
+
         // eslint-disable-next-line no-undef
         grid = new TestRowExpanderGrid({
             renderTo: Ext.getBody()
         });
-        
+
         waits(1);
-        
+
         runs(function() {
             var allColumns = grid.getVisibleColumnManager().getColumns(),
                 lockedColumns = grid.lockedGrid.getVisibleColumnManager().getColumns();

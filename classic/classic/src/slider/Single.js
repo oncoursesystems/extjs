@@ -17,7 +17,7 @@
 Ext.define('Ext.slider.Single', {
     extend: 'Ext.slider.Multi',
     alias: ['widget.slider', 'widget.sliderfield'],
-    
+
     alternateClassName: [
         'Ext.Slider',
         'Ext.form.SliderField',
@@ -29,7 +29,7 @@ Ext.define('Ext.slider.Single', {
         if (this.publishOnComplete) {
             this.valuePublishEvent = 'changecomplete';
         }
-        
+
         this.callParent();
     },
 

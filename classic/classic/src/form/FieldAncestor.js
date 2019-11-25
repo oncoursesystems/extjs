@@ -21,11 +21,11 @@ Ext.define('Ext.form.FieldAncestor', {
 
     mixinConfig: {
         id: 'fieldAncestor',
-        
+
         after: {
             initInheritedState: 'initFieldInheritedState'
         },
-        
+
         before: {
             doDestroy: 'onBeforeDestroy'
         }
@@ -109,10 +109,10 @@ Ext.define('Ext.form.FieldAncestor', {
             addHandler: me.onChildFieldAdd,
             removeHandler: me.onChildFieldRemove
         });
-        
+
         me.initFieldDefaults();
     },
-    
+
     initMonitor: function() {
         this.monitor.bind(this);
     },
@@ -134,14 +134,14 @@ Ext.define('Ext.form.FieldAncestor', {
 
     onChildFieldAdd: function(field) {
         var me = this;
-        
+
         me.mon(field, 'errorchange', me.handleFieldErrorChange, me);
         me.mon(field, 'validitychange', me.handleFieldValidityChange, me);
     },
-    
+
     onChildFieldRemove: function(field) {
         var me = this;
-        
+
         me.mun(field, 'errorchange', me.handleFieldErrorChange, me);
         me.mun(field, 'validitychange', me.handleFieldValidityChange, me);
     },
@@ -162,7 +162,7 @@ Ext.define('Ext.form.FieldAncestor', {
      */
     handleFieldValidityChange: function(field, isValid) {
         var me = this;
-        
+
         if (field !== me) {
             me.fireEvent('fieldvaliditychange', me, field, isValid);
             me.onFieldValidityChange(field, isValid);
@@ -175,7 +175,7 @@ Ext.define('Ext.form.FieldAncestor', {
      */
     handleFieldErrorChange: function(labelable, activeError) {
         var me = this;
-        
+
         if (labelable !== me) {
             me.fireEvent('fielderrorchange', me, labelable, activeError);
             me.onFieldErrorChange(labelable, activeError);

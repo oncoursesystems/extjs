@@ -4,11 +4,11 @@
  */
 Ext.define('Ext.resizer.SplitterTracker', {
     extend: 'Ext.dd.DragTracker',
-    
+
     requires: ['Ext.util.Region'],
-    
+
     enabled: true,
-    
+
     overlayCls: Ext.baseCSSPrefix + 'resizable-overlay',
 
     createDragOverlay: function() {
@@ -47,7 +47,7 @@ Ext.define('Ext.resizer.SplitterTracker', {
             collapseEl = me.getSplitter().collapseEl,
             target = e.getTarget(),
             box;
-            
+
         if (!prevCmp || !nextCmp) {
             return false;
         }
@@ -124,11 +124,11 @@ Ext.define('Ext.resizer.SplitterTracker', {
             easing.setEndValue(4);
             easing.setDuration(2000);
         }
-        
+
         if (me.active) {
             me.lastKeyDownXY[incrIdx] =
                 Math.round(me.lastKeyDownXY[incrIdx] + (incr * me.easing.getValue()));
-            
+
             me.lastXY = me.lastKeyDownXY;
             splitter.setXY(me.getXY('dragTarget'));
         }
@@ -164,7 +164,7 @@ Ext.define('Ext.resizer.SplitterTracker', {
                 defaultMin: defaultMin,
                 splitWidth: splitWidth
             };
-            
+
             // Region constructor accepts (top, right, bottom, left)
             // anchored/calculated from the left
             prevConstrainRegion = new Ext.util.Region(
@@ -173,7 +173,7 @@ Ext.define('Ext.resizer.SplitterTracker', {
                 prevBox.bottom,
                 me.getVertPrevConstrainLeft(constrainOptions)
             );
-            
+
             // anchored/calculated from the right
             nextConstrainRegion = new Ext.util.Region(
                 nextBox.y,
@@ -193,7 +193,7 @@ Ext.define('Ext.resizer.SplitterTracker', {
                 (prevCmp.maxHeight ? prevBox.y + prevCmp.maxHeight : nextBox.bottom - (nextCmp.minHeight || defaultMin)) + splitWidth,
                 prevBox.x
             );
-            
+
             // anchored/calculated from the bottom
             nextConstrainRegion = new Ext.util.Region(
                 // Top boundary is bottom - maxHeight if there IS a maxHeight.
@@ -277,7 +277,7 @@ Ext.define('Ext.resizer.SplitterTracker', {
     onEnd: function(e) {
         var me = this,
             splitter = me.getSplitter();
-            
+
         splitter.removeCls(splitter.baseCls + '-active');
         me.performResize(e, me.getResizeOffset());
     },
@@ -315,7 +315,6 @@ Ext.define('Ext.resizer.SplitterTracker', {
     getVertPrevConstrainLeft: function(o) {
         return o.prevBox.x + (o.prevCmp.minWidth || o.defaultMin);
     },
-
 
     getVertNextConstrainRight: function(o) {
         return o.nextBox.right - (o.nextCmp.minWidth || o.defaultMin);

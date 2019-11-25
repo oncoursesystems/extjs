@@ -26,24 +26,29 @@ Ext.define('KitchenSink.view.charts.scatter.BasicController', {
         'Botswana': true
     },
 
-    onPreview: function () {
+    onPreview: function() {
+        var chart;
+
         if (Ext.isIE8) {
             Ext.Msg.alert('Unsupported Operation', 'This operation requires a newer version of Internet Explorer.');
+
             return;
         }
-        var chart = this.lookup('chart');
+
+        chart = this.lookup('chart');
+
         chart.preview();
     },
 
-    onSeriesTooltipRender: function (tooltip, record, item) {
+    onSeriesTooltipRender: function(tooltip, record, item) {
         tooltip.setHtml(record.get('country'));
     },
 
-    onSeriesLabelRender: function (label) {
+    onSeriesLabelRender: function(label) {
         return label in this.highlights ? label : '';
     },
 
-    onAfterRender: function () {
+    onAfterRender: function() {
         var chart = this.lookup('chart'),
             panzoom = chart.getInteractions()[0],
             toolbar = this.lookup('toolbar');
@@ -51,7 +56,7 @@ Ext.define('KitchenSink.view.charts.scatter.BasicController', {
         toolbar.add(panzoom.getModeToggleButton());
     },
 
-    onPanZoomReset: function () {
+    onPanZoomReset: function() {
         var chart = this.lookup('chart'),
             axes = chart.getAxes();
 

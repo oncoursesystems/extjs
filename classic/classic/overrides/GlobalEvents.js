@@ -11,11 +11,11 @@ Ext.define('Ext.overrides.GlobalEvents', {
      * Fires after global layout processing has been resumed in {@link
      * Ext.Component#resumeLayouts}.
      */
-    
+
     attachListeners: function() {
         var me = this,
             docElement, bufferedFn;
-        
+
         // In IE9- when using legacy onresize event via attachEvent or onresize property,
         // the event may fire for *content size changes* as well as actual document view
         // size changes. See this: https://msdn.microsoft.com/en-us/library/ms536959(v=vs.85).aspx
@@ -26,7 +26,7 @@ Ext.define('Ext.overrides.GlobalEvents', {
         if (Ext.isIE8) {
             docElement = Ext.getDoc().dom.documentElement;
             bufferedFn = Ext.Function.createBuffered(me.fireResize, me.resizeBuffer, me);
-            
+
             Ext.getWin().dom.attachEvent('onresize', function() {
                 if (docElement.clientWidth !== Ext.GlobalEvents.curWidth ||
                     docElement.clientHeight !== Ext.GlobalEvents.curHeight) {
@@ -34,7 +34,7 @@ Ext.define('Ext.overrides.GlobalEvents', {
                 }
             });
         }
-        
+
         me.callParent();
     },
 
@@ -64,7 +64,7 @@ Ext.define('Ext.overrides.GlobalEvents', {
                         Ext.log.warn("Ext.on('ready', fn) is deprecated.  " +
                                      "Please use Ext.onReady(fn) instead.");
                         //</debug>
-                        
+
                         Ext.onReady(readyFn);
                     }
 

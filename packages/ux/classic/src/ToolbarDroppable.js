@@ -78,13 +78,13 @@ Ext.define('Ext.ux.ToolbarDroppable', {
             xHover = e.getXY()[0],
             index = 0,
             el, xTotal, width, midpoint;
- 
+
         for (; index < count; index++) {
             el = items[index].getEl();
             xTotal = el.getXY()[0];
             width = el.getWidth();
             midpoint = xTotal + width / 2;
- 
+
             if (xHover < midpoint) {
                 entryIndex = index;
                 break;

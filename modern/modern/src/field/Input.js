@@ -48,7 +48,7 @@ Ext.define('Ext.field.Input', {
     ariaEl: 'inputElement',
     inputTabIndex: 0,
 
-    getBodyTemplate: function () {
+    getBodyTemplate: function() {
         return [this.getInputTemplate()];
     },
 
@@ -61,38 +61,39 @@ Ext.define('Ext.field.Input', {
         };
     },
 
-    initElement: function () {
+    initElement: function() {
         this.callParent();
 
         this.labelElement.dom.setAttribute('for', this.inputElement.id);
     },
 
-    updateDisabled: function (disabled, oldDisabled) {
+    updateDisabled: function(disabled, oldDisabled) {
         this.callParent([disabled, oldDisabled]);
 
         this.inputElement.dom.disabled = !!disabled;
     },
 
-    updateInputType: function (newInputType) {
+    updateInputType: function(newInputType) {
         this.setInputAttribute('type', newInputType);
     },
 
-    updateName: function (name, oldName) {
+    updateName: function(name, oldName) {
         this.callParent([name, oldName]);
 
         this.setInputAttribute('name', name);
     },
 
-    updateReadOnly: function (readOnly) {
+    updateReadOnly: function(readOnly) {
         this.setInputAttribute('readonly', readOnly ? true : null);
     },
 
-    updateValue: function (value, oldValue) {
+    updateValue: function(value, oldValue) {
         // This is to prevent formatting from updating the current
         // value while typing
         if (this.canSetInputValue()) {
             this.setInputValue(value);
         }
+
         this.callParent([value, oldValue]);
     },
 
@@ -119,15 +120,17 @@ Ext.define('Ext.field.Input', {
     },
 
     reset: function() {
-        var me = this, 
+        var me = this,
             original = me.originalValue;
-        
+
         if (me.isEqual(original, me.getValue())) {
             me.setInputValue(original);
+
             if (!me.isValid()) {
                 me.validate();
             }
-        } else {
+        }
+        else {
             me.setValue(original);
         }
 
@@ -143,12 +146,13 @@ Ext.define('Ext.field.Input', {
          * Helper method to update or remove an attribute on the `inputElement`
          * @private
          */
-        setInputAttribute: function (attribute, newValue) {
+        setInputAttribute: function(attribute, newValue) {
             var inputElement = this.inputElement.dom;
 
             if (!Ext.isEmpty(newValue, true)) {
                 inputElement.setAttribute(attribute, newValue);
-            } else {
+            }
+            else {
                 inputElement.removeAttribute(attribute);
             }
         }

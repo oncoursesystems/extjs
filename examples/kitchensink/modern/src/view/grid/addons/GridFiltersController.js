@@ -82,7 +82,9 @@ Ext.define('KitchenSink.view.grid.addons.GridFiltersController', {
             }
         }
 
-        count && inFilters.push(currFilter);
+        if (count) {
+            inFilters.push(currFilter);
+        }
 
         return inFilters;
     },

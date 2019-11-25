@@ -72,7 +72,7 @@ Ext.define('Ext.grid.header.DropZone', {
         else {
             pos = "before";
         }
-        
+
         return {
             pos: pos,
             header: Ext.getCmp(t.id),
@@ -93,10 +93,10 @@ Ext.define('Ext.grid.header.DropZone', {
         if (targetHeader === me.lastTargetHeader && pos === me.lastDropPos) {
             return;
         }
-        
+
         nextHd = dragHeader.nextSibling('gridcolumn:not([hidden])');
         prevHd = dragHeader.previousSibling('gridcolumn:not([hidden])');
-        
+
         me.lastTargetHeader = targetHeader;
         me.lastDropPos = pos;
 
@@ -121,7 +121,7 @@ Ext.define('Ext.grid.header.DropZone', {
 
             for (; i < ln; i++) {
                 dropZone = allDropZones[i];
-                
+
                 if (dropZone !== me && dropZone.invalidateDrop) {
                     dropZone.invalidateDrop();
                 }
@@ -130,7 +130,7 @@ Ext.define('Ext.grid.header.DropZone', {
             me.valid = true;
             topIndicator = me.getTopIndicator();
             bottomIndicator = me.getBottomIndicator();
-            
+
             if (pos === 'before') {
                 topAnchor = 'bc-tl';
                 bottomAnchor = 'tc-bl';
@@ -189,14 +189,14 @@ Ext.define('Ext.grid.header.DropZone', {
                 doPosition = true;
                 fromPanel = from.up('tablepanel');
                 toPanel = to.up('tablepanel');
-                
+
                 if (fromPanel !== toPanel) {
                     data.crossPanel = true;
 
                     // If it's a lock operation, check that it's allowable.
                     data.isLock = toPanel.isLocked && !fromPanel.isLocked;
                     data.isUnlock = !toPanel.isLocked && fromPanel.isLocked;
-                    
+
                     if ((data.isUnlock && from.lockable === false) ||
                         (data.isLock && !from.isLockable())) {
                         doPosition = false;
@@ -211,7 +211,7 @@ Ext.define('Ext.grid.header.DropZone', {
         else {
             me.valid = false;
         }
-        
+
         return me.valid ? me.dropAllowed : me.dropNotAllowed;
     },
 
@@ -253,7 +253,7 @@ Ext.define('Ext.grid.header.DropZone', {
         if (!this.valid) {
             return;
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             dragHeader = data.header,
@@ -303,7 +303,7 @@ Ext.define('Ext.grid.header.DropZone', {
                 : visibleColumnManager.getHeaderIndex(me.getNestedHeader(targetHeader, 0));
 
             me.invalidateDrop();
-            
+
             // Cache the width here, we need to get it before we removed it from the DOM
             savedWidth = dragHeader.getWidth();
 
@@ -414,14 +414,14 @@ Ext.define('Ext.grid.header.DropZone', {
             }
 
             Ext.resumeLayouts(true);
-            
+
             // The grid must lay out so that its headerCt lays out.
             // It will not be thrown into the mix by BorderLayout#getLayoutItems
             // if it's floated, so we have to force the issue.
             if (me.headerCt.grid.floated) {
                 me.headerCt.grid.updateLayout();
             }
-            
+
             // Ext.grid.header.Container will handle the removal of empty groups,
             // don't handle it here.
         }

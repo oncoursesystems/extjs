@@ -14,7 +14,7 @@ topSuite("Ext.field.Picker", ['Ext.Button', 'Ext.picker.Picker', 'Ext.form.Panel
         }
     }
 
-    beforeEach(function () {
+    beforeEach(function() {
         oldPlatformTags = Ext.merge({}, Ext.platformTags);
     });
 
@@ -152,7 +152,7 @@ topSuite("Ext.field.Picker", ['Ext.Button', 'Ext.picker.Picker', 'Ext.form.Panel
         });
     });
 
-    describe('showPicker', function () {
+    describe('showPicker', function() {
         beforeEach(function() {
             makeField({
                 createEdgePicker: function() {
@@ -176,7 +176,7 @@ topSuite("Ext.field.Picker", ['Ext.Button', 'Ext.picker.Picker', 'Ext.form.Panel
             });
         });
 
-        it('should set value to picker on show', function () {
+        it('should set value to picker on show', function() {
             Ext.platformTags.phone = true;
 
             field.setValue('foo');
@@ -191,10 +191,10 @@ topSuite("Ext.field.Picker", ['Ext.Button', 'Ext.picker.Picker', 'Ext.form.Panel
             });
         });
     });
-    
+
     describe("readonly on first tap", function() {
         var inputEl, button, expandSpy, collapseSpy;
-        
+
         beforeEach(function() {
             button = new Ext.Button({
                 text: 'foo',
@@ -232,11 +232,11 @@ topSuite("Ext.field.Picker", ['Ext.Button', 'Ext.picker.Picker', 'Ext.form.Panel
         afterEach(function() {
             inputEl = button = expandSpy = collapseSpy = Ext.destroy(button);
         });
-        
+
         (jasmine.supportsTouch ? describe : xdescribe)("Expand on touch-induced focus", function() {
             describe("tap on unfocused field", function() {
                 beforeEach(function() {
-                    Ext.testHelper.tap(inputEl, { pointerType: 'touch'});
+                    Ext.testHelper.tap(inputEl, { pointerType: 'touch' });
                 });
 
                 it("should expand the picker", function() {

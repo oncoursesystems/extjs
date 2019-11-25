@@ -21,10 +21,10 @@ Ext.define('KitchenSink.view.pivot.DrillDown', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/PivotController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
@@ -34,21 +34,32 @@ Ext.define('KitchenSink.view.pivot.DrillDown', {
             height: 350,
             sumColumnWidth: 85,
             companyWidth: 100,
-            countryWidth: 100
+            countryWidth: 100,
+            columnLines: true
         },
         neptune: {
             width: 750,
             height: 350,
             sumColumnWidth: 85,
             companyWidth: 100,
-            countryWidth: 100
+            countryWidth: 100,
+            columnLines: true
         },
         graphite: {
             width: 750,
             height: 600,
             sumColumnWidth: 130,
             companyWidth: 150,
-            countryWidth: 200
+            countryWidth: 200,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 750,
+            height: 600,
+            sumColumnWidth: 150,
+            companyWidth: 150,
+            countryWidth: 200,
+            columnLines: false
         }
     },
     //</example>
@@ -58,6 +69,7 @@ Ext.define('KitchenSink.view.pivot.DrillDown', {
     height: '${height}',
     collapsible: true,
     multiSelect: true,
+    columnLines: '${columnLines}',
 
     selModel: {
         type: 'spreadsheet'
@@ -109,7 +121,7 @@ Ext.define('KitchenSink.view.pivot.DrillDown', {
         }, {
             dataIndex: 'month',
             header: 'Month',
-            labelRenderer: function (v) {
+            labelRenderer: function(v) {
                 return Ext.Date.monthNames[v];
             }
         }]

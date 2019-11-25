@@ -131,7 +131,7 @@ Ext.define('Ext.fx.runner.Css', {
         me.transformMethods = Ext.feature.has.Css3dTransforms
             ? me.transformMethods3d
             : me.transformMethodsNo3d;
-        
+
         me.vendorPrefix = Ext.browser.getStyleDashPrefix();
         me.ruleStylesCache = {};
 
@@ -214,7 +214,7 @@ Ext.define('Ext.fx.runner.Css', {
                 elementStyle = element.style;
 
                 properties = styles[id];
-                
+
                 for (name in properties) {
                     if (properties.hasOwnProperty(name)) {
                         value = this.formatValue(properties[name], name);
@@ -271,13 +271,13 @@ Ext.define('Ext.fx.runner.Css', {
             if (this.lengthProperties[name]) {
                 if (!Ext.dom.Element.hasUnit(value)) {
                     value = value + defaultLengthUnit;
-                    
+
                     if (isCustom) {
                         value = this.getCustomValue(value, name);
                     }
                 }
             }
-            
+
             return value;
         }
         else if (type === 'number') {
@@ -287,11 +287,11 @@ Ext.define('Ext.fx.runner.Css', {
 
             if (this.lengthProperties[name]) {
                 value = value + defaultLengthUnit;
-                
+
                 if (isCustom) {
                     value = this.getCustomValue(value, name);
                 }
-                
+
                 return value;
             }
 
@@ -337,7 +337,7 @@ Ext.define('Ext.fx.runner.Css', {
         else if (name === 'y') {
             value = el.translateXY(null, parseInt(value, 10)).y;
         }
-        
+
         return value + this.DEFAULT_UNIT_LENGTH;
     }
 });

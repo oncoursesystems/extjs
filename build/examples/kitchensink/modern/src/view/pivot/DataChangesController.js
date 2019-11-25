@@ -5,13 +5,13 @@ Ext.define('KitchenSink.view.pivot.DataChangesController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.datachangespivot',
 
-    onAddData: function () {
+    onAddData: function() {
         var store = this.lookup('pivotgrid').getMatrix().store;
 
         store.add(KitchenSink.data.PivotData.getData(1));
     },
 
-    onUpdateData: function () {
+    onUpdateData: function() {
         var store = this.lookup('pivotgrid').getMatrix().store,
             data = KitchenSink.data.PivotData.getData(1)[0],
             record = KitchenSink.data.PivotData.getRandomItem(store.data.items);
@@ -21,7 +21,7 @@ Ext.define('KitchenSink.view.pivot.DataChangesController', {
         }
     },
 
-    onRemoveData: function () {
+    onRemoveData: function() {
         var store = this.lookup('pivotgrid').getMatrix().store,
             record = KitchenSink.data.PivotData.getRandomItem(store.data.items);
 
@@ -30,7 +30,7 @@ Ext.define('KitchenSink.view.pivot.DataChangesController', {
         }
     },
 
-    onClearData: function () {
+    onClearData: function() {
         var store = this.lookup('pivotgrid').getMatrix().store;
 
         store.removeAll();

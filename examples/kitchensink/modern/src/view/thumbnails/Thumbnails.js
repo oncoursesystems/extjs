@@ -18,7 +18,9 @@ Ext.define('KitchenSink.view.thumbnails.Thumbnails', {
         pressedDelay: 0,
         itemButtonMode: true,
         disableSelection: true,
-        itemRipple: Ext.theme.is.Material ? { delegate: '.thumbnail-icon-wrap',  release: false } : false,
+        itemRipple: Ext.theme.is.Material
+            ? { delegate: '.thumbnail-icon-wrap', release: false }
+            : false,
 
         autoSize: true,
 
@@ -38,22 +40,22 @@ Ext.define('KitchenSink.view.thumbnails.Thumbnails', {
             '<div class="thumbnail-text">{text}</div>',
             {
                 bkgnd: {
-                    crisp:           'border-circle',
-                    material:        'square',
-                    'crisp-touch':   'circle',
-                    neptune:         'border-square',
-                    'modern-neptune':'border-square',
+                    crisp: 'border-circle',
+                    material: 'square',
+                    'crisp-touch': 'circle',
+                    neptune: 'border-square',
+                    'modern-neptune': 'border-square',
                     'neptune-touch': 'square',
-                    ios:             'rounded-square-bg',
-                    classic:         'rounded-square',
-                    gray:            'rounded-square',
-                    triton:          'square',
+                    ios: 'rounded-square-bg',
+                    classic: 'rounded-square',
+                    gray: 'rounded-square',
+                    triton: 'square',
                     'modern-triton': 'square'
                 },
                 styles: {
                     // Bring the star close enough to the circle bkgnd to look connected
-                    crisp:           'style="margin: 8px"',
-                    'crisp-touch':   'style="margin: 8px"'
+                    crisp: 'style="margin: 8px"',
+                    'crisp-touch': 'style="margin: 8px"'
                 }
             }
         ]
@@ -61,7 +63,7 @@ Ext.define('KitchenSink.view.thumbnails.Thumbnails', {
 
     initialize: function() {
         this.dataview = this.down('dataview');
-        this.dataview.setStore(new KitchenSink.store.Thumbnails({ id: 'thumbs-' + Ext.id()}));
+        this.dataview.setStore(new KitchenSink.store.Thumbnails({ id: 'thumbs-' + Ext.id() }));
         this.callParent();
     },
 

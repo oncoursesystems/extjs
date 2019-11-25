@@ -254,11 +254,11 @@ function() {
             }, 'shadow to be shown after animation finishes');
 
             runs(function() {
-                
+
                 // IE8 does shadows the hard way
                 expect(shadow.el.getX()).toBe(Ext.isIE8 ? 345 : 350);
                 expect(shadow.el.getY()).toBe(Ext.isIE8 ? 397 : 404);
-                
+
                 // FFWindows gets this off by one
                 expect(shadow.el.getWidth()).toBeApprox(Ext.isIE8 ? 209 : 200, 1);
                 expect(shadow.el.getHeight()).toBe(Ext.isIE8 ? 107 : 96);
@@ -302,7 +302,7 @@ function() {
             runs(function() {
                 expect(shadow.hide).not.toHaveBeenCalled();
                 expect(shadow.el.isVisible()).toBe(true);
-                
+
                 // IE8 does shadows the hard way
                 expect(shadow.el.getX()).toBe(Ext.isIE8 ? 345 : 350);
                 expect(shadow.el.getY()).toBe(Ext.isIE8 ? 397 : 404);
@@ -376,7 +376,7 @@ function() {
                 height: 400,
                 scrollable: true
             };
-            
+
             if (alignToComponent) {
                 c.items = [{
                     xtype: 'component',
@@ -413,7 +413,7 @@ function() {
                     }]
                 });
             }
-            
+
             c = new (alignToComponent ? Ext.Container : Ext.Component)(c);
             scroller = c.getScrollable();
             scroller.refresh(true);
@@ -495,7 +495,7 @@ function() {
                     expect(floater.getEl().getTop()).toBe(200);
                 });
             });
-            
+
             it('should unbind the resize listener when alignTo element is destroyed', function() {
                 var alignEl = c.getEl().down('.align', true),
                     spy = spyOnEvent(Ext.GlobalEvents, 'resize', null, {
@@ -508,7 +508,7 @@ function() {
                 expect(floater.getEl().getTop()).toBe(200);
 
                 alignEl.parentNode.removeChild(alignEl);
-                
+
                 window.onerror = onErrorSpy.andCallFake(function() {
                     if (oldOnError) {
                         oldOnError();
@@ -516,19 +516,19 @@ function() {
                 });
 
                 Ext.GlobalEvents.fireEvent('resize', 500, 500);
-                
+
                 waitsFor(function() {
                     return spy.callCount === 1;
                 });
-                
+
                 runs(function() {
                     Ext.GlobalEvents.fireEvent('resize', 1000, 1000);
                 });
-                
+
                 waitsFor(function() {
                     return spy.callCount === 2;
                 });
-                
+
                 runs(function() {
                     expect(onErrorSpy).not.toHaveBeenCalled();
                     Ext.GlobalEvents.un('resize', spy);
@@ -615,7 +615,7 @@ function() {
                 height: 400,
                 scrollable: true
             };
-            
+
             if (alignToComponent) {
                 c.items = [{
                     xtype: 'component',
@@ -652,7 +652,7 @@ function() {
                     }]
                 });
             }
-            
+
             c = new (alignToComponent ? Ext.Container : Ext.Component)(c);
             scroller = c.getScrollable();
             scroller.refresh(true);
@@ -718,12 +718,12 @@ function() {
                     expect(alignToSpy.callCount).toBe(1);
 
                     expect(floater.getEl().getTop()).toBe(100);
-                    
+
                     c.getEl().down('.align').destroy();
                 });
             });
         });
-        
+
         describe('aligning to Component', function() {
             beforeEach(function() {
                 makeTestComponent(true);
@@ -772,7 +772,7 @@ function() {
             });
         });
     });
-    
+
     describeGoodBrowsers('Chained aligning and scrolling and clipping', function() {
         var panel;
 
@@ -865,7 +865,7 @@ function() {
             headerMenu = col.activeMenu;
             columnsItem = headerMenu.child('[text=Columns]');
             jasmine.fireMouseEvent(columnsItem.el, 'mouseover');
-            
+
             waitsFor(function() {
                 columnsMenu = columnsItem.menu;
 
@@ -940,7 +940,7 @@ function() {
             headerMenu = col.activeMenu;
             columnsItem = headerMenu.child('[text=Columns]');
             jasmine.fireMouseEvent(columnsItem.el, 'mouseover');
-            
+
             waitsFor(function() {
                 columnsMenu = columnsItem.menu;
 
@@ -984,10 +984,10 @@ function() {
             });
         });
     });
-    
+
     describe('showing a focusable floater while there is an unfocable, alwaysOnTop floater visible', function() {
         var transientCmp, focusable;
-        
+
         afterEach(function() {
             Ext.destroy(transientCmp, focusable);
         });
@@ -998,7 +998,7 @@ function() {
                 alwaysOnTop: true,
                 renderTo: document.body
             });
-            
+
             focusable = new Ext.window.Window({
                 title: 'I should get focused'
             }).show();
@@ -1044,7 +1044,7 @@ function() {
             expect(w1.el.getZIndex()).toBeGreaterThan(w.el.getZIndex());
         });
     });
-   
+
     describe('window rendering', function() {
         var w,
         button,
@@ -1055,7 +1055,7 @@ function() {
         });
 
         it('should not render shadow to destination if there is animation', function() {
-            
+
             button = Ext.create('Ext.Button', {
                 text: 'Click me',
                 renderTo: Ext.getBody(),
@@ -1076,7 +1076,7 @@ function() {
                                 text: '{demo}'
                             }
                         }]
-                        
+
                     });
 
                     onElementShowSpy = spyOn(w.el, 'show').andCallFake(function(anim) {
@@ -1110,7 +1110,7 @@ function() {
                                 text: '{demo}'
                             }
                         }]
-                        
+
                     });
                 }
             });

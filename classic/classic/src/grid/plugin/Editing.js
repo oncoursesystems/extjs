@@ -228,7 +228,7 @@ Ext.define('Ext.grid.plugin.Editing', {
             grid = me.grid;
 
         Ext.destroy(me.keyNav);
-        
+
         // Clear all listeners from all our events, clear all managed listeners we added
         // to other Observables
         me.clearListeners();
@@ -238,10 +238,10 @@ Ext.define('Ext.grid.plugin.Editing', {
                 Ext.destroy(grid.ownerLockable.editorEventRelayers);
                 grid.ownerLockable.editorEventRelayers = null;
             }
-            
+
             Ext.destroy(grid.editorEventRelayers);
             grid.editorEventRelayers = null;
-            
+
             grid.editingPlugin = grid.view.editingPlugin = null;
         }
 
@@ -636,7 +636,7 @@ Ext.define('Ext.grid.plugin.Editing', {
         grid.ensureVisible(record, {
             column: horizontalScroll ? columnHeader : null
         });
-        
+
         gridRow = view.getRow(record);
 
         // An intervening listener may have deleted the Record.

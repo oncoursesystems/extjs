@@ -4,7 +4,7 @@
  */
 Ext.define('Ext.ux.event.Recorder', function(Recorder) {
     var eventsToRecord, eventKey;
-    
+
     function apply() {
         var a = arguments,
             n = a.length,

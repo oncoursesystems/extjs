@@ -50,7 +50,7 @@ Ext.define('Ext.rtl.Component', {
     getBorderPadding: function() {
         var borderPadding = this.el.getBorderPadding(),
             xBegin;
-                
+
         if (this.isParentRtl()) {
             xBegin = borderPadding.xBegin;
             borderPadding.xBegin = borderPadding.xEnd;
@@ -67,7 +67,7 @@ Ext.define('Ext.rtl.Component', {
     getLocalXY: function() {
         return this.isLocalRtl() ? this.el.rtlGetLocalXY() : this.el.getLocalXY();
     },
-    
+
     unitizeBox: function(box) {
         if (this.getInherited().rtl) {
             return Ext.dom.Element.rtlUnitizeBox(box);
@@ -107,7 +107,7 @@ Ext.define('Ext.rtl.Component', {
 
         if (me.floating) {
             if (me._isOffsetParentRtl === undefined) {
-                
+
                 // position:fixed elements do not report an offsetParent, so fall back to parentNode
                 offsetParent = this.el.dom.offsetParent || this.el.dom.parentNode;
 
@@ -171,7 +171,7 @@ Ext.define('Ext.rtl.Component', {
     setLocalXY: function(x, y) {
         return this.isLocalRtl() ? this.el.rtlSetLocalXY(x, y) : this.el.setLocalXY(x, y);
     },
-    
+
     isOppositeRootDirection: function() {
         return !this.getInherited().rtl !== !Ext.rootInheritedState.rtl;
     },

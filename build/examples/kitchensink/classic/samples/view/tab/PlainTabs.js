@@ -5,7 +5,7 @@ Ext.define('KitchenSink.view.tab.PlainTabs', {
     extend: 'Ext.tab.Panel',
     xtype: 'plain-tabs',
     controller: 'tab-view',
-    
+
     //<example>
     requires: [
         'KitchenSink.view.tab.TabController'
@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.tab.PlainTabs', {
     }],
     exampleTitle: 'Plain Tabs',
     //</example>
-    
+
     width: 500,
     height: 300,
     plain: true,

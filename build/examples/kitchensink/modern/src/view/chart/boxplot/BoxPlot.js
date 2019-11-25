@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.chart.boxplot.BoxPlot', {
         'Ext.chart.series.Scatter'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/boxplot/BoxPlotController.js'
@@ -52,9 +52,9 @@ Ext.define('KitchenSink.view.chart.boxplot.BoxPlot', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -136,7 +136,7 @@ Ext.define('KitchenSink.view.chart.boxplot.BoxPlot', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

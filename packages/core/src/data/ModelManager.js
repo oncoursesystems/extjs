@@ -7,7 +7,7 @@ Ext.define('Ext.data.ModelManager', {
     requires: [
         'Ext.data.schema.Schema'
     ],
-    
+
     singleton: true,
 
     deprecated: {

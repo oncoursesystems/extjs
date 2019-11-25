@@ -484,7 +484,7 @@ $button-plain-toolbar-color: dynamic(#f0f0f0);
                     background-color: transparent;
                 }
                 
-                & + .#{$prefix}btn-arrow-el{
+                & + .#{$prefix}btn-arrow-el {
                     right: $split-pseudo-width;
                     
                     &:before {

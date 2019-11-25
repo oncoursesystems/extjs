@@ -597,7 +597,7 @@ Ext.define('Ext.data.field.Field', {
      * @cfg serialize
      * @inheritdoc Ext.data.field.Field#method-serialize
      */
-    
+
     /**
      * @cfg {String/Object/Function} summary
      * The summary type for this field. This is used to calculate a
@@ -754,14 +754,14 @@ Ext.define('Ext.data.field.Field', {
             if (!Ext.isArray(validators)) {
                 validators = [validators];
             }
-            
+
             delete data.validators;
 
             // Need to join them
             if (superValidators) {
                 validators = superValidators.concat(validators);
             }
-            
+
             proto.validators = validators;
         }
     },
@@ -784,12 +784,12 @@ Ext.define('Ext.data.field.Field', {
             }
             else {
                 validators = config.validators;
-                
+
                 if (validators) {
                     delete config.validators;
                     me.instanceValidators = validators;
                 }
-                
+
                 Ext.apply(me, config);
             }
         }
@@ -826,7 +826,7 @@ Ext.define('Ext.data.field.Field', {
         }
 
         defaultValue = me.defaultValue;
-        
+
         if (me.convert) {
             me.calculated = calculated = me.convert.length > 1;
             me.evil = calculated && !depends;
@@ -837,7 +837,7 @@ Ext.define('Ext.data.field.Field', {
         }
 
         sortType = me.sortType;
-        
+
         if (!me.sortType) {
             me.sortType = Ext.data.SortTypes.none;
         }
@@ -861,12 +861,12 @@ Ext.define('Ext.data.field.Field', {
 
     constructValidators: function(validators) {
         var all, length, i, item, validator, presence;
-        
+
         if (validators) {
             if (!(validators instanceof Array)) {
                 validators = [validators];
             }
-            
+
             all = this._validators; // we are inside getValidators so this is OK
 
             for (i = 0, length = validators.length; i < length; ++i) {
@@ -1046,7 +1046,7 @@ Ext.define('Ext.data.field.Field', {
 
         if (presence && (value == null || value === '')) {
             result = me.validateGroup(presence, value, separator, errors, record);
-            
+
             if (result !== true) {
                 return result;
             }
@@ -1065,7 +1065,7 @@ Ext.define('Ext.data.field.Field', {
 
             if (result !== true) {
                 result = result || this.defaultInvalidMessage;
-                
+
                 if (errors) {
                     if (errors.isMixedCollection) {
                         errors.add(this.name, result);
@@ -1076,14 +1076,14 @@ Ext.define('Ext.data.field.Field', {
                     else {
                         errors.push(result);
                     }
-                    
+
                     ret = ret || result;
                 }
                 else if (separator) {
                     if (ret) {
                         ret += separator;
                     }
-                    
+
                     ret += result;
                 }
                 else {
@@ -1162,7 +1162,7 @@ Ext.define('Ext.data.field.Field', {
      */
     hasMapping: function() {
         var map = this.mapping;
-        
+
         return !!(map || map === 0);
     },
 

@@ -281,7 +281,7 @@ Ext.define('Ext.util.Bag', {
         if (me.length) {
             for (i = 0; i < n; i++) {
                 idx = map[id = me.getKey(old ? item[i] : item)];
-    
+
                 if (idx !== undefined) {
                     delete map[id];
                     was = items[idx];
@@ -299,11 +299,11 @@ Ext.define('Ext.util.Bag', {
                         items[idx] = last;
                         map[me.getKey(last)] = idx;
                     }
-    
+
                     changed = true;
                 }
             }
-            
+
             if (changed) {
                 ++me.generation;
             }

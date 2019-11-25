@@ -1,14 +1,14 @@
 topSuite("Ext.app.domain.Component", ['Ext.menu.Menu'], function() {
     var panel, ctrl;
-    
+
     beforeEach(function() {
         panel = new Ext.panel.Panel({
             renderTo: Ext.getBody(),
-            
+
             width: 100,
             height: 100
         });
-        
+
         ctrl = new Ext.app.Controller({
             id: 'foo'
         });
@@ -20,35 +20,35 @@ topSuite("Ext.app.domain.Component", ['Ext.menu.Menu'], function() {
 
     it("should ignore case on event names", function() {
         var handler = jasmine.createSpy('foo handler');
-        
+
         ctrl.control({
             panel: {
                 foo: handler
             }
         });
-        
+
         panel.fireEvent('FOO');
-        
+
         expect(handler).toHaveBeenCalled();
     });
 
     it("controls Component events with control() method", function() {
         var handler = jasmine.createSpy('foo handler');
-        
+
         ctrl.control({
             panel: {
                 foo: handler
             }
         });
-        
+
         panel.fireEvent('foo');
-        
+
         expect(handler).toHaveBeenCalled();
     });
-    
+
     it("listens to Component events with listen() method", function() {
         var handler = jasmine.createSpy('bar handler');
-        
+
         ctrl.listen({
             component: {
                 panel: {
@@ -56,9 +56,9 @@ topSuite("Ext.app.domain.Component", ['Ext.menu.Menu'], function() {
                 }
             }
         });
-        
+
         panel.fireEvent('bar');
-        
+
         expect(handler).toHaveBeenCalled();
     });
 
@@ -94,9 +94,9 @@ topSuite("Ext.app.domain.Component", ['Ext.menu.Menu'], function() {
                     foo: handler
                 }
             });
-            
+
             Ext.getCmp('childMenu').fireEvent('foo');
-            
+
             expect(handler).toHaveBeenCalled();
         });
 
@@ -106,9 +106,9 @@ topSuite("Ext.app.domain.Component", ['Ext.menu.Menu'], function() {
                     foo: handler
                 }
             });
-            
+
             Ext.getCmp('childMenu').fireEvent('foo');
-            
+
             expect(handler).toHaveBeenCalled();
         });
     });

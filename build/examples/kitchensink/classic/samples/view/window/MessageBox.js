@@ -4,7 +4,7 @@
 Ext.define('KitchenSink.view.window.MessageBox', {
     extend: 'Ext.panel.Panel',
     xtype: 'message-box',
-    
+
     //<example>
     exampleTitle: 'Message Box',
     otherContent: [{
@@ -23,6 +23,11 @@ Ext.define('KitchenSink.view.window.MessageBox', {
             comboboxWidth: 250
         },
         graphite: {
+            width: 500,
+            labelWidth: 180,
+            comboboxWidth: 300
+        },
+        'classic-material': {
             width: 500,
             labelWidth: 180,
             comboboxWidth: 300
@@ -115,9 +120,9 @@ Ext.define('KitchenSink.view.window.MessageBox', {
             value: 'error',
             width: '${comboboxWidth}',
             store: [
-                ['error', 'Error'], 
-                ['info', 'Informational'], 
-                ['question', 'Question'], 
+                ['error', 'Error'],
+                ['info', 'Informational'],
+                ['question', 'Question'],
                 ['warning', 'Warning']
             ]
         }, {

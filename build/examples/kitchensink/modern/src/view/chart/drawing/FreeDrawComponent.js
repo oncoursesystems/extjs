@@ -1,15 +1,19 @@
 /**
  * Demonstrates path drawing and smoothing.
  */
-Ext.define('KitchenSink.view.chart.drawing.FreeDrawComponent', function () {
+Ext.define('KitchenSink.view.chart.drawing.FreeDrawComponent', function() {
 
     function smoothList(points) {
-        if (points.length < 3) {
+        var dx = [],
+            dy = [],
+            ln = points.length,
+            result, i;
+
+        if (ln < 3) {
             return ['M', points[0], points[1]];
         }
 
-        var dx = [], dy = [], result = ['M'],
-            i, ln = points.length;
+        result = ['M'];
 
         for (i = 0; i < ln; i += 2) {
             dx.push(points[i]);
@@ -38,7 +42,7 @@ Ext.define('KitchenSink.view.chart.drawing.FreeDrawComponent', function () {
         lastEventY: undefined,
         list: [],
 
-        constructor: function () {
+        constructor: function() {
             var me = this;
 
             me.callParent(arguments);
@@ -53,7 +57,7 @@ Ext.define('KitchenSink.view.chart.drawing.FreeDrawComponent', function () {
             });
         },
 
-        onMouseDown: function (e) {
+        onMouseDown: function(e) {
             var targetElement = this,
                 me = Ext.getCmp(targetElement.id),
                 surface = me.getSurface(),
@@ -80,7 +84,7 @@ Ext.define('KitchenSink.view.chart.drawing.FreeDrawComponent', function () {
             }
         },
 
-        onMouseMove: function (e) {
+        onMouseMove: function(e) {
             var targetElement = this,
                 me = Ext.getCmp(targetElement.id),
                 surface = me.getSurface(),
@@ -97,7 +101,8 @@ Ext.define('KitchenSink.view.chart.drawing.FreeDrawComponent', function () {
                 if (dx * dx + dy * dy < D * D) {
                     me.list.length -= 2;
                     me.list.push(x, y);
-                } else {
+                }
+                else {
                     me.list.length -= 2;
                     me.list.push(me.lastEventX = x, me.lastEventY = y);
                     me.list.push(me.lastEventX + 1, me.lastEventY + 1);
@@ -108,11 +113,13 @@ Ext.define('KitchenSink.view.chart.drawing.FreeDrawComponent', function () {
                 me.sprite.setAttributes({
                     path: path
                 });
+
                 if (Ext.os.is.Android) {
-                    Ext.draw.Animator.schedule(function () {
+                    Ext.draw.Animator.schedule(function() {
                         surface.renderFrame();
                     }, me);
-                } else {
+                }
+                else {
                     surface.renderFrame();
                 }
             }

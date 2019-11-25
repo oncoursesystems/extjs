@@ -20,7 +20,7 @@ Ext.define('Ext.theme.neptune.Component', {
                 // allow dock layout to decide which borders to suppress.
                 me.border = null;
             }
-            
+
             me.callParent(arguments);
 
             if (hasOwnBorder) {

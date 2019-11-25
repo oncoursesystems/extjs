@@ -2,16 +2,16 @@ Ext.define('KitchenSink.view.forms.ContainerFieldController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.form-containerfield',
 
-    init: function () {
+    init: function() {
         var view = this.getView(),
             forms = view.query('> formpanel');
 
-        forms.forEach(function (form) {
+        forms.forEach(function(form) {
             form.validate();
         });
     },
 
-    onCancel: function (btn) {
+    onCancel: function(btn) {
         var form = btn.up('formpanel'),
             nameField = form.child('containerfield');
 
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.forms.ContainerFieldController', {
         nameField.focus();
     },
 
-    onOk: function (btn) {
+    onOk: function(btn) {
         var form = btn.up('formpanel');
 
         if (form.validate()) {

@@ -13,7 +13,7 @@ Ext.define('Ext.chart.axis.layout.Continuous', {
         adjustMinimumByMajorUnit: false,
         adjustMaximumByMajorUnit: false
     },
-    
+
     getCoordFor: function(value, field, idx, items) {
         return +value;
     },

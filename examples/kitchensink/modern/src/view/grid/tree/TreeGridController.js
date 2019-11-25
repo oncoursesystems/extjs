@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.grid.tree.TreeGridController', {
         'Ext.exporter.excel.Xlsx'
     ],
 
-    exportDocument: function(btn){
+    exportDocument: function(btn) {
         var cfg = Ext.merge({
             title: 'Tree grid export demo',
             fileName: 'TreeGridExport' + '.' + (btn.cfg.ext || btn.cfg.type)
@@ -22,14 +22,14 @@ Ext.define('KitchenSink.view.grid.tree.TreeGridController', {
         this.getView().saveDocumentAs(cfg);
     },
 
-    onBeforeDocumentSave: function(view){
+    onBeforeDocumentSave: function(view) {
         view.mask({
             xtype: 'loadmask',
             message: 'Document is prepared for export. Please wait ...'
         });
     },
 
-    onDocumentSave: function(view){
+    onDocumentSave: function(view) {
         view.unmask();
     }
 

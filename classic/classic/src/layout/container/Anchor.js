@@ -260,11 +260,11 @@ Ext.define('Ext.layout.container.Anchor', {
             if (this.parseAnchorRE.test(a)) {
                 return factory.standard(cstart - start);
             }
-    
+
             if (a.indexOf('%') !== -1) {
                 return factory.ratio(parseFloat(a.replace('%', '')) * 0.01);
             }
-    
+
             delta = parseInt(a, 10);
 
             if (!isNaN(delta)) {

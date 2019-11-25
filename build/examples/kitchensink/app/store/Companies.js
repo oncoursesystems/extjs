@@ -2,10 +2,10 @@ Ext.define('KitchenSink.store.Companies', {
     extend: 'Ext.data.Store',
     alias: 'store.companies',
     model: 'KitchenSink.model.Company',
-    
+
     autoLoad: true,
     pageSize: null,
-    
+
     proxy: {
         type: 'ajax',
         url: '/KitchenSink/Company',

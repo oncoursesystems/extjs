@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.charts.bar.Stacked', {
     xtype: 'bar-stacked',
     controller: 'bar-stacked',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.charts.bar.Stacked', {
         type: 'Store',
         path: 'app/store/Browsers.js'
     }],
-    // </example>
+    //</example>
 
     width: 650,
     bodyStyle: 'background-color: transparent;',
@@ -43,7 +43,7 @@ Ext.define('KitchenSink.view.charts.bar.Stacked', {
         legend: {
             docked: 'right'
         },
-        store: {type: 'browsers'},
+        store: { type: 'browsers' },
         flipXY: true,
         axes: [{
             type: 'numeric',

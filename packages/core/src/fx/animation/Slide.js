@@ -117,7 +117,7 @@ Ext.define('Ext.fx.animation.Slide', {
                 if (offsetPct) {
                     offset = box.height * offset / 100;
                 }
-                
+
                 if (out) {
                     translateY = containerBox.top - box.top - box.height - offset;
                 }
@@ -132,7 +132,7 @@ Ext.define('Ext.fx.animation.Slide', {
                 if (offsetPct) {
                     offset = box.height * offset / 100;
                 }
-                
+
                 if (out) {
                     translateY = containerBox.bottom - box.bottom + box.height + offset;
                 }
@@ -146,7 +146,7 @@ Ext.define('Ext.fx.animation.Slide', {
                 if (offsetPct) {
                     offset = box.width * offset / 100;
                 }
-                
+
                 if (out) {
                     translateX = containerBox.right - box.right + box.width + offset;
                 }
@@ -160,7 +160,7 @@ Ext.define('Ext.fx.animation.Slide', {
                 if (offsetPct) {
                     offset = box.width * offset / 100;
                 }
-                
+
                 if (out) {
                     translateX = containerBox.left - box.left - box.width - offset;
                 }

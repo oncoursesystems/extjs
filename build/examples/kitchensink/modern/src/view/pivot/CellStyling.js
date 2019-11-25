@@ -24,7 +24,7 @@ Ext.define('KitchenSink.view.pivot.CellStyling', {
     xtype: 'cellediting-pivot-grid',
     controller: 'pivot',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/pivot/PivotController.js'
@@ -35,7 +35,7 @@ Ext.define('KitchenSink.view.pivot.CellStyling', {
         type: 'Model',
         path: 'modern/src/view/pivot/PivotCellModel.js'
     }],
-    // </example>
+    //</example>
 
     // Use this config to apply a rule to all cells generated for aggregate dimensions
     // Or use `leftAxisCellConfig` to apply a rule to all cells generated for leftAxis
@@ -65,14 +65,14 @@ Ext.define('KitchenSink.view.pivot.CellStyling', {
             align: 'right',
             width: 120
             // You can also define here a `cellConfig` for binding
-            //cellConfig: {
+            // cellConfig: {
             //    viewModel: {
             //        type: 'pivot-cell-model'
             //    },
             //    bind: {
             //        userCls: '{cellStyle}'
             //    }
-            //}
+            // }
         }],
         // Configure the left axis dimensions that will be used to generate
         // the grid rows
@@ -114,7 +114,7 @@ Ext.define('KitchenSink.view.pivot.CellStyling', {
         }, {
             dataIndex: 'month',
             header: 'Month',
-            labelRenderer:  'monthLabelRenderer'
+            labelRenderer: 'monthLabelRenderer'
         }]
     }
 });

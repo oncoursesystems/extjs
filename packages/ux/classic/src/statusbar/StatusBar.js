@@ -86,27 +86,27 @@ Ext.define('Ext.ux.statusbar.StatusBar', {
      *         })
      *     });
      */
-    
+
     /**
      * @cfg {String} [defaultText='']
      * The default {@link #text} value.  This will be used anytime the status bar is cleared
      * with the `useDefaults:true` option.
      */
-    
+
     /**
      * @cfg {String} [defaultIconCls='']
      * The default {@link #iconCls} value (see the iconCls docs for additional details about
      * customizing the icon). This will be used anytime the status bar is cleared with the
      * `useDefaults:true` option.
      */
-    
+
     /**
      * @cfg {String} text
      * A string that will be <b>initially</b> set as the status message.  This string
      * will be set as innerHTML (html tags are accepted) for the toolbar item.
      * If not specified, the value set for {@link #defaultText} will be used.
      */
-    
+
     /**
      * @cfg [iconCls='']
      * @inheritdoc Ext.panel.Header#cfg-iconCls
@@ -138,21 +138,21 @@ Ext.define('Ext.ux.statusbar.StatusBar', {
      * The base class applied to the containing element for this component on render.
      */
     cls: 'x-statusbar',
-    
+
     /**
      * @cfg {String} busyIconCls
      * The default {@link #iconCls} applied when calling {@link #showBusy}.
      * It can be overridden at any time by passing the `iconCls` argument into {@link #showBusy}.
      */
     busyIconCls: 'x-status-busy',
-    
+
     /**
      * @cfg {String} busyText
      * The default {@link #text} applied when calling {@link #showBusy}.
      * It can be overridden at any time by passing the `text` argument into {@link #showBusy}.
      */
     busyText: 'Loading...',
-    
+
     /**
      * @cfg {Number} autoClear
      * The number of milliseconds to wait after setting the status via

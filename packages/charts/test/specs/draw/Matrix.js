@@ -27,7 +27,7 @@ topSuite("Ext.draw.Matrix", function() {
             m2.rotate(Math.PI / 3, 8, 9, true);
             expect(m1.isEqual(m2)).toBe(true);
         });
-        
+
         it("should return 'false' for matrices with different elements", function() {
             var m1 = new Ext.draw.Matrix(1, 2, 3, 1, 5, 6),
                 m2 = new Ext.draw.Matrix(1, 2, 3, 4, 5, 6);

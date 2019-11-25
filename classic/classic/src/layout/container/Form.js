@@ -101,7 +101,7 @@ Ext.define('Ext.layout.container.Form', {
             if (typeof labelWidth === 'number') {
                 labelWidth += 'px';
             }
-            
+
             data.labelWidth = labelWidth;
             formWrapCls += ' ' + me.formWrapSizedLabelCls;
         }

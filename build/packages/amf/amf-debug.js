@@ -207,7 +207,7 @@ Ext.define('Ext.data.amf.Encoder', {
         if (typeof (item) !== "boolean") {
             Ext.log.warn("Encoder: writeBoolean argument is not a boolean. Coercing.");
         }
-        // </debug>
+        //</debug>
         if (item) {
             this.writeByte(3);
         } else // AMF3 true
@@ -226,7 +226,7 @@ Ext.define('Ext.data.amf.Encoder', {
         if (typeof (item) !== "boolean") {
             Ext.log.warn("Encoder: writeBoolean argument is not a boolean. Coercing.");
         }
-        // </debug>
+        //</debug>
         this.writeByte(1);
         // AMF0 boolean marker
         if (item) {
@@ -288,7 +288,7 @@ Ext.define('Ext.data.amf.Encoder', {
         if (typeof (item) !== "number" && !(item instanceof Number)) {
             Ext.log.warn("Encoder: writeNumber argument is not numeric. Can't coerce.");
         }
-        // </debug>
+        //</debug>
         // switch to the primitive value for handling:
         if (item instanceof Number) {
             item = item.valueOf();
@@ -323,7 +323,7 @@ Ext.define('Ext.data.amf.Encoder', {
         if (typeof (item) !== "number" && !(item instanceof Number)) {
             Ext.log.warn("Encoder: writeNumber argument is not numeric. Can't coerce.");
         }
-        // </debug>
+        //</debug>
         // switch to the primitive value for handling:
         if (item instanceof Number) {
             item = item.valueOf();
@@ -432,7 +432,7 @@ Ext.define('Ext.data.amf.Encoder', {
         if (!Ext.isString(item)) {
             Ext.log.warn("Encoder: writString argument is not a string.");
         }
-        // </debug>
+        //</debug>
         if (item === "") {
             // special case for the empty string
             this.writeByte(6);
@@ -476,7 +476,7 @@ Ext.define('Ext.data.amf.Encoder', {
         if (!Ext.isString(item)) {
             Ext.log.warn("Encoder: writString argument is not a string.");
         }
-        // </debug>
+        //</debug>
         if (item === "") {
             // special case for the empty string
             this.writeByte(2);
@@ -522,7 +522,7 @@ Ext.define('Ext.data.amf.Encoder', {
         if (!this.isXmlDocument(xml)) {
             Ext.log.warn("Encoder: write3XmlWithType argument is not an xml document.");
         }
-        // </debug>
+        //</debug>
         xmlStr = this.convertXmlToString(xml);
         if (xmlStr === "") {
             // special case for the empty string
@@ -570,7 +570,7 @@ Ext.define('Ext.data.amf.Encoder', {
         if (!this.isXmlDocument(xml)) {
             Ext.log.warn("Encoder: write0Xml argument is not an xml document.");
         }
-        // </debug>
+        //</debug>
         xmlStr = this.convertXmlToString(xml);
         this.writeByte(15);
         // AMF0 XML marker
@@ -2843,7 +2843,7 @@ Ext.define('Ext.data.amf.XmlEncoder', {
         if (typeof (num) !== "number" && !(num instanceof Number)) {
             Ext.log.warn("Encoder: writeNumber argument is not numeric. Can't coerce.");
         }
-        // </debug>
+        //</debug>
         // switch to the primitive value for handling:
         if (num instanceof Number) {
             num = num.valueOf();

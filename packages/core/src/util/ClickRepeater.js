@@ -32,7 +32,7 @@ Ext.define('Ext.util.ClickRepeater', {
      * @param {Ext.util.ClickRepeater} this
      * @param {Ext.event.Event} e
      */
-    
+
     config: {
         /**
          * @cfg {Ext.dom.Element} [el]
@@ -129,9 +129,9 @@ Ext.define('Ext.util.ClickRepeater', {
         this.setEl(null);
         this.callParent();
     },
-    
+
     privates: {
-        
+
         fireClick: function(e) {
             var me = this;
 

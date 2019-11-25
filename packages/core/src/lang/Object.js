@@ -33,11 +33,11 @@ ExtObject = Ext.Object = {
      */
     chain: Object.create || function(object) {
         var result;
-        
+
         TemplateClass.prototype = object;
         result = new TemplateClass();
         TemplateClass.prototype = null;
-        
+
         return result;
     },
 
@@ -48,7 +48,7 @@ ExtObject = Ext.Object = {
      */
     clear: function(object) {
         var key;
-        
+
         // Safe to delete during iteration
         for (key in object) {
             delete object[key];
@@ -69,17 +69,17 @@ ExtObject = Ext.Object = {
     freeze: Object.freeze
         ? function(obj, deep) {
             var name;
-            
+
             if (obj && typeof obj === 'object' && !Object.isFrozen(obj)) {
                 Object.freeze(obj);
-    
+
                 if (deep) {
                     for (name in obj) {
                         ExtObject.freeze(obj[name], deep);
                     }
                 }
             }
-            
+
             return obj;
         }
         : Ext.identityFn,
@@ -275,7 +275,7 @@ ExtObject = Ext.Object = {
                 name = decodeURIComponent(name);
 
                 value = components[1];
-                
+
                 if (value !== undefined) {
                     value = value.replace(plusRe, '%20');
                     value = decodeURIComponent(value);
@@ -506,10 +506,10 @@ ExtObject = Ext.Object = {
 
             for (key in object) {
                 value = object[key];
-                
+
                 if (value && value.constructor === Object) {
                     sourceKey = destination[key];
-                    
+
                     if (sourceKey && sourceKey.constructor === Object) {
                         mergeFn(sourceKey, value);
                     }
@@ -590,7 +590,7 @@ ExtObject = Ext.Object = {
      */
     getKey: function(object, value) {
         var property;
-        
+
         for (property in object) {
             if (object.hasOwnProperty(property) && object[property] === value) {
                 return property;
@@ -641,7 +641,7 @@ ExtObject = Ext.Object = {
             if (!object) {
                 return [];
             }
-            
+
             return Object.keys(object);
         }
         : function(object) {
@@ -680,7 +680,7 @@ ExtObject = Ext.Object = {
 
         return size;
     },
-    
+
     /**
      * Checks if there are any properties on this object.
      * @param {Object} object
@@ -688,16 +688,16 @@ ExtObject = Ext.Object = {
      */
     isEmpty: function(object) {
         var key;
-        
+
         for (key in object) {
             if (object.hasOwnProperty(key)) {
                 return false;
             }
         }
-        
+
         return true;
     },
-    
+
     /**
      * @method
      * Shallow compares the contents of 2 objects using strict equality. Objects are
@@ -720,7 +720,7 @@ ExtObject = Ext.Object = {
     equals: (function() {
         var check = function(o1, o2) {
             var key;
-        
+
             for (key in o1) {
                 if (o1.hasOwnProperty(key)) {
                     if (o1[key] !== o2[key]) {
@@ -728,16 +728,16 @@ ExtObject = Ext.Object = {
                     }
                 }
             }
-            
+
             return true;
         };
-        
+
         return function(object1, object2) {
             // Short circuit if the same object is passed twice
             if (object1 === object2) {
                 return true;
             }
-            
+
             if (object1 && object2) {
                 // Do the second check because we could have extra keys in
                 // object2 that don't exist in object1.
@@ -787,11 +787,11 @@ ExtObject = Ext.Object = {
             if (!Object.prototype.__defineGetter__) {
                 return;
             }
-            
+
             if (descriptor.get) {
                 object.__defineGetter__(name, descriptor.get);
             }
-            
+
             if (descriptor.set) {
                 object.__defineSetter__(name, descriptor.set);
             }
@@ -805,7 +805,7 @@ ExtObject = Ext.Object = {
             objectProperties = [],
             propertyClassesMap = {},
             objectClass, key, value;
-            
+
         objectClass = function() {
             var property, i, ln;
 

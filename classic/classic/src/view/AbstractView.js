@@ -5,7 +5,7 @@
  */
 Ext.define('Ext.view.AbstractView', {
     extend: 'Ext.Component',
-    
+
     requires: [
         'Ext.LoadMask',
         'Ext.CompositeElementLite',
@@ -13,7 +13,7 @@ Ext.define('Ext.view.AbstractView', {
         'Ext.view.NavigationModel',
         'Ext.util.CSS'
     ],
-    
+
     mixins: [
         'Ext.util.StoreHolder'
     ],
@@ -39,7 +39,7 @@ Ext.define('Ext.view.AbstractView', {
             return Ext.getCmp(node.getAttribute('data-boundView'));
         }
     },
-    
+
     /**
      * @property defaultBindProperty
      * @inheritdoc
@@ -135,7 +135,7 @@ Ext.define('Ext.view.AbstractView', {
                         : me.flushChangeQueue.bind(me), me, null, false
                 );
             }
-            
+
             if (!me.flushTimer) {
                 me.flushTimer = me.flushQueueTask.delay(Ext.view.AbstractView.updateDelay);
             }
@@ -158,7 +158,7 @@ Ext.define('Ext.view.AbstractView', {
             if (Ext.isScrolling) {
                 return me.flushTimer = me.flushQueueTask.delay(1);
             }
-            
+
             me.flushTimer = null;
 
             changeQueue = me.changeQueue;
@@ -221,7 +221,7 @@ Ext.define('Ext.view.AbstractView', {
      * @inheritdoc
      */
     publishes: ['selection'],
-    
+
     /**
      * @cfg twoWayBindable
      * @inheritdoc
@@ -425,7 +425,7 @@ Ext.define('Ext.view.AbstractView', {
      * @inheritdoc
      */
     autoDestroyBoundStore: true,
-    
+
     /**
      * @property ariaRole
      * @inheritdoc
@@ -437,13 +437,13 @@ Ext.define('Ext.view.AbstractView', {
      * @private
      */
     last: false,
-    
+
     /**
      * @property focusable
      * @inheritdoc
      */
     focusable: true,
-    
+
     /**
      * @cfg tabIndex
      * @inheritdoc
@@ -514,7 +514,7 @@ Ext.define('Ext.view.AbstractView', {
         if (config && config.selModel) {
             config.selectionModel = config.selModel;
         }
-        
+
         this.callParent([config]);
     },
 
@@ -538,7 +538,7 @@ Ext.define('Ext.view.AbstractView', {
                     itemTpl = itemTpl.slice(0);
                     memberFn = itemTpl.pop();
                 }
-                
+
                 itemTpl = itemTpl.join('');
             }
             else if (Ext.isObject(itemTpl)) {
@@ -556,12 +556,12 @@ Ext.define('Ext.view.AbstractView', {
                 delete memberFn.fn;
                 itemTpl = "{%this.baseFn(out, values, parent, xindex, xcount, xkey)%}";
             }
-            
+
             itemTpl = Ext.String.format(
                 '<tpl for="."><div class="{0}" role="{2}">{1}</div></tpl>', me.itemCls, itemTpl,
                 me.itemAriaRole
             );
-            
+
             me.tpl = new Ext.XTemplate(itemTpl, memberFn);
         }
 
@@ -589,9 +589,9 @@ Ext.define('Ext.view.AbstractView', {
                     'Use overItemCls instead.'
                 );
             }
-            
+
             me.overItemCls = me.overCls || me.overClass;
-            
+
             delete me.overCls;
             delete me.overClass;
         }
@@ -602,9 +602,9 @@ Ext.define('Ext.view.AbstractView', {
                     'Ext.view.View: Using the deprecated selectedCls or selectedClass ' +
                     'configuration. Use selectedItemCls instead.');
             }
-            
+
             me.selectedItemCls = me.selectedCls || me.selectedClass;
-            
+
             delete me.selectedCls;
             delete me.selectedClass;
         }
@@ -652,7 +652,7 @@ Ext.define('Ext.view.AbstractView', {
         if (this.focusable) {
             result.tabIndex = 0;
         }
-        
+
         return result;
     },
 
@@ -660,7 +660,7 @@ Ext.define('Ext.view.AbstractView', {
         var mask = this.loadMask;
 
         this.callParent([parentNode, containerIdx]);
-        
+
         if (mask) {
             this.createMask(mask);
         }
@@ -728,7 +728,7 @@ Ext.define('Ext.view.AbstractView', {
         if (mask && mask.isComponent) {
             result.push(mask);
         }
-        
+
         return result;
     },
 
@@ -760,17 +760,17 @@ Ext.define('Ext.view.AbstractView', {
         if (!me.ignoreNextSelection) {
             me.ignoreNextSelection = true;
             sm = me.getSelectionModel();
-            
+
             if (selection) {
                 sm.select(selection);
             }
             else {
                 sm.deselectAll();
             }
-            
+
             me.ignoreNextSelection = false;
         }
-        
+
         me.publishState('selection', selection);
     },
 
@@ -780,16 +780,16 @@ Ext.define('Ext.view.AbstractView', {
 
         if (!me.ignoreNextSelection) {
             me.ignoreNextSelection = true;
-            
+
             if (selection.length) {
                 selected = selModel.getLastSelected();
                 me.hasHadSelection = true;
             }
-            
+
             if (me.hasHadSelection) {
                 me.setSelection(selected);
             }
-            
+
             me.ignoreNextSelection = false;
         }
     },
@@ -808,7 +808,7 @@ Ext.define('Ext.view.AbstractView', {
                     lastselectedchanged: me.updateBindSelection
                 });
             }
-            
+
             Ext.destroy(me.selModelRelayer);
             selModel = Ext.Factory.selection(selModel);
         }
@@ -833,7 +833,7 @@ Ext.define('Ext.view.AbstractView', {
                         type: selModel
                     };
                 }
-                
+
                 selModel = Ext.Factory.selection(Ext.apply({
                     allowDeselect: me.allowDeselect || me.multiSelect,
                     mode: mode,
@@ -841,11 +841,11 @@ Ext.define('Ext.view.AbstractView', {
                 }, selModel));
             }
         }
-        
+
         // Grids should have aria-multiselectable on their ariaEl instead
         if (selModel.mode !== 'SINGLE') {
             ariaDom = (grid || me).ariaEl.dom;
-            
+
             if (ariaDom) {
                 ariaDom.setAttribute('aria-multiselectable', true);
             }
@@ -858,7 +858,7 @@ Ext.define('Ext.view.AbstractView', {
         me.selModelRelayer = me.relayEvents(selModel, [
             'selectionchange', 'beforeselect', 'beforedeselect', 'select', 'deselect', 'focuschange'
         ]);
-        
+
         selModel.on({
             scope: me,
             lastselectedchanged: me.updateBindSelection,
@@ -888,16 +888,16 @@ Ext.define('Ext.view.AbstractView', {
         // situation.
         // See Ext.view.navigationModel for this being set.
         me.lastFocused = null;
-        
+
         if (focusPosition === 'scrollbar') {
             e.relatedTarget.focus();
-            
+
             return;
         }
 
         // Disable tabbability of elements within this view.
         me.toggleChildrenTabbability(false);
-        
+
         if (!me.itemFocused && me.all.getCount()) {
 
             // SHIFT+TAB hit the tab guard - focus last item.
@@ -907,20 +907,20 @@ Ext.define('Ext.view.AbstractView', {
             else {
                 focusPosition = navigationModel.getLastFocused();
             }
-            
+
             navigationModel.setPosition(focusPosition || 0, e.event, null, !focusPosition);
 
             // We now contain focus is that was successful
             me.itemFocused = navigationModel.getPosition() != null;
         }
-        
+
         // View's main el should be kept untabbable, otherwise pressing
         // Shift-Tab key in the view would move the focus to the main el
         // which will then bounce it back to the last focused item.
         // That would effectively make Shift-Tab unusable.
         if (me.itemFocused) {
             me.el.dom.setAttribute('tabIndex', -1);
-            
+
             if (me.tabGuardEl) {
                 me.tabGuardEl.setAttribute('tabIndex', -1);
             }
@@ -941,7 +941,7 @@ Ext.define('Ext.view.AbstractView', {
 
             me.itemFocused = false;
             me.el.dom.setAttribute('tabIndex', 0);
-            
+
             if (me.tabGuardEl) {
                 me.tabGuardEl.setAttribute('tabIndex', 0);
             }
@@ -949,7 +949,7 @@ Ext.define('Ext.view.AbstractView', {
 
         me.callParent([e]);
     },
-    
+
     /**
      * @private
      * Cancel a pending focus task, if any.
@@ -957,7 +957,7 @@ Ext.define('Ext.view.AbstractView', {
      */
     cancelFocusTask: function() {
         var task = this.getFocusTask();
-        
+
         if (task) {
             task.cancel();
         }
@@ -971,7 +971,7 @@ Ext.define('Ext.view.AbstractView', {
             this.onFocusLeave({});
         }
     },
-    
+
     /**
      * Refreshes the view by reloading the data from the store and re-rendering the template.
      *
@@ -1008,7 +1008,7 @@ Ext.define('Ext.view.AbstractView', {
 
             if (scroller) {
                 scrollPos = scroller.getPosition();
-                
+
                 if (!(scrollPos.x || scrollPos.y)) {
                     scrollPos = null;
                 }
@@ -1070,7 +1070,7 @@ Ext.define('Ext.view.AbstractView', {
                 me.viewReady = true;
                 me.fireEvent('viewready', me);
             }
-            
+
             me.refreshing = false;
 
             if (bufferedRenderer) {
@@ -1164,7 +1164,7 @@ Ext.define('Ext.view.AbstractView', {
                 destroyable: true
             });
         }
-        
+
         me.callParent([width, height]);
     },
 
@@ -1180,17 +1180,17 @@ Ext.define('Ext.view.AbstractView', {
         // view. This is so that widgets rendered into a view by a WidgetColumn can be recycled.
         removedItems = all.slice();
         removedRecs = [];
-        
+
         for (i = all.startIndex; i <= all.endIndex; i++) {
             removedRecs.push(
                 store.getByInternalId(all.item(i, true).getAttribute('data-recordId'))
             );
         }
-        
+
         me.fireItemMutationEvent('itemremove', removedRecs, all.startIndex || 0, removedItems, me);
 
         me.clearEmptyEl();
-        
+
         // If nodeContainer is the el, just clear the innerHTML. Otherwise, we need
         // to manually remove each node we know about.
         me.all.clear(!nodeContainerIsTarget);
@@ -1210,7 +1210,7 @@ Ext.define('Ext.view.AbstractView', {
         if (emptyEl) {
             Ext.removeNode(emptyEl);
         }
-        
+
         this.emptyEl = null;
     },
 
@@ -1269,10 +1269,10 @@ Ext.define('Ext.view.AbstractView', {
      */
     prepareData: function(data, recordIndex, record) {
         var associatedData, attr, hasCopied;
-        
+
         if (record) {
             associatedData = record.getAssociatedData();
-            
+
             for (attr in associatedData) {
                 if (associatedData.hasOwnProperty(attr)) {
                     // This would be better done in collectData, however
@@ -1283,12 +1283,12 @@ Ext.define('Ext.view.AbstractView', {
                         data = Ext.Object.chain(data);
                         hasCopied = true;
                     }
-                    
+
                     data[attr] = associatedData[attr];
                 }
             }
         }
-        
+
         return data;
     },
 
@@ -1318,10 +1318,10 @@ Ext.define('Ext.view.AbstractView', {
             record = records[i];
             data[i] = this.prepareData(record.data, startIndex + i, record);
         }
-        
+
         return data;
     },
-    
+
     cleanupData: Ext.emptyFn,
 
     bufferRender: function(records, index) {
@@ -1332,11 +1332,11 @@ Ext.define('Ext.view.AbstractView', {
 
         me.tpl.overwrite(div, me.collectData(records, index));
         nodes = div.query(me.getItemSelector());
-        
+
         for (i = 0, len = nodes.length; i < len; i++) {
             result.appendChild(nodes[i]);
         }
-        
+
         return {
             fragment: result,
             children: nodes
@@ -1371,13 +1371,13 @@ Ext.define('Ext.view.AbstractView', {
         var me = this,
             selector = '#' + me.id + ' ' + me.getItemSelector(),
             styleSheet = me.viewStyleSheet;
-        
+
         if (draggable) {
             if (!styleSheet) {
                 styleSheet = Ext.view.AbstractView.prototype.viewStyleSheet =
                     Ext.util.CSS.createStyleSheet('', 'AbstractView');
             }
-            
+
             // Pointer Events platforms implement the touch-action or -ms-touch-action properties
             // which deicate how an element responds to touches.
             // Non Pointer Events platforms such as iOS show a selection rectangle
@@ -1441,19 +1441,19 @@ Ext.define('Ext.view.AbstractView', {
                     node = me.bufferRender([record], index).children[0];
                     me.all.replaceElement(index, node, true);
                     me.updateIndexes(index, index);
-                    
+
                     // Maintain selection after update
                     selModel.onUpdate(record);
                     me.refreshSizePending = true;
-                    
+
                     if (selModel.isSelected(record)) {
                         me.onItemSelect(record);
                     }
-                    
+
                     if (me.hasListeners.itemupdate) {
                         me.fireEvent('itemupdate', record, index, node, me);
                     }
-                    
+
                     return node;
                 }
             }
@@ -1541,12 +1541,12 @@ Ext.define('Ext.view.AbstractView', {
             }
             else {
                 nodes = me.doAdd(records, index);
-                
+
                 // Some subclasses do not need to do this. TableView does not need to do this.
                 if (me.refreshSelmodelOnRefresh !== false) {
                     selModel.refresh();
                 }
-                
+
                 me.updateIndexes(index);
 
                 // Ensure layout system knows about new content size
@@ -1557,7 +1557,7 @@ Ext.define('Ext.view.AbstractView', {
         }
 
     },
-    
+
     appendNodes: function(nodes) {
         var all = this.all,
             count = all.getCount();
@@ -1595,7 +1595,7 @@ Ext.define('Ext.view.AbstractView', {
         }
 
         all.insert(index, children);
-        
+
         return children;
     },
 
@@ -1616,16 +1616,16 @@ Ext.define('Ext.view.AbstractView', {
                 // Just remove the elements which corresponds to the removed records
                 // The tpl's full HTML will still be in place.
                 nodes = [];
-                
+
                 for (i = records.length - 1; i >= 0; --i) {
                     record = records[i];
                     currIdx = index + i;
-                    
+
                     if (nodes) {
                         node = rows.item(currIdx);
                         nodes[i] = node ? node.dom : undefined;
                     }
-                    
+
                     if (rows.item(currIdx)) {
                         me.doRemove(record, currIdx);
                     }
@@ -1665,12 +1665,12 @@ Ext.define('Ext.view.AbstractView', {
             if (eventName !== 'refresh') {
                 vm = me.lookupViewModel();
             }
-            
+
             ownerGrid[me.eventLifecycleMap[eventName]].apply(
                 ownerGrid, Ext.Array.slice(arguments, 1)
             );
         }
-        
+
         me.fireEvent.apply(me, arguments);
 
         // The content height MUST be measurable by the caller (the buffered renderer),
@@ -1722,7 +1722,7 @@ Ext.define('Ext.view.AbstractView', {
                     // what kind of destruction might have been wrought on this view's DOM
                     // during focus save.
                     lastFocusedIndex = Math.min(lastFocusedIndex, me.all.getCount() - 1);
-                    
+
                     navModel.setPosition(
                         store.contains(lastFocusedRec)
                             ? lastFocusedRec
@@ -1732,7 +1732,7 @@ Ext.define('Ext.view.AbstractView', {
                 }
             };
         }
-        
+
         return Ext.emptyFn;
     },
 
@@ -1745,7 +1745,7 @@ Ext.define('Ext.view.AbstractView', {
         if (Ext.isNumber(record)) {
             record = this.store.getAt(record);
         }
-        
+
         this.onUpdate(this.dataSource, record);
     },
 
@@ -1767,7 +1767,7 @@ Ext.define('Ext.view.AbstractView', {
             node.setAttribute('data-recordIndex', i);
             node.setAttribute('data-recordId', record.internalId);
             node.setAttribute('data-boundView', myId);
-            
+
             if (selModel.getLastSelected()) {
                 me[selModel.isSelected(record) ? 'onItemSelect' : 'onItemDeselect'](record);
             }
@@ -1785,13 +1785,12 @@ Ext.define('Ext.view.AbstractView', {
             selModel = me.getSelectionModel(),
             navModel = me.getNavigationModel();
 
-
         // Can be already destroyed if we're called from doDestroy()
         if (selModel && !selModel.destroyed) {
             selModel.bindStore(store, initial);
             selModel.bindComponent(store ? me : null);
         }
-        
+
         me.mixins.storeholder.bindStore.apply(me, arguments);
 
         // Navigation model must bind to new store
@@ -1849,7 +1848,7 @@ Ext.define('Ext.view.AbstractView', {
         if (me.store.isBufferedStore) {
             me.store.preserveScrollOnReload = me.preserveScrollOnReload;
         }
-        
+
         if (oldStore && oldStore.isBufferedStore) {
             delete oldStore.preserveScrollOnReload;
         }
@@ -1866,7 +1865,6 @@ Ext.define('Ext.view.AbstractView', {
     setMaskBind: function(store) {
         var mask = this.loadMask;
 
-
         if (this.rendered && mask && store && !mask.bindStore) {
             mask = this.createMask();
         }
@@ -1878,7 +1876,7 @@ Ext.define('Ext.view.AbstractView', {
 
     getStoreListeners: function() {
         var me = this;
-        
+
         return {
             refresh: me.onDataRefresh,
             replace: me.onReplace,
@@ -1893,7 +1891,7 @@ Ext.define('Ext.view.AbstractView', {
 
     onBeginUpdate: function() {
         ++this.updateSuspendCounter;
-        
+
         Ext.suspendLayouts();
     },
 
@@ -1903,9 +1901,9 @@ Ext.define('Ext.view.AbstractView', {
         if (me.updateSuspendCounter) {
             --me.updateSuspendCounter;
         }
-        
+
         Ext.resumeLayouts(true);
-        
+
         if (me.refreshSizePending) {
             me.refreshSize(true);
             me.refreshSizePending = false;
@@ -1973,7 +1971,6 @@ Ext.define('Ext.view.AbstractView', {
         return e.getTarget(this.getItemSelector(), this.getTargetEl());
     },
 
-
     /**
      * Gets the currently selected nodes.
      * @return {HTMLElement[]} An array of HTMLElements
@@ -2024,7 +2021,6 @@ Ext.define('Ext.view.AbstractView', {
         return this.dataSource.getByInternalId(id);
     },
 
-
     /**
      * Returns true if the passed node is selected, else false.
      * @param {HTMLElement/Number/Ext.data.Model} node The node, node index or record to check
@@ -2033,7 +2029,7 @@ Ext.define('Ext.view.AbstractView', {
      */
     isSelected: function(node) {
         var r = this.getRecord(node);
-        
+
         return this.getSelectionModel().isSelected(r);
     },
 
@@ -2089,12 +2085,12 @@ Ext.define('Ext.view.AbstractView', {
                     // must pass unchanged
                     nodeInfo = nodeInfo.target;
                 }
-                
+
                 // already an HTMLElement
                 out = Ext.fly(nodeInfo).findParent(me.itemSelector, me.getTargetEl());
             }
         }
-        
+
         return out || null;
     },
 
@@ -2103,7 +2099,7 @@ Ext.define('Ext.view.AbstractView', {
      */
     getNodeByRecord: function(record) {
         var index = this.store.indexOf(record);
-        
+
         return this.all.elements[index] || null;
     },
 
@@ -2120,7 +2116,7 @@ Ext.define('Ext.view.AbstractView', {
         if (end !== undefined) {
             end++;
         }
-        
+
         return all.slice(start, end);
     },
 
@@ -2133,15 +2129,15 @@ Ext.define('Ext.view.AbstractView', {
      */
     indexOf: function(node) {
         node = this.getNode(node);
-        
+
         if (!node && node !== 0) {
             return -1;
         }
-        
+
         if (node.getAttribute('data-recordIndex')) {
             return Number(node.getAttribute('data-recordIndex'));
         }
-        
+
         return this.all.indexOf(node);
     },
 
@@ -2149,7 +2145,7 @@ Ext.define('Ext.view.AbstractView', {
         var me = this,
             count = me.updateSuspendCounter,
             tabGuardEl = me.tabGuardEl;
-        
+
         if (me.viewScrollListeners) {
             me.viewScrollListeners.destroy();
         }
@@ -2158,22 +2154,22 @@ Ext.define('Ext.view.AbstractView', {
         if (me.all && !me.all.destroyed) {
             me.all.clear();
         }
-        
+
         if (tabGuardEl) {
             if (tabGuardEl.parentNode) {
                 tabGuardEl.parentNode.removeChild(tabGuardEl);
             }
         }
-        
+
         me.emptyEl = null;
         me.setItemsDraggable(false);
-        
+
         me.bindStore(null);
-        
+
         if (me.selModelRelayer) {
             me.selModelRelayer.destroy();
         }
-        
+
         Ext.destroy(me.navigationModel, me.selectionModel, me.loadMask);
 
         // We have been destroyed during a begin/end update, which means we're
@@ -2193,7 +2189,7 @@ Ext.define('Ext.view.AbstractView', {
             Ext.fly(node).addCls(this.selectedItemCls);
             node.setAttribute('aria-selected', 'true');
         }
-        
+
         return node;
     },
 
@@ -2205,7 +2201,7 @@ Ext.define('Ext.view.AbstractView', {
             Ext.fly(node).removeCls(this.selectedItemCls);
             node.setAttribute('aria-selected', 'false');
         }
-        
+
         return node;
     },
 
@@ -2221,7 +2217,7 @@ Ext.define('Ext.view.AbstractView', {
      */
     addItemCls: function(itemInfo, cls) {
         var item = this.getNode(itemInfo);
-        
+
         if (item) {
             Ext.fly(item).addCls(cls);
         }
@@ -2235,7 +2231,7 @@ Ext.define('Ext.view.AbstractView', {
      */
     removeItemCls: function(itemInfo, cls) {
         var item = this.getNode(itemInfo);
-        
+
         if (item) {
             Ext.fly(item).removeCls(cls);
         }
@@ -2268,7 +2264,7 @@ Ext.define('Ext.view.AbstractView', {
         deferRefreshForLoad: function(store) {
             return store.isLoading();
         },
-        
+
         toggleChildrenTabbability: function(enableTabbing) {
             var focusEl = this.getTargetEl();
 
@@ -2301,7 +2297,7 @@ Ext.define('Ext.view.AbstractView', {
             if (this.focusable) {
                 options.tabindex = '-1';
             }
-            
+
             all.set(options);
         },
 
@@ -2319,30 +2315,30 @@ Ext.define('Ext.view.AbstractView', {
                     // rendering let's push on the store
                     store: maskStore
                 };
-                
+
                 // Do not overwrite default msgCls if we do not have a loadingCls
                 if (me.loadingCls) {
                     cfg.msgCls = me.loadingCls;
                 }
-                
+
                 // either a config object 
                 if (Ext.isObject(mask)) {
                     cfg = Ext.apply(cfg, mask);
                 }
-                
+
                 // Attach the LoadMask to a *Component* so that it can be sensitive to resizing
                 // during long loads. If this DataView is floating, then mask this DataView.
                 // Otherwise, mask its owning Container (or this, if there *is* no owning Container)
                 // LoadMask captures the element upon render.
                 me.loadMask = new Ext.LoadMask(cfg);
-                
+
                 me.loadMask.on({
                     scope: me,
                     beforeshow: me.onMaskBeforeShow,
                     hide: me.onMaskHide
                 });
             }
-            
+
             return me.loadMask;
         },
 
@@ -2355,10 +2351,9 @@ Ext.define('Ext.view.AbstractView', {
         getNodeContainer: function() {
             var target = this.getTargetEl(),
                 selector = this.nodeContainerSelector;
-            
+
             return selector ? target.down(selector, true) : target;
         },
-
 
         getOverflowEl: function() {
             // The desired behavior here is just to inherit from the superclass.  However,
@@ -2382,7 +2377,7 @@ Ext.define('Ext.view.AbstractView', {
              * @deprecated 4.0 Use {@link Ext.selection.Model#cfg-mode} 'MULTI' instead.
              * @since 2.3.0
              */
-            
+
             /**
              * @cfg {Boolean} [singleSelect]
              * Allows selection of exactly one item at a time. As this is the default selection mode
@@ -2390,7 +2385,7 @@ Ext.define('Ext.view.AbstractView', {
              * @removed 4.0 Use {@link Ext.selection.Model#cfg-mode} 'SINGLE' instead.
              * @since 2.3.0
              */
-            
+
             /**
              * @cfg {Boolean} [simpleSelect=false]
              * True to enable multiselection by clicking on multiple items without requiring
@@ -2413,7 +2408,7 @@ Ext.define('Ext.view.AbstractView', {
                         "with the Ext.selection.DataViewModel"
                     );
                 }
-                
+
                 return this.selModel.getSelection().length;
             },
 
@@ -2430,7 +2425,7 @@ Ext.define('Ext.view.AbstractView', {
                         "with the Ext.selection.DataViewModel"
                     );
                 }
-                
+
                 return this.selModel.getSelection();
             },
 
@@ -2443,10 +2438,10 @@ Ext.define('Ext.view.AbstractView', {
                         "a DataView's SelectionModel, ie: view.getSelectionModel().select()"
                     );
                 }
-                
+
                 // eslint-disable-next-line vars-on-top
                 var sm = this.getSelectionModel();
-                
+
                 return sm.select.apply(sm, arguments);
             },
 
@@ -2463,10 +2458,10 @@ Ext.define('Ext.view.AbstractView', {
                         "view.getSelectionModel().deselectAll()"
                     );
                 }
-                
+
                 // eslint-disable-next-line vars-on-top
                 var sm = this.getSelectionModel();
-                
+
                 return sm.deselectAll();
             }
         });

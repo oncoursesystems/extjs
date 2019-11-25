@@ -60,6 +60,7 @@ Ext.define('KitchenSink.data.Weather', {
                 // If you want to simulate more random or ctx param specific responses,
                 // modify the data object.
                 data.main.temp = Math.floor(Math.random() * (to - from + 1) + from);
+
                 return {
                     responseText: JSON.stringify(data)
                 };

@@ -61,11 +61,11 @@ Ext.define('Ext.draw.gradient.Radial', {
 
     applyStart: function(newStart, oldStart) {
         var circle;
-        
+
         if (!oldStart) {
             return newStart;
         }
-        
+
         circle = {
             x: oldStart.x,
             y: oldStart.y,
@@ -98,11 +98,11 @@ Ext.define('Ext.draw.gradient.Radial', {
 
     applyEnd: function(newEnd, oldEnd) {
         var circle;
-        
+
         if (!oldEnd) {
             return newEnd;
         }
-        
+
         circle = {
             x: oldEnd.x,
             y: oldEnd.y,

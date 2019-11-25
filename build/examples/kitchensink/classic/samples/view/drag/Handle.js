@@ -27,5 +27,5 @@ Ext.define('KitchenSink.view.drag.Handle', {
         '</div>' +
         '<div class="handle-source handle-handles">' +
             '<div class="handle">Drag</div>' +
-        '</div>' 
+        '</div>'
 });

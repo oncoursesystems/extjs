@@ -68,7 +68,7 @@ Ext.define('Ext.data.session.ChangesVisitor', {
                     all: record.getProxy().getWriter().getWriteAllFields()
                 };
             }
-            
+
             if (!options.all) {
                 entry = record.id;
             }

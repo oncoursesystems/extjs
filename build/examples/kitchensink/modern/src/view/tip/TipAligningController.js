@@ -29,6 +29,7 @@ Ext.define('KitchenSink.view.tip.TipAligningController', {
 
     onTipEdgeChange: function(newValue) {
         var values = [2, 3, 0, 1];
+
         this.getViewModel().set('targetEdge', values[newValue]);
     }
 });

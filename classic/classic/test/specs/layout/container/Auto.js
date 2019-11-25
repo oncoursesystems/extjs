@@ -275,7 +275,6 @@ topSuite("Ext.layout.container.Auto", ['Ext.Panel'], function() {
                 });
             });
 
-
             describe("configured height, shrink wrap width", function() {
                 var parentConfig = {
                     height: 100,
@@ -367,7 +366,7 @@ topSuite("Ext.layout.container.Auto", ['Ext.Panel'], function() {
                     it("should naturally width the child", function() {
                         expect(panel.child().getWidth()).toBe(78);
                     });
-                    
+
                     it("should shrink wrap the height", function() {
                         expect(panel.getHeight()).toBe(42);
                     });
@@ -449,7 +448,6 @@ topSuite("Ext.layout.container.Auto", ['Ext.Panel'], function() {
 
                 });
             });
-
 
             describe("shrink wrap width and height", function() {
                 var parentConfig = {

@@ -1,10 +1,10 @@
 topSuite("Ext.window.MessageBox", function() {
     var M;
-    
+
     beforeEach(function() {
         M = new Ext.window.MessageBox();
     });
-    
+
     afterEach(function() {
         if (M.isVisible()) {
             M.hide();
@@ -12,11 +12,11 @@ topSuite("Ext.window.MessageBox", function() {
 
         Ext.destroy(M);
     });
-    
+
     it("should have a single instance", function() {
         var MessageBox = Ext.MessageBox,
             Msg = Ext.Msg;
-            
+
         expect(MessageBox).toBe(Msg);
         expect(MessageBox instanceof Ext.window.MessageBox).toBe(true);
     });
@@ -33,7 +33,7 @@ topSuite("Ext.window.MessageBox", function() {
         expect(M.el.dom.style.zIndex).toBeGreaterThan(win.el.dom.style.zIndex);
         Ext.destroy(win);
     });
-    
+
     it("should be able to hide before being shown", function() {
         expect(function() {
             M.hide();
@@ -109,11 +109,11 @@ topSuite("Ext.window.MessageBox", function() {
 
             expect(M.title).toBe(M.header.getTitle().getText());
         });
-        
+
         it("should accept empty string as valid title", function() {
             M.show({ title: "foo" });
             M.show({ title: "" });
-            
+
             expect(M.header.getTitle().getText()).toBe('&#160;');
         });
 
@@ -162,44 +162,44 @@ topSuite("Ext.window.MessageBox", function() {
 
                 expect(M.title).toBe('Bar');
             });
-            
+
             it("should accept empty string as a valid default header title", function() {
                 M = new Ext.window.MessageBox({
                     header: {
                         title: ''
                     }
                 });
-                
+
                 M.show({ title: 'throbbe' });
                 M.show({});
-                
+
                 expect(M.header.getTitle().getText()).toBe('&#160;');
             });
         });
     });
-    
+
     describe("iconCls", function() {
         it("should accept empty string in config", function() {
             M.show({ iconCls: 'frobbe' });
             M.show({ iconCls: '' });
-            
+
             expect(M.header.getTitle().iconEl.hasCls('frobbe')).toBe(false);
         });
-        
+
         describe("passed in constructor config", function() {
             beforeEach(function() {
                 M.destroy();
             });
-            
+
             it("should accept default value for iconCls", function() {
                 M = new Ext.window.MessageBox({
                     header: {
                         iconCls: 'bonzo'
                     }
                 });
-                
+
                 M.show({});
-                
+
                 expect(M.header.getTitle().iconEl.hasCls('bonzo')).toBe(true);
             });
         });
@@ -217,11 +217,11 @@ topSuite("Ext.window.MessageBox", function() {
                 cancel: 'cancelText'
             };
         });
-        
+
         afterEach(function() {
             M.buttonText = oldText;
         });
-        
+
         it("should apply custom text to the buttons", function() {
             var btns = M.msgButtons;
 
@@ -230,16 +230,16 @@ topSuite("Ext.window.MessageBox", function() {
             });
             expect(btns.yes.text).toBe('yesText');
             expect(btns.no.text).toBe('noText');
-            
+
             M.hide();
-            
+
             M.show({
                 buttons: M.OKCANCEL
             });
             expect(btns.ok.text).toBe('okText');
             expect(btns.cancel.text).toBe('cancelText');
         });
-        
+
         it("should persist the custom text on each show", function() {
             var btns = M.msgButtons;
 
@@ -247,15 +247,15 @@ topSuite("Ext.window.MessageBox", function() {
                 buttons: M.YES
             });
             expect(btns.yes.text).toBe('yesText');
-            
+
             M.hide();
-            
+
             M.show({
                 buttons: M.YES
             });
             expect(btns.yes.text).toBe('yesText');
         });
-        
+
         it("should accept a buttonText config", function() {
             var btns = M.msgButtons;
 
@@ -270,9 +270,9 @@ topSuite("Ext.window.MessageBox", function() {
             expect(btns.no.text).toBe('newNoText');
         });
     });
-    
+
     describe("shortcuts", function() {
-        
+
         describe("buttons", function() {
             it("should use the OK shortcut", function() {
                 M.show({
@@ -285,7 +285,7 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(true);
                 expect(btns.cancel.isVisible()).toBe(false);
             });
-            
+
             it("should use the YES shortcut", function() {
                 M.show({
                     buttons: M.YES
@@ -297,7 +297,7 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(false);
                 expect(btns.cancel.isVisible()).toBe(false);
             });
-            
+
             it("should use the NO shortcut", function() {
                 M.show({
                     buttons: M.NO
@@ -309,7 +309,7 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(false);
                 expect(btns.cancel.isVisible()).toBe(false);
             });
-            
+
             it("should use the CANCEL shortcut", function() {
                 M.show({
                     buttons: M.CANCEL
@@ -321,7 +321,7 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(false);
                 expect(btns.cancel.isVisible()).toBe(true);
             });
-            
+
             it("should use the OKCANCEL shortcut", function() {
                 M.show({
                     buttons: M.OKCANCEL
@@ -333,7 +333,7 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(true);
                 expect(btns.cancel.isVisible()).toBe(true);
             });
-            
+
             it("should use the YESNO shortcut", function() {
                 M.show({
                     buttons: M.YESNO
@@ -345,7 +345,7 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(false);
                 expect(btns.cancel.isVisible()).toBe(false);
             });
-            
+
             it("should use the YESNOCANCEL shortcut", function() {
                 M.show({
                     buttons: M.YESNOCANCEL
@@ -358,9 +358,9 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.cancel.isVisible()).toBe(true);
             });
         });
-        
+
         describe("confirm", function() {
-            
+
             it("should configure yes/no buttons", function() {
                 M.confirm('a', 'b');
                 var btns = M.msgButtons;
@@ -370,13 +370,13 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(false);
                 expect(btns.cancel.isVisible()).toBe(false);
             });
-            
+
             it("should show the close tool", function() {
                 M.confirm('a', 'b');
                 expect(M.down('tool').isVisible()).toBe(true);
             });
         });
-        
+
         describe("prompt", function() {
             it("should configure ok/cancel buttons", function() {
                 M.prompt('a', 'b');
@@ -387,13 +387,13 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(true);
                 expect(btns.cancel.isVisible()).toBe(true);
             });
-            
+
             it("should show the close tool", function() {
                 M.prompt('a', 'b');
                 expect(M.down('tool').isVisible()).toBe(true);
             });
         });
-        
+
         describe("wait", function() {
             it("should hide all buttons", function() {
                 M.wait('a', 'b');
@@ -404,13 +404,13 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(false);
                 expect(btns.cancel.isVisible()).toBe(false);
             });
-            
+
             it("should hide the close tool", function() {
                 M.wait('a', 'b');
                 expect(M.down('tool').isVisible()).toBe(false);
             });
         });
-        
+
         describe("alert", function() {
             it("should configure an ok button", function() {
                 M.alert('a', 'b');
@@ -421,13 +421,13 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(true);
                 expect(btns.cancel.isVisible()).toBe(false);
             });
-            
+
             it("should show the close tool", function() {
                 M.alert('a', 'b');
                 expect(M.down('tool').isVisible()).toBe(true);
             });
         });
-        
+
         describe("progress", function() {
             it("should hide all buttons", function() {
                 M.progress('a', 'b');
@@ -438,23 +438,23 @@ topSuite("Ext.window.MessageBox", function() {
                 expect(btns.ok.isVisible()).toBe(false);
                 expect(btns.cancel.isVisible()).toBe(false);
             });
-            
+
             it("should show the close tool", function() {
                 M.progress('a', 'b');
                 expect(M.down('tool').isVisible()).toBe(true);
             });
         });
     });
-    
+
     describe("callbacks", function() {
         var click;
-        
+
         beforeEach(function() {
             click = function(btn) {
                 if (typeof btn === 'string') {
                     btn = M.msgButtons[btn];
                 }
-                
+
                 btn.onClick({
                     button: 0,
                     preventDefault: Ext.emptyFn,
@@ -462,11 +462,11 @@ topSuite("Ext.window.MessageBox", function() {
                 });
             };
         });
-        
+
         afterEach(function() {
             click = null;
         });
-        
+
         it("should pass ok when ok is clicked", function() {
             var name;
 
@@ -479,7 +479,7 @@ topSuite("Ext.window.MessageBox", function() {
             click('ok');
             expect(name).toBe('ok');
         });
-        
+
         it("should pass cancel when cancel is clicked", function() {
             var name;
 
@@ -492,7 +492,7 @@ topSuite("Ext.window.MessageBox", function() {
             click('cancel');
             expect(name).toBe('cancel');
         });
-        
+
         it("should pass yes when yes is clicked", function() {
             var name;
 
@@ -505,7 +505,7 @@ topSuite("Ext.window.MessageBox", function() {
             click('yes');
             expect(name).toBe('yes');
         });
-        
+
         it("should pass no when no is clicked", function() {
             var name;
 
@@ -518,7 +518,7 @@ topSuite("Ext.window.MessageBox", function() {
             click('no');
             expect(name).toBe('no');
         });
-        
+
         it("should pass cancel when close is pressed", function() {
             var name;
 
@@ -532,7 +532,7 @@ topSuite("Ext.window.MessageBox", function() {
             expect(name).toBe('cancel');
         });
     });
-    
+
     describe("closable", function() {
         it("should be closable by default", function() {
             M.show({
@@ -541,7 +541,7 @@ topSuite("Ext.window.MessageBox", function() {
             });
             expect(M.down('tool').isVisible()).toBe(true);
         });
-        
+
         it("should not show the tool if closable it set to false", function() {
             M.show({
                 title: 'a',
@@ -551,28 +551,28 @@ topSuite("Ext.window.MessageBox", function() {
             expect(M.down('tool').isVisible()).toBe(false);
         });
     });
-    
+
     describe("ARIA", function() {
         describe("aria-describedby", function() {
             it("should set aria-describedby for alert", function() {
                 M.alert('foo', 'bar');
-                
+
                 expect(M.ariaEl).toHaveAttribute('aria-describedby', M.msg.id);
             });
-            
+
             it("should set aria-describedby for confirm", function() {
                 M.confirm('blerg', 'zingbong');
-                
+
                 expect(M.ariaEl).toHaveAttribute('aria-describedby', M.msg.id);
             });
-            
+
             it("should remove aria-describedby for prompt", function() {
                 M.prompt('quiz', 'type something');
-                
+
                 expect(M.ariaEl).not.toHaveAttribute('aria-describedby');
             });
         });
-        
+
         describe("aria-labelledby", function() {
             describe("textField", function() {
                 beforeEach(function() {
@@ -582,16 +582,16 @@ topSuite("Ext.window.MessageBox", function() {
                         prompt: true
                     });
                 });
-                
+
                 it("should not have for attribute on labelEl", function() {
                     expect(M.textField.labelEl).not.toHaveAttribute('for');
                 });
-                
+
                 it("should have aria-labelledby attribute on inputEl", function() {
                     expect(M.textField.inputEl).toHaveAttribute('aria-labelledby', M.msg.id);
                 });
             });
-            
+
             describe("textArea", function() {
                 beforeEach(function() {
                     M.show({
@@ -600,18 +600,18 @@ topSuite("Ext.window.MessageBox", function() {
                         multiline: true
                     });
                 });
-                
+
                 it("should not have for attribute on labelEl", function() {
                     expect(M.textArea.labelEl).not.toHaveAttribute('for');
                 });
-                
+
                 it("should have aria-labelledby attribute on inputEl", function() {
                     expect(M.textArea.inputEl).toHaveAttribute('aria-labelledby', M.msg.id);
                 });
             });
         });
     });
-    
+
     describe("layouts", function() {
 
         var widths = [
@@ -649,7 +649,7 @@ topSuite("Ext.window.MessageBox", function() {
         footerPadR = 0,
         border = 1,
         mbox = Ext.MessageBox;
-    
+
         function verifyMessageBoxLayout(isShrinkWrap) {
 
             var panelH = mbox.el.getHeight(),
@@ -684,7 +684,7 @@ topSuite("Ext.window.MessageBox", function() {
                         }
                     }
                 };
-    
+
             expect(mbox).toHaveLayout(layout);
         }
 

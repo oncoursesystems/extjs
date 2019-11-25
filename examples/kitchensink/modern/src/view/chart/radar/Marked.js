@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.chart.radar.Marked', {
     xtype: 'radar-marked',
     controller: 'radar-basic',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/radar/BasicController.js'
@@ -45,9 +45,9 @@ Ext.define('KitchenSink.view.chart.radar.Marked', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -159,7 +159,7 @@ Ext.define('KitchenSink.view.chart.radar.Marked', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {

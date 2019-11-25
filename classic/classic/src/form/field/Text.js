@@ -108,7 +108,7 @@ Ext.define('Ext.form.field.Text', {
     extend: 'Ext.form.field.Base',
     alias: 'widget.textfield',
     alternateClassName: ['Ext.form.TextField', 'Ext.form.Text'],
-    
+
     requires: [
         'Ext.layout.component.field.Text',
         'Ext.form.field.VTypes',
@@ -198,7 +198,7 @@ Ext.define('Ext.form.field.Text', {
          */
         triggers: undefined
     },
-    
+
     renderConfig: {
         /**
          * @cfg {Boolean} editable
@@ -485,7 +485,7 @@ Ext.define('Ext.form.field.Text', {
      * This property will hold all elements that require emtpyCls to be applied to them
      */
     emptyClsElements: null,
-    
+
     needArrowKeys: true,
 
     /**
@@ -593,7 +593,7 @@ Ext.define('Ext.form.field.Text', {
                          'Please specify a "width" or use a layout instead.');
         }
         //</debug>
-        
+
         // In Ext JS 4.x the layout system used the following magic formula for converting
         // the "size" config into a pixel value.
         if (me.size) {
@@ -610,7 +610,7 @@ Ext.define('Ext.form.field.Text', {
         if (me.readOnly) {
             me.setReadOnly(me.readOnly);
         }
-        
+
         me.fieldFocusCls = me.baseCls + '-focus';
         me.emptyUICls = emptyCls + ' ' + emptyCls + '-' + me.ui;
         me.addStateEvents('change');
@@ -697,20 +697,20 @@ Ext.define('Ext.form.field.Text', {
             fieldCls: me.fieldCls + (me.allowBlank ? '' : ' ' + me.requiredCls) +
                       (isEmpty ? ' ' + me.emptyUICls : '')
         });
-        
+
         inputElAttr = data.inputElAriaAttributes;
-        
+
         if (inputElAttr) {
             inputElAttr['aria-required'] = !me.allowBlank;
         }
-        
+
         return data;
     },
 
     beforeRender: function() {
         var me = this,
             heighted;
-            
+
         heighted = me.height != null || me.minHeight != null ||
             !!(me.ownerLayout && me.ownerLayout.getItemSizePolicy(me, me.fakeSizeModel).setsHeight);
 
@@ -750,7 +750,7 @@ Ext.define('Ext.form.field.Text', {
             for (id in triggers) {
                 elements.push(triggers[id].el);
             }
-            
+
             // for 4.x compat, also set triggerCell
             me.triggerEl = me.triggerCell = new Ext.CompositeElement(elements, true);
         }
@@ -772,7 +772,7 @@ Ext.define('Ext.form.field.Text', {
         if (me.rendered && me.grow) {
             me.autoSize();
         }
-        
+
         me.callParent([width, height, oldWidth, oldHeight]);
     },
 
@@ -866,7 +866,7 @@ Ext.define('Ext.form.field.Text', {
                     (hideAllTriggers && triggerCfg.hidden !== false)) {
                     triggerCfg.hidden = true;
                 }
-                
+
                 if (repeatTriggerClick && (triggerCfg.repeatClick !== false)) {
                     triggerCfg.repeatClick = true;
                 }
@@ -876,7 +876,7 @@ Ext.define('Ext.form.field.Text', {
             }
         }
 
-        Ext.Array.sort(orderedTriggers, Ext.weightSortFn);
+        Ext.sortByWeight(orderedTriggers);
 
         return triggers;
     },
@@ -896,7 +896,7 @@ Ext.define('Ext.form.field.Text', {
             for (id in triggers) {
                 if (triggers.hasOwnProperty(id)) {
                     trigger = triggers[id];
-                    
+
                     // IE8 needs "|| []" if args is undefined
                     trigger[methodName].apply(trigger, args || []);
                 }
@@ -952,7 +952,7 @@ Ext.define('Ext.form.field.Text', {
         readOnly = !!readOnly;
 
         me.callParent([readOnly]);
-        
+
         if (me.rendered) {
             me.setReadOnlyAttr(readOnly || !me.editable);
         }
@@ -960,7 +960,7 @@ Ext.define('Ext.form.field.Text', {
         if (triggers) {
             for (id in triggers) {
                 trigger = triggers[id];
-                
+
                 /*
                  * Controlled trigger visibility state is only managed fully when 'hideOnReadOnly'
                  * is falsy.
@@ -993,7 +993,7 @@ Ext.define('Ext.form.field.Text', {
         else {
             inputEl.removeAttribute(readOnlyName);
         }
-        
+
         if (!me.ariaStaticRoles[me.ariaRole]) {
             me.inputEl.dom.setAttribute('aria-readonly', !!readOnly);
         }
@@ -1022,26 +1022,26 @@ Ext.define('Ext.form.field.Text', {
             }
 
             newValue = value.replace(stripRe, '');
-            
+
             if (newValue !== value) {
                 me.setRawValue(newValue);
-                
+
                 // Some components change lastValue as you type, so we need to verify
                 // if this is the case here and replace the value of lastValue
                 if (me.lastValue === value) {
                     me.lastValue = newValue;
                 }
-                
+
                 value = newValue;
             }
         }
-        
+
         return value;
     },
 
     onDisable: function() {
         this.callParent();
-        
+
         if (Ext.isIE) {
             this.inputEl.dom.unselectable = 'on';
         }
@@ -1049,7 +1049,7 @@ Ext.define('Ext.form.field.Text', {
 
     onEnable: function() {
         this.callParent();
-        
+
         if (Ext.isIE) {
             this.inputEl.dom.unselectable = '';
         }
@@ -1125,7 +1125,7 @@ Ext.define('Ext.form.field.Text', {
             else {
                 me.placeholderLabel.setHtml(value);
             }
-            
+
             me.refreshEmptyText();
         }
 
@@ -1134,12 +1134,12 @@ Ext.define('Ext.form.field.Text', {
 
     afterFirstLayout: function() {
         var el;
-        
+
         this.callParent();
-        
+
         if (Ext.isIE && this.disabled) {
             el = this.inputEl;
-            
+
             if (el) {
                 el.dom.unselectable = 'on';
             }
@@ -1172,7 +1172,7 @@ Ext.define('Ext.form.field.Text', {
         if (inputEl) {
             value = me.getValue();
             isEmpty = !(inputEl.dom.value || (Ext.isArray(value) && value.length));
-            
+
             if (me.placeholderLabel) {
                 me.placeholderLabel.setDisplayed(isEmpty);
             }
@@ -1199,7 +1199,7 @@ Ext.define('Ext.form.field.Text', {
             value, len;
 
         me.callParent([e]);
-        
+
         if (me.emptyText) {
             me.autoSize();
         }
@@ -1256,7 +1256,7 @@ Ext.define('Ext.form.field.Text', {
      */
     filterKeys: function(e) {
         var charCode;
-        
+
         /*
          * Current only FF will fire keypress events for special keys.
          * 
@@ -1267,9 +1267,9 @@ Ext.define('Ext.form.field.Text', {
         if ((e.ctrlKey && !e.altKey) || e.isSpecialKey()) {
             return;
         }
-        
+
         charCode = String.fromCharCode(e.getCharCode());
-        
+
         if (!this.maskRe.test(charCode)) {
             e.stopEvent();
         }
@@ -1281,7 +1281,7 @@ Ext.define('Ext.form.field.Text', {
 
     applyState: function(state) {
         this.callParent([state]);
-        
+
         if (state.hasOwnProperty('value')) {
             this.setValue(state.value);
         }
@@ -1359,7 +1359,7 @@ Ext.define('Ext.form.field.Text', {
 
         if (Ext.isFunction(validator)) {
             msg = validator.call(me, value);
-            
+
             if (msg !== true) {
                 errors.push(msg);
             }
@@ -1371,13 +1371,13 @@ Ext.define('Ext.form.field.Text', {
             if (!me.allowBlank) {
                 errors.push(me.blankText);
             }
-            
+
             // If we are not configured to validate blank values,
             // there cannot be any additional errors
             if (!me.validateBlank) {
                 return errors;
             }
-            
+
             isBlank = true;
         }
 
@@ -1436,7 +1436,7 @@ Ext.define('Ext.form.field.Text', {
      */
     selectText: function(start, end, direction) {
         var me = this;
-        
+
         Ext.defer(function() {
             if (!me.destroyed && me.inputEl.isVisible(true)) {
                 me.inputEl.selectText(start, end, direction);
@@ -1526,7 +1526,7 @@ Ext.define('Ext.form.field.Text', {
                     var triggers = this.getTriggers(),
                         width = 0,
                         id;
-                    
+
                     if (triggers && this.rendered) {
                         for (id in triggers) {
                             if (triggers.hasOwnProperty(id)) {
@@ -1543,6 +1543,6 @@ Ext.define('Ext.form.field.Text', {
 
 }, function(TextField) {
     var calculated = Ext.layout.SizeModel.calculated;
-        
+
     TextField.prototype.fakeSizeModel = calculated.pairsByHeightOrdinal[calculated.ordinal];
 });

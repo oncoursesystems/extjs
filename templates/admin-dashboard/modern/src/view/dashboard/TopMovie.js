@@ -21,7 +21,7 @@ Ext.define('Admin.view.dashboard.TopMovie', {
 
     platformConfig: {
         '!phone': {
-            iconCls: 'x-fa fa-video-camera'
+            iconCls: 'x-fa fa-video'
         }
     },
 

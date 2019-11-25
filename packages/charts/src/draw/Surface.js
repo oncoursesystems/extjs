@@ -336,11 +336,11 @@ Ext.define('Ext.draw.Surface', {
 
         for (i = 0, ln = items.length; i < ln; i++) {
             item = items[i];
-            
+
             if (!item || item.destroyed) {
                 continue;
             }
-            
+
             sprite = null;
 
             if (item.isSprite && !map[item.getId()]) {
@@ -437,17 +437,17 @@ Ext.define('Ext.draw.Surface', {
                 if (isDestroy) {
                     sprite.destroy();
                 }
-                
+
                 return sprite;
             }
-            
+
             sprite.setParent(null);
             sprite.setSurface(null);
 
             if (isDestroy) {
                 sprite.destroy();
             }
-            
+
             if (!destroying) {
                 Ext.Array.remove(me.getItems(), sprite);
 

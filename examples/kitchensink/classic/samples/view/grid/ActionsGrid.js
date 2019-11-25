@@ -54,8 +54,18 @@ Ext.define('KitchenSink.view.grid.ActionsGrid', {
             lastUpdatedColumnWidth: 115,
             gainColor: '#73b51e',
             lossColor: '#cf4c35'
-        }, 
+        },
         graphite: {
+            width: 750,
+            height: 450,
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 150,
+            gainColor: 'unset',
+            lossColor: 'unset'
+        },
+        'classic-material': {
             width: 750,
             height: 450,
             priceWidth: 100,
@@ -74,7 +84,7 @@ Ext.define('KitchenSink.view.grid.ActionsGrid', {
             selectionchange: 'onSelectionChange'
         }
     },
-    
+
     // Clearing selection disables the Actions.
     allowDeselect: true,
     defaultActionType: 'button',

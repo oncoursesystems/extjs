@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.lists.UndoableStepper', {
         'Ext.dataview.listswiper.Stepper'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/lists/UndoableSwiperController.js'
@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.lists.UndoableStepper', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     itemTpl: '{firstName} {lastName}',
@@ -56,7 +56,7 @@ Ext.define('KitchenSink.view.lists.UndoableStepper', {
 
                 undoable: true
             }, {
-                iconCls: 'x-fa fa-trash',
+                iconCls: 'x-fa fa-trash-alt',
                 text: 'Delete',
                 ui: 'decline',
 

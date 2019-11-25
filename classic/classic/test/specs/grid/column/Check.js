@@ -11,7 +11,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             invert: invert
         }, cfg);
     }
-    
+
     function makeGrid(columns, data, gridCfg) {
         store = new Ext.data.Store({
             model: spec.CheckColumnModel,
@@ -31,7 +31,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
         if (!columns) {
             columns = [getColCfg()];
         }
-        
+
         grid = new Ext.grid.Panel(Ext.apply({
             width: 200,
             renderTo: Ext.getBody(),
@@ -41,41 +41,41 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
         view = grid.getView();
         col = grid.getColumnManager().getFirst();
     }
-    
+
     function triggerCellMouseEvent(type, rowIdx, cellIdx, button, x, y) {
         var target = getCellImg(rowIdx, cellIdx);
 
         jasmine.fireMouseEvent(target, type, x, y, button);
     }
-       
+
     function getCell(rowIdx) {
         return grid.getView().getCellInclusive({
             row: rowIdx,
             column: 0
         }, true);
     }
-    
+
     function getCellImg(rowIdx) {
         var cell = getCell(rowIdx);
 
         return cell.querySelector('.x-grid-checkcolumn');
     }
-    
+
     function hasCls(el, cls) {
         return Ext.fly(el).hasCls(cls);
     }
-    
+
     function clickHeader() {
         jasmine.fireMouseEvent(col.el.dom.querySelector('.' + col.headerCheckboxCls), 'click');
     }
-    
+
     beforeEach(function() {
         Ext.define('spec.CheckColumnModel', {
             extend: 'Ext.data.Model',
             fields: ['val']
         });
     });
-    
+
     afterEach(function() {
         Ext.destroy(grid, store);
         col = grid = store = null;
@@ -89,12 +89,12 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
         expect(col.isCheckColumn).toBe(true);
         col.destroy();
     });
-    
+
     describe("check rendering", function() {
-        
+
         it("should add the x-grid-checkcolumn class to the checkbox element", function() {
             makeGrid();
-            
+
             expect(hasCls(getCellImg(0), 'x-grid-checkcolumn')).toBe(true);
         });
 
@@ -119,14 +119,14 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             expect(hasCls(getCellImg(4), 'x-grid-checkcolumn-checked')).toBe(true);
         });
     });
-    
+
     describe("enable/disable", function() {
         describe("during config", function() {
             it("should not include the disabledCls if the column is not disabled", function() {
                 makeGrid();
                 expect(hasCls(getCell(0), col.disabledCls)).toBe(false);
             });
-        
+
             it("should include the disabledCls if the column is disabled", function() {
                 var cfg = getColCfg();
 
@@ -135,7 +135,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
                 expect(hasCls(getCell(0), col.disabledCls)).toBe(true);
             });
         });
-        
+
         describe("after render", function() {
             it("should add the disabledCls if disabling", function() {
                 makeGrid();
@@ -146,7 +146,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
                 expect(hasCls(getCell(3), col.disabledCls)).toBe(true);
                 expect(hasCls(getCell(4), col.disabledCls)).toBe(true);
             });
-            
+
             it("should remove the disabledCls if enabling", function() {
                 var cfg = getColCfg();
 
@@ -161,7 +161,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             });
         });
     });
-    
+
     describe("interaction", function() {
         describe("stopSelection", function() {
             describe("stopSelection: false", function() {
@@ -238,7 +238,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
                 expect(arg3).toBe(false);
                 expect(arg4).toBe(store.getAt(0));
             });
-            
+
             it("should pass the column, record index, new checked state & record for checkchange", function() {
                 var arg1, arg2, arg3, arg4;
 
@@ -255,7 +255,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
                 expect(arg3).toBe(true);
                 expect(arg4).toBe(store.getAt(2));
             });
-            
+
             it("should not fire fire checkchange if beforecheckchange returns false", function() {
                 var called = false;
 
@@ -302,7 +302,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             expect(store.getAt(2).get('val')).toBe(true);
             expect(hasCls(getCellImg(2), 'x-grid-checkcolumn-checked')).toBe(false);
         });
-        
+
         it("should not trigger any changes when disabled", function() {
             var cfg = getColCfg();
 
@@ -314,7 +314,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             expect(store.getAt(2).get('val')).toBe(false);
         });
     });
-    
+
     describe('Header checkbox', function() {
         beforeEach(function() {
             var ready;
@@ -357,7 +357,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
 
                 return col.el.hasCls(col.headerCheckedCls) === true;
             });
-            
+
             runs(function() {
                 // Test deselecting all
                 clickHeader();
@@ -468,7 +468,7 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             // Nothing should happen.
             // We are expecting the header checkbox state to remain false
             waits(100);
-            
+
             runs(function() {
                 expect(col.el.hasCls(col.headerCheckedCls)).toBe(false);
                 store.getAt(4).set('val', true);

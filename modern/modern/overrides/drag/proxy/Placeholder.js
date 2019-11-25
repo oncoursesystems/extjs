@@ -4,7 +4,7 @@ Ext.define('Ext.overrides.drag.proxy.Placeholder', {
         var el = this.callParent();
 
         el.addCls(Ext.baseCSSPrefix + 'root');
-        
+
         return el;
     }
 });

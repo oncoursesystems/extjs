@@ -62,7 +62,7 @@ Ext.define('Ext.event.publisher.ElementSize', {
             Ext.TaskQueue.cancelRead(element.activeRead);
         }
     },
-    
+
     fireElementResize: function(element, info) {
         delete element.activeRead;
         this.fire(element, 'resize', [element, info]);
@@ -85,23 +85,23 @@ Ext.define('Ext.event.publisher.ElementSize', {
     , privates: { // eslint-disable-line comma-style
         syncRefresh: function(elements) {
             var el, monitor, i, len;
-            
+
             elements = Ext.Array.from(elements);
 
             for (i = 0, len = elements.length; i < len; ++i) {
                 el = elements[i];
-                
+
                 if (typeof el !== 'string') {
                     el = el.id;
                 }
-                
+
                 monitor = this.monitors[el];
-                
+
                 if (monitor) {
                     monitor.forceRefresh();
                 }
             }
-            
+
             // This just pushes onto the RAF queue.
             Ext.TaskQueue.flush();
 

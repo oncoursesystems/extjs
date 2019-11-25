@@ -90,15 +90,15 @@ Ext.define('Ext.perf.Monitor', {
     reset: function() {
         Ext.each(this.accumulators, function(accum) {
             var me = accum;
-            
+
             me.count = me.childCount = me.depth = me.maxDepth = 0;
-            
+
             me.pure = {
                 min: Number.MAX_VALUE,
                 max: 0,
                 sum: 0
             };
-            
+
             me.total = {
                 min: Number.MAX_VALUE,
                 max: 0,
@@ -127,7 +127,7 @@ Ext.define('Ext.perf.Monitor', {
 
     watchGC: function() {
         var toolbox = Ext.senchaToolbox;
-        
+
         Ext.perf.getTimestamp(); // initializes SenchaToolbox (if available)
 
         if (toolbox) {
@@ -139,7 +139,7 @@ Ext.define('Ext.perf.Monitor', {
     setup: function(config) {
         var key, prop,
             accum, className, methods;
-        
+
         if (!config) {
             config = {
                 /* insertHtml: {
@@ -214,29 +214,29 @@ Ext.define('Ext.perf.Monitor', {
 
         this.watchGC();
     },
-    
+
     // This is a quick hack for now
     setupLog: function(config) {
         var className, cls, methods, method, override;
-        
+
         for (className in config) {
             if (config.hasOwnProperty(className)) {
                 cls = Ext.ClassManager.get(className);
-                
+
                 if (cls) {
                     methods = config[className];
-                    
+
                     override = {};
-                    
+
                     for (method in methods) {
                         override[method] = (function(methodName, idProp) {
                             return function() {
                                 var before, diff, id, idHolder, ret;
-                                
+
                                 before = +Date.now();
                                 ret = this.callParent(arguments);
                                 diff = +Date.now() - before;
-                                
+
                                 if (window.console && diff > 0) {
                                     /* eslint-disable multiline-ternary, no-multi-spaces, indent */
                                     idHolder = idProp === 'this'          ? this
@@ -245,28 +245,28 @@ Ext.define('Ext.perf.Monitor', {
                                              :                              null
                                              ;
                                     /* eslint-enable */
-                                    
+
                                     if (idHolder) {
                                         id = idHolder.id;
                                     }
-                                    
+
                                     if (id != null) {
                                         console.log(methodName + ' for ' + id + ': ' + diff + 'ms');
                                     }
                                     else {
                                         console.log(methodName + ' for unknown: ' + diff + 'ms');
                                     }
-                                    
+
                                     if (console.trace) {
                                         console.trace();
                                     }
                                 }
-                                
+
                                 return ret;
                             };
                         })(method, methods[method]);
                     }
-                    
+
                     Ext.override(cls, override);
                 }
             }

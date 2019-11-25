@@ -172,7 +172,7 @@ Ext.define('Ext.data.identifier.Generator', {
         me.initConfig(config);
 
         id = me.getId();
-        
+
         if (id) {
             Ext.data.identifier.Generator.all[id] = me;
         }
@@ -195,9 +195,9 @@ Ext.define('Ext.data.identifier.Generator', {
          */
         clone: function(config) {
             var cfg = this.getInitialConfig();
-            
+
             cfg = config ? Ext.apply({}, config, cfg) : cfg;
-            
+
             return new this.self(cfg);
         },
 

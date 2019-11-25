@@ -319,7 +319,7 @@ Ext.define('Ext.field.Picker', {
             picker = Ext.apply({
                 ownerField: me
             }, picker);
-            
+
             // Allow mutation of the picker configuration
             me.fireEvent('beforepickercreate', me, picker);
 

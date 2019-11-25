@@ -39,7 +39,7 @@ Ext.define('Ext.data.StoreManager', {
     requires: [
         'Ext.data.ArrayStore'
     ],
-    
+
     /**
      * @cfg {Object} listeners
      * @private
@@ -53,7 +53,7 @@ Ext.define('Ext.data.StoreManager', {
      */
     register: function() {
         var i, s;
-        
+
         for (i = 0; (s = arguments[i]); i++) {
             this.add(s);
         }
@@ -65,7 +65,7 @@ Ext.define('Ext.data.StoreManager', {
      */
     unregister: function() {
         var i, s;
-        
+
         for (i = 0; (s = arguments[i]); i++) {
             this.remove(this.lookup(s));
         }
@@ -81,7 +81,7 @@ Ext.define('Ext.data.StoreManager', {
      */
     lookup: function(store, defaultType) {
         var first, data, arrays, fields, i, len;
-        
+
         // handle the case when we are given an array or an array of arrays.
         if (Ext.isArray(store)) {
             first = store[0];
@@ -104,7 +104,7 @@ Ext.define('Ext.data.StoreManager', {
                 else {
                     // store: [ 1,2,3, ... ]
                     data = [];
-                    
+
                     for (i = 0, len = store.length; i < len; ++i) {
                         data.push([store[i]]);
                     }
@@ -119,7 +119,7 @@ Ext.define('Ext.data.StoreManager', {
                 });
             }
         }
-        
+
         if (Ext.isString(store)) {
             // store id
             return this.get(store);
@@ -134,7 +134,7 @@ Ext.define('Ext.data.StoreManager', {
     getKey: function(o) {
         return o.storeId;
     },
-    
+
     addEmptyStore: function() {
         // A dummy empty store with a fieldless Model defined in it.
         // Just for binding to Views which are instantiated with no Store defined.
@@ -143,7 +143,7 @@ Ext.define('Ext.data.StoreManager', {
             destoryable = {
                 destroy: Ext.emptyFn
             };
-        
+
         if (!emptyStore) {
             emptyStore = this.$emptyStore =
                 Ext.regStore('ext-empty-store', { proxy: 'memory', useModelWarning: false });
@@ -156,9 +156,9 @@ Ext.define('Ext.data.StoreManager', {
             emptyStore.on = emptyStore.addListener = function() {
                 return destoryable;
             };
-            
+
             emptyStore.un = emptyStore.removeListener = Ext.emptyFn;
-    
+
             //<debug>
             emptyStore.add = emptyStore.remove = emptyStore.insert = emptyStore.destroy =
                 emptyStore.loadData = function() {
@@ -166,10 +166,10 @@ Ext.define('Ext.data.StoreManager', {
                 };
             //</debug>
         }
-        
+
         this.add(emptyStore);
     },
-    
+
     clear: function() {
         this.callParent();
         this.addEmptyStore();
@@ -206,7 +206,7 @@ Ext.define('Ext.data.StoreManager', {
             if (Ext.data.StoreManager.containsKey(id)) {
                 return Ext.data.StoreManager.lookup(id);
             }
-            
+
             config.storeId = id;
         }
 
@@ -218,7 +218,7 @@ Ext.define('Ext.data.StoreManager', {
         }
 
         Ext.data.StoreManager.register(store);
-        
+
         return store;
     };
 
@@ -231,6 +231,6 @@ Ext.define('Ext.data.StoreManager', {
     Ext.getStore = function(name) {
         return Ext.data.StoreManager.lookup(name);
     };
-    
+
     Ext.data.StoreManager.addEmptyStore();
 });

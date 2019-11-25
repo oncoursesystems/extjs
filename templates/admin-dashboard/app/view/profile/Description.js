@@ -25,7 +25,7 @@ Ext.define('Admin.view.profile.Description', {
         },
         {
             xtype: 'component',
-            userCls: 'box x-fa fa-clock-o',
+            userCls: 'box x-fa fa-clock',
             html: 'Member since 1 years ago',
             padding: '0 0 12 0'
         },

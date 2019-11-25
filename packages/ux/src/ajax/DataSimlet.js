@@ -22,7 +22,7 @@ Ext.define('Ext.ux.ajax.DataSimlet', function() {
 
     function makeSortFns(defs, cmp) {
         var sortFn, i;
-        
+
         for (sortFn = cmp, i = defs && defs.length; i;) {
             sortFn = makeSortFn(defs[--i], sortFn);
         }
@@ -161,7 +161,7 @@ Ext.define('Ext.ux.ajax.DataSimlet', function() {
 
             return data;
         },
-        
+
         processFilters: Ext.identityFn,
 
         getPage: function(ctx, data) {

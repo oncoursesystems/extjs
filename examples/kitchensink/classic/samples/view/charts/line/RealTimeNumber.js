@@ -3,7 +3,7 @@ Ext.define('KitchenSink.view.charts.line.RealTimeNumber', {
     xtype: 'line-real-time-number',
     controller: 'line-real-time-number',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.charts.line.RealTimeNumber', {
         type: 'vbox',
         pack: 'center'
     },
-    // </example>
+    //</example>
 
     width: 650,
 

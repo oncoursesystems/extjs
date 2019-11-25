@@ -267,13 +267,13 @@ Ext.define('Ext.state.Stateful', {
              * Gather state from those plugins that implement a getState method
              */
             plugins = me.getPlugins() || [];
-            
+
             for (i = 0, len = plugins.length; i < len; i++) {
                 plugin = plugins[i];
-                
+
                 if (plugin && plugin.getState) {
                     pluginState = plugin.getState(state);
-                    
+
                     if (pluginState && !state[plugin.ptype]) {  // first duplicate plugin wins
                         state[plugin.ptype] = pluginState;
                     }
@@ -283,7 +283,7 @@ Ext.define('Ext.state.Stateful', {
             if (!hasListeners.beforestatesave ||
                 me.fireEvent('beforestatesave', me, state) !== false) {
                 Ext.state.Manager.set(id, state);
-                
+
                 if (hasListeners.statesave) {
                     me.fireEvent('statesave', me, state);
                 }
@@ -335,26 +335,26 @@ Ext.define('Ext.state.Stateful', {
 
         if (id) {
             combinedState = Ext.state.Manager.get(id);
-            
+
             if (combinedState) {
                 state = Ext.apply({}, combinedState);
-                
+
                 if (!hasListeners.beforestaterestore ||
                     me.fireEvent('beforestaterestore', me, combinedState) !== false) {
 
                     // Notify all plugins FIRST (if interested) in new state
                     plugins = me.getPlugins() || [];
-                    
+
                     for (i = 0, len = plugins.length; i < len; i++) {
                         plugin = plugins[i];
-                        
+
                         if (plugin) {
                             pluginType = plugin.ptype;
-                            
+
                             if (plugin.applyState) {
                                 plugin.applyState(state[pluginType], combinedState);
                             }
-                            
+
                             // clean to prevent unwanted props on the component in final phase
                             delete state[pluginType];
                         }
@@ -432,7 +432,7 @@ Ext.define('Ext.state.Stateful', {
             task.destroy();
             this.stateTask = null;
         }
-        
+
         // No callParent() here, it's a mixin.
     }
 });

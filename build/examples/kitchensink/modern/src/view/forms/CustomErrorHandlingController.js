@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.forms.CustomErrorHandlingController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.forms-customerrors',
 
-    passwordValidator: function (value) {
+    passwordValidator: function(value) {
         var password1 = this.lookup('password1'),
             password1Value = password1.getValue();
 
@@ -15,8 +15,9 @@ Ext.define('KitchenSink.view.forms.CustomErrorHandlingController', {
         return true;
     },
 
-    submitRegistration: function () {
-        var form = this.getView();
+    submitRegistration: function() {
+        var form = this.getView(),
+            out;
 
         /* Normally we would submit the form to the server here and handle the response...
         form.submit({
@@ -32,19 +33,20 @@ Ext.define('KitchenSink.view.forms.CustomErrorHandlingController', {
         */
 
         if (form.validate()) {
-            var out = [];
+            out = [];
 
-            Ext.Object.each(form.getValues(), function(key, value){
+            Ext.Object.each(form.getValues(), function(key, value) {
                 out.push(key + '=' + value);
             });
 
             Ext.Msg.alert('Submitted Values', out.join('<br />'));
-        } else {
+        }
+        else {
             this.updateErrorState();
         }
     },
 
-    updateErrorState: function () {
+    updateErrorState: function() {
         var form = this.getView(),
             errorCmp = this.lookup('formErrorState'),
             tooltip = errorCmp.getTooltip(),
@@ -53,7 +55,7 @@ Ext.define('KitchenSink.view.forms.CustomErrorHandlingController', {
                 errors: errors
             };
 
-        form.getFields(false).forEach(function (field) {
+        form.getFields(false).forEach(function(field) {
             var error;
 
             if (!field.validate() && (error = field.getError())) {
@@ -67,7 +69,8 @@ Ext.define('KitchenSink.view.forms.CustomErrorHandlingController', {
         if (errors.length) {
             tooltip.setData(data);
             tooltip.show();
-        } else {
+        }
+        else {
             tooltip.hide();
         }
 

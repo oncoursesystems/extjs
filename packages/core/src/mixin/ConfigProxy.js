@@ -252,7 +252,7 @@ Ext.define('Ext.mixin.ConfigProxy', function(ConfigProxy) { return { // eslint-d
                     if (s in add) {
                         Ext.raise('Duplicate proxy config definitions for "' + s + '"');
                     }
-                    
+
                     if (s in targetProto.config) {
                         Ext.raise('Config "' + s + '" already defined for class ' +
                                   targetProto.$className);
@@ -315,7 +315,7 @@ Ext.define('Ext.mixin.ConfigProxy', function(ConfigProxy) { return { // eslint-d
                     item = me[itemGetter]();
 
                     proxiedConfigs = me.$proxiedConfigs; // lazy created by itemGetter
-                    
+
                     if (proxiedConfigs && proxiedConfigs[itemName]) {
                         delete proxiedConfigs[itemName]; // drop only the first set call
                         item = null;

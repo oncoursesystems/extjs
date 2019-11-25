@@ -53,7 +53,7 @@ Ext.define('Ext.ux.colorpick.ColorMapController', {
         if (yRatio > 0.99) {
             yRatio = 1;
         }
-        
+
         container.fireEvent('handledrag', xRatio, yRatio);
     },
 
@@ -145,7 +145,7 @@ Ext.define('Ext.ux.colorpick.ColorMapController', {
 
         fullColorRGB = Ext.ux.colorpick.ColorUtils.hsv2rgb(hue, 1, 1);
         hex = Ext.ux.colorpick.ColorUtils.rgb2hex(fullColorRGB.r, fullColorRGB.g, fullColorRGB.b);
-        
+
         me.getView().getEl().applyStyles({ 'background-color': '#' + hex });
     }
 });

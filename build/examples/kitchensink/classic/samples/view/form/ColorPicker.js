@@ -21,10 +21,10 @@ Ext.define('KitchenSink.view.form.ColorPicker', {
         type: 'Controller',
         path: 'classic/samples/view/form/ColorPickerController.js'
     }],
-    
+
     exampleTitle: 'Color Picker',
     //</example>
-    
+
     profiles: {
         classic: {
             colorHeight: 15,
@@ -37,6 +37,11 @@ Ext.define('KitchenSink.view.form.ColorPicker', {
             colorLabelWidth: 75
         },
         graphite: {
+            colorHeight: 48,
+            colorWidth: 48,
+            colorLabelWidth: 100
+        },
+        'classic-material': {
             colorHeight: 48,
             colorWidth: 48,
             colorLabelWidth: 100
@@ -65,7 +70,7 @@ Ext.define('KitchenSink.view.form.ColorPicker', {
             xtype: 'component',
             cls: 'x-panel-header-title-default-framed',
             html: 'colorbutton &#8680;'
-        },{
+        }, {
             xtype: 'colorbutton',
             bind: '{color}',
             width: '${colorWidth}',
@@ -84,7 +89,7 @@ Ext.define('KitchenSink.view.form.ColorPicker', {
         listeners: {
             change: 'onChange'
         }
-    },{
+    }, {
         xtype: 'colorselector',
         hidden: true,
         flex: 1,
@@ -103,7 +108,7 @@ Ext.define('KitchenSink.view.form.ColorPicker', {
         listeners: {
             click: 'onShowMoreLess'
         }
-    },{
+    }, {
         text: 'Hide colorselector &lt;&lt;',
         bind: {
             visible: '{full}'

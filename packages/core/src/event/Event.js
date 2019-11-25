@@ -88,7 +88,7 @@ Ext.define('Ext.event.Event', {
      * Same as `currentTarget`
      * @deprecated 5.0.0 use {@link #currentTarget} instead.
      */
-    
+
     /**
      * @property {Number} button
      * Indicates which mouse button caused the event for mouse events, for example
@@ -132,7 +132,7 @@ Ext.define('Ext.event.Event', {
      * @property {Event} browserEvent
      * The raw browser event which this object wraps.
      */
-    
+
     /**
      * @property {String} pointerType
      * The pointer type for this event. May be empty if the event was
@@ -249,7 +249,7 @@ Ext.define('Ext.event.Event', {
             focusin: 1,
             focusenter: 1
         },
-        
+
         /**
          * @private
          */
@@ -355,37 +355,37 @@ Ext.define('Ext.event.Event', {
 
             for (i = 0; i < numModifiers; i++) {
                 eventFlag = me.keyFlags[parts[i]];
-                
+
                 //<debug>
                 if (!eventFlag) {
                     Ext.raise('Invalid key modifier: "' + parts[i] + '"');
                 }
                 //</debug>
-                
+
                 result[eventFlag] = true;
             }
-            
+
             if (result.ctrlKey) {
                 result.push(me.modifierGlyphs.ctrlKey);
             }
-            
+
             if (result.altKey) {
                 result.push(me.modifierGlyphs.altKey);
             }
-            
+
             if (result.shiftKey) {
                 result.push(me.modifierGlyphs.shiftKey);
             }
-            
+
             if (result.metaKey) {
                 result.push(me.modifierGlyphs.metaKey);
             }
-            
+
             result.push(this.specialKeyGlyphs[rawKey] || rawKey);
-            
+
             return result.join('');
         },
-        
+
         /**
          * @private
          */
@@ -394,7 +394,7 @@ Ext.define('Ext.event.Event', {
                 Ext.event.Event.forwardTab = !e.shiftKey;
             }
         },
-        
+
         /**
          * @private
          */
@@ -428,7 +428,7 @@ Ext.define('Ext.event.Event', {
         me.target = me.delegatedTarget = resolveTextNode(event.target);
         me.currentTarget = resolveTextNode(event.currentTarget);
         relatedTarget = event.relatedTarget;
-        
+
         if (relatedTarget) {
             if (Ext.isGecko && me.geckoRelatedTargetEvents[type]) {
                 try {
@@ -445,12 +445,12 @@ Ext.define('Ext.event.Event', {
 
         me.browserEvent = me.event = event;
         me.type = type;
-        
+
         // set button to 0 if undefined so that touchstart, touchend, and tap will quack
         // like left mouse button mousedown mouseup, and click
         me.button = event.button || 0;
         me.shiftKey = event.shiftKey;
-        
+
         // mac metaKey behaves like ctrlKey
         me.ctrlKey = event.ctrlKey || event.metaKey || false;
         me.altKey = event.altKey;
@@ -458,7 +458,7 @@ Ext.define('Ext.event.Event', {
         me.keyCode = event.keyCode;
 
         me.buttons = event.buttons;
-        
+
         // When invoking synthetic events, current APIs do not
         // have the ability to specify the buttons config, which
         // defaults to button. For buttons, 0 means no button
@@ -467,12 +467,12 @@ Ext.define('Ext.event.Event', {
         if (me.button === 0 && me.buttons === 0) {
             me.buttons = 1;
         }
-        
+
         if (self.focusEvents[type] || self.blurEvents[type]) {
             if (self.forwardTab !== undefined) {
                 me.forwardTab = self.forwardTab;
             }
-            
+
             if (self.focusEvents[type]) {
                 me.fromElement = event.relatedTarget;
                 me.toElement = event.target;
@@ -532,9 +532,9 @@ Ext.define('Ext.event.Event', {
      */
     chain: function(props) {
         var e = Ext.Object.chain(this);
-        
+
         e.parentEvent = this; // needed for stopPropagation
-        
+
         return Ext.apply(e, props);
     },
 
@@ -566,7 +566,7 @@ Ext.define('Ext.event.Event', {
 
     getChar: function() {
         var r = this.which();
-        
+
         return String.fromCharCode(r);
     },
 
@@ -585,7 +585,7 @@ Ext.define('Ext.event.Event', {
     getKey: function() {
         return this.keyCode || this.charCode;
     },
-    
+
     /**
      * Returns the name of the keyCode for the event.
      * @return {String} The key name
@@ -647,7 +647,7 @@ Ext.define('Ext.event.Event', {
         }
         else if (clipIE && clipIE.getData) {
             typeIE = this.ieMimeType[type];
-            
+
             if (typeIE) {
                 result = clipIE.getData(typeIE);
             }
@@ -699,7 +699,7 @@ Ext.define('Ext.event.Event', {
                 target = returnEl ? Ext.get(relatedTarget) : relatedTarget;
             }
         }
-        
+
         return target;
     },
 
@@ -857,7 +857,7 @@ Ext.define('Ext.event.Event', {
     */
     hasModifier: function() {
         var me = this;
-        
+
         return !!(me.ctrlKey || me.altKey || me.shiftKey || me.metaKey);
     },
 
@@ -925,7 +925,7 @@ Ext.define('Ext.event.Event', {
             k = me.keyCode,
             isGecko = Ext.isGecko,
             isKeyPress = me.type === 'keypress';
-        
+
         // See specs for description of behaviour
         return (isGecko && isKeyPress && me.charCode === 0) ||
                (this.isNavKeyPress()) ||
@@ -999,7 +999,7 @@ Ext.define('Ext.event.Event', {
         if (me.mousedownEvents[me.type]) {
             Ext.GlobalEvents.fireMouseDown(me);
         }
-        
+
         // Fire the "unstoppable" global mouseup event
         // (used for component unpressing, etc)
         if (me.mouseupEvents[me.type]) {
@@ -1028,7 +1028,7 @@ Ext.define('Ext.event.Event', {
         if (!browserEvent.stopPropagation) {
             // IE < 10 does not have stopPropagation()
             browserEvent.cancelBubble = true;
-            
+
             return me;
         }
         //</feature>
@@ -1132,7 +1132,7 @@ Ext.define('Ext.event.Event', {
                  * @member Ext.event.Event
                  */
                 getPageX: 'getX',
-                
+
                 /**
                  * @method getPageY
                  * Gets the y coordinate of the event.
@@ -1370,12 +1370,12 @@ Ext.define('Ext.event.Event', {
 
     Ext.apply(Event, constants);
     Ext.apply(prototype, constants);
-    
+
     // ENTER and RETURN has the same keyCode, but since RETURN
     // comes later it will win over ENTER down there. However
     // ENTER is used more often and feels more natural.
     delete constants.RETURN;
-    
+
     // We need this to do reverse lookup of key name by its code
     for (keyName in constants) {
         keyCode = constants[keyName];
@@ -1383,13 +1383,13 @@ Ext.define('Ext.event.Event', {
     }
 
     Event.keyCodes = prototype.keyCodes = keyCodes;
-    
+
     // Classic Event override will install this handler in IE9-
     if (!Ext.isIE9m) {
         document.addEventListener('keydown', Event.globalTabKeyDown, true);
         document.addEventListener('keyup', Event.globalTabKeyUp, true);
     }
-    
+
     /**
      * @member Ext.event.Event
      * @private
@@ -1472,7 +1472,7 @@ Ext.define('Ext.event.Event', {
         for (i = 1; i < 25; ++i) {
             keys[i + 111] = 'F' + i; // F1 - F24
         }
-        
+
         for (i = 0; i < 26; ++i) { // a-z, A-Z
             keys[i] = [String.fromCharCode(i + 97), String.fromCharCode(i + 65)];
         }

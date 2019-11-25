@@ -22,7 +22,7 @@ function() {
                     }
                 }
             }, storeCfg));
-    
+
             grid = Ext.create('Ext.grid.Panel', Ext.apply({
                 title: 'Simpsons',
                 store: store,
@@ -67,7 +67,7 @@ function() {
             expect(grid.headerCt.forceFit).toBe(true);
         });
     });
-    
+
     describe("scrollable", function() {
         // https://sencha.jira.com/browse/EXTJS-15736
         it("should not throw exception on autoScroll config when locking", function() {
@@ -131,7 +131,7 @@ function() {
                             }],
                             listeners: {
                                 cellclick: function() {
-                                    
+
                                     this.up('#cards').setActiveItem(1);
                                 }
                             }

@@ -49,7 +49,7 @@ topSuite("Ext.data.schema.HasMany", [false, 'Ext.data.ArrayStore'], function() {
         MockAjaxManager.addMethods();
         Ext.data.Model.schema.setNamespace('spec');
     });
-    
+
     afterEach(function() {
         if (Post) {
             Ext.undefine('spec.Post');

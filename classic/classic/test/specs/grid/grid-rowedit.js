@@ -26,43 +26,43 @@ function() {
                     'field10'
                 ]
             });
-                
+
             function triggerCellMouseEvent(type, rowIdx, cellIdx, button, x, y) {
                 var target = findCell(rowIdx, cellIdx);
 
                 jasmine.fireMouseEvent(target, type, x, y, button);
             }
-            
+
             function triggerCellKeyEvent(type, rowIdx, cellIdx, key) {
                 var target = findCell(rowIdx, cellIdx);
-                
+
                 jasmine.fireKeyEvent(target, type, key);
             }
-            
+
             function triggerEditorKey(key) {
                 var target = plugin.getEditor().items.first().inputEl.dom;
-                
+
                 jasmine.fireKeyEvent(target, 'keydown', key);
                 jasmine.fireKeyEvent(target, 'keyup', key);
                 jasmine.fireKeyEvent(target, 'keypress', key);
             }
-            
+
             function getRec(index) {
                 return store.getAt(index);
             }
-            
+
             function findCell(rowIdx, cellIdx) {
                 return grid.getView().getCellInclusive({
                     row: rowIdx,
                     column: cellIdx
                 }, true);
             }
-            
+
             function startEdit(rec, column) {
                 if (!rec || !rec.isModel) {
                     rec = store.getAt(rec || 0);
                 }
-                
+
                 if (column == null) {
                     column = 0;
                 }
@@ -85,17 +85,17 @@ function() {
                 }
 
                 plugin.startEdit(rec, column);
-                
+
                 if (column) {
                     waitsForFocus(plugin.context.column.getEditor());
                 }
             }
-            
+
             // Prevent validity from running on a delay
             function clearFormDelay() {
                 plugin.getEditor().getForm().taskDelay = 0;
             }
-            
+
             function getDefaultColumns(locked, cfg, count) {
                 var columns = [],
                     i, colConfig;
@@ -128,7 +128,7 @@ function() {
                     defaultCols = [],
                     hasCols,
                     i;
-                
+
                 if (!columns) {
                     hasCols = true;
                     colRef = defaultCols = getDefaultColumns(locked);
@@ -148,7 +148,7 @@ function() {
                         field10: i + '.' + 10
                     });
                 }
-                
+
                 if (gridCfg && gridCfg.store && gridCfg.store.isStore) {
                     store = gridCfg.store;
                 }
@@ -158,7 +158,7 @@ function() {
                         data: data
                     });
                 }
-                
+
                 plugin = new Ext.grid.plugin.RowEditing(pluginCfg);
 
                 grid = new Ext.grid.Panel(Ext.apply({
@@ -183,7 +183,7 @@ function() {
                 scroller = view.getScrollable ? view.getScrollable() : grid.normalGrid.view.getScrollable();
                 editor = plugin.getEditor();
             }
-            
+
             afterEach(function() {
                 plugin = editor = grid = store = view = Ext.destroy(grid, store);
                 Ext.data.Model.schema.clear();
@@ -219,12 +219,12 @@ function() {
 
                 it('should move an editor from one side to another when a column is locked during editing', function() {
                     grid.setActionableMode(true, new Ext.grid.CellContext(grid.normalGrid.view).setPosition(0, 0));
-                    
+
                     var ed = colRef[2].getEditor();
 
                     // normal view context 0, 0 yields colRef[2] because 1st 2 coliumns are locked
                     focusAndWait(ed, undefined, 'column 0 editor to gain focus');
-                    
+
                     runs(function() {
                         // The editor should be in the right container
                         expect(ed.up('container') === plugin.editor.items.items[1]).toBe(true);
@@ -269,7 +269,7 @@ function() {
 
                     store.add(data);
                     startEdit(900);
-                    
+
                     waitsFor(function() {
                         return plugin.editing === true &&
                                plugin.getEditor().isVisible() === true;
@@ -299,7 +299,7 @@ function() {
                     var rec = store.first();
 
                     startEdit(rec);
-                    
+
                     runs(function() {
                         expect(plugin.editing).toBe(true);
                         expect(plugin.getEditor().getRecord() === rec).toBe(true);
@@ -360,7 +360,7 @@ function() {
                     var rec = store.first();
 
                     plugin.startEdit(rec, colRef[2]);
-                    
+
                     runs(function() {
                         expect(plugin.editing).toBe(true);
                         expect(plugin.getEditor().getRecord() === rec).toBe(true);
@@ -415,12 +415,12 @@ function() {
                 it("should not be dirty when the field has values", function() {
                     makeGrid();
                     startEdit(store.first());
-                    
+
                     runs(function() {
                         expect(plugin.getEditor().isDirty()).toBe(false);
                     });
                 });
-                
+
                 it("should commit changes with autoUpdate", function() {
                     makeGrid(null, {
                         autoUpdate: true
@@ -432,7 +432,7 @@ function() {
                         editor.activeField.setValue('foo');
                         expect(editor.isDirty()).toBe(true);
                     });
-                    
+
                     runs(function() {
                         startEdit(1, 1);
                     });
@@ -442,17 +442,17 @@ function() {
                         expect(editor.isDirty()).toBe(false);
                     });
                 });
-                
+
                 it("should reset changes with autoCancel", function() {
                     makeGrid();
-                    
+
                     startEdit(0, 0);
-                    
+
                     runs(function() {
                         editor.activeField.setValue('bar');
                         expect(editor.isDirty()).toBe(true);
                     });
-                    
+
                     runs(function() {
                         startEdit(1, 1);
                     });
@@ -463,98 +463,98 @@ function() {
                     });
                 });
             });
-            
+
             describe("tabbing", function() {
                 beforeEach(function() {
                     makeGrid();
                 });
-                
+
                 describe("basic tabbing", function() {
                     it("should tab from F1 to F2", function() {
                         startEdit(0, 0);
-                        
+
                         runs(function() {
                             pressTabKey(editor.activeField, true);
                         });
-                        
+
                         waitForFocus(editor.items.getAt(1));
-                        
+
                         runs(function() {
                             expect(editor.activeField.getValue()).toBe('1.2');
                             expect(document.activeElement).toBe(editor.activeField.inputEl.dom);
                         });
                     });
-                    
+
                     it("should shift-tab from F2 to F1", function() {
                         startEdit(0, 1);
-                        
+
                         runs(function() {
                             pressTabKey(editor.activeField, false);
                         });
-                        
+
                         waitForFocus(editor.items.getAt(0));
-                        
+
                         runs(function() {
                             expect(editor.activeField.getValue()).toBe('1.1');
                             expect(document.activeElement).toBe(editor.activeField.inputEl.dom);
                         });
                     });
                 });
-                
+
                 describe("wrapping over edges", function() {
                     it("should tab from F5 to F1", function() {
                         startEdit(0, 4);
-                        
+
                         runs(function() {
                             pressTabKey(editor.activeField, true);
                         });
-                        
+
                         waitForFocus(editor.items.getAt(0));
-                        
+
                         runs(function() {
                             expect(editor.activeField.getValue()).toBe('2.1');
                             expect(document.activeElement).toBe(editor.activeField.inputEl.dom);
                         });
                     });
-                    
+
                     it("should shift-tab from F1 to F5", function() {
                         startEdit(1, 0);
-                        
+
                         runs(function() {
                             pressTabKey(editor.activeField, false);
                         });
-                        
+
                         waitForFocus(editor.items.getAt(4));
-                        
+
                         runs(function() {
                             expect(editor.activeField.getValue()).toBe('1.5');
                             expect(document.activeElement).toBe(editor.activeField.inputEl.dom);
                         });
                     });
                 });
-                
+
                 describe("wrapping over end rows", function() {
                     it("should wrap over to the first row when editing last row", function() {
                         var firstField, lastField;
-                        
+
                         startEdit(store.last(), colRef[4]);
                         firstField = plugin.getEditor().items.getAt(0);
                         lastField = plugin.getEditor().items.getAt(4);
-                        
+
                         runs(function() {
                             pressTabKey(lastField, true);
                         });
-                        
+
                         waitForFocus(firstField);
-                        
+
                         runs(function() {
                             expect(plugin.context.record).toBe(store.first());
                         });
                     });
-                    
+
                     it("should wrap over to the last row when editing first row", function() {
                         var firstField, lastField;
-                        
+
                         startEdit(store.first(), colRef[0]);
                         firstField = plugin.getEditor().items.getAt(0);
                         lastField = plugin.getEditor().items.getAt(4);
@@ -562,15 +562,15 @@ function() {
                         runs(function() {
                             pressTabKey(firstField, false);
                         });
-                       
+
                         waitForFocus(lastField);
-                        
+
                         runs(function() {
                             expect(plugin.context.record).toBe(store.last());
                         });
                     });
                 });
-                
+
                 describe("with dirty values", function() {
                     describe("autoUpdate == false", function() {
                         it("should tab to Update button from last field", function() {
@@ -580,10 +580,10 @@ function() {
                                 editor.activeField.setValue('blerg');
                                 pressTabKey(editor.activeField, true);
                             });
-                            
+
                             waitsForFocus(editor.down('#update'));
                         });
-                        
+
                         it("should shift-tab to Update button from first field", function() {
                             startEdit(0, 0);
 
@@ -591,11 +591,11 @@ function() {
                                 editor.activeField.setValue('throbbe');
                                 pressTabKey(editor.activeField, false);
                             });
-                            
+
                             waitsForFocus(editor.down('#update'));
                         });
                     });
-                    
+
                     describe("autoUpdate == true", function() {
                         it("should tab to the next row from the last field", function() {
                             startEdit(0, 4);
@@ -606,10 +606,10 @@ function() {
                                 editor.activeField.setValue('zumbo');
                                 pressTabKey(editor.activeField, true);
                             });
-                            
+
                             waitsForFocus(editor.items.getAt(0));
                         });
-                        
+
                         it("should shift-tab to the previous row from the first field", function() {
                             startEdit(1, 0);
 
@@ -636,7 +636,7 @@ function() {
                         }
                     }]);
                     startEdit(store.first());
-                    
+
                     runs(function() {
                         var field = plugin.getEditor().items.getAt(0);
 
@@ -653,7 +653,7 @@ function() {
                                 field: 'textfield'
                             }]);
                             startEdit(store.first());
-                            
+
                             runs(function() {
                                 var field = plugin.getEditor().items.getAt(0);
 
@@ -675,7 +675,7 @@ function() {
                                         }
                                     }]);
                                     startEdit(store.first());
-                                    
+
                                     runs(function() {
                                         var field = plugin.getEditor().items.getAt(0);
 
@@ -696,7 +696,7 @@ function() {
                                         }
                                     }]);
                                     startEdit(store.first());
-                                    
+
                                     runs(function() {
                                         var field = plugin.getEditor().items.getAt(0);
 
@@ -722,7 +722,7 @@ function() {
                                         }
                                     }]);
                                     startEdit(store.first());
-                                    
+
                                     runs(function() {
                                         var field = plugin.getEditor().items.getAt(0);
 
@@ -744,7 +744,7 @@ function() {
                                         }
                                     }]);
                                     startEdit(store.first());
-                                    
+
                                     runs(function() {
                                         var field = plugin.getEditor().items.getAt(0);
 
@@ -767,7 +767,7 @@ function() {
                                         }
                                     }]);
                                     startEdit(store.first());
-                                    
+
                                     runs(function() {
                                         var field = plugin.getEditor().items.getAt(0);
 
@@ -791,7 +791,7 @@ function() {
                     store.remove(records);
                     // Only 1 record, not scrolling
                     startEdit();
-                    
+
                     runs(function() {
                         expect(plugin.getEditor()._buttonsOnTop).toBe(false);
                     });
@@ -831,7 +831,6 @@ function() {
                         leadingBufferZone: 10
                     });
 
-
                     for (var i = 11; i <= 100; ++i) {
                         data.push({
                             field1: i + '.' + 1,
@@ -846,7 +845,7 @@ function() {
                             field10: i + '.' + 10
                         });
                     }
-    
+
                     store.insert(10, data);
                 });
 
@@ -896,14 +895,14 @@ function() {
                         expect(plugin.editing).toBe(true);
                     });
                 });
-                
+
                 it('should scroll to edited item if it is out of view and the column is sorted', function() {
                     var columns = grid.getColumns();
 
                     columns[3].sort();
 
                     startEdit();
-                    
+
                     runs(function() {
                         plugin.getEditor().items.items[3].setValue(99999999);
                         plugin.completeEdit();
@@ -942,7 +941,7 @@ function() {
                     width -= field._marginWidth;
                     expect(field.getWidth()).toBe(width);
                 }
-                
+
                 function expectWidths() {
                     runs(function() {
                         var items = plugin.getEditor().items;
@@ -952,7 +951,7 @@ function() {
                         });
                     });
                 }
-                
+
                 it("should set fixed column widths", function() {
                     makeGrid([{
                         dataIndex: 'field1',
@@ -966,7 +965,7 @@ function() {
                     startEdit();
                     expectWidths();
                 });
-                
+
                 it("should set flex widths", function() {
                     makeGrid([{
                         dataIndex: 'field1',
@@ -980,7 +979,7 @@ function() {
                     startEdit();
                     expectWidths();
                 });
-                
+
                 it("should set width with a mix of flex/configured", function() {
                     makeGrid([{
                         dataIndex: 'field1',
@@ -998,7 +997,7 @@ function() {
                     startEdit();
                     expectWidths();
                 });
-                
+
                 describe("reconfigure", function() {
                     it("should set the widths if the editor has not been shown", function() {
                         makeGrid();
@@ -1015,11 +1014,11 @@ function() {
                         startEdit();
                         expectWidths();
                     });
-                    
+
                     it("should set the widths after the editor has already been shown", function() {
                         makeGrid();
                         plugin.startEdit(store.first());
-                        
+
                         runs(function() {
                             plugin.cancelEdit();
                             grid.reconfigure(null, [{
@@ -1033,7 +1032,7 @@ function() {
                             }]);
                             colRef = grid.getColumnManager().getColumns();
                         });
-                        
+
                         runs(function() {
                             startEdit();
                             expectWidths();
@@ -1056,7 +1055,7 @@ function() {
                         triggerCellMouseEvent('dblclick', 0, 0);
                         expect(called).toBe(true);
                     });
-                    
+
                     it("should fire the event with the plugin & an event context", function() {
                         var p, context;
 
@@ -1074,7 +1073,7 @@ function() {
                         expect(context.rowIdx).toBe(0);
                         expect(context.store === store).toBe(true);
                     });
-                    
+
                     it("should prevent editing if false is returned", function() {
                         plugin.on('beforeedit', function(a1, a2) {
                             return false;
@@ -1082,7 +1081,7 @@ function() {
                         triggerCellMouseEvent('dblclick', 0, 0);
                         expect(plugin.editing).toBeFalsy();
                     });
-                    
+
                     it("should prevent editing if context.cancel is set", function() {
                         plugin.on('beforeedit', function(p, context) {
                             context.cancel = true;
@@ -1091,7 +1090,7 @@ function() {
                         expect(plugin.editing).toBeFalsy();
                     });
                 });
-                
+
                 describe("canceledit", function() {
                     it("should fire the event when editing is cancelled", function() {
                         var called = false;
@@ -1104,7 +1103,7 @@ function() {
                         expect(called).toBe(true);
                         expect(plugin.editing).toBe(false);
                     });
-                    
+
                     it("should pass the plugin and the context", function() {
                         var p, context;
 
@@ -1124,7 +1123,7 @@ function() {
                         expect(context.store === store).toBe(true);
                     });
                 });
-                
+
                 describe("validateedit", function() {
                     it("should fire the validateedit event before edit", function() {
                         var calledFirst = false,
@@ -1140,7 +1139,7 @@ function() {
                         plugin.completeEdit();
                         expect(calledFirst).toBe(true);
                     });
-                    
+
                     it("should pass the plugin and the context", function() {
                         var p, context;
 
@@ -1159,7 +1158,7 @@ function() {
                         expect(context.rowIdx).toBe(0);
                         expect(context.store === store).toBe(true);
                     });
-                    
+
                     it("should veto the completeEdit if we return false", function() {
                         var called = false;
 
@@ -1174,7 +1173,7 @@ function() {
                         expect(plugin.editing).toBe(true);
                         expect(called).toBe(false);
                     });
-                    
+
                     it("should veto the completeEdit if we set context.cancel", function() {
                         var called = false;
 
@@ -1190,7 +1189,7 @@ function() {
                         expect(called).toBe(false);
                     });
                 });
-                
+
                 describe("edit", function() {
                     it("should fire the edit event", function() {
                         var called = false;
@@ -1203,7 +1202,7 @@ function() {
                         expect(plugin.editing).toBe(false);
                         expect(called).toBe(true);
                     });
-                    
+
                     it("should pass the plugin and the context", function() {
                         var p, context;
 
@@ -1222,7 +1221,7 @@ function() {
                         expect(context.rowIdx).toBe(0);
                         expect(context.store === store).toBe(true);
                     });
-                    
+
                     it("should update the value in the model", function() {
 
                         triggerCellMouseEvent('dblclick', 0, 0);
@@ -1232,13 +1231,13 @@ function() {
                     });
                 });
             });
-            
+
             describe("dynamic editors", function() {
                 beforeEach(function() {
                     // Suppress console warning about Trigger field being deprecated
                     spyOn(Ext.log, 'warn');
                 });
-                
+
                 it("should allow the editor to change dynamically", function() {
                     var field = new Ext.form.field.Trigger();
 
@@ -1247,7 +1246,7 @@ function() {
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(plugin.getEditor().items.first() === field).toBe(true);
                 });
-                
+
                 it("should allow the editor to change in the beforeedit event", function() {
                     var field = new Ext.form.field.Trigger();
 
@@ -1274,7 +1273,7 @@ function() {
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(plugin.getEditor().items.first().getWidth()).toBe(500);
                 });
-                
+
                 it("should allow us to set an editor if one wasn't there before", function() {
                     var field = new Ext.form.field.Text();
 
@@ -1289,17 +1288,17 @@ function() {
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(plugin.getEditor().items.first() === field).toBe(true);
                 });
-                
+
                 it("should allow us to clear out an editor", function() {
                     makeGrid();
                     colRef[0].setEditor(null);
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(plugin.getEditor().items.first().getXType()).toBe('displayfield');
                 });
-                
+
                 it("should destroy the old field", function() {
                     var field = new Ext.form.field.Text();
-                    
+
                     makeGrid([{
                         dataIndex: 'field1',
                         field: field
@@ -1309,7 +1308,7 @@ function() {
                     expect(field.destroyed).toBe(true);
                 });
             });
-            
+
             describe("hidden columns", function() {
                 beforeEach(function() {
                     makeGrid([{
@@ -1338,16 +1337,16 @@ function() {
                     }]);
                     colRef = grid.getColumnManager().getColumns();
                 });
-                
+
                 it("should not show editors for hidden columns", function() {
                     triggerCellMouseEvent('dblclick', 0, 1);
                     expect(plugin.getEditor().items.getAt(0).isVisible()).toBe(false);
                     expect(plugin.getEditor().items.getAt(3).isVisible()).toBe(false);
                 });
-                
+
                 it("should focus the first visible field", function() {
                     startEdit();
-                    
+
                     runs(function() {
                         var toFocus = plugin.getEditor().items.getAt(1);
 
@@ -1358,23 +1357,23 @@ function() {
 
                 it("should show the editor when the column is shown", function() {
                     startEdit();
-                    
+
                     runs(function() {
                         colRef[0].show();
                         expect(plugin.getEditor().items.getAt(0).isVisible()).toBe(true);
                     });
                 });
-                
+
                 it("should hide the editor when the column is hidden", function() {
                     startEdit();
-                    
+
                     runs(function() {
                         colRef[6].show();
                         expect(plugin.getEditor().items.getAt(6).isVisible()).toBe(true);
                     });
                 });
             });
-            
+
             describe("reconfigure", function() {
                 var old;
 
@@ -1395,24 +1394,24 @@ function() {
                         }]);
                         colRef = grid.getColumnManager().getColumns();
                     });
-                
+
                     it("should destroy old editors", function() {
                         Ext.Array.forEach(old, function(item) {
                             expect(item.destroyed).toBe(true);
                         });
                     });
-                
+
                     it("should update columns with no editors", function() {
                         triggerCellMouseEvent('dblclick', 0, 1);
                         expect(plugin.getEditor().items.getAt(1).getXType()).toBe('displayfield');
                     });
-                
+
                     it("should use new editors", function() {
                         triggerCellMouseEvent('dblclick', 0, 0);
                         expect(plugin.getEditor().items.first().getItemId()).toBe('newEd');
                     });
                 });
-                
+
                 describe("original rendered", function() {
                     it("should cancel editing on reconfigure if visible", function() {
                         makeGrid();
@@ -1425,20 +1424,20 @@ function() {
                     });
                 });
             });
-            
+
             describe("values/validity", function() {
                 it("should set the values on each field", function() {
                     makeGrid();
                     triggerCellMouseEvent('dblclick', 0, 0);
                     var items = plugin.getEditor().items;
-                    
+
                     expect(items.getAt(0).getValue()).toBe('1.1');
                     expect(items.getAt(1).getValue()).toBe('1.2');
                     expect(items.getAt(2).getValue()).toBe('1.3');
                     expect(items.getAt(3).getValue()).toBe('1.4');
                     expect(items.getAt(4).getValue()).toBe('1.5');
                 });
-                
+
                 it("should set the correct value if the field name config is specified", function() {
                     makeGrid([{
                         dataIndex: 'field1',
@@ -1447,7 +1446,7 @@ function() {
                             name: 'field2'
                         }
                     }]);
-                    
+
                     triggerCellMouseEvent('dblclick', 0, 0);
                     expect(plugin.getEditor().items.first().getValue()).toBe('1.2');
                 });
@@ -1456,37 +1455,37 @@ function() {
                     makeGrid();
                     startEdit(0);
                     var field = plugin.getEditor().items.getAt(0);
-                    
+
                     runs(function() {
                         expect(field.getValue()).toBe('1.1');
                         plugin.completeEdit();
                         store.insert(0, {});
                     });
-                    
+
                     runs(function() {
                         startEdit(0);
                         expect(field.getValue()).toBe('');
                     });
                 });
-                
+
                 describe("buttons", function() {
                     beforeEach(function() {
                         makeGrid();
                     });
-                    
+
                     it("should disable the buttons when starting editing in an invalid state", function() {
                         store.first().set('field1', '');
                         triggerCellMouseEvent('dblclick', 0, 0);
                         expect(plugin.getEditor().down('#update').disabled).toBe(true);
                     });
-                
+
                     it("should disable the buttons when a value changes the form to a invalid state", function() {
                         triggerCellMouseEvent('dblclick', 0, 0);
                         clearFormDelay();
                         plugin.getEditor().items.first().setValue('');
                         expect(plugin.getEditor().down('#update').disabled).toBe(true);
                     });
-                
+
                     it("should enable the buttons when a value changes the form to a valid state", function() {
                         store.first().set('field1', '');
                         triggerCellMouseEvent('dblclick', 0, 0);
@@ -1494,19 +1493,19 @@ function() {
                         plugin.getEditor().items.first().setValue('Foo');
                         expect(plugin.getEditor().down('#update').disabled).toBe(false);
                     });
-                    
+
                     it("should update the state correctly after loading multiple records", function() {
                         store.removeAll();
                         store.insert(0, {});
                         startEdit(0);
-                        
+
                         runs(function() {
                             clearFormDelay();
                             plugin.getEditor().items.first().setValue('Foo');
                             plugin.completeEdit();
                             store.insert(0, {});
                         });
-                        
+
                         runs(function() {
                             startEdit(0);
                             plugin.getEditor().items.first().setValue('Foo');
@@ -1514,18 +1513,18 @@ function() {
                         });
                     });
                });
-               
+
                describe("tooltip", function() {
                    beforeEach(function() {
                         makeGrid();
                     });
-                    
+
                     it("should show the tip when starting editing in an invalid state", function() {
                         store.first().set('field1', '');
                         triggerCellMouseEvent('dblclick', 0, 0);
                         expect(plugin.getEditor().tooltip.isVisible()).toBe(true);
                     });
-                
+
                     it("should show the tip when a value changes the form to a invalid state", function() {
                         triggerCellMouseEvent('dblclick', 0, 0);
                         clearFormDelay();
@@ -1534,7 +1533,7 @@ function() {
                         editor.items.first().setValue('');
                         expect(editor.tooltip.isVisible()).toBe(true);
                     });
-                
+
                     it("should hide the tip when a value changes the form to a valid state", function() {
                         store.first().set('field1', '');
                         triggerCellMouseEvent('dblclick', 0, 0);
@@ -1665,7 +1664,7 @@ function() {
                     });
                });
             });
-            
+
             describe("field types", function() {
                 it("should set values with a fieldcontainer", function() {
                     makeGrid([{
@@ -1682,7 +1681,7 @@ function() {
                     expect(plugin.getEditor().items.first().items.first().getValue()).toBe('1.1');
                 });
             });
-            
+
             describe("key events", function() {
                 it("should cancel editing on ESC", function() {
                     makeGrid();
@@ -1690,7 +1689,7 @@ function() {
                     triggerEditorKey(ESC);
                     expect(plugin.editing).toBe(false);
                 });
-                
+
                 it("should complete on edit if the form is valid", function() {
                     makeGrid();
                     triggerCellMouseEvent('dblclick', 0, 0);
@@ -1699,7 +1698,7 @@ function() {
                     expect(plugin.editing).toBe(false);
                     expect(store.first().get('field1')).toBe('Foo');
                 });
-                
+
                 it("should not finish editing if enter is pressed and the form is invalid", function() {
                     makeGrid();
                     triggerCellMouseEvent('dblclick', 0, 0);
@@ -1708,7 +1707,7 @@ function() {
                     triggerEditorKey(ENTER);
                     expect(plugin.editing).toBe(true);
                 });
-                
+
                 it("should be able to cancel after pressing enter and the form is invalid", function() {
                     makeGrid();
                     triggerCellMouseEvent('dblclick', 0, 0);
@@ -1720,7 +1719,7 @@ function() {
                     expect(store.first().get('field1')).toBe('1.1');
                 });
             });
-            
+
             describe("adding/removing/moving columns", function() {
                 function dragColumn(from, to, onRight) {
                     var fromBox = from.titleEl.getBox(),
@@ -1771,7 +1770,7 @@ function() {
                                 if (!beforeFirstShow) {
                                     startEdit();
                                 }
-                                
+
                                 runs(function() {
                                     grid.headerCt.add({
                                         dataIndex: 'field6',
@@ -1790,12 +1789,12 @@ function() {
                                     expect(plugin.getEditor().getComponent('field6').getValue()).toBe('1.6');
                                 });
                             });
-                        
+
                             it("should remove an existing field & destroy it", function() {
                                 if (!beforeFirstShow) {
                                     startEdit();
                                 }
-                                
+
                                 runs(function() {
                                     grid.headerCt.remove(1);
 
@@ -1803,18 +1802,18 @@ function() {
                                         startEdit();
                                     }
                                 });
-                                
+
                                 runs(function() {
                                     expect(plugin.getEditor().getComponent('field2')).toBeFalsy();
                                     expect(Ext.getCmp('field2')).toBeFalsy();
                                 });
                             });
-                        
+
                             it("should move the field in the editor", function() {
                                 if (!beforeFirstShow) {
                                     startEdit();
                                 }
-                                
+
                                 runs(function() {
                                     grid.headerCt.move(0, 5);
 
@@ -1822,17 +1821,17 @@ function() {
                                         startEdit();
                                     }
                                 });
-                                
+
                                 runs(function() {
                                     expect(plugin.getEditor().items.last().getItemId()).toBe('field1');
                                 });
                             });
-                        
+
                             it("should remove all fields", function() {
                                 if (!beforeFirstShow) {
                                     startEdit();
                                 }
-                                
+
                                 runs(function() {
                                     grid.headerCt.removeAll();
 
@@ -1840,7 +1839,7 @@ function() {
                                         startEdit();
                                     }
                                 });
-                                
+
                                 runs(function() {
                                     expect(plugin.getEditor().items.getCount()).toBe(0);
                                 });
@@ -1875,7 +1874,7 @@ function() {
                                 if (!beforeFirstShow) {
                                    startEdit();
                                 }
-                                
+
                                 runs(function() {
                                     // insert before the first visible column
                                     grid.headerCt.move(4, 1);
@@ -1884,7 +1883,7 @@ function() {
                                        startEdit();
                                     }
                                 });
-                                
+
                                 runs(function() {
                                     expect(plugin.getEditor().items.getAt(1).getItemId()).toBe('field5');
                                 });
@@ -1896,7 +1895,7 @@ function() {
                                 if (!beforeFirstShow) {
                                    startEdit();
                                 }
-                                
+
                                 runs(function() {
                                     // insert after the last visible column
                                     grid.headerCt.move(0, 3);
@@ -1905,7 +1904,7 @@ function() {
                                        startEdit();
                                     }
                                 });
-                                
+
                                 runs(function() {
                                     expect(plugin.getEditor().items.getAt(3).getItemId()).toBe('field1');
                                 });
@@ -1917,7 +1916,7 @@ function() {
                                 if (!beforeFirstShow) {
                                    startEdit();
                                 }
-                                
+
                                 runs(function() {
                                     grid.headerCt.move(0, 3);
                                     grid.headerCt.insert(1, colRef[6]);
@@ -1926,7 +1925,7 @@ function() {
                                        startEdit();
                                     }
                                 });
-                                
+
                                 runs(function() {
                                     expect(plugin.getEditor().items.getAt(1).getItemId()).toBe('field7');
                                     expect(plugin.getEditor().items.getAt(4).getItemId()).toBe('field1');
@@ -1993,7 +1992,7 @@ function() {
                                 }
 
                                 startEdit();
-                                
+
                                 if (!beforeFirstShow) {
                                     runs(function() {
                                          grid.normalGrid.headerCt.move(1, 0);
@@ -2011,13 +2010,13 @@ function() {
                                 }
 
                                 startEdit();
-                                
+
                                 if (!beforeFirstShow) {
                                     runs(function() {
                                          grid.normalGrid.headerCt.move(1, 2);
                                     });
                                 }
-                                
+
                                 runs(function() {
                                     expectOrder(['field1', 'field2', 'field3', 'field7', 'field8', 'field9', 'field4', 'field5', 'field6']);
                                 });
@@ -2056,7 +2055,7 @@ function() {
                             { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
                         ]
                     });
-                    
+
                     makeGrid([
                             { header: 'Name', dataIndex: 'name', editor: 'textfield' },
                             { header: 'Email', dataIndex: 'email', flex: 1,
@@ -2075,7 +2074,7 @@ function() {
                             width: 600,
                             renderTo: document.body
                     });
-                    
+
                     view = grid.view;
                     plugin = grid.findPlugin('rowediting');
 
@@ -2098,15 +2097,15 @@ function() {
                     makeGrid(getDefaultColumns(false, {
                         width: 200
                     }, 10));
-                    
+
                     scroller.scrollBy(300);
 
                     waitsForEvent(scroller, 'scrollend', 'view to scroll');
-                    
+
                     runs(function() {
                         startEdit(0, 3);
                     });
-                    
+
                     waitsFor(function() {
                         return plugin.context && plugin.context.column.getEditor().el.contains(document.activeElement) &&
                                plugin.editor.getScrollable().getPosition().x === scroller.getPosition().x;
@@ -2175,7 +2174,7 @@ function() {
 
                     return cell;
                 }
-                
+
                 afterEach(function() {
                     window.onerror = oldOnError;
                 });
@@ -2199,7 +2198,7 @@ function() {
                     makeGrid(columns, {
                         clicksToEdit: 1
                     });
-                    
+
                     // We can't catch any exceptions thrown by synthetic events,
                     // so a standard toThrow() or even try/catch won't do the job
                     // here. They will hit onerror though, so use that.
@@ -2224,26 +2223,26 @@ function() {
                 describe("with visible headers", function() {
                     beforeEach(function() {
                         makeGrid();
-                        
+
                         startEdit(0, 0);
                     });
-                    
+
                     it("should have form role on the editor body", function() {
                         expect(editor.body).toHaveAttr('role', 'form');
                     });
-                    
+
                     it("should have aria-label on the editor body", function() {
                         expect(editor.body).toHaveAttr('aria-label', 'Editing row 2');
                     });
-                    
+
                     it("should have aria-owns on the editor body", function() {
                         expect(editor.body).toHaveAttr('aria-owns', editor.floatingButtons.id);
                     });
-                    
+
                     it("should have toolbar role on the floating buttons", function() {
                         expect(editor.floatingButtons).toHaveAttr('role', 'toolbar');
                     });
-                    
+
                     it("should have aria-labelledby on the fields' inputEls", function() {
                         expect(editor.items.getAt(0).inputEl).toHaveAttr('aria-labelledby', colRef[0].id);
                         expect(editor.items.getAt(1).inputEl).toHaveAttr('aria-labelledby', colRef[1].id);
@@ -2252,16 +2251,16 @@ function() {
                         expect(editor.items.getAt(4).inputEl).toHaveAttr('aria-labelledby', colRef[4].id);
                     });
                 });
-                
+
                 describe("with hidden headers", function() {
                     beforeEach(function() {
                         makeGrid(null, null, null, {
                             hideHeaders: true
                         });
-                        
+
                         startEdit(0, 1);
                     });
-                    
+
                     it("should have aria-labels on the fields' inputEls", function() {
                         expect(editor.items.getAt(0).inputEl).toHaveAttr('aria-label', 'F1');
                         expect(editor.items.getAt(1).inputEl).toHaveAttr('aria-label', 'F2');

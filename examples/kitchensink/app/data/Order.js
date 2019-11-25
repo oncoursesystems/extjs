@@ -3504,7 +3504,7 @@ Ext.define('KitchenSink.data.Order', {
         "date": "2015-10-13",
         "shipped": false
     }];
-    
+
     Ext.ux.ajax.SimManager.register({
         type: 'json',
         url: /\/KitchenSink\/Order(\/\d+)?/,
@@ -3512,19 +3512,23 @@ Ext.define('KitchenSink.data.Order', {
             var idPart = ctx.url.match(this.url)[1],
                 filters = ctx.params.filter,
                 id;
-            
+
             if (idPart) {
                 id = parseInt(idPart.substring(1), 10);
+
                 return Ext.Array.findBy(orders, function(order) {
                     return order.id === id;
                 });
-            } else if (filters) {
+            }
+            else if (filters) {
                 filters = Ext.decode(filters);
                 id = filters[0].value;
+
                 return Ext.Array.filter(orders, function(order) {
                     return order.companyId === id;
                 });
-            } else {
+            }
+            else {
                 return orders;
             }
         }

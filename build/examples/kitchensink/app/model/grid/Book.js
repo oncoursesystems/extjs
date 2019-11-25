@@ -1,4 +1,4 @@
-Ext.define('KitchenSink.model.grid.Book',{
+Ext.define('KitchenSink.model.grid.Book', {
     extend: 'KitchenSink.model.Base',
     requires: [
         'Ext.data.reader.Xml'
@@ -19,7 +19,7 @@ Ext.define('KitchenSink.model.grid.Book',{
     fields: [
         // set up the fields mapping into the xml doc
         // The first needs mapping, the others are very basic
-        {name: 'Author', mapping: '@author.name'},
+        { name: 'Author', mapping: '@author.name' },
         'Title', 'Manufacturer', 'ProductGroup'
     ]
 });

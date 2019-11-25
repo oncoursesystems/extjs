@@ -74,31 +74,31 @@ Ext.define('Ext.view.MultiSelectorSearch', {
      * @inheritdoc
      */
     floating: true,
-    
+
     /**
      * @cfg alignOnScroll
      * @inheritdoc
      */
     alignOnScroll: false,
-    
+
     /**
      * @cfg minWidth
      * @inheritdoc
      */
     minWidth: 200,
-    
+
     /**
      * @cfg minHeight
      * @inheritdoc
      */
     minHeight: 200,
-    
+
     /**
      * @cfg border
      * @inheritdoc
      */
     border: true,
-    
+
     /**
      * @cfg keyMap
      * @inheritdoc
@@ -129,7 +129,7 @@ Ext.define('Ext.view.MultiSelectorSearch', {
      * @inheritdoc
      */
     defaultListenerScope: true,
-    
+
     /**
      * @cfg referenceHolder
      * @inheritdoc
@@ -221,7 +221,7 @@ Ext.define('Ext.view.MultiSelectorSearch', {
 
     afterShow: function() {
         var searchField;
-        
+
         this.callParent(arguments);
 
         // Do not focus if this was invoked by a touch gesture
@@ -319,7 +319,7 @@ Ext.define('Ext.view.MultiSelectorSearch', {
         // match up passed records to the records in the search store so that the right
         // internal ids are used
         records = this.getMatchingRecords(records);
-        
+
         return searchGrid.getSelectionModel().select(records);
     },
 

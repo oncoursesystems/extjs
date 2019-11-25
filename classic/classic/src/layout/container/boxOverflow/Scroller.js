@@ -4,17 +4,17 @@
 Ext.define('Ext.layout.container.boxOverflow.Scroller', {
     extend: 'Ext.layout.container.boxOverflow.None',
     alternateClassName: 'Ext.layout.boxOverflow.Scroller',
-    
+
     alias: [
         'box.overflow.scroller',
         'box.overflow.Scroller' // capitalized for 4.x compat
     ],
-    
+
     requires: [
         'Ext.util.ClickRepeater',
         'Ext.Element'
     ],
-    
+
     mixins: {
         observable: 'Ext.mixin.Observable'
     },
@@ -90,7 +90,7 @@ Ext.define('Ext.layout.container.boxOverflow.Scroller', {
             };
 
         // If no obstrusive scrollbars, allow natural scrolling on mobile touch devices
-        if (!Ext.getScrollbarSize().width && !Ext.platformTags.desktop) {
+        if (!Ext.scrollbar.width() && !Ext.platformTags.desktop) {
             scrollable[owner.layout.horizontal ? 'x' : 'y'] = true;
         }
         else {
@@ -184,12 +184,12 @@ Ext.define('Ext.layout.container.boxOverflow.Scroller', {
 
         beforeScroller = me.getBeforeScroller();
         afterScroller = me.getAfterScroller();
-        
+
         scrollerWidth = beforeScroller[getWidth]() + afterScroller[getWidth]() +
             beforeScroller.getMargin(parallelMargins) + afterScroller.getMargin(parallelMargins);
-        
+
         targetPaddingWidth = ownerContext.targetContext.getPaddingInfo()[names.width];
-        
+
         return {
             reservedSpace: Math.max(scrollerWidth - targetPaddingWidth, 0)
         };

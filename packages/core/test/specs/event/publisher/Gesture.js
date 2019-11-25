@@ -97,7 +97,7 @@ topSuite("Ext.event.publisher.Gesture", function() {
             expect(result[5]).toEqual(['Ext.event.gesture.Swipe', 600]);
             expect(result[6]).toEqual(['Ext.event.gesture.Pinch', 700]);
             expect(result[7]).toEqual(['Ext.event.gesture.Rotate', 800]);
-            
+
             Ext.testHelper.touchEnd(document.body);
 
             delete Drag.onStart;
@@ -110,7 +110,7 @@ topSuite("Ext.event.publisher.Gesture", function() {
             delete Rotate.onStart;
         });
     });
-    
+
     // window.onerror method of catching exceptions in synthetic event handlers
     // doesn't work in IE8 for some reason :(
     (Ext.isIE8m ? xdescribe : describe)("exceptions in recognizers", function() {
@@ -121,20 +121,20 @@ topSuite("Ext.event.publisher.Gesture", function() {
                 throw new Error("This error is caught but will show in console IE");
             });
         });
-        
+
         it("should not allow the exception to propagate", function() {
             expect(function() {
                 helper.touchStart(targetEl, { id: 1, x: 1, y: 1 });
                 helper.touchEnd(targetEl, { id: 1, x: 1, y: 1 });
             }).toThrow('This error is caught but will show in console IE');
         });
-        
+
         it("should finish gesture when an exception is thrown in recognizer", function() {
             expect(function() {
                 helper.touchStart(targetEl, { id: 1, x: 1, y: 1 });
                 helper.touchEnd(targetEl, { id: 1, x: 1, y: 1 });
             }).toThrow('This error is caught but will show in console IE');
-            
+
             expect(gesture.isStarted).toBe(false);
         });
     });
@@ -705,7 +705,7 @@ topSuite("Ext.event.publisher.Gesture", function() {
             }
 
             helper.touchEnd(targetEl, { id: 2, x: 12, y: 15 });
-            
+
             helper.touchEnd(targetEl, { id: 1, x: 10, y: 11 });
         });
 

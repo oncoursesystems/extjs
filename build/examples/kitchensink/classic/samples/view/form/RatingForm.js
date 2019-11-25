@@ -46,6 +46,14 @@ Ext.define('KitchenSink.view.form.RatingForm', {
             idWidth: 100,
             height: 650,
             labelWidth: 140
+        },
+        'classic-material': {
+            width: 700,
+            lastYearWidth: 150,
+            yearWidth: 150,
+            idWidth: 100,
+            height: 650,
+            labelWidth: 150
         }
     },
     title: 'Rating Form',
@@ -77,7 +85,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
         store: {
             type: 'big-data'
         },
-        columns:[{
+        columns: [{
             xtype: 'rownumberer',
             width: 40,
             sortable: false
@@ -93,7 +101,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
             dataIndex: 'name',
             groupable: false,
             flex: 1
-        },{
+        }, {
             text: 'Rating',
             columns: [{
                 xtype: 'widgetcolumn',
@@ -104,7 +112,7 @@ Ext.define('KitchenSink.view.form.RatingForm', {
                     xtype: 'rating',
                     overStyle: 'color: orange;'
                 }
-            },{
+            }, {
                 xtype: 'widgetcolumn',
                 text: 'This Year',
                 width: '${lastYearWidth}',
@@ -115,12 +123,12 @@ Ext.define('KitchenSink.view.form.RatingForm', {
                     overStyle: 'color: rgb(23, 23, 189);',
                     tip: [
                         '<div style="white-space: nowrap;"><b>',
-                            'Current: {[this.rank[values.value]]}',
+                        'Current: {[this.rank[values.value]]}',
                         '</b>',
                         '<tpl if="trackOver && tracking !== value">',
-                            '<br><span style="color:#aaa">(click to set to ',
-                            '{[this.rank[values.tracking]]}',
-                            ')</span>',
+                        '<br><span style="color:#aaa">(click to set to ',
+                        '{[this.rank[values.tracking]]}',
+                        ')</span>',
                         '</tpl></span>',
                         {
                             rank: {

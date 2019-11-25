@@ -197,12 +197,12 @@ Ext.define('Ext.dom.Helper', function() {
                 for (attr in spec) {
                     if (spec.hasOwnProperty(attr)) {
                         val = spec[attr];
-                        
+
                         if (val !== undefined && !me.confRe.test(attr)) {
                             if (val && val.join) {
                                 val = val.join(' ');
                             }
-                            
+
                             if (typeof val === "object") {
                                 buffer.push(' ', attr, '="');
                                 me.generateStyles(val, buffer, true).push('"');
@@ -226,11 +226,11 @@ Ext.define('Ext.dom.Helper', function() {
                     if ((val = spec.tpl)) {
                         val.applyOut(spec.tplData, buffer);
                     }
-                    
+
                     if ((val = spec.html)) {
                         buffer.push(val);
                     }
-                    
+
                     if ((val = spec.cn || spec.children)) {
                         me.generateMarkup(val, buffer);
                     }
@@ -286,11 +286,11 @@ Ext.define('Ext.dom.Helper', function() {
                     // restricted to fonts), we'll check first before we try and encode it
                     // because it's less expensive and this method gets called a lot.
                     name = this.decamelizeName(name);
-                    
+
                     if (encode && Ext.String.hasHtmlCharacters(val)) {
                         val = Ext.String.htmlEncode(val);
                     }
-                    
+
                     a.push(name, ':', val, ';');
                 }
             }
@@ -305,13 +305,13 @@ Ext.define('Ext.dom.Helper', function() {
          */
         markup: function(spec) {
             var buf;
-            
+
             if (typeof spec === "string") {
                 return spec;
             }
 
             buf = this.generateMarkup(spec, []);
-            
+
             return buf.join('');
         },
 
@@ -367,7 +367,7 @@ Ext.define('Ext.dom.Helper', function() {
             while (length--) {
                 fragment.appendChild(childNodes[0]);
             }
-            
+
             return fragment;
         },
 
@@ -429,17 +429,17 @@ Ext.define('Ext.dom.Helper', function() {
                 if (me.ieInsertHtml) {
                     // hook for IE table hack - impl in ext package override
                     frag = me.ieInsertHtml(where, el, html);
-                    
+
                     if (frag) {
                         return frag;
                     }
                 }
 
                 hashVal = fullPositionHash[where];
-                
+
                 if (hashVal) {
                     el.insertAdjacentHTML(hashVal[0], html);
-                    
+
                     return el[hashVal[1]];
                 }
                 // if (not IE and context element is an HTMLElement) or TextNode
@@ -450,13 +450,13 @@ Ext.define('Ext.dom.Helper', function() {
                     where = where === afterbegin ? beforebegin : where;
                     where = where === beforeend ? afterend : where;
                 }
-                
+
                 range = Ext.supports.CreateContextualFragment
                     ? el.ownerDocument.createRange()
                     : undefined;
-                
+
                 setStart = 'setStart' + (this.endRe.test(where) ? 'After' : 'Before');
-                
+
                 if (bb_ae_PositionHash[where]) {
                     if (range) {
                         range[setStart](el);
@@ -465,14 +465,14 @@ Ext.define('Ext.dom.Helper', function() {
                     else {
                         frag = this.createContextualFragment(html);
                     }
-                    
+
                     el.parentNode.insertBefore(frag, where === beforebegin ? el : el.nextSibling);
-                    
+
                     return el[(where === beforebegin ? 'previous' : 'next') + 'Sibling'];
                 }
                 else {
                     rangeEl = (where === afterbegin ? 'first' : 'last') + 'Child';
-                    
+
                     if (el.firstChild) {
                         if (range) {
                             // Creating ranges on a hidden element throws an error, checking for
@@ -500,11 +500,11 @@ Ext.define('Ext.dom.Helper', function() {
                     else {
                         el.innerHTML = html;
                     }
-                    
+
                     return el[rangeEl];
                 }
             }
-            
+
             //<debug>
             Ext.raise({
                 sourceClass: 'Ext.DomHelper',
@@ -578,12 +578,12 @@ Ext.define('Ext.dom.Helper', function() {
                 // hook for IE table hack - impl in ext package override
                 newNode = me.ieOverwrite(el, html);
             }
-            
+
             if (!newNode) {
                 el.innerHTML = html;
                 newNode = el.firstChild;
             }
-            
+
             return returnElement ? Ext.get(newNode) : newNode;
         },
 
@@ -609,7 +609,7 @@ Ext.define('Ext.dom.Helper', function() {
                     where = where === afterbegin ? beforebegin : where;
                     where = where === beforeend ? afterend : where;
                 }
-                
+
                 if (bb_ae_PositionHash[where]) {
                     el.parentNode.insertBefore(newNode, where === beforebegin ? el : el.nextSibling); // eslint-disable-line max-len
                 }
@@ -631,7 +631,7 @@ Ext.define('Ext.dom.Helper', function() {
          */
         createTemplate: function(o) {
             var html = this.markup(o);
-            
+
             return new Ext.Template(html);
         },
 

@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.binding.Association', {
         type: 'binding-association'
     },
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'ViewModel',
         path: 'modern/src/view/binding/AssociationModel.js'
@@ -29,7 +29,7 @@ Ext.define('KitchenSink.view.binding.Association', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     height: '${height}',
     referenceHolder: true,

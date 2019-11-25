@@ -2,17 +2,17 @@ topSuite("Ext.data.ResultSet", ['Ext.data.Model'], function() {
     var resultset,
         ModelManager = Ext.data.ModelManager,
         ResultSet = Ext.data.ResultSet;
-    
+
     beforeEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = false;
     });
-    
+
     afterEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = true;
         Ext.data.Model.schema.clear();
         Ext.undefine('spec.User');
     });
-    
+
     describe("instantiation with records", function() {
         var config, nico, flo;
 

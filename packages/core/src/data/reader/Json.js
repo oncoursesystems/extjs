@@ -210,7 +210,7 @@ Ext.define('Ext.data.reader.Json', {
     requires: [
         'Ext.JSON'
     ],
-    
+
     config: {
         /**
         * @cfg {String} record The optional location within the JSON response that the record data
@@ -218,7 +218,7 @@ Ext.define('Ext.data.reader.Json', {
         * needed.
         */
         record: null,
-    
+
         /**
         * @cfg {String} [metaProperty]
         * Name of the property from which to retrieve the `metaData` attribute. See
@@ -236,7 +236,7 @@ Ext.define('Ext.data.reader.Json', {
         * the root object.
         */
         useSimpleAccessors: false,
-        
+
         /**
          * @cfg {Boolean} preserveRawData
          * The reader will keep a copy of the most recent request in the {@link #rawData} property.
@@ -253,16 +253,16 @@ Ext.define('Ext.data.reader.Json', {
          */
         preserveRawData: false
     },
-    
+
     /**
      * @private
      */
     responseType: 'json',
-    
+
     updateRootProperty: function() {
         this.forceBuildExtractors();
     },
-    
+
     updateMetaProperty: function() {
         this.forceBuildExtractors();
     },
@@ -280,7 +280,7 @@ Ext.define('Ext.data.reader.Json', {
 
     getResponseData: function(response) {
         var error;
-        
+
         if (typeof response.responseJson === 'object') {
             return response.responseJson;
         }
@@ -293,7 +293,7 @@ Ext.define('Ext.data.reader.Json', {
 
             Ext.Logger.warn('Unable to parse the JSON returned by the server');
             this.fireEvent('exception', this, response, error);
-            
+
             return error;
         }
     },
@@ -327,7 +327,7 @@ Ext.define('Ext.data.reader.Json', {
 
         if (recordName) {
             length = root.length;
-            
+
             if (!length && Ext.isObject(root)) {
                 length = 1;
                 root = [root];
@@ -340,10 +340,10 @@ Ext.define('Ext.data.reader.Json', {
         else {
             data = root;
         }
-        
+
         return this.callParent([data, readOptions]);
     },
-    
+
     getModelData: function(raw) {
         return this.getPreserveRawData() ? Ext.apply({}, raw) : raw;
     },
@@ -380,11 +380,11 @@ Ext.define('Ext.data.reader.Json', {
             if (typeof expr === 'function') {
                 return expr;
             }
-            
+
             if (!simple) {
                 operatorIndex = String(expr).search(re);
             }
-            
+
             if (simple === true || operatorIndex < 0) {
                 result = function(raw) {
                     return raw == null ? null : raw[expr];
@@ -411,7 +411,7 @@ Ext.define('Ext.data.reader.Json', {
                     isRight = c === ']';
 
                     special = isDot || isLeft || isRight || !c;
-                    
+
                     // If either:
                     // a) Not a special char
                     // b) We're nested more than 1 deep, no single char can bring us out
@@ -422,7 +422,7 @@ Ext.define('Ext.data.reader.Json', {
                     }
                     else if (special) {
                         bracketed = false;
-                        
+
                         if (isLeft) {
                             ++inExpr;
                         }
@@ -438,9 +438,9 @@ Ext.define('Ext.data.reader.Json', {
                             else {
                                 part = '.' + part;
                             }
-                            
+
                             current += part;
-                            
+
                             // Concatting the empty string to the start fixes a very odd
                             // intermittent bug with IE9/10.
                             // On some occasions, without it, it will end up generating
@@ -452,11 +452,11 @@ Ext.define('Ext.data.reader.Json', {
                         }
                     }
                 }
-                
+
                 result = parts.join(' && ');
                 result = Ext.functionFactory('raw', 'return ' + result);
             }
-            
+
             return result;
         };
     }()),
@@ -482,7 +482,7 @@ Ext.define('Ext.data.reader.Json', {
             mapping = field.mapping,
             hasMap = mapping || mapping === 0,
             map = hasMap ? mapping : field.name;
-            
+
         if (hasMap) {
             if (typeof map === 'function') {
                 return function(raw, self) {
@@ -497,7 +497,7 @@ Ext.define('Ext.data.reader.Json', {
 
     getAccessorKey: function(prop) {
         var simple = this.getUseSimpleAccessors() ? 'simple' : '';
-        
+
         return this.callParent([simple + prop]);
     },
 

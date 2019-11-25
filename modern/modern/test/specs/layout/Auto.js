@@ -14,7 +14,6 @@ topSuite("Ext.layout.Auto", ['Ext.layout.*'], function() {
     describe("docking", function() {
         // TODO
 
-
         describe("constraining docked item size", function() {
             // https://sencha.jira.com/browse/EXTJS-23904
 
@@ -203,7 +202,7 @@ topSuite("Ext.layout.Auto", ['Ext.layout.*'], function() {
             });
         });
 
-        (Ext.supports.PercentageSizeFlexBug ? xit : it)("should percentage height an item in a shrinkwrap width container", function () {
+        (Ext.supports.PercentageSizeFlexBug ? xit : it)("should percentage height an item in a shrinkwrap width container", function() {
             ct = Ext.create({
                 xtype: 'container',
                 floated: true,
@@ -236,7 +235,7 @@ topSuite("Ext.layout.Auto", ['Ext.layout.*'], function() {
             });
         });
 
-        (Ext.supports.PercentageSizeFlexBug ? xit : it)("should percentage width an item in a shrinkwrap height container", function () {
+        (Ext.supports.PercentageSizeFlexBug ? xit : it)("should percentage width an item in a shrinkwrap height container", function() {
             ct = Ext.create({
                 xtype: 'container',
                 renderTo: document.body,
@@ -372,7 +371,7 @@ topSuite("Ext.layout.Auto", ['Ext.layout.*'], function() {
             });
         });
 
-        it("should size a dynamically added item in percentages", function () {
+        it("should size a dynamically added item in percentages", function() {
             ct = Ext.create({
                 xtype: 'container',
                 renderTo: document.body,

@@ -8,15 +8,15 @@ Ext.define('KitchenSink.view.direct.BaseController', {
     inheritableStatics: {
         providers: {},
 
-        addProvider: function (url, provider) {
+        addProvider: function(url, provider) {
             return this.providers[url] = provider;
         },
 
-        getProvider: function (url) {
+        getProvider: function(url) {
             return this.providers[url];
         },
 
-        removeProvider: function (url) {
+        removeProvider: function(url) {
             var provider = this.providers[url];
 
             if (provider) {
@@ -46,17 +46,18 @@ Ext.define('KitchenSink.view.direct.BaseController', {
 
     finishInit: Ext.emptyFn,
 
-    init: function () {
+    init: function() {
         var provider = this.getProvider(this.apiUrl);
 
         if (provider) {
             this.finishInit();
-        } else {
+        }
+        else {
             this.loadProvider();
         }
     },
 
-    loadProvider: function () {
+    loadProvider: function() {
         var config = Ext.apply({
             url: this.apiUrl
         }, this.providerCfg);
@@ -64,25 +65,26 @@ Ext.define('KitchenSink.view.direct.BaseController', {
         Ext.direct.Manager.loadProvider(config, this.onProviderLoad, this);
     },
 
-    onProviderLoad: function (url, provider) {
+    onProviderLoad: function(url, provider) {
         if (Ext.isString(provider)) {
             Ext.Msg.alert('Ext Direct init failure', provider);
-        } else {
+        }
+        else {
             this.addProvider(url, provider);
 
             this.finishInit();
         }
     },
 
-    addProvider: function (url, provider) {
+    addProvider: function(url, provider) {
         return this.self.addProvider(url, provider);
     },
 
-    getProvider: function (url) {
+    getProvider: function(url) {
         return this.self.getProvider(url);
     },
 
-    removeProvider: function (url) {
+    removeProvider: function(url) {
         return this.self.removeProvider(url);
     }
 });

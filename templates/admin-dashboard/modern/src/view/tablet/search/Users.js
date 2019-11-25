@@ -56,7 +56,7 @@ Ext.define('Admin.view.tablet.search.Users', {
         cell: {
             tools: {
                 gear: {
-                    iconCls: 'x-fa fa-pencil',
+                    iconCls: 'x-fa fa-pencil-alt',
                     tooltip: 'Edit User',
                     zone: 'start'
                 },

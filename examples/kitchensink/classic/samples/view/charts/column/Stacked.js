@@ -10,7 +10,7 @@ Ext.define('KitchenSink.view.charts.column.Stacked', {
     extend: 'Ext.Panel',
     xtype: 'column-stacked',
     controller: 'column-stacked',
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -24,7 +24,7 @@ Ext.define('KitchenSink.view.charts.column.Stacked', {
         type: 'Store',
         path: 'app/store/Browsers.js'
     }],
-    // </example>
+    //</example>
 
     width: 650,
 

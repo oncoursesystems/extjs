@@ -18,10 +18,10 @@ Ext.define('KitchenSink.view.pivot.LayoutCompact', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/LayoutController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
@@ -29,17 +29,26 @@ Ext.define('KitchenSink.view.pivot.LayoutCompact', {
         classic: {
             width: 600,
             height: 350,
-            totalColumnWidth: 90
+            totalColumnWidth: 90,
+            columnLines: true
         },
         neptune: {
             width: 750,
             height: 350,
-            totalColumnWidth: 90
+            totalColumnWidth: 90,
+            columnLines: true
         },
         graphite: {
             width: 750,
             height: 600,
-            totalColumnWidth: 120
+            totalColumnWidth: 120,
+            columnLines: true
+        },
+        'classic-material': {
+            width: 750,
+            height: 600,
+            totalColumnWidth: 120,
+            columnLines: false
         }
     },
     //</example>
@@ -49,6 +58,7 @@ Ext.define('KitchenSink.view.pivot.LayoutCompact', {
     height: '${height}',
     collapsible: true,
     multiSelect: true,
+    columnLines: '${columnLines}',
 
     selModel: {
         type: 'cellmodel'
@@ -97,7 +107,6 @@ Ext.define('KitchenSink.view.pivot.LayoutCompact', {
             header: 'Country'
         }],
 
-
         /**
          * Configure the top axis dimensions that will be used to generate
          * the columns.
@@ -127,41 +136,41 @@ Ext.define('KitchenSink.view.pivot.LayoutCompact', {
         menu: [{
             text: 'Collapse all',
             handler: 'collapseAll'
-        },{
+        }, {
             text: 'Expand all',
             handler: 'expandAll'
         }]
-    },{
+    }, {
         text: 'Subtotals position',
         menu: {
             defaults: {
                 xtype: 'menucheckitem',
-                group:  'subtotals',
+                group: 'subtotals',
                 checkHandler: 'subtotalsHandler'
             },
             items: [{
                 text: 'First',
                 checked: true
-            },{
+            }, {
                 text: 'Last'
-            },{
+            }, {
                 text: 'None'
             }]
         }
-    },{
+    }, {
         text: 'Totals position',
         menu: {
             defaults: {
                 xtype: 'menucheckitem',
-                group:  'totals',
+                group: 'totals',
                 checkHandler: 'totalsHandler'
             },
             items: [{
                 text: 'First'
-            },{
+            }, {
                 text: 'Last',
                 checked: true
-            },{
+            }, {
                 text: 'None'
             }]
         }

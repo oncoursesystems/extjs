@@ -56,7 +56,7 @@ Ext.define('Ext.data.JsonPStore', {
                 reader: 'json'
             }
         }, config);
-        
+
         this.callParent([config]);
     }
 });

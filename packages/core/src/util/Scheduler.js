@@ -122,7 +122,7 @@ Ext.define('Ext.util.Scheduler', {
 
         item.id = item.id || ++me.nextId;
         item.scheduler = me;
-        
+
         items.add(item);
 
         if (!me.sortMap) {
@@ -383,7 +383,7 @@ Ext.define('Ext.util.Scheduler', {
                         me.onCycleLimitExceeded();
                     }
                     //</debug>
-                    
+
                     break;
                 }
 

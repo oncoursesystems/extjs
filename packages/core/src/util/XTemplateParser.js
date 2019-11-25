@@ -166,7 +166,7 @@ Ext.define('Ext.util.XTemplateParser', {
                 // However, if we have spaces they will get matched as plaintext, so
                 // we want to skip over them here.
                 s = str.substring(index, begin);
-                
+
                 if (!(expectTplNext && Ext.String.trim(s) === '')) {
                     me.doText(s);
                 }
@@ -189,10 +189,10 @@ Ext.define('Ext.util.XTemplateParser', {
             }
             else if (m[4]) { // content of a <tpl xxxxxx xxx> tag
                 actions = null;
-                
+
                 while ((subMatch = actionsRe.exec(m[4])) !== null) {
                     s = subMatch[2] || subMatch[3];
-                    
+
                     if (s) {
                         s = Ext.String.htmlDecode(s); // decode attr value
                         t = subMatch[1];
@@ -247,7 +247,7 @@ Ext.define('Ext.util.XTemplateParser', {
                     if (prop = me.propRe.exec(m[4])) {
                         actions.propName = prop[1] || prop[2];
                     }
-                    
+
                     me.doFor(actions['for'], actions);
                     stack.push({ type: 'for', actions: actions });
                 }
@@ -259,7 +259,7 @@ Ext.define('Ext.util.XTemplateParser', {
                     if (prop = me.propRe.exec(m[4])) {
                         actions.propName = prop[1] || prop[2];
                     }
-                    
+
                     me.doForEach(actions['foreach'], actions);
                     stack.push({ type: 'foreach', actions: actions });
                 }
@@ -282,7 +282,7 @@ Ext.define('Ext.util.XTemplateParser', {
             else {
                 frame = stack.pop();
                 me.doEnd(frame.type, frame.actions);
-                
+
                 if (frame.type === 'for' || frame.type === 'foreach') {
                     --me.level;
                 }
@@ -291,7 +291,7 @@ Ext.define('Ext.util.XTemplateParser', {
     },
 
     // Internal regexes
-    
+
     /* eslint-disable no-useless-escape */
     topRe: /(?:(\{\%)|(\{\[)|\{([^{}]+)\})|(?:<tpl([^>]*)\>)|(?:<\/tpl>)/g,
     actionsRe: /\s*(elif|elseif|if|for|foreach|exec|switch|case|eval|between)\s*\=\s*(?:(?:"([^"]*)")|(?:'([^']*)'))\s*/g,

@@ -104,7 +104,7 @@ Ext.define('KitchenSink.view.forms.ContactForm', {
                 allowBlank: false,
                 required: true
             }, {
-                xtype:'filefield',
+                xtype: 'filefield',
                 label: 'Document',
                 name: 'photo-path'
             }]
@@ -126,7 +126,7 @@ Ext.define('KitchenSink.view.forms.ContactForm', {
         'respond to your inquiry as quickly as possible.'
     }],
 
-    buttons : ['->', {
+    buttons: ['->', {
         text: 'Contact Us',
         handler: 'showWindow'
     }, '->']

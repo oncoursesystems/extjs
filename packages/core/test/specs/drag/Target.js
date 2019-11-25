@@ -12,7 +12,7 @@ topSuite("Ext.drag.Target", ['Ext.drag.*', 'Ext.dom.Element'], function() {
         if (typeof x !== 'number') {
             x = 5;
         }
-        
+
         if (typeof y !== 'number') {
             y = 5;
         }
@@ -33,7 +33,7 @@ topSuite("Ext.drag.Target", ['Ext.drag.*', 'Ext.dom.Element'], function() {
         if (typeof x !== 'number') {
             x = 50;
         }
-        
+
         if (typeof y !== 'number') {
             y = 50;
         }

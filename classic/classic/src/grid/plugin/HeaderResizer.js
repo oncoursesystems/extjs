@@ -5,7 +5,7 @@
 Ext.define('Ext.grid.plugin.HeaderResizer', {
     extend: 'Ext.plugin.Abstract',
     alias: 'plugin.gridheaderresizer',
-    
+
     requires: [
         'Ext.dd.DragTracker',
         'Ext.util.Region'
@@ -43,16 +43,16 @@ Ext.define('Ext.grid.plugin.HeaderResizer', {
     destroy: function() {
         var me = this,
             tracker = me.tracker;
-        
+
         if (tracker) {
             tracker.destroy();
             me.tracker = null;
         }
-        
+
         // The grid may happen to never render
         me.headerCt.un('render', me.afterHeaderRender, me);
         me.headerCt = null;
-        
+
         me.callParent();
     },
 
@@ -111,12 +111,12 @@ Ext.define('Ext.grid.plugin.HeaderResizer', {
 
             // If near the right edge, we're resizing the column we are over.
             if (overHeader.isAtEndEdge(e)) {
-                
+
                 // Cannot resize the only column in a forceFit grid.
                 if (headerCt.visibleColumnManager.getColumns().length === 1 && headerCt.forceFit) {
                     return;
                 }
-                
+
                 resizeHeader = overHeader;
             }
             // Else... we might be near the right edge
@@ -211,7 +211,7 @@ Ext.define('Ext.grid.plugin.HeaderResizer', {
             nextHd,
             ownerGrid = me.ownerGrid,
             widthModel = ownerGrid.getSizeModel().width,
-            
+
             // eslint-disable-next-line max-len
             maxColWidth = widthModel.shrinkWrap ? me.headerCt.getWidth() - me.headerCt.visibleColumnManager.getColumns().length * me.minColWidth : me.maxColWidth,
             result;
@@ -234,7 +234,7 @@ Ext.define('Ext.grid.plugin.HeaderResizer', {
                 me.dragHd.up('[scrollerOwner]').getTargetEl().getWidth(true) -
                 ownerGrid.getWidth() -
                 (ownerGrid.ownerLockable.normalGrid.visibleColumnManager.getColumns().length *
-                    me.minColWidth + Ext.getScrollbarSize().width);
+                    me.minColWidth + Ext.scrollbar.width());
         }
 
         result = me.adjustConstrainRegion(dragHdEl.getRegion(), 0, 0, 0, me.minColWidth);
@@ -293,7 +293,7 @@ Ext.define('Ext.grid.plugin.HeaderResizer', {
     // synchronize the rhsMarker with the mouse movement
     onDrag: function(e) {
         var me = this;
-            
+
         if (me.dynamic) {
             me.doResize();
         }
@@ -301,7 +301,7 @@ Ext.define('Ext.grid.plugin.HeaderResizer', {
             me.setMarkerX(me.getMovingMarker(me.markerOwner), me.calculateDragX(me.markerOwner));
         }
     },
-    
+
     getMovingMarker: function(markerOwner) {
         return markerOwner.getRhsMarker();
     },
@@ -360,7 +360,7 @@ Ext.define('Ext.grid.plugin.HeaderResizer', {
             // Adjusted for the offset from the actual column border that the mousedown
             // too place at.
             me.adjustColumnWidth(offset[0] - me.xDelta);
- 
+
             // In the case of forceFit, change the following Header width.
             // Constraining so that neither neighbour can be sized to below minWidth is handled
             // in getConstrainRegion
@@ -381,11 +381,11 @@ Ext.define('Ext.grid.plugin.HeaderResizer', {
             Ext.resumeLayouts(true);
         }
     },
-    
+
     // nextNode can traverse out of this grid, possibly to others on the page, so limit it here
     headerInSameGrid: function(header) {
         var grid = this.dragHd.up('tablepanel');
-        
+
         return !!header.up(grid);
     },
 

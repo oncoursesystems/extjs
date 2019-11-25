@@ -38,6 +38,13 @@ Ext.define('Ext.Toast', {
 
     config: {
         /**
+         * @cfg {String} alignment
+         * The alignment for the {@link Ext.Toast}.
+         * @accessor
+         */
+        alignment: 't-t',
+
+        /**
          * @cfg centered
          * @inheritdoc
          */
@@ -186,7 +193,7 @@ Ext.define('Ext.Toast', {
     showToast: function(config) {
         var me = this,
             message = config.message,
-            timeout = config.timeout,
+            timeout = config.timeout || this.getTimeout(),
             messageContainer = me.getMessage(),
             msgAnimation = me.getMessageAnimation();
 
@@ -228,7 +235,7 @@ Ext.define('Ext.Toast', {
                 animation: null,
                 alignment: {
                     component: document.body,
-                    alignment: 't-t',
+                    alignment: config.alignment || me.getAlignment(),
                     options: {
                         offset: [0, 20]
                     }
@@ -331,10 +338,6 @@ Ext.define('Ext.Toast', {
             throw new Error("Toast requires a message");
         }
         //</debug>
-
-        if (config.timeout === undefined) {
-            config.timeout = Ext.Toast.prototype.config.timeout;
-        }
 
         _queue.push(config);
 

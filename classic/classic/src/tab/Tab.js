@@ -106,7 +106,7 @@ Ext.define('Ext.tab.Tab', {
 
     ariaRole: 'tab',
     tabIndex: -1,
-    
+
     keyMap: {
         scope: 'this',
         DELETE: 'onDeleteKey'
@@ -170,7 +170,7 @@ Ext.define('Ext.tab.Tab', {
 
     initComponent: function() {
         var me = this;
-        
+
         // Although WAI-ARIA spec has a provision for deleting tab panels,
         // according to accessibility experts at University of Washington
         // closable tab panels can be very confusing to vision impaired users.
@@ -187,7 +187,7 @@ Ext.define('Ext.tab.Tab', {
             );
         }
         //</debug>
-        
+
         if (me.card) {
             me.setCard(me.card);
         }
@@ -269,7 +269,7 @@ Ext.define('Ext.tab.Tab', {
             tabPanel = me.up('tabpanel');
 
         me.callParent();
-        
+
         me.ariaRenderAttributes = me.ariaRenderAttributes || {};
 
         if (me.active) {
@@ -521,7 +521,7 @@ Ext.define('Ext.tab.Tab', {
 
         me.active = true;
         me.addCls(me._activeCls);
-        
+
         if (ariaDom) {
             ariaDom.setAttribute('aria-selected', true);
         }
@@ -529,7 +529,7 @@ Ext.define('Ext.tab.Tab', {
             me.ariaRenderAttributes = me.ariaRenderAttributes || {};
             me.ariaRenderAttributes['aria-selected'] = true;
         }
-        
+
         if (card) {
             if (card.ariaEl.dom) {
                 card.ariaEl.dom.setAttribute('aria-expanded', true);
@@ -555,7 +555,7 @@ Ext.define('Ext.tab.Tab', {
 
         me.active = false;
         me.removeCls(me._activeCls);
-        
+
         if (ariaDom) {
             ariaDom.setAttribute('aria-selected', false);
         }
@@ -563,7 +563,7 @@ Ext.define('Ext.tab.Tab', {
             me.ariaRenderAttributes = me.ariaRenderAttributes || {};
             me.ariaRenderAttributes['aria-selected'] = false;
         }
-        
+
         if (card) {
             if (card.ariaEl.dom) {
                 card.ariaEl.dom.setAttribute('aria-expanded', false);

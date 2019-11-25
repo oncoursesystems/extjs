@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.binding.Formula', {
         type: 'binding-formula'
     },
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'ViewModel',
         path: 'modern/src/view/binding/FormulaModel.js'
@@ -24,7 +24,7 @@ Ext.define('KitchenSink.view.binding.Formula', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     padding: 20,
     width: '${width}',

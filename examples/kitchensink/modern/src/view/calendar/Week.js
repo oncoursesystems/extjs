@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.calendar.Week', {
         'Ext.SegmentedButton'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Store',
         path: 'samples/data/calendar/Week.js'
@@ -25,13 +25,13 @@ Ext.define('KitchenSink.view.calendar.Week', {
         phone: {
             defaults: {
                 weekBtnText: undefined,
-                weekBtnIconCls: 'x-fa fa-calendar-check-o',
+                weekBtnIconCls: 'x-fa fa-calendar-check',
                 workBtnText: undefined,
                 workBtnIconCls: 'x-fa fa-briefcase'
             }
         }
     },
-    // </example>
+    //</example>
 
     viewModel: {
         data: {
@@ -46,6 +46,7 @@ Ext.define('KitchenSink.view.calendar.Week', {
                 },
                 set: function(val) {
                     var work = val === 'workweek';
+
                     this.set('visibleDays', work ? 5 : 7);
                     this.set('firstDayOfWeek', work ? 1 : 0);
                 }

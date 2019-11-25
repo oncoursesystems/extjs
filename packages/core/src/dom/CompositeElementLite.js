@@ -129,7 +129,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
     getElement: function(el) {
         // Set the shared flyweight dom property to the current element
         var fly = this._fly || (this._fly = new Ext.dom.Fly());
-        
+
         return fly.attach(el);
     },
 
@@ -190,7 +190,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
             // make sure we are using the correct prototype, since Fly overrides a 
             // couple of Element methods
             prototype = (me.isLite ? Ext.dom.Fly : Ext.dom.Element).prototype;
-            
+
             for (i = 0; i < ln; i++) {
                 element = elements[i];
 
@@ -199,7 +199,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
                 }
             }
         }
-        
+
         return me;
     },
 
@@ -249,16 +249,16 @@ Ext.define('Ext.dom.CompositeElementLite', {
 
         for (i = 0; i < len; i++) {
             e = els[i];
-            
+
             if (e) {
                 e = this.getElement(e);
-                
+
                 if (fn.call(scope || e, e, me, i) === false) {
                     break;
                 }
             }
         }
-        
+
         return me;
     },
 
@@ -270,10 +270,10 @@ Ext.define('Ext.dom.CompositeElementLite', {
      */
     fill: function(els) {
         var me = this;
-        
+
         me.elements = [];
         me.add(els);
-        
+
         return me;
     },
 
@@ -301,7 +301,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
         for (; i < len; i++) {
             el = els[i];
             add = false;
-            
+
             if (el) {
                 el = me.getElement(el);
 
@@ -311,7 +311,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
                 else {
                     add = el.is(selector);
                 }
-                
+
                 if (add) {
                     out.push(me.transformElement(el));
                 }
@@ -319,7 +319,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
         }
 
         me.elements = out;
-        
+
         return me;
     },
 
@@ -345,19 +345,19 @@ Ext.define('Ext.dom.CompositeElementLite', {
     replaceElement: function(el, replacement, domReplace) {
         var index = !isNaN(el) ? el : this.indexOf(el),
             d;
-        
+
         if (index > -1) {
             replacement = Ext.getDom(replacement);
-            
+
             if (domReplace) {
                 d = this.elements[index];
                 d.parentNode.insertBefore(replacement, d);
                 Ext.removeNode(d);
             }
-            
+
             Ext.Array.splice(this.elements, index, 1, replacement);
         }
-        
+
         return this;
     },
 
@@ -369,13 +369,13 @@ Ext.define('Ext.dom.CompositeElementLite', {
         var me = this,
             els = me.elements,
             i = els.length - 1;
-        
+
         if (removeDom) {
             for (; i >= 0; i--) {
                 Ext.removeNode(els[i]);
             }
         }
-        
+
         this.elements = [];
     },
 
@@ -452,7 +452,7 @@ Ext.define('Ext.dom.CompositeElementLite', {
                         Ext.removeNode(el);
                     }
                 }
-                
+
                 Ext.Array.erase(elements, val, 1);
             }
         }

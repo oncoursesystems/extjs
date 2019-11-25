@@ -485,9 +485,9 @@ Ext.define('Ext.dd.DragDrop', {
         if (Ext.isNumber(pad)) {
             pad = { left: pad, right: pad, top: pad, bottom: pad };
         }
-        
+
         pad = pad || this.defaultPadding;
-        
+
         // eslint-disable-next-line vars-on-top
         var ddBox = Ext.get(this.getEl()).getBox(),
             constrainEl = Ext.get(constrainTo),
@@ -517,13 +517,13 @@ Ext.define('Ext.dd.DragDrop', {
         leftSpace = ddBox.x - c.x;
 
         this.resetConstraints();
-        
+
         this.setXConstraint(
             leftSpace - (pad.left || 0), // left
             c.width - leftSpace - ddBox.width - (pad.right || 0), // right
             this.xTickSize
         );
-        
+
         this.setYConstraint(
             topSpace - (pad.top || 0), // top
             c.height - topSpace - ddBox.height - (pad.bottom || 0), // bottom
@@ -636,7 +636,7 @@ Ext.define('Ext.dd.DragDrop', {
         this.maintainOffset = (this.config.maintainOffset);
         this.primaryButtonOnly = (this.config.primaryButtonOnly !== false);
     },
-    
+
     /**
      * Executed when the linked element is available
      * @private
@@ -646,7 +646,7 @@ Ext.define('Ext.dd.DragDrop', {
         this.resetConstraints();
         this.onAvailable();
     },
-    
+
     /**
      * Configures the padding for the target zone in px.  Effectively expands
      * (or reduces) the virtual object size for targeting calculations.
@@ -786,7 +786,7 @@ Ext.define('Ext.dd.DragDrop', {
     unreg: function() {
         var me = this,
             el;
-        
+
         if (me._domRef) {
             el = Ext.fly(me.id);
 
@@ -952,7 +952,6 @@ Ext.define('Ext.dd.DragDrop', {
             valid = !Ext.fly(node).hasCls(this.invalidHandleClasses[i]);
         }
 
-
         return valid;
 
     },
@@ -1089,7 +1088,7 @@ Ext.define('Ext.dd.DragDrop', {
      */
     resetConstraints: function() {
         var dx, dy;
-        
+
         // Maintain offsets if necessary
         if (this.initPageX || this.initPageX === 0) {
             // figure out how much this thing has moved

@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.chart.combination.CustomThemeController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.combination-theme',
 
-    onAxisLabelRender: function (axis, label, layoutContext) {
+    onAxisLabelRender: function(axis, label, layoutContext) {
         // Custom renderer overrides the native axis label renderer.
         // Since we don't want to do anything fancy with the value
         // ourselves except appending a '%' sign, but at the same time
@@ -11,7 +11,7 @@ Ext.define('KitchenSink.view.chart.combination.CustomThemeController', {
         return layoutContext.renderer(label) + '%';
     },
 
-    onSeriesTooltipRender: function (tooltip, record, item) {
+    onSeriesTooltipRender: function(tooltip, record, item) {
         var fieldIndex = Ext.Array.indexOf(item.series.getYField(), item.field),
             browser = item.series.getTitle()[fieldIndex];
 
@@ -19,18 +19,19 @@ Ext.define('KitchenSink.view.chart.combination.CustomThemeController', {
             record.get(item.field) + '%');
     },
 
-    onColumnRender: function (value) {
+    onColumnRender: function(value) {
         return value + '%';
     },
 
-    onDownload: function () {
+    onDownload: function() {
         var chart = this.lookup('chart');
 
         if (Ext.is.Desktop) {
             chart.download({
                 filename: 'Custom Theme Chart'
             });
-        } else {
+        }
+        else {
             chart.preview();
         }
     }

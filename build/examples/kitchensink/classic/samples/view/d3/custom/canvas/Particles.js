@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.d3.custom.canvas.Particles', {
         'KitchenSink.view.d3.custom.canvas.ParticlesController'
     ],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [
         {
@@ -24,7 +24,7 @@ Ext.define('KitchenSink.view.d3.custom.canvas.Particles', {
             path: 'classic/samples/view/d3/custom/canvas/Particle.js'
         }
     ],
-    // </example>
+    //</example>
 
     width: 860,
     height: 500,

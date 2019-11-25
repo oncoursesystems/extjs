@@ -12,7 +12,7 @@ Ext.define('Ext.form.field.Trigger', {
     extend: 'Ext.form.field.Text',
     alias: ['widget.triggerfield', 'widget.trigger'],
     alternateClassName: ['Ext.form.TriggerField', 'Ext.form.TwinTriggerField', 'Ext.form.Trigger'],
-    
+
     requires: [
         'Ext.dom.Helper',
         'Ext.util.ClickRepeater'

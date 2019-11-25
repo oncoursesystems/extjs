@@ -52,7 +52,7 @@ Ext.define('Ext.chart.PolarChart', {
             axes = me.getAxes(),
             series = me.getSeries(),
             i, ln, axis, seriesItem;
-            
+
         for (i = 0, ln = axes.length; i < ln; i++) {
             axis = axes[i];
             axis.setCenter(center);

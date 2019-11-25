@@ -14,7 +14,7 @@ Ext.define('Ext.form.field.Picker', {
     extend: 'Ext.form.field.Text',
     alias: 'widget.pickerfield',
     alternateClassName: 'Ext.form.Picker',
-    
+
     requires: ['Ext.util.KeyNav'],
 
     config: {
@@ -26,7 +26,7 @@ Ext.define('Ext.form.field.Picker', {
             }
         }
     },
-    
+
     renderConfig: {
         /**
          * @cfg {Boolean} editable
@@ -36,13 +36,13 @@ Ext.define('Ext.form.field.Picker', {
          */
         editable: true
     },
-    
+
     keyMap: {
         scope: 'this',
         DOWN: 'onDownArrow',
         ESC: 'onEsc'
     },
-    
+
     keyMapTarget: 'inputEl',
 
     /**
@@ -120,24 +120,24 @@ Ext.define('Ext.form.field.Picker', {
 
         return me.callParent([triggers]);
     },
-    
+
     getSubTplData: function(fieldData) {
         var me = this,
             data, ariaAttr;
-        
+
         data = me.callParent([fieldData]);
-        
+
         if (!me.ariaStaticRoles[me.ariaRole]) {
             ariaAttr = data.ariaElAttributes;
-            
+
             if (ariaAttr) {
                 ariaAttr['aria-haspopup'] = true;
-                
+
                 // Picker fields start as collapsed
                 ariaAttr['aria-expanded'] = false;
             }
         }
-        
+
         return data;
     },
 
@@ -184,11 +184,11 @@ Ext.define('Ext.form.field.Picker', {
 
     onDownArrow: function(e) {
         var me = this;
-        
+
         if ((e.time - me.lastDownArrow) > 150) {
             delete me.lastDownArrow;
         }
-        
+
         if (!me.isExpanded) {
             // Do not let the down arrow event propagate into the picker
             e.stopEvent();
@@ -196,7 +196,7 @@ Ext.define('Ext.form.field.Picker', {
             // Don't call expand() directly as there may be additional processing involved before
             // expanding, e.g. in the case of a ComboBox query.
             me.onTriggerClick(me, me.getPickerTrigger(), e);
-            
+
             me.lastDownArrow = e.time;
         }
         else if (!e.stopped && (e.time - me.lastDownArrow) < 150) {
@@ -216,7 +216,7 @@ Ext.define('Ext.form.field.Picker', {
             picker = me.getPicker();
             doc = Ext.getDoc();
             picker.setMaxHeight(picker.initialConfig.maxHeight);
-            
+
             if (me.matchFieldWidth) {
                 picker.setWidth(me.bodyEl.getWidth());
             }
@@ -226,14 +226,14 @@ Ext.define('Ext.form.field.Picker', {
             me.isExpanded = true;
             me.alignPicker();
             bodyEl.addCls(me.openCls);
-            
+
             if (!me.ariaStaticRoles[me.ariaRole]) {
                 if (!me.ariaEl.dom.hasAttribute('aria-owns')) {
                     me.ariaEl.dom.setAttribute(
                         'aria-owns', picker.listEl ? picker.listEl.id : picker.el.id
                     );
                 }
-                
+
                 me.ariaEl.dom.setAttribute('aria-expanded', true);
             }
 
@@ -256,7 +256,7 @@ Ext.define('Ext.form.field.Picker', {
                 scope: me,
                 destroyable: true
             });
-            
+
             // Buffer is used to allow any layouts to complete before we align
             Ext.on('resize', me.alignPicker, me, { buffer: 1 });
             me.fireEvent('expand', me);
@@ -303,7 +303,7 @@ Ext.define('Ext.form.field.Picker', {
         newPos = picker.floatParent
             ? picker.getOffsetsTo(picker.floatParent.getTargetEl())
             : picker.getXY();
-        
+
         picker.x = newPos[0];
         picker.y = newPos[1];
 
@@ -322,7 +322,7 @@ Ext.define('Ext.form.field.Picker', {
             openCls = me.openCls,
             aboveSfx = '-above',
             picker;
-        
+
         if (me.isExpanded && !me.destroyed && !me.destroying) {
             picker = me.picker;
 
@@ -333,7 +333,7 @@ Ext.define('Ext.form.field.Picker', {
             // remove the openCls
             me.bodyEl.removeCls([openCls, openCls + aboveSfx]);
             picker.el.removeCls(picker.baseCls + aboveSfx);
-            
+
             if (!me.ariaStaticRoles[me.ariaRole]) {
                 me.ariaEl.dom.setAttribute('aria-expanded', false);
             }
@@ -341,10 +341,10 @@ Ext.define('Ext.form.field.Picker', {
             // remove event listeners
             me.touchListeners.destroy();
             me.scrollListeners.destroy();
-            
+
             Ext.un('resize', me.alignPicker, me);
             me.fireEvent('collapse', me);
-            
+
             me.onCollapse();
         }
     },
@@ -401,11 +401,11 @@ Ext.define('Ext.form.field.Picker', {
      */
     getRefItems: function() {
         var result = [];
-        
+
         if (this.picker) {
             result[0] = this.picker;
         }
-        
+
         return result;
     },
 
@@ -451,7 +451,7 @@ Ext.define('Ext.form.field.Picker', {
 
         Ext.un('resize', me.alignPicker, me);
         Ext.destroy(me.keyNav, picker);
-        
+
         if (picker) {
             me.picker = picker.pickerField = null;
         }

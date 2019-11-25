@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.drag.File', {
     xtype: 'drag-file',
     controller: 'drag-file',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/drag/FileController.js'
@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.drag.File', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     height: '${height}',
     padding: 5,

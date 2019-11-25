@@ -21,7 +21,7 @@ Ext.define('Ext.state.Manager', {
     constructor: function() {
         this.provider = new Ext.state.Provider();
     },
-    
+
     /**
      * Configures the default state provider for your application
      * @param {Ext.state.Provider} stateProvider The state provider to set

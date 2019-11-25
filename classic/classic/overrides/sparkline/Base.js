@@ -29,14 +29,14 @@ Ext.define('Ext.override.sparkline.Base', {
     privates: {
         hideTip: function() {
             var tip = this.getSharedTooltip();
-            
+
             tip.target = null;
             tip.hide();
         },
 
         showTip: function() {
             var tip = this.getSharedTooltip();
-            
+
             tip.target = this.el;
             tip.onTargetOver(tip.triggerEvent);
         }

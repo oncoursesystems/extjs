@@ -22,11 +22,11 @@ function() {
         }),
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         },
         view, bufferedRenderer;
@@ -42,7 +42,7 @@ function() {
                 title: 'Title' + i
             });
         }
-        
+
         return recs;
     }
 
@@ -148,7 +148,7 @@ function() {
 
             waitsFor(function() {
                 satisfyRequests();
-                
+
                 return scrollDone;
             }, 'scroll to finish');
 
@@ -164,7 +164,7 @@ function() {
 
             waitsFor(function() {
                 satisfyRequests();
-                
+
                 return refreshed;
             }, 'store to reload');
 

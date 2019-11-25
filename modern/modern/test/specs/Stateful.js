@@ -250,7 +250,6 @@ function() {
                 }
             });
 
-
             expect(log).toEqual([
                 'foo=42'
             ]);

@@ -71,11 +71,11 @@ Ext.define('Ext.data.amf.RemotingMessage', {
     encodeMessage: function() {
         var encoder = Ext.create('Ext.data.amf.XmlEncoder'),
             cleanObj;
-        
+
         // eslint-disable-next-line max-len
         cleanObj = Ext.copyTo({}, this, "$flexType,body,clientId,destination,headers,messageId,operation,source,timestamp,timeToLive", true);
         encoder.writeObject(cleanObj);
-        
+
         return encoder.body;
     }
 });

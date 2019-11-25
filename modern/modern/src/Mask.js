@@ -68,10 +68,17 @@ Ext.define('Ext.Mask', {
         me.callParent();
         me.element.on('tap', 'onTap', me);
         me.on('hide', 'onHide', me);
+        me.on('show', 'onShow', me);
     },
 
-    onHide: function() {
+    onHide: function(me) {
         var firstChild;
+
+        // Enable Tabbing only if tabbing is disabled
+        if (me.sender && me.tabbingDisabled) {
+            me.sender.enableTabbing();
+            me.tabbingDisabled = false;
+        }
 
         Ext.util.InputBlocker.unblockInputs();
 
@@ -82,6 +89,14 @@ Ext.define('Ext.Mask', {
             if (firstChild) {
                 firstChild.redraw();
             }
+        }
+    },
+
+    onShow: function(me) {
+        // Disable Tabbing only if tabbing is enabled
+        if (me.sender && !me.tabbingDisabled) {
+            me.sender.disableTabbing();
+            me.tabbingDisabled = true;
         }
     },
 

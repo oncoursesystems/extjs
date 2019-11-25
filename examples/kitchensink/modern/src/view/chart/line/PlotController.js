@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.chart.line.PlotController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.line-plot',
 
-    i : -1,
+    i: -1,
 
     fn: [
         function(x) {
@@ -34,8 +34,11 @@ Ext.define('KitchenSink.view.chart.line.PlotController', {
         }
     ],
 
-    init: function (view) {
+    init: function(view) {
+        var chart, toolbar, interaction, button;
+
         this.callParent([view]);
+
         if (!Ext.supports.Touch) {
             /**
              * Touch devices do not need the toggle buttons
@@ -43,10 +46,10 @@ Ext.define('KitchenSink.view.chart.line.PlotController', {
              * interaction to use based on how many touches.
              * 1 touch point is a pan, 2 touch points is a zoom.
              */
-            var chart = view.lookup('chart'),
-                toolbar = view.lookup('toolbar'),
-                interaction = chart.getInteraction('panzoom'),
-                button = interaction.getModeToggleButton();
+            chart = view.lookup('chart');
+            toolbar = view.lookup('toolbar');
+            interaction = chart.getInteraction('panzoom');
+            button = interaction.getModeToggleButton();
 
             toolbar.add(button);
         }
@@ -54,7 +57,7 @@ Ext.define('KitchenSink.view.chart.line.PlotController', {
         this.onRefresh();
     },
 
-    generateData: function () {
+    generateData: function() {
         var delta = arguments[0],
             length = arguments.length,
             data = [],
@@ -83,7 +86,7 @@ Ext.define('KitchenSink.view.chart.line.PlotController', {
         return data;
     },
 
-    onRefresh: function () {
+    onRefresh: function() {
         var chart = this.lookup('chart'),
             store = chart.getStore(),
             fn = this.fn,

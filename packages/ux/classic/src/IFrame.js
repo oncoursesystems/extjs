@@ -14,7 +14,7 @@ Ext.define('Ext.ux.IFrame', {
         // eslint-disable-next-line max-len
         '<iframe src="{src}" id="{id}-iframeEl" data-ref="iframeEl" name="{frameName}" width="100%" height="100%" frameborder="0"></iframe>'
     ],
-    
+
     childEls: ['iframeEl'],
 
     initComponent: function() {
@@ -81,7 +81,6 @@ Ext.define('Ext.ux.IFrame', {
             this.fireEvent('error', this);
         }
 
-
     },
 
     load: function(src) {
@@ -123,5 +122,4 @@ Ext.define('Ext.ux.IFrame', {
  *     elements are orphaned.  Accessing the html and body elements or any of their properties
  *     results in a "Permission Denied" error.
  */
-
 

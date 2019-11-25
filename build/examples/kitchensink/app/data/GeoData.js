@@ -10,7 +10,7 @@ Ext.define('KitchenSink.data.GeoData', {
                 children: [{
                     mtype: 'Territory',
                     name: 'North America',
-                    children :[{
+                    children: [{
                         mtype: 'Country',
                         name: 'USA',
                         children: [{
@@ -50,7 +50,7 @@ Ext.define('KitchenSink.data.GeoData', {
                 }, {
                     mtype: 'Territory',
                     name: 'Europe, ME, Africa',
-                    children :[{
+                    children: [{
                         mtype: 'Country',
                         name: 'England',
                         children: [{
@@ -110,7 +110,7 @@ Ext.define('KitchenSink.data.GeoData', {
                 }, {
                     mtype: 'Territory',
                     name: 'South America, Caribbean',
-                    children :[{
+                    children: [{
                         mtype: 'Country',
                         name: 'Brazil',
                         children: [{
@@ -142,7 +142,7 @@ Ext.define('KitchenSink.data.GeoData', {
                 }, {
                     mtype: 'Territory',
                     name: 'Central and South Asia',
-                    children :[{
+                    children: [{
                         mtype: 'Country',
                         name: 'Russian Federation',
                         children: [{
@@ -186,7 +186,7 @@ Ext.define('KitchenSink.data.GeoData', {
                 }, {
                     mtype: 'Territory',
                     name: 'East Asia and Pacific',
-                    children :[{
+                    children: [{
                         mtype: 'Country',
                         name: 'Australia',
                         children: [{

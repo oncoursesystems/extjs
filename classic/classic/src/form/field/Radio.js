@@ -175,7 +175,7 @@ Ext.define('Ext.form.field.Radio', {
     extend: 'Ext.form.field.Checkbox',
     alias: ['widget.radiofield', 'widget.radio'],
     alternateClassName: 'Ext.form.Radio',
-    
+
     requires: ['Ext.form.RadioManager'],
 
     /**
@@ -191,7 +191,7 @@ Ext.define('Ext.form.field.Radio', {
      */
 
     inputType: 'radio',
-    
+
     formId: null,
 
     /**
@@ -217,7 +217,7 @@ Ext.define('Ext.form.field.Radio', {
         if (me.modelValue === undefined) {
             me.modelValue = me.inputValue;
         }
-        
+
         me.callParent();
     },
 
@@ -227,7 +227,7 @@ Ext.define('Ext.form.field.Radio', {
      */
     getGroupValue: function() {
         var selected = this.getManager().getChecked(this.name, this.getFormId());
-        
+
         return selected ? selected.inputValue : null;
     },
 
@@ -252,7 +252,7 @@ Ext.define('Ext.form.field.Radio', {
         }
         else {
             active = me.getManager().getWithValue(me.name, value, me.getFormId()).getAt(0);
-            
+
             if (active) {
                 active.setValue(true);
             }
@@ -275,7 +275,7 @@ Ext.define('Ext.form.field.Radio', {
             r, rLen, radio, radios;
 
         me.callParent(arguments);
-        
+
         // Standard compliant browsers only fire change event on the radio button
         // that became checked so we need to update other buttons in the group.
         // See also IE8 override.
@@ -283,16 +283,16 @@ Ext.define('Ext.form.field.Radio', {
             if (newVal) {
                 radios = me.getManager().getByName(me.name, me.getFormId()).items;
                 rLen = radios.length;
-    
+
                 for (r = 0; r < rLen; r++) {
                     radio = radios[r];
-    
+
                     if (radio !== me) {
                         radio.updateValueFromDom();
                     }
                 }
             }
-    
+
             if (ownerCt && ownerCt.isRadioGroup && ownerCt.simpleValue) {
                 ownerCt.checkChange();
             }

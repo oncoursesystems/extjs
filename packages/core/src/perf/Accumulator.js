@@ -11,12 +11,12 @@ Ext.define('Ext.perf.Accumulator', function() {
             var interval, toolbox;
 
             getTimestamp = Ext.now;
-            
+
             // If Chrome is started with the --enable-benchmarking switch
             if (Ext.isChrome && khrome && khrome.Interval) {
                 interval = new khrome.Interval();
                 interval.start();
-                
+
                 getTimestamp = function() {
                     return interval.microseconds() / 1000;
                 };
@@ -27,7 +27,7 @@ Ext.define('Ext.perf.Accumulator', function() {
                     /* eslint-disable-next-line no-undef */
                     toolbox = new ActiveXObject('SenchaToolbox.Toolbox');
                     Ext.senchaToolbox = toolbox; // export for other uses
-                    
+
                     getTimestamp = function() {
                         return toolbox.milliseconds;
                     };
@@ -38,7 +38,7 @@ Ext.define('Ext.perf.Accumulator', function() {
             }
 
             Ext.perf.getTimestamp = Ext.perf.Accumulator.getTimestamp = getTimestamp;
-            
+
             return getTimestamp();
         };
 
@@ -54,15 +54,15 @@ Ext.define('Ext.perf.Accumulator', function() {
             accum = me.accum;
 
         ++accum.count;
-        
+
         if (! --accum.depth) {
             adjustSet(accum.total, totalTime);
         }
-        
+
         adjustSet(accum.pure, totalTime - me.childTime);
 
         currentFrame = me.parent;
-        
+
         if (currentFrame) {
             ++currentFrame.accum.childCount;
             currentFrame.childTime += totalTime;
@@ -83,7 +83,7 @@ Ext.define('Ext.perf.Accumulator', function() {
                 ret = fn.apply(this, arguments);
 
             frame.leave();
-            
+
             return ret;
         };
     }
@@ -128,7 +128,7 @@ Ext.define('Ext.perf.Accumulator', function() {
 
         format: function(calibration) {
             var data;
-            
+
             if (!formatTpl) {
                 /* eslint-disable indent */
                 formatTpl = new Ext.XTemplate([
@@ -157,12 +157,12 @@ Ext.define('Ext.perf.Accumulator', function() {
             }
 
             data = this.getData(calibration);
-            
+
             data.name = this.name;
             data.pure.type = 'Pure';
             data.total.type = 'Total';
             data.times = [data.pure, data.total];
-            
+
             return formatTpl.apply(data);
         },
 
@@ -188,27 +188,27 @@ Ext.define('Ext.perf.Accumulator', function() {
                 };
 
             ++me.depth;
-            
+
             if (me.maxDepth < me.depth) {
                 me.maxDepth = me.depth;
             }
 
             currentFrame = frame;
             frame.time = getTimestamp(); // do this last
-            
+
             return frame;
         },
 
         monitor: function(fn, scope, args) {
             var frame = this.enter();
-            
+
             if (args) {
                 fn.apply(scope, args);
             }
             else {
                 fn.call(scope);
             }
-            
+
             frame.leave();
         },
 
@@ -226,7 +226,7 @@ Ext.define('Ext.perf.Accumulator', function() {
                 if (typeof className === 'string') {
                     klass = Ext.global;
                     parts = className.split('.');
-                    
+
                     for (i = 0, length = parts.length; i < length; ++i) {
                         klass = klass[parts[i]];
                     }

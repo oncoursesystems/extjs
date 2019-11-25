@@ -22,10 +22,10 @@ Ext.define('KitchenSink.view.pivot.Stateful', {
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/pivot/StatefulController.js'
-    },{
+    }, {
         type: 'Model',
         path: 'classic/samples/model/pivot/Sale.js'
-    },{
+    }, {
         type: 'Store',
         path: 'classic/samples/store/pivot/Sales.js'
     }],
@@ -39,6 +39,10 @@ Ext.define('KitchenSink.view.pivot.Stateful', {
             height: 400
         },
         graphite: {
+            width: 750,
+            height: 600
+        },
+        'classic-material': {
             width: 750,
             height: 600
         }
@@ -68,7 +72,7 @@ Ext.define('KitchenSink.view.pivot.Stateful', {
     tbar: [{
         text: 'Configure',
         handler: 'onConfigure'
-    },{
+    }, {
         text: 'Clear state',
         handler: 'onClearState'
     }]

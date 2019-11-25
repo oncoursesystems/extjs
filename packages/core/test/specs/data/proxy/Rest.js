@@ -5,11 +5,11 @@ topSuite("Ext.data.proxy.Rest", ['Ext.data.ArrayStore'], function() {
         Ext.ClassManager.enableNamespaceParseCache = false;
         proxy = new Ext.data.proxy.Rest({});
     });
-    
+
     afterEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = true;
     });
-    
+
     describe("instantiation", function() {
         it("should extend Ext.data.proxy.Ajax", function() {
             expect(proxy.superclass).toEqual(Ext.data.proxy.Ajax.prototype);
@@ -129,22 +129,22 @@ topSuite("Ext.data.proxy.Rest", ['Ext.data.ArrayStore'], function() {
                 record1.phantom = true;
                 expect(stripCache(proxy.buildUrl(singleRequest))).toBe('/users');
             });
-            
+
             it("should append an id of 0", function() {
                 record1.setId(0);
                 expect(stripCache(proxy.buildUrl(singleRequest))).toBe('/users/0');
             });
-            
+
             it("should not append an empty string", function() {
                 record1.setId('');
                 expect(stripCache(proxy.buildUrl(singleRequest))).toBe('/users');
             });
-            
+
             it("should not append null", function() {
                 record1.setId(null);
                 expect(stripCache(proxy.buildUrl(singleRequest))).toBe('/users');
             });
-            
+
             it("should not append undefined", function() {
                 record1.setId(undefined);
                 expect(stripCache(proxy.buildUrl(singleRequest))).toBe('/users');
@@ -190,7 +190,7 @@ topSuite("Ext.data.proxy.Rest", ['Ext.data.ArrayStore'], function() {
                 expect(stripCache(proxy.buildUrl(singleRequest))).toEqual('/users/2.json');
             });
         });
-        
+
         it("should respect the api configuration", function() {
             proxy = createProxy({
                 api: {

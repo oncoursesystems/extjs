@@ -9,7 +9,7 @@ Ext.define('KitchenSink.store.Months', {
         'number'
     ],
 
-    data: Ext.Array.map(Ext.Date.monthNames, function (name, number) {
+    data: Ext.Array.map(Ext.Date.monthNames, function(name, number) {
         return {
             id: number,
             name: name,

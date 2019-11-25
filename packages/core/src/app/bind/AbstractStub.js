@@ -48,11 +48,11 @@ Ext.define('Ext.app.bind.AbstractStub', {
         for (key in children) {
             children[key].destroy();
         }
-        
+
         if (me.scheduled) {
             me.unschedule();
         }
-        
+
         me.callParent();
     },
 
@@ -83,11 +83,11 @@ Ext.define('Ext.app.bind.AbstractStub', {
 
         if (!name) {
             name = me.name || me.id;
-            
+
             if (parent && (s = parent.getFullName())) {
                 name = ((s.charAt(s.length - 1) !== ':') ? s + '.' : s) + name;
             }
-            
+
             me.fullName = name;
         }
 
@@ -144,13 +144,13 @@ Ext.define('Ext.app.bind.AbstractStub', {
 
     isDescendantOf: function(item) {
         var parent;
-        
+
         for (parent = this; parent = parent.parent;) { // eslint-disable-line no-cond-assign
             if (parent === item) {
                 return true;
             }
         }
-        
+
         return false;
     },
 
@@ -164,18 +164,18 @@ Ext.define('Ext.app.bind.AbstractStub', {
 
     onSchedule: function() {
         var i, len, binding, bindings, p;
-        
+
         // When a stub changes, say "foo.bar.baz" we may need to notify bindings on our
         // parents "foo.bar" and "foo", This is true especially when these are targets of
         // links. To economize on this we require that bindings that want to be notified
         // of changes to sub-properties of their target set the "deep" property to true.
         for (p = this.parent; p; p = p.parent) {
             bindings = p.bindings;
-            
+
             if (bindings) {
                 for (i = 0, len = bindings.length; i < len; ++i) {
                     binding = bindings[i];
-                    
+
                     if (binding.deep && !binding.scheduled) {
                         binding.schedule();
                     }
@@ -187,11 +187,11 @@ Ext.define('Ext.app.bind.AbstractStub', {
     react: function() {
         var bindings = this.bindings,
             binding, i, len;
-            
+
         if (bindings) {
             for (i = 0, len = bindings.length; i < len; ++i) {
                 binding = bindings[i];
-                
+
                 if (!binding.scheduled) {
                     binding.schedule();
                 }
@@ -214,36 +214,36 @@ Ext.define('Ext.app.bind.AbstractStub', {
                 totalCount = 0,
                 count = 0,
                 child, key;
-            
+
             if (children) {
                 for (key in children) {
                     child = children[key];
                     count = child.collect();
-                    
+
                     if (count === 0) {
                         // The child (and any deep children) have no bindings,
                         // so we can consider it a dead node.
                         child.destroy();
                         delete children[key];
                     }
-                    
+
                     totalCount += count;
                 }
             }
-            
+
             if (bindings) {
                 totalCount += bindings.length;
             }
-            
+
             return totalCount;
         },
-        
+
         getScheduler: function() {
             var owner = this.owner;
-            
+
             return owner && owner.getScheduler();
         },
-        
+
         sort: function() {
             var parent = this.parent;
 

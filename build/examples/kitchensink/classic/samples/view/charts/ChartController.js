@@ -19,11 +19,11 @@ Ext.define('KitchenSink.view.chart.ChartController', {
         'Default'
     ],
 
-    getChart: function () {
+    getChart: function() {
         return this.lookup('chart');
     },
 
-    onThemeSwitch: function () {
+    onThemeSwitch: function() {
         var chart = this.getChart(),
             themeNames = this.themeNames,
             currentThemeName = Ext.getClassName(chart.getTheme()).split('.').pop(),
@@ -34,19 +34,20 @@ Ext.define('KitchenSink.view.chart.ChartController', {
         chart.redraw();
     },
 
-    onDownload: function () {
+    onDownload: function() {
         var chart = this.getChart();
 
         if (Ext.is.Desktop) {
             chart.download({
                 filename: 'Chart'
             });
-        } else {
+        }
+        else {
             chart.preview();
         }
     },
 
-    onRefresh: function () {
+    onRefresh: function() {
         var store = this.getChart().getStore();
 
         store.generateData(store.getNumRecords());

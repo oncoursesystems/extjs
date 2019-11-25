@@ -392,13 +392,13 @@ Ext.define('Ext.window.Window', {
      * @inheritdoc
      */
     ariaRole: 'dialog',
-    
+
     /**
      * @property focusable
      * @inheritdoc
      */
     focusable: true,
-    
+
     /**
      * @cfg tabGuard
      * @inheritdoc
@@ -419,7 +419,7 @@ Ext.define('Ext.window.Window', {
         scope: 'this',
         ESC: 'onEsc'
     },
-    
+
     /**
      * @cfg {String} maskClickAction
      * The method to call when the window's modal mask is clicked or tapped:
@@ -488,7 +488,7 @@ Ext.define('Ext.window.Window', {
      * Fires after the window has been restored to its original size after being maximized.
      * @param {Ext.window.Window} this
      */
-    
+
     disableCloseToolFocus: true,
 
     /**
@@ -516,7 +516,7 @@ Ext.define('Ext.window.Window', {
 
         elConfig = me.callParent();
         elConfig.tabIndex = -1;
-        
+
         return elConfig;
     },
 
@@ -545,7 +545,7 @@ Ext.define('Ext.window.Window', {
             pos;
 
         state.maximized = maximized;
-        
+
         if (maximized) {
             pos = me.restorePos;
         }
@@ -557,12 +557,12 @@ Ext.define('Ext.window.Window', {
         else {
             pos = me.getPosition(true);
         }
-        
+
         Ext.apply(state, {
             size: maximized ? me.restoreSize : me.getSize(),
             pos: pos
         });
-        
+
         return state;
     },
 
@@ -571,7 +571,7 @@ Ext.define('Ext.window.Window', {
 
         if (state) {
             me.maximized = state.maximized;
-            
+
             if (me.maximized) {
                 me.hasSavedRestore = true;
                 me.restoreSize = state.size;
@@ -618,14 +618,14 @@ Ext.define('Ext.window.Window', {
         if (me.maximized) {
             me.maximized = false;
             me.maximize(null, true);
-            
+
             if (header) {
                 header.removeCls(header.indicateDragCls);
             }
         }
 
         me.callParent();
-        
+
         me.initTabGuards();
     },
 
@@ -636,20 +636,20 @@ Ext.define('Ext.window.Window', {
         if (this.closable) {
             e.stopEvent();
             this.close();
-            
+
             return false;
         }
     },
 
     doDestroy: function() {
         var me = this;
-        
+
         if (me.rendered) {
             Ext.un('resize', me.onWindowResize, me);
             delete me.animateTarget;
             me.hide();
         }
-        
+
         me.callParent();
     },
 
@@ -675,7 +675,7 @@ Ext.define('Ext.window.Window', {
                 scope: me
             });
         }
-        
+
         if (me.maximizable) {
             tools.push({
                 type: 'maximize',
@@ -688,66 +688,66 @@ Ext.define('Ext.window.Window', {
             me.addTool(tools);
         }
     },
-    
+
     addTool: function(tools) {
         var me = this;
-        
+
         me.callParent([tools]);
-        
+
         if (me.rendered && me.tabGuard) {
             me.initTabGuards();
         }
     },
-    
+
     add: function() {
         var me = this,
             ret;
-        
+
         ret = me.callParent(arguments);
-        
+
         if (me.rendered && me.tabGuard) {
             me.initTabGuards();
         }
-        
+
         return ret;
     },
-    
+
     remove: function() {
         var me = this,
             ret;
-        
+
         ret = me.callParent(arguments);
-        
+
         if (me.rendered && me.tabGuard) {
             me.initTabGuards();
         }
-        
+
         return ret;
     },
-    
+
     addDocked: function() {
         var me = this,
             ret;
-        
+
         ret = me.callParent(arguments);
-        
+
         if (me.rendered && me.tabGuard) {
             me.initTabGuards();
         }
-        
+
         return ret;
     },
-    
+
     removeDocked: function() {
         var me = this,
             ret;
-        
+
         ret = me.callParent(arguments);
-        
+
         if (me.rendered && me.tabGuard) {
             me.initTabGuards();
         }
-        
+
         return ret;
     },
 
@@ -755,13 +755,13 @@ Ext.define('Ext.window.Window', {
         var me = this;
 
         me.callParent(arguments);
-        
+
         if (me.expandOnShow) {
             me.expand(false);
         }
-        
+
         me.syncMonitorWindowResize();
-        
+
         if (me.rendered && me.tabGuard) {
             me.initTabGuards();
         }
@@ -776,7 +776,7 @@ Ext.define('Ext.window.Window', {
         // Being called as callback after going through the hide call below
         if (me.hidden) {
             me.fireEvent('close', me);
-            
+
             // This method can be called from hide() which in turn can be called
             // from destroy()
             if (me.closeAction === 'destroy' && !me.destroying && !me.destroyed) {
@@ -821,11 +821,11 @@ Ext.define('Ext.window.Window', {
             }
             else {
                 sizeModel = me.getSizeModel();
-                
+
                 if (sizeModel.width.natural || sizeModel.height.natural) {
                     me.updateLayout();
                 }
-                
+
                 me.doConstrain();
             }
         }
@@ -840,7 +840,7 @@ Ext.define('Ext.window.Window', {
      */
     minimize: function() {
         this.fireEvent('minimize', this);
-        
+
         return this;
     },
 
@@ -858,11 +858,11 @@ Ext.define('Ext.window.Window', {
             tools.maximize.hide();
             this.resumeHeaderLayout(true);
         }
-        
+
         if (me.resizer) {
             me.resizer.disable();
         }
-        
+
         me.callParent(arguments);
     },
 
@@ -874,19 +874,19 @@ Ext.define('Ext.window.Window', {
 
         if (header) {
             header.suspendLayouts();
-            
+
             if (me.maximizable) {
                 tools.maximize.show();
                 changed = true;
             }
-            
+
             this.resumeHeaderLayout(changed);
         }
-        
+
         if (me.resizer) {
             me.resizer.enable();
         }
-        
+
         me.callParent(arguments);
     },
 
@@ -909,7 +909,7 @@ Ext.define('Ext.window.Window', {
         if (!me.maximized && !me.maximizing) {
             me.maximizing = true;
             me.expand(false);
-            
+
             if (!me.hasSavedRestore) {
                 me.restoreSize = {
                     width: width ? width : null,
@@ -928,16 +928,16 @@ Ext.define('Ext.window.Window', {
             // Manipulate visibility of header tools if there is a header
             if (header) {
                 header.suspendLayouts();
-                
+
                 if (tools.maximize) {
                     tools.maximize.setType('restore');
                 }
-                
+
                 if (me.collapseTool) {
                     me.collapseTool.hide();
                     changed = true;
                 }
-                
+
                 me.resumeHeaderLayout(changed);
             }
 
@@ -945,12 +945,12 @@ Ext.define('Ext.window.Window', {
 
             if (me.dd) {
                 me.dd.disable();
-                
+
                 if (header) {
                     header.removeCls(header.indicateDragCls);
                 }
             }
-            
+
             if (me.resizer) {
                 me.resizer.disable();
             }
@@ -959,14 +959,14 @@ Ext.define('Ext.window.Window', {
             me.container.addCls(Ext.baseCSSPrefix + 'window-maximized-ct');
 
             me.syncMonitorWindowResize();
-            
+
             me.fitContainer(
                 animate = (animate || !!me.animateTarget)
                     ? {
                         callback: function() {
                             me.maximizing = false;
                             me.maximized = true;
-                            
+
                             if (!initial) {
                                 me.fireEvent('maximize', me);
                             }
@@ -974,17 +974,17 @@ Ext.define('Ext.window.Window', {
                     }
                     : null
             );
-            
+
             if (!animate) {
                 me.maximizing = false;
                 me.maximized = true;
-                
+
                 if (!initial) {
                     me.fireEvent('maximize', me);
                 }
             }
         }
-        
+
         return me;
     },
 
@@ -1009,23 +1009,23 @@ Ext.define('Ext.window.Window', {
             // Manipulate visibility of header tools if there is a header
             if (header) {
                 header.suspendLayouts();
-                
+
                 if (tools.maximize) {
                     tools.maximize.setType('maximize');
                 }
-                
+
                 if (me.collapseTool) {
                     me.collapseTool.show();
                     changed = true;
                 }
-                
+
                 me.resumeHeaderLayout(changed);
             }
 
             // Restore the position/sizing
             newBox.x = me.restorePos[0];
             newBox.y = me.restorePos[1];
-            
+
             me.setBox(
                 newBox,
                 animate = (animate || !!me.animateTarget)
@@ -1045,7 +1045,7 @@ Ext.define('Ext.window.Window', {
             // Allow users to drag and drop again
             if (me.dd) {
                 me.dd.enable();
-                
+
                 if (header) {
                     header.addCls(header.indicateDragCls);
                 }
@@ -1064,7 +1064,7 @@ Ext.define('Ext.window.Window', {
                 me.fireEvent('restore', me);
             }
         }
-        
+
         return me;
     },
 
@@ -1076,10 +1076,10 @@ Ext.define('Ext.window.Window', {
     syncMonitorWindowResize: function() {
         var me = this,
             currentlyMonitoring = me._monitoringResize,
-            
+
             // all the states where we should be listening to window resize:
             yes = me.monitorResize || me.constrain || me.constrainHeader || me.maximized,
-            
+
             // all the states where we veto this:
             veto = me.hidden || me.destroying || me.destroyed;
 
@@ -1110,10 +1110,10 @@ Ext.define('Ext.window.Window', {
 
     createGhost: function() {
         var ghost = this.callParent(arguments);
-        
+
         ghost.xtype = 'window';
         ghost.focusOnToFront = false;
-        
+
         return ghost;
     },
 
@@ -1143,7 +1143,7 @@ Ext.define('Ext.window.Window', {
                 if (Ext.validIdRe.test(selector)) {
                     result = me.down(Ext.makeIdSelector(selector));
                 }
-                
+
                 // If not found, use as selector
                 if (!result) {
                     result = me.down(selector);
@@ -1193,9 +1193,9 @@ Ext.define('Ext.window.Window', {
 
         initResizable: function(resizable) {
             var me = this;
-            
+
             me.callParent([resizable]);
-            
+
             if (me.maximized || me.maximizing) {
                 me.resizer.disable();
             }
@@ -1206,14 +1206,14 @@ Ext.define('Ext.window.Window', {
                 dd;
 
             me.callParent();
-            
+
             dd = me.dd;
-            
+
             if (dd && me.maximized || me.maximizing) {
                 dd.disable();
             }
         },
-        
+
         onTabGuardFocusEnter: function(e, target) {
             var me = this,
                 el = me.el,
@@ -1225,16 +1225,16 @@ Ext.define('Ext.window.Window', {
             nodes = el.findTabbableElements({
                 skipSelf: true
             });
-            
+
             // Tabbables might include two tab guards, so remove them
             if (nodes[0] === beforeGuard.dom) {
                 nodes.shift();
             }
-            
+
             if (nodes[nodes.length - 1] === afterGuard.dom) {
                 nodes.pop();
             }
-            
+
             // Totally possible not to have anything tabbable within the window
             // but we have to do something so focus back the window el. At least
             // in that case the user will be able to press Escape key to close it.
@@ -1259,9 +1259,9 @@ Ext.define('Ext.window.Window', {
             else {
                 forward = target === beforeGuard.dom;
             }
-            
+
             nextFocus = nextFocus || (forward ? nodes[0] : nodes[nodes.length - 1]);
-            
+
             if (nextFocus) {
                 // If there is only one focusable node in the window, focusing it
                 // while we're in focusenter handler for the tab guard might cause

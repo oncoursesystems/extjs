@@ -314,7 +314,7 @@ Ext.define('Ext.data.Query', {
         var filters = this.serialize(),
             ret;
 
-        if (filters.length) {
+        if (filters && filters.length) {
             out.push.apply(out, filters);
 
             ret = true;
@@ -434,7 +434,7 @@ Ext.define('Ext.data.Query', {
             mul:  ['binary',    '*',            null ],
             sub:  ['binary',    '-',            null ],
 
-            in:   ['binary',    null,           'in' ],
+            'in':   ['binary',    null,           'in' ],
             like: ['binary',    null,           'like' ],
 
             seq:  ['binary',    '===',          '==' ],

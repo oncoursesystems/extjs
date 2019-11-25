@@ -7,25 +7,28 @@ Ext.define('KitchenSink.view.grid.advanced.TickerController', {
         var store = view.getStore();
 
         this.callParent();
+
         if (store.isLoaded() && store.getCount()) {
             this.startTicker(store);
         }
+
         view.getStore().on('load', 'onStoreLoad', this);
     },
 
-    onStoreLoad: function (store) {
+    onStoreLoad: function(store) {
         this.startTicker(store);
     },
 
     startTicker: function(store) {
+        var count, i, j, rec;
+
         if (this.timer) {
             return;
         }
 
         store.removeAt(15, 70);
 
-        var count = store.getCount(),
-            i, j, rec;
+        count = store.getCount();
 
         for (i = 0; i < count; i++) {
             rec = store.getAt(i);
@@ -38,7 +41,7 @@ Ext.define('KitchenSink.view.grid.advanced.TickerController', {
             rec.endEdit(true);
         }
 
-        this.timer = Ext.interval(function () {
+        this.timer = Ext.interval(function() {
             rec = store.getAt(Ext.Number.randomInt(0, store.getCount() - 1));
             rec.addPriceTick();
         }, Ext.isIE || !Ext.is.Desktop ? 100 : 20);

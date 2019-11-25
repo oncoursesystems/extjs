@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.chart.column3d.Column', {
     xtype: 'column-basic-3d',
     controller: 'chart',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/ChartController.js'
@@ -44,9 +44,9 @@ Ext.define('KitchenSink.view.chart.column3d.Column', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -93,7 +93,7 @@ Ext.define('KitchenSink.view.chart.column3d.Column', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             menu: {
                 bind: {
@@ -120,7 +120,7 @@ Ext.define('KitchenSink.view.chart.column3d.Column', {
             }
         }, {
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             handler: 'onRefresh'
         }]
     }]

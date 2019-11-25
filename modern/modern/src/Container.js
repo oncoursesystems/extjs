@@ -214,6 +214,13 @@ Ext.define('Ext.Container', {
         autoSize: null,
 
         /**
+         * @cfg {String/String[]} bodyCls
+         * The CSS class to add to this container's body element.
+         * @since 7.0
+         */
+        bodyCls: null,
+
+        /**
          * @cfg {String/Object/Boolean} cardSwitchAnimation
          * Animation to be used during transitions of cards.
          * @removed 2.0.0 Please use {@link Ext.layout.Card#animation} instead
@@ -500,7 +507,7 @@ Ext.define('Ext.Container', {
             masked = true;
             isVisible = false;
         }
-        
+
         if (Ext.isString(masked)) {
             masked = {
                 xtype: 'loadmask',
@@ -514,6 +521,7 @@ Ext.define('Ext.Container', {
         currentMask = Ext.factory(masked, Ext['Mask'], this.getMasked());
 
         if (currentMask) {
+            currentMask.sender = this;
             currentMask.setHidden(!isVisible);
 
             // TODO: Reliable render pathway and rendered transition.
@@ -576,6 +584,14 @@ Ext.define('Ext.Container', {
             this.items.generation++;
             layout.handleDockedItemBorders();
         }
+    },
+
+    applyBodyCls: function(cls) {
+        return cls && Ext.dom.Element.splitCls(cls);
+    },
+
+    updateBodyCls: function(newCls, oldCls) {
+        this.bodyElement.replaceCls(oldCls, newCls);
     },
 
     applyItems: function(items, collection) {
@@ -806,7 +822,7 @@ Ext.define('Ext.Container', {
                 doWeightedInsert = true;
             }
             else {
-                Ext.Array.sort(newItems, Ext.weightSortFn);
+                Ext.sortByWeight(newItems);
             }
         }
 

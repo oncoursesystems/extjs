@@ -38,7 +38,7 @@ Ext.define('Admin.view.main.Main', {
                 {
                     margin: '0 0 0 8',
                     ui: 'header',
-                    iconCls:'x-fa fa-navicon',
+                    iconCls:'x-fa fa-bars',
                     id: 'main-navigation-btn',
                     handler: 'onToggleNavigationSize'
                 },

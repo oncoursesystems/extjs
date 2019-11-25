@@ -75,7 +75,7 @@ Ext.define('Ext.grid.locking.RowSynchronizer', {
             els = me.els,
             grid = me.view.ownerGrid,
             name;
-        
+
         me.rowHeight = grid.getElementHeight(me.rowEl);
 
         for (name in els) {

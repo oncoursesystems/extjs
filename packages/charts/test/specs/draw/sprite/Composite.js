@@ -30,7 +30,7 @@ topSuite("Ext.draw.sprite.Composite", ['Ext.draw.sprite.*'], function() {
                     }
                 ]
             });
-            
+
             var mainSurface = draw.getSurface();
 
             var composite = new Ext.draw.sprite.Composite();

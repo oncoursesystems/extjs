@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.tip.AnchoredToolTips', {
         'KitchenSink.data.ToolTips'
     ],
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/tip/AnchoredToolTipsController.js'
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.tip.AnchoredToolTips', {
     },
 
     cls: 'demo-solid-background',
-    // <example>
+    //<example>
 
     height: '${height}',
     width: '${width}',

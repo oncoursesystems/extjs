@@ -110,7 +110,7 @@ Ext.define('Ext.ux.grid.SubTable', {
 
         out.push('</tbody>');
     },
-    
+
     getRowBodyContentsFn: function(rowBodyTpl) {
         var me = this;
 
@@ -120,7 +120,7 @@ Ext.define('Ext.ux.grid.SubTable', {
             return rowBodyTpl.applyTemplate(rowValues);
         };
     },
-    
+
     getAssociatedRecords: function(record) {
         return record[this.association]().getRange();
     }

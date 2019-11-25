@@ -12,7 +12,7 @@
         if (typeof x !== 'number') {
             x = 5;
         }
-        
+
         if (typeof y !== 'number') {
             y = 5;
         }
@@ -33,7 +33,7 @@
         if (typeof x !== 'number') {
             x = 50;
         }
-        
+
         if (typeof y !== 'number') {
             y = 50;
         }
@@ -476,7 +476,6 @@
             spy = null;
         });
 
-
         describe("beforeDragStart", function() {
             it("should fired before a drag is initiated", function() {
                 spy = spyOn(source, 'beforeDragStart');
@@ -679,7 +678,6 @@
         afterEach(function() {
             spy = null;
         });
-
 
         describe("beforedragstart", function() {
             it("should fired before a drag is initiated", function() {
@@ -1537,7 +1535,7 @@
                         moveBy(100, 100, handle2);
                         endHandleDrag(handle2);
                         runsExpectXY(150, 150);
-                        
+
                         runs(function() {
                             handle.destroy();
                             handle2.destroy();
@@ -1605,7 +1603,7 @@
                         moveBy(100, 100, handle2);
                         endHandleDrag(handle2);
                         runsExpectXY(250, 250);
-                        
+
                         runs(function() {
                             handle.destroy();
                             handle2.destroy();
@@ -2413,7 +2411,7 @@
                  beforeEach(function() {
                     makeDragEl(50, 50);
                 });
-                
+
                 describe("x", function() {
                     describe("min", function() {
                         it("should use the region min if it is larger", function() {

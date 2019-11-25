@@ -177,7 +177,7 @@ Ext.define('Ext.layout.container.Box', {
     innerCls: Ext.baseCSSPrefix + 'box-inner',
 
     manageMargins: true,
-    
+
     createsInnerCt: true,
 
     childEls: [
@@ -219,7 +219,7 @@ Ext.define('Ext.layout.container.Box', {
         me.flexSortFn = me.flexSort.bind(me);
 
         type = typeof me.padding;
-        
+
         if (type === 'string' || type === 'number') {
             me.padding = Ext.util.Format.parseBox(me.padding);
             me.padding.height = me.padding.top + me.padding.bottom;
@@ -251,7 +251,7 @@ Ext.define('Ext.layout.container.Box', {
             isStretch = (align === 'stretch'),
             isStretchMax = (align === 'stretchmax'),
             constrain = me.constrainAlign;
-            
+
         // Getting the size model is expensive, so we only want to do so if we really need it
         if (!ownerSizeModel &&
             (isStretch || flex || percentageWidth || (constrain && !isStretchMax))) {
@@ -316,7 +316,7 @@ Ext.define('Ext.layout.container.Box', {
         bMax = bTarget[maxWidthName] || infiniteValue;
         aMin = aTarget[minWidthName] || 0;
         bMin = bTarget[minWidthName] || 0;
-        
+
         hasMin = isFinite(aMin) || isFinite(bMin);
         hasMax = isFinite(aMax) || isFinite(bMax);
 
@@ -324,7 +324,7 @@ Ext.define('Ext.layout.container.Box', {
             if (hasMax) {
                 result = aMax - bMax;
             }
-            
+
             // If the result is 0, it means either
             // a) hasMax was false
             // b) The max values were the same
@@ -484,7 +484,6 @@ Ext.define('Ext.layout.container.Box', {
             }
         }
 
-
         // Consider an hbox w/stretch which means "assign all items the container's height".
         // The spirit of this request is make all items the same height, but when shrinkWrap
         // height is also requested, the height of the tallest item determines the height.
@@ -571,7 +570,7 @@ Ext.define('Ext.layout.container.Box', {
             }
             // the above means that "childContext.flex" is properly truthy/falsy, which is
             // often times quite convenient...
-            
+
             if (widthModel.configured) {
                 width = child[names.width];
             }
@@ -708,12 +707,12 @@ Ext.define('Ext.layout.container.Box', {
             totalMargin = 0,
             left = padding[beforeXName],
             nonFlexWidth = left + padding[afterXName],
-            scrollbarSize = Ext.getScrollbarSize(),
+            scrollbarSize = Ext.scrollbar.size(),
             scrollbarWidth = scrollbarSize[names.width],
             scrollbarHeight = scrollbarSize[names.height],
             i, childMargins, remainingWidth, remainingFlex, childContext, flex, flexedWidth,
             contentWidth, childWidth, percentageSpace, availableSpace;
-            
+
         // If we are not widthModel.shrinkWrap, we need the width before we can lay out boxes.
         // This check belongs here so it does not prevent the perpendicular from attempting to
         // calculate. It may have a dependency on the width, but it may be able to achieve
@@ -879,7 +878,7 @@ Ext.define('Ext.layout.container.Box', {
             hasPercentageSizes = 0,
             onBeforeInvalidateChild = me.onBeforeConstrainInvalidateChild,
             onAfterInvalidateChild = me.onAfterConstrainInvalidateChild,
-            scrollbarHeight = Ext.getScrollbarSize().height,
+            scrollbarHeight = Ext.scrollbar.height(),
             childTop, i, childHeight, childMargins, diff, height, childContext,
             stretchMaxPartner, stretchMaxChildren, shrinkWrapParallelOverflow,
             percentagePerpendicular;
@@ -926,7 +925,7 @@ Ext.define('Ext.layout.container.Box', {
                 }
                 else {
                     ++hasPercentageSizes;
-                    
+
                     if (heightShrinkWrap) {
                         // height %age items cannot contribute to maxHeight... they are going
                         // to be a %age of that maxHeight!
@@ -937,7 +936,7 @@ Ext.define('Ext.layout.container.Box', {
                         childHeight = childContext[setHeightName](childHeight);
                     }
                 }
-                
+
                 // Summary:
                 // 1) Not shrink wrapping height, so the height is not determined by the children
                 // 2) Constrain is set
@@ -952,7 +951,7 @@ Ext.define('Ext.layout.container.Box', {
                         childHeight: availHeight,
                         names: names
                     });
-                    
+
                     // By invalidating the height, it could mean the width can change, so we need
                     // to recalculate in the parallel direction.
                     ownerContext.state.parallelDone = false;
@@ -1071,7 +1070,7 @@ Ext.define('Ext.layout.container.Box', {
 
         return true;
     },
-    
+
     onBeforeConstrainInvalidateChild: function(childContext, options) {
         // NOTE: No "this" pointer in here...
         var heightModelName = options.names.heightModel;
@@ -1082,7 +1081,7 @@ Ext.define('Ext.layout.container.Box', {
             childContext[heightModelName] = Ext.layout.SizeModel.calculated;
         }
     },
-    
+
     onAfterConstrainInvalidateChild: function(childContext, options) {
         // NOTE: No "this" pointer in here...
         var names = options.names;
@@ -1140,7 +1139,7 @@ Ext.define('Ext.layout.container.Box', {
             }
         }
     },
-    
+
     onBeforeStretchMaxInvalidateChild: function(childContext, options) {
         // NOTE: No "this" pointer in here...
         var heightModelName = options.names.heightModel;
@@ -1222,6 +1221,7 @@ Ext.define('Ext.layout.container.Box', {
 
             if (invalidateScrollX || invalidateScrollY) { // if (some form of 'auto' in play)
                 // force a reflow...
+                // eslint-disable-next-line no-unused-expressions
                 dom.scrollWidth;
 
                 if (invalidateScrollX) {
@@ -1256,7 +1256,7 @@ Ext.define('Ext.layout.container.Box', {
             }
 
             splitter = item.splitter;
-            
+
             if (item.hidden) {
                 if (splitter) {
                     // hidden items always need to hide their splitter
@@ -1300,7 +1300,7 @@ Ext.define('Ext.layout.container.Box', {
             }
             // else we have no splitter or are !splitBefore, so we defer the fate of this
             // splitter
-            
+
             if (hide !== null && splitter.hidden !== hide) {
                 splitter.hidden = hide;
 
@@ -1308,7 +1308,7 @@ Ext.define('Ext.layout.container.Box', {
                     splitter.el.setVisible(!hide);
                 }
             }
-            
+
             splitAfter = !splitBefore && splitter;
             lastVisibleItem = item;
         }
@@ -1366,7 +1366,7 @@ Ext.define('Ext.layout.container.Box', {
             innerCtWidth, innerCtHeight;
 
         widthOffset = widthOffset || 0;
-        
+
         // The state.canScroll check is on purpose here, all we want to know is whether we have
         // a scrollable instance, since even if UI scrolling isn't available, we may scroll it
         // programmatically
@@ -1376,12 +1376,12 @@ Ext.define('Ext.layout.container.Box', {
         }
         else {
             innerCtWidth = targetSize[widthName];
-            
+
             if (needsScroll && needsScroll.perpendicular) {
-                innerCtWidth -= Ext.getScrollbarSize()[widthName];
+                innerCtWidth -= Ext.scrollbar.size()[widthName];
             }
         }
-        
+
         innerCtWidth -= widthOffset;
 
         // Allow the other co-operating objects to know whether the columns overflow
@@ -1456,7 +1456,7 @@ Ext.define('Ext.layout.container.Box', {
             splitter = comp.splitter,
             overflowHandler = me.overflowHandler,
             el;
-            
+
         me.callParent([comp, isDestroying]);
 
         if (splitter && owner.contains(splitter)) {
@@ -1471,7 +1471,7 @@ Ext.define('Ext.layout.container.Box', {
         if (comp.layoutMarginCap === me.id) {
             delete comp.layoutMarginCap;
         }
-        
+
         if (!owner.destroying && !isDestroying && comp.rendered) {
             // Clear top/left styles
             el = comp.getEl();

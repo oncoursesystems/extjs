@@ -86,16 +86,16 @@ Ext.Assert = {
      */
     falseyProp: function(object, property) {
         var b;
-        
+
         Ext.Assert.truthy(object);
-        
+
         b = object[property];
-        
+
         if (b) {
             if (object.$className) {
                 property = object.$className + '#' + property;
             }
-            
+
             Ext.raise('Expected a falsey value for ' + property + ' but was ' + b);
         }
     },
@@ -114,16 +114,16 @@ Ext.Assert = {
      */
     truthyProp: function(object, property) {
         var b;
-        
+
         Ext.Assert.truthy(object);
-        
+
         b = object[property];
-        
+
         if (!b) {
             if (object.$className) {
                 property = object.$className + '#' + property;
             }
-            
+
             Ext.raise('Expected a truthy value for ' + property + ' but was ' + typeof b);
         }
     }
@@ -132,11 +132,11 @@ Ext.Assert = {
 /* eslint-disable indent */
 (function() {
     var name, kind;
-    
+
     function makeAssert(name, kind) {
         var testFn = Ext[name],
             def;
-        
+
         return function(value, msg) {
             if (!testFn(value)) {
                 Ext.raise(msg || def || (def = 'Expected value to be ' + kind));
@@ -147,10 +147,10 @@ Ext.Assert = {
     function makeAssertProp(name, kind) {
         var testFn = Ext[name],
             def;
-        
+
         return function(object, prop) {
             Ext.Assert.truthy(object);
-            
+
             if (!testFn(object[prop])) {
                 Ext.raise(def || (def = 'Expected ' +
                         (object.$className ? object.$className + '#' : '') +
@@ -162,7 +162,7 @@ Ext.Assert = {
     function makeNotAssert(name, kind) {
         var testFn = Ext[name],
             def;
-        
+
         return function(value, msg) {
             if (testFn(value)) {
                 Ext.raise(msg || def ||
@@ -174,10 +174,10 @@ Ext.Assert = {
     function makeNotAssertProp(name, kind) {
         var testFn = Ext[name],
             def;
-        
+
         return function(object, prop) {
             Ext.Assert.truthy(object);
-            
+
             if (testFn(object[prop])) {
                 Ext.raise(def || (def = 'Expected ' +
                         (object.$className ? object.$className + '#' : '') +
@@ -189,7 +189,7 @@ Ext.Assert = {
     for (name in Ext) {
         if (name.substring(0, 2) === "is" && Ext.isFunction(Ext[name])) {
             kind = name.substring(2);
-            
+
             Ext.Assert[name] = makeAssert(name, kind);
             Ext.Assert[name + 'Prop'] = makeAssertProp(name, kind);
             Ext.Assert['isNot' + kind] = makeNotAssert(name, kind);

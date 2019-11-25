@@ -140,7 +140,7 @@ Ext.define('Ext.data.virtual.Page', {
         if (!(kind in locks)) {
             Ext.raise('Bad lock type (expected "active" or "prefetch"): "' + kind + '"');
         }
-        
+
         if (delta !== 1 && delta !== -1) {
             Ext.raise('Invalid lock count delta (should be 1 or -1): ' + delta);
         }
@@ -191,6 +191,7 @@ Ext.define('Ext.data.virtual.Page', {
         var me = this,
             records = me.records,
             begin = me.begin,
+            store = me.pageMap.store,
             i, n, record;
 
         if (records) {
@@ -201,11 +202,13 @@ Ext.define('Ext.data.virtual.Page', {
             if (by) {
                 for (i = 0; i < n; ++i) {
                     record = records[i];
+                    record.join(store);
                     out[record[by]] = withIndex ? begin + i : record;
                 }
             }
             else {
                 for (i = 0; i < n; ++i) {
+                    records[i].join(store);
                     out[begin + i] = records[i];
                 }
             }

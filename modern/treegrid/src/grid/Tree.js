@@ -103,6 +103,27 @@ Ext.define('Ext.grid.Tree', {
      * @param {Ext.data.NodeInterface} record       The record that was collapsed
      */
 
+    /**
+     * @event checkchange 
+     * Fires when a node with a checkbox's checked property changes.
+     * @param {Ext.grid.cell.Tree} cell               The cell who's checked property was changed.
+     * @param {Boolean} checked                       The cell's new checked state.
+     * @param {Ext.data.Model} record                 The record that was checked
+     * @param {Ext.event.Event} e                     The tap event.
+     * @since 7.0
+     */
+
+    /**
+     * @event beforecheckchange  cell, checked, current, record
+     * Fires before a node with a checkbox's checked property changes.
+     * @param {Ext.grid.cell.Tree} this               The cell who's checked property was changed.
+     * @param {Boolean} checked                       The cell's new checked state.
+     * @param {Boolean} current                       The cell's old checked state.
+     * @param {Ext.data.Model} record                 The record that was checked
+     * @param {Ext.event.Event} e                     The tap event.
+     * @since 7.0
+     */
+
     cachedConfig: {
 
         /**
@@ -237,7 +258,6 @@ Ext.define('Ext.grid.Tree', {
         return store ? store.getRoot() : null;
     },
 
-
     /**
      * Expands a record that is loaded in the tree.
      * @param {Ext.data.Model} record The record to expand
@@ -298,6 +318,27 @@ Ext.define('Ext.grid.Tree', {
 
             Ext.resumeLayouts(true);
         }
+    },
+
+    /**
+     * @method getChecked
+     * Retrieve an array of checked records.
+     * @return {Ext.data.NodeInterface[]} An array containing the checked records
+     * @since 7.0
+     */
+    getChecked: function() {
+        var checked = [],
+            rootNode = this.getRootNode(),
+            isChecked = rootNode.get('checked'),
+            childNodes = rootNode.childNodes;
+
+        if (isChecked === true) {
+            checked.push(rootNode);
+        }
+
+        this.getCheckedChildItems(childNodes, checked);
+
+        return checked;
     },
 
     privates: {
@@ -406,6 +447,27 @@ Ext.define('Ext.grid.Tree', {
                         newRoot.data.expanded = false;
                         newRoot.expand();
                     }
+                }
+            }
+        },
+
+        /**
+         * get checked nodes
+         * @param {Array} [childNodes] childNodes of a parent node
+         * @param {Array} [checked] array of checked nodes
+         */
+        getCheckedChildItems: function(childNodes, checked) {
+            var i, childNode;
+
+            for (i = 0; i < childNodes.length; i++) {
+                childNode = childNodes[i];
+
+                if (childNode.get('checked') === true) {
+                    checked.push(childNode);
+                }
+
+                if (childNode.childNodes.length) {
+                    this.getCheckedChildItems(childNode.childNodes, checked);
                 }
             }
         }

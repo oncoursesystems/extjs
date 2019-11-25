@@ -239,7 +239,7 @@ Ext.define('Ext.grid.column.Widget', {
      * {@link #method-getWidgetColumn} - Returns the {@link Ext.grid.column.Widget column}
      * the widget was associated with.
      */
-    
+
     /**
      * @cfg {Function/String} onWidgetAttach
      * A function that will be called when a widget is attached to a record. This may be useful for
@@ -309,20 +309,20 @@ Ext.define('Ext.grid.column.Widget', {
         me.callParent(arguments);
 
         widget = me.widget;
-        
+
         //<debug>
         if (!widget || widget.isComponent) {
             Ext.raise('column.Widget requires a widget configuration.');
         }
         //</debug>
-        
+
         me.widget = widget = Ext.apply({}, widget);
 
         // Apply the default UI for the xtype which is going to feature in this column.
         if (!widget.ui) {
             widget.ui = me.getDefaultWidgetUI()[widget.xtype] || 'default';
         }
-        
+
         me.isFixedSize = Ext.isNumber(widget.width);
     },
 
@@ -342,14 +342,14 @@ Ext.define('Ext.grid.column.Widget', {
 
     processEvent: function(type, view, cell, recordIndex, cellIndex, e, record, row) {
         var target;
-         
+
         if (this.stopSelection && type === 'click') {
             // Grab the target that matches the cell inner selector. If we have a target, then,
             // that means we either clicked on the inner part or the widget inside us. If 
             // target === e.target, then it was on the cell, so it's ok. Otherwise, inside so
             // prevent the selection from happening
             target = e.getTarget(view.innerSelector);
-            
+
             if (target && target !== e.target) {
                 e.stopSelection = true;
             }
@@ -410,7 +410,7 @@ Ext.define('Ext.grid.column.Widget', {
 
         if (!me.isFixedSize && me.rendered && view && view.viewReady) {
             cell = view.getEl().down(me.getCellInnerSelector());
-            
+
             if (cell) {
                 // Subtract innerCell padding width
                 newWidth -= parseInt(me.getCachedStyle(cell, 'padding-left'), 10) +
@@ -445,7 +445,7 @@ Ext.define('Ext.grid.column.Widget', {
         }
 
         view = me.getView();
-        
+
         // If we are being added to a rendered HeaderContainer
         if (view) {
             me.setupViewListeners(view);
@@ -458,11 +458,11 @@ Ext.define('Ext.grid.column.Widget', {
         if (viewListeners) {
             Ext.destroy(viewListeners);
         }
-        
+
         if (isDestroying) {
             this.ownerGrid.destroyManagedWidgets(this.getId());
         }
-        
+
         this.callParent(arguments);
     },
 
@@ -479,11 +479,11 @@ Ext.define('Ext.grid.column.Widget', {
             if (record) {
                 result =
                     me.ownerGrid.createManagedWidget(me.getView(), me.getId(), me.widget, record);
-                
+
                 result.getWidgetRecord = me.widgetRecordDecorator;
                 result.getWidgetColumn = me.widgetColumnDecorator;
                 result.measurer = me;
-                
+
                 // The ownerCmp of the widget is the encapsulating view, which means
                 // it will be considered as a layout child, but it isn't really, we always need
                 // the layout on the component to run if asked.
@@ -508,7 +508,7 @@ Ext.define('Ext.grid.column.Widget', {
             if (me.isVisible(true)) {
                 for (i = 0; i < len; i++) {
                     record = records[i];
-                    
+
                     if (record.isNonData) {
                         continue;
                     }
@@ -518,7 +518,7 @@ Ext.define('Ext.grid.column.Widget', {
                     // May be a placeholder with no data row
                     if (cell) {
                         cell = cell.firstChild;
-                        
+
                         if (!isFixedSize && !width && me.lastBox) {
                             width = me.lastBox.width -
                                     parseInt(me.getCachedStyle(cell, 'padding-left'), 10) -
@@ -538,14 +538,14 @@ Ext.define('Ext.grid.column.Widget', {
                         }
 
                         el = widget.el || widget.element;
-                        
+
                         if (el) {
                             cell.appendChild(el.dom);
-                            
+
                             if (!isFixedSize) {
                                 widget.setWidth(width);
                             }
-                            
+
                             widget.reattachToBody();
                         }
                         else {
@@ -553,7 +553,7 @@ Ext.define('Ext.grid.column.Widget', {
                                 // Must have a width so that the initial layout works
                                 widget.width = width || 100;
                             }
-                            
+
                             widget.render(cell);
                         }
 
@@ -563,7 +563,7 @@ Ext.define('Ext.grid.column.Widget', {
                         if (hasAttach) {
                             Ext.callback(me.onWidgetAttach, me.scope, [me, widget, record], 0, me);
                         }
-                       
+
                         // If the widget has a focusEl, ensure that its tabbability status
                         // is synched with the view's navigable/actionable state.
                         focusEl = widget.getFocusEl();
@@ -615,7 +615,7 @@ Ext.define('Ext.grid.column.Widget', {
             if (viewListeners) {
                 Ext.destroy(viewListeners);
             }
-            
+
             me.setupViewListeners(me.getView());
 
             me.ownerGrid.handleWidgetViewChange(me.getView(), me.getId());
@@ -639,7 +639,7 @@ Ext.define('Ext.grid.column.Widget', {
             if (me.bindDataIndex) {
                 listeners.itemUpdate = me.onItemUpdate;
             }
-            
+
             me.viewListeners = view.on(listeners);
         },
 
@@ -649,7 +649,7 @@ Ext.define('Ext.grid.column.Widget', {
 
             if (this.rendered && this.bindDataIndex) {
                 widget = this.getWidget(record);
-                
+
                 // Call the appropriate setter with this column's data field
                 // unless it's using binding
                 if (widget) {
@@ -657,11 +657,11 @@ Ext.define('Ext.grid.column.Widget', {
                 }
             }
         },
-        
+
         widgetRecordDecorator: function() {
             return this.$widgetRecord;
         },
-        
+
         widgetColumnDecorator: function() {
             return this.$widgetColumn;
         }

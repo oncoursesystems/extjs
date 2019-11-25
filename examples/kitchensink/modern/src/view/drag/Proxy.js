@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.drag.Proxy', {
     xtype: 'drag-proxy',
     controller: 'drag-proxy',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/drag/ProxyController.js'
@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.drag.Proxy', {
     },
 
     cls: 'demo-solid-background',
-    // </example>
+    //</example>
 
     height: '${height}',
     padding: 5,

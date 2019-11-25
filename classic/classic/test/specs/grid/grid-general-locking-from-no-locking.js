@@ -6,11 +6,11 @@ function() {
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
             proxyStoreLoad.apply(this, arguments);
-            
+
             if (synchronousLoad) {
                 this.flushLoad.apply(this, arguments);
             }
-            
+
             return this;
         };
 
@@ -134,7 +134,7 @@ function() {
             expect(width).not.toBe(0);
             expect(grid.normalGrid.view.getX()).toBeGreaterThan(width);
         });
-        
+
         describe('scrolling with no locked columns', function() {
             var oldOnError = window.onerror;
 
@@ -151,7 +151,7 @@ function() {
                         oldOnError();
                     }
                 });
-                
+
                 scroller.on({
                     scrollend: function() {
                         scrollFinished = true;
@@ -159,7 +159,7 @@ function() {
                 });
 
                 scroller.scrollBy(0, 100);
-                
+
                 waitsFor(function() {
                     return scrollFinished;
                 }, 'scroll to be handled', 500);

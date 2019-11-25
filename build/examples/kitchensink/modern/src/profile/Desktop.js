@@ -5,7 +5,7 @@ Ext.define('KitchenSink.profile.Desktop', {
 
     mainView: 'desktop.Main',
 
-    isActive: function () {
+    isActive: function() {
         return Ext.os.is.Desktop;
     }
 });

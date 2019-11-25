@@ -3,7 +3,7 @@
  */
 Ext.define('Ext.view.DragZone', {
     extend: 'Ext.dd.DragZone',
-    
+
     containerScroll: false,
 
     constructor: function(config) {
@@ -40,7 +40,7 @@ Ext.define('Ext.view.DragZone', {
         view.setItemsDraggable(true);
 
         ownerCt = view.ownerCt;
-        
+
         // We don't just grab the parent el, since the parent el may be
         // some el injected by the layout
         if (ownerCt) {
@@ -49,7 +49,7 @@ Ext.define('Ext.view.DragZone', {
         else {
             el = view.el.dom.parentNode;
         }
-        
+
         me.callParent([el]);
 
         me.ddel = document.createElement('div');
@@ -75,14 +75,14 @@ Ext.define('Ext.view.DragZone', {
                 fn: me.onViewContextMenu
             };
         }
-        
+
         me.initTarget(id, sGroup, config);
         me.view.mon(me.view, eventSpec);
     },
 
     onValidDrop: function(target, e, id) {
         this.callParent([target, e, id]);
-        
+
         // focus the view that the node was dropped onto so that keynav will be enabled.
         if (!target.el.contains(Ext.Element.getActiveElement())) {
             target.el.focus();
@@ -137,7 +137,7 @@ Ext.define('Ext.view.DragZone', {
             else {
                 navModel.setPosition(index);
             }
-            
+
             this.handleMouseDown(e);
         }
     },
@@ -186,19 +186,19 @@ Ext.define('Ext.view.DragZone', {
         if (!selectionModel.isSelected(record)) {
             selectionModel.selectWithEvent(record, me.DDMInstance.mousedownEvent);
         }
-        
+
         data.records = selectionModel.getSelection();
 
         Ext.fly(me.ddel).setHtml(me.getDragText());
         me.proxy.update(me.ddel);
         me.onStartDrag(x, y);
-        
+
         return true;
     },
 
     getDragText: function() {
         var count = this.dragData.records.length;
-        
+
         return Ext.String.format(this.dragText, count, count === 1 ? '' : 's');
     },
 

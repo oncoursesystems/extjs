@@ -5591,6 +5591,8 @@ __rt_setDynamic("$content-padding", __rt_getGlobalDefault("$content_padding") ||
 __rt_setDynamic("$dataview_item_selected_background_color", __rt_getGlobalDefault("$dataview_item_selected_background_color") || __rt_get("$selected_background_color"), 39);
 __rt_setDynamic("$dataitem_selected_background_color", __rt_getGlobalDefault("$dataitem_selected_background_color") || __rt_get("$dataview_item_selected_background_color"), 40);
 __rt_setDynamic("$listitem-selected-background-color", __rt_getGlobalDefault("$listitem_selected_background_color") || __rt_get("$dataitem_selected_background_color"), 41);
+__rt_setDynamic("$reverse-border-color", __rt_getGlobalDefault("$reverse_border_color") || (__rt_test(__rt_get("$dark_mode")) ? __ColorRGBA.fromHex("#212121") : __ColorRGBA.fromHex("#e0e0e0")), 42);
+__rt_setDynamic("$reverse-alt-border-color", __rt_getGlobalDefault("$reverse_alt_border_color") || (__rt_test(__rt_get("$dark_mode")) ? __ColorRGBA.fromHex("#3a3a3a") : __ColorRGBA.fromHex("#e0e0e0")), 43);
 },
  {
 	":root": [
@@ -5629,7 +5631,9 @@ __rt_setDynamic("$listitem-selected-background-color", __rt_getGlobalDefault("$l
 		"reverse-alt-background-color",
 		"overlay-color",
 		"content-padding",
-		"listitem-selected-background-color"
+		"listitem-selected-background-color",
+		"reverse-border-color",
+		"reverse-alt-border-color"
 	],
 	"html": [
 		"base_color_name",

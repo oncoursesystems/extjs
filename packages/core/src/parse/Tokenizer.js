@@ -400,7 +400,7 @@ return {
                 }
 
                 me.index = me.pos;
-                
+
                 return me.parse(c);
             }
 
@@ -491,7 +491,7 @@ return {
                     if (prev === '.') {
                         return me.syntaxError(end, 'Unexpected dot operator');
                     }
-                    
+
                     ++end;
                 }
                 else if (identRe.test(c)) {
@@ -536,14 +536,14 @@ return {
                     if (me.pos !== start) {
                         break;
                     }
-                    
+
                     ++me.pos;
                 }
                 else if (c === '.') {
                     if (decimal) {
                         break;
                     }
-                    
+
                     decimal = true;
                     ++me.pos;
                 }
@@ -636,10 +636,10 @@ return {
 
                 if (c === quote) {
                     closed = true;
-                    
+
                     break;
                 }
-                
+
                 if (c === '\\' && pos < length) {
                     c = text.charAt(pos++);
                 }
@@ -648,9 +648,9 @@ return {
                 // text as a single chunk...
                 str += c;
             }
-            
+
             me.pos = pos;
-            
+
             if (!closed) {
                 return me.syntaxError(start, 'Unterminated string');
             }

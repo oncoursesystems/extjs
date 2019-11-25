@@ -13,7 +13,7 @@ Ext.define('KitchenSink.view.grid.XmlGrid', {
     otherContent: [{
         type: 'Store',
         path: 'app/store/Books.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/grid/Book.js'
     }],
@@ -31,6 +31,12 @@ Ext.define('KitchenSink.view.grid.XmlGrid', {
             productGroupWidth: 100
         },
         graphite: {
+            width: 900,
+            tittleWidth: 300,
+            manufacturerWidth: 170,
+            productGroupWidth: 150
+        },
+        'classic-material': {
             width: 900,
             tittleWidth: 300,
             manufacturerWidth: 170,

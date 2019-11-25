@@ -92,7 +92,7 @@ topSuite("Ext.data.BufferedStore", function() {
         MockAjaxManager.addMethods();
         captured = [];
     });
-    
+
     afterEach(function() {
         // Undo the overrides.
         Ext.data.BufferedStore.prototype.load = bufferedStoreLoad;
@@ -393,13 +393,13 @@ topSuite("Ext.data.BufferedStore", function() {
 
             bufferedStore.reload();
             satisfyRequests();
-            
+
             expect(refreshed).toBe(1);
             count = bufferedStore.getData().getCount();
 
             bufferedStore.reload();
             satisfyRequests();
-            
+
             expect(bufferedStore.getData().getCount()).toBe(count);
         });
 
@@ -505,7 +505,6 @@ topSuite("Ext.data.BufferedStore", function() {
             bufferedStore.load();
             satisfyRequests();
 
-
             // The PageMap should contain page 1
             keys = [];
             bufferedStore.getData().forEach(function(rec) {
@@ -548,25 +547,25 @@ topSuite("Ext.data.BufferedStore", function() {
             expect(Ext.Object.getKeys(bufferedStore.getData().indexMap)).toEqual(keys);
         });
     });
-    
+
     // only applies to stateful toolkits
     (Ext.state ? describe : xdescribe)('statefulness', function() {
         var state;
-        
+
         beforeEach(function() {
             // disabling so that flushLoad() isn't immediately called
             synchronousLoad = false;
         });
-        
+
         afterEach(function() {
             bufferedStore.destroy();
             synchronousLoad = true;
         });
-        
+
         describe('loading', function() {
             it('should only fire the event once per creation when loading from a stateful component', function() {
                 var spy = jasmine.createSpy();
-                
+
                 function createStatefulStore(state) {
                     createStore({
                         autoLoad: true,
@@ -578,25 +577,25 @@ topSuite("Ext.data.BufferedStore", function() {
                             beforeload: spy
                         }
                     });
-                    
+
                     if (state) {
                         bufferedStore.applyState(state);
                     }
-                    
+
                     // wait for the request to be built since this is being handled async
                     waits(10);
                     runs(function() {
                         satisfyRequests();
                     });
                 }
-                
+
                 // create the new grid (no existing state)
                 createStatefulStore();
-                
+
                 waitsFor(function() {
                     return bufferedStore.isLoaded();
                 });
-                
+
                 runs(function() {
                     // save the current state and re-apply it to the new store instance
                     // as if it were applied from a stateful component
@@ -604,11 +603,11 @@ topSuite("Ext.data.BufferedStore", function() {
                     bufferedStore.destroy();
                     createStatefulStore(state);
                 });
-                
+
                 waitsFor(function() {
                     return bufferedStore.isLoaded();
                 });
-                
+
                 runs(function() {
                     expect(spy.callCount).toBe(2);
                 });

@@ -73,7 +73,7 @@ Ext.define('Ext.grid.plugin.RowExpander', {
      * The width of the Row Expander column header
      */
     headerWidth: 24,
-    
+
     /**
      * @cfg {Boolean} [bodyBefore=false]
      * Configure as `true` to put the row expander body *before* the data row.
@@ -129,11 +129,11 @@ Ext.define('Ext.grid.plugin.RowExpander', {
         // Keep track of which record internalIds are expanded.
         me.recordsExpanded = {};
 
-        // <debug>
+        //<debug>
         if (!me.rowBodyTpl) {
             Ext.raise("The 'rowBodyTpl' config is required and is not defined.");
         }
-        // </debug>
+        //</debug>
 
         me.rowBodyTpl = Ext.XTemplate.getTpl(me, 'rowBodyTpl');
         features = me.getFeatureConfig(grid);
@@ -190,7 +190,7 @@ Ext.define('Ext.grid.plugin.RowExpander', {
 
         return features;
     },
-    
+
     getRowBodyContentsFn: function(rowBodyTpl) {
         var me = this;
 
@@ -264,7 +264,9 @@ Ext.define('Ext.grid.plugin.RowExpander', {
             record = newRecords[i];
 
             if (!record.isNonData && me.recordsExpanded[record.internalId]) {
-                ownerLockable && (me.grid.syncRowHeightOnNextLayout = true);
+                if (ownerLockable) {
+                    me.grid.syncRowHeightOnNextLayout = true;
+                }
 
                 return;
             }
@@ -273,12 +275,12 @@ Ext.define('Ext.grid.plugin.RowExpander', {
 
     beforeReconfigure: function(grid, store, columns, oldStore, oldColumns) {
         var me = this;
-        
+
         if (columns) {
             me.expanderColumn = new Ext.grid.column.Column(me.getHeaderConfig());
             columns.unshift(me.expanderColumn);
         }
-        
+
     },
 
     onLockableProcessColumns: function(lockable, lockedHeaders, normalHeaders) {
@@ -323,7 +325,7 @@ Ext.define('Ext.grid.plugin.RowExpander', {
                 itemkeydown: me.onKeyDown,
                 scope: me
             };
-        
+
         if (me.expandOnDblClick) {
             listeners.itemdblclick = me.onDblClick;
         }
@@ -456,7 +458,7 @@ Ext.define('Ext.grid.plugin.RowExpander', {
 
         lockable = lockable || me.grid;
         lockedColumns = lockable.lockedGrid.visibleColumnManager.getColumns();
-        
+
         // User has unlocked all columns and left only the expander column in the locked side.
         if (lockedColumns.length === 1) {
             lockable.normalGrid.removeCls(Ext.baseCSSPrefix + 'grid-hide-row-expander-spacer');

@@ -23,7 +23,7 @@ function() {
             column: cellIdx
         }, true);
     }
-    
+
     function makeGrid(columns, cfg, selModelCfg) {
         Ext.define('spec.CellModel', {
             extend: 'Ext.data.Model',
@@ -39,7 +39,7 @@ function() {
         var data = [],
             defaultCols = [],
             i;
-        
+
         if (!columns) {
             for (i = 1; i <= 5; ++i) {
                 defaultCols.push({
@@ -48,7 +48,7 @@ function() {
                 });
             }
         }
-            
+
         for (i = 1; i <= 10; ++i) {
             data.push({
                 field1: i + '.' + 1,
@@ -58,12 +58,12 @@ function() {
                 field5: i + '.' + 5
             });
         }
-        
+
         store = new Ext.data.Store({
             model: spec.CellModel,
             data: data
         });
-        
+
         grid = new Ext.grid.Panel(Ext.apply({
             columns: columns || defaultCols,
             store: store,
@@ -76,7 +76,7 @@ function() {
         selModel = grid.getSelectionModel();
         colRef = grid.getColumnManager().getColumns();
     }
-    
+
     afterEach(function() {
         Ext.destroy(grid, store);
         selModel = grid = store = view = null;
@@ -128,7 +128,7 @@ function() {
             });
         });
     });
-    
+
     describe("hidden columns", function() {
         it("should take a hidden column into account on click", function() {
             makeGrid([{
@@ -141,12 +141,12 @@ function() {
             }]);
             triggerCellMouseEvent('click', 0, 2);
             var pos = selModel.getPosition();
-    
+
             expect(pos.column).toBe(colRef[2]);
             expect(pos.record).toBe(grid.getStore().getAt(0));
         });
     });
-    
+
     describe("store actions", function() {
         it("should have no selection when clearing the store", function() {
             makeGrid();
@@ -157,11 +157,11 @@ function() {
             store.removeAll();
             expect(selModel.getPosition()).toBeNull();
         });
-        
+
         it("should update the position when removing records", function() {
             makeGrid();
             var rec = store.getAt(8);
-            
+
             selModel.selectByPosition({
                 column: 1,
                 row: 8
@@ -170,17 +170,17 @@ function() {
             store.removeAt(0);
             store.removeAt(0);
             store.removeAt(0);
-            
+
             var pos = selModel.getPosition();
 
             expect(pos.column).toBe(colRef[1]);
             expect(pos.record).toBe(rec);
         });
-        
+
         it("should update the position on inserting records", function() {
             makeGrid();
             var rec = store.getAt(1);
-            
+
             selModel.selectByPosition({
                 column: 2,
                 row: 1
@@ -189,17 +189,17 @@ function() {
             store.insert(0, {});
             store.insert(0, {});
             store.insert(0, {});
-            
+
             var pos = selModel.getPosition();
 
             expect(pos.column).toBe(colRef[2]);
             expect(pos.record).toBe(rec);
         });
-        
+
         it("should update the position on moving records", function() {
             makeGrid();
             var rec = store.getAt(0);
-            
+
             selModel.selectByPosition({
                 column: 2,
                 row: 0
@@ -207,7 +207,7 @@ function() {
 
             // Move record 0 to be record 9
             store.add(rec);
-            
+
             // Cell selectino should still be consistent
             var pos = selModel.getPosition();
 
@@ -227,7 +227,7 @@ function() {
         }]);
 
         var col = grid.getColumnManager().getHeaderAtIndex(0);
-            
+
         expect(grid.getView().getCell(0, col)).toHaveCls('x-grid-cell-selected');
     });
 
@@ -275,7 +275,7 @@ function() {
             if (jasmine.supportsTouch) {
                 waits(1500);
             }
-            
+
             runs(function() {
                 jasmine.fireMouseEvent(document.body, 'mousemove', 20, 20);
             });
@@ -299,7 +299,7 @@ function() {
             });
         });
     });
-    
+
     describe("view model selection", function() {
         var viewModel, spy;
 

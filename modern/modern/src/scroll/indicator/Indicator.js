@@ -51,7 +51,7 @@ Ext.define('Ext.scroll.indicator.Indicator', {
             x: Ext.baseCSSPrefix + 'horizontal',
             y: Ext.baseCSSPrefix + 'vertical'
         },
-        
+
         updateAxis: function(axis) {
             this.addCls(this.axisClsMap[axis]);
         }

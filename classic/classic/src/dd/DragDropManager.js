@@ -150,7 +150,7 @@ Ext.define('Ext.dd.DragDropManager', {
      * Class to add to the {@link Ext.dd.DragDrop#getDragEl dragged element} of a DragDrop instance.
      */
     dragCls: Ext.baseCSSPrefix + 'dd-drag-current',
-    
+
     currentPoint: new Ext.util.Point(),
 
     /**
@@ -160,19 +160,19 @@ Ext.define('Ext.dd.DragDropManager', {
     _execOnAll: function(sMethod, args) {
         var ids = this.ids,
             i, j, oDD, item;
-            
+
         for (i in ids) {
             if (ids.hasOwnProperty(i)) {
                 item = ids[i];
-                
+
                 for (j in item) {
                     if (item.hasOwnProperty(j)) {
                         oDD = item[j];
-                        
+
                         if (! this.isTypeOfDD(oDD)) {
                             continue;
                         }
-                        
+
                         oDD[sMethod].apply(oDD, args);
                     }
                 }
@@ -306,7 +306,7 @@ Ext.define('Ext.dd.DragDropManager', {
      */
     removeDDFromGroup: function(oDD, sGroup) {
         var obj;
-        
+
         if (!this.ids[sGroup]) {
             this.ids[sGroup] = {};
         }
@@ -349,7 +349,7 @@ Ext.define('Ext.dd.DragDropManager', {
                 }
             }
         }
-        
+
         delete me.handleIds[oDD.id];
         delete me.locationCache[oDD.id];
     },
@@ -591,13 +591,13 @@ Ext.define('Ext.dd.DragDropManager', {
         if (current) {
             current.b4StartDrag(x, y);
             current.startDrag(x, y);
-            
+
             dragEl = Ext.fly(current.getDragEl());
 
             // Add current drag class to dragged element
             if (dragEl) {
                 dragEl.addCls(me.dragCls);
-                
+
                 // This will allow pointer events to bubble through the shim iframe
                 // to the parent document
                 if (dragEl.shim && dragEl.shim.el) {
@@ -734,7 +734,7 @@ Ext.define('Ext.dd.DragDropManager', {
         if (!me.dragThreshMet) {
             diffX = Math.abs(me.offsetX);
             diffY = Math.abs(me.offsetY);
-            
+
             if (diffX > me.clickPixelThresh || diffY > me.clickPixelThresh) {
                 e.claimGesture();
                 me.startDrag(me.startX, me.startY);
@@ -1253,7 +1253,7 @@ Ext.define('Ext.dd.DragDropManager', {
         pos = dc.getTargetCoord(pt.x, pt.y);
 
         el = dc.getDragEl();
-        
+
         curRegion = new Ext.util.Region(
             pos.y,
             pos.x + el.offsetWidth,
@@ -1289,7 +1289,7 @@ Ext.define('Ext.dd.DragDropManager', {
         var me = this,
             cache = me.elementCache,
             i;
-            
+
         if (me.dragCurrent) {
             me.stopDrag();
             me.dragCurrent = null;
@@ -1399,7 +1399,7 @@ Ext.define('Ext.dd.DragDropManager', {
      */
     swapNode: function(n1, n2) {
         var p, s;
-        
+
         if (n1.swapNode) {
             n1.swapNode(n2);
         }
@@ -1503,7 +1503,7 @@ Ext.define('Ext.dd.DragDropManager', {
      */
     handleWasClicked: function(node, id) {
         var p;
-        
+
         if (this.isHandle(id, node.id)) {
             return true;
         }

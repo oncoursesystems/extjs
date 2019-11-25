@@ -43,7 +43,7 @@ Ext.define('Ext.chart.axis.sprite.Axis3D', {
         if (chart.isInitializing) {
             return;
         }
-        
+
         // eslint-disable-next-line vars-on-top, one-var
         var attr = me.attr,
             layout = me.getLayout(),
@@ -104,28 +104,28 @@ Ext.define('Ext.chart.axis.sprite.Axis3D', {
                     ctx.moveTo(position, -attr.endGap + depth);
                     ctx.lineTo(position, attr.length + attr.startGap);
                     break;
-                    
+
                 case 'right':
                     ctx.moveTo(halfLineWidth, -attr.endGap);
                     ctx.lineTo(halfLineWidth, attr.length + attr.startGap);
                     break;
-                    
+
                 case 'bottom':
                     ctx.moveTo(-attr.startGap, halfLineWidth);
                     ctx.lineTo(attr.length - depth + attr.endGap, halfLineWidth);
                     break;
-                    
+
                 case 'top':
                     position = surface.roundPixel(clipRect[3]) - halfLineWidth;
                     ctx.moveTo(-attr.startGap, position);
                     ctx.lineTo(attr.length + attr.endGap, position);
                     break;
-                    
+
                 case 'angular':
                     ctx.moveTo(attr.centerX + attr.length, attr.centerY);
                     ctx.arc(attr.centerX, attr.centerY, attr.length, 0, Math.PI * 2, true);
                     break;
-                    
+
                 case 'gauge':
                     gaugeAngles = me.getGaugeAngles();
                     ctx.moveTo(attr.centerX + Math.cos(gaugeAngles.start) * attr.length,

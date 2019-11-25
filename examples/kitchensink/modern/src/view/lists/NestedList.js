@@ -12,7 +12,7 @@ Ext.define('KitchenSink.view.lists.NestedList', {
 
     viewModel: {},
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/lists/NestedListController.js'
@@ -35,7 +35,7 @@ Ext.define('KitchenSink.view.lists.NestedList', {
             }
         }
     },
-    // </example>
+    //</example>
 
     height: '${height}',
     width: '${width}',

@@ -37,7 +37,7 @@ Ext.define('Ext.draw.TimingFunctions', function() {
 
             bounce: function(p) {
                 var a, b;
-                
+
                 // eslint-disable-next-line no-constant-condition
                 for (a = 0, b = 1; 1; a += b, b /= 2) {
                     if (p >= (7 - 4 * a) / 11) {

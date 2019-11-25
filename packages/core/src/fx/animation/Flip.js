@@ -35,7 +35,6 @@ Ext.define('Ext.fx.animation.Flip', {
             toRotateX = 0,
             toRotateY = 0;
 
-
         if (out) {
             toScale = 0.8;
         }
@@ -52,7 +51,7 @@ Ext.define('Ext.fx.animation.Flip', {
                 else {
                     fromRotateX = -rotate;
                 }
-                
+
                 break;
 
             case this.DIRECTION_DOWN:
@@ -63,7 +62,7 @@ Ext.define('Ext.fx.animation.Flip', {
                 else {
                     fromRotateX = rotate;
                 }
-                
+
                 break;
 
             case this.DIRECTION_RIGHT:
@@ -73,7 +72,7 @@ Ext.define('Ext.fx.animation.Flip', {
                 else {
                     fromRotateY = -rotate;
                 }
-                
+
                 break;
 
             case this.DIRECTION_LEFT:
@@ -83,7 +82,7 @@ Ext.define('Ext.fx.animation.Flip', {
                 else {
                     fromRotateY = rotate;
                 }
-                
+
                 break;
         }
 

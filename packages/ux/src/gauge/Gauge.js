@@ -139,7 +139,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
          * it's straightforward which class should be required.
          */
         needle: null,
-        
+
         needleDefaults: {
             cached: true,
             $value: {
@@ -352,7 +352,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
         me.valueGradient = Ext.destroy(me.valueGradient);
         me.defs = Ext.destroy(me.defs);
         me.svg = Ext.destroy(me.svg);
-        
+
         me.callParent();
     },
 
@@ -473,7 +473,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
 
     applyPadding: function(padding) {
         var ratio;
-        
+
         if (typeof padding === 'string') {
             ratio = parseFloat(padding) / 100;
 
@@ -575,12 +575,12 @@ Ext.define('Ext.ux.gauge.Gauge', {
 
         if (Ext.Number.isEqual(innerRadius, 0, 0.1) ||
             sectorRegion.isOutOfBound({ x: cx, y: cy })) {
-            
+
             alignedRegion = textElement.getRegion().alignTo({
                 align: textAlign, // align text region's center to sector region's center
                 target: sectorRegion
             });
-            
+
             textElement.setLeft(alignedRegion.left);
             textElement.setTop(alignedRegion.top);
         }
@@ -708,7 +708,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
     getTrackArc: function() {
         var me = this,
             trackArc = me.trackArc;
-        
+
         if (!trackArc) {
             trackArc = me.trackArc = document.createElementNS(me.svgNS, 'path');
             me.getSvg().append(trackArc, true);
@@ -718,7 +718,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
             // SVGAnimatedString {baseVal: "x-gauge-track", animVal: "x-gauge-track"}
             trackArc.setAttribute('class', Ext.baseCSSPrefix + 'gauge-track');
         }
-        
+
         return trackArc;
     },
 
@@ -745,7 +745,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
         return Ext.Factory.gaugeNeedle.update(oldNeedle, needle,
                                               this, 'createNeedle', 'needleDefaults');
     },
-    
+
     createNeedle: function(config) {
         return Ext.apply({
             gauge: this
@@ -807,7 +807,10 @@ Ext.define('Ext.ux.gauge.Gauge', {
             gradient.appendChild(stopEl);
             stopEl.setAttribute('offset', stopCfg.offset);
             stopEl.setAttribute('stop-color', stopCfg.color);
-            ('opacity' in stopCfg) && stopEl.setAttribute('stop-opacity', stopCfg.opacity);
+
+            if ('opacity' in stopCfg) {
+                stopEl.setAttribute('stop-opacity', stopCfg.opacity);
+            }
         }
     },
 
@@ -818,7 +821,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
         if (!trackGradient) {
             trackGradient = me.trackGradient =
                 Ext.get(document.createElementNS(me.svgNS, 'linearGradient'));
-            
+
             // Using absolute values for x1, y1, x2, y2 attributes.
             trackGradient.dom.setAttribute('gradientUnits', 'userSpaceOnUse');
             me.getDefs().appendChild(trackGradient);
@@ -835,7 +838,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
         if (!valueGradient) {
             valueGradient = me.valueGradient =
                 Ext.get(document.createElementNS(me.svgNS, 'linearGradient'));
-            
+
             // Using absolute values for x1, y1, x2, y2 attributes.
             valueGradient.dom.setAttribute('gradientUnits', 'userSpaceOnUse');
             me.getDefs().appendChild(valueGradient);
@@ -1118,25 +1121,25 @@ Ext.define('Ext.ux.gauge.Gauge', {
             points = me.getUnitSectorExtrema(startAngle, lengthAngle).concat([
                 // start angle outer radius point
                 me.getArcPoint(0, 0, 1, startAngle),
-                
+
                 // start angle inner radius point
                 me.getArcPoint(0, 0, ratio, startAngle),
-                
+
                 // end angle outer radius point
                 me.getArcPoint(0, 0, 1, startAngle + lengthAngle),
-                
+
                 // end angle inner radius point
                 me.getArcPoint(0, 0, ratio, startAngle + lengthAngle)
             ]);
-            
+
             xx = points.map(function(point) {
                 return point[0];
             });
-            
+
             yy = points.map(function(point) {
                 return point[1];
             });
-            
+
             // The bounding box of a unit sector with the given properties.
             minX = Math.min.apply(null, xx);
             maxX = Math.max.apply(null, xx);
@@ -1219,10 +1222,10 @@ Ext.define('Ext.ux.gauge.Gauge', {
             height = me.size.height,
             paddingFn = me.getPadding(),
             padding = paddingFn(Math.min(width, height)),
-            
+
             // in the range of [0, 360)
             trackStart = me.normalizeAngle(me.getTrackStart() + angleOffset),
-            
+
             // in the range of (0, 720)
             trackEnd = trackStart + trackLength,
             valueLength = me.interpolator(value),

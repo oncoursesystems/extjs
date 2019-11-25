@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.chart.line.LineWithMarker', {
     xtype: 'line-marked',
     controller: 'line-marked',
 
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/chart/ChartController.js'
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.chart.line.LineWithMarker', {
             buttonShadow: true,
             insetPadding: '20 20 0 10',
             padding: 8,
-            panIcon: 'x-fa fa-arrows',
+            panIcon: 'x-fa fa-arrows-alt',
             panText: 'Pan',
             refreshText: 'Refresh',
             segBtnWidth: 200,
@@ -48,9 +48,9 @@ Ext.define('KitchenSink.view.chart.line.LineWithMarker', {
         }
     },
 
-    padding: '${padding}', //give room for the chart's shadow
+    padding: '${padding}', // give room for the chart's shadow
     shadow: false,
-    // </example>
+    //</example>
 
     layout: 'fit',
 
@@ -197,7 +197,7 @@ Ext.define('KitchenSink.view.chart.line.LineWithMarker', {
         },
         items: [{
             text: '${themeText}',
-            iconCls: 'x-fa fa-picture-o',
+            iconCls: 'x-far fa-image',
             arrow: false,
             margin: '0 10 0 0',
             menu: {
@@ -225,7 +225,7 @@ Ext.define('KitchenSink.view.chart.line.LineWithMarker', {
             }
         }, {
             text: '${refreshText}',
-            iconCls: 'x-fa fa-refresh',
+            iconCls: 'x-fa fa-sync',
             margin: '0 10 0 0',
             handler: 'onRefresh'
         }]

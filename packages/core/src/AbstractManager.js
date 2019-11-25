@@ -111,7 +111,7 @@ Ext.define('Ext.AbstractManager', {
         var all = this.all,
             item,
             callback;
-        
+
         if (all.containsKey(id)) {
             item = all.get(id);
             fn.call(scope || item, item);
@@ -123,11 +123,11 @@ Ext.define('Ext.AbstractManager', {
                     all.un('add', callback);
                 }
             };
- 
+
             all.on('add', callback);
         }
     },
-    
+
     /**
      * Executes the specified function once for each item in the collection.
      * @param {Function} fn The function to execute.
@@ -140,7 +140,7 @@ Ext.define('Ext.AbstractManager', {
     each: function(fn, scope) {
         this.all.each(fn, scope || this);
     },
-    
+
     /**
      * Gets the number of items in the collection.
      * @return {Number} The number of items in the collection.

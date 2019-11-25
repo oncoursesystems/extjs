@@ -14,7 +14,7 @@ topSuite('Ext.form.field.HtmlEditor', function() {
             editor = undefined;
         }
     });
-    
+
     describe("dirty state", function() {
         it("should not be dirty when rendered without a value", function() {
             createHtmlEditor();
@@ -35,11 +35,11 @@ topSuite('Ext.form.field.HtmlEditor', function() {
         editor.render(Ext.getBody());
         expect(editor.getValue()).toBe('foo');
     });
-    
+
     it("should fire the change event", function() {
         var newVal,
             oldVal;
-            
+
         createHtmlEditor();
         editor.on('change', function(arg1, arg2, arg3) {
             newVal = arg2;

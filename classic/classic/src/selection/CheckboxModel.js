@@ -52,7 +52,7 @@
 Ext.define('Ext.selection.CheckboxModel', {
     alias: 'selection.checkboxmodel',
     extend: 'Ext.selection.RowModel',
-    
+
     requires: [
         'Ext.grid.column.Check'
     ],
@@ -89,14 +89,13 @@ Ext.define('Ext.selection.CheckboxModel', {
      * @inheritDoc Ext.grid.column.Column#cfg-editRenderer
      */
 
-
     /* @cfg {Boolean} [locked=false]
      * If set to true, the checkbox column will be locked.
      * Note: For this config to work, it is necessary to configure the grid with
      * `enableLocking: true`, if no other columns are initially locked.
      */
     locked: false,
-    
+
     /**
      * @cfg {Boolean} [showHeaderCheckbox=false]
      * Configure as `false` to not display the header checkbox at the top of the column.
@@ -113,7 +112,7 @@ Ext.define('Ext.selection.CheckboxModel', {
      * @since 6.0.1
      */
     headerText: undefined,
-    
+
     /**
      * @cfg {String} headerAriaLabel
      * ARIA label for screen readers to announce for the check column's header when it is focused.
@@ -123,7 +122,7 @@ Ext.define('Ext.selection.CheckboxModel', {
      * @locale
      */
     headerAriaLabel: 'Row selector',
-    
+
     /**
      * @cfg {String} headerSelectText
      * ARIA description text to announce for the check column's header when it is focused,
@@ -133,7 +132,7 @@ Ext.define('Ext.selection.CheckboxModel', {
      * @locale
      */
     headerSelectText: 'Press Space to select all rows',
-    
+
     /**
      * @cfg {String} headerDeselectText
      * ARIA description text to announce for the check column's header when it is focused,
@@ -141,7 +140,7 @@ Ext.define('Ext.selection.CheckboxModel', {
      * @locale
      */
     headerDeselectText: 'Press Space to deselect all rows',
-    
+
     /**
      * @cfg {String} rowSelectText
      * ARIA description text to announce when check column cell is focused and the row
@@ -149,7 +148,7 @@ Ext.define('Ext.selection.CheckboxModel', {
      * @locale
      */
     rowSelectText: 'Press Space to select this row',
-    
+
     /**
      * @cfg {String} rowDeselectText
      * ARIA description text to announce when check column cell is focused and the row
@@ -171,7 +170,7 @@ Ext.define('Ext.selection.CheckboxModel', {
 
     constructor: function() {
         var me = this;
-        
+
         me.callParent(arguments);
 
         // If mode is single and showHeaderCheck isn't explicity set to
@@ -183,7 +182,7 @@ Ext.define('Ext.selection.CheckboxModel', {
                                 'selection models.');
             }
             //</debug>
-            
+
             me.showHeaderCheckbox = false;
         }
     },
@@ -215,7 +214,7 @@ Ext.define('Ext.selection.CheckboxModel', {
             if (!ownerLockable || (view.isLockedView && (me.hasLockedHeader() || isLocked)) ||
                 (view.isNormalView && !me.column)) {
                 me.addCheckbox(view);
-                
+
                 // Listen for reconfigure of outermost grid panel.
                 me.mon(view.ownerGrid, {
                     beforereconfigure: me.onBeforeReconfigure,
@@ -230,7 +229,7 @@ Ext.define('Ext.selection.CheckboxModel', {
         var me = this,
             checkbox = me.injectCheckbox,
             lockedColumns = lockable.lockedGrid.visibleColumnManager.getColumns();
-        
+
         // User has unlocked all columns and left only the expander column in the locked side.
         if (lockedColumns.length === 1 && lockedColumns[0] === me.column) {
             if (checkbox === 'first') {
@@ -239,7 +238,7 @@ Ext.define('Ext.selection.CheckboxModel', {
             else if (checkbox === 'last') {
                 checkbox = lockable.normalGrid.visibleColumnManager.getColumns().length;
             }
-            
+
             lockable.unlock(me.column, checkbox);
         }
     },
@@ -257,7 +256,7 @@ Ext.define('Ext.selection.CheckboxModel', {
             else if (checkbox === 'last') {
                 checkbox = lockable.lockedGrid.visibleColumnManager.getColumns().length;
             }
-            
+
             lockable.lock(me.column, checkbox);
         }
     },
@@ -277,7 +276,7 @@ Ext.define('Ext.selection.CheckboxModel', {
                 return true;
             }
         }
-        
+
         return false;
     },
 
@@ -298,7 +297,7 @@ Ext.define('Ext.selection.CheckboxModel', {
             else if (checkboxIndex === 'last') {
                 checkboxIndex = headerCt.getColumnCount();
             }
-            
+
             Ext.suspendLayouts();
 
             // Cannot select all in a buffered store.
@@ -306,9 +305,9 @@ Ext.define('Ext.selection.CheckboxModel', {
             if (view.getStore().isBufferedStore) {
                 me.showHeaderCheckbox = false;
             }
-            
+
             me.column = headerCt.add(checkboxIndex, me.column || me.getHeaderConfig());
-            
+
             Ext.resumeLayouts();
         }
     },
@@ -353,7 +352,7 @@ Ext.define('Ext.selection.CheckboxModel', {
             else {
                 me.addCheckbox(me.view);
             }
-            
+
             grid.view.refreshView();
         }
     },
@@ -379,15 +378,15 @@ Ext.define('Ext.selection.CheckboxModel', {
             if (isChecked) {
                 records = [];
                 selections = this.getSelection();
-                
+
                 for (i = 0, len = selections.length; i < len; ++i) {
                     selection = selections[i];
-                    
+
                     if (store.indexOf(selection) > -1) {
                         records.push(selection);
                     }
                 }
-                
+
                 if (records.length > 0) {
                     me.deselect(records);
                 }
@@ -439,11 +438,11 @@ Ext.define('Ext.selection.CheckboxModel', {
 
             // The selection model listens to the navigation model to select/deselect
             setRecordCheck: Ext.emptyFn,
-            
+
             // It uses our isRowSelected to test whether a row is checked
             isRecordChecked: me.isRowSelected.bind(me)
         };
-        
+
         if (!me.checkOnly) {
             // tabIndex and focusable properties should not be removed as
             // they must depend on actual column configuration
@@ -457,7 +456,7 @@ Ext.define('Ext.selection.CheckboxModel', {
             config.rowSelectText = htmlEncode(me.rowSelectText);
             config.rowDeselectText = htmlEncode(me.rowDeselectText);
         }
-        
+
         return config;
     },
 
@@ -495,11 +494,11 @@ Ext.define('Ext.selection.CheckboxModel', {
         var me = this;
 
         me.callParent(arguments);
-        
+
         if (me.column) {
             me.column.updateCellAriaDescription(record, isSelected);
         }
-        
+
         if (!me.suspendChange) {
             me.updateHeaderState();
         }
@@ -522,23 +521,23 @@ Ext.define('Ext.selection.CheckboxModel', {
         this.callParent(arguments);
         this.updateHeaderState();
     },
-    
+
     onStoreRefresh: function() {
         this.callParent(arguments);
         this.updateHeaderState();
     },
-    
+
     maybeFireSelectionChange: function(fireEvent) {
         if (fireEvent && !this.suspendChange) {
             this.updateHeaderState();
         }
-        
+
         this.callParent(arguments);
     },
-    
+
     resumeChanges: function() {
         this.callParent();
-        
+
         if (!this.suspendChange) {
             this.updateHeaderState();
         }
@@ -556,20 +555,20 @@ Ext.define('Ext.selection.CheckboxModel', {
             hdSelectStatus = false,
             selectedCount = 0,
             selected, len, i;
-            
+
         if (!store.isBufferedStore && storeCount > 0) {
             selected = me.selected;
             hdSelectStatus = true;
-            
+
             for (i = 0, len = selected.getCount(); i < len; ++i) {
                 if (store.indexOfId(selected.getAt(i).id) > -1) {
                     ++selectedCount;
                 }
             }
-            
+
             hdSelectStatus = storeCount === selectedCount;
         }
-            
+
         if (views && views.length) {
             me.column.setHeaderStatus(hdSelectStatus);
         }
@@ -585,14 +584,14 @@ Ext.define('Ext.selection.CheckboxModel', {
             isSpace = e.getKey() === e.SPACE && e.position.column === column;
             veto = !(isClick || isSpace);
         }
-        
+
         return veto || me.callParent([e]);
     },
 
     privates: {
         onBeforeNavigate: function(metaEvent) {
             var e = metaEvent.keyEvent;
-            
+
             if (this.selectionMode !== 'SINGLE') {
                 metaEvent.ctrlKey = metaEvent.ctrlKey || e.ctrlKey ||
                                     (e.type === this.column.triggerEvent && !e.shiftKey) ||

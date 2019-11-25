@@ -23,6 +23,7 @@ Ext.define('KitchenSink.view.draw.Composite', {
 
     layout: 'fit',
     width: 650,
+    cls: 'composite-panel',
 
     profiles: {
         classic: {
@@ -32,7 +33,10 @@ Ext.define('KitchenSink.view.draw.Composite', {
             buttonWidth: 200
         },
         graphite: {
-             buttonWidth: 300
+            buttonWidth: 300
+        },
+        'classic-material': {
+            buttonWidth: 300
         }
     },
 

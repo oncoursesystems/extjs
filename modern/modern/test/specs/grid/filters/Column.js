@@ -140,7 +140,7 @@ function() {
             expect(colMap.colf3.getMenu().getComponent('filter').getChecked()).toBe(false);
 
             expect(colMap.colf3.getMenu().getComponent('filter').getMenu().innerItems.length).toBe(3);
-            
+
             expect(colMap.colf3.getMenu().getComponent('filter').getMenu().innerItems[0].xtype).toBe('datefield');
             expect(colMap.colf3.getMenu().getComponent('filter').getMenu().innerItems[0].operator).toBe('<');
             expect(colMap.colf3.getMenu().getComponent('filter').getMenu().innerItems[1].xtype).toBe('datefield');
@@ -159,7 +159,7 @@ function() {
             expect(colMap.colf4.getMenu().getComponent('filter').getChecked()).toBe(false);
 
             expect(colMap.colf4.getMenu().getComponent('filter').getMenu().innerItems.length).toBe(3);
-            
+
             expect(colMap.colf4.getMenu().getComponent('filter').getMenu().innerItems[0].xtype).toBe('numberfield');
             expect(colMap.colf4.getMenu().getComponent('filter').getMenu().innerItems[0].operator).toBe('<');
             expect(colMap.colf4.getMenu().getComponent('filter').getMenu().innerItems[1].xtype).toBe('numberfield');
@@ -180,7 +180,7 @@ function() {
             expect(colMap.colf5.getMenu().getComponent('filter').getChecked()).toBe(false);
 
             expect(colMap.colf5.getMenu().getComponent('filter').getMenu().innerItems.length).toBe(2);
-            
+
             expect(colMap.colf5.getMenu().getComponent('filter').getMenu().innerItems[0].xtype).toBe('menuradioitem');
             expect(colMap.colf5.getMenu().getComponent('filter').getMenu().innerItems[0].getText()).toBe('True');
             expect(colMap.colf5.getMenu().getComponent('filter').getMenu().innerItems[1].xtype).toBe('menuradioitem');
@@ -206,15 +206,15 @@ function() {
 
             Ext.testHelper.tap(colMap.colf3.triggerElement);
             expect(colMap.colf3.getMenu().getComponent('filter').getMenu().innerItems[0].xtype).toBe('datefield');
-            
+
             Ext.testHelper.tap(colMap.colf4.triggerElement);
             expect(colMap.colf4.getMenu().getComponent('filter').getMenu().innerItems[0].xtype).toBe('numberfield');
-            
+
             Ext.testHelper.tap(colMap.colf5.triggerElement);
             expect(colMap.colf5.getMenu().getComponent('filter').getMenu().innerItems[0].xtype).toBe('menuradioitem');
-            
+
         });
-        
+
         it('should have default "String" type filter', function() {
             makeGrid({
                 columns: [

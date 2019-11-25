@@ -119,7 +119,7 @@ Ext.define('Ext.chart.series.Pie3D', {
 
     updateColors: function(colors) {
         var chart;
-        
+
         this.setSubStyle({ baseColor: colors });
 
         if (!this.isConfiguring) {
@@ -415,7 +415,7 @@ Ext.define('Ext.chart.series.Pie3D', {
 
     updateRadius: function(radius) {
         var donut;
-        
+
         // The side effects of the 'getChart' call will result
         // in the 'coordinateX' method call, which we want to have called
         // first, to coordinate the data and create sprites for pie slices,
@@ -435,7 +435,7 @@ Ext.define('Ext.chart.series.Pie3D', {
 
     updateDonut: function(donut) {
         var radius;
-        
+
         // See 'updateRadius' comments.
         this.getChart();
 
@@ -450,7 +450,7 @@ Ext.define('Ext.chart.series.Pie3D', {
 
     updateCenter: function(center) {
         var offsetX, offsetY, thickness;
-        
+
         // See 'updateRadius' comments.
         this.getChart();
 
@@ -468,10 +468,10 @@ Ext.define('Ext.chart.series.Pie3D', {
 
     updateThickness: function(thickness) {
         var center, offsetY;
-        
+
         // See 'updateRadius' comments.
         this.getChart();
-        
+
         // Radius depends on thickness and distortion,
         // this will trigger its recalculation in the applier.
         this.setRadius();
@@ -490,7 +490,7 @@ Ext.define('Ext.chart.series.Pie3D', {
     updateDistortion: function(distortion) {
         // See 'updateRadius' comments.
         this.getChart();
-        
+
         // Radius depends on thickness and distortion,
         // this will trigger its recalculation in the applier.
         this.setRadius();
@@ -504,10 +504,10 @@ Ext.define('Ext.chart.series.Pie3D', {
 
     updateOffsetX: function(offsetX) {
         var center;
-        
+
         // See 'updateRadius' comments.
         this.getChart();
-        
+
         center = this.getCenter();
 
         this.forEachSprite(function(sprite) {
@@ -519,7 +519,7 @@ Ext.define('Ext.chart.series.Pie3D', {
 
     updateOffsetY: function(offsetY) {
         var center, thickness;
-        
+
         // See 'updateRadius' comments.
         this.getChart();
 
@@ -544,7 +544,7 @@ Ext.define('Ext.chart.series.Pie3D', {
 
     updateRenderer: function(renderer) {
         var rendererData;
-        
+
         // See 'updateRadius' comments.
         this.getChart();
 

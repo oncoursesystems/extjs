@@ -7,7 +7,7 @@
  * December, 2007.
  */
 Ext.onReady(function() {
-    
+
     if (Ext.Date) {
         Ext.Date.monthNames = ["januar", "februar", "marts", "april", "maj", "juni", "juli", "august", "september", "oktober", "november", "december"];
 

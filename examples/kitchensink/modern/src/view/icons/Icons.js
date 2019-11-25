@@ -51,17 +51,17 @@ Ext.define('KitchenSink.view.icons.Icons', {
         layout: 'center',
         html: '<span class="action">User tapped More</span>'
     }, {
-        xtype : 'toolbar',
+        xtype: 'toolbar',
         docked: 'top',
         layout: {
-            pack : 'center'
+            pack: 'center'
         },
         items: [
             { iconCls: 'x-fa fa-check' },
             { iconCls: 'x-fa fa-plus' },
-            { iconCls: 'x-fa fa-pencil-square-o' },
+            { iconCls: 'x-fa fa-edit' },
             { iconCls: 'x-fa fa-times' },
-            { iconCls: 'x-fa fa-refresh' },
+            { iconCls: 'x-fa fa-sync' },
             { iconCls: 'x-fa fa-reply' }
         ]
     }]

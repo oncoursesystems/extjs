@@ -10,9 +10,9 @@ Ext.define('KitchenSink.view.toolbars.DockedToolbars', {
     profiles: {
         defaults: {
             listCls: 'x-fa fa-list',
-            closeCls: 'x-fa fa-close',
-            fileCls: 'x-fa fa-file-text',
-            editCls: 'x-fa fa-pencil-square-o'
+            closeCls: 'x-fa fa-times',
+            fileCls: 'x-fa fa-file-alt',
+            editCls: 'x-far fa-image'
         }
     },
 

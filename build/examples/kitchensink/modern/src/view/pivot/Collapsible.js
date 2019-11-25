@@ -58,7 +58,7 @@ Ext.define('KitchenSink.view.pivot.Collapsible', {
         }
     },
 
-    padding: '${padding}', //give room for the grid's shadow
+    padding: '${padding}', // give room for the grid's shadow
     shadow: false,
     //</example>
 

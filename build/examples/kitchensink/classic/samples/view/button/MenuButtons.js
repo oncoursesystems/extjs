@@ -31,6 +31,9 @@ Ext.define('KitchenSink.view.button.MenuButtons', {
         },
         graphite: {
             width: 760
+        },
+        'classic-material': {
+            width: 760
         }
     },
     //</example>
@@ -51,11 +54,11 @@ Ext.define('KitchenSink.view.button.MenuButtons', {
         },
         defaults: {
             menu: [{
-                text:'Menu Item 1'
-            },{
-                text:'Menu Item 2'
-            },{
-                text:'Menu Item 3'
+                text: 'Menu Item 1'
+            }, {
+                text: 'Menu Item 2'
+            }, {
+                text: 'Menu Item 3'
             }]
         },
 

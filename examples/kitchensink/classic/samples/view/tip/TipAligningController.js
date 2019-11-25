@@ -1,7 +1,7 @@
 Ext.define('KitchenSink.view.tip.TipAligningController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.tip-aligning',
-    
+
     init: function() {
         this.callParent();
         this.getViewModel().bind('{alignSpec}', 'onAlignSpecChange', this);
@@ -18,8 +18,9 @@ Ext.define('KitchenSink.view.tip.TipAligningController', {
     },
 
     initToolTip: function() {
-        var button = this.lookupReference('button');
-        var width = Ext.theme.name === "Graphite" ? 300 : 250;
+        var button = this.lookupReference('button'),
+            width = Ext.theme.name === "Graphite" ? 300 : 250;
+
         this.tooltip = new Ext.tip.ToolTip({
             constrainTo: this.getView().getTargetEl(),
             defaultAlign: 't-b',
@@ -34,8 +35,7 @@ Ext.define('KitchenSink.view.tip.TipAligningController', {
     },
 
     showButton: function() {
-        var view = this.getView(),
-            button = this.lookupReference('button');
+        var button = this.lookupReference('button');
 
         button.show();
         button.center();
@@ -55,6 +55,7 @@ Ext.define('KitchenSink.view.tip.TipAligningController', {
         var tooltip = this.tooltip;
 
         tooltip.defaultAlign = newValue;
+
         if (tooltip.isVisible()) {
             tooltip.realignToTarget();
         }
@@ -64,6 +65,7 @@ Ext.define('KitchenSink.view.tip.TipAligningController', {
         var tooltip = this.tooltip;
 
         tooltip.anchor = newValue;
+
         if (tooltip.isVisible()) {
             tooltip.realignToTarget();
         }
@@ -73,6 +75,7 @@ Ext.define('KitchenSink.view.tip.TipAligningController', {
         var tooltip = this.tooltip;
 
         this.lookupReference('button').doConstrain();
+
         if (tooltip.isVisible()) {
             tooltip.realignToTarget();
         }

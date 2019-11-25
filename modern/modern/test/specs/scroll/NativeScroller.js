@@ -1615,7 +1615,7 @@ topSuite("Ext.scroll.NativeScroller", function() {
                         }
 
                     }
-   
+
                     return xy;
                 }
 
@@ -1648,7 +1648,7 @@ topSuite("Ext.scroll.NativeScroller", function() {
 
                     runs(scrollIt);
                     waitsFor(wait);
-                    
+
                     runs(scrollIt);
                     waitsFor(wait);
 
@@ -1809,7 +1809,7 @@ topSuite("Ext.scroll.NativeScroller", function() {
                         }
 
                     }
-   
+
                     return xy;
                 }
 
@@ -1838,7 +1838,7 @@ topSuite("Ext.scroll.NativeScroller", function() {
                     runs(function() {
                         expectArgs(offsetX, offsetY, scrollByX, scrollByY);
                     });
-                    
+
                     runs(scrollIt);
                     waitsFor(wait);
                     runs(function() {
@@ -1895,7 +1895,7 @@ topSuite("Ext.scroll.NativeScroller", function() {
                     runs(scrollIt);
                     waitsFor(wait);
                     runs(expectPos);
-                    
+
                     runs(scrollIt);
                     waitsFor(wait);
                     runs(expectPos);
@@ -2006,7 +2006,7 @@ topSuite("Ext.scroll.NativeScroller", function() {
                         }
 
                     }
-   
+
                     return xy;
                 }
 
@@ -2041,7 +2041,7 @@ topSuite("Ext.scroll.NativeScroller", function() {
 
                     runs(scrollIt);
                     waitsFor(wait);
-                    
+
                     runs(scrollIt);
                     waitsFor(wait);
 
@@ -2126,7 +2126,7 @@ topSuite("Ext.scroll.NativeScroller", function() {
 
                     runs(scrollIt);
                     waitsFor(wait);
-                    
+
                     runs(scrollIt);
                     waitsFor(wait);
 

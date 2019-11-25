@@ -167,7 +167,7 @@ Ext.define("Ext.form.Labelable", {
             '<tpl for="errors"><tpl if="xindex &gt; 1">\n</tpl>{.}</tpl>',
         '</tpl>'
     ],
-    
+
     ariaActiveErrorsTpl: [
         '<tpl if="errors && errors.length">',
             '<tpl for="errors" between=". ">{.}</tpl>',
@@ -301,7 +301,7 @@ Ext.define("Ext.form.Labelable", {
      * @cfg {String} labelStyle
      * A CSS style specification string to apply directly to this field's label.
      */
-    
+
     /**
      * @cfg {Boolean} hideLabel
      * Set to true to completely hide the label element ({@link #fieldLabel} and
@@ -382,14 +382,14 @@ Ext.define("Ext.form.Labelable", {
      * does not need setting.
      */
     noWrap: true,
-    
+
     /**
      * @cfg {String} [ariaHelp] Optional text description for this object. This text will be
      * announced to Assistive Technology users when the object is focused.
      * @locale
      */
     ariaHelp: undefined,
-    
+
     /**
      * @cfg {String} ariaErrorText Localized announcement text for validation errors. This text
      * will be used by Assistive Technologies such as screen readers to alert the users when
@@ -511,11 +511,11 @@ Ext.define("Ext.form.Labelable", {
                     }
                 };
             }
-            
+
             tip = this.tip = Ext.create('Ext.tip.QuickTip', cfg);
             copy = Ext.apply({}, tip.tagConfig);
             copy.attribute = 'errorqtip';
-            
+
             tip.setTagConfig(copy);
         },
 
@@ -617,11 +617,11 @@ Ext.define("Ext.form.Labelable", {
 
         label = label || '';
         me.fieldLabel = label;
-        
+
         if (me.rendered) {
             if (Ext.isEmpty(label) && me.hideEmptyLabel) {
                 me.addCls(noLabelCls);
-                
+
                 if (sideLabel && errorWrapEl) {
                     errorWrapEl.removeCls(errorWrapUnderSideLabelCls);
                 }
@@ -633,12 +633,12 @@ Ext.define("Ext.form.Labelable", {
 
                 me.labelTextEl.dom.innerHTML = label;
                 me.removeCls(noLabelCls);
-                
+
                 if (sideLabel && errorWrapEl) {
                     errorWrapEl.addCls(errorWrapUnderSideLabelCls);
                 }
             }
-            
+
             me.updateLayout();
         }
     },
@@ -648,7 +648,7 @@ Ext.define("Ext.form.Labelable", {
 
         if (hideLabel !== me.hideLabel) {
             me.hideLabel = hideLabel;
-            
+
             if (me.rendered) {
                 me[hideLabel ? 'addCls' : 'removeCls'](me.noLabelCls);
                 me.updateLayout();
@@ -662,7 +662,7 @@ Ext.define("Ext.form.Labelable", {
 
         if (hideEmptyLabel !== me.hideEmptyLabel) {
             me.hideEmptyLabel = hideEmptyLabel;
-            
+
             if (me.rendered && !me.hideLabel) {
                 hide = hideEmptyLabel && !me.getFieldLabel();
                 me[hide ? 'addCls' : 'removeCls'](me.noLabelCls);
@@ -684,7 +684,7 @@ Ext.define("Ext.form.Labelable", {
                     if (!value.isTemplate) {
                         value = Ext.XTemplate.getTpl(this, name);
                     }
-                    
+
                     value = value.apply(data);
                 }
             }
@@ -724,11 +724,11 @@ Ext.define("Ext.form.Labelable", {
 
         if (topLabel) {
             labelClsExtra += ' ' + me.topLabelCls;
-            
+
             if (labelPad) {
                 labelInnerStyle = 'padding-bottom:' + labelPad + 'px;';
             }
-            
+
             if (sideError && !autoFitErrors) {
                 labelClsExtra += ' ' + me.topLabelSideErrorCls;
             }
@@ -737,13 +737,13 @@ Ext.define("Ext.form.Labelable", {
             if (rightLabel) {
                 labelClsExtra += ' ' + me.rightLabelCls;
             }
-            
+
             if (labelPad) {
                 labelStyle += me.getHorizontalPaddingStyle() + labelPad + 'px;';
             }
-            
+
             labelStyle += 'width:' + (labelWidth + (labelPad ? labelPad : 0)) + 'px;';
-            
+
             // inner label needs width as well so that setting width on the outside
             // that is smaller than the natural width, will be ensured to take width
             // away from the body, and not the label.
@@ -790,7 +790,7 @@ Ext.define("Ext.form.Labelable", {
             renderAriaElements: !!me.renderAriaElements,
             ariaStatus: ''
         };
-        
+
         if (me.ariaHelp) {
             data.ariaHelp = Ext.String.htmlEncode(me.ariaHelp);
         }
@@ -807,13 +807,13 @@ Ext.define("Ext.form.Labelable", {
 
     beforeLabelRender: function() {
         var me = this;
-        
+
         me.setFieldDefaults(me.getInherited().fieldDefaults);
-        
+
         if (me.ownerLayout) {
             me.addCls(Ext.baseCSSPrefix + me.ownerLayout.type + '-form-item');
         }
-        
+
         if (!me.hasVisibleLabel()) {
             me.addCls(me.noLabelCls);
         }
@@ -836,13 +836,13 @@ Ext.define("Ext.form.Labelable", {
 
         if (me.extraMargins) {
             margins = me.el.getMargin();
-            
+
             for (side in margins) {
                 if (margins.hasOwnProperty(side)) {
                     style['margin-' + side] = (margins[side] + me.extraMargins[side]) + 'px';
                 }
             }
-            
+
             me.el.setStyle(style);
         }
     },
@@ -855,7 +855,7 @@ Ext.define("Ext.form.Labelable", {
         if (this.hideLabel) {
             return false;
         }
-        
+
         return !(this.hideEmptyLabel && !this.getFieldLabel());
     },
 
@@ -946,7 +946,7 @@ Ext.define("Ext.form.Labelable", {
         tpl = me.lookupTpl('activeErrorsTpl');
 
         me.activeErrors = errors;
-        
+
         activeError = me.activeError = tpl.apply({
             fieldLabel: me.fieldLabel,
             errors: errors,
@@ -957,7 +957,7 @@ Ext.define("Ext.form.Labelable", {
 
         if (me.rendered) {
             actionEl = me.getActionEl();
-            
+
             if (isSide) {
                 me.errorEl.dom.setAttribute('data-errorqtip', activeError);
             }
@@ -972,21 +972,21 @@ Ext.define("Ext.form.Labelable", {
             if (msgTarget !== 'title' && ariaErrorEl) {
                 ariaTpl = me.lookupTpl('ariaActiveErrorsTpl');
                 errStr = ariaTpl.apply({ errors: errors });
-                
+
                 // Setting innerHTML on aria-live element will replace inner text node,
                 // and the browser will fire DOM change event even if the text is the same.
                 // We don't want the announcement to repeat if the text hasn't changed.
                 errText = Ext.String.formatEncode(me.ariaErrorText, errStr, me.fieldLabel);
-                
+
                 if (ariaErrorEl.dom.innerHTML !== errText) {
                     ariaErrorEl.dom.innerHTML = errText;
                 }
-                
+
                 // ariaStatusEl is not aria-live so it's OK to change it every time.
                 // Contents will be announced only upon focusing the field.
                 me.ariaStatusEl.dom.innerHTML = Ext.String.htmlEncode(errStr);
             }
-            
+
             if (isSide || isQtip) {
                 Ext.form.Labelable.initTip();
             }
@@ -1002,11 +1002,11 @@ Ext.define("Ext.form.Labelable", {
 
         if (errorWrapEl) {
             errorWrapEl.setVisible(errors.length > 0);
-            
+
             if (isSide && me.autoFitErrors) {
                 me.labelEl.addCls(me.topLabelSideErrorCls);
             }
-            
+
             me.updateLayout();
         }
     },
@@ -1032,14 +1032,14 @@ Ext.define("Ext.form.Labelable", {
 
             if (me.rendered) {
                 actionEl = me.getActionEl();
-                
+
                 if (msgTarget === 'qtip') {
                     actionEl.dom.removeAttribute('data-errorqtip');
                 }
                 else if (msgTarget === 'title') {
                     actionEl.dom.removeAttribute('title');
                 }
-                
+
                 if (msgTarget !== 'title' && ariaErrorEl) {
                     ariaErrorEl.dom.innerHTML = me.ariaStatusEl.dom.innerHTML = '';
                 }
@@ -1054,11 +1054,11 @@ Ext.define("Ext.form.Labelable", {
 
                 if (errorWrapEl) {
                     errorWrapEl.hide();
-                    
+
                     if (msgTarget === 'side' && me.autoFitErrors) {
                         me.labelEl.removeCls(me.topLabelSideErrorCls);
                     }
-                    
+
                     me.updateLayout();
 
                     // IE8 hack for https://sencha.jira.com/browse/EXTJS-17536.
@@ -1078,7 +1078,7 @@ Ext.define("Ext.form.Labelable", {
         // Need to force a relayout of the display:table form item.
         // TODO: Remove this method when IE8 retires.
         var el = this.el;
-        
+
         if (el && el.dom) {
             el.dom.style.display = '';
         }
@@ -1101,7 +1101,7 @@ Ext.define("Ext.form.Labelable", {
 
         if (me.rendered && !me.destroyed && !me.preventMark) {
             me.toggleInvalidCls(hasError);
-            
+
             // Update the errorEl (There will only be one if msgTarget is 'side' or 'under')
             // with the error message text
             if (me.errorEl) {

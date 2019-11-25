@@ -8,13 +8,13 @@ Ext.define('KitchenSink.view.binding.ComboChaining', {
     otherContent: [{
         type: 'Store',
         path: 'app/store/Countries.js'
-    },{
+    }, {
         type: 'Store',
         path: 'app/store/CountryStates.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/tree/Country.js'
-    },{
+    }, {
         type: 'Model',
         path: 'app/model/State.js'
     }],
@@ -29,6 +29,9 @@ Ext.define('KitchenSink.view.binding.ComboChaining', {
             width: 350
         },
         graphite: {
+            width: 480
+        },
+        'classic-material': {
             width: 480
         }
     },
@@ -52,13 +55,14 @@ Ext.define('KitchenSink.view.binding.ComboChaining', {
         store: {
             type: 'countries'
         }
-    },{
+    }, {
         xtype: 'combo',
         fieldLabel: 'State',
         displayField: 'state',
         valueField: 'abbrev',
         queryMode: 'remote',
         forceSelection: true,
+        cls: 'combo-chaining-state',
         bind: {
             visible: '{country.value}',
             filters: {

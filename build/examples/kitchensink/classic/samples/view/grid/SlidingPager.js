@@ -43,10 +43,19 @@ Ext.define('KitchenSink.view.grid.SlidingPager', {
             lastUpdatedColumnWidth: 150,
             gainColor: 'unset',
             lossColor: 'unset'
+        },
+        'classic-material': {
+            width: 750,
+            priceWidth: 100,
+            pricechangeWidth: 110,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 150,
+            gainColor: 'unset',
+            lossColor: 'unset'
         }
     },
     //</example>
-    
+
     title: 'Sliding Pager',
     height: 460,
     width: '${width}',
@@ -68,28 +77,28 @@ Ext.define('KitchenSink.view.grid.SlidingPager', {
 
         sortable: true,
         flex: 1
-    },{
+    }, {
         text: 'Price',
         dataIndex: 'price',
 
         sortable: true,
         formatter: 'usMoney',
         width: '${priceWidth}'
-    },{
+    }, {
         text: 'Change',
         dataIndex: 'priceChange',
 
         sortable: true,
         renderer: 'renderChange',
         width: '${pricechangeWidth}'
-    },{
+    }, {
         text: '% Change',
         dataIndex: 'priceChangePct',
 
         sortable: true,
         renderer: 'renderPercent',
         width: '${percentChangeColumnWidth}'
-    },{
+    }, {
         text: 'Last Updated',
         dataIndex: 'priceLastChange',
 

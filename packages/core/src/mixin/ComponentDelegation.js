@@ -104,7 +104,7 @@ Ext.define('Ext.mixin.ComponentDelegation', {
 
                 while (owner) {
                     delegatedEvents = owner.$delegatedEvents;
-                    
+
                     if (delegatedEvents) {
                         event = delegatedEvents[eventName];
 
@@ -116,7 +116,7 @@ Ext.define('Ext.mixin.ComponentDelegation', {
                             }
                         }
                     }
-                    
+
                     owner = owner.getRefOwner();
                 }
             }
@@ -137,7 +137,7 @@ Ext.define('Ext.mixin.ComponentDelegation', {
 
             if (delegatedEvents) {
                 event = delegatedEvents[eventName];
-                
+
                 if (event && event.removeListener(fn, scope)) {
                     me.$hasDelegatedListeners._decr_(eventName);
 
@@ -147,7 +147,7 @@ Ext.define('Ext.mixin.ComponentDelegation', {
                 }
             }
         },
-        
+
         destroyComponentDelegation: function() {
             if (this.clearPropertiesOnDestroy) {
                 this.$delegatedEvents = null;
@@ -165,7 +165,7 @@ Ext.define('Ext.mixin.ComponentDelegation', {
         // to the single $hasDelegatedListeners object (see class-creation callback
         // of this class for more info)
         function HasListeners() {}
-        
+
         T.prototype.HasListeners = T.HasListeners = HasListeners;
         HasListeners.prototype = T.hasListeners =
             new Ext.mixin.ComponentDelegation.HasDelegatedListeners();

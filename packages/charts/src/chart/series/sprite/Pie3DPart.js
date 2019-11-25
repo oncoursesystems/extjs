@@ -233,7 +233,7 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
                         color: color.createDarker(0.1 * colorSpread)
                     }]
                 });
-                
+
                 break;
 
             case 'bottom':
@@ -256,7 +256,7 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
                         color: color.toString()
                     }]
                 });
-                
+
                 break;
 
             case 'outerFront':
@@ -276,7 +276,7 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
                         color: color.createDarker(0.25 * colorSpread).toString()
                     }]
                 });
-                
+
                 break;
 
             case 'start':
@@ -289,7 +289,7 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
                         color: color.createLighter(0.2 * colorSpread).toString()
                     }]
                 });
-                
+
                 break;
 
             case 'end':
@@ -302,7 +302,7 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
                         color: color.createLighter(0.2 * colorSpread).toString()
                     }]
                 });
-                
+
                 break;
 
             case 'innerFront':
@@ -322,7 +322,7 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
                         color: color.createDarker(0.1 * colorSpread).toString()
                     }]
                 });
-                
+
                 break;
         }
 
@@ -486,7 +486,7 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
                 startRho: attr.startRho,
                 endRho: attr.endRho
             };
-            
+
             changes = Ext.callback(renderer, null,
                                    [me, itemCfg, me.getRendererData(), me.getRendererIndex()],
                                    0, me.getSeries());
@@ -563,7 +563,7 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
         if (labelTpl.attr.renderer) {
             rendererParams = [me.attr.label, label, labelCfg, me.getRendererData(),
                               me.getRendererIndex()];
-            
+
             rendererChanges = Ext.callback(labelTpl.attr.renderer, null, rendererParams,
                                            0, me.getSeries());
 
@@ -808,7 +808,6 @@ Ext.define('Ext.chart.series.sprite.Pie3DPart', {
             path.ellipse.apply(path, params);
             path.closePath();
         }
-
 
         function renderRightBackChunk() {
             path.ellipse(

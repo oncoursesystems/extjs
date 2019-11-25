@@ -7,10 +7,10 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
         },
         recContent = '<record><id>1</id><title>Article 1</title><body>content1</body></record>',
        simpleXml = '<xmlData>' + recContent + '</xmlData>';
-    
+
     beforeEach(function() {
         Ext.ClassManager.enableNamespaceParseCache = false;
- 
+
         buildWriter = function(cfg) {
             cfg = Ext.apply({
                 writeAllFields: true
@@ -18,7 +18,7 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
 
             writer = new Ext.data.writer.Xml(cfg);
         };
-        
+
         Article = Ext.define('spec.Article', {
             extend: 'Ext.data.Model',
             fields: [
@@ -27,7 +27,7 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
                 { name: 'body',  type: 'string', writeName: 'content' }
             ]
         });
-        
+
         buildRecords = function(recs) {
             var out = [];
 
@@ -37,38 +37,38 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
 
             return out;
         };
-        
+
         makeOperation = function(records) {
             return new Ext.data.operation.Create({
                 records: records
             });
         };
     });
-    
+
     afterEach(function() {
         writer = buildWriter = buildRecords = makeOperation = null;
         Ext.ClassManager.enableNamespaceParseCache = true;
         Ext.data.Model.schema.clear();
         Ext.undefine('spec.Article');
     });
-    
+
     describe("initialization", function() {
         it("should default documentRoot to xmlData", function() {
             buildWriter();
             expect(writer.getDocumentRoot()).toBe('xmlData');
         });
-        
+
         it("should default header to ''", function() {
             buildWriter();
             expect(writer.getHeader()).toBe('');
         });
-        
+
         it("should default record to record", function() {
             buildWriter();
             expect(writer.getRecord()).toBe('record');
         });
     });
-    
+
     describe("header", function() {
         it("should not push a header if one is not specified", function() {
             buildWriter();
@@ -78,7 +78,7 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
 
             expect(request.getXmlData()).toBe(simpleXml);
         });
-        
+
         it("should append any header", function() {
             buildWriter({
                 header: 'foo'
@@ -90,7 +90,7 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
             expect(request.getXmlData()).toBe('foo' + simpleXml);
         });
     });
-    
+
     describe("root", function() {
         it("should include the root by default", function() {
             buildWriter();
@@ -100,7 +100,7 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
 
             expect(request.getXmlData()).toBe(simpleXml);
         });
-        
+
         it("should use any custom root specified", function() {
             buildWriter({
                 documentRoot: 'customRoot'
@@ -111,7 +111,7 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
 
             expect(request.getXmlData()).toBe(simpleXml.replace(/xmlData/g, 'customRoot'));
         });
-        
+
         it("should exclude the root if the root is empty and there's 1 record", function() {
             buildWriter({
                 documentRoot: ''
@@ -122,7 +122,7 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
 
             expect(request.getXmlData()).toBe(recContent);
         });
-        
+
         it("should force the defaultDocumentRoot if root is empty and there's more than 1 record", function() {
             buildWriter({
                 documentRoot: ''
@@ -144,7 +144,7 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
 
             expect(request.getXmlData()).toBe(content.join(''));
         });
-        
+
         it("should respect a custom defaultDocumentRoot", function() {
             buildWriter({
                 documentRoot: '',
@@ -168,7 +168,7 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
             expect(request.getXmlData()).toBe(content.join(''));
         });
     });
-    
+
     describe("transform", function() {
         it("should invoke the transform function", function() {
             var transformFn = function(data) {
@@ -178,21 +178,21 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
                     body: 'content10'
                 }];
             };
-            
+
             buildWriter({
                 transform: transformFn
             });
-            
+
             var request = writer.write(new Ext.data.Request({
                 operation: makeOperation(buildRecords([simpleData]))
             }));
-            
+
             var expectedXml = "<xmlData><record><id>10</id><title>Article 10</title><body>content10</body></record></xmlData>";
 
             expect(request.getXmlData()).not.toBe(simpleXml);
             expect(request.getXmlData()).toEqual(expectedXml);
         });
-        
+
         it("should invoke the transform function with the specified scope", function() {
             var mockScope = {};
 
@@ -205,18 +205,18 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
                     body: 'content10'
                 }];
             };
-            
+
             buildWriter({
                 transform: {
                     fn: transformFn,
                     scope: mockScope
                 }
             });
-            
+
             var request = writer.write(new Ext.data.Request({
                 operation: makeOperation(buildRecords([simpleData]))
             }));
-            
+
             var expectedXml = "<xmlData><record><id>10</id><title>Article 10</title><body>content10</body></record></xmlData>";
 
             expect(request.getXmlData()).not.toBe(simpleXml);
@@ -242,7 +242,7 @@ topSuite("Ext.data.writer.Xml", ['Ext.data.ArrayStore'], function() {
                     name: 'OCN', mapping: 'SystemMaster>OCN'
                 }]
             }),
-            
+
             // The compound record path means that a <SystemCatalog> element will wrap
             // the sequence of <SystemInfo> elements, so we do not need a documentRoot
             // so that must be false.

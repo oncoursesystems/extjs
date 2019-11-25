@@ -18,7 +18,9 @@ Ext.define('KitchenSink.view.phone.Main', {
             easing: 'ease-in-out'
         }
     },
-
+    backButton: {
+        cls: Ext.theme.is.iOS ? 'nested-list-back-btn' : ''
+    },
     store: 'Navigation',
     toolbar: {
         id: 'mainNavigationBar',
@@ -29,7 +31,7 @@ Ext.define('KitchenSink.view.phone.Main', {
         items: [{
             align: 'right',
             id: 'materialThemeMenuButton',
-            hidden:true,
+            hidden: true,
             menu: {
                 itemId: 'materialThemeMenu',
                 xtype: 'actionsheet',
@@ -41,11 +43,11 @@ Ext.define('KitchenSink.view.phone.Main', {
             xtype: 'button',
             align: 'right',
             action: 'burger',
-            menu: Ext.theme.is.Material ?
-                {
+            menu: Ext.theme.is.Material
+                ? {
                     itemId: 'burgerButtonMenu'
-                } :
-                {
+                }
+                : {
                     xtype: 'actionsheet',
                     side: 'right',
                     itemId: 'burgerButtonMenu',

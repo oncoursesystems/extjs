@@ -113,7 +113,6 @@ Ext.define('Ext.scroll.Scroller', {
         translatable: 'scrollposition'
     },
 
-
     constructor: function(config) {
         var me = this;
 
@@ -132,9 +131,10 @@ Ext.define('Ext.scroll.Scroller', {
 
         me.doDestroy();
 
-        me.destroying = false;
-
         me.callParent();
+
+        // This just makes it hard to ask "was destroy() called?":
+        // me.destroying = false; // removed in 7.0
     },
 
     doDestroy: function() {
@@ -686,34 +686,16 @@ Ext.define('Ext.scroll.Scroller', {
     privates: {
         scrollerCls: Ext.baseCSSPrefix + 'scroller',
 
-        // These are the methods that can cause the partner to scroll and need a check
-        // for whether the axis is enabled in callPartner()
-        partnerScrollMethods: {
-            onPartnerScrollStart: 1,
-            onPartnerScroll: 1
-        },
-
         axisConfigs: {
-            x: {
-                x: true
-            },
-            y: {
-                y: true
-            },
-            both: {
-                x: true,
-                y: true
-            }
+            x: { x: 1, y: 0 },
+            y: { x: 0, y: 1 },
+            both: { x: 1, y: 1 }
         },
 
-        callPartners: function(method, x, y, deltaX, deltaY) {
+        callPartners: function(method, scrollX, scrollY) {
             var me = this,
                 partners = me._partners,
-                initialX = x,
-                initialY = y,
-                initialDeltaX = deltaX,
-                initialDeltaY = deltaY,
-                partner, scroller, position, id, axes;
+                axes, id, partner, pos, scroller, x, y;
 
             if (!me.suspendSync) {
                 for (id in partners) {
@@ -721,41 +703,16 @@ Ext.define('Ext.scroll.Scroller', {
                     scroller = partner.scroller;
 
                     if (!scroller.isPrimary && !partner.called) {
-                        x = initialX;
-                        y = initialY;
-                        deltaX = initialDeltaX;
-                        deltaY = initialDeltaY;
-
                         partner.called = true; // this flag avoids infinite recursion
                         axes = partners[id].axes;
-                        position = scroller.position;
+                        pos = scroller.position;
 
-                        if (x === undefined) {
-                            x = position.x;
-                            deltaX = 0;
-                        }
+                        x = (!axes.x || scrollX === undefined) ? pos.x : scrollX;
+                        y = (!axes.y || scrollY === undefined) ? pos.y : scrollY;
 
-                        if (y === undefined) {
-                            y = position.y;
-                            deltaY = 0;
-                        }
+                        scroller[method](x, y, (x - pos.x) || 0, (y - pos.y) || 0);
 
-                        if (me.partnerScrollMethods[method]) {
-                            if (!axes.x) {
-                                x = null;
-                            }
-
-                            if (!axes.y) {
-                                y = null;
-                            }
-                        }
-
-                        deltaX = (x - position.x) || 0;
-                        deltaY = (y - position.y) || 0;
-
-                        scroller[method](x, y, deltaX, deltaY);
-
-                        scroller.callPartners(method, x, y, deltaX, deltaY);
+                        scroller.callPartners(method, x, y);
 
                         partner.called = false;
                     }
@@ -937,12 +894,13 @@ Ext.define('Ext.scroll.Scroller', {
             if (!me.suspendSync && syncNow) {
                 position = me.position;
                 x = position.x;
+                y = position.y;
 
-                me.callPartners('onPartnerScrollStart', undefined, undefined, 0, 0);
-                me.callPartners('fireScrollStart', undefined, undefined, 0, 0);
+                me.callPartners('onPartnerScrollStart', undefined, undefined);
+                me.callPartners('fireScrollStart', undefined, undefined);
 
                 me.callPartners('onPartnerScroll', x, y);
-                me.callPartners('fireScroll', x, y, null, null);
+                me.callPartners('fireScroll', x, y);
 
                 me.callPartners('onPartnerScrollEnd');
                 me.callPartners('fireScrollEnd', x, y);

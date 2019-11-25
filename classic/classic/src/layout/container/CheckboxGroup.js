@@ -19,7 +19,7 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
     autoFlex: true,
 
     type: 'checkboxgroup',
-    
+
     createsInnerCt: true,
 
     childEls: [
@@ -50,7 +50,7 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
 
         me.columnsArray = Ext.isArray(owner.columns);
         me.autoColumns = !owner.columns || owner.columns === 'auto';
-        
+
         // Auto layout is always horizontal
         if (!me.autoColumns) {
             // ... but one column is always vertical
@@ -155,7 +155,7 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
         me.callParent();
 
         me.rowNodes = me.innerCt.query('tr', true);
-        
+
         // There always should be at least one row
         me.tBodyNode = me.rowNodes[0].parentNode;
     },
@@ -369,7 +369,7 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
 
         if (itemCount) {
             Ext.suspendLayouts();
-            
+
             // We operate on "virtual" row and column counts here, which is the same
             // as the actual DOM structure for horizontal layouts but is quite different
             // for vertical layouts.
@@ -381,7 +381,7 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
                 columnCount = me.columnsArray ? me.owner.columns.length : me.owner.columns;
                 rowCount = Math.ceil(itemCount / columnCount);
             }
-            
+
             for (i = 0; i < itemCount; i++) {
                 item = items[i];
                 rowIndex = me.getRenderRowIndex(i, rowCount, columnCount);
@@ -425,34 +425,34 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
 
     getItemNodeAt: function(rowIndex, columnIndex) {
         var column = this.getColumnNodeAt(rowIndex, columnIndex);
-        
+
         return this.vertical ? column.children[rowIndex] : column.children[0];
     },
 
     getRowNodeAt: function(rowIndex) {
         var me = this,
             row;
-        
+
         // Vertical layout uses only one row with several columns,
         // each column containing one or more items, thus simulating "rows"
         rowIndex = me.vertical ? 0 : rowIndex;
         row = me.rowNodes[rowIndex];
-        
+
         if (!row) {
             row = me.rowNodes[rowIndex] = document.createElement('tr');
             row.role = 'presentation';
             me.tBodyNode.appendChild(row);
         }
-        
+
         return row;
     },
-    
+
     getColumnNodeAt: function(rowIndex, columnIndex, row) {
         var column;
-        
+
         row = row || this.getRowNodeAt(rowIndex);
         column = row.children[columnIndex];
-        
+
         if (!column) {
             column = Ext.fly(row).appendChild({
                 tag: 'td',
@@ -461,44 +461,44 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
                 role: 'presentation'
             }, true);
         }
-        
+
         return column;
     },
-    
+
     pruneRows: function(rowCount, columnCount) {
         var me = this,
             rows = me.tBodyNode.children,
             columns, row, column, i, j;
-        
+
         rowCount = me.vertical ? 1 : rowCount;
-        
+
         while (rows.length > rowCount) {
             row = rows[rows.length - 1];
-            
+
             while (row.children.length) {
                 Ext.get(row.children[0]).destroy();
             }
-            
+
             // We don't create Element instances for rows
             row.parentNode.removeChild(row);
         }
-        
+
         for (i = rowCount - 1; i >= 0; i--) {
             row = rows[i];
             columns = row.children;
-            
+
             while (columns.length > columnCount) {
                 column = columns[columns.length - 1];
                 Ext.get(column).destroy();
             }
-            
+
             // We only prune empty cells on 2nd and subsequent rows;
             // the first row needs to have all cells up to columnCount
             // to establish the structure.
             if (i > 0) {
                 for (j = columns.length - 1; j >= 0; j--) {
                     column = columns[j];
-                    
+
                     // We only need to test for the last cells that can be empty
                     // due to item removal. As soon as we reach a non-empty column
                     // there's no point in continuing the loop.
@@ -512,7 +512,7 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
             }
         }
     },
-    
+
     /**
      * Renders the given Component into the specified row and column
      * @param {Ext.Component} item The Component to render
@@ -528,7 +528,7 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
 
         itemIndex = me.vertical ? rowIndex : 0;
         column = Ext.get(me.getColumnNodeAt(rowIndex, columnIndex));
-        
+
         item.render(column, itemIndex);
     },
 
@@ -542,29 +542,29 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
     moveItem: function(item, rowIndex, columnIndex) {
         var me = this,
             column, itemIndex, targetNode;
-        
+
         itemIndex = me.vertical ? rowIndex : 0;
         column = me.getColumnNodeAt(rowIndex, columnIndex);
         targetNode = column.children[itemIndex];
-        
+
         column.insertBefore(item.el.dom, targetNode || null);
     },
-    
+
     destroy: function() {
         if (this.owner.rendered) {
             // eslint-disable-next-line vars-on-top
             var target = this.getRenderTarget(),
                 cells, i, len;
-            
+
             if (target) {
                 cells = target.query('.' + this.owner.groupCls, false);
-                
+
                 for (i = 0, len = cells.length; i < len; i++) {
                     cells[i].destroy();
                 }
             }
         }
-        
+
         this.callParent();
     }
 });

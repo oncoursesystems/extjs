@@ -9,6 +9,7 @@ function() {
 
     function makeComponent(config) {
         component = new Ext.Component(config);
+
         return component;
     }
 
@@ -26,12 +27,14 @@ function() {
 
             Ext.each([
                 'user-select', '-moz-user-select', '-ms-user-select', '-webkit-user-select'
-            ], function (name) {
+            ], function(name) {
                 if (style[name] !== undefined) {
                     userSelect = name;
+
                     return false;
                 }
             });
+
             if (userSelect === '-moz-user-select' || userSelect === 'user-select') {
                 userSelectAuto = 'auto';
             }
@@ -119,6 +122,7 @@ function() {
         // to disable it until it can be made more stable
         xit("should allow show twice in succession while animating", function() {
             var onErrorSpy = jasmine.createSpy();
+
             window.onerror = onErrorSpy.andCallFake(function() {
                 if (oldOnError) {
                     oldOnError();
@@ -215,15 +219,19 @@ function() {
                         if (eventName === 'beforeshow') {
                             beforeShowCalled = true;
                         }
+
                         if (eventName === 'show') {
                             showCalled = true;
                         }
+
                         if (eventName === 'beforehide') {
                             beforeHideCalled = true;
                         }
+
                         if (eventName === 'hide') {
                             hideCalled = true;
                         }
+
                         this.callParent(arguments);
                     }
                 });
@@ -232,7 +240,7 @@ function() {
             Ext.destroy(component);
             // "hide" is fired during destroy
             hideCalled = false;
-            component = new InstrumentedComponent({hidden: true});
+            component = new InstrumentedComponent({ hidden: true });
 
             expect(beforeShowCalled).toBe(false);
             expect(showCalled).toBe(false);
@@ -295,9 +303,10 @@ function() {
 
     describe("'cls' methods", function() {
         var spy;
+
         var spacesRe = /\s+/;
 
-        function getClsList (el) {
+        function getClsList(el) {
             if (el.isWidget) {
                 el = el.el;
             }
@@ -310,8 +319,9 @@ function() {
             return list;
         }
 
-        function getClsMap (el) {
+        function getClsMap(el) {
             var classes = getClsList(el);
+
             var map = {};
 
             while (classes.length) {
@@ -321,12 +331,13 @@ function() {
             return map;
         }
 
-        function expectCls (el, cls) {
+        function expectCls(el, cls) {
             if (el.isWidget) {
                 el = el.el;
             }
 
             var classes = typeof cls === 'string' ? cls.split(' ') : cls;
+
             var map = getClsMap(el);
 
             while (classes.length) {
@@ -343,6 +354,7 @@ function() {
             }
 
             classes = Ext.Object.getKeys(map);
+
             if (classes.length) {
                 Ext.raise('Expected cls to have only "' + cls + '" but found "' +
                     classes.join(' ') + '"');
@@ -1231,11 +1243,11 @@ function() {
 
                 it("force add cls to component", function() {
                     makeComponent({
-                        cls : 'one'
+                        cls: 'one'
                     });
 
-                    //normally since the component already has the cls it would remove
-                    //but since we are passing `true`, it will force it to add
+                    // normally since the component already has the cls it would remove
+                    // but since we are passing `true`, it will force it to add
                     component.toggleCls('one', true);
 
                     expect(component.element).toHaveCls('one');
@@ -1245,7 +1257,7 @@ function() {
             describe("remove cls", function() {
                 it("remove from component's element", function() {
                     makeComponent({
-                        cls : 'one'
+                        cls: 'one'
                     });
 
                     component.toggleCls('one');
@@ -1281,6 +1293,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden()).toBe(true);
                         ct.destroy();
@@ -1294,6 +1307,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden()).toBe(true);
                         ct.destroy();
@@ -1305,6 +1319,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden()).toBe(false);
                         ct.destroy();
@@ -1317,6 +1332,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden()).toBe(false);
                         ct.destroy();
@@ -1336,6 +1352,7 @@ function() {
                                 }
                             }
                         });
+
                         component = ct.down('#c');
                         expect(component.isHidden()).toBe(false);
                         ct.destroy();
@@ -1366,6 +1383,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden(false)).toBe(true);
                         ct.destroy();
@@ -1379,6 +1397,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden(false)).toBe(true);
                         ct.destroy();
@@ -1390,6 +1409,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden(false)).toBe(false);
                         ct.destroy();
@@ -1402,6 +1422,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden(false)).toBe(false);
                         ct.destroy();
@@ -1421,6 +1442,7 @@ function() {
                                 }
                             }
                         });
+
                         component = ct.down('#c');
                         expect(component.isHidden(false)).toBe(false);
                         ct.destroy();
@@ -1451,6 +1473,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden(true)).toBe(true);
                         ct.destroy();
@@ -1464,6 +1487,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden(true)).toBe(true);
                         ct.destroy();
@@ -1475,6 +1499,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden(true)).toBe(false);
                         ct.destroy();
@@ -1487,6 +1512,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isHidden(true)).toBe(true);
                         ct.destroy();
@@ -1506,6 +1532,7 @@ function() {
                                 }
                             }
                         });
+
                         component = ct.down('#c');
                         expect(component.isHidden(true)).toBe(true);
                         ct.destroy();
@@ -1540,6 +1567,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible()).toBe(false);
                         ct.destroy();
@@ -1553,6 +1581,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible()).toBe(false);
                         ct.destroy();
@@ -1564,6 +1593,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible()).toBe(false);
                         ct.destroy();
@@ -1576,6 +1606,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible()).toBe(true);
                         ct.destroy();
@@ -1589,6 +1620,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible()).toBe(true);
                         ct.destroy();
@@ -1609,6 +1641,7 @@ function() {
                                 }
                             }
                         });
+
                         component = ct.down('#c');
                         expect(component.isVisible()).toBe(true);
                         ct.destroy();
@@ -1641,6 +1674,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible(false)).toBe(false);
                         ct.destroy();
@@ -1654,6 +1688,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible(false)).toBe(false);
                         ct.destroy();
@@ -1666,6 +1701,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible(false)).toBe(true);
                         ct.destroy();
@@ -1679,6 +1715,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible(false)).toBe(true);
                         ct.destroy();
@@ -1699,6 +1736,7 @@ function() {
                                 }
                             }
                         });
+
                         component = ct.down('#c');
                         expect(component.isVisible(false)).toBe(true);
                         ct.destroy();
@@ -1732,6 +1770,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible(true)).toBe(false);
                         ct.destroy();
@@ -1745,6 +1784,7 @@ function() {
                                 hidden: true
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible(true)).toBe(false);
                         ct.destroy();
@@ -1757,6 +1797,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible(true)).toBe(true);
                         ct.destroy();
@@ -1769,6 +1810,7 @@ function() {
                                 xtype: 'component'
                             }
                         });
+
                         component = ct.getItems().first();
                         expect(component.isVisible(true)).toBe(false);
                         ct.destroy();
@@ -1788,6 +1830,7 @@ function() {
                                 }
                             }
                         });
+
                         component = ct.down('#c');
                         expect(component.isVisible(true)).toBe(false);
                         ct.destroy();
@@ -1799,6 +1842,7 @@ function() {
 
     describe('modal positioned', function() {
         var ct;
+
         afterEach(function() {
             Ext.destroy(ct);
         });
@@ -2305,12 +2349,12 @@ function() {
         });
     });
 
-    describe('destroy', function () {
-        it("should fire the 'destroy' event", function () {
+    describe('destroy', function() {
+        it("should fire the 'destroy' event", function() {
             var cmp = makeComponent({}),
                 isFired;
 
-            cmp.on('destroy', function () {
+            cmp.on('destroy', function() {
                 isFired = true;
             });
             cmp.destroy();
@@ -2325,7 +2369,7 @@ function() {
                         duration: 5,
                         easing: 'ease-out'
                     },
-    
+
                     hideAnimation: {
                         type: 'slideOut',
                         duration: 5,
@@ -2336,26 +2380,27 @@ function() {
                     html: 'Test'
                 }),
                 showAnim, hideAnim;
-            
+
             showAnim = cmp.getShowAnimation();
             hideAnim = cmp.getHideAnimation();
 
             cmp.show();
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return !cmp.activeAnimation;
             });
 
-            runs(function () {
+            runs(function() {
                 cmp.hide();
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return !cmp.activeAnimation;
             });
 
-            runs(function () {
+            runs(function() {
                 var showAnimSpy = spyOn(showAnim, 'destroy').andCallThrough();
+
                 var hideAnimSpy = spyOn(hideAnim, 'destroy').andCallThrough();
 
                 cmp.destroy();
@@ -2481,7 +2526,8 @@ function() {
             extend: 'Ext.Component',
             fn1: Ext.emptyFn,
             fn2: Ext.emptyFn
-        }), ct;
+        }),
+ct;
 
         function makeCls(hidden, preventRender) {
             component = new Cls({
@@ -2610,6 +2656,7 @@ function() {
                         renderTo: Ext.getBody(),
                         hidden: true
                     });
+
                     makeCls(true);
                     spyOn(component, 'fn1');
 

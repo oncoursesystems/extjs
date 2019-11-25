@@ -47,8 +47,21 @@ Ext.define('KitchenSink.view.toolbar.BasicToolbar', {
         'neptune-touch': {
             width: 620
         },
-         graphite: {
+        graphite: {
             width: 800
+        },
+        'classic-material': {
+            width: 800,
+            pasteIconCls: 'pasteMaterial',
+            cutIconCls: 'cutMaterial',
+            copyIconCls: 'copyMaterial',
+            formatIconCls: 'formatMaterial',
+            listIconCls: 'listMaterial',
+            pasteGlyph: null,
+            cutGlyph: null,
+            copyGlyph: null,
+            formatGlyph: null,
+            listGlyph: null
         }
     },
     //</example>
@@ -64,36 +77,36 @@ Ext.define('KitchenSink.view.toolbar.BasicToolbar', {
         },
 
         items: [{
-            xtype:'splitbutton',
-            text:'Menu Button',
+            xtype: 'splitbutton',
+            text: 'Menu Button',
             iconCls: '${listIconCls}',
             glyph: '${listGlyph}',
-            menu:[{
-                text:'Menu Button 1'
+            menu: [{
+                text: 'Menu Button 1'
             }]
         }, {
-            xtype:'splitbutton',
-            text:'Cut',
+            xtype: 'splitbutton',
+            text: 'Cut',
             iconCls: '${cutIconCls}',
             glyph: '${cutGlyph}',
             menu: [{
-                text:'Cut Menu Item'
+                text: 'Cut Menu Item'
             }]
         }, {
             iconCls: '${copyIconCls}',
             glyph: '${copyGlyph}',
-            text:'Copy'
+            text: 'Copy'
         }, {
-            text:'Paste',
+            text: 'Paste',
             iconCls: '${pasteIconCls}',
             glyph: '${pasteGlyph}',
-            menu:[{
-                text:'Paste Menu Item'
+            menu: [{
+                text: 'Paste Menu Item'
             }]
         }, {
             iconCls: '${formatIconCls}',
             glyph: '${formatGlyph}',
-            text:'Format'
+            text: 'Format'
         }]
     }
 });

@@ -9,14 +9,14 @@ Ext.define('Ext.grid.header.DragZone', {
 
     constructor: function(headerCt) {
         var me = this;
-        
+
         me.headerCt = headerCt;
         me.ddGroup = me.getDDGroup();
         me.autoGroup = true;
         me.callParent([headerCt.el]);
         me.proxy.el.addCls(Ext.baseCSSPrefix + 'grid-col-dd');
     },
-    
+
     getDDGroup: function() {
         return 'header-dd-zone-' + this.headerCt.up('[scrollerOwner]').id;
     },
@@ -30,13 +30,13 @@ Ext.define('Ext.grid.header.DragZone', {
 
             if (header) {
                 headerCmp = Ext.getCmp(header.id);
-                
+
                 if (!this.headerCt.dragging && headerCmp.draggable &&
                     !(headerCmp.isAtStartEdge(e) || headerCmp.isAtEndEdge(e))) {
                     ddel = document.createElement('div');
                     ddel.role = 'presentation';
                     ddel.innerHTML = headerCmp.text;
-                    
+
                     return {
                         ddel: ddel,
                         header: headerCmp
@@ -44,7 +44,7 @@ Ext.define('Ext.grid.header.DragZone', {
                 }
             }
         }
-        
+
         return false;
     },
 
@@ -71,11 +71,11 @@ Ext.define('Ext.grid.header.DragZone', {
     getRepairXY: function() {
         return this.dragData.header.el.getXY();
     },
-    
+
     disable: function() {
         this.disabled = true;
     },
-    
+
     enable: function() {
         this.disabled = false;
     }

@@ -74,19 +74,19 @@ Ext.define('Ext.panel.Tool', {
      * `true` in this class to identify an object as an instantiated Tool, or subclass thereof.
      */
     isTool: true,
-    
+
     /**
      * @cfg baseCls
      * @inheritdoc
      */
     baseCls: Ext.baseCSSPrefix + 'tool',
-    
+
     /**
      * @cfg disabledCls
      * @inheritdoc
      */
     disabledCls: Ext.baseCSSPrefix + 'tool-disabled',
-    
+
     /**
      * @cfg
      * @private
@@ -272,25 +272,25 @@ Ext.define('Ext.panel.Tool', {
      * Specify as false to allow click event to propagate.
      */
     stopEvent: true,
-    
+
     /**
      * @property ariaRole
      * @inheritdoc
      */
     ariaRole: 'button',
-    
+
     /**
      * @property focusable
      * @inheritdoc
      */
     focusable: true,
-    
+
     /**
      * @cfg tabIndex
      * @inheritdoc
      */
     tabIndex: 0,
-    
+
     /**
      * @cfg keyMap
      * @inheritdoc
@@ -378,7 +378,7 @@ Ext.define('Ext.panel.Tool', {
 
         return data;
     },
-    
+
     calculateClassName: function() {
         var me = this,
             result = me.baseCls + '-tool-el ';
@@ -456,7 +456,7 @@ Ext.define('Ext.panel.Tool', {
                 attr = me.tipAttrs[type || oldType] || 'title';
                 el.dom.setAttribute(attr, tooltip);
             }
-            
+
             if (attr !== 'title' && me.ariaRole && me.ariaRole !== 'presentation') {
                 if (el) {
                     el.dom.setAttribute('aria-label', tooltip);
@@ -606,14 +606,14 @@ Ext.define('Ext.panel.Tool', {
             if (me.stopEvent !== false) {
                 e.stopEvent();
             }
-            
+
             if (me.handler) {
                 Ext.callback(me.handler, me.scope, [e, target, me.ownerCt, me], 0, me);
             }
             else if (me.callback) {
                 Ext.callback(me.callback, me.scope, [me.toolOwner || me.ownerCt, me, e], 0, me);
             }
-            
+
             // The handler could have destroyed the owner, and the Tool instance as well.
             // This is what happens with Close tools in Panels.
             if (me.destroyed) {
@@ -647,7 +647,7 @@ Ext.define('Ext.panel.Tool', {
             // This is consistent with tool behavior in versions prior to 5.5 where
             // tools were pointer-interactive only.
             e.preventDefault();
-            
+
             if (this.disabled) {
                 return false;
             }

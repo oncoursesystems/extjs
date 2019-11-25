@@ -28,6 +28,32 @@ Ext.define('Ext.plugin.Abstract', {
     isPlugin: true,
 
     /**
+     * @cfg {String} id
+     * An identifier for the plugin that can be set at creation time to later retrieve the
+     * plugin using the {@link #getPlugin getPlugin} method. For example:
+     *
+     *      var panel = Ext.create({
+     *          xtype: 'panel',
+     *
+     *          plugins: {
+     *              foobar: {
+     *                  id: 'foo',
+     *                  ...
+     *              }
+     *          }
+     *      });
+     *
+     *      // later on:
+     *      var plugin = panel.getPlugin('foo');
+     * @since 6.2.0
+     */
+
+    /**
+     * @cfg {String} pluginId
+     * @deprecated 6.2.0 Use `id` instead
+     */
+
+    /**
      * Initializes the plugin.
      * @param {Object} [config] Configuration object.
      */
@@ -38,6 +64,37 @@ Ext.define('Ext.plugin.Abstract', {
             this.initConfig(config);
         }
     },
+
+    /**
+     * @method init
+     * The init method is invoked to formally associate the host component and the plugin.
+     *
+     * Subclasses should perform initialization and set up any requires links between the
+     * plugin and its host Component in their own implementation of this method.
+     * @param {Ext.Component} host The host Component which owns this plugin.
+     */
+    init: Ext.emptyFn,
+
+    /**
+     * The destroy method is invoked by the owning Component at the time the Component is
+     * being destroyed.
+     */
+    destroy: function() {
+        var me = this;
+
+        me.destroy = Ext.emptyFn;
+        me.destroying = true;
+        me.cmp = me.pluginConfig = null;
+
+        me.doDestroy();
+
+        me.callParent();
+
+        // This just makes it hard to ask "was destroy() called?":
+        // me.destroying = false; // removed in 7.0
+    },
+
+    doDestroy: Ext.emptyFn,
 
     /**
      * Creates clone of the plugin.
@@ -74,54 +131,6 @@ Ext.define('Ext.plugin.Abstract', {
 
     getStatefulOwner: function() {
         return [this.cmp, 'plugins'];
-    },
-
-    /**
-     * @cfg {String} id
-     * An identifier for the plugin that can be set at creation time to later retrieve the
-     * plugin using the {@link #getPlugin getPlugin} method. For example:
-     *
-     *      var panel = Ext.create({
-     *          xtype: 'panel',
-     *
-     *          plugins: {
-     *              foobar: {
-     *                  id: 'foo',
-     *                  ...
-     *              }
-     *          }
-     *      });
-     *
-     *      // later on:
-     *      var plugin = panel.getPlugin('foo');
-     * @since 6.2.0
-     */
-
-    /**
-     * @cfg {String} pluginId
-     * @deprecated 6.2.0 Use `id` instead
-     */
-
-    /**
-     * @method init
-     * The init method is invoked to formally associate the host component and the plugin.
-     *
-     * Subclasses should perform initialization and set up any requires links between the
-     * plugin and its host Component in their own implementation of this method.
-     * @param {Ext.Component} host The host Component which owns this plugin.
-     */
-    init: Ext.emptyFn,
-
-    /**
-     * @method destroy
-     *
-     * The destroy method is invoked by the owning Component at the time the Component is
-     * being destroyed.
-     */
-    destroy: function() {
-        this.cmp = this.pluginConfig = null;
-
-        this.callParent();
     },
 
     onClassExtended: function(cls, data, hooks) {
@@ -196,7 +205,7 @@ Ext.define('Ext.plugin.Abstract', {
                             plugins.push(entry);
                         }
 
-                        plugins.sort(Ext.weightSortFn);
+                        Ext.sortByWeight(plugins);
                     }
                 }
                 //<debug>

@@ -34,7 +34,7 @@ Ext.define('Ext.fx.target.ElementCSS', {
                     cssArr.attrs.push(attr.replace(/[A-Z]/g, function(v) {
                         return '-' + v.toLowerCase();
                     }));
-                    
+
                     cssArr.duration.push(duration + 'ms');
                     cssArr.easing.push(easing);
                 }
@@ -53,22 +53,22 @@ Ext.define('Ext.fx.target.ElementCSS', {
 
                 for (j = 0; j < ln2; j++) {
                     o = attrs[attr][j];
-                    
+
                     o[0].setStyle(
                         Ext.supports.CSS3Prefix + 'TransitionProperty',
                         isFirstFrame ? '' : attributes
                     );
-                    
+
                     o[0].setStyle(
                         Ext.supports.CSS3Prefix + 'TransitionDuration',
                         isFirstFrame ? '' : duration
                     );
-                    
+
                     o[0].setStyle(
                         Ext.supports.CSS3Prefix + 'TransitionTimingFunction',
                         isFirstFrame ? '' : easing
                     );
-                    
+
                     o[0].setStyle(attr, o[1]);
 
                     // Must trigger reflow to make this get used as the start point

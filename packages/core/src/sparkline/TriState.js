@@ -21,31 +21,31 @@ Ext.define('Ext.sparkline.TriState', {
          * The pixel width of each bar.
          */
         barWidth: 4,
-        
+
         /**
          * @cfg {Number} barSpacing
          * The pixel spacing between each bar.
          */
         barSpacing: 1,
-        
+
         /**
          * @cfg {String} posBarColor
          * The color for positive value bars.
          */
         posBarColor: '#6f6',
-        
+
         /**
          * @cfg {String} negBarColor
          * The color for negative value bars.
          */
         negBarColor: '#f44',
-        
+
         /**
          * @cfg {String} zeroBarColor
          * The color for zero value bars.
          */
         zeroBarColor: '#999',
-        
+
         /**
          * @cfg {Object} colorMap
          * An object that uses range specifiers as keys to

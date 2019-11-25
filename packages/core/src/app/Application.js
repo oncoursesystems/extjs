@@ -193,7 +193,6 @@ Ext.define('Ext.app.Application', {
      */
     // NOTE - this config has to be processed by Ext.application
 
-
     config: {
         /**
          * @cfg {String} name
@@ -349,7 +348,7 @@ Ext.define('Ext.app.Application', {
                     data.__handleRequires.call(this, requires, Ext.bind(function() {
                         return onBeforeClassCreated.apply(this, args);
                     }, this));
-                    
+
                     return;
                 }
                 //</debug>
@@ -545,9 +544,9 @@ Ext.define('Ext.app.Application', {
         if (!History.ready) {
             History.init();
         }
-        
+
         token = History.getToken();
-        
+
         if (token || token === defaultToken) {
             Ext.route.Router.onStateChange(token);
         }
@@ -618,7 +617,7 @@ Ext.define('Ext.app.Application', {
         if (typeof controller === 'string') {
             controller = this.getController(controller, true);
         }
-        
+
         Ext.destroy(controller);
     },
 
@@ -642,14 +641,14 @@ Ext.define('Ext.app.Application', {
         // over the existing controllers and find it by classname
         if (!controller) {
             all = controllers.items;
-            
+
             for (i = 0, len = all.length; i < len; ++i) {
                 c = all[i];
                 className = c.getModuleClassName();
-                
+
                 if (className && className === name) {
                     controller = c;
-                    
+
                     break;
                 }
             }

@@ -28,7 +28,65 @@ Ext.define('Ext.panel.TimeView', {
          * @private
          * Default mode for Time Panel. values can be 'hour' or 'minute'
          */
-        mode: 'hour'
+        mode: 'hour',
+
+        /**
+         * @cfg {Boolean} meridiem
+         * Default to true for 12 hour format for Time Panel else 24 hour format.
+         * @since 7.0
+         */
+        meridiem: true,
+
+        /**
+         * @cfg {Boolean} alignPMInside
+         * Default false
+         * @since 7.0
+         */
+        alignPMInside: false,
+
+        /**
+         * @cfg {string} hourDisplayFormat
+         * Accepted values are `G` or `H`
+         * Default G
+         * See {@link Ext.Date} for details. 
+         * @since 7.0
+         */
+        hourDisplayFormat: 'G'
+    },
+
+    /*
+     * Redraw the timeview on @cfg meridiem update
+     */
+    updateMeridiem: function() {
+        this.updateTimeView();
+    },
+
+    /*
+     * Redraw the timeview on @cfg alignPMInside update
+     */
+    updateAlignPMInside: function() {
+        this.updateTimeView();
+    },
+
+    /*
+     * Redraw the timeview on @cfg hourDisplayFormat update
+     */
+    updateHourDisplayFormat: function() {
+        this.updateTimeView();
+    },
+
+    /*
+     * Update / redraw the component 
+     */
+    updateTimeView: function() {
+        var me = this;
+
+        if (me.isConfiguring) {
+            return;
+        }
+
+        me.layoutFace();
+        me.updateValue();
     },
 
     platformConfig: {
@@ -39,6 +97,8 @@ Ext.define('Ext.panel.TimeView', {
 
     classCls: Ext.baseCSSPrefix + 'analogtime',
     dotIndicatorCls: Ext.baseCSSPrefix + 'analog-picker-dot-indicator',
+    hour12Cls: Ext.baseCSSPrefix + 'analog-picker-12hr-format',
+    hour24Cls: Ext.baseCSSPrefix + 'analog-picker-24hr-format',
 
     /**
      * @property animationTimeDelay
@@ -63,7 +123,7 @@ Ext.define('Ext.panel.TimeView', {
      */
     MAX_MINUTES: (24 * 60) + 59,
 
-    getTemplate: function () {
+    getTemplate: function() {
         var template = this.callParent(),
             child = template[0].children[0];
 
@@ -90,7 +150,7 @@ Ext.define('Ext.panel.TimeView', {
         return template;
     },
 
-    activateHours: function (value, options) {
+    activateHours: function(value, options) {
         var me = this,
             header = me.getHeader(),
             am = this.getAm(),
@@ -99,13 +159,18 @@ Ext.define('Ext.panel.TimeView', {
             hours = me.getHours();
 
         me.setMode('hour');
-        value = value != null ? value : (hours >= 12 ? hours - 12 : hours) + (!am ? 12 : 0);
+
+        if (value == null) {
+            value = hours > 11 ? hours - 12 : hours;
+            value += am ? 0 : 12;
+        }
+
         hoursEl.addCls('active');
         minutesEl.removeCls('active');
         me.setHours(value, options);
     },
 
-    activateMinutes: function (value, options) {
+    activateMinutes: function(value, options) {
         var me = this,
             header = me.getHeader(),
             hoursEl = header.hoursEl,
@@ -118,7 +183,7 @@ Ext.define('Ext.panel.TimeView', {
         me.setMinutes(value, options);
     },
 
-    applyValue: function (value) {
+    applyValue: function(value) {
         var now;
 
         if (Ext.isDate(value)) {
@@ -133,16 +198,19 @@ Ext.define('Ext.panel.TimeView', {
         return value;
     },
 
-    getAngleFromTime: function (time, type) {
-        var isMinute = type !== 'hour',
-            total = isMinute ? 60 : 12,
+    getAngleFromTime: function(time, type) {
+        var me = this,
+            isMinute = type !== 'hour',
+            isMeridiem = me.getMeridiem(),
+            alignPMInside = me.getAlignPMInside(),
+            total = isMinute ? 60 : (isMeridiem || alignPMInside) ? 12 : 24,
             anglePerItem = 360 / total,
-            initialRotation = isMinute ? (anglePerItem * 15) : (anglePerItem * 3);
+            initialRotation = me.getIntialRotation(type, anglePerItem);
 
         return (time * (anglePerItem)) - initialRotation;
     },
 
-    getCenter: function () {
+    getCenter: function() {
         var me = this,
             center, size;
 
@@ -156,37 +224,52 @@ Ext.define('Ext.panel.TimeView', {
         return me._center;
     },
 
-    getTimeFromAngle: function (angle) {
+    /**
+     * Method to get Time value based on the angle of the needle
+     * @param {Number} angle angle of needle
+     * @param {Number} radius radius of analog clock
+     * @return {Number} returns number value of Time from angle of clock needle
+     */
+    getTimeFromAngle: function(angle, radius) {
         var me = this,
             mode = me.getMode(),
             isMinute = mode !== 'hour',
-            total = isMinute ? 60 : 12,
+            isMeridiem = me.getMeridiem(),
+            alignPMInside = me.getAlignPMInside(),
+            total = isMinute ? 60 : (isMeridiem || alignPMInside) ? 12 : 24,
             anglePerItem = 360 / total,
-            initialRotation = isMinute ? (anglePerItem * 15) : (anglePerItem * 3);
+            initialRotation = me.getIntialRotation(mode, anglePerItem),
+            returnVal;
 
-        angle = anglePerItem * Math.round(angle / anglePerItem);
-        angle += initialRotation;
+        angle = (anglePerItem * Math.round(angle / anglePerItem)) + initialRotation;
 
         if (angle >= 360) {
             angle -= 360;
         }
 
-        if (!isMinute && angle === 0) {
-            return total;
+        if (angle === 0 && !isMinute) {
+            returnVal = total;
         }
         else {
-            return angle / anglePerItem;
+            returnVal = angle / anglePerItem;
         }
+
+        if (!isMinute && !isMeridiem &&
+            (radius && (radius < 75)) && alignPMInside) {
+            returnVal += 12;
+        }
+
+        return returnVal;
     },
 
-    getElementByValue: function (value) {
+    getElementByValue: function(value) {
         var me = this,
-            mode = this.getMode();
+            mode = me.getMode();
 
         value = parseInt(value);
 
         if (mode === 'hour' && value === 0) {
-            value = 12;
+            value = me.getMeridiem() ? 12 : 24;
         }
 
         if (!me.itemValueMap) {
@@ -196,13 +279,13 @@ Ext.define('Ext.panel.TimeView', {
         return me.itemValueMap[value];
     },
 
-    getHours: function () {
+    getHours: function() {
         var value = this.getValue();
 
         return Math.floor(value / 60);
     },
 
-    getMinutes: function () {
+    getMinutes: function() {
         var me = this,
             value = me.getValue(),
             hour = me.getHours();
@@ -210,28 +293,42 @@ Ext.define('Ext.panel.TimeView', {
         return value != null ? value - (hour * 60) : 0;
     },
 
-    getAm: function () {
+    getAm: function() {
         var value = this.getValue(),
             hour = Math.floor(value / 60);
+
+        if (hour === 24) {
+            hour = 0;
+        }
 
         return hour < 12;
     },
 
-    layoutFace: function () {
-        if (!this.rendered) {
+    /**
+     * Method to update / draw the inner clock or Analog clock
+     */
+    layoutFace: function() {
+        var me = this,
+            parent, mode, face, pickerWidth, isMinute, type,
+            padding, outerTrackWidth, total, i, item, itemText, rot, alignPMInside,
+            translateX, styleStr, hourDisplayFormat, text;
+
+        if (!me.rendered) {
             return;
         }
 
-        var me = this,
-            parent = me.getParent(),
-            mode = me.getMode(),
-            face = me.faceEl,
-            pickerWidth = face.measure('w'),
-            isMinute = mode === 'minute',
-            type = isMinute ? 'minute' : 'hour',
-            padding = 50,
-            total = isMinute ? 60 : 12,
-            i, item, itemText, rot;
+        parent = me.getParent();
+        mode = me.getMode();
+        face = me.faceEl;
+        pickerWidth = face.measure('w');
+        isMinute = mode === 'minute';
+        type = isMinute ? 'minute' : 'hour';
+        padding = 50;
+        outerTrackWidth = 70;
+        total = isMinute ? 60 : me.getMeridiem() ? 12 : 24;
+        alignPMInside = me.getAlignPMInside();
+        styleStr = 'rotate({0}deg) translateX({1}px) rotate({2}deg)';
+        hourDisplayFormat = me.getHourDisplayFormat();
 
         face.setHtml('');
         me.itemValueMap = {};
@@ -240,9 +337,11 @@ Ext.define('Ext.panel.TimeView', {
             item = Ext.Element.create();
             rot = me.getAngleFromTime(i, type);
             itemText = i;
+            translateX = (pickerWidth - padding) / 2;
 
             if (isMinute) {
                 itemText = i;
+
                 if (i % 5 !== 0) {
                     item.setStyle('opacity', 0);
                 }
@@ -250,20 +349,36 @@ Ext.define('Ext.panel.TimeView', {
                 if (i === 60) {
                     itemText = '0';
                 }
+
                 item.addCls('minute-picker-el');
             }
             else {
                 item.addCls('hour-picker-el');
+
+                // Increasing font-size when config alignPMInside is set true
+                item.toggleCls('align-pm-inside', alignPMInside);
+
+                // translateX for item if 24hours format is set true
+                if (i > 12 && alignPMInside) {
+                    translateX = (pickerWidth - padding - outerTrackWidth) / 2;
+                    item.addCls('inner-track');
+                }
             }
 
+            item.setStyle('transform', Ext.String.format(styleStr, rot, translateX, -rot));
             item.type = type;
             item.value = parseInt(itemText);
             item.rotation = rot;
-            item.setText(isMinute ? Ext.String.leftPad(itemText, 2, '0') : itemText);
+
+            if (isMinute) {
+                text = Ext.String.leftPad(itemText, 2, '0');
+            }
+            else {
+                text = Ext.Date.format(new Date(new Date().setHours(itemText)), hourDisplayFormat);
+            }
+
             me.itemValueMap[item.value] = item;
-
-            item.setStyle('transform', 'rotate(' + rot + 'deg) translateX(' + ((pickerWidth - padding) / 2) + 'px) rotate(' + (-rot) + 'deg)');
-
+            item.setText(text);
             face.appendChild(item);
         }
 
@@ -273,7 +388,7 @@ Ext.define('Ext.panel.TimeView', {
         }
     },
 
-    onConfirm: function (e) {
+    onConfirm: function(e) {
         var me = this;
 
         me.updateField();
@@ -281,7 +396,7 @@ Ext.define('Ext.panel.TimeView', {
         Ext.callback(me.getConfirmHandler(), me.getScope(), [me, e], 0, me);
     },
 
-    onDecline: function (e) {
+    onDecline: function(e) {
         var me = this;
 
         me.collapsePanel();
@@ -289,23 +404,22 @@ Ext.define('Ext.panel.TimeView', {
         Ext.callback(me.getDeclineHandler(), me.getScope(), [me, e], 0, me);
     },
 
-    onFaceElementClick: function (target, options) {
+    onFaceElementClick: function(target, options) {
+        var me = this,
+            value, type;
+
         target = Ext.fly(target);
 
         if (!target) {
             return;
         }
 
-        var me = this,
-            am = me.getAm(),
-            value = target.value,
-            type = target.type;
+        value = target.value;
+        type = target.type;
 
         if (type) {
             if (type === 'hour') {
-                value = am ? value : value + 12;
-                value = (am && value === 12) ? 0 : value;
-                me.setHours(value, options);
+                me.syncHours(value, options);
             }
             else {
                 me.setMinutes(value, options);
@@ -324,7 +438,7 @@ Ext.define('Ext.panel.TimeView', {
         }
     },
 
-    onFaceMouseDown: function (e) {
+    onFaceMouseDown: function(e) {
         var me = this;
 
         if (!me.dragging) {
@@ -335,7 +449,7 @@ Ext.define('Ext.panel.TimeView', {
         }
     },
 
-    onFaceMouseUp: function (e) {
+    onFaceMouseUp: function(e) {
         var me = this,
             target;
 
@@ -352,20 +466,19 @@ Ext.define('Ext.panel.TimeView', {
         me.onFaceElementClick(target);
     },
 
-    onHoursClick: function () {
+    onHoursClick: function() {
         this.activateHours(null, {
             animate: true
         });
     },
 
-    onMouseMove: function (e) {
+    onMouseMove: function(e) {
         var me = this,
             options = {
                 disableAnimation: true
             },
             mode = me.getMode(),
-            am = me.getAm(),
-            angle, center, point, x, y, value;
+            angle, center, point, x, y, value, radius;
 
         if (me.dragging) {
             center = me.getCenter();
@@ -374,57 +487,71 @@ Ext.define('Ext.panel.TimeView', {
             y = point[1] - center[1];
             angle = Math.atan2(y, x);
             angle = angle * (180 / Math.PI);
+            radius = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 
             if (y < 0) {
                 angle += 360;
             }
 
-            value = me.getTimeFromAngle(angle);
+            value = me.getAlignPMInside()
+                ? me.getTimeFromAngle(angle, radius)
+                : me.getTimeFromAngle(angle);
 
             if (mode === 'hour') {
-                value = am ? value : value + 12;
-                value = (am && value === 12) ? 0 : value;
-                me.setHours(value, options);
-            } else {
+                me.syncHours(value, options);
+            }
+            else {
                 me.setMinutes(value, options);
             }
         }
     },
 
-    onAmClick: function () {
+    onAmClick: function() {
         this.setAm(true);
     },
 
-    onMinutesClick: function () {
+    onMinutesClick: function() {
         this.activateMinutes(null, {
             animate: true
         });
     },
 
-    onOrientationChange: function () {
+    onOrientationChange: function() {
         this.setVerticalByOrientation();
     },
 
-    onPainted: function () {
+    onPainted: function() {
         var me = this;
 
         me.layoutFace();
-        me.updateValue(me.getValue());
+        me.updateValue();
         me.activateHours();
     },
 
-    onPmClick: function () {
+    onPmClick: function() {
         this.setAm(false);
     },
 
-    setAm: function (value) {
+    setAm: function(value) {
         var me = this,
             current = me.getAm(),
             hours = me.getHours(),
             header = me.getHeader(),
             amEl = header.amEl,
             pmEl = header.pmEl,
-            el = value ? amEl : pmEl;
+            el = value ? amEl : pmEl,
+            hour12Cls = me.hour12Cls,
+            hour24Cls = me.hour24Cls;
+
+        // to make AM & PM hide and show based on hourFormat config
+        if (me.getMeridiem()) {
+            amEl.replaceCls(hour24Cls, hour12Cls);
+            pmEl.replaceCls(hour24Cls, hour12Cls);
+        }
+        else {
+            amEl.replaceCls(hour12Cls, hour24Cls);
+            pmEl.replaceCls(hour12Cls, hour24Cls);
+        }
 
         if (!me.hasSetAm || current !== value) {
             amEl.removeCls('active');
@@ -438,16 +565,30 @@ Ext.define('Ext.panel.TimeView', {
         }
     },
 
-    setClockHand: function (options) {
+    setClockHand: function(options) {
         var me = this,
             isMinute = options.type === 'minute',
             currentMode = me.getMode(),
             mode = isMinute ? 'minute' : 'hour',
-            value = !isMinute && options.value > 12 ? options.value - 12 : options.value,
-            rotation = me.getAngleFromTime(value, options.type),
+            isMeridiem = me.getMeridiem(),
+            alignPMInside = me.getAlignPMInside(),
+            hourValue = isMeridiem
+                ? me.convert24to12Hours(options.value)
+                : options.value,
             analogPickerEl = me.analogPickerEl,
             handEl = me.handEl,
-            el;
+            el = me.getElementByValue(hourValue),
+            is24Hours = (!isMinute && !isMeridiem),
+            value, rotation;
+
+        if (!isMinute && isMeridiem) {
+            value = me.convert24to12Hours(options.value);
+        }
+        else {
+            value = options.value;
+        }
+
+        rotation = me.getAngleFromTime(value, options.type);
 
         analogPickerEl.removeCls(['animated', 'animated-delayed']);
         analogPickerEl.toggleCls(me.dotIndicatorCls, isMinute && value % 5 !== 0);
@@ -456,7 +597,9 @@ Ext.define('Ext.panel.TimeView', {
             this.setMode(isMinute ? 'minute' : 'hour');
         }
 
-        el = me.getElementByValue(value);
+        if (isMinute) {
+            el = me.getElementByValue(value);
+        }
 
         if (el && (!me.activeElement || me.activeElement !== el)) {
             if (me.activeElement) {
@@ -467,43 +610,71 @@ Ext.define('Ext.panel.TimeView', {
 
             if (options.disableAnimation) {
                 el.addCls('active');
-            } else {
+            }
+            else {
                 // We delay here so the time changes color
                 // after the hand rotation animation
-                Ext.defer(function () {
+                Ext.defer(function() {
                     el.addCls('active');
                 }, me.animationTimeDelay);
             }
         }
 
         if (handEl.rotation !== rotation) {
-            analogPickerEl.toggleCls('animated' + (options.delayed ? '-delayed' : ''), !!options.animate);
+            analogPickerEl.toggleCls(
+                'animated' + (options.delayed ? '-delayed' : ''), !!options.animate);
             handEl.setStyle('transform', 'rotate(' + rotation + 'deg)');
             handEl.rotation = rotation;
         }
+
+        // Including class for handEl based on configs
+        if (is24Hours && !alignPMInside) {
+            handEl.addCls('format-24hr');
+        }
+        else {
+            handEl.removeCls('format-24hr');
+        }
+
+        // To update the handEl to switch between outer track and inner track
+        // show handEl inside when alignPMInside is true & hour is from 13,14..22,23, 0 
+        if (is24Hours && alignPMInside && (options.value === 0 || options.value > 12)) {
+            handEl.addCls('inner-dial');
+        }
+        else {
+            // show handEl outside when alignPMInside is true & hour is from 1,2,3,...12
+            handEl.removeCls('inner-dial');
+        }
     },
 
-    setHours: function (value, options) {
+    setHours: function(value, options) {
         var me = this,
             header = me.getHeader(),
             mode = me.getMode(),
             minutes = me.getMinutes(),
-            displayValue = value > 12 ? value - 12 : value;
+            isMeridiem = me.getMeridiem(),
+            displayValue = isMeridiem ? me.convert24to12Hours(value) : value;
 
-        displayValue = displayValue === 0 ? 12 : displayValue;
+        if (isMeridiem && displayValue === 0) {
+            displayValue = 12;
+        }
+        else if (!isMeridiem && displayValue === 24) {
+            displayValue = 0;
+        }
+
         header.hoursEl.setText(displayValue);
 
         if (mode === 'hour') {
             me.setClockHand(Ext.apply({
                 value: value,
-                type: 'hour'
+                type: 'hour',
+                'meridiem': me.getMeridiem()
             }, options));
         }
 
         me.setValue((value * 60) + minutes);
     },
 
-    setMinutes: function (value, options) {
+    setMinutes: function(value, options) {
         var me = this,
             header = me.getHeader(),
             mode = me.getMode(),
@@ -521,7 +692,7 @@ Ext.define('Ext.panel.TimeView', {
         me.setValue((hours * 60) + value);
     },
 
-    setTime: function (hour, minute, am) {
+    setTime: function(hour, minute, am) {
         var me = this;
 
         me.setHours(hour);
@@ -529,7 +700,7 @@ Ext.define('Ext.panel.TimeView', {
         me.setAm(am);
     },
 
-    startDrag: function () {
+    startDrag: function() {
         var me = this;
 
         me.el.on({
@@ -540,7 +711,7 @@ Ext.define('Ext.panel.TimeView', {
         me.dragging = true;
     },
 
-    stopDrag: function () {
+    stopDrag: function() {
         var me = this;
 
         me.el.un({
@@ -552,15 +723,15 @@ Ext.define('Ext.panel.TimeView', {
         me.dragging = false;
     },
 
-    updateConfirmable: function (confirmable) {
+    updateConfirmable: function(confirmable) {
         this.setButtons(confirmable && this.getDefaultButtons());
     },
 
-    updateMode: function () {
+    updateMode: function() {
         this.layoutFace();
     },
 
-    updateValue: function () {
+    updateValue: function() {
         var me = this,
             hour = me.getHours(),
             minutes = me.getMinutes(),
@@ -574,7 +745,7 @@ Ext.define('Ext.panel.TimeView', {
         }
     },
 
-    updateField: function () {
+    updateField: function() {
         var me = this,
             hour = me.getHours(),
             minutes = me.getMinutes(),
@@ -586,15 +757,15 @@ Ext.define('Ext.panel.TimeView', {
         me.fireEvent('select', me.parent, newValue);
     },
 
-    collapsePanel: function () {
+    collapsePanel: function() {
         this.fireEvent('collapsePanel', this);
     },
 
-    setVerticalByOrientation: function () {
+    setVerticalByOrientation: function() {
         this.updateVertical('auto');
     },
 
-    updateVertical: function (vertical) {
+    updateVertical: function(vertical) {
         var me = this,
             viewport = Ext.Viewport;
 
@@ -603,7 +774,8 @@ Ext.define('Ext.panel.TimeView', {
                 vertical = viewport.getOrientation() === viewport.PORTRAIT;
 
                 viewport.on('orientationchange', 'onOrientationChange', me);
-            } else {
+            }
+            else {
                 viewport.un('orientationchange', 'onOrientationChange', me);
             }
         }
@@ -614,7 +786,7 @@ Ext.define('Ext.panel.TimeView', {
         me.layoutFace();
     },
 
-    doDestroy: function () {
+    doDestroy: function() {
         var viewport = Ext.Viewport;
 
         if (viewport) {
@@ -622,5 +794,55 @@ Ext.define('Ext.panel.TimeView', {
         }
 
         this.callParent();
+    },
+
+    /*
+     * Method to convert 24 to 12 hour
+     * @param {Number} hour
+     * @return {Number} returns format hour value
+     */
+    convert24to12Hours: function(hour) {
+        return hour > 12 ? (hour - 12) : hour;
+    },
+
+    /*
+     * Get intial rotation of analog clock     
+     * @param {string} type of clock minute or hour
+     * @param {Number} angle of each number of analog clock
+     * @return {Number} returns angle
+     */
+    getIntialRotation: function(type, anglePerItem) {
+        var me = this,
+            isMinute = type !== 'hour',
+            isMeridiem = me.getMeridiem(),
+            alignPMInside = me.getAlignPMInside(),
+            angleCount = isMinute ? 15 : isMeridiem ? 3 : (alignPMInside ? 3 : 6);
+
+        return anglePerItem * angleCount;
+    },
+
+    /*
+     * Get intial value of time and call setHours
+     * @param {Number} value of time set
+     * @param {Object} 
+     */
+    syncHours: function(value, options) {
+        var me = this,
+            hasMeridiem = me.getMeridiem(),
+            am = me.getAm();
+
+        if (hasMeridiem) {
+            if (!am && value !== 12) {
+                value = value + 12;
+            }
+            else if (am && value === 12) {
+                value = 0;
+            }
+        }
+        else if (value === 24) {
+            value = 0;
+        }
+
+        me.setHours(value, options);
     }
 });

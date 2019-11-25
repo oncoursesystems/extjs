@@ -90,7 +90,7 @@ Ext.define('Ext.util.FilterCollection', {
                 len--;
             }
         }
-        
+
         return len;
     },
 
@@ -119,11 +119,11 @@ Ext.define('Ext.util.FilterCollection', {
             // this case we create an instance of Ext.util.Filter passing the config.
             else {
                 // Finally we get to the point where it has to be invalid
-                // <debug>
+                //<debug>
                 if (!Ext.isObject(filter)) {
                     Ext.raise('Invalid filter specified: ' + filter);
                 }
-                // </debug>
+                //</debug>
 
                 filterConfig = Ext.apply(filterConfig, filter);
 
@@ -131,7 +131,7 @@ Ext.define('Ext.util.FilterCollection', {
                     filterConfig.filterFn = filterConfig.fn;
                     delete filterConfig.fn;
                 }
-                
+
                 if (Ext.util.Filter.isInvalid(filterConfig)) {
                     return false;
                 }

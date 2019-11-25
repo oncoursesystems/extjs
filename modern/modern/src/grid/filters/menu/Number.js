@@ -112,7 +112,6 @@ Ext.define('Ext.grid.filters.menu.Number', {
         items: {
             lt: {
                 xtype: 'numberfield',
-                // iconCls: 'fi-arrow-left', TODO
                 label: 'Less than',
                 placeholder: 'Less than...',
                 floatedPickerAlign: 'tl-tr?',
@@ -124,7 +123,6 @@ Ext.define('Ext.grid.filters.menu.Number', {
             },
             gt: {
                 xtype: 'numberfield',
-                // iconCls: 'fi-arrow-right', TODO
                 label: 'Greater than',
                 placeholder: 'Greater than...',
                 floatedPickerAlign: 'tl-tr?',
@@ -136,7 +134,6 @@ Ext.define('Ext.grid.filters.menu.Number', {
             },
             eq: {
                 xtype: 'numberfield',
-                // iconCls: 'fi-equal', TODO ?
                 label: 'Equal to',
                 placeholder: 'Equal to...',
                 floatedPickerAlign: 'tl-tr?',

@@ -689,7 +689,7 @@ Ext.define('Ext.route.Route', {
                 var type = typeMatch && types[typeMatch],
                     matcher = conditions[param] || type || defaultMatcher;
 
-                // <debug>
+                //<debug>
                 if (params[param]) {
                     Ext.raise('"' + param + '" already defined in route "' + url + '"');
                 }
@@ -697,7 +697,7 @@ Ext.define('Ext.route.Route', {
                 if (typeMatch && !type) {
                     Ext.raise('Unknown parameter type "' + typeMatch + '" in route "' + url + '"');
                 }
-                // </debug>
+                //</debug>
 
                 if (Ext.isObject(matcher)) {
                     matcher = matcher.re;
@@ -711,12 +711,12 @@ Ext.define('Ext.route.Route', {
                 return matcher;
             });
 
-        // <debug>
+        //<debug>
         if (re.search(me.paramMatchingRegex) !== -1) {
             Ext.raise('URL parameter mismatch. Positional url parameter found ' +
                       'while in named mode.');
         }
-        // </debug>
+        //</debug>
 
         me.paramsInMatchString = params;
         me.matcherRegex = new RegExp('^' + re + '$', me.getCaseInsensitive() ? 'i' : '');

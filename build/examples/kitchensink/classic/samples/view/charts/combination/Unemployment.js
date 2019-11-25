@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.charts.combination.Unemployment', {
 
     layout: 'absolute',
     width: 990,
-    // <example>
+    //<example>
     otherContent: [{
         type: 'Controller',
         path: 'classic/samples/view/charts/combination/UnemploymentController.js'
@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.charts.combination.Unemployment', {
         type: 'Sprite',
         path: 'classic/samples/view/charts/combination/ArcText.js'
     }],
-    // </example>
+    //</example>
 
     items: [
         {

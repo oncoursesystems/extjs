@@ -21,14 +21,14 @@
 Ext.define('Ext.grid.header.Container', {
     extend: 'Ext.container.Container',
     alias: 'widget.headercontainer',
-    
+
     requires: [
         'Ext.grid.ColumnLayout',
         'Ext.grid.plugin.HeaderResizer',
         'Ext.grid.plugin.HeaderReorderer',
         'Ext.util.KeyNav'
     ],
-    
+
     uses: [
         'Ext.grid.column.Column',
         'Ext.grid.ColumnManager',
@@ -121,7 +121,7 @@ Ext.define('Ext.grid.header.Container', {
 
     // May be set to false by a SptreadSheetSelectionModel
     sortOnClick: true,
-    
+
     // Disable FocusableContainer behavior by default, since we only want it
     // to be enabled for the root header container (we'll set the flag in initComponent)
     focusableContainer: false,
@@ -527,11 +527,11 @@ Ext.define('Ext.grid.header.Container', {
                     }
                 }
             }
-            
+
             targetCmp.focus();
         }
     },
-    
+
     onHeaderCtMouseOver: function(e, t) {
         var headerEl,
             header,
@@ -629,9 +629,9 @@ Ext.define('Ext.grid.header.Container', {
 
         Ext.unasap(me.unblockTimer);
         me.menuTask.cancel();
-        
+
         Ext.destroy(me.visibleColumnManager, me.columnManager, me.menu);
-        
+
         me.callParent();
     },
 
@@ -748,16 +748,16 @@ Ext.define('Ext.grid.header.Container', {
 
             //<debug>
             , stateId = c.getStateId(); // eslint-disable-line comma-style
-        
+
         if (stateId != null) {
             if (!me._usedIDs) {
                 me._usedIDs = {};
             }
-            
+
             if (me._usedIDs[stateId] && me._usedIDs[stateId] !== c) {
                 Ext.log.warn(this.$className + ' attempted to reuse an existing id: ' + stateId);
             }
-            
+
             me._usedIDs[stateId] = c;
         }
         //</debug>
@@ -864,12 +864,12 @@ Ext.define('Ext.grid.header.Container', {
                 if (c.rendered) {
                     c.detachFromBody();
                 }
-                
+
                 // If we don't have any items left and we're a group, remove ourselves.
                 // This will cascade up if necessary. DO NOT destroy ourselves here,
                 // we have to defer that until all moves are done and events are fired.
                 me.destroyAfterRemoving = true;
-                
+
                 Ext.suspendLayouts();
                 ownerCt.remove(me, false);
                 Ext.resumeLayouts(true);
@@ -893,7 +893,6 @@ Ext.define('Ext.grid.header.Container', {
         if (gridHeaderCt) {
             gridHeaderCt.onColumnsChanged();
             gridPanel = gridHeaderCt.ownerCt;
-
 
             // The grid needs to be informed even if the added/removed column is a group header
             // If it an add or remove operation causing this header change call, then inform
@@ -1667,7 +1666,7 @@ Ext.define('Ext.grid.header.Container', {
             useMinWidthForFlex = false,
             defaultWidth = Ext.grid.header.Container.prototype.defaultWidth,
             // eslint-disable-next-line max-len
-            availFlex = me.el.dom.clientWidth - (view.el.dom.scrollHeight > view.el.dom.clientHeight ? Ext.getScrollbarSize().width : 0),
+            availFlex = me.el.dom.clientWidth - (view.el.dom.scrollHeight > view.el.dom.clientHeight ? Ext.scrollbar.width() : 0),
             totalFlex = 0,
             items = me.getVisibleGridColumns(),
             hidden = header.hidden,
@@ -1771,7 +1770,7 @@ Ext.define('Ext.grid.header.Container', {
             }
         }
     },
-    
+
     getRefItems: function(deep) {
     // Override to include the header menu in the component tree
         var result = this.callParent([deep]);
@@ -1808,28 +1807,28 @@ Ext.define('Ext.grid.header.Container', {
 
         initFocusableContainerKeyNav: function(el) {
             var me = this;
-            
+
             if (!me.focusableKeyNav) {
                 me.focusableKeyNav = new Ext.util.KeyNav({
                     target: el,
                     scope: me,
-    
+
                     down: me.showHeaderMenu,
                     left: me.onFocusableContainerLeftKey,
                     right: me.onFocusableContainerRightKey,
                     home: me.onHomeKey,
                     end: me.onEndKey,
-    
+
                     space: me.onHeaderActivate,
                     enter: me.onHeaderActivate
                 });
             }
         },
-        
+
         onHomeKey: function(e) {
             return this.focusChild(null, true, e);
         },
-        
+
         onEndKey: function(e) {
             return this.focusChild(null, false, e);
         },
@@ -1874,14 +1873,14 @@ Ext.define('Ext.grid.header.Container', {
                 return this.onHeaderClick(column, e, column.el);
             }
         },
-        
+
         onOwnerGridReconfigure: function(storeChanged, columnsChanged) {
             var me = this;
-            
+
             if (!me.rendered || me.destroying || me.destroyed) {
                 return;
             }
-            
+
             // Adding or removing columns during reconfiguration could result
             // in changed FocusableContainer state.
             if (storeChanged || columnsChanged) {

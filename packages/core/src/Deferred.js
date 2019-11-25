@@ -319,7 +319,7 @@ return {
          */
         parallel: function(fns, scope) {
             var args;
-            
+
             if (scope == null) {
                 scope = null;
             }
@@ -393,7 +393,7 @@ return {
          */
         reduce: function(values, reduceFn, initialValue) {
             var initialValueSpecified;
-            
+
             //<debug>
             if (!(Ext.isArray(values) || ExtPromise.is(values))) {
                 Ext.raise('Invalid parameter: expected an Array or Promise of an Array.');
@@ -483,7 +483,7 @@ return {
          */
         sequence: function(fns, scope) {
             var args;
-            
+
             if (scope == null) {
                 scope = null;
             }

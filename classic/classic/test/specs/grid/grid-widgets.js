@@ -34,26 +34,26 @@ function() {
                 if (count == null) {
                     count = 20;
                 }
-                
+
                 if (min == null) {
                     min = -10;
                 }
-                
+
                 if (max == null) {
                     max = 10;
                 }
-                
+
                 for (j = 0; j < count; j++) {
                     sequence.push(Ext.Number.randomInt(min, max));
                 }
-                
+
                 return sequence;
             };
 
         for (i = 0; i < (recordCount || 20); i++) {
             result.push(['Record ' + (i + 1), Ext.Number.randomInt(0, 100) / 100, generateSequence(), generateSequence(), generateSequence(), generateSequence(20, 1, 10), generateSequence(4, 10, 20), generateSequence(), generateSequence(20, -1, 1)]);
         }
-        
+
         return result;
     }
 
@@ -62,9 +62,9 @@ function() {
                 fn: fn || Ext.emptyFn
             },
             spy = spyOn(obj, "fn");
-        
+
         object.addListener(eventName, obj.fn);
-        
+
         return (object[eventName] = spy);
     }
 
@@ -160,16 +160,16 @@ function() {
                 }
             }];
         }
-        
+
         if (useLocking) {
             columns[0].locked = columns[1].locked = columns[2].locked = true;
         }
-        
+
         store = new Ext.data.ArrayStore({
             model: GridModel,
             data: generateData(recordCount)
         });
-        
+
         grid = new Ext.grid.Panel(Ext.apply({
             columns: columns,
             store: store,
@@ -187,10 +187,10 @@ function() {
             },
             renderTo: Ext.getBody()
         }, cfg));
-        
+
         view = useLocking ? grid.normalGrid.getView() : grid.getView();
     }
-    
+
     afterEach(function() {
         Ext.destroy(grid, store);
         grid = store = null;
@@ -242,14 +242,14 @@ function() {
                 normalView = grid.normalGrid.getView();
                 lastRow = normalView.bufferedRenderer.getLastVisibleRowIndex();
             });
-            
+
             jasmine.waitsForScroll(grid.getScrollable(), function scrollIt(scroller, x, y) {
                 if (view.all.endIndex >= 100) {
                     Ext.undefer(timer);
 
                     return true;
                 }
-                
+
                 // Only scroll again when both have caught up with rendering..
                 if (readyToScroll) {
                     readyToScroll = 0;

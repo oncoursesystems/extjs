@@ -24,7 +24,6 @@ topSuite("Ext.form.Panel", function() {
         });
     });
 
-
     describe("form property", function() {
         it("should instantiate a Ext.form.Basic as its 'form' property", function() {
             createPanel();
@@ -36,7 +35,6 @@ topSuite("Ext.form.Panel", function() {
             expect(panel.getForm() instanceof Ext.form.Basic).toBeTruthy();
         });
     });
-
 
     describe("default configs", function() {
         var undef,
@@ -67,7 +65,6 @@ topSuite("Ext.form.Panel", function() {
         }
     });
 
-
     describe("event relaying", function() {
         function testRelay(eventName) {
             var spy = jasmine.createSpy(eventName + ' handler');
@@ -95,18 +92,16 @@ topSuite("Ext.form.Panel", function() {
         });
     });
 
-
     describe("destroying", function() {
         it("should call its form object's destroy method", function() {
             createPanel();
             var spy = spyOn(panel.getForm(), 'destroy');
-            
+
             panel.destroy();
-            
+
             expect(spy).toHaveBeenCalled();
         });
     });
-
 
     describe("fieldDefaults", function() {
         it("should copy properties to a sub-field if those properties are not already configured on the field", function() {
@@ -131,7 +126,7 @@ topSuite("Ext.form.Panel", function() {
 
             expect(field.dummyConfig).toBe('bar');
         });
-        
+
         it("should copy fieldDefaults deep", function() {
             createPanel({
                 renderTo: Ext.getBody(),
@@ -158,7 +153,6 @@ topSuite("Ext.form.Panel", function() {
         });
 
     });
-
 
     describe("minButtonWidth config", function() {
         it("should copy to items in the 'buttons' legacy toolbar config", function() {
@@ -190,7 +184,6 @@ topSuite("Ext.form.Panel", function() {
             expect(docked[docked.length - 1].child('button').minWidth).toBe(2345);
         });
     });
-
 
     describe("load method", function() {
         it("should call the load method of the BasicForm", function() {
@@ -246,7 +239,7 @@ topSuite("Ext.form.Panel", function() {
                 renderTo: Ext.getBody()
             });
         });
-        
+
         describe("attributes", function() {
             it("should have form role on the body", function() {
                 expect(panel.body).toHaveAttr('role', 'form');

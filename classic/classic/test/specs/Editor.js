@@ -20,7 +20,7 @@ topSuite("Ext.Editor", ['Ext.form.field.*'], function() {
 
     function startEditWithTarget(value) {
         makeTarget();
-        
+
         if (arguments.length) {
             editor.startEdit(target, value);
         }
@@ -101,7 +101,7 @@ topSuite("Ext.Editor", ['Ext.form.field.*'], function() {
             it("should focus the field", function() {
                 makeEditor();
                 startEditWithTarget();
-                
+
                 runs(function() {
                     expectFocused(field);
                 });
@@ -288,20 +288,20 @@ topSuite("Ext.Editor", ['Ext.form.field.*'], function() {
                 expect(editor.editing).toBe(false);
                 expect(editSpy).not.toHaveBeenCalled();
             });
-            
+
             it("should allow the value to be changed in beforestartedit", function() {
                 spy.andCallFake(function(editor) {
                     editor.context = editor.context || {};
                     editor.context.value = 'blergo';
                 });
-                
+
                 makeEditor();
                 makeTarget();
-                
+
                 editor.on('beforestartedit', spy);
-                
+
                 editor.startEdit(target);
-                
+
                 expect(editor.field.getValue()).toBe('blergo');
             });
         });

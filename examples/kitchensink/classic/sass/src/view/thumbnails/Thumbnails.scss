@@ -18,6 +18,10 @@ $kitchensink-thumbnail-height: $kitchensink-thumbnail-size + 60;
     $kitchensink-thumbnail-background-color: darken($base-color, 5%);
     $kitchensink-thumbnail-width: 130px;
     $kitchensink-thumbnail-height: 190px;
+} @else if $theme-name == 'theme-material' {
+    $kitchensink-thumbnail-background-color: $base-color;
+    $kitchensink-thumbnail-width: 130px;
+    $kitchensink-thumbnail-height: 190px;
 }
 
 

@@ -4,7 +4,7 @@
 Ext.define('KitchenSink.view.window.WindowVariations', {
     extend: 'Ext.container.Container',
     xtype: 'window-variations',
-    
+
     //<example>
     width: 10,
     height: 10,
@@ -24,6 +24,9 @@ Ext.define('KitchenSink.view.window.WindowVariations', {
             width: 200
         },
         graphite: {
+            width: 260
+        },
+        'classic-material': {
             width: 260
         }
     },

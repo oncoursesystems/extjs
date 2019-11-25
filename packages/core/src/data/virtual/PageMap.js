@@ -200,8 +200,13 @@ Ext.define('Ext.data.virtual.PageMap', {
     },
 
     indexOf: function(record) {
-        var ret = this.indexMap[record.internalId];
-        
+        var ret;
+
+        // return indexMap if record is not null/undefined
+        if (record) {
+            ret = this.indexMap[record.internalId];
+        }
+
         return (ret || ret === 0) ? ret : -1;
     },
 
@@ -211,7 +216,7 @@ Ext.define('Ext.data.virtual.PageMap', {
 
         if (index || index === 0) {
             page = this.pages[Math.floor(index / this.store.getPageSize())];
-            
+
             if (page) {
                 return page.records[index - page.begin];
             }
@@ -226,7 +231,7 @@ Ext.define('Ext.data.virtual.PageMap', {
             // Safe to delete during a for in
             for (pageNumber in pages) {
                 page = pages[pageNumber];
-                
+
                 if (page.number >= pageCount) {
                     this.clearPage(page);
                     this.destroyPage(page);
@@ -250,7 +255,7 @@ Ext.define('Ext.data.virtual.PageMap', {
 
             A.remove(loadQueues.active, page);
             A.remove(loadQueues.prefetch, page);
-            
+
             if (!fromCache) {
                 Ext.Array.remove(me.cache, page);
             }
@@ -369,20 +374,20 @@ Ext.define('Ext.data.virtual.PageMap', {
 
             a = aDir ? M.abs(firstPage - a) : M.abs(lastPage - a);
             b = bDir ? M.abs(firstPage - b) : M.abs(lastPage - b);
-            
+
             if (a === b) {
                 ret = aDir ? direction : -direction;
             }
             else {
                 ret = a - b;
             }
-            
+
             return ret;
         },
 
         prioritizePrefetch: function(direction, firstPage, lastPage) {
             var me = this;
-            
+
             me.sortDirection = direction;
             me.sortFirstPage = firstPage;
             me.sortLastPage = lastPage;

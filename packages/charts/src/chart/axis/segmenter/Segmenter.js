@@ -31,7 +31,7 @@ Ext.define('Ext.chart.axis.segmenter.Segmenter', {
     renderer: function(value, context) {
         return String(value);
     },
-    
+
     /**
      * Convert from any data into the target type.
      * @param {*} value The value to convert from

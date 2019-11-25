@@ -154,14 +154,14 @@ Ext.define('Ext.data.writer.Writer', {
          * In the previous release, this was default `true`.
          */
         writeAllFields: false,
-    
+
         /**
          * @cfg {String} dateFormat
          * This is used for each field of type date in the model to format the value before
          * it is sent to the server.
          */
         dateFormat: null,
-    
+
         /**
          * @cfg {String} nameProperty
          * This property is used to read the key for each value that will be sent to the
@@ -196,7 +196,7 @@ Ext.define('Ext.data.writer.Writer', {
          * If the value is not present, the field name will always be used.
          */
         nameProperty: 'name',
-    
+
         /**
          * @cfg {Boolean} [writeRecordId]
          * By default, each record's id is always included in the output for non-phantom
@@ -210,7 +210,7 @@ Ext.define('Ext.data.writer.Writer', {
          * typically be appended to the url instead.
          */
         writeRecordId: true,
-        
+
         /**
          * @cfg {Function|Object} [transform]
          * If a transform function is set, it will be invoked just before {@link #writeRecords} 
@@ -249,16 +249,16 @@ Ext.define('Ext.data.writer.Writer', {
     constructor: function(config) {
         this.initConfig(config);
     },
-    
+
     applyTransform: function(transform) {
         if (transform) {
             if (Ext.isFunction(transform)) {
                 transform = { fn: transform };
             }
-            
+
             return transform.fn.bind(transform.scope || this);
         }
-        
+
         return transform;
     },
 
@@ -280,7 +280,7 @@ Ext.define('Ext.data.writer.Writer', {
 
         return this.writeRecords(request, data);
     },
-    
+
     /**
      * @method
      *

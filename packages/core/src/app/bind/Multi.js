@@ -220,7 +220,7 @@ Ext.define('Ext.app.bind.Multi', {
     isLoading: function() {
         var bindings = this.bindings,
             n = bindings.length;
-            
+
         for (; n-- > 0;) {
             if (bindings[n].isLoading()) {
                 return true;
@@ -233,7 +233,7 @@ Ext.define('Ext.app.bind.Multi', {
     isAvailable: function() {
         var bindings = this.bindings,
             n = bindings.length;
-        
+
         for (; n-- > 0;) {
             if (bindings[n].isAvailable()) {
                 return true;
@@ -283,7 +283,7 @@ Ext.define('Ext.app.bind.Multi', {
     refresh: function() {
         // @TODO
     },
-    
+
     privates: {
         sort: function() {
             this.scheduler.sortItems(this.bindings);

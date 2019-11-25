@@ -38,15 +38,15 @@ Ext.define('Ext.sparkline.VmlCanvas', {
 
         initial = vpath.splice(0, 1);
         lineWidth = lineWidth == null ? 1 : lineWidth;
-        
+
         stroke = lineColor == null
             ? ' stroked="false" '
             : ' strokeWeight="' + lineWidth + 'px" strokeColor="' + lineColor + '" ';
-        
+
         fill = fillColor == null
             ? ' filled="false"'
             : ' fillColor="' + fillColor + '" filled="true" ';
-        
+
         closed = vpath[0] === vpath[vpath.length - 1] ? 'x ' : '';
 
         return [
@@ -65,11 +65,11 @@ Ext.define('Ext.sparkline.VmlCanvas', {
 
         x -= radius;
         y -= radius;
-        
+
         stroke = lineColor == null
             ? ' stroked="false" '
             : ' strokeWeight="' + lineWidth + 'px" strokeColor="' + lineColor + '" ';
-        
+
         fill = fillColor == null
             ? ' filled="false"'
             : ' fillColor="' + fillColor + '" filled="true" ';
@@ -88,11 +88,11 @@ Ext.define('Ext.sparkline.VmlCanvas', {
             width = this.pixelWidth,
             height = this.pixelHeight,
             startx, starty, endx, endy, stroke, fill;
-            
+
         stroke = lineColor == null
             ? ' stroked="false" '
             : ' strokeWeight="1px" strokeColor="' + lineColor + '" ';
-        
+
         fill = fillColor == null
             ? ' filled="false"'
             : ' fillColor="' + fillColor + '" filled="true" ';
@@ -206,7 +206,7 @@ Ext.define('Ext.sparkline.VmlCanvas', {
 }, function() {
     Ext.onInternalReady(function() {
         var doc = document;
-    
+
         if (doc.namespaces && !doc.namespaces.svml) {
             doc.namespaces.add("svml", "urn:schemas-microsoft-com:vml", '#default#VML');
         }

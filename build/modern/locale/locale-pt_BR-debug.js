@@ -83,7 +83,7 @@ Ext.define('Ext.locale.pt_BR.data.validator.Bound', {
 });
 Ext.define('Ext.locale.pt_BR.data.validator.CIDRv4', {
     override: 'Ext.data.validator.CIDRv4',
- 
+
     config: {
         message: 'Não é um bloco CIDR válido'
     }
@@ -312,8 +312,8 @@ Ext.define("Ext.locale.pt.grid.filters.menu.Base", {
     }
 });
 
-Ext.define("Ext.locale.pt_BR.grid.LockedGrid", {
-    override: "Ext.grid.LockedGrid",
+Ext.define("Ext.locale.pt_BR.grid.locked.Grid", {
+    override: 'Ext.grid.locked.Grid',
 
     config: {
         columnMenu: {
@@ -408,6 +408,10 @@ Ext.define("Ext.locale.pt_BR.grid.menu.SortDesc", {
     config: {
         text: "Ordenar decrescente"
     }
+});
+Ext.define("Ext.locale.pt_BR.grid.plugin.RowDragDrop", {
+    override: "Ext.grid.plugin.RowDragDrop",
+    dragText: "{0} linha(s) selecionada(s)"
 });
 Ext.define('Ext.locale.pt_BR.panel.Collapser', {
     override: 'Ext.panel.Collapser',

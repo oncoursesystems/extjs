@@ -491,7 +491,7 @@ Ext.define('Ext.chart.theme.Base', {
 
     updateBackground: function(background) {
         var chart;
-        
+
         if (background) {
             chart = this.getChart();
 
@@ -525,7 +525,7 @@ Ext.define('Ext.chart.theme.Base', {
                             }
                         ]
                     });
-                    
+
                     items.push(gradient);
                 }
             }
@@ -536,17 +536,17 @@ Ext.define('Ext.chart.theme.Base', {
 
     applySeriesThemes: function(newSeriesThemes) {
         var colors, color;
-        
+
         // Init the 'colors' config with solid colors generated from the 'baseColor'.
         this.getBaseColor();
-        
+
         // Init the 'gradients' config with a hardcoded value, if the legacy 'useGradients'
         // config was set to 'true'. This in turn updates the 'colors' config.
         this.getUseGradients();
-        
+
         // Init the 'gradients' config normally. This also updates the 'colors' config.
         this.getGradients();
-        
+
         colors = this.getColors(); // Final colors.
 
         if (!newSeriesThemes) {

@@ -8,7 +8,7 @@ Ext.define('KitchenSink.view.charts.column3d.Grouped', {
     xtype: 'column-grouped-3d',
     requires: ['Ext.chart.theme.Muted'],
     controller: 'column-grouped-3d',
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -22,7 +22,7 @@ Ext.define('KitchenSink.view.charts.column3d.Grouped', {
         type: 'Store',
         path: 'app/store/TwoYearSales.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     items: [{
@@ -96,7 +96,7 @@ Ext.define('KitchenSink.view.charts.column3d.Grouped', {
         items: [{
             xtype: 'gridpanel',
             width: 300,
-            columns : {
+            columns: {
                 defaults: {
                     sortable: false,
                     menuDisabled: true,

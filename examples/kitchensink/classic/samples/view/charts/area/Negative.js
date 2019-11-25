@@ -6,7 +6,7 @@ Ext.define('KitchenSink.view.charts.area.Negative', {
     xtype: 'area-negative',
     controller: 'area-negative',
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     bodyStyle: 'background: transparent !important',
     layout: {
@@ -20,7 +20,7 @@ Ext.define('KitchenSink.view.charts.area.Negative', {
         type: 'Store',
         path: 'app/store/Earnings.js'
     }],
-    // </example>
+    //</example>
     width: 650,
 
     tbar: [
@@ -67,20 +67,20 @@ Ext.define('KitchenSink.view.charts.area.Negative', {
     }, {
         style: 'margin-top: 10px;',
         xtype: 'gridpanel',
-        columns : {
+        columns: {
             defaults: {
                 sortable: false,
                 menuDisabled: true
             },
             items: [
                 { text: 'Quarter', dataIndex: 'quarter' },
-                { text: 'Consumer', dataIndex: 'consumer'},
-                { text: 'Gaming', dataIndex: 'gaming'},
-                { text: 'Phone', dataIndex: 'phone'},
-                { text: 'Corporate', dataIndex: 'corporate'}
+                { text: 'Consumer', dataIndex: 'consumer' },
+                { text: 'Gaming', dataIndex: 'gaming' },
+                { text: 'Phone', dataIndex: 'phone' },
+                { text: 'Corporate', dataIndex: 'corporate' }
             ]
         },
-        store: {type: 'earnings'},
+        store: { type: 'earnings' },
         width: '100%'
         //</example>
     }],

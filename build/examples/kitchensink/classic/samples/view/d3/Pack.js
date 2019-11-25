@@ -17,7 +17,7 @@ Ext.define('KitchenSink.view.d3.Pack', {
         'KitchenSink.view.d3.TreeViewModel',
         'Ext.d3.hierarchy.Pack'
     ],
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [
         {
@@ -37,7 +37,7 @@ Ext.define('KitchenSink.view.d3.Pack', {
             path: 'data/tree/tree.json'
         }
     ],
-    // </example>
+    //</example>
 
     width: 930,
     height: 900,

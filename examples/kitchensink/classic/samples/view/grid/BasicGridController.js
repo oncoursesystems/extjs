@@ -7,7 +7,7 @@ Ext.define('KitchenSink.view.grid.BasicGridController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.basicgrid',
 
-    onApprove: function (grid, rowIndex, colIndex) {
+    onApprove: function(grid, rowIndex, colIndex) {
         var rec = grid.getStore().getAt(rowIndex);
 
         Ext.Msg.alert('Approve', rec.get('name'));
@@ -19,15 +19,15 @@ Ext.define('KitchenSink.view.grid.BasicGridController', {
         Ext.Msg.alert('Decline', rec.get('name'));
     },
 
-    renderChange: function (value) {
+    renderChange: function(value) {
         return this.renderSign(value, '0.00');
     },
 
-    renderPercent: function (value) {
+    renderPercent: function(value) {
         return this.renderSign(value, '0.00%');
     },
 
-    renderSign: function (value, format) {
+    renderSign: function(value, format) {
         var text = Ext.util.Format.number(value, format),
             tpl = this.signTpl,
             data = this.data;

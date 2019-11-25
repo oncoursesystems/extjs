@@ -221,6 +221,13 @@ Ext.define('Ext.Widget', {
         cls: null,
 
         /**
+         * @cfg {Number/String} margin
+         * The margin to use on this Component. Can be specified as a number (in which
+         * case all edges get the same margin) or a CSS string like '5 10 10 10'
+         */
+        margin: null,
+
+        /**
          * @cfg {String/Object} style
          * Additional CSS styles that will be rendered into an inline style attribute when
          * the widget is rendered.
@@ -347,7 +354,7 @@ Ext.define('Ext.Widget', {
          *     });
          */
         touchAction: null,
-        
+
         /**
          * @cfg {Object} eventHandlers A map of event type to the corresponding handler method
          * name. This is used internally by native event handling mechanism.
@@ -498,7 +505,7 @@ Ext.define('Ext.Widget', {
          */
         disabled: null
     },
-    
+
     /**
      * @property {Array} template
      * An array of child elements to use as the children of the main element in the {@link
@@ -558,7 +565,7 @@ Ext.define('Ext.Widget', {
     clearPropertiesOnDestroy: 'async',
     focusEl: 'element',
     ariaEl: 'element',
-    
+
     spaceRe: /\s+/,
 
     /**
@@ -676,7 +683,7 @@ Ext.define('Ext.Widget', {
     updateDisabled: function(disabled) {
         var me = this,
             container = me.ownerFocusableContainer;
-        
+
         if (container) {
             if (disabled) {
                 if (!container.beforeFocusableChildDisable.$nullFn) {
@@ -689,9 +696,9 @@ Ext.define('Ext.Widget', {
                 }
             }
         }
-        
+
         me.element.toggleCls(me.disabledCls, disabled);
-        
+
         if (me.focusable) {
             if (disabled) {
                 me.disableFocusable();
@@ -700,7 +707,7 @@ Ext.define('Ext.Widget', {
                 me.enableFocusable();
             }
         }
-        
+
         if (container) {
             if (disabled) {
                 if (!container.onFocusableChildDisable.$nullFn) {
@@ -795,7 +802,8 @@ Ext.define('Ext.Widget', {
         // to let the interested parties fire events until the very end.
         me.clearListeners();
 
-        me.isDestroying = me.destroying = false;
+        // This just makes it hard to ask "was destroy() called?":
+        // me.isDestroying = me.destroying = false; // removed in 7.0
 
         // ComponentDelegation mixin does not install "after" interceptor on the
         // base class destructor so we need to call it explicitly.
@@ -844,13 +852,18 @@ Ext.define('Ext.Widget', {
 
     doFireEvent: function(eventName, args, bubbles) {
         var me = this,
-            ret;
-        
+            ev, ret;
+
         ret = me.mixins.observable.doFireEvent.call(me, eventName, args, bubbles);
-        
-        // Could have been destroyed in event handler
+
+        // Could have been destroyed in event handler.
         if (ret !== false && !me.destroyed) {
-            ret = me.mixins.componentDelegation.doFireDelegatedEvent.call(me, eventName, args);
+            ev = me.events[eventName];
+
+            // Also, a suspendEvent() call on the target could be in effect:
+            if (!ev || !ev.suspended) {
+                ret = me.mixins.componentDelegation.doFireDelegatedEvent.call(me, eventName, args);
+            }
         }
 
         return ret;
@@ -1085,12 +1098,12 @@ Ext.define('Ext.Widget', {
                     me.addElementReferenceOnDemand(reference, referenceNode);
                 }
             }
-            
+
             // At this point focusEl and ariaEl are still reference names
             if (reference === me.focusEl) {
                 me.addElementReference('focusEl', referenceNode);
             }
-            
+
             if (reference === me.ariaEl) {
                 me.addElementReferenceOnDemand('ariaEl', referenceNode);
             }
@@ -1400,11 +1413,11 @@ Ext.define('Ext.Widget', {
                 element.show();
             }
         }
-        
+
         if (me.focusableContainer && me.activateFocusableContainer) {
             me.activateFocusableContainer(!hidden);
         }
-        
+
         if (container) {
             if (hidden) {
                 if (!container.onFocusableChildHide.$nullFn) {
@@ -1419,14 +1432,18 @@ Ext.define('Ext.Widget', {
         }
     },
 
+    updateMargin: function(margin) {
+        this.element.setMargin(margin);
+    },
+
     updateRipple: function(ripple) {
         var me = this,
             el = me.el;
-        
+
         if (el) {
             el.un('touchstart', 'onRippleStart', me);
             el.un('touchend', 'onRippleStart', me);
-            
+
             el.destroyAllRipples();
 
             if (ripple.release) {
@@ -1870,7 +1887,7 @@ Ext.define('Ext.Widget', {
                 me.mixins.componentDelegation.addDelegatedListener.call(me, name, fn, scope,
                                                                         options, order, caller,
                                                                         manager);
-                
+
                 return;
             }
 
@@ -1879,7 +1896,7 @@ Ext.define('Ext.Widget', {
 
         doRemoveListener: function(eventName, fn, scope) {
             var me = this;
-            
+
             me.mixins.observable.doRemoveListener.call(me, eventName, fn, scope);
             me.mixins.componentDelegation.removeDelegatedListener.call(me, eventName, fn, scope);
         },

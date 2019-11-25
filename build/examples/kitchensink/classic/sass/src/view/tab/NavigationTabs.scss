@@ -89,6 +89,13 @@
         $inner-border-color-focus-over: #fff
     );
 }
+
+@if $theme-name == 'theme-material' {
+    @include extjs-tab-panel-ui(
+        $ui: 'navigation',
+        $ui-tab-background-color: $base-color
+    );
+}
 @else {
     @include extjs-tab-panel-ui(
         $ui: 'navigation',

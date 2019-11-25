@@ -11,42 +11,42 @@ Ext.define('Ext.list.AbstractTreeItem', {
      * @method setExpandable
      * @ignore
      */
-    
+
     /**
      * @method setExpanded
      * @ignore
      */
-    
+
     /**
      * @method setIconCls
      * @ignore
      */
-    
+
     /**
      * @method setLeaf
      * @ignore
      */
-    
+
     /**
      * @method setOwner
      * @ignore
      */
-    
+
     /**
      * @method setLoading
      * @ignore
      */
-    
+
     /**
      * @method setNode
      * @ignore
      */
-    
+
     /**
      * @method setParentItem
      * @ignore
      */
-    
+
     /**
      * @method setText
      * @ignore
@@ -168,10 +168,10 @@ Ext.define('Ext.list.AbstractTreeItem', {
                 childNodes = node.childNodes;
                 owner = me.getOwner();
                 me.itemMap = map = {};
-                
+
                 for (i = 0, len = childNodes.length; i < len; ++i) {
                     child = childNodes[i];
-                    
+
                     if (child.data.visible) {
                         item = owner.createItem(child, me);
                         map[child.internalId] = item;
@@ -187,10 +187,10 @@ Ext.define('Ext.list.AbstractTreeItem', {
 
     updateSelected: function(selected) {
         var parent;
-        
+
         if (!this.isConfiguring) {
             parent = this.getParentItem();
-            
+
             while (parent && !parent.isRootListItem) {
                 parent.setSelectedParent(selected);
                 parent = parent.getParentItem();
@@ -353,7 +353,7 @@ Ext.define('Ext.list.AbstractTreeItem', {
             oldParent = item.getParentItem();
             // May have some kind of custom removal processing, allow it to happen, even if it's us
             oldParent.removeItem(item);
-            
+
             if (oldParent !== me) {
                 oldParent.doUpdateExpandable();
                 item.setParentItem(me);
@@ -362,7 +362,7 @@ Ext.define('Ext.list.AbstractTreeItem', {
         else {
             item = me.getOwner().createItem(node, me);
         }
-        
+
         map[id] = item;
 
         if (refNode) {
@@ -493,7 +493,7 @@ Ext.define('Ext.list.AbstractTreeItem', {
             for (key in map) {
                 map[key].destroy();
             }
-            
+
             me.itemMap = null;
         }
 
@@ -537,7 +537,7 @@ Ext.define('Ext.list.AbstractTreeItem', {
 
         doUpdateExpandable: function() {
             var node = this.getNode();
-            
+
             this.setExpandable(node.isExpandable());
         },
 

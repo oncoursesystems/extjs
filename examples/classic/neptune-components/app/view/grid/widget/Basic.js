@@ -6,9 +6,11 @@ Ext.define('Neptune.view.grid.widget.Basic', function() {
     function change(val) {
         if (val > 0) {
             return '<span style="color:green;">' + val + '</span>';
-        } else if (val < 0) {
+        }
+        else if (val < 0) {
             return '<span style="color:red;">' + val + '</span>';
         }
+
         return val;
     }
 
@@ -19,9 +21,11 @@ Ext.define('Neptune.view.grid.widget.Basic', function() {
     function pctChange(val) {
         if (val > 0) {
             return '<span style="color:green;">' + val + '%</span>';
-        } else if (val < 0) {
+        }
+        else if (val < 0) {
             return '<span style="color:red;">' + val + '%</span>';
         }
+
         return val;
     }
 
@@ -45,7 +49,7 @@ Ext.define('Neptune.view.grid.widget.Basic', function() {
                 xtype: 'actioncolumn',
                 width: 24,
                 items: [{
-                    icon   : '../shared/icons/fam/delete.gif',
+                    icon: '../shared/icons/fam/delete.gif',
                     tooltip: 'Sell stock'
                 }]
             }

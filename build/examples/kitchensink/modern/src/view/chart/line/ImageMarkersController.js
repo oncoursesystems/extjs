@@ -2,7 +2,9 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkersController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.line-imagemarkers',
 
-    init: function (view) {
+    init: function(view) {
+        var chart, toolbar, interaction, button;
+
         this.callParent([view]);
 
         if (!Ext.supports.Touch) {
@@ -12,16 +14,16 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkersController', {
              * interaction to use based on how many touches.
              * 1 touch point is a pan, 2 touch points is a zoom.
              */
-            var chart = view.lookup('chart'),
-                toolbar = view.lookup('toolbar'),
-                interaction = chart.getInteraction('panzoom'),
-                button = interaction.getModeToggleButton();
+            chart = view.lookup('chart');
+            toolbar = view.lookup('toolbar');
+            interaction = chart.getInteraction('panzoom');
+            button = interaction.getModeToggleButton();
 
             toolbar.add(button);
         }
     },
 
-    onPanZoomReset: function () {
+    onPanZoomReset: function() {
         var chart = this.lookupReference('chart'),
             axes = chart.getAxes();
 
@@ -30,15 +32,20 @@ Ext.define('KitchenSink.view.chart.line.ImageMarkersController', {
         chart.redraw();
     },
 
-    onAxisRangeChange: function (axis, range) {
+    onAxisRangeChange: function(axis, range) {
+        var max;
+
         if (!range) {
             return;
         }
+
         // expand the range slightly to make sure markers aren't clipped
-        var max = range[1];
+        max = range[1];
+
         if (max >= 1000) {
             range[1] = max - max % 100 + 100;
-        } else {
+        }
+        else {
             range[1] = max - max % 50 + 50;
         }
     }

@@ -78,7 +78,7 @@ Ext.define('SimpleTasks.view.lists.Tree', {
 
     initComponent: function() {
         var me = this;
-            
+
         /**
          * This Tree Panel's cell editing plugin
          * @property cellEditingPlugin
@@ -107,7 +107,7 @@ Ext.define('SimpleTasks.view.lists.Tree', {
                 handler: Ext.bind(me.handleDeleteClick, me)
             }
         ];
-        
+
         me.callParent(arguments);
 
         me.on('beforeedit', me.handleBeforeEdit, me);
@@ -185,7 +185,5 @@ Ext.define('SimpleTasks.view.lists.Tree', {
         // refresh the data in the view.  This will trigger the column renderers to run, making sure the task counts are up to date.
         this.getView().refresh();
     }
-
-
 
 });

@@ -15,7 +15,7 @@ topSuite("Ext.chart.series.Pie", ['Ext.chart.*', 'Ext.data.ArrayStore'], functio
                 };
 
             var result = betweenAngle.call(context1, -0.5, 0, 0);
-            
+
             expect(result).toBe(false);
 
             result = betweenAngle.call(context1, -0.5, 1.1234567, 1.1234567);

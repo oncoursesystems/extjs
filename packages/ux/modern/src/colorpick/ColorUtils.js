@@ -279,9 +279,9 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
                     rgb = [c, 0, x];
                     break;
                 default:
-                    // <debug>
+                    //<debug>
                     console.error("unknown color " + h + ' ' + s + " " + v);
-                    // </debug>
+                    //</debug>
                     break;
             }
 

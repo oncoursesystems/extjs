@@ -268,13 +268,13 @@ topSuite("Ext.Date", function() {
 
         it("should return null when parsing an invalid date like 0 hours in 'g' format", function() {
             var date = Ext.Date.parse('1970-01-01 0:12 am', 'Y-m-d g:i a');
-            
+
             expect(date).toBe(null);
         });
 
         it("should return null when parsing an invalid date like 0 hours in 'h' format", function() {
             var date = Ext.Date.parse('1970-01-01 00:32 pm', 'Y-m-d h:i a');
-            
+
             expect(date).toBe(null);
         });
 
@@ -305,7 +305,7 @@ topSuite("Ext.Date", function() {
             expectedDate.setMilliseconds(0);
             expect(date).toEqual(expectedDate);
         });
-        
+
         it("should parse time format", function() {
             // Can't use a static date because the timezone of the
             // local machine will change the result
@@ -371,7 +371,7 @@ topSuite("Ext.Date", function() {
                 expect(date).toEqual(expectedDate);
            });
        });
-       
+
        describe("week/year", function() {
            var d;
 
@@ -380,32 +380,32 @@ topSuite("Ext.Date", function() {
                expect(d.getMonth()).toBe(month);
                expect(d.getDate()).toBe(day);
            }
-           
+
            describe("first week of year", function() {
                it("should return the correct date for 2013", function() {
                    d = Ext.Date.parse('01/2013', 'W/Y');
                    expectDate(2012, 11, 31);
                });
-               
+
                it("should return the correct date for 2014", function() {
                    d = Ext.Date.parse('01/2014', 'W/Y');
                    expectDate(2013, 11, 30);
                });
-               
+
                it("should return the correct date for 2015", function() {
                    d = Ext.Date.parse('01/2015', 'W/Y');
                    expectDate(2014, 11, 29);
                });
-               
+
                it("should return the correct date for 2016", function() {
                    d = Ext.Date.parse('01/2016', 'W/Y');
                    expectDate(2016, 0, 4);
                });
            });
-           
+
            it("should always be a Monday", function() {
                var i, j;
-               
+
                for (i = 2012; i <= 2020; ++i) {
                    for (j = 1; j < 53; ++j) {
                        expect(Ext.Date.parse(i + '-' + Ext.String.leftPad(j, 2, '0'), 'Y-W').getDay()).toBe(1);

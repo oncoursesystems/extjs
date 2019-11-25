@@ -284,13 +284,13 @@ Ext.define('Ext.util.Animate', {
      */
     animate: function(animObj) {
         var me = this;
-        
+
         if (Ext.fx.Manager.hasFxBlock(me.id)) {
             return me;
         }
-        
+
         Ext.fx.Manager.queueFx(new Ext.fx.Anim(me.anim(animObj)));
-        
+
         return this;
     },
 
@@ -345,7 +345,7 @@ Ext.define('Ext.util.Animate', {
      */
     stopAnimation: function(suppressEvent) {
         Ext.fx.Manager.stopAnimation(this.id, suppressEvent);
-        
+
         return this;
     },
 
@@ -358,7 +358,7 @@ Ext.define('Ext.util.Animate', {
         Ext.fx.Manager.setFxDefaults(this.id, {
             concurrent: true
         });
-        
+
         return this;
     },
 
@@ -371,7 +371,7 @@ Ext.define('Ext.util.Animate', {
         Ext.fx.Manager.setFxDefaults(this.id, {
             concurrent: false
         });
-        
+
         return this;
     },
 

@@ -818,9 +818,13 @@ jazzman.Env.prototype.checkResourceLeaks = function(spec) {
                 //                 
                 // spec.expect(leaks).toCleanup('Ext.promise.Consequence queue');
                 // fail = true;
-                
-                Ext.promise.Consequence.queueSize = 0;
                 // leaks.length = 0;
+
+                // dwg - That would include this:
+                // Ext.promise.Consequence.queueSize = 0;
+                // dwg - The problem is when a then(done()) is called, we are in the
+                // promise chain of the last spec... For example the modern panel
+                // collapser suite.
             }
         }
 

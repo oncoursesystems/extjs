@@ -122,39 +122,39 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             expect(tabPanel.items.indexOf(tabPanel.getActiveTab())).toEqual(0);
         });
     });
-    
+
     describe("the tabBar", function() {
         beforeEach(function() {
             fakeTabBar = {
                 something: 'yea'
             };
         });
-        
+
         it("should be referenced as .tabBar", function() {
             createTabPanel();
             expect(tabPanel.tabBar).toBeDefined();
         });
-        
+
         it("should be docked to the top", function() {
             createTabPanel();
             expect(tabPanel.tabBar.dock).toEqual('top');
         });
-        
+
         it("should be accessible through getTabBar()", function() {
             createTabPanel();
             expect(tabPanel.getTabBar()).toBeDefined();
         });
-        
+
         it("should accept additional config", function() {
             createTabPanel({
                 tabBar: {
                     someConfig: 'something'
                 }
             });
-            
+
             expect(tabPanel.tabBar.someConfig).toEqual('something');
         });
-        
+
         xdescribe("if there were no other dockedItems", function() {
             beforeEach(function() {
                 createTabPanel();
@@ -163,12 +163,12 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             it("should create the dockedItems MixedCollection", function() {
                 expect(tabPanel.dockedItems instanceof Ext.util.MixedCollection).toBe(true);
             });
-            
+
             it("should place the tabBar in the array", function() {
                 expect(tabPanel.dockedItems.items[0]).toEqual(tabPanel.tabBar);
             });
         });
-        
+
         describe("if there was an array of dockedItems", function() {
             beforeEach(function() {
                 createTabPanel({
@@ -181,16 +181,16 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     ]
                 });
             });
-            
+
             it("should add the tabBar to the dockedItems", function() {
                 expect(tabPanel.dockedItems.length).toEqual(2);
             });
-            
+
             it("should place the tabBar as the last item in the array", function() {
                 expect(tabPanel.dockedItems.items[1]).toEqual(tabPanel.tabBar);
             });
         });
-        
+
         describe("if there was a single dockedItem, not in an array", function() {
             beforeEach(function() {
                 createTabPanel({
@@ -201,15 +201,15 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     }
                 });
             });
-            
+
             xit("should turn the dockedItems into an array", function() {
                 expect(tabPanel.dockedItems instanceof Ext.util.MixedCollection).toBe(true);
             });
-            
+
             it("should add the tabBar to the dockedItems", function() {
                 expect(tabPanel.dockedItems.length).toEqual(2);
             });
-            
+
             it("should place the tabBar as the last item in the array", function() {
                 expect(tabPanel.dockedItems.items[1]).toEqual(tabPanel.tabBar);
             });
@@ -264,7 +264,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             it("should allow a click on a button", function() {
                 var spy = jasmine.createSpy('click'),
                     btn;
-                
+
                 runs(function() {
                     createTabPanel({
                         tabBar: {
@@ -284,22 +284,22 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
                     btn.on('click', spy);
                 });
-                
+
                 runs(function() {
                     expect(function() {
                         jasmine.fireMouseEvent(btn.getEl(), 'click');
                     }).not.toThrow();
                 });
-                
+
                 waitsFor(function() { return !!spy.callCount; }, 'spy to be called', 100);
-                
+
                 runs(function() {
                     expect(spy).toHaveBeenCalled();
                 });
             });
         });
     });
-    
+
     describe("the layout", function() {
         beforeEach(function() {
             createTabPanel({
@@ -308,11 +308,11 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 }
             });
         });
-        
+
         it("should be a card layout", function() {
             expect(tabPanel.layout instanceof Ext.layout.CardLayout).toBe(true);
         });
-        
+
         it("should accept additional config", function() {
             expect(tabPanel.layout.someConfig).toEqual('something');
         });
@@ -375,7 +375,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
     describe("modifying items", function() {
         describe("tab configuration", function() {
             var tabBar;
-            
+
             function addChild(config) {
                 return tabPanel.add(Ext.apply({
                     xtype: 'panel',
@@ -384,36 +384,36 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     itemId: 'newItem'
                 }, config));
             }
-            
+
             beforeEach(function() {
                 createTabPanel();
-                
+
                 tabBar = tabPanel.getTabBar();
             });
-            
+
             it("should give the tab a reference to the card", function() {
                 var newChild = addChild(),
                     newTab   = tabBar.items.first();
-                
+
                 expect(newTab.card).toEqual(newChild);
             });
-            
+
             it("should give the tab a reference to the tabBar", function() {
                 var newChild = addChild(),
                     newTab   = tabBar.items.first();
-                
+
                 expect(newTab.tabBar).toEqual(tabBar);
             });
-            
+
             it("should not overwrite closeText with undefined", function() {
                 var tab = addChild().tab;
-                
+
                 expect(tab.closeText).toBe('removable');
             });
-            
+
             it("should overwrite closeText when specified in tab config", function() {
                 var tab = addChild({ closeText: 'foo bar' }).tab;
-                
+
                 expect(tab.closeText).toBe('foo bar');
             });
         });
@@ -434,7 +434,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
         it("should insert a tab at the specified index", function() {
             createTabPanelWithTabs(3);
-            
+
             var item = tabPanel.insert(1, {
                     title: 'foo'
                 }),
@@ -488,7 +488,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             expect(items.getAt(1).text).toBe('test 3');
         });
     });
-    
+
     describe("setting the active tab", function() {
         var waitForFocus = jasmine.waitForFocus,
             pressArrow = jasmine.pressArrowKey,
@@ -503,7 +503,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             item2 = tabPanel.items.getAt(1);
             item3 = tabPanel.items.getAt(2);
             item4 = tabPanel.items.getAt(3);
-            
+
             tab1 = item1.tab;
             tab2 = item2.tab;
             tab3 = item3.tab;
@@ -514,7 +514,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             tab1 = tab2 = tab3 = tab4 = null;
             item1 = item2 = item3 = item4 = null;
         });
-        
+
         describe("programmatically", function() {
             describe("parameter types", function() {
                 it("should accept a component index", function() {
@@ -738,19 +738,19 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
                     jasmine.fireMouseEvent(target, 'click');
                 });
-                
+
                 // Need to yield enough cycles to unwind event handlers
                 jasmine.waitAWhile();
             }
-            
+
             function expectActiveItem(want) {
                 runs(function() {
                     var have = tabPanel.getActiveTab();
-                    
+
                     expect(have).toBe(want);
                 });
             }
-            
+
             var beforeSpy, spy;
 
             beforeEach(function() {
@@ -768,19 +768,19 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 describe("interaction", function() {
                     it("should set the active tab", function() {
                         clickTab(item2);
-                        
+
                         waitForFocus(tab2);
-                        
+
                         expectActiveItem(item2);
                     });
-                    
+
                     it("should not set the active tab if the beforetabchange event returns false", function() {
                         runs(function() {
                             beforeSpy.andReturn(false);
                         });
-                        
+
                         clickTab(item3);
-                        
+
                         expectActiveItem(item1);
                     });
 
@@ -790,22 +790,22 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                         expectActiveItem(item1);
                     });
                 });
-                
+
                 describe("focus handling", function() {
                     describe("during tab activate event", function() {
                         var textfield, tabFocusSpy, fieldFocusSpy;
-                        
+
                         beforeEach(function() {
                             tabFocusSpy   = jasmine.createSpy('tab focus');
                             fieldFocusSpy = jasmine.createSpy('textfield focus');
-                            
+
                             textfield = item3.add({
                                 xtype: 'textfield',
                                 listeners: {
                                     focus: fieldFocusSpy
                                 }
                             });
-                            
+
                             item3.on('activate', function() {
                                 // Give IE enough time to repaint the textfield,
                                 // otherwise it won't properly focus but *will*
@@ -813,22 +813,22 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                                 // but very confusing failures.
                                 // ***PURE UNDILUTED HATRED***
                                 jasmine.waitAWhile();
-                                
+
                                 runs(function() {
                                     tab3.getFocusEl().on('focus', tabFocusSpy);
                                     textfield.focus();
                                 });
                             });
                         });
-                        
+
                         it("should not force focus back to the tab", function() {
                             clickTab(item3);
-                                    
+
                             waitForSpy(fieldFocusSpy);
-                            
+
                             // Unwind the handlers that could potentially refocus
                             jasmine.waitAWhile();
-                            
+
                             runs(function() {
                                 expect(tabFocusSpy).not.toHaveBeenCalled();
                             });
@@ -839,9 +839,9 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 describe("events", function() {
                     it("should fire no events if clicking on the active tab", function() {
                         clickTab(item1);
-                        
+
                         waitForFocus(tab1);
-                        
+
                         runs(function() {
                             expect(beforeSpy).not.toHaveBeenCalled();
                             expect(spy).not.toHaveBeenCalled();
@@ -850,9 +850,9 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
                     it("should fire the beforetabchange event, passing the tab panel, new tab & old tab", function() {
                         clickTab(item2);
-                        
+
                         waitForFocus(tab2);
-                        
+
                         runs(function() {
                             expect(beforeSpy.callCount).toBe(1);
                             var args = beforeSpy.mostRecentCall.args;
@@ -865,9 +865,9 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
                     it("should fire the tabchange event, passing the tab panel, new tab & old tab", function() {
                         clickTab(item2);
-                        
+
                         waitForFocus(tab2);
-                        
+
                         runs(function() {
                             expect(spy.callCount).toBe(1);
                             var args = spy.mostRecentCall.args;
@@ -880,135 +880,135 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
                     it("should not fire the tabchange event if beforetabchange returns false", function() {
                         clickTab(item2);
-                        
+
                         waitForFocus(tab2);
-                        
+
                         runs(function() {
                             beforeSpy.andReturn(false);
                             spy = jasmine.createSpy();
                         });
-                        
+
                         clickTab(item3);
-                        
+
                         // Focus does change, but active tab does not
                         waitForFocus(tab3);
-                        
+
                         runs(function() {
                             expect(spy).not.toHaveBeenCalled();
                         });
                     });
                 });
             });
-            
+
             // Firefox and Safari on Mac will not focus <anchor> tags by default,
             // and that will make some or all tests below to fail. Fix TBD.
             var todoDescribe = (Ext.isMac && (Ext.isGecko || Ext.isSafari) ? xdescribe : describe);
-            
+
             todoDescribe("keys", function() {
                 describe("arrows", function() {
                     it("should go right from 1 to 2", function() {
                         pressArrow(tab1, 'right');
-                        
+
                         expectActiveItem(item2);
                     });
-                    
+
                     it("should loop over right from 4 to 1", function() {
                         pressArrow(tab4, 'right');
-                        
+
                         expectActiveItem(item1);
                     });
-                    
+
                     it("should go left from 2 to 1", function() {
                         pressArrow(tab2, 'left');
-                        
+
                         expectActiveItem(item1);
                     });
-                    
+
                     it("should loop over left to 4 from 1", function() {
                         pressArrow(tab1, 'left');
-                        
+
                         expectActiveItem(item4);
                     });
                 });
-                
+
                 describe("Space/Enter", function() {
                     it("should activate card on Space key", function() {
                         pressKey(tab2, 'space');
-                        
+
                         expectActiveItem(item2);
                     });
-                    
+
                     it("should activate card on Enter key", function() {
                         pressKey(tab3, 'enter');
-                        
+
                         expectActiveItem(item3);
                     });
                 });
-                
+
                 describe("activation", function() {
                     describe("activateOnFocus == true (default)", function() {
                         beforeEach(function() {
                             pressArrow(tab1, 'right');
                         });
-                        
+
                         it("should focus navigated-to tab", function() {
                             expectFocused(tab2);
                         });
-                        
+
                         it("should activate navigated-to item", function() {
                             expectActiveItem(item2);
                         });
-                        
+
                         it("should set active flag on navigated-to tab", function() {
                             runs(function() {
                                 expect(tab1.active).toBeFalsy();
                                 expect(tab2.active).toBe(true);
                             });
                         });
-                        
+
                         it("should not attempt to activate a child that is not a Tab", function() {
                             var button;
-                            
+
                             runs(function() {
                                 button = new Ext.button.Button({
                                     text: 'foo',
                                     activate: jasmine.createSpy('activate')
                                 });
-                            
+
                                 tabPanel.getTabBar().insert(2, button);
                             });
-                            
+
                             pressArrow(tab2, 'right');
-                            
+
                             // Need to defer waitForFocus until the button is rendered
                             // so there is some DOM to wait for :)
                             runs(function() {
                                 waitForFocus(button);
                             });
-                            
+
                             runs(function() {
                                 expect(button.activate).not.toHaveBeenCalled();
                             });
                         });
                     });
-                    
+
                     describe("activateOnFocus == false", function() {
                         beforeEach(function() {
                             runs(function() {
                                 tabPanel.getTabBar().setActivateOnFocus(false);
                             });
-                            
+
                             pressArrow(tab1, 'right');
                         });
-                        
+
                         it("should focus navigated-to tab", function() {
                             expectFocused(tab2);
                         });
-                        
+
                         it("should not activate navigated-to item", function() {
                             expectActiveItem(item1);
                         });
-                        
+
                         it("should not set active flag on navigated-to tab", function() {
                             runs(function() {
                                 expect(tab1.active).toBe(true);
@@ -1017,7 +1017,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                         });
                     });
                 });
-                
+
                 describe("events", function() {
                     // Focus by clicking before sending arrow key, so that
                     // events fire on the actual change. We have to click instead of
@@ -1026,109 +1026,109 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     // and things get messy real quick.
                     beforeEach(function() {
                         clickTab(item2);
-                        
+
                         waitForFocus(tab2);
                     });
-                    
+
                     describe("beforetabchange", function() {
                         beforeEach(function() {
                             pressArrow(tab2, 'right');
-                            
+
                             waitForFocus(tab3);
                         });
-                        
+
                         it("should fire the event", function() {
                             runs(function() {
                                 // Extra call is when we're focusing the tab in beforeEach
                                 expect(beforeSpy.callCount).toBe(2);
                             });
                         });
-                        
+
                         it("should pass the tab panel, new and old tab", function() {
                             runs(function() {
                                 var args = beforeSpy.mostRecentCall.args;
-                                
+
                                 expect(args[0]).toBe(tabPanel);
                                 expect(args[1]).toBe(item3);
                                 expect(args[2]).toBe(item2);
                             });
                         });
                     });
-                    
+
                     describe("tabchange", function() {
                         beforeEach(function() {
                             pressArrow(tab2, 'left');
-                            
+
                             waitForFocus(tab1);
                         });
-                        
+
                         it("should fire the event", function() {
                             runs(function() {
                                 // Extra call is when we're focusing the tab in beforeEach
                                 expect(spy.callCount).toBe(2);
                             });
                         });
-                        
+
                         it("should pass the tab panel, new and old tab", function() {
                             runs(function() {
                                 var args = spy.mostRecentCall.args;
-                                
+
                                 expect(args[0]).toBe(tabPanel);
                                 expect(args[1]).toBe(item1);
                                 expect(args[2]).toBe(item2);
                             });
                         });
                     });
-                    
+
                     describe("canceling beforetabchange", function() {
                         beforeEach(function() {
                             beforeSpy.andReturn(false);
-                            
+
                             // It was called when we focused tab2
                             spy = jasmine.createSpy();
-                            
+
                             pressArrow(tab2, 'right');
-                            
+
                             // Focus should change
                             waitForFocus(tab3);
                         });
-                        
+
                         it("should move focus to tab3", function() {
                             expectFocused(tab3);
                         });
-                        
+
                         it("should not fire tabchange event", function() {
                             expect(spy).not.toHaveBeenCalled();
                         });
                     });
-                    
+
                     describe("focusing non-Tab children", function() {
                         var button, beforeCount, changeCount;
-                        
+
                         beforeEach(function() {
                             runs(function() {
                                 button = new Ext.button.Button({
                                     text: 'foo'
                                 });
-                            
+
                                 tabPanel.getTabBar().insert(2, button);
-                                
+
                                 // Both spies are called when we change tabs above
                                 beforeCount = beforeSpy.callCount;
                                 changeCount = spy.callCount;
                             });
 
                             pressArrow(tab2, 'right');
-                            
+
                             runs(function() {
                                 waitForFocus(button);
                             });
                         });
-                        
+
                         it("should not fire beforetabchange event", function() {
                             expect(beforeSpy.callCount).toBe(beforeCount);
                         });
-                        
+
                         it("should not fire tabchange event", function() {
                             expect(spy.callCount).toBe(changeCount);
                         });
@@ -1137,20 +1137,20 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             });
         });
     });
-    
+
     describe("removing child components", function() {
         it("should remove the corresponding tab from the tabBar", function() {
             createTabPanelWithTabs(2);
-            
+
             var secondPanel = tabPanel.items.last(),
                 tabBar      = tabPanel.getTabBar(),
                 oldCount    = tabBar.items.length;
-            
+
             tabPanel.remove(secondPanel);
-            
+
             expect(tabBar.items.length).toEqual(oldCount - 1);
         });
-        
+
         describe("if the removed child is the currently active tab", function() {
             var firstItem, secondItem, thirdItem;
 
@@ -1161,34 +1161,34 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                     secondItem = tabPanel.items.getAt(1);
                     thirdItem = tabPanel.items.last();
                 });
-                
+
                 it("should activate the next tab", function() {
                     // second is currently active
                     tabPanel.remove(secondItem);
                     expect(tabPanel.getActiveTab().title).toEqual(thirdItem.title);
                 });
             });
-            
+
             describe("and there is no tab before it but at least one after it", function() {
                 beforeEach(function() {
                     createTabPanelWithTabs(2, { renderTo: document.body, activeTab: 0 });
                     firstItem  = tabPanel.items.items[0];
                     secondItem = tabPanel.items.items[1];
                 });
-                
+
                 it("should activate the next tab", function() {
                     // first is currently active
                     tabPanel.remove(firstItem);
                     expect(tabPanel.getActiveTab().title).toEqual(secondItem.title);
                 });
             });
-            
+
             describe("and there are no other tabs", function() {
                 beforeEach(function() {
                     createTabPanelWithTabs(1);
                     firstItem = tabPanel.items.first();
                 });
-                
+
                 it("should not activate any other tabs", function() {
                     tabPanel.remove(firstItem);
                     expect(tabPanel.getActiveTab()).toBeUndefined();
@@ -1196,7 +1196,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             });
         });
     });
-    
+
     describe("AutoSizing", function() {
         beforeEach(function() {
             createTabPanel({
@@ -1410,7 +1410,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             expect(spy).not.toHaveBeenCalled();
         });
     });
-    
+
     describe("cleanup", function() {
         it("should leave no orphans", function() {
             var count = Ext.ComponentManager.getCount();
@@ -1946,7 +1946,7 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
             expect(tabPanel.tabBar.dock).toBe('bottom');
         });
     });
-    
+
     describe("enable/disable", function() {
         beforeEach(function() {
             createTabPanelWithTabs(2, {
@@ -1954,157 +1954,157 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
                 disabled: true
             });
         });
-        
+
         it("should activate tab when enabled", function() {
             tabPanel.enable();
-            
+
             expect(tabPanel.tabBar.activeTab.card.itemId).toBe('item2');
         });
     });
-    
+
     describe("ARIA", function() {
         var tab1, tab2, card1, card2;
-        
+
         beforeEach(function() {
             createTabPanelWithTabs(2);
-            
+
             card1 = tabPanel.items.getAt(0);
             card2 = tabPanel.items.getAt(1);
-            
+
             tab1 = card1.tab;
             tab2 = card2.tab;
         });
-        
+
         afterEach(function() {
             tab1 = tab2 = card1 = card2 = null;
         });
-        
+
         describe("attributes", function() {
             it("should have tab role on the tab", function() {
                 expect(tab1).toHaveAttr('role', 'tab');
             });
-            
+
             it("should have tabpanel role on the card", function() {
                 expect(card1).toHaveAttr('role', 'tabpanel');
             });
-            
+
             it("should have aria-selected='true' on tab1", function() {
                 expect(tab1).toHaveAttr('aria-selected', 'true');
             });
-            
+
             it("should have aria-selected='false' on tab2", function() {
                 expect(tab2).toHaveAttr('aria-selected', 'false');
             });
-            
+
             it("should have aria-labelledby on card1", function() {
                 expect(card1).toHaveAttr('aria-labelledby', tab1.id);
             });
-            
+
             it("should not have aria-label on card1", function() {
                 expect(card1).not.toHaveAttr('aria-label');
             });
-            
+
             it("should have aria-expanded='true' on card1", function() {
                 expect(card1).toHaveAttr('aria-expanded', 'true');
             });
-            
+
             it("should have aria-hidden='false' on card1", function() {
                 expect(card1).toHaveAttr('aria-hidden', 'false');
             });
-            
+
             describe("dynamically added panel", function() {
                 var tab3, card3;
-                
+
                 beforeEach(function() {
                     card3 = tabPanel.add(new Ext.panel.Panel({
                         title: '<span style="background-color: red">foo</span>',
                         html: 'blerg'
                     }));
-                    
+
                     tab3 = card3.tab;
-                    
+
                     // This is to render the tab child
                     tabPanel.setActiveTab(2);
                 });
-                
+
                 afterEach(function() {
                     tab3 = card3 = null;
                 });
-                
+
                 it("should have correct aria-labelledby on card1", function() {
                     expect(card3).toHaveAttr('aria-labelledby', tab3.id);
                 });
-                
+
                 it("should not have aria-label on card1", function() {
                     expect(card3).not.toHaveAttr('aria-label');
                 });
             });
-            
+
             describe("dynamically moved panel", function() {
                 var tabPanel2, oldTab1Id;
-                
+
                 beforeEach(function() {
                     tabPanel2 = new Ext.tab.Panel({
                         renderTo: Ext.getBody()
                     });
-                    
+
                     oldTab1Id = tab1.id;
-                    
+
                     tabPanel.remove(card1, false);
                     tabPanel2.add(card1);
-                    
+
                     tab1 = card1.tab;
                 });
-                
+
                 afterEach(function() {
                     tabPanel2.destroy();
                     tabPanel2 = oldTab1Id = null;
                 });
-                
+
                 it("should have new tab id on card1", function() {
                     expect(tab1.id).not.toBe(oldTab1Id);
                 });
-                
+
                 it("should have correct aria-labelledby on card1", function() {
                     expect(card1).toHaveAttr('aria-labelledby', tab1.id);
                 });
-                
+
                 it("should not have aria-label on card1", function() {
                     expect(card1).not.toHaveAttr('aria-label');
                 });
             });
         });
-        
+
         describe("tab switching", function() {
             beforeEach(function() {
                 tabPanel.setActiveTab(1);
             });
-            
+
             describe("aria-selected", function() {
                 it("should be true on tab2", function() {
                     expect(tab2).toHaveAttr('aria-selected', 'true');
                 });
-                
+
                 it("should be false on tab1", function() {
                     expect(tab1).toHaveAttr('aria-selected', 'false');
                 });
             });
-            
+
             describe("aria-expanded", function() {
                 it("should be true on card2", function() {
                     expect(card2).toHaveAttr('aria-expanded', 'true');
                 });
-                
+
                 it("should be false on card1", function() {
                     expect(card1).toHaveAttr('aria-expanded', 'false');
                 });
             });
-            
+
             describe("aria-hidden", function() {
                 it("should be true on card1", function() {
                     expect(card1).toHaveAttr('aria-hidden', 'true');
                 });
-                
+
                 it("should be false on card2", function() {
                     expect(card2).toHaveAttr('aria-hidden', 'false');
                 });

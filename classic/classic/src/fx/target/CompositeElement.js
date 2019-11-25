@@ -15,7 +15,7 @@ Ext.define('Ext.fx.target.CompositeElement', {
      * or subclass thereof.
      */
     isComposite: true,
-    
+
     constructor: function(target) {
         target.id = target.id || Ext.id(null, 'ext-composite-');
         this.callParent([target]);
@@ -40,7 +40,7 @@ Ext.define('Ext.fx.target.CompositeElement', {
 
         return out;
     },
-    
+
     setAttr: function(targetData) {
         var target = this.target,
             ln = targetData.length,
@@ -48,7 +48,7 @@ Ext.define('Ext.fx.target.CompositeElement', {
             ln3 = elements.length,
             value, k,
             attrs, attr, el, i, j, ln2;
-            
+
         for (i = 0; i < ln; i++) {
             attrs = targetData[i].attrs;
 
@@ -72,7 +72,7 @@ Ext.define('Ext.fx.target.CompositeElement', {
             }
         }
     },
-    
+
     remove: function() {
         this.target.destroy();
     }

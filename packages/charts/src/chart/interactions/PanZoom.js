@@ -321,7 +321,7 @@ Ext.define('Ext.chart.interactions.PanZoom', {
     onPanGestureStart: function(e) {
         var me = this,
             chart, rect, xy;
-        
+
         if (!e || !e.touches || e.touches.length < 2) { // Limit drags to single touch
             chart = me.getChart();
             rect = chart.getInnerRect();

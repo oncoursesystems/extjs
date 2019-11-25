@@ -57,11 +57,11 @@ Ext.define('KitchenSink.view.dataview.MultiSort', {
             html: 'Sort on these fields:'
         }, {
             xtype: 'dataview-multisort-sortbutton',
-            text : 'Type',
+            text: 'Type',
             dataIndex: 'type'
         }, {
             xtype: 'dataview-multisort-sortbutton',
-            text : 'Name',
+            text: 'Name',
             dataIndex: 'name'
         }]
     },
@@ -81,7 +81,7 @@ Ext.define('KitchenSink.view.dataview.MultiSort', {
             fields: ['name', 'thumb', 'url', 'type'],
             proxy: {
                 type: 'ajax',
-                url : 'data/sencha-touch-examples.json'
+                url: 'data/sencha-touch-examples.json'
             }
         }
     }]

@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.charts.column.Renderer', {
         'Ext.chart.interactions.ItemHighlight'
     ],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [{
         type: 'Controller',
@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.charts.column.Renderer', {
         type: 'Store',
         path: 'app/store/Pie.js'
     }],
-    // </example>
+    //</example>
     layout: 'fit',
     width: 650,
     height: 500,
@@ -71,7 +71,7 @@ Ext.define('KitchenSink.view.charts.column.Renderer', {
         axes: [{
             type: 'numeric',
             position: 'left',
-            fields: ['g1','g2'],
+            fields: ['g1', 'g2'],
             minimum: 0
         }, {
             type: 'category',

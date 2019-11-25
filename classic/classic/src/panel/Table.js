@@ -15,7 +15,7 @@ Ext.define('Ext.panel.Table', {
     extend: 'Ext.panel.Panel',
 
     xtype: 'tablepanel',
-    
+
     requires: [
         'Ext.layout.container.Fit'
     ],
@@ -344,7 +344,7 @@ Ext.define('Ext.panel.Table', {
      * deferred so that layouts with GridPanels appear, and lay out more quickly.
      */
     deferRowRender: false,
-     
+
     /**
      * @cfg {Boolean} sortableColumns
      * False to disable column sorting via clicking the header and via the Sorting menu items.
@@ -409,7 +409,7 @@ Ext.define('Ext.panel.Table', {
      * False to disable column dragging within this grid.
      */
     enableColumnMove: true,
-    
+
     /**
      * @cfg {Boolean} sealedColumns
      * True to constrain column dragging so that a column cannot be dragged in or out of it's
@@ -454,13 +454,13 @@ Ext.define('Ext.panel.Table', {
      * {@link Ext.view.Table#deferEmptyText deferEmptyText} config in the {@link #viewConfig}
      * config.
      */
-    
+
     /**
      * @cfg {Boolean} [allowDeselect=false]
      * True to allow deselecting a record. This config is forwarded to
      * {@link Ext.selection.Model#allowDeselect}.
      */
-    
+
     /**
      * @cfg {Boolean} bufferedRenderer
      * Buffered rendering is enabled by default.
@@ -471,7 +471,7 @@ Ext.define('Ext.panel.Table', {
      * @since 5.0.0
      */
     bufferedRenderer: true,
-    
+
     /**
      * @cfg {Boolean} preciseHeight
      * Set to `true` to ensure that measurements (such as locking grid's row-height synchronization)
@@ -607,11 +607,11 @@ Ext.define('Ext.panel.Table', {
         if (this.verticalScroller) {
             Ext.raise("The verticalScroller config is not supported.");
         }
-        
+
         if (!this.viewType) {
             Ext.raise("You must specify a viewType config.");
         }
-        
+
         if (this.headers) {
             Ext.raise("The headers config is not supported. Please specify columns instead.");
         }
@@ -633,15 +633,15 @@ Ext.define('Ext.panel.Table', {
         // we will be creating a new Store instance unique to this Panel, and we should
         // destroy it as well.
         store = me.store;
-        
+
         if (store && Ext.isObject(store) && !store.isStore && !store.storeId) {
             store = Ext.apply({
                 autoDestroy: true
             }, store);
         }
-        
+
         store = me.store = Ext.data.StoreManager.lookup(store || 'ext-empty-store');
-        
+
         me.enableLocking = me.enableLocking || me.hasLockedColumns(columns);
 
         // Construct the plugins now rather than in the constructor of AbstractComponent
@@ -675,7 +675,7 @@ Ext.define('Ext.panel.Table', {
             if (!me.mixins.lockable) {
                 me.self.mixin('lockable', Ext.grid.locking.Lockable);
             }
-            
+
             me.injectLockable();
         }
         // Not lockable - create the HeaderContainer
@@ -704,13 +704,13 @@ Ext.define('Ext.panel.Table', {
                     columnLines: me.columnLines,
                     sealed: me.sealedColumns
                 };
-                
+
                 if (Ext.isObject(columns)) {
                     Ext.apply(headerCtCfg, columns);
                     columns = columns.items;
                     delete headerCtCfg.items;
                 }
-                
+
                 me.headerCt = headerCt = new Ext.grid.header.Container(headerCtCfg);
             }
 
@@ -750,11 +750,11 @@ Ext.define('Ext.panel.Table', {
 
             me.relayHeaderCtEvents(headerCt);
             me.features = me.features || [];
-            
+
             if (!Ext.isArray(me.features)) {
                 me.features = [me.features];
             }
-            
+
             me.viewConfig = me.viewConfig || {};
 
             // AbstractDataView will look up a Store configured as an object
@@ -795,385 +795,385 @@ Ext.define('Ext.panel.Table', {
              * @inheritdoc Ext.view.View#beforeitemlongpress
              */
             'beforeitemlongpress',
-            
+
             /**
              * @event beforeitemmousedown
              * @inheritdoc Ext.view.View#beforeitemmousedown
              */
             'beforeitemmousedown',
-            
+
             /**
              * @event beforeitemmouseup
              * @inheritdoc Ext.view.View#beforeitemmouseup
              */
             'beforeitemmouseup',
-            
+
             /**
              * @event beforeitemmouseenter
              * @inheritdoc Ext.view.View#beforeitemmouseenter
              */
             'beforeitemmouseenter',
-            
+
             /**
              * @event beforeitemmouseleave
              * @inheritdoc Ext.view.View#beforeitemmouseleave
              */
             'beforeitemmouseleave',
-            
+
             /**
              * @event beforeitemclick
              * @inheritdoc Ext.view.View#beforeitemclick
              */
             'beforeitemclick',
-            
+
             /**
              * @event beforeitemdblclick
              * @inheritdoc Ext.view.View#beforeitemdblclick
              */
             'beforeitemdblclick',
-            
+
             /**
              * @event beforeitemcontextmenu
              * @inheritdoc Ext.view.View#beforeitemcontextmenu
              */
             'beforeitemcontextmenu',
-            
+
             /**
              * @event itemlongpress
              * @inheritdoc Ext.view.View#itemlongpress
              */
             'itemlongpress',
-            
+
             /**
              * @event itemmousedown
              * @inheritdoc Ext.view.View#itemmousedown
              */
             'itemmousedown',
-            
+
             /**
              * @event itemmouseup
              * @inheritdoc Ext.view.View#itemmouseup
              */
             'itemmouseup',
-            
+
             /**
              * @event itemmouseenter
              * @inheritdoc Ext.view.View#itemmouseenter
              */
             'itemmouseenter',
-            
+
             /**
              * @event itemmouseleave
              * @inheritdoc Ext.view.View#itemmouseleave
              */
             'itemmouseleave',
-            
+
             /**
              * @event itemclick
              * @inheritdoc Ext.view.View#itemclick
              */
             'itemclick',
-            
+
             /**
              * @event itemdblclick
              * @inheritdoc Ext.view.View#itemdblclick
              */
             'itemdblclick',
-            
+
             /**
              * @event itemcontextmenu
              * @inheritdoc Ext.view.View#itemcontextmenu
              */
             'itemcontextmenu',
-            
+
             /**
              * @event beforecellclick
              * @inheritdoc Ext.view.Table#beforecellclick
              */
             'beforecellclick',
-            
+
             /**
              * @event cellclick
              * @inheritdoc Ext.view.Table#cellclick
              */
             'cellclick',
-            
+
             /**
              * @event beforecelldblclick
              * @inheritdoc Ext.view.Table#beforecelldblclick
              */
             'beforecelldblclick',
-            
+
             /**
              * @event celldblclick
              * @inheritdoc Ext.view.Table#celldblclick
              */
             'celldblclick',
-            
+
             /**
              * @event beforecellcontextmenu
              * @inheritdoc Ext.view.Table#beforecellcontextmenu
              */
             'beforecellcontextmenu',
-            
+
             /**
              * @event cellcontextmenu
              * @inheritdoc Ext.view.Table#cellcontextmenu
              */
             'cellcontextmenu',
-            
+
             /**
              * @event beforecellmousedown
              * @inheritdoc Ext.view.Table#beforecellmousedown
              */
             'beforecellmousedown',
-            
+
             /**
              * @event cellmousedown
              * @inheritdoc Ext.view.Table#cellmousedown
              */
             'cellmousedown',
-            
+
             /**
              * @event beforecellmouseup
              * @inheritdoc Ext.view.Table#beforecellmouseup
              */
             'beforecellmouseup',
-            
+
             /**
              * @event cellmouseup
              * @inheritdoc Ext.view.Table#cellmouseup
              */
             'cellmouseup',
-            
+
             /**
              * @event beforecellkeydown
              * @inheritdoc Ext.view.Table#beforecellkeydown
              */
             'beforecellkeydown',
-            
+
             /**
              * @event cellkeydown
              * @inheritdoc Ext.view.Table#cellkeydown
              */
             'cellkeydown',
-            
+
             /**
              * @event rowclick
              * @inheritdoc Ext.view.Table#rowclick
              */
             'rowclick',
-            
+
             /**
              * @event rowdblclick
              * @inheritdoc Ext.view.Table#rowdblclick
              */
             'rowdblclick',
-            
+
             /**
              * @event rowcontextmenu
              * @inheritdoc Ext.view.Table#rowcontextmenu
              */
             'rowcontextmenu',
-            
+
             /**
              * @event rowmousedown
              * @inheritdoc Ext.view.Table#rowmousedown
              */
             'rowmousedown',
-            
+
             /**
              * @event rowmouseup
              * @inheritdoc Ext.view.Table#rowmouseup
              */
             'rowmouseup',
-            
+
             /**
              * @event rowkeydown
              * @inheritdoc Ext.view.Table#rowkeydown
              */
             'rowkeydown',
-            
+
             /**
              * @event beforeitemkeydown
              * @inheritdoc Ext.view.View#event!beforeitemkeydown
              */
             'beforeitemkeydown',
-            
+
             /**
              * @event itemkeydown
              * @inheritdoc Ext.view.View#event!itemkeydown
              */
             'itemkeydown',
-            
+
             /**
              * @event beforeitemkeyup
              * @inheritdoc Ext.view.View#event!beforeitemkeyup
              */
             'beforeitemkeyup',
-            
+
             /**
              * @event itemkeyup
              * @inheritdoc Ext.view.View#event!itemkeyup
              */
             'itemkeyup',
-            
+
             /**
              * @event beforeitemkeypress
              * @inheritdoc Ext.view.View#event!beforeitemkeypress
              */
             'beforeitemkeypress',
-            
+
             /**
              * @event itemkeypress
              * @inheritdoc Ext.view.View#event!itemkeypress
              */
             'itemkeypress',
-            
+
             /**
              * @event beforecontainermousedown
              * @inheritdoc Ext.view.View#beforecontainermousedown
              */
             'beforecontainermousedown',
-            
+
             /**
              * @event beforecontainermouseup
              * @inheritdoc Ext.view.View#beforecontainermouseup
              */
             'beforecontainermouseup',
-            
+
             /**
              * @event beforecontainermouseover
              * @inheritdoc Ext.view.View#beforecontainermouseover
              */
             'beforecontainermouseover',
-            
+
             /**
              * @event beforecontainermouseout
              * @inheritdoc Ext.view.View#beforecontainermouseout
              */
             'beforecontainermouseout',
-            
+
             /**
              * @event beforecontainerclick
              * @inheritdoc Ext.view.View#beforecontainerclick
              */
             'beforecontainerclick',
-            
+
             /**
              * @event beforecontainerdblclick
              * @inheritdoc Ext.view.View#beforecontainerdblclick
              */
             'beforecontainerdblclick',
-            
+
             /**
              * @event beforecontainercontextmenu
              * @inheritdoc Ext.view.View#beforecontainercontextmenu
              */
             'beforecontainercontextmenu',
-            
+
             /**
              * @event beforecontainerkeydown
              * @inheritdoc Ext.view.View#beforecontainerkeydown
              */
             'beforecontainerkeydown',
-            
+
             /**
              * @event beforecontainerkeyup
              * @inheritdoc Ext.view.View#beforecontainerkeyup
              */
             'beforecontainerkeyup',
-            
+
             /**
              * @event beforecontainerkeypress
              * @inheritdoc Ext.view.View#beforecontainerkeypress
              */
             'beforecontainerkeypress',
-            
+
             /**
              * @event containermouseup
              * @inheritdoc Ext.view.View#containermouseup
              */
             'containermouseup',
-            
+
             /**
              * @event containermousedown
              * @inheritdoc Ext.view.View#containermousedown
              */
             'containermousedown',
-            
+
             /**
              * @event containermouseover
              * @inheritdoc Ext.view.View#containermouseover
              */
             'containermouseover',
-            
+
             /**
              * @event containermouseout
              * @inheritdoc Ext.view.View#containermouseout
              */
             'containermouseout',
-            
+
             /**
              * @event containerclick
              * @inheritdoc Ext.view.View#containerclick
              */
             'containerclick',
-            
+
             /**
              * @event containerdblclick
              * @inheritdoc Ext.view.View#containerdblclick
              */
             'containerdblclick',
-            
+
             /**
              * @event containercontextmenu
              * @inheritdoc Ext.view.View#containercontextmenu
              */
             'containercontextmenu',
-            
+
             /**
              * @event containerkeydown
              * @inheritdoc Ext.view.View#containerkeydown
              */
             'containerkeydown',
-            
+
             /**
              * @event containerkeyup
              * @inheritdoc Ext.view.View#containerkeyup
              */
             'containerkeyup',
-            
+
             /**
              * @event containerkeypress
              * @inheritdoc Ext.view.View#containerkeypress
              */
             'containerkeypress',
-            
+
             /**
              * @event beforeselect
              * @inheritdoc Ext.selection.RowModel#beforeselect
              */
             'beforeselect',
-            
+
             /**
              * @event select
              * @inheritdoc Ext.selection.RowModel#select
              */
             'select',
-            
+
             /**
              * @event beforedeselect
              * @inheritdoc Ext.selection.RowModel#beforedeselect
              */
             'beforedeselect',
-            
+
             /**
              * @event deselect
              * @inheritdoc Ext.selection.RowModel#deselect
              */
             'deselect',
-            
+
             /**
              * @event beforerowexit
              * @inheritdoc Ext.view.Table#beforerowexit
@@ -1202,18 +1202,18 @@ Ext.define('Ext.panel.Table', {
             (me.dockedItems = Ext.Array.from(me.dockedItems, true)).unshift(headerCt);
             headerCt.add(columns);
         }
-        
+
         // Maintain backward compatibiliy by providing the initial leaf column set as a property.
         me.columns = me.headerCt.getGridColumns();
 
         me.callParent();
-        
+
         me.syncHeaderVisibility();
-        
+
         if (me.enableLocking) {
             me.afterInjectLockable();
         }
-        
+
         me.addStateEvents([
             'columnresize',
             'columnmove',
@@ -1225,7 +1225,7 @@ Ext.define('Ext.panel.Table', {
             'filterchange',
             'groupchange'
         ]);
-        
+
         // rowBody feature events
         /**
          * @event beforerowbodymousedown
@@ -1256,7 +1256,7 @@ Ext.define('Ext.panel.Table', {
          * @preventable
          * @inheritdoc Ext.view.Table#event-beforerowbodycontextmenu
          */
-    
+
         /**
          * @event beforerowbodylongpress
          * @preventable
@@ -1305,7 +1305,7 @@ Ext.define('Ext.panel.Table', {
          * @event rowbodycontextmenu
          * @inheritdoc Ext.view.Table#event-rowbodycontextmenu
          */
-    
+
         /**
          * @event rowbodylongpress
          * @inheritdoc Ext.view.Table#event-rowbodylongpress
@@ -1344,7 +1344,7 @@ Ext.define('Ext.panel.Table', {
         if (me.lockable) {
             me.getProtoBody().addCls(me.lockingBodyCls);
         }
-        
+
         // Don't create a buffered renderer for a locked grid.
         else {
             // If we're auto heighting, we can't buffered render, so don't create it
@@ -1354,27 +1354,27 @@ Ext.define('Ext.panel.Table', {
                     Ext.raise('Cannot use buffered rendering with auto height');
                 }
                 //</debug>
-                
+
                 me.bufferedRenderer = bufferedRenderer = false;
             }
-        
+
             if (bufferedRenderer && !bufferedRenderer.isBufferedRenderer) {
                 // Create a BufferedRenderer as a plugin if we have not already configured with one.
                 bufferedRenderer = {
                     xclass: 'Ext.grid.plugin.BufferedRenderer'
                 };
-                
+
                 // eslint-disable-next-line max-len
                 Ext.copy(bufferedRenderer, me, 'variableRowHeight,numFromEdge,trailingBufferZone,leadingBufferZone,scrollToLoadBuffer', true);
-                
+
                 me.bufferedRenderer = me.addPlugin(bufferedRenderer);
             }
-            
+
             ariaAttr = me.ariaRenderAttributes || (me.ariaRenderAttributes = {});
             ariaAttr['aria-readonly'] = !me.isEditable;
             ariaAttr['aria-multiselectable'] = me.selModel.selectionMode !== 'SINGLE';
         }
-        
+
         me.callParent(arguments);
     },
 
@@ -1436,11 +1436,11 @@ Ext.define('Ext.panel.Table', {
     focus: function() {
         // TablePanel is not focusable, but allow a call to delegate into the view
         var view = this.getView();
-        
+
         if (!view.isVisible(true)) {
             return false;
         }
-        
+
         view.focus();
     },
 
@@ -1474,10 +1474,10 @@ Ext.define('Ext.panel.Table', {
         else if (Ext.isObject(columns)) {
             columns = columns.items;
         }
-        
+
         for (i = 0, len = columns.length; i < len; i++) {
             column = columns[i];
-            
+
             if (!column.processed && column.locked) {
                 return true;
             }
@@ -1491,49 +1491,49 @@ Ext.define('Ext.panel.Table', {
              * @inheritdoc Ext.grid.header.Container#columnresize
              */
             'columnresize',
-            
+
             /**
              * @event columnmove
              * @inheritdoc Ext.grid.header.Container#columnmove
              */
             'columnmove',
-            
+
             /**
              * @event columnhide
              * @inheritdoc Ext.grid.header.Container#columnhide
              */
             'columnhide',
-            
+
             /**
              * @event columnshow
              * @inheritdoc Ext.grid.header.Container#columnshow
              */
             'columnshow',
-            
+
             /**
              * @event columnschanged
              * @inheritdoc Ext.grid.header.Container#columnschanged
              */
             'columnschanged',
-            
+
             /**
              * @event sortchange
              * @inheritdoc Ext.grid.header.Container#sortchange
              */
             'sortchange',
-            
+
             /**
              * @event headerclick
              * @inheritdoc Ext.grid.header.Container#headerclick
              */
             'headerclick',
-            
+
             /**
              * @event headercontextmenu
              * @inheritdoc Ext.grid.header.Container#headercontextmenu
              */
             'headercontextmenu',
-            
+
             /**
              * @event headertriggerclick
              * @inheritdoc Ext.grid.header.Container#headertriggerclick
@@ -1552,7 +1552,7 @@ Ext.define('Ext.panel.Table', {
         if (storeState) {
             state.storeState = storeState;
         }
-        
+
         return state;
     },
 
@@ -1624,18 +1624,18 @@ Ext.define('Ext.panel.Table', {
         // }
         if (columns) {
             result = {};
-            
+
             for (i = 0, len = columns.length; i < len; i++) {
                 columnState = columns[i];
                 columnState.index = i;
-                
+
                 if (columnState.columns) {
                     columnState.columns = this.buildColumnHash(columnState.columns);
                 }
-                
+
                 result[columnState.id] = columnState;
             }
-            
+
             return result;
         }
     },
@@ -1680,7 +1680,7 @@ Ext.define('Ext.panel.Table', {
                         ownerGrid: me
                     });
                 }
-                
+
                 me.liveRowContexts[record.internalId] = rowContext;
                 rowContext.setRecord(record, index++);
             }
@@ -1722,16 +1722,16 @@ Ext.define('Ext.panel.Table', {
         // Destroy widgets from both live contexts, and free ones
         for (recInternalId in contexts) {
             rowWidgets = contexts[recInternalId].widgets;
-            
+
             if (rowWidgets) {
                 Ext.destroy(rowWidgets[ownerId]);
                 delete rowWidgets[ownerId];
             }
         }
-        
+
         for (i = 0; i < len; i++) {
             rowWidgets = freeRowContexts[i].widgets;
-            
+
             if (rowWidgets) {
                 Ext.destroy(rowWidgets[ownerId]);
                 delete rowWidgets[ownerId];
@@ -1748,7 +1748,7 @@ Ext.define('Ext.panel.Table', {
         for (recInternalId in contexts) {
             result.push(contexts[recInternalId].widgets[ownerId]);
         }
-        
+
         return result;
     },
 
@@ -1845,7 +1845,7 @@ Ext.define('Ext.panel.Table', {
                 me.fireEvent('viewcreated', me, me.view);
             }
         }
-        
+
         return me.view;
     },
 
@@ -1986,14 +1986,14 @@ Ext.define('Ext.panel.Table', {
         else {
             me.view.moveColumn(fromIdx, toIdx, colsToMove);
         }
-        
+
         me.delayScroll();
     },
 
     // Section onHeaderHide is invoked after view.
     onHeaderHide: function(headerCt, header) {
         var view = this.view;
-        
+
         // The headerCt may be hiding multiple children if a leaf level column
         // causes a parent (and possibly other parents) to be hidden. Only run the refresh
         // once we're done
@@ -2004,7 +2004,7 @@ Ext.define('Ext.panel.Table', {
 
     onHeaderShow: function(headerCt, header) {
         var view = this.view;
-        
+
         if (view.refreshCounter) {
             view.refreshView();
         }
@@ -2013,7 +2013,7 @@ Ext.define('Ext.panel.Table', {
     // To be triggered on add/remove/move for a leaf header
     onHeadersChanged: function(headerCt, header) {
         var me = this;
-        
+
         if (me.rendered && !me.reconfiguring) {
             me.view.refreshView();
             me.delayScroll();
@@ -2022,7 +2022,7 @@ Ext.define('Ext.panel.Table', {
 
     delayScroll: function() {
         var target = this.view;
-        
+
         if (target) {
             // Do not cause a layout by reading scrollX now.
             // It must be read from the target when the task finally executes.
@@ -2054,11 +2054,11 @@ Ext.define('Ext.panel.Table', {
 
     getScrollerOwner: function() {
         var rootCmp = this;
-        
+
         if (!this.scrollerOwner) {
             rootCmp = this.up('[scrollerOwner]');
         }
-        
+
         return rootCmp;
     },
 
@@ -2068,7 +2068,7 @@ Ext.define('Ext.panel.Table', {
      */
     getLhsMarker: function() {
         var me = this;
-        
+
         return me.lhsMarker || (me.lhsMarker = Ext.DomHelper.append(me.el, {
             role: 'presentation',
             cls: me.resizeMarkerCls
@@ -2121,14 +2121,14 @@ Ext.define('Ext.panel.Table', {
         if (!me.ignoreNextSelection) {
             me.ignoreNextSelection = true;
             sm = me.getSelectionModel();
-            
+
             if (selection) {
                 sm.select(selection);
             }
             else {
                 sm.deselectAll();
             }
-            
+
             me.ignoreNextSelection = false;
         }
 
@@ -2141,16 +2141,16 @@ Ext.define('Ext.panel.Table', {
 
         if (!me.ignoreNextSelection) {
             me.ignoreNextSelection = true;
-            
+
             if (selection.length) {
                 selected = selModel.getLastSelected();
                 me.hasHadSelection = true;
             }
-            
+
             if (me.hasHadSelection) {
                 me.setSelection(selected);
             }
-            
+
             me.ignoreNextSelection = false;
         }
     },
@@ -2189,7 +2189,7 @@ Ext.define('Ext.panel.Table', {
             scrollTarget;
 
         setBody = setBody === true;
-        
+
         // Only set the horizontal scroll if we've changed position,
         // so that we don't set this on vertical scrolls
         if (me.rendered && (setBody || x !== me.scrollXPos)) {
@@ -2199,7 +2199,7 @@ Ext.define('Ext.panel.Table', {
                 scrollTarget = me.getScrollTarget();
                 scrollTarget.setScrollX(x);
             }
-            
+
             me.headerCt.setScrollX(x);
             me.scrollXPos = x;
         }
@@ -2238,14 +2238,14 @@ Ext.define('Ext.panel.Table', {
                 load: me.onStoreLoad,
                 scope: me
             });
-            
+
             me.storeRelayers = me.relayEvents(store, [
                 /**
                  * @event filterchange
                  * @inheritdoc Ext.data.Store#filterchange
                  */
                 'filterchange',
-                
+
                 /**
                  * @event groupchange
                  * @inheritdoc Ext.data.Store#groupchange
@@ -2281,7 +2281,7 @@ Ext.define('Ext.panel.Table', {
             Ext.destroy(me.storeRelayers);
 
             view = me.view;
-            
+
             if (view.store) {
                 view.bindStore(null);
             }
@@ -2345,7 +2345,7 @@ Ext.define('Ext.panel.Table', {
                 !(store.loading || store.isLoaded())) {
                 store.load();
             }
-            
+
             Ext.destroy(me.globalShowListener);
         }
     },
@@ -2404,7 +2404,7 @@ Ext.define('Ext.panel.Table', {
             store = Ext.StoreManager.lookup('ext-empty-store');
             storeChanged = store !== oldStore;
         }
-        
+
         me.fireEvent('beforereconfigure', me, store, columns, oldStore, oldColumns);
 
         Ext.suspendLayouts();
@@ -2438,7 +2438,7 @@ Ext.define('Ext.panel.Table', {
                 headerCt.add(columns);
                 columnsChanged = true;
             }
-            
+
             headerCt.onOwnerGridReconfigure(storeChanged, columnsChanged);
 
             refreshCounter = view.refreshCounter;
@@ -2455,7 +2455,7 @@ Ext.define('Ext.panel.Table', {
 
         Ext.resumeLayouts(true);
         me.reconfiguring = false;
-        
+
         if (lockable) {
             me.afterReconfigureLockable();
         }
@@ -2471,10 +2471,10 @@ Ext.define('Ext.panel.Table', {
 
         me.fireEvent('reconfigure', me, store, columns, oldStore, oldColumns);
         delete me.reconfiguring;
-        
+
         if (storeChanged) {
             me.fireEvent('storechange', me, store, oldStore);
-            
+
             if (!oldStore.destroyed && oldStore.autoDestroy) {
                 oldStore.destroy();
             }
@@ -2493,36 +2493,36 @@ Ext.define('Ext.panel.Table', {
         if (me.lockable) {
             me.destroyLockable();
         }
-            
+
         if (task) {
             task.cancel();
         }
-        
+
         // Need to destroy plugins here because they may have listeners on the View
         Ext.destroy(
             me.rowContextParent, me.plugins, me.focusEnterLeaveListeners,
             me.freeRowContents, Ext.Object.getValues(me.liveRowContexts),
             me.lhsMarker, me.rhsMarker
         );
-        
+
         me.callParent();
-        
+
         // Have to unbind the store this late because plugins and other things
         // may still need it until the very end.
         me.unbindStore();
     },
-    
+
     getElementHeight: function(el) {
         var rect = this.preciseHeight &&
             el.getBoundingClientRect();
-        
+
         return rect ? (rect.height || (rect.bottom - rect.top)) : el.offsetHeight;
     },
-    
+
     getElementSize: function(el) {
         var rect = this.preciseHeight &&
             el.getBoundingClientRect();
-        
+
         return {
             width: rect ? (rect.width || (rect.right - rect.left)) : el.offsetWidth,
             height: rect ? (rect.height || (rect.bottom - rect.top)) : el.offsetHeight
@@ -2544,7 +2544,7 @@ Ext.define('Ext.panel.Table', {
             if (typeof record !== 'number' && !record.isEntity) {
                 record = this.store.getById(record);
             }
-            
+
             // eslint-disable-next-line vars-on-top
             var me = this,
                 view = me.getView(),
@@ -2581,20 +2581,20 @@ Ext.define('Ext.panel.Table', {
                     single: true,
                     destroyable: true
                 });
-                
+
                 return;
             }
 
             if (typeof column === 'number') {
                 column = me.ownerGrid.getVisibleColumnManager().getColumns()[column];
             }
-            
+
             // We found the DOM node associated with the record
             if (domNode) {
                 if (!record.isEntity) {
                     record = view.getRecord(domNode);
                 }
-                
+
                 verticalScroller = isLocking ? me.ownerGrid.getScrollable() : view.getScrollable();
 
                 // Scrolling *may* be asynchronous if animation is used, so post-process
@@ -2603,15 +2603,15 @@ Ext.define('Ext.panel.Table', {
                     internalCallback = function() {
                         targetContext =
                             new Ext.grid.CellContext(view).setPosition(record, column || 0);
-                        
+
                         if (select) {
                             view.getSelectionModel().selectByPosition(targetContext);
                         }
-                        
+
                         if (doFocus) {
                             view.getNavigationModel().setPosition(targetContext);
                         }
-                        
+
                         Ext.callback(callback, scope || me, [true, record, domNode]);
                     };
                 }
@@ -2642,7 +2642,7 @@ Ext.define('Ext.panel.Table', {
                             x: !!column
                         });
                     }
-                    
+
                     if (scrollPromise && internalCallback) {
                         scrollPromise.then(internalCallback);
                     }
@@ -2665,7 +2665,7 @@ Ext.define('Ext.panel.Table', {
                 Ext.callback(callback, scope || me, [false, null]);
             }
         },
-        
+
         getFocusEl: function() {
             return this.getView().getFocusEl();
         },
@@ -2679,13 +2679,13 @@ Ext.define('Ext.panel.Table', {
          */
         getRowContextViewModelParent: function() {
             var vm = this.lookupViewModel() || this.rowContextParent;
-            
+
             if (!vm) {
                 // If we get to this point, it means that there's no parent VM above us
                 // so we have nothing to hook up to
                 this.rowContextParent = vm = new Ext.app.ViewModel();
             }
-            
+
             return vm;
         },
 
@@ -2698,7 +2698,7 @@ Ext.define('Ext.panel.Table', {
             for (recInternalId in contexts) {
                 contexts[recInternalId].handleWidgetViewChange(view, ownerId);
             }
-            
+
             for (i = 0; i < len; i++) {
                 freeRowContexts[i].handleWidgetViewChange(view, ownerId);
             }
@@ -2726,7 +2726,7 @@ Ext.define('Ext.panel.Table', {
             if (!me.destroying && me.view.setActionableMode(enabled, position) !== false) {
                 me.fireEvent('actionablemodechange', enabled);
                 me[enabled ? 'addCls' : 'removeCls'](me.actionableModeCls);
-                
+
                 return true;
             }
         },
@@ -2737,8 +2737,9 @@ Ext.define('Ext.panel.Table', {
          * @private
          */
         getOverflowStyle: function() {
-            this.scrollFlags = this._scrollFlags.false.false;
-            
+            // eslint-disable-next-line dot-notation
+            this.scrollFlags = this._scrollFlags['false']['false'];
+
             return {
                 overflowX: 'hidden',
                 overflowY: 'hidden'
@@ -2778,7 +2779,7 @@ Ext.define('Ext.panel.Table', {
 
             if (me.lockable) {
                 me.syncLockableHeaderVisibility();
-                
+
                 return;
             }
 
@@ -2793,15 +2794,15 @@ Ext.define('Ext.panel.Table', {
                 headerCt.hiddenHeaders = hideHeaders;
                 headerCt.toggleCls(me.hiddenHeaderCtCls, hideHeaders);
                 me.toggleCls(me.hiddenHeaderCls, hideHeaders);
-                
+
                 if (!hideHeaders) {
                     headerCt.setScrollable({
                         x: false,
                         y: false
                     });
-                    
+
                     viewScroller = me.view.getScrollable();
-                    
+
                     if (viewScroller) {
                         headerCt.getScrollable().addPartner(viewScroller, 'x');
                     }

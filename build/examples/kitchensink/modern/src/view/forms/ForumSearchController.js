@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.forms.ForumSearchController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.form-forumsearch',
 
-    doSearch: function (field) {
+    doSearch: function(field) {
         var list = this.lookup('list'),
             store = list.getStore(),
             proxy = store.getProxy(),
@@ -13,7 +13,8 @@ Ext.define('KitchenSink.view.forms.ForumSearchController', {
 
         if (value) {
             store.load();
-        } else {
+        }
+        else {
             store.removeAll();
         }
     }

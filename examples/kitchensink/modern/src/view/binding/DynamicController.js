@@ -16,7 +16,8 @@ Ext.define('KitchenSink.view.binding.DynamicController', {
             content = KitchenSink.DummyText.longText;
 
             this.contentSwitch = false;
-        } else {
+        }
+        else {
             content = KitchenSink.DummyText.mediumText;
 
             this.contentSwitch = true;

@@ -1712,7 +1712,7 @@ topSuite("Ext.data.Session", [
                         id: 202,
                         orderId: 1
                     }]);
-                    
+
                     var orderItem = orderItems.getAt(0);
 
                     order.setAddress(null);
@@ -1738,7 +1738,7 @@ topSuite("Ext.data.Session", [
             });
             describe("one to one", function() {
                 var user, address;
-                
+
                 afterEach(function() {
                     user = address = null;
                 });
@@ -2532,7 +2532,7 @@ topSuite("Ext.data.Session", [
                             id: 202,
                             orderId: 1
                         }]);
-                        
+
                         var orderItem = orderItems.getAt(0);
 
                         order.setAddress(null);
@@ -2962,7 +2962,7 @@ topSuite("Ext.data.Session", [
                             });
                         });
                     });
-                    
+
                 });
 
                 describe("many to many", function() {
@@ -4104,7 +4104,7 @@ topSuite("Ext.data.Session", [
                         id: 202,
                         orderId: 1
                     }]);
-                    
+
                     var orderItem = orderItems.getAt(0);
 
                     order.setAddress(null);
@@ -4158,7 +4158,6 @@ topSuite("Ext.data.Session", [
 
                         posts = child.getRecord('User', 1).posts();
                     });
-
 
                     afterEach(function() {
                         user = posts = null;
@@ -5044,7 +5043,7 @@ topSuite("Ext.data.Session", [
 
                     rec.drop();
                 });
-                
+
                 describe("events", function() {
                     var rec;
 
@@ -6097,7 +6096,7 @@ topSuite("Ext.data.Session", [
                 state.newChild.setParent(state.newParent);
                 state.newGrandChild.setChild(state.newChild);
             });
-            
+
             afterEach(function() {
                 state = null;
             });

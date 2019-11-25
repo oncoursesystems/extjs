@@ -71,11 +71,11 @@ topSuite("Ext.dashboard.DropZone", ['Ext.dashboard.Dashboard', 'Ext.layout.conta
             thirdWidget = allItems[2].items.items[0];
             targetDom = thirdWidget.header.el.dom;
         });
-    
+
         afterEach(function() {
             panel = Ext.destroy(panel);
         });
-        
+
         describe('panels', function() {
             it('should split current column and increase count of splitters and items on dragging', function() {
                 var countSplitters = panel.el.dom.querySelectorAll('.x-splitter').length,
@@ -108,7 +108,7 @@ topSuite("Ext.dashboard.DropZone", ['Ext.dashboard.Dashboard', 'Ext.layout.conta
                     // drop hold of panel
                     jasmine.fireMouseEvent(targetDom, 'mousemove', 250, 250);
                     jasmine.fireMouseEvent(targetDom, 'mouseup', 350, 250);
-                    
+
                     // the placeholder should be removed once mouse dropped
                     expect(panel.el.dom.querySelectorAll('.x-panel-dd-spacer').length).toBe(0);
                 });

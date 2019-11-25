@@ -64,7 +64,7 @@ Ext.define('Ext.ux.ajax.Simlet', function() {
         doGet: function(ctx) {
             return this.handleRequest(ctx);
         },
-        
+
         doPost: function(ctx) {
             return this.handleRequest(ctx);
         },
@@ -154,7 +154,7 @@ Ext.define('Ext.ux.ajax.Simlet', function() {
                 });
                 xhr.open(method, url, async);
             }
-            
+
             return xhr;
         },
 
@@ -196,7 +196,7 @@ Ext.define('Ext.ux.ajax.Simlet', function() {
 
                     params = url;
                     // fall...
-                
+
                 // eslint-disable-next-line no-fallthrough
                 case 1:
                     url = method;

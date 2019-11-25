@@ -4,7 +4,7 @@
  */
 Ext.define('Ext.util.GroupCollection', {
     extend: 'Ext.util.Collection',
-    
+
     requires: [
         'Ext.util.Group',
 
@@ -88,7 +88,8 @@ Ext.define('Ext.util.GroupCollection', {
                 entries = groupData.entries,
                 groupKey, i, len, entry, j;
 
-            // The magic of Collection will automatically update the group with its new members.
+            // The magic of Collection will automatically update the group with its new
+            // members.
             for (i = 0, len = entries.length; i < len; ++i) {
                 entry = entries[i];
 
@@ -131,12 +132,12 @@ Ext.define('Ext.util.GroupCollection', {
                 // The item has changed, so the group key may be different, need
                 // to look it up
                 item = changeDetails.item || changeDetails.items[0];
-                entries = me.createEntries(source, [item]).entries;
+                entries = me.createEntries(source, [item], false).entries;
                 entries[0].group =
                     itemGroupKeys['oldKey' in details ? details.oldKey : source.getKey(item)];
             }
             else {
-                entries = me.createEntries(source, details.items).entries;
+                entries = me.createEntries(source, details.items, false).entries;
             }
 
             for (i = 0, n = entries.length; i < n; ++i) {
@@ -187,7 +188,10 @@ Ext.define('Ext.util.GroupCollection', {
             for (i = 0; i < length; ++i) {
                 group = items[i];
 
-                if (group.getSorters() !== sorters) {
+                if (group.getSorters() === sorters) {
+                    group.sortItems();
+                }
+                else {
                     group.setSorters(sorters);
                 }
             }
@@ -259,7 +263,7 @@ Ext.define('Ext.util.GroupCollection', {
         me.sortItems();
     },
 
-    createEntries: function(source, items) {
+    createEntries: function(source, items, createGroups) {
     // Separate the items out into arrays by group
         var me = this,
             groups = {},
@@ -271,7 +275,7 @@ Ext.define('Ext.util.GroupCollection', {
             groupKey = grouper.getGroupString(item = items[i]);
 
             if (!(entry = groups[groupKey])) {
-                group = me.getGroup(source, groupKey);
+                group = me.getGroup(source, groupKey, createGroups);
 
                 entries.push(groups[groupKey] = entry = {
                     group: group,
@@ -335,7 +339,7 @@ Ext.define('Ext.util.GroupCollection', {
         itemGroupKeys[itemKey] = group;
     },
 
-    getGroup: function(source, key) {
+    getGroup: function(source, key, createGroups) {
         var me = this,
             group = me.get(key),
             autoSort = me.getAutoSort();
@@ -343,9 +347,12 @@ Ext.define('Ext.util.GroupCollection', {
         if (group) {
             group.setSorters(source.getSorters());
         }
-        else {
+        else if (createGroups !== false) {
             group = me.emptyGroups[key] || Ext.create(Ext.apply({
                 xclass: 'Ext.util.Group',
+                //<debug>
+                id: me.getId() + '-group-' + key,
+                //</debug>
                 groupKey: key,
                 rootProperty: me.getItemRoot(),
                 sorters: source.getSorters()
@@ -360,7 +367,7 @@ Ext.define('Ext.util.GroupCollection', {
 
         return group;
     },
-    
+
     getKey: function(item) {
         return item.getGroupKey();
     },
@@ -394,7 +401,7 @@ Ext.define('Ext.util.GroupCollection', {
         var me = this;
 
         me.$groupable = null;
-        
+
         // Ensure group objects get destroyed, they may have
         // added listeners to the main collection sorters.
         me.destroyGroups(me.items);

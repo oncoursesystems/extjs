@@ -205,7 +205,7 @@ topSuite('Ext.layout.Form', ['Ext.form.Panel', 'Ext.field.*'], function() {
         });
     });
 
-    xit('should allow containerfield as a child item', function () {
+    xit('should allow containerfield as a child item', function() {
         container = Ext.create({
             xtype: 'formpanel',
             layout: {

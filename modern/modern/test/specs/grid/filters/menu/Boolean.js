@@ -163,7 +163,7 @@ i;
 
             // Trigger click 
             colMap.colf1.showMenu();
-            
+
             // To check that the initially filter is not checked
             expect(colMap.colf1.getMenu().getComponent('filter').getChecked()).toBe(false);
         });

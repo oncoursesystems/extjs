@@ -22,7 +22,7 @@ Ext.define('Ext.ux.desktop.Video', {
     controls: true,
     bodyStyle: 'background-color:#000;color:#fff',
     html: '',
-    
+
     /* eslint-disable max-len, indent */
     tpl: [
         '<video id="{id}-video" autoPlay="{autoplay}" controls="{controls}" poster="{poster}" start="{start}" loopstart="{loopstart}" loopend="{loopend}" autobuffer="{autobuffer}" loop="{loop}" style="width:100%;height:100%">',
@@ -52,7 +52,7 @@ Ext.define('Ext.ux.desktop.Video', {
             }
             else {
                 chrome = '<a href="http://www.google.com/chrome">Chrome</a>';
-                
+
                 fallback += 'Please try <a href="http://www.mozilla.com">Firefox</a>';
 
                 if (Ext.isIE) {
@@ -64,7 +64,7 @@ Ext.define('Ext.ux.desktop.Video', {
                 }
             }
         }
-        
+
         me.fallbackHTML = fallback;
 
         cfg = me.data =
@@ -81,7 +81,7 @@ Ext.define('Ext.ux.desktop.Video', {
         if (me.autoplay) {
             cfg.autoplay = 1;
         }
-        
+
         if (me.controls) {
             cfg.controls = 1;
         }
@@ -93,25 +93,25 @@ Ext.define('Ext.ux.desktop.Video', {
         else {
             cfg.src = [{ src: me.src }];
         }
-        
+
         me.callParent();
     },
 
     afterRender: function() {
         var me = this,
             el;
-        
+
         me.callParent();
-        
+
         me.video = me.body.getById(me.id + '-video');
         el = me.video.dom;
         me.supported = (el && el.tagName.toLowerCase() === 'video');
-        
+
         if (me.supported) {
             me.video.on('error', me.onVideoError, me);
         }
     },
-    
+
     getFallback: function() {
         return '<h1 style="background-color:#ff4f4f;padding: 10px;">' + this.fallbackHTML + '</h1>';
     },
@@ -130,14 +130,14 @@ Ext.define('Ext.ux.desktop.Video', {
             videoDom;
 
         video = me.video;
-        
+
         if (me.supported && video) {
             videoDom = video.dom;
-            
+
             if (videoDom && videoDom.pause) {
                 videoDom.pause();
             }
-            
+
             video.remove();
             me.video = null;
         }

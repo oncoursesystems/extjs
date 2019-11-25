@@ -70,9 +70,9 @@ Ext.define('Ext.sparkline.CanvasBase', {
      */
     _genShape: function(shapetype, shapeargs) {
         var id = this.shapeCount++;
-        
+
         shapeargs.unshift(id);
-        
+
         return new Ext.sparkline.Shape(this, id, shapetype, shapeargs);
     },
 

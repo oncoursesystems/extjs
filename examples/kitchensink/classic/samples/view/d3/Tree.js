@@ -16,7 +16,7 @@ Ext.define('KitchenSink.view.d3.Tree', {
         'Ext.d3.interaction.PanZoom',
         'Ext.tip.ToolTip'
     ],
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [
         {
@@ -40,7 +40,7 @@ Ext.define('KitchenSink.view.d3.Tree', {
         //     path: 'data/tree/salary.json'
         // }
     ],
-    // </example>
+    //</example>
 
     width: 930,
     height: 600,
@@ -93,7 +93,7 @@ Ext.define('KitchenSink.view.d3.Tree', {
                 tooltip: {
                     renderer: 'onTooltip'
                 },
-                nodeText: function (tree, node) {
+                nodeText: function(tree, node) {
                     var model = node.data,
                         text = model.data.text;
 

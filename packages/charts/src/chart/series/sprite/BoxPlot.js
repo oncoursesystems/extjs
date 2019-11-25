@@ -78,7 +78,7 @@ Ext.define('Ext.chart.series.sprite.BoxPlot', {
         if (this.cleanRedraw) {
             return;
         }
-        
+
         // eslint-disable-next-line vars-on-top
         var me = this,
             attr = me.attr,

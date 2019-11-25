@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.chart.bar3d.StackedController', {
     extend: 'KitchenSink.view.chart.ChartController',
     alias: 'controller.bar-stacked-3d',
 
-    onAxisLabelRender: function (axis, label, layoutContext) {
+    onAxisLabelRender: function(axis, label, layoutContext) {
         // Custom renderer overrides the native axis label renderer.
         // Since we don't want to do anything fancy with the value
         // ourselves except appending a '%' sign, but at the same time
@@ -19,7 +19,7 @@ Ext.define('KitchenSink.view.chart.bar3d.StackedController', {
             record.get(item.field) + '%');
     },
 
-    onColumnRender: function (v) {
+    onColumnRender: function(v) {
         return v + '%';
     }
 

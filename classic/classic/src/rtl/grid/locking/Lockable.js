@@ -16,16 +16,16 @@ Ext.define('Ext.rtl.grid.locking.Lockable', {
                     top: 0,
                     left: 0,
                     bottom: 0,
-                    width: Ext.getScrollbarSize().width + 'px'
+                    width: Ext.scrollbar.width() + 'px'
                 }
             });
-            
+
             me.verticalScrollbarScroller = new Ext.scroll.Scroller({
                 element: me.verticalScrollbar,
                 x: false,
                 y: true
             });
-            
+
             me.verticalScrollbarScroller.addPartner(me.scrollable, 'y');
         }
     },
@@ -42,7 +42,7 @@ Ext.define('Ext.rtl.grid.locking.Lockable', {
         if (verticalScrollbar) {
             if (hasVerticalScrollbar) {
                 normalGrid = me.normalGrid;
-                scrollbarWidth = Ext.getScrollbarSize().width;
+                scrollbarWidth = Ext.scrollbar.width();
                 style = me.scrollBody.dom.style;
 
                 style.width = (viewWidth + scrollbarWidth) + 'px';
@@ -51,7 +51,7 @@ Ext.define('Ext.rtl.grid.locking.Lockable', {
                 normalGrid.headerCt.layout.innerCt.setWidth(
                     normalGrid.headerCt.layout.innerCt.getWidth() + scrollbarWidth
                 );
-                
+
                 me.verticalScrollbarScroller.setSize({ y: me.scrollable.getSize().y });
                 me.verticalScrollbar.show();
             }

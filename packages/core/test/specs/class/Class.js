@@ -6,10 +6,10 @@ topSuite("Ext.Class", function() {
             this.initConfig(config);
         },
         cls, sub, fn, subClass, parentClass, mixinClass1, mixinClass2, o;
-        
+
     beforeEach(function() {
         fn = function() {};
-        
+
         mixinClass1 = Ext.define(null, {
             config: {
                 mixinConfig: 'mixinConfig'
@@ -104,28 +104,28 @@ topSuite("Ext.Class", function() {
     afterEach(function() {
         o = subClass = parentClass = mixinClass1 = mixinClass2 = sub = cls = null;
     });
-    
+
     describe("extend", function() {
-        
+
         beforeEach(function() {
             fn = function() {};
 
             Ext.define('spec.Base', {
                 aProp: 1,
-                
+
                 aFn: fn
             });
         });
-        
+
         afterEach(function() {
             Ext.undefine('spec.Base');
         });
-        
+
         it("should extend from Base if no 'extend' property found", function() {
             cls = Ext.define(null, {});
             expect((new cls()) instanceof Ext.Base).toBe(true);
         });
-        
+
         describe("extending from a parent", function() {
             it("class reference", function() {
                 cls = Ext.define(null, {
@@ -133,7 +133,7 @@ topSuite("Ext.Class", function() {
                 });
                 expect((new cls()) instanceof spec.Base).toBe(true);
             });
-        
+
             it("class string", function() {
                 cls = Ext.define(null, {
                     extend: 'spec.Base'
@@ -141,7 +141,7 @@ topSuite("Ext.Class", function() {
                 expect((new cls()) instanceof spec.Base).toBe(true);
             });
         });
-        
+
         it("should have superclass reference", function() {
             var parentPrototype = spec.Base.prototype;
 
@@ -152,14 +152,14 @@ topSuite("Ext.Class", function() {
             expect(cls.superclass).toBe(parentPrototype);
             expect((new cls()).superclass).toBe(parentPrototype);
         });
-        
+
         it("should copy properties from the parent", function() {
             cls = Ext.define(null, {
                 extend: spec.Base
             });
             expect(cls.prototype.aProp).toBe(1);
         });
-        
+
         it("should copy functions from the parent", function() {
             cls = Ext.define(null, {
                 extend: spec.Base
@@ -167,15 +167,15 @@ topSuite("Ext.Class", function() {
             expect(cls.prototype.aFn).toBe(fn);
         });
     });
-    
+
     describe("config", function() {
-        
+
         beforeEach(function() {
             fn = function() {};
         });
-        
+
         describe("getter/setter creation", function() {
-        
+
             it("should create getter if not exists", function() {
                 cls = Ext.define(null, {
                     config: {
@@ -184,7 +184,7 @@ topSuite("Ext.Class", function() {
                 });
                 expect(cls.prototype.getSomeName).toBeDefined();
             });
-            
+
             it("should NOT create getter if already exists", function() {
                 var cls = Ext.define(null, {
                     getSomeName: fn,
@@ -195,7 +195,7 @@ topSuite("Ext.Class", function() {
 
                 expect(cls.prototype.getSomeName).toBe(fn);
             });
-            
+
             it("should create setter if not exists", function() {
                 cls = Ext.define(null, {
                     config: {
@@ -204,7 +204,7 @@ topSuite("Ext.Class", function() {
                 });
                 expect(cls.prototype.setSomeName).toBeDefined();
             });
-    
+
             it("should NOT create setter if already exists", function() {
                 cls = Ext.define(null, {
                     setSomeName: fn,
@@ -214,7 +214,7 @@ topSuite("Ext.Class", function() {
                 });
                 expect(cls.prototype.setSomeName).toBe(fn);
             });
-            
+
             it("should allow a custom getter to call the generated getter", function() {
                 cls = Ext.define(null, {
                     config: {
@@ -225,11 +225,11 @@ topSuite("Ext.Class", function() {
                         return this.callParent().toUpperCase();
                     }
                 });
-                
+
                 o = new cls();
                 expect(o.getSomeName()).toBe('FOO');
             });
-            
+
             it("should allow a custom setter to call the generated setter", function() {
                 cls = Ext.define(null, {
                     config: {
@@ -242,11 +242,11 @@ topSuite("Ext.Class", function() {
                         return this.callParent([someName]);
                     }
                 });
-                
+
                 o = new cls();
                 expect(o.getSomeName()).toBe('FOO');
             });
-            
+
             it("should not set the value if the applier returns undefined", function() {
                 var called = false;
 
@@ -265,12 +265,12 @@ topSuite("Ext.Class", function() {
                         return undefined;
                     }
                 });
-                
+
                 o = new cls();
                 o.setFoo(2);
                 expect(o.getFoo()).toBe(1);
             });
-            
+
             it("should not call the updater if the value does not change", function() {
                 var count = 0;
 
@@ -283,12 +283,12 @@ topSuite("Ext.Class", function() {
                         ++count;
                     }
                 });
-                
+
                 o = new cls();
                 o.setFoo(1);
                 expect(count).toBe(1);
             });
-            
+
             it("should check using === to see if the value changed", function() {
                 var count = 0;
 
@@ -301,7 +301,7 @@ topSuite("Ext.Class", function() {
                         ++count;
                     }
                 });
-                
+
                 o = new cls();
                 o.setFoo('1');
                 expect(count).toBe(2);
@@ -389,7 +389,7 @@ topSuite("Ext.Class", function() {
                             o = new cls();
                             expect(o.setFoo).not.toHaveBeenCalled();
                         });
-                    
+
                         it("should not initialize with a custom setter", function() {
                             var called = false;
 
@@ -405,7 +405,7 @@ topSuite("Ext.Class", function() {
                             o = new cls();
                             expect(called).toBe(false);
                         });
-                        
+
                         it("should not initialize with an applier", function() {
                             var called = false;
 
@@ -421,7 +421,7 @@ topSuite("Ext.Class", function() {
                             o = new cls();
                             expect(called).toBe(false);
                         });
-                        
+
                         it("should not initialize with an updater", function() {
                             var called = false;
 
@@ -438,7 +438,7 @@ topSuite("Ext.Class", function() {
                             expect(called).toBe(false);
                         });
                     });
-                    
+
                     describe("other values", function() {
                         it("should not call the setter", function() {
                             cls = Ext.define(null, {
@@ -453,7 +453,7 @@ topSuite("Ext.Class", function() {
                             o = new cls();
                             expect(o.setFoo).not.toHaveBeenCalled();
                         });
-                        
+
                         it("should call the setter if there is a custom setter", function() {
                             cls = Ext.define(null, {
                                 config: {
@@ -464,13 +464,13 @@ topSuite("Ext.Class", function() {
                                     this.initConfig(config);
                                 },
                                 setFoo: function() {
-                                    
+
                                 }
                             });
                             o = new cls();
                             expect(o.setFoo).toHaveBeenCalled();
                         });
-                        
+
                         it("should call the setter if there is an applier", function() {
                             cls = Ext.define(null, {
                                 config: {
@@ -487,7 +487,7 @@ topSuite("Ext.Class", function() {
                             o = new cls();
                             expect(o.setFoo).toHaveBeenCalled();
                         });
-                        
+
                         it("should call the setter if there is an updater", function() {
                             cls = Ext.define(null, {
                                 config: {
@@ -498,13 +498,13 @@ topSuite("Ext.Class", function() {
                                     this.initConfig(config);
                                 },
                                 setFoo: function() {
-                                    
+
                                 }
                             });
                             o = new cls();
                             expect(o.setFoo).toHaveBeenCalled();
                         });
-                        
+
                         it("should call the setter if the value is an object", function() {
                             cls = Ext.define(null, {
                                 config: {
@@ -520,7 +520,7 @@ topSuite("Ext.Class", function() {
                         });
                     });
                 });
-                
+
                 describe("dependencies", function() {
                     it("should force an initialization if the getter is called during init time for a primitive", function() {
                         var secondVal;
@@ -535,14 +535,14 @@ topSuite("Ext.Class", function() {
                                 secondVal = this.getSecond();
                             }
                         });
-                    
+
                         new cls({
                             first: 1,
                             second: 2
                         });
                         expect(secondVal).toBe(2);
                     });
-                    
+
                     it("should have a non-config applied by the time any setter is called with non-strict mode", function() {
                         var secondVal;
 
@@ -556,7 +556,7 @@ topSuite("Ext.Class", function() {
                                 secondVal = this.second;
                             }
                         });
-                    
+
                         new cls({
                             first: 1,
                             second: 2
@@ -566,7 +566,7 @@ topSuite("Ext.Class", function() {
                 });
             });
         });
-        
+
         describe("get/setConfig", function() {
             beforeEach(function() {
                 cls = Ext.define(null, {
@@ -668,7 +668,7 @@ topSuite("Ext.Class", function() {
                         bletch: 3
                     });
                 });
-            
+
                 it("should return undefined when asking for a config name that does not exist", function() {
                     spyOn(Ext, 'log');
                     o = new cls();
@@ -735,14 +735,14 @@ topSuite("Ext.Class", function() {
                     });
                 });
             });
-            
+
             describe("setConfig", function() {
                 it("should be able to set a config by name", function() {
                     o = new cls();
                     o.setConfig('foo', 7);
                     expect(o.getFoo()).toBe(7);
                 });
-                
+
                 it("should be able to set a group of configs at once", function() {
                     o = new cls();
                     o.setConfig({
@@ -752,7 +752,7 @@ topSuite("Ext.Class", function() {
                     expect(o.getFoo()).toBe(6);
                     expect(o.getBar()).toBe(8);
                 });
-                
+
                 it("should call the setter for a non-config property if one exists and $configStrict is false", function() {
                     cls = Ext.define(null, {
                         $configStrict: false,
@@ -791,14 +791,14 @@ topSuite("Ext.Class", function() {
                         o.setConfig(undefined);
                     }).not.toThrow();
                 });
-                
+
                 it("should return the current instance", function() {
                     o = new cls();
                     expect(o.setConfig()).toBe(o);
                 });
             });
         });
-        
+
         it("should merge properly", function() {
             var obj = new subClass;
 
@@ -852,13 +852,13 @@ topSuite("Ext.Class", function() {
 
             expect(obj2.getName()).not.toBe('newName');
         });
-        
+
         it("should copy objects", function() {
             var o1 = new parentClass(),
                 o2 = new parentClass(),
                 m1 = o1.getMembers(),
                 m2 = o2.getMembers();
-                
+
             expect(m1).not.toBe(m2);
             expect(m1).toEqual(m2);
         });
@@ -881,18 +881,18 @@ topSuite("Ext.Class", function() {
 
             expect(o.getFoo().bar).toBe(el);
         });
-        
+
         // Possibly need to revisit this, arrays are not cloned.
         it("should copy arrays", function() {
             var o1 = new parentClass(),
                 o2 = new parentClass(),
                 h1 = o1.getHobbies(),
                 h2 = o2.getHobbies();
-                
+
             expect(h1).not.toBe(h2);
             expect(h1).toEqual(h2);
         });
-        
+
         describe("values", function() {
             it("should set the the config value defined", function() {
                 cls = Ext.define(null, {
@@ -903,7 +903,7 @@ topSuite("Ext.Class", function() {
                 });
                 expect((new cls()).getFoo()).toBe('bar');
             });
-            
+
             it("should be able to set the config", function() {
                 cls = Ext.define(null, {
                     constructor: defaultInitConfig,
@@ -916,7 +916,7 @@ topSuite("Ext.Class", function() {
                 expect(o.getFoo()).toBe('baz');
                 o = null;
             });
-            
+
             it("should use the inherited config", function() {
                 cls = Ext.define(null, {
                     constructor: defaultInitConfig,
@@ -924,7 +924,7 @@ topSuite("Ext.Class", function() {
                         foo: 'bar'
                     }
                 });
-                
+
                 sub = Ext.define(null, {
                     extend: cls,
                     config: {
@@ -933,7 +933,7 @@ topSuite("Ext.Class", function() {
                 });
                 expect((new sub()).getFoo()).toBe('baz');
             });
-            
+
             it("should inherit the parent value even if not specified in the config block", function() {
                 cls = Ext.define(null, {
                     constructor: defaultInitConfig,
@@ -941,7 +941,7 @@ topSuite("Ext.Class", function() {
                         foo: 'bar'
                     }
                 });
-                
+
                 sub = Ext.define(null, {
                     extend: cls,
                     config: {
@@ -951,7 +951,7 @@ topSuite("Ext.Class", function() {
                 expect((new sub()).getFoo()).toBe('bar');
             });
         });
-        
+
         describe("value on prototype", function() {
             it("should read the value from the prototype in a subclass", function() {
                 cls = Ext.define(null, {
@@ -960,15 +960,15 @@ topSuite("Ext.Class", function() {
                         foo: 'bar'
                     }
                 });
-                
+
                 sub = Ext.define(null, {
                     extend: cls,
                     foo: 'baz'
                 });
-                
+
                 expect((new sub()).getFoo()).toBe('baz');
             });
-            
+
             it("should remove the property from the prototype", function() {
                 cls = Ext.define(null, {
                     constructor: defaultInitConfig,
@@ -976,14 +976,14 @@ topSuite("Ext.Class", function() {
                         foo: 'bar'
                     }
                 });
-                
+
                 sub = Ext.define(null, {
                     extend: cls,
                     foo: 'baz'
                 });
                 expect(sub.prototype.foo).toBeUndefined();
             });
-            
+
             it("should favour the property on the config", function() {
                 cls = Ext.define(null, {
                     constructor: defaultInitConfig,
@@ -1009,7 +1009,7 @@ topSuite("Ext.Class", function() {
                 });
                 expect((new sub()).getFoo()).toBe('baz');
             });
-            
+
             it("should pull the property from the prototype in the subclass if it exists on the parent prototype", function() {
                 cls = Ext.define(null, {
                     constructor: defaultInitConfig,
@@ -1018,7 +1018,7 @@ topSuite("Ext.Class", function() {
                         foo: 'bar'
                     }
                 });
-                
+
                 sub = Ext.define(null, {
                     extend: cls,
                     foo: 'bleh'
@@ -1026,7 +1026,7 @@ topSuite("Ext.Class", function() {
                 expect((new sub()).getFoo()).toBe('bleh');
             });
         });
-        
+
         describe("$configStrict", function() {
             describe("initial config", function() {
                 it("should copy non-configs to the instance when true", function() {
@@ -1469,29 +1469,29 @@ topSuite("Ext.Class", function() {
                     constructor: defaultInitConfig
                 });
             };
-            
+
             it("should use the config name as the instance property when false", function() {
                 defineCls();
                 o = new cls();
                 expect(o.foo).toBe('bar');
             });
-            
+
             it("should use _config name as the instance property when true", function() {
                 defineCls(true);
                 o = new cls();
                 expect(o._foo).toBe('bar');
             });
-            
+
             it("should allow a subclass to have a different prefix", function() {
                 defineCls(false, {});
                 sub = Ext.define(null, {
                     extend: cls,
                     $configPrefixed: true
                 });
-                
+
                 var o1 = new cls(),
                     o2 = new sub();
-                    
+
                 // Use objects since they won't get stamped on the prototype.
                 expect(o1.foo).toEqual({});
                 expect(o2._foo).toEqual({});
@@ -1591,7 +1591,7 @@ topSuite("Ext.Class", function() {
                         });
                         expect(cls.prototype.foo).not.toBeDefined();
                     });
-                    
+
                     it("should not attempt to cache the config if we don't call initConfig", function() {
                         cls = Ext.define(null, {
                             config: {
@@ -1698,12 +1698,12 @@ topSuite("Ext.Class", function() {
                         expect(cls.prototype._foo).toBe('bar');
                         expect(o.hasOwnProperty('_foo')).toBe(false);
                     });
-                    
+
                     it("should call an applier only once", function() {
                         var count = 0;
-                        
+
                         o = {};
-                            
+
                         cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: {
@@ -1722,16 +1722,16 @@ topSuite("Ext.Class", function() {
                         var a = new cls(),
                             b = new cls(),
                             c = new cls();
-                           
+
                         expect(count).toBe(1);
                         expect(a.getFoo()).toBe(o);
                         expect(b.getFoo()).toBe(o);
                         expect(c.getFoo()).toBe(o);
                     });
-                    
+
                     it("should call the updater only once", function() {
                         var count = 0;
-                            
+
                         cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: {
@@ -1747,10 +1747,10 @@ topSuite("Ext.Class", function() {
                         var a = new cls(),
                             b = new cls(),
                             c = new cls();
-                           
+
                         expect(count).toBe(1);
                     });
-                    
+
                     it("should allow the value to be updated from the config", function() {
                         cls = Ext.define(null, {
                             constructor: defaultInitConfig,
@@ -1761,14 +1761,14 @@ topSuite("Ext.Class", function() {
                                 }
                             }
                         });
-                        
+
                         o = new cls({
                             foo: 'baz'
                         });
                         expect(cls.prototype._foo).toBe('bar');
                         expect(o.getFoo()).toBe('baz');
                     });
-                    
+
                     it("should allow the value to be updated from the setter", function() {
                         cls = Ext.define(null, {
                             constructor: defaultInitConfig,
@@ -1779,14 +1779,14 @@ topSuite("Ext.Class", function() {
                                 }
                             }
                         });
-                        
+
                         o = new cls();
                         o.setFoo('baz');
                         expect(cls.prototype._foo).toBe('bar');
                         expect(o.getFoo()).toBe('baz');
                     });
                 });
-                
+
                 describe("subclassing", function() {
                     it("should initialize the value on the subclass prototype", function() {
                         cls = Ext.define(null, {
@@ -1798,16 +1798,16 @@ topSuite("Ext.Class", function() {
                                 }
                             }
                         });
-                        
+
                         sub = Ext.define(null, {
                             extend: cls
                         });
-                        
+
                         o = new sub();
                         expect(sub.prototype._foo).toBe('bar');
                         expect(o.getFoo()).toBe('bar');
                     });
-                    
+
                     it("should be able to override the default value", function() {
                         cls = Ext.define(null, {
                             constructor: defaultInitConfig,
@@ -1818,7 +1818,7 @@ topSuite("Ext.Class", function() {
                                 }
                             }
                         });
-                        
+
                         sub = Ext.define(null, {
                             extend: cls,
                             config: {
@@ -1828,16 +1828,16 @@ topSuite("Ext.Class", function() {
                                 }
                             }
                         });
-                        
+
                         o = new sub();
                         expect(sub.prototype._foo).toBe('baz');
                         expect(o.getFoo()).toBe('baz');
                     });
-                    
+
                     it("should call the applier only once per instance", function() {
                         var parentCount = 0,
                             subCount = 0;
-                            
+
                         cls = Ext.define(null, {
                             constructor: defaultInitConfig,
                             config: {
@@ -1846,7 +1846,7 @@ topSuite("Ext.Class", function() {
                                     $value: 'bar'
                                 }
                             },
-                            
+
                             applyFoo: function(foo) {
                                 if (this.self === cls) {
                                     ++parentCount;
@@ -1858,28 +1858,28 @@ topSuite("Ext.Class", function() {
                                 return foo;
                             }
                         });
-                        
+
                         sub = Ext.define(null, {
                             extend: cls
                         });
-                        
+
                         new cls();
                         new sub();
-                        
+
                         new cls();
                         new sub();
-                        
+
                         new cls();
                         new sub();
-                        
+
                         expect(parentCount).toBe(1);
                         expect(subCount).toBe(1);
                     });
-                    
+
                     it("should retain cached-ness even when overridden in a subclass config", function() {
                         cls = Ext.define(null, {
                             constructor: defaultInitConfig,
-                            
+
                             config: {
                                 foo: {
                                     cached: true,
@@ -1887,23 +1887,23 @@ topSuite("Ext.Class", function() {
                                 }
                             }
                         });
-                        
+
                         sub = Ext.define(null, {
                             config: {
                                 foo: 'baz'
                             }
                         });
                     });
-                    
+
                     it("should not allow an initially uncached config to be declared as cached", function() {
                         cls = Ext.define(null, {
                             config: {
                                 foo: 1
                             }
                         });
-                        
+
                         spyOn(Ext, 'log');
-                        
+
                         expect(function() {
                             Ext.define(null, {
                                 extend: cls,
@@ -1916,7 +1916,7 @@ topSuite("Ext.Class", function() {
                             });
                         }).toThrow();
                     });
-                    
+
                     describe("nulls", function() {
                         it("should allow null overrides in child classes", function() {
                             cls = Ext.define(null, {
@@ -1937,13 +1937,13 @@ topSuite("Ext.Class", function() {
                                     }
                                 }
                             });
-                            
+
                             new cls();
                             new sub();
                             expect(cls.prototype._foo).toBe(1);
                             expect(sub.prototype._foo).not.toBeDefined();
                         });
-                        
+
                         it("should allow null in the base class and value overrides in child classes", function() {
                             cls = Ext.define(null, {
                                 config: {
@@ -1963,13 +1963,13 @@ topSuite("Ext.Class", function() {
                                     }
                                 }
                             });
-                            
+
                             new cls();
                             new sub();
                             expect(cls.prototype._foo).toBe(null);
                             expect(sub.prototype._foo).toBe(1);
                         });
-                        
+
                         it("should be able to return to being cached after being nulled out", function() {
                             var A = Ext.define(null, {
                                 config: {
@@ -1980,7 +1980,7 @@ topSuite("Ext.Class", function() {
                                 },
                                 constructor: defaultInitConfig
                             });
-                            
+
                             var B = Ext.define(null, {
                                 extend: A,
                                 config: {
@@ -1990,7 +1990,7 @@ topSuite("Ext.Class", function() {
                                     }
                                 }
                             });
-                            
+
                             var C = Ext.define(null, {
                                 extend: B,
                                 config: {
@@ -2000,7 +2000,7 @@ topSuite("Ext.Class", function() {
                                     }
                                 }
                             });
-                            
+
                             new A();
                             expect(A.prototype._foo).toBe(1);
                             new B();
@@ -2803,9 +2803,9 @@ topSuite("Ext.Class", function() {
                 });
             });
         });
-        
+
     });
-    
+
     describe("statics", function() {
         beforeEach(function() {
             fn = function() {};
@@ -2820,7 +2820,7 @@ topSuite("Ext.Class", function() {
             expect(cls.someName).toBe('someValue');
             expect(cls.someMethod).toBe(fn);
         });
-        
+
         it("should not copy statics to subclasses", function() {
             cls = Ext.define(null, {
                 statics: {
@@ -2828,7 +2828,7 @@ topSuite("Ext.Class", function() {
                     someMethod: fn
                 }
             });
-            
+
             sub = Ext.define(null, {
                 extend: sub
             });
@@ -2836,12 +2836,12 @@ topSuite("Ext.Class", function() {
             expect(sub.someMethod).not.toBeDefined();
         });
     });
-    
+
     describe("inheritableStatics", function() {
         beforeEach(function() {
             fn = function() {};
         });
-        
+
         it("should inherit inheritable statics", function() {
             cls = Ext.define(null, {
                 inheritableStatics: {
@@ -2916,7 +2916,7 @@ topSuite("Ext.Class", function() {
             expect(cls.foo()).toBe(101);
             expect(cls.bar()).toBe(2);
         });
-        
+
         it("should NOT inherit inheritable statics if the class already has it as a static", function() {
             cls = Ext.define(null, {
                 inheritableStatics: {
@@ -3165,7 +3165,6 @@ topSuite("Ext.Class", function() {
         });
     });
 
-
     describe("override", function() {
         it("should override", function() {
             subClass.override({
@@ -3183,7 +3182,7 @@ topSuite("Ext.Class", function() {
             expect(obj.isOverridden).toBe(true);
             expect(obj.myOwnMethodCalled).toBe(true);
         });
-        
+
         it("should override a default config", function() {
             cls = Ext.define(null, {
                 constructor: defaultInitConfig,
@@ -3191,16 +3190,16 @@ topSuite("Ext.Class", function() {
                     foo: 1
                 }
             });
-            
+
             cls.override({
                 config: {
                     foo: 2
                 }
             });
-            
+
             expect((new cls()).getFoo()).toBe(2);
         });
-        
+
         it("should be able to add a new config", function() {
             cls = Ext.define(null, {
                 constructor: defaultInitConfig,
@@ -3208,13 +3207,13 @@ topSuite("Ext.Class", function() {
                     foo: 1
                 }
             });
-            
+
             cls.override({
                 config: {
                     bar: 2
                 }
             });
-            
+
             expect((new cls()).getBar()).toBe(2);
         });
     });
@@ -3389,7 +3388,7 @@ topSuite("Ext.Class", function() {
                 method1: function(x) {
                     return 'b' + x;
                 },
-                
+
                 patchedMethod: function() {
                     return this.callParent() + 'B';
                 },
@@ -3450,7 +3449,7 @@ topSuite("Ext.Class", function() {
                 });
 
             Ext.undefine('Foo');
-            
+
             delete Ext.ClassManager.nameCreatedListeners['Foo.Nothing'];
 
             obj = createFnsCalled = null;
@@ -3697,17 +3696,17 @@ topSuite("Ext.Class", function() {
             expect(obj.mixinConstructor2Called).toBeTruthy();
         });
     });
-    
+
     describe("callbacks", function() {
         describe("extend", function() {
             afterEach(function() {
                 Ext.undefine('spec.Extend');
             });
-            
+
             it("should set the scope to the created class", function() {
                 var fn = function() {},
                     val;
-                    
+
                 Ext.define('spec.Extend', {
                     extend: 'Ext.Base',
                     foo: fn
@@ -3716,11 +3715,11 @@ topSuite("Ext.Class", function() {
                 });
                 expect(val).toBe(fn);
             });
-            
+
             it("should pass the created class", function() {
                 var fn = function() {},
                     val;
-                    
+
                 Ext.define('spec.Extend', {
                     extend: 'Ext.Base',
                     foo: fn
@@ -3730,18 +3729,18 @@ topSuite("Ext.Class", function() {
                 expect(val).toBe(fn);
             });
         });
-        
+
         describe("override", function() {
             var base;
 
             beforeEach(function() {
                 base = Ext.define('spec.Base', {});
             });
-            
+
             afterEach(function() {
                 Ext.undefine('spec.Base');
             });
-            
+
             it("should set the scope to the overridden class", function() {
                 var val;
 
@@ -3752,10 +3751,10 @@ topSuite("Ext.Class", function() {
                 });
                 expect(val).toBe(base);
             });
-            
+
             it("should pass the overridden class", function() {
                 var val;
-                    
+
                 Ext.define('spec.Override', {
                     override: 'spec.Base'
                 }, function(Cls) {

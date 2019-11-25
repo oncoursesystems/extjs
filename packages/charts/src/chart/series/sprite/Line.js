@@ -166,7 +166,7 @@ Ext.define('Ext.chart.series.sprite.Line', {
 
     drawStrip: function(ctx, strip) {
         var i, ln;
-        
+
         ctx.moveTo(strip[0], strip[1]);
 
         for (i = 2, ln = strip.length; i < ln; i += 2) {

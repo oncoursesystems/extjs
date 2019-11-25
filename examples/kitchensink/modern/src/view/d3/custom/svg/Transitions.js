@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.d3.custom.svg.Transitions', {
         'Ext.d3.svg.Svg'
     ],
 
-    // <example>
+    //<example>
     // Content between example tags is omitted from code preview.
     otherContent: [
         {

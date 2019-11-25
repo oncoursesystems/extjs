@@ -78,9 +78,16 @@ Ext.define('Ext.mixin.StoreWatcher', {
     // owner
 
     updateOwner: function(owner) {
-        this.syncListeners(owner, '$ownerListeners', 'getOwnerListeners');
+        var me = this,
+            ownerProperty = me.ownerProperty;
 
-        this.setStore(owner ? owner.getStore() : null);
+        if (ownerProperty) {
+            me[ownerProperty] = owner;
+        }
+
+        me.syncListeners(owner, '$ownerListeners', 'getOwnerListeners');
+
+        me.setStore(owner ? owner.getStore() : null);
     },
 
     // store

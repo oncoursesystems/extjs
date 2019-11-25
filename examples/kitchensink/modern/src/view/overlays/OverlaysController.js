@@ -8,34 +8,34 @@ Ext.define('KitchenSink.view.overlays.OverlaysController', {
         this.callParent();
     },
 
-    showAlert: function () {
+    showAlert: function() {
         Ext.Msg.alert('Title', 'The quick brown fox jumped over the lazy dog.');
     },
 
-    showConfirm: function () {
+    showConfirm: function() {
         Ext.Msg.confirm('Confirmation', 'Are you sure you want to do that?',
-            function (answer) {
-                console.log('Confirmation: ', answer);
-            });
+                        function(answer) {
+                            console.log('Confirmation: ', answer);
+                        });
     },
 
-    showPrompt: function () {
-        Ext.Msg.prompt('Welcome!', 'What\'s your first name?', function (btn, value) {
+    showPrompt: function() {
+        Ext.Msg.prompt('Welcome!', 'What\'s your first name?', function(btn, value) {
             console.log(btn + ' ' + value);
         });
     },
 
-    showToast: function () {
+    showToast: function() {
         Ext.toast('Hello Toast!');
     },
 
-    hideActionSheet: function () {
+    hideActionSheet: function() {
         this
             .getView()
             .actionsheet.hide();
     },
 
-    showActionSheet: function () {
+    showActionSheet: function() {
         var view = this.getView(),
             actionsheet = view.actionsheet;
 
@@ -51,7 +51,7 @@ Ext.define('KitchenSink.view.overlays.OverlaysController', {
         actionsheet.show();
     },
 
-    showPicker: function () {
+    showPicker: function() {
         var view = this.getView(),
             picker = view.picker;
 

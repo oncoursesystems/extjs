@@ -41,12 +41,12 @@ Ext.define('Ext.dataview.BoundList', {
     onFocusEnter: Ext.emptyFn,
     onFocusLeave: Ext.emptyFn,
 
-    afterShow: function(me) {
-        me.callParent([me]);
+    afterShow: function() {
+        this.callParent();
 
         // Our navModel uses the field's inputElement as event source,
         // so enable navigation KeyMap on show.
-        me.getNavigationModel().enable();
+        this.getNavigationModel().enable();
     },
 
     afterHide: function(me) {

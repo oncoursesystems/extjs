@@ -54,7 +54,7 @@ function() {
         if (shrinkWrap) {
             suiteName += ' (shrinkWrap:true)';
         }
-        
+
         describe(suiteName, function() {
             var panel,
                 scrollbarSize = Ext.getScrollbarSize(),
@@ -85,7 +85,7 @@ function() {
                     items: items
                 }, parentConfig));
             }
-             
+
             afterEach(function() {
                 panel.destroy();
             });
@@ -149,10 +149,9 @@ function() {
                     });
                 });
 
-                
                 describe("overflow", function() {
                     var overflowParentConfig = Ext.apply({}, { autoScroll: true }, parentConfig);
-                    
+
                     describe("vertical", function() {
                         beforeEach(function() {
                             makePanel(overflowParentConfig, [
@@ -161,7 +160,7 @@ function() {
                                 { height: 36, width: 14 }
                             ]);
                         });
-                         
+
                         it("should width the child items correctly", function() {
                             expect(panel.items.getAt(0).getWidth()).toBe(14);
                             expect(panel.items.getAt(1).getWidth()).toBe(36 - scrollbarWidth);
@@ -323,7 +322,7 @@ function() {
                         expect(panel.getHeight()).toBe(100);
                     });
                 });
-                 
+
                 describe("child items with a combination of width and columnWidth", function() {
                     beforeEach(function() {
                         makePanel(parentConfig, [
@@ -338,7 +337,7 @@ function() {
                         expect(panel.items.getAt(1).getWidth()).toBe(36);
                         expect(panel.items.getAt(2).getWidth()).toBe(14);
                     });
-                     
+
                     it("should shrink wrap the height", function() {
                         expect(panel.getHeight()).toBe(100);
                     });
@@ -362,7 +361,7 @@ function() {
                     it("should wrap the last item", function() {
                         expect(panel.items.getAt(2).getY() - panel.getY()).toBe(54);
                     });
-                     
+
                     // TODO: https://sencha.jira.com/browse/EXTJSIV-5910
                     xit("should shrink wrap the height", function() {
                         expect(panel.getHeight()).toBe(100);
@@ -443,20 +442,19 @@ function() {
                 });
             });
 
-         
         });
     }
 
     createSuite();
     createSuite(true);
-    
+
     describe("shrink wrap of child items", function() {
         var ct;
-        
+
         afterEach(function() {
             Ext.destroy(ct);
         });
-        
+
         it("should shrink wrap children side by side", function() {
             ct = new Ext.container.Container({
                 width: 400,
@@ -473,7 +471,7 @@ function() {
             expect(ct.items.first().getWidth()).toBe(100);
             expect(ct.items.last().getWidth()).toBe(100);
         });
-        
+
         it("should should stretch items after shrink wrapping", function() {
             ct = new Ext.container.Container({
                 width: 400,
@@ -491,7 +489,7 @@ function() {
             expect(ct.items.last().getWidth()).toBe(300);
         });
     });
-    
+
     describe("failure tests", function() {
         it("should work with a minHeight child", function() {
             var ct = new Ext.container.Container({

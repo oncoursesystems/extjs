@@ -206,7 +206,7 @@ Ext.define('Ext.layout.Layout', {
         this.lastHeightModel = ownerContext.heightModel;
         this.ownerContext = null;
     },
-    
+
     /**
      * This method (if implemented) is called after all layouts are finished, and all have
      * a `lastComponentSize` cached. No further layouts will be run and this method is only
@@ -225,7 +225,7 @@ Ext.define('Ext.layout.Layout', {
      * component.
      * @method notifyOwner
      */
-    
+
     redoLayout: Ext.emptyFn,
     undoLayout: Ext.emptyFn,
 
@@ -333,7 +333,7 @@ Ext.define('Ext.layout.Layout', {
                         // Perform layout preprocessing in the bulk render path
                         this.configureItem(item);
                         itemConfig = item.getRenderTree();
-                        
+
                         if (renderCfgs) {
                             renderCfgs[item.id] = itemConfig;
                         }
@@ -459,7 +459,7 @@ Ext.define('Ext.layout.Layout', {
 
         return dom;
     },
-    
+
     getPositionOffset: function(position) {
         return position;
     },
@@ -647,13 +647,13 @@ Ext.define('Ext.layout.Layout', {
         if (!me.onDestroy.$emptyFn) {
             me.onDestroy();
         }
-        
+
         me.callParent();
     },
 
     sortWeightedItems: function(items, reverseProp) {
         var i, length;
-        
+
         for (i = 0, length = items.length; i < length; ++i) {
             items[i].$i = i;
         }

@@ -105,7 +105,7 @@ Ext.define('Ext.dom.TouchAction', {
             /* eslint-disable-next-line vars-on-top, one-var */
             var objectValues = me.objectValues,
                 i, ln;
-            
+
             for (i = 0, ln = objectValues.length; i < ln; i++) {
                 Object.freeze(objectValues[i]);
             }
@@ -178,7 +178,7 @@ Ext.define('Ext.dom.TouchAction', {
             overflowName = vertical ? 'overflow-y' : 'overflow-x',
             overflowStyle, cls;
 
-        if (!me.disabledOverflowDom && !Ext.isiOS && !Ext.getScrollbarSize().width) {
+        if (!me.disabledOverflowDom && !Ext.isiOS && !Ext.scrollbar.width()) {
             me.disabledOverflowDom = dom;
             cls = vertical ? me.panXCls : me.panYCls;
 
@@ -350,12 +350,12 @@ Ext.define('Ext.dom.TouchAction', {
                 point = e.getPoint();
                 startPoint = me.startPoint;
                 scale = Ext.Element.getViewportScale();
-                
+
                 // account for scale so that move distance is actual screen pixels, not page pixels
                 distance = point.getDistanceTo(me.startPoint) * scale;
                 deltaX = point.x - startPoint.x;
                 deltaY = point.y - startPoint.y;
-                
+
                 isVertical = Math.abs(deltaY) >= Math.abs(deltaX);
             }
 

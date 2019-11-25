@@ -33,7 +33,15 @@ Ext.define('KitchenSink.view.grid.FramingButtons', {
             priceWidth: 120,
             pricechangeWidth: 120,
             percentChangeColumnWidth: 120,
-            lastUpdatedColumnWidth: 150          
+            lastUpdatedColumnWidth: 150
+        },
+        'classic-material': {
+            width: 950,
+            height: 400,
+            priceWidth: 120,
+            pricechangeWidth: 120,
+            percentChangeColumnWidth: 120,
+            lastUpdatedColumnWidth: 150
         }
     },
     //</example>
@@ -98,10 +106,10 @@ Ext.define('KitchenSink.view.grid.FramingButtons', {
         text: 'Options',
         tooltip: 'Set options',
         iconCls: 'framing-buttons-option'
-    },'-',{
+    }, '-', {
         text: 'Remove Something',
         tooltip: 'Remove the selected item',
-        iconCls:'framing-buttons-remove',
+        iconCls: 'framing-buttons-remove',
         disabled: true,
 
         bind: {

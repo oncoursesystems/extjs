@@ -1421,7 +1421,6 @@
         // change container size
         //
 
-
     });
 
     (Ext.supports.Touch && !scrollbarWidth ? describe : xdescribe)("interaction", function() {

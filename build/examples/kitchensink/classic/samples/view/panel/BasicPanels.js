@@ -30,11 +30,18 @@ Ext.define('KitchenSink.view.panel.BasicPanels', {
             itemWidth: 640,
             columns: 3,
             hideLightUI: true
+        },
+        'classic-material': {
+            width: 660,
+            itemWidth: 640,
+            columns: 3,
+            hideLightUI: true
         }
     },
     //</example>
 
     width: '${width}',
+    cls: 'panels-container',
     layout: {
         type: 'table',
         columns: '${columns}',
@@ -45,7 +52,8 @@ Ext.define('KitchenSink.view.panel.BasicPanels', {
         xtype: 'panel',
         width: 200,
         height: 280,
-        bodyPadding: 10
+        bodyPadding: 10,
+        cls: Ext.baseCSSPrefix + 'shadow'
     },
 
     items: [{
@@ -147,10 +155,10 @@ Ext.define('KitchenSink.view.panel.BasicPanels', {
         width: '${itemWidth}',
         html: KitchenSink.DummyText.mediumText,
         tools: [
-            { glyph: 'xf0ad@FontAwesome' },
-            { glyph: 'xf112@FontAwesome' },
-            { glyph: 'xf122@FontAwesome' },
-            { glyph: 'xf135@FontAwesome' }
+            { glyph: 'xf0ad@\'Font Awesome 5 Free\'' },
+            { glyph: 'xf3e5@\'Font Awesome 5 Free\'' },
+            { glyph: 'xf122@\'Font Awesome 5 Free\'' },
+            { glyph: 'xf135@\'Font Awesome 5 Free\'' }
         ],
         colspan: '${columns}'
     }, {
@@ -169,10 +177,10 @@ Ext.define('KitchenSink.view.panel.BasicPanels', {
         width: '${itemWidth}',
         html: KitchenSink.DummyText.mediumText,
         tools: [
-            { glyph: 'xf0ad@FontAwesome' },
-            { glyph: 'xf112@FontAwesome' },
-            { glyph: 'xf122@FontAwesome' },
-            { glyph: 'xf135@FontAwesome' }
+            { glyph: 'xf0ad@\'Font Awesome 5 Free\'' },
+            { glyph: 'xf3e5@\'Font Awesome 5 Free\'' },
+            { glyph: 'xf122@\'Font Awesome 5 Free\'' },
+            { glyph: 'xf135@\'Font Awesome 5 Free\'' }
         ],
         colspan: '${columns}'
     }]

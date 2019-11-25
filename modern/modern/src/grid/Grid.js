@@ -245,7 +245,8 @@ Ext.define('Ext.grid.Grid', {
         'Ext.grid.menu.*',
         'Ext.grid.HeaderContainer',
         'Ext.grid.selection.*',
-        'Ext.grid.plugin.ColumnResizing'
+        'Ext.grid.plugin.ColumnResizing',
+        'Ext.grid.plugin.HeaderReorder'
     ],
 
     mixins: [
@@ -358,6 +359,15 @@ Ext.define('Ext.grid.Grid', {
          * @since 6.0.1
          */
         hideHeaders: false,
+
+        /**
+         * @cfg {Boolean} enableColumnMove
+         * Set to `false` to disable column reorder.
+         * 
+         * **Note**: if `gridviewoptions` plugin is enabled on grids gets 
+         * precedence over `enableColumnMove` for touch supported device.
+         */
+        enableColumnMove: true,
 
         /**
          * @cfg {Boolean} hideScrollbar
@@ -621,6 +631,72 @@ Ext.define('Ext.grid.Grid', {
      */
 
     /**
+     * @event beforestartedit
+     * Fires when editing is initiated, but before the value changes.  Editing can be canceled by
+     * returning false from the handler of this event.
+     * @param {Ext.Editor} editor
+     * @param {Ext.dom.Element} boundEl The underlying element bound to this editor
+     * @param {Object} value The field value being set
+     * @param {Ext.grid.Location} The location where actionable mode was successfully started
+     * @since 7.0
+     */
+
+    /**
+     * @event startedit
+     * Fires when this editor is displayed
+     * @param {Ext.Editor} editor
+     * @param {Ext.dom.Element} boundEl The underlying element bound to this editor
+     * @param {Object} value The starting field value
+     * @param {Ext.grid.Location} The location where actionable mode was successfully started
+     * @since 7.0
+     */
+
+    /**
+     * @event beforecomplete
+     * Fires after a change has been made to the field, but before the change is reflected in the
+     * underlying field.  Saving the change to the field can be canceled by returning false from
+     * the handler of this event. Note that if the value has not changed and ignoreNoChange = true,
+     * the editing will still end but this event will not fire since no edit actually occurred.
+     * @param {Ext.Editor} editor
+     * @param {Object} value The current field value
+     * @param {Object} startValue The original field value
+     * @param {Ext.grid.Location} The location where actionable mode was successfully started
+     * @since 7.0
+     */
+
+    /**
+     * @event complete
+     * Fires after editing is complete and any changed value has been written to the underlying
+     * field.
+     * @param {Ext.Editor} editor
+     * @param {Object} value The current field value
+     * @param {Object} startValue The original field value
+     * @param {Ext.grid.Location} The location where actionable mode was successfully started
+     * @since 7.0
+     */
+
+    /**
+     * @event canceledit
+     * Fires after editing has been canceled and the editor's value has been reset.
+     * @param {Ext.Editor} editor
+     * @param {Object} value The user-entered field value that was discarded
+     * @param {Object} startValue The original field value that was set back into the editor after
+     * cancel
+     * @since 7.0
+     */
+
+    /**
+     * @event specialkey
+     * Fires when any key related to navigation (arrows, tab, enter, esc, etc.) is pressed. You can
+     * check
+     * {@link Ext.event.Event#getKey} to determine which key was pressed.
+     * @param {Ext.Editor} editor
+     * @param {Ext.form.field.Field} field The field attached to this editor
+     * @param {Ext.event.Event} event The event object
+     * @since 7.0
+     */
+
+    /**
      * @private
      * @readonly
      * @property {String} [selectionModel=grid]
@@ -735,7 +811,7 @@ Ext.define('Ext.grid.Grid', {
         for (i = 0; i < n; ++i) {
             item = sharedMenuItems[i];
 
-            if (!item.destroyed && !item.destroying) {
+            if (!item.destroyed && !item.destroying && !menu.isHidden()) {
                 item.onColumnMenuHide(menu, column, me);
             }
         }
@@ -1229,8 +1305,8 @@ Ext.define('Ext.grid.Grid', {
                 me.setCellSizes(changedColumns, me.itemCache);
 
                 if (me.isGrouping()) {
-                    me.setCellSizes(changedColumns, groupingInfo.headers.unused);
-                    me.setCellSizes(changedColumns, groupingInfo.footers.unused);
+                    me.setCellSizes(changedColumns, groupingInfo.header.unused);
+                    me.setCellSizes(changedColumns, groupingInfo.footer.unused);
                 }
 
                 // Row sizing rules change if we have flexed columns.
@@ -1458,7 +1534,7 @@ Ext.define('Ext.grid.Grid', {
         },
 
         updateHideScrollbar: function(hide) {
-            var w = Ext.getScrollbarSize().width;
+            var w = Ext.scrollbar.width();
 
             this.element.setStyle('margin-right', hide ? -w + 'px' : '');
         },
@@ -1521,12 +1597,54 @@ Ext.define('Ext.grid.Grid', {
 
             if (summaryRow) {
                 row = summaryRow.getRow();
+
                 if (!row.destroyed) {
                     row.rightSpacer.setStyle({
                         width: (addOverflow ? (verticalScrollbarWidth - 1) : 0) + 'px'
                     });
                 }
             }
+        },
+
+        // Enable column reorder
+        updateEnableColumnMove: function(enabled) {
+            var me = this,
+                plugin = me.findPlugin('headerreorder');
+
+            if (!plugin && enabled) {
+                plugin = me.addPlugin('headerreorder');
+            }
+
+            if (plugin) {
+                plugin.setGrid(enabled ? me : null);
+            }
+        },
+
+        /**
+         * @method getSelection
+         * Returns the grid's selection if {@link Ext.grid.selection.Model#cfg!mode mode} is single 
+         * @return {Ext.data.Model} returns selected record if selectable is rows
+         * @return {Ext.grid.column.Column} returns selected column if selectable is columns
+         * @return {Ext.data.Model} returns selected record if selectable is cells
+         * 
+         * Returns the last selected column/cell's record/row's record based on selectable
+         * if {@link Ext.grid.selection.Model#cfg!mode mode} is multi
+         */
+        getSelection: function() {
+            var me = this,
+                selectable = me.getSelectable(),
+                selection = selectable.getSelection(),
+                selectionType = selection.type;
+
+            if (selectionType === 'columns') {
+                return selection.lastColumnSelected;
+            }
+
+            if (selectionType === 'cells') {
+                return selection.endCell && selection.endCell.record;
+            }
+
+            return this.callParent();
         }
     } // privates
 

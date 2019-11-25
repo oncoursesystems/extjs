@@ -33,7 +33,7 @@ Ext.define('Ext.chart.Markers', {
 
     getMarkerFor: function(category, index) {
         var categoryInstances;
-        
+
         if (category in this.categories) {
             categoryInstances = this.categories[category];
 
@@ -107,7 +107,7 @@ Ext.define('Ext.chart.Markers', {
      */
     getMarkerBBoxFor: function(category, index, isWithoutTransform) {
         var categoryInstances;
-        
+
         if (category in this.categories) {
             categoryInstances = this.categories[category];
 

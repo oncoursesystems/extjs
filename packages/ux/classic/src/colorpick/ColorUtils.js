@@ -19,27 +19,27 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
         setBackground: oldIE
             ? function(el, color) {
                 var tpl, data, bgStyle;
-                
+
                 if (el) {
                     tpl = Ext.XTemplate.getTpl(ColorUtils, 'backgroundTpl');
                     data = {
                         hex: ColorUtils.rgb2hex(color.r, color.g, color.b),
                         alpha: Math.floor(color.a * 255).toString(16)
                     };
-                    
+
                     bgStyle = tpl.apply(data);
                     el.applyStyles(bgStyle);
                 }
             }
             : function(el, color) {
                 var tpl, data, bgStyle;
-                
+
                 if (el) {
                     tpl = Ext.XTemplate.getTpl(ColorUtils, 'backgroundTpl');
                     data = {
                         rgba: ColorUtils.getRGBAString(color)
                     };
-                    
+
                     bgStyle = tpl.apply(data);
                     el.applyStyles(bgStyle);
                 }
@@ -56,12 +56,12 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
             RGB: function(colorO) {
                 return ColorUtils.getRGBString(colorO).toUpperCase();
             },
-            
+
             // "RGBA(100,100,100,0.5)"
             RGBA: function(colorO) {
                 return ColorUtils.getRGBAString(colorO).toUpperCase();
             },
-            
+
             // "FFAA00"
             HEX6: function(colorO) {
                 return ColorUtils.rgb2hex(colorO.r, colorO.g, colorO.b);
@@ -117,7 +117,7 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
             if (!color) {
                 return null;
             }
-            
+
             // eslint-disable-next-line vars-on-top
             var me = this,
                 rgb = me.colorMap[color],
@@ -188,7 +188,7 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
                         if (match) {
                             // scss shorthands = rgba(red, 0.4), rgba(#222, 0.9), rgba(#444433, 0.8)
                             ret = me.parseColor(match[1]);
-                            
+
                             // we have HSV filled in, so poke on "a" and we're done
                             ret.a = parseFloat(match[2]);
 
@@ -211,7 +211,7 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
                     }
                 }
             }
-            
+
             // format alpha channel
             if (alphaFormat) {
                 ret.a = Ext.util.Format.number(ret.a, alphaFormat);
@@ -221,7 +221,7 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
 
             return Ext.apply(ret, hsv);
         },
-        
+
         isValid: function(color) {
             return ColorUtils.parseColor(color) !== null;
         },
@@ -272,31 +272,31 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
                 case 0:
                     rgb = [c, x, 0];
                     break;
-                
+
                 case 1:
                     rgb = [x, c, 0];
                     break;
-                
+
                 case 2:
                     rgb = [0, c, x];
                     break;
-                
+
                 case 3:
                     rgb = [0, x, c];
                     break;
-                
+
                 case 4:
                     rgb = [x, 0, c];
                     break;
-                
+
                 case 5:
                     rgb = [c, 0, x];
                     break;
-                
+
                 default:
-                    // <debug>
+                    //<debug>
                     console.error("unknown color " + h + ' ' + s + " " + v);
-                    // </debug>
+                    //</debug>
                     break;
             }
 
@@ -554,22 +554,22 @@ Ext.define('Ext.ux.colorpick.ColorUtils', function(ColorUtils) {
 }, function(ColorUtils) {
     var formats = ColorUtils.formats,
         lowerized = {};
-    
+
     formats['#HEX6'] = function(color) {
         return '#' + formats.HEX6(color);
     };
-    
+
     formats['#HEX8'] = function(color) {
         return '#' + formats.HEX8(color);
     };
-    
+
     Ext.Object.each(formats, function(name, fn) {
         lowerized[name.toLowerCase()] = function(color) {
             var ret = fn(color);
-            
+
             return ret.toLowerCase();
         };
     });
-    
+
     Ext.apply(formats, lowerized);
 });
