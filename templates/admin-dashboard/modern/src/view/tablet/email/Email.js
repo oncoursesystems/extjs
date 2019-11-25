@@ -24,9 +24,6 @@ Ext.define('Admin.view.tablet.email.Email', {
         xtype: 'container',
         userCls: 'email-controls',
         reference: 'controls',
-        plugins: {
-            responsive: true
-        },
         responsiveConfig: {
             'width < 1000': {
                 hidden: true

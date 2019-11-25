@@ -14,7 +14,7 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
         'KitchenSink.store.States'
     ],
 
-    //<example>
+    // <example>
     otherContent: [{
         type: 'Controller',
         path: 'modern/src/view/forms/FormPanelController.js'
@@ -42,7 +42,7 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
             }
         }
     },
-    //</example>
+    // </example>
 
     viewModel: {
     },
@@ -220,6 +220,16 @@ Ext.define('KitchenSink.view.forms.FormPanel', {
             name: 'color',
             label: 'Purple',
             value: 'purple'
+        }]
+    }, {
+        xtype: 'fieldset',
+        reference: 'fieldset3',
+        title: 'Second Favorite Color',
+        items: [{
+            xtype: 'colorfield',
+            label: 'Choose Color',
+            value: '0f0',
+            title: 'Color picker'
         }]
     }]
 });

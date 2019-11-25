@@ -28,9 +28,6 @@ Ext.define('Admin.view.forms.Forms', {
         // 100% when viewport is small
         userCls: 'big-100 small-100 dashboard-item',
         shadow: true,
-        plugins: {
-            responsive: true
-        },
         responsiveConfig: {
             'phone && width < 1000': {
                 height: '25em'
@@ -49,9 +46,6 @@ Ext.define('Admin.view.forms.Forms', {
         },
         items: [{
             xtype: 'specialoffer',
-            plugins: {
-                responsive: true
-            },
             platformConfig: {
                 phone: {
                     hidden: true

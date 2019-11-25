@@ -27,7 +27,6 @@ Ext.define('KitchenSink.view.calendar.Panel', {
                 visibleDays: 5
             }
         },
-        timezoneOffset: 0,
         store: {
             autoLoad: true,
             proxy: {

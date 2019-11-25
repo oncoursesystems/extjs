@@ -1,6 +1,13 @@
+Ext.define('Ext.locale.pt.ux.colorpick.Selector', {
+    override: 'Ext.ux.colorpick.Selector',
+
+    okButtonText: 'OK',
+    cancelButtonText: 'Cancelar'
+});
 Ext.define("Ext.locale.pt_BR.Component", {
     override: "Ext.Component"
-});Ext.define('Ext.locale.pt_BR.Dialog', {
+});
+Ext.define('Ext.locale.pt_BR.Dialog', {
     override: 'Ext.Dialog',
 
     config: {
@@ -15,10 +22,11 @@ Ext.define("Ext.locale.pt_BR.Component", {
 Ext.define("Ext.locale.pt_BR.LoadMask", {
     override: "Ext.LoadMask",
 
-    config:{
+    config: {
         message: 'Carregando...'
-    } 
-});Ext.define('Ext.locale.pt_BR.Panel', {
+    }
+});
+Ext.define('Ext.locale.pt_BR.Panel', {
     override: 'Ext.Panel',
 
     config: {
@@ -62,7 +70,8 @@ Ext.define("Ext.locale.pt_BR.LoadMask", {
         },
         closeToolText: 'Fechar Painel'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Bound', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
     config: {
@@ -71,94 +80,109 @@ Ext.define("Ext.locale.pt_BR.LoadMask", {
         maxOnlyMessage: 'O valor deve ser inferior a {0}',
         bothMessage: 'O valor deve estar entre {0} e {1}'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.CIDRv4', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.CIDRv4', {
     override: 'Ext.data.validator.CIDRv4',
  
     config: {
         message: 'Não é um bloco CIDR válido'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.CIDRv6', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.CIDRv6', {
     override: 'Ext.data.validator.CIDRv6',
 
     config: {
         message: 'Não é um bloco CIDR válido'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Currency', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Currency', {
     override: 'Ext.data.validator.Currency',
 
     config: {
         message: 'Não é um valor monetário válido'
     }
 
-});Ext.define('Ext.locale.pt_BR.data.validator.Date', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Date', {
     override: 'Ext.data.validator.Date',
 
     config: {
         message: "Não é uma data válida"
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.DateTime', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.DateTime', {
     override: 'Ext.data.validator.DateTime',
 
     config: {
         message: 'Não é uma data e hora válida'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Email', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Email', {
     override: 'Ext.data.validator.Email',
 
-    config:{
+    config: {
         message: 'Não é um e-mail válido'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Exclusion', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Exclusion', {
     override: 'Ext.data.validator.Exclusion',
 
     config: {
         message: 'É um valor que foi excluído'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Format', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Format', {
     override: 'Ext.data.validator.Format',
 
-    config:{
+    config: {
         message: 'Está no formato incorreto'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.IPAddress', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.IPAddress', {
     override: 'Ext.data.validator.IPAddress',
 
     config: {
         message: 'Não é um endereço IP válido'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Inclusion', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Inclusion', {
     override: 'Ext.data.validator.Inclusion',
 
     config: {
         message: 'Não está na lista de valores válidos'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Length', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Length', {
     override: 'Ext.data.validator.Length',
 
-    config:{
+    config: {
         minOnlyMessage: 'Tamanho deve ser pelo menos {0}',
         maxOnlyMessage: 'Tamanho deve ser menor que {0}',
         bothMessage: 'Tamanho deve estar entre {0} e {1}'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Number', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Number', {
     override: 'Ext.data.validator.Number',
 
-    config:{
+    config: {
         message: 'Não é um número válido'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Phone', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Phone', {
     override: 'Ext.data.validator.Phone',
 
-    config:{
+    config: {
         message: 'Não é um telefone válido'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Presence',{
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Presence', {
     override: 'Ext.data.validator.Presence',
 
-    config:{
+    config: {
         message: 'Este campo é necessário'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Range', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Range', {
     override: 'Ext.data.validator.Range',
 
     config: {
@@ -167,50 +191,58 @@ Ext.define("Ext.locale.pt_BR.LoadMask", {
         maxOnlyMessage: 'O valor deve ser inferior a {0}',
         bothMessage: 'O valor deve estar entre {0} e {1}'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Time', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Time', {
     override: 'Ext.data.validator.Time',
 
     config: {
         message: 'Não é uma hora válida'
     }
-});Ext.define('Ext.locale.pt_BR.data.validator.Url', {
+});
+Ext.define('Ext.locale.pt_BR.data.validator.Url', {
     override: 'Ext.data.validator.Url',
 
-    config:{
+    config: {
         message: 'Não é uma URL válida'
     }
-});Ext.define('Ext.locale.pt_BR.dataview.Abstract', {
+});
+Ext.define('Ext.locale.pt_BR.dataview.Abstract', {
     override: 'Ext.dataview.Abstract',
 
-    config:{
+    config: {
         loadingText: 'Carregando...'
     }
-});Ext.define("Ext.locale.pt_BR.dataview.DataView", {
+});
+Ext.define("Ext.locale.pt_BR.dataview.DataView", {
     override: "Ext.dataview.DataView",
 
-    config:{
+    config: {
         emptyText: ""
     }
-});Ext.define('Ext.locale.pt_BR.dataview.EmptyText', {
+});
+Ext.define('Ext.locale.pt_BR.dataview.EmptyText', {
     override: 'Ext.dataview.EmptyText',
 
     config: {
         html: 'Sem dados para exibir'
     }
-});Ext.define('Ext.locale.pt_BR.dataview.List', {
+});
+Ext.define('Ext.locale.pt_BR.dataview.List', {
     override: 'Ext.dataview.List',
 
-    config:{
+    config: {
         loadingText: 'Carregando...'
     }
-});Ext.define('Ext.locale.pt_BR.dataview.plugin.ListPaging', {
+});
+Ext.define('Ext.locale.pt_BR.dataview.plugin.ListPaging', {
     override: 'Ext.dataview.plugin.ListPaging',
 
     config: {
         loadMoreText: 'Carregar mais...',
         noMoreRecordsText: 'Não há mais registros'
     }
-});/**
+});
+/**
  * Portuguese/Brazil Translation by Weber Souza
  * 08 April 2007
  * Updated by Allan Brazute Alves (EthraZa)
@@ -225,11 +257,14 @@ Ext.define("Ext.locale.pt_BR.LoadMask", {
 Ext.onReady(function() {
 
     if (Ext.Date) {
-        Ext.Date.monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+        Ext.Date.monthNames = [
+            "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto",
+            "Setembro", "Outubro", "Novembro", "Dezembro"
+        ];
 
         Ext.Date.defaultFormat = 'd/m/Y';
         Ext.Date.defaultTimeFormat = 'H:i';
-        
+
         Ext.Date.getShortMonthName = function(month) {
             return Ext.Date.monthNames[month].substring(0, 3);
         };
@@ -250,7 +285,8 @@ Ext.onReady(function() {
         };
 
         Ext.Date.getMonthNumber = function(name) {
-            return Ext.Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+            return Ext.Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3)
+                .toLowerCase()];
         };
 
         Ext.Date.dayNames = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
@@ -267,32 +303,69 @@ Ext.onReady(function() {
         Ext.util.Format.brMoney = Ext.util.Format.currency;
     }
 });
+
+Ext.define("Ext.locale.pt.grid.filters.menu.Base", {
+    override: "Ext.grid.filters.menu.Base",
+
+    config: {
+        text: "Filtro"
+    }
+});
+
+Ext.define("Ext.locale.pt_BR.grid.LockedGrid", {
+    override: "Ext.grid.LockedGrid",
+
+    config: {
+        columnMenu: {
+            items: {
+                region: {
+                    text: 'Região'
+                }
+            }
+        },
+        regions: {
+            left: {
+                menuLabel: 'Bloqueado (Esquerda)'
+            },
+            center: {
+                menuLabel: 'Desbloqueado'
+            },
+            right: {
+                menuLabel: 'Bloqueado (Certo)'
+            }
+        }
+    }
+});
 Ext.define('Ext.locale.pt_BR.field.Date', {
     override: 'Ext.field.Date',
 
     minDateMessage: 'A data deste campo deve ser igual ou posterior à {0}',
     maxDateMessage: 'A data deste campo deve ser igual ou anterior à {0}'
-});Ext.define('Ext.locale.pt_BR.field.Field', {
+});
+Ext.define('Ext.locale.pt_BR.field.Field', {
     override: 'Ext.field.Field',
 
     config: {
         requiredMessage: 'Este campo é necessário',
         validationMessage: 'Está no formato incorreto'
     }
-});Ext.define("Ext.locale.pt_BR.field.FileButton", { 
-    override: "Ext.field.FileButton", 
+});
+Ext.define("Ext.locale.pt_BR.field.FileButton", {
+    override: "Ext.field.FileButton",
 
-    config:{
+    config: {
         text: 'Arquivo...'
     }
-});Ext.define('Ext.locale.pt_BR.field.Number', {
+});
+Ext.define('Ext.locale.pt_BR.field.Number', {
     override: 'Ext.field.Number',
 
     decimalsText: 'O valor máximo de decimais é {0}',
     minValueText: 'O valor mínimo para este campo é {0}',
     maxValueText: 'O valor máximo para este campo é {0}',
     badFormatMessage: 'Valor não é um número válido'
-});Ext.define('Ext.locale.pt_BR.field.Text', {
+});
+Ext.define('Ext.locale.pt_BR.field.Text', {
     override: 'Ext.field.Text',
 
     badFormatMessage: 'Valor não está no formato desejado',
@@ -300,44 +373,51 @@ Ext.define('Ext.locale.pt_BR.field.Date', {
         requiredMessage: 'Este campo é necessário',
         validationMessage: 'Está no formato incorreto'
     }
-});Ext.define("Ext.locale.pt_BR.grid.menu.Columns", {
+});
+Ext.define("Ext.locale.pt_BR.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
-    config:{
+    config: {
         text: "Colunas"
     }
-});Ext.define("Ext.locale.pt_BR.grid.menu.GroupByThis", {
+});
+Ext.define("Ext.locale.pt_BR.grid.menu.GroupByThis", {
     override: "Ext.grid.menu.GroupByThis",
 
-    config:{
+    config: {
         text: "Agrupar por este campo"
     }
-});Ext.define("Ext.locale.pt_BR.grid.menu.ShowInGroups", {
+});
+Ext.define("Ext.locale.pt_BR.grid.menu.ShowInGroups", {
     override: "Ext.grid.menu.ShowInGroups",
 
-    config:{
+    config: {
         text: "Mostrar em grupos"
     }
-});Ext.define("Ext.locale.pt_BR.grid.menu.SortAsc", {
+});
+Ext.define("Ext.locale.pt_BR.grid.menu.SortAsc", {
     override: "Ext.grid.menu.SortAsc",
 
-    config:{
+    config: {
         text: "Ordenar crescente"
     }
-});Ext.define("Ext.locale.pt_BR.grid.menu.SortDesc", {
+});
+Ext.define("Ext.locale.pt_BR.grid.menu.SortDesc", {
     override: "Ext.grid.menu.SortDesc",
 
-    config:{
+    config: {
         text: "Ordenar decrescente"
     }
-});Ext.define('Ext.locale.pt_BR.panel.Collapser', {
+});
+Ext.define('Ext.locale.pt_BR.panel.Collapser', {
     override: 'Ext.panel.Collapser',
 
-    config:{
+    config: {
         collapseToolText: "Recolher painel",
         expandToolText: "Expandir painel"
     }
-});Ext.define('Ext.locale.pt_BR.panel.Date', {
+});
+Ext.define('Ext.locale.pt_BR.panel.Date', {
     override: 'Ext.panel.Date',
 
     config: {
@@ -349,7 +429,8 @@ Ext.define('Ext.locale.pt_BR.field.Date', {
             }
         }
     }
-});Ext.define('Ext.locale.pt_BR.picker.Date', {
+});
+Ext.define('Ext.locale.pt_BR.picker.Date', {
     override: 'Ext.picker.Date',
 
     config: {
@@ -358,7 +439,8 @@ Ext.define('Ext.locale.pt_BR.field.Date', {
         dayText: 'Dia',
         yearText: 'Ano'
     }
-});Ext.define('Ext.locale.pt_BR.picker.Picker', {
+});
+Ext.define('Ext.locale.pt_BR.picker.Picker', {
     override: 'Ext.picker.Picker',
 
     config: {

@@ -8,13 +8,14 @@ Ext.define('KitchenSink.model.Employee', {
     idField: 'employeeNo',
 
     fields: [{
-        name: 'employeeNo'
+        name: 'employeeNo',
+        type: 'integer'
     }, {
         name: 'rating'
     }, {
         name: 'averageRating',
 
-        calculate: function (data) {
+        calculate: function(data) {
             var average, i,
                 ratings = data.rating || [],
                 count = ratings.length;
@@ -22,6 +23,7 @@ Ext.define('KitchenSink.model.Employee', {
             for (i = 0, average = 0; i < count; i++) {
                 average += data.rating[i];
             }
+
             return average / ratings.length;
         }
     }, {
@@ -33,7 +35,7 @@ Ext.define('KitchenSink.model.Employee', {
         name: 'surname'
     }, {
         name: 'fullName',
-        calculate: function (data) {
+        calculate: function(data) {
             var first = data.forename,
                 last = data.surname;
 
@@ -73,5 +75,8 @@ Ext.define('KitchenSink.model.Employee', {
     }, {
         name: 'ratingThisYear',
         type: 'integer'
+    }, {
+        name: 'verified',
+        type: 'boolean'
     }]
 });

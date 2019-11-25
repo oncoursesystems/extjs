@@ -8,6 +8,7 @@ Ext.define('KitchenSink.view.grid.core.GroupedGrid', {
     requires: [
         'Ext.grid.cell.Number',
         'Ext.grid.cell.Widget',
+        'Ext.grid.filters.Plugin',
         'Ext.grid.SummaryRow',
         'Ext.ux.rating.Picker'
     ],
@@ -62,6 +63,8 @@ Ext.define('KitchenSink.view.grid.core.GroupedGrid', {
         reference: 'grid',
         shadow: '${shadow}',
         title: 'Restaurants',
+        stateful: true,
+        stateId: 'grouped-grid',
 
         grouped: true,
         groupFooter: {
@@ -70,6 +73,10 @@ Ext.define('KitchenSink.view.grid.core.GroupedGrid', {
 
         store: {
             type: 'restaurants'
+        },
+
+        plugins: {
+            gridfilters: true
         },
 
         columns: [{

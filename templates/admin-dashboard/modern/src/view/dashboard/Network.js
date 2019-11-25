@@ -9,7 +9,8 @@ Ext.define('Admin.view.dashboard.Network', {
         'Ext.chart.axis.Numeric',
         'Ext.chart.series.Area',
         'Ext.chart.series.Line',
-        'Ext.chart.interactions.PanZoom'
+        'Ext.chart.interactions.PanZoom',
+        'Ext.Responsive'
     ],
 
     height: 380,
@@ -47,9 +48,6 @@ Ext.define('Admin.view.dashboard.Network', {
             padding: '0 15 0 0',
             margin: '15 0 0 0',
             layout: 'vbox',
-            plugins: {
-                responsive: true
-            },
             responsiveConfig: {
                 'width < 700': {
                     hidden: true

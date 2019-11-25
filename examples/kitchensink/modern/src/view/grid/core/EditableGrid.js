@@ -6,6 +6,10 @@
  * On desktop, double-clicking a cell displays and inline
  * editor, while on mobile devices, a form is shows on
  * the right with all the configured column editors.
+ *
+ * This example also demonstrates configuring the scroller
+ * to always use floating overlay scroll indicators instead
+ * of scrollbars.
  */
 Ext.define('KitchenSink.view.grid.core.EditableGrid', {
     extend: 'Ext.grid.Grid',
@@ -67,6 +71,10 @@ Ext.define('KitchenSink.view.grid.core.EditableGrid', {
     height: '${height}',
     store: 'Companies',
     width: '${width}',
+
+    scrollable: {
+        indicators: 'overlay'
+    },
 
     columns: [{
         text: 'Company',

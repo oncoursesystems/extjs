@@ -44,7 +44,8 @@ Ext.define('KitchenSink.view.d3.hierarchy.Organization', {
 
         nodeSize: [200, 100],
 
-        imagePath: 'images/d3/',
+        imagePath: 'images/staff/',
+        imageField: 'avatar',
 
         store: {
             type: 'org-chart'

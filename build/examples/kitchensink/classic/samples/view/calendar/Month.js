@@ -62,7 +62,6 @@ Ext.define('KitchenSink.view.calendar.Month', {
         region: 'center',
         xtype: 'calendar-month',
         visibleWeeks: null,
-        timezoneOffset: 0,
         gestureNavigation: false,
         bind: {
             value: '{value}',

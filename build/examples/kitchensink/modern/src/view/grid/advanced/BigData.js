@@ -42,7 +42,10 @@ Ext.define('KitchenSink.view.grid.advanced.BigData', {
         summaryrow: true,
         rowexpander: true,
         gridexporter: true,
-        rowoperations: true
+        rowoperations: true,
+        gridfilters: {
+            //
+        }
     },
 
     listeners: {

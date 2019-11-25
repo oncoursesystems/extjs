@@ -89,6 +89,7 @@ Ext.define('KitchenSink.view.grid.core.BasicGrid', {
         formatter: 'date("m/d/Y")'
     }, {
         width: 70,
+        hideable: false,
 
         cell: {
             tools: {

@@ -59,6 +59,6 @@ Ext.define('KitchenSink.view.desktop.Main', {
         }]
     }, {
         xtype: 'sourceoverlay',
-        flex: 1
+        width: 450  // flex is not compatible w/stateful width
     }]
 });

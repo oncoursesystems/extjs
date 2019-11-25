@@ -1,91 +1,31 @@
 Ext.define('KitchenSink.store.OrgChart', {
     extend: 'Ext.data.TreeStore',
     alias: 'store.org-chart',
+    requires: [
+        'KitchenSink.data.Staff'
+    ],
 
-    config: {
-        rootVisible: true
+    model: 'KitchenSink.model.StaffMember',
+
+    rootVisible: true,
+    autoLoad: true,
+
+    // Allows staff to link to immediate manager to create the reporting hierarchy.
+    parentIdProperty: 'parentId',
+
+    // We use the shared KitchenSink.data.Staff data which has a parentId link
+    // to allow it to be read either as a linear Store or a TreeStore.
+    proxy: {
+        type: 'ajax',
+        url: '/KitchenSink/StaffData'
     },
 
-    root: {
-        name: 'Cliff Capote',
-        title: 'CEO',
-        url: '1.jpg',
-        expanded: true,
-        children: [
-            {
-                name: 'Rina Hohn',
-                title: 'Vice President, Engineering',
-                url: '4.jpg',
-                expanded: true,
-                children: [{
-                    name: 'Edgardo Elvin',
-                    title: 'Director of Engineering',
-                    url: '2.jpg',
-                    expanded: true,
-                    children: [
-                        {
-                            name: 'Martin Patlan',
-                            title: 'Sr. Software Architect',
-                            url: '13.jpg'
-                        },
-                        {
-                            name: 'Paola Motes',
-                            title: 'Sr. Software Engineer',
-                            url: '8.jpg'
-                        },
-                        {
-                            name: 'Angelo Aden',
-                            title: 'Sr. Software Engineer',
-                            url: '12.jpg'
-                        },
-                        {
-                            name: 'Christina Timmins',
-                            title: 'Sr. Software Engineer',
-                            url: '14.jpg'
-                        },
-                        {
-                            name: 'Derrick Curtsinger',
-                            title: 'Software Engineer',
-                            url: '15.jpg'
-                        }
-                    ]
-                },  {
-                    name: 'Freda Mcmurray',
-                    title: 'Sr. Engineering Manager',
-                    url: '9.jpg'
-                }]
-            },
-            {
-                name: 'Ramiro Frew',
-                title: 'Vice President, Marketing',
-                url: '5.jpg',
-                expanded: true,
-                children: [
-                    {
-                        name: 'Conrad Yohe',
-                        title: 'Sr. Director, Product Management',
-                        url: '3.jpg'
-                    }
-                ]
-            },
-            {
-                name: 'Marita Meserve',
-                title: 'Senior Vice President and Chief Financial Officer',
-                url: '7.jpg'
-            },
-            {
-                name: 'Tory Orban',
-                title: 'Vice President, Global Alliances & Professional Services',
-                url: '10.jpg',
-                expanded: true,
-                children: [
-                    {
-                        name: 'Jarred Lasky',
-                        title: 'Principal Architect',
-                        url: '11.jpg'
-                    }
-                ]
-            }
-        ]
+    onProxyLoad: function(operation) {
+        this.callParent([operation]);
+
+        // Discard the automatic root - the root is part of the loaded data
+        if (operation.isRootLoad) {
+            this.setRoot(this.getRoot().firstChild);
+        }
     }
 });

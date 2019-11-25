@@ -1,11 +1,8 @@
 /**
- * @class kitchensink.controller.tablet.main
- * @extends KitchenSink.controller.Main
- *
  * This is the Main controller subclass for the 'tablet' profile.
  *
- * The table profile differs from the phone profile in that navigation is done via screens full of icons
- * instead of a nested list.
+ * The table profile differs from the phone profile in that navigation is done via screens
+ * full of icons instead of a nested list.
  */
 Ext.define('KitchenSink.controller.tablet.Main', {
     extend: 'KitchenSink.controller.Main',
@@ -60,7 +57,8 @@ Ext.define('KitchenSink.controller.tablet.Main', {
                     direction: 'left',
                     duration: 250
                 };
-            } else if (toNode.contains(fromNode)) {
+            }
+            else if (toNode.contains(fromNode)) {
                 // navigating upward in the hierarchy - animate left to right
                 animation = {
                     type: 'slide',
@@ -86,17 +84,11 @@ Ext.define('KitchenSink.controller.tablet.Main', {
     },
 
     updateTitle: function(node) {
-        var text = node.get('text'),
-            title = node.isLeaf() ? (node.parentNode.get('text') + ' - ' + text) : text,
-            toolbar = this.getToolbar();
-
-        if (title === 'All') {
-            title = 'Kitchen Sink';
-        }
+        var text = node.get('text');
 
         document.title = document.title.split(' - ')[0] + ' - ' + text;
-
-        return this;
+        
+        return this;  // NOTE this is not a config updater method...
     },
 
     updateBreadcrumb: function(node) {
@@ -109,7 +101,9 @@ Ext.define('KitchenSink.controller.tablet.Main', {
                 xtype: 'component',
                 cls: 'x-tool',
                 _bcSeparator: true,
-                html: '<div class="' + Ext.baseCSSPrefix + 'icon-el ' + Ext.baseCSSPrefix + 'font-icon ' + Ext.baseCSSPrefix + 'tool-type-right' + '"></div>'
+                html: '<div class="' + Ext.baseCSSPrefix + 'icon-el ' +
+                    Ext.baseCSSPrefix + 'font-icon ' +
+                    Ext.baseCSSPrefix + 'tool-type-right' + '"></div>'
             },
             btnCfg, existing, len, i, j, focusEl;
 
@@ -119,7 +113,7 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         }
 
         // Update the buttons as non-destructively as possible to preserve focus if possible.
-        for (i = 0, j = 0, len = path.length; i < len; i++, j+=2) {
+        for (i = 0, j = 0, len = path.length; i < len; i++, j += 2) {
             node = path[i];
 
             btnCfg = {
@@ -139,12 +133,15 @@ Ext.define('KitchenSink.controller.tablet.Main', {
 
                 if (i < len - 1) {
                     existing = items[j + 1];
+
                     if (!existing || !existing._bcSeparator) {
                         toAdd.push(sepCfg);
                     }
                 }
-            } else {
+            }
+            else {
                 toAdd.push(btnCfg);
+
                 if (i < len - 1) {
                     toAdd.push(sepCfg);
                 }
@@ -158,6 +155,7 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         if (breadcrumb.afterItems) {
             Ext.Array.push(toAdd, breadcrumb.afterItems);
         }
+
         if (toAdd.length) {
             breadcrumb.add(toAdd);
         }
@@ -165,6 +163,7 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         // If we have buttons, then focus the last one.
         if (j) {
             focusEl = breadcrumb.items.items[j - 2].getFocusEl();
+
             if (focusEl) {
                 focusEl.focus();
             }
@@ -208,19 +207,19 @@ Ext.define('KitchenSink.controller.tablet.Main', {
             };
 
             if (!demoContent.$preventContentSize && demoContent.getWidth() === null) {
-                    demoContent.setWidth('90%');
-                    demoContent.setHeight('90%');
-                }
+                demoContent.setWidth('90%');
+                demoContent.setHeight('90%');
+            }
 
             if (demoContent.getShadow() !== false) {
-                //default to having a shadow
                 demoContent.setShadow(true);
             }
 
             me.currentDemo = node;
 
             cmp = me.currentLeafView = Ext.create(cmp);
-        } else {
+        }
+        else {
             contentPanel1 = me.getContentPanel1();
             contentPanel2 = me.getContentPanel2();
             thumbnails1 = me.getThumbnails1();
@@ -249,7 +248,7 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         if (currentLeafView) {
             animation.on({
                 single: true,
-                animationend: function () {
+                animationend: function() {
                     currentLeafView.destroy();
                 }
             });
@@ -259,7 +258,7 @@ Ext.define('KitchenSink.controller.tablet.Main', {
             .updateDetails(node)
             .updateBreadcrumb(node);
 
-        //will add (if needed) and set active
+        // Will add (if needed) and set active
         cardPanel.setActiveItem(cmp);
     },
 
@@ -270,12 +269,12 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         // Confirm the touchend has occured over the item and that this item was currently
         // being pressed.
         // As we are handling the raw touchend event we have to manage these also
-        if (currentItem === location.item.dom && location.pressing) {
+        if (currentItem.dom === location.item.dom && location.pressing) {
             this.redirectTo(location.record.id);
         }
     },
 
-    getAvailableThemes: function () {
+    getAvailableThemes: function() {
         var items = this.callParent();
 
         items.push({

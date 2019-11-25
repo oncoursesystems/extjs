@@ -470,6 +470,9 @@
 .icon-form-color-picker:before {
   content: "\e618";
 }
+.icon-color-selector:before {
+  content: "\e618";
+}
 .icon-direct-named:before {
   content: "\e619";
 }

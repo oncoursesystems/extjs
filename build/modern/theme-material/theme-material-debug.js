@@ -5,10 +5,10 @@
 Ext.define('Ext.overrides.dom.Element', {
     override: 'Ext.dom.Element',
     /**
-         * @property  {Number/Boolean} rippleShowTimeout
-         * The amount of time take by ripple to completely shown.
-         * Settings this to `true` defaults to 300ms.
-         */
+     * @property  {Number/Boolean} rippleShowTimeout
+     * The amount of time take by ripple to completely shown.
+     * Settings this to `true` defaults to 300ms.
+     */
     rippleShowTimeout: 300
 });
 
@@ -50,10 +50,10 @@ Ext.define('Ext.theme.material.Button', {
     },
     materialIconRe: /^md-icon[-|_](.*)/,
     applyIconCls: function(classList) {
+        var len, i, cls, materialMatch;
         if (classList) {
             classList = Ext.dom.Element.splitCls(classList);
-            var len = classList.length,
-                i, cls, materialMatch;
+            len = classList.length;
             for (i = 0; i < len; i++) {
                 cls = classList[i];
                 materialMatch = cls && cls.match(this.materialIconRe);
@@ -103,7 +103,8 @@ Ext.define('Ext.theme.material.menu.Item', {
     shouldRipple: function() {
         var me = this,
             rippleDelay = me.el.rippleShowTimeout;
-        //To delay menu hide(closing of menu) after menu item is clicked. RippleDelayis used to show ripple effect on menu items. Max(clickHideDelay,rippleDelay) should be used
+        // To delay menu hide(closing of menu) after menu item is clicked. RippleDelayis used to
+        // show ripple effect on menu items. Max(clickHideDelay,rippleDelay) should be used
         me.clickHideDelay = me.clickHideDelay > rippleDelay ? me.clickHideDelay : rippleDelay;
         return this.getRipple();
     }
@@ -119,11 +120,11 @@ Ext.define('Ext.theme.material.menu.Menu', {
 Ext.define('Ext.theme.material.SplitButton', {
     override: 'Ext.SplitButton',
     /**
-         * @private
-         * @cfg {Number/Boolean} menuShowDelay
-         * The amount of delay between the `tap` or `onClick` and the moment the
-         * split menu button shows the menu.
-         */
+     * @private
+     * @cfg {Number/Boolean} menuShowDelay
+     * The amount of delay between the `tap` or `onClick` and the moment the
+     * split menu button shows the menu.
+     */
     config: {
         splitRipple: {
             delegate: '.x-splitInner-el'
@@ -695,6 +696,7 @@ Ext.define('Ext.theme.Material', {
         }
     },
     hasFashion: function() {
+        // eslint-disable-next-line no-undef
         return !!window.Fashion && !!Fashion.css && Fashion.css.setVariables;
     },
     setAutoUpdateMeta: function(value) {
@@ -713,6 +715,7 @@ Ext.define('Ext.theme.Material', {
             //</debug>
             return;
         }
+        // eslint-disable-next-line no-undef
         Fashion.css.setVariables({
             'dark-mode': value ? 'true' : 'false'
         });
@@ -723,10 +726,13 @@ Ext.define('Ext.theme.Material', {
      * @param {String} colorsConfig.base Name of the base color (red, green, blue, etc)
      * @param {String} colorsConfig.baseWeight Weight for the base color ('500', '400', '300', etc)
      * @param {String} colorsConfig.accent Name of the accent color (red, green, blue, etc)
-     * @param {String} colorsConfig.accentWeight Weight for the accent color ('500', '400', '300', etc)
+     * @param {String} colorsConfig.accentWeight Weight for the accent color
+     * ('500', '400', '300', etc)
      * @param {Boolean} colorsConfig.darkMode Determines if the theme is in Light or Dark Mode
      */
     setColors: function(colorsConfig) {
+        var obj = {},
+            baseColor, accentColor;
         if (!this.hasFashion()) {
             //<debug>
             Ext.Logger.warn('Fashion was not found and is required to set CSS Variables for Material Theme');
@@ -737,9 +743,8 @@ Ext.define('Ext.theme.Material', {
             baseWeight: this.getDefaultWeight(),
             accentWeight: this.getDefaultWeight()
         }, colorsConfig);
-        var baseColor = this._colors[colorsConfig.base],
-            accentColor = this._colors[colorsConfig.accent],
-            obj = {};
+        baseColor = this._colors[colorsConfig.base];
+        accentColor = this._colors[colorsConfig.accent];
         if (baseColor) {
             if (baseColor[colorsConfig.baseWeight]) {
                 obj['base-color-name'] = colorsConfig.base;
@@ -764,6 +769,7 @@ Ext.define('Ext.theme.Material', {
         if (colorsConfig.darkMode !== null) {
             obj['dark-mode'] = colorsConfig.darkMode ? 'true' : 'false';
         }
+        // eslint-disable-next-line no-undef
         Fashion.css.setVariables(obj);
     },
     updateMetaThemeColor: function(colorName, weight) {
@@ -786,12 +792,12 @@ Ext.define('Ext.theme.Material', {
     }
 });
 
+var color, toolbarIsDynamic, head, meta;
 Ext.require('Ext.theme.Material');
 if (Ext.platformTags.android && Ext.platformTags.chrome && Ext.manifest.material && Ext.manifest.material.toolbar) {
-    var color = Ext.manifest.material.toolbar.color,
-        toolbarIsDynamic = Ext.manifest.material.toolbar.dynamic,
-        head = document.head,
-        meta;
+    color = Ext.manifest.material.toolbar.color;
+    toolbarIsDynamic = Ext.manifest.material.toolbar.dynamic;
+    head = document.head;
     if (toolbarIsDynamic && Ext.supports.CSSVariables) {
         color = getComputedStyle(document.body).getPropertyValue('--primary-color-md');
         color = color.replace(/ /g, '').replace(/^#(?:\\3)?/, '#');

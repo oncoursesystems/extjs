@@ -61,7 +61,7 @@ Ext.define('KitchenSink.view.binding.ChainedSelect', {
         }, {
             xtype: 'component',
             margin: '20 0 0',
-            html: 'The states store contains all states, however it filters based upon the ' +
+            html: 'The states store contains all US states and Canadian provinces, however it filters based upon the ' +
                 'id of the selected record in the country field.'
         }]
     }]

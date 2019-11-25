@@ -70,7 +70,6 @@ Ext.define('KitchenSink.view.calendar.Timezone', {
         startTime: 6,
         endTime: 22,
         visibleDays: 2,
-        timezoneOffset: 0,
         gestureNavigation: false,
         showNowMarker: false,
         bind: {

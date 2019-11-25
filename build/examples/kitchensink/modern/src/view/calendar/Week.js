@@ -103,7 +103,6 @@ Ext.define('KitchenSink.view.calendar.Week', {
     }, {
         xtype: 'calendar-week',
         flex: 1,
-        timezoneOffset: 0,
         gestureNavigation: false,
         bind: {
             value: '{value}',

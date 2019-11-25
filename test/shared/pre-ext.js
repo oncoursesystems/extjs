@@ -8,3 +8,5 @@ Ext.disableImmediate = true;
 // exceptions whenever a Promise is rejected and is not handled. This makes writing
 // tests too complicated, so we use Ext promises instead for tests.
 Ext.useExtPromises = true;
+
+Ext._unitTesting = true;

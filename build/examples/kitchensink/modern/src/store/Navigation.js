@@ -549,6 +549,7 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'animations', text: 'Animations', leaf: true },
                 me.getNavItemsButtons(),
                 me.getNavItemsCarousel(),
+                { id: 'color-selector', text: 'Color Picker', leaf: true},
                 me.getNavItemsData(),
                 me.getNavItemsDataBinding(),
                 me.getNavItemsDataView(),
@@ -571,7 +572,8 @@ Ext.define('KitchenSink.store.Navigation', {
                 me.getNavItemsTabs(),
                 me.getNavItemsToolbars(),
                 me.getNavItemsTips(),
-                { id: 'touch-events', text: 'Touch Events', leaf: true }
+                { id: 'touch-events', text: 'Touch Events', leaf: true },
+                { id: 'virtual-scroller', iconCls: 'icon-drag-drop', text: 'Virtual Scroller', leaf: true }
             ]
         };
     },
@@ -860,8 +862,8 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'form-login', text: 'Login Form', leaf: true },
                 { id: 'form-contact', text: 'Contact Form', leaf: true },
                 { id: 'form-register', text: 'Register Form', leaf: true  },
+                { id: 'form-email', iconCls: 'icon-form-contact', text: 'Email Form', leaf: true  },
                 { id: 'form-checkout', text: 'Checkout Form', leaf: true },
-                //{ id: 'form-color-picker', text: 'Color Picker', leaf: true},
                 //{ id: 'form-rating', text: 'Rating Form', leaf: true},
                 //{ id: 'form-vboxlayout', text: 'VBox Layout', leaf: true },
                 { id: 'form-hboxlayout', text: 'HBox Layout', leaf: true },
@@ -997,7 +999,7 @@ Ext.define('KitchenSink.store.Navigation', {
 
             children: [
                 this.getNavItemsGridBasic(),
-                this.getNavItemsGridDecorations(),
+                this.getNavItemsGridAddons(),
                 this.getNavItemsGridAdvanced()
             ]
         };
@@ -1044,7 +1046,7 @@ Ext.define('KitchenSink.store.Navigation', {
     //            { id: 'row-numberer', text: 'Row Numberer', leaf: true },
     //            { id: 'grouped-header-grid', text: 'Grouped Header Grid', leaf: true },
     //            { id: 'multi-sort-grid', text: 'Multiple Sort Grid', leaf: true },
-    //            { id: 'locking-grid', text: 'Locking Grid', leaf: true },
+                { id: 'locking-grid', text: 'Locking Grid', leaf: true },
                 { id: 'editable-grid', text: 'Editable Grid', leaf: true },
     //            { id: 'row-expander-grid', text: 'Row Expander', leaf: true },
     //            { id: 'property-grid', text: 'Property Grid', leaf: true },
@@ -1053,7 +1055,7 @@ Ext.define('KitchenSink.store.Navigation', {
         };
     },
 
-    getNavItemsGridDecorations: function () {
+    getNavItemsGridAddons: function () {
         return {
             text: 'Add-ons and Decorations',
             id: 'grid-addons',
@@ -1063,7 +1065,6 @@ Ext.define('KitchenSink.store.Navigation', {
                 'capabilities that make grids ever more awesome.',
 
             children: [
-    //            { id: 'grid-filtering', text: 'Grid Filtering', leaf: true },
     //            { id: 'grid-exporter', text: 'Grid Export', leaf: true, tier: 'premium' },
     //            { id: 'paging-grid', text: 'Paging', leaf: true },
     //            { id: 'progress-bar-pager', text: 'Progress Bar Pager', leaf: true },
@@ -1075,6 +1076,7 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'row-expander-grid', text: 'Row Expander', leaf: true },
                 { id: 'rowoperations-grid', text: 'Row Operations', leaf: true },
                 { id: 'summary-row-grid', text: 'Summary Row', leaf: true },
+                { id: 'grid-filtering', text: 'Grid Filtering', leaf: true },
                 { id: 'view-options-grid', text: 'View Options', leaf: true },
                 { id: 'cell-overflow-grid', text: 'Cell Overflow Tip', leaf: true }
     //            { id: 'dd-field-to-grid', text: 'Drag Field to Grid', leaf: true },
@@ -1168,4 +1170,3 @@ Ext.define('KitchenSink.store.Navigation', {
         };
     }
 });
-

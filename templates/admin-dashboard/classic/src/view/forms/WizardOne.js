@@ -2,14 +2,11 @@ Ext.define('Admin.view.forms.WizardOne', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.formswizardone',
     requires: [
-        'Ext.form.field.Radio'
+        'Ext.form.field.Radio',
+        'Ext.Responsive'
     ],
 
     cls: 'wizardone shadow',
-
-    plugins: {
-        responsive: true
-    },
 
     responsiveConfig: {
         'width >= 1000': {
@@ -32,9 +29,6 @@ Ext.define('Admin.view.forms.WizardOne', {
     items: [
         {
             xtype: 'specialoffer',
-            plugins: {
-                responsive: true
-            },
             height: 338,
 
             responsiveConfig: {

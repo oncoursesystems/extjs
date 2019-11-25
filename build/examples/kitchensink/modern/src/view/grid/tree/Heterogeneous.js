@@ -49,6 +49,10 @@ Ext.define('KitchenSink.view.grid.tree.Heterogeneous', {
     store: 'GeoData',
     width: '${width}',
 
+    selectable: {
+        deselectable: true
+    },
+
     listeners: {
         selectionchange: 'onSelectionChange'
     },
@@ -65,12 +69,12 @@ Ext.define('KitchenSink.view.grid.tree.Heterogeneous', {
         docked: 'bottom',
         items: [{
             xtype: 'textfield',
-            reference: 'new-name',
+            reference: 'newName',
             listeners: {
                 action: 'onFieldAction'
             }
         }, {
-            reference: 'add-button',
+            reference: 'addButton',
             text: 'Add Territory',
             handler: 'addItem'
         }]

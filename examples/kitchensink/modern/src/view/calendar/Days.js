@@ -61,7 +61,6 @@ Ext.define('KitchenSink.view.calendar.Days', {
         startTime: 8,
         endTime: 20,
         visibleDays: 2,
-        timezoneOffset: 0,
         gestureNavigation: false,
         bind: {
             value: '{value}',

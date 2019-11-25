@@ -3,7 +3,9 @@ Ext.define('KitchenSink.Application', {
     namespace: 'KitchenSink',
 
     requires: [
-        'KitchenSink.*'
+        'KitchenSink.*',
+        'Ext.Stateful',
+        'Ext.state.LocalStorage'
     ],
 
     //sets up the icon and startup screens for when the app is added to a phone/tablet home screen
@@ -71,6 +73,12 @@ Ext.define('KitchenSink.Application', {
         viewModel: {
             darkMode: false
         }
+    },
+
+    onBeforeLaunch: function() {
+        Ext.state.Provider.register(new Ext.state.LocalStorage());
+
+        this.callParent();
     },
 
     launch: function() {

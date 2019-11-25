@@ -55,6 +55,8 @@ Ext.define('KitchenSink.view.forms.RemoteCombo', {
         store: {
             type: 'form-forum-posts'
         },
+        displayField: 'title',
+        forceSelection: true,
         floatedPicker: {
             maxHeight: '${pickerMaxHeight}'
         },

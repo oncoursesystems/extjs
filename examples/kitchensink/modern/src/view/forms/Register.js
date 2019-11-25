@@ -26,8 +26,8 @@ Ext.define('KitchenSink.view.forms.Register', {
 
     profiles: {
         defaults: {
-            maxHeight: 400,
-            width: 355
+            maxHeight: 600,
+            width: 500
         },
         phone: {
             defaults: {
@@ -85,6 +85,7 @@ Ext.define('KitchenSink.view.forms.Register', {
             displayField: 'state',
             forceSelection: true,
             queryMode: 'local',
+            clearable: true,
             placeholder: 'Select a state...',
             store: {
                 type: 'states'
@@ -94,6 +95,44 @@ Ext.define('KitchenSink.view.forms.Register', {
             label: 'Date of Birth',
             name: 'dob',
             maxValue: new Date()
+        }, {
+            xtype: 'selectfield',
+            label: 'Skills',
+            name: 'skills',
+            multiSelect: true,
+            autoSelect: false,
+            clearable: true,
+            options: [
+                'ExtJS',
+                'Javascript',
+                'CSS',
+                'Git',
+                'Java',
+                'PHP',
+                'COBOL',
+                'Node.js',
+                'JSON',
+                'HTML5',
+                'RIA',
+                'OOP',
+                'Scrum',
+                'REST',
+                'MVC'
+            ],
+            chipView: {
+                plugins: {
+                    dataviewtip: {
+                        align: 'tl-br',
+                        constrainToView: false,
+                        delegate: '.x-close-el',
+                        allowOver: true,
+                        anchor: false,
+                        anchorToTarget: false,
+                        bind: '{record}',
+                        tpl: 'Remove skill {text}'
+                    }
+                }
+            }
         }, {
             xtype: 'filefield',
             label: 'Profile pic',

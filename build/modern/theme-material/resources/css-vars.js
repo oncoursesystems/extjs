@@ -4395,7 +4395,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     key: "radialgradient",
                     value: function radialgradient(obj) {
                         var output = this.output;
-                        output.add("linear-gradient(");
+                        output.add("radial-gradient(");
                         if (obj.position) {
                             this.visit(obj.position);
                             output.add(',');
@@ -5083,6 +5083,25 @@ __rt.register({
 
                 return Color.adjust(color, 'lightness', amount);
             },
+    darken:  function (color, amount) {
+                if (color == null || color.$isFashionNull) {
+                    return Literal.Null;
+                }
+                if (color.type !== 'hsla' && color.type !== 'rgba') {
+                    Fashion.raise(color + ' is not a color for \'darken\'');
+                }
+                if (amount.type !== 'number') {
+                    Fashion.raise(amount + ' is not a number for \'darken\'');
+                }
+
+                if (amount.value !== Color.constrainPercentage(amount.value)) {
+                    Fashion.raise('Amount ' + amount + ' must be between 0% and 100% for \'darken\'');
+                }
+
+                amount = amount.clone();
+                amount.value *= -1;
+                return Color.adjust(color, 'lightness', amount);
+            },
     rgba:  function (red, green, blue, alpha, color) {
                 var colorInst;
 
@@ -5459,11 +5478,13 @@ __rt_setDynamic("$base-light-color", __rt_getGlobalDefault("$base_light_color") 
 __rt_setDynamic("$base-dark-color", __rt_getGlobalDefault("$base_dark_color") || __rt_box((__rt.functions.material_color || material_color__fn).apply(__rt.functions, __rt_applySpreadArgs([
     __rt_get("$base_color_name"), 
     new __Text("700", "'")]))), 6);
-__rt_setDynamic("$base-pressed-color", __rt_getGlobalDefault("$base_pressed_color") || (__rt_test(__rt_get("$dark_mode")) ? __rt_box(__rt_registered.darken.apply(__rt.registered, __rt_applySpreadArgs([
-    __rt_get("$base_color"), 
-    new __Numeric(15, "%")]))) : __rt_box(__rt.registered.lighten.apply(__rt.registered, __rt_applySpreadArgs([
-    __rt_get("$base_color"), 
-    new __Numeric(15, "%")])))), 7);
+__rt_setDynamic("$base-pressed-color", __rt_getGlobalDefault("$base_pressed_color") || __rt_box(__rt_registered.darken.apply(__rt.registered, __rt_applySpreadArgs([
+    (__rt_test(__rt_get("$dark_mode")) ? __rt_box(__rt.registered.darken.apply(__rt.registered, __rt_applySpreadArgs([
+        __rt_get("$base_color"), 
+        new __Numeric(15, "%")]))) : __rt_box(__rt.registered.lighten.apply(__rt.registered, __rt_applySpreadArgs([
+        __rt_get("$base_color"), 
+        new __Numeric(15, "%")])))), 
+    new __Numeric(0, "%")]))), 7);
 __rt_setDynamic("$base-focused-color", __rt_getGlobalDefault("$base_focused_color") || __rt_box((__rt.functions.material_color || material_color__fn).apply(__rt.functions, __rt_applySpreadArgs([
     __rt_get("$base_color_name"), 
     new __Text("400", "'")]))), 8);

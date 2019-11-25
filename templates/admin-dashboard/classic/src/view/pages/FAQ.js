@@ -4,7 +4,7 @@ Ext.define('Admin.view.pages.FAQ', {
 
     requires: [
         'Ext.panel.Panel',
-        'Ext.plugin.Responsive',
+        'Ext.Responsive',
         'Ext.button.Button',
         'Ext.layout.container.Accordion'
     ],
@@ -71,10 +71,7 @@ Ext.define('Admin.view.pages.FAQ', {
                         }
                     ]
                 }
-            ],
-            plugins: {
-                responsive: true
-            }
+            ]
     },
         {
             xtype: 'panel',
