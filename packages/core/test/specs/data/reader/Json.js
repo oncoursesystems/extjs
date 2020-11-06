@@ -639,7 +639,8 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     summary: asSummaryModel
                         ? {
                             maxIncome: {
-                                field: 'avg',
+                                field: 'income',
+                                summary: 'avg',
                                 type: 'int'
                             },
                             aSummaryField: {
@@ -800,7 +801,8 @@ topSuite("Ext.data.reader.Json", ['Ext.data.ArrayStore', 'Ext.data.proxy.Rest'],
                     summary: asSummaryModel
                         ? {
                             maxIncome: {
-                                field: 'avg',
+                                field: 'income',
+                                summary: 'avg',
                                 type: 'int'
                             },
                             aSummaryField: {

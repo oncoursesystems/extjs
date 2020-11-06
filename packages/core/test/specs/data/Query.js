@@ -163,10 +163,8 @@ topSuite('Ext.data.Query', [
         });
 
         it('should stringify correctly', function() {
-            var actual = query.toString();
-
-            // eslint-disable-next-line vars-on-top
-            var expected =
+            var actual = query.toString(),
+                expected =
                 'x and ' +                       // 0
                 '!x and ' +                      // 1
                 '-x and ' +                      // 2

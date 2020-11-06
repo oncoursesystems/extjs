@@ -10,16 +10,16 @@ Ext.define('KitchenSink.store.SalesPerEmployee', {
     ],
 
     employees: [
-        'Adrian',
-        'Alex',
-        'Kevin',
-        'Nige',
-        'Phil',
-        'Simon',
-        'Don',
-        'Mike',
-        'Ross',
-        'Vitaly'
+        'Izzy',
+        'Annabelle',
+        'Dion',
+        'Arthur',
+        'Katharine',
+        'Beck',
+        'Meg',
+        'Charleigh',
+        'Phillip',
+        'Cairo'
     ],
 
     days: [

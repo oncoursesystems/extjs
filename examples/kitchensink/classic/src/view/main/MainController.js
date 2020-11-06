@@ -2,21 +2,21 @@ Ext.define('KitchenSink.view.main.MainController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.main',
 
+    _hasTreeNav: true,
+
     applyState: function(state) {
         var refs = this.getReferences();
 
         if (state.hasTreeNav) {
-            this.getView().moveBefore({
-                region: 'west',
-                reference: 'tree',
-                xtype: 'navigation-tree'
-            }, refs.contentPanel);
-
+            refs.tree.show();
             refs['navigation-toolbar'].hide();
             refs.contentPanel.header.hidden = false;
             this._hasTreeNav = true;
         }
         else {
+            refs.tree.hide();
+            refs['navigation-toolbar'].show();
+            refs.contentPanel.header.hidden = true;
             this._hasTreeNav = false;
         }
     },

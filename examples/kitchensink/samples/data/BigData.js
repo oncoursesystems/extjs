@@ -63,12 +63,12 @@ Ext.define('KitchenSink.data.BigData', {
         },
         departments = shuffle('Accounting,Administration,Engineering,Management,Sales,' +
             'Marketing,QA,Support,Services,Shipping,IT,Executive,Facilities'),
-        firstNames = shuffle('Aubrey,Avery,Bill,Cale,Craig,Don,Evan,Hailey,Leah,Milton,Maya,' +
-            'Mark,Lily,Max,Nate,Olivia,Payton,Sven,Phil,Neal,Robert,Sarah,Ted,Wayne,Zack,Zoe,' +
-            'Ross,Vitaly,Alex,Peter,Raymond,Egon,Winston'),
-        lastNames = shuffle('Aye,Banner,Brooks,Carter,Chapman,Connor,Doe,Freedman,Logan,Mae,' +
-            'Carey,Vance,Hanks,Owen,Gill,Murphy,Parker,Preston,Mal,Jayne,Vaughan,West,' +
-            'Venkman,Stantz,Spengler,Zeddemore');
+        firstNames = shuffle('Vicky,Baran,Dani,Nur,Jodi,Marlie,Danica,Frankie,Parris,Nour,Taran,' +
+            'Mylie,Harlow,Geoffrey,Shannon,Dorian,Torin,Keelan,Brooke,Kaya,Zoey,Dilan,Ramone,Mina,Remi,Thierry,' +
+            'Perry,Divine,Seren,Elena,Vivian,Elis,Mylie'),
+        lastNames = shuffle('Lowery,Tang,Peterson,Harwood,Fletcher,Riggs,Romero,Garner,Cartwright,Bowes,' +
+            'Easton,Jensen,Emery,Foreman,Cohen,Bullock,Salinas,Rasmussen,Singh,Glass,Richards,Salter,' +
+            'Workman,Mckay,Velez,Nolan');
 
     Ext.ux.ajax.SimManager.register({
         '/KitchenSink/BigData': {
@@ -90,7 +90,7 @@ Ext.define('KitchenSink.data.BigData', {
                             salary: randInt(5e4, 2e5),
                             forename: fn,
                             surname: ln,
-                            email: (fn + '.' + ln + '@sentcha.com').toLowerCase(),
+                            email: (fn + '.' + ln + '@senchaaa.com').toLowerCase(),
                             // department: departments[(i + k) % departments.length],
                             department: departments[randInt(0, departments.length)],
                             dob: date(1960, thisYear - 19),

@@ -67,7 +67,6 @@ Ext.define('KitchenSink.controller.phone.Main', {
             this.getNav().goToNode(node);
         }
     },
-
     /**
      * This is called whenever the user taps on an item in the main navigation NestedList
      */

@@ -4,7 +4,8 @@ Ext.define('KitchenSink.view.desktop.Main', {
     requires: [
         'KitchenSink.view.ContentPanel',
         'KitchenSink.view.BreadcrumbBar',
-        'KitchenSink.view.desktop.NavigationBar'
+        'KitchenSink.view.desktop.NavigationBar',
+        'KitchenSink.view.NavigationPanel'
     ],
 
     id: 'mainPanel',
@@ -40,25 +41,29 @@ Ext.define('KitchenSink.view.desktop.Main', {
             arrow: false
         }]
     }, {
-        id: 'cardPanel',
-        flex: 3,
-        layout: {
-            type: 'card'
-        },
-        items: [{
-            xtype: 'breadcrumb',
-            docked: 'top'
-        }, {
-            xtype: 'contentPanel',
-            id: 'contentPanel1',
-            layout: 'center'
-        }, {
-            xtype: 'contentPanel',
-            id: 'contentPanel2',
-            layout: 'center'
-        }]
-    }, {
-        xtype: 'sourceoverlay',
-        width: 450  // flex is not compatible w/stateful width
-    }]
+        xtype: 'navigation-panel',
+        docked: 'left'
+    },
+            {
+                id: 'cardPanel',
+                flex: 3,
+                layout: {
+                    type: 'card'
+                },
+                items: [{
+                    xtype: 'breadcrumb',
+                    docked: 'top'
+                }, {
+                    xtype: 'contentPanel',
+                    id: 'contentPanel1',
+                    layout: 'center'
+                }, {
+                    xtype: 'contentPanel',
+                    id: 'contentPanel2',
+                    layout: 'center'
+                }]
+            }, {
+                xtype: 'sourceoverlay',
+                width: 450  // flex is not compatible w/stateful width
+            }]
 });

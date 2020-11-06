@@ -49,28 +49,39 @@ Ext.define('Ext.util.Grouper', {
     },
 
     /**
-     * Returns the value for grouping to be used.
+     * Returns the string value for grouping, primarily used for grouper key.
      * @param {Ext.data.Model} item The Model instance
      * @return {String}
      */
     getGroupString: function(item) {
-        var group = item.$collapsedGroupPlaceholder ? item.$groupKey : this._groupFn(item);
+        return item.$collapsedGroupPlaceholder
+            ? item.$groupKey
+            : this.getGroupValue(item).toString();
+    },
 
-        return (group != null) ? String(group) : '';
+    /**
+     * Returns the value for grouping to be used.
+     * @param {Ext.data.Model} item The Model instance
+     * @return {Mixed}
+     */
+    getGroupValue: function(item) {
+        var groupValue = item.$collapsedGroupPlaceholder ? item.$groupValue : this._groupFn(item);
+
+        return (groupValue != null) ? groupValue : '';
     },
 
     sortFn: function(item1, item2) {
         var me = this,
-            lhs = me.getGroupString(item1),
-            rhs = me.getGroupString(item2),
+            lhs = me.getGroupValue(item1),
+            rhs = me.getGroupValue(item2),
             property = me._sortProperty, // Sorter's sortFn uses "_property"
             root = me._root,
             sorterFn = me._sorterFn,
             transform = me._transform;
 
-        // Items with the same groupFn result must be equal... otherwise we sort them
-        // by sorterFn or sortProperty.
-        if (lhs === rhs) {
+        // Compare groupFn results for both sides and return if they are equal, ensuring
+        // correct comparison in case values are dates.
+        if (lhs === rhs || Ext.Date.isEqual(lhs, rhs)) {
             return 0;
         }
 

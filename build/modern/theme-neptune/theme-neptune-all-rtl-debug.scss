@@ -1,4 +1,4 @@
-$image-search-path: '/home/teamcity/buildAgent/work/ad7452ab2017f48b/sencha/ext/build/modern/theme-neptune/resources' !default;
+$image-search-path: '/home/teamcity/buildAgent/work/247fda0b265630cb/sencha/ext/build/modern/theme-neptune/resources' !default;
 $theme-name:  'theme-neptune' !default;
 $include-ext-abstractcomponent: dynamic(true);;
 $include-ext-abstractmanager: dynamic(true);;
@@ -180,6 +180,7 @@ $include-ext-data-writer: dynamic(true);;
 $include-ext-data-xmlreader: dynamic(true);;
 $include-ext-data-xmlstore: dynamic(true);;
 $include-ext-data-xmlwriter: dynamic(true);;
+$include-ext-data-field-array: dynamic(true);;
 $include-ext-data-field-boolean: dynamic(true);;
 $include-ext-data-field-date: dynamic(true);;
 $include-ext-data-field-field: dynamic(true);;

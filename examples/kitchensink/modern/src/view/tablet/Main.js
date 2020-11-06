@@ -39,6 +39,9 @@ Ext.define('KitchenSink.view.tablet.Main', {
             arrow: false
         }]
     }, {
+        xtype: 'navigation-panel',
+        docked: 'left'
+    }, {
         id: 'cardPanel',
         flex: 3,
         layout: {

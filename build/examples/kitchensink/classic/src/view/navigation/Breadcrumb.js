@@ -13,6 +13,7 @@ Ext.define('KitchenSink.view.navigation.Breadcrumb', {
     bind: {
         selection: '{selectedView}'
     },
+    hidden: true,
     flex: 1,
     // hide glyphs on the buttons (too busy)
     showIcons: false,

@@ -7,16 +7,17 @@
 Ext.define('KitchenSink.view.button.SplitButtons', {
     extend: 'Ext.Container',
     xtype: 'split-buttons',
-    controller: 'buttons',
 
     layout: 'vbox',
     width: '${width}',
 
+    viewModel: {
+        data: {
+            disabled: false
+        }
+    },
+
     //<example>
-    otherContent: [{
-        type: 'Controller',
-        path: 'classic/samples/view/button/ButtonsController.js'
-    }],
     profiles: {
         classic: {
             width: 470
@@ -43,9 +44,7 @@ Ext.define('KitchenSink.view.button.SplitButtons', {
         xtype: 'checkbox',
         boxLabel: 'Disabled',
         margin: '0 0 0 10',
-        listeners: {
-            change: 'toggleDisabled'
-        }
+        bind: '{disabled}'
     }, {
         xtype: 'container',
         layout: {
@@ -54,6 +53,10 @@ Ext.define('KitchenSink.view.button.SplitButtons', {
             tdAttrs: { style: 'padding: 5px 10px;' }
         },
         defaults: {
+            bind: {
+                disabled: '{disabled}',
+                tooltip: '{disabled ? "Buttons are disabled" : "Button tooltip"}'
+            },
             menu: [{
                 text: 'Menu Item 1'
             }, {
@@ -65,7 +68,8 @@ Ext.define('KitchenSink.view.button.SplitButtons', {
 
         items: [{
             xtype: 'component',
-            html: 'Text Only'
+            html: 'Text Only',
+            bind: null
         }, {
             xtype: 'splitbutton',
             text: 'Small'
@@ -79,7 +83,8 @@ Ext.define('KitchenSink.view.button.SplitButtons', {
             scale: 'large'
         }, {
             xtype: 'component',
-            html: 'Icon Only (toggle)'
+            html: 'Icon Only (toggle)',
+            bind: null
         }, {
             iconCls: 'button-home-small',
             xtype: 'splitbutton',
@@ -96,7 +101,8 @@ Ext.define('KitchenSink.view.button.SplitButtons', {
             enableToggle: true
         }, {
             xtype: 'component',
-            html: 'Icon and Text (left)'
+            html: 'Icon and Text (left)',
+            bind: null
         }, {
             xtype: 'splitbutton',
             iconCls: 'button-home-small',
@@ -113,7 +119,8 @@ Ext.define('KitchenSink.view.button.SplitButtons', {
             scale: 'large'
         }, {
             xtype: 'component',
-            html: 'Icon and Text (top)'
+            html: 'Icon and Text (top)',
+            bind: null
         }, {
             xtype: 'splitbutton',
             iconCls: 'button-home-small',
@@ -133,7 +140,8 @@ Ext.define('KitchenSink.view.button.SplitButtons', {
             iconAlign: 'top'
         }, {
             xtype: 'component',
-            html: 'Icon and Text (right)'
+            html: 'Icon and Text (right)',
+            bind: null
         }, {
             xtype: 'splitbutton',
             iconCls: 'button-home-small',
@@ -153,7 +161,8 @@ Ext.define('KitchenSink.view.button.SplitButtons', {
             iconAlign: 'right'
         }, {
             xtype: 'component',
-            html: 'Icon and Text (bottom)'
+            html: 'Icon and Text (bottom)',
+            bind: null
         }, {
             xtype: 'splitbutton',
             iconCls: 'button-home-small',

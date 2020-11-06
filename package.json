@@ -2,8 +2,8 @@
   "name": "ext",
   "namespace": "Ext",
   "format": "1",
-  "version": "7.0.0.156",
-  "compatVersion": "7.0.0",
+  "version": "7.3.1.27",
+  "compatVersion": "7.3.0",
   "creator": "Sencha",
   "summary": "Ext JS",
   "detailedDescription": "Sencha Ext JS JavaScript Framework",
@@ -12,10 +12,10 @@
     {
       "name": "Sencha",
       "uuid": "1d6b0d9c-3333-4e65-885f-5b07a1fc3198",
-      "created": "2019-08-22T21:19:45Z",
+      "created": "2020-10-12T05:07:36Z",
       "algorithm": "SHA1withRSA",
-      "nonce": "vB9BMQkvC2U\u003d",
-      "signature": "F0MT0P5sCdSj9cpOHf0D7qlgaQ890XlyqTdj8JBf9aWtOFd49A8kNoWVUrfTps0IcsCYcqmHClklZo0gnZpY1w9R4C6DhXo2dk/qiWDpDCCNPW4BIx5HXwFdBThqxA03JqCt1UiXt58AJnN3ufz0nSK7ye60LyM4+LoZBMBAepFEHbVwKjVnVwpr3z2cdUdNcDoCI4b1L4cQn3qPh4XNgWNKEGgEBVlcPTr3HnNnVf1/M84QCqm2U43f7EGKiYhej2QcM+gd1xE1rO2KipHFfgBYxY1qIO31bYPE5CxaI19wRe9HaxNwOZC1gGsKO5rGlYSw5yxxrTID9/hFPvJFhA\u003d\u003d"
+      "nonce": "Bd7GlnBtnXw\u003d",
+      "signature": "ogBbgeNw8Z0EHHAgKjRsaeCli8jQyeAVpvlGp4cxr3ekkN4MEsmwTt2Nl51vT9J9WLZd/anRTaA23YBSl8SMD86QUMDG5BdGHW9Do/CVpCeHd9q3RxlwLkdge0f+k5LNvDAy2z1XrnmXh/fM4ZZYdEAyF2D5mJoNC3kFYt7G7OndmtikzWqTNYtXtUR1LNF6mSeb2QaHs948VEUBeR3pherKJ4JH76zj0A6aYKlhSBhPd8ZH7s6MN6eAYJZpk/gZJq2yHC3PaIXPpGpGdAAFSiJCgtP9SqZNWpFcFlaPGhN1q8cQMp2lm/8xc5mtE8hWCCRTgi7DZVNeSjRCR5ipjA\u003d\u003d"
     }
   ],
   "output": "${package.dir}/build",

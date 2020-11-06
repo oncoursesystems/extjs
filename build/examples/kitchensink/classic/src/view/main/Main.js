@@ -35,7 +35,12 @@ Ext.define('KitchenSink.view.main.Main', {
         collapsed: true,
         width: 350,
         minWidth: 100
-    }],
+    },
+            {
+                region: 'west',
+                reference: 'tree',
+                xtype: 'navigation-tree'
+            }],
 
     applyState: function(state) {
         this.getController().applyState(state);

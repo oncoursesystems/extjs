@@ -4788,7 +4788,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     key: "hasTag",
                     value: function hasTag(tag, prefix, enable, disable) {
                         prefix = prefix || "fashion";
-                        enable = enable || new RegExp('^\\s*//#\\s*' + prefix + '\\s*\\+?' + tag + "\s*$");
+                        enable = enable || new RegExp('^\\s*//#\\s*' + prefix + '\\s*\\+?' + tag + "\\s*$");
                         disable = disable || new RegExp('^\\s*//#\\s*' + prefix + '\\s*\\-' + tag + '\\s*$');
                         var docs = this.docs;
                         if (docs && docs.length) {

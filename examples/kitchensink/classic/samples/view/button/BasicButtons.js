@@ -7,17 +7,18 @@
 Ext.define('KitchenSink.view.button.BasicButtons', {
     extend: 'Ext.Container',
     xtype: 'basic-buttons',
-    controller: 'buttons',
 
     cls: 'button-view',
     layout: 'vbox',
     width: '${width}',
 
+    viewModel: {
+        data: {
+            disabled: false
+        }
+    },
+
     //<example>
-    otherContent: [{
-        type: 'Controller',
-        path: 'classic/samples/view/button/ButtonsController.js'
-    }],
     profiles: {
         classic: {
             width: 420
@@ -44,9 +45,7 @@ Ext.define('KitchenSink.view.button.BasicButtons', {
         xtype: 'checkbox',
         boxLabel: 'Disabled',
         margin: '0 0 0 10',
-        listeners: {
-            change: 'toggleDisabled'  // see Controller
-        }
+        bind: '{disabled}'
     }, {
         xtype: 'container',
         layout: {
@@ -54,10 +53,17 @@ Ext.define('KitchenSink.view.button.BasicButtons', {
             columns: 4,
             tdAttrs: { style: 'padding: 5px 10px;' }
         },
+        defaults: {
+            bind: {
+                disabled: '{disabled}',
+                tooltip: '{disabled ? "Buttons are disabled" : "Button tooltip"}'
+            }
+        },
 
         items: [{
             xtype: 'component',
-            html: 'Text Only'
+            html: 'Text Only',
+            bind: null
         }, {
             xtype: 'button',
             text: 'Small'
@@ -71,7 +77,8 @@ Ext.define('KitchenSink.view.button.BasicButtons', {
             scale: 'large'
         }, {
             xtype: 'component',
-            html: 'Icon Only'
+            html: 'Icon Only',
+            bind: null
         }, {
             iconCls: 'button-home-small',
             xtype: 'button'
@@ -85,7 +92,8 @@ Ext.define('KitchenSink.view.button.BasicButtons', {
             scale: 'large'
         }, {
             xtype: 'component',
-            html: 'Icon and Text (left)'
+            html: 'Icon and Text (left)',
+            bind: null
         }, {
             xtype: 'button',
             iconCls: 'button-home-small',
@@ -102,7 +110,8 @@ Ext.define('KitchenSink.view.button.BasicButtons', {
             scale: 'large'
         }, {
             xtype: 'component',
-            html: 'Icon and Text (top)'
+            html: 'Icon and Text (top)',
+            bind: null
         }, {
             xtype: 'button',
             iconCls: 'button-home-small',
@@ -122,7 +131,8 @@ Ext.define('KitchenSink.view.button.BasicButtons', {
             iconAlign: 'top'
         }, {
             xtype: 'component',
-            html: 'Icon and Text (right)'
+            html: 'Icon and Text (right)',
+            bind: null
         }, {
             xtype: 'button',
             iconCls: 'button-home-small',
@@ -142,7 +152,8 @@ Ext.define('KitchenSink.view.button.BasicButtons', {
             iconAlign: 'right'
         }, {
             xtype: 'component',
-            html: 'Icon and Text (bottom)'
+            html: 'Icon and Text (bottom)',
+            bind: null
         }, {
             xtype: 'button',
             iconCls: 'button-home-small',

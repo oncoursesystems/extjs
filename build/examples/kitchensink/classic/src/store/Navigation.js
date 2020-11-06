@@ -28,6 +28,8 @@ Ext.define('KitchenSink.store.Navigation', {
             items.push(me.getNavItemsD3());
         }
 
+        items.push(me.getNavItemsTemplates());
+
         items = {
             text: 'All',
             id: 'all',
@@ -940,6 +942,27 @@ Ext.define('KitchenSink.store.Navigation', {
 
                 { id: 'tree-list', text: 'Tree List', leaf: true },
                 { id: 'tree-xml', text: 'XML Tree', leaf: true }
+            ]
+        };
+    },
+
+    getNavItemsTemplates: function() {
+        return {
+            text: 'Templates',
+            id: 'templates',
+            iconCls: 'icon-layout-card',
+            expanded: true,
+            tier: 'premium',
+            since: '7.3.0',
+
+            description: 'These are some ready to use reponsive templates which can be used with ' +
+                        'various screen sizes',
+
+            children: [
+                { id: 'template-login', text: 'Login', leaf: true, iconCls: 'icon-form-login' },
+                { id: 'template-create-account', text: 'Create Account', leaf: true, iconCls: 'icon-form-register' },
+                { id: 'template-horizontal-create-account', text: 'Horizontal Create Account', leaf: true, iconCls: 'icon-form-register' },
+                { id: 'template-reset-password', text: 'Reset Password', leaf: true, iconCls: 'icon-direct-named' }
             ]
         };
     }

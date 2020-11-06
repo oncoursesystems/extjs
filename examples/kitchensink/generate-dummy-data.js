@@ -39,10 +39,10 @@ function formatDate(d) {
     * @return {Array} The fake record data, suitable for usage with an ArrayReader
     */
 function createFakeData(count) {
-    var firstNames = ['Ed', 'Tommy', 'Aaron', 'Abe', 'Jamie',
-                      'Adam', 'Dave', 'David', 'Jay', 'Nicolas', 'Nige'],
-        lastNames = ['Spencer', 'Maintz', 'Conran', 'Elias', 'Avins',
-                     'Mishcon', 'Kaneda', 'Davis', 'Robinson', 'Ferrero', 'White'],
+    var firstNames = ['Kane', 'Kynan', 'Bobbie', 'Maddox', 'Katerina',
+                      'Cooper', 'Ryley', 'Lennox', 'Charli', 'Lani', 'Roan'],
+        lastNames = ['Morales', 'Ewing', 'Hodge', 'Spears', 'Sheehan',
+                     'Sanchez', 'Worthington', 'Dickens', 'Thatcher', 'Salt', 'Bouvet'],
         departments = ['Engineering', 'QA', 'Sales', 'Marketing', 'Accounting',
                        'Managment', 'Support', 'Administration'],
         ratings = [1, 2, 3, 4, 5],
@@ -56,9 +56,9 @@ function createFakeData(count) {
         firstName = firstNames[random(0, firstNames.length - 1)];
         lastName = lastNames[random(0, lastNames.length - 1)];
         name = firstName + ' ' + lastName;
-        email = firstName.toLowerCase() + '.' + lastName.toLowerCase() + '@sentcha.com';
-        rating = ratings[(name === 'Nige White') ? 0 : random(0, ratings.length - 1)];
-        salary = salaries[(name === 'Nige White') ? 4 : random(0, salaries.length - 1)];
+        email = firstName.toLowerCase() + '.' + lastName.toLowerCase() + '@senchaaa.com';
+        rating = ratings[(name === 'Kane Morales') ? 0 : random(0, ratings.length - 1)];
+        salary = salaries[(name === 'Kane Morales') ? 4 : random(0, salaries.length - 1)];
         department = departments[random(0, departments.length - 1)];
         ageInYears = random(23, 55);
         dob = new Date(new Date().getFullYear() - ageInYears, random(0, 11), random(0, 31));

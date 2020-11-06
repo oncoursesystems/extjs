@@ -1317,6 +1317,12 @@ Ext.define('Ext.grid.column.Column', {
             stateSorters = storeState && storeState.sorters,
             len, i, savedSorter, mySorterId;
 
+        // Bail out if stateful isn't being reflected on this column. Columns with
+        // stateful undefined *do* reflect state, so we're testing false explicitly.
+        if (me.getStateful() === false) {
+            return;
+        }
+
         // If we have been configured with a sorter, then there SHOULD be a sorter config
         // in the storeState with a corresponding ID from which we must restore our sorter's state.
         // (The only state we can restore is direction).
@@ -1367,6 +1373,12 @@ Ext.define('Ext.grid.column.Column', {
             state = {
                 id: me.getStateId()
             };
+
+        // Bail out if stateful isn't being reflected on this column. Columns with
+        // stateful undefined *do* reflect state, so we're testing false explicitly.
+        if (me.getStateful() === false) {
+            return;
+        }
 
         me.savePropsToState(['hidden', 'sortable', 'locked', 'flex', 'width'], state);
 
@@ -1646,7 +1658,7 @@ Ext.define('Ext.grid.column.Column', {
 
     onTitleElClick: function(e, t, sortOnClick) {
         var me = this,
-            activeHeader, prevSibling, tapMargin;
+            activeHeader, el, prevSibling, tapMargin;
 
         // Tap on the resize zone triggers the menu
         if (e.pointerType === 'touch') {
@@ -1675,15 +1687,16 @@ Ext.define('Ext.grid.column.Column', {
         else {
             // Firefox doesn't check the current target in a within check.
             // Therefore we check the target directly and then within (ancestors)
-            // eslint-disable-next-line max-len
-            activeHeader = me.triggerEl && (e.target === me.triggerEl.dom || t === me.triggerEl || e.within(me.triggerEl)) ? me : null;
+            el = me.triggerEl;
+            activeHeader = el && (e.target === el.dom || t === el || e.within(el)) ? me : null;
         }
 
         // If it's not a click on the trigger or extreme edges.
         // Or if we are called from a key handler, sort this column.
-        if (sortOnClick !== false && (!activeHeader && !me.isAtStartEdge(e) &&
-            !me.isAtEndEdge(e) || e.getKey())) {
-            me.toggleSortState();
+        if (sortOnClick !== false) {
+            if (e.getKey() || !activeHeader && me.isSortZone(e)) {
+                me.toggleSortState();
+            }
         }
 
         return activeHeader;
@@ -2136,6 +2149,23 @@ Ext.define('Ext.grid.column.Column', {
 
     isAtEndEdge: function(e, margin) {
         return (this.getX() + this.getWidth() - e.getXY()[0] <= (margin || this.getHandleWidth(e)));
+    },
+
+    isSortZone: function(e) {
+        var me = this,
+            zone = !me.isAtStartEdge(e) && !me.isAtEndEdge(e),
+            c;
+
+        if (zone) {
+            c = Ext.Component.from(e);
+
+            if (c) {
+                c = c.focusable ? c : c.up(':focusable');
+                zone = c === me;
+            }
+        }
+
+        return zone;
     },
 
     getHandleWidth: function(e) {

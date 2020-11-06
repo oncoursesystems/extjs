@@ -1,5 +1,3 @@
-/* eslint-disable one-var, vars-on-top, max-len */
-
 topSuite("Ext.grid.rowedit.Plugin", [
     'Ext.field.*',
     'Ext.panel.Collapser',
@@ -575,7 +573,6 @@ topSuite("Ext.grid.rowedit.Plugin", [
     describe('triggerEvent', function() {
         describe('doubletap', function() {
             beforeEach(function() {
-                console.clear();
                 makeGrid();
             });
 

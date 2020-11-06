@@ -5964,6 +5964,33 @@ topSuite("Ext.data.Store", [
                 expect(filter.getValue()).toBe('b');
             });
 
+            it('should add the filters from another FilterCollection', function() {
+                var store2 = new Ext.data.Store({
+                    asynchronousLoad: false,
+                    model: User,
+                    filters: [{
+                        property: 'foo',
+                        value: 'a'
+                    }, {
+                        property: 'bar',
+                        value: 'b'
+                    }]
+                });
+
+                createStore();
+
+                store.setFilters(store2.getFilters());
+
+                var filter = store.getFilters().getAt(0);
+
+                expect(filter.getProperty()).toBe('foo');
+                expect(filter.getValue()).toBe('a');
+
+                filter = store.getFilters().getAt(1);
+                expect(filter.getProperty()).toBe('bar');
+                expect(filter.getValue()).toBe('b');
+            });
+
             it("should not set the rootProperty as data on the filter collection", function() {
                 createStore();
                 expect(store.getFilters().getRootProperty()).not.toBe('data');
@@ -8975,6 +9002,26 @@ topSuite("Ext.data.Store", [
             // Must respond to filter
             expect(store.getCount()).toBe(1);
             expect(filterchangeSpy.callCount).toBe(1);
+        });
+    });
+
+    describe('applyState', function() {
+        it('should not trigger a load if not remoteSort or remoteFilter', function() {
+            createStore({
+                autoLoad: true,
+                remoteSort: false,
+                remoteFilter: false
+            }, true);
+            var count = store.loadCount;
+
+            store.applyState({
+                sorters: ['name'],
+                filters: [{
+                    property: 'name',
+                    value: 'Tommy'
+                }]
+            });
+            expect(store.loadCount).toBe(count);
         });
     });
 });

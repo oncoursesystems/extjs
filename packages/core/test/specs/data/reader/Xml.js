@@ -393,7 +393,8 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                     summary: asSummaryModel
                         ? {
                             maxIncome: {
-                                field: 'avg',
+                                field: 'income',
+                                summary: 'avg',
                                 type: 'int'
                             },
                             aSummaryField: {
@@ -524,7 +525,8 @@ topSuite("Ext.data.reader.Xml", ['Ext.data.Model'], function() {
                     summary: asSummaryModel
                         ? {
                             maxIncome: {
-                                field: 'avg',
+                                field: 'income',
+                                summary: 'avg',
                                 type: 'int'
                             },
                             aSummaryField: {

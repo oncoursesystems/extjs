@@ -1377,6 +1377,7 @@ Ext.define('Ext.ux.event.Player', function(Player) {
             inputSpecialKeys)
         },
         tagPathRegEx: /(\w+)(?:\[(\d+)\])?/,
+        xpathRe: /^[#~](?:[a-z][-a-z0-9_]*)(?:\/[a-z]+)*$/i,
         /**
      * @event beforeplay
      * Fires before an event is played.
@@ -1397,6 +1398,7 @@ Ext.define('Ext.ux.event.Player', function(Player) {
                 me.onTick();
             };
             me.attachTo = me.attachTo || window;
+            me.counter = 0;
             doc = me.attachTo.document;
         },
         /**
@@ -1425,6 +1427,27 @@ Ext.define('Ext.ux.event.Player', function(Player) {
                     }
                 }
                 el = child;
+            }
+            return el;
+        },
+        locateElement: function(locator) {
+            var cmp, cq, dq, el, parts;
+            if (this.xpathRe.test(locator)) {
+                el = this.getElementFromXPath(locator);
+            } else {
+                parts = locator.split('=>');
+                cq = Ext.String.trim(parts[0]);
+                dq = Ext.String.trim(parts[1]);
+                if (cq) {
+                    cmp = Ext.first(cq);
+                    el = cmp && cmp.el;
+                } else {
+                    el = Ext.getBody();
+                }
+                if (dq && el) {
+                    el = Ext.query(dq, true, el);
+                    el = el && el[0];
+                }
             }
             return el;
         },
@@ -1504,7 +1527,11 @@ Ext.define('Ext.ux.event.Player', function(Player) {
      * is called).
      */
         peekEvent: function() {
-            return this.eventQueue[this.queueIndex] || null;
+            var ev = this.eventQueue[this.queueIndex] || null;
+            if (ev && ev.seq === undefined) {
+                ev.seq = this.counter++;
+            }
+            return ev;
         },
         /**
      * Replaces an event in the queue with an array of events. This is often used to roll
@@ -1713,11 +1740,22 @@ Ext.define('Ext.ux.event.Player', function(Player) {
         },
         playEvent: function(eventDescriptor) {
             var me = this,
-                target = me.getElementFromXPath(eventDescriptor.target),
+                target = me.locateElement(eventDescriptor.target),
+                now = me.getTimeIndex(),
+                timeout = eventDescriptor.timeout,
                 event;
+            if (eventDescriptor.startedAt === undefined) {
+                eventDescriptor.startedAt = now;
+            }
             if (!target) {
                 // not present (yet)... wait for element present...
-                // TODO - need a timeout here
+                if (timeout !== null) {
+                    timeout = timeout || 30000;
+                    // 30 sec
+                    if (now - eventDescriptor.startedAt > timeout) {
+                        me.playEventHook(eventDescriptor, 'timeout', 'onEventTimeout');
+                    }
+                }
                 return false;
             }
             if (!me.playEventHook(eventDescriptor, 'beforeplay')) {
@@ -1730,11 +1768,11 @@ Ext.define('Ext.ux.event.Player', function(Player) {
             }
             return me.playEventHook(eventDescriptor, 'afterplay');
         },
-        playEventHook: function(eventDescriptor, hookName) {
+        playEventHook: function(eventDescriptor, hookName, hookHandler) {
             var me = this,
                 doneName = hookName + '.done',
                 firedName = hookName + '.fired',
-                hook = eventDescriptor[hookName];
+                hook = hookHandler || eventDescriptor[hookName];
             if (hook && !eventDescriptor[doneName]) {
                 if (!eventDescriptor[firedName]) {
                     eventDescriptor[firedName] = true;
@@ -11858,7 +11896,7 @@ Ext.define('Ext.ux.dd.PanelFieldDragZone', {
 
 /**
  * Ext JS Library
- * Copyright(c) 2006-2014 Sencha Inc.
+ * Copyright(c) 2006-2020 Sencha Inc.
  * licensing@sencha.com
  * http://www.sencha.com/license
  *
@@ -12276,7 +12314,7 @@ Ext.define('Ext.ux.desktop.Desktop', {
 
 /**
  * Ext JS Library
- * Copyright(c) 2006-2014 Sencha Inc.
+ * Copyright(c) 2006-2020 Sencha Inc.
  * licensing@sencha.com
  * http://www.sencha.com/license
  * @class Ext.ux.desktop.App
@@ -12421,7 +12459,7 @@ Ext.define('Ext.ux.desktop.App', {
 
 /*
  * Ext JS Library
- * Copyright(c) 2006-2014 Sencha Inc.
+ * Copyright(c) 2006-2020 Sencha Inc.
  * licensing@sencha.com
  * http://www.sencha.com/license
  */
@@ -12438,7 +12476,7 @@ Ext.define('Ext.ux.desktop.Module', {
 
 /*
  * Ext JS Library
- * Copyright(c) 2006-2014 Sencha Inc.
+ * Copyright(c) 2006-2020 Sencha Inc.
  * licensing@sencha.com
  * http://www.sencha.com/license
  */
@@ -12465,7 +12503,7 @@ Ext.define('Ext.ux.desktop.ShortcutModel', {
 
 /**
  * Ext JS Library
- * Copyright(c) 2006-2014 Sencha Inc.
+ * Copyright(c) 2006-2020 Sencha Inc.
  * licensing@sencha.com
  * http://www.sencha.com/license
  * @class Ext.ux.desktop.StartMenu
@@ -12511,7 +12549,7 @@ Ext.define('Ext.ux.desktop.StartMenu', {
 
 /*
  * Ext JS Library
- * Copyright(c) 2006-2014 Sencha Inc.
+ * Copyright(c) 2006-2020 Sencha Inc.
  * licensing@sencha.com
  * http://www.sencha.com/license
  */
@@ -12757,7 +12795,7 @@ Ext.define('Ext.ux.desktop.TrayClock', {
 
 /*
  * Ext JS Library
- * Copyright(c) 2006-2015 Sencha Inc.
+ * Copyright(c) 2006-2020 Sencha Inc.
  * licensing@sencha.com
  * http://www.sencha.com/license
  */
@@ -12871,7 +12909,7 @@ Ext.define('Ext.ux.desktop.Video', {
 
 /*
  * Ext JS Library
- * Copyright(c) 2006-2014 Sencha Inc.
+ * Copyright(c) 2006-2020 Sencha Inc.
  * licensing@sencha.com
  * http://www.sencha.com/license
  */

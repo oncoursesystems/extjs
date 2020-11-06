@@ -3,8 +3,8 @@ Ext.define('KitchenSink.data.Employees', {
         'KitchenSink.data.Init'
     ]
 }, function() {
-    var firstNames = ['Ben', 'Don', 'Evan', 'Kevin', 'Nige', 'Phil', 'Ross', 'Ryan'],
-        lastNames = ['Toll', 'Griffin', 'Trimboli', 'Krohe', 'White', 'Guerrant', 'Gerbasi', 'Smith'],
+    var firstNames = ['Malaika', 'Om', 'Kiah', 'Ezmae', 'Ciaran', 'Kade', 'Alister', 'Bryn'],
+        lastNames = ['Searle', 'Barlow', 'Burrows', 'Mcloughlin', 'Quintana', 'Holt', 'Ahmad', 'Santana'],
         data = [],
         rand = 37,
         map, i, j, k, s;

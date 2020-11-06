@@ -5,6 +5,6 @@ Ext.define('KitchenSink.view.ContentPanel', {
     scrollable: true,
 
     header: {
-        hidden: true
+        hidden: false
     }
 });

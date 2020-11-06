@@ -23,13 +23,19 @@ Ext.define('KitchenSink.view.froalaeditor.Editor', {
             },
             name: 'html',
             listeners: {
-                change: function(froalaComponent) {
-                    Ext.toast({ message: 'Change!' });
+
+                resize: function(froalaComponent) {
+                    Ext.toast({ message: 'You resized the component!', alignment: 'c' });
                 },
+
                 // Native Froala events are prefixed with 'froala.'
                 'froala.click': function(froalaComponent) {
-                    Ext.toast({ message: 'Click!' });
+                    Ext.toast({ message: 'You clicked in the editor!', alignment: 'c' });
+                },
+                'froala.image.beforeUpload': function(froalaComponent) {
+                    Ext.toast({ message: "You're uploading an image!", alignment: 'c' });
                 }
+
             },
             margin: 16
         }

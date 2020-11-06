@@ -2111,7 +2111,7 @@ topSuite("Ext.data.Model", [
                     return f.getName();
                 });
 
-                expect(names).toEqual(expected);
+                expect(expected).toEqual(names);
             }
 
             function defineA(summary, fields, cfg) {
@@ -2179,8 +2179,13 @@ topSuite("Ext.data.Model", [
                     maxRate: 'max'
                 });
 
-                expectFieldNames(A.getSummaryModel(), ['id', 'rate', 'maxRate']);
+                var S = A.getSummaryModel(),
+                    summary = S.fields[2].getSummary();
+
+                expectFieldNames(S, ['id', 'rate', 'maxRate']);
                 expectFieldNames(A, ['id', 'rate']);
+
+                expect(summary.type).toBe('max');
             });
 
             describe("as a function", function() {
@@ -2203,13 +2208,43 @@ topSuite("Ext.data.Model", [
                         }
                     });
 
-                    var T = A.getSummaryModel();
+                    var S = A.getSummaryModel();
 
-                    var rec = new T({
+                    var rec = new S({
                         maxRate: '100'
                     });
 
                     expect(rec.get('maxRate')).toBe(100);
+
+                    var summary = S.fields[2].getSummary();
+
+                    expect(summary.type).toBe('max');
+                });
+            });
+
+            describe("summary fields and overlapping summary block", function() {
+                it("should be able to change field type", function() {
+                    defineA({
+                        saleDate: {
+                            type: 'int',
+                            summary: 'count'
+                        }
+                    }, [
+                        'id',
+                        { name: 'saleDate', type: 'date' }
+                    ]);
+
+                    var M = A.getSummaryModel();
+
+                    expect(M.superclass).toBe(A.prototype);
+                    expectFieldNames(M, ['id', 'saleDate']);
+                    expectFieldNames(A, ['id', 'saleDate']);
+
+                    expect(M.fields[1].name).toBe('saleDate');
+                    expect(M.fields[1].type).toBe('int');
+
+                    expect(A.fields[1].name).toBe('saleDate');
+                    expect(A.fields[1].type).toBe('date');
                 });
             });
 
@@ -2268,6 +2303,8 @@ topSuite("Ext.data.Model", [
                         it("should create a summary model", function() {
                             defineB({
                                 maxIncome: {
+                                    // income does not have to be declared for this
+                                    // to work:
                                     field: 'income',
                                     summary: 'max'
                                 }

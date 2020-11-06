@@ -27,10 +27,10 @@ Ext.define('Ext.data.AbstractStore', {
 
     config: {
         /**
-         * @cfg {Object[]/Function[]} filters
-         * Array of {@link Ext.util.Filter Filters} for this store. Can also be passed array of
-         * functions which will be used as the {@link Ext.util.Filter#filterFn filterFn} config
-         * for filters:
+         * @cfg {Object[]/Function[]/Ext.util.Collection} filters
+         * Array of {@link Ext.util.Filter Filters} for this store. Can also be an array
+         * of functions which will be used as the {@link Ext.util.Filter#filterFn filterFn}
+         * config for filters:
          *
          *     filters: [
          *         function(item) {
@@ -41,6 +41,9 @@ Ext.define('Ext.data.AbstractStore', {
          * Individual filters can be specified as an `Ext.util.Filter` instance, a config
          * object for `Ext.util.Filter` or simply a function that will be wrapped in a
          * instance with its {@link Ext.util.Filter#filterFn filterFn} set.
+         *
+         * If a `Collection` of filters is passed, its items (filters) will be added. Any
+         * subsequent modification to the collection will have no affect.
          *
          * For fine grain control of the filters collection, call `getFilters` to return
          * the `Ext.util.Collection` instance that holds this store's filters.
@@ -593,17 +596,22 @@ Ext.define('Ext.data.AbstractStore', {
 
     applyFilters: function(filters, filtersCollection) {
         var me = this,
-            created;
-
-        if (!filtersCollection) {
-            filtersCollection = me.createFiltersCollection();
-            created = true;
-        }
-
-        filtersCollection.add(filters);
+            created = !filtersCollection;
 
         if (created) {
-            me.onRemoteFilterSet(filtersCollection, me.getRemoteFilter());
+            filtersCollection = me.createFiltersCollection();
+        }
+
+        if (filters !== filtersCollection) {
+            if (filters && filters.isCollection) {
+                filters = filters.items.slice();
+            }
+
+            filtersCollection.add(filters);
+
+            if (created) {
+                me.onRemoteFilterSet(filtersCollection, me.getRemoteFilter());
+            }
         }
 
         return filtersCollection;

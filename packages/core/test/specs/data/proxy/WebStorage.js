@@ -56,6 +56,7 @@ function() {
             spyOn(fakeStorageObject, 'getItem').andCallThrough();
 
             fakeStorageObject.setItem('wsId', "1,2,3");
+            fakeStorageObject.setItem('wsIdType', "'1','2','3'");
 
             proxy = new spec.Storage({
                 id: 'wsId',
@@ -151,6 +152,31 @@ function() {
             });
         });
     });
+
+    describe("if the id field type is not defined", function() {
+            beforeEach(function() {
+                spec.User = Ext.define(null, {
+                    extend: 'Ext.data.Model',
+                    fields: [
+                        { name: 'id' }
+                    ]
+                });
+
+                proxy = new spec.Storage({
+                    id: 'wsIdType',
+                    model: spec.User
+                });
+            });
+            it("when the id field type is not defined", function() {
+                var ids    = proxy.getIds(),
+                    length = ids.length,
+                    i;
+
+                for (i = 0; i < length; i++) {
+                    expect(typeof ids[i] === 'string').toBe(true);
+                }
+            });
+        });
 
     describe("instantiation with id configuration option and methods", function() {
         config = {

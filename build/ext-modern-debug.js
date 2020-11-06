@@ -1,7 +1,7 @@
 /*
-This file is part of Ext JS 7.0.0.156
+This file is part of Ext JS 7.3.1.27
 
-Copyright (c) 2011-2019 Sencha Inc
+Copyright (c) 2011-2020 Sencha Inc
 
 license: http://www.sencha.com/legal/sencha-software-license-agreement
 Contact: http://www.sencha.com/contact
@@ -14,7 +14,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Version: 7.0.0.156 Build date: 2019-08-22 21:19:41 (23a4f5eb33e19b67a3a5d753d762ff78e836bdf1)
+Version: 7.3.1.27 Build date: 2020-10-12 05:00:31 (7df4903278e962b811acb61ea0baeb10d8caabc1)
 
 */
 // @tag core
@@ -5557,6 +5557,7 @@ Ext.Number = (new function() {
     Ext.apply(ExtNumber, {
         MIN_SAFE_INTEGER: Number.MIN_SAFE_INTEGER,
         MAX_SAFE_INTEGER: Number.MAX_SAFE_INTEGER,
+        MAX_32BIT_INTEGER: math.pow(2, 31) - 1,
         
         floatRe: /^[-+]?(?:\d+|\d*\.\d*)(?:[Ee][+-]?\d+)?$/,
         intRe: /^[-+]?\d+(?:[Ee]\+?\d+)?$/,
@@ -7367,8 +7368,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '7.0.0.156');
-        Ext.setVersion('core', '7.0.0.156');
+        Ext.setVersion('ext', '7.3.1.27');
+        Ext.setVersion('core', '7.3.1.27');
     }
 })(Ext.manifest);
 
@@ -11641,7 +11642,10 @@ Ext.env.OS = function(userAgent, platform, browserScope) {
     
     
     
-    if (userAgent.match(/ipad/i)) {
+    
+    
+    if (userAgent.match(/ipad/i) || (!userAgent.match(/iphone/i) && userAgent.match(/Mac/) && navigator.maxTouchPoints > 2)) {
+        name = 'iOS';
         platform = 'iPad';
     }
     if (platform) {
@@ -11733,6 +11737,12 @@ Ext.env.OS.prototype = {
         } else {
             deviceType = 'Phone';
         }
+    }
+    
+    
+    if (deviceType === 'Tablet' && osName === 'MacOS') {
+        Ext.isiOS = true;
+        Ext.isiPadOS = true;
     }
     
     osEnv.setFlag(deviceType, true);
@@ -19592,7 +19602,7 @@ Ext.define('Ext.ComponentManager', {
             if (floatedSelector) {
                 targetFloated = Ext.Component.from(e.getTarget(floatedSelector, Ext.getBody()));
                 
-                if (targetFloated) {
+                if (targetFloated && !targetFloated.activeAnimation) {
                     targetFloated.toFront(true);
                 }
             }
@@ -20825,7 +20835,7 @@ Ext.define('Ext.util.Positionable', {
     },
     getAlignToRegion: function(alignToEl, posSpec, offset, minHeight) {
         var me = this,
-            inside, newRegion, bodyScroll;
+            inside, newRegion, bodyScroll, oldOffset;
         alignToEl = Ext.fly(alignToEl.el || alignToEl);
         if (!alignToEl || !alignToEl.dom) {
             
@@ -20853,9 +20863,13 @@ Ext.define('Ext.util.Positionable', {
         }
         if (alignToEl === Ext.getBody()) {
             bodyScroll = alignToEl.getScroll();
+            oldOffset = offset && offset.length === 2 ? offset : [
+                0,
+                0
+            ];
             offset = [
-                bodyScroll.left,
-                bodyScroll.top
+                bodyScroll.left + oldOffset[0],
+                bodyScroll.top + oldOffset[1]
             ];
         }
         newRegion = me.getRegion().alignTo({
@@ -23236,8 +23250,7 @@ Ext.define('Ext.event.Event', {
         },
         
         wheelEvents: {
-            wheel: 1,
-            mousewheel: 1
+            wheel: 1
         },
         
         
@@ -25734,9 +25747,18 @@ Ext.define('Ext.util.sizemonitor.Scroll', {
         this.expandMonitor[method]('scroll', this.onScroll, true);
         this.shrinkMonitor[method]('scroll', this.onScroll, true);
     },
-    onScroll: function() {
+    onScroll: function(e) {
         if (!this.destroyed) {
-            Ext.TaskQueue.requestRead('refresh', this);
+            
+            
+            
+            if (this.hasExpandMonitorScrollChanged && e.target === this.expandMonitor) {
+                delete this.hasExpandMonitorScrollChanged;
+            } else if (this.hasShrinkMonitorScrollChanged && e.target === this.shrinkMonitor) {
+                delete this.hasShrinkMonitorScrollChanged;
+            } else {
+                Ext.TaskQueue.requestRead('refresh', this);
+            }
         }
     },
     refreshMonitors: function() {
@@ -25744,10 +25766,17 @@ Ext.define('Ext.util.sizemonitor.Scroll', {
             shrinkMonitor = this.shrinkMonitor,
             end = 1000000;
         if (expandMonitor && !expandMonitor.destroyed) {
+            
+            if (Ext.isiOS) {
+                this.hasExpandMonitorScrollChanged = true;
+            }
             expandMonitor.scrollLeft = end;
             expandMonitor.scrollTop = end;
         }
         if (shrinkMonitor && !shrinkMonitor.destroyed) {
+            if (Ext.isiOS) {
+                this.hasShrinkMonitorScrollChanged = true;
+            }
             shrinkMonitor.scrollLeft = end;
             shrinkMonitor.scrollTop = end;
         }
@@ -30490,6 +30519,9 @@ Ext.define('Ext.dom.Element', function(Element) {
         if (Ext.isChrome) {
             bodyCls.push(Ext.baseCSSPrefix + 'chrome');
         }
+        if (Ext.isChromeMobile) {
+            bodyCls.push(Ext.baseCSSPrefix + 'chromemobile');
+        }
         if (Ext.isMac) {
             bodyCls.push(Ext.baseCSSPrefix + 'mac');
         }
@@ -34212,6 +34244,9 @@ Ext.define('Ext.Widget', {
             }
             return value;
         },
+        hasHiddenContent: function() {
+            return this.getHidden();
+        },
         
         initElementListeners: function(elementConfig) {
             var prototype = this,
@@ -35445,7 +35480,7 @@ Ext.define('Ext.util.Format', function() {
                 
                 code[code.length] = 'if(neg&&fnum!=="' + (precision ? '0.' + Ext.String.repeat('0', precision) : '0') + '") { fnum="-"+fnum; }';
                 if (trimTrailingZeroes) {
-                    code[code.length] = 'fnum=fnum.replace(trailingZeroes,"");';
+                    code[code.length] = 'if(fnum.indexOf("e+") === -1)' + 'fnum=fnum.replace(trailingZeroes,"");';
                 }
                 code[code.length] = 'return ';
                 
@@ -38924,13 +38959,16 @@ Ext.define('Ext.route.Router', {
         var routes = this.routes,
             delimiter = this.getMultipleToken(),
             name = config.name || url,
+            
+            version = Ext.getVersion().parts.slice(0, 3).join('.'),
+            
             handler, route;
         if (url[0] === '!') {
             
             if (!Ext.util.History.hashbang) {
                 Ext.log({
                     level: 'error',
-                    msg: 'Route found with "!" ("' + url + '"). Should use new hashbang functionality instead. ' + 'Please see the router guide for more: https://docs.sencha.com/extjs/' + Ext.getVersion().version + '/guides/application_architecture/router.html'
+                    msg: 'Route found with "!" ("' + url + '"). Should use new hashbang functionality instead. ' + 'Please see the router guide for more: https://docs.sencha.com/extjs/' + version + '/guides/application_architecture/router.html'
                 });
             }
             
@@ -41128,13 +41166,17 @@ Ext.define('Ext.util.Grouper', {
     },
     
     getGroupString: function(item) {
-        var group = item.$collapsedGroupPlaceholder ? item.$groupKey : this._groupFn(item);
-        return (group != null) ? String(group) : '';
+        return item.$collapsedGroupPlaceholder ? item.$groupKey : this.getGroupValue(item).toString();
+    },
+    
+    getGroupValue: function(item) {
+        var groupValue = item.$collapsedGroupPlaceholder ? item.$groupValue : this._groupFn(item);
+        return (groupValue != null) ? groupValue : '';
     },
     sortFn: function(item1, item2) {
         var me = this,
-            lhs = me.getGroupString(item1),
-            rhs = me.getGroupString(item2),
+            lhs = me.getGroupValue(item1),
+            rhs = me.getGroupValue(item2),
             property = me._sortProperty,
             
             root = me._root,
@@ -41142,7 +41184,7 @@ Ext.define('Ext.util.Grouper', {
             transform = me._transform;
         
         
-        if (lhs === rhs) {
+        if (lhs === rhs || Ext.Date.isEqual(lhs, rhs)) {
             return 0;
         }
         if (property || sorterFn) {
@@ -43150,6 +43192,10 @@ Ext.define('Ext.data.Range', {
     
     
     store: null,
+    
+    waitTimeout: 10000,
+    
+    activeWait: null,
     constructor: function(config) {
         var me = this,
             activeRanges, store;
@@ -43163,10 +43209,11 @@ Ext.define('Ext.data.Range', {
         if ('begin' in config) {
             me.begin = me.end = 0;
             
-            
-            me.goto(config.begin, config.end);
+            me.goto(config.begin, config.end).catch(function() {});
         }
     },
+    
+    
     destroy: function() {
         var me = this,
             store = me.store,
@@ -43175,15 +43222,23 @@ Ext.define('Ext.data.Range', {
         if (activeRanges) {
             Ext.Array.remove(activeRanges, me);
         }
+        me.cancelActiveWait();
         me.callParent();
     },
+    
     "goto": function(begin, end) {
         var me = this,
             buffer = me.buffer,
-            task = me.task;
+            task = me.task,
+            promise;
         me.begin = begin;
         me.end = end;
         me.length = end - begin;
+        me.cancelActiveWait();
+        me.activeWait = me.setupWait(begin, end);
+        
+        promise = me.activeWait.promise;
+        me.resolveWaitIfSatisfied();
         if (buffer > 0) {
             if (!task) {
                 me.task = task = new Ext.util.DelayedTask(me.doGoto, me);
@@ -43192,13 +43247,43 @@ Ext.define('Ext.data.Range', {
         } else {
             me.doGoto();
         }
+        return promise;
     },
     privates: {
         lastBegin: 0,
         lastEnd: 0,
+        cancelActiveWait: function() {
+            this.resolveWait(null);
+        },
         doGoto: Ext.privateFn,
         refresh: function() {
             this.records = this.store.getData().items;
+        },
+        resolveWait: function(value) {
+            var wait = this.activeWait;
+            if (wait) {
+                wait.deferred.resolve(value);
+                this.activeWait = null;
+            }
+            return value;
+        },
+        resolveWaitIfSatisfied: function() {
+            this.resolveWait(this);
+        },
+        setupWait: function(begin, end) {
+            var me = this,
+                timeout = me.waitTimeout,
+                deferred = new Ext.Deferred(),
+                promise = deferred.promise;
+            if (timeout) {
+                promise = Ext.Deferred.timeout(promise, timeout).catch(function() {
+                    return me.resolveWait(null);
+                });
+            }
+            return {
+                deferred: deferred,
+                promise: promise
+            };
         }
     }
 });
@@ -46158,14 +46243,18 @@ Ext.define('Ext.data.AbstractStore', {
     },
     applyFilters: function(filters, filtersCollection) {
         var me = this,
-            created;
-        if (!filtersCollection) {
-            filtersCollection = me.createFiltersCollection();
-            created = true;
-        }
-        filtersCollection.add(filters);
+            created = !filtersCollection;
         if (created) {
-            me.onRemoteFilterSet(filtersCollection, me.getRemoteFilter());
+            filtersCollection = me.createFiltersCollection();
+        }
+        if (filters !== filtersCollection) {
+            if (filters && filters.isCollection) {
+                filters = filters.items.slice();
+            }
+            filtersCollection.add(filters);
+            if (created) {
+                me.onRemoteFilterSet(filtersCollection, me.getRemoteFilter());
+            }
         }
         return filtersCollection;
     },
@@ -47540,6 +47629,88 @@ Ext.define('Ext.data.field.Field', {
 });
 
 
+Ext.define('Ext.data.field.Array', {
+    extend: Ext.data.field.Field,
+    alias: 'data.field.array',
+    isArrayField: true,
+    
+    itemType: {
+        type: 'auto'
+    },
+    getType: function() {
+        return 'array';
+    },
+    collate: function(v1, v2) {
+        return this.collateOrCompare(v1, v2, 'collate');
+    },
+    compare: function(v1, v2) {
+        return this.collateOrCompare(v1, v2, 'compare');
+    },
+    convert: function(v) {
+        return this.doForEach((v || v === 0) && !Ext.isArray(v) ? [
+            v
+        ] : v, 'convert');
+    },
+    serialize: function(value) {
+        return this.doForEach(value, 'serialize');
+    },
+    
+    getItemField: function() {
+        var me = this,
+            t = me.itemType;
+        if (!me.itemField) {
+            if (typeof t === 'string') {
+                t = {
+                    type: t
+                };
+            } else if (!(t && t.isDataField)) {
+                t = Ext.apply({
+                    type: 'auto'
+                }, t);
+            }
+            me.itemField = Ext.data.field.Field.create(t);
+        }
+        return me.itemField;
+    },
+    
+    doForEach: function(v, fn) {
+        if (!v) {
+            return this.allowNull ? null : [];
+        }
+        
+        var len = v.length,
+            ret = Array(len),
+            field = this.getItemField(),
+            i;
+        for (i = 0; i < len; ++i) {
+            ret[i] = field[fn] ? field[fn](v[i]) : v[i];
+        }
+        return ret;
+    },
+    
+    collateOrCompare: function(v1, v2, fn) {
+        var field = this.getItemField(),
+            i, len1, len2, len, result;
+        if ((!v1 && !v2) || (v1 === v2)) {
+            return 0;
+        }
+        if (!v1 || !v2) {
+            return v1 ? 1 : -1;
+        }
+        len1 = v1.length;
+        len2 = v2.length;
+        len = Math.min(len1, len2);
+        for (i = 0; i < len; ++i) {
+            result = field[fn](v1[i], v2[i]);
+            if (result !== 0) {
+                return result;
+            }
+        }
+        return len1 === len2 ? 0 : (len1 < len2 ? -1 : 1);
+    }
+});
+
+
 Ext.define('Ext.data.field.Boolean', {
     extend: Ext.data.field.Field,
     alias: [
@@ -48616,6 +48787,11 @@ Ext.define('Ext.data.Model', {
                 options.associated = opts;
             }
             item = role.getAssociatedItem(me);
+            
+            if (!item) {
+                
+                continue;
+            }
             if (item.isStore) {
                 items = item.getData().items;
                 
@@ -49473,56 +49649,83 @@ Ext.define('Ext.data.Model', {
             
             initSummaries: function(data, cls, proto) {
                 var summaryDefs = data.summary,
-                    superSummaries = proto.summaryFields,
-                    summaries, summaryMap, name, summary, len, i, index, field;
-                if (superSummaries) {
-                    summaries = [];
-                    summaryMap = {};
-                    for (i = 0 , len = superSummaries.length; i < len; ++i) {
-                        summary = superSummaries[i];
-                        summaries.push(summary);
-                        summaries[summary.name] = i;
+                    fields = proto.fields,
+                    superSummaryFields = proto.summaryFields,
+                    field, fieldName, i, index, inlineDefs, len, name, summaryFields, summaryFieldMap, summaryField, type;
+                if (superSummaryFields) {
+                    summaryFields = [];
+                    summaryFieldMap = {};
+                    for (i = 0 , len = superSummaryFields.length; i < len; ++i) {
+                        summaryField = superSummaryFields[i];
+                        summaryFields.push(summaryField);
+                        summaryFieldMap[summaryField.name] = i;
                     }
+                }
+                
+                
+                
+                for (i = 0 , len = fields.length; i < len; ++i) {
+                    field = fields[i];
+                    if (field.summary && field.definedBy === cls) {
+                        inlineDefs = inlineDefs || {};
+                        inlineDefs[field.name] = field.summary;
+                    }
+                }
+                
+                
+                
+                
+                
+                if (inlineDefs) {
+                    summaryDefs = Ext.apply(inlineDefs, summaryDefs);
                 }
                 if (summaryDefs) {
                     delete data.summary;
-                    summaries = summaries || [];
-                    summaryMap = summaryMap || {};
+                    summaryFields = summaryFields || [];
+                    summaryFieldMap = summaryFieldMap || {};
                     for (name in summaryDefs) {
-                        summary = summaryDefs[name];
-                        if (typeof summary === 'function') {
-                            summary = {
-                                summary: summary
+                        type = typeof (summaryField = summaryDefs[name]);
+                        if (type === 'function' || type === 'string') {
+                            summaryField = {
+                                summary: summaryField
                             };
                         }
                         
                         
-                        index = summaryMap[name];
-                        summary = Ext.apply({
+                        index = summaryFieldMap[name];
+                        summaryField = Ext.apply({
                             name: name
-                        }, summary);
-                        field = summary.field;
+                        }, summaryField);
+                        field = summaryField.field;
                         if (field) {
-                            delete summary.field;
-                            summary.summaryField = field;
+                            delete summaryField.field;
+                            summaryField.summaryField = field;
+                        }
+                        fieldName = summaryField.summaryField;
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        field = proto.fieldsMap[fieldName || name];
+                        if (field && !summaryField.type) {
+                            summaryField.type = field.type;
                         }
                         if (index === undefined) {
-                            index = summaries.length;
-                            summaryMap[name] = summary;
+                            index = summaryFields.length;
+                            summaryFieldMap[name] = index;
                         }
-                        summaries[index] = summary;
+                        summaryFields[index] = summaryField;
                     }
                 }
-                if (summaries) {
-                    
-                    for (i = 0 , len = summaries.length; i < len; ++i) {
-                        if (summaries[i].name in proto.fieldsMap) {
-                            Ext.raise('Cannot redefine field, use the summary property ' + 'on the field.');
-                        }
-                    }
-                    
-                    
-                    proto.summaryFields = summaries;
+                
+                if (summaryFields) {
+                    proto.summaryFields = summaryFields;
                 }
             },
             initValidators: function(data, cls, proto) {
@@ -50014,6 +50217,9 @@ Ext.define('Ext.data.reader.Reader', {
     updateSuccessProperty: function() {
         this.forceBuildExtractors();
     },
+    updateSummaryRootProperty: function() {
+        this.forceBuildExtractors();
+    },
     updateTotalProperty: function() {
         this.forceBuildExtractors();
     },
@@ -50323,14 +50529,20 @@ Ext.define('Ext.data.reader.Reader', {
     },
     
     readAssociated: function(record, data, readOptions) {
-        var roles = record.associations,
+        var me = this,
+            roles = record.associations,
             key, role;
         for (key in roles) {
             if (roles.hasOwnProperty(key)) {
                 role = roles[key];
+                if (!record.phantom && readOptions && !readOptions.recordCreator) {
+                    Ext.apply(readOptions, {
+                        recordCreator: me.defaultRecordCreatorFromServer
+                    });
+                }
                 
                 if (role.cls) {
-                    role.read(record, data, this, readOptions);
+                    role.read(record, data, me, readOptions);
                 }
             }
         }
@@ -50452,11 +50664,12 @@ Ext.define('Ext.data.reader.Reader', {
             me.setConfig(reader.getConfig());
             --me.duringInit;
             me.hasExtractors = true;
-        },
-        getGroupRoot: Ext.privateFn,
-        getSummaryRoot: Ext.privateFn
+        }
     }
-}, function(Cls) {
+}, 
+
+
+function(Cls) {
     var proto = Cls.prototype;
     Ext.apply(proto, {
         
@@ -51132,7 +51345,8 @@ Ext.define('Ext.data.ProxyStore', {
         
         
         
-        if (me.getAutoLoad() || me.isLoaded()) {
+        
+        if ((me.getAutoLoad() || me.isLoaded()) && (me.getRemoteSort() || me.getRemoteFilter())) {
             me.load();
         }
     },
@@ -51580,7 +51794,8 @@ Ext.define('Ext.util.Group', {
     extend: Ext.util.Collection,
     isGroup: true,
     config: {
-        groupKey: null
+        groupKey: null,
+        groupValue: null
     },
     
     
@@ -52615,6 +52830,14 @@ Ext.define('Ext.data.reader.Json', {
             ]);
             this.getRoot = reader.getRoot;
         },
+        getGroupRoot: function(data) {
+            this.buildExtractors();
+            return this.getGroupRoot(data);
+        },
+        getSummaryRoot: function(data) {
+            this.buildExtractors();
+            return this.getSummaryRoot(data);
+        },
         setupExtractor: function(prop, defaultFn) {
             return prop ? this.getAccessor(prop) : defaultFn;
         }
@@ -53314,11 +53537,12 @@ Ext.define('Ext.util.GroupCollection', {
             groups = {},
             entries = [],
             grouper = me.getGrouper(),
-            entry, group, groupKey, i, item, len;
+            entry, group, groupKey, groupValue, i, item, len;
         for (i = 0 , len = items.length; i < len; ++i) {
             groupKey = grouper.getGroupString(item = items[i]);
+            groupValue = grouper.getGroupValue(item);
             if (!(entry = groups[groupKey])) {
-                group = me.getGroup(source, groupKey, createGroups);
+                group = me.getGroup(source, groupKey, groupValue, createGroups);
                 entries.push(groups[groupKey] = entry = {
                     group: group,
                     items: []
@@ -53337,13 +53561,14 @@ Ext.define('Ext.util.GroupCollection', {
         var me = this,
             itemGroupKeys = me.itemGroupKeys || (me.itemGroupKeys = {}),
             item = details.item,
+            grouper = me.getGrouper(),
             oldKey, itemKey, oldGroup, group;
         itemKey = source.getKey(item);
         oldKey = 'oldKey' in details ? details.oldKey : itemKey;
         
         oldGroup = itemGroupKeys[oldKey];
         
-        group = me.getGroup(source, me.getGrouper().getGroupString(item));
+        group = me.getGroup(source, grouper.getGroupString(item), grouper.getGroupValue(item));
         details.group = group;
         details.oldGroup = oldGroup;
         
@@ -53370,7 +53595,7 @@ Ext.define('Ext.util.GroupCollection', {
         delete itemGroupKeys[oldKey];
         itemGroupKeys[itemKey] = group;
     },
-    getGroup: function(source, key, createGroups) {
+    getGroup: function(source, key, value, createGroups) {
         var me = this,
             group = me.get(key),
             autoSort = me.getAutoSort();
@@ -53383,6 +53608,7 @@ Ext.define('Ext.util.GroupCollection', {
                 id: me.getId() + '-group-' + key,
                 
                 groupKey: key,
+                groupValue: value,
                 rootProperty: me.getItemRoot(),
                 sorters: source.getSorters()
             }, me.getGroupConfig()));
@@ -55143,8 +55369,12 @@ Ext.define('Ext.app.Application', {
     getDependencies: Ext.emptyFn,
     
     constructor: function(config) {
-        var me = this;
+        var me = this,
+            App = Ext.app.Application;
         Ext.route.Router.application = me;
+        if (!App.instance) {
+            App.instance = me;
+        }
         me.callParent([
             config
         ]);
@@ -55194,6 +55424,7 @@ Ext.define('Ext.app.Application', {
         me.initControllers();
         me.onBeforeLaunch();
         me.finishInitControllers();
+        Ext.fireEvent('applaunch', me);
     },
     doInit: function(app) {
         this.initNamespace(app);
@@ -62868,6 +63099,7 @@ Ext.define('Ext.app.ViewModel', {
             for (link in links) {
                 this.linkTo(link, links[link]);
             }
+            return links;
         },
         applySchema: function(schema) {
             return Ext.data.schema.Schema.get(schema);
@@ -68049,7 +68281,8 @@ Ext.define('Ext.data.Query', {
         Ext.mixin.Factoryable,
         Ext.data.query.Compiler,
         Ext.data.query.Converter,
-        Ext.data.query.Stringifier
+        Ext.data.query.Stringifier,
+        Ext.mixin.Identifiable
     ],
     alias: 'query.default',
     config: {
@@ -68133,17 +68366,20 @@ Ext.define('Ext.data.Query', {
     ast: null,
     error: null,
     generation: 0,
+    identifiablePrefix: 'ext-data-query-',
     constructor: function(config) {
+        var me = this;
         if (typeof config === 'string') {
             config = {
                 source: config
             };
         }
+        me.id = (config && config.id) || me.generateAutoId();
         
         var parser = Ext.data.query.Parser.fly();
-        this.symbols = parser.symbols;
+        me.symbols = parser.symbols;
         parser.release();
-        this.callParent([
+        me.callParent([
             config
         ]);
     },
@@ -72301,7 +72537,7 @@ Ext.define('Ext.data.proxy.WebStorage', {
             ids = [];
         } else {
             for (i = 0; i < length; i++) {
-                ids[i] = isString ? ids[i] : +ids[i];
+                ids[i] = isString ? ids[i] : (Ext.isNumber(+ids[i]) ? +ids[i] : ids[i]);
             }
         }
         return ids;
@@ -73474,11 +73710,11 @@ Ext.define('Ext.data.virtual.Page', {
     isLoading: function() {
         return this.state === 'loading';
     },
-    load: function() {
+    load: function(options) {
         var me = this,
             operation;
         me.state = 'loading';
-        operation = me.pageMap.store.loadVirtualPage(me, me.onLoad, me);
+        operation = me.pageMap.store.loadVirtualPage(me, me.onLoad, me, options);
         
         if (me.state === 'loading') {
             me.operation = operation;
@@ -73664,10 +73900,13 @@ Ext.define('Ext.data.virtual.PageMap', {
         },
         loadNext: function() {
             var me = this,
-                concurrency = me.getConcurrentLoading(),
                 loading = me.loading,
                 loadQueues = me.loadQueues,
-                page;
+                concurrency, page;
+            if (me.destroyed) {
+                return;
+            }
+            concurrency = me.getConcurrentLoading();
             me.queueTimer = null;
             
             
@@ -73862,10 +74101,6 @@ Ext.define('Ext.data.virtual.Range', {
                 endBufferZone = me.leadingBufferZone,
                 adjustingPages = me.adjustingPages,
                 activePages, page, pg, direction, prefetchBegin, prefetchEnd, prefetchPages;
-            
-            if (limit === 0) {
-                return;
-            }
             adjustingPages.length = 0;
             
             
@@ -74011,6 +74246,11 @@ Ext.define('Ext.data.virtual.Range', {
             }
             me.lastBegin = begin;
             me.lastEnd = end;
+            
+            
+            if (begin === end && begin === 0) {
+                this.triggerCallback(0, 0);
+            }
         },
         onPageDestroy: function(page) {
             var n = page.number,
@@ -74025,20 +74265,18 @@ Ext.define('Ext.data.virtual.Range', {
         },
         onPageLoad: function(page) {
             var me = this,
-                callback = me.callback,
+                wait = me.activeWait,
                 first, last;
             if (me.activePages[page.number]) {
                 page.fillRecords(me.records);
-                if (callback) {
-                    
-                    
-                    first = Math.max(me.begin, page.begin);
-                    last = Math.min(me.end, page.end);
-                    Ext.callback(callback, me.scope, [
-                        me,
-                        first,
-                        last
-                    ]);
+                
+                
+                first = Math.max(me.begin, page.begin);
+                last = Math.min(me.end, page.end);
+                me.triggerCallback(first, last);
+                if (wait) {
+                    wait.got++;
+                    me.resolveWaitIfSatisfied();
                 }
             }
         },
@@ -74059,8 +74297,38 @@ Ext.define('Ext.data.virtual.Range', {
             me.begin = me.end = 0;
             me.direction = 1;
             me.prefetchPages = me.activePages = null;
-            
             me.goto(begin, end);
+        },
+        resolveWaitIfSatisfied: function() {
+            var wait = this.activeWait;
+            if (wait && wait.got === wait.needed) {
+                this.resolveWait(this);
+            }
+        },
+        setupWait: function(begin, end) {
+            var result = this.callParent([
+                    begin,
+                    end
+                ]),
+                pages = this.store.pageMap.getPages(begin, end),
+                needed = 0,
+                p;
+            for (p in pages) {
+                needed += pages[p].isLoaded() ? 0 : 1;
+            }
+            result.got = 0;
+            result.needed = needed;
+            return result;
+        },
+        triggerCallback: function(first, last) {
+            var callback = this.callback;
+            if (callback) {
+                Ext.callback(callback, this.scope, [
+                    this,
+                    first,
+                    last
+                ]);
+            }
         }
     }
 });
@@ -74175,7 +74443,7 @@ Ext.define('Ext.data.virtual.Store', {
         }
         me.grouper = grouper;
         if (!me.isConfiguring) {
-            me.reload();
+            me.reloadRanges();
             me.fireGroupChange(grouper);
         }
     },
@@ -74196,33 +74464,27 @@ Ext.define('Ext.data.virtual.Store', {
         return Ext.isNumber(this.totalCount);
     },
     load: function(options) {
-        if (typeof options === 'function') {
-            options = {
-                callback: options
-            };
-        }
+        options = options || {};
         
-        var me = this,
-            page = (options && options.page) || 1,
-            pageSize = me.getPageSize(),
-            operation = me.createOperation('read', Ext.apply({
-                start: (page - 1) * pageSize,
-                limit: pageSize,
-                page: page,
-                filters: me.getFilters().items,
-                sorters: me.getSorters().items,
-                grouper: me.getGrouper()
-            }, options));
-        if (me.fireEvent('beforeload', me, operation) !== false) {
-            me.onBeforeLoad(operation);
-            operation.execute();
-        } else {
-            operation.setCompleted();
+        
+        
+        
+        
+        
+        
+        var page = options.page || 1,
+            p = this.pageMap.getPage(page - 1, true);
+        if (!p.isLoading()) {
+            p.load({
+                callback: options.callback,
+                scope: options.scope
+            });
         }
-        return operation;
     },
+    
     reload: function(options) {
-        var me = this;
+        var me = this,
+            page;
         if (typeof options === 'function') {
             options = {
                 callback: options
@@ -74237,8 +74499,23 @@ Ext.define('Ext.data.virtual.Store', {
             page: 1
         }, options);
         me.pageMap.clear();
+        
+        me.pageMap.setPageCount(null);
         me.getGroups().clear();
-        return me.load(options);
+        
+        page = me.pageMap.getPage(options.page - 1, true);
+        
+        page.state = 'loading';
+        return me.loadInternal(options);
+    },
+    reloadRanges: function() {
+        var activeRanges = this.activeRanges,
+            i;
+        this.pageMap.clear();
+        this.getGroups().clear();
+        for (i = activeRanges.length; i-- > 0; ) {
+            activeRanges[i].reload();
+        }
     },
     
     
@@ -74294,7 +74571,7 @@ Ext.define('Ext.data.virtual.Store', {
             me.fireEvent('beforesort', me, sorters);
         }
         if (fire) {
-            me.reload();
+            me.reloadRanges();
             me.fireEvent('sort', me, sorters);
         }
     },
@@ -74393,10 +74670,21 @@ Ext.define('Ext.data.virtual.Store', {
                 pageMap = me.pageMap,
                 resultSet = op.getResultSet(),
                 wasSuccessful = op.wasSuccessful(),
+                pageNumber = op.config && op.config.page,
                 rsRecords = [],
-                i, range;
+                i, range, page;
             if (wasSuccessful) {
                 me.readTotalCount(resultSet);
+                
+                if (me.pageMap.getPageCount() !== 0 && pageNumber) {
+                    page = me.pageMap.getPage(pageNumber - 1, false);
+                    if (page && !(page.error = op.getError())) {
+                        
+                        
+                        page.records = op.getRecords();
+                        page.state = 'loaded';
+                    }
+                }
                 me.fireEvent('reload', me, op);
                 for (i = 0; i < len; ++i) {
                     range = activeRanges[i];
@@ -74410,10 +74698,38 @@ Ext.define('Ext.data.virtual.Store', {
             }
             me.fireEvent('load', me, rsRecords, wasSuccessful, op);
         },
-        loadVirtualPage: function(page, callback, scope) {
+        loadInternal: function(options) {
+            if (typeof options === 'function') {
+                options = {
+                    callback: options
+                };
+            }
+            
+            var me = this,
+                page = (options && options.page) || 1,
+                pageSize = me.getPageSize(),
+                operation = me.createOperation('read', Ext.apply({
+                    start: (page - 1) * pageSize,
+                    limit: pageSize,
+                    page: page,
+                    filters: me.getFilters().items,
+                    sorters: me.getSorters().items,
+                    grouper: me.getGrouper()
+                }, options));
+            if (me.fireEvent('beforeload', me, operation) !== false) {
+                me.onBeforeLoad(operation);
+                operation.execute();
+            } else {
+                operation.setCompleted();
+            }
+            return operation;
+        },
+        loadVirtualPage: function(page, callback, scope, loadOptions) {
+            
+            
             var me = this,
                 pageMapGeneration = me.pageMap.generation;
-            return me.load({
+            return me.loadInternal(Ext.apply({
                 page: page.number + 1,
                 
                 internalCallback: function(op) {
@@ -74432,7 +74748,7 @@ Ext.define('Ext.data.virtual.Store', {
                         me.fireEvent('load', me, rsRecords, op.wasSuccessful(), op);
                     }
                 }
-            });
+            }, loadOptions));
         },
         lockGroups: function(grouper, page) {
             var groups = this.getGroups(),
@@ -81888,6 +82204,87 @@ Ext.define('Ext.list.Tree', {
         
         this.publishState('selection', this.getSelection());
     },
+    focusable: true,
+    tabIndex: 0,
+    
+    keyMap: {
+        scope: 'this',
+        UP: 'onKeyUp',
+        DOWN: 'onKeyDown',
+        LEFT: 'onKeyLeft',
+        RIGHT: 'onKeyRight'
+    },
+    
+    onKeyUp: function(keyEvent, treeList) {
+        var selectedModel = treeList.getSelection(),
+            previousSibling = selectedModel ? selectedModel.previousSibling : null;
+        if (!selectedModel) {
+            return;
+        }
+        if (previousSibling) {
+            
+            
+            selectedModel = previousSibling;
+            while (treeList.getItem(selectedModel).getExpanded() && selectedModel.lastChild) {
+                selectedModel = selectedModel.lastChild;
+            }
+        } else if (!selectedModel.parentNode.isRoot()) {
+            
+            selectedModel = selectedModel.parentNode;
+        }
+        treeList.setSelection(selectedModel);
+    },
+    
+    onKeyDown: function(keyEvent, treeList) {
+        var currentModel,
+            isLastNode = false,
+            selectedModel = treeList.getSelection(),
+            selectedItem = treeList.getItem(selectedModel);
+        if (!selectedItem) {
+            return;
+        }
+        if (selectedItem.getExpanded() && selectedModel.firstChild) {
+            
+            selectedModel = selectedModel.firstChild;
+        } else if (selectedModel.nextSibling) {
+            
+            selectedModel = selectedModel.nextSibling;
+        } else {
+            currentModel = treeList.getSelection();
+            
+            
+            
+            
+            while (!selectedModel.parentNode.nextSibling) {
+                if (selectedModel.parentNode.isRoot()) {
+                    selectedModel = currentModel;
+                    isLastNode = true;
+                    break;
+                }
+                selectedModel = selectedModel.parentNode;
+            }
+            if (!isLastNode) {
+                selectedModel = selectedModel.parentNode.nextSibling;
+            }
+        }
+        treeList.setSelection(selectedModel);
+    },
+    
+    onKeyLeft: function(keyEvent, treeList) {
+        var selectedModel = treeList.getSelection(),
+            selectedItem = treeList.getItem(selectedModel);
+        if (selectedItem) {
+            selectedItem.collapse();
+        }
+    },
+    
+    onKeyRight: function(keyEvent, treeList) {
+        var selectedModel = treeList.getSelection(),
+            selectedItem = treeList.getItem(selectedModel);
+        if (selectedItem) {
+            selectedItem.expand();
+        }
+    },
     destroy: function() {
         var me = this;
         me.unfloatAll();
@@ -88464,6 +88861,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.data.Types": [],
   "Ext.data.Validation": [],
   "Ext.data.XmlStore": [],
+  "Ext.data.field.Array": [],
   "Ext.data.field.Boolean": [],
   "Ext.data.field.Date": [],
   "Ext.data.field.Field": [
@@ -89411,6 +89809,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.data.Validation": [],
   "Ext.data.XmlStore": [
     "store.xml"
+  ],
+  "Ext.data.field.Array": [
+    "data.field.array"
   ],
   "Ext.data.field.Boolean": [
     "data.field.bool",

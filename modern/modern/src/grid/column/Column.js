@@ -6,37 +6,130 @@
  *
  * In general an array of column configurations will be passed to the grid:
  *
- *     @example
- *     Ext.create({
- *         xtype: 'grid',
- *         title: 'Tree Grid Demo',
- *         itemConfig: {
- *             viewModel: true
- *         },
- *         store: {
- *              data: [
- *                  {firstname:"Michael", lastname:"Scott", seniority:7, department:"Management", hired:"01/10/2004"},
- *                  {firstname:"Dwight", lastname:"Schrute", seniority:2, department:"Sales", hired:"04/01/2004"},
- *                  {firstname:"Jim", lastname:"Halpert", seniority:3, department:"Sales", hired:"02/22/2006"},
- *                  {firstname:"Kevin", lastname:"Malone", seniority:4, department:"Accounting", hired:"06/10/2007"},
- *                  {firstname:"Angela", lastname:"Martin", seniority:5, department:"Accounting", hired:"10/21/2008"}
- *              ]
- *         },
- *         columns: [
- *             {text: 'First Name',  dataIndex:'firstname'},
- *             {text: 'Last Name',  dataIndex:'lastname'},
- *             {text: 'Hired Month',  dataIndex:'hired'},
- *             {
- *                 text: 'Department',
- *                 width: 200,
- *                 cell: {
- *                    bind: '{record.department} ({record.seniority})'
- *                 }
+ * ```javascript
+ * @example({ framework: 'extjs' })
+ * Ext.create({
+ *     xtype: 'grid',
+ *     title: 'Tree Grid Demo',
+ *     itemConfig: {
+ *         viewModel: true
+ *     },
+ *     store: {
+ *          data: [
+ *              {firstname:"Michael", lastname:"Scott", seniority:7, department:"Management", hired:"01/10/2004"},
+ *              {firstname:"Dwight", lastname:"Schrute", seniority:2, department:"Sales", hired:"04/01/2004"},
+ *              {firstname:"Jim", lastname:"Halpert", seniority:3, department:"Sales", hired:"02/22/2006"},
+ *              {firstname:"Kevin", lastname:"Malone", seniority:4, department:"Accounting", hired:"06/10/2007"},
+ *              {firstname:"Angela", lastname:"Martin", seniority:5, department:"Accounting", hired:"10/21/2008"}
+ *          ]
+ *     },
+ *     columns: [
+ *         {text: 'First Name',  dataIndex:'firstname'},
+ *         {text: 'Last Name',  dataIndex:'lastname'},
+ *         {text: 'Hired Month',  dataIndex:'hired'},
+ *         {
+ *             text: 'Department',
+ *             width: 200,
+ *             cell: {
+ *                bind: '{record.department} ({record.seniority})'
  *             }
- *         ],
- *         width: 500,
- *         fullscreen: true
- *     });
+ *         }
+ *     ],
+ *     width: 500,
+ *     fullscreen: true
+ * });
+ * ```
+ * ```html
+ * @example({framework: 'ext-web-components', packages:['ext-web-components'], tab: 1 })
+ * <ext-container width="100%" height="100%">
+ *     <ext-grid shadow="true" height="100%" onready="columnGrid.onGridReady">
+ *         <ext-column text="Name" dataIndex="name" flex="1"></ext-column>
+ *         <ext-column text="Email" dataIndex="email" flex="1"></ext-column>
+ *         <ext-column text="Phone" dataIndex="phone" flex="1"></ext-column>
+ *     </ext-grid>
+ * </ext-container>
+ * ```
+ * ```javascript
+ * @example({framework: 'ext-web-components', tab: 2, packages: ['ext-web-components']})
+ * import '@sencha/ext-web-components/dist/ext-container.component';
+ * import '@sencha/ext-web-components/dist/ext-grid.component';
+ * import '@sencha/ext-web-components/dist/ext-column.component';
+ * 
+ * export default class ColumnGridComponent {
+ *     constructor() {
+ *        this.store = new Ext.data.Store({
+ *           data: [
+ *               { "name": "Lisa", "email": "lisa@simpsons.com", "phone": "555-111-1224" },
+ *               { "name": "Bart", "email": "bart@simpsons.com", "phone": "555-222-1234" },
+ *               { "name": "Homer", "email": "home@simpsons.com", "phone": "555-222-1244" },
+ *               { "name": "Marge", "email": "marge@simpsons.com", "phone": "555-222-1254" }
+ *           ]
+ *        });
+ *     }
+ * 
+ *     onGridReady(event) {
+ *         this.basicGridCmp = event.detail.cmp;
+ *         this.basicGridCmp.setStore(this.store);
+ *     }
+ * }
+ * 
+ * window.columnGrid = new ColumnGridComponent();
+ * ```
+ * ```javascript
+ * @example({framework: 'ext-react', packages:['ext-react']})
+ * import React, { Component } from 'react';
+ * import { ExtGrid, ExtColumn, ExtPanel } from '@sencha/ext-modern';
+ *
+ * export default class MyExample extends Component {
+ *     render() {
+ *         this.store = new Ext.data.Store({
+ *             data: [
+ *                 { "name": "Lisa", "email": "lisa@simpsons.com", "phone": "555-111-1224" },
+ *                 { "name": "Bart", "email": "bart@simpsons.com", "phone": "555-222-1234" },
+ *                 { "name": "Homer", "email": "home@simpsons.com", "phone": "555-222-1244" },
+ *                 { "name": "Marge", "email": "marge@simpsons.com", "phone": "555-222-1254" }
+ *             ]
+ *         });
+ *         return (
+ *            <ExtPanel width="100%" height="100%">
+ *                 <ExtGrid shadow="true" height="100%" store={this.store}>
+ *                     <ExtColumn text="Name" dataIndex="name" flex="1"></ExtColumn>
+ *                     <ExtColumn text="Email" dataIndex="email" flex="1"></ExtColumn>
+ *                     <ExtColumn text="Phone" dataIndex="phone" flex="1"></ExtColumn>
+ *                 </ExtGrid>
+ *             </ExtPanel>
+ *         )
+ *     }
+ * }
+ * ```
+ * ```javascript
+ * @example({framework: 'ext-angular', packages:['ext-angular']})
+ * import { Component } from '@angular/core'
+ * declare var Ext: any;
+ *
+ * @Component({
+ *     selector: 'column-component',
+ *     styles: [``],
+ *     template: `
+ *       <ExtPanel [width]="400" [height]="400">
+ *            <ExtGrid shadow="true" [height]="400" [store]="store">
+ *                <ExtColumn [text]="'Name'" dataIndex="name" flex="1"></ExtColumn>
+ *                <ExtColumn [text]="'Email'" dataIndex="email" flex="1"></ExtColumn>
+ *                <ExtColumn [text]="'Phone'" dataIndex="phone" flex="1"></ExtColumn>
+ *            </ExtGrid>
+ *        </ExtPanel>`
+ *   })
+ * export class ColumnComponent  {
+ *    store = new Ext.data.Store({
+ *    data: [
+ *        { "name": "Lisa", "email": "lisa@simpsons.com", "phone": "555-111-1224" },
+ *        { "name": "Bart", "email": "bart@simpsons.com", "phone": "555-222-1234" },
+ *        { "name": "Homer", "email": "home@simpsons.com", "phone": "555-222-1244" },
+ *        { "name": "Marge", "email": "marge@simpsons.com", "phone": "555-222-1254" }
+ *    ]
+ *    });
+ * }
+ * ```
  *
  * # Convenience Subclasses
  *
@@ -1408,6 +1501,14 @@ Ext.define('Ext.grid.column.Column', {
                 grouper = me.getGrouper();
             }
         }
+
+        //<debug>
+        if (store && store.isVirtualStore && grouper) {
+            Ext.Logger.warn('Virtual store does not suppport grouping');
+
+            return;
+        }
+        //</debug>
 
         if (grouper) {
             store.setGrouper(grouper);

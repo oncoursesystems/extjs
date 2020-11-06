@@ -83,6 +83,291 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
         return list.getItem(byId(id));
     }
 
+    describe("Keyboard navigation", function() {
+        it("should select previous item on up arrow key", function() {
+            makeList();
+            list.setSelection('i2');
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 38, null);
+            expect(list.getSelection().id).toBe("i1");
+        });
+
+        it("should not select previous item on first item up arrow key", function() {
+            makeList();
+            list.setSelection('i1');
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 38, null);
+            expect(list.getSelection().id).toBe("i1");
+        });
+
+        it("should select next item on down arrow key", function() {
+            makeList();
+            list.setSelection('i2');
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 40, null);
+            expect(list.getSelection().id).toBe("i3");
+        });
+
+        it("should not select next item on last item down arrow key", function() {
+            makeList();
+            list.setSelection('i5');
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 40, null);
+            expect(list.getSelection().id).toBe("i5");
+        });
+
+        it("should select child item on down arrow key of expanded group", function() {
+            makeList();
+            var selectedModel, selectedItem;
+
+            list.setSelection('i4');
+            selectedModel = list.getSelection();
+            selectedItem = list.getItem(selectedModel);
+
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 40, null);
+            expect(list.getSelection().id).toBe("i41");
+        });
+
+        it("should select parent item on up arrow key of expanded group", function() {
+            makeList();
+            list.setSelection('i41');
+
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 38, null);
+            expect(list.getSelection().id).toBe("i4");
+        });
+
+        it("should go to previous sibling if previous sibling doesn't have any children on up arrow key", function() {
+            store = new Ext.data.TreeStore({
+                model: Model,
+                root: {
+                    expanded: true,
+                    children: [{
+                        id: 'i1',
+                        text: 'detention',
+                        leaf: true
+                    }, {
+                        id: 'i2',
+                        text: 'homework',
+                        expanded: true,
+                        children: []
+                    }, {
+                        id: 'i3',
+                        text: 'buy lottery tickets',
+                        leaf: true
+                    }]
+                }
+            });
+
+            makeList({
+                store: store
+            }, true);
+
+            list.setSelection('i3');
+
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 38, null);
+            expect(list.getSelection().id).toBe("i2");
+
+            list = Ext.destroy(list);
+        });
+
+        it("should go to next sibling if current item doesn't have any children on down arrow key", function() {
+            store = new Ext.data.TreeStore({
+                model: Model,
+                root: {
+                    expanded: true,
+                    children: [{
+                        id: 'i1',
+                        text: 'detention',
+                        leaf: true
+                    }, {
+                        id: 'i2',
+                        text: 'homework',
+                        expanded: true,
+                        children: []
+                    }, {
+                        id: 'i3',
+                        text: 'buy lottery tickets',
+                        leaf: true
+                    }]
+                }
+            });
+
+            makeList({
+                store: store
+            }, true);
+
+            list.setSelection('i2');
+
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 40, null);
+            expect(list.getSelection().id).toBe("i3");
+        });
+
+        it("should go to next sibling on multilevel heirarchy on down arrow key", function() {
+            store = new Ext.data.TreeStore({
+                model: Model,
+                root: {
+                    expanded: true,
+                    children: [{
+                        id: 'i1',
+                        text: 'detention',
+                        leaf: true
+                    }, {
+                        id: 'i2',
+                        text: 'homework',
+                        expanded: true,
+                        children: [{
+                            id: 'i21',
+                            text: 'abc',
+                            leaf: true
+                        }, {
+                            id: 'i22',
+                            text: 'def',
+                            expanded: true,
+                            children: [{
+                                id: 'i221',
+                                text: 'xyz'
+                            }, {
+                                id: 'i222',
+                                text: 'lmn'
+                            }]
+                        }]
+                    }, {
+                        id: 'i3',
+                        text: 'buy lottery tickets',
+                        leaf: true
+                    }]
+                }
+            });
+
+            makeList({
+                store: store
+            }, true);
+
+            list.setSelection('i222');
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 40, null);
+            expect(list.getSelection().id).toBe("i3");
+        });
+
+        it("should not change selection on last node on multilevel heirarchy on down arrow key", function() {
+            store = new Ext.data.TreeStore({
+                model: Model,
+                root: {
+                    expanded: true,
+                    children: [{
+                        id: 'i1',
+                        text: 'detention',
+                        leaf: true
+                    }, {
+                        id: 'i2',
+                        text: 'homework',
+                        expanded: true,
+                        children: [{
+                            id: 'i21',
+                            text: 'abc',
+                            leaf: true
+                        }, {
+                            id: 'i22',
+                            text: 'def',
+                            expanded: true,
+                            children: [{
+                                id: 'i221',
+                                text: 'xyz'
+                            }, {
+                                id: 'i222',
+                                text: 'lmn'
+                            }]
+                        }]
+                    }]
+                }
+            });
+
+            makeList({
+                store: store
+            }, true);
+
+            list.setSelection('i222');
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 40, null);
+            expect(list.getSelection().id).toBe("i222");
+        });
+
+        it("should go to last child of last expanded child of previous sibling on multilevel heirarchy on up arrow key", function() {
+            store = new Ext.data.TreeStore({
+                model: Model,
+                root: {
+                    expanded: true,
+                    children: [{
+                        id: 'i1',
+                        text: 'detention',
+                        leaf: true
+                    }, {
+                        id: 'i2',
+                        text: 'homework',
+                        expanded: true,
+                        children: [{
+                            id: 'i21',
+                            text: 'abc',
+                            leaf: true
+                        }, {
+                            id: 'i22',
+                            text: 'def',
+                            expanded: false,
+                            children: [{
+                                id: 'i221',
+                                text: 'xyz'
+                            }, {
+                                id: 'i222',
+                                text: 'lmn'
+                            }]
+                        }]
+                    }, {
+                        id: 'i3',
+                        text: 'buy lottery tickets',
+                        leaf: true
+                    }]
+                }
+            });
+
+            makeList({
+                store: store
+            }, true);
+
+            list.setSelection('i3');
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 38, null);
+            expect(list.getSelection().id).toBe("i22");
+        });
+
+        it("should go to next sibling if last item is selected in an expanded node on down arrow key", function() {
+            makeList();
+
+            list.setSelection('i43');
+
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 40, null);
+            expect(list.getSelection().id).toBe("i5");
+        });
+
+        it("should expand current item on right arrow key", function() {
+            var selectedModel, selectedItem;
+
+            makeList();
+            list.setSelection('i1');
+            selectedModel = list.getSelection();
+            selectedItem = list.getItem(selectedModel);
+
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 39, null);
+
+            expect(selectedItem.getExpanded()).toBe(true);
+        });
+
+        it("should collapse current item on left arrow key", function() {
+            var selectedModel, selectedItem;
+
+            makeList();
+            list.setSelection('i4');
+            selectedModel = list.getSelection();
+            selectedItem = list.getItem(selectedModel);
+
+            jasmine.fireKeyEvent(list.focusEl.dom, 'keydown', 37, null);
+
+            expect(selectedItem.getExpanded()).toBe(false);
+        });
+    });
+
     describe("store", function() {
         function getListeners() {
             var listeners = {},

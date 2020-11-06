@@ -115,6 +115,42 @@ topSuite("Ext.data.reader.Reader", ['Ext.data.ArrayStore', 'Ext.data.reader.Xml'
         });
     });
 
+    describe("extractRecord", function() {
+        var responseData;
+
+        beforeEach(function() {
+            responseData = {};
+            spyOn(reader, 'extractData').andReturn('someRootProperty');
+            spyOn(reader, 'defaultRecordCreatorFromServer').andReturn({});
+            spyOn(reader, 'readRecords').andReturn({});
+            spyOn(reader, 'extractModelData').andReturn({});
+            spyOn(reader, 'getResponseData').andCallFake(function() {
+                return responseData;
+            });
+        });
+
+        it("should call defaultRecordCreatorFromServer", function() {
+            var o = {
+                phantom: false
+            };
+
+            var transformFn = function(data) {
+                data[0] = { id: 2 };
+
+                return data;
+            };
+
+            makeReader({
+                transform: transformFn
+            });
+
+            reader.extractData = function(root, readOptions) { return root; };
+            var rec = reader.readRecords([o]).getRecords()[0];
+
+            expect(rec.phantom).not.toEqual(o.phantom);
+        });
+    });
+
     describe("transform", function() {
         it("should invoke the transform function", function() {
             var o = {

@@ -33,6 +33,15 @@ Ext.define('Ext.grid.NavigationModel', {
 
     focusCls: Ext.baseCSSPrefix + 'grid-item-focused',
 
+    constructor: function() {
+        var me = this;
+
+        me.onKeyPageDown = Ext.Function.createThrottled(me.onKeyPageDown, 120, me);
+        me.onKeyPageUp = Ext.Function.createThrottled(me.onKeyPageUp, 120, me);
+
+        me.callParent();
+    },
+
     getViewListeners: function() {
         var me = this;
 
@@ -683,7 +692,7 @@ Ext.define('Ext.grid.NavigationModel', {
             me.item = me.cell = null;
         }
         else {
-            me.focusPosition(me.position, preventNavigation);
+            me.focusPosition(me.position);
         }
 
         // Legacy API is that the SelectionModel fires focuschange events
@@ -1024,7 +1033,7 @@ Ext.define('Ext.grid.NavigationModel', {
     // Go one page down from the lastFocused record in the grid.
     onKeyPageDown: function(keyEvent) {
         var me = this,
-            view = keyEvent.view,
+            view = Ext.Component.fromElement(keyEvent.target, undefined, 'tableview'),
             rowsVisible = me.getRowsVisible(),
             newIdx,
             newRecord;
@@ -1051,7 +1060,7 @@ Ext.define('Ext.grid.NavigationModel', {
     // Go one page up from the lastFocused record in the grid.
     onKeyPageUp: function(keyEvent) {
         var me = this,
-            view = keyEvent.view,
+            view = Ext.Component.fromElement(keyEvent.target, undefined, 'tableview'),
             rowsVisible = me.getRowsVisible(),
             newIdx,
             newRecord;
@@ -1148,7 +1157,7 @@ Ext.define('Ext.grid.NavigationModel', {
     // of the same height and the first view is accurate.
     getRowsVisible: function() {
         var rowsVisible = false,
-            view = this.view,
+            view = this.view.ownerGrid.getView(),
             firstRow = view.all.first(),
             rowHeight, gridViewHeight;
 

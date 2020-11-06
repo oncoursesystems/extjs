@@ -1,6 +1,6 @@
 topSuite("Ext.Dialog",
     ['Ext.app.ViewModel', 'Ext.layout.Form', 'Ext.Button', 'Ext.field.Text',
-     'Ext.plugin.TabGuard', 'Ext.Dialog'],
+     'Ext.plugin.TabGuard', 'Ext.Dialog', 'Ext.panel.Resizer'],
 function() {
     var dialog;
 
@@ -940,6 +940,123 @@ function() {
 
         makeTabSuite(false);
         makeTabSuite(true);
+        
+        describe("ESC close modal", function() {
+            function makeButtonModal(modal) {
+                var pressTab = jasmine.pressTabKey,
+                    expectFocused = jasmine.expectFocused,
+                    tool, fooField, barField, okBtn, cancelBtn;
+
+                describe("without button", function() {
+                    beforeEach(function() {
+                        before = makeButton({
+                            id: 'beforeButton',
+                            text: 'before'
+                        });
+
+                        makeDialog({
+                            title: 'foo',
+
+                            modal: modal,
+
+                            // This will add tools and make the header a toolbar;
+                            // we need this to test that the top tab guard is indeed
+                            // at the top of the tab order above the dialog header.
+                            closable: true,
+
+                            layout: 'form',
+
+                            items: [{
+                                xtype: 'textfield',
+                                name: 'foo',
+                                fieldLabel: 'foo'
+                            }, {
+                                xtype: 'textfield',
+                                name: 'bar',
+                                fieldLabel: 'bar'
+                            }]
+                        });
+
+                        tool = dialog.down('tool');
+                        fooField = dialog.down('textfield[name=foo]');
+                        barField = dialog.down('textfield[name=bar]');
+
+                        after = makeButton({
+                            id: 'afterButton',
+                            text: 'after',
+                            y: 300
+                        });
+                    });
+
+                    it("should focus on close tool", function() {
+                        expectFocused(tool);
+                    });
+                });
+
+                describe("with button", function() {
+                    beforeEach(function() {
+                        before = makeButton({
+                            id: 'beforeButton',
+                            text: 'before'
+                        });
+
+                        makeDialog({
+                            title: 'foo',
+
+                            modal: modal,
+
+                            // This will add tools and make the header a toolbar;
+                            // we need this to test that the top tab guard is indeed
+                            // at the top of the tab order above the dialog header.
+                            maximizable: true,
+                            closable: true,
+
+                            layout: 'form',
+
+                            items: [{
+                                xtype: 'textfield',
+                                name: 'foo',
+                                fieldLabel: 'foo'
+                            }, {
+                                xtype: 'textfield',
+                                name: 'bar',
+                                fieldLabel: 'bar'
+                            }],
+
+                            // Buttons toolbar is there to test that bottom tab guard
+                            // is below it in the tab order.
+                            buttons: [{
+                                text: 'OK'
+                            }, {
+                                text: 'Cancel'
+                            }]
+                        });
+
+                        tool = dialog.down('tool');
+                        fooField = dialog.down('textfield[name=foo]');
+                        barField = dialog.down('textfield[name=bar]');
+                        okBtn = dialog.down('button[text=OK]');
+                        cancelBtn = dialog.down('button[text=Cancel]');
+
+                        after = makeButton({
+                            id: 'afterButton',
+                            text: 'after',
+                            y: 300
+                        });
+                    });
+
+                    it("should focus on close tool", function() {
+                        pressTab(after, false);
+
+                        runs(function() {
+                            expectFocused(cancelBtn);
+                        });
+                    });
+                });
+            }
+
+            makeButtonModal(true);
+        });
     });
 
     describe('centered after an animated show', function() {
@@ -970,6 +1087,133 @@ function() {
 
                 expect([dialog.getX(), dialog.getY()]).toEqual(position);
             });
+        });
+    });
+
+    describe("Dialog with toolbar present", function() {
+        var helper = Ext.testHelper,
+            activeEdge, cursorTrack, resizable,
+            width, height;
+
+        beforeEach(function() {
+            createDialog({
+                title: 'My Dialog',
+                items: [{
+                    html: 'this is my dialog content'
+                }],
+                draggable: true,
+                buttons: {
+                    customA: {
+                        text: 'Custom A',
+                        ui: 'decline'
+                    },
+                    customB: {
+                        text: 'Custom B',
+                        ui: 'confirm'
+                    }
+                },
+                resizable: {
+                    edges: 'all'
+                },
+                closable: true
+            });
+
+            dialog.show();
+            resizable = dialog.getResizable();
+            width = dialog.getSize().width;
+            height = dialog.getSize().height;
+        });
+
+        function startDrag(edge) {
+            runs(function() {
+                activeEdge = edge;
+                edge = resizable.getEdge(edge);
+                var xy = getCenter(edge);
+
+                start({
+                    x: xy[0],
+                    y: xy[1]
+                }, edge);
+            });
+            waitsForAnimation();
+        }
+
+        function getCenter(el) {
+            var xy = el.getXY();
+
+            return [xy[0] + (el.getWidth() / 2), xy[1] + (el.getHeight() / 2)];
+        }
+
+        function start(cfg, target) {
+            cursorTrack = [cfg.x || 0, cfg.y || 0];
+            helper.touchStart(target, cfg);
+        }
+
+        function moveBy(x, y) {
+            if (Ext.isArray(x)) {
+                y = x[1];
+                x = x[0];
+            }
+
+            runs(function() {
+                move({
+                    x: cursorTrack[0] + (x || 0),
+                    y: cursorTrack[1] + (y || 0)
+                }, resizable.getEdge(activeEdge));
+            });
+            waitsForAnimation();
+        }
+
+        function move(cfg, target) {
+            cursorTrack = [cfg.x || 0, cfg.y || 0];
+            helper.touchMove(target, cfg);
+        }
+
+        function endDrag(x, y) {
+            runs(function() {
+                x = x || cursorTrack[0];
+                y = y || cursorTrack[1];
+
+                end({
+                    x: x,
+                    y: y
+                }, resizable.getEdge(activeEdge));
+            });
+            waitsForAnimation();
+        }
+
+        function end(cfg, target) {
+            cursorTrack = [cfg.x || 0, cfg.y || 0];
+            helper.touchEnd(target, cfg);
+        }
+
+        function runsExpectSize(w, h) {
+            runs(function() {
+                expectSize(w, h);
+            });
+        }
+
+        function expectSize(w, h) {
+            var el = dialog.element;
+
+            expect(el.getWidth()).toBe(w);
+            expect(el.getHeight()).toBe(h);
+        }
+
+        it("should be resizable when pulled from right edge", function() {
+            startDrag('east');
+            moveBy(50, 0);
+            endDrag();
+
+            runsExpectSize(width + 50, height);
+        });
+
+        it("should be resizable when pulled from bottom edge", function() {
+            startDrag('south');
+            moveBy(0, 50);
+            endDrag();
+
+            runsExpectSize(width, height + 50);
         });
     });
 });

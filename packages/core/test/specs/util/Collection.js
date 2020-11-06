@@ -1,5 +1,3 @@
-/* eslint-disable vars-on-top, one-var */
-
 topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
     var collection,
         fakeScope = {};

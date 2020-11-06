@@ -143,7 +143,6 @@ Ext.define('KitchenSink.controller.Main', {
 
         Ext.getBody().toggleCls('dark-mode', darkMode);
     },
-
     updateDetails: function(node) {
         var me = this,
             description = node.get('description'),
@@ -168,7 +167,6 @@ Ext.define('KitchenSink.controller.Main', {
 
         return me;
     },
-
     changeLocale: function(item) {
         var params = Ext.Object.fromQueryString(location.search);
 
@@ -322,7 +320,18 @@ Ext.define('KitchenSink.controller.Main', {
         //</debug>
         });
     },
+    showTreeNav: function() {
+        var me = this,
+            panel = me.getNavigationPanel(),
+            isHidden = panel.isHidden();
 
+        if (isHidden) {
+            panel.show();
+        }
+        else {
+            panel.hide();
+        }
+    },
     processText: function(text, profileInfo) {
         var me = this,
             lines = text.split('\n'),

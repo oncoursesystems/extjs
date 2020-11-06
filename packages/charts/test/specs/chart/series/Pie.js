@@ -93,4 +93,34 @@ topSuite("Ext.chart.series.Pie", ['Ext.chart.*', 'Ext.data.ArrayStore'], functio
             });
         });
     });
+
+    describe('sprite', function() {
+       it('should not create sprite if zero data point', function() {
+            var chart = Ext.create({
+                    xtype: 'polar',
+                    renderTo: document.body,
+                    width: 400,
+                    height: 400,
+                    store: {
+                        fields: ['name', 'value'],
+                        data: [{
+                            name: 'A', value: 0
+                        }]
+                    },
+                    series: [{
+                        type: 'pie',
+                        angleField: 'value'
+                    }]
+                });
+
+            runs(function() {
+                expect(chart.getSeries()[0].sprites).toEqual([]);
+            });
+
+            runs(function() {
+                Ext.destroy(chart);
+            });
+        });
+    });
+
 });

@@ -827,6 +827,16 @@ Ext.define('Ext.Dialog', {
         }
     },
 
+    getFocusEl: function() {
+        var focusEl = this.callParent();
+
+        if (!focusEl && !this.getButtons() && this.getClosable()) {
+            return this.closeTool;
+        }
+
+        return focusEl;
+    },
+
     onCloseTool: function(dialog, tool, event) {
         this.close(event);
     },

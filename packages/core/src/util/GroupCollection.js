@@ -269,13 +269,14 @@ Ext.define('Ext.util.GroupCollection', {
             groups = {},
             entries = [],
             grouper = me.getGrouper(),
-            entry, group, groupKey, i, item, len;
+            entry, group, groupKey, groupValue, i, item, len;
 
         for (i = 0, len = items.length; i < len; ++i) {
             groupKey = grouper.getGroupString(item = items[i]);
+            groupValue = grouper.getGroupValue(item);
 
             if (!(entry = groups[groupKey])) {
-                group = me.getGroup(source, groupKey, createGroups);
+                group = me.getGroup(source, groupKey, groupValue, createGroups);
 
                 entries.push(groups[groupKey] = entry = {
                     group: group,
@@ -298,6 +299,7 @@ Ext.define('Ext.util.GroupCollection', {
         var me = this,
             itemGroupKeys = me.itemGroupKeys || (me.itemGroupKeys = {}),
             item = details.item,
+            grouper = me.getGrouper(),
             oldKey, itemKey, oldGroup, group;
 
         itemKey = source.getKey(item);
@@ -307,7 +309,7 @@ Ext.define('Ext.util.GroupCollection', {
         oldGroup = itemGroupKeys[oldKey];
 
         // Look up/create the group into which the item now must be added.
-        group = me.getGroup(source, me.getGrouper().getGroupString(item));
+        group = me.getGroup(source, grouper.getGroupString(item), grouper.getGroupValue(item));
 
         details.group = group;
         details.oldGroup = oldGroup;
@@ -339,7 +341,7 @@ Ext.define('Ext.util.GroupCollection', {
         itemGroupKeys[itemKey] = group;
     },
 
-    getGroup: function(source, key, createGroups) {
+    getGroup: function(source, key, value, createGroups) {
         var me = this,
             group = me.get(key),
             autoSort = me.getAutoSort();
@@ -354,6 +356,7 @@ Ext.define('Ext.util.GroupCollection', {
                 id: me.getId() + '-group-' + key,
                 //</debug>
                 groupKey: key,
+                groupValue: value,
                 rootProperty: me.getItemRoot(),
                 sorters: source.getSorters()
             }, me.getGroupConfig()));

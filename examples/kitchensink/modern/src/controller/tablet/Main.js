@@ -30,7 +30,10 @@ Ext.define('KitchenSink.controller.tablet.Main', {
             xtype: 'thumbnails',
             flex: 1,
             autoCreate: true
-        }
+        },
+        navigationTree: '#indextreeList',
+        navigationFilter: '#treeSearch',
+        navigationPanel: '#navigationPanel'
     },
 
     control: {
@@ -42,6 +45,15 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         },
         'breadcrumbButton': {
             tap: 'onBreadcrumbTap'
+        },
+        '#treeNavId': {
+            click: 'showTreeNav'
+        },
+        navigationTree: {
+            itemclick: 'nodeSelect'
+        },
+        '#treeSearch': {
+            change: 'onNavFilterFieldChange'
         }
     },
 
@@ -82,7 +94,6 @@ Ext.define('KitchenSink.controller.tablet.Main', {
 
         return layout.getAnimation();
     },
-
     updateTitle: function(node) {
         var text = node.get('text');
 
@@ -90,7 +101,6 @@ Ext.define('KitchenSink.controller.tablet.Main', {
 
         return this;  // NOTE this is not a config updater method...
     },
-
     updateBreadcrumb: function(node) {
         var me = this,
             breadcrumb = me.getBreadcrumb(),
@@ -113,7 +123,7 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         }
 
         // Update the buttons as non-destructively as possible to preserve focus if possible.
-        for (i = 0, j = 0, len = path.length; i < len; i++, j += 2) {
+        for (i = 0, j = 1, len = path.length; i < len; i++, j += 2) {
             node = path[i];
 
             btnCfg = {
@@ -172,6 +182,82 @@ Ext.define('KitchenSink.controller.tablet.Main', {
         return me;
     },
 
+    nodeSelect: function(list, info) {
+        var record = info && info.node;
+
+        // Ignore the initialize to the "all" node.
+        if (record && !record.isRoot()) {
+            this.redirectTo(record.getId());
+        }
+    },
+    /**
+     * This method filters the list based on the text in search field.
+     */
+    onNavFilterFieldChange: function(field, value) {
+        var me = this,
+            tree = me.getNavigationTree(),
+            store = tree.getStore(),
+            filteredData,
+            component,
+            childComponent,
+            i, j;
+
+        if (value) {
+            me.filterStore(value);
+        }
+        else {
+            store.clearFilter();
+            filteredData = store.getData().items;
+
+            // After clearing filter filtered data will give only first branches
+            // collapse the child nodes of first branches and keep the tree expanded at least one level
+            if (filteredData && filteredData.length) {
+                for (i = 0; i < filteredData.length; i++) {
+                    component = filteredData[i];
+
+                    if (component.childNodes.length) {
+                        for (j = 0; j < component.childNodes.length; j++) {
+                            childComponent = component.childNodes[j];
+
+                            if (childComponent.data.expandable && childComponent.data.expanded) {
+                                childComponent.collapse(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    /**
+     * This method filters the store.
+     */
+    filterStore: function(value) {
+        var me = this,
+            i = 0,
+            tree = me.getNavigationTree(),
+            filteredData,
+            store = tree.getStore();
+
+        if (value.length < 1) {
+            store.clearFilter();
+        }
+        else {
+            store.getFilters().replaceAll({
+                property: 'text',
+                value: new RegExp(Ext.String.escapeRegex(value), 'i')
+            });
+            filteredData = store.getData().items;
+
+            // expand the filtered nodes
+            if (filteredData && filteredData.length) {
+                for (; i < filteredData.length; i++) {
+                    if (filteredData[i].data.expandable && filteredData[i].data.expanded === false) {
+                        filteredData[i].data.expanded = true;
+                    }
+                }
+            }
+        }
+    },
     onBreadcrumbTap: function(button) {
         this.redirectTo(button.getValue());
     },

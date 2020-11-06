@@ -24,6 +24,7 @@ Ext.Number = (new function() { // jshint ignore:line
     Ext.apply(ExtNumber, {
         MIN_SAFE_INTEGER: Number.MIN_SAFE_INTEGER,
         MAX_SAFE_INTEGER: Number.MAX_SAFE_INTEGER,
+        MAX_32BIT_INTEGER: math.pow(2, 31) - 1,
         // No good way to allow "9." w/o allowing "." alone but we use isNaN to reject that
         floatRe: /^[-+]?(?:\d+|\d*\.\d*)(?:[Ee][+-]?\d+)?$/,
         intRe: /^[-+]?\d+(?:[Ee]\+?\d+)?$/,

@@ -7,7 +7,8 @@ Ext.define('Ext.util.Group', {
     isGroup: true,
 
     config: {
-        groupKey: null
+        groupKey: null,
+        groupValue: null
     },
 
     // Group collections must have a higher priority than normal collections.  This ensures

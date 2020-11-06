@@ -29,6 +29,7 @@ Ext.define('KitchenSink.store.Navigation', {
         items.push(me.getNavItemsCalendar());
         items.push(me.getNavItemsGridPivot());
         items.push(me.getNavItemsD3());
+        items.push(me.getNavItemsTemplates());
 
         items = {
             text: 'All',
@@ -101,6 +102,7 @@ Ext.define('KitchenSink.store.Navigation', {
             text: 'Calendar',
             id: 'calendar',
             tier: 'premium',
+            expanded: true,
             since: '6.2.0',
 
             description: 'The calendar family of components allows you to present ' +
@@ -540,7 +542,6 @@ Ext.define('KitchenSink.store.Navigation', {
         return {
             text: 'Maps',
             id: 'map',
-            expanded: true,
             iconCls: 'x-fa fa-globe',
             description: 'Ext JS map component',
 
@@ -576,6 +577,7 @@ Ext.define('KitchenSink.store.Navigation', {
         return {
             text: 'Components',
             id: 'components',
+            expanded: true,
             iconCls: 'icon-state-saving',
             description: 'Ext JS provides a wide variety of other, simpler components.',
 
@@ -1081,7 +1083,6 @@ Ext.define('KitchenSink.store.Navigation', {
             ]
         };
     },
-
     getNavItemsGridAdvanced: function() {
         return {
             text: 'Advanced Features',
@@ -1183,6 +1184,7 @@ Ext.define('KitchenSink.store.Navigation', {
             text: 'Pivot Grids',
             id: 'pivot-grids',
             tier: 'premium',
+            expanded: true,
 
             description:
                 'The Pivot Grid component enables rapid summarization of large sets of data. ' +
@@ -1215,6 +1217,7 @@ Ext.define('KitchenSink.store.Navigation', {
         return {
             text: 'Trees',
             id: 'trees',
+            expanded: true,
 
             description: 'Tree Panels provide a tree-structured UI representation ' +
                          'of tree-structured data. Tree Panel\'s built-in expand/collapse ' +
@@ -1260,6 +1263,27 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'basic-step-swiper', text: 'Basic Step Swiper', leaf: true },
                 { id: 'undoable-accordion-swiper', text: 'Undoable Accordion Swiper', leaf: true },
                 { id: 'undoable-step-swiper', text: 'Undoable Step Swiper', leaf: true }
+            ]
+        };
+    },
+
+    getNavItemsTemplates: function() {
+        return {
+            text: 'Templates',
+            id: 'templates',
+            iconCls: 'icon-layout-card',
+            expanded: true,
+            tier: 'premium',
+            since: '7.3.0',
+
+            description: 'These are some ready to use reponsive templates which can be used with ' +
+                        'various screen sizes',
+
+            children: [
+                { id: 'template-login', text: 'Login', leaf: true, iconCls: 'icon-form-login' },
+                { id: 'template-create-account', text: 'Create Account', leaf: true, iconCls: 'icon-form-register' },
+                { id: 'template-horizontal-create-account', text: 'Horizontal Create Account', leaf: true, iconCls: 'icon-form-register' },
+                { id: 'template-reset-password', text: 'Reset Password', leaf: true, iconCls: 'icon-direct-named' }
             ]
         };
     }
