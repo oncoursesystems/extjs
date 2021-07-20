@@ -50,7 +50,19 @@ Ext.define('Ext.grid.column.Number', {
          * A format string as used by {@link Ext.util.Format#number} to format values
          * for this column.
          */
-        format: null
+        format: null,
+
+        summaries: {
+            sum: true,
+            min: true,
+            max: true,
+            average: true,
+            variance: true,
+            variancep: true,
+            stddev: true,
+            stddevp: true
+        },
+        groupable: false
     },
 
     cell: {

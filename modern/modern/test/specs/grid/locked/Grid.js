@@ -93,7 +93,7 @@ topSuite('Ext.grid.locked.Grid', [
         grid = new Ext.grid.locked.Grid(Ext.apply({
             renderTo: Ext.getBody(),
             width: 600,
-            height: defaultHeight,
+            height: defaultHeight
         }, cfg));
         store = grid.getStore();
         setColMap();

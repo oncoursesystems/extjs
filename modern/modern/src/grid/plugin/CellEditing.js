@@ -313,7 +313,8 @@ Ext.define('Ext.grid.plugin.CellEditing', {
         // triggerEvent happens in a cell editor, and the event bubbles up to the
         // NavigationModel which will try to activate the owning cell.
         // In this case, we return the location to indicate that it's still a successful edit.
-        if (activeEditor && activeEditor.$activeLocation.cell === location.cell) {
+        if (activeEditor && activeEditor.editing &&
+            activeEditor.$activeLocation.cell === location.cell) {
             return activeEditor.$activeLocation;
         }
         else {

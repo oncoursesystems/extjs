@@ -15,4 +15,3 @@ npm install --save @sencha/ext
 This will need [@sencha/ext-build](https://github.com/sencha/extjs-reactor/tree/2.0.x-dev/packages/ext-build) to work.
 
 This will be included if you generate the application using [@sencha/ext-gen](https://github.com/sencha/extjs-reactor/tree/2.0.x-dev/packages/ext-gen)
-

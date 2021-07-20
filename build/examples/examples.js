@@ -113,12 +113,6 @@ Ext.samples = {
                     "desc": "Grouping grid with cell editing and custom dynamic summary calculations"
                 },
                 {
-                    "text": "Grid with Buffered Store",
-                    "url": "classic/grid/buffered-store.html",
-                    "icon": "grid-infinite-scroll",
-                    "desc": "Sample grid which scrolls through thousands of rows dynamically loaded from a server"
-                },
-                {
                     "text": "Grid with Live Search Capability",
                     "url": "classic/grid/live-search-grid.html",
                     "icon": "grid-live-search",
@@ -149,12 +143,6 @@ Ext.samples = {
                     "desc": "A Grid that generate CRUD requests to the server using JsonP"
                 },
                 {
-                    "text": "Buffered Scrolling",
-                    "url": "classic/grid/buffer-grid.html",
-                    "icon": "buffer-grid",
-                    "desc": "A grid that uses a virtualized scrolling system to handle very large data sets."
-                },
-                {
                     "text": "Grid From Markup",
                     "url": "classic/grid/transform-dom.html",
                     "icon": "grid-transform",
@@ -165,12 +153,6 @@ Ext.samples = {
                     "url": "classic/grid/locking-group-summary-grid.html",
                     "icon": "grid-summary",
                     "desc": "Grouping grid with cell editing, column locking, and dynamic summary calculations."
-                },
-                {
-                    "text": "Grid with Filtered and Buffered Store",
-                    "url": "classic/grid/filtered-buffered-store.html",
-                    "icon": "grid-infinite-scroll",
-                    "desc": "A grid that shows how to apply filters to a buffered store."
                 },
                 {
                     "text": "Locking Grouped Header Summary Grid",

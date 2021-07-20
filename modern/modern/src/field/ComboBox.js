@@ -779,8 +779,22 @@ Ext.define('Ext.field.ComboBox', {
         var me = this,
             inputValue = me.getInputValue(),
             value = me.getValue(),
-            selection = me.getSelection();
+            selection = me.getSelection(),
+            valueField,
+            displayField,
+            displayValueField;
 
+        // displayValueField is the field wherein combobox values are set/selected
+        // in case of displayTpl check the entire diplayTpl value 
+        // else just check the value of displayField
+        if (me.getDisplayTpl() && selection) {
+            valueField = selection.get(this.getValueField());
+            displayField = selection.get(this.getDisplayField());
+            displayValueField = me.getDisplayTpl().apply({ abbr: valueField, name: displayField });
+        }
+        else {
+            displayValueField = selection && selection.get(this.getDisplayField());
+        }
         // Don't want to callParent here, we need custom handling
 
         if (me.doFilterTask) {
@@ -809,7 +823,8 @@ Ext.define('Ext.field.ComboBox', {
                 // Prevent an issue where we have duplicate display values with
                 // different underlying values. If the typed value exactly matches
                 // the selection Record, we must not do a syncValue.
-                if (!selection || selection.get(this.getDisplayField()) !== inputValue) {
+
+                if (!selection || displayValueField !== inputValue) {
                     me.syncMode = 'input';
                     me.syncValue();
 

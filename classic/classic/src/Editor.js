@@ -402,6 +402,7 @@ Ext.define('Ext.Editor', {
             if (!isResuming) {
                 field.suspendEvents();
                 field.setValue(value);
+                field.resetOriginalValue();
                 field.resumeEvents();
             }
 

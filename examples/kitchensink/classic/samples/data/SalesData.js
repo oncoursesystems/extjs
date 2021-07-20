@@ -19,7 +19,7 @@ Ext.define('KitchenSink.data.SalesData', {
             return data[k];
         },
         randomDate = function(start, end) {
-            return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+            return Ext.Date.clearTime(new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())));
         },
         i;
 
@@ -30,7 +30,7 @@ Ext.define('KitchenSink.data.SalesData', {
             country: randomItem(countries),
             person: randomItem(persons),
             date: randomDate(new Date(2012, 0, 1), new Date()),
-            value: Math.random() * 1000 + 1,
+            value: Ext.Number.toFixed(Math.random() * 1000 + 1, 2),
             quantity: Math.floor(Math.random() * 30 + 1)
         });
     }

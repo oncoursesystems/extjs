@@ -575,6 +575,16 @@ function() {
                 tagField.setValue([1, 2]);
                 expect(tagField.inputEl).not.toHaveCls(tagField.emptyCls);
             });
+
+            it("should display empty text when all the tags are removed", function() {
+                makeField({ emptyText: 'placeholder text' });
+                tagField.setValue([1, 2]);
+                expect(tagField.emptyClsElements[2].dom.style.display).toBe('none');
+                clickTag(1, true);
+                clickTag(2, true);
+                expect(tagField.emptyClsElements[2].dom.style.display).toBe('');
+                expect(tagField.emptyClsElements[2].dom.innerText).toBe(tagField.emptyText);
+            });
         });
     });
 

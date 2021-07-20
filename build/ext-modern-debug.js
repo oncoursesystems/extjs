@@ -1,7 +1,7 @@
 /*
-This file is part of Ext JS 7.3.1.27
+This file is part of Ext JS 7.4.0.42
 
-Copyright (c) 2011-2020 Sencha Inc
+Copyright (c) 2011-2021 Sencha Inc
 
 license: http://www.sencha.com/legal/sencha-software-license-agreement
 Contact: http://www.sencha.com/contact
@@ -14,7 +14,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Version: 7.3.1.27 Build date: 2020-10-12 05:00:31 (7df4903278e962b811acb61ea0baeb10d8caabc1)
+Version: 7.4.0.42 Build date: 2021-05-04 14:42:24 (669f575eb1592a96aa3fb58a602faf3b96d819ea)
 
 */
 // @tag core
@@ -7368,8 +7368,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '7.3.1.27');
-        Ext.setVersion('core', '7.3.1.27');
+        Ext.setVersion('ext', '7.4.0.42');
+        Ext.setVersion('core', '7.4.0.42');
     }
 })(Ext.manifest);
 
@@ -39782,6 +39782,16 @@ Ext.define('Ext.util.Filter', {
                     }
                 }
                 return me.regex ? me.regex.test(candidate) : false;
+            },
+            empty: function(candidate) {
+                var v = this._filterValue,
+                    v2 = this.getCandidateValue(candidate, v, true);
+                return v2 == null || v2 === '';
+            },
+            nempty: function(candidate) {
+                var v = this._filterValue,
+                    v2 = this.getCandidateValue(candidate, v, true);
+                return v2 != null && v2 !== '';
             }
         });
     
@@ -41152,7 +41162,15 @@ Ext.define('Ext.util.Grouper', {
         groupFn: null,
         
         
-        sortProperty: null
+        sortProperty: null,
+        
+        formatter: false,
+        
+        blankValue: ''
+    },
+    _eventToMethodMap: {
+        propertychange: 'onGrouperPropertyChange',
+        directionchange: 'onGrouperDirectionChange'
     },
     constructor: function(config) {
         
@@ -41171,7 +41189,7 @@ Ext.define('Ext.util.Grouper', {
     
     getGroupValue: function(item) {
         var groupValue = item.$collapsedGroupPlaceholder ? item.$groupValue : this._groupFn(item);
-        return (groupValue != null) ? groupValue : '';
+        return (groupValue != null && groupValue !== '') ? groupValue : this.getBlankValue();
     },
     sortFn: function(item1, item2) {
         var me = this,
@@ -41205,15 +41223,113 @@ Ext.define('Ext.util.Grouper', {
         return (lhs > rhs) ? 1 : (lhs < rhs ? -1 : 0);
     },
     standardGroupFn: function(item) {
-        var root = this._root;
-        return (root ? item[root] : item)[this._property];
+        var me = this,
+            root = me._root,
+            formatter = me._formatter,
+            value = (root ? item[root] : item)[me._property];
+        if (formatter) {
+            value = formatter(value, me);
+        }
+        return value;
     },
     updateSorterFn: function() {},
     
-    updateProperty: function() {
+    updateProperty: function(data, oldData) {
+        var me = this;
         
-        if (!this.getGroupFn()) {
-            this.setGroupFn(this.standardGroupFn);
+        if (!me.getGroupFn()) {
+            me.setGroupFn(me.standardGroupFn);
+        }
+        me.notify('propertychange', [
+            data,
+            oldData
+        ]);
+    },
+    updateDirection: function(data, oldData) {
+        this.callParent([
+            data,
+            oldData
+        ]);
+        this.notify('directionchange', [
+            data,
+            oldData
+        ]);
+    },
+    applyFormatter: function(value) {
+        var parser, format;
+        if (!value) {
+            return null;
+        }
+        parser = Ext.app.bind.Parser.fly(value);
+        format = parser.compileFormat();
+        parser.release();
+        return function(v, scope) {
+            return format(v, scope);
+        };
+    },
+    addObserver: function(observer) {
+        var me = this,
+            observers = me.observers;
+        if (!observers) {
+            me.observers = observers = [];
+        }
+        if (!Ext.Array.contains(observers, observer)) {
+            
+            if (me.notifying) {
+                me.observers = observers = observers.slice(0);
+            }
+            observers[observers.length] = observer;
+        }
+        me.dirtyObservers = true;
+    },
+    prioritySortFn: function(o1, o2) {
+        var a = +o1.observerPriority,
+            b = +o2.observerPriority;
+        if (isNaN(a)) {
+            a = 0;
+        }
+        if (isNaN(b)) {
+            b = 0;
+        }
+        return a - b;
+    },
+    removeObserver: function(observer) {
+        var observers = this.observers;
+        if (observers) {
+            Ext.Array.remove(observers, observer);
+            this.dirtyObservers = true;
+        }
+    },
+    clearObservers: function() {
+        this.observers = null;
+    },
+    notify: function(eventName, args) {
+        var me = this,
+            observers = me.observers,
+            methodName = me._eventToMethodMap[eventName],
+            added = 0,
+            index, length, method, observer;
+        args = args || [];
+        if (observers && methodName) {
+            me.notifying = true;
+            if (me.dirtyObservers && observers.length > 1) {
+                
+                
+                
+                Ext.Array.sort(observers, me.prioritySortFn);
+                me.dirtyObservers = false;
+            }
+            for (index = 0 , length = observers.length; index < length; ++index) {
+                method = (observer = observers[index])[methodName];
+                if (method) {
+                    if (!added++) {
+                        
+                        args.unshift(me);
+                    }
+                    method.apply(observer, args);
+                }
+            }
+            me.notifying = false;
         }
     }
 });
@@ -41239,6 +41355,8 @@ Ext.define('Ext.util.Collection', {
         filters: null,
         
         grouper: null,
+        
+        groupers: null,
         
         groups: null,
         
@@ -41308,7 +41426,8 @@ Ext.define('Ext.util.Collection', {
         var me = this,
             filters = me._filters,
             sorters = me._sorters,
-            groups = me._groups;
+            groupers = me._groupers,
+            monitored = me.lastMonitoredGroupers;
         if (filters) {
             filters.destroy();
             me._filters = null;
@@ -41322,10 +41441,14 @@ Ext.define('Ext.util.Collection', {
                 sorters.destroy();
             }
         }
-        if (groups) {
-            groups.destroy();
-            me._groups = null;
+        if (monitored) {
+            monitored.removeGroupersObserver(me);
         }
+        if (groupers) {
+            groupers.destroy();
+            me._groupers = null;
+        }
+        me.setGroups(null);
         me.setSource(null);
         me.observers = me.items = me.map = null;
         me.callParent();
@@ -42596,6 +42719,8 @@ Ext.define('Ext.util.Collection', {
         remove: 'onCollectionRemove',
         beforesort: 'beforeCollectionSort',
         sort: 'onCollectionSort',
+        beforegroup: 'onCollectionBeforeGroup',
+        group: 'onCollectionGroup',
         filter: 'onCollectionFilter',
         filteradd: 'onCollectionFilterAdd',
         updatekey: 'onCollectionUpdateKey'
@@ -42653,8 +42778,8 @@ Ext.define('Ext.util.Collection', {
         return ret;
     },
     applyGrouper: function(grouper) {
-        if (grouper) {
-            grouper = this.getSorters().decodeSorter(grouper, Ext.util.Grouper);
+        if (grouper && !grouper.isGrouper) {
+            grouper = this.getGroupers(true).decodeGrouper(grouper);
         }
         return grouper;
     },
@@ -42921,55 +43046,38 @@ Ext.define('Ext.util.Collection', {
     },
     createSortFn: function() {
         var me = this,
-            grouper = me.getGrouper(),
+            groupers = me.getGroupers(false),
             sorters = me.getSorters(false),
-            sorterFn = sorters ? sorters.getSortFn() : null;
-        if (!grouper) {
+            sorterFn = sorters ? sorters.getSortFn() : null,
+            groupSorterFn = groupers ? groupers.getSortFn() : null;
+        if (!groupers) {
             return sorterFn;
         }
         return function(lhs, rhs) {
-            var ret = grouper.sort(lhs, rhs);
+            var ret = groupSorterFn(lhs, rhs);
             if (!ret && sorterFn) {
                 ret = sorterFn(lhs, rhs);
             }
             return ret;
         };
     },
+    
+    getGrouper: function() {
+        var groupers = this.getGroupers(false);
+        return (groupers && groupers.length ? groupers.getAt(0) : null);
+    },
     updateGrouper: function(grouper) {
-        var me = this,
-            groups = me.getGroups(),
-            sorters = me.getSorters(),
-            populate;
-        me.onSorterChange();
-        me.grouped = !!grouper;
+        var groupers = this.getGroupers(false);
         if (grouper) {
-            if (me.getTrackGroups()) {
-                if (!groups) {
-                    groups = new Ext.util.GroupCollection({
-                        
-                        id: me.getId() + '-groups' + (me.generation || ''),
-                        
-                        itemRoot: me.getRootProperty(),
-                        groupConfig: me.getGroupConfig()
-                    });
-                    groups.$groupable = me;
-                    me.setGroups(groups);
-                }
-                groups.setGrouper(grouper);
-                populate = true;
+            if (!groupers) {
+                groupers = this.getGroupers(true);
             }
+            groupers.clear();
+            groupers.add(grouper);
         } else {
-            if (groups) {
-                me.removeObserver(groups);
-                groups.destroy();
-            }
-            me.setGroups(null);
-        }
-        if (!sorters.updating) {
-            me.onEndUpdateSorters(sorters);
-        }
-        if (populate) {
-            groups.onCollectionRefresh(me);
+            
+            
+            this.setGroupers(null);
         }
     },
     updateSorters: function(newSorters, oldSorters) {
@@ -43008,6 +43116,126 @@ Ext.define('Ext.util.Collection', {
             me.sorted = !!is;
             me.onSortChange(sorters);
         }
+    },
+    
+    getGroupers: function(autoCreate) {
+        var ret = this._groupers;
+        if (!ret && autoCreate !== false) {
+            ret = new Ext.util.GrouperCollection({
+                rootProperty: this.getRootProperty()
+            });
+            this.setGroupers(ret);
+        }
+        return ret;
+    },
+    applyGroupers: function(groupers, collection) {
+        if (groupers == null || (groupers && groupers.isGrouperCollection)) {
+            return groupers;
+        }
+        if (groupers) {
+            if (!collection) {
+                collection = this.getGroupers();
+            }
+            collection.splice(0, collection.length, groupers);
+        }
+        return collection;
+    },
+    
+    updateGroupers: function(newGroupers, oldGroupers) {
+        var me = this,
+            groups = me.getGroups(),
+            sorters = me.getSorters(),
+            populate;
+        if (oldGroupers) {
+            oldGroupers.un('endupdate', 'onEndUpdateGroupers', me);
+        }
+        if (newGroupers) {
+            if (me.getTrackGroups()) {
+                if (!groups) {
+                    groups = new Ext.util.GroupCollection({
+                        itemRoot: me.getRootProperty(),
+                        autoGroup: me.getAutoGroup(),
+                        autoSort: me.getAutoSort(),
+                        groupConfig: me.getGroupConfig()
+                    });
+                    me.setGroups(groups);
+                }
+                populate = true;
+            }
+            newGroupers.on('endupdate', 'onEndUpdateGroupers', me, {
+                prepend: true
+            });
+        } else {
+            me.setGroups(null);
+        }
+        me.onEndUpdateGroupers(newGroupers);
+        if (!sorters.updating) {
+            me.onEndUpdateSorters(sorters);
+        }
+        if (populate) {
+            groups.onCollectionRefresh(me);
+        }
+    },
+    onEndUpdateGroupers: function(groupers) {
+        var me = this,
+            was = me.grouped,
+            sorters = me.getSorters(),
+            is = groupers && groupers.length > 0;
+        if (me.lastMonitoredGroupers) {
+            me.lastMonitoredGroupers.removeGroupersObserver(me);
+            me.lastMonitoredGroupers = null;
+        }
+        if (was || is) {
+            
+            
+            me.grouped = !!is;
+            
+            me.onSorterChange();
+            if (sorters && !sorters.updating) {
+                me.onEndUpdateSorters(groupers);
+            }
+            me.onGroupChange(groupers);
+            if (groupers) {
+                me.lastMonitoredGroupers = groupers;
+                groupers.addGroupersObserver(me);
+            }
+        }
+    },
+    onGrouperDirectionChange: function() {
+        var me = this;
+        
+        me.onEndUpdateSorters(me.getSorters());
+        me.notify('group', [
+            me.getGroupers(false)
+        ]);
+    },
+    onGroupChange: function(groupers) {
+        var me = this,
+            groups = me.getGroups();
+        if (groups) {
+            groups.onCollectionGroupersChanged(me);
+            me.groupItems();
+        } else {
+            me.notify('group', [
+                groupers
+            ]);
+        }
+    },
+    groupItems: function() {
+        var me = this,
+            groupers = me.getGroupers(false),
+            groups = me.getGroups();
+        me.notify('beforegroup', [
+            groupers
+        ]);
+        if (me.length && groups) {
+            groups.onCollectionRefresh(me);
+        }
+        
+        
+        me.notify('group', [
+            groupers
+        ]);
     },
     
     removeObserver: function(observer) {
@@ -43138,6 +43366,7 @@ Ext.define('Ext.util.Collection', {
     updateGroups: function(newGroups, oldGroups) {
         if (oldGroups) {
             this.removeObserver(oldGroups);
+            oldGroups.destroy();
         }
         if (newGroups) {
             this.addObserver(newGroups);
@@ -46110,11 +46339,18 @@ Ext.define('Ext.data.AbstractStore', {
             $value: false
         },
         
+        remoteSummary: {
+            lazy: true,
+            $value: false
+        },
+        
         groupField: undefined,
         
         groupDir: 'ASC',
         
         grouper: null,
+        
+        groupers: undefined,
         
         pageSize: 25,
         
@@ -46130,6 +46366,7 @@ Ext.define('Ext.data.AbstractStore', {
     isStore: true,
     
     updating: 0,
+    observerPriority: 0,
     constructor: function(config) {
         var me = this,
             storeId;
@@ -46389,6 +46626,8 @@ Ext.define('Ext.data.AbstractStore', {
             sorters = [],
             filters = me.getFilters(),
             grouper = me.getGrouper(),
+            groupers = [],
+            storeGroupers = me.getGroupers(false),
             filterState, hasState, result;
         
         me.getSorters().each(function(s) {
@@ -46409,6 +46648,11 @@ Ext.define('Ext.data.AbstractStore', {
         }
         if (grouper) {
             hasState = true;
+        } else if (storeGroupers) {
+            storeGroupers.each(function(g) {
+                groupers[groupers.length] = g.getState();
+                hasState = true;
+            });
         }
         
         if (hasState) {
@@ -46421,6 +46665,8 @@ Ext.define('Ext.data.AbstractStore', {
             }
             if (grouper) {
                 result.grouper = grouper.getState();
+            } else if (groupers.length) {
+                result.groupers = groupers;
             }
         }
         return result;
@@ -46430,7 +46676,8 @@ Ext.define('Ext.data.AbstractStore', {
         var me = this,
             stateSorters = state.sorters,
             stateFilters = state.filters,
-            stateGrouper = state.grouper;
+            stateGrouper = state.grouper,
+            stateGroupers = state.groupers;
         if (stateSorters) {
             me.getSorters().replaceAll(stateSorters);
         }
@@ -46441,6 +46688,8 @@ Ext.define('Ext.data.AbstractStore', {
         }
         if (stateGrouper) {
             me.setGrouper(stateGrouper);
+        } else if (stateGroupers) {
+            me.setGroupers(stateGroupers);
         }
     },
     
@@ -46572,29 +46821,115 @@ Ext.define('Ext.data.AbstractStore', {
     getGrouper: function() {
         return this.getData().getGrouper();
     },
-    
-    group: function(grouper, direction) {
+    setGrouper: function(grouper) {
         var me = this,
-            sorters = me.getSorters(false),
-            change = grouper || (sorters && sorters.length),
-            data = me.getData();
-        if (grouper && typeof grouper === 'string') {
-            grouper = {
-                property: grouper,
-                direction: direction || me.getGroupDir()
-            };
+            group = !me.isConfiguring || (me.isConfiguring && grouper);
+        if (group) {
+            me.usesGroupers = false;
+            me.group(grouper);
+        }
+    },
+    getGroupers: function(autoCreate) {
+        var data = this.getData();
+        return (data && data.isCollection) ? data.getGroupers(autoCreate) : null;
+    },
+    setGroupers: function(groupers) {
+        var me = this,
+            group = !me.isConfiguring || (me.isConfiguring && groupers);
+        if (group) {
+            me.usesGroupers = true;
+            me.group(groupers);
+        }
+    },
+    
+    group: function(groupers, direction) {
+        var me = this,
+            data = me.getData(),
+            colGroupers, grouper, newGroupers;
+        if (me.usesGroupers) {
+            me.fireEvent('beforegroupschange', me);
         }
         me.settingGroups = true;
+        colGroupers = data.getGroupers();
         
         
-        
-        if (grouper === data.getGrouper()) {
-            data.updateGrouper(grouper);
+        if (groupers) {
+            if (Ext.isArray(groupers)) {
+                newGroupers = groupers;
+            } else if (Ext.isObject(groupers)) {
+                newGroupers = [
+                    groupers
+                ];
+            } else if (Ext.isString(groupers)) {
+                grouper = colGroupers.get(groupers);
+                if (!grouper) {
+                    grouper = {
+                        property: groupers,
+                        direction: direction || me.getGroupDir()
+                    };
+                    newGroupers = [
+                        grouper
+                    ];
+                } else if (direction === undefined) {
+                    grouper.toggle();
+                } else {
+                    grouper.setDirection(direction);
+                }
+            }
+            
+            if (newGroupers && newGroupers.length) {
+                colGroupers.replaceAll(newGroupers);
+            }
         } else {
-            data.setGrouper(grouper);
+            data.setGrouper(null);
+            data.setGroupers(null);
         }
         delete me.settingGroups;
-        if (change) {
+    },
+    fireGroupChange: function(grouper) {
+        var me = this;
+        if (!me.isConfiguring && !me.destroying && !me.destroyed) {
+            if (me.usesGroupers) {
+                me.fireEvent('groupschange', me, me.getGroupers(false));
+            } else {
+                me.fireGroupChangeEvent(grouper || me.getGrouper());
+            }
+        }
+    },
+    fireGroupChangeEvent: function(grouper) {
+        this.fireEvent('groupchange', this, grouper);
+    },
+    
+    clearGrouping: function() {
+        this.group(null);
+    },
+    getGroupField: function() {
+        var groupers = this.getGroupers(false),
+            group = '';
+        if (groupers && groupers.length) {
+            group = groupers.getAt(0).getProperty();
+        }
+        return group;
+    },
+    
+    isGrouped: function() {
+        var groupers = this.getGroupers(false);
+        return !!(groupers && groupers.length > 0);
+    },
+    
+    getGroups: function() {
+        return this.getData().getGroups();
+    },
+    onGroupersEndUpdate: function() {
+        var me = this,
+            data = me.getData(),
+            groupers = data.getGroupers(false),
+            sorters = me.getSorters(false);
+        
+        if (groupers) {
+            groupers.addGroupersObserver(me);
+        }
+        if ((groupers && groupers.length) || (sorters && sorters.length)) {
             if (me.getRemoteSort()) {
                 if (!me.isInitializing) {
                     me.load({
@@ -46610,44 +46945,32 @@ Ext.define('Ext.data.AbstractStore', {
                 me.fireEvent('refresh', me);
                 me.fireGroupChange();
             }
-        } else 
-        
-        {
+        } else {
             me.fireGroupChange();
         }
     },
-    fireGroupChange: function(grouper) {
+    onGrouperDirectionChange: function() {
         var me = this;
-        if (!me.isConfiguring && !me.destroying && !me.destroyed) {
-            me.fireGroupChangeEvent(grouper || me.getGrouper());
+        me.fireEvent('beforegroupschange', me);
+        if (me.getRemoteSort()) {
+            if (!me.isInitializing) {
+                me.load({
+                    scope: me,
+                    callback: function() {
+                        me.fireGroupChange();
+                    }
+                });
+            }
+        } else 
+        {
+            Ext.asap(me.delayedDirectionChange, me);
         }
     },
-    fireGroupChangeEvent: function(grouper) {
-        this.fireEvent('groupchange', this, grouper);
-    },
-    
-    clearGrouping: function() {
-        this.group(null);
-    },
-    getGroupField: function() {
-        var grouper = this.getGrouper(),
-            group = '';
-        if (grouper) {
-            group = grouper.getProperty();
+    delayedDirectionChange: function() {
+        if (this.destroyed) {
+            return;
         }
-        return group;
-    },
-    
-    isGrouped: function() {
-        return !!this.getGrouper();
-    },
-    applyGrouper: function(grouper) {
-        this.group(grouper);
-        return this.getData().getGrouper();
-    },
-    
-    getGroups: function() {
-        return this.getData().getGroups();
+        this.fireGroupChange();
     },
     onEndUpdate: Ext.emptyFn,
     privates: {
@@ -47149,6 +47472,10 @@ Ext.define('Ext.data.operation.Read', {
         
         sorters: undefined,
         
+        groupers: undefined,
+        
+        summaries: undefined,
+        
         grouper: undefined,
         
         start: undefined,
@@ -47273,6 +47600,52 @@ Ext.define('Ext.data.validator.Validator', {
 }, function(Validator) {
     Ext.Factory.validator = Ext.Factory.dataValidator;
 });
+
+
+Ext.define('Ext.data.summary.Base', {
+    mixins: [
+        Ext.mixin.Factoryable
+    ],
+    alias: 'data.summary.base',
+    
+    isAggregator: true,
+    factoryConfig: {
+        defaultType: 'base',
+        cacheable: true
+    },
+    
+    text: 'Custom',
+    constructor: function(config) {
+        var calculate = config && config.calculate;
+        if (calculate) {
+            config = Ext.apply({}, config);
+            delete config.calculate;
+            this.calculate = calculate;
+        }
+        this.initConfig(config);
+    },
+    
+    
+    extractValue: function(record, property, root) {
+        var ret;
+        if (record) {
+            if (root) {
+                record = record[root];
+            }
+            ret = record[property];
+        }
+        return ret;
+    }
+}, function() {
+    Ext.Factory.on('dataSummary', function(factory, config) {
+        if (typeof config === 'function') {
+            return factory({
+                calculate: config
+            });
+        }
+    });
+});
+
 
 
 Ext.define('Ext.data.field.Field', {
@@ -48138,11 +48511,12 @@ Ext.define('Ext.data.Model', {
         for (i = 0; i < len; ++i) {
             field = fields[i];
             summary = field.getSummary();
-            if (summary) {
-                result = result || {};
-                name = field.name;
-                prop = field.summaryField || name;
-                result[name] = summary.calculate(records, prop, 'data', 0, recLen);
+            result = result || {};
+            name = field.name;
+            prop = field.summaryField || name;
+            if (name !== 'id') {
+                
+                result[name] = summary ? summary.calculate(records, prop, 'data', 0, recLen) : undefined;
             }
         }
         if (result) {
@@ -49010,9 +49384,33 @@ Ext.define('Ext.data.Model', {
                     isSummaryModel: true
                 });
                 summaryModel.isSummaryModel = true;
-                me.summaryModel = proto.summaryModel = summaryModel;
+                
+                
+                
+                me.summaryModel = summaryModel;
             }
             return summaryModel || null;
+        },
+        
+        setSummaryField: function(name, summary) {
+            var field = this.getField(name);
+            if (!field) {
+                this.addFields([
+                    {
+                        name: name,
+                        type: 'auto',
+                        summary: summary,
+                        doneSummary: (summary && summary.isAggregator)
+                    }
+                ]);
+            } else {
+                if (field.doneSummary && summary && summary.isAggregator) {
+                    field.summary = summary;
+                } else {
+                    field.summary = summary;
+                    field.doneSummary = false;
+                }
+            }
         },
         
         addFields: function(newFields) {
@@ -51119,6 +51517,7 @@ Ext.define('Ext.data.proxy.Memory', {
             }),
             records = resultSet.getRecords(),
             sorters = operation.getSorters(),
+            groupers = operation.getGroupers(),
             grouper = operation.getGrouper(),
             filters = operation.getFilters(),
             start = operation.getStart(),
@@ -51138,7 +51537,11 @@ Ext.define('Ext.data.proxy.Memory', {
                 resultSet.setTotal(records.length);
             }
             
-            if (grouper) {
+            if (groupers && groupers.length) {
+                
+                
+                sorters = sorters ? groupers.concat(sorters) : groupers;
+            } else if (grouper) {
                 
                 
                 sorters = sorters ? sorters.concat(grouper) : sorters;
@@ -51794,15 +52197,205 @@ Ext.define('Ext.util.Group', {
     extend: Ext.util.Collection,
     isGroup: true,
     config: {
+        
+        level: 1,
+        
+        path: null,
+        
+        data: null,
+        
+        grouper: null,
+        
+        label: null,
+        
         groupKey: null,
-        groupValue: null
+        
+        groupValue: null,
+        
+        parent: null
     },
+    
+    pathSeparator: '<||>',
     
     
     
     
     $endUpdatePriority: 2001,
-    manageSorters: false
+    manageSorters: false,
+    constructor: function(config) {
+        this.callParent([
+            config
+        ]);
+        this.on('remove', 'onGroupItemsRemove', this);
+    },
+    destroy: function() {
+        var parent = this.getParent(),
+            groups;
+        if (parent) {
+            
+            if (parent.isGroup) {
+                groups = parent.getGroups();
+            } else if (parent.isGroupCollection) {
+                groups = parent;
+            }
+            if (groups) {
+                groups.remove(this);
+            }
+        }
+        this.callParent();
+    },
+    clear: function() {
+        var groups = this.getGroups(),
+            length, i, ret;
+        ret = this.callParent();
+        if (groups) {
+            length = groups.length;
+            for (i = 0; i < length; i++) {
+                groups.items[i].clear();
+            }
+            groups.clear();
+        }
+        return ret;
+    },
+    getData: function() {
+        var data = this._data;
+        if (!data) {
+            data = {};
+            this.setData(data);
+        }
+        return data;
+    },
+    
+    setCustomData: function(property, value) {
+        this.getData()[property] = value;
+    },
+    
+    getCustomData: function(property) {
+        return this.getData()[property];
+    },
+    updateLabel: function(label) {
+        var me = this,
+            grouper = me.getGrouper();
+        if (grouper) {
+            me.setCustomData(grouper.getProperty(), label);
+        } else {
+            me.setData({});
+        }
+        me.setGroupValue(label);
+    },
+    
+    getGrouper: function() {
+        return this._grouper;
+    },
+    
+    updateGrouper: Ext.emptyFn,
+    updateSorters: function(sorters, oldSorters) {
+        var children = this.getGroups(),
+            length, i;
+        this.callParent([
+            sorters,
+            oldSorters
+        ]);
+        if (!children || this.ejectTime) {
+            return;
+        }
+        length = children.length;
+        for (i = 0; i < length; i++) {
+            children.items[i].setSorters(sorters);
+        }
+    },
+    updateGroupKey: function() {
+        this.refreshPath();
+    },
+    updateParent: function() {
+        this.refreshPath();
+    },
+    refreshPath: function() {
+        var me = this,
+            level = 1,
+            parent, path;
+        if (!me.refreshingPath) {
+            me.refreshingPath = true;
+            parent = me.getParent();
+            path = me.getGroupKey();
+            if (parent && parent.isGroup) {
+                level += parent.getLevel();
+                path = parent.getPath() + me.pathSeparator + path;
+            }
+            me.setLevel(level);
+            me.setPath(path);
+            me.refreshingPath = false;
+        }
+    },
+    
+    isFirst: function() {
+        var parent = this.getParent(),
+            collection = parent ? (parent.isGroup ? parent.getGroups() : parent) : null,
+            first = false;
+        if (collection) {
+            first = (collection.indexOf(this) === 0);
+        }
+        return first;
+    },
+    
+    isLast: function() {
+        var parent = this.getParent(),
+            collection = parent ? (parent.isGroup ? parent.getGroups() : parent) : null,
+            last = false;
+        if (collection) {
+            last = (collection.indexOf(this) === collection.length - 1);
+        }
+        return last;
+    },
+    groupItems: function() {
+        if (!this.ejectTime) {
+            return this.callParent();
+        }
+    },
+    sortItems: function() {
+        if (!this.ejectTime) {
+            return this.callParent();
+        }
+    },
+    eject: function() {
+        var me = this;
+        me.ejectTime = Ext.now();
+        me.setConfig({
+            sorters: null,
+            groupers: null,
+            parent: null,
+            grouper: null,
+            groups: null
+        });
+    },
+    privates: {
+        
+        canOwnItem: function(item) {
+            
+            
+            return this.getGroupKey() === this.getGrouper().getGroupString(item);
+        },
+        removeItems: function(items) {
+            var groups = this.getGroups(),
+                len = groups ? groups.length : 0,
+                removeGroups = [],
+                i, group;
+            for (i = 0; i < len; ++i) {
+                group = groups.items[i];
+                group.remove(items);
+                if (!group.length) {
+                    removeGroups.push(group);
+                }
+            }
+            if (removeGroups.length) {
+                
+                groups.remove(removeGroups);
+            }
+        },
+        onGroupItemsRemove: function(collection, info) {
+            this.removeItems(info.items);
+        }
+    }
 });
 
 
@@ -51810,23 +52403,108 @@ Ext.define('Ext.data.Group', {
     extend: Ext.util.Group,
     isDataGroup: true,
     store: null,
+    isCollapsed: false,
+    updateParent: function(parent, oldParent) {
+        if (!this.isCollapsed && parent && parent.isGroup) {
+            this.isCollapsed = parent.isCollapsed;
+        }
+        this.callParent([
+            parent,
+            oldParent
+        ]);
+    },
+    
+    expand: function(includeChildren) {
+        this.doExpandCollapse(true, includeChildren);
+    },
+    
+    collapse: function(includeChildren) {
+        this.doExpandCollapse(false, includeChildren);
+    },
+    doExpandCollapse: function(expanded, includeChildren) {
+        var groups = this.getGroups(),
+            len, i;
+        this.isCollapsed = !expanded;
+        if (includeChildren && groups) {
+            len = groups.length;
+            for (i = 0; i < len; i++) {
+                groups.items[i].doExpandCollapse(expanded, includeChildren);
+            }
+        }
+    },
+    
+    toggleCollapsed: function() {
+        this.doExpandCollapse(this.isCollapsed);
+    },
+    
+    getGroupRecord: function() {
+        var record = this.getNewSummaryRecord('groupRecord', true);
+        record.isGroup = true;
+        return record;
+    },
     
     getSummaryRecord: function() {
+        var record = this.getNewSummaryRecord('summaryRecord', true);
+        record.isSummary = true;
+        return record;
+    },
+    getNewSummaryRecord: function(property, calculate) {
         var me = this,
-            summaryRecord = me.summaryRecord,
+            summaryRecord = me[property],
             store = me.store,
             generation = store.getData().generation,
-            M, T;
+            M, T, idProperty;
         if (!summaryRecord) {
             M = store.getModel();
             T = M.getSummaryModel();
-            me.summaryRecord = summaryRecord = new T();
+            me[property] = summaryRecord = new T();
+            idProperty = M.idField.name;
+            summaryRecord.data[idProperty] = summaryRecord.id = M.identifier.generate();
+            summaryRecord.group = me;
+            summaryRecord.commit();
         }
-        if (!summaryRecord.isRemote && summaryRecord.summaryGeneration !== generation) {
+        if (!store.getRemoteSummary() && !summaryRecord.isRemote && summaryRecord.summaryGeneration !== generation && calculate === true) {
             summaryRecord.calculateSummary(me.items);
             summaryRecord.summaryGeneration = generation;
+        } else if (store.getRemoteSummary() && summaryRecord.isRemote) {
+            
+            me.fixRemoteSummary(summaryRecord);
         }
+        summaryRecord.isNonData = true;
         return summaryRecord;
+    },
+    
+    fixRemoteSummary: function(summaryRecord) {
+        var fields = summaryRecord.getFields(),
+            len = fields.length,
+            i, result, summary, name, field;
+        for (i = 0; i < len; ++i) {
+            field = fields[i];
+            summary = field.getSummary();
+            result = result || {};
+            name = field.name;
+            if (name !== 'id' && !summary) {
+                result[name] = null;
+            }
+        }
+        if (result) {
+            summaryRecord.set(result, summaryRecord._commitOptions);
+        }
+    },
+    recalculateSummaries: function() {
+        var items = this.items;
+        this.getGroupRecord().calculateSummary(items);
+        this.getSummaryRecord().calculateSummary(items);
+    },
+    eject: function() {
+        var me = this;
+        me.callParent();
+        if (me.groupRecord) {
+            me.groupRecord.summaryGeneration = 0;
+        }
+        if (me.summaryRecord) {
+            me.summaryRecord.summaryGeneration = 0;
+        }
     }
 });
 
@@ -51897,10 +52575,15 @@ Ext.define('Ext.data.LocalStore', {
             summaryRecord = me.summaryRecord,
             data = me.getData(),
             generation = data.generation,
-            T;
+            M, T, idProperty;
         if (!summaryRecord) {
-            T = me.getModel().getSummaryModel();
+            M = me.getModel();
+            T = M.getSummaryModel();
             me.summaryRecord = summaryRecord = new T();
+            idProperty = M.idField.name;
+            summaryRecord.data[idProperty] = summaryRecord.id = M.identifier.generate();
+            summaryRecord.commit();
+            summaryRecord.isNonData = true;
         }
         if (!summaryRecord.isRemote && summaryRecord.summaryGeneration !== generation) {
             summaryRecord.calculateSummary(data.items);
@@ -51925,6 +52608,12 @@ Ext.define('Ext.data.LocalStore', {
     
     onCollectionFilter: function() {
         this.onFilterEndUpdate();
+    },
+    
+    
+    
+    onCollectionGroup: function() {
+        this.onGroupersEndUpdate();
     },
     onGrouperChange: function(grouper) {
         this.callObservers('GrouperChange', [
@@ -52209,6 +52898,8 @@ Ext.define('Ext.data.proxy.Server', {
         
         groupParam: 'group',
         
+        summaryParam: 'summary',
+        
         groupDirectionParam: 'groupDir',
         
         sortParam: 'sort',
@@ -52411,6 +53102,7 @@ Ext.define('Ext.data.proxy.Server', {
         
         var me = this,
             params = {},
+            groupers = operation.getGroupers(),
             grouper = operation.getGrouper(),
             sorters = operation.getSorters(),
             filters = operation.getFilters(),
@@ -52427,7 +53119,9 @@ Ext.define('Ext.data.proxy.Server', {
             sortParam = me.getSortParam(),
             filterParam = me.getFilterParam(),
             directionParam = me.getDirectionParam(),
-            hasGroups, index;
+            summaries = operation.getSummaries(),
+            summaryParam = me.getSummaryParam(),
+            hasGrouper, hasGroupers, index;
         if (pageParam && page) {
             params[pageParam] = page;
         }
@@ -52437,28 +53131,47 @@ Ext.define('Ext.data.proxy.Server', {
         if (limitParam && limit) {
             params[limitParam] = limit;
         }
-        hasGroups = groupParam && grouper;
-        if (hasGroups) {
+        if (summaryParam && summaries && summaries.length > 0) {
+            params[summaryParam] = me.encodeFields(summaries);
+        }
+        hasGrouper = groupParam && grouper;
+        hasGroupers = groupParam && groupers && groupers.length;
+        
+        
+        if (hasGrouper || hasGroupers) {
             
             if (simpleGroupMode) {
-                params[groupParam] = grouper.getProperty();
-                
-                if (groupDirectionParam === groupParam) {
-                    params[groupParam] += ' ' + grouper.getDirection();
+                if (hasGrouper) {
+                    params[groupParam] = grouper.getProperty();
+                    
+                    if (groupDirectionParam === groupParam) {
+                        params[groupParam] += ' ' + grouper.getDirection();
+                    } else {
+                        params[groupDirectionParam] = grouper.getDirection();
+                    }
                 } else {
-                    params[groupDirectionParam] = grouper.getDirection();
+                    for (index = 0; index < groupers.length; index++) {
+                        
+                        if (groupDirectionParam === groupParam) {
+                            params[groupParam] = Ext.Array.push(params[groupParam] || [], groupers[index].getProperty() + ' ' + groupers[index].getDirection());
+                        } else {
+                            params[groupParam] = Ext.Array.push(params[groupParam] || [], groupers[index].getProperty());
+                            params[groupDirectionParam] = Ext.Array.push(params[groupDirectionParam] || [], groupers[index].getDirection());
+                        }
+                    }
                 }
             } else {
-                params[groupParam] = me.encodeSorters([
+                params[groupParam] = hasGrouper ? me.encodeSorters([
                     grouper
-                ], true);
+                ], true) : me.encodeSorters(groupers);
             }
         }
+        
         
         if (sortParam && sorters && sorters.length > 0) {
             if (simpleSortMode) {
                 
-                for (index = (sorters.length > 1 && hasGroups) ? 1 : 0; index < sorters.length; index++) {
+                for (index = 0; index < sorters.length; index++) {
                     
                     if (directionParam === sortParam) {
                         params[sortParam] = Ext.Array.push(params[sortParam] || [], sorters[index].getProperty() + ' ' + sorters[index].getDirection());
@@ -52476,6 +53189,24 @@ Ext.define('Ext.data.proxy.Server', {
             params[filterParam] = me.encodeFilters(filters);
         }
         return params;
+    },
+    
+    encodeFields: function(fields) {
+        var out = [],
+            length = fields.length,
+            i, field, encodedField, summary;
+        for (i = 0; i < length; i++) {
+            field = fields[i];
+            encodedField = {
+                name: field.getName()
+            };
+            summary = field.getSummary();
+            if (summary && summary.isAggregator) {
+                encodedField.summary = summary.type;
+                out.push(encodedField);
+            }
+        }
+        return this.applyEncoding(out);
     },
     
     buildUrl: function(request) {
@@ -53335,6 +54066,43 @@ Ext.define('Ext.util.FilterCollection', {
 });
 
 
+Ext.define('Ext.util.GrouperCollection', {
+    extend: Ext.util.SorterCollection,
+    isGrouperCollection: true,
+    constructor: function(config) {
+        this.callParent([
+            config
+        ]);
+        this.setDecoder(this.decodeGrouper);
+    },
+    decodeGrouper: function(grouper) {
+        var cfg = grouper;
+        if (typeof grouper === 'function') {
+            cfg = {
+                groupFn: grouper
+            };
+        }
+        return this.decodeSorter(cfg, 'Ext.util.Grouper');
+    },
+    addGroupersObserver: function(observer) {
+        var items = this.items,
+            length = items.length,
+            i;
+        for (i = 0; i < length; i++) {
+            items[i].addObserver(observer);
+        }
+    },
+    removeGroupersObserver: function(observer) {
+        var items = this.items,
+            length = items.length,
+            i;
+        for (i = 0; i < length; i++) {
+            items[i].removeObserver(observer);
+        }
+    }
+});
+
+
 Ext.define('Ext.util.GroupCollection', {
     extend: Ext.util.Collection,
     isGroupCollection: true,
@@ -53346,6 +54114,8 @@ Ext.define('Ext.util.GroupCollection', {
     observerPriority: -100,
     emptyGroupRetainTime: 300000,
     
+    rootProperty: '_data',
+    
     constructor: function(config) {
         this.emptyGroups = {};
         this.callParent([
@@ -53355,8 +54125,58 @@ Ext.define('Ext.util.GroupCollection', {
     },
     
     getItemGroup: function(item) {
-        var key = this.getGrouper().getGroupString(item);
-        return this.get(key);
+        var grouper = this.lastMonitoredGrouper,
+            key, group;
+        if (!grouper && this.items.length) {
+            grouper = this.items[0].getGrouper();
+        }
+        if (grouper) {
+            key = grouper.getGroupString(item);
+            group = this.get(key);
+        }
+        return group;
+    },
+    
+    getByPath: function(path) {
+        var paths = path ? String(path).split(Ext.util.Group.prototype.pathSeparator) : [],
+            len = paths.length,
+            items = this,
+            group = false,
+            i;
+        if (!len) {
+            group = items.get(path);
+        }
+        for (i = 0; i < len; i++) {
+            if (!items || items.length === 0) {
+                break;
+            }
+            group = items.get(paths[i]);
+            if (group) {
+                items = group.getGroups();
+            }
+        }
+        return group || false;
+    },
+    
+    getGroupsByItem: function(item) {
+        var me = this,
+            groups = [],
+            length = me.items.length,
+            i, group, children;
+        if (item) {
+            for (i = 0; i < length; i++) {
+                group = me.items[i];
+                if (group.indexOf(item) >= 0) {
+                    groups.push(group);
+                    children = group.getGroups();
+                    if (children) {
+                        
+                        return Ext.Array.insert(groups, groups.length, children.getGroupsByItem(item));
+                    }
+                }
+            }
+        }
+        return groups;
     },
     
     
@@ -53388,9 +54208,10 @@ Ext.define('Ext.util.GroupCollection', {
             
             var me = this,
                 itemGroupKeys = me.itemGroupKeys = {},
-                groupData = me.createEntries(source, source.items),
-                entries = groupData.entries,
-                groupKey, i, len, entry, j;
+                groupData, entries, groupKey, i, len, entry, j;
+            me.groupersChanged = true;
+            groupData = me.createEntries(source, source.items);
+            entries = groupData.entries;
             
             
             for (i = 0 , len = entries.length; i < len; ++i) {
@@ -53415,13 +54236,18 @@ Ext.define('Ext.util.GroupCollection', {
             
             
             me.sortItems();
+            me.groupersChanged = false;
         }
     },
     onCollectionRemove: function(source, details) {
         var me = this,
+            groupers = source.getGroupers(),
             changeDetails = me.changeDetails,
             itemGroupKeys = me.itemGroupKeys || (me.itemGroupKeys = {}),
             entries, entry, group, i, n, j, removeGroups, item;
+        if (!groupers || !groupers.length) {
+            return;
+        }
         if (source.getCount()) {
             if (changeDetails) {
                 
@@ -53486,8 +54312,66 @@ Ext.define('Ext.util.GroupCollection', {
             this.syncItemGrouping(source, details);
         }
     },
+    onCollectionGroupersChanged: function(source) {
+        var me = this,
+            groupers = source.getGroupers(),
+            grouper;
+        if (groupers.length > 0) {
+            grouper = groupers.items[0];
+            me.changeSorterFn(grouper);
+            if (me.lastMonitoredGrouper) {
+                me.lastMonitoredGrouper.removeObserver(me);
+            }
+            me.lastMonitoredGrouper = grouper;
+            grouper.addObserver(me);
+        } else {
+            me.removeAll();
+        }
+    },
+    onGrouperDirectionChange: function(grouper) {
+        
+        this.changeSorterFn(grouper);
+        this.onEndUpdateSorters(this.getSorters());
+    },
+    onEndUpdateSorters: function(sorters) {
+        var me = this,
+            was = me.sorted,
+            is = (me.grouped && me.getAutoGroup()) || (me.getAutoSort() && sorters && sorters.length > 0);
+        if (was || is) {
+            
+            
+            me.sorted = !!is;
+            me.onSortChange(sorters);
+        }
+    },
     
     
+    changeSorterFn: function(grouper) {
+        var me = this,
+            sorters = me.getSorters(),
+            
+            sorter = {
+                root: me.getRootProperty()
+            };
+        sorter.direction = grouper.getDirection();
+        if (grouper) {
+            sorter.id = grouper.getProperty();
+            if (grouper.initialConfig.sorterFn) {
+                sorter.sorterFn = grouper.initialConfig.sorterFn;
+            } else {
+                sorter.property = grouper.getSortProperty() || grouper.getProperty();
+            }
+        }
+        if (sorter.property || sorter.sorterFn) {
+            if (sorters.length === 0) {
+                sorters.add(sorter);
+            } else {
+                sorters.items[0].setConfig(sorter);
+            }
+        } else {
+            sorters.clear();
+        }
+    },
     addItemsToGroups: function(source, items, at, oldIndex) {
         var me = this,
             itemGroupKeys = me.itemGroupKeys || (me.itemGroupKeys = {}),
@@ -53536,21 +54420,24 @@ Ext.define('Ext.util.GroupCollection', {
         var me = this,
             groups = {},
             entries = [],
-            grouper = me.getGrouper(),
-            entry, group, groupKey, groupValue, i, item, len;
-        for (i = 0 , len = items.length; i < len; ++i) {
-            groupKey = grouper.getGroupString(item = items[i]);
-            groupValue = grouper.getGroupValue(item);
-            if (!(entry = groups[groupKey])) {
-                group = me.getGroup(source, groupKey, groupValue, createGroups);
-                entries.push(groups[groupKey] = entry = {
-                    group: group,
-                    items: []
-                });
+            groupers = source.getGroupers().getRange(),
+            grouper, entry, group, groupKey, i, item, len;
+        if (groupers.length) {
+            grouper = groupers.shift();
+            groupers = groupers.length ? Ext.clone(groupers) : null;
+            for (i = 0 , len = items.length; i < len; ++i) {
+                groupKey = grouper.getGroupString(item = items[i]);
+                if (!(entry = groups[groupKey])) {
+                    group = me.getGroup(source, item, grouper, groupers, createGroups);
+                    entries.push(groups[groupKey] = entry = {
+                        group: group,
+                        items: []
+                    });
+                }
+                
+                
+                entry.items.push(item);
             }
-            
-            
-            entry.items.push(item);
         }
         return {
             groups: groups,
@@ -53561,18 +54448,24 @@ Ext.define('Ext.util.GroupCollection', {
         var me = this,
             itemGroupKeys = me.itemGroupKeys || (me.itemGroupKeys = {}),
             item = details.item,
-            grouper = me.getGrouper(),
-            oldKey, itemKey, oldGroup, group;
+            groupers = source.getGroupers().getRange(),
+            grouper, oldKey, itemKey, oldGroup, group;
+        if (!groupers.length) {
+            return;
+        }
+        grouper = groupers.shift();
+        groupers = groupers.length ? Ext.clone(groupers) : null;
         itemKey = source.getKey(item);
         oldKey = 'oldKey' in details ? details.oldKey : itemKey;
         
         oldGroup = itemGroupKeys[oldKey];
         
-        group = me.getGroup(source, grouper.getGroupString(item), grouper.getGroupValue(item));
+        group = me.getGroup(source, item, grouper, groupers);
         details.group = group;
         details.oldGroup = oldGroup;
+        details.groupChanged = (group !== oldGroup);
         
-        if (!(details.groupChanged = group !== oldGroup)) {
+        if (group === oldGroup) {
             
             oldGroup.itemChanged(item, details.modified, details.oldKey, details);
         } else {
@@ -53595,27 +54488,57 @@ Ext.define('Ext.util.GroupCollection', {
         delete itemGroupKeys[oldKey];
         itemGroupKeys[itemKey] = group;
     },
-    getGroup: function(source, key, value, createGroups) {
+    getGroup: function(source, item, grouper, groupers, createGroups) {
         var me = this,
+            key = grouper.getGroupString(item),
+            prop = grouper.getSortProperty(),
+            root = grouper.getRoot(),
             group = me.get(key),
-            autoSort = me.getAutoSort();
+            autoSort = me.getAutoSort(),
+            label;
         if (group) {
             group.setSorters(source.getSorters());
+            if (me.groupersChanged) {
+                
+                label = group.getLabel();
+                group.setLabel(null);
+                group.setGroupers(groupers);
+                group.setGrouper(grouper);
+                group.setParent(source.isGroup ? source : me);
+                group.setLabel(label);
+            }
         } else if (createGroups !== false) {
-            group = me.emptyGroups[key] || Ext.create(Ext.apply({
-                xclass: 'Ext.util.Group',
-                
-                id: me.getId() + '-group-' + key,
-                
-                groupKey: key,
-                groupValue: value,
-                rootProperty: me.getItemRoot(),
-                sorters: source.getSorters()
-            }, me.getGroupConfig()));
-            group.ejectTime = null;
+            group = me.emptyGroups[key];
+            if (group && group.destroyed) {
+                delete me.emptyGroups[key];
+                group = null;
+            }
+            if (group) {
+                group.setLabel(null);
+            } else {
+                group = Ext.create(Ext.apply({
+                    xclass: 'Ext.util.Group',
+                    groupConfig: me.getGroupConfig()
+                }, me.getGroupConfig()));
+            }
             me.setAutoSort(false);
+            group.setConfig({
+                groupKey: key,
+                grouper: grouper,
+                groupers: groupers,
+                label: key,
+                rootProperty: me.getItemRoot(),
+                sorters: source.getSorters(),
+                autoSort: autoSort,
+                autoGroup: me.getAutoGroup(),
+                parent: source.isGroup ? source : me
+            });
+            group.ejectTime = null;
             me.add(group);
             me.setAutoSort(autoSort);
+            if (prop) {
+                group.setCustomData(prop, (root ? item[root] : item)[prop]);
+            }
         }
         return group;
     },
@@ -53623,27 +54546,33 @@ Ext.define('Ext.util.GroupCollection', {
         return item.getGroupKey();
     },
     createSortFn: function() {
-        var me = this,
-            grouper = me.getGrouper(),
-            sorterFn = me.getSorters().getSortFn();
-        if (!grouper) {
-            return sorterFn;
-        }
-        return function(lhs, rhs) {
-            
-            
-            
-            return grouper.sort(lhs.items[0], rhs.items[0]) || sorterFn(lhs, rhs);
-        };
+        return this.getSorters().getSortFn();
     },
-    updateGrouper: function(grouper) {
-        var me = this;
-        me.grouped = !!(grouper && me.$groupable.getAutoGroup());
-        me.onSorterChange();
-        me.onEndUpdateSorters(me.getSorters());
+    
+    getGrouper: function() {
+        return this.lastMonitoredGrouper;
+    },
+    
+    updateGrouper: Ext.emptyFn,
+    updateAutoGroup: function(autoGroup) {
+        var len = this.length,
+            i;
+        
+        
+        this.setAutoSort(autoGroup);
+        for (i = 0; i < len; i++) {
+            this.items[i].setAutoGroup(autoGroup);
+        }
+        
+        
+        this.onEndUpdateSorters(this._sorters);
     },
     destroy: function() {
-        var me = this;
+        var me = this,
+            grouper = me.lastMonitoredGrouper;
+        if (grouper) {
+            grouper.removeObserver(me);
+        }
         me.$groupable = null;
         
         
@@ -53655,7 +54584,7 @@ Ext.define('Ext.util.GroupCollection', {
         destroyGroups: function(groups) {
             var len = groups.length,
                 i;
-            for (i = 0; i < len; ++i) {
+            for (i = len - 1; i >= 0; i--) {
                 groups[i].destroy();
             }
         },
@@ -53667,9 +54596,8 @@ Ext.define('Ext.util.GroupCollection', {
             groups = Ext.Array.from(groups);
             for (i = 0 , len = groups.length; i < len; i++) {
                 group = groups[i];
-                group.setSorters(null);
+                group.eject();
                 emptyGroups[group.getGroupKey()] = group;
-                group.ejectTime = Ext.now();
             }
             
             
@@ -53681,8 +54609,11 @@ Ext.define('Ext.util.GroupCollection', {
                 groupKey, group, reschedule;
             for (groupKey in emptyGroups) {
                 group = emptyGroups[groupKey];
+                if (!group || group.destroyed) {
+                    delete emptyGroups[groupKey];
+                }
                 
-                if (!group.getCount() && Ext.now() - group.ejectTime > me.emptyGroupRetainTime) {
+                else if (!group.length && Ext.now() - group.ejectTime > me.emptyGroupRetainTime) {
                     Ext.destroy(group);
                     delete emptyGroups[groupKey];
                 } else {
@@ -53750,6 +54681,7 @@ Ext.define('Ext.data.Store', {
                 Ext.log.warn('Ext.data.Store: remoteGroup has been removed. ' + 'Use remoteSort instead.');
             }
         }
+        
         
         
         
@@ -54449,6 +55381,52 @@ Ext.define('Ext.data.Store', {
         }
         me.callParent();
     },
+    
+    setFieldsSummaries: function(values) {
+        var me = this,
+            model = me.model.getSummaryModel(),
+            key;
+        if (!model || me.isDestroyed) {
+            return;
+        }
+        for (key in values) {
+            model.setSummaryField(key, values[key]);
+        }
+        if (me.getRemoteSummary()) {
+            me.reload();
+        } else {
+            me.getSummaryRecord().calculateSummary(me.getData().items);
+            me.recalculateSummaries(me.getGroups());
+            me.fireEvent('summarieschanged', me);
+            me.fireEvent('datachanged', me);
+        }
+    },
+    
+    setFieldSummary: function(field, summary) {
+        var me = this,
+            model = me.model.getSummaryModel();
+        if (!model || me.isDestroyed) {
+            return;
+        }
+        model.setSummaryField(field, summary);
+        if (me.getRemoteSummary()) {
+            me.reload();
+        } else {
+            me.getSummaryRecord().calculateSummary(me.getData().items);
+            me.recalculateSummaries(me.getGroups());
+            me.fireEvent('summarieschanged', me);
+            me.fireEvent('datachanged', me);
+        }
+    },
+    recalculateSummaries: function(groups) {
+        var groupCount = groups ? groups.length : 0,
+            i, group;
+        for (i = 0; i < groupCount; i++) {
+            group = groups.items[i];
+            group.recalculateSummaries();
+            this.recalculateSummaries(group.getGroups());
+        }
+    },
     privates: {
         commitOptions: {
             commit: true
@@ -54460,35 +55438,65 @@ Ext.define('Ext.data.Store', {
             
             var me = this,
                 summary = resultSet.getSummaryData(),
-                grouper = me.getGrouper(),
+                groupers = me.getGroupers(),
                 current = me.summaryRecord,
                 commitOptions = me.commitOptions,
-                groups, len, i, rec, group;
+                changed = false,
+                groups, len, i, rec, group, children, child;
             if (summary) {
+                changed = true;
                 if (current) {
+                    
+                    
+                    
+                    current.data = {};
                     current.set(summary.data, commitOptions);
                 } else {
                     me.summaryRecord = summary;
                     summary.isRemote = true;
                 }
             }
-            if (grouper) {
+            if (groupers && groupers.length) {
+                changed = true;
                 summary = resultSet.getGroupData();
                 if (summary) {
                     groups = me.getGroups();
                     for (i = 0 , len = summary.length; i < len; ++i) {
                         rec = summary[i];
+                        
+                        
                         group = groups.getItemGroup(rec);
                         if (group) {
-                            current = group.summaryRecord;
-                            if (current) {
-                                current.set(rec.data, commitOptions);
-                            } else {
-                                group.summaryRecord = rec;
-                                rec.isRemote = true;
+                            children = group.getGroups();
+                            while (children) {
+                                child = children.getItemGroup(rec);
+                                if (child) {
+                                    
+                                    
+                                    if (Ext.isDefined(rec.data[child.getGrouper().getProperty()])) {
+                                        group = child;
+                                        children = group.getGroups();
+                                    } else {
+                                        children = null;
+                                    }
+                                } else {
+                                    children = null;
+                                }
                             }
+                            delete (rec.data.id);
+                            current = group.getGroupRecord();
+                            current.set(rec.data, commitOptions);
+                            current.isRemote = true;
+                            current = group.getSummaryRecord();
+                            current.set(rec.data, commitOptions);
+                            current.isRemote = true;
                         }
                     }
+                }
+            }
+            if (changed) {
+                if (me.hasListeners.remotesummarieschanged) {
+                    me.fireEvent('remotesummarieschanged', me);
                 }
             }
         },
@@ -54552,12 +55560,35 @@ Ext.define('Ext.data.Store', {
             
             var me = this,
                 pageSize = me.getPageSize(),
-                session, grouper;
-            if (me.getRemoteSort() && !options.grouper) {
-                grouper = me.getGrouper();
-                if (grouper) {
-                    options.grouper = grouper;
+                summaries = [],
+                groupers = me.getGroupers(false),
+                session, grouper, model, fields, field, len, i;
+            if (me.getRemoteSort() || me.getRemoteSummary()) {
+                if (!options.grouper) {
+                    grouper = me.getGrouper();
+                    if (grouper) {
+                        options.grouper = grouper;
+                    }
+                } else if (!options.groupers) {
+                    if (groupers && groupers.length) {
+                        options.groupers = groupers.getRange();
+                    }
                 }
+            }
+            if (me.getRemoteSummary()) {
+                
+                model = me.getModel().getSummaryModel();
+                fields = model.getFields();
+                len = fields.length;
+                for (i = 0; i < len; i++) {
+                    
+                    
+                    field = fields[i];
+                    if (groupers && !groupers.get(field.name)) {
+                        summaries.push(field);
+                    }
+                }
+                options.summaries = summaries;
             }
             if (pageSize || 'start' in options || 'limit' in options || 'page' in options) {
                 options.page = options.page != null ? options.page : me.currentPage;
@@ -68791,7 +69822,7 @@ Ext.define('Ext.data.TreeStore', {
     applyGroupDir: function(dir) {
         return null;
     },
-    applyGrouper: function(grouper) {
+    setGrouper: function(grouper) {
         
         if (grouper) {
             Ext.raise('You can\'t group a TreeStore');
@@ -72792,53 +73823,11 @@ Ext.define('Ext.data.proxy.SessionStorage', {
 
 
 
-Ext.define('Ext.data.summary.Base', {
-    mixins: [
-        Ext.mixin.Factoryable
-    ],
-    alias: 'data.summary.base',
-    
-    isAggregator: true,
-    factoryConfig: {
-        defaultType: 'base',
-        cacheable: true
-    },
-    constructor: function(config) {
-        var calculate = config && config.calculate;
-        if (calculate) {
-            config = Ext.apply({}, config);
-            delete config.calculate;
-            this.calculate = calculate;
-        }
-        this.initConfig(config);
-    },
-    
-    
-    extractValue: function(record, property, root) {
-        var ret;
-        if (record) {
-            if (root) {
-                record = record[root];
-            }
-            ret = record[property];
-        }
-        return ret;
-    }
-}, function() {
-    Ext.Factory.on('dataSummary', function(factory, config) {
-        if (typeof config === 'function') {
-            return factory({
-                calculate: config
-            });
-        }
-    });
-});
-
-
-
 Ext.define('Ext.data.summary.Sum', {
     extend: Ext.data.summary.Base,
     alias: 'data.summary.sum',
+    
+    text: 'Sum',
     calculate: function(records, property, root, begin, end) {
         var n = end - begin,
             i, sum, v;
@@ -72854,6 +73843,8 @@ Ext.define('Ext.data.summary.Sum', {
 Ext.define('Ext.data.summary.Average', {
     extend: Ext.data.summary.Sum,
     alias: 'data.summary.average',
+    
+    text: 'Average',
     calculate: function(records, property, root, begin, end) {
         var len = end - begin,
             value;
@@ -72874,6 +73865,8 @@ Ext.define('Ext.data.summary.Average', {
 Ext.define('Ext.data.summary.Count', {
     extend: Ext.data.summary.Base,
     alias: 'data.summary.count',
+    
+    text: 'Count',
     calculate: function(records, property, root, begin, end) {
         return end - begin;
     }
@@ -72883,6 +73876,8 @@ Ext.define('Ext.data.summary.Count', {
 Ext.define('Ext.data.summary.Max', {
     extend: Ext.data.summary.Base,
     alias: 'data.summary.max',
+    
+    text: 'Max',
     calculate: function(records, property, root, begin, end) {
         var max = this.extractValue(records[begin], property, root),
             i, v;
@@ -72900,6 +73895,8 @@ Ext.define('Ext.data.summary.Max', {
 Ext.define('Ext.data.summary.Min', {
     extend: Ext.data.summary.Base,
     alias: 'data.summary.min',
+    
+    text: 'Min',
     calculate: function(records, property, root, begin, end) {
         var min = this.extractValue(records[begin], property, root),
             i, v;
@@ -72921,8 +73918,106 @@ Ext.define('Ext.data.summary.None', {
         
         value: null
     },
+    
+    text: 'None',
     calculate: function() {
         return this.getValue();
+    }
+});
+
+
+Ext.define('Ext.data.summary.Variance', {
+    extend: Ext.data.summary.Base,
+    alias: 'data.summary.variance',
+    
+    text: 'Var',
+    constructor: function(config) {
+        this.callParent([
+            config
+        ]);
+        this.avg = Ext.Factory.dataSummary('average');
+    },
+    calculate: function(records, property, root, begin, end) {
+        var n = end - begin,
+            avg = this.avg.calculate(records, property, root, begin, end),
+            total = 0,
+            i, v, ret;
+        if (avg != null && avg !== 0) {
+            for (i = 0; i < n; ++i) {
+                v = this.extractValue(records[begin + i], property, root);
+                total += Math.pow(Ext.Number.from(v, 0) - avg, 2);
+            }
+        }
+        if (total !== 0 && n > 1) {
+            ret = total / (n - 1);
+        }
+        return ret;
+    }
+});
+
+
+Ext.define('Ext.data.summary.StdDev', {
+    extend: Ext.data.summary.Variance,
+    alias: 'data.summary.stddev',
+    
+    text: 'StdDev',
+    calculate: function(records, property, root, begin, end) {
+        var v = this.callParent([
+                records,
+                property,
+                root,
+                begin,
+                end
+            ]);
+        if (v != null) {
+            v = Math.sqrt(v);
+        }
+        return v;
+    }
+});
+
+
+Ext.define('Ext.data.summary.VarianceP', {
+    extend: Ext.data.summary.Variance,
+    alias: 'data.summary.variancep',
+    
+    text: 'VarP',
+    calculate: function(records, property, root, begin, end) {
+        var n = end - begin,
+            avg = this.avg.calculate(records, property, root, begin, end),
+            total = 0,
+            i, v, ret;
+        if (avg != null && avg !== 0) {
+            for (i = 0; i < n; ++i) {
+                v = this.extractValue(records[begin + i], property, root);
+                total += Math.pow(Ext.Number.from(v, 0) - avg, 2);
+            }
+        }
+        if (total !== 0 && n > 1) {
+            ret = total / n;
+        }
+        return ret;
+    }
+});
+
+
+Ext.define('Ext.data.summary.StdDevP', {
+    extend: Ext.data.summary.VarianceP,
+    alias: 'data.summary.stddevp',
+    
+    text: 'StdDevP',
+    calculate: function(records, property, root, begin, end) {
+        var v = this.callParent([
+                records,
+                property,
+                root,
+                begin,
+                end
+            ]);
+        if (v != null) {
+            v = Math.sqrt(v);
+        }
+        return v;
     }
 });
 
@@ -81427,6 +82522,962 @@ Ext.define('Ext.fx.runner.CssAnimation', {
 });
 
 
+Ext.define('Ext.grid.AdvancedGroupStore', {
+    extend: Ext.util.Observable,
+    mixins: [
+        Ext.mixin.Bufferable
+    ],
+    cachedConfig: {
+        storeEventListeners: {
+            beforeload: 'onBeforeLoad',
+            load: 'onLoad',
+            datachanged: 'onDataChanged',
+            groupchange: 'onGroupChange',
+            groupschange: 'onGroupsChange',
+            idchanged: 'onIdChanged',
+            update: 'onUpdate',
+            remotesummarieschanged: 'fireRefresh'
+        }
+    },
+    config: {
+        autoDestroy: true,
+        autoLoad: false,
+        source: null,
+        summaryPosition: null,
+        groupSummaryPosition: null,
+        startCollapsed: null,
+        fireReplaceEvent: true
+    },
+    isMultigroupStore: true,
+    isGroupStore: true,
+    isStore: true,
+    isVirtualStore: false,
+    $applyConfigs: false,
+    bufferableMethods: {
+        fireRefresh: 5
+    },
+    constructor: function(config) {
+        var me = this;
+        me.data = new Ext.util.Collection({
+            rootProperty: 'data',
+            extraKeys: {
+                byInternalId: {
+                    property: 'internalId',
+                    rootProperty: ''
+                }
+            }
+        });
+        me.renderData = {};
+        return me.callParent([
+            config
+        ]);
+    },
+    destroy: function() {
+        this.setSource(null);
+        this.callParent();
+    },
+    updateGroupSummaryPosition: function() {
+        if (!this.isConfiguring) {
+            this.refreshData();
+        }
+    },
+    updateSummaryPosition: function() {
+        if (!this.isConfiguring) {
+            this.refreshData();
+        }
+    },
+    updateSource: function(store, oldStore) {
+        var me = this;
+        if (oldStore) {
+            Ext.destroy(me.storeListeners);
+        }
+        if (store) {
+            me.storeListeners = store.on(Ext.apply({
+                scope: me,
+                destroyable: true
+            }, me.getStoreEventListeners()));
+            me.refreshData();
+        }
+    },
+    processStore: function(forceStartCollapsed) {
+        var me = this,
+            data = me.data,
+            position = me.getSummaryPosition(),
+            store = me.getSource(),
+            startCollapsed = me.getStartCollapsed(),
+            items, placeholder, groups, length, i;
+        if (data) {
+            data.clear();
+            me.renderData = {};
+        } else {
+            return;
+        }
+        if (store) {
+            groups = store.getGroups();
+            length = groups && groups.length;
+            if (length > 0) {
+                if (forceStartCollapsed) {
+                    for (i = 0; i < length; i++) {
+                        groups.items[i].doExpandCollapse(!startCollapsed, true);
+                    }
+                } else if (startCollapsed) {
+                    for (i = 0; i < length; i++) {
+                        groups.items[i].collapse(true);
+                    }
+                }
+                me.setStartCollapsed(false);
+                items = me.processGroups(groups.items);
+            } else {
+                items = store.getRange();
+            }
+            data.add(items);
+            if (position === 'top' || position === 'bottom') {
+                placeholder = store.getSummaryRecord();
+                me.renderData[placeholder.getId()] = {
+                    isSummary: true
+                };
+                if (position === 'top') {
+                    data.insert(0, placeholder);
+                } else {
+                    data.add(placeholder);
+                }
+            }
+        }
+    },
+    processGroups: function(groups) {
+        var me = this,
+            data = [],
+            groupCount = groups ? groups.length : 0,
+            addSummary = false,
+            position = me.getGroupSummaryPosition(),
+            i, j, group, groupPlaceholder, depth, children;
+        
+        
+        
+        
+        
+        
+        
+        if (groupCount <= 0) {
+            return data;
+        }
+        for (i = 0; i < groupCount; i++) {
+            group = groups[i];
+            addSummary = false;
+            
+            groupPlaceholder = group.getGroupRecord();
+            data.push(groupPlaceholder);
+            me.renderData[groupPlaceholder.getId()] = {
+                group: group,
+                depth: group.getLevel(),
+                isGroup: true
+            };
+            if (!group.isCollapsed) {
+                children = group.getGroups();
+                if (children && children.length > 0) {
+                    Ext.Array.insert(data, data.length, me.processGroups(children.items));
+                } else {
+                    Ext.Array.insert(data, data.length, group.items);
+                    for (j = 0; j < group.items.length; j++) {
+                        me.renderData[group.items[j].getId()] = {
+                            group: group,
+                            depth: group.getLevel()
+                        };
+                    }
+                }
+            }
+            if (position === 'bottom') {
+                addSummary = !group.isCollapsed;
+                depth = group.getLevel();
+            }
+            if (addSummary) {
+                groupPlaceholder = group.getSummaryRecord();
+                data.push(groupPlaceholder);
+                me.renderData[groupPlaceholder.getId()] = {
+                    group: group,
+                    depth: depth,
+                    isGroupSummary: true
+                };
+            }
+        }
+        return data;
+    },
+    isLoading: function() {
+        return false;
+    },
+    getData: function() {
+        return this.data;
+    },
+    getCount: function() {
+        var data = this.data;
+        return data ? data.getCount() : 0;
+    },
+    getTotalCount: function() {
+        var data = this.data;
+        return data ? data.getCount() : 0;
+    },
+    
+    first: function() {
+        var data = this.data,
+            item = null;
+        if (data) {
+            item = data.first();
+        }
+        return item;
+    },
+    
+    last: function() {
+        var data = this.data,
+            item = null;
+        if (data) {
+            item = data.last();
+        }
+        return item;
+    },
+    
+    rangeCached: function(start, end) {
+        return end < this.getCount();
+    },
+    getRange: function(start, end, options) {
+        
+        
+        var data = this.data,
+            result = data ? data.getRange(start, Ext.isNumber(end) ? end + 1 : end) : [];
+        if (options && options.callback) {
+            options.callback.call(options.scope || this, result, start, end, options);
+        }
+        return result;
+    },
+    getAt: function(index) {
+        var data = this.data;
+        return data ? data.getAt(index) : null;
+    },
+    getById: function(id) {
+        return this.getSource().getById(id);
+    },
+    getByInternalId: function(internalId) {
+        var data = this.data,
+            item = null;
+        if (data) {
+            item = data.byInternalId.get(internalId);
+        }
+        return item;
+    },
+    getRenderData: function(record) {
+        return (record && record.isModel ? this.renderData[record.getId()] : null);
+    },
+    toggleCollapsedByRecord: function(record) {
+        var data = this.renderData[record.getId()];
+        if (!data) {
+            return;
+        }
+        return this.doExpandCollapse(data.group, data.group.isCollapsed);
+    },
+    doExpandCollapseByPath: function(path, expanded) {
+        var group = this.getSource().getGroups().getByPath(path);
+        if (!group) {
+            return;
+        }
+        return this.doExpandCollapse(group, expanded);
+    },
+    doExpandCollapse: function(group, expanded) {
+        var me = this,
+            fireReplaceEvent = me.getFireReplaceEvent(),
+            startIdx, items, oldItems, len;
+        oldItems = me.processGroups([
+            group
+        ]);
+        group.doExpandCollapse(expanded);
+        items = me.processGroups([
+            group
+        ]);
+        if (items.length && (startIdx = me.data.indexOf(group.getGroupRecord())) !== -1) {
+            if (group.isCollapsed) {
+                me.isExpandingOrCollapsing = 2;
+                len = oldItems.length;
+                oldItems = me.data.getRange(startIdx, startIdx + len);
+                
+                me.data.removeAt(startIdx, len);
+                me.data.insert(startIdx, items);
+                if (fireReplaceEvent) {
+                    me.fireEvent('replace', me, startIdx, oldItems, items);
+                } else {
+                    me.fireRefresh();
+                }
+                me.fireEvent('groupcollapse', me, group);
+            } else {
+                me.isExpandingOrCollapsing = 1;
+                
+                me.data.removeAt(startIdx);
+                me.data.insert(startIdx, items);
+                if (fireReplaceEvent) {
+                    me.fireEvent('replace', me, startIdx, oldItems, items);
+                } else {
+                    me.fireRefresh();
+                }
+                me.fireEvent('groupexpand', me, group);
+            }
+            me.isExpandingOrCollapsing = 0;
+        }
+        return items[0];
+    },
+    isInCollapsedGroup: function(record) {
+        var expanded = true,
+            groups = this.getSource().getGroups(),
+            i, length, group;
+        if (groups) {
+            groups = groups.getGroupsByItem(record);
+        }
+        if (groups) {
+            length = groups.length;
+            for (i = 0; i < length; i++) {
+                group = groups[i];
+                expanded = expanded && !group.isCollapsed;
+            }
+        }
+        return !expanded;
+    },
+    expandToRecord: function(record) {
+        var groups = this.getSource().getGroups(),
+            i, j, length, group;
+        if (groups) {
+            groups = groups.getGroupsByItem(record);
+        }
+        if (groups) {
+            length = groups.length;
+            for (i = 0; i < length; i++) {
+                group = groups[i];
+                if (group.isCollapsed) {
+                    
+                    for (j = i + 1; j < length; j++) {
+                        groups[j].isCollapsed = false;
+                    }
+                    this.doExpandCollapse(group, true);
+                    break;
+                }
+            }
+        }
+    },
+    contains: function(record) {
+        return this.indexOf(record) > -1;
+    },
+    
+    indexOf: function(record) {
+        var data = this.data;
+        return data ? data.indexOf(record) : null;
+    },
+    
+    indexOfId: function(id) {
+        var data = this.data;
+        return data ? data.indexOfKey(id) : null;
+    },
+    
+    indexOfTotal: function(record) {
+        return this.getSource().indexOf(record);
+    },
+    getGrouper: function() {
+        return null;
+    },
+    getGroups: function() {
+        return null;
+    },
+    hasPendingLoad: function() {
+        var store = this.getSource();
+        return store ? store.hasPendingLoad() : false;
+    },
+    onUpdate: function(store, record, operation, modifiedFieldNames) {
+        
+        this.fireEvent('update', this, record, operation, modifiedFieldNames);
+    },
+    onDataChanged: function() {
+        this.refreshData();
+    },
+    onIdChanged: function(store, rec, oldId, newId) {
+        var data = this.data;
+        if (data) {
+            data.updateKey(rec, oldId);
+        }
+    },
+    
+    onGroupsChange: function(store, groupers) {
+        if (!groupers || !groupers.length) {
+            this.refreshData();
+        }
+        this.fireEvent('groupschange', store, groupers);
+    },
+    onGroupChange: function(store, grouper) {
+        this.onGroupsChange(store, grouper ? [
+            grouper
+        ] : null);
+    },
+    refreshData: function(forceStartCollapsed) {
+        this.processStore(forceStartCollapsed);
+        this.fireRefresh();
+    },
+    onBeforeLoad: function() {
+        this.fireEvent('beforeload', this);
+    },
+    onLoad: function(store) {
+        this.currentPage = store.currentPage;
+        this.pageSize = store.pageSize;
+        this.fireEvent('load', this);
+    },
+    privates: {
+        doFireRefresh: function() {
+            this.fireEvent('refresh', this);
+        }
+    }
+}, function(GroupStore) {
+    var target = GroupStore.prototype;
+    
+    Ext.each([
+        
+        'add',
+        'addFilter',
+        'addSorted',
+        'aggregate',
+        'average',
+        'beginUpdate',
+        'clearFilter',
+        'clearGrouping',
+        'collect',
+        'commitChanges',
+        'contains',
+        'count',
+        'createActiveRange',
+        'each',
+        'enableBubble',
+        'endUpdate',
+        'filter',
+        'filterBy',
+        'find',
+        'findBy',
+        'findExact',
+        'findRecord',
+        'flushLoad',
+        'getAsynchronousLoad',
+        'getAutoLoad',
+        'getAutoSync',
+        'getBatchUpdateMode',
+        'getClearOnPageLoad',
+        'getClearRemovedOnLoad',
+        'getFields',
+        'getFilters',
+        'getGroupDir',
+        'getGroupField',
+        'getGrouper',
+        'getGroupers',
+        'getGroups',
+        'getModel',
+        'getModifiedRecords',
+        'getNewRecords',
+        'getPageSize',
+        'getProxy',
+        'getReloadOnClearSorters',
+        'getRemoteFilter',
+        'getRemoteSort',
+        'getRemoteSummary',
+        'getRemovedRecords',
+        'getSession',
+        'getSortOnLoad',
+        'getSorters',
+        'getStatefulFilters',
+        'getStoreId',
+        'getSummaryRecord',
+        'getTrackRemoved',
+        'getUpdatedRecords',
+        'group',
+        'insert',
+        'isFiltered',
+        'isGrouped',
+        'isLoaded',
+        'isLoading',
+        'isSorted',
+        'load',
+        'loadData',
+        'loadPage',
+        'loadRawData',
+        'loadRecords',
+        'max',
+        'min',
+        'nextPage',
+        'previousPage',
+        'query',
+        'queryBy',
+        'rejectChanges',
+        'reload',
+        'remove',
+        'removeAll',
+        'removeAt',
+        'removeFilters',
+        'resumeAutoSync',
+        'setAsynchronousLoad',
+        'setAutoDestroy',
+        'setAutoLoad',
+        'setAutoSync',
+        'setBatchUpdateMode',
+        'setClearOnPageLoad',
+        'setClearRemovedOnLoad',
+        'setFields',
+        'setFilters',
+        'setFieldsSummaries',
+        'setFieldSummary',
+        'setGroupDir',
+        'setGroupField',
+        'setGrouper',
+        'setGroupers',
+        'setModel',
+        'setPageSize',
+        'setProxy',
+        'setReloadOnClearSorters',
+        'setRemoteFilters',
+        'setRemoteSort',
+        'setRemoteSummary',
+        'setSession',
+        'setSortOnLoad',
+        'setSorters',
+        'setStatefulFilters',
+        'setStoreId',
+        'setTrackRemoved',
+        'sort',
+        'sum',
+        'suspendAutoSync',
+        'sync'
+    ], function(name) {
+        
+        if (!target[name]) {
+            target[name] = function() {
+                var store = this.getSource();
+                return store && store[name].apply(store, arguments);
+            };
+        }
+    });
+});
+
+
+Ext.define('Ext.grid.plugin.BaseFilterBar', {
+    extend: Ext.plugin.Abstract,
+    config: {
+        
+        hidden: false,
+        headerListeners: null,
+        gridListeners: null,
+        storeListeners: {
+            filterchange: 'onFilterChanged'
+        },
+        grid: null,
+        store: null,
+        bar: null,
+        header: null
+    },
+    filterBarCls: Ext.baseCSSPrefix + 'grid-filterbar',
+    filterCls: Ext.baseCSSPrefix + 'grid-filterbar-filtered-column',
+    init: function(grid) {
+        this.setGrid(grid);
+    },
+    destroy: function() {
+        var me = this;
+        me.setStore(null);
+        me.setGrid(null);
+        me.setBar(null);
+        me.callParent();
+    },
+    
+    showFilterBar: function() {
+        if (this.isDestroyed) {
+            return;
+        }
+        this.getBar().show();
+    },
+    
+    hideFilterBar: function() {
+        if (this.isDestroyed) {
+            return;
+        }
+        this.getBar().hide();
+    },
+    
+    clearFilters: function() {
+        var filters = this.getGrid().getStore().getFilters(false);
+        if (filters) {
+            filters.removeAll();
+        }
+    },
+    setupGridFunctions: function(grid) {
+        var me = this;
+        if (grid) {
+            grid.showFilterBar = Ext.bind(me.showFilterBar, me);
+            grid.hideFilterBar = Ext.bind(me.hideFilterBar, me);
+        }
+    },
+    unsetupGridFunctions: function(grid) {
+        if (grid) {
+            grid.showFilterBar = grid.hideFilterBar = null;
+        }
+    },
+    updateGrid: function(grid, oldGrid) {
+        var me = this,
+            listeners = me.getGridListeners();
+        me.listenersGrid = Ext.destroy(me.listenersGrid);
+        me.unsetupGridFunctions(oldGrid);
+        if (oldGrid) {
+            me.setStore(null);
+        }
+        if (grid) {
+            if (listeners) {
+                me.listenersGrid = grid.on(Ext.apply({
+                    scope: me,
+                    destroyable: true
+                }, listeners));
+            }
+            me.setStore(grid.getStore());
+            me.setupGridFunctions(grid);
+            me.createFilterBar();
+        }
+    },
+    updateStore: function(store) {
+        var me = this;
+        Ext.destroy(me.listenersStore);
+        if (store) {
+            me.listenersStore = store.on(Ext.apply({
+                scope: me,
+                destroyable: me
+            }, me.getStoreListeners()));
+        }
+    },
+    createFilterBar: Ext.emptyFn,
+    getGridColumns: Ext.emptyFn,
+    initializeFilters: function(columns) {
+        var len = columns.length,
+            bar = this.getBar(),
+            i, filter;
+        for (i = 0; i < len; i++) {
+            filter = this.createColumnFilter(columns[i]);
+            bar.add(filter.getField());
+        }
+    },
+    setFilterVisibility: function(column, visible) {
+        var filter = column.getFilterType(),
+            field = filter && filter.isGridFilter ? filter.getField() : null;
+        if (field) {
+            field[visible ? 'show' : 'hide']();
+        }
+    },
+    createColumnFilter: function(column) {
+        var filter = column.getFilterType(),
+            config = {
+                grid: this.getGrid(),
+                column: column,
+                owner: this
+            };
+        if (!filter) {
+            config.type = 'none';
+            filter = Ext.Factory.gridFilterbar(config);
+        } else if (!filter.isGridFilter) {
+            if (Ext.isString(filter)) {
+                config.type = filter;
+            } else {
+                Ext.apply(config, filter);
+            }
+            filter = Ext.Factory.gridFilterbar(config);
+        }
+        column.setFilterType(filter);
+        return filter;
+    },
+    onFilterChanged: function() {
+        this.resetFilters();
+    },
+    resetFilters: function() {
+        var columns = this.getGridColumns(),
+            len = columns.length,
+            i, filter;
+        for (i = 0; i < len; i++) {
+            filter = columns[i].getFilterType();
+            if (filter && filter.isGridFilter) {
+                filter.resetFilter();
+            }
+        }
+    },
+    resizeFilters: function() {
+        var columns = this.getGridColumns(),
+            len = columns.length,
+            i, filter;
+        for (i = 0; i < len; i++) {
+            filter = columns[i].getFilterType();
+            if (filter && filter.isGridFilter) {
+                filter.resizeField();
+            }
+        }
+    }
+});
+
+
+Ext.define('Ext.grid.plugin.BaseGroupingPanel', {
+    extend: Ext.plugin.Abstract,
+    config: {
+        panel: {
+            xtype: 'groupingpanel',
+            columnConfig: {
+                xtype: 'groupingpanelcolumn'
+            }
+        },
+        grid: null,
+        bar: null,
+        gridListeners: null
+    },
+    init: function(grid) {
+        this.setGrid(grid);
+    },
+    
+    destroy: function() {
+        this.setConfig({
+            grid: null,
+            bar: null,
+            panel: null
+        });
+        this.callParent();
+    },
+    enable: function() {
+        this.disabled = false;
+        this.showGroupingPanel();
+    },
+    disable: function() {
+        this.disabled = true;
+        this.hideGroupingPanel();
+    },
+    
+    showGroupingPanel: function() {
+        var bar;
+        this.setup();
+        bar = this.getBar();
+        bar.show();
+    },
+    
+    hideGroupingPanel: function() {
+        var bar;
+        this.setup();
+        bar = this.getBar();
+        bar.hide();
+    },
+    toggleGroupingPanel: function() {
+        var bar;
+        this.setup();
+        bar = this.getBar();
+        bar.setHidden(!bar.getHidden());
+    },
+    updateGrid: function(grid, oldGrid) {
+        var me = this;
+        Ext.destroy(me.listenersGrid);
+        if (oldGrid) {
+            oldGrid.showGroupingPanel = oldGrid.hideGroupingPanel = null;
+        }
+        if (grid) {
+            grid.showGroupingPanel = Ext.bind(me.showGroupingPanel, me);
+            grid.hideGroupingPanel = Ext.bind(me.hideGroupingPanel, me);
+            if (grid.rendered) {
+                me.onAfterGridRendered();
+            } else {
+                me.listenersGrid = grid.on(Ext.apply({
+                    scope: me,
+                    destroyable: true
+                }, me.getGridListeners()));
+            }
+        }
+    },
+    updateBar: function(bar, oldBar) {
+        var panel;
+        Ext.destroy(oldBar);
+        if (bar) {
+            panel = bar.isXType('groupingpanel') ? bar : bar.down('groupingpanel');
+            if (panel) {
+                panel.setConfig({
+                    grid: this.getGrid()
+                });
+            } else 
+            {
+                Ext.raise('Wrong grouping panel configuration! ' + 'No "groupingpanel" component available');
+            }
+        }
+    },
+    
+    onAfterGridRendered: function() {
+        var me = this;
+        if (me.disabled === true) {
+            me.disable();
+        } else {
+            me.enable();
+        }
+    },
+    addGroupingPanel: Ext.emptyFn,
+    privates: {
+        setup: function() {
+            var me = this;
+            if (me.doneSetup) {
+                return;
+            }
+            me.doneSetup = true;
+            me.setBar(me.addGroupingPanel());
+        }
+    }
+});
+
+
+Ext.define('Ext.grid.plugin.BaseSummaries', {
+    extend: Ext.plugin.Abstract,
+    config: {
+        
+        enableContextMenu: true,
+        
+        enableSummaryMenu: true,
+        
+        gridListeners: null,
+        
+        grid: null,
+        
+        contextMenu: null
+    },
+    textNone: 'None',
+    summaryText: 'Summary',
+    init: function(grid) {
+        this.setGrid(grid);
+    },
+    destroy: function() {
+        var me = this;
+        me.setContextMenu(null);
+        me.setGrid(null);
+        me.callParent();
+    },
+    updateGrid: function(grid) {
+        var me = this;
+        me.gListeners = Ext.destroy(me.gListeners);
+        if (grid) {
+            me.gListeners = grid.on(Ext.apply({
+                scope: me,
+                destroyable: true
+            }, me.getGridListeners()));
+        }
+    },
+    updateContextMenu: function(newMenu, oldMenu) {
+        Ext.destroy(oldMenu);
+    },
+    getDataIndex: function(column) {
+        return column.dataIndex;
+    },
+    canShowMenu: function(params) {
+        return this.getEnableContextMenu() && this.getDataIndex(params.column);
+    },
+    showMenu: function(params) {
+        var me = this,
+            grid = me.getGrid(),
+            target = params.cell,
+            e = params.e,
+            menu, options;
+        if (!me.canShowMenu(params)) {
+            return;
+        }
+        menu = me.getSummaryMenu(params.column);
+        if (!menu) {
+            return;
+        }
+        menu = me.createMenu(menu);
+        me.setContextMenu(menu);
+        options = {
+            menu: menu,
+            params: params
+        };
+        if (grid.fireEvent('beforeshowsummarycontextmenu', me, options) !== false) {
+            menu.showBy(target, 'tl-bl?');
+            menu.focus();
+            grid.fireEvent('showsummarycontextmenu', me, options);
+        } else {
+            me.setContextMenu(null);
+        }
+        e.stopEvent();
+    },
+    createMenu: function(menu) {
+        return Ext.menu.Manager.get(menu);
+    },
+    getSummaryMenu: function(column) {
+        var me = this,
+            summaries = column.getListOfSummaries(),
+            dataIndex = me.getDataIndex(column),
+            summaryType = me.getSummaryFieldType(dataIndex),
+            items = [
+                {
+                    text: me.textNone,
+                    summary: null,
+                    checked: !summaryType
+                }
+            ],
+            i, len, fns, value;
+        fns = me.fns = me.fns || {};
+        if (!summaries || !summaries.length) {
+            return false;
+        }
+        len = summaries.length;
+        for (i = 0; i < len; i++) {
+            value = summaries[i];
+            if (!fns[value]) {
+                fns[value] = Ext.Factory.dataSummary(value);
+            }
+            items.push({
+                text: fns[value].text,
+                summary: fns[value],
+                checked: (summaryType === fns[value].type)
+            });
+        }
+        return {
+            defaults: {
+                xtype: 'menucheckitem',
+                column: column,
+                hideOnClick: true,
+                dataIndex: dataIndex,
+                handler: me.onChangeSummary,
+                group: 'summaries',
+                scope: me
+            },
+            items: items
+        };
+    },
+    onChangeSummary: function(menu) {
+        var store = this.getGrid().getStore(),
+            column = menu.column;
+        
+        
+        column.summaryType = null;
+        if (column.onSummaryChange) {
+            
+            column.onSummaryChange(menu.summary);
+        }
+        if (store.isGroupStore) {
+            store = store.getSource();
+        }
+        store.setFieldSummary(menu.dataIndex, menu.summary);
+    },
+    getSummaryFieldType: function(name) {
+        var store = this.getGrid().getStore(),
+            model = store.getModel().getSummaryModel(),
+            field = model.getField(name),
+            summary = field ? field.getSummary() : false;
+        return summary ? summary.type : false;
+    },
+    onCollectMenuItems: function(grid, params) {
+        params.items.push({
+            text: this.summaryText,
+            itemId: 'summaryMenuItem'
+        });
+    },
+    onShowHeaderMenu: function(grid, params) {
+        var menuItem = params.menu.down('#summaryMenuItem');
+        if (!menuItem) {
+            return;
+        }
+        menuItem.setVisible(!params.column.isGroupsColumn);
+        menuItem.setMenu(this.getSummaryMenu(params.column));
+    }
+});
+
+
 Ext.define('Ext.list.AbstractTreeItem', {
     extend: Ext.Widget,
     isTreeListItem: true,
@@ -88956,7 +91007,11 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.data.summary.Max": [],
   "Ext.data.summary.Min": [],
   "Ext.data.summary.None": [],
+  "Ext.data.summary.StdDev": [],
+  "Ext.data.summary.StdDevP": [],
   "Ext.data.summary.Sum": [],
+  "Ext.data.summary.Variance": [],
+  "Ext.data.summary.VarianceP": [],
   "Ext.data.validator.AbstractDate": [],
   "Ext.data.validator.Bound": [],
   "Ext.data.validator.CIDRv4": [],
@@ -89205,6 +91260,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.field.trigger.Expand": [],
   "Ext.field.trigger.File": [],
   "Ext.field.trigger.Menu": [],
+  "Ext.field.trigger.Operator": [],
   "Ext.field.trigger.Reveal": [],
   "Ext.field.trigger.Search": [],
   "Ext.field.trigger.SpinDown": [],
@@ -89251,6 +91307,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.fx.runner.CssTransition": [
     "Ext.Animator"
   ],
+  "Ext.grid.AdvancedGroupStore": [],
   "Ext.grid.CellEditor": [],
   "Ext.grid.Grid": [],
   "Ext.grid.GridDragZone": [],
@@ -89270,12 +91327,14 @@ Ext.ClassManager.addNameAlternateMappings({
   ],
   "Ext.grid.TreeDragZone": [],
   "Ext.grid.TreeDropZone": [],
+  "Ext.grid.TreeGrouped": [],
   "Ext.grid.cell.Base": [],
   "Ext.grid.cell.Boolean": [],
   "Ext.grid.cell.Cell": [],
   "Ext.grid.cell.Check": [],
   "Ext.grid.cell.Date": [],
   "Ext.grid.cell.Expander": [],
+  "Ext.grid.cell.Group": [],
   "Ext.grid.cell.Number": [],
   "Ext.grid.cell.RowNumberer": [],
   "Ext.grid.cell.Text": [],
@@ -89288,6 +91347,7 @@ Ext.ClassManager.addNameAlternateMappings({
   ],
   "Ext.grid.column.Date": [],
   "Ext.grid.column.Drag": [],
+  "Ext.grid.column.Groups": [],
   "Ext.grid.column.Number": [],
   "Ext.grid.column.RowNumberer": [],
   "Ext.grid.column.Selection": [],
@@ -89300,22 +91360,34 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.grid.filters.menu.Date": [],
   "Ext.grid.filters.menu.Number": [],
   "Ext.grid.filters.menu.String": [],
+  "Ext.grid.grouped.NavigationModel": [],
+  "Ext.grid.grouped.selection.Model": [],
+  "Ext.grid.grouped.selection.Records": [],
+  "Ext.grid.grouped.selection.Rows": [],
   "Ext.grid.locked.Grid": [
     "Ext.grid.LockedGrid"
   ],
   "Ext.grid.locked.Region": [
     "Ext.grid.LockedGridRegion"
   ],
+  "Ext.grid.menu.AddGroup": [],
   "Ext.grid.menu.Columns": [],
   "Ext.grid.menu.GroupByThis": [],
+  "Ext.grid.menu.Groups": [],
+  "Ext.grid.menu.RemoveGroup": [],
   "Ext.grid.menu.Shared": [],
   "Ext.grid.menu.ShowInGroups": [],
   "Ext.grid.menu.SortAsc": [],
   "Ext.grid.menu.SortDesc": [],
+  "Ext.grid.mixin.Menus": [],
+  "Ext.grid.plugin.BaseFilterBar": [],
+  "Ext.grid.plugin.BaseGroupingPanel": [],
+  "Ext.grid.plugin.BaseSummaries": [],
   "Ext.grid.plugin.CellEditing": [],
   "Ext.grid.plugin.Clipboard": [],
   "Ext.grid.plugin.ColumnResizing": [],
   "Ext.grid.plugin.Editable": [],
+  "Ext.grid.plugin.GroupingPanel": [],
   "Ext.grid.plugin.HeaderReorder": [],
   "Ext.grid.plugin.PagingToolbar": [],
   "Ext.grid.plugin.RowDragDrop": [],
@@ -89323,12 +91395,31 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.grid.plugin.RowOperations": [
     "Ext.grid.plugin.MultiSelection"
   ],
+  "Ext.grid.plugin.Summaries": [],
   "Ext.grid.plugin.Summary": [
     "Ext.grid.plugin.SummaryRow"
   ],
   "Ext.grid.plugin.TreeDragDrop": [],
   "Ext.grid.plugin.ViewOptions": [],
   "Ext.grid.plugin.ViewOptionsListItem": [],
+  "Ext.grid.plugin.filterbar.FilterBar": [],
+  "Ext.grid.plugin.filterbar.Operator": [],
+  "Ext.grid.plugin.filterbar.filters.Base": [],
+  "Ext.grid.plugin.filterbar.filters.Boolean": [],
+  "Ext.grid.plugin.filterbar.filters.Date": [],
+  "Ext.grid.plugin.filterbar.filters.List": [],
+  "Ext.grid.plugin.filterbar.filters.None": [],
+  "Ext.grid.plugin.filterbar.filters.Number": [],
+  "Ext.grid.plugin.filterbar.filters.SingleFilter": [],
+  "Ext.grid.plugin.filterbar.filters.String": [],
+  "Ext.grid.plugin.grouping.Column": [],
+  "Ext.grid.plugin.grouping.DragZone": [],
+  "Ext.grid.plugin.grouping.DropZone": [],
+  "Ext.grid.plugin.grouping.Panel": [],
+  "Ext.grid.plugin.header.DragZone": [],
+  "Ext.grid.plugin.header.DropZone": [],
+  "Ext.grid.row.Group": [],
+  "Ext.grid.row.Summary": [],
   "Ext.grid.rowedit.Bar": [],
   "Ext.grid.rowedit.Cell": [],
   "Ext.grid.rowedit.Editor": [],
@@ -89542,6 +91633,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.util.Group": [],
   "Ext.util.GroupCollection": [],
   "Ext.util.Grouper": [],
+  "Ext.util.GrouperCollection": [],
   "Ext.util.HashMap": [],
   "Ext.util.HeightSynchronizer": [],
   "Ext.util.History": [
@@ -89948,8 +92040,20 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.data.summary.None": [
     "data.summary.none"
   ],
+  "Ext.data.summary.StdDev": [
+    "data.summary.stddev"
+  ],
+  "Ext.data.summary.StdDevP": [
+    "data.summary.stddevp"
+  ],
   "Ext.data.summary.Sum": [
     "data.summary.sum"
+  ],
+  "Ext.data.summary.Variance": [
+    "data.summary.variance"
+  ],
+  "Ext.data.summary.VarianceP": [
+    "data.summary.variancep"
   ],
   "Ext.data.validator.AbstractDate": [],
   "Ext.data.validator.Bound": [
@@ -90332,6 +92436,10 @@ Ext.ClassManager.addNameAliasMappings({
     "trigger.menu",
     "widget.menutrigger"
   ],
+  "Ext.field.trigger.Operator": [
+    "trigger.operator",
+    "widget.operatortrigger"
+  ],
   "Ext.field.trigger.Reveal": [
     "trigger.reveal",
     "widget.revealtrigger"
@@ -90413,6 +92521,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.fx.runner.Css": [],
   "Ext.fx.runner.CssAnimation": [],
   "Ext.fx.runner.CssTransition": [],
+  "Ext.grid.AdvancedGroupStore": [],
   "Ext.grid.CellEditor": [
     "widget.celleditor"
   ],
@@ -90450,6 +92559,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.grid.TreeDragZone": [],
   "Ext.grid.TreeDropZone": [],
+  "Ext.grid.TreeGrouped": [
+    "widget.treegroupedgrid"
+  ],
   "Ext.grid.cell.Base": [
     "widget.gridcellbase"
   ],
@@ -90467,6 +92579,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.grid.cell.Expander": [
     "widget.expandercell"
+  ],
+  "Ext.grid.cell.Group": [
+    "widget.groupcell"
   ],
   "Ext.grid.cell.Number": [
     "widget.numbercell"
@@ -90500,6 +92615,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.grid.column.Drag": [
     "widget.dragcolumn"
   ],
+  "Ext.grid.column.Groups": [
+    "widget.groupscolumn"
+  ],
   "Ext.grid.column.Number": [
     "widget.numbercolumn"
   ],
@@ -90532,17 +92650,38 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.grid.filters.menu.String": [
     "gridFilters.string"
   ],
+  "Ext.grid.grouped.NavigationModel": [
+    "navmodel.groupedgrid"
+  ],
+  "Ext.grid.grouped.selection.Model": [
+    "selmodel.groupedgrid"
+  ],
+  "Ext.grid.grouped.selection.Records": [
+    "selection.groupedrecords"
+  ],
+  "Ext.grid.grouped.selection.Rows": [
+    "selection.groupedrows"
+  ],
   "Ext.grid.locked.Grid": [
     "widget.lockedgrid"
   ],
   "Ext.grid.locked.Region": [
     "widget.lockedgridregion"
   ],
+  "Ext.grid.menu.AddGroup": [
+    "widget.gridaddgroupmenuitem"
+  ],
   "Ext.grid.menu.Columns": [
     "widget.gridcolumnsmenu"
   ],
   "Ext.grid.menu.GroupByThis": [
     "widget.gridgroupbythismenuitem"
+  ],
+  "Ext.grid.menu.Groups": [
+    "widget.gridgroupsmenuitem"
+  ],
+  "Ext.grid.menu.RemoveGroup": [
+    "widget.gridremovegroupmenuitem"
   ],
   "Ext.grid.menu.Shared": [],
   "Ext.grid.menu.ShowInGroups": [
@@ -90554,6 +92693,10 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.grid.menu.SortDesc": [
     "widget.gridsortdescmenuitem"
   ],
+  "Ext.grid.mixin.Menus": [],
+  "Ext.grid.plugin.BaseFilterBar": [],
+  "Ext.grid.plugin.BaseGroupingPanel": [],
+  "Ext.grid.plugin.BaseSummaries": [],
   "Ext.grid.plugin.CellEditing": [
     "plugin.cellediting",
     "plugin.gridcellediting"
@@ -90567,6 +92710,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.grid.plugin.Editable": [
     "plugin.grideditable"
+  ],
+  "Ext.grid.plugin.GroupingPanel": [
+    "plugin.groupingpanel"
   ],
   "Ext.grid.plugin.HeaderReorder": [
     "plugin.headerreorder"
@@ -90586,6 +92732,10 @@ Ext.ClassManager.addNameAliasMappings({
     "plugin.multiselection",
     "plugin.rowoperations"
   ],
+  "Ext.grid.plugin.Summaries": [
+    "plugin.gridsummaries",
+    "plugin.summaries"
+  ],
   "Ext.grid.plugin.Summary": [
     "plugin.gridsummary",
     "plugin.gridsummaryrow",
@@ -90599,6 +92749,48 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.grid.plugin.ViewOptionsListItem": [
     "widget.viewoptionslistitem"
+  ],
+  "Ext.grid.plugin.filterbar.FilterBar": [
+    "plugin.gridfilterbar"
+  ],
+  "Ext.grid.plugin.filterbar.Operator": [
+    "plugin.operator"
+  ],
+  "Ext.grid.plugin.filterbar.filters.Base": [],
+  "Ext.grid.plugin.filterbar.filters.Boolean": [
+    "grid.filterbar.boolean"
+  ],
+  "Ext.grid.plugin.filterbar.filters.Date": [
+    "grid.filterbar.date"
+  ],
+  "Ext.grid.plugin.filterbar.filters.List": [
+    "grid.filterbar.list"
+  ],
+  "Ext.grid.plugin.filterbar.filters.None": [
+    "grid.filterbar.none"
+  ],
+  "Ext.grid.plugin.filterbar.filters.Number": [
+    "grid.filterbar.number"
+  ],
+  "Ext.grid.plugin.filterbar.filters.SingleFilter": [],
+  "Ext.grid.plugin.filterbar.filters.String": [
+    "grid.filterbar.string"
+  ],
+  "Ext.grid.plugin.grouping.Column": [
+    "widget.groupingpanelcolumn"
+  ],
+  "Ext.grid.plugin.grouping.DragZone": [],
+  "Ext.grid.plugin.grouping.DropZone": [],
+  "Ext.grid.plugin.grouping.Panel": [
+    "widget.groupingpanel"
+  ],
+  "Ext.grid.plugin.header.DragZone": [],
+  "Ext.grid.plugin.header.DropZone": [],
+  "Ext.grid.row.Group": [
+    "widget.gridgrouprow"
+  ],
+  "Ext.grid.row.Summary": [
+    "widget.groupedgridsummaryrow"
   ],
   "Ext.grid.rowedit.Bar": [
     "widget.roweditorbar"
@@ -90944,6 +93136,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.util.Group": [],
   "Ext.util.GroupCollection": [],
   "Ext.util.Grouper": [],
+  "Ext.util.GrouperCollection": [],
   "Ext.util.HashMap": [],
   "Ext.util.HeightSynchronizer": [],
   "Ext.util.History": [],

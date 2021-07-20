@@ -519,15 +519,9 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Nativ
         });
 
         describe("scroll", function() {
-            it("should match targets when the document is scrolled", function() {
-                var stretcher, s;
+            var stretcher;
 
-                makeDragEl(405, 405);
-                makeDropEl(450, 450);
-
-                setup();
-                s = Ext.getViewportScroller();
-
+            beforeEach(function() {
                 stretcher = Ext.getBody().insertFirst({
                     style: {
                         width: '5000px',
@@ -535,6 +529,20 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Nativ
                         border: '1px solid red'
                     }
                 });
+            });
+
+            afterEach(function() {
+                stretcher = Ext.destroy(stretcher);
+            });
+
+            it("should match targets when the document is scrolled", function() {
+                var s;
+
+                makeDragEl(405, 405);
+                makeDropEl(450, 450);
+
+                setup();
+                s = Ext.getViewportScroller();
 
                 s.scrollTo(0, 400);
 
@@ -547,7 +555,7 @@ topSuite("Ext.drag.Manager", ['Ext.drag.*', 'Ext.dom.Element', 'Ext.scroll.Nativ
                 runsExpectCallCount(leaveSpy, 1);
                 endDrag();
                 runs(function() {
-                    stretcher.remove();
+                    stretcher.destroy();
                 });
             });
         });

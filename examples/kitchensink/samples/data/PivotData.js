@@ -6,10 +6,10 @@ Ext.define('KitchenSink.data.PivotData', {
 
     statics: {
         rand: 37,
-        companies: ['Google', 'Apple', 'Dell', 'Microsoft', 'Adobe'],
+        companies: ['Google', 'Apple', 'Dell', 'Microsoft', 'Adobe', null],
         countries: ['Belgium', 'Netherlands', 'United Kingdom',
-                    'Canada', 'United States', 'Australia'],
-        persons: ['John', 'Michael', 'Mary', 'Anne', 'Robert', 'Müller'],
+                    'Canada', 'United States', 'Australia', null],
+        persons: ['John', 'Michael', 'Mary', 'Anne', 'Robert', 'Müller', null],
 
         getRandomItem: function(data) {
             var rand = this.rand,
@@ -23,7 +23,7 @@ Ext.define('KitchenSink.data.PivotData', {
         },
 
         getRandomDate: function(start, end) {
-            return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+            return Ext.Date.clearTime(new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())));
         },
 
         getRandomNumber: function(multiply) {
@@ -56,7 +56,7 @@ Ext.define('KitchenSink.data.PivotData', {
                     country: this.getRandomCountry(),
                     person: this.getRandomPerson(),
                     date: this.getRandomDate(new Date(2012, 0, 1), new Date(2016, 11, 31)),
-                    value: this.getRandomNumber(),
+                    value: Ext.Number.toFixed(this.getRandomNumber(), 2),
                     quantity: Math.floor(this.getRandomNumber(30))
                 });
             }

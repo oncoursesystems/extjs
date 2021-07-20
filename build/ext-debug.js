@@ -1,7 +1,7 @@
 /*
-This file is part of Ext JS 7.3.1.27
+This file is part of Ext JS 7.4.0.42
 
-Copyright (c) 2011-2020 Sencha Inc
+Copyright (c) 2011-2021 Sencha Inc
 
 license: http://www.sencha.com/legal/sencha-software-license-agreement
 Contact: http://www.sencha.com/contact
@@ -14,7 +14,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Version: 7.3.1.27 Build date: 2020-10-12 05:00:31 (7df4903278e962b811acb61ea0baeb10d8caabc1)
+Version: 7.4.0.42 Build date: 2021-05-04 14:42:24 (669f575eb1592a96aa3fb58a602faf3b96d819ea)
 
 */
 
@@ -67,6 +67,10 @@ var Ext = Ext || {};
     "Ext.fx.animation": "../packages/core/src/fx/animation",
     "Ext.fx.easing": "../packages/core/src/fx/easing",
     "Ext.fx.runner": "../packages/core/src/fx/runner",
+    "Ext.grid.AdvancedGroupStore": "../packages/core/src/grid/AdvancedGroupStore.js",
+    "Ext.grid.plugin.BaseFilterBar": "../packages/core/src/grid/plugin/BaseFilterBar.js",
+    "Ext.grid.plugin.BaseGroupingPanel": "../packages/core/src/grid/plugin/BaseGroupingPanel.js",
+    "Ext.grid.plugin.BaseSummaries": "../packages/core/src/grid/plugin/BaseSummaries.js",
     "Ext.list": "../packages/core/src/list",
     "Ext.mixin": "../packages/core/src/mixin",
     "Ext.parse": "../packages/core/src/parse",
@@ -435,18 +439,18 @@ var Ext = Ext || {};
       "uses": [
         36,
         49,
-        308,
-        319,
-        320,
-        321,
-        322,
-        323,
+        313,
         324,
         325,
         326,
         327,
         328,
-        329
+        329,
+        330,
+        331,
+        332,
+        333,
+        334
       ],
       "idx": 38
     },
@@ -561,11 +565,11 @@ var Ext = Ext || {};
         76,
         95,
         102,
-        251,
-        309,
-        330,
-        341,
-        343
+        253,
+        314,
+        335,
+        346,
+        348
       ],
       "idx": 49
     },
@@ -964,7 +968,7 @@ var Ext = Ext || {};
       "requires": [],
       "uses": [
         95,
-        251
+        253
       ],
       "idx": 94
     },
@@ -974,7 +978,7 @@ var Ext = Ext || {};
         94
       ],
       "uses": [
-        251
+        253
       ],
       "idx": 95
     },
@@ -1023,7 +1027,7 @@ var Ext = Ext || {};
       "requires": [],
       "uses": [
         49,
-        251
+        253
       ],
       "idx": 101
     },
@@ -1103,7 +1107,7 @@ var Ext = Ext || {};
       ],
       "uses": [
         77,
-        462
+        471
       ],
       "idx": 110
     },
@@ -1114,7 +1118,7 @@ var Ext = Ext || {};
         21,
         49,
         75,
-        414
+        423
       ],
       "idx": 111
     },
@@ -1132,7 +1136,7 @@ var Ext = Ext || {};
       "uses": [
         98,
         117,
-        251
+        253
       ],
       "idx": 113
     },
@@ -1191,16 +1195,16 @@ var Ext = Ext || {};
         49,
         67,
         98,
-        251,
-        409,
-        410,
-        411,
-        414,
-        422,
-        424,
-        489,
-        636,
-        656
+        253,
+        418,
+        419,
+        420,
+        423,
+        431,
+        433,
+        498,
+        666,
+        686
       ],
       "idx": 117
     },
@@ -1305,7 +1309,7 @@ var Ext = Ext || {};
         127
       ],
       "uses": [
-        224
+        226
       ],
       "idx": 128
     },
@@ -1328,7 +1332,9 @@ var Ext = Ext || {};
       "requires": [
         54
       ],
-      "uses": [],
+      "uses": [
+        221
+      ],
       "idx": 131
     },
     {
@@ -1341,9 +1347,10 @@ var Ext = Ext || {};
         131
       ],
       "uses": [
-        177,
         178,
-        179
+        179,
+        180,
+        181
       ],
       "idx": 132
     },
@@ -1443,7 +1450,7 @@ var Ext = Ext || {};
         142
       ],
       "uses": [
-        183
+        185
       ],
       "idx": 143
     },
@@ -1460,7 +1467,7 @@ var Ext = Ext || {};
         144
       ],
       "uses": [
-        153
+        154
       ],
       "idx": 145
     },
@@ -1517,62 +1524,71 @@ var Ext = Ext || {};
       "idx": 152
     },
     {
-      "path": "../packages/core/src/data/field/Field.js",
+      "path": "../packages/core/src/data/summary/Base.js",
       "requires": [
-        12,
-        151,
-        152
+        12
       ],
       "uses": [],
       "idx": 153
     },
     {
-      "path": "../packages/core/src/data/field/Array.js",
+      "path": "../packages/core/src/data/field/Field.js",
       "requires": [
+        12,
+        151,
+        152,
         153
       ],
       "uses": [],
       "idx": 154
     },
     {
-      "path": "../packages/core/src/data/field/Boolean.js",
+      "path": "../packages/core/src/data/field/Array.js",
       "requires": [
-        153
+        154
       ],
       "uses": [],
       "idx": 155
     },
     {
-      "path": "../packages/core/src/data/field/Date.js",
+      "path": "../packages/core/src/data/field/Boolean.js",
       "requires": [
-        153
+        154
       ],
       "uses": [],
       "idx": 156
     },
     {
-      "path": "../packages/core/src/data/field/Integer.js",
+      "path": "../packages/core/src/data/field/Date.js",
       "requires": [
-        153
+        154
       ],
       "uses": [],
       "idx": 157
     },
     {
-      "path": "../packages/core/src/data/field/Number.js",
+      "path": "../packages/core/src/data/field/Integer.js",
       "requires": [
-        157
+        154
       ],
       "uses": [],
       "idx": 158
     },
     {
-      "path": "../packages/core/src/data/field/String.js",
+      "path": "../packages/core/src/data/field/Number.js",
       "requires": [
-        153
+        158
       ],
       "uses": [],
       "idx": 159
+    },
+    {
+      "path": "../packages/core/src/data/field/String.js",
+      "requires": [
+        154
+      ],
+      "uses": [],
+      "idx": 160
     },
     {
       "path": "../packages/core/src/data/identifier/Generator.js",
@@ -1580,15 +1596,15 @@ var Ext = Ext || {};
         12
       ],
       "uses": [],
-      "idx": 160
+      "idx": 161
     },
     {
       "path": "../packages/core/src/data/identifier/Sequential.js",
       "requires": [
-        160
+        161
       ],
       "uses": [],
-      "idx": 161
+      "idx": 162
     },
     {
       "path": "../packages/core/src/data/Model.js",
@@ -1601,7 +1617,6 @@ var Ext = Ext || {};
         149,
         150,
         152,
-        153,
         154,
         155,
         156,
@@ -1609,20 +1624,21 @@ var Ext = Ext || {};
         158,
         159,
         160,
-        161
+        161,
+        162
       ],
       "uses": [
         12,
-        164,
-        250
+        165,
+        252
       ],
-      "idx": 162
+      "idx": 163
     },
     {
       "path": "../packages/core/src/data/ResultSet.js",
       "requires": [],
       "uses": [],
-      "idx": 163
+      "idx": 164
     },
     {
       "path": "../packages/core/src/data/reader/Reader.js",
@@ -1631,12 +1647,12 @@ var Ext = Ext || {};
         12,
         23,
         98,
-        163
+        164
       ],
       "uses": [
         142
       ],
-      "idx": 164
+      "idx": 165
     },
     {
       "path": "../packages/core/src/data/writer/Writer.js",
@@ -1644,7 +1660,7 @@ var Ext = Ext || {};
         12
       ],
       "uses": [],
-      "idx": 165
+      "idx": 166
     },
     {
       "path": "../packages/core/src/data/proxy/Proxy.js",
@@ -1652,8 +1668,8 @@ var Ext = Ext || {};
         4,
         12,
         142,
-        164,
-        165
+        165,
+        166
       ],
       "uses": [
         146,
@@ -1661,29 +1677,29 @@ var Ext = Ext || {};
         148,
         149,
         150,
-        162,
-        192
+        163,
+        194
       ],
-      "idx": 166
+      "idx": 167
     },
     {
       "path": "../packages/core/src/data/proxy/Client.js",
       "requires": [
-        166
+        167
       ],
       "uses": [],
-      "idx": 167
+      "idx": 168
     },
     {
       "path": "../packages/core/src/data/proxy/Memory.js",
       "requires": [
-        167
+        168
       ],
       "uses": [
         51,
         55
       ],
-      "idx": 168
+      "idx": 169
     },
     {
       "path": "../packages/core/src/data/ProxyStore.js",
@@ -1694,14 +1710,14 @@ var Ext = Ext || {};
         148,
         149,
         150,
-        162,
-        166,
-        168
+        163,
+        167,
+        169
       ],
       "uses": [
         142
       ],
-      "idx": 169
+      "idx": 170
     },
     {
       "path": "../packages/core/src/util/Group.js",
@@ -1709,63 +1725,63 @@ var Ext = Ext || {};
         132
       ],
       "uses": [],
-      "idx": 170
+      "idx": 171
     },
     {
       "path": "../packages/core/src/data/Group.js",
       "requires": [
-        170
+        171
       ],
       "uses": [],
-      "idx": 171
+      "idx": 172
     },
     {
       "path": "../packages/core/src/data/LocalStore.js",
       "requires": [
         0,
-        171
+        172
       ],
       "uses": [
         132
       ],
-      "idx": 172
+      "idx": 173
     },
     {
       "path": "../packages/core/src/data/proxy/Server.js",
       "requires": [
-        166
+        167
       ],
       "uses": [
         95,
-        247
+        249
       ],
-      "idx": 173
+      "idx": 174
     },
     {
       "path": "../packages/core/src/data/proxy/Ajax.js",
       "requires": [
         18,
-        173
-      ],
-      "uses": [],
-      "idx": 174
-    },
-    {
-      "path": "../packages/core/src/data/reader/Json.js",
-      "requires": [
-        79,
-        164
+        174
       ],
       "uses": [],
       "idx": 175
     },
     {
-      "path": "../packages/core/src/data/writer/Json.js",
+      "path": "../packages/core/src/data/reader/Json.js",
       "requires": [
+        79,
         165
       ],
       "uses": [],
       "idx": 176
+    },
+    {
+      "path": "../packages/core/src/data/writer/Json.js",
+      "requires": [
+        166
+      ],
+      "uses": [],
+      "idx": 177
     },
     {
       "path": "../packages/core/src/util/SorterCollection.js",
@@ -1774,7 +1790,7 @@ var Ext = Ext || {};
         132
       ],
       "uses": [],
-      "idx": 177
+      "idx": 178
     },
     {
       "path": "../packages/core/src/util/FilterCollection.js",
@@ -1783,69 +1799,79 @@ var Ext = Ext || {};
         132
       ],
       "uses": [],
-      "idx": 178
+      "idx": 179
+    },
+    {
+      "path": "../packages/core/src/util/GrouperCollection.js",
+      "requires": [
+        131,
+        178
+      ],
+      "uses": [],
+      "idx": 180
     },
     {
       "path": "../packages/core/src/util/GroupCollection.js",
       "requires": [
         132,
-        170,
-        177,
-        178
-      ],
-      "uses": [],
-      "idx": 179
-    },
-    {
-      "path": "../packages/core/src/data/Store.js",
-      "requires": [
-        1,
-        162,
-        169,
-        172,
-        174,
-        175,
-        176,
-        179
-      ],
-      "uses": [
-        131,
-        183
-      ],
-      "idx": 180
-    },
-    {
-      "path": "../packages/core/src/data/reader/Array.js",
-      "requires": [
-        175
+        171,
+        178,
+        179,
+        180
       ],
       "uses": [],
       "idx": 181
     },
     {
-      "path": "../packages/core/src/data/ArrayStore.js",
+      "path": "../packages/core/src/data/Store.js",
       "requires": [
-        168,
-        180,
+        1,
+        163,
+        170,
+        173,
+        175,
+        176,
+        177,
         181
       ],
-      "uses": [],
+      "uses": [
+        131,
+        185
+      ],
       "idx": 182
+    },
+    {
+      "path": "../packages/core/src/data/reader/Array.js",
+      "requires": [
+        176
+      ],
+      "uses": [],
+      "idx": 183
+    },
+    {
+      "path": "../packages/core/src/data/ArrayStore.js",
+      "requires": [
+        169,
+        182,
+        183
+      ],
+      "uses": [],
+      "idx": 184
     },
     {
       "path": "../packages/core/src/data/StoreManager.js",
       "requires": [
         56,
-        182
+        184
       ],
       "uses": [
         12,
-        168,
-        176,
-        180,
-        181
+        169,
+        177,
+        182,
+        183
       ],
-      "idx": 183
+      "idx": 185
     },
     {
       "path": "../packages/core/src/app/domain/Store.js",
@@ -1854,7 +1880,7 @@ var Ext = Ext || {};
         143
       ],
       "uses": [],
-      "idx": 184
+      "idx": 186
     },
     {
       "path": "../packages/core/src/app/Controller.js",
@@ -1863,35 +1889,35 @@ var Ext = Ext || {};
         100,
         128,
         129,
-        183,
-        184
+        185,
+        186
       ],
       "uses": [
         24,
         142
       ],
-      "idx": 185
+      "idx": 187
     },
     {
       "path": "../packages/core/src/app/Application.js",
       "requires": [
         56,
         125,
-        185
+        187
       ],
       "uses": [
         126
       ],
-      "idx": 186
+      "idx": 188
     },
     {
       "path": "../packages/core/src/app/Profile.js",
       "requires": [
         4,
-        185
+        187
       ],
       "uses": [],
-      "idx": 187
+      "idx": 189
     },
     {
       "path": "../packages/core/src/app/domain/View.js",
@@ -1900,34 +1926,34 @@ var Ext = Ext || {};
         99
       ],
       "uses": [],
-      "idx": 188
+      "idx": 190
     },
     {
       "path": "../packages/core/src/app/ViewController.js",
       "requires": [
         12,
         128,
-        188
+        190
       ],
       "uses": [],
-      "idx": 189
+      "idx": 191
     },
     {
       "path": "../packages/core/src/util/Bag.js",
       "requires": [],
       "uses": [],
-      "idx": 190
+      "idx": 192
     },
     {
       "path": "../packages/core/src/util/Scheduler.js",
       "requires": [
         4,
-        190
+        192
       ],
       "uses": [
         77
       ],
-      "idx": 191
+      "idx": 193
     },
     {
       "path": "../packages/core/src/data/Batch.js",
@@ -1935,38 +1961,24 @@ var Ext = Ext || {};
         4
       ],
       "uses": [],
-      "idx": 192
+      "idx": 194
     },
     {
       "path": "../packages/core/src/data/matrix/Slice.js",
       "requires": [],
       "uses": [],
-      "idx": 193
+      "idx": 195
     },
     {
       "path": "../packages/core/src/data/matrix/Side.js",
       "requires": [
-        193
+        195
       ],
-      "uses": [],
-      "idx": 194
-    },
-    {
-      "path": "../packages/core/src/data/matrix/Matrix.js",
-      "requires": [
-        194
-      ],
-      "uses": [],
-      "idx": 195
-    },
-    {
-      "path": "../packages/core/src/data/session/ChangesVisitor.js",
-      "requires": [],
       "uses": [],
       "idx": 196
     },
     {
-      "path": "../packages/core/src/data/session/ChildChangesVisitor.js",
+      "path": "../packages/core/src/data/matrix/Matrix.js",
       "requires": [
         196
       ],
@@ -1974,133 +1986,133 @@ var Ext = Ext || {};
       "idx": 197
     },
     {
+      "path": "../packages/core/src/data/session/ChangesVisitor.js",
+      "requires": [],
+      "uses": [],
+      "idx": 198
+    },
+    {
+      "path": "../packages/core/src/data/session/ChildChangesVisitor.js",
+      "requires": [
+        198
+      ],
+      "uses": [],
+      "idx": 199
+    },
+    {
       "path": "../packages/core/src/data/session/BatchVisitor.js",
       "requires": [],
       "uses": [
-        192
+        194
       ],
-      "idx": 198
+      "idx": 200
     },
     {
       "path": "../packages/core/src/mixin/Dirty.js",
       "requires": [],
       "uses": [],
-      "idx": 199
+      "idx": 201
     },
     {
       "path": "../packages/core/src/data/Session.js",
       "requires": [
         4,
         142,
-        192,
-        195,
-        196,
+        194,
         197,
         198,
-        199
-      ],
-      "uses": [],
-      "idx": 200
-    },
-    {
-      "path": "../packages/core/src/util/Schedulable.js",
-      "requires": [],
-      "uses": [],
-      "idx": 201
-    },
-    {
-      "path": "../packages/core/src/app/bind/BaseBinding.js",
-      "requires": [
+        199,
+        200,
         201
       ],
       "uses": [],
       "idx": 202
     },
     {
-      "path": "../packages/core/src/app/bind/Binding.js",
-      "requires": [
-        202
-      ],
+      "path": "../packages/core/src/util/Schedulable.js",
+      "requires": [],
       "uses": [],
       "idx": 203
     },
     {
-      "path": "../packages/core/src/app/bind/AbstractStub.js",
+      "path": "../packages/core/src/app/bind/BaseBinding.js",
       "requires": [
-        201,
         203
       ],
       "uses": [],
       "idx": 204
     },
     {
-      "path": "../packages/core/src/app/bind/Stub.js",
+      "path": "../packages/core/src/app/bind/Binding.js",
       "requires": [
-        203,
         204
       ],
-      "uses": [
-        209
-      ],
+      "uses": [],
       "idx": 205
     },
     {
-      "path": "../packages/core/src/app/bind/LinkStub.js",
+      "path": "../packages/core/src/app/bind/AbstractStub.js",
       "requires": [
+        203,
         205
       ],
       "uses": [],
       "idx": 206
     },
     {
-      "path": "../packages/core/src/app/bind/RootStub.js",
+      "path": "../packages/core/src/app/bind/Stub.js",
       "requires": [
-        204,
         205,
         206
       ],
-      "uses": [],
+      "uses": [
+        211
+      ],
       "idx": 207
     },
     {
-      "path": "../packages/core/src/app/bind/Multi.js",
+      "path": "../packages/core/src/app/bind/LinkStub.js",
       "requires": [
-        202
+        207
       ],
       "uses": [],
       "idx": 208
     },
     {
-      "path": "../packages/core/src/app/bind/Formula.js",
+      "path": "../packages/core/src/app/bind/RootStub.js",
       "requires": [
-        23,
-        201
+        206,
+        207,
+        208
       ],
       "uses": [],
       "idx": 209
     },
     {
-      "path": "../packages/core/src/util/Fly.js",
-      "requires": [],
+      "path": "../packages/core/src/app/bind/Multi.js",
+      "requires": [
+        204
+      ],
       "uses": [],
       "idx": 210
     },
     {
-      "path": "../packages/core/src/parse/Tokenizer.js",
+      "path": "../packages/core/src/app/bind/Formula.js",
       "requires": [
-        210
+        23,
+        203
       ],
       "uses": [],
       "idx": 211
     },
     {
-      "path": "../packages/core/src/parse/Symbol.js",
+      "path": "../packages/core/src/util/Fly.js",
       "requires": [],
       "uses": [],
       "idx": 212
     },
     {
-      "path": "../packages/core/src/parse/symbol/Constant.js",
+      "path": "../packages/core/src/parse/Tokenizer.js",
       "requires": [
         212
       ],
@@ -2108,15 +2120,13 @@ var Ext = Ext || {};
       "idx": 213
     },
     {
-      "path": "../packages/core/src/parse/symbol/Infix.js",
-      "requires": [
-        212
-      ],
+      "path": "../packages/core/src/parse/Symbol.js",
+      "requires": [],
       "uses": [],
       "idx": 214
     },
     {
-      "path": "../packages/core/src/parse/symbol/InfixRight.js",
+      "path": "../packages/core/src/parse/symbol/Constant.js",
       "requires": [
         214
       ],
@@ -2124,107 +2134,123 @@ var Ext = Ext || {};
       "idx": 215
     },
     {
-      "path": "../packages/core/src/parse/symbol/Paren.js",
+      "path": "../packages/core/src/parse/symbol/Infix.js",
       "requires": [
-        212
+        214
       ],
       "uses": [],
       "idx": 216
     },
     {
-      "path": "../packages/core/src/parse/symbol/Prefix.js",
+      "path": "../packages/core/src/parse/symbol/InfixRight.js",
       "requires": [
-        212
+        216
       ],
       "uses": [],
       "idx": 217
     },
     {
-      "path": "../packages/core/src/parse/Parser.js",
+      "path": "../packages/core/src/parse/symbol/Paren.js",
       "requires": [
-        210,
-        211,
-        213,
-        215,
-        216,
-        217
-      ],
-      "uses": [
-        212,
         214
       ],
+      "uses": [],
       "idx": 218
     },
     {
-      "path": "../packages/core/src/app/bind/Parser.js",
+      "path": "../packages/core/src/parse/symbol/Prefix.js",
       "requires": [
-        94,
-        218
+        214
       ],
       "uses": [],
       "idx": 219
     },
     {
-      "path": "../packages/core/src/app/bind/Template.js",
+      "path": "../packages/core/src/parse/Parser.js",
       "requires": [
-        94,
+        212,
+        213,
+        215,
+        217,
+        218,
         219
       ],
-      "uses": [],
+      "uses": [
+        214,
+        216
+      ],
       "idx": 220
     },
     {
-      "path": "../packages/core/src/app/bind/TemplateBinding.js",
+      "path": "../packages/core/src/app/bind/Parser.js",
       "requires": [
-        202,
-        208,
+        94,
         220
       ],
       "uses": [],
       "idx": 221
     },
     {
+      "path": "../packages/core/src/app/bind/Template.js",
+      "requires": [
+        94,
+        221
+      ],
+      "uses": [],
+      "idx": 222
+    },
+    {
+      "path": "../packages/core/src/app/bind/TemplateBinding.js",
+      "requires": [
+        204,
+        210,
+        222
+      ],
+      "uses": [],
+      "idx": 223
+    },
+    {
       "path": "../packages/core/src/data/ChainedStore.js",
       "requires": [
         143,
-        172
+        173
       ],
       "uses": [
         95,
-        183
+        185
       ],
-      "idx": 222
+      "idx": 224
     },
     {
       "path": "../packages/core/src/app/ViewModel.js",
       "requires": [
         3,
         12,
-        191,
-        200,
-        206,
-        207,
+        193,
+        202,
         208,
         209,
-        221,
-        222
+        210,
+        211,
+        223,
+        224
       ],
       "uses": [
         1,
         142
       ],
-      "idx": 223
+      "idx": 225
     },
     {
       "path": "../packages/core/src/app/domain/Controller.js",
       "requires": [
         99,
-        185
+        187
       ],
       "uses": [
         128
       ],
-      "idx": 224
+      "idx": 226
     },
     {
       "path": "../packages/core/src/direct/Manager.js",
@@ -2235,27 +2261,27 @@ var Ext = Ext || {};
       "uses": [
         95
       ],
-      "idx": 225
+      "idx": 227
     },
     {
       "path": "../packages/core/src/direct/Provider.js",
       "requires": [
         4,
-        225
+        227
       ],
       "uses": [
         18
       ],
-      "idx": 226
+      "idx": 228
     },
     {
       "path": "../packages/core/src/app/domain/Direct.js",
       "requires": [
         99,
-        226
+        228
       ],
       "uses": [],
-      "idx": 227
+      "idx": 229
     },
     {
       "path": "../packages/core/src/data/PageMap.js",
@@ -2263,7 +2289,7 @@ var Ext = Ext || {};
         23
       ],
       "uses": [],
-      "idx": 228
+      "idx": 230
     },
     {
       "path": "../packages/core/src/data/BufferedStore.js",
@@ -2271,78 +2297,78 @@ var Ext = Ext || {};
         51,
         54,
         131,
-        169,
-        228
+        170,
+        230
       ],
       "uses": [
-        177,
         178,
-        179
+        179,
+        181
       ],
-      "idx": 229
+      "idx": 231
     },
     {
       "path": "../packages/core/src/data/ClientStore.js",
       "requires": [
-        168,
-        180
-      ],
-      "uses": [],
-      "idx": 230
-    },
-    {
-      "path": "../packages/core/src/data/proxy/Direct.js",
-      "requires": [
-        173,
-        225
-      ],
-      "uses": [],
-      "idx": 231
-    },
-    {
-      "path": "../packages/core/src/data/DirectStore.js",
-      "requires": [
-        180,
-        231
+        169,
+        182
       ],
       "uses": [],
       "idx": 232
     },
     {
-      "path": "../packages/core/src/data/JsonP.js",
-      "requires": [],
+      "path": "../packages/core/src/data/proxy/Direct.js",
+      "requires": [
+        174,
+        227
+      ],
       "uses": [],
       "idx": 233
     },
     {
-      "path": "../packages/core/src/data/proxy/JsonP.js",
+      "path": "../packages/core/src/data/DirectStore.js",
       "requires": [
-        173,
+        182,
         233
       ],
       "uses": [],
       "idx": 234
     },
     {
-      "path": "../packages/core/src/data/JsonPStore.js",
-      "requires": [
-        175,
-        180,
-        234
-      ],
+      "path": "../packages/core/src/data/JsonP.js",
+      "requires": [],
       "uses": [],
       "idx": 235
     },
     {
-      "path": "../packages/core/src/data/JsonStore.js",
+      "path": "../packages/core/src/data/proxy/JsonP.js",
       "requires": [
         174,
-        175,
-        176,
-        180
+        235
       ],
       "uses": [],
       "idx": 236
+    },
+    {
+      "path": "../packages/core/src/data/JsonPStore.js",
+      "requires": [
+        176,
+        182,
+        236
+      ],
+      "uses": [],
+      "idx": 237
+    },
+    {
+      "path": "../packages/core/src/data/JsonStore.js",
+      "requires": [
+        175,
+        176,
+        177,
+        182
+      ],
+      "uses": [],
+      "idx": 238
     },
     {
       "path": "../packages/core/src/data/ModelManager.js",
@@ -2350,23 +2376,23 @@ var Ext = Ext || {};
         142
       ],
       "uses": [
-        162
+        163
       ],
-      "idx": 237
+      "idx": 239
     },
     {
       "path": "../packages/core/src/data/NodeInterface.js",
       "requires": [
         4,
-        155,
-        157,
-        159,
-        176
+        156,
+        158,
+        160,
+        177
       ],
       "uses": [
         142
       ],
-      "idx": 238
+      "idx": 240
     },
     {
       "path": "../packages/core/src/mixin/Queryable.js",
@@ -2374,29 +2400,29 @@ var Ext = Ext || {};
       "uses": [
         24
       ],
-      "idx": 239
+      "idx": 241
     },
     {
       "path": "../packages/core/src/data/TreeModel.js",
       "requires": [
-        162,
-        238,
-        239
+        163,
+        240,
+        241
       ],
       "uses": [],
-      "idx": 240
+      "idx": 242
     },
     {
       "path": "../packages/core/src/data/NodeStore.js",
       "requires": [
-        180,
-        238,
-        240
+        182,
+        240,
+        242
       ],
       "uses": [
-        162
+        163
       ],
-      "idx": 241
+      "idx": 243
     },
     {
       "path": "../packages/core/src/data/query/Compiler.js",
@@ -2404,13 +2430,13 @@ var Ext = Ext || {};
       "uses": [
         79
       ],
-      "idx": 242
+      "idx": 244
     },
     {
       "path": "../packages/core/src/data/query/Converter.js",
       "requires": [],
       "uses": [],
-      "idx": 243
+      "idx": 245
     },
     {
       "path": "../packages/core/src/data/query/Stringifier.js",
@@ -2418,15 +2444,15 @@ var Ext = Ext || {};
       "uses": [
         79
       ],
-      "idx": 244
+      "idx": 246
     },
     {
       "path": "../packages/core/src/data/query/Parser.js",
       "requires": [
-        218
+        220
       ],
       "uses": [],
-      "idx": 245
+      "idx": 247
     },
     {
       "path": "../packages/core/src/data/Query.js",
@@ -2434,32 +2460,32 @@ var Ext = Ext || {};
         3,
         12,
         50,
-        242,
-        243,
         244,
-        245
+        245,
+        246,
+        247
       ],
       "uses": [],
-      "idx": 246
+      "idx": 248
     },
     {
       "path": "../packages/core/src/data/Request.js",
       "requires": [],
       "uses": [],
-      "idx": 247
+      "idx": 249
     },
     {
       "path": "../packages/core/src/data/TreeStore.js",
       "requires": [
         54,
-        180,
-        238,
-        240
+        182,
+        240,
+        242
       ],
       "uses": [
-        162
+        163
       ],
-      "idx": 248
+      "idx": 250
     },
     {
       "path": "../packages/core/src/data/Types.js",
@@ -2467,15 +2493,15 @@ var Ext = Ext || {};
         151
       ],
       "uses": [],
-      "idx": 249
+      "idx": 251
     },
     {
       "path": "../packages/core/src/data/Validation.js",
       "requires": [
-        162
+        163
       ],
       "uses": [],
-      "idx": 250
+      "idx": 252
     },
     {
       "path": "../packages/core/src/dom/Helper.js",
@@ -2483,179 +2509,206 @@ var Ext = Ext || {};
       "uses": [
         95
       ],
-      "idx": 251
+      "idx": 253
     },
     {
       "path": "../packages/core/src/dom/Query.js",
       "requires": [
         22,
-        251
+        253
       ],
       "uses": [
         23
       ],
-      "idx": 252
+      "idx": 254
     },
     {
       "path": "../packages/core/src/data/reader/Xml.js",
       "requires": [
-        164,
-        252
-      ],
-      "uses": [],
-      "idx": 253
-    },
-    {
-      "path": "../packages/core/src/data/writer/Xml.js",
-      "requires": [
-        165
-      ],
-      "uses": [],
-      "idx": 254
-    },
-    {
-      "path": "../packages/core/src/data/XmlStore.js",
-      "requires": [
-        174,
-        180,
-        253,
+        165,
         254
       ],
       "uses": [],
       "idx": 255
     },
     {
-      "path": "../packages/core/src/data/identifier/Negative.js",
+      "path": "../packages/core/src/data/writer/Xml.js",
       "requires": [
-        161
+        166
       ],
       "uses": [],
       "idx": 256
     },
     {
-      "path": "../packages/core/src/data/identifier/Uuid.js",
+      "path": "../packages/core/src/data/XmlStore.js",
       "requires": [
-        160
+        175,
+        182,
+        255,
+        256
       ],
       "uses": [],
       "idx": 257
     },
     {
-      "path": "../packages/core/src/data/proxy/WebStorage.js",
+      "path": "../packages/core/src/data/identifier/Negative.js",
       "requires": [
-        161,
-        167
+        162
       ],
-      "uses": [
-        54,
-        95,
-        163
-      ],
+      "uses": [],
       "idx": 258
     },
     {
-      "path": "../packages/core/src/data/proxy/LocalStorage.js",
+      "path": "../packages/core/src/data/identifier/Uuid.js",
       "requires": [
-        258
+        161
       ],
       "uses": [],
       "idx": 259
     },
     {
-      "path": "../packages/core/src/data/proxy/Rest.js",
+      "path": "../packages/core/src/data/proxy/WebStorage.js",
       "requires": [
-        174
+        162,
+        168
       ],
-      "uses": [],
+      "uses": [
+        54,
+        95,
+        164
+      ],
       "idx": 260
     },
     {
-      "path": "../packages/core/src/data/proxy/SessionStorage.js",
+      "path": "../packages/core/src/data/proxy/LocalStorage.js",
       "requires": [
-        258
+        260
       ],
       "uses": [],
       "idx": 261
     },
     {
-      "path": "../packages/core/src/data/schema/BelongsTo.js",
-      "requires": [],
+      "path": "../packages/core/src/data/proxy/Rest.js",
+      "requires": [
+        175
+      ],
       "uses": [],
       "idx": 262
     },
     {
-      "path": "../packages/core/src/data/schema/HasMany.js",
-      "requires": [],
+      "path": "../packages/core/src/data/proxy/SessionStorage.js",
+      "requires": [
+        260
+      ],
       "uses": [],
       "idx": 263
     },
     {
-      "path": "../packages/core/src/data/schema/HasOne.js",
+      "path": "../packages/core/src/data/schema/BelongsTo.js",
       "requires": [],
       "uses": [],
       "idx": 264
     },
     {
-      "path": "../packages/core/src/data/schema/Reference.js",
+      "path": "../packages/core/src/data/schema/HasMany.js",
       "requires": [],
       "uses": [],
       "idx": 265
     },
     {
-      "path": "../packages/core/src/data/summary/Base.js",
-      "requires": [
-        12
-      ],
+      "path": "../packages/core/src/data/schema/HasOne.js",
+      "requires": [],
       "uses": [],
       "idx": 266
     },
     {
-      "path": "../packages/core/src/data/summary/Sum.js",
-      "requires": [
-        266
-      ],
+      "path": "../packages/core/src/data/schema/Reference.js",
+      "requires": [],
       "uses": [],
       "idx": 267
     },
     {
-      "path": "../packages/core/src/data/summary/Average.js",
+      "path": "../packages/core/src/data/summary/Sum.js",
       "requires": [
-        267
+        153
       ],
       "uses": [],
       "idx": 268
     },
     {
-      "path": "../packages/core/src/data/summary/Count.js",
+      "path": "../packages/core/src/data/summary/Average.js",
       "requires": [
-        266
+        268
       ],
       "uses": [],
       "idx": 269
     },
     {
-      "path": "../packages/core/src/data/summary/Max.js",
+      "path": "../packages/core/src/data/summary/Count.js",
       "requires": [
-        266
+        153
       ],
       "uses": [],
       "idx": 270
     },
     {
-      "path": "../packages/core/src/data/summary/Min.js",
+      "path": "../packages/core/src/data/summary/Max.js",
       "requires": [
-        266
+        153
       ],
       "uses": [],
       "idx": 271
     },
     {
-      "path": "../packages/core/src/data/summary/None.js",
+      "path": "../packages/core/src/data/summary/Min.js",
       "requires": [
-        266
+        153
       ],
       "uses": [],
       "idx": 272
+    },
+    {
+      "path": "../packages/core/src/data/summary/None.js",
+      "requires": [
+        153
+      ],
+      "uses": [],
+      "idx": 273
+    },
+    {
+      "path": "../packages/core/src/data/summary/Variance.js",
+      "requires": [
+        153,
+        269
+      ],
+      "uses": [
+        12
+      ],
+      "idx": 274
+    },
+    {
+      "path": "../packages/core/src/data/summary/StdDev.js",
+      "requires": [
+        274
+      ],
+      "uses": [],
+      "idx": 275
+    },
+    {
+      "path": "../packages/core/src/data/summary/VarianceP.js",
+      "requires": [
+        274
+      ],
+      "uses": [],
+      "idx": 276
+    },
+    {
+      "path": "../packages/core/src/data/summary/StdDevP.js",
+      "requires": [
+        276
+      ],
+      "uses": [],
+      "idx": 277
     },
     {
       "path": "../packages/core/src/data/validator/AbstractDate.js",
@@ -2663,7 +2716,7 @@ var Ext = Ext || {};
         152
       ],
       "uses": [],
-      "idx": 273
+      "idx": 278
     },
     {
       "path": "../packages/core/src/data/validator/Bound.js",
@@ -2673,7 +2726,7 @@ var Ext = Ext || {};
       "uses": [
         95
       ],
-      "idx": 274
+      "idx": 279
     },
     {
       "path": "../packages/core/src/data/validator/Format.js",
@@ -2681,23 +2734,23 @@ var Ext = Ext || {};
         152
       ],
       "uses": [],
-      "idx": 275
+      "idx": 280
     },
     {
       "path": "../packages/core/src/data/validator/CIDRv4.js",
       "requires": [
-        275
+        280
       ],
       "uses": [],
-      "idx": 276
+      "idx": 281
     },
     {
       "path": "../packages/core/src/data/validator/CIDRv6.js",
       "requires": [
-        275
+        280
       ],
       "uses": [],
-      "idx": 277
+      "idx": 282
     },
     {
       "path": "../packages/core/src/data/validator/Number.js",
@@ -2707,60 +2760,20 @@ var Ext = Ext || {};
       "uses": [
         94
       ],
-      "idx": 278
+      "idx": 283
     },
     {
       "path": "../packages/core/src/data/validator/Currency.js",
       "requires": [
-        278
+        283
       ],
       "uses": [
         94
       ],
-      "idx": 279
-    },
-    {
-      "path": "../packages/core/src/data/validator/CurrencyUS.js",
-      "requires": [
-        279
-      ],
-      "uses": [],
-      "idx": 280
-    },
-    {
-      "path": "../packages/core/src/data/validator/Date.js",
-      "requires": [
-        273
-      ],
-      "uses": [],
-      "idx": 281
-    },
-    {
-      "path": "../packages/core/src/data/validator/DateTime.js",
-      "requires": [
-        273
-      ],
-      "uses": [],
-      "idx": 282
-    },
-    {
-      "path": "../packages/core/src/data/validator/Email.js",
-      "requires": [
-        275
-      ],
-      "uses": [],
-      "idx": 283
-    },
-    {
-      "path": "../packages/core/src/data/validator/List.js",
-      "requires": [
-        152
-      ],
-      "uses": [],
       "idx": 284
     },
     {
-      "path": "../packages/core/src/data/validator/Exclusion.js",
+      "path": "../packages/core/src/data/validator/CurrencyUS.js",
       "requires": [
         284
       ],
@@ -2768,31 +2781,31 @@ var Ext = Ext || {};
       "idx": 285
     },
     {
-      "path": "../packages/core/src/data/validator/IPAddress.js",
+      "path": "../packages/core/src/data/validator/Date.js",
       "requires": [
-        275
+        278
       ],
       "uses": [],
       "idx": 286
     },
     {
-      "path": "../packages/core/src/data/validator/Inclusion.js",
+      "path": "../packages/core/src/data/validator/DateTime.js",
       "requires": [
-        284
+        278
       ],
       "uses": [],
       "idx": 287
     },
     {
-      "path": "../packages/core/src/data/validator/Length.js",
+      "path": "../packages/core/src/data/validator/Email.js",
       "requires": [
-        274
+        280
       ],
       "uses": [],
       "idx": 288
     },
     {
-      "path": "../packages/core/src/data/validator/Presence.js",
+      "path": "../packages/core/src/data/validator/List.js",
       "requires": [
         152
       ],
@@ -2800,7 +2813,7 @@ var Ext = Ext || {};
       "idx": 289
     },
     {
-      "path": "../packages/core/src/data/validator/NotNull.js",
+      "path": "../packages/core/src/data/validator/Exclusion.js",
       "requires": [
         289
       ],
@@ -2808,100 +2821,91 @@ var Ext = Ext || {};
       "idx": 290
     },
     {
-      "path": "../packages/core/src/data/validator/Phone.js",
+      "path": "../packages/core/src/data/validator/IPAddress.js",
       "requires": [
-        275
+        280
       ],
       "uses": [],
       "idx": 291
     },
     {
-      "path": "../packages/core/src/data/validator/Range.js",
+      "path": "../packages/core/src/data/validator/Inclusion.js",
       "requires": [
-        274
+        289
       ],
       "uses": [],
       "idx": 292
     },
     {
-      "path": "../packages/core/src/data/validator/Time.js",
+      "path": "../packages/core/src/data/validator/Length.js",
       "requires": [
-        273
+        279
       ],
       "uses": [],
       "idx": 293
     },
     {
-      "path": "../packages/core/src/data/validator/Url.js",
+      "path": "../packages/core/src/data/validator/Presence.js",
       "requires": [
-        275
+        152
       ],
       "uses": [],
       "idx": 294
     },
     {
-      "path": "../packages/core/src/data/virtual/Group.js",
-      "requires": [],
+      "path": "../packages/core/src/data/validator/NotNull.js",
+      "requires": [
+        294
+      ],
       "uses": [],
       "idx": 295
     },
     {
-      "path": "../packages/core/src/data/virtual/Page.js",
-      "requires": [],
+      "path": "../packages/core/src/data/validator/Phone.js",
+      "requires": [
+        280
+      ],
       "uses": [],
       "idx": 296
     },
     {
-      "path": "../packages/core/src/data/virtual/PageMap.js",
+      "path": "../packages/core/src/data/validator/Range.js",
       "requires": [
-        296
+        279
       ],
       "uses": [],
       "idx": 297
     },
     {
-      "path": "../packages/core/src/data/virtual/Range.js",
+      "path": "../packages/core/src/data/validator/Time.js",
       "requires": [
-        133
+        278
       ],
       "uses": [],
       "idx": 298
     },
     {
-      "path": "../packages/core/src/data/virtual/Store.js",
+      "path": "../packages/core/src/data/validator/Url.js",
       "requires": [
-        169,
-        177,
-        178,
-        297,
-        298
+        280
       ],
-      "uses": [
-        131,
-        132,
-        162,
-        295
-      ],
+      "uses": [],
       "idx": 299
     },
     {
-      "path": "../packages/core/src/direct/Event.js",
+      "path": "../packages/core/src/data/virtual/Group.js",
       "requires": [],
       "uses": [],
       "idx": 300
     },
     {
-      "path": "../packages/core/src/direct/RemotingEvent.js",
-      "requires": [
-        300
-      ],
-      "uses": [
-        225
-      ],
+      "path": "../packages/core/src/data/virtual/Page.js",
+      "requires": [],
+      "uses": [],
       "idx": 301
     },
     {
-      "path": "../packages/core/src/direct/ExceptionEvent.js",
+      "path": "../packages/core/src/data/virtual/PageMap.js",
       "requires": [
         301
       ],
@@ -2909,57 +2913,106 @@ var Ext = Ext || {};
       "idx": 302
     },
     {
-      "path": "../packages/core/src/direct/JsonProvider.js",
+      "path": "../packages/core/src/data/virtual/Range.js",
       "requires": [
-        226
+        133
+      ],
+      "uses": [],
+      "idx": 303
+    },
+    {
+      "path": "../packages/core/src/data/virtual/Store.js",
+      "requires": [
+        170,
+        178,
+        179,
+        302,
+        303
       ],
       "uses": [
-        225,
-        302
+        131,
+        132,
+        163,
+        300
       ],
-      "idx": 303
+      "idx": 304
+    },
+    {
+      "path": "../packages/core/src/direct/Event.js",
+      "requires": [],
+      "uses": [],
+      "idx": 305
+    },
+    {
+      "path": "../packages/core/src/direct/RemotingEvent.js",
+      "requires": [
+        305
+      ],
+      "uses": [
+        227
+      ],
+      "idx": 306
+    },
+    {
+      "path": "../packages/core/src/direct/ExceptionEvent.js",
+      "requires": [
+        306
+      ],
+      "uses": [],
+      "idx": 307
+    },
+    {
+      "path": "../packages/core/src/direct/JsonProvider.js",
+      "requires": [
+        228
+      ],
+      "uses": [
+        227,
+        307
+      ],
+      "idx": 308
     },
     {
       "path": "../packages/core/src/direct/PollingProvider.js",
       "requires": [
         18,
         57,
-        302,
-        303
+        307,
+        308
       ],
       "uses": [
-        225,
-        400
+        227,
+        409
       ],
-      "idx": 304
+      "idx": 309
     },
     {
       "path": "../packages/core/src/direct/RemotingMethod.js",
       "requires": [],
       "uses": [],
-      "idx": 305
+      "idx": 310
     },
     {
       "path": "../packages/core/src/direct/Transaction.js",
       "requires": [],
       "uses": [],
-      "idx": 306
+      "idx": 311
     },
     {
       "path": "../packages/core/src/direct/RemotingProvider.js",
       "requires": [
         1,
         56,
-        225,
-        303,
-        305,
-        306
+        227,
+        308,
+        310,
+        311
       ],
       "uses": [
         79,
-        302
+        307
       ],
-      "idx": 307
+      "idx": 312
     },
     {
       "path": "../packages/core/src/dom/GarbageCollector.js",
@@ -2967,7 +3020,7 @@ var Ext = Ext || {};
       "uses": [
         49
       ],
-      "idx": 308
+      "idx": 313
     },
     {
       "path": "../packages/core/src/dom/TouchAction.js",
@@ -2976,7 +3029,7 @@ var Ext = Ext || {};
         49
       ],
       "uses": [],
-      "idx": 309
+      "idx": 314
     },
     {
       "path": "../packages/core/src/drag/Constraint.js",
@@ -2986,7 +3039,7 @@ var Ext = Ext || {};
       "uses": [
         34
       ],
-      "idx": 310
+      "idx": 315
     },
     {
       "path": "../packages/core/src/drag/Info.js",
@@ -2994,7 +3047,7 @@ var Ext = Ext || {};
         10
       ],
       "uses": [],
-      "idx": 311
+      "idx": 316
     },
     {
       "path": "../packages/core/src/drag/Item.js",
@@ -3003,7 +3056,7 @@ var Ext = Ext || {};
         4
       ],
       "uses": [],
-      "idx": 312
+      "idx": 317
     },
     {
       "path": "../packages/core/src/drag/Manager.js",
@@ -3011,31 +3064,31 @@ var Ext = Ext || {};
       "uses": [
         49,
         81,
-        311
+        316
       ],
-      "idx": 313
+      "idx": 318
     },
     {
       "path": "../packages/core/src/drag/Source.js",
       "requires": [
         77,
-        310,
-        312
+        315,
+        317
       ],
       "uses": [
         12,
-        311
+        316
       ],
-      "idx": 314
+      "idx": 319
     },
     {
       "path": "../packages/core/src/drag/Target.js",
       "requires": [
-        312,
-        313
+        317,
+        318
       ],
       "uses": [],
-      "idx": 315
+      "idx": 320
     },
     {
       "path": "../packages/core/src/drag/proxy/None.js",
@@ -3043,23 +3096,23 @@ var Ext = Ext || {};
         12
       ],
       "uses": [],
-      "idx": 316
+      "idx": 321
     },
     {
       "path": "../packages/core/src/drag/proxy/Original.js",
       "requires": [
-        316
+        321
       ],
       "uses": [],
-      "idx": 317
+      "idx": 322
     },
     {
       "path": "../packages/core/src/drag/proxy/Placeholder.js",
       "requires": [
-        316
+        321
       ],
       "uses": [],
-      "idx": 318
+      "idx": 323
     },
     {
       "path": "../packages/core/src/event/gesture/Recognizer.js",
@@ -3068,99 +3121,99 @@ var Ext = Ext || {};
         38
       ],
       "uses": [],
-      "idx": 319
+      "idx": 324
     },
     {
       "path": "../packages/core/src/event/gesture/SingleTouch.js",
       "requires": [
-        319
+        324
       ],
       "uses": [],
-      "idx": 320
+      "idx": 325
     },
     {
       "path": "../packages/core/src/event/gesture/DoubleTap.js",
       "requires": [
-        320
+        325
       ],
       "uses": [
         49
       ],
-      "idx": 321
+      "idx": 326
     },
     {
       "path": "../packages/core/src/event/gesture/Drag.js",
       "requires": [
-        320
+        325
       ],
       "uses": [
         49
       ],
-      "idx": 322
+      "idx": 327
     },
     {
       "path": "../packages/core/src/event/gesture/Swipe.js",
       "requires": [
-        320
-      ],
-      "uses": [],
-      "idx": 323
-    },
-    {
-      "path": "../packages/core/src/event/gesture/EdgeSwipe.js",
-      "requires": [
-        323
-      ],
-      "uses": [
-        49
-      ],
-      "idx": 324
-    },
-    {
-      "path": "../packages/core/src/event/gesture/LongPress.js",
-      "requires": [
-        320
-      ],
-      "uses": [
-        38,
-        49,
-        322
-      ],
-      "idx": 325
-    },
-    {
-      "path": "../packages/core/src/event/gesture/MultiTouch.js",
-      "requires": [
-        319
-      ],
-      "uses": [],
-      "idx": 326
-    },
-    {
-      "path": "../packages/core/src/event/gesture/Pinch.js",
-      "requires": [
-        326
-      ],
-      "uses": [],
-      "idx": 327
-    },
-    {
-      "path": "../packages/core/src/event/gesture/Rotate.js",
-      "requires": [
-        326
+        325
       ],
       "uses": [],
       "idx": 328
     },
     {
-      "path": "../packages/core/src/event/gesture/Tap.js",
+      "path": "../packages/core/src/event/gesture/EdgeSwipe.js",
       "requires": [
-        320
+        328
       ],
       "uses": [
         49
       ],
       "idx": 329
+    },
+    {
+      "path": "../packages/core/src/event/gesture/LongPress.js",
+      "requires": [
+        325
+      ],
+      "uses": [
+        38,
+        49,
+        327
+      ],
+      "idx": 330
+    },
+    {
+      "path": "../packages/core/src/event/gesture/MultiTouch.js",
+      "requires": [
+        324
+      ],
+      "uses": [],
+      "idx": 331
+    },
+    {
+      "path": "../packages/core/src/event/gesture/Pinch.js",
+      "requires": [
+        331
+      ],
+      "uses": [],
+      "idx": 332
+    },
+    {
+      "path": "../packages/core/src/event/gesture/Rotate.js",
+      "requires": [
+        331
+      ],
+      "uses": [],
+      "idx": 333
+    },
+    {
+      "path": "../packages/core/src/event/gesture/Tap.js",
+      "requires": [
+        325
+      ],
+      "uses": [
+        49
+      ],
+      "idx": 334
     },
     {
       "path": "../packages/core/src/event/publisher/Focus.js",
@@ -3173,80 +3226,40 @@ var Ext = Ext || {};
       "uses": [
         36
       ],
-      "idx": 330
+      "idx": 335
     },
     {
       "path": "../packages/core/src/field/InputMask.js",
       "requires": [],
       "uses": [],
-      "idx": 331
+      "idx": 336
     },
     {
       "path": "../packages/core/src/fx/State.js",
       "requires": [],
       "uses": [],
-      "idx": 332
+      "idx": 337
     },
     {
       "path": "../packages/core/src/fx/animation/Abstract.js",
       "requires": [
         12,
         25,
-        332
-      ],
-      "uses": [],
-      "idx": 333
-    },
-    {
-      "path": "../packages/core/src/fx/animation/Slide.js",
-      "requires": [
-        333
-      ],
-      "uses": [],
-      "idx": 334
-    },
-    {
-      "path": "../packages/core/src/fx/animation/SlideOut.js",
-      "requires": [
-        334
-      ],
-      "uses": [],
-      "idx": 335
-    },
-    {
-      "path": "../packages/core/src/fx/animation/Fade.js",
-      "requires": [
-        333
-      ],
-      "uses": [],
-      "idx": 336
-    },
-    {
-      "path": "../packages/core/src/fx/animation/FadeOut.js",
-      "requires": [
-        336
-      ],
-      "uses": [],
-      "idx": 337
-    },
-    {
-      "path": "../packages/core/src/fx/animation/Flip.js",
-      "requires": [
-        333
+        337
       ],
       "uses": [],
       "idx": 338
     },
     {
-      "path": "../packages/core/src/fx/animation/Pop.js",
+      "path": "../packages/core/src/fx/animation/Slide.js",
       "requires": [
-        333
+        338
       ],
       "uses": [],
       "idx": 339
     },
     {
-      "path": "../packages/core/src/fx/animation/PopOut.js",
+      "path": "../packages/core/src/fx/animation/SlideOut.js",
       "requires": [
         339
       ],
@@ -3254,74 +3267,114 @@ var Ext = Ext || {};
       "idx": 340
     },
     {
-      "path": "../packages/core/src/fx/Animation.js",
+      "path": "../packages/core/src/fx/animation/Fade.js",
       "requires": [
-        334,
-        335,
-        336,
-        337,
-        338,
-        339,
-        340
+        338
       ],
-      "uses": [
-        333
-      ],
+      "uses": [],
       "idx": 341
     },
     {
-      "path": "../packages/core/src/fx/runner/Css.js",
+      "path": "../packages/core/src/fx/animation/FadeOut.js",
       "requires": [
-        25,
         341
       ],
-      "uses": [
-        49
-      ],
+      "uses": [],
       "idx": 342
     },
     {
-      "path": "../packages/core/src/fx/runner/CssTransition.js",
+      "path": "../packages/core/src/fx/animation/Flip.js",
       "requires": [
-        19,
-        342
+        338
       ],
-      "uses": [
-        341
-      ],
+      "uses": [],
       "idx": 343
     },
     {
-      "path": "../packages/core/src/fx/Runner.js",
+      "path": "../packages/core/src/fx/animation/Pop.js",
       "requires": [
-        343
+        338
       ],
       "uses": [],
       "idx": 344
     },
     {
-      "path": "../packages/core/src/fx/animation/Cube.js",
+      "path": "../packages/core/src/fx/animation/PopOut.js",
       "requires": [
-        333
+        344
       ],
       "uses": [],
       "idx": 345
     },
     {
-      "path": "../packages/core/src/fx/animation/Wipe.js",
+      "path": "../packages/core/src/fx/Animation.js",
       "requires": [
-        341
+        339,
+        340,
+        341,
+        342,
+        343,
+        344,
+        345
       ],
-      "uses": [],
+      "uses": [
+        338
+      ],
       "idx": 346
     },
     {
-      "path": "../packages/core/src/fx/animation/WipeOut.js",
+      "path": "../packages/core/src/fx/runner/Css.js",
+      "requires": [
+        25,
+        346
+      ],
+      "uses": [
+        49
+      ],
+      "idx": 347
+    },
+    {
+      "path": "../packages/core/src/fx/runner/CssTransition.js",
+      "requires": [
+        19,
+        347
+      ],
+      "uses": [
+        346
+      ],
+      "idx": 348
+    },
+    {
+      "path": "../packages/core/src/fx/Runner.js",
+      "requires": [
+        348
+      ],
+      "uses": [],
+      "idx": 349
+    },
+    {
+      "path": "../packages/core/src/fx/animation/Cube.js",
+      "requires": [
+        338
+      ],
+      "uses": [],
+      "idx": 350
+    },
+    {
+      "path": "../packages/core/src/fx/animation/Wipe.js",
       "requires": [
         346
       ],
       "uses": [],
-      "idx": 347
+      "idx": 351
+    },
+    {
+      "path": "../packages/core/src/fx/animation/WipeOut.js",
+      "requires": [
+        351
+      ],
+      "uses": [],
+      "idx": 352
     },
     {
       "path": "../packages/core/src/fx/easing/Bounce.js",
@@ -3329,7 +3382,7 @@ var Ext = Ext || {};
         105
       ],
       "uses": [],
-      "idx": 348
+      "idx": 353
     },
     {
       "path": "../packages/core/src/fx/easing/Momentum.js",
@@ -3337,17 +3390,17 @@ var Ext = Ext || {};
         105
       ],
       "uses": [],
-      "idx": 349
+      "idx": 354
     },
     {
       "path": "../packages/core/src/fx/easing/BoundMomentum.js",
       "requires": [
         105,
-        348,
-        349
+        353,
+        354
       ],
       "uses": [],
-      "idx": 350
+      "idx": 355
     },
     {
       "path": "../packages/core/src/fx/easing/EaseIn.js",
@@ -3355,7 +3408,7 @@ var Ext = Ext || {};
         106
       ],
       "uses": [],
-      "idx": 351
+      "idx": 356
     },
     {
       "path": "../packages/core/src/fx/easing/EaseOut.js",
@@ -3363,7 +3416,7 @@ var Ext = Ext || {};
         106
       ],
       "uses": [],
-      "idx": 352
+      "idx": 357
     },
     {
       "path": "../packages/core/src/fx/easing/Easing.js",
@@ -3371,17 +3424,67 @@ var Ext = Ext || {};
         106
       ],
       "uses": [],
-      "idx": 353
+      "idx": 358
     },
     {
       "path": "../packages/core/src/fx/runner/CssAnimation.js",
       "requires": [
-        342
+        347
       ],
       "uses": [
-        341
+        346
       ],
-      "idx": 354
+      "idx": 359
+    },
+    {
+      "path": "../packages/core/src/grid/AdvancedGroupStore.js",
+      "requires": [
+        20,
+        52
+      ],
+      "uses": [
+        132
+      ],
+      "idx": 360
+    },
+    {
+      "path": "../packages/core/src/grid/plugin/BaseFilterBar.js",
+      "requires": [
+        84
+      ],
+      "uses": [
+        12
+      ],
+      "idx": 361
+    },
+    {
+      "path": "../packages/core/src/grid/plugin/BaseGroupingPanel.js",
+      "requires": [
+        84
+      ],
+      "uses": [],
+      "idx": 362
+    },
+    {
+      "path": "../packages/core/src/grid/plugin/BaseSummaries.js",
+      "requires": [
+        84,
+        153,
+        268,
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275,
+        276,
+        277
+      ],
+      "uses": [
+        12
+      ],
+      "idx": 363
     },
     {
       "path": "../packages/core/src/list/AbstractTreeItem.js",
@@ -3389,44 +3492,44 @@ var Ext = Ext || {};
         89
       ],
       "uses": [],
-      "idx": 355
+      "idx": 364
     },
     {
       "path": "../packages/core/src/list/RootTreeItem.js",
       "requires": [
-        355
+        364
       ],
       "uses": [],
-      "idx": 356
+      "idx": 365
     },
     {
       "path": "../packages/core/src/mixin/ItemRippler.js",
       "requires": [],
       "uses": [],
-      "idx": 357
+      "idx": 366
     },
     {
       "path": "../packages/core/src/list/TreeItem.js",
       "requires": [
         89,
-        355
+        364
       ],
       "uses": [],
-      "idx": 358
+      "idx": 367
     },
     {
       "path": "../packages/core/src/list/Tree.js",
       "requires": [
         89,
-        356,
-        357,
-        358
+        365,
+        366,
+        367
       ],
       "uses": [
-        162,
-        183
+        163,
+        185
       ],
-      "idx": 359
+      "idx": 368
     },
     {
       "path": "../packages/core/src/mixin/ConfigProxy.js",
@@ -3434,7 +3537,7 @@ var Ext = Ext || {};
         0
       ],
       "uses": [],
-      "idx": 360
+      "idx": 369
     },
     {
       "path": "../packages/core/src/mixin/ConfigState.js",
@@ -3442,7 +3545,7 @@ var Ext = Ext || {};
         0
       ],
       "uses": [],
-      "idx": 361
+      "idx": 370
     },
     {
       "path": "../packages/core/src/mixin/Container.js",
@@ -3452,34 +3555,34 @@ var Ext = Ext || {};
       "uses": [
         21
       ],
-      "idx": 362
+      "idx": 371
     },
     {
       "path": "../packages/core/src/util/KeyMap.js",
       "requires": [],
       "uses": [],
-      "idx": 363
+      "idx": 372
     },
     {
       "path": "../packages/core/src/util/KeyNav.js",
       "requires": [
-        363
+        372
       ],
       "uses": [
         36
       ],
-      "idx": 364
+      "idx": 373
     },
     {
       "path": "../packages/core/src/mixin/FocusableContainer.js",
       "requires": [
         0,
-        364
+        373
       ],
       "uses": [
         21
       ],
-      "idx": 365
+      "idx": 374
     },
     {
       "path": "../packages/core/src/mixin/Hookable.js",
@@ -3487,7 +3590,7 @@ var Ext = Ext || {};
         0
       ],
       "uses": [],
-      "idx": 366
+      "idx": 375
     },
     {
       "path": "../packages/core/src/mixin/Mashup.js",
@@ -3497,7 +3600,7 @@ var Ext = Ext || {};
       "uses": [
         95
       ],
-      "idx": 367
+      "idx": 376
     },
     {
       "path": "../packages/core/src/mixin/Selectable.js",
@@ -3507,13 +3610,13 @@ var Ext = Ext || {};
       "uses": [
         132
       ],
-      "idx": 368
+      "idx": 377
     },
     {
       "path": "../packages/core/src/mixin/StoreWatcher.js",
       "requires": [],
       "uses": [],
-      "idx": 369
+      "idx": 378
     },
     {
       "path": "../packages/core/src/mixin/StyleCacher.js",
@@ -3521,7 +3624,7 @@ var Ext = Ext || {};
         0
       ],
       "uses": [],
-      "idx": 370
+      "idx": 379
     },
     {
       "path": "../packages/core/src/mixin/Traversable.js",
@@ -3529,7 +3632,7 @@ var Ext = Ext || {};
         0
       ],
       "uses": [],
-      "idx": 371
+      "idx": 380
     },
     {
       "path": "../packages/core/src/perf/Accumulator.js",
@@ -3537,85 +3640,10 @@ var Ext = Ext || {};
         98
       ],
       "uses": [],
-      "idx": 372
-    },
-    {
-      "path": "../packages/core/src/perf/Monitor.js",
-      "requires": [
-        372
-      ],
-      "uses": [],
-      "idx": 373
-    },
-    {
-      "path": "../packages/core/src/plugin/AbstractClipboard.js",
-      "requires": [
-        84,
-        363
-      ],
-      "uses": [
-        49
-      ],
-      "idx": 374
-    },
-    {
-      "path": "../packages/core/src/plugin/MouseEnter.js",
-      "requires": [
-        84
-      ],
-      "uses": [],
-      "idx": 375
-    },
-    {
-      "path": "../packages/core/src/sparkline/Shape.js",
-      "requires": [],
-      "uses": [],
-      "idx": 376
-    },
-    {
-      "path": "../packages/core/src/sparkline/CanvasBase.js",
-      "requires": [
-        376
-      ],
-      "uses": [],
-      "idx": 377
-    },
-    {
-      "path": "../packages/core/src/sparkline/CanvasCanvas.js",
-      "requires": [
-        377
-      ],
-      "uses": [],
-      "idx": 378
-    },
-    {
-      "path": "../packages/core/src/sparkline/VmlCanvas.js",
-      "requires": [
-        377
-      ],
-      "uses": [],
-      "idx": 379
-    },
-    {
-      "path": "../packages/core/src/util/Color.js",
-      "requires": [],
-      "uses": [],
-      "idx": 380
-    },
-    {
-      "path": "../packages/core/src/sparkline/Base.js",
-      "requires": [
-        89,
-        98,
-        378,
-        379,
-        380
-      ],
-      "uses": [],
       "idx": 381
     },
     {
-      "path": "../packages/core/src/sparkline/BarBase.js",
+      "path": "../packages/core/src/perf/Monitor.js",
       "requires": [
         381
       ],
@@ -3623,89 +3651,164 @@ var Ext = Ext || {};
       "idx": 382
     },
     {
-      "path": "../packages/core/src/sparkline/RangeMap.js",
-      "requires": [],
-      "uses": [],
+      "path": "../packages/core/src/plugin/AbstractClipboard.js",
+      "requires": [
+        84,
+        372
+      ],
+      "uses": [
+        49
+      ],
       "idx": 383
     },
     {
-      "path": "../packages/core/src/sparkline/Bar.js",
+      "path": "../packages/core/src/plugin/MouseEnter.js",
       "requires": [
-        382,
-        383
+        84
       ],
       "uses": [],
       "idx": 384
     },
     {
-      "path": "../packages/core/src/sparkline/Box.js",
-      "requires": [
-        381
-      ],
+      "path": "../packages/core/src/sparkline/Shape.js",
+      "requires": [],
       "uses": [],
       "idx": 385
     },
     {
-      "path": "../packages/core/src/sparkline/Bullet.js",
+      "path": "../packages/core/src/sparkline/CanvasBase.js",
       "requires": [
-        381
+        385
       ],
       "uses": [],
       "idx": 386
     },
     {
-      "path": "../packages/core/src/sparkline/Discrete.js",
+      "path": "../packages/core/src/sparkline/CanvasCanvas.js",
       "requires": [
-        382
+        386
       ],
       "uses": [],
       "idx": 387
     },
     {
-      "path": "../packages/core/src/sparkline/Line.js",
+      "path": "../packages/core/src/sparkline/VmlCanvas.js",
       "requires": [
-        381,
-        383
+        386
       ],
       "uses": [],
       "idx": 388
     },
     {
-      "path": "../packages/core/src/sparkline/Pie.js",
-      "requires": [
-        381
-      ],
+      "path": "../packages/core/src/util/Color.js",
+      "requires": [],
       "uses": [],
       "idx": 389
     },
     {
-      "path": "../packages/core/src/sparkline/TriState.js",
+      "path": "../packages/core/src/sparkline/Base.js",
       "requires": [
-        382,
-        383
+        89,
+        98,
+        387,
+        388,
+        389
       ],
       "uses": [],
       "idx": 390
     },
     {
-      "path": "../packages/core/src/util/Base64.js",
-      "requires": [],
+      "path": "../packages/core/src/sparkline/BarBase.js",
+      "requires": [
+        390
+      ],
       "uses": [],
       "idx": 391
     },
     {
-      "path": "../packages/core/src/util/DelimitedValue.js",
+      "path": "../packages/core/src/sparkline/RangeMap.js",
       "requires": [],
       "uses": [],
       "idx": 392
     },
     {
-      "path": "../packages/core/src/util/CSV.js",
+      "path": "../packages/core/src/sparkline/Bar.js",
       "requires": [
+        391,
         392
       ],
       "uses": [],
       "idx": 393
+    },
+    {
+      "path": "../packages/core/src/sparkline/Box.js",
+      "requires": [
+        390
+      ],
+      "uses": [],
+      "idx": 394
+    },
+    {
+      "path": "../packages/core/src/sparkline/Bullet.js",
+      "requires": [
+        390
+      ],
+      "uses": [],
+      "idx": 395
+    },
+    {
+      "path": "../packages/core/src/sparkline/Discrete.js",
+      "requires": [
+        391
+      ],
+      "uses": [],
+      "idx": 396
+    },
+    {
+      "path": "../packages/core/src/sparkline/Line.js",
+      "requires": [
+        390,
+        392
+      ],
+      "uses": [],
+      "idx": 397
+    },
+    {
+      "path": "../packages/core/src/sparkline/Pie.js",
+      "requires": [
+        390
+      ],
+      "uses": [],
+      "idx": 398
+    },
+    {
+      "path": "../packages/core/src/sparkline/TriState.js",
+      "requires": [
+        391,
+        392
+      ],
+      "uses": [],
+      "idx": 399
+    },
+    {
+      "path": "../packages/core/src/util/Base64.js",
+      "requires": [],
+      "uses": [],
+      "idx": 400
+    },
+    {
+      "path": "../packages/core/src/util/DelimitedValue.js",
+      "requires": [],
+      "uses": [],
+      "idx": 401
+    },
+    {
+      "path": "../packages/core/src/util/CSV.js",
+      "requires": [
+        401
+      ],
+      "uses": [],
+      "idx": 402
     },
     {
       "path": "../packages/core/src/util/ClickRepeater.js",
@@ -3713,13 +3816,13 @@ var Ext = Ext || {};
         4
       ],
       "uses": [],
-      "idx": 394
+      "idx": 403
     },
     {
       "path": "../packages/core/src/util/Cookies.js",
       "requires": [],
       "uses": [],
-      "idx": 395
+      "idx": 404
     },
     {
       "path": "../packages/core/src/util/ItemCollection.js",
@@ -3727,27 +3830,27 @@ var Ext = Ext || {};
         56
       ],
       "uses": [],
-      "idx": 396
+      "idx": 405
     },
     {
       "path": "../packages/core/src/util/LocalStorage.js",
       "requires": [],
       "uses": [],
-      "idx": 397
+      "idx": 406
     },
     {
       "path": "../packages/core/src/util/Spans.js",
       "requires": [],
       "uses": [],
-      "idx": 398
+      "idx": 407
     },
     {
       "path": "../packages/core/src/util/TSV.js",
       "requires": [
-        392
+        401
       ],
       "uses": [],
-      "idx": 399
+      "idx": 408
     },
     {
       "path": "../packages/core/src/util/TaskManager.js",
@@ -3755,7 +3858,7 @@ var Ext = Ext || {};
         57
       ],
       "uses": [],
-      "idx": 400
+      "idx": 409
     },
     {
       "path": "../packages/core/src/util/TextMetrics.js",
@@ -3765,7 +3868,7 @@ var Ext = Ext || {};
       "uses": [
         75
       ],
-      "idx": 401
+      "idx": 410
     },
     {
       "path": "../packages/core/src/util/paintmonitor/OverflowChange.js",
@@ -3773,7 +3876,7 @@ var Ext = Ext || {};
         45
       ],
       "uses": [],
-      "idx": 402
+      "idx": 411
     },
     {
       "path": "../packages/core/src/util/sizemonitor/OverflowChange.js",
@@ -3783,7 +3886,7 @@ var Ext = Ext || {};
       "uses": [
         40
       ],
-      "idx": 403
+      "idx": 412
     },
     {
       "path": "../packages/core/src/util/translatable/CssPosition.js",
@@ -3791,7 +3894,7 @@ var Ext = Ext || {};
         108
       ],
       "uses": [],
-      "idx": 404
+      "idx": 413
     },
     {
       "path": "../packages/core/src/util/translatable/CssTransform.js",
@@ -3799,7 +3902,7 @@ var Ext = Ext || {};
         108
       ],
       "uses": [],
-      "idx": 405
+      "idx": 414
     },
     {
       "path": "../packages/core/src/util/translatable/ScrollParent.js",
@@ -3807,13 +3910,13 @@ var Ext = Ext || {};
         108
       ],
       "uses": [],
-      "idx": 406
+      "idx": 415
     },
     {
       "path": "../classic/classic/src/Action.js",
       "requires": [],
       "uses": [],
-      "idx": 407
+      "idx": 416
     },
     {
       "path": "../classic/classic/src/ElementLoader.js",
@@ -3824,81 +3927,81 @@ var Ext = Ext || {};
         17,
         18
       ],
-      "idx": 408
+      "idx": 417
     },
     {
       "path": "../classic/classic/src/ComponentLoader.js",
       "requires": [
-        408
+        417
       ],
       "uses": [],
-      "idx": 409
+      "idx": 418
     },
     {
       "path": "../classic/classic/src/layout/SizeModel.js",
       "requires": [],
       "uses": [],
-      "idx": 410
+      "idx": 419
     },
     {
       "path": "../classic/classic/src/layout/Layout.js",
       "requires": [
         12,
         98,
-        410
+        419
       ],
       "uses": [
-        636
+        666
       ],
-      "idx": 411
+      "idx": 420
     },
     {
       "path": "../classic/classic/src/layout/container/Container.js",
       "requires": [
         98,
         112,
-        411
+        420
       ],
       "uses": [
-        251
+        253
       ],
-      "idx": 412
+      "idx": 421
     },
     {
       "path": "../classic/classic/src/layout/container/Auto.js",
       "requires": [
-        412
+        421
       ],
       "uses": [
         98
       ],
-      "idx": 413
+      "idx": 422
     },
     {
       "path": "../classic/classic/src/ZIndexManager.js",
       "requires": [
         77,
-        177,
-        178
+        178,
+        179
       ],
       "uses": [
         49,
         132
       ],
-      "idx": 414
+      "idx": 423
     },
     {
       "path": "../classic/classic/src/container/Container.js",
       "requires": [
         56,
         117,
-        239,
-        362,
-        365,
-        396,
-        407,
-        413,
-        414
+        241,
+        371,
+        374,
+        405,
+        416,
+        422,
+        423
       ],
       "uses": [
         12,
@@ -3906,27 +4009,27 @@ var Ext = Ext || {};
         24,
         49
       ],
-      "idx": 415
+      "idx": 424
     },
     {
       "path": "../classic/classic/src/layout/container/Editor.js",
       "requires": [
-        412
+        421
       ],
       "uses": [],
-      "idx": 416
+      "idx": 425
     },
     {
       "path": "../classic/classic/src/Editor.js",
       "requires": [
-        415,
-        416
+        424,
+        425
       ],
       "uses": [
         1,
         21
       ],
-      "idx": 417
+      "idx": 426
     },
     {
       "path": "../classic/classic/src/EventManager.js",
@@ -3934,13 +4037,13 @@ var Ext = Ext || {};
       "uses": [
         77
       ],
-      "idx": 418
+      "idx": 427
     },
     {
       "path": "../classic/classic/src/Gadget.js",
       "requires": [],
       "uses": [],
-      "idx": 419
+      "idx": 428
     },
     {
       "path": "../classic/classic/src/Img.js",
@@ -3949,52 +4052,52 @@ var Ext = Ext || {};
         117
       ],
       "uses": [],
-      "idx": 420
+      "idx": 429
     },
     {
       "path": "../classic/classic/src/util/StoreHolder.js",
       "requires": [
-        183
+        185
       ],
       "uses": [],
-      "idx": 421
+      "idx": 430
     },
     {
       "path": "../classic/classic/src/LoadMask.js",
       "requires": [
         117,
-        421
+        430
       ],
       "uses": [
         49,
         77,
-        183
+        185
       ],
-      "idx": 422
+      "idx": 431
     },
     {
       "path": "../classic/classic/src/layout/component/Component.js",
       "requires": [
-        411
+        420
       ],
       "uses": [],
-      "idx": 423
+      "idx": 432
     },
     {
       "path": "../classic/classic/src/layout/component/Auto.js",
       "requires": [
-        423
+        432
       ],
       "uses": [],
-      "idx": 424
+      "idx": 433
     },
     {
       "path": "../classic/classic/src/layout/component/ProgressBar.js",
       "requires": [
-        424
+        433
       ],
       "uses": [],
-      "idx": 425
+      "idx": 434
     },
     {
       "path": "../classic/classic/src/ProgressBar.js",
@@ -4003,13 +4106,13 @@ var Ext = Ext || {};
         95,
         102,
         117,
-        400,
-        425
+        409,
+        434
       ],
       "uses": [
         73
       ],
-      "idx": 426
+      "idx": 435
     },
     {
       "path": "../classic/classic/src/dom/ButtonElement.js",
@@ -4017,13 +4120,13 @@ var Ext = Ext || {};
         49
       ],
       "uses": [],
-      "idx": 427
+      "idx": 436
     },
     {
       "path": "../classic/classic/src/button/Manager.js",
       "requires": [],
       "uses": [],
-      "idx": 428
+      "idx": 437
     },
     {
       "path": "../classic/classic/src/menu/Manager.js",
@@ -4032,72 +4135,72 @@ var Ext = Ext || {};
         21,
         110,
         117,
-        600
+        613
       ],
-      "idx": 429
+      "idx": 438
     },
     {
       "path": "../classic/classic/src/button/Button.js",
       "requires": [
         78,
         117,
-        239,
-        394,
-        401,
-        427,
-        428,
-        429
+        241,
+        403,
+        410,
+        436,
+        437,
+        438
       ],
       "uses": [
         49,
-        544
+        553
       ],
-      "idx": 430
+      "idx": 439
     },
     {
       "path": "../classic/classic/src/button/Split.js",
       "requires": [
-        430
+        439
       ],
       "uses": [
         49,
-        428
+        437
       ],
-      "idx": 431
+      "idx": 440
     },
     {
       "path": "../classic/classic/src/button/Cycle.js",
       "requires": [
-        431
+        440
       ],
       "uses": [],
-      "idx": 432
+      "idx": 441
     },
     {
       "path": "../classic/classic/src/layout/container/SegmentedButton.js",
       "requires": [
-        412
+        421
       ],
       "uses": [],
-      "idx": 433
+      "idx": 442
     },
     {
       "path": "../classic/classic/src/button/Segmented.js",
       "requires": [
-        415,
-        430,
-        433
+        424,
+        439,
+        442
       ],
       "uses": [],
-      "idx": 434
+      "idx": 443
     },
     {
       "path": "../classic/classic/src/panel/Bar.js",
       "requires": [
-        415
+        424
       ],
       "uses": [],
-      "idx": 435
+      "idx": 444
     },
     {
       "path": "../classic/classic/src/panel/Title.js",
@@ -4106,7 +4209,7 @@ var Ext = Ext || {};
         117
       ],
       "uses": [],
-      "idx": 436
+      "idx": 445
     },
     {
       "path": "../classic/classic/src/panel/Tool.js",
@@ -4115,22 +4218,22 @@ var Ext = Ext || {};
         117
       ],
       "uses": [
-        544
+        553
       ],
-      "idx": 437
+      "idx": 446
     },
     {
       "path": "../classic/classic/src/panel/Header.js",
       "requires": [
-        424,
-        435,
-        436,
-        437
+        433,
+        444,
+        445,
+        446
       ],
       "uses": [
         21
       ],
-      "idx": 438
+      "idx": 447
     },
     {
       "path": "../classic/classic/src/layout/container/boxOverflow/None.js",
@@ -4138,20 +4241,20 @@ var Ext = Ext || {};
         12
       ],
       "uses": [],
-      "idx": 439
+      "idx": 448
     },
     {
       "path": "../classic/classic/src/layout/container/boxOverflow/Scroller.js",
       "requires": [
         4,
         49,
-        394,
-        439
+        403,
+        448
       ],
       "uses": [
         117
       ],
-      "idx": 440
+      "idx": 449
     },
     {
       "path": "../classic/classic/src/dd/DragDropManager.js",
@@ -4161,10 +4264,10 @@ var Ext = Ext || {};
       ],
       "uses": [
         49,
-        472,
-        544
+        481,
+        553
       ],
-      "idx": 441
+      "idx": 450
     },
     {
       "path": "../classic/classic/src/resizer/Splitter.js",
@@ -4173,91 +4276,91 @@ var Ext = Ext || {};
         117
       ],
       "uses": [
-        468
+        477
       ],
-      "idx": 442
+      "idx": 451
     },
     {
       "path": "../classic/classic/src/layout/container/Box.js",
       "requires": [
         94,
-        412,
-        439,
-        440,
-        441,
-        442
+        421,
+        448,
+        449,
+        450,
+        451
       ],
       "uses": [
         12,
-        410,
-        424
+        419,
+        433
       ],
-      "idx": 443
+      "idx": 452
     },
     {
       "path": "../classic/classic/src/layout/container/HBox.js",
       "requires": [
-        443
+        452
       ],
       "uses": [],
-      "idx": 444
+      "idx": 453
     },
     {
       "path": "../classic/classic/src/layout/container/VBox.js",
       "requires": [
-        443
+        452
       ],
       "uses": [],
-      "idx": 445
+      "idx": 454
     },
     {
       "path": "../classic/classic/src/toolbar/Toolbar.js",
       "requires": [
-        415,
         424,
-        444,
-        445
+        433,
+        453,
+        454
       ],
       "uses": [
         117,
-        375,
-        526,
-        547,
-        672,
-        673
+        384,
+        535,
+        556,
+        702,
+        703
       ],
-      "idx": 446
+      "idx": 455
     },
     {
       "path": "../classic/classic/src/dd/DragDrop.js",
       "requires": [
-        441
+        450
       ],
       "uses": [
         49
       ],
-      "idx": 447
+      "idx": 456
     },
     {
       "path": "../classic/classic/src/dd/DD.js",
       "requires": [
-        441,
-        447
+        450,
+        456
       ],
       "uses": [
         49
       ],
-      "idx": 448
+      "idx": 457
     },
     {
       "path": "../classic/classic/src/dd/DDProxy.js",
       "requires": [
-        448
+        457
       ],
       "uses": [
-        441
+        450
       ],
-      "idx": 449
+      "idx": 458
     },
     {
       "path": "../classic/classic/src/dd/StatusProxy.js",
@@ -4265,19 +4368,19 @@ var Ext = Ext || {};
         117
       ],
       "uses": [],
-      "idx": 450
+      "idx": 459
     },
     {
       "path": "../classic/classic/src/dd/DragSource.js",
       "requires": [
-        441,
-        449,
-        450
+        450,
+        458,
+        459
       ],
       "uses": [
-        424
+        433
       ],
-      "idx": 451
+      "idx": 460
     },
     {
       "path": "../classic/classic/src/panel/Proxy.js",
@@ -4285,34 +4388,34 @@ var Ext = Ext || {};
       "uses": [
         49
       ],
-      "idx": 452
+      "idx": 461
     },
     {
       "path": "../classic/classic/src/panel/DD.js",
       "requires": [
-        451,
-        452
+        460,
+        461
       ],
       "uses": [],
-      "idx": 453
+      "idx": 462
     },
     {
       "path": "../classic/classic/src/layout/component/Dock.js",
       "requires": [
-        423
+        432
       ],
       "uses": [
         24,
         49,
-        410
+        419
       ],
-      "idx": 454
+      "idx": 463
     },
     {
       "path": "../classic/classic/src/util/Memento.js",
       "requires": [],
       "uses": [],
-      "idx": 455
+      "idx": 464
     },
     {
       "path": "../classic/classic/src/container/DockingContainer.js",
@@ -4322,10 +4425,10 @@ var Ext = Ext || {};
       ],
       "uses": [
         24,
-        251,
-        396
+        253,
+        405
       ],
-      "idx": 456
+      "idx": 465
     },
     {
       "path": "../classic/classic/src/panel/Panel.js",
@@ -4334,13 +4437,13 @@ var Ext = Ext || {};
         56,
         73,
         98,
-        415,
-        438,
-        446,
-        453,
-        454,
+        424,
+        447,
         455,
-        456
+        462,
+        463,
+        464,
+        465
       ],
       "uses": [
         1,
@@ -4350,31 +4453,31 @@ var Ext = Ext || {};
         101,
         102,
         117,
-        251,
-        364,
-        413,
-        424,
-        437,
-        489
+        253,
+        373,
+        422,
+        433,
+        446,
+        498
       ],
-      "idx": 457
+      "idx": 466
     },
     {
       "path": "../classic/classic/src/layout/container/Table.js",
       "requires": [
-        412
+        421
       ],
       "uses": [],
-      "idx": 458
+      "idx": 467
     },
     {
       "path": "../classic/classic/src/container/ButtonGroup.js",
       "requires": [
-        457,
-        458
+        466,
+        467
       ],
       "uses": [],
-      "idx": 459
+      "idx": 468
     },
     {
       "path": "../classic/classic/src/container/Monitor.js",
@@ -4383,7 +4486,7 @@ var Ext = Ext || {};
         24,
         56
       ],
-      "idx": 460
+      "idx": 469
     },
     {
       "path": "../classic/classic/src/plugin/Viewport.js",
@@ -4394,55 +4497,55 @@ var Ext = Ext || {};
       "uses": [
         49,
         90,
-        410
+        419
       ],
-      "idx": 461
+      "idx": 470
     },
     {
       "path": "../classic/classic/src/container/Viewport.js",
       "requires": [
         118,
-        415,
-        461
+        424,
+        470
       ],
       "uses": [],
-      "idx": 462
+      "idx": 471
     },
     {
       "path": "../classic/classic/src/layout/container/Anchor.js",
       "requires": [
-        413
+        422
       ],
       "uses": [],
-      "idx": 463
+      "idx": 472
     },
     {
       "path": "../classic/classic/src/dashboard/Panel.js",
       "requires": [
-        457
+        466
       ],
       "uses": [
         21
       ],
-      "idx": 464
+      "idx": 473
     },
     {
       "path": "../classic/classic/src/dashboard/Column.js",
       "requires": [
-        415,
-        463,
-        464
+        424,
+        472,
+        473
       ],
       "uses": [],
-      "idx": 465
+      "idx": 474
     },
     {
       "path": "../classic/classic/src/layout/container/Column.js",
       "requires": [
-        413
+        422
       ],
       "uses": [],
-      "idx": 466
+      "idx": 475
     },
     {
       "path": "../classic/classic/src/dd/DragTracker.js",
@@ -4452,82 +4555,82 @@ var Ext = Ext || {};
       "uses": [
         34,
         117,
-        364
+        373
       ],
-      "idx": 467
+      "idx": 476
     },
     {
       "path": "../classic/classic/src/resizer/SplitterTracker.js",
       "requires": [
         34,
-        467
+        476
       ],
       "uses": [
         49,
         106
       ],
-      "idx": 468
+      "idx": 477
     },
     {
       "path": "../classic/classic/src/layout/container/ColumnSplitterTracker.js",
       "requires": [
-        468
+        477
       ],
       "uses": [],
-      "idx": 469
+      "idx": 478
     },
     {
       "path": "../classic/classic/src/layout/container/ColumnSplitter.js",
       "requires": [
-        442,
-        469
+        451,
+        478
       ],
       "uses": [],
-      "idx": 470
+      "idx": 479
     },
     {
       "path": "../classic/classic/src/layout/container/Dashboard.js",
       "requires": [
-        466,
-        470
+        475,
+        479
       ],
       "uses": [
-        424
+        433
       ],
-      "idx": 471
+      "idx": 480
     },
     {
       "path": "../classic/classic/src/dd/DDTarget.js",
       "requires": [
-        447
+        456
       ],
       "uses": [],
-      "idx": 472
+      "idx": 481
     },
     {
       "path": "../classic/classic/src/dd/ScrollManager.js",
       "requires": [
-        441
+        450
       ],
       "uses": [],
-      "idx": 473
+      "idx": 482
     },
     {
       "path": "../classic/classic/src/dd/DropTarget.js",
       "requires": [
-        472,
-        473
+        481,
+        482
       ],
       "uses": [],
-      "idx": 474
+      "idx": 483
     },
     {
       "path": "../classic/classic/src/dashboard/DropZone.js",
       "requires": [
-        474
+        483
       ],
       "uses": [],
-      "idx": 475
+      "idx": 484
     },
     {
       "path": "../classic/classic/src/dashboard/Part.js",
@@ -4537,51 +4640,51 @@ var Ext = Ext || {};
         134
       ],
       "uses": [],
-      "idx": 476
+      "idx": 485
     },
     {
       "path": "../classic/classic/src/dashboard/Dashboard.js",
       "requires": [
-        457,
-        465,
-        471,
-        475,
-        476
+        466,
+        474,
+        480,
+        484,
+        485
       ],
       "uses": [
         12,
         115,
         132
       ],
-      "idx": 477
+      "idx": 486
     },
     {
       "path": "../classic/classic/src/dd/DragZone.js",
       "requires": [
-        451
+        460
       ],
       "uses": [
-        473,
-        479
+        482,
+        488
       ],
-      "idx": 478
+      "idx": 487
     },
     {
       "path": "../classic/classic/src/dd/Registry.js",
       "requires": [],
       "uses": [],
-      "idx": 479
+      "idx": 488
     },
     {
       "path": "../classic/classic/src/dd/DropZone.js",
       "requires": [
-        474,
-        479
+        483,
+        488
       ],
       "uses": [
-        441
+        450
       ],
-      "idx": 480
+      "idx": 489
     },
     {
       "path": "../classic/classic/src/dom/Layer.js",
@@ -4589,15 +4692,15 @@ var Ext = Ext || {};
         49
       ],
       "uses": [
-        251
+        253
       ],
-      "idx": 481
+      "idx": 490
     },
     {
       "path": "../classic/classic/src/enums.js",
       "requires": [],
       "uses": [],
-      "idx": 482
+      "idx": 491
     },
     {
       "path": "../classic/classic/src/event/publisher/MouseEnterLeave.js",
@@ -4605,7 +4708,7 @@ var Ext = Ext || {};
         37
       ],
       "uses": [],
-      "idx": 483
+      "idx": 492
     },
     {
       "path": "../classic/classic/src/flash/Component.js",
@@ -4613,64 +4716,64 @@ var Ext = Ext || {};
         117
       ],
       "uses": [],
-      "idx": 484
+      "idx": 493
     },
     {
       "path": "../classic/classic/src/form/action/Action.js",
       "requires": [],
       "uses": [],
-      "idx": 485
+      "idx": 494
     },
     {
       "path": "../classic/classic/src/form/action/Load.js",
       "requires": [
         17,
-        485
+        494
       ],
       "uses": [
         18
       ],
-      "idx": 486
+      "idx": 495
     },
     {
       "path": "../classic/classic/src/form/action/Submit.js",
       "requires": [
-        485
+        494
       ],
       "uses": [
         18,
-        251
+        253
       ],
-      "idx": 487
+      "idx": 496
     },
     {
       "path": "../classic/classic/src/form/action/StandardSubmit.js",
       "requires": [
-        487
+        496
       ],
       "uses": [],
-      "idx": 488
+      "idx": 497
     },
     {
       "path": "../classic/classic/src/util/ComponentDragger.js",
       "requires": [
-        467
+        476
       ],
       "uses": [
         34,
         49
       ],
-      "idx": 489
+      "idx": 498
     },
     {
       "path": "../classic/classic/src/window/Window.js",
       "requires": [
         34,
-        457,
-        489
+        466,
+        498
       ],
       "uses": [],
-      "idx": 490
+      "idx": 499
     },
     {
       "path": "../classic/classic/src/form/Labelable.js",
@@ -4680,15 +4783,15 @@ var Ext = Ext || {};
       ],
       "uses": [
         49,
-        543
+        552
       ],
-      "idx": 491
+      "idx": 500
     },
     {
       "path": "../classic/classic/src/form/field/Field.js",
       "requires": [],
       "uses": [],
-      "idx": 492
+      "idx": 501
     },
     {
       "path": "../classic/classic/src/form/field/Base.js",
@@ -4696,90 +4799,90 @@ var Ext = Ext || {};
         1,
         98,
         117,
-        491,
-        492
+        500,
+        501
       ],
       "uses": [
         95,
-        251
+        253
       ],
-      "idx": 493
+      "idx": 502
     },
     {
       "path": "../classic/classic/src/layout/component/field/Text.js",
       "requires": [
-        424
+        433
       ],
       "uses": [],
-      "idx": 494
+      "idx": 503
     },
     {
       "path": "../classic/classic/src/form/field/VTypes.js",
       "requires": [],
       "uses": [],
-      "idx": 495
+      "idx": 504
     },
     {
       "path": "../classic/classic/src/form/trigger/Trigger.js",
       "requires": [
         12,
-        394
+        403
       ],
       "uses": [
         49,
         98
       ],
-      "idx": 496
+      "idx": 505
     },
     {
       "path": "../classic/classic/src/form/field/Text.js",
       "requires": [
-        401,
         410,
-        493,
-        494,
-        495,
-        496
+        419,
+        502,
+        503,
+        504,
+        505
       ],
       "uses": [
         94,
         95,
         102
       ],
-      "idx": 497
+      "idx": 506
     },
     {
       "path": "../classic/classic/src/form/field/TextArea.js",
       "requires": [
         1,
         98,
-        497
+        506
       ],
       "uses": [
         94,
-        401
+        410
       ],
-      "idx": 498
+      "idx": 507
     },
     {
       "path": "../classic/classic/src/window/MessageBox.js",
       "requires": [
-        426,
-        430,
-        444,
-        446,
-        463,
-        490,
-        497,
-        498
+        435,
+        439,
+        453,
+        455,
+        472,
+        499,
+        506,
+        507
       ],
       "uses": [
         117,
-        415,
         424,
-        425
+        433,
+        434
       ],
-      "idx": 499
+      "idx": 508
     },
     {
       "path": "../classic/classic/src/form/Basic.js",
@@ -4788,53 +4891,53 @@ var Ext = Ext || {};
         52,
         56,
         145,
-        486,
-        487,
-        488,
-        499
+        495,
+        496,
+        497,
+        508
       ],
       "uses": [
-        460
+        469
       ],
-      "idx": 500
+      "idx": 509
     },
     {
       "path": "../classic/classic/src/layout/component/field/FieldContainer.js",
       "requires": [
-        424
+        433
       ],
       "uses": [],
-      "idx": 501
+      "idx": 510
     },
     {
       "path": "../classic/classic/src/form/FieldAncestor.js",
       "requires": [
         0,
-        460
+        469
       ],
       "uses": [],
-      "idx": 502
+      "idx": 511
     },
     {
       "path": "../classic/classic/src/form/FieldContainer.js",
       "requires": [
-        415,
-        491,
-        501,
-        502
+        424,
+        500,
+        510,
+        511
       ],
       "uses": [],
-      "idx": 503
+      "idx": 512
     },
     {
       "path": "../classic/classic/src/layout/container/CheckboxGroup.js",
       "requires": [
-        412
+        421
       ],
       "uses": [
-        251
+        253
       ],
-      "idx": 504
+      "idx": 513
     },
     {
       "path": "../classic/classic/src/form/CheckboxManager.js",
@@ -4842,48 +4945,48 @@ var Ext = Ext || {};
         56
       ],
       "uses": [],
-      "idx": 505
+      "idx": 514
     },
     {
       "path": "../classic/classic/src/form/field/Checkbox.js",
       "requires": [
         98,
-        493,
-        505
+        502,
+        514
       ],
       "uses": [],
-      "idx": 506
+      "idx": 515
     },
     {
       "path": "../classic/classic/src/form/CheckboxGroup.js",
       "requires": [
-        492,
-        493,
-        503,
-        504,
-        506
+        501,
+        502,
+        512,
+        513,
+        515
       ],
       "uses": [],
-      "idx": 507
+      "idx": 516
     },
     {
       "path": "../classic/classic/src/form/FieldSet.js",
       "requires": [
-        415,
-        502
+        424,
+        511
       ],
       "uses": [
         49,
         101,
         117,
-        251,
-        424,
-        437,
-        463,
-        506,
-        639
+        253,
+        433,
+        446,
+        472,
+        515,
+        669
       ],
-      "idx": 508
+      "idx": 517
     },
     {
       "path": "../classic/classic/src/form/Label.js",
@@ -4892,20 +4995,20 @@ var Ext = Ext || {};
         117
       ],
       "uses": [],
-      "idx": 509
+      "idx": 518
     },
     {
       "path": "../classic/classic/src/form/Panel.js",
       "requires": [
         57,
-        457,
-        500,
-        502
+        466,
+        509,
+        511
       ],
       "uses": [
-        400
+        409
       ],
-      "idx": 510
+      "idx": 519
     },
     {
       "path": "../classic/classic/src/form/RadioManager.js",
@@ -4913,27 +5016,27 @@ var Ext = Ext || {};
         56
       ],
       "uses": [],
-      "idx": 511
+      "idx": 520
     },
     {
       "path": "../classic/classic/src/form/field/Radio.js",
       "requires": [
-        506,
-        511
+        515,
+        520
       ],
       "uses": [],
-      "idx": 512
+      "idx": 521
     },
     {
       "path": "../classic/classic/src/form/RadioGroup.js",
       "requires": [
-        507,
-        512
+        516,
+        521
       ],
       "uses": [
-        511
+        520
       ],
-      "idx": 513
+      "idx": 522
     },
     {
       "path": "../classic/classic/src/form/action/DirectAction.js",
@@ -4941,70 +5044,70 @@ var Ext = Ext || {};
         0
       ],
       "uses": [
-        225
+        227
       ],
-      "idx": 514
+      "idx": 523
     },
     {
       "path": "../classic/classic/src/form/action/DirectLoad.js",
       "requires": [
-        225,
-        486,
-        514
+        227,
+        495,
+        523
       ],
       "uses": [],
-      "idx": 515
+      "idx": 524
     },
     {
       "path": "../classic/classic/src/form/action/DirectSubmit.js",
       "requires": [
-        225,
-        487,
-        514
+        227,
+        496,
+        523
       ],
       "uses": [],
-      "idx": 516
+      "idx": 525
     },
     {
       "path": "../classic/classic/src/form/field/Picker.js",
       "requires": [
-        364,
-        497
+        373,
+        506
       ],
       "uses": [],
-      "idx": 517
+      "idx": 526
     },
     {
       "path": "../classic/classic/src/selection/Model.js",
       "requires": [
         4,
         12,
-        190,
-        421
+        192,
+        430
       ],
       "uses": [],
-      "idx": 518
+      "idx": 527
     },
     {
       "path": "../classic/classic/src/selection/DataViewModel.js",
       "requires": [
-        364,
-        518
+        373,
+        527
       ],
       "uses": [],
-      "idx": 519
+      "idx": 528
     },
     {
       "path": "../classic/classic/src/view/NavigationModel.js",
       "requires": [
         12,
         52,
-        421
+        430
       ],
       "uses": [
-        364
+        373
       ],
-      "idx": 520
+      "idx": 529
     },
     {
       "path": "../classic/classic/src/view/AbstractView.js",
@@ -5013,10 +5116,10 @@ var Ext = Ext || {};
         76,
         104,
         117,
-        421,
-        422,
-        519,
-        520
+        430,
+        431,
+        528,
+        529
       ],
       "uses": [
         1,
@@ -5024,154 +5127,154 @@ var Ext = Ext || {};
         49,
         95,
         98,
-        183,
-        251
+        185,
+        253
       ],
-      "idx": 521
+      "idx": 530
     },
     {
       "path": "../classic/classic/src/view/View.js",
       "requires": [
-        521
+        530
       ],
       "uses": [],
-      "idx": 522
+      "idx": 531
     },
     {
       "path": "../classic/classic/src/view/BoundListKeyNav.js",
       "requires": [
-        520
+        529
       ],
       "uses": [
         36,
-        364
+        373
       ],
-      "idx": 523
+      "idx": 532
     },
     {
       "path": "../classic/classic/src/layout/component/BoundList.js",
       "requires": [
-        424
+        433
       ],
       "uses": [],
-      "idx": 524
+      "idx": 533
     },
     {
       "path": "../classic/classic/src/toolbar/Item.js",
       "requires": [
         117,
-        446
+        455
       ],
       "uses": [],
-      "idx": 525
+      "idx": 534
     },
     {
       "path": "../classic/classic/src/toolbar/TextItem.js",
       "requires": [
         98,
-        446,
-        525
+        455,
+        534
       ],
       "uses": [],
-      "idx": 526
+      "idx": 535
     },
     {
       "path": "../classic/classic/src/form/trigger/Spinner.js",
       "requires": [
-        496
+        505
       ],
       "uses": [],
-      "idx": 527
+      "idx": 536
     },
     {
       "path": "../classic/classic/src/form/field/Spinner.js",
       "requires": [
-        364,
-        497,
-        527
+        373,
+        506,
+        536
       ],
       "uses": [],
-      "idx": 528
+      "idx": 537
     },
     {
       "path": "../classic/classic/src/form/field/Number.js",
       "requires": [
-        528
+        537
       ],
       "uses": [
         94,
         95
       ],
-      "idx": 529
+      "idx": 538
     },
     {
       "path": "../classic/classic/src/toolbar/Paging.js",
       "requires": [
-        421,
-        446,
-        526,
-        529
+        430,
+        455,
+        535,
+        538
       ],
       "uses": [
         95,
-        424,
-        494,
-        527
+        433,
+        503,
+        536
       ],
-      "idx": 530
+      "idx": 539
     },
     {
       "path": "../classic/classic/src/view/BoundList.js",
       "requires": [
         49,
-        239,
-        522,
-        523,
-        524,
-        530
+        241,
+        531,
+        532,
+        533,
+        539
       ],
       "uses": [
         98,
-        424
+        433
       ],
-      "idx": 531
+      "idx": 540
     },
     {
       "path": "../classic/classic/src/form/field/ComboBox.js",
       "requires": [
         1,
-        183,
-        421,
-        517,
-        531
+        185,
+        430,
+        526,
+        540
       ],
       "uses": [
         49,
         51,
         98,
         132,
-        162,
-        178,
-        251,
-        364,
-        519,
-        523,
-        524
+        163,
+        179,
+        253,
+        373,
+        528,
+        532,
+        533
       ],
-      "idx": 532
+      "idx": 541
     },
     {
       "path": "../classic/classic/src/picker/Month.js",
       "requires": [
         98,
         117,
-        394,
-        430
+        403,
+        439
       ],
       "uses": [
-        424
+        433
       ],
-      "idx": 533
+      "idx": 542
     },
     {
       "path": "../classic/classic/src/picker/Date.js",
@@ -5179,115 +5282,115 @@ var Ext = Ext || {};
         67,
         98,
         117,
-        364,
-        394,
-        430,
-        431,
-        533
+        373,
+        403,
+        439,
+        440,
+        542
       ],
       "uses": [
         95,
-        251,
-        424
+        253,
+        433
       ],
-      "idx": 534
+      "idx": 543
     },
     {
       "path": "../classic/classic/src/form/field/Date.js",
       "requires": [
-        517,
-        534
+        526,
+        543
       ],
       "uses": [
         95,
-        424
+        433
       ],
-      "idx": 535
+      "idx": 544
     },
     {
       "path": "../classic/classic/src/form/field/Display.js",
       "requires": [
         94,
         98,
-        493
+        502
       ],
       "uses": [],
-      "idx": 536
+      "idx": 545
     },
     {
       "path": "../classic/classic/src/form/field/FileButton.js",
       "requires": [
-        430
+        439
       ],
       "uses": [],
-      "idx": 537
+      "idx": 546
     },
     {
       "path": "../classic/classic/src/form/trigger/Component.js",
       "requires": [
-        496
+        505
       ],
       "uses": [],
-      "idx": 538
+      "idx": 547
     },
     {
       "path": "../classic/classic/src/form/field/File.js",
       "requires": [
-        497,
-        537,
-        538
+        506,
+        546,
+        547
       ],
       "uses": [
-        424
+        433
       ],
-      "idx": 539
+      "idx": 548
     },
     {
       "path": "../classic/classic/src/form/field/Hidden.js",
       "requires": [
-        493
+        502
       ],
       "uses": [],
-      "idx": 540
+      "idx": 549
     },
     {
       "path": "../classic/classic/src/tip/Tip.js",
       "requires": [
-        457
+        466
       ],
       "uses": [
         35,
         117
       ],
-      "idx": 541
+      "idx": 550
     },
     {
       "path": "../classic/classic/src/tip/ToolTip.js",
       "requires": [
         33,
-        541
+        550
       ],
       "uses": [
         35,
         75
       ],
-      "idx": 542
+      "idx": 551
     },
     {
       "path": "../classic/classic/src/tip/QuickTip.js",
       "requires": [
-        542
+        551
       ],
       "uses": [],
-      "idx": 543
+      "idx": 552
     },
     {
       "path": "../classic/classic/src/tip/QuickTipManager.js",
       "requires": [
-        543
+        552
       ],
       "uses": [],
-      "idx": 544
+      "idx": 553
     },
     {
       "path": "../classic/classic/src/picker/Color.js",
@@ -5296,213 +5399,213 @@ var Ext = Ext || {};
         117
       ],
       "uses": [],
-      "idx": 545
+      "idx": 554
     },
     {
       "path": "../classic/classic/src/layout/component/field/HtmlEditor.js",
       "requires": [
-        501
+        510
       ],
       "uses": [],
-      "idx": 546
+      "idx": 555
     },
     {
       "path": "../classic/classic/src/toolbar/Separator.js",
       "requires": [
-        446,
-        525
+        455,
+        534
       ],
       "uses": [],
-      "idx": 547
+      "idx": 556
     },
     {
       "path": "../classic/classic/src/layout/container/boxOverflow/Menu.js",
       "requires": [
-        430,
         439,
-        547
+        448,
+        556
       ],
       "uses": [
-        424,
-        440,
-        445,
+        433,
+        449,
         454,
-        506,
-        598,
-        600,
-        672
+        463,
+        515,
+        611,
+        613,
+        702
       ],
-      "idx": 548
+      "idx": 557
     },
     {
       "path": "../classic/classic/src/form/field/HtmlEditor.js",
       "requires": [
         94,
-        400,
-        445,
-        446,
-        492,
-        503,
-        525,
-        544,
-        545,
-        546,
-        548
+        409,
+        454,
+        455,
+        501,
+        512,
+        534,
+        553,
+        554,
+        555,
+        557
       ],
       "uses": [
         1,
         95,
         117,
-        251,
-        424,
-        440,
-        454,
-        600
+        253,
+        433,
+        449,
+        463,
+        613
       ],
-      "idx": 549
+      "idx": 558
     },
     {
       "path": "../classic/classic/src/view/TagKeyNav.js",
       "requires": [
-        523
+        532
       ],
       "uses": [],
-      "idx": 550
+      "idx": 559
     },
     {
       "path": "../classic/classic/src/form/field/Tag.js",
       "requires": [
-        180,
-        222,
-        518,
-        532,
-        550
+        182,
+        224,
+        527,
+        541,
+        559
       ],
       "uses": [
         51,
         95,
         98,
-        168,
-        175,
+        169,
         176,
-        401
+        177,
+        410
       ],
-      "idx": 551
+      "idx": 560
     },
     {
       "path": "../classic/classic/src/picker/Time.js",
       "requires": [
-        180,
-        531
+        182,
+        540
       ],
       "uses": [
         51
       ],
-      "idx": 552
+      "idx": 561
     },
     {
       "path": "../classic/classic/src/form/field/Time.js",
       "requires": [
-        523,
         532,
-        535,
-        552
+        541,
+        544,
+        561
       ],
       "uses": [
         95,
         98,
-        519,
-        524
+        528,
+        533
       ],
-      "idx": 553
+      "idx": 562
     },
     {
       "path": "../classic/classic/src/form/field/Trigger.js",
       "requires": [
-        251,
-        394,
-        497
+        253,
+        403,
+        506
       ],
       "uses": [],
-      "idx": 554
+      "idx": 563
     },
     {
       "path": "../classic/classic/src/grid/CellContext.js",
       "requires": [],
       "uses": [],
-      "idx": 555
+      "idx": 564
     },
     {
       "path": "../classic/classic/src/grid/CellEditor.js",
       "requires": [
-        417
+        426
       ],
       "uses": [
         49,
-        415
+        424
       ],
-      "idx": 556
+      "idx": 565
     },
     {
       "path": "../classic/classic/src/grid/ColumnComponentLayout.js",
       "requires": [
-        424
+        433
       ],
       "uses": [],
-      "idx": 557
+      "idx": 566
     },
     {
       "path": "../classic/classic/src/layout/container/Fit.js",
       "requires": [
-        412
+        421
       ],
       "uses": [],
-      "idx": 558
+      "idx": 567
     },
     {
       "path": "../classic/classic/src/panel/Table.js",
       "requires": [
-        457,
-        558
+        466,
+        567
       ],
       "uses": [
         1,
         77,
         115,
-        183,
-        223,
-        251,
-        555,
-        562,
-        569,
-        579,
-        613,
-        614,
-        657,
-        658,
-        659
+        185,
+        225,
+        253,
+        564,
+        571,
+        578,
+        588,
+        626,
+        627,
+        687,
+        688,
+        689
       ],
-      "idx": 559
+      "idx": 568
     },
     {
       "path": "../classic/classic/src/grid/ColumnLayout.js",
       "requires": [
-        444,
-        559
+        453,
+        568
       ],
       "uses": [],
-      "idx": 560
+      "idx": 569
     },
     {
       "path": "../classic/classic/src/grid/ColumnManager.js",
       "requires": [],
       "uses": [],
-      "idx": 561
+      "idx": 570
     },
     {
       "path": "../classic/classic/src/grid/NavigationModel.js",
       "requires": [
-        520
+        529
       ],
       "uses": [
         21,
@@ -5510,24 +5613,24 @@ var Ext = Ext || {};
         49,
         75,
         117,
-        364,
-        555
+        373,
+        564
       ],
-      "idx": 562
+      "idx": 571
     },
     {
       "path": "../classic/classic/src/view/TableLayout.js",
       "requires": [
-        424
+        433
       ],
       "uses": [],
-      "idx": 563
+      "idx": 572
     },
     {
       "path": "../classic/classic/src/grid/locking/RowSynchronizer.js",
       "requires": [],
       "uses": [],
-      "idx": 564
+      "idx": 573
     },
     {
       "path": "../classic/classic/src/view/NodeCache.js",
@@ -5538,7 +5641,7 @@ var Ext = Ext || {};
         49,
         75
       ],
-      "idx": 565
+      "idx": 574
     },
     {
       "path": "../classic/classic/src/scroll/TableScroller.js",
@@ -5548,7 +5651,7 @@ var Ext = Ext || {};
       "uses": [
         10
       ],
-      "idx": 566
+      "idx": 575
     },
     {
       "path": "../classic/classic/src/view/Table.js",
@@ -5556,32 +5659,32 @@ var Ext = Ext || {};
         1,
         56,
         75,
-        239,
-        522,
-        555,
-        563,
+        241,
+        531,
         564,
-        565,
-        566
+        572,
+        573,
+        574,
+        575
       ],
       "uses": [
         12,
         49,
         98,
         117,
-        162,
-        579
+        163,
+        588
       ],
-      "idx": 567
+      "idx": 576
     },
     {
       "path": "../classic/classic/src/grid/Panel.js",
       "requires": [
-        559,
-        567
+        568,
+        576
       ],
       "uses": [],
-      "idx": 568
+      "idx": 577
     },
     {
       "path": "../classic/classic/src/grid/RowContext.js",
@@ -5589,231 +5692,240 @@ var Ext = Ext || {};
       "uses": [
         12
       ],
-      "idx": 569
+      "idx": 578
     },
     {
       "path": "../classic/classic/src/grid/RowEditorButtons.js",
       "requires": [
-        415
+        424
       ],
       "uses": [
-        424,
-        430,
-        457
+        433,
+        439,
+        466
       ],
-      "idx": 570
+      "idx": 579
     },
     {
       "path": "../classic/classic/src/grid/RowEditor.js",
       "requires": [
-        364,
-        510,
-        542,
-        570
+        373,
+        519,
+        551,
+        579
       ],
       "uses": [
         49,
         67,
         77,
-        413,
-        415,
+        422,
         424,
-        454,
-        536,
-        555
+        433,
+        463,
+        545,
+        564
       ],
-      "idx": 571
+      "idx": 580
     },
     {
       "path": "../classic/classic/src/grid/Scroller.js",
       "requires": [],
       "uses": [],
-      "idx": 572
+      "idx": 581
     },
     {
       "path": "../classic/classic/src/view/DropZone.js",
       "requires": [
-        480
+        489
       ],
       "uses": [
         117,
-        424
+        433
       ],
-      "idx": 573
+      "idx": 582
     },
     {
       "path": "../classic/classic/src/grid/ViewDropZone.js",
       "requires": [
-        573
+        582
       ],
       "uses": [],
-      "idx": 574
+      "idx": 583
     },
     {
       "path": "../classic/classic/src/grid/plugin/HeaderResizer.js",
       "requires": [
         34,
         84,
-        467
+        476
       ],
       "uses": [
-        580
+        589
       ],
-      "idx": 575
+      "idx": 584
     },
     {
       "path": "../classic/classic/src/grid/header/DragZone.js",
       "requires": [
-        478
+        487
       ],
       "uses": [],
-      "idx": 576
+      "idx": 585
     },
     {
       "path": "../classic/classic/src/grid/header/DropZone.js",
       "requires": [
-        480
+        489
       ],
       "uses": [
-        441
+        450
       ],
-      "idx": 577
+      "idx": 586
     },
     {
       "path": "../classic/classic/src/grid/plugin/HeaderReorderer.js",
       "requires": [
         84,
-        576,
-        577
+        585,
+        586
       ],
       "uses": [],
-      "idx": 578
+      "idx": 587
     },
     {
       "path": "../classic/classic/src/grid/header/Container.js",
       "requires": [
-        364,
-        415,
-        560,
-        575,
-        578
+        373,
+        424,
+        569,
+        584,
+        587
       ],
       "uses": [
         1,
         117,
-        424,
-        440,
-        445,
+        433,
+        449,
         454,
-        561,
-        580,
-        598,
-        599,
-        600
+        463,
+        570,
+        589,
+        611,
+        612,
+        613
       ],
-      "idx": 579
+      "idx": 588
     },
     {
       "path": "../classic/classic/src/grid/column/Column.js",
       "requires": [
-        219,
-        557,
-        560,
-        579
+        221,
+        566,
+        569,
+        588
       ],
       "uses": [
         54,
         94,
         117,
-        575
+        131,
+        584
       ],
-      "idx": 580
+      "idx": 589
     },
     {
       "path": "../classic/classic/src/grid/column/ActionProxy.js",
       "requires": [],
       "uses": [],
-      "idx": 581
+      "idx": 590
     },
     {
       "path": "../classic/classic/src/grid/column/Action.js",
       "requires": [
         78,
         94,
-        580,
-        581
+        589,
+        590
       ],
       "uses": [
         49
       ],
-      "idx": 582
+      "idx": 591
     },
     {
       "path": "../classic/classic/src/grid/column/Boolean.js",
       "requires": [
-        580
+        589
       ],
       "uses": [],
-      "idx": 583
+      "idx": 592
     },
     {
       "path": "../classic/classic/src/grid/column/Check.js",
       "requires": [
-        580
+        589
       ],
       "uses": [
-        555
+        564
       ],
-      "idx": 584
+      "idx": 593
     },
     {
       "path": "../classic/classic/src/grid/column/Date.js",
       "requires": [
-        580
+        589
       ],
       "uses": [
         94
       ],
-      "idx": 585
+      "idx": 594
+    },
+    {
+      "path": "../classic/classic/src/grid/column/Groups.js",
+      "requires": [
+        589
+      ],
+      "uses": [],
+      "idx": 595
     },
     {
       "path": "../classic/classic/src/grid/column/Number.js",
       "requires": [
         94,
-        580
+        589
       ],
       "uses": [],
-      "idx": 586
+      "idx": 596
     },
     {
       "path": "../classic/classic/src/grid/column/RowNumberer.js",
       "requires": [
-        580
+        589
       ],
       "uses": [
-        555
+        564
       ],
-      "idx": 587
+      "idx": 597
     },
     {
       "path": "../classic/classic/src/grid/column/Template.js",
       "requires": [
         98,
-        580
+        589
       ],
       "uses": [
-        584
+        593
       ],
-      "idx": 588
+      "idx": 598
     },
     {
       "path": "../classic/classic/src/grid/column/Widget.js",
       "requires": [
-        370,
-        580
+        379,
+        589
       ],
       "uses": [],
-      "idx": 589
+      "idx": 599
     },
     {
       "path": "../classic/classic/src/grid/feature/Feature.js",
@@ -5821,17 +5933,51 @@ var Ext = Ext || {};
         52
       ],
       "uses": [],
-      "idx": 590
+      "idx": 600
     },
     {
       "path": "../classic/classic/src/grid/feature/AbstractSummary.js",
       "requires": [
-        590
+        600
       ],
       "uses": [
         12
       ],
-      "idx": 591
+      "idx": 601
+    },
+    {
+      "path": "../classic/classic/src/grid/feature/AdvancedGroupStore.js",
+      "requires": [
+        360
+      ],
+      "uses": [],
+      "idx": 602
+    },
+    {
+      "path": "../classic/classic/src/grid/feature/AdvancedGrouping.js",
+      "requires": [
+        595,
+        600,
+        602
+      ],
+      "uses": [
+        98,
+        422,
+        566
+      ],
+      "idx": 603
+    },
+    {
+      "path": "../classic/classic/src/grid/feature/AdvancedGroupingSummary.js",
+      "requires": [
+        603
+      ],
+      "uses": [
+        1,
+        117,
+        433
+      ],
+      "idx": 604
     },
     {
       "path": "../classic/classic/src/grid/feature/GroupStore.js",
@@ -5841,219 +5987,219 @@ var Ext = Ext || {};
       "uses": [
         132
       ],
-      "idx": 592
+      "idx": 605
     },
     {
       "path": "../classic/classic/src/grid/feature/Grouping.js",
       "requires": [
-        590,
-        591,
-        592
+        600,
+        601,
+        605
       ],
       "uses": [
         98,
-        162
+        163
       ],
-      "idx": 593
+      "idx": 606
     },
     {
       "path": "../classic/classic/src/grid/feature/GroupingSummary.js",
       "requires": [
-        593
+        606
       ],
       "uses": [],
-      "idx": 594
+      "idx": 607
     },
     {
       "path": "../classic/classic/src/grid/feature/RowBody.js",
       "requires": [
-        590
+        600
       ],
       "uses": [
         98
       ],
-      "idx": 595
+      "idx": 608
     },
     {
       "path": "../classic/classic/src/grid/feature/Summary.js",
       "requires": [
-        591
+        601
       ],
       "uses": [
         117,
-        162,
-        424
+        163,
+        433
       ],
-      "idx": 596
+      "idx": 609
     },
     {
       "path": "../classic/classic/src/menu/Item.js",
       "requires": [
         78,
         117,
-        239
+        241
       ],
       "uses": [
-        429,
-        544
+        438,
+        553
       ],
-      "idx": 597
+      "idx": 610
     },
     {
       "path": "../classic/classic/src/menu/CheckItem.js",
       "requires": [
-        597
+        610
       ],
       "uses": [
-        429
+        438
       ],
-      "idx": 598
+      "idx": 611
     },
     {
       "path": "../classic/classic/src/menu/Separator.js",
       "requires": [
-        597
+        610
       ],
       "uses": [],
-      "idx": 599
+      "idx": 612
     },
     {
       "path": "../classic/classic/src/menu/Menu.js",
       "requires": [
-        429,
-        445,
-        457,
-        597,
-        598,
-        599
+        438,
+        454,
+        466,
+        610,
+        611,
+        612
       ],
       "uses": [
         1,
         21,
         36,
         49,
-        364,
-        424
+        373,
+        433
       ],
-      "idx": 600
+      "idx": 613
     },
     {
       "path": "../classic/classic/src/grid/filters/filter/Base.js",
       "requires": [
         12,
-        440,
-        445,
+        449,
         454,
-        600
+        463,
+        613
       ],
       "uses": [
         1,
         51
       ],
-      "idx": 601
+      "idx": 614
     },
     {
       "path": "../classic/classic/src/grid/filters/filter/SingleFilter.js",
       "requires": [
-        601
+        614
       ],
       "uses": [],
-      "idx": 602
+      "idx": 615
     },
     {
       "path": "../classic/classic/src/grid/filters/filter/Boolean.js",
       "requires": [
-        602
+        615
       ],
       "uses": [],
-      "idx": 603
+      "idx": 616
     },
     {
       "path": "../classic/classic/src/grid/filters/filter/TriFilter.js",
       "requires": [
-        601
+        614
       ],
       "uses": [],
-      "idx": 604
+      "idx": 617
     },
     {
       "path": "../classic/classic/src/grid/filters/filter/Date.js",
       "requires": [
-        424,
-        598,
-        604
+        433,
+        611,
+        617
       ],
       "uses": [
-        440,
-        445,
+        449,
         454,
-        534,
-        649
+        463,
+        543,
+        679
       ],
-      "idx": 605
+      "idx": 618
     },
     {
       "path": "../classic/classic/src/grid/filters/filter/List.js",
       "requires": [
-        602
+        615
       ],
       "uses": [
-        180,
-        183
+        182,
+        185
       ],
-      "idx": 606
+      "idx": 619
     },
     {
       "path": "../classic/classic/src/grid/filters/filter/Number.js",
       "requires": [
-        494,
-        527,
-        604
+        503,
+        536,
+        617
       ],
       "uses": [
-        529
+        538
       ],
-      "idx": 607
+      "idx": 620
     },
     {
       "path": "../classic/classic/src/grid/filters/filter/String.js",
       "requires": [
-        494,
-        497,
-        602
+        503,
+        506,
+        615
       ],
       "uses": [
         51
       ],
-      "idx": 608
+      "idx": 621
     },
     {
       "path": "../classic/classic/src/grid/filters/Filters.js",
       "requires": [
         84,
-        421,
-        601,
-        602,
-        603,
-        604,
-        605,
-        606,
-        607,
-        608
+        430,
+        614,
+        615,
+        616,
+        617,
+        618,
+        619,
+        620,
+        621
       ],
       "uses": [
         12
       ],
-      "idx": 609
+      "idx": 622
     },
     {
       "path": "../classic/classic/src/grid/locking/HeaderContainer.js",
       "requires": [
-        561,
-        579
+        570,
+        588
       ],
       "uses": [],
-      "idx": 610
+      "idx": 623
     },
     {
       "path": "../classic/classic/src/grid/locking/View.js",
@@ -6061,16 +6207,16 @@ var Ext = Ext || {};
         52,
         87,
         117,
-        421,
-        521,
-        567
+        430,
+        530,
+        576
       ],
       "uses": [
         110,
-        422,
-        555
+        431,
+        564
       ],
-      "idx": 611
+      "idx": 624
     },
     {
       "path": "../classic/classic/src/scroll/LockingScroller.js",
@@ -6080,89 +6226,89 @@ var Ext = Ext || {};
       "uses": [
         10
       ],
-      "idx": 612
+      "idx": 625
     },
     {
       "path": "../classic/classic/src/grid/locking/Lockable.js",
       "requires": [
         117,
-        567,
-        579,
-        610,
-        611,
-        612
+        576,
+        588,
+        623,
+        624,
+        625
       ],
       "uses": [
         1,
         34,
         110,
-        183,
-        413,
-        424,
-        442,
-        443,
-        457,
-        559
+        185,
+        422,
+        433,
+        451,
+        452,
+        466,
+        568
       ],
-      "idx": 613
+      "idx": 626
     },
     {
       "path": "../classic/classic/src/grid/plugin/BufferedRenderer.js",
       "requires": [
         84,
-        564
+        573
       ],
       "uses": [
         1,
         49,
         117
       ],
-      "idx": 614
+      "idx": 627
     },
     {
       "path": "../classic/classic/src/grid/plugin/Editing.js",
       "requires": [
         4,
         84,
-        364,
-        493,
-        567,
-        580
+        373,
+        502,
+        576,
+        589
       ],
       "uses": [
         21,
         117,
-        424,
-        555
+        433,
+        564
       ],
-      "idx": 615
+      "idx": 628
     },
     {
       "path": "../classic/classic/src/grid/plugin/CellEditing.js",
       "requires": [
         1,
-        556,
-        615
+        565,
+        628
       ],
       "uses": [
         56,
-        416,
-        424,
-        555
+        425,
+        433,
+        564
       ],
-      "idx": 616
+      "idx": 629
     },
     {
       "path": "../classic/classic/src/grid/plugin/Clipboard.js",
       "requires": [
         94,
-        374,
-        399
+        383,
+        408
       ],
       "uses": [
-        555
+        564
       ],
-      "idx": 617
+      "idx": 630
     },
     {
       "path": "../classic/classic/src/grid/plugin/DragDrop.js",
@@ -6170,137 +6316,325 @@ var Ext = Ext || {};
         84
       ],
       "uses": [
-        574,
-        678
+        583,
+        708
       ],
-      "idx": 618
+      "idx": 631
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/grouping/Column.js",
+      "requires": [
+        117,
+        610,
+        611,
+        612,
+        613
+      ],
+      "uses": [],
+      "idx": 632
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/grouping/DragZone.js",
+      "requires": [
+        487
+      ],
+      "uses": [],
+      "idx": 633
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/grouping/DropZone.js",
+      "requires": [
+        489
+      ],
+      "uses": [
+        131,
+        450
+      ],
+      "idx": 634
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/grouping/Panel.js",
+      "requires": [
+        374,
+        433,
+        466,
+        475,
+        632,
+        633,
+        634
+      ],
+      "uses": [
+        438,
+        612
+      ],
+      "idx": 635
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/GroupingPanel.js",
+      "requires": [
+        362,
+        635
+      ],
+      "uses": [],
+      "idx": 636
     },
     {
       "path": "../classic/classic/src/grid/plugin/RowEditing.js",
       "requires": [
-        571,
-        615
+        580,
+        628
       ],
       "uses": [],
-      "idx": 619
+      "idx": 637
     },
     {
       "path": "../classic/classic/src/grid/plugin/RowExpander.js",
       "requires": [
         84,
-        595
+        608
       ],
       "uses": [
         98,
-        580
+        589
       ],
-      "idx": 620
+      "idx": 638
     },
     {
       "path": "../classic/classic/src/grid/plugin/RowWidget.js",
       "requires": [
         3,
-        370,
-        620
+        379,
+        638
       ],
       "uses": [
         84,
-        595
+        608
       ],
-      "idx": 621
+      "idx": 639
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/Summaries.js",
+      "requires": [
+        363
+      ],
+      "uses": [],
+      "idx": 640
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/Operator.js",
+      "requires": [
+        84
+      ],
+      "uses": [
+        449,
+        454,
+        463,
+        613
+      ],
+      "idx": 641
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/filters/Base.js",
+      "requires": [
+        12,
+        503,
+        506,
+        641
+      ],
+      "uses": [
+        1,
+        51
+      ],
+      "idx": 642
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/filters/SingleFilter.js",
+      "requires": [
+        642
+      ],
+      "uses": [],
+      "idx": 643
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/filters/String.js",
+      "requires": [
+        503,
+        506,
+        643
+      ],
+      "uses": [],
+      "idx": 644
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/filters/Date.js",
+      "requires": [
+        503,
+        544,
+        643
+      ],
+      "uses": [],
+      "idx": 645
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/filters/Number.js",
+      "requires": [
+        503,
+        536,
+        538,
+        643
+      ],
+      "uses": [],
+      "idx": 646
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/filters/Boolean.js",
+      "requires": [
+        503,
+        541,
+        643
+      ],
+      "uses": [],
+      "idx": 647
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/filters/None.js",
+      "requires": [
+        117,
+        433,
+        642
+      ],
+      "uses": [],
+      "idx": 648
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/filters/List.js",
+      "requires": [
+        503,
+        541,
+        643
+      ],
+      "uses": [],
+      "idx": 649
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/filters/InList.js",
+      "requires": [
+        649
+      ],
+      "uses": [],
+      "idx": 650
+    },
+    {
+      "path": "../classic/classic/src/grid/plugin/filterbar/FilterBar.js",
+      "requires": [
+        361,
+        644,
+        645,
+        646,
+        647,
+        648,
+        649,
+        650
+      ],
+      "uses": [
+        424,
+        433,
+        453
+      ],
+      "idx": 651
     },
     {
       "path": "../classic/classic/src/grid/property/Grid.js",
       "requires": [
-        568
+        577
       ],
       "uses": [
         21,
         98,
-        162,
-        416,
-        424,
-        493,
-        494,
-        497,
-        527,
-        529,
-        532,
-        535,
-        555,
-        556,
-        567,
-        616,
-        623,
-        626
+        163,
+        425,
+        433,
+        502,
+        503,
+        506,
+        536,
+        538,
+        541,
+        544,
+        564,
+        565,
+        576,
+        629,
+        653,
+        656
       ],
-      "idx": 622
+      "idx": 652
     },
     {
       "path": "../classic/classic/src/grid/property/HeaderContainer.js",
       "requires": [
         94,
-        579
+        588
       ],
       "uses": [],
-      "idx": 623
+      "idx": 653
     },
     {
       "path": "../classic/classic/src/grid/property/Property.js",
       "requires": [
-        162
+        163
       ],
       "uses": [],
-      "idx": 624
+      "idx": 654
     },
     {
       "path": "../classic/classic/src/grid/property/Reader.js",
       "requires": [
-        164
+        165
       ],
       "uses": [
-        163
+        164
       ],
-      "idx": 625
+      "idx": 655
     },
     {
       "path": "../classic/classic/src/grid/property/Store.js",
       "requires": [
-        168,
-        180,
-        624,
-        625
+        169,
+        182,
+        654,
+        655
       ],
       "uses": [
-        176
+        177
       ],
-      "idx": 626
+      "idx": 656
     },
     {
       "path": "../classic/classic/src/grid/selection/Selection.js",
       "requires": [],
       "uses": [],
-      "idx": 627
+      "idx": 657
     },
     {
       "path": "../classic/classic/src/grid/selection/Cells.js",
       "requires": [
-        627
+        657
       ],
       "uses": [
-        555
+        564
       ],
-      "idx": 628
+      "idx": 658
     },
     {
       "path": "../classic/classic/src/grid/selection/Columns.js",
       "requires": [
-        627
+        657
       ],
       "uses": [
-        555
+        564
       ],
-      "idx": 629
+      "idx": 659
     },
     {
       "path": "../classic/classic/src/grid/selection/Replicator.js",
@@ -6308,56 +6642,56 @@ var Ext = Ext || {};
         84
       ],
       "uses": [],
-      "idx": 630
+      "idx": 660
     },
     {
       "path": "../classic/classic/src/grid/selection/Rows.js",
       "requires": [
         132,
-        627
+        657
       ],
       "uses": [
-        555
+        564
       ],
-      "idx": 631
+      "idx": 661
     },
     {
       "path": "../classic/classic/src/grid/selection/SelectionExtender.js",
       "requires": [
-        467
+        476
       ],
       "uses": [
         49,
-        400
+        409
       ],
-      "idx": 632
+      "idx": 662
     },
     {
       "path": "../classic/classic/src/grid/selection/SpreadsheetModel.js",
       "requires": [
-        518,
-        587,
-        627,
-        628,
-        629,
-        631,
-        632
+        527,
+        597,
+        657,
+        658,
+        659,
+        661,
+        662
       ],
       "uses": [
-        400,
-        413,
-        473,
-        555,
-        557,
-        584
+        409,
+        422,
+        482,
+        564,
+        566,
+        593
       ],
-      "idx": 633
+      "idx": 663
     },
     {
       "path": "../classic/classic/src/util/Queue.js",
       "requires": [],
       "uses": [],
-      "idx": 634
+      "idx": 664
     },
     {
       "path": "../classic/classic/src/layout/ContextItem.js",
@@ -6366,142 +6700,142 @@ var Ext = Ext || {};
         56,
         67,
         73,
-        410
+        419
       ],
-      "idx": 635
+      "idx": 665
     },
     {
       "path": "../classic/classic/src/layout/Context.js",
       "requires": [
         67,
         73,
-        373,
-        411,
-        634,
-        635
+        382,
+        420,
+        664,
+        665
       ],
       "uses": [],
-      "idx": 636
+      "idx": 666
     },
     {
       "path": "../classic/classic/src/layout/SizePolicy.js",
       "requires": [],
       "uses": [],
-      "idx": 637
+      "idx": 667
     },
     {
       "path": "../classic/classic/src/layout/component/Body.js",
       "requires": [
-        424
+        433
       ],
       "uses": [],
-      "idx": 638
+      "idx": 668
     },
     {
       "path": "../classic/classic/src/layout/component/FieldSet.js",
       "requires": [
-        638
+        668
       ],
       "uses": [],
-      "idx": 639
+      "idx": 669
     },
     {
       "path": "../classic/classic/src/layout/container/Absolute.js",
       "requires": [
-        463
+        472
       ],
       "uses": [],
-      "idx": 640
+      "idx": 670
     },
     {
       "path": "../classic/classic/src/layout/container/Accordion.js",
       "requires": [
-        445
+        454
       ],
       "uses": [],
-      "idx": 641
+      "idx": 671
     },
     {
       "path": "../classic/classic/src/resizer/BorderSplitter.js",
       "requires": [
-        442
+        451
       ],
       "uses": [
-        653
+        683
       ],
-      "idx": 642
+      "idx": 672
     },
     {
       "path": "../classic/classic/src/layout/container/Border.js",
       "requires": [
         73,
         119,
-        412,
-        642
+        421,
+        672
       ],
       "uses": [
         94,
-        424
+        433
       ],
-      "idx": 643
+      "idx": 673
     },
     {
       "path": "../classic/classic/src/layout/container/Card.js",
       "requires": [
-        558
+        567
       ],
       "uses": [
         49
       ],
-      "idx": 644
+      "idx": 674
     },
     {
       "path": "../classic/classic/src/layout/container/Center.js",
       "requires": [
-        558
+        567
       ],
       "uses": [],
-      "idx": 645
+      "idx": 675
     },
     {
       "path": "../classic/classic/src/layout/container/Form.js",
       "requires": [
-        413
+        422
       ],
       "uses": [],
-      "idx": 646
+      "idx": 676
     },
     {
       "path": "../classic/classic/src/menu/Bar.js",
       "requires": [
-        600
+        613
       ],
       "uses": [],
-      "idx": 647
+      "idx": 677
     },
     {
       "path": "../classic/classic/src/menu/ColorPicker.js",
       "requires": [
-        545,
-        600
+        554,
+        613
       ],
       "uses": [
-        424,
-        429
+        433,
+        438
       ],
-      "idx": 648
+      "idx": 678
     },
     {
       "path": "../classic/classic/src/menu/DatePicker.js",
       "requires": [
-        534,
-        600
+        543,
+        613
       ],
       "uses": [
-        424,
-        429
+        433,
+        438
       ],
-      "idx": 649
+      "idx": 679
     },
     {
       "path": "../classic/classic/src/panel/Pinnable.js",
@@ -6509,10 +6843,10 @@ var Ext = Ext || {};
         0
       ],
       "uses": [
-        424,
-        437
+        433,
+        446
       ],
-      "idx": 650
+      "idx": 680
     },
     {
       "path": "../classic/classic/src/plugin/LazyItems.js",
@@ -6520,7 +6854,7 @@ var Ext = Ext || {};
         84
       ],
       "uses": [],
-      "idx": 651
+      "idx": 681
     },
     {
       "path": "../classic/classic/src/plugin/Responsive.js",
@@ -6529,16 +6863,16 @@ var Ext = Ext || {};
         118
       ],
       "uses": [],
-      "idx": 652
+      "idx": 682
     },
     {
       "path": "../classic/classic/src/resizer/BorderSplitterTracker.js",
       "requires": [
         34,
-        468
+        477
       ],
       "uses": [],
-      "idx": 653
+      "idx": 683
     },
     {
       "path": "../classic/classic/src/resizer/Handle.js",
@@ -6546,17 +6880,17 @@ var Ext = Ext || {};
         117
       ],
       "uses": [],
-      "idx": 654
+      "idx": 684
     },
     {
       "path": "../classic/classic/src/resizer/ResizeTracker.js",
       "requires": [
-        467
+        476
       ],
       "uses": [
         49
       ],
-      "idx": 655
+      "idx": 685
     },
     {
       "path": "../classic/classic/src/resizer/Resizer.js",
@@ -6567,101 +6901,101 @@ var Ext = Ext || {};
         49,
         95,
         117,
-        655
+        685
       ],
-      "idx": 656
+      "idx": 686
     },
     {
       "path": "../classic/classic/src/selection/CellModel.js",
       "requires": [
-        519,
-        555
+        528,
+        564
       ],
       "uses": [],
-      "idx": 657
+      "idx": 687
     },
     {
       "path": "../classic/classic/src/selection/RowModel.js",
       "requires": [
-        519,
-        555
+        528,
+        564
       ],
       "uses": [],
-      "idx": 658
+      "idx": 688
     },
     {
       "path": "../classic/classic/src/selection/CheckboxModel.js",
       "requires": [
-        584,
-        658
+        593,
+        688
       ],
       "uses": [
-        413,
-        555,
-        557
+        422,
+        564,
+        566
       ],
-      "idx": 659
+      "idx": 689
     },
     {
       "path": "../classic/classic/src/selection/TreeModel.js",
       "requires": [
-        658
+        688
       ],
       "uses": [],
-      "idx": 660
+      "idx": 690
     },
     {
       "path": "../classic/classic/src/slider/Thumb.js",
       "requires": [
         94,
-        467
+        476
       ],
       "uses": [
         73
       ],
-      "idx": 661
+      "idx": 691
     },
     {
       "path": "../classic/classic/src/slider/Tip.js",
       "requires": [
-        541
+        550
       ],
       "uses": [],
-      "idx": 662
+      "idx": 692
     },
     {
       "path": "../classic/classic/src/slider/Multi.js",
       "requires": [
         94,
         95,
-        493,
-        661,
-        662
+        502,
+        691,
+        692
       ],
       "uses": [
-        251
+        253
       ],
-      "idx": 663
+      "idx": 693
     },
     {
       "path": "../classic/classic/src/slider/Single.js",
       "requires": [
-        663
+        693
       ],
       "uses": [],
-      "idx": 664
+      "idx": 694
     },
     {
       "path": "../classic/classic/src/slider/Widget.js",
       "requires": [
         89,
-        663
+        693
       ],
       "uses": [
         73,
         94
       ],
-      "idx": 665
+      "idx": 695
     },
     {
       "path": "../classic/classic/src/state/CookieProvider.js",
@@ -6669,157 +7003,157 @@ var Ext = Ext || {};
         114
       ],
       "uses": [],
-      "idx": 666
+      "idx": 696
     },
     {
       "path": "../classic/classic/src/state/LocalStorageProvider.js",
       "requires": [
         114,
-        397
+        406
       ],
       "uses": [],
-      "idx": 667
+      "idx": 697
     },
     {
       "path": "../classic/classic/src/tab/Tab.js",
       "requires": [
-        430
+        439
       ],
       "uses": [],
-      "idx": 668
+      "idx": 698
     },
     {
       "path": "../classic/classic/src/tab/Bar.js",
       "requires": [
         35,
-        435,
-        638,
-        668
+        444,
+        668,
+        698
       ],
       "uses": [
         34
       ],
-      "idx": 669
+      "idx": 699
     },
     {
       "path": "../classic/classic/src/tab/Panel.js",
       "requires": [
-        457,
-        644,
-        669
+        466,
+        674,
+        699
       ],
       "uses": [
-        424,
-        668
+        433,
+        698
       ],
-      "idx": 670
+      "idx": 700
     },
     {
       "path": "../classic/classic/src/toolbar/Breadcrumb.js",
       "requires": [
-        248,
-        415,
-        431
+        250,
+        424,
+        440
       ],
       "uses": [
         24,
-        183
+        185
       ],
-      "idx": 671
+      "idx": 701
     },
     {
       "path": "../classic/classic/src/toolbar/Fill.js",
       "requires": [
         117,
-        446
+        455
       ],
       "uses": [],
-      "idx": 672
+      "idx": 702
     },
     {
       "path": "../classic/classic/src/toolbar/Spacer.js",
       "requires": [
         117,
-        446
+        455
       ],
       "uses": [],
-      "idx": 673
+      "idx": 703
     },
     {
       "path": "../classic/classic/src/tree/Column.js",
       "requires": [
-        580
+        589
       ],
       "uses": [
         78
       ],
-      "idx": 674
+      "idx": 704
     },
     {
       "path": "../classic/classic/src/tree/NavigationModel.js",
       "requires": [
-        562
+        571
       ],
       "uses": [
         36
       ],
-      "idx": 675
+      "idx": 705
     },
     {
       "path": "../classic/classic/src/tree/View.js",
       "requires": [
-        567
+        576
       ],
       "uses": [
         49
       ],
-      "idx": 676
+      "idx": 706
     },
     {
       "path": "../classic/classic/src/tree/Panel.js",
       "requires": [
-        248,
-        559,
-        660,
-        674,
-        675,
-        676
+        250,
+        568,
+        690,
+        704,
+        705,
+        706
       ],
       "uses": [
-        183,
-        413,
-        557
+        185,
+        422,
+        566
       ],
-      "idx": 677
+      "idx": 707
     },
     {
       "path": "../classic/classic/src/view/DragZone.js",
       "requires": [
-        478
+        487
       ],
       "uses": [
         49,
         95
       ],
-      "idx": 678
+      "idx": 708
     },
     {
       "path": "../classic/classic/src/tree/ViewDragZone.js",
       "requires": [
-        678
+        708
       ],
       "uses": [
         95
       ],
-      "idx": 679
+      "idx": 709
     },
     {
       "path": "../classic/classic/src/tree/ViewDropZone.js",
       "requires": [
-        573
+        582
       ],
       "uses": [],
-      "idx": 680
+      "idx": 710
     },
     {
       "path": "../classic/classic/src/tree/plugin/TreeViewDragDrop.js",
@@ -6827,47 +7161,47 @@ var Ext = Ext || {};
         84
       ],
       "uses": [
-        679,
-        680
+        709,
+        710
       ],
-      "idx": 681
+      "idx": 711
     },
     {
       "path": "../classic/classic/src/view/MultiSelectorSearch.js",
       "requires": [
-        457
+        466
       ],
       "uses": [
         51,
-        183,
-        454,
-        494,
-        497,
-        558,
-        568
+        185,
+        463,
+        503,
+        506,
+        567,
+        577
       ],
-      "idx": 682
+      "idx": 712
     },
     {
       "path": "../classic/classic/src/view/MultiSelector.js",
       "requires": [
-        454,
-        558,
-        568,
-        682
+        463,
+        567,
+        577,
+        712
       ],
       "uses": [],
-      "idx": 683
+      "idx": 713
     },
     {
       "path": "../classic/classic/src/window/Toast.js",
       "requires": [
-        490
+        499
       ],
       "uses": [
         1
       ],
-      "idx": 684
+      "idx": 714
     }
   ],
   "classes": {
@@ -6877,7 +7211,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.Action": {
-      "idx": 407,
+      "idx": 416,
       "alias": [],
       "alternates": []
     },
@@ -6902,7 +7236,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.ComponentLoader": {
-      "idx": 409,
+      "idx": 418,
       "alias": [],
       "alternates": []
     },
@@ -6924,19 +7258,19 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.Editor": {
-      "idx": 417,
+      "idx": 426,
       "alias": [
         "widget.editor"
       ],
       "alternates": []
     },
     "Ext.ElementLoader": {
-      "idx": 408,
+      "idx": 417,
       "alias": [],
       "alternates": []
     },
     "Ext.EventManager": {
-      "idx": 418,
+      "idx": 427,
       "alias": [],
       "alternates": []
     },
@@ -6960,7 +7294,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.Img": {
-      "idx": 420,
+      "idx": 429,
       "alias": [
         "widget.image",
         "widget.imagecomponent"
@@ -6968,7 +7302,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.LoadMask": {
-      "idx": 422,
+      "idx": 431,
       "alias": [
         "widget.loadmask"
       ],
@@ -6990,7 +7324,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.ProgressBar": {
-      "idx": 426,
+      "idx": 435,
       "alias": [
         "widget.progressbar"
       ],
@@ -7041,14 +7375,14 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.ZIndexManager": {
-      "idx": 414,
+      "idx": 423,
       "alias": [],
       "alternates": [
         "Ext.WindowGroup"
       ]
     },
     "Ext.app.Application": {
-      "idx": 186,
+      "idx": 188,
       "alias": [],
       "alternates": []
     },
@@ -7058,7 +7392,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.app.Controller": {
-      "idx": 185,
+      "idx": 187,
       "alias": [],
       "alternates": []
     },
@@ -7073,7 +7407,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.app.Profile": {
-      "idx": 187,
+      "idx": 189,
       "alias": [],
       "alternates": []
     },
@@ -7083,71 +7417,71 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.app.ViewController": {
-      "idx": 189,
+      "idx": 191,
       "alias": [
         "controller.controller"
       ],
       "alternates": []
     },
     "Ext.app.ViewModel": {
-      "idx": 223,
+      "idx": 225,
       "alias": [
         "viewmodel.default"
       ],
       "alternates": []
     },
     "Ext.app.bind.AbstractStub": {
-      "idx": 204,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.app.bind.BaseBinding": {
-      "idx": 202,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.app.bind.Binding": {
-      "idx": 203,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.app.bind.Formula": {
-      "idx": 209,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.app.bind.LinkStub": {
       "idx": 206,
       "alias": [],
       "alternates": []
     },
-    "Ext.app.bind.Multi": {
-      "idx": 208,
+    "Ext.app.bind.BaseBinding": {
+      "idx": 204,
       "alias": [],
       "alternates": []
     },
-    "Ext.app.bind.Parser": {
-      "idx": 219,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.app.bind.RootStub": {
-      "idx": 207,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.app.bind.Stub": {
+    "Ext.app.bind.Binding": {
       "idx": 205,
       "alias": [],
       "alternates": []
     },
+    "Ext.app.bind.Formula": {
+      "idx": 211,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.app.bind.LinkStub": {
+      "idx": 208,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.app.bind.Multi": {
+      "idx": 210,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.app.bind.Parser": {
+      "idx": 221,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.app.bind.RootStub": {
+      "idx": 209,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.app.bind.Stub": {
+      "idx": 207,
+      "alias": [],
+      "alternates": []
+    },
     "Ext.app.bind.Template": {
-      "idx": 220,
+      "idx": 222,
       "alias": [],
       "alternates": []
     },
     "Ext.app.bind.TemplateBinding": {
-      "idx": 221,
+      "idx": 223,
       "alias": [],
       "alternates": []
     },
@@ -7157,12 +7491,12 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.app.domain.Controller": {
-      "idx": 224,
+      "idx": 226,
       "alias": [],
       "alternates": []
     },
     "Ext.app.domain.Direct": {
-      "idx": 227,
+      "idx": 229,
       "alias": [],
       "alternates": []
     },
@@ -7172,17 +7506,17 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.app.domain.Store": {
-      "idx": 184,
+      "idx": 186,
       "alias": [],
       "alternates": []
     },
     "Ext.app.domain.View": {
-      "idx": 188,
+      "idx": 190,
       "alias": [],
       "alternates": []
     },
     "Ext.button.Button": {
-      "idx": 430,
+      "idx": 439,
       "alias": [
         "widget.button"
       ],
@@ -7191,7 +7525,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.button.Cycle": {
-      "idx": 432,
+      "idx": 441,
       "alias": [
         "widget.cycle"
       ],
@@ -7200,21 +7534,21 @@ var Ext = Ext || {};
       ]
     },
     "Ext.button.Manager": {
-      "idx": 428,
+      "idx": 437,
       "alias": [],
       "alternates": [
         "Ext.ButtonToggleManager"
       ]
     },
     "Ext.button.Segmented": {
-      "idx": 434,
+      "idx": 443,
       "alias": [
         "widget.segmentedbutton"
       ],
       "alternates": []
     },
     "Ext.button.Split": {
-      "idx": 431,
+      "idx": 440,
       "alias": [
         "widget.splitbutton"
       ],
@@ -7223,7 +7557,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.container.ButtonGroup": {
-      "idx": 459,
+      "idx": 468,
       "alias": [
         "widget.buttongroup"
       ],
@@ -7232,7 +7566,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.container.Container": {
-      "idx": 415,
+      "idx": 424,
       "alias": [
         "widget.container"
       ],
@@ -7242,17 +7576,17 @@ var Ext = Ext || {};
       ]
     },
     "Ext.container.DockingContainer": {
-      "idx": 456,
+      "idx": 465,
       "alias": [],
       "alternates": []
     },
     "Ext.container.Monitor": {
-      "idx": 460,
+      "idx": 469,
       "alias": [],
       "alternates": []
     },
     "Ext.container.Viewport": {
-      "idx": 462,
+      "idx": 471,
       "alias": [
         "widget.viewport"
       ],
@@ -7261,33 +7595,33 @@ var Ext = Ext || {};
       ]
     },
     "Ext.dashboard.Column": {
-      "idx": 465,
+      "idx": 474,
       "alias": [
         "widget.dashboard-column"
       ],
       "alternates": []
     },
     "Ext.dashboard.Dashboard": {
-      "idx": 477,
+      "idx": 486,
       "alias": [
         "widget.dashboard"
       ],
       "alternates": []
     },
     "Ext.dashboard.DropZone": {
-      "idx": 475,
+      "idx": 484,
       "alias": [],
       "alternates": []
     },
     "Ext.dashboard.Panel": {
-      "idx": 464,
+      "idx": 473,
       "alias": [
         "widget.dashboard-panel"
       ],
       "alternates": []
     },
     "Ext.dashboard.Part": {
-      "idx": 476,
+      "idx": 485,
       "alias": [
         "part.part"
       ],
@@ -7299,7 +7633,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.ArrayStore": {
-      "idx": 182,
+      "idx": 184,
       "alias": [
         "store.array"
       ],
@@ -7308,26 +7642,26 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.Batch": {
-      "idx": 192,
+      "idx": 194,
       "alias": [],
       "alternates": []
     },
     "Ext.data.BufferedStore": {
-      "idx": 229,
+      "idx": 231,
       "alias": [
         "store.buffered"
       ],
       "alternates": []
     },
     "Ext.data.ChainedStore": {
-      "idx": 222,
+      "idx": 224,
       "alias": [
         "store.chained"
       ],
       "alternates": []
     },
     "Ext.data.ClientStore": {
-      "idx": 230,
+      "idx": 232,
       "alias": [
         "store.clientstorage"
       ],
@@ -7339,7 +7673,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.DirectStore": {
-      "idx": 232,
+      "idx": 234,
       "alias": [
         "store.direct"
       ],
@@ -7358,72 +7692,72 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.Group": {
-      "idx": 171,
+      "idx": 172,
       "alias": [],
       "alternates": []
     },
     "Ext.data.JsonP": {
-      "idx": 233,
+      "idx": 235,
       "alias": [],
       "alternates": []
     },
     "Ext.data.JsonPStore": {
-      "idx": 235,
+      "idx": 237,
       "alias": [
         "store.jsonp"
       ],
       "alternates": []
     },
     "Ext.data.JsonStore": {
-      "idx": 236,
+      "idx": 238,
       "alias": [
         "store.json"
       ],
       "alternates": []
     },
     "Ext.data.LocalStore": {
-      "idx": 172,
+      "idx": 173,
       "alias": [],
       "alternates": []
     },
     "Ext.data.Model": {
-      "idx": 162,
+      "idx": 163,
       "alias": [],
       "alternates": [
         "Ext.data.Record"
       ]
     },
     "Ext.data.ModelManager": {
-      "idx": 237,
+      "idx": 239,
       "alias": [],
       "alternates": [
         "Ext.ModelMgr"
       ]
     },
     "Ext.data.NodeInterface": {
-      "idx": 238,
+      "idx": 240,
       "alias": [],
       "alternates": []
     },
     "Ext.data.NodeStore": {
-      "idx": 241,
+      "idx": 243,
       "alias": [
         "store.node"
       ],
       "alternates": []
     },
     "Ext.data.PageMap": {
-      "idx": 228,
+      "idx": 230,
       "alias": [],
       "alternates": []
     },
     "Ext.data.ProxyStore": {
-      "idx": 169,
+      "idx": 170,
       "alias": [],
       "alternates": []
     },
     "Ext.data.Query": {
-      "idx": 246,
+      "idx": 248,
       "alias": [
         "query.default"
       ],
@@ -7435,17 +7769,17 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.Request": {
-      "idx": 247,
+      "idx": 249,
       "alias": [],
       "alternates": []
     },
     "Ext.data.ResultSet": {
-      "idx": 163,
+      "idx": 164,
       "alias": [],
       "alternates": []
     },
     "Ext.data.Session": {
-      "idx": 200,
+      "idx": 202,
       "alias": [],
       "alternates": []
     },
@@ -7455,14 +7789,14 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.Store": {
-      "idx": 180,
+      "idx": 182,
       "alias": [
         "store.store"
       ],
       "alternates": []
     },
     "Ext.data.StoreManager": {
-      "idx": 183,
+      "idx": 185,
       "alias": [],
       "alternates": [
         "Ext.StoreMgr",
@@ -7471,43 +7805,43 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.TreeModel": {
-      "idx": 240,
+      "idx": 242,
       "alias": [],
       "alternates": []
     },
     "Ext.data.TreeStore": {
-      "idx": 248,
+      "idx": 250,
       "alias": [
         "store.tree"
       ],
       "alternates": []
     },
     "Ext.data.Types": {
-      "idx": 249,
+      "idx": 251,
       "alias": [],
       "alternates": []
     },
     "Ext.data.Validation": {
-      "idx": 250,
+      "idx": 252,
       "alias": [],
       "alternates": []
     },
     "Ext.data.XmlStore": {
-      "idx": 255,
+      "idx": 257,
       "alias": [
         "store.xml"
       ],
       "alternates": []
     },
     "Ext.data.field.Array": {
-      "idx": 154,
+      "idx": 155,
       "alias": [
         "data.field.array"
       ],
       "alternates": []
     },
     "Ext.data.field.Boolean": {
-      "idx": 155,
+      "idx": 156,
       "alias": [
         "data.field.bool",
         "data.field.boolean"
@@ -7515,14 +7849,14 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.field.Date": {
-      "idx": 156,
+      "idx": 157,
       "alias": [
         "data.field.date"
       ],
       "alternates": []
     },
     "Ext.data.field.Field": {
-      "idx": 153,
+      "idx": 154,
       "alias": [
         "data.field.auto"
       ],
@@ -7531,7 +7865,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.field.Integer": {
-      "idx": 157,
+      "idx": 158,
       "alias": [
         "data.field.int",
         "data.field.integer"
@@ -7539,7 +7873,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.field.Number": {
-      "idx": 158,
+      "idx": 159,
       "alias": [
         "data.field.float",
         "data.field.number"
@@ -7547,7 +7881,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.field.String": {
-      "idx": 159,
+      "idx": 160,
       "alias": [
         "data.field.string"
       ],
@@ -7559,45 +7893,45 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.identifier.Generator": {
-      "idx": 160,
+      "idx": 161,
       "alias": [
         "data.identifier.default"
       ],
       "alternates": []
     },
     "Ext.data.identifier.Negative": {
-      "idx": 256,
+      "idx": 258,
       "alias": [
         "data.identifier.negative"
       ],
       "alternates": []
     },
     "Ext.data.identifier.Sequential": {
-      "idx": 161,
+      "idx": 162,
       "alias": [
         "data.identifier.sequential"
       ],
       "alternates": []
     },
     "Ext.data.identifier.Uuid": {
-      "idx": 257,
+      "idx": 259,
       "alias": [
         "data.identifier.uuid"
       ],
       "alternates": []
     },
     "Ext.data.matrix.Matrix": {
-      "idx": 195,
+      "idx": 197,
       "alias": [],
       "alternates": []
     },
     "Ext.data.matrix.Side": {
-      "idx": 194,
+      "idx": 196,
       "alias": [],
       "alternates": []
     },
     "Ext.data.matrix.Slice": {
-      "idx": 193,
+      "idx": 195,
       "alias": [],
       "alternates": []
     },
@@ -7637,7 +7971,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.proxy.Ajax": {
-      "idx": 174,
+      "idx": 175,
       "alias": [
         "proxy.ajax"
       ],
@@ -7647,14 +7981,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.proxy.Client": {
-      "idx": 167,
+      "idx": 168,
       "alias": [],
       "alternates": [
         "Ext.data.ClientProxy"
       ]
     },
     "Ext.data.proxy.Direct": {
-      "idx": 231,
+      "idx": 233,
       "alias": [
         "proxy.direct"
       ],
@@ -7663,7 +7997,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.proxy.JsonP": {
-      "idx": 234,
+      "idx": 236,
       "alias": [
         "proxy.jsonp",
         "proxy.scripttag"
@@ -7673,7 +8007,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.proxy.LocalStorage": {
-      "idx": 259,
+      "idx": 261,
       "alias": [
         "proxy.localstorage"
       ],
@@ -7682,7 +8016,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.proxy.Memory": {
-      "idx": 168,
+      "idx": 169,
       "alias": [
         "proxy.memory"
       ],
@@ -7691,7 +8025,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.proxy.Proxy": {
-      "idx": 166,
+      "idx": 167,
       "alias": [
         "proxy.proxy"
       ],
@@ -7701,7 +8035,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.proxy.Rest": {
-      "idx": 260,
+      "idx": 262,
       "alias": [
         "proxy.rest"
       ],
@@ -7710,7 +8044,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.proxy.Server": {
-      "idx": 173,
+      "idx": 174,
       "alias": [
         "proxy.server"
       ],
@@ -7719,7 +8053,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.proxy.SessionStorage": {
-      "idx": 261,
+      "idx": 263,
       "alias": [
         "proxy.sessionstorage"
       ],
@@ -7728,34 +8062,34 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.proxy.WebStorage": {
-      "idx": 258,
+      "idx": 260,
       "alias": [],
       "alternates": [
         "Ext.data.WebStorageProxy"
       ]
     },
     "Ext.data.query.Compiler": {
-      "idx": 242,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.data.query.Converter": {
-      "idx": 243,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.data.query.Parser": {
-      "idx": 245,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.data.query.Stringifier": {
       "idx": 244,
       "alias": [],
       "alternates": []
     },
+    "Ext.data.query.Converter": {
+      "idx": 245,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.data.query.Parser": {
+      "idx": 247,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.data.query.Stringifier": {
+      "idx": 246,
+      "alias": [],
+      "alternates": []
+    },
     "Ext.data.reader.Array": {
-      "idx": 181,
+      "idx": 183,
       "alias": [
         "reader.array"
       ],
@@ -7764,7 +8098,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.reader.Json": {
-      "idx": 175,
+      "idx": 176,
       "alias": [
         "reader.json"
       ],
@@ -7773,7 +8107,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.reader.Reader": {
-      "idx": 164,
+      "idx": 165,
       "alias": [
         "reader.base"
       ],
@@ -7783,7 +8117,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.reader.Xml": {
-      "idx": 253,
+      "idx": 255,
       "alias": [
         "reader.xml"
       ],
@@ -7850,216 +8184,244 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.session.BatchVisitor": {
-      "idx": 198,
+      "idx": 200,
       "alias": [],
       "alternates": []
     },
     "Ext.data.session.ChangesVisitor": {
-      "idx": 196,
+      "idx": 198,
       "alias": [],
       "alternates": []
     },
     "Ext.data.session.ChildChangesVisitor": {
-      "idx": 197,
+      "idx": 199,
       "alias": [],
       "alternates": []
     },
     "Ext.data.summary.Average": {
-      "idx": 268,
+      "idx": 269,
       "alias": [
         "data.summary.average"
       ],
       "alternates": []
     },
     "Ext.data.summary.Base": {
-      "idx": 266,
+      "idx": 153,
       "alias": [
         "data.summary.base"
       ],
       "alternates": []
     },
     "Ext.data.summary.Count": {
-      "idx": 269,
+      "idx": 270,
       "alias": [
         "data.summary.count"
       ],
       "alternates": []
     },
     "Ext.data.summary.Max": {
-      "idx": 270,
+      "idx": 271,
       "alias": [
         "data.summary.max"
       ],
       "alternates": []
     },
     "Ext.data.summary.Min": {
-      "idx": 271,
+      "idx": 272,
       "alias": [
         "data.summary.min"
       ],
       "alternates": []
     },
     "Ext.data.summary.None": {
-      "idx": 272,
+      "idx": 273,
       "alias": [
         "data.summary.none"
       ],
       "alternates": []
     },
+    "Ext.data.summary.StdDev": {
+      "idx": 275,
+      "alias": [
+        "data.summary.stddev"
+      ],
+      "alternates": []
+    },
+    "Ext.data.summary.StdDevP": {
+      "idx": 277,
+      "alias": [
+        "data.summary.stddevp"
+      ],
+      "alternates": []
+    },
     "Ext.data.summary.Sum": {
-      "idx": 267,
+      "idx": 268,
       "alias": [
         "data.summary.sum"
       ],
       "alternates": []
     },
+    "Ext.data.summary.Variance": {
+      "idx": 274,
+      "alias": [
+        "data.summary.variance"
+      ],
+      "alternates": []
+    },
+    "Ext.data.summary.VarianceP": {
+      "idx": 276,
+      "alias": [
+        "data.summary.variancep"
+      ],
+      "alternates": []
+    },
     "Ext.data.validator.AbstractDate": {
-      "idx": 273,
+      "idx": 278,
       "alias": [],
       "alternates": []
     },
     "Ext.data.validator.Bound": {
-      "idx": 274,
+      "idx": 279,
       "alias": [
         "data.validator.bound"
       ],
       "alternates": []
     },
     "Ext.data.validator.CIDRv4": {
-      "idx": 276,
+      "idx": 281,
       "alias": [
         "data.validator.cidrv4"
       ],
       "alternates": []
     },
     "Ext.data.validator.CIDRv6": {
-      "idx": 277,
+      "idx": 282,
       "alias": [
         "data.validator.cidrv6"
       ],
       "alternates": []
     },
     "Ext.data.validator.Currency": {
-      "idx": 279,
+      "idx": 284,
       "alias": [
         "data.validator.currency"
       ],
       "alternates": []
     },
     "Ext.data.validator.CurrencyUS": {
-      "idx": 280,
+      "idx": 285,
       "alias": [
         "data.validator.currency-us"
       ],
       "alternates": []
     },
     "Ext.data.validator.Date": {
-      "idx": 281,
+      "idx": 286,
       "alias": [
         "data.validator.date"
       ],
       "alternates": []
     },
     "Ext.data.validator.DateTime": {
-      "idx": 282,
+      "idx": 287,
       "alias": [
         "data.validator.datetime"
       ],
       "alternates": []
     },
     "Ext.data.validator.Email": {
-      "idx": 283,
+      "idx": 288,
       "alias": [
         "data.validator.email"
       ],
       "alternates": []
     },
     "Ext.data.validator.Exclusion": {
-      "idx": 285,
+      "idx": 290,
       "alias": [
         "data.validator.exclusion"
       ],
       "alternates": []
     },
     "Ext.data.validator.Format": {
-      "idx": 275,
+      "idx": 280,
       "alias": [
         "data.validator.format"
       ],
       "alternates": []
     },
     "Ext.data.validator.IPAddress": {
-      "idx": 286,
+      "idx": 291,
       "alias": [
         "data.validator.ipaddress"
       ],
       "alternates": []
     },
     "Ext.data.validator.Inclusion": {
-      "idx": 287,
+      "idx": 292,
       "alias": [
         "data.validator.inclusion"
       ],
       "alternates": []
     },
     "Ext.data.validator.Length": {
-      "idx": 288,
+      "idx": 293,
       "alias": [
         "data.validator.length"
       ],
       "alternates": []
     },
     "Ext.data.validator.List": {
-      "idx": 284,
+      "idx": 289,
       "alias": [
         "data.validator.list"
       ],
       "alternates": []
     },
     "Ext.data.validator.NotNull": {
-      "idx": 290,
+      "idx": 295,
       "alias": [
         "data.validator.notnull"
       ],
       "alternates": []
     },
     "Ext.data.validator.Number": {
-      "idx": 278,
+      "idx": 283,
       "alias": [
         "data.validator.number"
       ],
       "alternates": []
     },
     "Ext.data.validator.Phone": {
-      "idx": 291,
+      "idx": 296,
       "alias": [
         "data.validator.phone"
       ],
       "alternates": []
     },
     "Ext.data.validator.Presence": {
-      "idx": 289,
+      "idx": 294,
       "alias": [
         "data.validator.presence"
       ],
       "alternates": []
     },
     "Ext.data.validator.Range": {
-      "idx": 292,
+      "idx": 297,
       "alias": [
         "data.validator.range"
       ],
       "alternates": []
     },
     "Ext.data.validator.Time": {
-      "idx": 293,
+      "idx": 298,
       "alias": [
         "data.validator.time"
       ],
       "alternates": []
     },
     "Ext.data.validator.Url": {
-      "idx": 294,
+      "idx": 299,
       "alias": [
         "data.validator.url"
       ],
@@ -8073,34 +8435,34 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.data.virtual.Group": {
-      "idx": 295,
+      "idx": 300,
       "alias": [],
       "alternates": []
     },
     "Ext.data.virtual.Page": {
-      "idx": 296,
+      "idx": 301,
       "alias": [],
       "alternates": []
     },
     "Ext.data.virtual.PageMap": {
-      "idx": 297,
+      "idx": 302,
       "alias": [],
       "alternates": []
     },
     "Ext.data.virtual.Range": {
-      "idx": 298,
+      "idx": 303,
       "alias": [],
       "alternates": []
     },
     "Ext.data.virtual.Store": {
-      "idx": 299,
+      "idx": 304,
       "alias": [
         "store.virtual"
       ],
       "alternates": []
     },
     "Ext.data.writer.Json": {
-      "idx": 176,
+      "idx": 177,
       "alias": [
         "writer.json"
       ],
@@ -8109,7 +8471,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.writer.Writer": {
-      "idx": 165,
+      "idx": 166,
       "alias": [
         "writer.base"
       ],
@@ -8119,7 +8481,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.data.writer.Xml": {
-      "idx": 254,
+      "idx": 256,
       "alias": [
         "writer.xml"
       ],
@@ -8128,27 +8490,27 @@ var Ext = Ext || {};
       ]
     },
     "Ext.dd.DD": {
-      "idx": 448,
+      "idx": 457,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.DDProxy": {
-      "idx": 449,
+      "idx": 458,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.DDTarget": {
-      "idx": 472,
+      "idx": 481,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.DragDrop": {
-      "idx": 447,
+      "idx": 456,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.DragDropManager": {
-      "idx": 441,
+      "idx": 450,
       "alias": [],
       "alternates": [
         "Ext.dd.DragDropMgr",
@@ -8156,113 +8518,113 @@ var Ext = Ext || {};
       ]
     },
     "Ext.dd.DragSource": {
-      "idx": 451,
+      "idx": 460,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.DragTracker": {
-      "idx": 467,
+      "idx": 476,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.DragZone": {
-      "idx": 478,
+      "idx": 487,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.DropTarget": {
-      "idx": 474,
+      "idx": 483,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.DropZone": {
-      "idx": 480,
+      "idx": 489,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.Registry": {
-      "idx": 479,
+      "idx": 488,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.ScrollManager": {
-      "idx": 473,
+      "idx": 482,
       "alias": [],
       "alternates": []
     },
     "Ext.dd.StatusProxy": {
-      "idx": 450,
+      "idx": 459,
       "alias": [],
       "alternates": []
     },
     "Ext.direct.Event": {
-      "idx": 300,
+      "idx": 305,
       "alias": [
         "direct.event"
       ],
       "alternates": []
     },
     "Ext.direct.ExceptionEvent": {
-      "idx": 302,
+      "idx": 307,
       "alias": [
         "direct.exception"
       ],
       "alternates": []
     },
     "Ext.direct.JsonProvider": {
-      "idx": 303,
+      "idx": 308,
       "alias": [
         "direct.jsonprovider"
       ],
       "alternates": []
     },
     "Ext.direct.Manager": {
-      "idx": 225,
+      "idx": 227,
       "alias": [],
       "alternates": []
     },
     "Ext.direct.PollingProvider": {
-      "idx": 304,
+      "idx": 309,
       "alias": [
         "direct.pollingprovider"
       ],
       "alternates": []
     },
     "Ext.direct.Provider": {
-      "idx": 226,
+      "idx": 228,
       "alias": [
         "direct.provider"
       ],
       "alternates": []
     },
     "Ext.direct.RemotingEvent": {
-      "idx": 301,
+      "idx": 306,
       "alias": [
         "direct.rpc"
       ],
       "alternates": []
     },
     "Ext.direct.RemotingMethod": {
-      "idx": 305,
+      "idx": 310,
       "alias": [],
       "alternates": []
     },
     "Ext.direct.RemotingProvider": {
-      "idx": 307,
+      "idx": 312,
       "alias": [
         "direct.remotingprovider"
       ],
       "alternates": []
     },
     "Ext.direct.Transaction": {
-      "idx": 306,
+      "idx": 311,
       "alias": [
         "direct.transaction"
       ],
       "alternates": []
     },
     "Ext.dom.ButtonElement": {
-      "idx": 427,
+      "idx": 436,
       "alias": [],
       "alternates": []
     },
@@ -8300,12 +8662,12 @@ var Ext = Ext || {};
       ]
     },
     "Ext.dom.GarbageCollector": {
-      "idx": 308,
+      "idx": 313,
       "alias": [],
       "alternates": []
     },
     "Ext.dom.Helper": {
-      "idx": 251,
+      "idx": 253,
       "alias": [],
       "alternates": [
         "Ext.DomHelper",
@@ -8313,14 +8675,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.dom.Layer": {
-      "idx": 481,
+      "idx": 490,
       "alias": [],
       "alternates": [
         "Ext.Layer"
       ]
     },
     "Ext.dom.Query": {
-      "idx": 252,
+      "idx": 254,
       "alias": [],
       "alternates": [
         "Ext.core.DomQuery",
@@ -8340,7 +8702,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.dom.TouchAction": {
-      "idx": 309,
+      "idx": 314,
       "alias": [],
       "alternates": []
     },
@@ -8355,53 +8717,53 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.drag.Constraint": {
-      "idx": 310,
+      "idx": 315,
       "alias": [
         "drag.constraint.base"
       ],
       "alternates": []
     },
     "Ext.drag.Info": {
-      "idx": 311,
+      "idx": 316,
       "alias": [],
       "alternates": []
     },
     "Ext.drag.Item": {
-      "idx": 312,
+      "idx": 317,
       "alias": [],
       "alternates": []
     },
     "Ext.drag.Manager": {
-      "idx": 313,
+      "idx": 318,
       "alias": [],
       "alternates": []
     },
     "Ext.drag.Source": {
-      "idx": 314,
+      "idx": 319,
       "alias": [],
       "alternates": []
     },
     "Ext.drag.Target": {
-      "idx": 315,
+      "idx": 320,
       "alias": [],
       "alternates": []
     },
     "Ext.drag.proxy.None": {
-      "idx": 316,
+      "idx": 321,
       "alias": [
         "drag.proxy.none"
       ],
       "alternates": []
     },
     "Ext.drag.proxy.Original": {
-      "idx": 317,
+      "idx": 322,
       "alias": [
         "drag.proxy.original"
       ],
       "alternates": []
     },
     "Ext.drag.proxy.Placeholder": {
-      "idx": 318,
+      "idx": 323,
       "alias": [
         "drag.proxy.placeholder"
       ],
@@ -8415,57 +8777,57 @@ var Ext = Ext || {};
       ]
     },
     "Ext.event.gesture.DoubleTap": {
-      "idx": 321,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.event.gesture.Drag": {
-      "idx": 322,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.event.gesture.EdgeSwipe": {
-      "idx": 324,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.event.gesture.LongPress": {
-      "idx": 325,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.event.gesture.MultiTouch": {
       "idx": 326,
       "alias": [],
       "alternates": []
     },
-    "Ext.event.gesture.Pinch": {
+    "Ext.event.gesture.Drag": {
       "idx": 327,
       "alias": [],
       "alternates": []
     },
+    "Ext.event.gesture.EdgeSwipe": {
+      "idx": 329,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.event.gesture.LongPress": {
+      "idx": 330,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.event.gesture.MultiTouch": {
+      "idx": 331,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.event.gesture.Pinch": {
+      "idx": 332,
+      "alias": [],
+      "alternates": []
+    },
     "Ext.event.gesture.Recognizer": {
-      "idx": 319,
+      "idx": 324,
       "alias": [],
       "alternates": []
     },
     "Ext.event.gesture.Rotate": {
-      "idx": 328,
+      "idx": 333,
       "alias": [],
       "alternates": []
     },
     "Ext.event.gesture.SingleTouch": {
-      "idx": 320,
+      "idx": 325,
       "alias": [],
       "alternates": []
     },
     "Ext.event.gesture.Swipe": {
-      "idx": 323,
+      "idx": 328,
       "alias": [],
       "alternates": []
     },
     "Ext.event.gesture.Tap": {
-      "idx": 329,
+      "idx": 334,
       "alias": [],
       "alternates": []
     },
@@ -8485,7 +8847,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.event.publisher.Focus": {
-      "idx": 330,
+      "idx": 335,
       "alias": [],
       "alternates": []
     },
@@ -8495,7 +8857,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.event.publisher.MouseEnterLeave": {
-      "idx": 483,
+      "idx": 492,
       "alias": [],
       "alternates": []
     },
@@ -8505,12 +8867,12 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.field.InputMask": {
-      "idx": 331,
+      "idx": 336,
       "alias": [],
       "alternates": []
     },
     "Ext.flash.Component": {
-      "idx": 484,
+      "idx": 493,
       "alias": [
         "widget.flash"
       ],
@@ -8519,57 +8881,57 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.Basic": {
-      "idx": 500,
+      "idx": 509,
       "alias": [],
       "alternates": [
         "Ext.form.BasicForm"
       ]
     },
     "Ext.form.CheckboxGroup": {
-      "idx": 507,
+      "idx": 516,
       "alias": [
         "widget.checkboxgroup"
       ],
       "alternates": []
     },
     "Ext.form.CheckboxManager": {
-      "idx": 505,
+      "idx": 514,
       "alias": [],
       "alternates": []
     },
     "Ext.form.FieldAncestor": {
-      "idx": 502,
+      "idx": 511,
       "alias": [],
       "alternates": []
     },
     "Ext.form.FieldContainer": {
-      "idx": 503,
+      "idx": 512,
       "alias": [
         "widget.fieldcontainer"
       ],
       "alternates": []
     },
     "Ext.form.FieldSet": {
-      "idx": 508,
+      "idx": 517,
       "alias": [
         "widget.fieldset"
       ],
       "alternates": []
     },
     "Ext.form.Label": {
-      "idx": 509,
+      "idx": 518,
       "alias": [
         "widget.label"
       ],
       "alternates": []
     },
     "Ext.form.Labelable": {
-      "idx": 491,
+      "idx": 500,
       "alias": [],
       "alternates": []
     },
     "Ext.form.Panel": {
-      "idx": 510,
+      "idx": 519,
       "alias": [
         "widget.form"
       ],
@@ -8579,31 +8941,31 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.RadioGroup": {
-      "idx": 513,
+      "idx": 522,
       "alias": [
         "widget.radiogroup"
       ],
       "alternates": []
     },
     "Ext.form.RadioManager": {
-      "idx": 511,
+      "idx": 520,
       "alias": [],
       "alternates": []
     },
     "Ext.form.action.Action": {
-      "idx": 485,
+      "idx": 494,
       "alias": [],
       "alternates": [
         "Ext.form.Action"
       ]
     },
     "Ext.form.action.DirectAction": {
-      "idx": 514,
+      "idx": 523,
       "alias": [],
       "alternates": []
     },
     "Ext.form.action.DirectLoad": {
-      "idx": 515,
+      "idx": 524,
       "alias": [
         "formaction.directload"
       ],
@@ -8612,7 +8974,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.action.DirectSubmit": {
-      "idx": 516,
+      "idx": 525,
       "alias": [
         "formaction.directsubmit"
       ],
@@ -8621,7 +8983,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.action.Load": {
-      "idx": 486,
+      "idx": 495,
       "alias": [
         "formaction.load"
       ],
@@ -8630,14 +8992,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.action.StandardSubmit": {
-      "idx": 488,
+      "idx": 497,
       "alias": [
         "formaction.standardsubmit"
       ],
       "alternates": []
     },
     "Ext.form.action.Submit": {
-      "idx": 487,
+      "idx": 496,
       "alias": [
         "formaction.submit"
       ],
@@ -8646,7 +9008,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Base": {
-      "idx": 493,
+      "idx": 502,
       "alias": [
         "widget.field"
       ],
@@ -8656,7 +9018,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Checkbox": {
-      "idx": 506,
+      "idx": 515,
       "alias": [
         "widget.checkbox",
         "widget.checkboxfield"
@@ -8666,7 +9028,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.ComboBox": {
-      "idx": 532,
+      "idx": 541,
       "alias": [
         "widget.combo",
         "widget.combobox"
@@ -8676,7 +9038,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Date": {
-      "idx": 535,
+      "idx": 544,
       "alias": [
         "widget.datefield"
       ],
@@ -8686,7 +9048,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Display": {
-      "idx": 536,
+      "idx": 545,
       "alias": [
         "widget.displayfield"
       ],
@@ -8696,12 +9058,12 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Field": {
-      "idx": 492,
+      "idx": 501,
       "alias": [],
       "alternates": []
     },
     "Ext.form.field.File": {
-      "idx": 539,
+      "idx": 548,
       "alias": [
         "widget.filefield",
         "widget.fileuploadfield"
@@ -8713,14 +9075,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.FileButton": {
-      "idx": 537,
+      "idx": 546,
       "alias": [
         "widget.filebutton"
       ],
       "alternates": []
     },
     "Ext.form.field.Hidden": {
-      "idx": 540,
+      "idx": 549,
       "alias": [
         "widget.hidden",
         "widget.hiddenfield"
@@ -8730,7 +9092,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.HtmlEditor": {
-      "idx": 549,
+      "idx": 558,
       "alias": [
         "widget.htmleditor"
       ],
@@ -8739,7 +9101,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Number": {
-      "idx": 529,
+      "idx": 538,
       "alias": [
         "widget.numberfield"
       ],
@@ -8749,7 +9111,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Picker": {
-      "idx": 517,
+      "idx": 526,
       "alias": [
         "widget.pickerfield"
       ],
@@ -8758,7 +9120,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Radio": {
-      "idx": 512,
+      "idx": 521,
       "alias": [
         "widget.radio",
         "widget.radiofield"
@@ -8768,7 +9130,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Spinner": {
-      "idx": 528,
+      "idx": 537,
       "alias": [
         "widget.spinnerfield"
       ],
@@ -8777,14 +9139,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Tag": {
-      "idx": 551,
+      "idx": 560,
       "alias": [
         "widget.tagfield"
       ],
       "alternates": []
     },
     "Ext.form.field.Text": {
-      "idx": 497,
+      "idx": 506,
       "alias": [
         "widget.textfield"
       ],
@@ -8794,7 +9156,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.TextArea": {
-      "idx": 498,
+      "idx": 507,
       "alias": [
         "widget.textarea",
         "widget.textareafield"
@@ -8804,7 +9166,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Time": {
-      "idx": 553,
+      "idx": 562,
       "alias": [
         "widget.timefield"
       ],
@@ -8814,7 +9176,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.Trigger": {
-      "idx": 554,
+      "idx": 563,
       "alias": [
         "widget.trigger",
         "widget.triggerfield"
@@ -8826,28 +9188,28 @@ var Ext = Ext || {};
       ]
     },
     "Ext.form.field.VTypes": {
-      "idx": 495,
+      "idx": 504,
       "alias": [],
       "alternates": [
         "Ext.form.VTypes"
       ]
     },
     "Ext.form.trigger.Component": {
-      "idx": 538,
+      "idx": 547,
       "alias": [
         "trigger.component"
       ],
       "alternates": []
     },
     "Ext.form.trigger.Spinner": {
-      "idx": 527,
+      "idx": 536,
       "alias": [
         "trigger.spinner"
       ],
       "alternates": []
     },
     "Ext.form.trigger.Trigger": {
-      "idx": 496,
+      "idx": 505,
       "alias": [
         "trigger.trigger"
       ],
@@ -8859,7 +9221,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.fx.Animation": {
-      "idx": 341,
+      "idx": 346,
       "alias": [],
       "alternates": []
     },
@@ -8899,29 +9261,29 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.fx.Runner": {
-      "idx": 344,
+      "idx": 349,
       "alias": [],
       "alternates": []
     },
     "Ext.fx.State": {
-      "idx": 332,
+      "idx": 337,
       "alias": [],
       "alternates": []
     },
     "Ext.fx.animation.Abstract": {
-      "idx": 333,
+      "idx": 338,
       "alias": [],
       "alternates": []
     },
     "Ext.fx.animation.Cube": {
-      "idx": 345,
+      "idx": 350,
       "alias": [
         "animation.cube"
       ],
       "alternates": []
     },
     "Ext.fx.animation.Fade": {
-      "idx": 336,
+      "idx": 341,
       "alias": [
         "animation.fade",
         "animation.fadeIn"
@@ -8931,21 +9293,21 @@ var Ext = Ext || {};
       ]
     },
     "Ext.fx.animation.FadeOut": {
-      "idx": 337,
+      "idx": 342,
       "alias": [
         "animation.fadeOut"
       ],
       "alternates": []
     },
     "Ext.fx.animation.Flip": {
-      "idx": 338,
+      "idx": 343,
       "alias": [
         "animation.flip"
       ],
       "alternates": []
     },
     "Ext.fx.animation.Pop": {
-      "idx": 339,
+      "idx": 344,
       "alias": [
         "animation.pop",
         "animation.popIn"
@@ -8955,14 +9317,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.fx.animation.PopOut": {
-      "idx": 340,
+      "idx": 345,
       "alias": [
         "animation.popOut"
       ],
       "alternates": []
     },
     "Ext.fx.animation.Slide": {
-      "idx": 334,
+      "idx": 339,
       "alias": [
         "animation.slide",
         "animation.slideIn"
@@ -8972,21 +9334,21 @@ var Ext = Ext || {};
       ]
     },
     "Ext.fx.animation.SlideOut": {
-      "idx": 335,
+      "idx": 340,
       "alias": [
         "animation.slideOut"
       ],
       "alternates": []
     },
     "Ext.fx.animation.Wipe": {
-      "idx": 346,
+      "idx": 351,
       "alias": [],
       "alternates": [
         "Ext.fx.animation.WipeIn"
       ]
     },
     "Ext.fx.animation.WipeOut": {
-      "idx": 347,
+      "idx": 352,
       "alias": [],
       "alternates": []
     },
@@ -8996,31 +9358,31 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.fx.easing.Bounce": {
-      "idx": 348,
+      "idx": 353,
       "alias": [],
       "alternates": []
     },
     "Ext.fx.easing.BoundMomentum": {
-      "idx": 350,
+      "idx": 355,
       "alias": [],
       "alternates": []
     },
     "Ext.fx.easing.EaseIn": {
-      "idx": 351,
+      "idx": 356,
       "alias": [
         "easing.ease-in"
       ],
       "alternates": []
     },
     "Ext.fx.easing.EaseOut": {
-      "idx": 352,
+      "idx": 357,
       "alias": [
         "easing.ease-out"
       ],
       "alternates": []
     },
     "Ext.fx.easing.Easing": {
-      "idx": 353,
+      "idx": 358,
       "alias": [],
       "alternates": []
     },
@@ -9032,22 +9394,22 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.fx.easing.Momentum": {
-      "idx": 349,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.fx.runner.Css": {
-      "idx": 342,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.fx.runner.CssAnimation": {
       "idx": 354,
       "alias": [],
       "alternates": []
     },
+    "Ext.fx.runner.Css": {
+      "idx": 347,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.fx.runner.CssAnimation": {
+      "idx": 359,
+      "alias": [],
+      "alternates": []
+    },
     "Ext.fx.runner.CssTransition": {
-      "idx": 343,
+      "idx": 348,
       "alias": [],
       "alternates": [
         "Ext.Animator"
@@ -9093,48 +9455,53 @@ var Ext = Ext || {};
       "alias": [],
       "alternates": []
     },
+    "Ext.grid.AdvancedGroupStore": {
+      "idx": 360,
+      "alias": [],
+      "alternates": []
+    },
     "Ext.grid.CellContext": {
-      "idx": 555,
+      "idx": 564,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.CellEditor": {
-      "idx": 556,
+      "idx": 565,
       "alias": [
         "widget.celleditor"
       ],
       "alternates": []
     },
     "Ext.grid.ColumnComponentLayout": {
-      "idx": 557,
+      "idx": 566,
       "alias": [
         "layout.columncomponent"
       ],
       "alternates": []
     },
     "Ext.grid.ColumnLayout": {
-      "idx": 560,
+      "idx": 569,
       "alias": [
         "layout.gridcolumn"
       ],
       "alternates": []
     },
     "Ext.grid.ColumnManager": {
-      "idx": 561,
+      "idx": 570,
       "alias": [],
       "alternates": [
         "Ext.grid.ColumnModel"
       ]
     },
     "Ext.grid.NavigationModel": {
-      "idx": 562,
+      "idx": 571,
       "alias": [
         "view.navigation.grid"
       ],
       "alternates": []
     },
     "Ext.grid.Panel": {
-      "idx": 568,
+      "idx": 577,
       "alias": [
         "widget.grid",
         "widget.gridpanel"
@@ -9146,36 +9513,36 @@ var Ext = Ext || {};
       ]
     },
     "Ext.grid.RowContext": {
-      "idx": 569,
+      "idx": 578,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.RowEditor": {
-      "idx": 571,
+      "idx": 580,
       "alias": [
         "widget.roweditor"
       ],
       "alternates": []
     },
     "Ext.grid.RowEditorButtons": {
-      "idx": 570,
+      "idx": 579,
       "alias": [
         "widget.roweditorbuttons"
       ],
       "alternates": []
     },
     "Ext.grid.Scroller": {
-      "idx": 572,
+      "idx": 581,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.ViewDropZone": {
-      "idx": 574,
+      "idx": 583,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.column.Action": {
-      "idx": 582,
+      "idx": 591,
       "alias": [
         "widget.actioncolumn"
       ],
@@ -9184,12 +9551,12 @@ var Ext = Ext || {};
       ]
     },
     "Ext.grid.column.ActionProxy": {
-      "idx": 581,
+      "idx": 590,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.column.Boolean": {
-      "idx": 583,
+      "idx": 592,
       "alias": [
         "widget.booleancolumn"
       ],
@@ -9198,7 +9565,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.grid.column.Check": {
-      "idx": 584,
+      "idx": 593,
       "alias": [
         "widget.checkcolumn"
       ],
@@ -9208,7 +9575,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.grid.column.Column": {
-      "idx": 580,
+      "idx": 589,
       "alias": [
         "widget.gridcolumn"
       ],
@@ -9217,7 +9584,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.grid.column.Date": {
-      "idx": 585,
+      "idx": 594,
       "alias": [
         "widget.datecolumn"
       ],
@@ -9225,8 +9592,15 @@ var Ext = Ext || {};
         "Ext.grid.DateColumn"
       ]
     },
+    "Ext.grid.column.Groups": {
+      "idx": 595,
+      "alias": [
+        "widget.groupscolumn"
+      ],
+      "alternates": []
+    },
     "Ext.grid.column.Number": {
-      "idx": 586,
+      "idx": 596,
       "alias": [
         "widget.numbercolumn"
       ],
@@ -9235,7 +9609,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.grid.column.RowNumberer": {
-      "idx": 587,
+      "idx": 597,
       "alias": [
         "widget.rownumberer"
       ],
@@ -9244,7 +9618,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.grid.column.Template": {
-      "idx": 588,
+      "idx": 598,
       "alias": [
         "widget.templatecolumn"
       ],
@@ -9253,94 +9627,113 @@ var Ext = Ext || {};
       ]
     },
     "Ext.grid.column.Widget": {
-      "idx": 589,
+      "idx": 599,
       "alias": [
         "widget.widgetcolumn"
       ],
       "alternates": []
     },
     "Ext.grid.feature.AbstractSummary": {
-      "idx": 591,
+      "idx": 601,
       "alias": [
         "feature.abstractsummary"
       ],
       "alternates": []
     },
+    "Ext.grid.feature.AdvancedGroupStore": {
+      "idx": 602,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.grid.feature.AdvancedGrouping": {
+      "idx": 603,
+      "alias": [
+        "feature.advancedgrouping"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.feature.AdvancedGroupingSummary": {
+      "idx": 604,
+      "alias": [
+        "feature.advancedgroupingsummary"
+      ],
+      "alternates": []
+    },
     "Ext.grid.feature.Feature": {
-      "idx": 590,
+      "idx": 600,
       "alias": [
         "feature.feature"
       ],
       "alternates": []
     },
     "Ext.grid.feature.GroupStore": {
-      "idx": 592,
+      "idx": 605,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.feature.Grouping": {
-      "idx": 593,
+      "idx": 606,
       "alias": [
         "feature.grouping"
       ],
       "alternates": []
     },
     "Ext.grid.feature.GroupingSummary": {
-      "idx": 594,
+      "idx": 607,
       "alias": [
         "feature.groupingsummary"
       ],
       "alternates": []
     },
     "Ext.grid.feature.RowBody": {
-      "idx": 595,
+      "idx": 608,
       "alias": [
         "feature.rowbody"
       ],
       "alternates": []
     },
     "Ext.grid.feature.Summary": {
-      "idx": 596,
+      "idx": 609,
       "alias": [
         "feature.summary"
       ],
       "alternates": []
     },
     "Ext.grid.filters.Filters": {
-      "idx": 609,
+      "idx": 622,
       "alias": [
         "plugin.gridfilters"
       ],
       "alternates": []
     },
     "Ext.grid.filters.filter.Base": {
-      "idx": 601,
+      "idx": 614,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.filters.filter.Boolean": {
-      "idx": 603,
+      "idx": 616,
       "alias": [
         "grid.filter.boolean"
       ],
       "alternates": []
     },
     "Ext.grid.filters.filter.Date": {
-      "idx": 605,
+      "idx": 618,
       "alias": [
         "grid.filter.date"
       ],
       "alternates": []
     },
     "Ext.grid.filters.filter.List": {
-      "idx": 606,
+      "idx": 619,
       "alias": [
         "grid.filter.list"
       ],
       "alternates": []
     },
     "Ext.grid.filters.filter.Number": {
-      "idx": 607,
+      "idx": 620,
       "alias": [
         "grid.filter.number",
         "grid.filter.numeric"
@@ -9348,135 +9741,261 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.grid.filters.filter.SingleFilter": {
-      "idx": 602,
+      "idx": 615,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.filters.filter.String": {
-      "idx": 608,
+      "idx": 621,
       "alias": [
         "grid.filter.string"
       ],
       "alternates": []
     },
     "Ext.grid.filters.filter.TriFilter": {
-      "idx": 604,
+      "idx": 617,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.header.Container": {
-      "idx": 579,
+      "idx": 588,
       "alias": [
         "widget.headercontainer"
       ],
       "alternates": []
     },
     "Ext.grid.header.DragZone": {
-      "idx": 576,
+      "idx": 585,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.header.DropZone": {
-      "idx": 577,
+      "idx": 586,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.locking.HeaderContainer": {
-      "idx": 610,
+      "idx": 623,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.locking.Lockable": {
-      "idx": 613,
+      "idx": 626,
       "alias": [],
       "alternates": [
         "Ext.grid.Lockable"
       ]
     },
     "Ext.grid.locking.RowSynchronizer": {
-      "idx": 564,
+      "idx": 573,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.locking.View": {
-      "idx": 611,
+      "idx": 624,
       "alias": [],
       "alternates": [
         "Ext.grid.LockingView"
       ]
     },
+    "Ext.grid.plugin.BaseFilterBar": {
+      "idx": 361,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.grid.plugin.BaseGroupingPanel": {
+      "idx": 362,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.grid.plugin.BaseSummaries": {
+      "idx": 363,
+      "alias": [],
+      "alternates": []
+    },
     "Ext.grid.plugin.BufferedRenderer": {
-      "idx": 614,
+      "idx": 627,
       "alias": [
         "plugin.bufferedrenderer"
       ],
       "alternates": []
     },
     "Ext.grid.plugin.CellEditing": {
-      "idx": 616,
+      "idx": 629,
       "alias": [
         "plugin.cellediting"
       ],
       "alternates": []
     },
     "Ext.grid.plugin.Clipboard": {
-      "idx": 617,
+      "idx": 630,
       "alias": [
         "plugin.clipboard"
       ],
       "alternates": []
     },
     "Ext.grid.plugin.DragDrop": {
-      "idx": 618,
+      "idx": 631,
       "alias": [
         "plugin.gridviewdragdrop"
       ],
       "alternates": []
     },
     "Ext.grid.plugin.Editing": {
-      "idx": 615,
+      "idx": 628,
       "alias": [
         "editing.editing"
       ],
       "alternates": []
     },
+    "Ext.grid.plugin.GroupingPanel": {
+      "idx": 636,
+      "alias": [
+        "plugin.groupingpanel"
+      ],
+      "alternates": []
+    },
     "Ext.grid.plugin.HeaderReorderer": {
-      "idx": 578,
+      "idx": 587,
       "alias": [
         "plugin.gridheaderreorderer"
       ],
       "alternates": []
     },
     "Ext.grid.plugin.HeaderResizer": {
-      "idx": 575,
+      "idx": 584,
       "alias": [
         "plugin.gridheaderresizer"
       ],
       "alternates": []
     },
     "Ext.grid.plugin.RowEditing": {
-      "idx": 619,
+      "idx": 637,
       "alias": [
         "plugin.rowediting"
       ],
       "alternates": []
     },
     "Ext.grid.plugin.RowExpander": {
-      "idx": 620,
+      "idx": 638,
       "alias": [
         "plugin.rowexpander"
       ],
       "alternates": []
     },
     "Ext.grid.plugin.RowWidget": {
-      "idx": 621,
+      "idx": 639,
       "alias": [
         "plugin.rowwidget"
       ],
       "alternates": []
     },
+    "Ext.grid.plugin.Summaries": {
+      "idx": 640,
+      "alias": [
+        "plugin.gridsummaries"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.FilterBar": {
+      "idx": 651,
+      "alias": [
+        "plugin.gridfilterbar"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.Operator": {
+      "idx": 641,
+      "alias": [
+        "plugin.operator"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.filters.Base": {
+      "idx": 642,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.filters.Boolean": {
+      "idx": 647,
+      "alias": [
+        "grid.filterbar.boolean"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.filters.Date": {
+      "idx": 645,
+      "alias": [
+        "grid.filterbar.date"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.filters.InList": {
+      "idx": 650,
+      "alias": [
+        "grid.filterbar.inlist"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.filters.List": {
+      "idx": 649,
+      "alias": [
+        "grid.filterbar.list"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.filters.None": {
+      "idx": 648,
+      "alias": [
+        "grid.filterbar.none"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.filters.Number": {
+      "idx": 646,
+      "alias": [
+        "grid.filterbar.number"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.filters.SingleFilter": {
+      "idx": 643,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.grid.plugin.filterbar.filters.String": {
+      "idx": 644,
+      "alias": [
+        "grid.filterbar.string"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.grouping.Column": {
+      "idx": 632,
+      "alias": [
+        "widget.groupingpanelcolumn"
+      ],
+      "alternates": []
+    },
+    "Ext.grid.plugin.grouping.DragZone": {
+      "idx": 633,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.grid.plugin.grouping.DropZone": {
+      "idx": 634,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.grid.plugin.grouping.Panel": {
+      "idx": 635,
+      "alias": [
+        "widget.groupingpanel"
+      ],
+      "alternates": []
+    },
     "Ext.grid.property.Grid": {
-      "idx": 622,
+      "idx": 652,
       "alias": [
         "widget.propertygrid"
       ],
@@ -9485,118 +10004,118 @@ var Ext = Ext || {};
       ]
     },
     "Ext.grid.property.HeaderContainer": {
-      "idx": 623,
+      "idx": 653,
       "alias": [],
       "alternates": [
         "Ext.grid.PropertyColumnModel"
       ]
     },
     "Ext.grid.property.Property": {
-      "idx": 624,
+      "idx": 654,
       "alias": [],
       "alternates": [
         "Ext.PropGridProperty"
       ]
     },
     "Ext.grid.property.Reader": {
-      "idx": 625,
+      "idx": 655,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.property.Store": {
-      "idx": 626,
+      "idx": 656,
       "alias": [],
       "alternates": [
         "Ext.grid.PropertyStore"
       ]
     },
     "Ext.grid.selection.Cells": {
-      "idx": 628,
+      "idx": 658,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.selection.Columns": {
-      "idx": 629,
+      "idx": 659,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.selection.Replicator": {
-      "idx": 630,
+      "idx": 660,
       "alias": [
         "plugin.selectionreplicator"
       ],
       "alternates": []
     },
     "Ext.grid.selection.Rows": {
-      "idx": 631,
+      "idx": 661,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.selection.Selection": {
-      "idx": 627,
+      "idx": 657,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.selection.SelectionExtender": {
-      "idx": 632,
+      "idx": 662,
       "alias": [],
       "alternates": []
     },
     "Ext.grid.selection.SpreadsheetModel": {
-      "idx": 633,
+      "idx": 663,
       "alias": [
         "selection.spreadsheet"
       ],
       "alternates": []
     },
     "Ext.layout.Context": {
-      "idx": 636,
+      "idx": 666,
       "alias": [],
       "alternates": []
     },
     "Ext.layout.ContextItem": {
-      "idx": 635,
+      "idx": 665,
       "alias": [],
       "alternates": []
     },
     "Ext.layout.Layout": {
-      "idx": 411,
+      "idx": 420,
       "alias": [],
       "alternates": []
     },
     "Ext.layout.SizeModel": {
-      "idx": 410,
+      "idx": 419,
       "alias": [],
       "alternates": []
     },
     "Ext.layout.component.Auto": {
-      "idx": 424,
+      "idx": 433,
       "alias": [
         "layout.autocomponent"
       ],
       "alternates": []
     },
     "Ext.layout.component.Body": {
-      "idx": 638,
+      "idx": 668,
       "alias": [
         "layout.body"
       ],
       "alternates": []
     },
     "Ext.layout.component.BoundList": {
-      "idx": 524,
+      "idx": 533,
       "alias": [
         "layout.boundlist"
       ],
       "alternates": []
     },
     "Ext.layout.component.Component": {
-      "idx": 423,
+      "idx": 432,
       "alias": [],
       "alternates": []
     },
     "Ext.layout.component.Dock": {
-      "idx": 454,
+      "idx": 463,
       "alias": [
         "layout.dock"
       ],
@@ -9605,42 +10124,42 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.component.FieldSet": {
-      "idx": 639,
+      "idx": 669,
       "alias": [
         "layout.fieldset"
       ],
       "alternates": []
     },
     "Ext.layout.component.ProgressBar": {
-      "idx": 425,
+      "idx": 434,
       "alias": [
         "layout.progressbar"
       ],
       "alternates": []
     },
     "Ext.layout.component.field.FieldContainer": {
-      "idx": 501,
+      "idx": 510,
       "alias": [
         "layout.fieldcontainer"
       ],
       "alternates": []
     },
     "Ext.layout.component.field.HtmlEditor": {
-      "idx": 546,
+      "idx": 555,
       "alias": [
         "layout.htmleditor"
       ],
       "alternates": []
     },
     "Ext.layout.component.field.Text": {
-      "idx": 494,
+      "idx": 503,
       "alias": [
         "layout.textfield"
       ],
       "alternates": []
     },
     "Ext.layout.container.Absolute": {
-      "idx": 640,
+      "idx": 670,
       "alias": [
         "layout.absolute"
       ],
@@ -9649,7 +10168,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.Accordion": {
-      "idx": 641,
+      "idx": 671,
       "alias": [
         "layout.accordion"
       ],
@@ -9658,7 +10177,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.Anchor": {
-      "idx": 463,
+      "idx": 472,
       "alias": [
         "layout.anchor"
       ],
@@ -9667,7 +10186,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.Auto": {
-      "idx": 413,
+      "idx": 422,
       "alias": [
         "layout.auto",
         "layout.autocontainer"
@@ -9675,7 +10194,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.layout.container.Border": {
-      "idx": 643,
+      "idx": 673,
       "alias": [
         "layout.border"
       ],
@@ -9684,7 +10203,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.Box": {
-      "idx": 443,
+      "idx": 452,
       "alias": [
         "layout.box"
       ],
@@ -9693,7 +10212,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.Card": {
-      "idx": 644,
+      "idx": 674,
       "alias": [
         "layout.card"
       ],
@@ -9702,7 +10221,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.Center": {
-      "idx": 645,
+      "idx": 675,
       "alias": [
         "layout.center",
         "layout.ux.center"
@@ -9712,14 +10231,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.CheckboxGroup": {
-      "idx": 504,
+      "idx": 513,
       "alias": [
         "layout.checkboxgroup"
       ],
       "alternates": []
     },
     "Ext.layout.container.Column": {
-      "idx": 466,
+      "idx": 475,
       "alias": [
         "layout.column"
       ],
@@ -9728,19 +10247,19 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.ColumnSplitter": {
-      "idx": 470,
+      "idx": 479,
       "alias": [
         "widget.columnsplitter"
       ],
       "alternates": []
     },
     "Ext.layout.container.ColumnSplitterTracker": {
-      "idx": 469,
+      "idx": 478,
       "alias": [],
       "alternates": []
     },
     "Ext.layout.container.Container": {
-      "idx": 412,
+      "idx": 421,
       "alias": [
         "layout.container"
       ],
@@ -9749,21 +10268,21 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.Dashboard": {
-      "idx": 471,
+      "idx": 480,
       "alias": [
         "layout.dashboard"
       ],
       "alternates": []
     },
     "Ext.layout.container.Editor": {
-      "idx": 416,
+      "idx": 425,
       "alias": [
         "layout.editor"
       ],
       "alternates": []
     },
     "Ext.layout.container.Fit": {
-      "idx": 558,
+      "idx": 567,
       "alias": [
         "layout.fit"
       ],
@@ -9773,7 +10292,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.Form": {
-      "idx": 646,
+      "idx": 676,
       "alias": [
         "layout.form"
       ],
@@ -9782,7 +10301,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.HBox": {
-      "idx": 444,
+      "idx": 453,
       "alias": [
         "layout.hbox"
       ],
@@ -9791,14 +10310,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.SegmentedButton": {
-      "idx": 433,
+      "idx": 442,
       "alias": [
         "layout.segmentedbutton"
       ],
       "alternates": []
     },
     "Ext.layout.container.Table": {
-      "idx": 458,
+      "idx": 467,
       "alias": [
         "layout.table"
       ],
@@ -9807,7 +10326,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.VBox": {
-      "idx": 445,
+      "idx": 454,
       "alias": [
         "layout.vbox"
       ],
@@ -9821,7 +10340,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.layout.container.boxOverflow.Menu": {
-      "idx": 548,
+      "idx": 557,
       "alias": [
         "box.overflow.Menu",
         "box.overflow.menu"
@@ -9831,7 +10350,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.boxOverflow.None": {
-      "idx": 439,
+      "idx": 448,
       "alias": [
         "box.overflow.None",
         "box.overflow.none"
@@ -9841,7 +10360,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.layout.container.boxOverflow.Scroller": {
-      "idx": 440,
+      "idx": 449,
       "alias": [
         "box.overflow.Scroller",
         "box.overflow.scroller"
@@ -9851,59 +10370,59 @@ var Ext = Ext || {};
       ]
     },
     "Ext.list.AbstractTreeItem": {
-      "idx": 355,
+      "idx": 364,
       "alias": [],
       "alternates": []
     },
     "Ext.list.RootTreeItem": {
-      "idx": 356,
+      "idx": 365,
       "alias": [],
       "alternates": []
     },
     "Ext.list.Tree": {
-      "idx": 359,
+      "idx": 368,
       "alias": [
         "widget.treelist"
       ],
       "alternates": []
     },
     "Ext.list.TreeItem": {
-      "idx": 358,
+      "idx": 367,
       "alias": [
         "widget.treelistitem"
       ],
       "alternates": []
     },
     "Ext.menu.Bar": {
-      "idx": 647,
+      "idx": 677,
       "alias": [
         "widget.menubar"
       ],
       "alternates": []
     },
     "Ext.menu.CheckItem": {
-      "idx": 598,
+      "idx": 611,
       "alias": [
         "widget.menucheckitem"
       ],
       "alternates": []
     },
     "Ext.menu.ColorPicker": {
-      "idx": 648,
+      "idx": 678,
       "alias": [
         "widget.colormenu"
       ],
       "alternates": []
     },
     "Ext.menu.DatePicker": {
-      "idx": 649,
+      "idx": 679,
       "alias": [
         "widget.datemenu"
       ],
       "alternates": []
     },
     "Ext.menu.Item": {
-      "idx": 597,
+      "idx": 610,
       "alias": [
         "widget.menuitem"
       ],
@@ -9912,21 +10431,21 @@ var Ext = Ext || {};
       ]
     },
     "Ext.menu.Manager": {
-      "idx": 429,
+      "idx": 438,
       "alias": [],
       "alternates": [
         "Ext.menu.MenuMgr"
       ]
     },
     "Ext.menu.Menu": {
-      "idx": 600,
+      "idx": 613,
       "alias": [
         "widget.menu"
       ],
       "alternates": []
     },
     "Ext.menu.Separator": {
-      "idx": 599,
+      "idx": 612,
       "alias": [
         "widget.menuseparator"
       ],
@@ -9953,22 +10472,22 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.mixin.ConfigProxy": {
-      "idx": 360,
+      "idx": 369,
       "alias": [],
       "alternates": []
     },
     "Ext.mixin.ConfigState": {
-      "idx": 361,
+      "idx": 370,
       "alias": [],
       "alternates": []
     },
     "Ext.mixin.Container": {
-      "idx": 362,
+      "idx": 371,
       "alias": [],
       "alternates": []
     },
     "Ext.mixin.Dirty": {
-      "idx": 199,
+      "idx": 201,
       "alias": [],
       "alternates": []
     },
@@ -9983,12 +10502,12 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.mixin.FocusableContainer": {
-      "idx": 365,
+      "idx": 374,
       "alias": [],
       "alternates": []
     },
     "Ext.mixin.Hookable": {
-      "idx": 366,
+      "idx": 375,
       "alias": [],
       "alternates": []
     },
@@ -10003,7 +10522,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.mixin.ItemRippler": {
-      "idx": 357,
+      "idx": 366,
       "alias": [],
       "alternates": []
     },
@@ -10013,7 +10532,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.mixin.Mashup": {
-      "idx": 367,
+      "idx": 376,
       "alias": [],
       "alternates": []
     },
@@ -10028,7 +10547,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.mixin.Queryable": {
-      "idx": 239,
+      "idx": 241,
       "alias": [],
       "alternates": []
     },
@@ -10038,17 +10557,17 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.mixin.Selectable": {
-      "idx": 368,
+      "idx": 377,
       "alias": [],
       "alternates": []
     },
     "Ext.mixin.StoreWatcher": {
-      "idx": 369,
+      "idx": 378,
       "alias": [],
       "alternates": []
     },
     "Ext.mixin.StyleCacher": {
-      "idx": 370,
+      "idx": 379,
       "alias": [],
       "alternates": []
     },
@@ -10058,29 +10577,29 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.mixin.Traversable": {
-      "idx": 371,
+      "idx": 380,
       "alias": [],
       "alternates": []
     },
     "Ext.panel.Bar": {
-      "idx": 435,
+      "idx": 444,
       "alias": [],
       "alternates": []
     },
     "Ext.panel.DD": {
-      "idx": 453,
+      "idx": 462,
       "alias": [],
       "alternates": []
     },
     "Ext.panel.Header": {
-      "idx": 438,
+      "idx": 447,
       "alias": [
         "widget.header"
       ],
       "alternates": []
     },
     "Ext.panel.Panel": {
-      "idx": 457,
+      "idx": 466,
       "alias": [
         "widget.panel"
       ],
@@ -10089,92 +10608,92 @@ var Ext = Ext || {};
       ]
     },
     "Ext.panel.Pinnable": {
-      "idx": 650,
+      "idx": 680,
       "alias": [],
       "alternates": []
     },
     "Ext.panel.Proxy": {
-      "idx": 452,
+      "idx": 461,
       "alias": [],
       "alternates": [
         "Ext.dd.PanelProxy"
       ]
     },
     "Ext.panel.Table": {
-      "idx": 559,
+      "idx": 568,
       "alias": [
         "widget.tablepanel"
       ],
       "alternates": []
     },
     "Ext.panel.Title": {
-      "idx": 436,
+      "idx": 445,
       "alias": [
         "widget.title"
       ],
       "alternates": []
     },
     "Ext.panel.Tool": {
-      "idx": 437,
+      "idx": 446,
       "alias": [
         "widget.tool"
       ],
       "alternates": []
     },
     "Ext.parse.Parser": {
-      "idx": 218,
+      "idx": 220,
       "alias": [],
       "alternates": []
     },
     "Ext.parse.Symbol": {
-      "idx": 212,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.parse.Tokenizer": {
-      "idx": 211,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.parse.symbol.Constant": {
-      "idx": 213,
-      "alias": [],
-      "alternates": []
-    },
-    "Ext.parse.symbol.Infix": {
       "idx": 214,
       "alias": [],
       "alternates": []
     },
-    "Ext.parse.symbol.InfixRight": {
+    "Ext.parse.Tokenizer": {
+      "idx": 213,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.parse.symbol.Constant": {
       "idx": 215,
       "alias": [],
       "alternates": []
     },
-    "Ext.parse.symbol.Paren": {
+    "Ext.parse.symbol.Infix": {
       "idx": 216,
       "alias": [],
       "alternates": []
     },
-    "Ext.parse.symbol.Prefix": {
+    "Ext.parse.symbol.InfixRight": {
       "idx": 217,
       "alias": [],
       "alternates": []
     },
+    "Ext.parse.symbol.Paren": {
+      "idx": 218,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.parse.symbol.Prefix": {
+      "idx": 219,
+      "alias": [],
+      "alternates": []
+    },
     "Ext.perf.Accumulator": {
-      "idx": 372,
+      "idx": 381,
       "alias": [],
       "alternates": []
     },
     "Ext.perf.Monitor": {
-      "idx": 373,
+      "idx": 382,
       "alias": [],
       "alternates": [
         "Ext.Perf"
       ]
     },
     "Ext.picker.Color": {
-      "idx": 545,
+      "idx": 554,
       "alias": [
         "widget.colorpicker"
       ],
@@ -10183,7 +10702,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.picker.Date": {
-      "idx": 534,
+      "idx": 543,
       "alias": [
         "widget.datepicker"
       ],
@@ -10192,7 +10711,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.picker.Month": {
-      "idx": 533,
+      "idx": 542,
       "alias": [
         "widget.monthpicker"
       ],
@@ -10201,7 +10720,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.picker.Time": {
-      "idx": 552,
+      "idx": 561,
       "alias": [
         "widget.timepicker"
       ],
@@ -10215,12 +10734,12 @@ var Ext = Ext || {};
       ]
     },
     "Ext.plugin.AbstractClipboard": {
-      "idx": 374,
+      "idx": 383,
       "alias": [],
       "alternates": []
     },
     "Ext.plugin.LazyItems": {
-      "idx": 651,
+      "idx": 681,
       "alias": [
         "plugin.lazyitems"
       ],
@@ -10235,21 +10754,21 @@ var Ext = Ext || {};
       ]
     },
     "Ext.plugin.MouseEnter": {
-      "idx": 375,
+      "idx": 384,
       "alias": [
         "plugin.mouseenter"
       ],
       "alternates": []
     },
     "Ext.plugin.Responsive": {
-      "idx": 652,
+      "idx": 682,
       "alias": [
         "plugin.responsive"
       ],
       "alternates": []
     },
     "Ext.plugin.Viewport": {
-      "idx": 461,
+      "idx": 470,
       "alias": [
         "plugin.viewport"
       ],
@@ -10271,43 +10790,43 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.resizer.BorderSplitter": {
-      "idx": 642,
+      "idx": 672,
       "alias": [
         "widget.bordersplitter"
       ],
       "alternates": []
     },
     "Ext.resizer.BorderSplitterTracker": {
-      "idx": 653,
+      "idx": 683,
       "alias": [],
       "alternates": []
     },
     "Ext.resizer.Handle": {
-      "idx": 654,
+      "idx": 684,
       "alias": [],
       "alternates": []
     },
     "Ext.resizer.ResizeTracker": {
-      "idx": 655,
+      "idx": 685,
       "alias": [],
       "alternates": []
     },
     "Ext.resizer.Resizer": {
-      "idx": 656,
+      "idx": 686,
       "alias": [],
       "alternates": [
         "Ext.Resizable"
       ]
     },
     "Ext.resizer.Splitter": {
-      "idx": 442,
+      "idx": 451,
       "alias": [
         "widget.splitter"
       ],
       "alternates": []
     },
     "Ext.resizer.SplitterTracker": {
-      "idx": 468,
+      "idx": 477,
       "alias": [],
       "alternates": []
     },
@@ -10337,7 +10856,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.scroll.LockingScroller": {
-      "idx": 612,
+      "idx": 625,
       "alias": [
         "scroller.locking"
       ],
@@ -10353,35 +10872,35 @@ var Ext = Ext || {};
       ]
     },
     "Ext.scroll.TableScroller": {
-      "idx": 566,
+      "idx": 575,
       "alias": [
         "scroller.table"
       ],
       "alternates": []
     },
     "Ext.selection.CellModel": {
-      "idx": 657,
+      "idx": 687,
       "alias": [
         "selection.cellmodel"
       ],
       "alternates": []
     },
     "Ext.selection.CheckboxModel": {
-      "idx": 659,
+      "idx": 689,
       "alias": [
         "selection.checkboxmodel"
       ],
       "alternates": []
     },
     "Ext.selection.DataViewModel": {
-      "idx": 519,
+      "idx": 528,
       "alias": [
         "selection.dataviewmodel"
       ],
       "alternates": []
     },
     "Ext.selection.Model": {
-      "idx": 518,
+      "idx": 527,
       "alias": [
         "selection.abstract"
       ],
@@ -10390,21 +10909,21 @@ var Ext = Ext || {};
       ]
     },
     "Ext.selection.RowModel": {
-      "idx": 658,
+      "idx": 688,
       "alias": [
         "selection.rowmodel"
       ],
       "alternates": []
     },
     "Ext.selection.TreeModel": {
-      "idx": 660,
+      "idx": 690,
       "alias": [
         "selection.treemodel"
       ],
       "alternates": []
     },
     "Ext.slider.Multi": {
-      "idx": 663,
+      "idx": 693,
       "alias": [
         "widget.multislider"
       ],
@@ -10413,7 +10932,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.slider.Single": {
-      "idx": 664,
+      "idx": 694,
       "alias": [
         "widget.slider",
         "widget.sliderfield"
@@ -10426,117 +10945,117 @@ var Ext = Ext || {};
       ]
     },
     "Ext.slider.Thumb": {
-      "idx": 661,
+      "idx": 691,
       "alias": [],
       "alternates": []
     },
     "Ext.slider.Tip": {
-      "idx": 662,
+      "idx": 692,
       "alias": [
         "widget.slidertip"
       ],
       "alternates": []
     },
     "Ext.slider.Widget": {
-      "idx": 665,
+      "idx": 695,
       "alias": [
         "widget.sliderwidget"
       ],
       "alternates": []
     },
     "Ext.sparkline.Bar": {
-      "idx": 384,
+      "idx": 393,
       "alias": [
         "widget.sparklinebar"
       ],
       "alternates": []
     },
     "Ext.sparkline.BarBase": {
-      "idx": 382,
+      "idx": 391,
       "alias": [],
       "alternates": []
     },
     "Ext.sparkline.Base": {
-      "idx": 381,
+      "idx": 390,
       "alias": [
         "widget.sparkline"
       ],
       "alternates": []
     },
     "Ext.sparkline.Box": {
-      "idx": 385,
+      "idx": 394,
       "alias": [
         "widget.sparklinebox"
       ],
       "alternates": []
     },
     "Ext.sparkline.Bullet": {
-      "idx": 386,
+      "idx": 395,
       "alias": [
         "widget.sparklinebullet"
       ],
       "alternates": []
     },
     "Ext.sparkline.CanvasBase": {
-      "idx": 377,
+      "idx": 386,
       "alias": [],
       "alternates": []
     },
     "Ext.sparkline.CanvasCanvas": {
-      "idx": 378,
+      "idx": 387,
       "alias": [],
       "alternates": []
     },
     "Ext.sparkline.Discrete": {
-      "idx": 387,
+      "idx": 396,
       "alias": [
         "widget.sparklinediscrete"
       ],
       "alternates": []
     },
     "Ext.sparkline.Line": {
-      "idx": 388,
+      "idx": 397,
       "alias": [
         "widget.sparklineline"
       ],
       "alternates": []
     },
     "Ext.sparkline.Pie": {
-      "idx": 389,
+      "idx": 398,
       "alias": [
         "widget.sparklinepie"
       ],
       "alternates": []
     },
     "Ext.sparkline.RangeMap": {
-      "idx": 383,
+      "idx": 392,
       "alias": [],
       "alternates": []
     },
     "Ext.sparkline.Shape": {
-      "idx": 376,
+      "idx": 385,
       "alias": [],
       "alternates": []
     },
     "Ext.sparkline.TriState": {
-      "idx": 390,
+      "idx": 399,
       "alias": [
         "widget.sparklinetristate"
       ],
       "alternates": []
     },
     "Ext.sparkline.VmlCanvas": {
-      "idx": 379,
+      "idx": 388,
       "alias": [],
       "alternates": []
     },
     "Ext.state.CookieProvider": {
-      "idx": 666,
+      "idx": 696,
       "alias": [],
       "alternates": []
     },
     "Ext.state.LocalStorageProvider": {
-      "idx": 667,
+      "idx": 697,
       "alias": [
         "state.localstorage"
       ],
@@ -10558,14 +11077,14 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.tab.Bar": {
-      "idx": 669,
+      "idx": 699,
       "alias": [
         "widget.tabbar"
       ],
       "alternates": []
     },
     "Ext.tab.Panel": {
-      "idx": 670,
+      "idx": 700,
       "alias": [
         "widget.tabpanel"
       ],
@@ -10574,14 +11093,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.tab.Tab": {
-      "idx": 668,
+      "idx": 698,
       "alias": [
         "widget.tab"
       ],
       "alternates": []
     },
     "Ext.tip.QuickTip": {
-      "idx": 543,
+      "idx": 552,
       "alias": [
         "widget.quicktip"
       ],
@@ -10590,14 +11109,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.tip.QuickTipManager": {
-      "idx": 544,
+      "idx": 553,
       "alias": [],
       "alternates": [
         "Ext.QuickTips"
       ]
     },
     "Ext.tip.Tip": {
-      "idx": 541,
+      "idx": 550,
       "alias": [
         "widget.tip"
       ],
@@ -10606,7 +11125,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.tip.ToolTip": {
-      "idx": 542,
+      "idx": 551,
       "alias": [
         "widget.tooltip"
       ],
@@ -10615,14 +11134,14 @@ var Ext = Ext || {};
       ]
     },
     "Ext.toolbar.Breadcrumb": {
-      "idx": 671,
+      "idx": 701,
       "alias": [
         "widget.breadcrumb"
       ],
       "alternates": []
     },
     "Ext.toolbar.Fill": {
-      "idx": 672,
+      "idx": 702,
       "alias": [
         "widget.tbfill"
       ],
@@ -10631,7 +11150,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.toolbar.Item": {
-      "idx": 525,
+      "idx": 534,
       "alias": [
         "widget.tbitem"
       ],
@@ -10640,7 +11159,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.toolbar.Paging": {
-      "idx": 530,
+      "idx": 539,
       "alias": [
         "widget.pagingtoolbar"
       ],
@@ -10649,7 +11168,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.toolbar.Separator": {
-      "idx": 547,
+      "idx": 556,
       "alias": [
         "widget.tbseparator"
       ],
@@ -10658,7 +11177,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.toolbar.Spacer": {
-      "idx": 673,
+      "idx": 703,
       "alias": [
         "widget.tbspacer"
       ],
@@ -10667,7 +11186,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.toolbar.TextItem": {
-      "idx": 526,
+      "idx": 535,
       "alias": [
         "widget.tbtext"
       ],
@@ -10676,7 +11195,7 @@ var Ext = Ext || {};
       ]
     },
     "Ext.toolbar.Toolbar": {
-      "idx": 446,
+      "idx": 455,
       "alias": [
         "widget.toolbar"
       ],
@@ -10685,21 +11204,21 @@ var Ext = Ext || {};
       ]
     },
     "Ext.tree.Column": {
-      "idx": 674,
+      "idx": 704,
       "alias": [
         "widget.treecolumn"
       ],
       "alternates": []
     },
     "Ext.tree.NavigationModel": {
-      "idx": 675,
+      "idx": 705,
       "alias": [
         "view.navigation.tree"
       ],
       "alternates": []
     },
     "Ext.tree.Panel": {
-      "idx": 677,
+      "idx": 707,
       "alias": [
         "widget.treepanel"
       ],
@@ -10709,24 +11228,24 @@ var Ext = Ext || {};
       ]
     },
     "Ext.tree.View": {
-      "idx": 676,
+      "idx": 706,
       "alias": [
         "widget.treeview"
       ],
       "alternates": []
     },
     "Ext.tree.ViewDragZone": {
-      "idx": 679,
+      "idx": 709,
       "alias": [],
       "alternates": []
     },
     "Ext.tree.ViewDropZone": {
-      "idx": 680,
+      "idx": 710,
       "alias": [],
       "alternates": []
     },
     "Ext.tree.plugin.TreeViewDragDrop": {
-      "idx": 681,
+      "idx": 711,
       "alias": [
         "plugin.treeviewdragdrop"
       ],
@@ -10743,12 +11262,12 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.Bag": {
-      "idx": 190,
+      "idx": 192,
       "alias": [],
       "alternates": []
     },
     "Ext.util.Base64": {
-      "idx": 391,
+      "idx": 400,
       "alias": [],
       "alternates": []
     },
@@ -10763,12 +11282,12 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.CSV": {
-      "idx": 393,
+      "idx": 402,
       "alias": [],
       "alternates": []
     },
     "Ext.util.ClickRepeater": {
-      "idx": 394,
+      "idx": 403,
       "alias": [],
       "alternates": [
         "Ext.util.TapRepeater"
@@ -10785,24 +11304,24 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.Color": {
-      "idx": 380,
+      "idx": 389,
       "alias": [],
       "alternates": [
         "Ext.draw.Color"
       ]
     },
     "Ext.util.ComponentDragger": {
-      "idx": 489,
+      "idx": 498,
       "alias": [],
       "alternates": []
     },
     "Ext.util.Cookies": {
-      "idx": 395,
+      "idx": 404,
       "alias": [],
       "alternates": []
     },
     "Ext.util.DelimitedValue": {
-      "idx": 392,
+      "idx": 401,
       "alias": [],
       "alternates": []
     },
@@ -10822,7 +11341,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.FilterCollection": {
-      "idx": 178,
+      "idx": 179,
       "alias": [],
       "alternates": []
     },
@@ -10832,7 +11351,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.Fly": {
-      "idx": 210,
+      "idx": 212,
       "alias": [],
       "alternates": []
     },
@@ -10842,17 +11361,22 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.Group": {
-      "idx": 170,
+      "idx": 171,
       "alias": [],
       "alternates": []
     },
     "Ext.util.GroupCollection": {
-      "idx": 179,
+      "idx": 181,
       "alias": [],
       "alternates": []
     },
     "Ext.util.Grouper": {
       "idx": 131,
+      "alias": [],
+      "alternates": []
+    },
+    "Ext.util.GrouperCollection": {
+      "idx": 180,
       "alias": [],
       "alternates": []
     },
@@ -10874,28 +11398,28 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.ItemCollection": {
-      "idx": 396,
+      "idx": 405,
       "alias": [],
       "alternates": [
         "Ext.ItemCollection"
       ]
     },
     "Ext.util.KeyMap": {
-      "idx": 363,
+      "idx": 372,
       "alias": [],
       "alternates": [
         "Ext.KeyMap"
       ]
     },
     "Ext.util.KeyNav": {
-      "idx": 364,
+      "idx": 373,
       "alias": [],
       "alternates": [
         "Ext.KeyNav"
       ]
     },
     "Ext.util.LocalStorage": {
-      "idx": 397,
+      "idx": 406,
       "alias": [],
       "alternates": []
     },
@@ -10905,7 +11429,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.Memento": {
-      "idx": 455,
+      "idx": 464,
       "alias": [],
       "alternates": []
     },
@@ -10950,7 +11474,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.Queue": {
-      "idx": 634,
+      "idx": 664,
       "alias": [],
       "alternates": []
     },
@@ -10965,12 +11489,12 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.Schedulable": {
-      "idx": 201,
+      "idx": 203,
       "alias": [],
       "alternates": []
     },
     "Ext.util.Scheduler": {
-      "idx": 191,
+      "idx": 193,
       "alias": [],
       "alternates": []
     },
@@ -10990,22 +11514,22 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.SorterCollection": {
-      "idx": 177,
+      "idx": 178,
       "alias": [],
       "alternates": []
     },
     "Ext.util.Spans": {
-      "idx": 398,
+      "idx": 407,
       "alias": [],
       "alternates": []
     },
     "Ext.util.StoreHolder": {
-      "idx": 421,
+      "idx": 430,
       "alias": [],
       "alternates": []
     },
     "Ext.util.TaskManager": {
-      "idx": 400,
+      "idx": 409,
       "alias": [],
       "alternates": [
         "Ext.TaskManager"
@@ -11017,12 +11541,12 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.TextMetrics": {
-      "idx": 401,
+      "idx": 410,
       "alias": [],
       "alternates": []
     },
     "Ext.util.TsvDecoder": {
-      "idx": 399,
+      "idx": 408,
       "alias": [],
       "alternates": [
         "Ext.util.TSV"
@@ -11049,7 +11573,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.paintmonitor.OverflowChange": {
-      "idx": 402,
+      "idx": 411,
       "alias": [],
       "alternates": []
     },
@@ -11059,7 +11583,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.sizemonitor.OverflowChange": {
-      "idx": 403,
+      "idx": 412,
       "alias": [],
       "alternates": []
     },
@@ -11074,14 +11598,14 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.translatable.CssPosition": {
-      "idx": 404,
+      "idx": 413,
       "alias": [
         "translatable.cssposition"
       ],
       "alternates": []
     },
     "Ext.util.translatable.CssTransform": {
-      "idx": 405,
+      "idx": 414,
       "alias": [
         "translatable.csstransform"
       ],
@@ -11095,7 +11619,7 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.util.translatable.ScrollParent": {
-      "idx": 406,
+      "idx": 415,
       "alias": [
         "translatable.scrollparent"
       ],
@@ -11109,12 +11633,12 @@ var Ext = Ext || {};
       "alternates": []
     },
     "Ext.view.AbstractView": {
-      "idx": 521,
+      "idx": 530,
       "alias": [],
       "alternates": []
     },
     "Ext.view.BoundList": {
-      "idx": 531,
+      "idx": 540,
       "alias": [
         "widget.boundlist"
       ],
@@ -11123,50 +11647,50 @@ var Ext = Ext || {};
       ]
     },
     "Ext.view.BoundListKeyNav": {
-      "idx": 523,
+      "idx": 532,
       "alias": [
         "view.navigation.boundlist"
       ],
       "alternates": []
     },
     "Ext.view.DragZone": {
-      "idx": 678,
+      "idx": 708,
       "alias": [],
       "alternates": []
     },
     "Ext.view.DropZone": {
-      "idx": 573,
+      "idx": 582,
       "alias": [],
       "alternates": []
     },
     "Ext.view.MultiSelector": {
-      "idx": 683,
+      "idx": 713,
       "alias": [
         "widget.multiselector"
       ],
       "alternates": []
     },
     "Ext.view.MultiSelectorSearch": {
-      "idx": 682,
+      "idx": 712,
       "alias": [
         "widget.multiselector-search"
       ],
       "alternates": []
     },
     "Ext.view.NavigationModel": {
-      "idx": 520,
+      "idx": 529,
       "alias": [
         "view.navigation.default"
       ],
       "alternates": []
     },
     "Ext.view.NodeCache": {
-      "idx": 565,
+      "idx": 574,
       "alias": [],
       "alternates": []
     },
     "Ext.view.Table": {
-      "idx": 567,
+      "idx": 576,
       "alias": [
         "widget.gridview",
         "widget.tableview"
@@ -11176,21 +11700,21 @@ var Ext = Ext || {};
       ]
     },
     "Ext.view.TableLayout": {
-      "idx": 563,
+      "idx": 572,
       "alias": [
         "layout.tableview"
       ],
       "alternates": []
     },
     "Ext.view.TagKeyNav": {
-      "idx": 550,
+      "idx": 559,
       "alias": [
         "view.navigation.tagfield"
       ],
       "alternates": []
     },
     "Ext.view.View": {
-      "idx": 522,
+      "idx": 531,
       "alias": [
         "widget.dataview"
       ],
@@ -11199,21 +11723,21 @@ var Ext = Ext || {};
       ]
     },
     "Ext.window.MessageBox": {
-      "idx": 499,
+      "idx": 508,
       "alias": [
         "widget.messagebox"
       ],
       "alternates": []
     },
     "Ext.window.Toast": {
-      "idx": 684,
+      "idx": 714,
       "alias": [
         "widget.toast"
       ],
       "alternates": []
     },
     "Ext.window.Window": {
-      "idx": 490,
+      "idx": 499,
       "alias": [
         "widget.window"
       ],
@@ -11245,10 +11769,10 @@ var Ext = Ext || {};
         "core",
         "classic"
       ],
-      "version": "7.3.0"
+      "version": "7.4.0"
     },
     "cmd": {
-      "version": "7.3.0.20"
+      "version": "7.4.0.39"
     },
     "core": {
       "css": true,
@@ -11263,7 +11787,7 @@ var Ext = Ext || {};
       "requires": [
         "ext"
       ],
-      "version": "7.3.0"
+      "version": "7.4.0"
     },
     "ext": {
       "css": true,
@@ -11283,7 +11807,7 @@ var Ext = Ext || {};
       },
       "required": true,
       "requires": [],
-      "version": "7.3.1.27"
+      "version": "7.4.0.42"
     }
   },
   "bootRelative": true
@@ -19653,10 +20177,10 @@ Ext.Number = (new function() {
          *        0   1   2   3   4   5   6   7
          *       -8  -7  -6  -5  -4  -3  -2  -1
          *
-         *      console.log(Ext.Number.clipIndices(8, [3, 10]); // logs "[3, 8]"
-         *      console.log(Ext.Number.clipIndices(8, [-5]);    // logs "[3, 8]"
-         *      console.log(Ext.Number.clipIndices(8, []);
-         *      console.log(Ext.Number.clipIndices(8, []);
+         *      console.log(Ext.Number.clipIndices(8, [3, 10])); // logs "[3, 8]"
+         *      console.log(Ext.Number.clipIndices(8, [-5]));    // logs "[3, 8]"
+         *      console.log(Ext.Number.clipIndices(8, []));
+         *      console.log(Ext.Number.clipIndices(8, []));
          *
          * @param {Number} length
          * @param {Number[]} indices
@@ -22577,8 +23101,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '7.3.1.27');
-        Ext.setVersion('core', '7.3.1.27');
+        Ext.setVersion('ext', '7.4.0.42');
+        Ext.setVersion('core', '7.4.0.42');
     }
 })(Ext.manifest);
 

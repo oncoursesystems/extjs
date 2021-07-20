@@ -539,6 +539,16 @@ Ext.define('Ext.form.field.ComboBox', {
     clearFilterOnBlur: true,
 
     /**
+     * @cfg {Boolean} forceResetCaret
+     *
+     * A long text can scroll the field to it's end when combobox trigger is clicked /
+     * on selecting another long text from list depending upon browser behavior .
+     * When this option is set to `true`, it prevents the above mentioned behavior
+     * and the field shows beginning of text.
+     */
+    forceResetCaret: false,
+
+    /**
      * @cfg {Boolean} enableRegEx
      * *When {@link #queryMode} is `'local'` only*
      *
@@ -1022,6 +1032,12 @@ Ext.define('Ext.form.field.ComboBox', {
             me.clearFilterOnBlur) {
             delete me.lastQuery;
             me.doRawQuery();
+        }
+
+        // Long inputs shouldn't scorll to end in IE/Safari
+        // prevent setting caret at start in other browsers if mid of field is clicked
+        if (me.forceResetCaret && me.inputEl && (Ext.isIE || Ext.isSafari)) {
+            me.setCaretPos(0);
         }
     },
 
@@ -1841,6 +1857,10 @@ Ext.define('Ext.form.field.ComboBox', {
                     }
                 }
             }
+
+            if (me.forceResetCaret && me.inputEl) {
+                me.setCaretPos(0);
+            }
         }
     },
 
@@ -2570,6 +2590,11 @@ Ext.define('Ext.form.field.ComboBox', {
         if (inputEl && me.typeAhead && me.hasFocus) {
             // if typeahead is configured, deselect any partials
             me.selectText(displayValue.length);
+        }
+
+        // long inputs shouldn't scroll to end in Chrome/Edge/Firefox
+        if (me.forceResetCaret && inputEl && !Ext.isIE && !Ext.isSafari) {
+            me.setCaretPos(0);
         }
     },
 

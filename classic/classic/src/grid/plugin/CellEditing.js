@@ -747,6 +747,14 @@ Ext.define('Ext.grid.plugin.CellEditing', {
             view.skipSaveFocusState = false;
             // Changing the record may impact the position
             context.rowIdx = view.indexOf(record);
+
+            if (context.rowIdx < 0 && view.dataSource.isMultigroupStore &&
+                view.dataSource.isInCollapsedGroup(record)) {
+                // the record is probably in a collapsed group
+                view.dataSource.expandToRecord(record);
+                context.rowIdx = view.indexOf(record);
+            }
+
         }
 
         // We clear down our context here in response to the CellEditor completing.

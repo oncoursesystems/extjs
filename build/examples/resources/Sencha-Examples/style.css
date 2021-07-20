@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Sencha-Examples';
-  src:  url('fonts/Sencha-Examples.eot?5yxcy7');
-  src:  url('fonts/Sencha-Examples.eot?5yxcy7#iefix') format('embedded-opentype'),
-    url('fonts/Sencha-Examples.ttf?5yxcy7') format('truetype'),
-    url('fonts/Sencha-Examples.woff?5yxcy7') format('woff'),
-    url('fonts/Sencha-Examples.svg?5yxcy7#Sencha-Examples') format('svg');
+  src:  url('fonts/Sencha-Examples.eot?vojc4q');
+  src:  url('fonts/Sencha-Examples.eot?vojc4q#iefix') format('embedded-opentype'),
+    url('fonts/Sencha-Examples.ttf?vojc4q') format('truetype'),
+    url('fonts/Sencha-Examples.woff?vojc4q') format('woff'),
+    url('fonts/Sencha-Examples.svg?vojc4q#Sencha-Examples') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -971,6 +971,9 @@
 .icon-dd-grid-to-form:before {
   content: "\e755";
 }
+.icon-dd-grid-row:before {
+  content: "\e755";
+}
 .icon-dd-field-to-grid:before {
   content: "\e756";
 }
@@ -1229,7 +1232,7 @@
 .icon-statusbar-demo:before {
   content: "\e7ac";
 }
-.icon-toolbar-overflow:before {
+.icon-toolbar-overflow2:before {
   content: "\e7ad";
 }
 .icon-toolbar-reorderable:before {
@@ -1282,6 +1285,18 @@
 }
 .icon-easing-functions:before {
   content: "\e7ba";
+}
+.icon-tree-grouped-grid:before {
+  content: "\e996";
+}
+.icon-advanced-grouping-grid:before {
+  content: "\e996";
+}
+.icon-grid-filterbar:before {
+  content: "\e997";
+}
+.icon-grid-advanced-filterbar:before {
+  content: "\e997";
 }
 .icon-row-editing:before {
   content: "\e93a";
@@ -1414,7 +1429,4 @@
 }
 .icon-minus-circle:before {
   content: "\e901";
-}
-.icon-dd-grid-row:before {
-    content: "\e755";
 }

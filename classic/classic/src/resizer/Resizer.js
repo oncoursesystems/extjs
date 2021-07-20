@@ -455,7 +455,7 @@ Ext.define('Ext.resizer.Resizer', {
 
         // Force the element to be un-selectable when resizing due to complications
         // with drop down lists and other overlays during resizing.
-        if (result) {
+        if (result !== false) {
             this.el.unselectable();
         }
 

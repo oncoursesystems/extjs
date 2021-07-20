@@ -382,7 +382,7 @@ Ext.define('Ext.selection.Model', {
             record = e.record,
             lastFocused = e.previousRecord,
             isSelected = me.isSelected(record),
-            from = (me.selectionStart && me.isSelected(e.previousRecord))
+            from = me.selectionStart
                 ? me.selectionStart
                 : (me.selectionStart = e.previousRecord),
             fromIdx = e.previousRecordIndex,

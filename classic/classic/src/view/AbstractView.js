@@ -1520,7 +1520,9 @@ Ext.define('Ext.view.AbstractView', {
             me.fireItemMutationEvent('itemadd', newRecords, origStart, children, me);
 
             // If focus was in this view, this will restore it
-            restoreFocus();
+            if (restoreFocus) {
+                restoreFocus();
+            }
 
             me.refreshSize();
         }

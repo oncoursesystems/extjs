@@ -2615,6 +2615,10 @@ Ext.define('Ext.panel.Table', {
                 // the target node in a callback.
                 if (callback || select || doFocus) {
                     internalCallback = function() {
+                        if (view && view.destroyed) {
+                            return;
+                        }
+
                         targetContext =
                             new Ext.grid.CellContext(view).setPosition(record, column || 0);
 

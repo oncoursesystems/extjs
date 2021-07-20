@@ -136,6 +136,18 @@ Ext.define('Ext.data.AbstractStore', {
         },
 
         /**
+         * @cfg {Boolean} [remoteSummary=false]
+         * `true` if the summary calculation should be performed on the server side,
+         * false if it is local only.
+         * If `true` then all groupers are sent to the server side.
+         * @since 7.4.0
+         */
+        remoteSummary: {
+            lazy: true,
+            $value: false
+        },
+
+        /**
         * @cfg {String} groupField
         * The field by which to group data in the store. Internally, grouping is very similar to
         * sorting - the groupField and {@link #groupDir} are injected as the first sorter
@@ -158,6 +170,13 @@ Ext.define('Ext.data.AbstractStore', {
          * they should not be used together.
          */
         grouper: null,
+
+        /**
+         * @cfg {Ext.util.GrouperCollection} groupers
+         * The initial set of {@link Ext.util.Grouper Groupers}
+         * @since 7.4.0
+         */
+        groupers: undefined,
 
         /**
         * @cfg {Number} pageSize
@@ -228,6 +247,8 @@ Ext.define('Ext.data.AbstractStore', {
      * @since 5.0.0
      */
     updating: 0,
+
+    observerPriority: 0,
 
     constructor: function(config) {
         var me = this,
@@ -896,6 +917,8 @@ Ext.define('Ext.data.AbstractStore', {
             sorters = [],
             filters = me.getFilters(),
             grouper = me.getGrouper(),
+            groupers = [],
+            storeGroupers = me.getGroupers(false),
             filterState, hasState, result;
 
         // Create sorters config array.
@@ -921,6 +944,12 @@ Ext.define('Ext.data.AbstractStore', {
         if (grouper) {
             hasState = true;
         }
+        else if (storeGroupers) {
+            storeGroupers.each(function(g) {
+                groupers[groupers.length] = g.getState();
+                hasState = true;
+            });
+        }
 
         // If there is any state to save, return it as an object
         if (hasState) {
@@ -937,6 +966,9 @@ Ext.define('Ext.data.AbstractStore', {
             if (grouper) {
                 result.grouper = grouper.getState();
             }
+            else if (groupers.length) {
+                result.groupers = groupers;
+            }
         }
 
         return result;
@@ -950,7 +982,8 @@ Ext.define('Ext.data.AbstractStore', {
         var me = this,
             stateSorters = state.sorters,
             stateFilters = state.filters,
-            stateGrouper = state.grouper;
+            stateGrouper = state.grouper,
+            stateGroupers = state.groupers;
 
         if (stateSorters) {
             me.getSorters().replaceAll(stateSorters);
@@ -964,6 +997,9 @@ Ext.define('Ext.data.AbstractStore', {
 
         if (stateGrouper) {
             me.setGrouper(stateGrouper);
+        }
+        else if (stateGroupers) {
+            me.setGroupers(stateGroupers);
         }
     },
 
@@ -1202,70 +1238,103 @@ Ext.define('Ext.data.AbstractStore', {
         return this.getData().getGrouper();
     },
 
+    setGrouper: function(grouper) {
+        var me = this,
+            group = !me.isConfiguring || (me.isConfiguring && grouper);
+
+        if (group) {
+            me.usesGroupers = false;
+            me.group(grouper);
+        }
+    },
+
+    getGroupers: function(autoCreate) {
+        var data = this.getData();
+
+        return (data && data.isCollection) ? data.getGroupers(autoCreate) : null;
+    },
+
+    setGroupers: function(groupers) {
+        var me = this,
+            group = !me.isConfiguring || (me.isConfiguring && groupers);
+
+        if (group) {
+            me.usesGroupers = true;
+            me.group(groupers);
+        }
+    },
+
     /**
      * Groups data inside the store.
-     * @param {String/Object} grouper Either a string name of one of the fields in this Store's
+     * @param {String/Object[]} groupers Either a string name of one of the fields in this Store's
      * configured {@link Ext.data.Model Model}, or an object, or a {@link Ext.util.Grouper grouper}
      * configuration object.
      * @param {String} [direction] The overall direction to group the data by. Defaults to the
      * value of {@link #groupDir}.
      */
-    group: function(grouper, direction) {
+    group: function(groupers, direction) {
         var me = this,
-            sorters = me.getSorters(false),
-            change = grouper || (sorters && sorters.length),
-            data = me.getData();
+            data = me.getData(),
+            colGroupers, grouper, newGroupers;
 
-        if (grouper && typeof grouper === 'string') {
-            grouper = {
-                property: grouper,
-                direction: direction || me.getGroupDir()
-            };
+        if (me.usesGroupers) {
+            me.fireEvent('beforegroupschange', me);
         }
 
         me.settingGroups = true;
 
-        // The config system would reject this case as no change
-        // Assume the caller has changed a configuration of the Grouper
-        // and requires the sorting to be redone.
-        if (grouper === data.getGrouper()) {
-            data.updateGrouper(grouper);
+        colGroupers = data.getGroupers();
+
+        // If we were passed groupers, we replace the existing groupers in the sorter collection
+        // with the new ones
+        if (groupers) {
+            if (Ext.isArray(groupers)) {
+                newGroupers = groupers;
+            }
+            else if (Ext.isObject(groupers)) {
+                newGroupers = [groupers];
+            }
+            else if (Ext.isString(groupers)) {
+                grouper = colGroupers.get(groupers);
+
+                if (!grouper) {
+                    grouper = {
+                        property: groupers,
+                        direction: direction || me.getGroupDir()
+                    };
+                    newGroupers = [grouper];
+                }
+                else if (direction === undefined) {
+                    grouper.toggle();
+                }
+                else {
+                    grouper.setDirection(direction);
+                }
+            }
+
+            // If we were passed groupers, replace our grouper collection
+            if (newGroupers && newGroupers.length) {
+                colGroupers.replaceAll(newGroupers);
+            }
         }
         else {
-            data.setGrouper(grouper);
+            data.setGrouper(null);
+            data.setGroupers(null);
         }
 
         delete me.settingGroups;
-
-        if (change) {
-            if (me.getRemoteSort()) {
-                if (!me.isInitializing) {
-                    me.load({
-                        scope: me,
-                        callback: function() {
-                            me.fireGroupChange(); // do not pass on args
-                        }
-                    });
-                }
-            }
-            else {
-                me.fireEvent('datachanged', me);
-                me.fireEvent('refresh', me);
-                me.fireGroupChange();
-            }
-        }
-        // groupchange event must fire when group is cleared.
-        // The Grouping feature forces a view refresh when changed to a null grouper
-        else {
-            me.fireGroupChange();
-        }
     },
 
     fireGroupChange: function(grouper) {
         var me = this;
 
         if (!me.isConfiguring && !me.destroying && !me.destroyed) {
-            me.fireGroupChangeEvent(grouper || me.getGrouper());
+            if (me.usesGroupers) {
+                me.fireEvent('groupschange', me, me.getGroupers(false));
+            }
+            else {
+                me.fireGroupChangeEvent(grouper || me.getGrouper());
+            }
         }
     },
 
@@ -1281,11 +1350,11 @@ Ext.define('Ext.data.AbstractStore', {
     },
 
     getGroupField: function() {
-        var grouper = this.getGrouper(),
+        var groupers = this.getGroupers(false),
             group = '';
 
-        if (grouper) {
-            group = grouper.getProperty();
+        if (groupers && groupers.length) {
+            group = groupers.getAt(0).getProperty();
         }
 
         return group;
@@ -1296,13 +1365,9 @@ Ext.define('Ext.data.AbstractStore', {
      * @return {Boolean} `true` if the store is grouped.
      */
     isGrouped: function() {
-        return !!this.getGrouper();
-    },
+        var groupers = this.getGroupers(false);
 
-    applyGrouper: function(grouper) {
-        this.group(grouper);
-
-        return this.getData().getGrouper();
+        return !!(groupers && groupers.length > 0);
     },
 
     /**
@@ -1343,6 +1408,67 @@ Ext.define('Ext.data.AbstractStore', {
      */
     getGroups: function() {
         return this.getData().getGroups();
+    },
+
+    onGroupersEndUpdate: function() {
+        var me = this,
+            data = me.getData(),
+            groupers = data.getGroupers(false),
+            sorters = me.getSorters(false);
+
+        // we need to monitor the groupers in case their direction changes
+        if (groupers) {
+            groupers.addGroupersObserver(me);
+        }
+
+        if ((groupers && groupers.length) || (sorters && sorters.length)) {
+            if (me.getRemoteSort()) {
+                if (!me.isInitializing) {
+                    me.load({
+                        scope: me,
+                        callback: function() {
+                            me.fireGroupChange(); // do not pass on args
+                        }
+                    });
+                }
+            }
+            else {
+                me.fireEvent('datachanged', me);
+                me.fireEvent('refresh', me);
+                me.fireGroupChange();
+            }
+        }
+        else {
+            me.fireGroupChange();
+        }
+    },
+
+    onGrouperDirectionChange: function() {
+        var me = this;
+
+        me.fireEvent('beforegroupschange', me);
+
+        if (me.getRemoteSort()) {
+            if (!me.isInitializing) {
+                me.load({
+                    scope: me,
+                    callback: function() {
+                        me.fireGroupChange(); // do not pass on args
+                    }
+                });
+            }
+        }
+        else {
+            Ext.asap(me.delayedDirectionChange, me);
+        }
+    },
+
+    delayedDirectionChange: function() {
+        if (this.destroyed) {
+            return;
+        }
+
+        this.fireGroupChange();
     },
 
     onEndUpdate: Ext.emptyFn,

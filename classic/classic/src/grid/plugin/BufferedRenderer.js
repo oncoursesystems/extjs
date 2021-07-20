@@ -195,6 +195,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
 
         me.storeListeners = newStore.on({
             scope: me,
+            groupschange: me.onStoreGroupChange,
             groupchange: me.onStoreGroupChange,
             clear: me.onStoreClear,
             beforeload: me.onBeforeStoreLoad,
@@ -907,10 +908,28 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             };
         }
 
+        if (view.dataSource.isMultigroupStore) {
+            if (recordIdx.isEntity) {
+                record = recordIdx;
+            }
+            else {
+                // eslint-disable-next-line max-len
+                record = view.store.getAt(Math.min(Math.max(recordIdx, 0), view.store.getCount() - 1));
+            }
+
+            // eslint-disable-next-line max-len
+            if (!view.dataSource.isExpandingOrCollapsing && view.dataSource.isInCollapsedGroup(record)) {
+                // we need to make sure all groups the record belongs to are expanded
+                view.dataSource.expandToRecord(record);
+            }
+
+            recordIdx = view.dataSource.indexOf(record);
+        }
         // If we have a grouping summary feature rendering the view in groups,
         // first, ensure that the record's group is expanded,
         // then work out which record in the groupStore the record is at.
-        if ((groupingFeature = view.dataSource.groupingFeature) && (groupingFeature.collapsible)) {
+        // eslint-disable-next-line max-len
+        else if ((groupingFeature = view.dataSource.groupingFeature) && (groupingFeature.collapsible)) {
             if (recordIdx.isEntity) {
                 record = recordIdx;
             }

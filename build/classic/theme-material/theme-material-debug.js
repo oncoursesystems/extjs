@@ -535,17 +535,20 @@ Ext.define('Ext.theme.neptune.container.ButtonGroup', {
 Ext.define('Ext.theme.material.form.field.Text', {
     override: 'Ext.form.field.Text',
     labelSeparator: '',
-    listeners: {
-        change: function(field, value) {
-            if (field.el) {
-                field.el.toggleCls('not-empty', value || field.emptyText);
+    initComponent: function() {
+        this.callParent();
+        this.on({
+            change: function(field, value) {
+                if (field.el) {
+                    field.el.toggleCls('not-empty', !Ext.isEmpty(value) || field.emptyText);
+                }
+            },
+            render: function(ths, width, height, eOpts) {
+                if ((!Ext.isEmpty(ths.getValue()) || ths.emptyText) && ths.el) {
+                    ths.el.addCls('not-empty');
+                }
             }
-        },
-        render: function(ths, width, height, eOpts) {
-            if ((ths.getValue() || ths.emptyText) && ths.el) {
-                ths.el.addCls('not-empty');
-            }
-        }
+        });
     }
 });
 
@@ -646,23 +649,6 @@ Ext.define('Ext.theme.triton.picker.Date', {
 Ext.define('Ext.theme.neptune.form.field.HtmlEditor', {
     override: 'Ext.form.field.HtmlEditor',
     defaultButtonUI: 'plain-toolbar'
-});
-
-Ext.define('Ext.theme.material.form.field.Tag', {
-    override: 'Ext.form.field.Tag',
-    labelSeparator: '',
-    listeners: {
-        change: function(field, value) {
-            if (field.el) {
-                field.el.toggleCls('not-empty', value.length);
-            }
-        },
-        render: function(ths, width, height, eOpts) {
-            if (ths.getValue() && ths.el) {
-                ths.el.addCls('not-empty');
-            }
-        }
-    }
 });
 
 Ext.define('Ext.theme.neptune.panel.Table', {

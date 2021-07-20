@@ -2,7 +2,7 @@ topSuite("Ext.Dialog",
     ['Ext.app.ViewModel', 'Ext.layout.Form', 'Ext.Button', 'Ext.field.Text',
      'Ext.plugin.TabGuard', 'Ext.Dialog', 'Ext.panel.Resizer'],
 function() {
-    var dialog;
+    var dialog, childDialog;
 
     function createDialog(config) {
         if (Ext.isArray(config)) {
@@ -1056,6 +1056,155 @@ function() {
             }
 
             makeButtonModal(true);
+        });
+    });
+    
+
+    describe("Dialog with focus and drag n drop and ESC event", function() {
+        var closeSpy = jasmine.createSpy(),
+            toolField, textField,
+            expectFocused = jasmine.expectFocused, targetEl,
+            helper = Ext.testHelper, resizable, activeEdge, cursorTrack;
+
+        describe("with ESC button click", function() {
+            beforeEach(function() {
+                targetEl = createDialog({
+                    title: 'My Dialog',
+                    items: [{
+                        html: 'this is my dialog content'
+                    },
+                    {
+                        xtype: 'textfield',
+                        name: 'foo',
+                        fieldLabel: 'foo'
+                    }],
+                    draggable: true,
+                    listeners: {
+                        close: closeSpy
+                    },
+                    closable: true,
+                    resizable: {
+                        edges: 'all'
+                    }
+                });
+                toolField = dialog.down('tool');
+                textField = dialog.down('textfield[name=foo]');
+                dialog.show();
+                resizable = dialog.getResizable();
+            });
+
+            afterEach(function() {
+                Ext.destroy(dialog);
+            });
+
+            function startDrag(edge) {
+                runs(function() {
+                    activeEdge = edge;
+                    edge = resizable.getEdge(edge);
+                    var xy =dialog.element.getXY();
+
+                    start({
+                        x: xy[0],
+                        y: xy[1]
+                    }, edge);
+                });
+                waitsForAnimation();
+            }
+
+            function start(cfg, target) {
+                cursorTrack = [cfg.x || 0, cfg.y || 0];
+                helper.touchStart(target, cfg);
+            }
+
+            function moveBy(x, y) {
+                if (Ext.isArray(x)) {
+                    y = x[1];
+                    x = x[0];
+                }
+
+                runs(function() {
+                    move({
+                        x: cursorTrack[0] + (x || 0),
+                        y: cursorTrack[1] + (y || 0)
+                    }, resizable.getEdge(activeEdge));
+                });
+                waitsForAnimation();
+            }
+
+            function move(cfg, target) {
+                cursorTrack = [cfg.x || 0, cfg.y || 0];
+                helper.touchMove(target, cfg);
+            }
+
+            function endDrag(x, y) {
+                runs(function() {
+                    x = x || cursorTrack[0];
+                    y = y || cursorTrack[1];
+
+                    end({
+                        x: x,
+                        y: y
+                    }, resizable.getEdge(activeEdge));
+                });
+                waitsForAnimation();
+            }
+
+            function end(cfg, target) {
+                cursorTrack = [cfg.x || 0, cfg.y || 0];
+                helper.touchEnd(target, cfg);
+            }
+            it("should focus close button", function() {
+                expectFocused(toolField);
+            });
+
+            it("should focus close button on esc", function() {
+                jasmine.syncPressKey(dialog.element, 'esc');
+                expect(closeSpy).toHaveBeenCalled();
+            });
+
+            it("should close on escape button", function() {
+                expectFocused(toolField);
+                startDrag('east');
+                moveBy(50, 0);
+                endDrag();
+                runs(function() {
+                    jasmine.syncPressKey(dialog.element, 'esc');
+                    expect(closeSpy).toHaveBeenCalled();
+                });
+            });
+        });
+    });
+
+    describe("with parent and child modal esc button click", function() {
+        var parentToolField, childToolField, 
+            expectFocused = jasmine.expectFocused,
+            closeSpy = jasmine.createSpy(),
+            childCloseSpy = jasmine.createSpy();
+
+        afterEach(function() {
+            Ext.destroy(dialog);
+            Ext.destroy(childDialog);
+        });
+
+        it("should focus on parent sibling dialog after esc", function() {
+            dialog = new Ext.Dialog({closable: true,listeners: {
+                close: closeSpy
+            }});
+            parentToolField = dialog.down('tool');
+            dialog.show();
+            expectFocused(parentToolField);
+            
+            runs(function() {
+                childDialog = new Ext.Dialog({closable: true,listeners: {
+                    close: childCloseSpy
+                }});
+                childToolField = dialog.down('tool');
+                childDialog.show();
+                expectFocused(childToolField);
+                jasmine.syncPressKey(childDialog.element, 'esc');
+                expect(childCloseSpy).toHaveBeenCalled();
+                expectFocused(parentToolField);
+            });
         });
     });
 

@@ -351,7 +351,7 @@ Ext.define('Ext.form.field.Tag', {
     ],
 
     postSubTpl: [
-            '<label id="{cmpId}-placeholderLabel" data-ref="placeholderLabel" for="{cmpId}-inputEl" class="{placeholderCoverCls} {placeholderCoverCls}-{ui} {emptyCls}">{emptyText}</label>',
+            '<label id="{cmpId}-placeholderLabel" data-ref="placeholderLabel" for="{cmpId}-inputEl" class="{placeholderCoverCls} {placeholderCoverCls}-{ui} {emptyCls}">{placeholder}</label>',
             '</div>', // end inputWrap
             '<tpl for="triggers">{[values.renderTrigger(parent)]}</tpl>',
         '</div>' // end triggerWrap

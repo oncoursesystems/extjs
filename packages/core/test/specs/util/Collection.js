@@ -3124,6 +3124,149 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
                 expect(group.contains(item2));
             });
         });
+
+        describe('massive data to multi group', function() {
+            var rand = 37,
+                noOfItems = 1000,
+                fixedData = {
+                    company: ['Google', 'Apple', 'Dell', 'Microsoft', 'Adobe'],
+                    country: ['Belgium', 'Netherlands', 'United Kingdom', 'Canada', 'United States', 'Australia'],
+                    person: ['John', 'Michael', 'Mary', 'Anne', 'Robert']
+                },
+                data, item, items, groups;
+
+            function randomItem(data) {
+                var k = rand % data.length;
+
+                rand = rand * 1664525 + 1013904223;
+                rand &= 0x7FFFFFFF;
+
+                return data[k];
+            }
+
+            function randomDate(start, end) {
+                return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+            }
+
+            function generateData(items) {
+                var data = [],
+                    i;
+
+                if (!items) {
+                    items = 500;
+                }
+
+                for (i = 0; i < items; i++) {
+                    data.push({
+                        id: i,
+                        company: randomItem(fixedData.company),
+                        country: randomItem(fixedData.country),
+                        person: randomItem(fixedData.person),
+                        date: randomDate(new Date(2012, 0, 1), new Date()),
+                        value: Math.random() * 1000 + 1,
+                        quantity: Math.floor(Math.random() * 30 + 1)
+                    });
+                }
+
+                return data;
+            }
+
+            function groupBy(groupers, direction) {
+                var start = (new Date()).getTime();
+
+                if (!groupers) {
+                    groupers = [{
+                        property: 'company',
+                        direction: direction
+                    }, {
+                        property: 'country',
+                        direction: direction
+                    }];
+                }
+
+                collection.setGroupers(groupers);
+
+                return (new Date()).getTime() - start;
+            }
+
+            beforeEach(function() {
+                collection = new Ext.util.Collection();
+                data = generateData(noOfItems);
+
+                collection.add(data);
+            });
+
+            afterEach(function() {
+                data = groups = item = items = null;
+            });
+
+            function generateTest(records, groupers) {
+                /* eslint-disable-next-line max-len */
+                it("should match groups when dealing with" + records + " items and " + groupers.length + " groupers", function() {
+                    var levelsData = {},
+                        length = groupers.length,
+                        i;
+
+                    noOfItems = records;
+                    groupBy(groupers);
+
+                    function checkData(groups, level) {
+                        var match = groupers[level],
+                            len = groups.length,
+                            j, group;
+
+                        for (j = 0; j < len; j++) {
+                            group = groups.getAt(j);
+                            levelsData['level' + level] += group.items.length;
+                            expect(Ext.Array.indexOf(fixedData[match.property], group.getLabel()) >= 0).toBe(true);
+
+                            if (group.getGroups()) {
+                                checkData(group.getGroups(), level + 1);
+                            }
+                        }
+                    }
+
+                    for (i = 0; i < length; i++) {
+                        levelsData['level' + i] = 0;
+                    }
+
+                    checkData(collection.getGroups(), 0);
+
+                    length = groupers.length;
+
+                    for (i = 0; i < length; i++) {
+                        expect(levelsData['level' + i]).toBe(data.length);
+                    }
+
+                });
+            }
+
+            generateTest(10000, [{
+                property: 'company',
+                direction: 'ASC'
+            }]);
+
+            generateTest(10000, [{
+                property: 'company',
+                direction: 'ASC'
+            }, {
+                property: 'country',
+                direction: 'DESC'
+            }]);
+
+            generateTest(10000, [{
+                property: 'company',
+                direction: 'ASC'
+            }, {
+                property: 'country',
+                direction: 'DESC'
+            }, {
+                property: 'person',
+                direction: 'ASC'
+            }]);
+
+        });
+
     });
 
     describe("sorting", function() {

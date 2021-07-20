@@ -4660,7 +4660,7 @@ Ext.define('Ext.dataview.List', {
                     if (force && storeCount < oldIndexBottom && active) {
                         // Changing the amount of rows because the data in the store is
                         // no longer sufficient to fill the view
-                        renderInfo.top = renderInfo.indexTop * me.rowHeight;
+                        renderInfo.top = renderInfo.indexTop * rowHeight;
                     }
                 }
             }

@@ -876,7 +876,9 @@ Ext.define('KitchenSink.store.Navigation', {
             iconCls: 'icon-framing-buttons',
 
             children: [
+                { id: 'advanced-grouping-grid', text: 'Advanced Grouping', leaf: true, since: '7.4.0' },
                 { id: 'grid-filtering', text: 'Grid Filtering', leaf: true },
+                { id: 'grid-advanced-filterbar', text: 'Grid Filter Bar', leaf: true, since: '7.4.0' },
                 { id: 'grid-exporter', text: 'Grid Export', leaf: true, tier: 'premium' },
                 { id: 'paging-grid', text: 'Paging', leaf: true },
                 { id: 'progress-bar-pager', text: 'Progress Bar Pager', leaf: true },

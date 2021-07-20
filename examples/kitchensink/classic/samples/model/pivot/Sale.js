@@ -22,12 +22,12 @@ Ext.define('KitchenSink.model.pivot.Sale', function() {
             {
                 name: 'year',
                 calculate: function(data) {
-                    return parseInt(Ext.Date.format(data.date, "Y"), 10);
+                    return data.date ? parseInt(Ext.Date.format(data.date, "Y"), 10) : null;
                 }
             }, {
                 name: 'month',
                 calculate: function(data) {
-                    return parseInt(Ext.Date.format(data.date, "m"), 10) - 1;
+                    return data.date ? parseInt(Ext.Date.format(data.date, "m"), 10) - 1 : null;
                 }
             }, {
                 name: 'continent',

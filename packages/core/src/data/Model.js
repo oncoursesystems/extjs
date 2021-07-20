@@ -897,11 +897,13 @@ Ext.define('Ext.data.Model', {
             field = fields[i];
             summary = field.getSummary();
 
-            if (summary) {
-                result = result || {};
-                name = field.name;
-                prop = field.summaryField || name;
-                result[name] = summary.calculate(records, prop, 'data', 0, recLen);
+            result = result || {};
+            name = field.name;
+            prop = field.summaryField || name;
+
+            if (name !== 'id') {
+                /* eslint-disable-next-line max-len */
+                result[name] = summary ? summary.calculate(records, prop, 'data', 0, recLen) : undefined;
             }
         }
 
@@ -2539,10 +2541,42 @@ Ext.define('Ext.data.Model', {
                 });
 
                 summaryModel.isSummaryModel = true;
-                me.summaryModel = proto.summaryModel = summaryModel;
+                // we do not keep the summary model on the prototype
+                // because the model could be used in different stores
+                // that can have different summaries added dynamically
+                me.summaryModel = summaryModel;
             }
 
             return summaryModel || null;
+        },
+
+        /**
+         * Add a new summary field to the model
+         *
+         * @param {String} name Name of the field
+         * @param {Ext.data.summary.Base} summary Name of the summary function
+         */
+        setSummaryField: function(name, summary) {
+            var field = this.getField(name);
+
+            if (!field) {
+                this.addFields([{
+                    name: name,
+                    type: 'auto',
+                    summary: summary,
+                    doneSummary: (summary && summary.isAggregator)
+                }]);
+            }
+            else {
+                if (field.doneSummary && summary && summary.isAggregator) {
+                    field.summary = summary;
+                }
+                else {
+                    field.summary = summary;
+                    field.doneSummary = false;
+                }
+            }
+
         },
 
         /**

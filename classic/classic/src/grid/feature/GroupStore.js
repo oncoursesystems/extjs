@@ -208,6 +208,36 @@ Ext.define('Ext.grid.feature.GroupStore', {
         return this.data.getCount();
     },
 
+    first: function() {
+        var data = this.data,
+            item = null;
+
+        if (data) {
+            item = data.first();
+
+            if (item && item.isCollapsedPlaceholder) {
+                item = this.store.first();
+            }
+        }
+
+        return item;
+    },
+
+    last: function() {
+        var data = this.data,
+            item = null;
+
+        if (data) {
+            item = data.last();
+
+            if (item && item.isCollapsedPlaceholder) {
+                item = this.store.last();
+            }
+        }
+
+        return item;
+    },
+
     // This class is only created for fully loaded, non-buffered stores
     rangeCached: function(start, end) {
         return end < this.getCount();

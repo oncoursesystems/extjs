@@ -1,6 +1,8 @@
 topSuite("Ext.grid.feature.GroupingSummary", [
     'Ext.grid.Panel',
     'Ext.data.reader.Xml',
+    'Ext.data.summary.Average',
+    'Ext.data.summary.Count',
     'Ext.grid.column.Date',
     'Ext.grid.column.Number'
 ], function() {

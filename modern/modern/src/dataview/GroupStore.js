@@ -128,10 +128,9 @@ Ext.define('Ext.dataview.GroupStore', {
         this.loadPage(this.currentPage - 1, options);
     },
 
-    applyGrouper: function(grouper, oldGrouper) {
+    setGrouper: function(grouper) {
         var me = this,
-            source = me.getSource(),
-            ret;
+            source = me.getSource();
 
         if (source && grouper !== source.getGrouper()) {
             source.setGrouper(grouper);
@@ -139,11 +138,9 @@ Ext.define('Ext.dataview.GroupStore', {
             grouper = source.getGrouper();
         }
 
-        ret = me.callParent([ grouper, oldGrouper ]);
+        me.callParent([ grouper ]);
 
         me.refreshFromSource();
-
-        return ret;
     },
 
     constructDataCollection: function() {

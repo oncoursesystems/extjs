@@ -1753,4 +1753,60 @@ topSuite("Ext.grid.rowedit.Plugin", [
             });
         });
     });
+    describe('row editor height', function () {
+        var storeCfg = {
+            fields: ['name', 'email', 'phone', 'bio'],
+            data: [{
+                name: 'Lisa',
+                email: 'lisa@simpsons.com',
+                phone: '555-111-1224',
+                bio: 'I am <b>the</b>\n large one and this is very long piece of text which should wrap and create a new height\n right ?'
+            }, {
+                name: 'Bart',
+                email: 'bart@simpsons.com',
+                phone: '555-222-1234',
+                bio: 'I am the small one'
+            }, {
+                name: 'Homer',
+                email: 'home@simpsons.com',
+                phone: '555-222-1244',
+                bio: 'I am the small one'
+            } ]
+        };
+
+        var gridCfg = {
+            columns: [{
+                header: 'Name',
+                dataIndex: 'name',
+                editor: 'textfield'
+            }, {
+                header: 'Email',
+                dataIndex: 'email'
+            }, {
+                header: 'Phone',
+                dataIndex: 'phone'
+            }, {
+                header: 'Bio',
+                dataIndex: 'bio',
+                editor: 'textareafield',
+                cell: {
+                    bodyStyle: {
+                        'white-space': 'pre-wrap'
+                    }
+                }
+            }]
+        };
+
+        it('should have the editor height based on row height', function () {
+            makeGrid(null, gridCfg, storeCfg);
+            var node = grid.dataItems[0];
+            jasmine.fireMouseEvent(node.el.dom, 'dblclick');
+            expect(plugin.editor.getHeight()).toEqual(node.el.getHeight());
+
+            node = grid.dataItems[1];
+            jasmine.fireMouseEvent(node.el.dom, 'dblclick');
+            expect(plugin.editor.getHeight()).toEqual(node.el.getHeight());
+
+        });
+    });
 });

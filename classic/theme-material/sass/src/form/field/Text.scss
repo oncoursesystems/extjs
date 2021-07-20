@@ -184,3 +184,12 @@ $input-font-family: $form-field-font-family;
 .#{$prefix}form-item-body {
     display: block;
 }
+
+.#{$prefix}ie11 {
+    .#{$prefix}form-item-label-default {
+        &.#{$prefix}form-item-label-top {
+            display: inline;
+            top: -5px;
+        }
+    }
+}

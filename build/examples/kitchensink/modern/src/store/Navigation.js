@@ -1153,6 +1153,7 @@ Ext.define('KitchenSink.store.Navigation', {
                 // { id: 'grid-exporter', text: 'Grid Export', leaf: true, tier: 'premium' },
                 // { id: 'paging-grid', text: 'Paging', leaf: true },
                 // { id: 'progress-bar-pager', text: 'Progress Bar Pager', leaf: true },
+                { id: 'tree-grouped-grid', text: 'Tree Grouped Grid', leaf: true, since: '7.4.0' },
                 { id: 'grid-tools', text: 'Grid Tools', leaf: true },
                 { id: 'gridheader-tools', text: 'Grid Header Tools', leaf: true },
                 { id: 'menu-grid', text: 'Grid with Menu', leaf: true },
@@ -1162,6 +1163,7 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'rowoperations-grid', text: 'Row Operations', leaf: true },
                 { id: 'summary-row-grid', text: 'Summary Row', leaf: true },
                 { id: 'grid-filtering', text: 'Grid Filtering', leaf: true },
+                { id: 'grid-filterbar', text: 'Grid Filterbar', leaf: true, since: '7.4.0' },
                 { id: 'view-options-grid', text: 'View Options', leaf: true },
                 { id: 'cell-overflow-grid', text: 'Cell Overflow Tip', leaf: true },
                 {

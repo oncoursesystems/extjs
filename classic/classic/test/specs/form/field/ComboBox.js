@@ -5776,4 +5776,24 @@ function() {
             });
         });
     });
+
+    describe("caret position when forceResetCaret is true", function() {
+        it("should not scroll to end of long value", function() {
+            makeComponent({
+                renderTo: Ext.getBody(),
+                forceResetCaret: true
+            });
+            component.setValue('I am a long piece of text which scrolls to end on trigger click');
+            component.onTriggerClick();
+            expect(component.getCaretPos()).toBe(0);
+
+            store.getAt(2).set('text', 'I am another long text here to replace the earlier text on update value');
+            expect(component.getCaretPos()).toBe(0);
+
+            jasmine.blurAndWait(component);
+            runs(function() {
+                expect(component.getCaretPos()).toBe(0);
+            });
+        });
+    });
 });
