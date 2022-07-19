@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.ja.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "カウント"
+});
 /**
  * Japanese translation
  * By tyama
@@ -321,4 +326,72 @@ Ext.define("Ext.locale.ja.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.ja.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.ja.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "すべて展開",
+    collapseAllText: "全体を折りたたむ",
+    groupsText: "群衆",
+    groupByText: "このフィールドによるグループ",
+    addToGroupingText: "グループ化に追加します",
+    removeFromGroupingText: "グループ化から削除します",
+    groupSummaryTpl: "概要 ({name})",
+    summaryTpl: "概要 ({store.data.length})"
+});
+Ext.define("Ext.locale.ja.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "なし",
+    summaryText: "概要"
+});
+Ext.define("Ext.locale.ja.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "等しい",
+        ne: "等しくない",
+        gt: "より大きい",
+        ge: "以上",
+        lt: "未満",
+        le: "それ以上",
+        like: "お気に入り",
+        nlike: "好きじゃない",
+        empty: "空の",
+        nempty: "空ではない",
+        identical: "同一",
+        nidentical: "同一ではない",
+        regex: "正規表現",
+        "in": "イン",
+        notin: "インテではありません"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.ja.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "ここで列ヘッダーをその列によるグループにドラッグする",
+    showGroupingPanelText: "パネルごとにグループを表示",
+    hideGroupingPanelText: "パネルでグループ化を非表示",
+    clearGroupText: "クリアグループ",
+    sortAscText: "ソート昇順",
+    sortDescText: "降順に並べ替えます",
+    moveLeftText: "左に移動します",
+    moveRightText: "右に動く",
+    moveBeginText: "始まりに移動",
+    moveEndText: "終わりに移動",
+    removeText: "削除する"
 });

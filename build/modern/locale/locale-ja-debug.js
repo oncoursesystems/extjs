@@ -72,6 +72,11 @@ Ext.define('Ext.locale.ja.Panel', {
         closeToolText: 'Panel 閉じる'
     }
 });
+Ext.define("Ext.locale.ja.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "カウント"
+});
 Ext.define('Ext.locale.ja.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
@@ -349,6 +354,23 @@ Ext.define('Ext.locale.ja.field.Text', {
         validationMessage: '形式が間違っています'
     }
 });
+Ext.define("Ext.locale.ja.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "概要 ({name})",
+        summaryTpl: "概要 ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.ja.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "概要 ({name})",
+        summaryTpl: "概要 ({store.data.length})"
+    },
+    text: "群衆"
+});
 Ext.define("Ext.locale.ja.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
 
@@ -380,6 +402,13 @@ Ext.define("Ext.locale.ja.grid.locked.Grid", {
         }
     }
 });
+Ext.define("Ext.locale.ja.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "グループ化に追加します"
+    }
+});
 Ext.define("Ext.locale.ja.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
@@ -392,6 +421,25 @@ Ext.define("Ext.locale.ja.grid.menu.GroupByThis", {
 
     config: {
         text: "これでグループ化する"
+    }
+});
+Ext.define("Ext.locale.ja.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "群衆",
+
+        menu: [{
+            text: "すべて展開"
+        }, {
+            text: "全体を折りたたむ"
+        }]
+    }
+});
+Ext.define("Ext.locale.ja.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "グループ化から削除します"
     }
 });
 Ext.define("Ext.locale.ja.grid.menu.ShowInGroups", {
@@ -418,6 +466,62 @@ Ext.define("Ext.locale.ja.grid.menu.SortDesc", {
 Ext.define("Ext.locale.ja.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} 行選択"
+});
+Ext.define("Ext.locale.ja.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "なし",
+    summaryText: "概要"
+});
+Ext.define("Ext.locale.ja.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "等しい",
+        ne: "等しくない",
+        gt: "より大きい",
+        ge: "以上",
+        lt: "未満",
+        le: "それ以上",
+        like: "お気に入り",
+        nlike: "好きじゃない",
+        empty: "空の",
+        nempty: "空ではない",
+        identical: "同一",
+        nidentical: "同一ではない",
+        regex: "正規表現",
+        in: "イン",
+        notin: "インテではありません"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.ja.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "ここで列ヘッダーをその列によるグループにドラッグする",
+    showGroupingPanelText: "パネルごとにグループを表示",
+    hideGroupingPanelText: "Panelでグループを隠す",
+    clearGroupText: "クリアグループ",
+    sortAscText: "ソート昇順",
+    sortDescText: "降順に並べ替えます",
+    moveLeftText: "左に移動します",
+    moveRightText: "右に動く",
+    moveBeginText: "始まりに移動",
+    moveEndText: "終わりに移動",
+    removeText: "削除する"
+
 });
 Ext.define('Ext.locale.ja.panel.Collapser', {
     override: 'Ext.panel.Collapser',

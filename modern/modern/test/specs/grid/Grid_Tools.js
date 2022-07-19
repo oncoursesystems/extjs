@@ -1,4 +1,3 @@
-/* global Ext, jasmine, expect */
 
 topSuite("Ext.grid.Grid_Tools",
     [false, 'Ext.grid.Grid', 'Ext.data.ArrayStore', 'Ext.layout.Fit'],

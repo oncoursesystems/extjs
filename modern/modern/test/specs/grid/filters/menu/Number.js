@@ -1,4 +1,3 @@
-/* global Ext, MockAjaxManager, expect, jasmine, spyOn, xit */
 
 topSuite('Ext.grid.filters.menu.Number', [
     'Ext.data.ArrayStore', 'Ext.layout.Fit', 'Ext.grid.Grid', 'Ext.data.ArrayStore', 'Ext.layout.Fit', 'Ext.app.ViewModel', 'Ext.grid.filters.*', 'Ext.grid.filters.menu.Base'],

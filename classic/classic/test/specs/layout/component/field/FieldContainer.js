@@ -363,6 +363,82 @@ topSuite("Ext.layout.component.field.FieldContainer", ['Ext.form.field.*'], func
                 ct.destroy();
             });
         });
+
+        describe("alignment of adjacent component", function() {
+            it("should align top taking account of fieldcontainer components", function() {
+                var ct = new Ext.container.Container({
+                    floating: true,
+                    renderTo: Ext.getBody(),
+                    layout: 'vbox',
+                    items: [{
+                        xtype: 'component',
+                        height: 50
+                    }, {
+                        xtype: 'fieldcontainer',
+                        fieldLabel: 'Label',
+                        labelAlign: 'top',
+                        margin: 0,
+                        layout: 'hbox',
+                        items: [{
+                            xtype: 'textfield',
+                            height: 50
+                        }, {
+                            xtype: 'textfield',
+                            height: 50
+                        }]
+                    }, {
+                        xtype: 'component',
+                        height: 50
+                    }]
+                }),
+                labelHeight;
+
+                fc = ct.down('fieldcontainer');
+                labelHeight = fc.labelEl.getHeight();
+
+                expect(ct.getHeight()).toBe(150 + labelHeight);
+                expect(ct.items.last().el.getTop(true)).toBe(100 + labelHeight);
+
+                ct.destroy();
+            });
+
+            it("should align left taking account of fieldcontainer components", function() {
+                var ct = new Ext.container.Container({
+                    floating: true,
+                    renderTo: Ext.getBody(),
+                    layout: 'hbox',
+                    items: [{
+                        xtype: 'component',
+                        width: 50
+                    }, {
+                        xtype: 'fieldcontainer',
+                        fieldLabel: 'Label',
+                        labelAlign: 'left',
+                        margin: 0,
+                        layout: 'vbox',
+                        items: [{
+                            xtype: 'textfield',
+                            width: 50
+                        }, {
+                            xtype: 'textfield',
+                            width: 50
+                        }]
+                    }, {
+                        xtype: 'component',
+                        width: 50
+                    }]
+                }),
+                labelWidth;
+
+                fc = ct.down('fieldcontainer');
+                labelWidth = fc.labelWidth + fc.labelPad;
+
+                expect(ct.getWidth()).toBe(150 + labelWidth);
+                expect(ct.items.last().el.getLeft(true)).toBe(100 + labelWidth);
+
+                ct.destroy();
+            });
+        });
     });
 
     it("should shrink wrap liquid layout children when using a box layout", function() {

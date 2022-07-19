@@ -72,6 +72,11 @@ Ext.define('Ext.locale.zh_CN.Panel', {
         closeToolText: '关闭面板'
     }
 });
+Ext.define("Ext.locale.zh_CN.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "数数"
+});
 Ext.define('Ext.locale.zh_CN.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
@@ -317,6 +322,23 @@ Ext.define('Ext.locale.zh_CN.field.Text', {
         validationMessage: '格式错误'
     }
 });
+Ext.define("Ext.locale.zh_CN.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "概括 ({name})",
+        summaryTpl: "概括 ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.zh_CN.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "概括 ({name})",
+        summaryTpl: "概括 ({store.data.length})"
+    },
+    text: "团体"
+});
 Ext.define("Ext.locale.zh_CN.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
 
@@ -348,6 +370,13 @@ Ext.define("Ext.locale.zh_CN.grid.locked.Grid", {
         }
     }
 });
+Ext.define("Ext.locale.zh_CN.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "添加到分组"
+    }
+});
 Ext.define("Ext.locale.zh_CN.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
@@ -361,6 +390,25 @@ Ext.define("Ext.locale.zh_CN.grid.menu.GroupByThis", {
 
     config: {
         text: "由此分组"
+    }
+});
+Ext.define("Ext.locale.zh_CN.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "团体",
+
+        menu: [{
+            text: "展开全部"
+        }, {
+            text: "全部收缩"
+        }]
+    }
+});
+Ext.define("Ext.locale.zh_CN.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "从分组中删除"
     }
 });
 Ext.define("Ext.locale.zh_CN.grid.menu.ShowInGroups", {
@@ -389,6 +437,62 @@ Ext.define("Ext.locale.zh_CN.grid.menu.SortDesc", {
 Ext.define("Ext.locale.zh_CN.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "选择了 {0} 行"
+});
+Ext.define("Ext.locale.zh_CN.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "没有任何",
+    summaryText: "概括"
+});
+Ext.define("Ext.locale.zh_CN.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "是平等的",
+        ne: "不平等",
+        gt: "比...更棒",
+        ge: "大于或等于",
+        lt: "少于",
+        le: "小于或等于",
+        like: "喜欢",
+        nlike: "不喜欢",
+        empty: "空的",
+        nempty: "不是空的",
+        identical: "完全相同的",
+        nidentical: "没有相同",
+        regex: "正则表达式",
+        in: "是",
+        notin: "不是在"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.zh_CN.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "将列标题拖动到该列的组",
+    showGroupingPanelText: "按面板展示集团",
+    hideGroupingPanelText: "通过面板隐藏小组",
+    clearGroupText: "明确的群体",
+    sortAscText: "升序",
+    sortDescText: "排序下降",
+    moveLeftText: "向左移动",
+    moveRightText: "向右移",
+    moveBeginText: "搬到开始",
+    moveEndText: "搬到结束",
+    removeText: "消除"
+
 });
 Ext.define('Ext.locale.zh_CN.panel.Collapser', {
     override: 'Ext.panel.Collapser',

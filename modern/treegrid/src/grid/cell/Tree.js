@@ -218,7 +218,7 @@ Ext.define('Ext.grid.cell.Tree', {
             record = me.getRecord();
 
         me.getGrid()
-            .fireEventedAction('nodecollapse', [me.parent, record, 'collapse'], 'doToggle', this);
+            .fireEventedAction('nodecollapse', [me.row, record, 'collapse'], 'doToggle', this);
     },
 
     /**
@@ -230,7 +230,7 @@ Ext.define('Ext.grid.cell.Tree', {
             tree = me.getGrid(),
             siblings, i, len, sibling;
 
-        tree.fireEventedAction('nodeexpand', [me.parent, record, 'expand'], 'doToggle', me);
+        tree.fireEventedAction('nodeexpand', [me.row, record, 'expand'], 'doToggle', me);
 
         // Collapse any other expanded sibling if tree is singleExpand
         if (record.isExpanded && !record.isRoot() && tree.getSingleExpand()) {

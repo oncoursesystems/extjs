@@ -26,7 +26,7 @@ Ext.define('KitchenSink.view.SourceOverlay', {
                 split: true,
                 edges: 'west'
             },
-            // collapsed: true,
+            collapsed: true,
             stateId: 'sourceOverlay',
             stateful: [
                 'collapsed',

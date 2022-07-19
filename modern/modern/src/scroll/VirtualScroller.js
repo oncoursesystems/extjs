@@ -326,6 +326,7 @@ Ext.define('Ext.scroll.VirtualScroller', {
             drag: onEvent,
             dragend: onEvent,
             wheel: 'onWheel',
+            scroll: 'onNativeScroll',
             scope: me
         };
 
@@ -1047,6 +1048,24 @@ Ext.define('Ext.scroll.VirtualScroller', {
 
         onInnerElementResize: function() {
             this.refresh(true);
+        },
+
+        onNativeScroll: function(e) {
+            var el = e.target,
+                x = el.scrollLeft,
+                y = el.scrollTop;
+
+            if (x || y) {
+                // reset the scrollLeft/scrollTop on the el since they should always be zero
+                // when using the VirtualScroller
+                // this usually only happens when doing an orientation change
+                el.scrollLeft = 0;
+                el.scrollTop = 0;
+
+                // call the scrollBy method with the x,y coordinates that the native scroller
+                // tried to scroll to so that the VirtualScroller is at the right scroll location
+                this.scrollBy(x, y, false);
+            }
         },
 
         onPartnerScroll: function(x, y) {

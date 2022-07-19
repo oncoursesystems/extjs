@@ -1,4 +1,3 @@
-/* global Ext, MockAjaxManager, expect, jasmine, spyOn, xit */
 
 topSuite('Ext.grid.filters.Column', [
     'Ext.data.ChainedStore',

@@ -72,6 +72,11 @@ Ext.define('Ext.locale.fi.Panel', {
         closeToolText: 'Sulje paneeli'
     }
 });
+Ext.define("Ext.locale.fi.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Kreivi"
+});
 Ext.define('Ext.locale.fi.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
@@ -350,6 +355,23 @@ Ext.define('Ext.locale.fi.field.Text', {
         validationMessage: 'on väärässä muodossa'
     }
 });
+Ext.define("Ext.locale.fi.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "Yhteenveto ({name})",
+        summaryTpl: "Yhteenveto ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.fi.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "Yhteenveto ({name})",
+        summaryTpl: "Yhteenveto ({store.data.length})"
+    },
+    text: "Ryhmät"
+});
 Ext.define("Ext.locale.fi.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
 
@@ -381,6 +403,13 @@ Ext.define("Ext.locale.fi.grid.locked.Grid", {
         }
     }
 });
+Ext.define("Ext.locale.fi.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "Lisää ryhmittelyyn"
+    }
+});
 Ext.define("Ext.locale.fi.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
@@ -393,6 +422,25 @@ Ext.define("Ext.locale.fi.grid.menu.GroupByThis", {
 
     config: {
         text: "Ryhmä tähän"
+    }
+});
+Ext.define("Ext.locale.fi.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "Ryhmät",
+
+        menu: [{
+            text: "Laajenna kaikki"
+        }, {
+            text: "Romahtaa kaikki"
+        }]
+    }
+});
+Ext.define("Ext.locale.fi.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "Poista ryhmittymästä"
     }
 });
 Ext.define("Ext.locale.fi.grid.menu.ShowInGroups", {
@@ -419,6 +467,62 @@ Ext.define("Ext.locale.fi.grid.menu.SortDesc", {
 Ext.define("Ext.locale.fi.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} rivi(ä) valittu"
+});
+Ext.define("Ext.locale.fi.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Ei mitään",
+    summaryText: "Yhteenveto"
+});
+Ext.define("Ext.locale.fi.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "On yhtä kuin",
+        ne: "Ei ole yhtä suuri",
+        gt: "Suurempi kuin",
+        ge: "Suurempi tai yhtä suuri kuin",
+        lt: "Vähemmän kuin",
+        le: "Pienempi kuin tai yhtä suuri kuin",
+        like: "Kuten",
+        nlike: "Ei niin kuin",
+        empty: "Tyhjä",
+        nempty: "Ei tyhjä",
+        identical: "Samanlainen",
+        nidentical: "Ei identtinen",
+        regex: "Tavallinen ilme",
+        in: "On",
+        notin: "Ei ole"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.fi.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Vedä sarakkeen otsikko tähän ryhmään kyseisellä sarakkeella",
+    showGroupingPanelText: "Näytä ryhmä paneelilla",
+    hideGroupingPanelText: "Piilota ryhmä paneelilla",
+    clearGroupText: "Kirkas ryhmä",
+    sortAscText: "Lajittele nousevaan järjestykseen",
+    sortDescText: "Lajitella laskeva",
+    moveLeftText: "Siirry vasemmalle",
+    moveRightText: "Liiku oikealle",
+    moveBeginText: "Siirry alkuun",
+    moveEndText: "Siirtyä loppuun",
+    removeText: "Poista"
+
 });
 Ext.define('Ext.locale.fi.panel.Collapser', {
     override: 'Ext.panel.Collapser',

@@ -147,7 +147,10 @@ Ext.define('Ext.grid.filters.menu.Date', {
                 weight: 30,
                 listeners: {
                     change: 'up.onInputChange'
-                }
+                },
+                // This is the default element to use when
+                // is specified only one value to use as a filter.
+                defaultFilter: true
             }
         }
     },

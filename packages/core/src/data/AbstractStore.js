@@ -119,6 +119,8 @@ Ext.define('Ext.data.AbstractStore', {
         /**
         * @cfg {Boolean} [remoteSort=false]
         * `true` if the sorting should be performed on the server side, false if it is local only.
+        * **Note:** if {@link Ext.data.ProxyStore.html#cfg-autoLoad} is false, you will have to 
+        * explicitly make store load initially before applying sorters. (since 7.5).
         */
         remoteSort: {
             lazy: true,
@@ -129,6 +131,8 @@ Ext.define('Ext.data.AbstractStore', {
         * @cfg {Boolean} [remoteFilter=false]
         * `true` to defer any filtering operation to the server. If `false`, filtering is done
         * locally on the client.
+        * **Note:** if {@link Ext.data.ProxyStore.html#cfg-autoLoad} is false, you will have to 
+        * explicitly make store load initially before applying filters. (since 7.5).
         */
         remoteFilter: {
             lazy: true,
@@ -214,7 +218,15 @@ Ext.define('Ext.data.AbstractStore', {
          * sorters, then it is useful to set this config to `true`.
          * @since 6.5.1
          */
-        reloadOnClearSorters: false
+        reloadOnClearSorters: false,
+
+        /**
+         * @cfg {Boolean} autoLoadOnFilterEnd
+         * Set this to `true` to trigger store load on filter end.
+         *
+         * @private
+         */
+        autoLoadOnFilterEnd: undefined
     },
 
     /**
@@ -1152,7 +1164,8 @@ Ext.define('Ext.data.AbstractStore', {
             // Unless reloadOnClearSorters is set to indicate that there's a default
             // order used by the server which must be returned to when there is no
             // explicit sort order.
-            if (sorters.length || me.getReloadOnClearSorters()) {
+            if ((me.isLoaded() || me.getAutoLoad()) &&
+                (sorters.length || me.getReloadOnClearSorters())) {
                 // The sort event will fire in the load callback;
                 fireSort = false;
 
@@ -1195,7 +1208,8 @@ Ext.define('Ext.data.AbstractStore', {
             //</debug>
             me.currentPage = 1;
 
-            if (!suppressNext) {
+            if (!suppressNext && (me.isLoaded() || me.getAutoLoad() ||
+                me.getAutoLoadOnFilterEnd())) {
                 me.load();
             }
         }

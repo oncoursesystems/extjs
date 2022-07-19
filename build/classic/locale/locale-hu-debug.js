@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.hu.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Számol"
+});
 /**
  * List compiled by mystix on the extjs.com forums.
  * Thank you Mystix!
@@ -272,4 +277,72 @@ Ext.define("Ext.locale.hu.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.hu.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.hu.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Bővítse az összeset",
+    collapseAllText: "Összes bezárása",
+    groupsText: "Csoportok",
+    groupByText: "Csoport ezen a területen",
+    addToGroupingText: "Hozzáadás a csoportosításhoz",
+    removeFromGroupingText: "Távolítsa el a csoportosítást",
+    groupSummaryTpl: "Összefoglaló ({name})",
+    summaryTpl: "Összefoglaló ({store.data.length})"
+});
+Ext.define("Ext.locale.hu.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Egyik sem",
+    summaryText: "Összefoglaló"
+});
+Ext.define("Ext.locale.hu.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Egyenlő",
+        ne: "Nem egyenlő",
+        gt: "Nagyobb, mint",
+        ge: "Nagyobb vagy egyenlő",
+        lt: "Kevesebb, mint",
+        le: "Kevesebb vagy egyenlő",
+        like: "Mint",
+        nlike: "Nem mint",
+        empty: "Üres",
+        nempty: "Nem üres",
+        identical: "Azonos",
+        nidentical: "Nem azonos",
+        regex: "Reguláris kifejezés",
+        "in": "Van",
+        notin: "Nincs be"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.hu.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Húzza az oszlop fejlécét az oszlophoz",
+    showGroupingPanelText: "Csoport megjelenítése panelen",
+    hideGroupingPanelText: "Csoport elrejtése panelen",
+    clearGroupText: "Egyértelmű csoport",
+    sortAscText: "Növekvő",
+    sortDescText: "Rendezés csökkenő",
+    moveLeftText: "Menj balra",
+    moveRightText: "Mozdulj jobbra",
+    moveBeginText: "Mozogni kezdve",
+    moveEndText: "Vége",
+    removeText: "Eltávolít"
 });

@@ -2,6 +2,11 @@
 Ext.define("Ext.locale.es.Component", {
     override: "Ext.Component"
 });
+Ext.define("Ext.locale.es.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Contar"
+});
 Ext.define("Ext.locale.es.data.validator.Presence", {
     override: "Ext.data.validator.Presence",
     message: "Este campo es obligatorio",
@@ -238,6 +243,18 @@ Ext.define("Ext.locale.es.grid.PropertyColumnModel", {
     valueText: "Valor",
     dateFormat: "j/m/Y"
 });
+Ext.define("Ext.locale.es.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Expandir todo",
+    collapseAllText: "Desplegar todo",
+    groupsText: "Grupos",
+    groupByText: "Grupo por este campo",
+    addToGroupingText: "Añadir a la agrupación",
+    removeFromGroupingText: "Eliminar de la agrupación",
+    groupSummaryTpl: "Resumen ({name})",
+    summaryTpl: "Resumen ({store.data.length})"
+});
 Ext.define("Ext.locale.es.grid.feature.Grouping", {
     override: "Ext.grid.feature.Grouping",
     emptyGroupText: '(Ninguno)',
@@ -262,6 +279,62 @@ Ext.define("Ext.locale.es.grid.header.Container", {
 Ext.define("Ext.locale.es.grid.plugin.DragDrop", {
     override: "Ext.grid.plugin.DragDrop",
     dragText: "{0} fila(s) seleccionada(s)"
+});
+Ext.define("Ext.locale.es.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Ninguno",
+    summaryText: "Resumen"
+});
+Ext.define("Ext.locale.es.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Es igual",
+        ne: "No es igual",
+        gt: "Mas grande que",
+        ge: "Mayor qué o igual a",
+        lt: "Menos que",
+        le: "Menos que o igual a",
+        like: "Igual que",
+        nlike: "Diferente a",
+        empty: "Vacío",
+        nempty: "No vacío",
+        identical: "Idéntico",
+        nidentical: "No es identico",
+        regex: "Expresión regular",
+        "in": "Es en",
+        notin: "No está dentro"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.es.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Arrastre un encabezado de columna aquí para agrupar esa columna",
+    showGroupingPanelText: "Mostrar grupo por panel",
+    hideGroupingPanelText: "Ocultar grupo por panel",
+    clearGroupText: "Grupo claro",
+    sortAscText: "Orden ascendente",
+    sortDescText: "Orden descendiente",
+    moveLeftText: "Mover hacia la izquierda",
+    moveRightText: "Mover a la derecha",
+    moveBeginText: "Pasar al principio",
+    moveEndText: "Mover al final",
+    removeText: "Eliminar"
 });
 Ext.define("Ext.locale.es.picker.Date", {
     override: "Ext.picker.Date",

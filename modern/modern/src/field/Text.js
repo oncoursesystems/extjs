@@ -835,7 +835,15 @@ Ext.define('Ext.field.Text', {
     },
 
     updateDisabled: function(disabled, oldDisabled) {
+        var triggers = this.getTriggers(),
+            triggerName;
+
         this.callParent([disabled, oldDisabled]);
+
+        for (triggerName in triggers) {
+            triggers[triggerName].setDisabled(disabled);
+        }
+
         this.syncEmptyState();
     },
 

@@ -1,4 +1,3 @@
-/* global Ext, expect, topSuite */
 /* eslint indent: off */
 
 topSuite("Ext.Component",
@@ -2225,6 +2224,7 @@ function() {
                     // Now widen the container
                     container.setWidth(200);
                     // Force a repaint
+                    // eslint-disable-next-line no-unused-expressions
                     component.el.dom.offsetWidth;
                 });
 
@@ -2527,7 +2527,8 @@ function() {
             extend: 'Ext.Component',
             fn1: Ext.emptyFn,
             fn2: Ext.emptyFn
-        }), ct;
+        }),
+        ct;
 
         function makeCls(hidden, preventRender) {
             component = new Cls({

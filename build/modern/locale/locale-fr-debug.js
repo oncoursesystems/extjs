@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.fr.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Compter"
+});
 /**
  * France (France) translation
  */
@@ -509,4 +514,103 @@ Ext.define("Ext.locale.fr.grid.locked.Grid", {
 Ext.define("Ext.locale.fr.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} ligne{1} sélectionnée{1}"
+});
+Ext.define("Ext.locale.fr.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "Sommaire ({name})",
+        summaryTpl: "Sommaire ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.fr.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "Sommaire ({name})",
+        summaryTpl: "Sommaire ({store.data.length})"
+    },
+    text: "Groupes"
+});
+Ext.define("Ext.locale.fr.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "Ajouter au groupement"
+    }
+});
+Ext.define("Ext.locale.fr.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "Groupes",
+
+        menu: [{
+            text: "Développer tout"
+        }, {
+            text: "Réduire tout"
+        }]
+    }
+});
+Ext.define("Ext.locale.fr.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "Supprimer du groupement"
+    }
+});
+Ext.define("Ext.locale.fr.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Rien",
+    summaryText: "Sommaire"
+});
+Ext.define("Ext.locale.fr.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "rovnat se",
+        ne: "Není rovno",
+        gt: "Větší než",
+        ge: "Greater than or equal to",
+        lt: "Méně než",
+        le: "Menší nebo rovna",
+        like: "Jako",
+        nlike: "Ne jako",
+        empty: "Prázdný",
+        nempty: "Není prázdný",
+        identical: "Identický",
+        nidentical: "Není identický",
+        regex: "Regulární výraz",
+        "in": "Je in",
+        notin: "Není"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.fr.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Faites glisser une en-tête de colonne ici pour regrouper cette colonne",
+    showGroupingPanelText: "Afficher le groupe par panneau",
+    hideGroupingPanelText: "Masquer le groupe par panneau",
+    clearGroupText: "Groupe clair",
+    sortAscText: "Trier par ordre croissant",
+    sortDescText: "Trier par ordre décroissant",
+    moveLeftText: "Se déplacer à gauche",
+    moveRightText: "Déplacer vers la droite",
+    moveBeginText: "Déménager au début",
+    moveEndText: "Passer à la fin",
+    removeText: "Supprimer"
+
 });

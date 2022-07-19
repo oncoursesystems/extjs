@@ -2076,8 +2076,15 @@ function() {
 
             describe('after page load', function() {
                 describe('sorting', function() {
+                    it('should not trigger a load when remote sorting', function() {
+                        doTest({
+                            remoteSort: true
+                        }, 'sort');
+                    });
+
                     it('should trigger a load when remote sorting', function() {
                         doExtendedTest({
+                            autoLoad: true,
                             remoteSort: true
                         }, 'sort');
                     });
@@ -2086,6 +2093,7 @@ function() {
                 describe('filtering', function() {
                     it('should trigger a load when remote filtering', function() {
                         doExtendedTest({
+                            autoLoad: true,
                             remoteFilter: true
                         }, 'filter');
                     });
@@ -4020,6 +4028,304 @@ function() {
         });
     });
 
+    describe('grid sorters and filters behaviour with autoload config', function() {
+        function completeWithData(data) {
+            Ext.Ajax.mockComplete({
+                status: 200,
+                responseText: Ext.JSON.encode(data)
+            });
+        }
+
+        beforeEach(function() {
+            MockAjaxManager.addMethods();
+        });
+
+        afterEach(function() {
+            MockAjaxManager.removeMethods();
+        });
+
+        it('should send filters and sorters remotely if autoload true', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                store, grid, colRef;
+
+            store = Ext.create('Ext.data.Store', {
+                fields: ['name', 'email', 'phone'],
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                autoLoad: true,
+                remoteSort: true,
+                remoteFilter: true
+            });
+
+            ajaxSpy.reset();
+            flushLoadSpy.reset();
+
+            grid = Ext.create('Ext.grid.Panel', {
+                title: 'Simpsons',
+                store: store,
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                height: 200,
+                width: 400,
+                renderTo: Ext.getBody(),
+                plugins: [{
+                    ptype: 'gridfilters'
+                }]
+            });
+
+            // Load the data to store.
+            completeWithData([
+                    { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224'  },
+                    { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
+                    { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244'  },
+                    { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  }
+            ]);
+
+            colRef = grid.getColumns();
+
+            // Sort on name column
+            Ext.testHelper.tap(colRef[0].el);
+
+            // response matching with ascending sort on name
+            completeWithData([
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244'  },
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  },
+                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224'  }
+            ]);
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 2;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.sort).toBe(Ext.encode([
+                    {
+                        "property": "name",
+                        "direction": "ASC"
+                    }
+                ]));
+
+                colRef[0].filter.setValue('ar');
+                completeWithData([
+                    { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
+                    { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  }
+                ]);
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 3;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.filter).toBe(Ext.encode([{
+                    "operator": "like",
+                    "value": "ar",
+                    "property": "name"
+                }]));
+
+                store.destroy();
+                grid.destroy();
+            });
+        });
+
+        it('should not trigger a load for remoteSort and remoteFilter with autoLoad false', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                store, grid, colRef;
+
+            ajaxSpy.reset();
+            flushLoadSpy.reset();
+
+            store = Ext.create('Ext.data.Store', {
+                fields: ['name', 'email', 'phone'],
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                autoLoad: false,
+                remoteSort: true,
+                remoteFilter: true
+            });
+
+            grid = Ext.create('Ext.grid.Panel', {
+                title: 'Simpsons',
+                store: store,
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                height: 200,
+                width: 400,
+                renderTo: Ext.getBody(),
+                plugins: [{
+                    ptype: 'gridfilters'
+                }]
+            });
+
+            colRef = grid.getColumns();
+            Ext.testHelper.tap(colRef[0].el);
+
+            colRef[0].filter.setValue('ar');
+
+            // no remote calls to be made if autoload false
+            expect(ajaxSpy.callCount).toBe(0);
+            expect(store.isLoaded()).toBe(false);
+
+            store.destroy();
+            grid.destroy();
+        });
+
+        it('should not trigger a load for remoteSort and remoteFilter with default autoLoad config (autoLoad: undefined)', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                store, grid, colRef;
+
+            ajaxSpy.reset();
+            flushLoadSpy.reset();
+
+            store = Ext.create('Ext.data.Store', {
+                fields: ['name', 'email', 'phone'],
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                remoteSort: true,
+                remoteFilter: true
+            });
+
+            grid = Ext.create('Ext.grid.Panel', {
+                title: 'Simpsons',
+                store: store,
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                height: 200,
+                width: 400,
+                renderTo: Ext.getBody(),
+                plugins: [{
+                    ptype: 'gridfilters'
+                }]
+            });
+
+            colRef = grid.getColumns();
+            Ext.testHelper.tap(colRef[0].el);
+
+            colRef[0].filter.setValue('ar');
+
+            // no remote calls to be made if autoload not configured
+            expect(ajaxSpy.callCount).toBe(0);
+            expect(store.isLoaded()).toBe(false);
+
+            store.destroy();
+            grid.destroy();
+        });
+
+        it('should send filters and sorters remotely after intialLoad of store if autoload false', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                store, grid, colRef;
+
+            ajaxSpy.reset();
+            flushLoadSpy.reset();
+
+            store = Ext.create('Ext.data.Store', {
+                fields: ['name', 'email', 'phone'],
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                autoLoad: false,
+                remoteSort: true,
+                remoteFilter: true
+            });
+
+            grid = Ext.create('Ext.grid.Panel', {
+                title: 'Simpsons',
+                store: store,
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                height: 200,
+                width: 400,
+                renderTo: Ext.getBody(),
+                plugins: [{
+                    ptype: 'gridfilters'
+                }]
+            });
+
+            colRef = grid.getColumns();
+            Ext.testHelper.tap(colRef[0].el);
+
+            colRef[0].filter.setValue('ar');
+
+            // no remote calls to be made if autoload false
+            expect(ajaxSpy.callCount).toBe(0);
+            expect(store.isLoaded()).toBe(false);
+
+            store.load();
+            completeWithData([
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  }
+            ]);
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 1;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.sort).toBe(Ext.encode([{
+                    "property": "name",
+                    "direction": "ASC"
+                }]));
+                expect(ajaxSpy.mostRecentCall.args[0].params.filter).toBe(Ext.encode([{
+                    "operator": "like",
+                    "value": "ar",
+                    "property": "name"
+                }]));
+
+                colRef[0].filter.setValue('art');
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 2;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.filter).toBe(Ext.encode([{
+                    "operator": "like",
+                    "value": "art",
+                    "property": "name"
+                }]));
+                Ext.testHelper.tap(colRef[0].el);
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 3;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.sort).toBe(Ext.encode([{
+                    "property": "name",
+                    "direction": "DESC"
+                }]));
+                store.destroy();
+                grid.destroy();
+            });
+        });
+    });
+
     describe('grid destruction of contained grid', function() {
         it('should not throw an error', function() {
             var p = new Ext.panel.Panel({
@@ -4098,4 +4404,3 @@ function() {
         });
     });
 });
-

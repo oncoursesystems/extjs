@@ -8,7 +8,7 @@ $grid-filterbar-column-filtered-font-style: dynamic(italic);
  * @var {string}
  * The font-weight of the filtered column.
  */
-$grid-filterbar-column-filtered-font-weight: dynamic(inherit);
+$grid-filterbar-column-filtered-font-weight: dynamic($font-weight-bold);
 
 /**
  * @var {string}

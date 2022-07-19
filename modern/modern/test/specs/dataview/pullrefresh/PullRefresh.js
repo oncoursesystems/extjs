@@ -1,7 +1,7 @@
 topSuite("Ext.dataview.pullrefresh.PullRefresh", [
     'Ext.List', 'Ext.data.ArrayStore', 'Ext.layout.Fit'
 ], function() {
-    var store, proxy, list, plugin, model, supportsTouch, supportsTouchScroll;
+    var store, proxy, list, plugin, model, supportsTouch, supportsTouchScroll, loadSpy;
 
     beforeEach(function() {
         // make sure we are testing "touch" scrolling
@@ -81,6 +81,16 @@ topSuite("Ext.dataview.pullrefresh.PullRefresh", [
 
             it("should set page size to the Store's page size", function() {
                 expect(operation.getLimit()).toBe(store.getPageSize());
+            });
+
+            it("should call load listeners method after load", function() {
+                loadSpy = jasmine.createSpy('load event');
+
+                store.addListener('load', loadSpy, store);
+                operation.getInternalCallback().call(store, operation);
+                store.removeListener('load', loadSpy, store);
+
+                expect(loadSpy).toHaveBeenCalled();
             });
         });
     });

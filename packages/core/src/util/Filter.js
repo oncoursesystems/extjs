@@ -349,7 +349,7 @@ Ext.define('Ext.util.Filter', {
             // We only want the instance properties in this case, not inherited ones,
             // so we need hasOwnProperty to filter out our class values.
             if (config.hasOwnProperty(name)) {
-                result[name] = config[name];
+                result[name] = this.getConfig(name);
             }
         }
 

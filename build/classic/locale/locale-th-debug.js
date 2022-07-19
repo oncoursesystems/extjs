@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.th.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "นับ"
+});
 /**
  * List compiled by KillerNay on the extjs.com forums.
  * Thank you KillerNay!
@@ -270,4 +275,72 @@ Ext.define("Ext.locale.th.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.th.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.th.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "ขยายทั้งหมด",
+    collapseAllText: "ยุบทั้งหมด",
+    groupsText: "กลุ่ม",
+    groupByText: "กลุ่มตามฟิลด์นี้",
+    addToGroupingText: "เพิ่มการจัดกลุ่ม",
+    removeFromGroupingText: "ลบออกจากการจัดกลุ่ม",
+    groupSummaryTpl: "สรุป ({name})",
+    summaryTpl: "สรุป ({store.data.length})"
+});
+Ext.define("Ext.locale.th.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "ไม่มี",
+    summaryText: "สรุป"
+});
+Ext.define("Ext.locale.th.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "เท่ากัน",
+        ne: "ไม่เท่ากับ",
+        gt: "มากกว่า",
+        ge: "มากกว่าหรือเท่ากับ",
+        lt: "น้อยกว่า",
+        le: "น้อยกว่าหรือเท่ากับ",
+        like: "ชอบ",
+        nlike: "ไม่ชอบ",
+        empty: "ว่างเปล่า",
+        nempty: "ไม่ว่างเปล่า",
+        identical: "เหมือนกัน",
+        nidentical: "ไม่เหมือนกัน",
+        regex: "การแสดงออกปกติ",
+        "in": "อยู่ใน",
+        notin: "ไม่ได้อยู่ใน"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.th.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "ลากส่วนหัวของคอลัมน์ที่นี่เพื่อจัดกลุ่มตามคอลัมน์นั้น",
+    showGroupingPanelText: "แสดงกลุ่มตามแผง",
+    hideGroupingPanelText: "ซ่อนกลุ่มตามแผง",
+    clearGroupText: "กลุ่มที่ชัดเจน",
+    sortAscText: "เรียงจากน้อยไปมาก",
+    sortDescText: "เรียงเรียงจากมากไปน้อย",
+    moveLeftText: "ย้ายไปทางซ้าย",
+    moveRightText: "เลื่อนไปทางขวา",
+    moveBeginText: "ย้ายไปที่จุดเริ่มต้น",
+    moveEndText: "ย้ายไปที่จุดสิ้นสุด",
+    removeText: "ลบ"
 });

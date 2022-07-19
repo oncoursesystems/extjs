@@ -817,8 +817,9 @@ topSuite("Ext.dataview.Component", ['Ext.Button'], function() {
                         }, makeInlineData(10));
 
                         var h = getElement(view.getItemAt(0)).getHeight();
+
                         waits(100);
-                        runs(function(){
+                        runs(function() {
                             expectPositions(getInlineNoWrapPos(50, h));
                         });
                     });
@@ -849,8 +850,9 @@ topSuite("Ext.dataview.Component", ['Ext.Button'], function() {
                                 wrap: false
                             });
                             var h = getElement(view.getItemAt(0)).getHeight();
+
                             waits(100);
-                            runs(function(){
+                            runs(function() {
                                 expectPositions(getInlineNoWrapPos(50, h));
                             });
                         });
@@ -881,8 +883,9 @@ topSuite("Ext.dataview.Component", ['Ext.Button'], function() {
                                 height: 400
                             });
                             var h = getElement(view.getItemAt(0)).getHeight();
+
                             waits(100);
-                            runs(function(){
+                            runs(function() {
                                 expectPositions(getInlineNoWrapPos(50, h));
                             });
                         });

@@ -646,7 +646,7 @@ Ext.define('Ext.grid.feature.Grouping', {
         }
     },
 
-    enable: function() {
+    enable: function(fromPartner) {
         var me = this,
             view = me.view,
             store = me.getGridStore(),
@@ -673,12 +673,18 @@ Ext.define('Ext.grid.feature.Grouping', {
 
         groupToggleMenuItem = me.view.headerCt.getMenu().down('#groupToggleMenuItem');
 
+        // Enable the grouping feature of locking partner. 
+        // This will help maintain the same state of the feature in normal view and locked view.
+        if (me.lockingPartner && !fromPartner) {
+            me.lockingPartner.enable(true);
+        }
+
         if (groupToggleMenuItem) {
             groupToggleMenuItem.setChecked(true, true);
         }
     },
 
-    disable: function() {
+    disable: function(fromPartner) {
         var me = this,
             view = me.view,
             store = me.getGridStore(),
@@ -705,6 +711,12 @@ Ext.define('Ext.grid.feature.Grouping', {
         }
 
         groupToggleMenuItem = me.view.headerCt.getMenu().down('#groupToggleMenuItem');
+
+        // Disable the grouping feature of locking partner. 
+        // This will help maintain the same state of the feature in normal view and locked view.
+        if (me.lockingPartner && !fromPartner) {
+            me.lockingPartner.disable(true);
+        }
 
         if (groupToggleMenuItem) {
             groupToggleMenuItem.setChecked(false, true);
@@ -936,7 +948,7 @@ Ext.define('Ext.grid.feature.Grouping', {
         var me = this,
             header = me.getGroupedHeader();
 
-        if (me.hideGroupedHeader && header) {
+        if (me.hideGroupedHeader) {
             Ext.suspendLayouts();
 
             if (me.prunedHeader && me.prunedHeader !== header) {
@@ -945,7 +957,9 @@ Ext.define('Ext.grid.feature.Grouping', {
 
             me.prunedHeader = header;
 
-            if (header.rendered) {
+            // For cases where there was a grouping, but the grouper
+            // was changed to no groups.
+            if (header && header.rendered) {
                 header.hide();
             }
 
@@ -1310,6 +1324,8 @@ Ext.define('Ext.grid.feature.Grouping', {
         else {
             this.lastGrouper = grouper;
         }
+
+        this.pruneGroupedHeader();
     },
 
     /**
@@ -1747,6 +1763,8 @@ Ext.define('Ext.grid.feature.Grouping', {
                 view.isGrouping = !!store.getGrouper();
                 dataSource.bindStore(store);
             }
+
+            me.pruneGroupedHeader();
 
             me.mixins.summary.bindStore.call(me, grid, store);
         }

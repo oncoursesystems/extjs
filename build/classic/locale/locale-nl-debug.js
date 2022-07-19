@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.nl.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Graaf"
+});
 /**
  * List compiled by mystix on the extjs.com forums.
  * Thank you Mystix!
@@ -298,4 +303,72 @@ Ext.define("Ext.locale.nl.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.nl.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.nl.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Expand alles",
+    collapseAllText: "Alles inklappen",
+    groupsText: "Groepen",
+    groupByText: "Groep op dit gebied",
+    addToGroupingText: "Toevoegen aan groepering",
+    removeFromGroupingText: "Verwijderen van groepering",
+    groupSummaryTpl: "Samenvatting ({name})",
+    summaryTpl: "Samenvatting ({store.data.length})"
+});
+Ext.define("Ext.locale.nl.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Geen",
+    summaryText: "Samenvatting"
+});
+Ext.define("Ext.locale.nl.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Is gelijk",
+        ne: "Niet gelijk",
+        gt: "Groter dan",
+        ge: "Groter dan of gelijk aan",
+        lt: "Minder dan",
+        le: "Minder dan of gelijk aan",
+        like: "Leuk vinden",
+        nlike: "Niet zoals",
+        empty: "Leeg",
+        nempty: "Niet leeg",
+        identical: "Identiek",
+        nidentical: "Niet hetzelfde",
+        regex: "Reguliere expressie",
+        "in": "isIn",
+        notin: "Is niet in"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.nl.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Sleep hier een kolomkop om door die kolom te groeperen",
+    showGroupingPanelText: "Toon groep per paneel",
+    hideGroupingPanelText: "Groep verbergen op paneel",
+    clearGroupText: "Heldere groep",
+    sortAscText: "Sorteren oplopend",
+    sortDescText: "Sorteer aflopend",
+    moveLeftText: "Ga naar links",
+    moveRightText: "Ga naar rechts",
+    moveBeginText: "Ga naar het begin",
+    moveEndText: "Ga naar het einde",
+    removeText: "Verwijderen"
 });

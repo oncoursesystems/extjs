@@ -1,4 +1,3 @@
-/* global Ext, expect */
 
 topSuite("Ext.Toast", ["Ext.Toast"], function() {
     describe("Ext.Toast", function() {

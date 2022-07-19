@@ -32,7 +32,7 @@ Ext.define('Ext.grid.plugin.filterbar.filters.Base', {
         },
 
         /**
-         * @cfg {Ext.grid.Panel} grid
+         * @cfg {Ext.grid.Grid} grid
          *
          * The reference to the grid
          */

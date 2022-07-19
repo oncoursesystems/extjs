@@ -1214,6 +1214,8 @@ Ext.define('Ext.field.Select', {
             displayField = me.getDisplayField(),
             extraKeySpec;
 
+        me.autoSelectCompleted = false;
+
         if (oldStore) {
             if (oldStore.getAutoDestroy()) {
                 oldStore.destroy();
@@ -1391,7 +1393,15 @@ Ext.define('Ext.field.Select', {
         // Get the record that matches our input value
         if (!isCleared) {
             if (me.getMultiSelect()) {
-                return me.syncMultiValues(Ext.Array.from(value));
+                // Avoid adding a user value that is not finished typing.
+                // The value could be a manual input value that could be
+                // an user input value and not a selected record and not finished
+                // typing.
+                if (me.getForceSelection() || me.getInputValue() === '') {
+                    me.syncMultiValues(Ext.Array.from(value));
+                }
+
+                return;
             }
 
             matchedRecord = (isInput ? store.byText : store.byValue).get(value);
@@ -1436,7 +1446,7 @@ Ext.define('Ext.field.Select', {
             }
             // Value is the set value.
             else {
-                if (isCleared) {
+                if (isCleared || !matchedRecord) {
                     if (me.mustAutoSelect()) {
                         matchedRecord = store.first();
 
@@ -1445,12 +1455,19 @@ Ext.define('Ext.field.Select', {
                         }
                     }
                     else {
+                        // me.setValue(null) change the initial null value to ''.
+                        // To avoid this situation and let the null value as the
+                        // initial value, only set null when getValue() !== null;
+                        if (me.getValue() !== null) {
+                            me.setValue(null);
+                        }
+
                         me.setSelection(null);
                     }
                 }
                 // We have a value, so get the record that matches our current value.
                 // Note that setValue can
-                else if (!matchedRecord && valueNotFoundText) {
+                else if (valueNotFoundText) {
                     me.setError(valueNotFoundText);
                 }
             }
@@ -1631,6 +1648,32 @@ Ext.define('Ext.field.Select', {
                 Ext.dataview.BoundList.prototype.beforeSelectionRefresh
             );
         }
+
+        me.syncValue();
+        me.syncAutoSelect(store);
+    },
+
+    syncAutoSelect: function(store) {
+        var me = this,
+            record;
+
+        // autoSelect functionality.
+        if ((me.getValue() === null || me.getValue() === '') && me.getAutoSelect()) {
+
+            if (!me.getQueryMode || me.getQueryMode() === 'local') {
+                record = store && store.getAt(0);
+                me.setValue(record);
+            }
+            else if (!me.autoSelectCompleted) {
+                me.autoSelectCompleted = true;
+
+                if (!me.getRawValue()) {
+                    record = store && store.getAt(0);
+                    me.setValue(record);
+                }
+            }
+        }
+
     },
 
     /**
@@ -1674,6 +1717,7 @@ Ext.define('Ext.field.Select', {
 
     privates: {
         syncMode: null,
+        autoSelectCompleted: false,
 
         createChipView: function(chipView) {
             var me = this,

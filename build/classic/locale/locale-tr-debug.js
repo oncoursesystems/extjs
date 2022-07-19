@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.tr.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Saymak"
+});
 Ext.onReady(function() {
 
     if (Ext.Date) {
@@ -266,4 +271,72 @@ Ext.define("Ext.locale.tr.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.tr.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.tr.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Hepsini genişlet",
+    collapseAllText: "Hepsini Daralt",
+    groupsText: "Gruplar",
+    groupByText: "Bu alan tarafından grup",
+    addToGroupingText: "Gruplandırmaya ekle",
+    removeFromGroupingText: "Gruplamadan kaldır",
+    groupSummaryTpl: "Özet ({name})",
+    summaryTpl: "Özet ({store.data.length})"
+});
+Ext.define("Ext.locale.tr.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Hiçbiri",
+    summaryText: "Özet"
+});
+Ext.define("Ext.locale.tr.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Eşittir",
+        ne: "Eşit değil",
+        gt: "Daha büyük",
+        ge: "Eşit veya daha büyük",
+        lt: "Daha az",
+        le: "Daha az veya eşit",
+        like: "Beğenmek",
+        nlike: "Gibi değil",
+        empty: "Boş",
+        nempty: "Boş değil",
+        identical: "Birebir aynı",
+        nidentical: "Aynı değil",
+        regex: "Düzenli ifade",
+        "in": "İçinde",
+        notin: "İçinde değil"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.tr.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Bir sütun başlığını buraya bu sütunla gruplandırmak için sürükleyin",
+    showGroupingPanelText: "Panel tarafından Grup Gösterisi",
+    hideGroupingPanelText: "Grubu panelle gizle",
+    clearGroupText: "Açık grup",
+    sortAscText: "Artan sırala",
+    sortDescText: "Azalan şekilde sırala",
+    moveLeftText: "Sola hareket et",
+    moveRightText: "Sağa hareket et",
+    moveBeginText: "Başlamak için hareket",
+    moveEndText: "Sonuna kadar hareket ettirmek",
+    removeText: "Kaldırmak"
 });

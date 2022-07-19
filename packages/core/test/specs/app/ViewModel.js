@@ -7497,11 +7497,14 @@ topSuite("Ext.app.ViewModel", [
                     afterEach(function() {
                         Ext.data.Store.prototype.config.asynchronousLoad = false;
                     });
-                    it("should only trigger a single load", function() {
+                    it("should only trigger a single load when autoLoaded", function() {
+                        var flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough();
+
                         viewModel.set('prop', 'a');
                         viewModel.setStores({
                             users: {
                                 model: 'spec.User',
+                                autoLoad: true,
                                 remoteFilter: true,
                                 remoteSort: true,
                                 sorters: [{
@@ -7515,20 +7518,120 @@ topSuite("Ext.app.ViewModel", [
                             }
                         });
                         notify();
-                        var store = viewModel.getStore('users');
 
-                        spyOn(store, 'flushLoad');
                         setNotify('prop', 'b');
-
                         // Wait for a triggered load to flush.
                         // Wait until possible erroneous multiple calls would have been made.
                         waits(100);
 
                         // Only one actual call to the proxy should have been made
                         runs(function() {
-                            expect(store.flushLoad.callCount).toBe(1);
+                            expect(flushLoadSpy.callCount).toBe(1);
                         });
                     });
+                });
+            });
+        });
+
+        describe("Store autoload config", function() {
+            beforeEach(function() {
+                Ext.data.Store.prototype.config.asynchronousLoad = true;
+            });
+            afterEach(function() {
+                Ext.data.Store.prototype.config.asynchronousLoad = false;
+            });
+
+            it("should load store when autoLoad is true", function() {
+                var flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough();
+
+                viewModel.set('prop', 'a');
+                viewModel.setStores({
+                    worker: {
+                        model: 'spec.User',
+                        autoLoad: true,
+                        remoteFilter: true,
+                        remoteSort: true,
+                        sorters: [{
+                            property: '{prop}',
+                            direction: 'ASC'
+                        }],
+                        filters: [{
+                            property: 'foo',
+                            value: '{prop}'
+                        }]
+                    }
+                });
+                notify();
+
+                setNotify('prop', 'b');
+                // Wait for a triggered load to flush.
+                // Wait until possible erroneous multiple calls would have been made.
+                waits(100);
+
+                // Only one actual call to the proxy should have been made
+                runs(function() {
+                    expect(flushLoadSpy.callCount).toBe(1);
+                });
+            });
+
+            it("should not load store when autoLoad is false", function() {
+                viewModel.set('prop', 'a');
+                viewModel.setStores({
+                    emp: {
+                        model: 'spec.User',
+                        autoLoad: false,
+                        remoteFilter: true,
+                        remoteSort: true,
+                        sorters: [{
+                            property: '{prop}',
+                            direction: 'ASC'
+                        }],
+                        filters: [{
+                            property: 'foo',
+                            value: '{prop}'
+                        }]
+                    }
+                });
+                notify();
+                var store = viewModel.getStore('emp');
+
+                setNotify('prop', 'b');
+                // Wait for a triggered load to flush.
+                // Wait until possible erroneous multiple calls would have been made.
+                waits(100);
+
+                runs(function() {
+                    expect(store.loadCount).toBe(0);
+                });
+            });
+
+            it("should not load store with default autoLoad config (autoLoad: undefined)", function() {
+                viewModel.set('prop', 'a');
+                viewModel.setStores({
+                    student: {
+                        model: 'spec.User',
+                        remoteFilter: true,
+                        remoteSort: true,
+                        sorters: [{
+                            property: '{prop}',
+                            direction: 'ASC'
+                        }],
+                        filters: [{
+                            property: 'foo',
+                            value: '{prop}'
+                        }]
+                    }
+                });
+                notify();
+                var store = viewModel.getStore('student');
+
+                setNotify('prop', 'b');
+                // Wait for a triggered load to flush.
+                // Wait until possible erroneous multiple calls would have been made.
+                waits(100);
+
+                runs(function() {
+                    expect(store.loadCount).toBe(0);
                 });
             });
         });

@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.en_GB.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Count"
+});
 /**
  * List compiled by mystix on the extjs.com forums.
  * Thank you Mystix!
@@ -413,4 +418,72 @@ Ext.define("Ext.locale.en_GB.view.MultiSelector", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.en_GB.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.en_GB.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Expand All",
+    collapseAllText: "Collapse all",
+    groupsText: "Groups",
+    groupByText: "Group by this field",
+    addToGroupingText: "Add to grouping",
+    removeFromGroupingText: "Remove from grouping",
+    groupSummaryTpl: "Summary ({name})",
+    summaryTpl: "Summary ({store.data.length})"
+});
+Ext.define("Ext.locale.en_GB.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "None",
+    summaryText: "Summary"
+});
+Ext.define("Ext.locale.en_GB.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Is equal",
+        ne: "Not equal",
+        gt: "Greater than",
+        ge: "Greater than or equal to",
+        lt: "Less than",
+        le: "Less than or equal to",
+        like: "Like",
+        nlike: "Not like",
+        empty: "Empty",
+        nempty: "Not empty",
+        identical: "Identical",
+        nidentical: "Not identical",
+        regex: "Regular expression",
+        "in": "Is in",
+        notin: "Is not in"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.en_GB.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Drag a column header here to group by that column",
+    showGroupingPanelText: "Show Group By Panel",
+    hideGroupingPanelText: "Hide Group By Panel",
+    clearGroupText: "Clear Group",
+    sortAscText: "Sort Ascending",
+    sortDescText: "Sort Descending",
+    moveLeftText: "Move left",
+    moveRightText: "Move right",
+    moveBeginText: "Move to beginning",
+    moveEndText: "Move to end",
+    removeText: "Remove"
 });

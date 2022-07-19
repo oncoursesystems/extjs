@@ -230,7 +230,6 @@ Ext.define('Ext.carousel.Carousel', {
     updateBufferSize: function(size) {
         var ItemClass = Ext.carousel.Item,
             total = size * 2 + 1,
-            isRendered = this.isRendered(),
             bodyElement = this.bodyElement,
             items = this.carouselItems,
             ln = items.length,
@@ -251,10 +250,7 @@ Ext.define('Ext.carousel.Carousel', {
 
             items.push(item);
             bodyElement.append(item.renderElement);
-
-            if (isRendered && item.setRendered(true)) {
-                item.fireEvent('renderedchange', this, item, true);
-            }
+            this.setItemRendered(item);
         }
 
         this.getTranslatable().setActiveIndex(size);
@@ -584,6 +580,22 @@ Ext.define('Ext.carousel.Carousel', {
     refresh: function() {
         this.refreshSizing();
         this.refreshActiveItem();
+        this.refreshRenderedState();
+    },
+
+    setItemRendered: function(item) {
+        if (this.isRendered() && item.setRendered(true)) {
+            item.fireEvent('renderedchange', this, item, true);
+        }
+    },
+
+    refreshRenderedState: function() {
+        var len = this.carouselItems.length,
+            i;
+
+        for (i = 0; i < len; i++) {
+            this.setItemRendered(this.carouselItems[i]);
+        }
     },
 
     refreshSizing: function() {

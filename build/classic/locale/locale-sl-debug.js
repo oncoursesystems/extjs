@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.sl.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Preštej"
+});
 /**
  * Slovenian translation by Matjaž (UTF-8 encoding)
  * 25 April 2007
@@ -146,4 +151,72 @@ Ext.define("Ext.locale.sl.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.sl.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.sl.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Razširi vse",
+    collapseAllText: "Strniti vse",
+    groupsText: "Skupine",
+    groupByText: "Skupina na tem področju",
+    addToGroupingText: "Dodaj v Združenje",
+    removeFromGroupingText: "Odstranite iz združenja",
+    groupSummaryTpl: "Povzetek ({name})",
+    summaryTpl: "Povzetek ({store.data.length})"
+});
+Ext.define("Ext.locale.sl.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Nič",
+    summaryText: "Povzetek"
+});
+Ext.define("Ext.locale.sl.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Je enak",
+        ne: "Ni enak",
+        gt: "Večji kot",
+        ge: "Večja ali enaka",
+        lt: "Manj kot",
+        le: "Manj kot ali enako",
+        like: "Kot.",
+        nlike: "Ne",
+        empty: "Prazno",
+        nempty: "Ne praznega",
+        identical: "Enaka",
+        nidentical: "Ni identičen",
+        regex: "Vsakdanje izražanje",
+        "in": "Je v",
+        notin: "Ni v"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.sl.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Povlecite glavo stolpca tukaj, da skupino po tem stolpcu",
+    showGroupingPanelText: "Pokaži skupino s plošči",
+    hideGroupingPanelText: "Skrij skupino s ploščo",
+    clearGroupText: "Jasna skupina",
+    sortAscText: "Razvrsti naraščajoče",
+    sortDescText: "Razvrsti spust",
+    moveLeftText: "Premakni levo",
+    moveRightText: "Premakni desno",
+    moveBeginText: "Se premaknite na začetek",
+    moveEndText: "Se premaknite na konec",
+    removeText: "Odstrani"
 });

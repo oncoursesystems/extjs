@@ -1194,6 +1194,44 @@ function() {
                 });
             });
 
+            it("should not cause the store to load if plugin gridfilters is there", function() {
+                createGrid({
+                    remoteFilter: true,
+                    autoLoad: false,
+                    data: null,
+                    plugins: [{ ptype: 'gridfilters' }],
+                    proxy: {
+                        type: 'ajax',
+                        url: '/grid/filters/Feature/remoteFiltering'
+                    }
+                }, {
+                    columns: [
+                        { header: 'Name',  dataIndex: 'name', width: 100,
+                            filter: {
+                                type: 'string',
+                                value: 'stevie ray'
+                            }
+                        },
+                        { header: 'Email', dataIndex: 'email', width: 100 },
+                        { header: 'Phone', dataIndex: 'phone', width: 100,
+                            filter: {
+                                type: 'string'
+                            }
+                        }
+                    ]
+                });
+
+                waits(100);
+                runs(function() {
+                    expect(store.isLoaded()).toBe(false);
+
+                    // Store must now have a pending load. It's going
+                    // to load at the next tick. The autoLoad, and the addition
+                    // of the filter both required a load be scheduled.
+                    expect(store.hasPendingLoad()).toBe(true);
+                });
+            });
+
             describe("applying state, normal grid", function() {
                 beforeEach(function() {
                     new Ext.state.Provider();
@@ -1342,6 +1380,45 @@ function() {
                         expect(store.flushCallCount).toBe(1);
                     });
                 });
+            });
+        });
+
+        describe("do not load when autoload is undefined", function() {
+            it("should not load the store", function() {
+                var proto = Ext.data.ProxyStore.prototype;
+
+                spyOn(proto, 'flushLoad').andCallThrough();
+
+                createGrid({
+                    remoteFilter: true,
+                    proxy: {
+                        type: 'ajax',
+                        url: '/grid/filters/Feature/remoteFiltering'
+                    }
+                }, {
+                    columns: [{
+                        header: 'Name', dataIndex: 'name', width: 100,
+                        filter: {
+                            type: 'string',
+                            value: 'stevie ray'
+                        }
+                    },
+                    { header: 'Email', dataIndex: 'email', width: 100 },
+                    {
+                        header: 'Phone', dataIndex: 'phone', width: 100,
+                        filter: {
+                            type: 'string'
+                        }
+                    }]
+                });
+
+                // Store must now have a pending load. It's going
+                // to load at the next tick. The autoLoad, and the addition
+                // of the filter both required a load be scheduled.
+                expect(store.hasPendingLoad()).toBe(true);
+
+                // The createGrid function explicitly flushes an loads.
+                expect(proto.flushLoad.callCount).toBe(1);
             });
         });
     });
@@ -1509,6 +1586,7 @@ function() {
                     createGrid({
                         remoteFilter: true,
                         data: null,
+                        autoLoad: true,
                         proxy: {
                             type: 'ajax',
                             url: '/grid/filters/Feature/addingFilters'
@@ -1709,6 +1787,7 @@ function() {
                     createGrid({
                         remoteFilter: true,
                         data: null,
+                        autoLoad: true,
                         proxy: {
                             type: 'ajax',
                             url: '/grid/filters/Feature/addingFilters'
@@ -1852,6 +1931,7 @@ function() {
             beforeEach(function() {
                 createGrid({
                     remoteFilter: true,
+                    autoLoad: true,
                     data: null,
                     proxy: {
                         type: 'ajax',
@@ -1980,6 +2060,7 @@ function() {
                 beforeEach(function() {
                     createGrid({
                         remoteFilter: true,
+                        autoLoad: true,
                         data: null,
                         proxy: {
                             type: 'ajax',

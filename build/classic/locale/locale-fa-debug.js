@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.fa.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "شمردن"
+});
 /**
  * Farsi (Persian) translation
  * By Mohaqa
@@ -257,4 +262,72 @@ Ext.define("Ext.locale.fa.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.fa.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.fa.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "همه را گسترش دهید",
+    collapseAllText: "فروپاشی همه",
+    groupsText: "گروه ها",
+    groupByText: "گروه این فیلد",
+    addToGroupingText: "اضافه کردن به گروه بندی",
+    removeFromGroupingText: "حذف از گروه بندی",
+    groupSummaryTpl: "خلاصه ({name})",
+    summaryTpl: "خلاصه ({store.data.length})"
+});
+Ext.define("Ext.locale.fa.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "هیچ یک",
+    summaryText: "خلاصه"
+});
+Ext.define("Ext.locale.fa.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "برابر است",
+        ne: "نا برابر",
+        gt: "بزرگتر از",
+        ge: "بزرگتر یا مساوی با",
+        lt: "کمتر از",
+        le: "کمتر یا برابر است",
+        like: "پسندیدن",
+        nlike: "مثل",
+        empty: "خالی",
+        nempty: "خالی نیست",
+        identical: "همسان",
+        nidentical: "نه یکسان",
+        regex: "عبارت منظم",
+        "in": "هست در",
+        notin: "در حال حاضر نیست"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.fa.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "هدر ستون را اینجا بکشید تا آن ستون را به گروه بندی کنید",
+    showGroupingPanelText: "نمایش گروه توسط پانل",
+    hideGroupingPanelText: "مخفی کردن گروه توسط پانل",
+    clearGroupText: "گروه روشن",
+    sortAscText: "مرتب سازی صعودی",
+    sortDescText: "مرتب کردن نزولی",
+    moveLeftText: "حرکت به سمت چپ",
+    moveRightText: "برو راست",
+    moveBeginText: "شروع به حرکت",
+    moveEndText: "حرکت به پایان",
+    removeText: "برداشتن"
 });

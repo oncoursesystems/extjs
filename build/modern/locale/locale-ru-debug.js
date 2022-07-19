@@ -72,6 +72,11 @@ Ext.define('Ext.locale.ru.Panel', {
         closeToolText: 'Закрыть панель'
     }
 });
+Ext.define("Ext.locale.ru.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Считать"
+});
 Ext.define('Ext.locale.ru.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
@@ -345,6 +350,23 @@ Ext.define('Ext.locale.ru.field.Text', {
         validationMessage: 'Недопустимый формат'
     }
 });
+Ext.define("Ext.locale.ru.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "Резюме ({name})",
+        summaryTpl: "Резюме ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.ru.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "Резюме ({name})",
+        summaryTpl: "Резюме ({store.data.length})"
+    },
+    text: "Группы"
+});
 Ext.define("Ext.locale.ru.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
 
@@ -376,6 +398,13 @@ Ext.define("Ext.locale.ru.grid.locked.Grid", {
         }
     }
 });
+Ext.define("Ext.locale.ru.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "Добавить в группировку"
+    }
+});
 Ext.define('Ext.locale.ru.grid.menu.Columns', {
     override: 'Ext.grid.menu.Columns',
 
@@ -388,6 +417,25 @@ Ext.define('Ext.locale.ru.grid.menu.GroupByThis', {
 
     config: {
         text: 'Группировать по этому полю'
+    }
+});
+Ext.define("Ext.locale.ru.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "Группы",
+
+        menu: [{
+            text: "Расширить все"
+        }, {
+            text: "Свернуть все"
+        }]
+    }
+});
+Ext.define("Ext.locale.ru.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "Удалить из группировки"
     }
 });
 Ext.define('Ext.locale.ru.grid.menu.ShowInGroups', {
@@ -414,6 +462,62 @@ Ext.define('Ext.locale.ru.grid.menu.SortDesc', {
 Ext.define("Ext.locale.ru.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} выбранных строк"
+});
+Ext.define("Ext.locale.ru.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Никто",
+    summaryText: "Резюме"
+});
+Ext.define("Ext.locale.ru.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "Равно",
+        ne: "Не равный",
+        gt: "Больше чем",
+        ge: "Больше или равно",
+        lt: "Меньше, чем",
+        le: "Меньше или равно",
+        like: "Нравиться",
+        nlike: "Не как",
+        empty: "Пустой",
+        nempty: "Не пустой",
+        identical: "Идентичный",
+        nidentical: "Не идентично",
+        regex: "Регулярное выражение",
+        in: "В",
+        notin: "Не включен"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.ru.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Перетащите заголовок столбца здесь в группу этим столбцом",
+    showGroupingPanelText: "Показать группу по панели",
+    hideGroupingPanelText: "Скрыть группу по панели",
+    clearGroupText: "Clear Group.",
+    sortAscText: "Сортировать по возрастанию",
+    sortDescText: "Сортировать по убыванию",
+    moveLeftText: "Двигай влево",
+    moveRightText: "Переместить вправо",
+    moveBeginText: "Перейти к началу",
+    moveEndText: "Перейти к концу",
+    removeText: "Удалять"
+
 });
 Ext.define('Ext.locale.ru.panel.Collapser', {
     override: 'Ext.panel.Collapser',

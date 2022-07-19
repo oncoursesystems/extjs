@@ -17,6 +17,15 @@ function() {
         button = null;
     }
 
+    function mouseoverTarget(theTarget) {
+        if (jasmine.supportsTouch && !Ext.os.is.Desktop) {
+            jasmine.fireMouseEvent(theTarget, 'click');
+        }
+        else {
+            jasmine.fireMouseEvent(theTarget, 'mouseover');
+        }
+    }
+
     function makeButton(config) {
         button = new Ext.button.Button(Ext.apply({
             text: 'Button'
@@ -6180,6 +6189,114 @@ function() {
 
             it("should NOT return false to stop Event propagation loop", function() {
                 expect(downSpy.mostRecentCall.result).not.toBeDefined();
+            });
+        });
+    });
+
+    describe("tooltip functionality with disable state", function() {
+        afterEach(function() {
+            button.destroy();
+            button = null;
+        });
+
+        describe("rendering as disabled", function() {
+            it("should set qtip attrbute in tooltip el", function() {
+                makeButton({
+                    tooltip: 'Foo',
+                    disabled: true,
+                    renderTo: Ext.getBody()
+                });
+                expect(button.tooltipEl.getAttribute('data-qtip')).toBe('Foo');
+            });
+
+            it("should not have qtip attribute in button el", function() {
+                makeButton({
+                    tooltip: 'Foo',
+                    tooltipType: 'title',
+                    disabled: true,
+                    renderTo: Ext.getBody()
+                });
+                expect(button.el.getAttribute('data-qtip')).toBeFalsy();
+            });
+
+            it("should set qtip attribute on re-enable", function() {
+                makeButton({
+                    tooltip: 'Foo',
+                    renderTo: Ext.getBody()
+                });
+                button.disable();
+                expect(button.tooltipEl.getAttribute('data-qtip')).toBe('Foo');
+                expect(button.el.getAttribute('data-qtip')).toBeFalsy();
+                button.enable();
+                expect(button.tooltipEl.getAttribute('data-qtip')).toBeFalsy();
+                expect(button.el.getAttribute('data-qtip')).toBe('Foo');
+            });
+        });
+
+        describe("setting tooltip after rendered disabled", function() {
+            it("should set the qtip attribute", function() {
+                makeButton({
+                    disabled: true
+                });
+                button.setTooltip('Foo');
+                button.render(Ext.getBody());
+                expect(button.el.getAttribute('data-qtip')).toBeFalsy();
+                expect(button.tooltipEl.getAttribute('data-qtip')).toBe('Foo');
+                button.enable();
+                expect(button.el.getAttribute('data-qtip')).toBe('Foo');
+                expect(button.tooltipEl.getAttribute('data-qtip')).toBeFalsy();
+            });
+        });
+
+        describe("on successive disable/enable", function() {
+            it("should set the qtip attribute as per the disable state", function() {
+                makeButton({
+                    renderTo: Ext.getBody(),
+                    tooltip: 'Foo',
+                    disabled: false
+                });
+                expect(button.el.getAttribute('data-qtip')).toBe('Foo');
+                expect(button.tooltipEl.getAttribute('data-qtip')).toBeFalsy();
+                button.disable();
+                expect(button.el.getAttribute('data-qtip')).toBeFalsy();
+                expect(button.tooltipEl.getAttribute('data-qtip')).toBe('Foo');
+                button.enable();
+                expect(button.el.getAttribute('data-qtip')).toBe('Foo');
+                expect(button.tooltipEl.getAttribute('data-qtip')).toBeFalsy();
+                button.disable();
+                expect(button.el.getAttribute('data-qtip')).toBeFalsy();
+                expect(button.tooltipEl.getAttribute('data-qtip')).toBe('Foo');
+            });
+        });
+        describe("clearing the tip when disabled", function() {
+            it("should set the qtip attribute", function() {
+                makeButton({
+                    tooltip: 'Foo',
+                    disabled: true,
+                    renderTo: Ext.getBody()
+                });
+                button.setTooltip(null);
+                expect(button.el.getAttribute('data-qtip')).toBeFalsy();
+            });
+        });
+
+        describe("Creating tooltip using tooltip object", function() {
+            var changeSpy = jasmine.createSpy('filter field change');
+
+            it("should set the qtip attribute", function() {
+                makeButton({
+                    tooltip: {
+                        text: 'test1 body'
+                    },
+                    renderTo: Ext.getBody()
+                });
+
+                Ext.first('tip').on('show', changeSpy);
+                mouseoverTarget(button.el);
+                waitForSpy(changeSpy);
+                runs(function() {
+                    expect(Ext.first('tip').el.dom.innerText.trim()).toBe('test1 body');
+                });
             });
         });
     });

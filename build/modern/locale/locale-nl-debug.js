@@ -72,6 +72,11 @@ Ext.define('Ext.locale.nl.Panel', {
         closeToolText: 'Sluiten Panel'
     }
 });
+Ext.define("Ext.locale.nl.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Graaf"
+});
 Ext.define('Ext.locale.nl.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
@@ -344,6 +349,23 @@ Ext.define('Ext.locale.nl.field.Text', {
         validationMessage: 'heeft de verkeerde indeling'
     }
 });
+Ext.define("Ext.locale.nl.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "Samenvatting ({name})",
+        summaryTpl: "Samenvatting ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.nl.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "Samenvatting ({name})",
+        summaryTpl: "Samenvatting ({store.data.length})"
+    },
+    text: "Groepen"
+});
 Ext.define("Ext.locale.nl.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
 
@@ -375,6 +397,13 @@ Ext.define('Ext.locale.nl.grid.locked.Grid', {
         }
     }
 });
+Ext.define("Ext.locale.nl.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "Toevoegen aan groepering"
+    }
+});
 Ext.define("Ext.locale.nl.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
@@ -387,6 +416,25 @@ Ext.define("Ext.locale.nl.grid.menu.GroupByThis", {
 
     config: {
         text: "Groepeer op deze manier"
+    }
+});
+Ext.define("Ext.locale.nl.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "Groepen",
+
+        menu: [{
+            text: "Expand alles"
+        }, {
+            text: "Alles inklappen"
+        }]
+    }
+});
+Ext.define("Ext.locale.nl.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "Verwijderen van groepering"
     }
 });
 Ext.define("Ext.locale.nl.grid.menu.ShowInGroups", {
@@ -413,6 +461,62 @@ Ext.define("Ext.locale.nl.grid.menu.SortDesc", {
 Ext.define("Ext.locale.nl.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: '{0} geselecteerde rij(en)'
+});
+Ext.define("Ext.locale.nl.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Geen",
+    summaryText: "Samenvatting"
+});
+Ext.define("Ext.locale.nl.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "Is gelijk",
+        ne: "Niet gelijk",
+        gt: "Groter dan",
+        ge: "Groter dan of gelijk aan",
+        lt: "Minder dan",
+        le: "Minder dan of gelijk aan",
+        like: "Leuk vinden",
+        nlike: "Niet zoals",
+        empty: "Leeg",
+        nempty: "Niet leeg",
+        identical: "Identiek",
+        nidentical: "Niet hetzelfde",
+        regex: "Reguliere expressie",
+        in: "Is in",
+        notin: "Is niet in"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.nl.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Sleep hier een kolomkop om door die kolom te groeperen",
+    showGroupingPanelText: "Toon groep per paneel",
+    hideGroupingPanelText: "Groep verbergen op paneel",
+    clearGroupText: "Heldere groep",
+    sortAscText: "Sorteren oplopend",
+    sortDescText: "Sorteer aflopend",
+    moveLeftText: "Ga naar links",
+    moveRightText: "Ga naar rechts",
+    moveBeginText: "Ga naar het begin",
+    moveEndText: "Ga naar het einde",
+    removeText: "Verwijderen"
+
 });
 Ext.define('Ext.locale.nl.panel.Collapser', {
     override: 'Ext.panel.Collapser',

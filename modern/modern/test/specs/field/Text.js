@@ -1,4 +1,3 @@
-/* global expect, Ext, describe */
 
 topSuite("Ext.field.Text", [
     'Ext.Container',
@@ -1147,9 +1146,9 @@ function() {
             // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autocapitalize
             // both on and sentences is a valid as well as off and none
             // Firefox uses sentences and none, other browsers seem to just use on and off
-            var onRegExp = /^(on|sentences)$/i
-            var offRegExp = /^(off|none)$/i
-            
+            var onRegExp = /^(on|sentences)$/i,
+                offRegExp = /^(off|none)$/i;
+
             describe("using value 'on'", function() {
                 var defaultConfig = {
                     autoCapitalize: 'on'
@@ -2074,6 +2073,26 @@ function() {
             triggers.foo.setIconCls('fooIcon');
 
             expect(triggers.foo.iconElement).toHaveCls('fooIcon');
+        });
+
+        it("should disable file triggers on field disable", function() {
+            makeField({
+                width: 200,
+                disabled: true,
+                triggers: {
+                    file: {
+                        type: 'file'
+                    }
+                }
+            });
+
+            var trigger = field.getTriggers().file;
+
+            expect(trigger.isDisabled()).toBe(true);
+            field.setDisabled(false);
+            expect(trigger.isDisabled()).toBeFalsy();
+            field.setDisabled(true);
+            expect(trigger.isDisabled()).toBeTruthy();
         });
 
         describe("weight", function() {

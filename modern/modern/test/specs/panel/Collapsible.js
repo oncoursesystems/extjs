@@ -76,7 +76,7 @@ topSuite("Ext.panel.Collapsible", [
             expect(panel.element.getHeight()).toBeLessThan(400);
         });
     });
-  
+
     describe('events', function() {
         function expandCollapse(collapse) {
             var action = collapse ? 'collapse' : 'expand',
@@ -230,7 +230,7 @@ topSuite("Ext.panel.Collapsible", [
 
                 expect(spy.callCount).toBe(1);
                 Ext.un('collapse', spy);
-            })
+            });
         });
     });
 
@@ -240,11 +240,11 @@ topSuite("Ext.panel.Collapsible", [
                 titleCollapse: true,
                 collapsible: true,
                 collapsed: false,
-                items:[{
+                items: [{
                     html: 'testing'
                 }]
             });
-            
+
             expect(panel.getCollapsed()).toBe(false);
 
             jasmine.fireMouseEvent(panel.header.el.dom, 'mousedown');
@@ -263,14 +263,14 @@ topSuite("Ext.panel.Collapsible", [
             makePanel({
                 collapsible: true,
                 collapsed: false,
-                items:[{
+                items: [{
                     html: 'testing'
                 }]
             });
-            
+
             panel.setTitleCollapse(true);
             expect(panel.getCollapsed()).toBe(false);
-            
+
             jasmine.fireMouseEvent(panel.header.el.dom, 'mousedown');
             jasmine.fireMouseEvent(panel.header.el.dom, 'mouseup');
             jasmine.fireMouseEvent(panel.header.el.dom, 'click');

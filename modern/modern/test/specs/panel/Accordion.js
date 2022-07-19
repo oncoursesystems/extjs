@@ -2,7 +2,7 @@ topSuite('Ext.panel.Accordion', [
     'Ext.layout.Fit',
     'Ext.panel.Collapser'
 ], function() {
-    var backgrounds = ['red','green','blue','orange','pink'],
+    var backgrounds = ['red', 'green', 'blue', 'orange', 'pink'],
         states = {
             collapsed: '.',
             collapsing: 'v',

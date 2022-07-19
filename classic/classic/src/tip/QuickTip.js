@@ -196,10 +196,12 @@ Ext.define('Ext.tip.QuickTip', {
         var me = this,
             cfg = me.tagConfig,
             attr = cfg.attr || (cfg.attr = cfg.namespace + cfg.attribute),
+            registeredTarget = me.targets[target.id],
             text;
 
         // We can now only activate on elements which have the required attributes
-        text = target.getAttribute(attr) || (me.interceptTitles && target.title);
+        text = target.getAttribute(attr) || (me.interceptTitles && target.title) ||
+                (registeredTarget && registeredTarget.text);
 
         return !!text;
     },

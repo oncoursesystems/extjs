@@ -72,6 +72,11 @@ Ext.define('Ext.locale.da.Panel', {
         closeToolText: 'Luk Panel'
     }
 });
+Ext.define("Ext.locale.da.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Tælle"
+});
 Ext.define('Ext.locale.da.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
@@ -332,6 +337,23 @@ Ext.define('Ext.locale.da.field.Text', {
         validationMessage: 'er i forkert format'
     }
 });
+Ext.define("Ext.locale.da.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "Resumé ({name})",
+        summaryTpl: "Resumé ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.da.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "Resumé ({name})",
+        summaryTpl: "Resumé ({store.data.length})"
+    },
+    text: "Grupper."
+});
 Ext.define("Ext.locale.da.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
 
@@ -363,6 +385,13 @@ Ext.define("Ext.locale.da.grid.locked.Grid", {
         }
     }
 });
+Ext.define("Ext.locale.da.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "Tilføj til gruppering"
+    }
+});
 Ext.define("Ext.locale.da.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
@@ -375,6 +404,25 @@ Ext.define("Ext.locale.da.grid.menu.GroupByThis", {
 
     config: {
         text: "Gruppér ved dette"
+    }
+});
+Ext.define("Ext.locale.da.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "Grupper.",
+
+        menu: [{
+            text: "Udvid alle"
+        }, {
+            text: "Skjul alle"
+        }]
+    }
+});
+Ext.define("Ext.locale.da.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "Fjern fra gruppering."
     }
 });
 Ext.define("Ext.locale.da.grid.menu.ShowInGroups", {
@@ -401,6 +449,62 @@ Ext.define("Ext.locale.da.grid.menu.SortDesc", {
 Ext.define("Ext.locale.da.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} markerede rækker"
+});
+Ext.define("Ext.locale.da.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Ingen",
+    summaryText: "Resumé"
+});
+Ext.define("Ext.locale.da.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "Er ligning",
+        ne: "Ikke lige",
+        gt: "Bedre end",
+        ge: "Større end eller lig med",
+        lt: "Mindre end",
+        le: "Mindre end eller lig med",
+        like: "Synes godt om",
+        nlike: "Ikke som",
+        empty: "Tom",
+        nempty: "Ikke tomt",
+        identical: "Identisk",
+        nidentical: "Ikke identisk.",
+        regex: "Almindelig udtryk",
+        in: "Er i",
+        notin: "Er ikke IN."
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.da.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Træk en kolonneoverskrift her til gruppen ved den pågældende kolonne",
+    showGroupingPanelText: "Vis gruppe af panel",
+    hideGroupingPanelText: "Skjul gruppe efter panel",
+    clearGroupText: "CLEAR GROUP.",
+    sortAscText: "Sorter stigende",
+    sortDescText: "Sorter nedadgående",
+    moveLeftText: "Bevæg dig til venstre",
+    moveRightText: "Flyt til højre",
+    moveBeginText: "Flyt til BEGINNING",
+    moveEndText: "Flyt til slutningen",
+    removeText: "Fjerne"
+
 });
 Ext.define('Ext.locale.da.panel.Collapser', {
     override: 'Ext.panel.Collapser',

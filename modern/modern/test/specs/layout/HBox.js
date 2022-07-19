@@ -1070,8 +1070,7 @@ c3 = new Ext.Component({
                 style: 'font: 50px monospace',
                 floated: true,
                 hidden: false,
-                html: testHtml,
-                hidden: false
+                html: testHtml
             });
 
             measure = c.el.getWidth();

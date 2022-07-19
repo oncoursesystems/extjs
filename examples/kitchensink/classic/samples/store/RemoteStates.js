@@ -6,7 +6,6 @@ Ext.define('KitchenSink.store.RemoteStates', {
     model: 'KitchenSink.model.State',
 
     storeId: 'remote-states',
-
     proxy: {
         type: 'ajax',
         url: 'data/form/states_remote.php',

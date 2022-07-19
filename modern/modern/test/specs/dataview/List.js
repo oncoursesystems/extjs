@@ -1,5 +1,5 @@
 topSuite("Ext.dataview.List", [
-    'Ext.dataview.ListItem'
+    'Ext.dataview.ListItem', 'Ext.dataview.plugin.ListPaging'
 ], function() {
     var defaultSize = 400,
         list, store, selModel;
@@ -263,6 +263,22 @@ topSuite("Ext.dataview.List", [
             waitsFor(function() {
                 // scrolling down 20 rows should trigger a 10 row shift
                 return list.getTopRenderedIndex() >= 10;
+            });
+        });
+
+        it('should keep outerCt scroll position at 0', function() {
+            makeSuiteList();
+
+            // setting scrollTop on the outerCt simulates what happens during an orientation change
+            // which causes the outerCt element to scroll, but should get reset back to 0
+            list.outerCt.el.dom.scrollTop = 40;
+
+            waitsFor(function() {
+                var scroller = list.getScrollable();
+
+                // Ext.scroll.VirtualScroller#onNativeScroll should reset scrollTop to 0 and then
+                // cause the VirtualScroller to scroll by the previous scrollTop value
+                return list.outerCt.el.dom.scrollTop === 0 && scroller.getPosition().y === 40;
             });
         });
 
@@ -931,7 +947,7 @@ topSuite("Ext.dataview.List", [
 
                 makeList({
                     listeners: {
-                        selectionchange: function (view, records, selected, selection) {
+                        selectionchange: function(view, records, selected, selection) {
                                changedRecords = records;
                         }
                     }
@@ -949,7 +965,7 @@ topSuite("Ext.dataview.List", [
 
                 makeList({
                     listeners: {
-                        selectionchange: function (view, records, selected, selection) {
+                        selectionchange: function(view, records, selected, selection) {
                            changecounter++;
                         }
                     }
@@ -1156,13 +1172,145 @@ topSuite("Ext.dataview.List", [
 
             it('should trigger event for Previous Page', function() {
                 var nextPageSpy = jasmine.createSpy(),
-                    loadPageSpy = jasmine.createSpy()
+                    loadPageSpy = jasmine.createSpy();
 
-                store.on('load', loadPageSpy);    
+                store.on('load', loadPageSpy);
                 store.on('nextPage', nextPageSpy);
                 store.previousPage();
                 expect(loadPageSpy).toHaveBeenCalled();
             });
         });
     });
+
+    describe('remote sort store', function() {
+        var captured = null;
+
+        function getData(start, limit) {
+            var end = start + limit,
+                recs = [],
+                i;
+
+            for (i = start + 1; i <= end; ++i) {
+                recs.push({
+                    post_id: i + 1,
+                    groupName: 'Group ' + (i % 5),
+                    title: 'Data ' + i + ' of Group ' + (i % 5)
+                });
+            }
+
+            return recs;
+        }
+
+        function createStore() {
+            return new Ext.data.Store({
+                fields: ['post_id', 'title', 'groupName'],
+                pageSize: 5,
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl',
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'data'
+                    }
+                },
+                autoLoad: true,
+                remoteSort: true,
+                grouper: {
+                    property: 'groupName'
+                }
+            });
+        }
+
+        function satisfyRequests(total) {
+            var requests = Ext.Ajax.mockGetAllRequests(),
+                empty = total === 0,
+                request, params, data;
+
+            while (requests.length) {
+                request = requests[0];
+
+                captured.push(request.options.params);
+
+                params = request.options.params;
+                data = getData(empty ? 0 : params.start, empty ? 0 : params.limit);
+
+                Ext.Ajax.mockComplete({
+                    status: 200,
+                    responseText: Ext.encode({
+                        total: (total || empty) ? total : 5000,
+                        data: data
+                    })
+                });
+
+                requests = Ext.Ajax.mockGetAllRequests();
+            }
+        }
+
+        function createList() {
+
+            list = new Ext.dataview.List({
+                renderTo: Ext.getBody(),
+                height: 400,
+                infinite: true,
+                store: createStore(),
+                collapsible: true,
+                itemTpl: '<strong>{title}</strong>',
+                plugins: {
+                    listpaging: {
+                        autoPaging: true
+                    }
+                }
+            });
+
+            store = list.getStore();
+            selModel = list.getSelectable();
+            waits(100);
+
+            runs(function() {
+                satisfyRequests();
+            });
+        }
+
+        beforeEach(function() {
+            MockAjaxManager.addMethods();
+            captured = [];
+
+            createList();
+        });
+
+        afterEach(function() {
+            satisfyRequests();
+            MockAjaxManager.removeMethods();
+
+            Ext.destroy(list);
+            captured = list = null;
+        });
+
+        it('should show all loaded rows', function() {
+
+            // Wait to load more than one page.
+            waitsFor(function() {
+                satisfyRequests();
+
+                return list.dataItems.length > 10;
+            });
+
+            // Check if all store records are showed in the list.
+            runs(function() {
+                var count = store.getCount(),
+                    i, item, rec;
+
+                for (i = 0; i < count; ++i) {
+                    rec = store.getAt(i);
+                    item = list.mapToItem(rec);
+
+                    // console.log(rec.get('title'));
+                    expect(item.element.down('.x-innerhtml')).hasHTML('<strong>' + rec.get('title') + '</strong>');
+                }
+            });
+
+        });
+
+    });
+
 });

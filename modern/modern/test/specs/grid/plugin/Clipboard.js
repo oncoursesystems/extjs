@@ -1,4 +1,3 @@
-/* global Ext, MockAjaxManager, expect, jasmine, spyOn, xit */
 
 topSuite("Ext.grid.plugin.Clipboard",
     ['Ext.grid.Grid', 'Ext.grid.selection.*', 'Ext.grid.plugin.Clipboard'],

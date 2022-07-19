@@ -169,10 +169,12 @@ topSuite("Ext.layout.Center", function() {
                         x: 0,
                         // Conditional expectation for IE due to the following bug:
                         // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/10547765/
-                        y: (Ext.isIE) ? 50 : [
-                            Math.floor((100 - scrollbarSize.height) / 2),
-                            Math.ceil((100 - scrollbarSize.height) / 2)
-                        ],
+                        y: (Ext.isIE)
+                            ? 50
+                            : [
+                                Math.floor((100 - scrollbarSize.height) / 2),
+                                Math.ceil((100 - scrollbarSize.height) / 2)
+                            ],
                         w: 300,
                         h: 100
                     }

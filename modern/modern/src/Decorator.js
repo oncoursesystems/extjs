@@ -78,14 +78,12 @@ Ext.define('Ext.Decorator', {
     },
 
     onClassExtended: function(Class, members) {
-        // eslint-disable-next-line no-unused-vars
-        var ExtClass, proxyConfig, config, name, nameMap, setName, getName;
+        var proxyConfig, config, name, nameMap, setName, getName;
 
         if (!members.hasOwnProperty('proxyConfig')) {
             return;
         }
 
-        ExtClass = Ext.Class;
         proxyConfig = members.proxyConfig;
         config = members.config;
 

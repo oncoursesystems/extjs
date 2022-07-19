@@ -645,6 +645,7 @@ topSuite("Ext.grid.rowedit.Plugin", [
 
         it('should start the edit when ENTER is pressed', function() {
             var cell = grid.down('gridrow').cells[1].el;
+
             // First complete the edit (we start an edit in the top-level beforeEach).
             plugin.completeEdit();
             // Let's just do a sanity to make sure we're really not currently editing.
@@ -1753,7 +1754,7 @@ topSuite("Ext.grid.rowedit.Plugin", [
             });
         });
     });
-    describe('row editor height', function () {
+    describe('row editor height', function() {
         var storeCfg = {
             fields: ['name', 'email', 'phone', 'bio'],
             data: [{
@@ -1797,9 +1798,10 @@ topSuite("Ext.grid.rowedit.Plugin", [
             }]
         };
 
-        it('should have the editor height based on row height', function () {
+        it('should have the editor height based on row height', function() {
             makeGrid(null, gridCfg, storeCfg);
             var node = grid.dataItems[0];
+
             jasmine.fireMouseEvent(node.el.dom, 'dblclick');
             expect(plugin.editor.getHeight()).toEqual(node.el.getHeight());
 

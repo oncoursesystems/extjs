@@ -1,4 +1,3 @@
-/* global expect, jasmine, Ext */
 
 topSuite("Ext.grid.column.Check", ['Ext.grid.Grid', 'Ext.data.ArrayStore', 'Ext.layout.Fit'], function() {
     var grid, store, col;

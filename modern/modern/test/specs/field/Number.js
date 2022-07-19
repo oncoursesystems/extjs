@@ -446,7 +446,7 @@ topSuite("Ext.field.Number", function() {
 
         // For some reason this test is failing when we run through teamcity whereas
         // it does pass when run on local machine or saucelab directly
-        //https://github.com/extjs/SDK/pull/22900#issuecomment-495638499
+        // https://github.com/extjs/SDK/pull/22900#issuecomment-495638499
         xit("should not allow to type decimals if decimals is 0", function() {
             var keyboardEvent = new KeyboardEvent('keydown', { key: '.', keyCode: 190 }),
                 event = new Ext.event.Event(keyboardEvent, {
@@ -461,16 +461,16 @@ topSuite("Ext.field.Number", function() {
 
             field.inputElement.fireEvent('keydown', event);
 
-            waits(100); 
+            waits(100);
 
-            runs(function(){
+            runs(function() {
                 expect(event.defaultPrevented).toBe(true);
             });
         });
-        
+
         // For some reason this test is failing when we run through teamcity whereas
         // it does pass when run on local machine or saucelab directly
-        //https://github.com/extjs/SDK/pull/22900#issuecomment-495638499
+        // https://github.com/extjs/SDK/pull/22900#issuecomment-495638499
         xit("should allow to type decimals if decimals is not 0", function() {
             var keyboardEvent = new KeyboardEvent('keydown', { key: '.', keyCode: 190 }),
                 event = new Ext.event.Event(keyboardEvent, {
@@ -484,9 +484,9 @@ topSuite("Ext.field.Number", function() {
 
             field.inputElement.fireEvent('keydown', event);
 
-            waits(100); 
+            waits(100);
 
-            runs(function(){
+            runs(function() {
                 expect(event.defaultPrevented).toBe(false);
             });
         });

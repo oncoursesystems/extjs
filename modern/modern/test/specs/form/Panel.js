@@ -1,3 +1,5 @@
+/* global jazzman */
+
 topSuite("Ext.form.Panel",
     ['Ext.field.*', 'Ext.layout.VBox', 'Ext.direct.RemotingProvider', 'Ext.data.validator.*'],
 function() {
@@ -936,6 +938,88 @@ function() {
                 expect(typeof args[3]).toBe('function');
             });
         });
+
+        describe("load using ajax", function() {
+            var callback, response;
+
+            beforeEach(function() {
+                spyOn(Ext.Ajax, 'request').andCallFake(function(cb, scope) {
+                    cb.callback(cb, response.success, { responseText: JSON.stringify(response.data) });
+                });
+
+                create({
+                    renderTo: Ext.getBody(),
+                    url: '/fake',
+                    width: 300,
+                    height: 300,
+                    defaults: {
+                        xtype: 'textfield'
+                    },
+                    items: [{ name: 'name', label: 'name' }]
+                });
+            });
+
+            it("should load values in the form using ajax call", function() {
+                callback = jasmine.createSpy('load fn');
+
+                response = {
+                    success: true,
+                    data: {
+                        success: true,
+                        data: { name: 'Bar' }
+                    }
+                };
+
+                panel.load({
+                    method: 'GET',
+                    success: callback,
+                    failure: callback
+                });
+
+                expect(callback).toHaveBeenCalled();
+                expect(panel.getValues()).toEqual({ name: 'Bar' });
+            });
+
+            it("should call failure method on unsuccessful request", function() {
+                callback = jasmine.createSpy('failure callback');
+
+                response = {
+                    success: false,
+                    data: {
+                        success: false,
+                        "message": "Request failed"
+                    }
+                };
+
+                panel.load({
+                    method: 'GET',
+                    failure: callback
+                });
+
+                expect(callback).toHaveBeenCalled();
+
+            });
+
+            it("should call success method when success is true and no response data", function() {
+                callback = jasmine.createSpy('success fn');
+
+                response = {
+                    success: true,
+                    data: {
+                        success: true
+                    }
+                };
+
+                panel.load({
+                    method: 'GET',
+                    success: callback
+                });
+
+                expect(callback).toHaveBeenCalled();
+                expect(panel.getValues()).toEqual({ name: null });
+
+            });
+        });
     });
 
     describe("submit", function() {
@@ -1224,7 +1308,7 @@ function() {
             });
         });
     });
-  
+
    describe("fieldDefaults", function() {
         it("should copy properties to a sub-field if those properties are not already configured on the field", function() {
             create({
@@ -1278,8 +1362,8 @@ function() {
         });
     });
 
-    describe('keyboard/focus management', function () {
-        it("Should allow TAB from keyboard when panel is not masked", function () {
+    describe('keyboard/focus management', function() {
+        it("Should allow TAB from keyboard when panel is not masked", function() {
                 create({
                 renderTo: document.body,
                 defaults: {
@@ -1305,8 +1389,8 @@ function() {
 
             expect(field1.isFocusing()).toBe(false);
 
-            runs(function () {
-                
+            runs(function() {
+
                 fieldInput = jazzman.simulateTabKey(field1.inputElement, true);
                 expect(field1.name).toBe(fieldInput.name);
 
@@ -1314,12 +1398,12 @@ function() {
                 expect(field2.name).toBe(fieldInput.name);
 
                 // should shift back to the upper input field
-                fieldInput = jazzman.simulateTabKey(field2.inputElement,false);
+                fieldInput = jazzman.simulateTabKey(field2.inputElement, false);
                 expect(field1.name).toBe(fieldInput.name);
             });
         });
-            
-        it("Should not allow TAB from keyboard when panel has config masked:true", function () {
+
+        it("Should not allow TAB from keyboard when panel has config masked:true", function() {
             var fieldInput;
 
             create({
@@ -1340,10 +1424,10 @@ function() {
                     name: 'fullname'
                 }]
             });
-           
+
             panel.setMasked(true);
 
-            runs(function () {
+            runs(function() {
                 // should shift to the next input field
                 fieldInput = jazzman.simulateTabKey(null, true);
 

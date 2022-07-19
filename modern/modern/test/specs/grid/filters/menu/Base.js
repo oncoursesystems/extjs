@@ -1,4 +1,3 @@
-/* global Ext, MockAjaxManager, expect, jasmine, spyOn, xit */
 
 topSuite('Ext.grid.filters.menu.Base', [
     'Ext.data.ArrayStore', 'Ext.layout.Fit', 'Ext.grid.Grid', 'Ext.data.ArrayStore', 'Ext.layout.Fit', 'Ext.app.ViewModel', 'Ext.grid.filters.*', 'Ext.grid.filters.menu.Base'],
@@ -138,6 +137,7 @@ topSuite('Ext.grid.filters.menu.Base', [
         // Force any flex sizes to be published internally
         function refreshColSizes() {
             var cols = grid.query('column');
+
             Ext.event.publisher.ElementSize.instance.syncRefresh(cols);
         }
 

@@ -379,14 +379,15 @@ topSuite("Ext.field.Time", [
     }
 
     describe('Validate full date for all formats', function() {
-        var i,
-formats = ['g:i A', 'g:i:s A', 'h:i A', 'h:i:s A', 'H', 'H:i', 'H:i:s A'];
+        var formats = ['g:i A', 'g:i:s A', 'h:i A', 'h:i:s A', 'H', 'H:i', 'H:i:s A'],
+            len = formats.length,
+            i;
 
-        for (var i = 0; i < formats.size; i++) {
+        for (i = 0; i < len; i++) {
             testFullDate(formats[i]);
         }
 
-        function testFullDate(input, output) {
+        function testFullDate(format) {
             it("should set full date as value for format " + format, function() {
                 var date = new Date();
 
@@ -395,7 +396,6 @@ formats = ['g:i A', 'g:i:s A', 'h:i A', 'h:i:s A', 'H', 'H:i', 'H:i:s A'];
                 });
                 field.setValue(date);
                 expect(field.inputElement.dom.value).toBe(Ext.Date.format(date, format));
-                expect(field.getValue().toString()).toBe(date.toString());
             });
         }
     });

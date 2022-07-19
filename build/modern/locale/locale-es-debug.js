@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.es.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Contar"
+});
 /**
  * Spanish/Latin American Translation
  */
@@ -516,4 +521,103 @@ Ext.define("Ext.locale.es.grid.locked.Grid", {
 Ext.define("Ext.locale.es.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} fila(s) seleccionada(s)"
+});
+Ext.define("Ext.locale.es.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "Resumen ({name})",
+        summaryTpl: "Resumen ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.es.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "Resumen ({name})",
+        summaryTpl: "Resumen ({store.data.length})"
+    },
+    text: "Grupos"
+});
+Ext.define("Ext.locale.es.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "Añadir a la agrupación"
+    }
+});
+Ext.define("Ext.locale.es.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "Grupos",
+
+        menu: [{
+            text: "Expandir todo"
+        }, {
+            text: "Desplegar todo"
+        }]
+    }
+});
+Ext.define("Ext.locale.es.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "Eliminar de la agrupación"
+    }
+});
+Ext.define("Ext.locale.es.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Ninguno",
+    summaryText: "Resumen"
+});
+Ext.define("Ext.locale.es.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "Es igual",
+        ne: "No es igual",
+        gt: "Mas grande que",
+        ge: "Mayor qué o igual a",
+        lt: "Menos que",
+        le: "Menos que o igual a",
+        like: "Igual que",
+        nlike: "Diferente a",
+        empty: "Vacío",
+        nempty: "No vacío",
+        identical: "Idéntico",
+        nidentical: "No es identico",
+        regex: "Expresión regular",
+        in: "Es en",
+        notin: "No está dentro"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.es.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Arrastre un encabezado de columna aquí para agrupar esa columna",
+    showGroupingPanelText: "Mostrar grupo por panel",
+    hideGroupingPanelText: "Ocultar grupo por panel",
+    clearGroupText: "Grupo claro",
+    sortAscText: "Orden ascendente",
+    sortDescText: "Orden descendiente",
+    moveLeftText: "Mover hacia la izquierda",
+    moveRightText: "Mover a la derecha",
+    moveBeginText: "Pasar al principio",
+    moveEndText: "Mover al final",
+    removeText: "Eliminar"
+
 });

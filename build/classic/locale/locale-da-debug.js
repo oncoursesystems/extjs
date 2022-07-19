@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.da.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Tælle"
+});
 /**
  * Danish translation
  * By JohnF
@@ -274,4 +279,72 @@ Ext.define("Ext.locale.da.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.da.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.da.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Udvid alle",
+    collapseAllText: "Skjul alle",
+    groupsText: "Grupper.",
+    groupByText: "Gruppe af dette felt",
+    addToGroupingText: "Tilføj til gruppering",
+    removeFromGroupingText: "Fjern fra gruppering.",
+    groupSummaryTpl: "Resumé ({name})",
+    summaryTpl: "Resumé ({store.data.length})"
+});
+Ext.define("Ext.locale.da.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Ingen",
+    summaryText: "Resumé"
+});
+Ext.define("Ext.locale.da.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Er ligning",
+        ne: "Ikke lige",
+        gt: "Bedre end",
+        ge: "Større end eller lig med",
+        lt: "Mindre end",
+        le: "Mindre end eller lig med",
+        like: "Synes godt om",
+        nlike: "Ikke som",
+        empty: "Tom",
+        nempty: "Ikke tomt",
+        identical: "Identisk",
+        nidentical: "Ikke identisk.",
+        regex: "Almindelig udtryk",
+        "in": "Er i",
+        notin: "Er ikke IN."
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.da.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Træk en kolonneoverskrift her til gruppen ved den pågældende kolonne",
+    showGroupingPanelText: "Vis gruppe af panel",
+    hideGroupingPanelText: "Skjul gruppe efter panel",
+    clearGroupText: "Ryd gruppe",
+    sortAscText: "Sortér stigende",
+    sortDescText: "Sortér faldende",
+    moveLeftText: "Bevæg dig til venstre",
+    moveRightText: "Flyt til højre",
+    moveBeginText: "Flyt til BEGINNING",
+    moveEndText: "Flyt til slutningen",
+    removeText: "Fjerne"
 });

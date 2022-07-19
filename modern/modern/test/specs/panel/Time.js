@@ -157,16 +157,19 @@ topSuite("Ext.panel.Time", function() {
             });
         });
 
-        //EXTJS-27468
+        // EXTJS-27468
         describe("hourformat", function() {
-            function meridemCheck(hourNodes, format){
+            function meridemCheck(hourNodes, format) {
                 var hourDisplay;
-                for(var i = 0; i<hourNodes.length; i++){
-                    if(format==='H'){
-                        hourDisplay = i < 9 ? '0'+ (i+1) : i == 23 ? '00': (i+1).toString();
-                    }else{
-                        hourDisplay = i == 23 ? '00' : (i+1).toString();
-                    }   
+
+                for (var i = 0; i < hourNodes.length; i++) {
+                    if (format === 'H') {
+                        hourDisplay = i < 9 ? '0' + (i + 1) : i === 23 ? '00' : (i + 1).toString();
+                    }
+                    else {
+                        hourDisplay = i === 23 ? '00' : (i + 1).toString();
+                    }
+
                     expect(hourNodes[i].innerText).toBe(hourDisplay);
                 }
             }
@@ -179,14 +182,14 @@ topSuite("Ext.panel.Time", function() {
 
             it("should set AM and PM dom style display set none", function() {
                 panel.setMeridiem(false);
-                
+
                 expect(view.el.down('.analog-picker-24hr-format')).toBeDefined();
             });
 
             it("should set 13-00 hours of analog clock inside circle of 1-12", function() {
                 panel.setMeridiem(false);
                 panel.setAlignPMInside(true);
-                
+
                 expect(faceEl.dom.childNodes[0].style.transform.split(' ')[1]).not.toBe(faceEl.dom.childNodes[13].style.transform.split(' ')[1]);
             });
 

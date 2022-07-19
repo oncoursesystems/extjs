@@ -419,7 +419,7 @@ Ext.define('Ext.data.proxy.Server', {
      * @return {Object} The encoded value
      */
     applyEncoding: function(value) {
-        return Ext.encode(value);
+        return (this.getParamsAsJson && this.getParamsAsJson()) ? value : Ext.encode(value);
     },
 
     /**

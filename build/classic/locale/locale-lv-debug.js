@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.lv.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Skaitīt"
+});
 /**
  * List compiled by mystix on the extjs.com forums.
  * Thank you Mystix!
@@ -306,4 +311,72 @@ Ext.define("Ext.locale.lv.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.lv.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.lv.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Paplašināt visu",
+    collapseAllText: "Sabrukt",
+    groupsText: "Grupas",
+    groupByText: "Group ar šo lauku",
+    addToGroupingText: "Pievienot grupai",
+    removeFromGroupingText: "Noņemt no grupēšanas",
+    groupSummaryTpl: "Kopsavilkums ({name})",
+    summaryTpl: "Kopsavilkums ({store.data.length})"
+});
+Ext.define("Ext.locale.lv.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Neviens",
+    summaryText: "Kopsavilkums"
+});
+Ext.define("Ext.locale.lv.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Ir vienāds",
+        ne: "Nav vienāds",
+        gt: "Lielāks nekā",
+        ge: "Lielāks vai vienāds ar",
+        lt: "Mazāk nekā",
+        le: "Mazāk vai vienāds ar",
+        like: "Kā",
+        nlike: "Nepatīk",
+        empty: "Tukšs",
+        nempty: "Nav tukšs",
+        identical: "Identisks",
+        nidentical: "Nav identisks",
+        regex: "Regulāra izteiksme",
+        "in": "Ir iekšā",
+        notin: "Nav"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.lv.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Velciet kolonnas galveni šeit uz grupu ar šo kolonnu",
+    showGroupingPanelText: "Rādīt grupu pēc paneļa",
+    hideGroupingPanelText: "Slēpt grupu pēc paneļa",
+    clearGroupText: "Skaidra grupa",
+    sortAscText: "Kārtot augošu",
+    sortDescText: "Kārtot dilstošā secībā",
+    moveLeftText: "Pārvietoties pa kreisi",
+    moveRightText: "Kusties pa labi",
+    moveBeginText: "Pāriet uz sākumu",
+    moveEndText: "Pāriet uz beigām",
+    removeText: "Noņemt"
 });

@@ -684,6 +684,10 @@ Ext.define('Ext.picker.Picker', {
             slot = slots[i];
             location = slot.getNavigationModel().location;
 
+            // inserting/appending the picker to global float wrap disrupts the scroll position.
+            // refresh the scroller to reset it
+            slot.getScrollable().refresh();
+
             // MultiSelection means that you cannot scroll to a selection.
             // Scroll to the last navigation position
             slot.navigateToItem(location ? location.item : slot.itemFromRecord(0));

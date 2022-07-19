@@ -24,6 +24,15 @@ Ext.define('Ext.layout.container.boxOverflow.Menu', {
 
     menuCls: Ext.baseCSSPrefix + 'box-menu',
 
+    /**
+     * The CSS class that gets added to toolbar items that have been
+     * overflowed to the overflow menu.
+     * 
+     * @private
+     * @since 7.5.0
+     */
+    menuItemOverflowedCls: Ext.baseCSSPrefix + 'menu-item-overflowed',
+
     constructor: function(config) {
         var me = this;
 
@@ -181,7 +190,7 @@ Ext.define('Ext.layout.container.boxOverflow.Menu', {
             // What we are doing here is preventing the layout bubble from invalidating our
             // owner component. We need just the button to be added to the layout run.
             item.suspendLayouts();
-            item.show();
+            item.removeCls(me.menuItemOverflowedCls);
             me.clearItem(item);
             item.resumeLayouts(asLayoutRoot);
         }
@@ -233,7 +242,7 @@ Ext.define('Ext.layout.container.boxOverflow.Menu', {
             if (props[startProp] + props[sizeProp] > available) {
                 comp = childContext.target;
                 me.menuItems.push(comp);
-                comp.hide();
+                comp.addCls(me.menuItemOverflowedCls);
             }
         }
 

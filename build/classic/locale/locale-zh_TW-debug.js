@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.zh_TW.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "數數"
+});
 /**
  * Traditional Chinese translation
  * By hata1234
@@ -175,4 +180,72 @@ Ext.define("Ext.locale.zh_TW.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.zh_TW.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.zh_TW.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "展開全部",
+    collapseAllText: "全部收縮",
+    groupsText: "團體",
+    groupByText: "小組由此字段",
+    addToGroupingText: "添加到分組",
+    removeFromGroupingText: "從分組中刪除",
+    groupSummaryTpl: "概括 ({name})",
+    summaryTpl: "概括 ({store.data.length})"
+});
+Ext.define("Ext.locale.zh_TW.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "沒有任何",
+    summaryText: "概括"
+});
+Ext.define("Ext.locale.zh_TW.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "是平等的",
+        ne: "不平等",
+        gt: "比...更棒",
+        ge: "大於或等於",
+        lt: "少於",
+        le: "小於或等於",
+        like: "喜歡",
+        nlike: "不喜歡",
+        empty: "空的",
+        nempty: "不是空的",
+        identical: "完全相同的",
+        nidentical: "沒有相同",
+        regex: "正則表達式",
+        "in": "是",
+        notin: "不是在"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.zh_TW.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "將列標題拖動到該列的組",
+    showGroupingPanelText: "按面板展示集團",
+    hideGroupingPanelText: "通過面板隱藏小組",
+    clearGroupText: "明確的群體",
+    sortAscText: "升序",
+    sortDescText: "排序下降",
+    moveLeftText: "向左移動",
+    moveRightText: "向右移",
+    moveBeginText: "搬到開始",
+    moveEndText: "搬到結束",
+    removeText: "消除"
 });

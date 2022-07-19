@@ -94,6 +94,7 @@ Ext.define('Ext.grid.filters.Column', {
         fieldFilterTypes: {
             auto: 'string',
             bool: 'boolean',
+            'boolean': 'boolean',
             date: 'date',
             'float': 'number',
             number: 'number',

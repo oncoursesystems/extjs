@@ -59,10 +59,11 @@ Ext.define('Ext.grid.filters.menu.Base', {
         var me = this,
             dataIndex = me.column.getDataIndex(),
             plugin = me.plugin,
+            grid = plugin.getOwner(),
             query = plugin.getQuery(),
             added = 0,
             removed = 0,
-            filters, i, item, items, value;
+            active, filters, i, item, items, value;
 
         if (dataIndex) {
             filters = Ext.clone(query.getFilters());
@@ -106,13 +107,117 @@ Ext.define('Ext.grid.filters.menu.Base', {
             if (added || removed) {
                 plugin.setActiveFilter(filters);
             }
+
+            active = filters && Ext.Array.contains(Ext.Array.pluck(filters, 'property'), dataIndex);
+            me.setColumnActive(active);
+            grid.fireEventArgs(active ? 'filteractivate' : 'filterdeactivate', [me, me.column]);
         }
+    },
+
+    setColumnActive: function(active) {
+        this.column[active ? 'addCls' : 'removeCls'](this.plugin.filterCls);
     },
 
     privates: {
         doOnInputChange: function() {
             this.setChecked(true);
             this.syncQuery();
+        },
+
+        /**
+         * The initialization update the filters options with the default(s) values
+         * specified in the column configuration, that could be specified:
+         *
+         * As one unique value, as:
+         *
+         *     filter: {
+         *         value: 'saturday'
+         *     }
+         *
+         *  As more than one value, indicating the operator to use with each one, as:
+         *
+         *     filter: {
+         *         '>': 0,
+         *         '<': 100
+         *     }
+         *
+         *     or
+         *
+         *     filter: {
+         *         value: {
+         *              '>': 0,
+         *              '<': 100
+         *         }
+         *     }
+         *
+         *  If the filter is defined with only one value with not operation specification,
+         *  it ill be assigned to the menu element witch has the next property:
+         *
+         *       defaultFilter: true
+         */
+        initialize: function() {
+            var filter = this.column.getFilter(),
+                item,
+                defaultToFilterBy,
+                menuItems = this.getMenu().getItems().items,
+                prop, itemIndex, itemToAssignValue;
+
+            if (filter) {
+
+                if (Ext.isObject(filter) && filter.value !== undefined) {
+                    defaultToFilterBy = filter.value;
+                }
+                else {
+                    defaultToFilterBy = filter;
+                }
+
+                if (defaultToFilterBy !== undefined) {
+
+                    if (Ext.isObject(defaultToFilterBy)) {
+                        for (prop in defaultToFilterBy) {
+                            for (itemIndex = menuItems.length; itemIndex-- > 0;) {
+                                item = menuItems[itemIndex];
+
+                                if (item.operator && item.operator === prop) {
+                                    item.setValue(defaultToFilterBy[prop]);
+                                }
+                            }
+                        }
+
+                    }
+                    else {
+
+                        if (menuItems.length === 1) {
+                            itemToAssignValue = menuItems[0];
+                        }
+                        else {
+                            for (itemIndex = menuItems.length; itemIndex-- > 0;) {
+                                item = menuItems[itemIndex];
+
+                                if (item.defaultFilter === true ||
+                                    item.getValue() === defaultToFilterBy) {
+                                    itemToAssignValue = item;
+                                }
+                            }
+                        }
+
+                        if (itemToAssignValue) {
+                            // If it's a check element.
+                            if (itemToAssignValue.setChecked) {
+                                itemToAssignValue.setChecked(true);
+                            }
+                            else {
+                                itemToAssignValue.setValue(defaultToFilterBy);
+                            }
+                        }
+
+                    }
+                }
+
+            }
+
+            this.callParent();
         }
+
     }
 });

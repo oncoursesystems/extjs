@@ -107,6 +107,7 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
         var me = this,
             view = grid.view,
             viewListeners = {
+                beforerefresh: me.onViewBeforeRefresh,
                 refresh: me.onViewRefresh,
                 columnschanged: me.checkVariableRowHeight,
                 scope: me,
@@ -281,10 +282,18 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
         this.refreshSize();
     },
 
+    /**
+     * BeforeRefresh listener needed by normal grids (non-locking) to capture
+     * the startIndex before a refresh is done.
+     */
+    onViewBeforeRefresh: function(view) {
+        this.beforeRefreshStartIndex = view.all.startIndex;
+    },
+
     onViewRefresh: function(view, records) {
         var me = this,
             rows = view.all,
-            height;
+            height, beforeRefreshStartIndex;
 
         // Recheck the variability of row height in the view.
         me.checkVariableRowHeight();
@@ -352,6 +361,27 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                     }
                 }
             }
+        }
+
+        // Determine what the previously captured startIndex was based on 
+        // whether the grid was a normal grid or a locked grid.
+        if (view.lockingPartner) {
+            beforeRefreshStartIndex = view.beforeRefreshStartIndex;
+            view.beforeRefreshStartIndex = null;
+        }
+        else {
+            beforeRefreshStartIndex = me.beforeRefreshStartIndex;
+            me.beforeRefreshStartIndex = null;
+        }
+
+        // Call refreshView() with this previously captured startIndex which
+        // is done in the onViewBeforeRefresh method for normal grids and in
+        // the Ext.grid.locking.View#refresh method for locked grids.
+        // Without this logic, a call to view.refresh() followed by a scroll up
+        // will result in blank lines above the rendered range and the rendered
+        // range will not be the correct range of data that should be displayed.
+        if (beforeRefreshStartIndex) {
+            me.refreshView(beforeRefreshStartIndex);
         }
     },
 
@@ -658,6 +688,12 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                         // Clip the rows off the required end
                         rows.clip(pointyEnd, diff);
                         me.setBodyTop(me.bodyTop + oldTop);
+
+                        // And clip the rows of the lockingPartner
+                        if (lockingPartner && lockingPartner.view.all.count > 0) {
+                            lockingPartner.view.all.clip(pointyEnd, diff);
+                            lockingPartner.setBodyTop(lockingPartner.bodyTop + oldTop);
+                        }
                     }
 
                     if (lockingPartner) {

@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.ukr.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Рахувати"
+});
 /**
  * Ukrainian translations for ExtJS (UTF-8 encoding)
  *
@@ -238,4 +243,72 @@ Ext.define("Ext.locale.ukr.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.ukr.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.ukr.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Розширюватися",
+    collapseAllText: "Закрити всі",
+    groupsText: "Групи",
+    groupByText: "Групу за цим полем",
+    addToGroupingText: "Додати до групування",
+    removeFromGroupingText: "Видалити з групування",
+    groupSummaryTpl: "Резюме ({name})",
+    summaryTpl: "Резюме ({store.data.length})"
+});
+Ext.define("Ext.locale.ukr.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Ніякий",
+    summaryText: "Резюме"
+});
+Ext.define("Ext.locale.ukr.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Дорівнює",
+        ne: "Не рівний",
+        gt: "Більше ніж",
+        ge: "Більше або дорівнює",
+        lt: "Менш ніж",
+        le: "Менше або дорівнює",
+        like: "Подобається",
+        nlike: "Не люблять",
+        empty: "Порожній",
+        nempty: "Не порожній",
+        identical: "Ідентичний",
+        nidentical: "Не ідентичні",
+        regex: "Регулярне вираження",
+        "in": "Є в",
+        notin: "Не в"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.ukr.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Перетягніть заголовок стовпця тут, щоб групувати за допомогою цієї колонки",
+    showGroupingPanelText: "Показати групу за панеллю",
+    hideGroupingPanelText: "Приховати групу за панеллю",
+    clearGroupText: "Очистити групу",
+    sortAscText: "Сортувати зростання",
+    sortDescText: "Сортування спускання",
+    moveLeftText: "Рухатися ліворуч",
+    moveRightText: "Рухатися прямо",
+    moveBeginText: "Переходити до початку",
+    moveEndText: "Переходити до кінця",
+    removeText: "Видалити"
 });

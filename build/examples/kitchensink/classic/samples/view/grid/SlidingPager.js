@@ -65,7 +65,8 @@ Ext.define('KitchenSink.view.grid.SlidingPager', {
     store: {
         type: 'companies',
         pageSize: 10,
-        remoteSort: true
+        remoteSort: true,
+        autoLoad: true
     },
     signTpl: '<span style="' +
             'color:{value:sign(\'${lossColor}\',\'${gainColor}\')}"' +

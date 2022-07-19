@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.fi.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Kreivi"
+});
 /**
  * Finnish Translations
  * <tuomas.salo (at) iki.fi>
@@ -292,4 +297,72 @@ Ext.define("Ext.locale.fi.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.fi.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.fi.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Laajenna kaikki",
+    collapseAllText: "Romahtaa kaikki",
+    groupsText: "Ryhmät",
+    groupByText: "Ryhmä tällä alalla",
+    addToGroupingText: "Lisää ryhmittelyyn",
+    removeFromGroupingText: "Poista ryhmittymästä",
+    groupSummaryTpl: "Yhteenveto ({name})",
+    summaryTpl: "Yhteenveto ({store.data.length})"
+});
+Ext.define("Ext.locale.fi.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Ei mitään",
+    summaryText: "Yhteenveto"
+});
+Ext.define("Ext.locale.fi.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "On yhtä kuin",
+        ne: "Ei ole yhtä suuri",
+        gt: "Suurempi kuin",
+        ge: "Suurempi tai yhtä suuri kuin",
+        lt: "Vähemmän kuin",
+        le: "Pienempi kuin tai yhtä suuri kuin",
+        like: "Kuten",
+        nlike: "Ei niin kuin",
+        empty: "Tyhjä",
+        nempty: "Ei tyhjä",
+        identical: "Samanlainen",
+        nidentical: "Ei identtinen",
+        regex: "Tavallinen ilme",
+        "in": "On",
+        notin: "Ei ole"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.fi.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Vedä sarakkeen otsikko tähän ryhmään kyseisellä sarakkeella",
+    showGroupingPanelText: "Näytä ryhmä paneelilla",
+    hideGroupingPanelText: "Piilota ryhmä paneelilla",
+    clearGroupText: "Kirkas ryhmä",
+    sortAscText: "Lajittele nousevaan järjestykseen",
+    sortDescText: "Lajitella laskeva",
+    moveLeftText: "Siirry vasemmalle",
+    moveRightText: "Liiku oikealle",
+    moveBeginText: "Siirry alkuun",
+    moveEndText: "Siirtyä loppuun",
+    removeText: "Poista"
 });

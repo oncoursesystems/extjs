@@ -543,6 +543,7 @@ Ext.define('Ext.data.virtual.Store', {
                         // and marking the page as loaded
                         page.records = op.getRecords();
                         page.state = 'loaded';
+                        me.pageMap.onPageLoad(page);
                     }
                 }
 

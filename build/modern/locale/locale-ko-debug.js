@@ -72,6 +72,11 @@ Ext.define('Ext.locale.ko.Panel', {
         closeToolText: 'Panel 閉じる'
     }
 });
+Ext.define("Ext.locale.ko.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "세다"
+});
 Ext.define('Ext.locale.ko.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
@@ -302,6 +307,23 @@ Ext.define('Ext.locale.ko.field.Text', {
         validationMessage: '형식이 잘못되었습니다'
     }
 });
+Ext.define("Ext.locale.ko.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "요약 ({name})",
+        summaryTpl: "요약 ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.ko.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "요약 ({name})",
+        summaryTpl: "요약 ({store.data.length})"
+    },
+    text: "그룹화에 추가하십시오"
+});
 Ext.define("Ext.locale.ko.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
 
@@ -333,6 +355,13 @@ Ext.define('Ext.locale.ko.grid.locked.Grid', {
         }
     }
 });
+Ext.define("Ext.locale.ko.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "그룹화에 추가하십시오"
+    }
+});
 Ext.define("Ext.locale.ko.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
@@ -345,6 +374,25 @@ Ext.define("Ext.locale.ko.grid.menu.GroupByThis", {
 
     config: {
         text: "이 항목별로 그룹화"
+    }
+});
+Ext.define("Ext.locale.ko.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "여러 떼",
+
+        menu: [{
+            text: "모두 확장"
+        }, {
+            text: "모든 축소"
+        }]
+    }
+});
+Ext.define("Ext.locale.ko.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "그룹화에서 제거하십시오"
     }
 });
 Ext.define("Ext.locale.ko.grid.menu.ShowInGroups", {
@@ -371,6 +419,62 @@ Ext.define("Ext.locale.ko.grid.menu.SortDesc", {
 Ext.define("Ext.locale.ko.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} 개가 선택되었습니다."
+});
+Ext.define("Ext.locale.ko.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "없음",
+    summaryText: "요약"
+});
+Ext.define("Ext.locale.ko.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "는 같다",
+        ne: "동등하지 않다",
+        gt: "보다 큰",
+        ge: "보다 크거나 같음",
+        lt: "미만",
+        le: "보다 작거나 같은 것",
+        like: "좋다",
+        nlike: "같지 않은",
+        empty: "비어있는",
+        nempty: "비어 있지 않다",
+        identical: "동일한",
+        nidentical: "동일하지 않습니다",
+        regex: "정규식",
+        in: "in.",
+        notin: "아니다"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.ko.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "열 머리글을 해당 열로 그룹으로 드래그하십시오.",
+    showGroupingPanelText: "그룹 별 그룹을 보여줍니다",
+    hideGroupingPanelText: "패널로 그룹 숨기기",
+    clearGroupText: "명확한 그룹",
+    sortAscText: "정렬 오름차순",
+    sortDescText: "내림차순 정렬",
+    moveLeftText: "왼쪽으로 이동하십시오",
+    moveRightText: "오른쪽으로 이동해라",
+    moveBeginText: "처음으로 이동하십시오",
+    moveEndText: "끝까지 이동하십시오",
+    removeText: "제거하다"
+
 });
 Ext.define('Ext.locale.ko.panel.Collapser', {
     override: 'Ext.panel.Collapser',

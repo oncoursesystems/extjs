@@ -235,8 +235,8 @@ topSuite('Ext.tab.Panel', ['Ext.Panel'], function() {
 
             panel = new Ext.tab.Panel(config);
 
-            tabBar = panel.getTabBar(),
-            tab1 = tabBar.getAt(0).el.dom,
+            tabBar = panel.getTabBar();
+            tab1 = tabBar.getAt(0).el.dom;
             tab2 = tabBar.getAt(1).el.dom;
 
             jasmine.fireMouseEvent(tab2, 'click');

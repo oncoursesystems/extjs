@@ -123,6 +123,93 @@ function() {
             expect(getCell(3, 0).el.down('.x-body-el', true).innerHTML).toBe('245');
         });
 
+        it('should apply the renderer correctly', function() {
+            createGrid({
+                columns: [{
+                    header: 'Income', dataIndex: 'income', width: 100, xtype: 'numbercolumn',
+                    cell: {
+                        renderer: Ext.util.Format.numberRenderer("0,000.00")
+                    }
+                }],
+                renderTo: Ext.getBody()
+            });
+
+            expect(getCell(0, 0).el.down('.x-body-el', true).innerHTML).toBe('1,244.25');
+            expect(getCell(1, 0).el.down('.x-body-el', true).innerHTML).toBe('3,444.99');
+            expect(getCell(2, 0).el.down('.x-body-el', true).innerHTML).toBe('2,474.45');
+            expect(getCell(3, 0).el.down('.x-body-el', true).innerHTML).toBe('244.75');
+        });
+
+        it('should apply the scoped renderer correctly', function() {
+            createGrid({
+                columns: [{
+                    header: 'Income', dataIndex: 'income', width: 100, xtype: 'numbercolumn',
+                    renderer: 'myTest',
+                    scope: {
+                        myTest: function(v) {
+                            return Ext.util.Format.number(v, '0,000.00');
+                        }
+                    }
+                }],
+                renderTo: Ext.getBody()
+            });
+
+            expect(getCell(0, 0).el.down('.x-body-el', true).innerHTML).toBe('1,244.25');
+            expect(getCell(1, 0).el.down('.x-body-el', true).innerHTML).toBe('3,444.99');
+            expect(getCell(2, 0).el.down('.x-body-el', true).innerHTML).toBe('2,474.45');
+            expect(getCell(3, 0).el.down('.x-body-el', true).innerHTML).toBe('244.75');
+        });
+
+        it('should apply the cell renderer correctly from a VM', function() {
+            var vm = new Ext.app.ViewModel({
+                data: {
+                    renderer: Ext.util.Format.numberRenderer("0,000.00")
+                }
+            });
+
+            createGrid({
+                columns: [{
+                    header: 'Income', dataIndex: 'income', width: 100, xtype: 'numbercolumn',
+                    cell: {
+                        viewModel: vm,
+                        bind: {
+                            renderer: '{renderer}'
+                        }
+                    }
+                }],
+                renderTo: Ext.getBody()
+            });
+
+            vm.notify();
+            expect(getCell(0, 0).el.down('.x-body-el', true).innerHTML).toBe('1,244.25');
+            expect(getCell(1, 0).el.down('.x-body-el', true).innerHTML).toBe('3,444.99');
+            expect(getCell(2, 0).el.down('.x-body-el', true).innerHTML).toBe('2,474.45');
+            expect(getCell(3, 0).el.down('.x-body-el', true).innerHTML).toBe('244.75');
+        });
+
+        it('should apply the cell renderer correctly from a ViewController', function() {
+            var controller = new Controller({
+                renderer_ctlr: function(v) {
+                    return Ext.util.Format.number(v, '0,000.00');
+                }
+            });
+
+            createGrid({
+                controller: controller,
+                columns: [{
+                    header: 'Income', dataIndex: 'income', width: 100, xtype: 'numbercolumn',
+                    cell: {
+                        renderer: 'renderer_ctlr'
+                    }
+                }],
+                renderTo: Ext.getBody()
+            });
+
+            expect(getCell(0, 0).el.down('.x-body-el', true).innerHTML).toBe('1,244.25');
+            expect(getCell(1, 0).el.down('.x-body-el', true).innerHTML).toBe('3,444.99');
+            expect(getCell(2, 0).el.down('.x-body-el', true).innerHTML).toBe('2,474.45');
+            expect(getCell(3, 0).el.down('.x-body-el', true).innerHTML).toBe('244.75');
+        });
     });
 
 });

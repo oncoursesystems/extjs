@@ -1025,6 +1025,11 @@ Ext.define('Ext.view.AbstractView', {
                 me.refreshCounter = 1;
             }
 
+            // if we have a captured 'beforeRefreshStartIndex' use it to update items.startIndex
+            if (bufferedRenderer && bufferedRenderer.beforeRefreshStartIndex) {
+                items.startIndex = bufferedRenderer.beforeRefreshStartIndex;
+            }
+
             // Usually, for an empty record set, this would be blank, but when the Template
             // Creates markup outside of the record loop, this must still be honoured
             // even if there are no records.

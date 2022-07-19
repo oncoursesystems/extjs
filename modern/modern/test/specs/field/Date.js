@@ -1,4 +1,4 @@
-topSuite('Ext.field.Date', ['Ext.viewport.Viewport', 'Ext.data.validator.Date'], function() {
+topSuite('Ext.field.Date', ['Ext.viewport.Viewport', 'Ext.data.validator.Date', 'Ext.form.Panel'], function() {
     jasmine.usesViewport(); // setup in beforeAll, teardown in afterAll
 
     var today = Ext.Date.clearTime(new Date()),
@@ -442,6 +442,83 @@ topSuite('Ext.field.Date', ['Ext.viewport.Viewport', 'Ext.data.validator.Date'],
                 });
             });
         });
+
+        describe('Panel with multiple date pickers', function() {
+            var formPanel, datefield1, datefield2, picker1, picker2, showSpy, hideSpy;
+
+            afterEach(function() {
+                formPanel.destroy(formPanel);
+            });
+
+            it('should not show the wrong date selection when there are multiple pickers added to the viewport', function() {
+
+                // create a form panel with two date picker fields
+                formPanel = new Ext.create('Ext.form.Panel', {
+                    renderTo: document.body,
+                    defaults: {
+                        value: new Date(),
+                        picker: {
+                            xtype: 'datepicker'
+                        }
+                    },
+                    items: [{
+                        id: 'datePicker1',
+                        xtype: 'datepickerfield',
+                        label: 'Birthday1'
+                    }, {
+                        xtype: 'datepickerfield',
+                        id: 'datePicker2',
+                        label: 'Birthday2'
+                    }]
+                });
+                datefield1 =  formPanel.down('#datePicker1');
+                datefield2 = formPanel.down('#datePicker2');
+                picker1 = datefield1.getPicker();
+                picker2 = datefield2.getPicker();
+                showSpy = jasmine.createSpy('date picker show');
+                hideSpy = jasmine.createSpy('date picker hide');
+
+                picker1.on({
+                    show: showSpy,
+                    hide: hideSpy
+                });
+                datefield1.expand();
+                waitForSpy(showSpy);
+                runs(function() {
+                    expect(picker1.isVisible()).toBe(true);
+                    expect(picker1.getValue(true)).toEqual(datefield1.getValue());
+                    picker1.hide();
+                    showSpy.reset();
+                });
+                waitForSpy(hideSpy);
+                picker2.on({
+                    show: showSpy
+                });
+                runs(function() {
+                    expect(picker1.isVisible()).toBe(false);
+                    datefield2.expand();
+                });
+                waitForSpy(showSpy);
+                runs(function() {
+                    expect(picker1.isVisible()).toBe(false);
+                    expect(picker2.isVisible()).toBe(true);
+                    expect(picker2.getValue(true)).toEqual(datefield2.getValue());
+                    showSpy.reset();
+                    picker2.hide();
+                    datefield1.expand();
+
+                    // wait for the picker selection to take place
+                    waits(100);
+                });
+                waitForSpy(showSpy);
+                runs(function() {
+                    expect(picker1.isVisible()).toBe(true);
+
+                    // check if the picker's selection is same as datefield's value
+                    expect(picker1.getValue(true)).toEqual(datefield1.getValue());
+                });
+            });
+        });
     });
 
     describe('validate', function() {
@@ -529,8 +606,9 @@ topSuite('Ext.field.Date', ['Ext.viewport.Viewport', 'Ext.data.validator.Date'],
             makeField({
                 value: new Date(2010, 0, 15)
             });
-            var date = new Date(2010, 0, 15);
-            var expected = Ext.Date.format(date, 'timestamp');
+            var date = new Date(2010, 0, 15),
+                expected = Ext.Date.format(date, 'timestamp');
+
             expect(field.serialize()).toBe(expected);
         });
 
@@ -614,7 +692,7 @@ topSuite('Ext.field.Date', ['Ext.viewport.Viewport', 'Ext.data.validator.Date'],
                 value: '02/26'
             });
 
-            expect(field.getValue()).toEqual(new Date(dt.getFullYear(), 01, 26));
+            expect(field.getValue()).toEqual(new Date(dt.getFullYear(), 1, 26));
         });
 
         it('should parse value using default format when altFormats is `null`', function() {
@@ -623,7 +701,7 @@ topSuite('Ext.field.Date', ['Ext.viewport.Viewport', 'Ext.data.validator.Date'],
                 altFormats: null
             });
             field.setValue('1992-02-26');
-            expect(field.getValue()).toEqual(new Date(1992, 01, 26));
+            expect(field.getValue()).toEqual(new Date(1992, 1, 26));
         });
 
         it('should set field value to null', function() {

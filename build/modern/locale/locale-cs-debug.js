@@ -71,6 +71,11 @@ Ext.define('Ext.locale.cs.Panel', {
         closeToolText: 'Zavřete panel'
     }
 });
+Ext.define("Ext.locale.cs.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Počet"
+});
 Ext.define('Ext.locale.cs.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
@@ -346,6 +351,23 @@ Ext.define('Ext.locale.cs.field.Text', {
         validationMessage: 'je ve špatném formátu'
     }
 });
+Ext.define("Ext.locale.cs.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "souhrn ({name})",
+        summaryTpl: "souhrn ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.cs.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "souhrn ({name})",
+        summaryTpl: "souhrn ({store.data.length})"
+    },
+    text: "Skupiny"
+});
 Ext.define("Ext.locale.cs.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
 
@@ -377,6 +399,13 @@ Ext.define('Ext.locale.cs.grid.locked.Grid', {
         }
     }
 });
+Ext.define("Ext.locale.cs.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "Přidat do seskupení"
+    }
+});
 Ext.define("Ext.locale.cs.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
@@ -389,6 +418,25 @@ Ext.define("Ext.locale.cs.grid.menu.GroupByThis", {
 
     config: {
         text: "Seskupit podle toho"
+    }
+});
+Ext.define("Ext.locale.cs.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "Skupiny",
+
+        menu: [{
+            text: "Rozšířit vše"
+        }, {
+            text: "Kolaps vše."
+        }]
+    }
+});
+Ext.define("Ext.locale.cs.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "Odstranit ze seskupení"
     }
 });
 Ext.define("Ext.locale.cs.grid.menu.ShowInGroups", {
@@ -415,6 +463,62 @@ Ext.define("Ext.locale.cs.grid.menu.SortDesc", {
 Ext.define("Ext.locale.cs.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} vybraných řádků"
+});
+Ext.define("Ext.locale.cs.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Žádný",
+    summaryText: "souhrn"
+});
+Ext.define("Ext.locale.cs.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "Je roven",
+        ne: "Není rovno",
+        gt: "Větší než",
+        ge: "Větší nebo rovný",
+        lt: "Méně než",
+        le: "Menší nebo rovna",
+        like: "Jako",
+        nlike: "Ne jako",
+        empty: "Prázdný",
+        nempty: "Není prázdný",
+        identical: "Identický",
+        nidentical: "Není identický",
+        regex: "Regulární výraz",
+        in: "Je in",
+        notin: "Není"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.cs.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Přetáhněte záhlaví sloupce, abyste se dostali do tohoto sloupce",
+    showGroupingPanelText: "Zobrazit skupinu podle panelu",
+    hideGroupingPanelText: "Skrýt skupinu podle panelu",
+    clearGroupText: "Clear Group",
+    sortAscText: "Seřadit vzestupně",
+    sortDescText: "Seřadit sestupně",
+    moveLeftText: "Pohyb doleva",
+    moveRightText: "Pohyb vpravo",
+    moveBeginText: "Přesunout na začátek",
+    moveEndText: "Přesunout na konec",
+    removeText: "Odstranit"
+
 });
 Ext.define('Ext.locale.cs.panel.Collapser', {
     override: 'Ext.panel.Collapser',

@@ -4875,14 +4875,31 @@ Ext.define('Ext.ux.BoxReorderer', {
         var me = this,
             items = me.container.items,
             container = me.container,
+            direction = me.curIndex < newIndex ? 1 : -1,
             orig, dest, tmpIndex;
+        // Tab is moved too quickly to invoke this event after it positioned beyond
+        // adjacent tab. Iterate adjacent swaps to maintain current order of tabs.
+        // The remainder of this method will adjust when attempting to make a swap
+        // with a non reorderable tab.
+        if (Math.abs(me.curIndex - newIndex) > 1) {
+            me.doSwap(me.curIndex + direction);
+            return;
+        }
+        // Check for swap with non-reorderable tab
         newIndex = me.findReorderable(newIndex);
+        // Return if all the tabs in the direction we are moving are non-reorderable
+        // or we are moving back in the direction of original tab position when over
+        // a non-reorderable tab.
         if (newIndex === -1 || newIndex === me.curIndex) {
             return;
         }
         me.reorderer.fireEvent('ChangeIndex', me, container, me.dragCmp, me.startIndex, newIndex);
         orig = items.getAt(me.curIndex);
         dest = items.getAt(newIndex);
+        // Remove and insert both original and destination in this seemingly
+        // odd way to account for skipping over non-reorderable tabs which
+        // may be between original and destination tabs. This keeps the
+        // not-reorderable tabs from moving around.
         items.remove(orig);
         tmpIndex = Math.min(Math.max(newIndex, 0), items.getCount() - 1);
         items.insert(tmpIndex, orig);
@@ -4892,7 +4909,9 @@ Ext.define('Ext.ux.BoxReorderer', {
         container.updateLayout({
             isRoot: true
         });
-        me.curIndex = newIndex;
+        // Update startIndex/curIndex with newIndex so that further drag
+        // calculations have correct position of currently dragged tab.
+        me.startIndex = me.curIndex = newIndex;
     },
     onDrag: function(e) {
         var me = this,

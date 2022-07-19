@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.fr.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Compter"
+});
 /**
  * France (France) translation
  * By Thylia
@@ -324,4 +329,72 @@ Ext.define('Ext.locale.fr.data.validator.Presence', {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.fr.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.fr.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Développer tout",
+    collapseAllText: "Réduire tout",
+    groupsText: "Groupes",
+    groupByText: "Groupe par ce champ",
+    addToGroupingText: "Ajouter au groupement",
+    removeFromGroupingText: "Supprimer du groupement",
+    groupSummaryTpl: "Sommaire ({name})",
+    summaryTpl: "Sommaire ({store.data.length})"
+});
+Ext.define("Ext.locale.fr.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Rien",
+    summaryText: "Sommaire"
+});
+Ext.define("Ext.locale.fr.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Est égal",
+        ne: "Inégal",
+        gt: "Plus grand que",
+        ge: "Plus grand ou égal à",
+        lt: "Moins que",
+        le: "Inférieur ou égal à",
+        like: "Comme",
+        nlike: "Pas comme",
+        empty: "Vide",
+        nempty: "Pas vide",
+        identical: "Identique",
+        nidentical: "Pas identique",
+        regex: "Expression régulière",
+        "in": "Est dans",
+        notin: "N'est pas dans"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.fr.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Faites glisser une en-tête de colonne ici pour regrouper cette colonne",
+    showGroupingPanelText: "Afficher le groupe par panneau",
+    hideGroupingPanelText: "Masquer le groupe par panneau",
+    clearGroupText: "Groupe clair",
+    sortAscText: "Trier par ordre croissant",
+    sortDescText: "Trier par ordre décroissant",
+    moveLeftText: "Se déplacer à gauche",
+    moveRightText: "Déplacer vers la droite",
+    moveBeginText: "Déménager au début",
+    moveEndText: "Passer à la fin",
+    removeText: "Supprimer"
 });

@@ -88,9 +88,9 @@ topSuite("Ext.grid.plugin.GroupingPanel", [
                 type: 'memory',
                 limitParam: null,
                 data: storeData || [
-                    {company: 'Microsoft', person: 'John', date: new Date(), value: 1},
-                    {company: 'Adobe', person: 'John', date: new Date(), value: 2},
-                    {company: 'Microsoft', person: 'Helen', date: new Date(), value: 3}
+                    { company: 'Microsoft', person: 'John', date: new Date(), value: 1 },
+                    { company: 'Adobe', person: 'John', date: new Date(), value: 2 },
+                    { company: 'Microsoft', person: 'Helen', date: new Date(), value: 3 }
                 ],
                 reader: {
                     type: 'json'
@@ -120,11 +120,11 @@ topSuite("Ext.grid.plugin.GroupingPanel", [
             },
 
             columns: [
-                {text: 'Company', dataIndex: 'company', itemId: 'c1'},
-                {text: 'Person', dataIndex: 'person', itemId: 'c2'},
-                {text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3'},
-                {text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4'},
-                {text: 'Year', dataIndex: 'year', itemId: 'c5'}
+                { text: 'Company', dataIndex: 'company', itemId: 'c1' },
+                { text: 'Person', dataIndex: 'person', itemId: 'c2' },
+                { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3' },
+                { text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4' },
+                { text: 'Year', dataIndex: 'year', itemId: 'c5' }
             ],
 
             renderTo: document.body

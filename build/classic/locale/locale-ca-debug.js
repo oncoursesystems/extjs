@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.ca.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Compte"
+});
 /**
  * Catalonian Translation by halkon_polako 6-12-2007
  * December correction halkon_polako 11-12-2007
@@ -291,4 +296,72 @@ Ext.define("Ext.locale.ca.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.ca.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.ca.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Amplieu-ho tot",
+    collapseAllText: "Col · lapsar tot",
+    groupsText: "Grups",
+    groupByText: "Grup per aquest camp",
+    addToGroupingText: "Afegeix a l'agrupació",
+    removeFromGroupingText: "Treure de l'agrupació",
+    groupSummaryTpl: "Sumari ({name})",
+    summaryTpl: "Sumari ({store.data.length})"
+});
+Ext.define("Ext.locale.ca.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Res",
+    summaryText: "Sumari"
+});
+Ext.define("Ext.locale.ca.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "És igual",
+        ne: "No és igual",
+        gt: "Més gran que",
+        ge: "Superior o igual a",
+        lt: "Menys que",
+        le: "Inferior o igual a",
+        like: "M'agrada",
+        nlike: "No m'agrada",
+        empty: "Buit",
+        nempty: "No està buit",
+        identical: "Idèntic",
+        nidentical: "No idèntic",
+        regex: "Expressió normal",
+        "in": "Està dins",
+        notin: "No està a"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.ca.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Arrossegueu una capçalera de columna aquí per agrupar-se per aquesta columna",
+    showGroupingPanelText: "Mostra el grup per panell",
+    hideGroupingPanelText: "Amaga el grup per panell",
+    clearGroupText: "Clear Group",
+    sortAscText: "Ordena ascendent",
+    sortDescText: "Ordena descendent",
+    moveLeftText: "Mou-te a l'esquerra",
+    moveRightText: "Mou-te a la dreta",
+    moveBeginText: "Aneu al començament",
+    moveEndText: "Mogui per acabar",
+    removeText: "Treure"
 });

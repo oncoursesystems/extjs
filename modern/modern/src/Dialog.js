@@ -392,7 +392,6 @@ Ext.define('Ext.Dialog', {
         handle: '.' + Ext.baseCSSPrefix + 'draggable',
         listeners: {
             beforedragstart: 'onBeforeDragDialog',
-            dragend: 'onDragEnd',
             scope: 'this'
         }
     },
@@ -465,6 +464,9 @@ Ext.define('Ext.Dialog', {
                 tabGuardAfterIndex: me.tabGuardAfterIndex
             });
         }
+
+        // register click event on dialog's el to handle focusing.
+        me.el.on('click', 'handleFocus', this);
     },
 
     doDestroy: function() {
@@ -828,14 +830,6 @@ Ext.define('Ext.Dialog', {
         }
     },
 
-    onDragEnd: function(event) {
-        var me = this;
-
-        if (me.getModal()) {
-            me.getFocusEl().focus();
-        }
-    },
-
     getFocusEl: function() {
         var focusEl = this.callParent();
 
@@ -882,6 +876,21 @@ Ext.define('Ext.Dialog', {
         }
 
         return ret;
+    },
+
+    handleFocus: function(e) {
+        var me = this,
+            focusEl;
+
+        // Focus back on focusEl if the dialog or inner items are not focused
+        if (me.getModal() && (!me.el.dom.querySelector('.' + Ext.baseCSSPrefix + 'focused') &&
+        !e.target.type)) {
+            focusEl = me.getFocusEl();
+
+            if (focusEl) {
+                focusEl.focus();
+            }
+        }
     },
 
     //-----------------------------------------------------------

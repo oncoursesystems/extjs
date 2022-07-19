@@ -2,6 +2,12 @@ topSuite('Ext.field.File', function() {
     var field, fileButton;
 
     function createField(cfg) {
+        if (cfg) {
+            cfg.requires = [
+                'Ext.field.trigger.File'
+            ];
+        }
+
         field = new Ext.field.File(cfg);
         fileButton = field.getFileButton();
     }
@@ -56,8 +62,30 @@ topSuite('Ext.field.File', function() {
                 readOnly: true
             });
             field.reset();
-            expect(field.getValue() == '').toBe(true);
-            expect(field.getInputValue() == '').toBe(true);
+            expect(field.getValue() === '').toBe(true);
+            expect(field.getInputValue() === '').toBe(true);
+        });
+    });
+    describe('disableFileTrigger', function() {
+        it('should disable the file trigger button', function() {
+            createField({
+                name: 'testFileField'
+            });
+            field.disable();
+            expect(field.getDisabled()).toBe(true);
+            expect(field.getFileButton().getDisabled()).toBe(true);
+        });
+
+        it('should enable the file trigger button', function() {
+            createField({
+                name: 'testFileField'
+            });
+            field.enable();
+            expect(field.getDisabled()).toBe(false);
+            expect(field.getFileButton().getDisabled()).toBe(false);
+            field.disable();
+            expect(field.getDisabled()).toBe(true);
+            expect(field.getFileButton().getDisabled()).toBe(true);
         });
     });
 });

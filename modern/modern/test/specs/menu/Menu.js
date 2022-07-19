@@ -1,4 +1,3 @@
-/* global expect, jasmine, Ext, spyOn, xdescribe, describe, it */
 
 topSuite("Ext.menu.Menu", ['Ext.Button', 'Ext.field.Text', 'Ext.scroll.NativeScroller'], function() {
     var menu;

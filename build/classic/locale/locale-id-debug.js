@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.id.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Menghitung"
+});
 /**
  * Pedoman translasi:
  * http://id.wikisource.org/wiki/Panduan_Pembakuan_Istilah,_Pelaksanaan_Instruksi_Presiden_Nomor_2_Tahun_2001_Tentang_Penggunaan_Komputer_Dengan_Aplikasi_Komputer_Berbahasa_Indonesia
@@ -287,4 +292,72 @@ Ext.define("Ext.locale.id.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.id.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.id.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Melebarkan semua",
+    collapseAllText: "Runtuhnya semua",
+    groupsText: "Kelompok",
+    groupByText: "Grup oleh bidang ini",
+    addToGroupingText: "Tambahkan ke Pengelompokan",
+    removeFromGroupingText: "Hapus dari pengelompokan",
+    groupSummaryTpl: "Ringkasan ({name})",
+    summaryTpl: "Ringkasan ({store.data.length})"
+});
+Ext.define("Ext.locale.id.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Tidak ada",
+    summaryText: "Ringkasan"
+});
+Ext.define("Ext.locale.id.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Sama.",
+        ne: "Tidak sama",
+        gt: "Lebih besar dari",
+        ge: "Lebih dari atau sama dengan",
+        lt: "Kurang dari",
+        le: "Kurang dari atau sama dengan",
+        like: "Suka",
+        nlike: "Tidak suka",
+        empty: "Kosong",
+        nempty: "Tidak kosong",
+        identical: "Identik",
+        nidentical: "Tidak identik",
+        regex: "Ekspresi reguler",
+        "in": "Ada di",
+        notin: "Tidak ada dalam."
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.id.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Seret header kolom di sini ke grup oleh kolom itu",
+    showGroupingPanelText: "Tampilkan grup dengan panel",
+    hideGroupingPanelText: "Sembunyikan Grup dengan Panel",
+    clearGroupText: "Grup yang jelas",
+    sortAscText: "Urutkan naik",
+    sortDescText: "Sortir turun",
+    moveLeftText: "Pindahkan kiri",
+    moveRightText: "Bergerak ke kanan",
+    moveBeginText: "Pindah ke awal",
+    moveEndText: "Pindah ke akhir",
+    removeText: "Menghapus"
 });

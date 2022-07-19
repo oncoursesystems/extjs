@@ -285,7 +285,7 @@ Ext.define('Ext.data.Model', {
             Model = Ext.data.Model,
             modelIdentifier = Model.identifier,
             idProperty = me.idField.name,
-            array, id, initializeFn, internalId, len, i, fields;
+            array, id, initializeFn, internalId, len, i, fields, parentRecord;
 
         // Yes, this is here on purpose. See EXTJS-16494. The second
         // assignment seems to work around a strange JIT issue that prevents
@@ -304,6 +304,17 @@ Ext.define('Ext.data.Model', {
             Ext.raise('Bad Model constructor argument 2 - "session" is not a Session');
         }
         //</debug>
+
+        // Add the parent record to the model instance if a $parentRecordRef exists.
+        // This allows the parent record to be available in a field's convert method.
+        if (data.$parentRecordRef) {
+            parentRecord = data.$parentRecordRef;
+            delete data.$parentRecordRef;
+
+            // parentRecord[0] -> the inverseName for the association
+            // parentRecord[1] -> the parent record
+            me[parentRecord[0]] = parentRecord[1];
+        }
 
         if ((array = data) instanceof Array) {
             me.data = data = {};

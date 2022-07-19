@@ -432,10 +432,35 @@ Ext.define('Ext.grid.locking.View', {
     },
 
     refresh: function() {
-        var lockedView = this.lockedView,
-            normalView = this.normalView;
+        var me = this,
+            lockedView = me.lockedView,
+            normalView = me.normalView,
+            bufferedRenderer = normalView.bufferedRenderer,
+            items = normalView.all,
+            refreshCounter = normalView.refreshCounter,
+            // If there are items in the view, then honour preserveScrollOnRefresh
+            scroller = refreshCounter && items.getCount() && normalView.preserveScrollOnRefresh &&
+                        normalView.ownerGrid.getScrollable(),
+            scrollPos;
 
         Ext.suspendLayouts();
+
+        // capture the startIndex before the clearViewEl call so that we can
+        // re-render the correct range when the refresh() methods are called below
+        if (bufferedRenderer) {
+            lockedView.beforeRefreshStartIndex = lockedView.all.startIndex;
+            normalView.beforeRefreshStartIndex = normalView.all.startIndex;
+        }
+
+        // capture the scrollPos before the clearViewEl call so that we can
+        // scroll back to the correct position after the refresh() methods are called
+        if (scroller) {
+            scrollPos = Ext.clone(scroller.getPosition());
+
+            if (!(scrollPos.x || scrollPos.y)) {
+                scrollPos = null;
+            }
+        }
 
         // Clear both views first so that any widgets are cached first.
         // Otherwise the second refresh's clear could remove widgets
@@ -446,8 +471,16 @@ Ext.define('Ext.grid.locking.View', {
         // Refresh locked view second, so that if it's refreshing from empty (can start
         // with no locked columns), the buffered renderer can look to its partner
         // to get the correct range to refresh.
+        // NOTE: At the end of the Ext.grid.plugin.BufferedRenderer#onViewRefresh method is
+        // the logic that gets called after each of these refresh() calls that makes sure the
+        // correct range is rendered starting at our captured 'beforeRefreshStartIndex' value.
         normalView.refresh();
         lockedView.refresh();
+
+        // restore the scroll since the above calls to clearViewEl() and refresh() clears them
+        if (scroller) {
+            scroller.scrollTo(scrollPos);
+        }
 
         Ext.resumeLayouts(true);
     },

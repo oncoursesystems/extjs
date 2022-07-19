@@ -449,7 +449,7 @@ Ext.define('Ext.field.Panel', {
      * @param {Ext.form.Panel} options.failure.form
      * The {@link Ext.form.Panel} that requested the load.
      *
-     * @param {Ext.form.Panel} options.failure.result
+     * @param {Object} options.failure.result
      * The failed response or result object returned by the server which performed the
      * operation.
      *
@@ -470,7 +470,7 @@ Ext.define('Ext.field.Panel', {
         waitMsg = options.waitMsg;
 
         successFn = function(response, data) {
-            me.setValues(data.data);
+            me.setValues(data);
 
             if (Ext.isFunction(options.success)) {
                 options.success.call(options.scope || me, me, response, data);
@@ -481,7 +481,7 @@ Ext.define('Ext.field.Panel', {
 
         failureFn = function(response, data) {
             if (Ext.isFunction(options.failure)) {
-                options.failure.call(options.scope, me, response, data);
+                options.failure.call(options.scope || me, me, response, data);
             }
 
             me.fireEvent('exception', me, response);
@@ -517,10 +517,10 @@ Ext.define('Ext.field.Panel', {
                     me.setMasked(false);
 
                     if (success) {
-                        successFn(response, data);
+                        successFn(response, data.data);
                     }
                     else {
-                        failureFn(response, data);
+                        failureFn(response, data.data);
                     }
                 }
             });
@@ -555,10 +555,10 @@ Ext.define('Ext.field.Panel', {
                         }
 
                         if (success) {
-                            successFn(response, responseText);
+                            successFn(response, response.data);
                         }
                         else {
-                            failureFn(response, responseText);
+                            failureFn(response, response.data);
                         }
                     }
                     else {

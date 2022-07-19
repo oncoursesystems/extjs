@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.ro.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Numara"
+});
 /**
  * Romanian translations for ExtJS 2.1
  * First released by Lucian Lature on 2007-04-24
@@ -269,4 +274,72 @@ Ext.define("Ext.locale.ro.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.ro.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.ro.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Extinde toate",
+    collapseAllText: "Colaps All.",
+    groupsText: "Grupuri",
+    groupByText: "Grup de acest domeniu",
+    addToGroupingText: "Adăugați la grupare",
+    removeFromGroupingText: "Eliminați din grupare",
+    groupSummaryTpl: "rezumat ({name})",
+    summaryTpl: "rezumat ({store.data.length})"
+});
+Ext.define("Ext.locale.ro.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Nici unul",
+    summaryText: "rezumat"
+});
+Ext.define("Ext.locale.ro.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Este egal",
+        ne: "Nu este egal",
+        gt: "Mai mare ca",
+        ge: "Mai mare sau egal cu",
+        lt: "Mai puțin decât",
+        le: "Mai mic sau egal cu",
+        like: "Ca",
+        nlike: "Nu ca",
+        empty: "Gol",
+        nempty: "Nu goală",
+        identical: "Identic",
+        nidentical: "Nu este identic",
+        regex: "Expresie uzuala",
+        "in": "Este in",
+        notin: "Nu este in."
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.ro.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Trageți un antet de coloană aici pentru a grupa în coloana respectivă",
+    showGroupingPanelText: "Afișați grupul de grup",
+    hideGroupingPanelText: "Ascundeți grupul de grup",
+    clearGroupText: "Grupul clar",
+    sortAscText: "Sortare ascendentă",
+    sortDescText: "Sortează descrescător",
+    moveLeftText: "Mută la stânga",
+    moveRightText: "Misca-te la dreapta",
+    moveBeginText: "Treceți la început",
+    moveEndText: "Treceți la capăt",
+    removeText: "Elimina"
 });

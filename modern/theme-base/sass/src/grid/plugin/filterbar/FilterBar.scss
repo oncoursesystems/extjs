@@ -23,10 +23,12 @@
   }
 }
 
-.#{$prefix}grid-filterbar-filtered-column {
-  > .#{$prefix}header-el {
-    font-style: $grid-filterbar-column-filtered-font-style;
-    font-weight: $grid-filterbar-column-filtered-font-weight;
-    text-decoration: $grid-filterbar-column-filtered-text-decoration;
+.#{$prefix}gridcolumn {
+  &.#{$prefix}grid-filterbar-filtered-column {
+    > .#{$prefix}header-el {
+      font-style: $grid-filterbar-column-filtered-font-style;
+      font-weight: $grid-filterbar-column-filtered-font-weight;
+      text-decoration: $grid-filterbar-column-filtered-text-decoration;
+    }
   }
 }

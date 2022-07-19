@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.NavigationPanel', {
     scrollable: true,
     platformConfig: {
         '!phone': {
-            hidden: false,
+            hidden: true,
             resizable: {
                 split: true,
                 edges: 'east'

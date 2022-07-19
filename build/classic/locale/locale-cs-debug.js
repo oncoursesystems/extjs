@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.cs.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Počet"
+});
 /**
  * Czech Translations
  * Translated by Tomáš Korčák (72)
@@ -289,4 +294,72 @@ Ext.define("Ext.locale.cs.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.cs.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.cs.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Rozšířit vše",
+    collapseAllText: "Kolaps vše.",
+    groupsText: "Skupiny",
+    groupByText: "Skupina podle tohoto pole",
+    addToGroupingText: "Přidat do seskupení",
+    removeFromGroupingText: "Odstranit ze seskupení",
+    groupSummaryTpl: "souhrn ({name})",
+    summaryTpl: "souhrn ({store.data.length})"
+});
+Ext.define("Ext.locale.cs.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Žádný",
+    summaryText: "souhrn"
+});
+Ext.define("Ext.locale.cs.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Je roven",
+        ne: "Není roven",
+        gt: "Větší než",
+        ge: "Větší nebo rovný",
+        lt: "Méně než",
+        le: "Menší nebo rovna",
+        like: "Jako",
+        nlike: "Ne jako",
+        empty: "Prázdný",
+        nempty: "Není prázdný",
+        identical: "Identický",
+        nidentical: "Není identický",
+        regex: "Regulární výraz",
+        "in": "Je in.",
+        notin: "Není"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.cs.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Přetáhněte záhlaví sloupce, abyste se dostali do tohoto sloupce",
+    showGroupingPanelText: "Zobrazit skupinu podle panelu",
+    hideGroupingPanelText: "Skrýt skupinu podle panelu",
+    clearGroupText: "Clear Group.",
+    sortAscText: "Seřadit vzestupně",
+    sortDescText: "Seřadit sestupně",
+    moveLeftText: "Pohyb doleva",
+    moveRightText: "Pohyb vpravo",
+    moveBeginText: "Přesunout na začátek",
+    moveEndText: "Přesunout na konec",
+    removeText: "Odstranit"
 });

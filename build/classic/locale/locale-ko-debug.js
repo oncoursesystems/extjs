@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.ko.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "세다"
+});
 /**
  * Korean Translations By nicetip
  * 05 September 2007
@@ -242,4 +247,72 @@ Ext.define("Ext.locale.ko.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.ko.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.ko.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "모두 확장",
+    collapseAllText: "모든 축소",
+    groupsText: "여러 떼",
+    groupByText: "이 분야의 그룹",
+    addToGroupingText: "그룹화에 추가하십시오",
+    removeFromGroupingText: "그룹화에서 제거하십시오",
+    groupSummaryTpl: "요약 ({name})",
+    summaryTpl: "요약 ({store.data.length})"
+});
+Ext.define("Ext.locale.ko.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "없음",
+    summaryText: "요약"
+});
+Ext.define("Ext.locale.ko.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "는 같다",
+        ne: "동등하지 않다",
+        gt: "보다 큰",
+        ge: "보다 크거나 같음",
+        lt: "미만",
+        le: "보다 작거나 같은 것",
+        like: "좋다",
+        nlike: "같지 않은",
+        empty: "비어있는",
+        nempty: "비어 있지 않다",
+        identical: "동일한",
+        nidentical: "동일하지 않습니다",
+        regex: "정규식",
+        "in": "에 있음",
+        notin: "아니다"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.ko.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "열 머리글을 해당 열로 그룹으로 드래그하십시오.",
+    showGroupingPanelText: "그룹 별 그룹을 보여줍니다",
+    hideGroupingPanelText: "패널로 그룹 숨기기",
+    clearGroupText: "명확한 그룹",
+    sortAscText: "정렬 오름차순",
+    sortDescText: "내림차순 정렬",
+    moveLeftText: "왼쪽으로 이동하십시오",
+    moveRightText: "오른쪽으로 이동해라",
+    moveBeginText: "처음으로 이동하십시오",
+    moveEndText: "끝까지 이동하십시오",
+    removeText: "제거하다"
 });

@@ -250,7 +250,7 @@ function() {
                 queryMode: 'local',
                 renderTo: Ext.getBody(),
                 picker: pickerType || 'auto',
-                platformConfig: { phone: { editable: false }}
+                platformConfig: { phone: { editable: false } }
             });
         }
 
@@ -304,7 +304,7 @@ function() {
         it("should make combobox uneditable when pickertype is 'auto' on mobile", function() {
             Ext.platformTags.phone = true;
             create();
-            
+
             expect(component.getEditable()).toBe(false);
         });
 
@@ -327,7 +327,7 @@ function() {
 
             expect(component.getEditable()).toBe(true);
         });
-    
+
         it("should let combobox be editable when pickertype is 'floated' on desktop", function() {
             create('floated');
 
@@ -1067,7 +1067,7 @@ v = component.getValue();
                 });
                 it("should fire the refresh event when the value changes back to what the last *remotely* queried value was", function() {
                     var remoteStore = new Ext.data.Store({
-                        fields: ['abbr', 'name'],
+                            fields: ['abbr', 'name'],
                             proxy: {
                                 type: 'memory',
                                 data: [{
@@ -1927,6 +1927,169 @@ v = component.getValue();
                     expect(component.expanded).toBeTruthy();
                     expect(component.getPicker().isVisible()).toBe(true);
                 });
+            });
+
+            // EXTJS-28512
+            describe("multiselect is true", function() {
+                it('should allow multiselection for remote store', function() {
+                    Ext.data.ProxyStore.prototype.load = storeLoad;
+                    store.setAsynchronousLoad(true);
+                    makeComponent({
+                        queryMode: 'remote',
+                        queryDelay: 0,
+                        multiSelect: true,
+                        anyMatch: true,
+                        forceSelection: true,
+                        renderTo: Ext.getBody()
+                    });
+                    var loadSpy = spyOn(component.getStore(), 'load').andCallThrough();
+
+                    doTyping('tex');
+
+                    expect(loadSpy).not.toHaveBeenCalled();
+
+                    doTyping('text', true);
+                    waitsForSpy(loadSpy);
+
+                    runs(function() {
+                        expect(store.getCount()).not.toBe(0);
+
+                        component.getPicker().setSelection(component._pickerStore.getAt(0));
+                        component.getPicker().setSelection(component._pickerStore.getAt(1));
+
+                        expect(component.getValue().length).toBe(2);
+                    });
+                });
+
+                it('should be able to input manual values not listed in the pickerlist', function() {
+                    Ext.data.ProxyStore.prototype.load = storeLoad;
+                    store.setAsynchronousLoad(true);
+                    makeComponent({
+                        queryMode: 'remote',
+                        queryDelay: 0,
+                        multiSelect: true,
+                        anyMatch: true,
+                        forceSelection: true,
+                        renderTo: Ext.getBody()
+                    });
+                    var loadSpy = spyOn(component.getStore(), 'load').andCallThrough();
+
+                    component.inputElement.dom.focus();
+                    doTyping('texa');
+                    jasmine.fireKeyEvent(component.inputElement, 'keydown', Ext.event.Event.TAB);
+
+                    waitsForSpy(loadSpy);
+
+                    runs(function() {
+                        expect(store.getCount()).toBe(0);
+                        expect(component.inputElement.el.dom.value).toBe('texa');
+                    });
+                });
+
+                it('should clear a chip when clearing using backspace', function() {
+                    Ext.data.ProxyStore.prototype.load = storeLoad;
+                    store.setAsynchronousLoad(true);
+                    makeComponent({
+                        queryMode: 'remote',
+                        queryDelay: 0,
+                        multiSelect: true,
+                        anyMatch: true,
+                        forceSelection: true,
+                        renderTo: Ext.getBody()
+                    });
+                    var loadSpy = spyOn(component.getStore(), 'load').andCallThrough();
+
+                    doTyping('text', true);
+                    waitsForSpy(loadSpy);
+
+                    runs(function() {
+                        expect(store.getCount()).not.toBe(0);
+
+                        expect(component.getPicker().isVisible()).toBe(true);
+
+                        component.getPicker().setSelection(component._pickerStore.getAt(0));
+                        component.getPicker().setSelection(component._pickerStore.getAt(1));
+
+                        expect(component.getValue().length).toBe(2);
+
+                        component.inputElement.dom.focus();
+                        jasmine.fireKeyEvent(component.inputElement, 'keydown', Ext.event.Event.BACKSPACE);
+                        jasmine.fireKeyEvent(component.inputElement, 'keydown', Ext.event.Event.BACKSPACE);
+
+                        expect(component.getValue().length).toBe(1);
+                    });
+                });
+
+                it('should make single request for a query', function() {
+                    Ext.data.ProxyStore.prototype.load = storeLoad;
+                    store.setAsynchronousLoad(true);
+                    makeComponent({
+                        queryMode: 'remote',
+                        queryDelay: 0,
+                        multiSelect: true,
+                        anyMatch: true,
+                        forceSelection: true,
+                        renderTo: Ext.getBody()
+                    });
+                    var loadSpy = spyOn(component.getStore(), 'load').andCallThrough();
+
+                    doTyping('text', true);
+                    waitsForSpy(loadSpy);
+
+                    runs(function() {
+                        expect(loadSpy.callCount).toBe(1);
+                        component.getPicker().setSelection(component._pickerStore.getAt(0));
+                        expect(loadSpy.callCount).toBe(1);
+                    });
+                });
+
+                it('should load the store when trigger clicked', function() {
+                    Ext.data.ProxyStore.prototype.load = storeLoad;
+                    store.setAsynchronousLoad(true);
+                    makeComponent({
+                        queryMode: 'remote',
+                        queryDelay: 0,
+                        multiSelect: true,
+                        anyMatch: true,
+                        forceSelection: false,
+                        renderTo: Ext.getBody()
+                    });
+                    var loadSpy = spyOn(component.getStore(), 'load').andCallThrough();
+
+                    component._triggers.expand.el.dom.click();
+                    waitsForSpy(loadSpy);
+
+                    runs(function() {
+                        expect(loadSpy.callCount).toBe(1);
+                    });
+                });
+
+                it('should make separate request for each character typed above minChars', function() {
+                    Ext.data.ProxyStore.prototype.load = storeLoad;
+                    store.setAsynchronousLoad(true);
+                    makeComponent({
+                        queryMode: 'remote',
+                        queryDelay: 0,
+                        multiSelect: true,
+                        anyMatch: true,
+                        forceSelection: true,
+                        renderTo: Ext.getBody()
+                    });
+                    var loadSpy = spyOn(component.getStore(), 'load').andCallThrough();
+
+                    doTyping('foru');
+                    waitsForSpy(loadSpy);
+
+                    runs(function() {
+                        doTyping('forum');
+                        waitsForSpy(loadSpy);
+
+                        runs(function() {
+                            expect(loadSpy.callCount).toBe(2);
+                        });
+                    });
+                });
+
             });
         });
 
@@ -5552,6 +5715,7 @@ v = component.getValue();
                     return getRawValue() === 'text 1';
 
                     // An "isEntered" record will be selected
+                    // eslint-disable-next-line no-unreachable
                     if (!enableForceSelection) {
                         expect(spy.callCount).toBe(1);
                     }
@@ -6138,4 +6302,272 @@ v = component.getValue();
         });
     });
 
+    describe('autoSelect: dynamically loaded data test', function() {
+        var statesStore,
+            panel,
+            combo;
+
+        beforeEach(function() {
+            statesStore = Ext.create('Ext.data.Store', {
+                extend: 'Ext.data.Store',
+                fields: [
+                    'abbr', 'country', 'state', 'description'
+                ]
+            });
+            panel = new Ext.Panel({
+                renderTo: document.body,
+                title: 'Country and state',
+                width: 400,
+                height: 200,
+                items: [{
+                    xtype: 'selectfield',
+                    reference: 'dynamicStoreCombo',
+                    store: statesStore,
+                    autoSelect: true,
+                    displayField: 'state',
+                    valueField: 'abbr',
+                    label: 'Local, Dynamic, autoSelect'
+                }]
+            });
+            combo = panel.child('[reference=dynamicStoreCombo]');
+        });
+
+        afterEach(function() {
+            Ext.destroy(panel);
+            Ext.destroy(statesStore);
+        });
+
+        it('Select field has torespect autoSelect: true dynamically loaded data', function() {
+            runs(function() {
+                statesStore.loadData([
+                    { abbr: 'AL', country: 'USA', state: 'Alabama', description: 'The Heart of Dixie' },
+                    { abbr: 'AK', country: 'USA', state: 'Alaska', description: 'The Land of the Midnight Sun' },
+                    { abbr: 'AZ', country: 'USA', state: 'Arizona', description: 'The Grand Canyon State' },
+                    { abbr: 'AR', country: 'USA', state: 'Arkansas', description: 'The Natural State' },
+                    { abbr: 'CA', country: 'USA', state: 'California', description: 'The Golden State' },
+                    { abbr: 'CO', country: 'USA', state: 'Colorado', description: 'The Mountain State' }
+                ], false);
+
+                expect(combo.getValue()).toBe('AL');
+            });
+        });
+    });
+
+    describe('AutoLoad Config Combo', function() {
+        function completeWithData(data) {
+            Ext.Ajax.mockComplete({
+                status: 200,
+                responseText: Ext.JSON.encode(data)
+            });
+        }
+
+        beforeEach(function() {
+            MockAjaxManager.addMethods();
+        });
+
+        afterEach(function() {
+            MockAjaxManager.removeMethods();
+        });
+
+        it('should load the data while typing when autoLoad is true', function() {
+            var loadSpy = spyOn(Ext.data.Store.prototype, 'load').andCallThrough();
+
+            loadSpy.reset();
+            store = new Ext.data.Store({
+                autoLoad: true,
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                model: CBTestModel
+            });
+            makeComponent({
+                renderTo: Ext.getBody(),
+                minChars: 0,
+                valueField: 'value',
+                queryDelay: 1,
+                queryMode: 'remote'
+            });
+
+            expect(loadSpy.callCount).toBe(1);
+            jasmine.focusAndWait(component);
+            doTyping('t');
+            completeWithData([
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' },
+                { text: 'text 31', value: 'value 31' },
+                { text: 'text 32', value: 'value 32' },
+                { text: 'text 33', value: 'value 33' },
+                { text: 'text 34', value: 'value 34' }
+            ]);
+            expect(loadSpy.callCount).toBe(2);
+        });
+
+        it('should load the data while typing when autoLoad is false', function() {
+            var loadSpy = spyOn(Ext.data.Store.prototype, 'load').andCallThrough();
+
+            loadSpy.reset();
+            store = new Ext.data.Store({
+                autoLoad: false,
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                model: CBTestModel
+            });
+            makeComponent({
+                renderTo: Ext.getBody(),
+                minChars: 0,
+                valueField: 'value',
+                queryDelay: 1,
+                queryMode: 'remote'
+            });
+
+            expect(loadSpy.callCount).toBe(0);
+            jasmine.focusAndWait(component);
+            doTyping('t');
+            completeWithData([
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' },
+                { text: 'text 31', value: 'value 31' },
+                { text: 'text 32', value: 'value 32' },
+                { text: 'text 33', value: 'value 33' },
+                { text: 'text 34', value: 'value 34' }
+            ]);
+            expect(loadSpy.callCount).toBe(1);
+        });
+
+        it('should load the data while typing with default autoLoad config (autoLoad: undefined)', function() {
+            var loadSpy = spyOn(Ext.data.Store.prototype, 'load').andCallThrough();
+
+            loadSpy.reset();
+            store = new Ext.data.Store({
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                model: CBTestModel
+            });
+            makeComponent({
+                renderTo: Ext.getBody(),
+                minChars: 0,
+                valueField: 'value',
+                queryMode: 'remote'
+            });
+
+            expect(loadSpy.callCount).toBe(0);
+            jasmine.focusAndWait(component);
+            doTyping('t');
+            completeWithData([
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' },
+                { text: 'text 31', value: 'value 31' },
+                { text: 'text 32', value: 'value 32' },
+                { text: 'text 33', value: 'value 33' },
+                { text: 'text 34', value: 'value 34' }
+            ]);
+            expect(loadSpy.callCount).toBe(1);
+        });
+
+        it('should not load the data intially but while typing should trigger load for autoLoad false.', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                loadSpy = spyOn(Ext.data.Store.prototype, 'load').andCallThrough();
+
+            flushLoadSpy.reset();
+            loadSpy.reset();
+            store = new Ext.data.Store({
+                autoLoad: false,
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                model: CBTestModel
+            });
+            makeComponent({
+                renderTo: Ext.getBody(),
+                minChars: 0,
+                valueField: 'value',
+                queryDelay: 1,
+                queryMode: 'remote'
+            });
+
+            expect(loadSpy.callCount).toBe(0);
+            jasmine.focusAndWait(component);
+            doTyping('B');
+            completeWithData([
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' }
+            ]);
+
+            expect(loadSpy.callCount).toBe(1);
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 1;
+            });
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.query[0]).toBe('B');
+                doTyping('BA');
+                expect(loadSpy.callCount).toBe(2);
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 2;
+            });
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.query[0]).toBe('BA');
+                doTyping('BAC');
+                expect(loadSpy.callCount).toBe(3);
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 3;
+            });
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.query[0]).toBe('BAC');
+                doTyping('BACD');
+                expect(loadSpy.callCount).toBe(4);
+            });
+        });
+
+        it('should not load the data while typing with default autoLoad config (autoLoad: undefined) and autoLoadOnFilterEnd (autoLoadOnFilterEnd: false)', function() {
+            var loadSpy = spyOn(Ext.data.Store.prototype, 'load').andCallThrough();
+
+            loadSpy.reset();
+            store = new Ext.data.Store({
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                autoLoadOnFilterEnd: false,
+                model: CBTestModel
+            });
+
+            makeComponent({
+                renderTo: Ext.getBody(),
+                minChars: 0,
+                valueField: 'value',
+                queryDelay: 1,
+                queryMode: 'remote'
+            });
+
+            expect(loadSpy.callCount).toBe(0);
+            jasmine.focusAndWait(component);
+
+            doTyping('t');
+            completeWithData([
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' },
+                { text: 'text 31', value: 'value 31' },
+                { text: 'text 32', value: 'value 32' },
+                { text: 'text 33', value: 'value 33' },
+                { text: 'text 34', value: 'value 34' }
+            ]);
+            expect(loadSpy.callCount).toBe(0);
+        });
+    });
 });

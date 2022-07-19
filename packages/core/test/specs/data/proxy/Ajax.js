@@ -180,6 +180,56 @@ topSuite("Ext.data.proxy.Ajax", ['Ext.data.ArrayStore'], function() {
                 expect(ajax.params).toBeUndefined();
             });
 
+            it("should send sorters as object with non-get action and paramsAsJson: true", function() {
+                proxy = new Ext.data.proxy.Ajax({
+                    url: 'fake',
+                    paramsAsJson: true,
+                    method: 'POST'
+                });
+                expect(proxy.encodeSorters([new Ext.util.Sorter({ property: 'name', direction: 'ASC' })])).toEqual(
+                    [{
+                        "property": "name",
+                        "direction": "ASC"
+                    }]
+                );
+            });
+
+            it("should send sorters encoded when paramsAsJson: false", function() {
+                proxy = new Ext.data.proxy.Ajax({
+                    url: 'fake',
+                    paramsAsJson: false,
+                    method: 'POST'
+                });
+                expect(proxy.encodeSorters([new Ext.util.Sorter({ property: 'name', direction: 'ASC' })])).toEqual(
+                    "[{\"property\":\"name\",\"direction\":\"ASC\"}]"
+                );
+            });
+
+            it("should send filters as object with non-get action and paramsAsJson: true", function() {
+                proxy = new Ext.data.proxy.Ajax({
+                    url: 'fake',
+                    paramsAsJson: true,
+                    method: 'POST'
+                });
+                expect(proxy.encodeFilters([new Ext.util.Filter({ property: 'name', value: 'Ed' })])).toEqual(
+                    [{
+                        "property": "name",
+                        "value": "Ed"
+                    }]
+                );
+            });
+
+            it("should send filters encoded when paramsAsJson: false", function() {
+                proxy = new Ext.data.proxy.Ajax({
+                    url: 'fake',
+                    paramsAsJson: false,
+                    method: 'POST'
+                });
+                expect(proxy.encodeFilters([new Ext.util.Filter({ property: 'name', value: 'Ed' })])).toEqual(
+                    "[{\"property\":\"name\",\"value\":\"Ed\"}]"
+                );
+            });
+
             it("should not overwrite existing jsonData, but merge them", function() {
                 proxy = new Ext.data.proxy.Ajax({
                     url: 'fake',

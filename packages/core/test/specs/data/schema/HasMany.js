@@ -22,7 +22,19 @@ topSuite("Ext.data.schema.HasMany", [false, 'Ext.data.ArrayStore'], function() {
     function definePost(options) {
         var cfg = {
             extend: 'Ext.data.Model',
-            fields: ['id', 'title']
+            fields: ['id', 'title', {
+                name: 'threadTitle',
+                convert: function(val, rec) {
+                    var thread = rec.getThread();
+
+                    if (thread) {
+                        return thread.data.title;
+                    }
+                    else {
+                        return 'Unknown thread title';
+                    }
+                }
+            }]
         };
 
         if (options) {
@@ -285,6 +297,52 @@ topSuite("Ext.data.schema.HasMany", [false, 'Ext.data.ArrayStore'], function() {
                     }]
                 });
                 expect(thread.posts().getCount()).toBe(2);
+            });
+
+            it("should find parent record in convert function when loading nested data via Model.load(id)", function() {
+                definePost();
+                defineThread({
+                    hasMany: {
+                        type: 'Post',
+                        associationKey: 'comments'
+                    }
+                });
+
+                var thread = Thread.load(1);
+
+                Ext.Ajax.mockCompleteWithData({
+                    id: 1,
+                    title: 'Thread.load(id) example',
+                    comments: [{
+                        id: 101
+                    }, {
+                        id: 102
+                    }]
+                });
+                expect(thread.posts().getAt(0).data.threadTitle).toBe('Thread.load(id) example');
+            });
+
+            it("should find parent record in convert function when loading nested data via Model.loadData(data)", function() {
+                definePost();
+                defineThread({
+                    hasMany: {
+                        type: 'Post',
+                        associationKey: 'comments'
+                    }
+                });
+
+                var thread = Thread.loadData({
+                    id: 1,
+                    title: 'Thread.loadData(data) example',
+                    comments: [{
+                        id: 101
+                    }, {
+                        id: 102
+                    }]
+                });
+
+                Ext.Ajax.mockCompleteWithData();
+                expect(thread.posts().getAt(0).data.threadTitle).toBe('Thread.loadData(data) example');
             });
         });
 

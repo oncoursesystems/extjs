@@ -72,6 +72,11 @@ Ext.define('Ext.locale.it.Panel', {
         closeToolText: 'Chiudi pannello'
     }
 });
+Ext.define("Ext.locale.it.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Contare"
+});
 Ext.define('Ext.locale.it.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
@@ -337,6 +342,23 @@ Ext.define('Ext.locale.it.field.Text', {
         validationMessage: 'È nel formato sbagliato'
     }
 });
+Ext.define("Ext.locale.it.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "Riepilogo ({name})",
+        summaryTpl: "Riepilogo ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.it.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "Riepilogo ({name})",
+        summaryTpl: "Riepilogo ({store.data.length})"
+    },
+    text: "Gruppi"
+});
 Ext.define("Ext.locale.it.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
 
@@ -368,6 +390,13 @@ Ext.define("Ext.locale.it.grid.locked.Grid", {
         }
     }
 });
+Ext.define("Ext.locale.it.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "Aggiungi al raggruppamento"
+    }
+});
 Ext.define("Ext.locale.it.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
@@ -380,6 +409,25 @@ Ext.define("Ext.locale.it.grid.menu.GroupByThis", {
 
     config: {
         text: "Raggruppa per questo campo"
+    }
+});
+Ext.define("Ext.locale.it.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "Gruppi",
+
+        menu: [{
+            text: "Espandi tutto"
+        }, {
+            text: "Collapse all"
+        }]
+    }
+});
+Ext.define("Ext.locale.it.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "Rimuovere dal raggruppamento"
     }
 });
 Ext.define("Ext.locale.it.grid.menu.ShowInGroups", {
@@ -406,6 +454,61 @@ Ext.define("Ext.locale.it.grid.menu.SortDesc", {
 Ext.define("Ext.locale.it.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} Righe selezionate"
+});
+Ext.define("Ext.locale.it.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Nessuno",
+    summaryText: "Riepilogo"
+});
+Ext.define("Ext.locale.it.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "È uguale",
+        ne: "Non uguale",
+        gt: "Più grande di",
+        ge: "Maggiore o uguale a",
+        lt: "Meno di",
+        le: "Minore o uguale a",
+        like: "Piace",
+        nlike: "Non come",
+        empty: "Vuoto",
+        nempty: "Non vuoto",
+        identical: "Identico",
+        nidentical: "Non identico",
+        regex: "Espressione regolare",
+        in: "È in",
+        notin: "Non è in"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.it.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Trascina un'intestazione di colonna qui per raggruppare da quella colonna",
+    showGroupingPanelText: "Mostra gruppo per pannello",
+    hideGroupingPanelText: "Nascondi gruppo per pannello",
+    clearGroupText: "Clear Group.",
+    sortAscText: "Ordine crescente",
+    sortDescText: "Ordine decrescente",
+    moveLeftText: "Muovere a sinistra",
+    moveRightText: "Vai a destra",
+    moveBeginText: "Passa all'inizio",
+    moveEndText: "Passare alla fine",
+    removeText: "Rimuovere"
 });
 Ext.define('Ext.locale.it.panel.Collapser', {
     override: 'Ext.panel.Collapser',

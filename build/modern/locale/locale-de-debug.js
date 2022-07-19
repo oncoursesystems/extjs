@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.de.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Zählen"
+});
 /**
  * German translation
  */
@@ -498,4 +503,103 @@ Ext.define('Ext.locale.de.grid.locked.Grid', {
 Ext.define("Ext.locale.de.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} Zeile(n) ausgewählt"
+});
+Ext.define("Ext.locale.de.grid.TreeGrouped", {
+    override: "Ext.grid.TreeGrouped",
+
+    config: {
+        groupSummaryTpl: "Zusammenfassung ({name})",
+        summaryTpl: "Zusammenfassung ({store.data.length})"
+    }
+});
+Ext.define("Ext.locale.de.grid.column.Groups", {
+    override: "Ext.grid.column.Groups",
+
+    config: {
+        groupSummaryTpl: "Zusammenfassung ({name})",
+        summaryTpl: "Zusammenfassung ({store.data.length})"
+    },
+    text: "Gruppen"
+});
+Ext.define("Ext.locale.de.grid.menu.AddGroup", {
+    override: "Ext.grid.menu.AddGroup",
+
+    config: {
+        text: "Zur gruppierung hinzufügen"
+    }
+});
+Ext.define("Ext.locale.de.grid.menu.Groups", {
+    override: "Ext.grid.menu.Groups",
+
+    config: {
+        text: "Gruppen",
+
+        menu: [{
+            text: "Alle erweitern"
+        }, {
+            text: "Alles kollabieren"
+        }]
+    }
+});
+Ext.define("Ext.locale.de.grid.menu.RemoveGroup", {
+    override: "Ext.grid.menu.RemoveGroup",
+    config: {
+        text: "Von der Gruppierung entfernen."
+    }
+});
+Ext.define("Ext.locale.de.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Keiner",
+    summaryText: "Zusammenfassung"
+});
+Ext.define("Ext.locale.de.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+    operatorsTextMap: {
+        eq: "Ist gleich",
+        ne: "Nicht gleich",
+        gt: "Größer als",
+        ge: "Größer als oder gleich wie",
+        lt: "Weniger als",
+        le: "Weniger als oder gleich",
+        like: "Mögen",
+        nlike: "Nicht wie",
+        empty: "Leer",
+        nempty: "Nicht leer",
+        identical: "Identisch",
+        nidentical: "Nicht identisch",
+        regex: "Regulären Ausdruck",
+        in: "Ist in",
+        notin: "Ist nicht in"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.de.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Ziehen Sie hier einen Spalten-Header hier in diese Spalte",
+    showGroupingPanelText: "Gruppe nach dem Panel anzeigen",
+    hideGroupingPanelText: "Gruppen nach Panel ausblenden",
+    clearGroupText: "Klare Gruppe",
+    sortAscText: "Aufsteigend sortieren",
+    sortDescText: "Absteigend sortieren",
+    moveLeftText: "Geh nach links",
+    moveRightText: "Nach rechts bewegen",
+    moveBeginText: "Umzug zum Anfang",
+    moveEndText: "Umzug zum Ende",
+    removeText: "Entfernen"
+
 });

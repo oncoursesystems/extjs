@@ -1,4 +1,3 @@
-/* global Ext, expect, jasmine, xit, topSuite */
 /* eslint indent: off */
 topSuite('Ext.grid.plugin.CellEditing',
     ['Ext.grid.Grid', 'Ext.grid.Tree', 'Ext.grid.plugin.CellEditing', 'Ext.form.Panel',
@@ -47,7 +46,7 @@ function() {
             var cell = findCell(row, column),
                 navigateSpy = spyOnEvent(grid, 'navigate'),
                 triggerEvent = plugin.getTriggerEvent(),
-                double = Ext.String.startsWith(triggerEvent, 'dbl') || Ext.String.startsWith(triggerEvent, 'double'),
+                isDoubleTap = Ext.String.startsWith(triggerEvent, 'dbl') || Ext.String.startsWith(triggerEvent, 'double'),
                 focusSpy = jasmine.createSpy(),
                 editor;
 
@@ -84,12 +83,12 @@ function() {
                 if (jasmine.supportsTouch) {
                     Ext.testHelper.tap(cell);
 
-                    if (double) {
+                    if (isDoubleTap) {
                         Ext.testHelper.tap(cell);
                     }
                 }
                 else {
-                    if (double) {
+                    if (isDoubleTap) {
                         jasmine.fireMouseEvent(cell, 'dblclick');
                     }
                     else {
@@ -761,14 +760,15 @@ function() {
         });
 
         describe('events', function() {
-            beforeEach(function () {
+            beforeEach(function() {
                 makeGrid(null);
             });
 
             describe('beforestartedit', function() {
                  it('should fire the event in grid', function() {
                     var called = false;
-                    runs(function () {
+
+                    runs(function() {
                         grid.on('beforestartedit', function() {
                             called = true;
                         });
@@ -782,11 +782,11 @@ function() {
 
                 it('should fire the event with the grid, element, value and location', function() {
                     var p, inputValue, context;
-                  
+
                     runs(function() {
-                        grid.on('beforestartedit', function (editor, el, value, location) {
+                        grid.on('beforestartedit', function(editor, el, value, location) {
                             p = editor;
-                            inputValue = value,
+                            inputValue = value;
                             context = location;
                         });
 
@@ -811,7 +811,8 @@ function() {
                         grid.on('beforestartedit', function(editor, el, value, location) {
                             // Only allow editing on rows other than the first
                             plugin.editor = editor;
-                            return editor.getField().id != 'field1';
+
+                            return editor.getField().id !== 'field1';
                         });
 
                         triggerCellMouseEvent('dblclick', 0, 0);
@@ -842,7 +843,7 @@ function() {
                         });
 
                         triggerCellMouseEvent('dblclick', 0, 0);
-                        
+
                     });
 
                     runs(function() {
@@ -896,7 +897,7 @@ function() {
                     var p, inputValue;
 
                     runs(function() {
-                        grid.on('canceledit', function (editor, value, startValue) {
+                        grid.on('canceledit', function(editor, value, startValue) {
                             p = editor;
                             inputValue = value;
                         });
@@ -946,7 +947,7 @@ function() {
 
                     grid.on('startedit', function(editor, editorEl, value, location) {
                         p = editor;
-                        inputValue = value
+                        inputValue = value;
                         context = location;
                     });
 
@@ -1011,7 +1012,7 @@ function() {
 
                     runs(function() {
                         expect(grid.refreshCounter).toBe(refreshCounter + 1);
-                        
+
                     });
                 });
             });
@@ -1055,15 +1056,15 @@ function() {
                         expect(called).toBe(true);
                         expect(plugin.editing).toBe(false);
                     });
-                }); 
-                it('should prevent saving edited values if false is returned from the beforecomplete event', function () {
+                });
+                it('should prevent saving edited values if false is returned from the beforecomplete event', function() {
                     runs(function() {
                         grid.on('beforecomplete', function() {
                             return false;
                         });
 
                         triggerCellMouseEvent('dblclick', 0, 0);
-                        
+
                         plugin.getActiveEditor().getField().setValue('foo');
                         plugin.getActiveEditor().completeEdit();
                     });
@@ -1071,7 +1072,7 @@ function() {
                     runs(function() {
                         expect(getRec(0).get('field1')).toBe('1.1');
                     });
-                }); 
+                });
             });
 
              describe('complete', function() {
@@ -1091,7 +1092,7 @@ function() {
 
                         expect(called).toBe(true);
                     });
-                }); 
+                });
                 it('should prevent saving edited values if false is returned from the beforecomplete event', function() {
                     runs(function() {
                         grid.on('complete', function() {
@@ -1099,7 +1100,7 @@ function() {
                         });
 
                         triggerCellMouseEvent('dblclick', 0, 0);
-                        
+
                         plugin.getActiveEditor().getField().setValue('foo');
                         plugin.getActiveEditor().completeEdit();
                     });
@@ -1107,7 +1108,7 @@ function() {
                     runs(function() {
                         expect(getRec(0).get('field1')).toBe('foo');
                     });
-                }); 
+                });
             });
         });
         describe('positioning', function() {
@@ -1815,6 +1816,7 @@ function() {
                 waitsFor(function() {
                     // with the clicked record as the current location
                     var loc = grid.getNavigationModel().getLocation();
+
                     return loc && loc.recordIndex === 63;
                 });
             });

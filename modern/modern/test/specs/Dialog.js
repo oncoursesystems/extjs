@@ -10,7 +10,7 @@ function() {
                 items: config
             };
         }
- else {
+        else {
             config = Ext.apply({}, config);
         }
 
@@ -940,7 +940,7 @@ function() {
 
         makeTabSuite(false);
         makeTabSuite(true);
-        
+
         describe("ESC close modal", function() {
             function makeButtonModal(modal) {
                 var pressTab = jasmine.pressTabKey,
@@ -1058,13 +1058,14 @@ function() {
             makeButtonModal(true);
         });
     });
-    
 
     describe("Dialog with focus and drag n drop and ESC event", function() {
         var closeSpy = jasmine.createSpy(),
             toolField, textField,
-            expectFocused = jasmine.expectFocused, targetEl,
-            helper = Ext.testHelper, resizable, activeEdge, cursorTrack;
+            expectFocused = jasmine.expectFocused,
+            targetEl,
+            helper = Ext.testHelper,
+            resizable, activeEdge, cursorTrack;
 
         describe("with ESC button click", function() {
             beforeEach(function() {
@@ -1101,7 +1102,7 @@ function() {
                 runs(function() {
                     activeEdge = edge;
                     edge = resizable.getEdge(edge);
-                    var xy =dialog.element.getXY();
+                    var xy = dialog.element.getXY();
 
                     start({
                         x: xy[0],
@@ -1153,6 +1154,7 @@ function() {
                 cursorTrack = [cfg.x || 0, cfg.y || 0];
                 helper.touchEnd(target, cfg);
             }
+
             it("should focus close button", function() {
                 expectFocused(toolField);
             });
@@ -1172,11 +1174,29 @@ function() {
                     expect(closeSpy).toHaveBeenCalled();
                 });
             });
+
+            it("should close on esc key event when user clics on dialog's body and click on ESC key", function() {
+                jasmine.fireMouseEvent(dialog.element, 'click');
+                expectFocused(toolField);
+                runs(function() {
+                    jasmine.syncPressKey(dialog.element, 'esc');
+                    expect(closeSpy).toHaveBeenCalled();
+                });
+            });
+
+            it("should close on esc key event when user clics on dialog's header and click on ESC key", function() {
+                jasmine.fireMouseEvent(dialog.header.element, 'click');
+                expectFocused(toolField);
+                runs(function() {
+                    jasmine.syncPressKey(dialog.element, 'esc');
+                    expect(closeSpy).toHaveBeenCalled();
+                });
+            });
         });
     });
 
     describe("with parent and child modal esc button click", function() {
-        var parentToolField, childToolField, 
+        var parentToolField, childToolField,
             expectFocused = jasmine.expectFocused,
             closeSpy = jasmine.createSpy(),
             childCloseSpy = jasmine.createSpy();
@@ -1187,17 +1207,23 @@ function() {
         });
 
         it("should focus on parent sibling dialog after esc", function() {
-            dialog = new Ext.Dialog({closable: true,listeners: {
-                close: closeSpy
-            }});
+            dialog = new Ext.Dialog({
+                closable: true,
+                listeners: {
+                    close: closeSpy
+                }
+            });
             parentToolField = dialog.down('tool');
             dialog.show();
             expectFocused(parentToolField);
-            
+
             runs(function() {
-                childDialog = new Ext.Dialog({closable: true,listeners: {
-                    close: childCloseSpy
-                }});
+                childDialog = new Ext.Dialog({
+                    closable: true,
+                    listeners: {
+                        close: childCloseSpy
+                    }
+                });
                 childToolField = dialog.down('tool');
                 childDialog.show();
                 expectFocused(childToolField);

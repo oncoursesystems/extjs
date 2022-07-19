@@ -801,8 +801,9 @@ topSuite("Ext.dataview.DataView", ['Ext.data.ArrayStore'], function() {
                         }, makeInlineData(10));
 
                         var h = getElement(view.getItemAt(0)).getHeight();
+
                         waits(100);
-                        runs(function(){
+                        runs(function() {
                             expectPositions(getInlineNoWrapPos(50, h));
                         });
                     });
@@ -832,8 +833,9 @@ topSuite("Ext.dataview.DataView", ['Ext.data.ArrayStore'], function() {
                                 wrap: false
                             });
                             var h = getElement(view.getItemAt(0)).getHeight();
+
                             waits(100);
-                            runs(function(){
+                            runs(function() {
                                 expectPositions(getInlineNoWrapPos(50, h));
                             });
                         });

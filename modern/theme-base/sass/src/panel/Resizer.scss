@@ -97,3 +97,7 @@
     position: absolute;
     cursor: default;
 }
+
+.#{$prefix}resizeactive iframe {
+    pointer-events: none;
+}

@@ -36,11 +36,11 @@
         }
     },
     {
-        "platform": "OS X 10.11",
+        "platform": "macOS 10.12",
         "browserName": "safari",
-        "version": "9",
+        "version": "10",
+        "pingTimeout": 60000,
         "chunks": 10,
-        "seleniumVersion": "2.48.0",
         "remoteOptions": {
             "queueSizeThreshold": 500
         }

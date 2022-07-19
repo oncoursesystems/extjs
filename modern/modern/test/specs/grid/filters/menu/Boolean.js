@@ -1,4 +1,3 @@
-/* global Ext, MockAjaxManager, expect, jasmine, spyOn, xit */
 
 topSuite('Ext.grid.filters.menu.Boolean', ['Ext.grid.Grid', 'Ext.grid.filters.*'],
 function() {

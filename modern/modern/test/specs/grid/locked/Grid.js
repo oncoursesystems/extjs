@@ -37,7 +37,7 @@ topSuite('Ext.grid.locked.Grid', [
         measurer.destroy();
     });
 
-    function makeGrid(cfg,options) {
+    function makeGrid(cfg, options) {
         cfg = cfg || {};
 
         if (!cfg.hasOwnProperty('columns')) {
@@ -90,6 +90,7 @@ topSuite('Ext.grid.locked.Grid', [
                 })()
             };
         }
+
         grid = new Ext.grid.locked.Grid(Ext.apply({
             renderTo: Ext.getBody(),
             width: 600,
@@ -237,9 +238,9 @@ topSuite('Ext.grid.locked.Grid', [
                             }
                         }
                     }
-                } ,200);
+                }, 200);
             });
-          
+
             it('should add selection to all regions when checkbox selected from one region', function() {
                 var grids = getVisibleGrids(),
                     sm = grids[0].getSelectable(),
@@ -249,7 +250,7 @@ topSuite('Ext.grid.locked.Grid', [
                     checkbox,
                     row,
                     cells,
-                    j
+                    j;
 
                     row = grids[0].getItemAt(0);
                     cells = row.getCells();
@@ -257,12 +258,12 @@ topSuite('Ext.grid.locked.Grid', [
 
                     // checkbox selection event 
                     jasmine.fireMouseEvent(checkbox, 'click');
-                    
+
                         // For each grid, selected record should also reflect in all regions
                         for (j = 0; j < len; ++j) {
                             rowItem = grids[j].getItemAt(0);
                             expect(rowItem).toHaveCls(cls);
-                        }        
+                        }
             });
 
             it('should select record when checkbox is clicked', function() {
@@ -271,14 +272,15 @@ topSuite('Ext.grid.locked.Grid', [
                     selectedRecord,
                     row,
                     cells,
-                    checkbox
+                    checkbox;
+
                     row = grids[0].getItemAt(0);
                     cells = row.getCells();
                     checkbox = cells[0].element.dom.querySelector('.x-checkbox-el');
 
                     // checkbox selection event 
                     jasmine.fireMouseEvent(checkbox, 'click');
-                    selectedRecord = sm.getSelectedRecord().getData(); 
+                    selectedRecord = sm.getSelectedRecord().getData();
 
                     expect(row.getRecord().getData()).toEqual(selectedRecord);
         });

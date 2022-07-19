@@ -56,8 +56,8 @@ $states = array(
     "Wyoming"        => array(49, "WY", "Wyoming",        "Like No Place on Earth",       584153,   39538)
 );
 
-$filters = $_GET['filter'];
-$query = $_GET['q'];
+$filters = array_key_exists('filter', $_GET) ? $_GET['filter'] : '';
+$query = array_key_exists('q', $_GET) ? $_GET['q'] : '';
 $queryRe = '/^' . $query . '/i';
 $found = array();
 

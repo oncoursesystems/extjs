@@ -3,6 +3,11 @@ Ext.define("Ext.locale.it.LoadMask", {
 
     msg: "Caricamento..."
 });
+Ext.define("Ext.locale.it.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Contare"
+});
 Ext.define("Ext.locale.it.data.validator.Bound", {
     override: "Ext.data.validator.Bound",
 
@@ -295,6 +300,18 @@ Ext.define("Ext.locale.it.grid.column.Number", {
 
     format: '0.000,00'
 });
+Ext.define("Ext.locale.it.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Espandi tutto",
+    collapseAllText: "Comprimi tutto",
+    groupsText: "Gruppi",
+    groupByText: "Gruppo di questo campo",
+    addToGroupingText: "Aggiungi al raggruppamento",
+    removeFromGroupingText: "Rimuovere dal raggruppamento",
+    groupSummaryTpl: "Riepilogo ({name})",
+    summaryTpl: "Riepilogo ({store.data.length})"
+});
 Ext.define("Ext.locale.it.grid.feature.Grouping", {
     override: "Ext.grid.feature.Grouping",
 
@@ -358,6 +375,62 @@ Ext.define("Ext.locale.it.grid.plugin.DragDrop", {
     override: "Ext.grid.plugin.DragDrop",
 
     dragText: "{0} Righe selezionate"
+});
+Ext.define("Ext.locale.it.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Nessuno",
+    summaryText: "Riepilogo"
+});
+Ext.define("Ext.locale.it.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "È uguale",
+        ne: "Non uguale",
+        gt: "Più grande di",
+        ge: "Maggiore o uguale a",
+        lt: "Meno di",
+        le: "Minore o uguale a",
+        like: "Piace",
+        nlike: "Non come",
+        empty: "Vuoto",
+        nempty: "Non vuoto",
+        identical: "Identico",
+        nidentical: "Non identico",
+        regex: "Espressione regolare",
+        "in": "È in",
+        notin: "Non è in"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.it.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Trascina un'intestazione di colonna qui per raggruppare da quella colonna",
+    showGroupingPanelText: "Mostra gruppo per pannello",
+    hideGroupingPanelText: "Nascondi gruppo per pannello",
+    clearGroupText: "Cancella gruppo",
+    sortAscText: "Ordine crescente",
+    sortDescText: "Ordine decrescente",
+    moveLeftText: "Muovere a sinistra",
+    moveRightText: "Vai a destra",
+    moveBeginText: "Passa all'inizio",
+    moveEndText: "Passare alla fine",
+    removeText: "Rimuovere"
 });
 Ext.define("Ext.locale.it.menu.CheckItem", {
     override: 'Ext.menu.CheckItem',

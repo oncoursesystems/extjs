@@ -1,4 +1,3 @@
-/* global Ext, spyOn, jasmine, expect */
 
 topSuite("Ext.Widget.modern",
     [false, 'Ext.Container', 'Ext.app.ViewModel', 'Ext.app.ViewController'],

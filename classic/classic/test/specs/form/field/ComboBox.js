@@ -765,7 +765,7 @@ function() {
                 });
                 it("should fire the change event when the value changes back to what the last *remotely* queried value was", function() {
                     var remoteStore = new Ext.data.Store({
-                        fields: ['abbr', 'name'],
+                            fields: ['abbr', 'name'],
                             proxy: {
                                 type: 'memory',
                                 data: [{
@@ -5793,6 +5793,194 @@ function() {
             jasmine.blurAndWait(component);
             runs(function() {
                 expect(component.getCaretPos()).toBe(0);
+            });
+        });
+    });
+
+    describe('AutoLoad config combo', function() {
+        function completeWithData(data) {
+            Ext.Ajax.mockComplete({
+                status: 200,
+                responseText: Ext.JSON.encode(data)
+            });
+        }
+
+        beforeEach(function() {
+            MockAjaxManager.addMethods();
+        });
+
+        afterEach(function() {
+            MockAjaxManager.removeMethods();
+        });
+
+        it('should load the data while typing when autoLoad is true', function() {
+            var loadSpy = spyOn(Ext.data.Store.prototype, 'load').andCallThrough();
+
+            loadSpy.reset();
+            store = new Ext.data.Store({
+                autoLoad: true,
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                model: CBTestModel
+            });
+            makeComponent({
+                renderTo: Ext.getBody(),
+                minChars: 0,
+                valueField: 'value',
+                queryDelay: 1,
+                queryMode: 'remote'
+            });
+            expect(loadSpy.callCount).toBe(1);
+
+            jasmine.focusAndWait(component);
+
+            doTyping('t');
+            completeWithData([
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' },
+                { text: 'text 31', value: 'value 31' },
+                { text: 'text 32', value: 'value 32' },
+                { text: 'text 33', value: 'value 33' },
+                { text: 'text 34', value: 'value 34' }
+            ]);
+            expect(loadSpy.callCount).toBe(2);
+        });
+
+        it('should load the data while typing when autoLoad is false', function() {
+            var loadSpy = spyOn(Ext.data.Store.prototype, 'load').andCallThrough();
+
+            loadSpy.reset();
+            store = new Ext.data.Store({
+                autoLoad: false,
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                model: CBTestModel
+            });
+
+            makeComponent({
+                renderTo: Ext.getBody(),
+                minChars: 0,
+                valueField: 'value',
+                queryDelay: 1,
+                queryMode: 'remote'
+            });
+
+            expect(loadSpy.callCount).toBe(0);
+            jasmine.focusAndWait(component);
+            doTyping('t');
+            completeWithData([
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' },
+                { text: 'text 31', value: 'value 31' },
+                { text: 'text 32', value: 'value 32' },
+                { text: 'text 33', value: 'value 33' },
+                { text: 'text 34', value: 'value 34' }
+            ]);
+            expect(loadSpy.callCount).toBe(1);
+        });
+
+        it('should load the data while typing with default autoLoad config (autoLoad: undefined)', function() {
+            var loadSpy = spyOn(Ext.data.Store.prototype, 'load').andCallThrough();
+
+            loadSpy.reset();
+            store = new Ext.data.Store({
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                model: CBTestModel
+            });
+
+            makeComponent({
+                renderTo: Ext.getBody(),
+                minChars: 0,
+                valueField: 'value',
+                queryDelay: 1,
+                queryMode: 'remote'
+            });
+
+            expect(loadSpy.callCount).toBe(0);
+            jasmine.focusAndWait(component);
+
+            doTyping('t');
+            completeWithData([
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' },
+                { text: 'text 31', value: 'value 31' },
+                { text: 'text 32', value: 'value 32' },
+                { text: 'text 33', value: 'value 33' },
+                { text: 'text 34', value: 'value 34' }
+            ]);
+            expect(loadSpy.callCount).toBe(1);
+        });
+
+        it('should not load the data intially but while typing should trigger load for autoLoad false.', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                loadSpy = spyOn(Ext.data.Store.prototype, 'load').andCallThrough();
+
+            loadSpy.reset();
+            flushLoadSpy.reset();
+
+            store = new Ext.data.Store({
+                autoLoad: false,
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                model: CBTestModel
+            });
+
+            makeComponent({
+                renderTo: Ext.getBody(),
+                minChars: 0,
+                valueField: 'value',
+                queryDelay: 1,
+                queryMode: 'remote'
+            });
+
+            expect(loadSpy.callCount).toBe(0);
+            jasmine.focusAndWait(component);
+
+            doTyping('B');
+            completeWithData([
+                { text: 'text 10', value: 'value 10' },
+                { text: 'text 11', value: 'value 11' },
+                { text: 'text 12', value: 'value 12' }
+            ]);
+
+            expect(loadSpy.callCount).toBe(1);
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 1;
+            });
+            runs(function() {
+               doTyping('BA');
+               expect(loadSpy.callCount).toBe(2);
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 2;
+            });
+            runs(function() {
+               expect(ajaxSpy.mostRecentCall.args[0].params.query).toBe('BA');
+               doTyping('BAC');
+               expect(loadSpy.callCount).toBe(3);
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 3;
+            });
+            runs(function() {
+               expect(ajaxSpy.mostRecentCall.args[0].params.query).toBe('BAC');
+               doTyping('BACD');
+               expect(loadSpy.callCount).toBe(4);
             });
         });
     });

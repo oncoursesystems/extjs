@@ -1,7 +1,7 @@
 /*
-This file is part of Ext JS 7.4.0.42
+This file is part of Ext JS 7.5.1.5
 
-Copyright (c) 2011-2021 Sencha Inc
+Copyright (c) 2011-2022 Sencha Inc
 
 license: http://www.sencha.com/legal/sencha-software-license-agreement
 Contact: http://www.sencha.com/contact
@@ -14,7 +14,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Version: 7.4.0.42 Build date: 2021-05-04 14:42:24 (669f575eb1592a96aa3fb58a602faf3b96d819ea)
+Version: 7.5.1.5 Build date: 2022-02-04 16:51:53 (e022145fa993b4c9612a7e3bcaaabc2125de00be)
 
 */
 // @tag core
@@ -7368,8 +7368,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '7.4.0.42');
-        Ext.setVersion('core', '7.4.0.42');
+        Ext.setVersion('ext', '7.5.1.5');
+        Ext.setVersion('core', '7.5.1.5');
     }
 })(Ext.manifest);
 
@@ -39592,7 +39592,7 @@ Ext.define('Ext.util.Filter', {
             
             
             if (config.hasOwnProperty(name)) {
-                result[name] = config[name];
+                result[name] = this.getConfig(name);
             }
         }
         delete result.root;
@@ -43908,7 +43908,28 @@ Ext.define('Ext.data.schema.Role', {
     },
     read: function(record, data, fromReader, readOptions) {
         var reader = this.constructReader(fromReader),
-            root = reader.getRoot(data);
+            root = reader.getRoot(data),
+            inverse = this.inverse,
+            inverseName = inverse && !inverse.isMany && inverse.getInstanceName(),
+            recordCreator = (readOptions && readOptions.recordCreator) || reader.defaultRecordCreator;
+        
+        
+        
+        
+        
+        if (inverseName) {
+            readOptions = Ext.applyIf({
+                recordCreator: function(data, Model) {
+                    if (!data.$parentRecordRef) {
+                        data.$parentRecordRef = [
+                            inverseName,
+                            record
+                        ];
+                    }
+                    return recordCreator(data, Model);
+                }
+            }, readOptions);
+        }
         if (root) {
             return reader.readRecords(root, readOptions, this._internalReadOptions);
         }
@@ -46356,7 +46377,9 @@ Ext.define('Ext.data.AbstractStore', {
         
         autoSort: null,
         
-        reloadOnClearSorters: false
+        reloadOnClearSorters: false,
+        
+        autoLoadOnFilterEnd: undefined
     },
     
     currentPage: 1,
@@ -46756,7 +46779,7 @@ Ext.define('Ext.data.AbstractStore', {
             
             
             
-            if (sorters.length || me.getReloadOnClearSorters()) {
+            if ((me.isLoaded() || me.getAutoLoad()) && (sorters.length || me.getReloadOnClearSorters())) {
                 
                 fireSort = false;
                 me.load({
@@ -46791,7 +46814,7 @@ Ext.define('Ext.data.AbstractStore', {
             });
             
             me.currentPage = 1;
-            if (!suppressNext) {
+            if (!suppressNext && (me.isLoaded() || me.getAutoLoad() || me.getAutoLoadOnFilterEnd())) {
                 me.load();
             }
         } else if (!suppressNext) {
@@ -48370,7 +48393,7 @@ Ext.define('Ext.data.Model', {
             Model = Ext.data.Model,
             modelIdentifier = Model.identifier,
             idProperty = me.idField.name,
-            array, id, initializeFn, internalId, len, i, fields;
+            array, id, initializeFn, internalId, len, i, fields, parentRecord;
         
         
         
@@ -48387,6 +48410,15 @@ Ext.define('Ext.data.Model', {
             Ext.raise('Bad Model constructor argument 2 - "session" is not a Session');
         }
         
+        
+        
+        if (data.$parentRecordRef) {
+            parentRecord = data.$parentRecordRef;
+            delete data.$parentRecordRef;
+            
+            
+            me[parentRecord[0]] = parentRecord[1];
+        }
         if ((array = data) instanceof Array) {
             me.data = data = {};
             fields = me.getFields();
@@ -53070,7 +53102,7 @@ Ext.define('Ext.data.proxy.Server', {
     extractResponseData: Ext.identityFn,
     
     applyEncoding: function(value) {
-        return Ext.encode(value);
+        return (this.getParamsAsJson && this.getParamsAsJson()) ? value : Ext.encode(value);
     },
     
     encodeSorters: function(sorters, preventArray) {
@@ -55502,11 +55534,28 @@ Ext.define('Ext.data.Store', {
         },
         
         fetch: function(options) {
-            var operation;
+            var me = this,
+                operation;
             options = Ext.apply({}, options);
             this.setLoadOptions(options);
-            operation = this.createOperation('read', options);
+            operation = Ext.apply({
+                internalScope: me,
+                internalCallback: me.onFetch,
+                scope: me
+            }, options);
+            operation = this.createOperation('read', operation);
             operation.execute();
+        },
+        onFetch: function(operation) {
+            var me = this,
+                records = operation.getRecords(),
+                successful = operation.wasSuccessful();
+            if (me.destroyed) {
+                return;
+            }
+            if (me.hasListeners.load) {
+                me.fireEvent('load', me, records, successful, operation);
+            }
         },
         fireChangeEvent: function(record) {
             return this.getDataSource().contains(record);
@@ -63410,14 +63459,14 @@ Ext.define('Ext.data.ChainedStore', {
         var me = this,
             records = info.items,
             lastChunk = !info.next;
-        if (me.ignoreCollectionAdd) {
-            return;
-        }
         
         
         
         if (me.activeRanges) {
             me.syncActiveRanges();
+        }
+        if (me.ignoreCollectionAdd) {
+            return;
         }
         me.fireEvent('add', me, records, info.at);
         
@@ -68785,7 +68834,8 @@ Ext.define('Ext.data.query.Converter', {
                         {
                             type: 'string',
                             value: filter.value,
-                            re: filter.value,
+                            
+                            re: Ext.String.escapeRegex(filter.value),
                             flags: 'i'
                         }
                     ]
@@ -75362,7 +75412,7 @@ Ext.define('Ext.data.virtual.Range', {
             var me = this,
                 wait = me.activeWait,
                 first, last;
-            if (me.activePages[page.number]) {
+            if (me.activePages && me.activePages[page.number]) {
                 page.fillRecords(me.records);
                 
                 
@@ -75778,6 +75828,7 @@ Ext.define('Ext.data.virtual.Store', {
                         
                         page.records = op.getRecords();
                         page.state = 'loaded';
+                        me.pageMap.onPageLoad(page);
                     }
                 }
                 me.fireEvent('reload', me, op);

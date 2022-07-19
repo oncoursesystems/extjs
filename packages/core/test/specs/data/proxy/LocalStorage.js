@@ -11,13 +11,13 @@ topSuite("Ext.data.proxy.LocalStorage", ['Ext.data.ArrayStore'], function() {
             Ext.ClassManager.enableNamespaceParseCache = true;
         });
 
-        describe("instantiation", function() {
+        (Ext.isSafari10 ? xdescribe : describe)("instantiation", function() {
             it("should extend Ext.data.proxy.WebStorage", function() {
                 expect(proxy.superclass).toEqual(Ext.data.proxy.WebStorage.prototype);
             });
         });
 
-        describe("methods", function() {
+        (Ext.isSafari10 ? xdescribe : describe)("methods", function() {
             describe("getStorageObject", function() {
                 it("should return localStorage object", function() {
                     // IE8 throw Class doesn't support Automation when comparing localStorage to itself (or sessionStorage)
@@ -44,7 +44,7 @@ topSuite("Ext.data.proxy.LocalStorage", ['Ext.data.ArrayStore'], function() {
         });
     }
     else {
-        describe("instantiation", function() {
+        (Ext.isSafari10 ? xdescribe : describe)("instantiation", function() {
             it("should throw an error", function() {
                 expect(function() {
                     new Ext.data.proxy.LocalStorage({ id: 1 });

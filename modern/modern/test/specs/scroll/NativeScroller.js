@@ -1,4 +1,3 @@
-/* global Ext, expect, Infinity, jasmine, spyOn */
 
 topSuite("Ext.scroll.NativeScroller", function() {
     var ctWidth = 100,

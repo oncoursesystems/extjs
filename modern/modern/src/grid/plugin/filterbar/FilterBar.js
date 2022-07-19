@@ -17,7 +17,7 @@
  *         ]
  *     });
  *
- *     Ext.create('Ext.grid.Panel', {
+ *     Ext.create('Ext.grid.Grid', {
  *         renderTo: Ext.getBody(),
  *         title: 'Sci-Fi Television',
  *         height: 250,
@@ -38,7 +38,7 @@
  *         }]
  *     });
  *
- *     Ext.create('Ext.grid.Panel', {
+ *     Ext.create('Ext.grid.Grid', {
  *         renderTo: Ext.getBody(),
  *         title: 'Sci-Fi Television',
  *         height: 250,

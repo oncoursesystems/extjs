@@ -1,4 +1,4 @@
-/* global Ext, spyOn, expect */
+/* global TestController */
 
 topSuite("Ext.app.Controller",
     ['Ext.Panel', 'Ext.app.Application', 'Ext.viewport.Viewport'],
@@ -13,9 +13,9 @@ function() {
             toBeFunction: function(expected) {
                 var actual = this.actual;
 
-                return expected ? Ext.isFunction(actual) && actual === expected
-                     :            Ext.isFunction(actual)
-                     ;
+                return expected
+                    ? Ext.isFunction(actual) && actual === expected
+                    : Ext.isFunction(actual);
             }
         });
 

@@ -1,5 +1,3 @@
-/* global expect, jasmine, Ext, spyOn, xdescribe, describe, it */
-
 topSuite('Ext.ActionSheet', ['Ext.layout.VBox'], function() {
     var menus = [];
 

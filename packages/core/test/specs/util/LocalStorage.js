@@ -15,7 +15,7 @@ topSuite("Ext.util.LocalStorage", function() {
         store = null;
     });
 
-    describe("initialization", function() {
+    (Ext.isSafari10 ? xdescribe : describe)("initialization", function() {
         it("should start empty", function() {
             var keys = store.getKeys();
 
@@ -36,7 +36,7 @@ topSuite("Ext.util.LocalStorage", function() {
         });
     });
 
-    describe("isolation", function() {
+    (Ext.isSafari10 ? xdescribe : describe)("isolation", function() {
         var store2;
 
         function createStore2() {

@@ -1,4 +1,3 @@
-/* global Ext, jasmine, expect, spyOn */
 
 topSuite("Ext.tip.ToolTip", function() {
     var tip,

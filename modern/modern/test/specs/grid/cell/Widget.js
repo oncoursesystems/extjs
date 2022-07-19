@@ -1,4 +1,3 @@
-/* global Ext, expect */
 
 topSuite("Ext.grid.cell.Widget", [
     'Ext.data.ArrayStore', 'Ext.layout.Fit', 'Ext.ux.rating.Picker', 'Ext.grid.cell.Widget', 'Ext.grid.cell.Number',

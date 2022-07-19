@@ -1543,14 +1543,34 @@ Ext.define('Ext.data.Store', {
          * @private
          */
         fetch: function(options) {
-            var operation;
+            var me = this,
+                operation;
 
             options = Ext.apply({}, options);
 
             this.setLoadOptions(options);
-            operation = this.createOperation('read', options);
 
+            operation = Ext.apply({
+                internalScope: me,
+                internalCallback: me.onFetch,
+                scope: me
+            }, options);
+            operation = this.createOperation('read', operation);
             operation.execute();
+        },
+
+        onFetch: function(operation) {
+            var me = this,
+                records = operation.getRecords(),
+                successful = operation.wasSuccessful();
+
+            if (me.destroyed) {
+                return;
+            }
+
+            if (me.hasListeners.load) {
+                me.fireEvent('load', me, records, successful, operation);
+            }
         },
 
         fireChangeEvent: function(record) {

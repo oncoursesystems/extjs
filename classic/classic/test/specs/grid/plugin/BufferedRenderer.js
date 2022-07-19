@@ -360,6 +360,50 @@ topSuite("Ext.grid.plugin.BufferedRenderer", [
                 });
             });
 
+            describe('syncing locking partners when resizing', function() {
+                beforeEach(function() {
+                    makeGrid({
+                        height: 400,
+                        columns: [
+                            { header: 'Name',  dataIndex: 'name', locked: true },
+                            { header: 'Name2', dataIndex: 'name' },
+                            { header: 'Phone', dataIndex: 'phone' },
+                            { header: 'Age', dataIndex: 'age' }
+                        ],
+                        dockedItems: [{
+                            xtype: 'panel',
+                            hidden: true,
+                            dock: 'bottom',
+                            height: 300,
+                            itemId: 'extraPanel'
+                        }]
+                    }, {
+                        data: makeData(500)
+                    });
+
+                    normal = grid.normalGrid.bufferedRenderer;
+                    locked = grid.lockedGrid.bufferedRenderer;
+
+                    // trigger a resize
+                    grid.down('#extraPanel').setHidden(false);
+                    // scroll enough (400)
+                    grid.getScrollable().scrollTo(0, 400);
+                    // trigger another resize to take height back to original
+                    grid.down('#extraPanel').setHidden(true);
+                    // trigger one more resize that gets us to our test case
+                    grid.down('#extraPanel').setHidden(false);
+                });
+
+                it('should fetch the range', function() {
+                    expect(locked.view.all.startIndex).toBe(normal.view.all.startIndex);
+                    expect(locked.view.all.endIndex).toBe(normal.view.all.endIndex);
+                });
+
+                it('should sync the view els', function() {
+                    expect(normal.bodyTop).toBe(locked.bodyTop);
+                });
+            });
+
             describe('locked partner with no column configuration', function() {
                 beforeEach(function() {
                     makeGrid({
@@ -2280,26 +2324,61 @@ topSuite("Ext.grid.plugin.BufferedRenderer", [
         });
 
         describe('refreshing the view', function() {
-            describe('filtering out all records', function() {
-                function makeData(len) {
-                    var data = [],
-                        i, str;
+            function makeData(len) {
+                var data = [],
+                    i, str;
 
-                    len = len || 100;
+                len = len || 100;
 
-                    for (i = 0; i < len; i++) {
-                        str = 'emp_' + i;
+                for (i = 0; i < len; i++) {
+                    str = 'emp_' + i;
 
-                        data.push({
-                            name: str,
-                            email: str + '@sencha.com',
-                            phone: '1-888-' + i,
-                            age: i
-                        });
-                    }
-
-                    return data;
+                    data.push({
+                        name: str,
+                        email: str + '@sencha.com',
+                        phone: '1-888-' + i,
+                        age: i
+                    });
                 }
+
+                return data;
+            }
+
+            it('should not show blank rows when scrolling up in a normal grid after a call to view.refresh()', function() {
+                makeGrid(null, {
+                    data: makeData(2000)
+                });
+
+                plugin.scrollTo(500);
+                view.refresh();
+                plugin.scrollTo(0);
+
+                expect(plugin.bodyTop).toBe(0);
+                expect(plugin.scrollTop).toBe(0);
+            });
+
+            it('should not show blank rows when scrolling up in a locked enabled grid after a call to view.refresh()', function() {
+                makeGrid({
+                    enableLocking: true,
+                    columns: [
+                        { header: 'Name',  dataIndex: 'name', locked: true },
+                        { header: 'Email', dataIndex: 'email' },
+                        { header: 'Phone', dataIndex: 'phone' },
+                        { header: 'Age', dataIndex: 'age' }
+                    ]
+                }, {
+                    data: makeData(2000)
+                });
+
+                plugin.scrollTo(500);
+                view.refresh();
+                plugin.scrollTo(0);
+
+                expect(plugin.bodyTop).toBe(0);
+                expect(plugin.scrollTop).toBe(0);
+            });
+
+            describe('filtering out all records', function() {
 
                 function runTests(scroll) {
                     describe('scrolled = ' + scroll, function() {

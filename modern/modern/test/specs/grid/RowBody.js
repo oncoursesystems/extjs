@@ -1,4 +1,3 @@
-/* global Ext, expect */
 
 xtopSuite("Ext.grid.RowBody",
     ['Ext.grid.Grid', 'Ext.data.ArrayStore', 'Ext.layout.Fit',

@@ -6,7 +6,6 @@ Ext.define('KitchenSink.store.CountryStates', {
     model: 'KitchenSink.model.State',
 
     pageSize: 0,
-
     proxy: {
         type: 'ajax',
         reader: 'json',

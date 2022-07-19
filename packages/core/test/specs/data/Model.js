@@ -34,6 +34,18 @@ topSuite("Ext.data.Model", [
                 fields: ['discountCode', {
                     name: 'userId',
                     reference: 'User'
+                }, {
+                    name: 'userName',
+                    convert: function(val, rec) {
+                        var user = rec.getUser();
+
+                        if (user) {
+                            return user.data.name;
+                        }
+                        else {
+                            return 'Unknown user name';
+                        }
+                    }
                 }]
             });
         });
@@ -86,10 +98,12 @@ topSuite("Ext.data.Model", [
                 expect(orders.getAt(0).$className).toBe('spec.Order');
                 expect(orders.getAt(0).id).toBe(101);
                 expect(orders.getAt(0).get('discountCode')).toBe('abc');
+                expect(orders.getAt(0).get('userName')).toBe('Foo');
 
                 expect(orders.getAt(1).$className).toBe('spec.Order');
                 expect(orders.getAt(1).id).toBe(102);
                 expect(orders.getAt(1).get('discountCode')).toBe('xyz');
+                expect(orders.getAt(1).get('userName')).toBe('Foo');
             });
 
             it("should maintain phantom state based on id", function() {
@@ -155,12 +169,14 @@ topSuite("Ext.data.Model", [
                 expect(orders.getAt(0).$className).toBe('spec.Order');
                 expect(orders.getAt(0).id).toBe(101);
                 expect(orders.getAt(0).get('discountCode')).toBe('abc');
+                expect(orders.getAt(0).get('userName')).toBe('Foo');
                 expect(orders.getAt(0).session).toBe(session);
 
                 expect(orders.getAt(1).$className).toBe('spec.Order');
                 expect(orders.getAt(1).id).toBe(102);
                 expect(orders.getAt(1).get('discountCode')).toBe('xyz');
-                expect(orders.getAt(0).session).toBe(session);
+                expect(orders.getAt(1).get('userName')).toBe('Foo');
+                expect(orders.getAt(1).session).toBe(session);
             });
 
             it("should read records from the session", function() {

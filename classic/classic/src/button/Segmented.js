@@ -339,7 +339,6 @@ Ext.define('Ext.button.Segmented', {
         var me = this,
             syncItemClasses = '_syncItemClasses';
 
-        //<debug>
         // eslint-disable-next-line vars-on-top, one-var
         var items = me.items.items,
             ln = items.length,
@@ -354,6 +353,7 @@ Ext.define('Ext.button.Segmented', {
             }
         }
 
+        //<debug>
         for (; i < ln; i++) {
             if (items[i] !== item) {
                 value = items[i].value;

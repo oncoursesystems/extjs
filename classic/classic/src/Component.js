@@ -3289,14 +3289,14 @@ Ext.define('Ext.Component', {
 
             me.addCls(me.disabledCls);
 
+            me.disabled = true;
+
             if (me.rendered) {
                 me.onDisable();
             }
             else {
                 me.disableOnRender = true;
             }
-
-            me.disabled = true;
 
             if (silent !== true) {
                 me.fireEvent('disable', me);
@@ -3357,11 +3357,11 @@ Ext.define('Ext.Component', {
                 me.disableOnRender = false;
                 me.removeCls(me.disabledCls);
 
+                me.disabled = false;
+
                 if (me.rendered) {
                     me.onEnable();
                 }
-
-                me.disabled = false;
 
                 if (silent !== true) {
                     me.fireEvent('enable', me);

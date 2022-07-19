@@ -820,6 +820,38 @@ topSuite("Ext.panel.Resizable", [
                         runsExpectSize(baseSize + 50, baseSize);
                     });
 
+                    describe("Resize over iframe", function() {
+                        it("should allow panel to resize over iframe", function() {
+                            createPanel({
+                                edges: ['west']
+                            });
+                            resizable.setEdges(['east']);
+
+                            function startDragOver(edge) {
+                                runs(function() {
+                                    startBox = panel.element.getRegion();
+                                    activeEdge = edge;
+                                    edge = resizable.getEdge(edge);
+                                    var xy = getCenter(edge);
+
+                                    start({
+                                        id: touchId,
+                                        x: xy[0],
+                                        y: xy[1]
+                                    }, edge);
+                                    expect(Ext.getBody().hasCls(Ext.baseCSSPrefix + 'resizeactive')).toBeTruthy();
+                                });
+                                waitsForAnimation();
+                            }
+
+                            startDragOver('east');
+                            moveBy(50, 0);
+                            endDrag();
+                            expect(Ext.getBody().hasCls(Ext.baseCSSPrefix + 'resizeactive')).toBeFalsy();
+                            runsExpectSize(baseSize + 50, baseSize);
+                        });
+                    });
+
                     describe("with split: false", function() {
                         it("should not add the x-splitter class to the edges", function() {
                             createPanel({

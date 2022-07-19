@@ -620,18 +620,18 @@ topSuite("grid-general", [
             describe("autoSizeColumn", function() {
                 function getPadding() {
                     var cell = Ext.fly(grid.getView().getEl().down(colRef[0].getCellInnerSelector(), true)),
-                        right = Ext.supports.ScrollWidthInlinePaddingBug ? parseInt(cell.getStyle('padding-right'), 10) : 0;
+                        right = Ext.isSafari ? 0 : parseInt(cell.getStyle('padding-right'), 10);
 
                     return parseInt(cell.getStyle('padding-left'), 10) + right;
                 }
 
                 it("should size the column when passed a header", function() {
                     makeGrid(null, [{
-                        field1: '<div style="width: 125px;>a</div>'
+                        field1: '<div style="width: 125px;">a</div>'
                     }, {
-                        field1: '<div style="width: 450px;>b</div>'
+                        field1: '<div style="width: 450px;">b</div>'
                     }, {
-                        field1: '<div style="width: 375px;>c</div>'
+                        field1: '<div style="width: 375px;">c</div>'
                     }]);
                     grid.getView().autoSizeColumn(colRef[0]);
                     expect(colRef[0].getWidth()).toBe(451 + getPadding());
@@ -639,11 +639,11 @@ topSuite("grid-general", [
 
                 it("should size the column when passed a header index", function() {
                     makeGrid(null, [{
-                        field1: '<div style="width: 125px;>a</div>'
+                        field1: '<div style="width: 125px;">a</div>'
                     }, {
-                        field1: '<div style="width: 450px;>b</div>'
+                        field1: '<div style="width: 450px;">b</div>'
                     }, {
-                        field1: '<div style="width: 375px;>c</div>'
+                        field1: '<div style="width: 375px;">c</div>'
                     }]);
                     grid.getView().autoSizeColumn(0);
                     expect(colRef[0].getWidth()).toBe(451 + getPadding());

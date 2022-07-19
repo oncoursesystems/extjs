@@ -158,15 +158,15 @@ Ext.define('Ext.data.ChainedStore', {
             records = info.items,
             lastChunk = !info.next;
 
-        if (me.ignoreCollectionAdd) {
-            return;
-        }
-
         // Collection add changes the items reference of the collection, and that array
         // object if directly referenced by Ranges. The ranges have to refresh themselves
         // upon add.
         if (me.activeRanges) {
             me.syncActiveRanges();
+        }
+
+        if (me.ignoreCollectionAdd) {
+            return;
         }
 
         me.fireEvent('add', me, records, info.at);

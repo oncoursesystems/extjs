@@ -1,6 +1,5 @@
 var Test = Test || {};
 
-/* eslint indent: [{ "outerIIFEBody": 0 }] */
 (function() {
 'use strict';
 

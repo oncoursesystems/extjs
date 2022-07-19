@@ -99,4 +99,61 @@ function() {
         });
     });
 
+    describe("alignment of adjacent component", function() {
+        it("should align top taking account of htmleditor components", function() {
+            var ct = new Ext.container.Container({
+                floating: true,
+                renderTo: Ext.getBody(),
+                layout: 'vbox',
+                items: [{
+                    xtype: 'component',
+                    height: 50
+                }, {
+                    xtype: 'htmleditor',
+                    fieldLabel: 'Label',
+                    labelAlign: 'top',
+                    margin: 0
+                }, {
+                    xtype: 'component',
+                    height: 50
+                }]
+            }),
+            editorComponent, editorHeight;
+
+            editorComponent = ct.down('htmleditor');
+            editorHeight = editorComponent.getHeight();
+
+            expect(ct.items.last().el.getTop(true)).toBe(50 + editorHeight);
+
+            ct.destroy();
+        });
+
+        it("should align left taking account of htmleditor components", function() {
+            var ct = new Ext.container.Container({
+                floating: true,
+                renderTo: Ext.getBody(),
+                layout: 'hbox',
+                items: [{
+                    xtype: 'component',
+                    width: 50
+                }, {
+                    xtype: 'htmleditor',
+                    fieldLabel: 'Label',
+                    labelAlign: 'left',
+                    margin: 0
+                }, {
+                    xtype: 'component',
+                    width: 50
+                }]
+            }),
+            editorComponent, editorWidth;
+
+            editorComponent = ct.down('htmleditor');
+            editorWidth = editorComponent.getWidth();
+
+            expect(ct.items.last().el.getLeft(true)).toBe(50 + editorWidth);
+
+            ct.destroy();
+        });
+    });
 });

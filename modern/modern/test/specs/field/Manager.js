@@ -1,3 +1,4 @@
+/* global MyContainer, MyModel */
 topSuite(
     'Ext.field.Manager',
     [

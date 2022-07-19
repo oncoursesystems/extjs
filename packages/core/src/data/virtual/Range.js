@@ -330,7 +330,7 @@ Ext.define('Ext.data.virtual.Range', {
                 wait = me.activeWait,
                 first, last;
 
-            if (me.activePages[page.number]) {
+            if (me.activePages && me.activePages[page.number]) {
                 page.fillRecords(me.records);
 
                 // Clip the range to our actually active range for the sake of

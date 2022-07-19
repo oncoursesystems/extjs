@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.sk.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Počítať"
+});
 /**
  * List compiled by mystix on the extjs.com forums.
  * Thank you Mystix!
@@ -148,4 +153,72 @@ Ext.define("Ext.locale.sk.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.sk.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.sk.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Rozšíriť všetko",
+    collapseAllText: "Zbaliť všetko",
+    groupsText: "Skupina",
+    groupByText: "Skupina podľa tohto poľa",
+    addToGroupingText: "Pridať do zoskupenia",
+    removeFromGroupingText: "Odstráňte zoskupenie",
+    groupSummaryTpl: "Zhrnutie ({name})",
+    summaryTpl: "Zhrnutie ({store.data.length})"
+});
+Ext.define("Ext.locale.sk.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Nefajčiarsky",
+    summaryText: "Zhrnutie"
+});
+Ext.define("Ext.locale.sk.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Je rovnaký",
+        ne: "Nerovná sa",
+        gt: "Väčší než",
+        ge: "Viac ako alebo rovné",
+        lt: "Menej ako",
+        le: "Menej alebo rovné",
+        like: "Páči sa mi to",
+        nlike: "Nie ako",
+        empty: "Prázdny",
+        nempty: "Nie prázdny",
+        identical: "Identický",
+        nidentical: "Nie je identický",
+        regex: "Regulárny výraz",
+        "in": "Je v",
+        notin: "Nie je v"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.sk.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Presuňte záhlavie stĺpca tu na skupinu podľa tohto stĺpca",
+    showGroupingPanelText: "Zobraziť skupinu podľa panela",
+    hideGroupingPanelText: "Skryť skupinu podľa panela",
+    clearGroupText: "Jasná skupina",
+    sortAscText: "Zoradiť vzostupne",
+    sortDescText: "Zoradiť zostupne",
+    moveLeftText: "Presunúť doľava",
+    moveRightText: "Pohnúť sa vpravo",
+    moveBeginText: "Prejsť na začiatok",
+    moveEndText: "Prejsť",
+    removeText: "Odstrániť"
 });

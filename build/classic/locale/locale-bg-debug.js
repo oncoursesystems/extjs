@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.bg.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Броя"
+});
 /**
  * Bulgarian Translation
  *
@@ -255,4 +260,72 @@ Ext.define("Ext.locale.bg.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.bg.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.bg.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Разширете всичко",
+    collapseAllText: "Колапс всичко",
+    groupsText: "Групи",
+    groupByText: "Група от тази област",
+    addToGroupingText: "Добави към групирането",
+    removeFromGroupingText: "Премахване от групиране",
+    groupSummaryTpl: "Резюме ({name})",
+    summaryTpl: "Резюме ({store.data.length})"
+});
+Ext.define("Ext.locale.bg.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Нито един",
+    summaryText: "Резюме"
+});
+Ext.define("Ext.locale.bg.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Е равно",
+        ne: "Не е равно",
+        gt: "По-голяма от",
+        ge: "По-голяма или равна на",
+        lt: "По-малко от",
+        le: "По-малко или равно на",
+        like: "като",
+        nlike: "Не като",
+        empty: "Празен",
+        nempty: "Не е празно",
+        identical: "Идентичен",
+        nidentical: "Не идентични",
+        regex: "Редовен израз",
+        "in": "Е в",
+        notin: "Не е в"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.bg.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Плъзнете заглавката на колона тук, за да групирате с тази колона",
+    showGroupingPanelText: "Показване на група от панел",
+    hideGroupingPanelText: "Скриване на група от панел",
+    clearGroupText: "Ясно група",
+    sortAscText: "Сортиране на възходящ",
+    sortDescText: "Сортиране на низходящ",
+    moveLeftText: "Мръдни на ляво",
+    moveRightText: "Премести се надясно",
+    moveBeginText: "Преминете към началото",
+    moveEndText: "Преминете към края",
+    removeText: "Премахване"
 });

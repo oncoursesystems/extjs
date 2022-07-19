@@ -2874,6 +2874,7 @@ topSuite("Ext.data.Store", [
                             sorters;
 
                         store.setRemoteSort(true);
+                        store.setAutoLoad(true);
                         store.getSorters().add(makeSorter('email', 'ASC'));
 
                         // Mutating the sorters of a remoteSort ProxyStore triggers a load of sorted data
@@ -4219,7 +4220,8 @@ topSuite("Ext.data.Store", [
             describe("modifying the sorters", function() {
                 beforeEach(function() {
                     createStore({
-                        remoteSort: true
+                        remoteSort: true,
+                        autoLoad: true
                     });
                 });
 
@@ -4304,6 +4306,7 @@ topSuite("Ext.data.Store", [
                 it("should not sort the data when the store load has completed", function() {
                     createStore({
                         remoteSort: true,
+                        autoLoad: true,
                         proxy: {
                             type: 'ajax',
                             url: 'fakeurl'
@@ -4340,7 +4343,8 @@ topSuite("Ext.data.Store", [
             beforeEach(function() {
                 createStore({
                     proxy: 'memory',
-                    remoteSort: true
+                    remoteSort: true,
+                    autoLoad: true
                 });
                 spy = jasmine.createSpy();
             });
@@ -4537,11 +4541,8 @@ topSuite("Ext.data.Store", [
             groupOrdinal,
             allCorrect;
 
-        beforeEach(function() {
-            // Create a store that kicks off an autoload request
-            createStore({
-                // Override the default in this test suite.
-                // We are testing asynchronousness.
+        function createRemoteStore(cfg) {
+            cfg = Ext.apply({
                 asynchronousLoad: true,
                 remoteSort: true,
                 remoteFilter: true,
@@ -4553,12 +4554,20 @@ topSuite("Ext.data.Store", [
                         groupOrdinal = ++callSequence;
                     }
                 }
-            });
-            spyOn(store, 'load').andCallThrough();
-            spyOn(store, 'flushLoad').andCallThrough();
-        });
+            }, cfg);
+            createStore(cfg);
+        }
 
         it('should not fire all the callbacks of superceded loads', function() {
+            var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough();
+
+            createRemoteStore({
+                autoLoad: true
+            });
+
+            loadSpy.reset();
+            flushLoadSpy.reset();
 
             // All these three operations will each kick off a load request
             store.group('group');
@@ -4572,8 +4581,8 @@ topSuite("Ext.data.Store", [
             // Adding a grouper requests a load with a callback scheduled to fire the groupchange event.
             // Adding sorters requests a load with a callback scheduled to fire the sort event.
             // Adding filters requests a load
-            expect(store.load.callCount).toBe(3);
-            expect(store.flushLoad.callCount).toBe(0);
+            expect(loadSpy.callCount).toBe(3);
+            expect(flushLoadSpy.callCount).toBe(0);
 
             // Now *we* ask for a load to fire another callback.
             // If should be called last in the sequence:
@@ -4596,10 +4605,44 @@ topSuite("Ext.data.Store", [
                 return allCorrect && store.getCount() === 2;
             }, 'the store to load');
 
-            // Whan all this is done, there should have been 5 load calls, but only 1 flushLoad
+            // When all this is done, there should have been 4 load calls, but only 1 flushLoad
             runs(function() {
-                expect(store.load.callCount).toBe(4);
-                expect(store.flushLoad.callCount).toBe(1);
+                expect(loadSpy.callCount).toBe(4);
+                expect(flushLoadSpy.callCount).toBe(1);
+            });
+        });
+
+        it('should not load when autoLoad is false.', function() {
+            var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough();
+
+            createRemoteStore({
+                autoLoad: false
+            });
+
+            loadSpy.reset();
+            waits(100);
+
+            runs(function() {
+                expect(loadSpy.callCount).toBe(0);
+                expect(flushLoadSpy.callCount).toBe(0);
+            });
+        });
+
+        it('should not load when autoLoad is undefined.', function() {
+            var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough();
+
+            createRemoteStore({
+                autoLoad: undefined
+            });
+
+            loadSpy.reset();
+            waits(100);
+
+            runs(function() {
+                expect(loadSpy.callCount).toBe(0);
+                expect(flushLoadSpy.callCount).toBe(0);
             });
         });
     });
@@ -5255,11 +5298,28 @@ topSuite("Ext.data.Store", [
                     expect(flushLoadSpy).not.toHaveBeenCalled();
                 });
 
-                it("should not trigger a load", function() {
+                it("should not load store with default autoLoad config (autoLoad: undefined)", function() {
                     var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough(),
                         flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad');
 
                     createStore({
+                        remoteSort: true,
+                        asynchronousLoad: true,
+                        grouper: {
+                            property: 'group'
+                        }
+                    });
+
+                    expect(loadSpy).not.toHaveBeenCalled();
+                    expect(flushLoadSpy).not.toHaveBeenCalled();
+                });
+
+                it("should not trigger a load when autoload is false", function() {
+                    var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough(),
+                        flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad');
+
+                    createStore({
+                        autoLoad: false,
                         remoteSort: true,
                         asynchronousLoad: true,
                         grouper: {
@@ -6069,7 +6129,9 @@ topSuite("Ext.data.Store", [
 
         describe("clearFilter method", function() {
             beforeEach(function() {
-                createStore();
+                createStore({
+                    autoLoad: true
+                });
             });
 
             it("should remove all filters", function() {
@@ -6398,7 +6460,8 @@ topSuite("Ext.data.Store", [
             describe("modifying the filters", function() {
                 beforeEach(function() {
                     createStore({
-                        remoteFilter: true
+                        remoteFilter: true,
+                        autoLoad: true
                     });
                 });
 
@@ -6455,6 +6518,7 @@ topSuite("Ext.data.Store", [
                 beforeEach(function() {
                     createStore({
                         remoteFilter: true,
+                        autoLoad: true,
                         proxy: {
                             type: 'ajax',
                             url: 'fakeurl'
@@ -9022,6 +9086,160 @@ topSuite("Ext.data.Store", [
                 }]
             });
             expect(store.loadCount).toBe(count);
+        });
+    });
+
+    describe('Autoload Config', function() {
+        var callSequence = 0,
+            sortOrdinal, groupOrdinal;
+
+        function createRemoteStore(cfg) {
+            cfg = Ext.apply({
+            asynchronousLoad: true,
+            remoteSort: true,
+            remoteFilter: true,
+            listeners: {
+                sort: function() {
+                    sortOrdinal = ++callSequence;
+                },
+                groupchange: function() {
+                    groupOrdinal = ++callSequence;
+                }
+            }
+            }, cfg);
+            createStore(cfg);
+        }
+
+        it('should not trigger a load for remoteSort and remoteFilter with default autoLoad config (autoLoad: undefined)', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough();
+
+            createRemoteStore({
+                sorters: [{
+                    property: 'name',
+                    value: 'DESC'
+                }],
+                filters: [{
+                    property: 'name',
+                    value: 'Tommy'
+                }]
+            });
+
+            waits(100);
+            runs(function() {
+                expect(store.loadCount).toBe(0);
+                expect(ajaxSpy).not.toHaveBeenCalled();
+            });
+        });
+
+        it('should not trigger a load for remoteSort and remoteFilter with autoLoad false', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough();
+
+            createRemoteStore({
+                autoLoad: false,
+                sorters: [{
+                    property: 'name',
+                    value: 'DESC'
+                }],
+                filters: [{
+                    property: 'name',
+                    value: 'Tommy'
+                }]
+            });
+
+            waits(100);
+            runs(function() {
+                expect(store.loadCount).toBe(0);
+                expect(flushLoadSpy.callCount).toBe(0);
+                expect(ajaxSpy).not.toHaveBeenCalled();
+            });
+        });
+
+        it('should trigger a load for remoteSort and remoteFilter with autoLoad true', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough();
+
+            createRemoteStore({
+                autoLoad: true,
+                sorters: [{
+                    property: 'name',
+                    value: 'DESC'
+                }],
+                filters: [{
+                    property: 'name',
+                    value: 'Tommy'
+                }]
+            });
+
+            waits(100);
+            runs(function() {
+                expect(loadSpy.callCount).toBe(1);
+                expect(flushLoadSpy.callCount).toBe(1);
+                expect(ajaxSpy).toHaveBeenCalled();
+            });
+        });
+
+        it('should send filters and sorters remotely after intialLoad of store if autoload false', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                successData = {
+                    success: true,
+                    data: [{
+                        email: 'foo@sencha.com'
+                    }]
+                };
+
+            createRemoteStore({
+                autoLoad: false,
+                asynchronousLoad: false,
+                sorters: [{
+                    property: 'name',
+                    value: 'DESC'
+                }],
+                filters: [{
+                    property: 'name',
+                    value: 'Tommy'
+                }],
+                proxy: {
+                    type: 'ajax',
+                    url: 'foo',
+                    reader: {
+                        type: 'json',
+                        successProperty: 'success',
+                        rootProperty: 'data'
+                    }
+                }
+            });
+            flushLoadSpy.reset();
+
+            store.load();
+            completeWithData(successData);
+
+            waitsFor(function() {
+                return  flushLoadSpy.callCount === 1;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.filter).toBe('[{"property":"name","value":"Tommy"}]');
+                store.sort('name', 'DESC');
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 2;
+            });
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.sort).toBe('[{"property":"name","direction":"DESC"}]');
+                store.filter('name', 'Brown');
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 3;
+            });
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.filter).toBe('[{"property":"name","value":"Brown"}]');
+            });
         });
     });
 });

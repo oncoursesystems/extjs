@@ -1,4 +1,3 @@
-/* global Ext, expect, jasmine, xit */
 topSuite("Ext.grid.plugin.PagingToolbar",
     ['Ext.grid.Grid', 'Ext.grid.plugin.PagingToolbar', 'Ext.form.Panel',
         'Ext.field.*'],

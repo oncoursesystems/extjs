@@ -1,6 +1,7 @@
 topSuite("Ext.grid.Grid", [
     'Ext.data.ArrayStore', 'Ext.layout.Fit', 'Ext.grid.plugin.ColumnResizing',
-    'Ext.MessageBox', 'Ext.grid.SummaryRow', 'Ext.app.ViewModel'
+    'Ext.MessageBox', 'Ext.grid.SummaryRow', 'Ext.app.ViewModel', 'Ext.data.virtual.Store',
+    'Ext.carousel.Carousel', 'Ext.data.proxy.JsonP', 'Ext.grid.filters.Plugin'
 ], function() {
     var Model = Ext.define(null, {
         extend: 'Ext.data.Model',
@@ -3346,11 +3347,11 @@ topSuite("Ext.grid.Grid", [
                     jasmine.fireKeyEvent(Ext.Msg.down('#ok').getFocusEl(), 'keydown', Ext.event.Event.SPACE);
                 });
 
-                    // Cleanup for modal
-                    runs(function() {
-                        Ext.Msg.hide();
-                        Ext.Msg.hideModalMask();
-                    });
+                // Cleanup for modal
+                runs(function() {
+                    Ext.Msg.hide();
+                    Ext.Msg.hideModalMask();
+                });
 
                 // Automatic focus reversion must send focus back into the grid
                 waitsForSpy(focusEnterSpy);
@@ -3962,6 +3963,45 @@ topSuite("Ext.grid.Grid", [
             });
         });
 
+        describe("Grouped Grid with collapsed true", function() {
+            it("Should not throw exception when user changes the store data dynamically", function() {
+                makeGrid([{
+                    dataIndex: 'group',
+                    text: 'Group',
+                    flex: 1,
+                    itemId: 'groupCol'
+                }, {
+                    dataIndex: 'f5',
+                    flex: 1,
+                    text: 'F5',
+                    itemId: 'colf5'
+                }], null, {
+                    renderTo: document.body,
+                    grouped: true,
+                    collapsible: {
+                        collapsed: true
+                    },
+                    store: makeStore(null, {
+                        groupField: 'group'
+                    })
+                });
+
+                // set data to the store dynamically and expect no exception
+                expect(function() {
+                    store.setData([{
+                        "group": "Seinfeld",
+                        "f1": "Jerry"
+                    }, {
+                        "group": "Seinfeld",
+                        "f1": "Elaine"
+                    }, {
+                        "group": "Seinfeld",
+                        "f1": "Kramer"
+                    }]);
+                }).not.toThrow();
+            });
+        });
+
         describe("Store has a sorter who's property is the column's dataIndex", function() {
             beforeEach(function() {
                 makeGrid([{
@@ -4317,6 +4357,742 @@ topSuite("Ext.grid.Grid", [
             grid.getColumns()[1].getCells()[0].setValue('Test Column auto size width');
             columnAutoSize();
             expect(grid.getColumns()[1].getWidth()).toBeGreaterThan(100);
+        });
+    });
+
+    describe("Inside a carrousel", function() {
+        var store, panel, data;
+
+        beforeEach(function() {
+            data = {
+                "users": [{
+                    "id": 0,
+                    "firstName": "Pete",
+                    "lastName": "Weber",
+                    "address": "223 Ismael Light Apt. 614",
+                    "company": "Wintheiser, Corwin and Dickinson",
+                    "title": "Forward Applications Consultant"
+                }, {
+                    "id": 1,
+                    "firstName": "Melody",
+                    "lastName": "Leannon",
+                    "address": "0977 Bailey Trace Suite 952",
+                    "company": "Klein, Connelly and Pollich",
+                    "title": "Corporate Tactics Producer"
+                }, {
+                    "id": 2,
+                    "firstName": "Norwood",
+                    "lastName": "Predovic",
+                    "address": "83949 Misty Roads Suite 254",
+                    "company": "Wintheiser, Corwin and Dickinson",
+                    "title": "Regional Accountability Analyst"
+                }, {
+                    "id": 3,
+                    "firstName": "Irving",
+                    "lastName": "Bernhard",
+                    "address": "2251 Jacobi Summit Suite 310",
+                    "company": "Nicolas, Pollich and Zemlak",
+                    "title": "Investor Group Analyst"
+                }, {
+                    "id": 4,
+                    "firstName": "Norwood",
+                    "lastName": "Hudson",
+                    "address": "993 Francisca Well Suite 899",
+                    "company": "Beatty Inc",
+                    "title": "National Branding Administrator"
+                }, {
+                    "id": 5,
+                    "firstName": "Hertha",
+                    "lastName": "Wintheiser",
+                    "address": "89669 Tony Cape Apt. 652",
+                    "company": "Baumbach, Hammes and Gutmann",
+                    "title": "Legacy Creative Orchestrator"
+                }, {
+                    "id": 6,
+                    "firstName": "Serenity",
+                    "lastName": "Waters",
+                    "address": "26756 Tillman Orchard Apt. 279",
+                    "company": "Nicolas, Pollich and Zemlak",
+                    "title": "Human Security Director"
+                }, {
+                    "id": 7,
+                    "firstName": "Verlie",
+                    "lastName": "McClure",
+                    "address": "626 Wiegand Junction Apt. 783",
+                    "company": "Hagenes and Sons",
+                    "title": "Product Tactics Agent"
+                }, {
+                    "id": 8,
+                    "firstName": "Cara",
+                    "lastName": "Kuphal",
+                    "address": "2848 Brain Track Apt. 978",
+                    "company": "Hagenes and Sons",
+                    "title": "Global Intranet Facilitator"
+                }, {
+                    "id": 9,
+                    "firstName": "Kyle",
+                    "lastName": "Larson",
+                    "address": "8837 Lind Land Suite 443",
+                    "company": "Baumbach, Hammes and Gutmann",
+                    "title": "Regional Implementation Liaison"
+                }, {
+                    "id": 10,
+                    "firstName": "Eduardo",
+                    "lastName": "Gleichner",
+                    "address": "933 Samanta Drives Suite 622",
+                    "company": "Beatty Inc",
+                    "title": "District Research Engineer"
+                }, {
+                    "id": 11,
+                    "firstName": "Jose",
+                    "lastName": "Hessel",
+                    "address": "19629 Herman Spur Apt. 082",
+                    "company": "Hagenes and Sons",
+                    "title": "Regional Communications Producer"
+                }, {
+                    "id": 12,
+                    "firstName": "Nelda",
+                    "lastName": "Erdman",
+                    "address": "29095 Osinski Landing Apt. 171",
+                    "company": "Klein, Connelly and Pollich",
+                    "title": "Regional Configuration Consultant"
+                }, {
+                    "id": 13,
+                    "firstName": "Jordan",
+                    "lastName": "Batz",
+                    "address": "62199 Abshire Radial Suite 604",
+                    "company": "Quitzon Inc",
+                    "title": "Customer Mobility Consultant"
+                }, {
+                    "id": 14,
+                    "firstName": "Adeline",
+                    "lastName": "Botsford",
+                    "address": "969 Raleigh Crossroad Apt. 144",
+                    "company": "Hagenes and Sons",
+                    "title": "Senior Accounts Facilitator"
+                }, {
+                    "id": 15,
+                    "firstName": "Jeramie",
+                    "lastName": "Hagenes",
+                    "address": "4395 Mavis Alley Apt. 081",
+                    "company": "Nicolas, Pollich and Zemlak",
+                    "title": "Forward Paradigm Consultant"
+                }, {
+                    "id": 16,
+                    "firstName": "Jean",
+                    "lastName": "Windler",
+                    "address": "80402 Abner Plain Suite 936",
+                    "company": "Baumbach, Hammes and Gutmann",
+                    "title": "National Implementation Strategist"
+                }, {
+                    "id": 17,
+                    "firstName": "Yoshiko",
+                    "lastName": "Klein",
+                    "address": "492 Dorris Glens Suite 380",
+                    "company": "Stehr, Eichmann and Senger",
+                    "title": "Dynamic Mobility Analyst"
+                }, {
+                    "id": 18,
+                    "firstName": "Haylie",
+                    "lastName": "Cassin",
+                    "address": "16878 Thiel Point Apt. 180",
+                    "company": "Beatty Inc",
+                    "title": "Dynamic Communications Engineer"
+                }, {
+                    "id": 19,
+                    "firstName": "Davon",
+                    "lastName": "Aufderhar",
+                    "address": "9446 Christiansen Cove Suite 262",
+                    "company": "Stehr, Eichmann and Senger",
+                    "title": "Future Infrastructure Director"
+                }, {
+                    "id": 20,
+                    "firstName": "Trinity",
+                    "lastName": "Keeling",
+                    "address": "3244 Hyatt Junction Suite 125",
+                    "company": "Hagenes and Sons",
+                    "title": "Customer Creative Coordinator"
+                }, {
+                    "id": 21,
+                    "firstName": "Lola",
+                    "lastName": "Wilderman",
+                    "address": "444 Barton Key Apt. 994",
+                    "company": "Beatty Inc",
+                    "title": "Lead Interactions Analyst"
+                }, {
+                    "id": 22,
+                    "firstName": "Jan",
+                    "lastName": "Cole",
+                    "address": "71154 Stehr Falls Apt. 233",
+                    "company": "Dooley Group",
+                    "title": "Legacy Research Strategist"
+                }, {
+                    "id": 23,
+                    "firstName": "Oran",
+                    "lastName": "Kuvalis",
+                    "address": "612 Theresa Land Apt. 751",
+                    "company": "Krajcik - Stanton",
+                    "title": "Human Metrics Strategist"
+                }, {
+                    "id": 24,
+                    "firstName": "Anahi",
+                    "lastName": "Cruickshank",
+                    "address": "64574 Coralie Locks Suite 011",
+                    "company": "Nicolas, Pollich and Zemlak",
+                    "title": "Investor Functionality Producer"
+                }],
+                "totalCount": 50000
+            };
+
+            Ext.define('Ght.proxy', {
+                extend: 'Ext.data.proxy.Server',
+                alias: 'proxy.ght',
+                alternateClassName: ['Ext.data.GhtProxy'],
+
+                doRequest: function(operation) {
+                    var me = this,
+                        request,
+                        handler;
+
+                    operation.setUrl("http://dummy");
+                    request = me.buildRequest(operation);
+                    handler = (function(_operation, _request) {
+                        return function() {
+
+                            me.processResponse(true, _operation, _request, data);
+                            me.fireEvent('dataprocessed');
+                        };
+                    })(operation, request);
+
+                    setTimeout(handler, 50);
+
+                    return request;
+                }
+            });
+
+            store = Ext.create('Ext.data.Store', {
+                requires: ['Ght.proxy'],
+                autoLoad: false,
+                fields: [
+                    'firstName', 'lastName', 'address', 'company', 'title', {
+                        name: 'id',
+                        type: 'int'
+                    }
+                ], pageSize: 25,
+                proxy: {
+                    type: 'ght',
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'users',
+                        totalProperty: 'totalCount'
+                    }
+                }
+            });
+
+            grid = Ext.create('Ext.grid.Grid', {
+                title: 'Grid',
+
+                style: 'border: 1px solid red;',
+
+                // Using Named Stored
+                store: store,
+                columns: [{
+                    text: 'First Name',
+                    width: 130,
+                    dataIndex: 'firstName'
+                }, {
+                    text: 'Last Name',
+                    width: 130,
+                    dataIndex: 'lastName'
+                }, {
+                    text: 'Title',
+                    flex: 1,
+                    dataIndex: 'title'
+                }, {
+                    text: 'Address',
+                    flex: 1,
+                    dataIndex: 'address'
+                }, {
+                    text: 'Company',
+                    flex: 1,
+                    dataIndex: 'company'
+                }]
+            });
+
+            panel = Ext.create('Ext.Panel', {
+                renderTo: document.body,
+                height: 400,
+                width: '100%',
+
+                title: 'Container',
+                layout: 'fit',
+                items: [{
+                    items: [
+                        grid
+                    ],
+                    xtype: 'carousel'
+                }]
+            });
+
+        });
+
+        afterEach(function() {
+            Ext.destroy(grid, panel, store, data);
+            Ext.undefine('Ght');
+        });
+
+        it("should load and show the rows inside a carousel", function() {
+
+            grid.getStore().load();
+            waits(100);
+            runs(function() {
+                expect(grid.query('column')[1].getCells()[0].getValue()).toBe("Weber");
+            });
+
+        });
+
+    });
+
+    describe('selection on infinite scrolling', function() {
+        describe('row/record', function() {
+            var captured = null;
+
+            function getData(start, limit) {
+                var end = start + limit,
+                    recs = [],
+                    i;
+
+                for (i = start + 1; i <= end; ++i) {
+                    recs.push({
+                        post_id: i + 1,
+                        author: 'Author ' + i,
+                        title: 'Title ' + i
+                    });
+                }
+
+                return recs;
+            }
+
+            function satisfyRequests(total) {
+                var requests = Ext.Ajax.mockGetAllRequests(),
+                    empty = total === 0,
+                    request, params, data;
+
+                while (requests.length) {
+                    request = requests[0];
+
+                    captured.push(request.options.params);
+
+                    params = request.options.params;
+                    data = getData(empty ? 0 : params.start, empty ? 0 : params.limit);
+
+                    Ext.Ajax.mockComplete({
+                        status: 200,
+                        responseText: Ext.encode({
+                            total: (total || empty) ? total : 5000,
+                            data: data
+                        })
+                    });
+
+                    requests = Ext.Ajax.mockGetAllRequests();
+                }
+            }
+
+            function createStore(cfg) {
+                return new Ext.data.virtual.Store(Ext.apply({
+                    fields: ['post_id', 'title', 'author'],
+                    pageSize: 100,
+                    proxy: {
+                        type: 'ajax',
+                        url: 'fakeUrl',
+                        reader: {
+                            type: 'json',
+                            rootProperty: 'data'
+                        }
+                    },
+                    autoLoad: true
+                }, cfg));
+            }
+
+            function createGrid(cfg) {
+                cfg = Ext.apply({
+
+                    renderTo: Ext.getBody(),
+                    title: 'Infinite Grid',
+                    width: 600,
+                    height: 200,
+                    bufferSize: 25,
+                    scrollable: true,
+                    store: createStore(),
+
+                    columns: [{
+                        text: 'Id',
+                        width: 130,
+                        dataIndex: 'post_id'
+                    }, {
+                        text: 'Title',
+                        flex: 1,
+                        dataIndex: 'title'
+                    }, {
+                        text: 'author',
+                        flex: 1,
+                        dataIndex: 'author'
+                    }]
+                });
+
+                grid = new Ext.grid.Grid(cfg);
+
+                // Kicks the store into action on first refresh, so wait for that
+                waits(100);
+
+                // Now satisfy the requests
+                runs(function() {
+                    satisfyRequests();
+                });
+            }
+
+            beforeEach(function() {
+                MockAjaxManager.addMethods();
+                captured = [];
+
+                createGrid();
+            });
+
+            afterEach(function() {
+                MockAjaxManager.removeMethods();
+
+                Ext.destroy(grid);
+                captured = grid = null;
+            });
+
+            it('should have the first rows selectables', function() {
+                var sm = grid.getSelectable(),
+                    row = grid.getItemAt(0),
+                    rec = row.getRecord(),
+                    cls = Ext.baseCSSPrefix + 'selected';
+
+                sm.selectRows(rec);
+
+                runs(function() {
+                    expect(row).toHaveCls(cls);
+                });
+
+            });
+        });
+    });
+
+    describe('grid sorters and filters behaviour with autoload config', function() {
+        function completeWithData(data) {
+            Ext.Ajax.mockComplete({
+                status: 200,
+                responseText: Ext.JSON.encode(data)
+            });
+        }
+
+        beforeEach(function() {
+            MockAjaxManager.addMethods();
+        });
+
+        afterEach(function() {
+            MockAjaxManager.removeMethods();
+        });
+
+        it('should send filters and sorters remotely if autoload true', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                nameFilter = [{ operator: "like", property: "name", value: "Marge" }],
+                store, grid, colRef, plugin;
+
+            ajaxSpy.reset();
+            flushLoadSpy.reset();
+
+            store = Ext.create('Ext.data.Store', {
+                fields: ['name', 'email', 'phone'],
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                autoLoad: true,
+                remoteSort: true,
+                remoteFilter: true
+            });
+
+            grid = Ext.create('Ext.grid.Grid', {
+                title: 'Simpsons',
+                store: store,
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                height: 200,
+                width: 400,
+                renderTo: Ext.getBody(),
+                plugins: [{
+                    type: 'gridfilters'
+                }]
+            });
+
+            plugin = grid.findPlugin('gridfilters');
+
+            completeWithData([
+                    { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224'  },
+                    { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
+                    { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244'  },
+                    { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  }
+            ]);
+
+            colRef = grid.getColumns();
+            Ext.testHelper.tap(colRef[0].el);
+            // response matching with ascending sort on name
+            completeWithData([
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
+                { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244'  },
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  },
+                { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224'  }
+            ]);
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 1;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.sort).toBe(Ext.encode([{
+                    "property": "name",
+                    "direction": "ASC"
+                }]));
+
+                plugin.setActiveFilter(nameFilter);
+                completeWithData([
+                    { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
+                    { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  }
+                ]);
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 2;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.filter).toEqual(Ext.encode([{
+                    "property": "name",
+                    "operator": "like",
+                    "value": "Marge"
+                }]));
+
+                store.destroy();
+                grid.destroy();
+            });
+        });
+
+        it('should not trigger a load for remoteSort and remoteFilter with autoLoad false', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                nameFilter = [{ operator: "like", property: "name", value: "Marge" }],
+                store, grid, colRef, plugin;
+
+            ajaxSpy.reset();
+            flushLoadSpy.reset();
+
+            store = Ext.create('Ext.data.Store', {
+                fields: ['name', 'email', 'phone'],
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                autoLoad: false,
+                remoteSort: true,
+                remoteFilter: true
+            });
+
+            grid = Ext.create('Ext.grid.Grid', {
+                title: 'Simpsons',
+                store: store,
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                height: 200,
+                width: 400,
+                renderTo: Ext.getBody(),
+                plugins: [{
+                    type: 'gridfilters'
+                }]
+            });
+
+            plugin = grid.findPlugin('gridfilters');
+
+            colRef = grid.getColumns();
+            Ext.testHelper.tap(colRef[0].el);
+            plugin.setActiveFilter(nameFilter);
+
+            // response matching with ascending sort on name
+            completeWithData([
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  }
+            ]);
+            expect(ajaxSpy.callCount).toBe(0);
+            expect(store.isLoaded()).toBe(false);
+            store.destroy();
+            grid.destroy();
+        });
+
+        it('should not trigger a load for remoteSort and remoteFilter with default autoLoad config (autoLoad: undefined)', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                nameFilter = [{ operator: "like", property: "name", value: "Marge" }],
+                store, grid, colRef, plugin;
+
+            ajaxSpy.reset();
+            flushLoadSpy.reset();
+
+            store = Ext.create('Ext.data.Store', {
+                fields: ['name', 'email', 'phone'],
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                remoteSort: true,
+                remoteFilter: true
+            });
+
+            grid = Ext.create('Ext.grid.Grid', {
+                title: 'Simpsons',
+                store: store,
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                height: 200,
+                width: 400,
+                renderTo: Ext.getBody(),
+                plugins: [{
+                    type: 'gridfilters'
+                }]
+            });
+
+            expect(ajaxSpy.callCount).toBe(0);
+            expect(store.isLoaded()).toBe(false);
+
+            plugin = grid.findPlugin('gridfilters');
+
+            colRef = grid.getColumns();
+            Ext.testHelper.tap(colRef[0].el);
+            plugin.setActiveFilter(nameFilter);
+
+            // response matching with ascending sort on name
+            completeWithData([
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  }
+            ]);
+            expect(ajaxSpy.callCount).toBe(0);
+            expect(store.isLoaded()).toBe(false);
+            store.destroy();
+            grid.destroy();
+        });
+
+        it('should send filters and sorters remotely after intialLoad of store if autoload false', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
+                successData = {
+                    success: true,
+                    data: [{
+                        email: 'foo@sencha.com'
+                    }]
+                },
+                store, grid, colRef, plugin;
+
+            store = Ext.create('Ext.data.Store', {
+                asynchronousLoad: false,
+                fields: ['name', 'email', 'phone'],
+                proxy: {
+                    type: 'ajax',
+                    url: 'foo',
+                    reader: {
+                        type: 'json',
+                        successProperty: 'success',
+                        rootProperty: 'data'
+                    }
+                },
+                autoLoad: false,
+                remoteSort: true,
+                remoteFilter: true
+            });
+
+            ajaxSpy.reset();
+            flushLoadSpy.reset();
+
+            grid = Ext.create('Ext.grid.Grid', {
+                title: 'Simpsons',
+                store: store,
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                height: 200,
+                width: 400,
+                renderTo: Ext.getBody(),
+                plugins: [{
+                    type: 'gridfilters'
+                }]
+            });
+
+            plugin = grid.findPlugin('gridfilters');
+
+            colRef = grid.getColumns();
+            Ext.testHelper.tap(colRef[0].el);
+            plugin.setActiveFilter([{ operator: "like", property: "name", value: "Marge" }]);
+            store.load();
+
+            // response matching with ascending sort on name
+            completeWithData(successData);
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 1;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.sort).toBe(Ext.encode([{
+                    "property": "name",
+                    "direction": "ASC"
+                }]));
+                expect(ajaxSpy.mostRecentCall.args[0].params.filter).toBe(Ext.encode([{
+                    "property": "name",
+                    "operator": "like",
+                    "value": "Marge"
+                }]));
+                Ext.testHelper.tap(colRef[0].el);
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 2;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.sort).toBe(Ext.encode([{
+                    "property": "name",
+                    "direction": "DESC"
+                }]));
+
+                plugin.setActiveFilter([{ operator: "like", property: "name", value: "Bart" }]);
+            });
+
+            waitsFor(function() {
+                return flushLoadSpy.callCount === 3;
+            });
+
+            runs(function() {
+                expect(ajaxSpy.mostRecentCall.args[0].params.filter).toBe(Ext.encode([{
+                    "property": "name",
+                    "operator": "like",
+                    "value": "Bart"
+                }]));
+                store.destroy();
+                grid.destroy();
+            });
         });
     });
 });

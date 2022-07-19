@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.af.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Tel"
+});
 /**
  * List compiled by mystix on the extjs.com forums.
  * Thank you Mystix!
@@ -151,4 +156,72 @@ Ext.define("Ext.locale.af.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.af.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.af.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Brei almal uit",
+    collapseAllText: "Ineenstort",
+    groupsText: "Groepe",
+    groupByText: "Groep deur hierdie veld",
+    addToGroupingText: "Voeg by groepering",
+    removeFromGroupingText: "Verwyder uit groepering",
+    groupSummaryTpl: "Opsomming ({name})",
+    summaryTpl: "Opsomming ({store.data.length})"
+});
+Ext.define("Ext.locale.af.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Geen",
+    summaryText: "Opsomming"
+});
+Ext.define("Ext.locale.af.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Is gelyk",
+        ne: "Nie gelyk nie",
+        gt: "Groter as",
+        ge: "Groter as of gelyk aan",
+        lt: "Minder as",
+        le: "Minder as of gelyk aan",
+        like: "Soos",
+        nlike: "Nie soos",
+        empty: "Leegmaak",
+        nempty: "Nie leeg nie",
+        identical: "Identies",
+        nidentical: "Nie identies nie",
+        regex: "Gewone uitdrukking",
+        "in": "Is in",
+        notin: "Is nie in nie"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.af.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Sleep 'n kolomopskrif hier om deur die kolom te groepeer",
+    showGroupingPanelText: "Wys groep per paneel",
+    hideGroupingPanelText: "Versteek groep deur paneel",
+    clearGroupText: "Duidelike groep",
+    sortAscText: "Sorteer stygend",
+    sortDescText: "Sorteer aflopend",
+    moveLeftText: "Skuif na links",
+    moveRightText: "Beweeg regs",
+    moveBeginText: "Beweeg om te begin",
+    moveEndText: "Beweeg om te eindig",
+    removeText: "Verwyder"
 });

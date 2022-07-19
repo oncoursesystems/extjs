@@ -1,4 +1,4 @@
-/* global Ext, MockAjaxManager, expect, jasmine, spyOn, xit */
+/** global Ext, MockAjaxManager, expect, jasmine, spyOn, xit */
 
 topSuite('Ext.grid.filters.Plugin', [
     'Ext.grid.Grid',
@@ -6,7 +6,7 @@ topSuite('Ext.grid.filters.Plugin', [
     'Ext.grid.filters.*'
 ], function() {
     var MyStore = Ext.define(null, {
-        extend: 'Ext.data.Store',
+            extend: 'Ext.data.Store',
 
             load: function() {
                 var ret = this.callParent(arguments);
@@ -77,6 +77,7 @@ topSuite('Ext.grid.filters.Plugin', [
         if (provider) {
             provider.destroy();
         }
+
         Ext.state.Provider.register(oldProvider || new Ext.state.Provider());
         provider = store = grid = plugin = Ext.destroy(grid);
     }
@@ -234,6 +235,7 @@ topSuite('Ext.grid.filters.Plugin', [
                 store: makeStore({
                     data: null,
                     remoteFilter: true,
+                    autoLoad: true,
                     proxy: {
                         type: 'ajax',
                         url: 'foo',
@@ -333,7 +335,8 @@ topSuite('Ext.grid.filters.Plugin', [
         });
 
         it('should set initial activeFilter and check string filter applied', function() {
-            var a = [{ operator: "like", property: "name", value: "Marge" }];
+            var a = [{ operator: "like", property: "name", value: "Marge" }],
+                cells;
 
             makeGrid({
                 plugins: {
@@ -341,7 +344,7 @@ topSuite('Ext.grid.filters.Plugin', [
                 }
             });
 
-            var cells = getCells(colMap.name);
+            cells = getCells(colMap.name);
 
             expect(plugin.getActiveFilter()).toBe(null);
 
@@ -354,12 +357,17 @@ topSuite('Ext.grid.filters.Plugin', [
             // To check there are activeFilter exists
             expect(plugin.getActiveFilter()).not.toBe(null);
 
-            // To check value after filter applied
-            expect(cells[0].getValue()).toBe('Marge');
+            waits(100);
+
+            runs(function() {
+                // To check value after filter applied
+                expect(cells[0].getValue()).toBe('Marge');
+            });
         });
 
         it('should set initial activeFilter and check number filter applied for op <', function() {
-            var a_lt = [{ operator: "<", property: "age", value: 14 }];
+            var a_lt = [{ operator: "<", property: "age", value: 14 }],
+                cells;
 
             makeGrid({
                 plugins: {
@@ -367,7 +375,7 @@ topSuite('Ext.grid.filters.Plugin', [
                 }
             });
 
-            var cells = getCells(colMap.age);
+            cells = getCells(colMap.age);
 
             expect(plugin.getActiveFilter()).toBe(null);
 
@@ -380,14 +388,18 @@ topSuite('Ext.grid.filters.Plugin', [
             // To check there are activeFilter exists
             expect(plugin.getActiveFilter()).not.toBe(null);
 
-            // To check value after filter applied
-            expect(cells[0].getValue()).toBe(12);
-            plugin.setActiveFilter(null);
+            waits(100);
 
+            runs(function() {
+                // To check value after filter applied
+                expect(cells[0].getValue()).toBe(12);
+                plugin.setActiveFilter(null);
+            });
         });
 
         it('should set initial activeFilter and check number filter applied for op >', function() {
-            var a_gt = [{ operator: ">", property: "age", value: 41 }];
+            var a_gt = [{ operator: ">", property: "age", value: 41 }],
+                cells;
 
             makeGrid({
                 plugins: {
@@ -395,7 +407,7 @@ topSuite('Ext.grid.filters.Plugin', [
                 }
             });
 
-            var cells = getCells(colMap.age);
+            cells = getCells(colMap.age);
 
             expect(plugin.getActiveFilter()).toBe(null);
 
@@ -408,13 +420,17 @@ topSuite('Ext.grid.filters.Plugin', [
             // To check there are activeFilter exists
             expect(plugin.getActiveFilter()).not.toBe(null);
 
-            // To check value after filter applied
-            expect(cells[0].getValue()).toBe(44);
+            waits(100);
 
+            runs(function() {
+                // To check value after filter applied
+                expect(cells[0].getValue()).toBe(44);
+            });
         });
 
         it('should set initial activeFilter and check number filter applied for op =', function() {
-            var a_eq = [{ operator: "=", property: "age", value: 44 }];
+            var a_eq = [{ operator: "=", property: "age", value: 44 }],
+                cells;
 
             makeGrid({
                 plugins: {
@@ -422,7 +438,7 @@ topSuite('Ext.grid.filters.Plugin', [
                 }
             });
 
-            var cells = getCells(colMap.age);
+            cells = getCells(colMap.age);
 
             expect(plugin.getActiveFilter()).toBe(null);
 
@@ -435,15 +451,20 @@ topSuite('Ext.grid.filters.Plugin', [
             // To check there are activeFilter exists
             expect(plugin.getActiveFilter()).not.toBe(null);
 
-            // To check value after filter applied
-            expect(cells[0].getValue()).toBe(44);
+            waits(100);
+
+            runs(function() {
+                // To check value after filter applied
+                expect(cells[0].getValue()).toBe(44);
+            });
         });
 
         it('should set initial activeFilter and check number filter applied for op < and >', function() {
             var a_lt_gt = [
                 { operator: "<", property: "age", value: 44 },
                 { operator: ">", property: "age", value: 14 }
-            ];
+            ],
+            cells;
 
             makeGrid({
                 plugins: {
@@ -451,7 +472,7 @@ topSuite('Ext.grid.filters.Plugin', [
                 }
             });
 
-            var cells = getCells(colMap.age);
+            cells = getCells(colMap.age);
 
             expect(plugin.getActiveFilter()).toBe(null);
 
@@ -464,14 +485,18 @@ topSuite('Ext.grid.filters.Plugin', [
             // To check there are activeFilter exists
             expect(plugin.getActiveFilter()).not.toBe(null);
 
-            // To check value after filter applied
-            expect(cells[0].getValue()).toBe(41);
-            plugin.setActiveFilter(null);
+            waits(100);
 
+            runs(function() {
+                // To check value after filter applied
+                expect(cells[0].getValue()).toBe(41);
+                plugin.setActiveFilter(null);
+            });
         });
 
         it('should set initial activeFilter and check boolean filter applied for op true', function() {
-            var a_true = [{ operator: "==", property: "visible", value: true }];
+            var a_true = [{ operator: "==", property: "visible", value: true }],
+                cells;
 
             makeGrid({
                 plugins: {
@@ -479,7 +504,7 @@ topSuite('Ext.grid.filters.Plugin', [
                 }
             });
 
-            var cells = getCells(colMap.visible);
+            cells = getCells(colMap.visible);
 
             expect(plugin.getActiveFilter()).toBe(null);
 
@@ -493,13 +518,18 @@ topSuite('Ext.grid.filters.Plugin', [
             // To check there are activeFilter exists
             expect(plugin.getActiveFilter()).not.toBe(null);
 
-            // To check value after filter applied
-            expect(cells[0].getValue()).toBe(true);
-            expect(cells[1].getValue()).toBe(true);
+            waits(100);
+
+            runs(function() {
+                // To check value after filter applied
+                expect(cells[0].getValue()).toBe(true);
+                expect(cells[1].getValue()).toBe(true);
+            });
         });
 
         it('should set initial activeFilter and check boolean filter applied for op false', function() {
-            var a_false = [{ operator: "==", property: "visible", value: false }];
+            var a_false = [{ operator: "==", property: "visible", value: false }],
+                cells;
 
             makeGrid({
                 plugins: {
@@ -507,7 +537,7 @@ topSuite('Ext.grid.filters.Plugin', [
                 }
             });
 
-            var cells = getCells(colMap.visible);
+            cells = getCells(colMap.visible);
 
             expect(plugin.getActiveFilter()).toBe(null);
 
@@ -521,13 +551,18 @@ topSuite('Ext.grid.filters.Plugin', [
             // To check there are activeFilter exists
             expect(plugin.getActiveFilter()).not.toBe(null);
 
-            // To check value after filter applied
-            expect(cells[0].getValue()).toBe(false);
-            expect(cells[1].getValue()).toBe(false);
+            waits(100);
+
+            runs(function() {
+                // To check value after filter applied
+                expect(cells[0].getValue()).toBe(false);
+                expect(cells[1].getValue()).toBe(false);
+            });
         });
 
         it('should remove activeFilter and check filter removed', function() {
-            var a = [{ operator: "like", property: "name", value: "Marge" }];
+            var a = [{ operator: "like", property: "name", value: "Marge" }],
+                cells;
 
             makeGrid({
                 plugins: {
@@ -535,7 +570,7 @@ topSuite('Ext.grid.filters.Plugin', [
                 }
             });
 
-            var cells = getCells(colMap.name);
+            cells = getCells(colMap.name);
 
             // To check there are no activeFilter
             expect(plugin.getActiveFilter()).toBe(null);
@@ -546,20 +581,28 @@ topSuite('Ext.grid.filters.Plugin', [
             // To set filter type string
             plugin.setActiveFilter(a);
 
-            // To check there are activeFilter exists
-            expect(plugin.getActiveFilter()).not.toBe(null);
+            waits(100);
 
-            // To check value after filter applied
-            expect(cells[0].getValue()).toBe('Marge');
+            runs(function() {
+                // To check there are activeFilter exists
+                expect(plugin.getActiveFilter()).not.toBe(null);
 
-            // To remove applied filter
-            plugin.setActiveFilter(null);
+                // To check value after filter applied
+                expect(cells[0].getValue()).toBe('Marge');
 
-            // To check there are no activeFilter
-            expect(plugin.getActiveFilter()).toBe(null);
+                // To remove applied filter
+                plugin.setActiveFilter(null);
 
-            // To check initial value
-            expect(cells[0].getValue()).toBe('Lisa');
+                // To check there are no activeFilter
+                expect(plugin.getActiveFilter()).toBe(null);
+
+                waits(100);
+
+                runs(function() {
+                    // To check initial value
+                    expect(cells[0].getValue()).toBe('Lisa');
+                });
+            });
         });
     });
 
@@ -575,8 +618,8 @@ topSuite('Ext.grid.filters.Plugin', [
                         totalProperty: 'totalCount'
                     }
                 },
-                pageSize:25,
-                autoLoad:true
+                pageSize: 25,
+                autoLoad: true
             }, cfg));
         }
 
@@ -599,15 +642,320 @@ topSuite('Ext.grid.filters.Plugin', [
             grid = new Ext.grid.Grid(cfg);
         }
 
-        afterEach(function(){
+        afterEach(function() {
             store.destroy();
             store = null;
         });
 
         it('should not throw error on adding filter plugin to the grid with virtual store', function() {
-            expect(function(){
-                createGrid()
-            }).not.toThrow()
+            expect(function() {
+                createGrid();
+            }).not.toThrow();
+        });
+    });
+
+    describe('inital filter in grid configuration', function() {
+        it('should send the correct filters with default operator for given type', function() {
+            var filters;
+
+            makeGrid({
+                columns: [
+                    { header: 'Name', dataIndex: 'name', editor: 'textfield' },
+                    {
+                        header: 'Email', dataIndex: 'email', flex: 1,
+                        filter: {
+                            value: 'ar'
+                        }
+                    },
+                    { header: 'Phone', dataIndex: 'phone', editor: 'textfield' },
+                    {
+                        header: 'Age', dataIndex: 'age', editor: 'textfield',
+                        filter: {
+                            type: 'number',
+                            value: '12'
+                        }
+                    },
+                    { header: 'Visible', dataIndex: 'visible', editor: 'textfield', filter: 'boolean' }
+                ],
+                store: makeStore({
+                    data: null,
+                    remoteFilter: true,
+                    proxy: {
+                        type: 'ajax',
+                        url: 'foo',
+                        reader: {
+                            type: 'json',
+                            successProperty: 'success',
+                            rootProperty: 'data'
+                        }
+                    },
+                    autoLoad: true,
+                    listeners: {
+                        filterchange: function(store, request) {
+                            filters = request;
+                        }
+                    }
+                })
+            });
+
+            waits(300);
+            runs(function() {
+                expect(filters[0].serialize()).toEqual([
+                    {
+                        "property": "email",
+                        "operator": "like",
+                        "value": "ar"
+                    },
+                    {
+                        "property": "age",
+                        "operator": "==",
+                        "value": 12
+                    }
+                ]);
+            });
+        });
+    });
+
+    describe('Filter Special characters', function() {
+
+        function createStore(cfg) {
+            return store = Ext.create('Ext.data.Store', {
+                fields: ['name', 'email', 'phone'],
+                data: [{
+                    'name': 'Dea/?nna',
+                    "email": "lisa@simpsons.com",
+                    "phone": "555-111-1224"
+                }, {
+                    'name': 'Ba/rt',
+                    "email": "bart@simpsons.com",
+                    "phone": "555-222-1234"
+                }, {
+                    'name': 'Ho\//mer',
+                    "email": "home@simpsons.com",
+                    "phone": "555-222-1244"
+                }, {
+                    'name': 'Marge',
+                    "email": "marge@simpsons.com",
+                    "phone": "555-222-1254"
+                }]
+            });
+        }
+
+        function createGrid(cfg) {
+            cfg = Ext.apply({
+                title: 'Grid Filters',
+                height: 400,
+                width: 600,
+                plugins: {
+                    gridfilters: true
+                },
+                columns: [{
+                    text: 'Name',
+                    dataIndex: 'name',
+                    flex: 1
+                }, {
+                    text: 'Email',
+                    dataIndex: 'email',
+                    flex: 1
+                }, {
+                    text: 'Phone',
+                    dataIndex: 'phone',
+                    flex: 1
+                }],
+                store: createStore(),
+                renderTo: document.body
+            });
+            grid = new Ext.grid.Grid(cfg);
+        }
+
+        afterEach(function() {
+            store.destroy();
+            store = null;
+        });
+
+        it('should filter for special characters ', function() {
+            var changeSpy = jasmine.createSpy('filter field change'),
+                store, headerContainer, filterField, filterMenu;
+
+            expect(function() {
+                createGrid();
+            }).not.toThrow();
+
+            store = grid.getStore();
+            headerContainer = grid.getHeaderContainer();
+            headerContainer.innerItems[0].showMenu();
+            filterMenu =  headerContainer.innerItems[0].getMenu().down('[_itemId=filter]').getMenu();
+            filterField = filterMenu.down();
+            store.on({
+                refresh: changeSpy
+            });
+            filterField.setValue('/');
+            waitForSpy(changeSpy);
+
+            runs(function() {
+                expect(grid.getStore().getCount()).toBe(3);
+            });
+        });
+    });
+
+    describe("column cls decoration", function() {
+        var filterCls = Ext.grid.filters.Plugin.prototype.filterCls,
+            cols;
+
+        afterEach(function() {
+            cols = null;
+        });
+
+        describe("works for both non-nested and nested columns", function() {
+            it("should add the cls for columns when setting a value", function() {
+                var filterChangeSpy = jasmine.createSpy('filter change spy'),
+                    col;
+
+                makeGrid(null, {
+                    columns: [{
+                        dataIndex: 'name',
+                        filter: true
+                    }, {
+                        columns: [{
+                            dataIndex: 'age',
+                            filter: {
+                                type: 'number'
+                            }
+                        }]
+                    }]
+                });
+
+                store.on('filterchange', filterChangeSpy);
+                cols = grid.getColumns();
+                col = cols.filter(function(col) {
+                    return col.getDataIndex() === 'name';
+                })[0];
+
+                expect(col.el).not.toHaveCls(filterCls);
+
+                colMap.name.showMenu();
+                var menu = colMap.name.getMenu(),
+                    filter = menu.getComponent('filter');
+
+                expect(filter.getChecked()).toBeFalsy();
+
+                waitForSpy(filterChangeSpy);
+                filter.getMenu().show();
+                filter.getMenu().down('textfield').setValue('ar');
+                filter.getMenu().hide();
+
+                runs(function() {
+                    expect(filter.getChecked()).toBe(true);
+                    expect(col.el).toHaveCls(filterCls);
+                });
+            });
+
+            it("should remove the cls for columns when clearing a value", function() {
+                var filterChangeSpy = jasmine.createSpy('filter change spy'),
+                    col;
+
+                makeGrid(null, {
+                    columns: [{
+                        dataIndex: 'name',
+                        filter: true
+                    }, {
+                        columns: [{
+                            dataIndex: 'age',
+                            filter: {
+                                type: 'number'
+                            }
+                        }]
+                    }]
+                });
+
+                store.on('filterchange', filterChangeSpy);
+                cols = grid.getColumns();
+                col = cols.filter(function(col) {
+                    return col.getDataIndex() === 'name';
+                })[0];
+
+                expect(col.el).not.toHaveCls(filterCls);
+
+                colMap.name.showMenu();
+                var menu = colMap.name.getMenu(),
+                    filter = menu.getComponent('filter');
+
+                expect(filter.getChecked()).toBeFalsy();
+
+                waitForSpy(filterChangeSpy);
+                filter.getMenu().show();
+                filter.getMenu().down('textfield').setValue('ar');
+                filter.getMenu().hide();
+
+                runs(function() {
+                    expect(filter.getChecked()).toBe(true);
+                    expect(col.el).toHaveCls(filterCls);
+
+                    filterChangeSpy.reset();
+                    waitForSpy(filterChangeSpy);
+                    filter.getMenu().show();
+                    filter.getMenu().down('textfield').setValue('');
+                    filter.getMenu().hide();
+
+                    runs(function() {
+                        expect(filter.getChecked()).toBe(false);
+                        expect(col.el).not.toHaveCls(filterCls);
+                    });
+                });
+            });
+
+            it("should remove the cls for columns when unchecking the filter menu item", function() {
+                var filterChangeSpy = jasmine.createSpy('filter change spy'),
+                    col;
+
+                makeGrid(null, {
+                    columns: [{
+                        dataIndex: 'name',
+                        filter: true
+                    }, {
+                        columns: [{
+                            dataIndex: 'age',
+                            filter: {
+                                type: 'number'
+                            }
+                        }]
+                    }]
+                });
+
+                store.on('filterchange', filterChangeSpy);
+                cols = grid.getColumns();
+                col = cols.filter(function(col) {
+                    return col.getDataIndex() === 'name';
+                })[0];
+
+                expect(col.el).not.toHaveCls(filterCls);
+
+                colMap.name.showMenu();
+                var menu = colMap.name.getMenu(),
+                    filter = menu.getComponent('filter');
+
+                expect(filter.getChecked()).toBeFalsy();
+
+                waitForSpy(filterChangeSpy);
+                filter.getMenu().show();
+                filter.getMenu().down('textfield').setValue('ar');
+                filter.getMenu().hide();
+
+                runs(function() {
+                    expect(filter.getChecked()).toBe(true);
+                    expect(col.el).toHaveCls(filterCls);
+
+                    filterChangeSpy.reset();
+                    waitForSpy(filterChangeSpy);
+                    filter.setChecked(false);
+
+                    runs(function() {
+                        expect(filter.getChecked()).toBe(false);
+                        expect(col.el).not.toHaveCls(filterCls);
+                    });
+                });
+
+            });
         });
     });
 });

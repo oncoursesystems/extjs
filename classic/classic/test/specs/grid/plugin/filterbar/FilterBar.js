@@ -190,6 +190,101 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
                     expect(store.getCount()).toBe(1);
                 });
             });
+
+            describe('remote filters', function() {
+                var remoteStoreConfig = {
+                        remoteFilter: true,
+                        proxy: {
+                            type: 'ajax',
+                            url: 'fake',
+                            reader: {
+                                type: 'json',
+                                rootProperty: 'data'
+                            }
+                        }
+                    },
+                    filterParams;
+
+                beforeEach(function() {
+                    spyOn(Ext.Ajax, 'request').andCallFake(function(cb, scope) {
+                        filterParams = cb;
+                    });
+                });
+
+                it('should load the store without filter params', function() {
+                    makeGrid({}, remoteStoreConfig);
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    waitsFor(function() {
+                        return filterParams.params !== undefined;
+                    });
+
+                    runs(function() {
+                        expect(filterParams.params.page).toBe(1);
+                    });
+                });
+
+                it('should load the store with default filter params', function() {
+                    makeGrid({ columns: [
+                        { text: 'Company', dataIndex: 'company', itemId: 'c1', filterType: { type: 'string', value: 'abc', operator: '==' } }]
+                    }, remoteStoreConfig);
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    waitsFor(function() {
+                        return filterParams.params.filter !== undefined;
+                    });
+
+                    runs(function() {
+                        expect(filterParams.params.page).toBe(1);
+                        expect(JSON.parse(filterParams.params.filter)[0].operator).toBe('==');
+                    });
+                });
+
+                it('should load the store when filter value is changed', function() {
+                    makeGrid({}, remoteStoreConfig);
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    plugin.getBar().down('textfield').setValue('xyz');
+
+                    waitsFor(function() {
+                        return filterParams.params.filter !== undefined;
+                    });
+
+                    runs(function() {
+                        expect(filterParams.params.page).toBe(1);
+                        expect(JSON.parse(filterParams.params.filter)[0].value).toBe('xyz');
+                    });
+                });
+
+                it('should load the store when filter operator is changed', function() {
+                    makeGrid({}, remoteStoreConfig);
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    plugin.getBar().down('textfield').setOperator('==');
+                    plugin.getBar().down('textfield').setValue('xyz');
+
+                    waitsFor(function() {
+                        return filterParams.params.filter !== undefined;
+                    });
+
+                    runs(function() {
+                        expect(filterParams.params.page).toBe(1);
+                        expect(JSON.parse(filterParams.params.filter)[0].operator).toBe('==');
+                    });
+                });
+            });
         });
 
         describe('show/hide', function() {
@@ -220,6 +315,93 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
                     grid.hideFilterBar();
                     expect(plugin.getBar().isVisible()).toBe(false);
                 });
+            });
+        });
+
+        describe("column cls decoration", function() {
+            var filterCls = Ext.grid.plugin.BaseFilterBar.prototype.filterCls,
+                col;
+
+            describe("works for both non-nested and nested columns", function() {
+                it("should add the cls for columns when a filter is preset", function() {
+                    makeGrid(null, {
+                        filters: {
+                            property: 'company',
+                            value: 'Adobe',
+                            operator: '='
+                        }
+                    });
+
+                    col = grid.columnManager.getHeaderByDataIndex('company');
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        expect(col.el).toHaveCls(filterCls);
+                    });
+                });
+
+                it("should add the cls for columns when setting a value", function() {
+                    makeGrid();
+
+                    col = grid.columnManager.getHeaderByDataIndex('company');
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        gridEvents = null;
+                        plugin.getBar().down('textfield').setValue('Adobe');
+                    });
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        expect(col.el).toHaveCls(filterCls);
+                    });
+                });
+
+                it("should remove the cls for columns when clearing a value", function() {
+                    makeGrid();
+
+                    col = grid.columnManager.getHeaderByDataIndex('company');
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        gridEvents = null;
+                        plugin.getBar().down('textfield').setValue('Adobe');
+                    });
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        expect(col.el).toHaveCls(filterCls);
+                    });
+
+                    runs(function() {
+                        gridEvents = null;
+                        plugin.getBar().down('textfield').setValue('');
+                    });
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        expect(col.el).not.toHaveCls(filterCls);
+                    });
+                });
+
             });
         });
     });

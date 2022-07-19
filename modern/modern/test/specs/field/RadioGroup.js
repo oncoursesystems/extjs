@@ -4,7 +4,7 @@ topSuite("Ext.field.RadioGroup", ['Ext.app.ViewModel', 'Ext.form.Panel'], functi
     function makeGroup(items, cfg, panelCfg) {
         panel = new Ext.form.Panel(Ext.apply({
             renderTo: Ext.getBody()
-        },panelCfg));
+        }, panelCfg));
 
         group = panel.add(Ext.apply({
             xtype: 'radiogroup',
@@ -239,7 +239,7 @@ topSuite("Ext.field.RadioGroup", ['Ext.app.ViewModel', 'Ext.form.Panel'], functi
                     publishes: 'value',
                     bind: '{foo}',
                     simpleValue: true
-                },{
+                }, {
                    viewModel: {
                         type: 'bar'
                     },

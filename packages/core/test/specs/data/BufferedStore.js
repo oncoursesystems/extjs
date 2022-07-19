@@ -158,6 +158,7 @@ topSuite("Ext.data.BufferedStore", function() {
         var spy = jasmine.createSpy();
 
         createStore({
+            autoLoad: true,
             listeners: {
                 load: spy
             }
@@ -230,12 +231,16 @@ topSuite("Ext.data.BufferedStore", function() {
             var spy = jasmine.createSpy();
 
             createStore({
+                autoLoad: true,
                 listeners: {
                     load: spy
-                }
+                },
+                filters: [{
+                    property: 'username',
+                    value: 'germanicus'
+                }]
             });
 
-            bufferedStore.filter('username', 'germanicus');
             satisfyRequests();
 
             expect(spy.callCount).toBe(1);

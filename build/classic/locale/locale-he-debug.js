@@ -6,6 +6,11 @@ Ext.define('Ext.locale.container.Viewport', {
 
     rtl: true
 });
+Ext.define("Ext.locale.he.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "לספור"
+});
 /**
  * Hebrew Translations
  * By spartacus (from forums) 06-12-2007
@@ -281,4 +286,72 @@ Ext.define("Ext.locale.he.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.he.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.he.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "הרחב הכל",
+    collapseAllText: "למוטט הכל",
+    groupsText: "קבוצות",
+    groupByText: "קבוצה על ידי שדה זה",
+    addToGroupingText: "הוסף לקבוצה",
+    removeFromGroupingText: "הסר מהקיבוץ",
+    groupSummaryTpl: "סיכום ({name})",
+    summaryTpl: "סיכום ({store.data.length})"
+});
+Ext.define("Ext.locale.he.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "אף אחד",
+    summaryText: "סיכום"
+});
+Ext.define("Ext.locale.he.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "שווה",
+        ne: "לא שווה",
+        gt: "גדול מ",
+        ge: "גדול מ או שווה ל",
+        lt: "פחות מ",
+        le: "פחות מ או שווה ל",
+        like: "כמו",
+        nlike: "לא כמו",
+        empty: "ריק",
+        nempty: "לא ריק",
+        identical: "זֵהֶה",
+        nidentical: "לא מזוהה",
+        regex: "הבעה רגילה",
+        "in": "הוא ב",
+        notin: "אינו ב"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.he.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "גרור כותרת עמודה כאן לקבוצה על ידי עמודה זו",
+    showGroupingPanelText: "הצג קבוצה לפי פאנל",
+    hideGroupingPanelText: "הסתר קבוצה לפי פאנל",
+    clearGroupText: "קבוצה ברורה",
+    sortAscText: "מיין לפי סדר עולה",
+    sortDescText: "מיון יורד",
+    moveLeftText: "זוז שמאלה",
+    moveRightText: "זוז ימינה",
+    moveBeginText: "לעבור עד תחילת",
+    moveEndText: "זז לסוף",
+    removeText: "לְהַסִיר"
 });

@@ -1,4 +1,3 @@
-/* global spyOn, expect, Ext */
 
 topSuite("Ext.picker.Slot", ['Ext.viewport.Default', 'Ext.picker.Picker'], function() {
     var picker, viewport, slot;

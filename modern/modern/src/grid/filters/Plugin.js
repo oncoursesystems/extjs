@@ -103,7 +103,7 @@
  * @example({framework: 'ext-web-components', tab: 2, packages: ['ext-web-components']})
  * import '@sencha/ext-web-components/dist/ext-grid.component';
  * import '@sencha/ext-web-components/dist/ext-column.component';
- * 
+ *
  * export default class PluginComponent {
  *     constructor() {
  *         this.store=Ext.create('Ext.data.Store', {
@@ -157,7 +157,7 @@
  *         this.gridCmp.setStore(this.store);
  *     }
  * }
- * 
+ *
  * window.plugin = new PluginComponent();
  * ```
  * ```javascript
@@ -247,7 +247,7 @@
  * @example({framework: 'ext-angular', packages:['ext-angular']})
  * import { Component } from '@angular/core'
  * declare var Ext: any;
- *  
+ *
  * Ext.require('Ext.grid.filters');
  * @Component({
  *     selector: 'app-root-1',
@@ -328,7 +328,7 @@
  *  - {@link Ext.grid.filters.menu.Date}: Renders for date input fields
  *  - {@link Ext.grid.filters.menu.Number}: Renders for numeric input fields
  *  - {@link Ext.grid.filters.menu.String}: Renders for string input fields
- *  
+ *
  *  These subclasses can be configured in columns as such:
  *
  *
@@ -441,8 +441,15 @@ Ext.define('Ext.grid.filters.Plugin', {
 
     mixins: [
         'Ext.state.Stateful',
-        'Ext.mixin.StoreWatcher'
+        'Ext.mixin.StoreWatcher',
+        'Ext.mixin.Bufferable'
     ],
+
+    // The query modified is buffered by avoid the duplicate
+    // loads in the initial start up process.
+    bufferableMethods: {
+        queryModified: 100
+    },
 
     config: {
         /**
@@ -458,6 +465,12 @@ Ext.define('Ext.grid.filters.Plugin', {
         }
     },
 
+    /**
+     * @property {String} [filterCls="x-grid-filters-filtered-column"]
+     * The CSS applied to column headers with active filters.
+     */
+    filterCls: Ext.baseCSSPrefix + 'grid-filters-filtered-column',
+
     stateful: [
         'activeFilter'
     ],
@@ -469,6 +482,8 @@ Ext.define('Ext.grid.filters.Plugin', {
             beforeshowcolumnmenu: 'onBeforeShowColumnMenu',
             scope: this
         });
+
+        this.initColumns();
     },
 
     destroy: function() {
@@ -533,10 +548,35 @@ Ext.define('Ext.grid.filters.Plugin', {
     },
 
     privates: {
-        onBeforeShowColumnMenu: function(grid, column, menu) {
+
+        /**
+         * Create all filters.
+         */
+        initColumns: function() {
+            var grid = this.getOwner(),
+                columns = grid.getColumns(),
+                len = columns.length,
+                i, column;
+
+            for (i = 0; i < len; i++) {
+                column = columns[i];
+                this.createFilter(grid, column, column.getMenu());
+            }
+        },
+
+        /**
+         * Creates the Filter objects for the current configuration.
+         * Reconfigure and on add handlers.
+         */
+        createFilter: function(grid, column, menu) {
             var me = this,
-                filterMenuItem = menu.getComponent('filter'),
-                menuConfig;
+                filterMenuItem, menuConfig, filter;
+
+            if (!menu) {
+                return;
+            }
+
+            filterMenuItem = menu.getComponent('filter');
 
             if (!filterMenuItem) {
                 // This method is provided by our Column override:
@@ -550,7 +590,26 @@ Ext.define('Ext.grid.filters.Plugin', {
 
                 if (filterMenuItem) {
                     filterMenuItem.setCheckHandler(me.onFilterItemCheckChange.bind(me));
+
+                    filter = column.getFilter();
+
+                    if (!Ext.isObject(filter) || filter.value === undefined) {
+                        filterMenuItem.syncFilter();
+                    }
                 }
+            }
+
+            return filterMenuItem;
+        },
+
+        onBeforeShowColumnMenu: function(grid, column, menu) {
+            var me = this,
+                filterMenuItem = menu.getComponent('filter');
+
+            // The column may have been added after the plugin
+            // initialization.
+            if (!filterMenuItem) {
+                filterMenuItem = me.createFilter(grid, column, menu);
             }
 
             if (filterMenuItem) {
@@ -562,7 +621,7 @@ Ext.define('Ext.grid.filters.Plugin', {
             item.syncQuery();
         },
 
-        queryModified: function() {
+        doQueryModified: function() {
             var filters = this.cmp.getStore();
 
             filters = filters && filters.getFilters();

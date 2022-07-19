@@ -1,7 +1,7 @@
 /*
-This file is part of Ext JS 7.4.0.42
+This file is part of Ext JS 7.5.1.5
 
-Copyright (c) 2011-2021 Sencha Inc
+Copyright (c) 2011-2022 Sencha Inc
 
 license: http://www.sencha.com/legal/sencha-software-license-agreement
 Contact: http://www.sencha.com/contact
@@ -14,7 +14,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Version: 7.4.0.42 Build date: 2021-05-04 14:42:24 (669f575eb1592a96aa3fb58a602faf3b96d819ea)
+Version: 7.5.1.5 Build date: 2022-02-04 16:51:53 (e022145fa993b4c9612a7e3bcaaabc2125de00be)
 
 */
 
@@ -11769,10 +11769,10 @@ var Ext = Ext || {};
         "core",
         "classic"
       ],
-      "version": "7.4.0"
+      "version": "7.5.0"
     },
     "cmd": {
-      "version": "7.4.0.39"
+      "version": "7.5.1.1"
     },
     "core": {
       "css": true,
@@ -11787,7 +11787,7 @@ var Ext = Ext || {};
       "requires": [
         "ext"
       ],
-      "version": "7.4.0"
+      "version": "7.5.0"
     },
     "ext": {
       "css": true,
@@ -11807,7 +11807,7 @@ var Ext = Ext || {};
       },
       "required": true,
       "requires": [],
-      "version": "7.4.0.42"
+      "version": "7.5.1.5"
     }
   },
   "bootRelative": true
@@ -23101,8 +23101,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '7.4.0.42');
-        Ext.setVersion('core', '7.4.0.42');
+        Ext.setVersion('ext', '7.5.1.5');
+        Ext.setVersion('core', '7.5.1.5');
     }
 })(Ext.manifest);
 

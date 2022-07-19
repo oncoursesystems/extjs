@@ -1,4 +1,3 @@
-/* global Ext, jasmine, expect */
 
 topSuite('Ext.grid.HeaderContainer', ['Ext.grid.Grid', 'Ext.field.Text'], function() {
     var createGrid = function(storeCfg, gridCfg) {

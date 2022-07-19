@@ -1,4 +1,3 @@
-/* global expect, Ext, jasmine, topSuite */
 /* eslint indent: off */
 
 topSuite("Ext.Container",

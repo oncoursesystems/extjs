@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.gr.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "μετρώ"
+});
 /**
  * Greek (Old Version) Translations by Vagelis
  * 03-June-2007
@@ -146,4 +151,72 @@ Ext.define("Ext.locale.gr.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.gr.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.gr.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Επεκτείνω όλα",
+    collapseAllText: "Σύμπτυξη όλων",
+    groupsText: "Ομάδες",
+    groupByText: "Ομάδα από αυτό το πεδίο",
+    addToGroupingText: "Προσθήκη στην ομαδοποίηση",
+    removeFromGroupingText: "Αφαιρέστε από την ομαδοποίηση",
+    groupSummaryTpl: "Περίληψη ({name})",
+    summaryTpl: "Περίληψη ({store.data.length})"
+});
+Ext.define("Ext.locale.gr.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Κανένας",
+    summaryText: "Περίληψη"
+});
+Ext.define("Ext.locale.gr.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Είναι ίσο",
+        ne: "Όχι ίση",
+        gt: "Μεγαλύτερος από",
+        ge: "Μεγαλύτερο ή ίσο με",
+        lt: "Λιγότερο από",
+        le: "Λιγότερο από ή ίσο με",
+        like: "Σαν",
+        nlike: "Οχι σαν",
+        empty: "Αδειάζω",
+        nempty: "Οχι άδειο",
+        identical: "Πανομοιότυπο",
+        nidentical: "Δεν είναι πανομοιότυπος",
+        regex: "Κοινή έκφραση",
+        "in": "Είναι μέσα",
+        notin: "Δεν είναι μέσα"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.gr.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Σύρετε μια κεφαλίδα στήλης εδώ για να ομαδοποιήσετε από τη στήλη αυτή",
+    showGroupingPanelText: "Εμφάνιση ομάδας ανά πάνελ",
+    hideGroupingPanelText: "Απόκρυψη ομάδας ανά πάνελ",
+    clearGroupText: "Σαφής ομάδα",
+    sortAscText: "Αύξουσα ταξινόμηση",
+    sortDescText: "Ταξινόμηση φθίνουσα",
+    moveLeftText: "Κινήσου αριστερά",
+    moveRightText: "Μετακινήστε δεξιά",
+    moveBeginText: "Μετακινηθείτε στην αρχή",
+    moveEndText: "Μετακίνηση στο τέλος",
+    removeText: "Αφαιρώ"
 });

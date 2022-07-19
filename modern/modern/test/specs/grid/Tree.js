@@ -1,4 +1,3 @@
-/* global Ext, expect, spyOn, jasmine */
 
 topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.ViewModel',
          'Ext.grid.plugin.TreeDragDrop'], function() {
@@ -106,7 +105,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
             fromMy = fromBox.y + fromBox.height / 2,
             toBox = to.element.getBox(),
             toMx = toBox.right - 10,
-            toMy = onBottom ? toBox.y + toBox.height / 2 : (toBox.y + (toBox.height / 2)-5),
+            toMy = onBottom ? toBox.y + toBox.height / 2 : (toBox.y + (toBox.height / 2) - 5),
             dThresh = 8;
 
         // Mousedown on the node to drag
@@ -284,7 +283,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
         });
     });
 
-    describe("Checkbox tree nodes", function () {
+    describe("Checkbox tree nodes", function() {
         var eventRec,
             record,
             row,
@@ -302,7 +301,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
         function getCheckedCount() {
             var checkedNodes = [];
 
-            store.getRootNode().cascade(function (node) {
+            store.getRootNode().cascade(function(node) {
                 if (node.get('checked') === true) {
                     checkedNodes.push(node);
                 }
@@ -311,8 +310,8 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
             return checkedNodes.length;
         }
 
-        describe("check change events", function () {
-            beforeEach(function () {
+        describe("check change events", function() {
+            beforeEach(function() {
                 eventRec = null;
                 spy = jasmine.createSpy('spy');
                 makeTree(testNodes, {
@@ -322,20 +321,20 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                         dataIndex: 'text',
                         cell: {
                             checkable: true,
-                            autoCheckChildren:false,
+                            autoCheckChildren: false,
                             checkOnTriTap: false,
                             enablTri: true
                         }
                     }],
                     listeners: {
-                        checkchange: function (cell, checked, record) {
+                        checkchange: function(cell, checked, record) {
                             eventRec = record;
                             recordCheck = checked;
                             spy(record);
                         }
                     }
                 });
-                store.getRoot().cascade(function (r) {
+                store.getRoot().cascade(function(r) {
                     r.set('checked', false);
                 });
                 tree.expandAll();
@@ -343,7 +342,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                 row = tree.getItem(record);
                 checkbox = row.el.dom.firstElementChild.querySelector('.x-check-el');
             });
-            it("should fire the checkchange event", function () {
+            it("should fire the checkchange event", function() {
                 jasmine.fireMouseEvent(checkbox, 'click');
 
                 expect(eventRec).toBe(record);
@@ -353,11 +352,12 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                 expect(getCheckedCount()).toBe(1);
             });
 
-            it("should veto checkchange if false is returned from a beforecheckchange handler", function () {
+            it("should veto checkchange if false is returned from a beforecheckchange handler", function() {
                 tree.on({
-                    beforecheckchange: function (cell, checked, current, record) {
+                    beforecheckchange: function(cell, checked, current, record) {
                         eventRec = record;
                         currentCheck = current;
+
                         return false;
                     }
                 });
@@ -367,9 +367,9 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
             });
         });
 
-        describe("with autoCheckChildren", function () {
-            describe("autoCheckChildren:true & enableTri : true", function(){
-                beforeEach(function () {
+        describe("with autoCheckChildren", function() {
+            describe("autoCheckChildren:true & enableTri : true", function() {
+                beforeEach(function() {
                     spy = jasmine.createSpy('spy');
                     makeTree(testNodes, {
                         columns: [{
@@ -378,24 +378,24 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             dataIndex: 'text',
                             cell: {
                                 checkable: true,
-                                autoCheckChildren:true,
+                                autoCheckChildren: true,
                                 checkOnTriTap: false,
                                 enablTri: true
                             }
                         }],
                         listeners: {
-                            checkchange: function (cell, checked, record) {
+                            checkchange: function(cell, checked, record) {
                                 spy(record);
                             }
                         }
                     });
-                    store.getRoot().cascade(function (r) {
+                    store.getRoot().cascade(function(r) {
                         r.set('checked', false);
                     });
                     tree.expandAll();
                 });
 
-                it("should sync parent node's check state with state of children on child check change", function () {
+                it("should sync parent node's check state with state of children on child check change", function() {
                     // Both parent nodes start unchecked
                     expect(store.getById('I').get('checked')).toBe(false);
                     expect(store.getById('J').get('checked')).toBe(false);
@@ -429,7 +429,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                     expect(store.getById('B').get('checked')).toBe(false);
                 });
 
-                it("should propagate checked state both ways" , function () {
+                it("should propagate checked state both ways", function() {
 
                     // Start with none checked
                     expect(getCheckedCount()).toBe(0);
@@ -473,19 +473,19 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                     expect(getCheckedCount()).toBe(8);
                 });
 
-                it("should fire the checkevent only once when it has a parent and it's not changing the parent's status", function () {
+                it("should fire the checkevent only once when it has a parent and it's not changing the parent's status", function() {
                     clickCheckboxId('C');
 
                     // needs to be waits because we are waiting for something not to happen
                     waits(100);
 
-                    runs(function () {
+                    runs(function() {
                         expect(spy.callCount).toBe(1);
                     });
                 });
             });
-            describe("autoCheckChildren:true & enableTri : false", function(){
-                beforeEach(function () {
+            describe("autoCheckChildren:true & enableTri : false", function() {
+                beforeEach(function() {
                     eventRec = null;
                     makeTree(testNodes, {
                         columns: [{
@@ -494,18 +494,18 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             dataIndex: 'text',
                             cell: {
                                 checkable: true,
-                                autoCheckChildren:true,
+                                autoCheckChildren: true,
                                 checkOnTriTap: false,
                                 enablTri: false
                             }
                         }]
                     });
-                    store.getRoot().cascade(function (r) {
+                    store.getRoot().cascade(function(r) {
                         r.set('checked', false);
                     });
                     tree.expandAll();
                 });
-                it("should propagate a parent's checked state to child nodes", function () {
+                it("should propagate a parent's checked state to child nodes", function() {
 
                     // Start with none checked
                     expect(getCheckedCount()).toBe(0);
@@ -523,8 +523,8 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                     expect(getCheckedCount()).toBe(8);
                 });
             });
-            describe("checkable: false", function(){
-                it('should not display check boxes for cells irrespective of nodes data', function(){
+            describe("checkable: false", function() {
+                it('should not display check boxes for cells irrespective of nodes data', function() {
                     var treeCells;
 
                     makeTree(testNodes, {
@@ -534,14 +534,14 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             dataIndex: 'text',
                             cell: {
                                 checkable: false,
-                                autoCheckChildren:true,
+                                autoCheckChildren: true,
                                 checkOnTriTap: false,
                                 enablTri: false
                             }
                         }]
                     });
 
-                    store.getRoot().cascade(function (r) {
+                    store.getRoot().cascade(function(r) {
                         r.set('checked', true);
                     });
                     tree.expandAll();
@@ -560,8 +560,8 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                 });
             });
 
-            describe("checkable: null", function(){
-                beforeEach(function () {
+            describe("checkable: null", function() {
+                beforeEach(function() {
                     makeTree(testNodes, {
                         columns: [{
                             xtype: 'treecolumn',
@@ -569,18 +569,18 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             dataIndex: 'text',
                             cell: {
                                 checkable: null,
-                                autoCheckChildren:true,
+                                autoCheckChildren: true,
                                 checkOnTriTap: false,
                                 enablTri: false
                             }
                         }]
                     });
-                    store.getRoot().cascade(function (r) {
+                    store.getRoot().cascade(function(r) {
                         r.set('checked', true);
                     });
                     tree.expandAll();
                 });
-                it('should honour the record\'s checked property', function(){
+                it('should honour the record\'s checked property', function() {
                     var treeCells = tree.getColumns()[0].getCells();
 
                     expect(getCheckedCount()).toBe(15);
@@ -588,18 +588,18 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                     clickCheckboxId('A');
                     expect(store.getById('A').get('checked')).toBe(false);
                     expect(getCheckedCount()).toBe(14);
-                    
+
                     expect(treeCells[1].hasCls('x-treecell-checkable')).toBe(true);
                     expect(treeCells[1].hasCls('x-treecell-checked')).toBe(false);
                 });
-                it('should not honour `autoCheckChildren` config', function(){
+                it('should not honour `autoCheckChildren` config', function() {
                     clickCheckboxId('A');
                     expect(store.getById('A').get('checked')).toBe(false);
                     expect(store.getById('B').get('checked')).toBe(true);
                     expect(store.getById('D').get('checked')).toBe(true);
                     expect(store.getById('E').get('checked')).toBe(true);
                 });
-                it('should not honour `enableTri` config', function(){
+                it('should not honour `enableTri` config', function() {
                     clickCheckboxId('B');
 
                     // A is the parent class of B, it should not in tri mode now
@@ -611,9 +611,9 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                     // treecell should not have tri mode class
                     expect(tree.getColumns()[0].getCells()[1].hasCls('x-treecell-trimode')).toBe(false);
                 });
-                it('should not honour the `checked: tri` from the record\'s data', function(){
+                it('should not honour the `checked: tri` from the record\'s data', function() {
                     store.getById('A').set('checked', 'tri');
-                    
+
                     // Record\'s check property is tri
                     expect(store.getById('A').get('checked')).toBe('tri');
 
@@ -622,10 +622,10 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                 });
             });
 
-            describe("checkable: true", function(){
-                describe("with the data opted out", function(){
-                    describe("tree cells behaviour", function(){
-                        beforeEach(function () {
+            describe("checkable: true", function() {
+                describe("with the data opted out", function() {
+                    describe("tree cells behaviour", function() {
+                        beforeEach(function() {
                             makeTree(testNodes, {
                                 columns: [{
                                     xtype: 'treecolumn',
@@ -633,7 +633,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                                     dataIndex: 'text',
                                     cell: {
                                         checkable: true,
-                                        autoCheckChildren:true,
+                                        autoCheckChildren: true,
                                         enableTri: true
                                     }
                                 }]
@@ -641,7 +641,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             tree.expandAll();
                         });
 
-                        it("should have checkable ability with data is opted out", function(){
+                        it("should have checkable ability with data is opted out", function() {
                             var treeCell;
 
                             expect(getCheckedCount()).toBe(0);
@@ -657,7 +657,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             expect(treeCell.hasCls('x-treecell-unchecked')).toBe(true);
                         });
 
-                        it("should honour the tri-state when the child node/nodes are checked", function(){
+                        it("should honour the tri-state when the child node/nodes are checked", function() {
                             // Start with none checked
                             expect(getCheckedCount()).toBe(0);
 
@@ -673,8 +673,8 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                         });
                     });
 
-                    describe("autoCheckChildren: false and enableTri: true", function(){
-                        beforeEach(function () {
+                    describe("autoCheckChildren: false and enableTri: true", function() {
+                        beforeEach(function() {
                             makeTree(testNodes, {
                                 columns: [{
                                     xtype: 'treecolumn',
@@ -682,7 +682,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                                     dataIndex: 'text',
                                     cell: {
                                         checkable: true,
-                                        autoCheckChildren:false,
+                                        autoCheckChildren: false,
                                         enableTri: true
                                     }
                                 }]
@@ -690,7 +690,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             tree.expandAll();
                         });
 
-                        it("should not propagate a parent's checked state to child nodes", function () {
+                        it("should not propagate a parent's checked state to child nodes", function() {
 
                             // Start with none checked
                             expect(getCheckedCount()).toBe(0);
@@ -710,7 +710,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             expect(store.getById('A').get('checked')).toBe(true);
                             expect(getCheckedCount()).toBe(1);
                         });
-                        it("should honour the tri-state when the child node/nodes are checked", function(){
+                        it("should honour the tri-state when the child node/nodes are checked", function() {
                             // Start with none checked
                             expect(getCheckedCount()).toBe(0);
 
@@ -727,8 +727,8 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                         });
                     });
 
-                    describe("autoCheckChildren: false and enableTri: false", function(){
-                         beforeEach(function () {
+                    describe("autoCheckChildren: false and enableTri: false", function() {
+                         beforeEach(function() {
                             makeTree(testNodes, {
                                 columns: [{
                                     xtype: 'treecolumn',
@@ -736,7 +736,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                                     dataIndex: 'text',
                                     cell: {
                                         checkable: true,
-                                        autoCheckChildren:false,
+                                        autoCheckChildren: false,
                                         enableTri: false
                                     }
                                 }]
@@ -744,7 +744,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             tree.expandAll();
                         });
 
-                        it("should not propagate a parent's checked state to child nodes", function () {
+                        it("should not propagate a parent's checked state to child nodes", function() {
 
                             // Start with none checked
                             expect(getCheckedCount()).toBe(0);
@@ -759,7 +759,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             expect(store.getById('A').get('checked')).toBe(true);
                             expect(getCheckedCount()).toBe(1);
                         });
-                        it("should not honour the tri-state when the child node/nodes are checked", function(){
+                        it("should not honour the tri-state when the child node/nodes are checked", function() {
                             // Start with none checked
                             expect(getCheckedCount()).toBe(0);
 
@@ -772,7 +772,7 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
                             expect(store.getById('A').get('checked')).toBe(null);
                             expect(tree.getColumns()[0].getCells()[0].hasCls('x-treecell-trimode')).toBe(false);
                             expect(tree.getColumns()[0].getCells()[0].hasCls('x-treecell-checkable')).toBe(true);
-                        })
+                        });
                     });
                 });
             });
@@ -1031,6 +1031,55 @@ topSuite("Ext.grid.Tree", ['Ext.data.TreeStore', 'Ext.layout.Fit', 'Ext.app.View
             });
         });
 
+        describe("events", function() {
+            beforeEach(function() {
+                makeAutoTree(true, [{
+                    id: 'a',
+                    text: 'A',
+                    expanded: false,
+                    children: [{
+                        text: 'B',
+                        id: 'b'
+                    }]
+                }]);
+            });
+
+            it("should pass proper arguments through 'nodeexpand' event", function() {
+                var expander = getCell(1, 0).expanderElement,
+                    store = tree.getStore(),
+                    gridRow, record;
+
+                tree.on('nodeexpand', function(row, rec) {
+                    gridRow = row;
+                    record = rec;
+                });
+                jasmine.fireMouseEvent(expander, 'click');
+                expect(gridRow).not.toBeUndefined();
+                expect(gridRow.xtype).toBe("gridrow");
+                expect(record).toBe(store.getById('a'));
+            });
+
+            it("should pass proper arguments through 'nodecollapse' event", function() {
+                var expander = getCell(1, 0).expanderElement,
+                    store = tree.getStore(),
+                    spy = jasmine.createSpy(),
+                    gridRow, record;
+
+                tree.on('nodeexpand', spy);
+                tree.on('nodecollapse', function(row, rec) {
+                    gridRow = row;
+                    record = rec;
+                });
+                jasmine.fireMouseEvent(expander, 'click');
+                waitsForSpy(spy);
+                runs(function() {
+                    jasmine.fireMouseEvent(expander, 'click');
+                    expect(gridRow).not.toBeUndefined();
+                    expect(gridRow.xtype).toBe("gridrow");
+                    expect(record).toBe(store.getById('a'));
+                });
+            });
+        });
     });
 
     describe('collapsing when collapse zone overflows the rendered zone', function() {
@@ -1908,7 +1957,7 @@ expectedScope;
         });
     });
 
-    describe('node drag and drop', function(){
+    describe('node drag and drop', function() {
         beforeEach(function() {
             makeTree(testNodes, {
                 rootVisible: true,

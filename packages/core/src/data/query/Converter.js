@@ -196,7 +196,8 @@ Ext.define('Ext.data.query.Converter', {
                     }, {
                         type: 'string',
                         value: filter.value,
-                        re: filter.value,
+                        // Escape regex characters which may be present in filter string
+                        re: Ext.String.escapeRegex(filter.value),
                         flags: 'i'
                     }]
                 };

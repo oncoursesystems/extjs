@@ -1,4 +1,3 @@
-/* global jasmine, Ext, expect */
 
 topSuite("Ext.navigation.View", ['Ext.layout.Card'], function() {
     var view,

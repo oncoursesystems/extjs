@@ -342,7 +342,7 @@ Ext.define('Ext.panel.Resizer', {
         splitPrefix: Ext.baseCSSPrefix + 'split-',
 
         edgeDelegateSelector: '> .' + Ext.baseCSSPrefix + 'panelresizer',
-
+        resizeCls: Ext.baseCSSPrefix + 'resizeactive',
         /**
          * @property {String[]} allEdges
          * A shortcut to provide all the edges.
@@ -775,6 +775,7 @@ Ext.define('Ext.panel.Resizer', {
         },
 
         handleDragEnd: function(e) {
+            Ext.getBody().removeCls(this.resizeCls);
             this.handleDrag(e);
             this.cleanup();
         },
@@ -872,6 +873,7 @@ Ext.define('Ext.panel.Resizer', {
         },
 
         handleTouchStart: function(e) {
+            Ext.getBody().addCls(this.resizeCls);
             // Used to prevent text selection
             e.preventDefault();
         },

@@ -100,23 +100,6 @@ Ext.define('Ext.chart.series.Bar', {
         }
     },
 
-    getItemForPoint: function(x, y) {
-        var chart, padding, isRtl;
-
-        if (this.getSprites().length) {
-            chart = this.getChart();
-            padding = chart.getInnerPadding();
-            isRtl = chart.getInherited().rtl;
-
-            // Convert the coordinates because the "items" sprites that draw
-            // the bars ignore the chart's InnerPadding.
-            arguments[0] = x + (isRtl ? padding.right : -padding.left);
-            arguments[1] = y + padding.bottom;
-
-            return this.callParent(arguments);
-        }
-    },
-
     updateXAxis: function(xAxis) {
         //<debug>
         if (!this.is3D && !xAxis.isCategory) {

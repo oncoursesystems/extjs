@@ -275,7 +275,8 @@ topSuite("Ext.panel.Date", function() {
                     value: new Date(2000, 0, 18),
                     minDate: new Date(1999, 11, 13)
                 });
-                const tool = panel.lookup('navigatePrevMonth');
+                var tool = panel.lookup('navigatePrevMonth');
+
                 jasmine.fireMouseEvent(tool.element, 'click');
                 expect(panel.getFocusableDate()).toEqual(new Date(1999, 11, 18));
             });
@@ -287,7 +288,8 @@ topSuite("Ext.panel.Date", function() {
                     value: new Date(2000, 0, 18),
                     maxDate: new Date(2000, 1, 27)
                 });
-                const tool = panel.lookup('navigateNextMonth');
+                var tool = panel.lookup('navigateNextMonth');
+
                 jasmine.fireMouseEvent(tool.element, 'click');
                 expect(panel.getFocusableDate()).toEqual(new Date(2000, 1, 18));
             });

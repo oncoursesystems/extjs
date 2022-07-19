@@ -235,6 +235,12 @@ Ext.define('Ext.draw.Container', {
      * The default URL used by the {@link #download} method if the {@link #downloadServerUrl}
      * config wasn't set.
      * To override this globally, set the `Ext.draw.Container.prototype.defaultDownloadServerUrl`.
+     *
+     * **Note:** Downloading charts via Sencha's http://svg.sencha.io server may expose
+     * your data. This server will be deprecated (turned down) in a future SDK release. Please
+     * implement your own server to provide support for older browsers that do not support file
+     * saving via blob. An example implementation can be seen inside the Charts Package source:
+     * packages/charts/server/node
      */
     defaultDownloadServerUrl: 'http://svg.sencha.io',
 
@@ -272,9 +278,12 @@ Ext.define('Ext.draw.Container', {
             //<debug>
             // Skip this warning when unit testing.
             if (!window.jasmine) {
-                Ext.log.warn('Using Sencha\'s download server could expose your data and pose ' +
-                             'a security risk. Please see Ext.draw.Container#download method ' +
-                             'docs for more info. (component id=' + this.getId() + ')');
+                Ext.log.warn('Downloading charts via Sencha\'s http://svg.sencha.io server may ' +
+                            'expose your data. This server will be deprecated (turned down) in ' +
+                            'a future SDK release. Please implement your own server to provide ' +
+                            'support for older browsers that do not support file saving via ' +
+                            'blob. An example implementation can be seen inside the Charts ' +
+                            'Package source: packages/charts/server/node.');
             }
             //</debug>
         }

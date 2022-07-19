@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.pt_PT.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Contar"
+});
 /**
  * Portuguese/Portugal (pt_PT) Translation
  * by Nuno Franco da Costa - francodacosta.com
@@ -274,4 +279,72 @@ Ext.define("Ext.locale.pt_PT.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.pt_PT.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.pt_PT.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Expandir todos",
+    collapseAllText: "Recolher todos",
+    groupsText: "Grupos",
+    groupByText: "Agrupar por este campo",
+    addToGroupingText: "Adicionar ao agrupamento",
+    removeFromGroupingText: "Remover do agrupamento",
+    groupSummaryTpl: "Resumo ({name})",
+    summaryTpl: "Resumo ({store.data.length})"
+});
+Ext.define("Ext.locale.pt_PT.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Nenhum",
+    summaryText: "Resumo"
+});
+Ext.define("Ext.locale.pt_PT.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "É igual",
+        ne: "Não igual",
+        gt: "Maior que",
+        ge: "Melhor que ou igual a",
+        lt: "Menor que",
+        le: "Menos que ou igual a",
+        like: "Parece",
+        nlike: "Não parece",
+        empty: "Vazio",
+        nempty: "Não está vazio",
+        identical: "Idêntico",
+        nidentical: "Não idênticos",
+        regex: "Expressão regular",
+        "in": "Está dentro",
+        notin: "Não está dentro"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.pt_PT.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Arraste um cabeçalho de coluna aqui para agrupar por essa coluna",
+    showGroupingPanelText: "Mostrar painel de agrupamento",
+    hideGroupingPanelText: "Ocultar o grupo por painel",
+    clearGroupText: "Limpar grupo",
+    sortAscText: "Ordernar ascendente",
+    sortDescText: "Ordenar descendente",
+    moveLeftText: "Mover para esquerda",
+    moveRightText: "Mover para direita",
+    moveBeginText: "Mover para o início",
+    moveEndText: "Mover para o final",
+    removeText: "Remover"
 });

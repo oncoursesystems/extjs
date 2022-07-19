@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.lt.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Skaičiuoti"
+});
 /**
  * Lithuanian Translations (UTF-8)
  * Vladas Saulis (vladas at prodata dot lt),  03-29-2009
@@ -330,4 +335,72 @@ Ext.define("Ext.locale.lt.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.lt.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.lt.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Išplėsti viską",
+    collapseAllText: "Sutraukti visus",
+    groupsText: "Grupės",
+    groupByText: "Grupė pagal šį lauką",
+    addToGroupingText: "Pridėti į grupavimą",
+    removeFromGroupingText: "Pašalinti iš grupės",
+    groupSummaryTpl: "Santrauka ({name})",
+    summaryTpl: "Santrauka ({store.data.length})"
+});
+Ext.define("Ext.locale.lt.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Nė vienas",
+    summaryText: "Santrauka"
+});
+Ext.define("Ext.locale.lt.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Yra lygus",
+        ne: "Nėra lygus",
+        gt: "Geresnis negu",
+        ge: "Didesnis arba lygus",
+        lt: "Mažiau nei",
+        le: "Mažesnis arba lygus",
+        like: "Kaip",
+        nlike: "Nepatinka",
+        empty: "Tuščia",
+        nempty: "Ne tuščias",
+        identical: "Identiškas",
+        nidentical: "Nėra identiški",
+        regex: "Įprasta išraiška",
+        "in": "Yra",
+        notin: "Nėra"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.lt.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Vilkite stulpelio antraštę čia į grupę pagal tą stulpelį",
+    showGroupingPanelText: "Rodyti grupę pagal skydelį",
+    hideGroupingPanelText: "Slėpti grupę pagal skydelį",
+    clearGroupText: "Aiški grupė",
+    sortAscText: "Rūšiuoti didėjančią veiklą",
+    sortDescText: "Rūšiuoti mažėjančią veiklą",
+    moveLeftText: "Judėti į kairę",
+    moveRightText: "Perkelti į dešinę",
+    moveBeginText: "Pereikite į pradžią",
+    moveEndText: "Perkelti į pabaigą",
+    removeText: "Pašalinti"
 });

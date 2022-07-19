@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.mk.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Брои"
+});
 /**
  * Macedonia translation
  * By PetarD petar.dimitrijevic@vorteksed.com.mk (utf8 encoding)
@@ -147,4 +152,72 @@ Ext.define("Ext.locale.mk.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.mk.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.mk.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Прошири го сите",
+    collapseAllText: "Колапс сите",
+    groupsText: "Групи",
+    groupByText: "Група од ова поле",
+    addToGroupingText: "Додај во групација",
+    removeFromGroupingText: "Отстрани од групирање",
+    groupSummaryTpl: "Резиме ({name})",
+    summaryTpl: "Резиме ({store.data.length})"
+});
+Ext.define("Ext.locale.mk.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Никој",
+    summaryText: "Резиме"
+});
+Ext.define("Ext.locale.mk.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Е еднакво",
+        ne: "Не е еднакво",
+        gt: "Поголем од",
+        ge: "Поголема или еднаква на",
+        lt: "Помалку од",
+        le: "Помалку или еднаква на",
+        like: "Допаѓа",
+        nlike: "Не како",
+        empty: "Празен",
+        nempty: "Не е празен",
+        identical: "Идентична",
+        nidentical: "Не е идентичен",
+        regex: "Редовен израз",
+        "in": "Е во",
+        notin: "Не е внатре"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.mk.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Повлечете го насловот на колоната тука за да ги групирате со таа колона",
+    showGroupingPanelText: "Прикажи група од панел",
+    hideGroupingPanelText: "Скриј група од панел",
+    clearGroupText: "Јасна група",
+    sortAscText: "Сортирај растечко",
+    sortDescText: "Сортирај опаѓање",
+    moveLeftText: "Помести се на лево",
+    moveRightText: "Движете се надесно",
+    moveBeginText: "Премести на почеток",
+    moveEndText: "Премести до крај",
+    removeText: "Отстрани"
 });

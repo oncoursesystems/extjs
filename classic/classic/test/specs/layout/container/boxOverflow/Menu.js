@@ -131,6 +131,42 @@ function() {
             expect(menuItems.getAt(1).disabled).toBe(false);
         });
 
+        it('should not show overflow menu items in main container', function() {
+            var menu, baritem, menuitem, overflowedCls;
+
+            createToolbar({
+                enableOverflow: true,
+                width: 50, // small initial width so textfield starts off in overflow menu
+                items: [{
+                    text: 'Foo'
+                }, {
+                    text: 'Bar'
+                }, {
+                    text: 'Test'
+                }, {
+                    xtype: 'textfield'
+                }]
+            });
+
+            overflowedCls = Ext.baseCSSPrefix + 'menu-item-overflowed';
+            menu = toolbar.layout.overflowHandler.menu;
+            menu.show();
+
+            menuitem = menu.down('textfield');
+            baritem = menuitem.masterComponent;
+
+            // the 'overflowed' class should exist on the baritem so that it is hidden and only visible in the overflow menu
+            expect(baritem.getEl().hasCls(overflowedCls)).toBe(true);
+            expect(baritem.getEl().isVisible()).toBe(false);
+
+            // resize toolbar so textfield item is no longer in the overflow menu
+            toolbar.setWidth(1000);
+
+            // the 'overflowed' class should not exist on the baritem so that it is now visible and not in the overflow menu
+            expect(baritem.getEl().hasCls(overflowedCls)).toBe(false);
+            expect(baritem.getEl().isVisible()).toBe(true);
+        });
+
         it('should not overwrite listeners config defined on the original component', function() {
             // This test demonstrates that the menu item created from the original component's config
             // will receive any listeners defined in the item's listeners config.

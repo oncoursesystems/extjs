@@ -1666,7 +1666,17 @@ Ext.define('Ext.dataview.List', {
             return;
         }
 
-        list.scrollToRecord(to.record);
+        if (to && !to.event.touch) {
+            return this.ensureVisible({
+                record: to.record,
+                animation: false,
+                // to fix the issue where a virtual keyboard's navigation arrows sometimes
+                // get disabled, we force the alignment of the y scroll to always center
+                align: {
+                    y: 'center'
+                }
+            });
+        }
     },
 
     // maxItemCache
@@ -2394,10 +2404,18 @@ Ext.define('Ext.dataview.List', {
                     decoration = me.reorderItem(decoration, item, def.offset);
                 }
 
-                decoration.$dataRow = item;
-                decoration.setGroup(group);
+                if (group.getCount()) {
+                    decoration.$dataRow = item;
+                    decoration.setGroup(group);
+                }
+                else {
+                    // Remove group item and define decoration as null
+                    me.removeGroupItem(decoration, def, !enabled);
+                    decoration = null;
+                }
             }
             else if (decoration) {
+
                 destroyed = me.removeGroupItem(decoration, def, !enabled);
 
                 if (!destroyed && infinite) {

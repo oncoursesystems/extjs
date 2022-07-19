@@ -13,7 +13,7 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
         if (containerConfig === null && !field.getFloated()) {
             field.render(Ext.getBody());
         }
- else {
+        else {
             container = new Ext.Container(Ext.apply({
                 renderTo: Ext.getBody(),
                 width: 600,
@@ -711,25 +711,28 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError();
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 400 41' },
-                labelElement: { xywh: '0 0 100 41' },
-                bodyElement: { xywh: '100 0 274 41' },
-                inputElement: { xywh: '101 1 272 39' },
-                errorElement: { xywh: '374 13 26 16' },
-                errorIconElement: { xywh: '379 13 16 16' },
-                errorMessageElement: { d: false },
-                labelHtmlElement: { xywh: '0 4 50 17' }
-            } : {
-                element: { xywh: '0 0 400 75' },
-                labelElement: { xywh: '0 0 100 75' },
-                bodyElement: { xywh: '100 0 274 75' },
-                inputElement: { xywh: '101 1 272 73' },
-                errorElement: { xywh: '374 30 26 16' },
-                errorIconElement: { xywh: '379 30 16 16' },
-                errorMessageElement: { d: false },
-                labelHtmlElement: { xywh: '0 4 50 17' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 400 41' },
+                    labelElement: { xywh: '0 0 100 41' },
+                    bodyElement: { xywh: '100 0 274 41' },
+                    inputElement: { xywh: '101 1 272 39' },
+                    errorElement: { xywh: '374 13 26 16' },
+                    errorIconElement: { xywh: '379 13 16 16' },
+                    errorMessageElement: { d: false },
+                    labelHtmlElement: { xywh: '0 4 50 17' }
+                }
+                : {
+                    element: { xywh: '0 0 400 75' },
+                    labelElement: { xywh: '0 0 100 75' },
+                    bodyElement: { xywh: '100 0 274 75' },
+                    inputElement: { xywh: '101 1 272 73' },
+                    errorElement: { xywh: '374 30 26 16' },
+                    errorIconElement: { xywh: '379 30 16 16' },
+                    errorMessageElement: { d: false },
+                    labelHtmlElement: { xywh: '0 4 50 17' }
+                });
         });
 
         it('should layout with right label and side error', function() {
@@ -740,25 +743,28 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError();
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 400 41' },
-                labelElement: { xywh: '300 0 100 41' },
-                bodyElement: { xywh: '26 0 274 41' },
-                inputElement: { xywh: '27 1 272 39' },
-                errorElement: { xywh: '0 13 26 16' },
-                errorIconElement: { xywh: '5 13 16 16' },
-                errorMessageElement: { d: false },
-                labelHtmlElement: { xywh: '306 4 50 17' }
-            } : {
-                element: { xywh: '0 0 400 75' },
-                labelElement: { xywh: '300 0 100 75' },
-                bodyElement: { xywh: '26 0 274 75' },
-                inputElement: { xywh: '27 1 272 73' },
-                errorElement: { xywh: '0 30 26 16' },
-                errorIconElement: { xywh: '5 30 16 16' },
-                errorMessageElement: { d: false },
-                labelHtmlElement: { xywh: '306 4 50 17' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 400 41' },
+                    labelElement: { xywh: '300 0 100 41' },
+                    bodyElement: { xywh: '26 0 274 41' },
+                    inputElement: { xywh: '27 1 272 39' },
+                    errorElement: { xywh: '0 13 26 16' },
+                    errorIconElement: { xywh: '5 13 16 16' },
+                    errorMessageElement: { d: false },
+                    labelHtmlElement: { xywh: '306 4 50 17' }
+                }
+                : {
+                    element: { xywh: '0 0 400 75' },
+                    labelElement: { xywh: '300 0 100 75' },
+                    bodyElement: { xywh: '26 0 274 75' },
+                    inputElement: { xywh: '27 1 272 73' },
+                    errorElement: { xywh: '0 30 26 16' },
+                    errorIconElement: { xywh: '5 30 16 16' },
+                    errorMessageElement: { d: false },
+                    labelHtmlElement: { xywh: '306 4 50 17' }
+                });
         });
 
         it('should layout with top label and side error', function() {
@@ -809,25 +815,28 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError();
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 400 61' },
-                labelElement: { xywh: '0 0 100 61' },
-                bodyElement: { xywh: '100 0 300 41' },
-                inputElement: { xywh: '101 1 298 39' },
-                errorElement: { xywh: '100 43 300 16' },
-                errorIconElement: { xywh: '100 43 16 16' },
-                errorMessageElement: { xywh: '121 43 279 16' },
-                labelHtmlElement: { xywh: '0 4 50 17' }
-            } : {
-                element: { xywh: '0 0 400 75' },
-                labelElement: { xywh: '0 0 100 75' },
-                bodyElement: { xywh: '100 0 300 55' },
-                inputElement: { xywh: '101 1 298 53' },
-                errorElement: { xywh: '100 57 300 16' },
-                errorIconElement: { xywh: '100 57 16 16' },
-                errorMessageElement: { xywh: '121 57 279 16' },
-                labelHtmlElement: { xywh: '0 4 50 17' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 400 61' },
+                    labelElement: { xywh: '0 0 100 61' },
+                    bodyElement: { xywh: '100 0 300 41' },
+                    inputElement: { xywh: '101 1 298 39' },
+                    errorElement: { xywh: '100 43 300 16' },
+                    errorIconElement: { xywh: '100 43 16 16' },
+                    errorMessageElement: { xywh: '121 43 279 16' },
+                    labelHtmlElement: { xywh: '0 4 50 17' }
+                }
+                : {
+                    element: { xywh: '0 0 400 75' },
+                    labelElement: { xywh: '0 0 100 75' },
+                    bodyElement: { xywh: '100 0 300 55' },
+                    inputElement: { xywh: '101 1 298 53' },
+                    errorElement: { xywh: '100 57 300 16' },
+                    errorIconElement: { xywh: '100 57 16 16' },
+                    errorMessageElement: { xywh: '121 57 279 16' },
+                    labelHtmlElement: { xywh: '0 4 50 17' }
+                });
         });
 
         it('should layout with right label and under error', function() {
@@ -838,25 +847,28 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError();
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 400 61' },
-                labelElement: { xywh: '300 0 100 61' },
-                bodyElement: { xywh: '0 0 300 41' },
-                inputElement: { xywh: '1 1 298 39' },
-                errorElement: { xywh: '0 43 300 16' },
-                errorIconElement: { xywh: '0 43 16 16' },
-                errorMessageElement: { xywh: '21 43 279 16' },
-                labelHtmlElement: { xywh: '306 4 50 17' }
-            } : {
-                element: { xywh: '0 0 400 75' },
-                labelElement: { xywh: '300 0 100 75' },
-                bodyElement: { xywh: '0 0 300 55' },
-                inputElement: { xywh: '1 1 298 53' },
-                errorElement: { xywh: '0 57 300 16' },
-                errorIconElement: { xywh: '0 57 16 16' },
-                errorMessageElement: { xywh: '21 57 279 16' },
-                labelHtmlElement: { xywh: '306 4 50 17' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 400 61' },
+                    labelElement: { xywh: '300 0 100 61' },
+                    bodyElement: { xywh: '0 0 300 41' },
+                    inputElement: { xywh: '1 1 298 39' },
+                    errorElement: { xywh: '0 43 300 16' },
+                    errorIconElement: { xywh: '0 43 16 16' },
+                    errorMessageElement: { xywh: '21 43 279 16' },
+                    labelHtmlElement: { xywh: '306 4 50 17' }
+                }
+                : {
+                    element: { xywh: '0 0 400 75' },
+                    labelElement: { xywh: '300 0 100 75' },
+                    bodyElement: { xywh: '0 0 300 55' },
+                    inputElement: { xywh: '1 1 298 53' },
+                    errorElement: { xywh: '0 57 300 16' },
+                    errorIconElement: { xywh: '0 57 16 16' },
+                    errorMessageElement: { xywh: '21 57 279 16' },
+                    labelHtmlElement: { xywh: '306 4 50 17' }
+                });
         });
 
         it('should layout with top label and under error', function() {
@@ -921,25 +933,28 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError();
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 240 41' },
-                labelElement: { xywh: '0 0 100 41' },
-                bodyElement: { xywh: '100 0 114 41' },
-                inputElement: { xywh: '101 1 112 39' },
-                errorElement: { xywh: '214 13 26 16' },
-                errorIconElement: { xywh: '219 13 16 16' },
-                errorMessageElement: { d: false },
-                labelHtmlElement: { xywh: '0 4 50 17' }
-            } : {
-                element: { xywh: '0 0 240 75' },
-                labelElement: { xywh: '0 0 100 75' },
-                bodyElement: { xywh: '100 0 114 75' },
-                inputElement: { xywh: '101 1 112 73' },
-                errorElement: { xywh: '214 30 26 16' },
-                errorIconElement: { xywh: '219 30 16 16' },
-                errorMessageElement: { d: false },
-                labelHtmlElement: { xywh: '0 4 50 17' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 240 41' },
+                    labelElement: { xywh: '0 0 100 41' },
+                    bodyElement: { xywh: '100 0 114 41' },
+                    inputElement: { xywh: '101 1 112 39' },
+                    errorElement: { xywh: '214 13 26 16' },
+                    errorIconElement: { xywh: '219 13 16 16' },
+                    errorMessageElement: { d: false },
+                    labelHtmlElement: { xywh: '0 4 50 17' }
+                }
+                : {
+                    element: { xywh: '0 0 240 75' },
+                    labelElement: { xywh: '0 0 100 75' },
+                    bodyElement: { xywh: '100 0 114 75' },
+                    inputElement: { xywh: '101 1 112 73' },
+                    errorElement: { xywh: '214 30 26 16' },
+                    errorIconElement: { xywh: '219 30 16 16' },
+                    errorMessageElement: { d: false },
+                    labelHtmlElement: { xywh: '0 4 50 17' }
+                });
         });
 
         it('should layout with right label and side error', function() {
@@ -950,25 +965,28 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError();
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 240 41' },
-                labelElement: { xywh: '140 0 100 41' },
-                bodyElement: { xywh: '26 0 114 41' },
-                inputElement: { xywh: '27 1 112 39' },
-                errorElement: { xywh: '0 13 26 16' },
-                errorIconElement: { xywh: '5 13 16 16' },
-                errorMessageElement: { d: false },
-                labelHtmlElement: { xywh: '146 4 50 17' }
-            } : {
-                element: { xywh: '0 0 240 75' },
-                labelElement: { xywh: '140 0 100 75' },
-                bodyElement: { xywh: '26 0 114 75' },
-                inputElement: { xywh: '27 1 112 73' },
-                errorElement: { xywh: '0 30 26 16' },
-                errorIconElement: { xywh: '5 30 16 16' },
-                errorMessageElement: { d: false },
-                labelHtmlElement: { xywh: '146 4 50 17' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 240 41' },
+                    labelElement: { xywh: '140 0 100 41' },
+                    bodyElement: { xywh: '26 0 114 41' },
+                    inputElement: { xywh: '27 1 112 39' },
+                    errorElement: { xywh: '0 13 26 16' },
+                    errorIconElement: { xywh: '5 13 16 16' },
+                    errorMessageElement: { d: false },
+                    labelHtmlElement: { xywh: '146 4 50 17' }
+                }
+                : {
+                    element: { xywh: '0 0 240 75' },
+                    labelElement: { xywh: '140 0 100 75' },
+                    bodyElement: { xywh: '26 0 114 75' },
+                    inputElement: { xywh: '27 1 112 73' },
+                    errorElement: { xywh: '0 30 26 16' },
+                    errorIconElement: { xywh: '5 30 16 16' },
+                    errorMessageElement: { d: false },
+                    labelHtmlElement: { xywh: '146 4 50 17' }
+                });
         });
 
         it('should layout with top label and side error', function() {
@@ -1023,25 +1041,28 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError();
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 240 61' },
-                labelElement: { xywh: '0 0 100 61' },
-                bodyElement: { xywh: '100 0 140 41' },
-                inputElement: { xywh: '101 1 138 39' },
-                errorElement: { xywh: '100 43 140 16' },
-                errorIconElement: { xywh: '100 43 16 16' },
-                errorMessageElement: { xywh: '121 43 119 16' },
-                labelHtmlElement: { xywh: '0 4 50 17' }
-            } : {
-                element: { xywh: '0 0 240 75' },
-                labelElement: { xywh: '0 0 100 75' },
-                bodyElement: { xywh: '100 0 140 55' },
-                inputElement: { xywh: '101 1 138 53' },
-                errorElement: { xywh: '100 57 140 16' },
-                errorIconElement: { xywh: '100 57 16 16' },
-                errorMessageElement: { xywh: '121 57 119 16' },
-                labelHtmlElement: { xywh: '0 4 50 17' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 240 61' },
+                    labelElement: { xywh: '0 0 100 61' },
+                    bodyElement: { xywh: '100 0 140 41' },
+                    inputElement: { xywh: '101 1 138 39' },
+                    errorElement: { xywh: '100 43 140 16' },
+                    errorIconElement: { xywh: '100 43 16 16' },
+                    errorMessageElement: { xywh: '121 43 119 16' },
+                    labelHtmlElement: { xywh: '0 4 50 17' }
+                }
+                : {
+                    element: { xywh: '0 0 240 75' },
+                    labelElement: { xywh: '0 0 100 75' },
+                    bodyElement: { xywh: '100 0 140 55' },
+                    inputElement: { xywh: '101 1 138 53' },
+                    errorElement: { xywh: '100 57 140 16' },
+                    errorIconElement: { xywh: '100 57 16 16' },
+                    errorMessageElement: { xywh: '121 57 119 16' },
+                    labelHtmlElement: { xywh: '0 4 50 17' }
+                });
         });
 
         it('should layout with right label and under error', function() {
@@ -1052,25 +1073,28 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError();
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 240 61' },
-                labelElement: { xywh: '140 0 100 61' },
-                bodyElement: { xywh: '0 0 140 41' },
-                inputElement: { xywh: '1 1 138 39' },
-                errorElement: { xywh: '0 43 140 16' },
-                errorIconElement: { xywh: '0 43 16 16' },
-                errorMessageElement: { xywh: '21 43 119 16' },
-                labelHtmlElement: { xywh: '146 4 50 17' }
-            } : {
-                element: { xywh: '0 0 240 75' },
-                labelElement: { xywh: '140 0 100 75' },
-                bodyElement: { xywh: '0 0 140 55' },
-                inputElement: { xywh: '1 1 138 53' },
-                errorElement: { xywh: '0 57 140 16' },
-                errorIconElement: { xywh: '0 57 16 16' },
-                errorMessageElement: { xywh: '21 57 119 16' },
-                labelHtmlElement: { xywh: '146 4 50 17' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 240 61' },
+                    labelElement: { xywh: '140 0 100 61' },
+                    bodyElement: { xywh: '0 0 140 41' },
+                    inputElement: { xywh: '1 1 138 39' },
+                    errorElement: { xywh: '0 43 140 16' },
+                    errorIconElement: { xywh: '0 43 16 16' },
+                    errorMessageElement: { xywh: '21 43 119 16' },
+                    labelHtmlElement: { xywh: '146 4 50 17' }
+                }
+                : {
+                    element: { xywh: '0 0 240 75' },
+                    labelElement: { xywh: '140 0 100 75' },
+                    bodyElement: { xywh: '0 0 140 55' },
+                    inputElement: { xywh: '1 1 138 53' },
+                    errorElement: { xywh: '0 57 140 16' },
+                    errorIconElement: { xywh: '0 57 16 16' },
+                    errorMessageElement: { xywh: '21 57 119 16' },
+                    labelHtmlElement: { xywh: '146 4 50 17' }
+                });
         });
 
         it('should layout with top label and under error', function() {
@@ -1135,15 +1159,18 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError();
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 50 41' },
-                labelElement: { xywh: '0 0 50 41' },
-                bodyWrapElement: { xywh: '50 0 0 41' }
-            } : {
-                element: { xywh: '0 0 50 75' },
-                labelElement: { xywh: '0 0 50 75' },
-                bodyWrapElement: { xywh: '50 0 0 75' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 50 41' },
+                    labelElement: { xywh: '0 0 50 41' },
+                    bodyWrapElement: { xywh: '50 0 0 41' }
+                }
+                : {
+                    element: { xywh: '0 0 50 75' },
+                    labelElement: { xywh: '0 0 50 75' },
+                    bodyWrapElement: { xywh: '50 0 0 75' }
+                });
         });
 
         it('should layout with right label and side error', function() {
@@ -1154,15 +1181,18 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError();
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 50 41' },
-                labelElement: { xywh: '0 0 50 41' },
-                bodyWrapElement: { xywh: '0 0 0 41' }
-            } : {
-                element: { xywh: '0 0 50 75' },
-                labelElement: { xywh: '0 0 50 75' },
-                bodyWrapElement: { xywh: '0 0 0 75' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 50 41' },
+                    labelElement: { xywh: '0 0 50 41' },
+                    bodyWrapElement: { xywh: '0 0 0 41' }
+                }
+                : {
+                    element: { xywh: '0 0 50 75' },
+                    labelElement: { xywh: '0 0 50 75' },
+                    bodyWrapElement: { xywh: '0 0 0 75' }
+                });
         });
 
         it('should layout with top label and side error', function() {
@@ -1213,15 +1243,18 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError('E');
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 50 61' },
-                labelElement: { xywh: '0 0 50 61' },
-                bodyWrapElement: { xywh: '50 0 0 61' }
-            } : {
-                element: { xywh: '0 0 50 75' },
-                labelElement: { xywh: '0 0 50 75' },
-                bodyWrapElement: { xywh: '50 0 0 75' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 50 61' },
+                    labelElement: { xywh: '0 0 50 61' },
+                    bodyWrapElement: { xywh: '50 0 0 61' }
+                }
+                : {
+                    element: { xywh: '0 0 50 75' },
+                    labelElement: { xywh: '0 0 50 75' },
+                    bodyWrapElement: { xywh: '50 0 0 75' }
+                });
         });
 
         it('should layout with right label and under error', function() {
@@ -1232,15 +1265,18 @@ topSuite('Ext.field.TextArea_layout', [false, 'Ext.field.TextArea'], function() 
 
             setError('E');
 
-            expect(field).toHaveLayout(pctBug ? {
-                element: { xywh: '0 0 50 61' },
-                labelElement: { xywh: '0 0 50 61' },
-                bodyWrapElement: { xywh: '0 0 0 61' }
-            } : {
-                element: { xywh: '0 0 50 75' },
-                labelElement: { xywh: '0 0 50 75' },
-                bodyWrapElement: { xywh: '0 0 0 75' }
-            });
+            expect(field).toHaveLayout(
+                pctBug
+                ? {
+                    element: { xywh: '0 0 50 61' },
+                    labelElement: { xywh: '0 0 50 61' },
+                    bodyWrapElement: { xywh: '0 0 0 61' }
+                }
+                : {
+                    element: { xywh: '0 0 50 75' },
+                    labelElement: { xywh: '0 0 50 75' },
+                    bodyWrapElement: { xywh: '0 0 0 75' }
+                });
         });
 
         it('should layout with top label and under error', function() {

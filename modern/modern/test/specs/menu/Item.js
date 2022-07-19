@@ -1,6 +1,4 @@
 
-/* global Ext, jasmine, expect, xit */
-
 topSuite("Ext.menu.Item", ['Ext.menu.Menu', 'Ext.app.ViewModel', 'Ext.app.ViewController'], function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         menu, item;

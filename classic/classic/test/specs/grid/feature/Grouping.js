@@ -1867,19 +1867,289 @@ function() {
         });
 
         describe('locked grids', function() {
-            var lockedGroupingFeature, normalGroupingFeature;
+            var data = [
+                    { 'id': 1, 'category': 'Trucks and Buses', 'name': '1940 Ford Pickup Truck', 'vendor': 'Motor City Art Classics', 'color': 'red' },
+                    { 'id': 2, 'category': 'Trucks and Buses', 'name': '1957 Chevy Pickup', 'vendor': 'Gearbox Collectibles', 'color': 'red' },
+                    { 'id': 3, 'category': 'Classic Cars', 'name': '1972 Alfa Romeo GTA', 'vendor': 'Motor City Art Classics', 'color': 'blue' },
+                    { 'id': 4, 'category': 'Motorcycles', 'name': '2003 Harley-Davidson Eagle Drag Bike', 'vendor': 'Studio M Art Models', 'color': 'blue' },
+                    { 'id': 5, 'category': 'Motorcycles', 'name': '1996 Moto Guzzi 1100i', 'vendor': 'Motor City Art Classics', 'color': 'green' },
+                    { 'id': 6, 'category': 'Classic Cars', 'name': '1952 Alpine Renault 1300', 'vendor': 'Studio M Art Models', 'color': 'green' },
+                    { 'id': 7, 'category': 'Classic Cars', 'name': '1993 Mazda RX-7', 'vendor': 'Motor City Art Classics', 'color': 'green' },
+                    { 'id': 9, 'category': 'Classic Cars', 'name': '1965 Aston Martin DB5', 'vendor': 'Motor City Art Classics', 'color': 'red' },
+                    { 'id': 10, 'category': 'Classic Cars', 'name': '1998 Chrysler Plymouth Prowler', 'vendor': 'Unimax Art Galleries', 'color': 'blue' },
+                    { 'id': 11, 'category': 'Trucks and Buses', 'name': '1926 Ford Fire Engine', 'vendor': 'Studio M Art Models', 'color': 'pink' },
+                    { 'id': 12, 'category': 'Trucks and Buses', 'name': '1962 Volkswagen Microbus', 'vendor': 'Unimax Art Galleries', 'color': 'purple' },
+                    { 'id': 13, 'category': 'Trucks and Buses', 'name': '1980’s GM Manhattan Express', 'vendor': 'Motor City Art Classics', 'color': 'black' },
+                    { 'id': 13, 'category': 'Motorcycles', 'name': '1997 BMW F650 ST', 'vendor': 'Gearbox Collectibles', 'color': 'black' },
+                    { 'id': 13, 'category': 'Motorcycles', 'name': '1974 Ducati 350 Mk3 Desmo', 'vendor': 'Motor City Art Classics', 'color': 'red' },
+                    { 'id': 13, 'category': 'Motorcycles', 'name': '2002 Yamaha YZR M1', 'vendor': 'Motor City Art Classics', 'color': 'black' }
+                ],
+                lockedGridStore, lockingGrid, normalGrid, lockedGrid, groupingBtn, nheaderCt, lheaderCt;
 
             beforeEach(function() {
-                makeGrid(null, null, {
-                    enableLocking: true
+                lockedGridStore = new Ext.data.Store({
+                    data: data
                 });
 
-                lockedGroupingFeature = view.lockedView.summaryFeature;
-                normalGroupingFeature = view.normalView.summaryFeature;
+                lockingGrid = new Ext.grid.Panel({
+                    width: 800,
+                    height: 450,
+                    frame: true,
+                    title: 'Locked Grid',
+                    renderTo: document.body,
+                    columnLines: true,
+                    store: lockedGridStore,
+                    enableLocking: true,
+                    features: [{ ftype: 'grouping' }],
+                    columns: [{
+                        "dataIndex": "name",
+                        "text": "Name",
+                        "locked": true,
+                        "width": 200
+                    }, {
+                        "dataIndex": "category",
+                        "text": "Category",
+                        "locked": true,
+                        "width": 120
+                    }, {
+                        "dataIndex": "vendor",
+                        "text": "Vendor",
+                        "width": 200
+                    }, {
+                        "dataIndex": "color",
+                        "text": "Color",
+                        "width": 75
+                    }]
+                });
+
+                normalGrid = lockingGrid.normalGrid;
+                lockedGrid = lockingGrid.lockedGrid;
+                nheaderCt = normalGrid.headerCt;
+                lheaderCt = lockedGrid.headerCt;
             });
 
             afterEach(function() {
-                lockedGroupingFeature = normalGroupingFeature = null;
+                lockingGrid.destroy();
+                lockedGridStore.destroy();
+                lockingGrid = null;
+                lockedGridStore = null;
+                normalGrid = null;
+                lockedGrid = null;
+                nheaderCt = null;
+                lheaderCt = null;
+            });
+
+            it('should maintain grouping in locked view when Group By this field is selected', function() {
+                var lcolumn = lheaderCt.getVisibleGridColumns()[1],
+                    firstNode;
+
+                    waits(500);
+
+                    runs(function() {
+                        lheaderCt.showMenuBy(null, lcolumn.triggerEl, lcolumn);
+                        groupingBtn = lheaderCt.menu.down("#groupMenuItem");
+
+                        jasmine.fireMouseEvent(groupingBtn.el, 'click');
+
+                        waits(500);
+
+                        runs(function() {
+                            firstNode = lockedGrid.view.getNodeByRecord(lockedGrid.store.getAt(0));
+
+                            expect(lockedGrid.view.features[0].disabled).toBeFalsy();
+                            expect(firstNode.getElementsByClassName('x-grid-group-title').length).toBe(1);
+                    });
+                });
+            });
+
+            it('should maintain grouping in normal view when Group By this field is selected', function() {
+                var ncolumn = nheaderCt.getVisibleGridColumns()[1],
+                    firstNode;
+
+                    waits(500);
+
+                    runs(function() {
+                        nheaderCt.showMenuBy(null, ncolumn.triggerEl, ncolumn);
+                        groupingBtn = nheaderCt.menu.down("#groupMenuItem");
+
+                        jasmine.fireMouseEvent(groupingBtn.el, 'click');
+
+                        waits(500);
+
+                        runs(function() {
+                            firstNode = normalGrid.view.getNodeByRecord(normalGrid.store.getAt(0));
+                            expect(normalGrid.view.features[0].disabled).toBeFalsy();
+                            expect(firstNode.getElementsByClassName('x-grid-group-title').length).toBe(1);
+                        });
+                });
+            });
+
+            it('should maintain grouping from normal to locked view', function() {
+                var column = nheaderCt.getVisibleGridColumns()[1],
+                firstNode;
+
+                waits(500);
+
+                runs(function() {
+                    nheaderCt.showMenuBy(null, column.triggerEl, column);
+                    groupingBtn = nheaderCt.menu.down("#groupMenuItem");
+
+                    jasmine.fireMouseEvent(groupingBtn.el, 'click');
+
+                    waits(500);
+
+                    runs(function() {
+                        firstNode = normalGrid.view.getNodeByRecord(normalGrid.store.getAt(0));
+                        expect(normalGrid.view.features[0].disabled).toBeFalsy();
+                        expect(firstNode.getElementsByClassName('x-grid-group-title').length).toBe(1);
+                    });
+
+                    column = lheaderCt.getVisibleGridColumns()[1];
+                    lheaderCt.showMenuBy(null, column.triggerEl, column);
+                    groupingBtn = lheaderCt.menu.down('#groupMenuItem');
+
+                    jasmine.fireMouseEvent(groupingBtn.el, 'click');
+
+                    waits(500);
+
+                    runs(function() {
+                        firstNode = lockedGrid.view.getNodeByRecord(lockedGrid.store.getAt(0));
+                        expect(lockedGrid.view.features[0].disabled).toBeFalsy();
+                        expect(firstNode.getElementsByClassName('x-grid-group-title').length).toBe(1);
+                    });
+                });
+            });
+
+            it('should maintain grouping from locked to normal view', function() {
+                var column = lheaderCt.getVisibleGridColumns()[1],
+                firstNode;
+
+                waits(500);
+
+                runs(function() {
+                    lheaderCt.showMenuBy(null, column.triggerEl, column);
+                    groupingBtn = lheaderCt.menu.down("#groupMenuItem");
+
+                    jasmine.fireMouseEvent(groupingBtn.el, 'click');
+
+                    waits(500);
+
+                    runs(function() {
+                        firstNode = lockedGrid.view.getNodeByRecord(lockedGrid.store.getAt(0));
+                        expect(lockedGrid.view.features[0].disabled).toBeFalsy();
+                        expect(firstNode.getElementsByClassName('x-grid-group-title').length).toBe(1);
+                    });
+
+                    column = nheaderCt.getVisibleGridColumns()[1];
+                    nheaderCt.showMenuBy(null, column.triggerEl, column);
+                    groupingBtn = nheaderCt.menu.down('#groupMenuItem');
+
+                    jasmine.fireMouseEvent(groupingBtn.el, 'click');
+
+                    waits(500);
+
+                    runs(function() {
+                        firstNode = normalGrid.view.getNodeByRecord(normalGrid.store.getAt(0));
+                        expect(normalGrid.view.features[0].disabled).toBeFalsy();
+                        expect(firstNode.getElementsByClassName('x-grid-group-title').length).toBe(1);
+                    });
+                });
+            });
+
+            it('should group when ungrouping from locked and grouping from normal view', function() {
+                var column = lheaderCt.getVisibleGridColumns()[1],
+                firstNode, groupToggleBtn;
+
+                waits(500);
+
+                runs(function() {
+                    lheaderCt.showMenuBy(null, column.triggerEl, column);
+                    groupingBtn = lheaderCt.menu.down("#groupMenuItem");
+
+                    // Group in locked grid
+                    jasmine.fireMouseEvent(groupingBtn.el, 'click');
+
+                    waits(500);
+
+                    runs(function() {
+                        lheaderCt.showMenuBy(null, column.triggerEl, column);
+                        groupToggleBtn =  lheaderCt.menu.down("#groupToggleMenuItem");
+
+                        // ungroup in locked grid
+                        jasmine.fireMouseEvent(groupToggleBtn.el, 'click');
+                    });
+
+                    waits(500);
+
+                    runs(function() {
+                        column = nheaderCt.getVisibleGridColumns()[1];
+                        nheaderCt.showMenuBy(null, column.triggerEl, column);
+                        groupingBtn = nheaderCt.menu.down("#groupMenuItem");
+
+                        // Group in normal grid.
+                        jasmine.fireMouseEvent(groupingBtn.el, 'click');
+                    });
+
+                    waits(500);
+
+                    runs(function() {
+                        firstNode = lockedGrid.view.getNodeByRecord(lockedGrid.store.getAt(0));
+                        expect(lockedGrid.view.features[0].disabled).toBeFalsy();
+                        expect(firstNode.getElementsByClassName('x-grid-group-title').length).toBe(1);
+
+                        firstNode = normalGrid.view.getNodeByRecord(normalGrid.store.getAt(0));
+                        expect(normalGrid.view.features[0].disabled).toBeFalsy();
+                        expect(firstNode.getElementsByClassName('x-grid-group-title').length).toBe(1);
+                    });
+                });
+            });
+
+            it('should group when ungrouping from normal and grouping from locked view', function() {
+                var column = nheaderCt.getVisibleGridColumns()[1],
+                firstNode, groupToggleBtn;
+
+                waits(500);
+
+                runs(function() {
+                    nheaderCt.showMenuBy(null, column.triggerEl, column);
+                    groupingBtn = nheaderCt.menu.down("#groupMenuItem");
+
+                    // Group in normal grid
+                    jasmine.fireMouseEvent(groupingBtn.el, 'click');
+
+                    waits(500);
+
+                    runs(function() {
+                        nheaderCt.showMenuBy(null, column.triggerEl, column);
+                        groupToggleBtn =  nheaderCt.menu.down("#groupToggleMenuItem");
+
+                        // ungroup in normal grid
+                        jasmine.fireMouseEvent(groupToggleBtn.el, 'click');
+                    });
+
+                    waits(500);
+
+                    runs(function() {
+                        column = lheaderCt.getVisibleGridColumns()[1];
+                        lheaderCt.showMenuBy(null, column.triggerEl, column);
+                        groupingBtn = lheaderCt.menu.down("#groupMenuItem");
+
+                        // Group in locked grid.
+                        jasmine.fireMouseEvent(groupingBtn.el, 'click');
+                    });
+
+                    waits(500);
+
+                    runs(function() {
+                        firstNode = normalGrid.view.getNodeByRecord(normalGrid.store.getAt(0));
+                        expect(normalGrid.view.features[0].disabled).toBeFalsy();
+                        expect(firstNode.getElementsByClassName('x-grid-group-title').length).toBe(1);
+
+                        firstNode = lockedGrid.view.getNodeByRecord(lockedGrid.store.getAt(0));
+                        expect(lockedGrid.view.features[0].disabled).toBeFalsy();
+                        expect(firstNode.getElementsByClassName('x-grid-group-title').length).toBe(1);
+                    });
+                });
             });
         });
     });
@@ -1937,6 +2207,69 @@ function() {
             showMenu();
             clickItem('groupToggleMenuItem');
             expect(menu.down('#groupToggleMenuItem').disabled).toBe(true);
+        });
+
+        describe('for grid with bound store', function() {
+            var grid;
+
+            beforeEach(function() {
+                grid = new Ext.grid.Panel({
+                    renderTo: Ext.getBody(),
+                    viewModel: {
+                        stores: {
+                            userStore: {
+                                fields: ['name', 'cuisine'],
+                                groupField: 'name',
+                                data: [{
+                                    name: 'Utley',
+                                    cuisine: 'Roman'
+                                }, {
+                                    name: 'Hyacinth',
+                                    cuisine: 'Greek'
+                                }]
+                            }
+                        }
+                    },
+                    bind: {
+                        store: '{userStore}'
+                    },
+                    width: 200,
+                    height: 200,
+                    features: [{
+                        ftype: 'grouping',
+                        hideGroupedHeader: true
+                    }],
+                    columns: [{
+                        text: 'Name',
+                        dataIndex: 'name'
+                    }, {
+                        text: 'Cuisine',
+                        dataIndex: 'cuisine'
+                    }]
+                });
+                grid.getViewModel().notify();
+            });
+
+            afterEach(function() {
+                grid.destroy();
+            });
+
+            it('should honor a given config', function() {
+                expect(grid.getColumnManager().getHeaderByDataIndex('name').isHidden()).toBe(true);
+            });
+
+            it('should handle column visibilty with dynamic change in grouper', function() {
+                grid.getStore().clearGrouping();
+                expect(grid.getColumnManager().getHeaderByDataIndex('name').isHidden()).toBe(false);
+
+                grid.getStore().setGrouper({ property: "cuisine", direction: "ASC" });
+                expect(grid.getColumnManager().getHeaderByDataIndex('name').isHidden()).toBe(false);
+                expect(grid.getColumnManager().getHeaderByDataIndex('cuisine').isHidden()).toBe(true);
+
+                grid.getStore().setGrouper();
+                expect(grid.getColumnManager().getHeaderByDataIndex('name').isHidden()).toBe(false);
+                expect(grid.getColumnManager().getHeaderByDataIndex('cuisine').isHidden()).toBe(false);
+            });
         });
 
         describe('when false', function() {

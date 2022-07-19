@@ -1,4 +1,3 @@
-/* global Ext, expect */
 
 topSuite("Ext.Sheet", [
     'Ext.layout.VBox'

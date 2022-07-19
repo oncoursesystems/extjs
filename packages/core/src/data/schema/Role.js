@@ -431,7 +431,28 @@ Ext.define('Ext.data.schema.Role', {
 
     read: function(record, data, fromReader, readOptions) {
         var reader = this.constructReader(fromReader),
-            root = reader.getRoot(data);
+            root = reader.getRoot(data),
+            inverse = this.inverse,
+            inverseName = inverse && !inverse.isMany && inverse.getInstanceName(),
+            recordCreator =
+                (readOptions && readOptions.recordCreator) || reader.defaultRecordCreator;
+
+        // If we have an inverseName for a non isMany association, we define a custom recordCreator.
+        // This custom recordCreator will capture a reference to the parent record that will be
+        // available in the Ext.data.Model#constructor method so that it can add the parent record
+        // to the model instance. This then makes the parent record available in a field's convert
+        // method during a Model.loadData() or Model.load() call.
+        if (inverseName) {
+            readOptions = Ext.applyIf({
+                recordCreator: function(data, Model) {
+                    if (!data.$parentRecordRef) {
+                        data.$parentRecordRef = [inverseName, record];
+                    }
+
+                    return recordCreator(data, Model);
+                }
+            }, readOptions);
+        }
 
         if (root) {
             return reader.readRecords(root, readOptions, this._internalReadOptions);

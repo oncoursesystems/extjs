@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.hr.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Računati"
+});
 /**
  * Croatian translation
  * By Ylodi (utf8 encoding)
@@ -271,4 +276,72 @@ Ext.define("Ext.locale.hr.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.hr.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.hr.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Proširi sve",
+    collapseAllText: "Srušiti sve",
+    groupsText: "Grupa",
+    groupByText: "Grupa po ovom području",
+    addToGroupingText: "Dodajte grupiranje",
+    removeFromGroupingText: "Uklonite iz grupiranja",
+    groupSummaryTpl: "Sažetak ({name})",
+    summaryTpl: "Sažetak ({store.data.length})"
+});
+Ext.define("Ext.locale.hr.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Ništa",
+    summaryText: "Sažetak"
+});
+Ext.define("Ext.locale.hr.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Je jednako",
+        ne: "Nejednak",
+        gt: "Veće od",
+        ge: "Veći ili jednak",
+        lt: "Manje od",
+        le: "Manje ili jednako",
+        like: "Kao",
+        nlike: "Ne kao",
+        empty: "Prazan",
+        nempty: "Nije prazno",
+        identical: "Identičan",
+        nidentical: "Nije identičan",
+        regex: "Regularni izraz",
+        "in": "Unutra je",
+        notin: "Nije u"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.hr.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Povucite zaglavlje stupca ovdje da biste skupili tom stupcu",
+    showGroupingPanelText: "Prikaži grupu po ploči",
+    hideGroupingPanelText: "Sakrij grupu po ploči",
+    clearGroupText: "Čista grupa",
+    sortAscText: "Sortirajte se",
+    sortDescText: "Sortiranje silazne",
+    moveLeftText: "Premjestiti lijevo",
+    moveRightText: "Pomaknuti se udesno",
+    moveBeginText: "Prijeđite na početak",
+    moveEndText: "Premjestiti do kraja",
+    removeText: "Ukloniti"
 });

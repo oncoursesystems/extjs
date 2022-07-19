@@ -252,7 +252,7 @@ Ext.define('Ext.field.ComboBox', {
          *
          *  - **`'remote'`** : In this mode the ComboBox loads its Store dynamically based upon
          *   user interaction.
-         *
+         *   
          *   This is typically used for "autocomplete" type inputs, and after the user finishes
          *   typing, the Store is {@link Ext.data.Store#method!load load}ed.
          *
@@ -462,7 +462,7 @@ Ext.define('Ext.field.ComboBox', {
 
             // If we were expanded, then release the filter constrains that were
             // in place due to the primaryFilter using the inputElement's value.
-            if (this.expanded) {
+            if (this.getQueryMode() === 'local' && this.expanded) {
                 this.doRawFilter();
             }
         }
@@ -544,7 +544,7 @@ Ext.define('Ext.field.ComboBox', {
         newValue = me.getValue() || [];
         newValue.push.apply(newValue, inputValue.split(me.getDelimiter()));
 
-        return me.setValue(Ext.Array.clean(newValue));
+        return me.syncMultiValues(Ext.Array.clean(newValue));
     },
 
     /**
@@ -779,22 +779,34 @@ Ext.define('Ext.field.ComboBox', {
         var me = this,
             inputValue = me.getInputValue(),
             value = me.getValue(),
-            selection = me.getSelection(),
+            selection = Ext.Array.from(me.getSelection()),
             valueField,
             displayField,
-            displayValueField;
+            displayValueField,
+            numSelectedElements = selection.length,
+            firstSelectedElement;
 
         // displayValueField is the field wherein combobox values are set/selected
-        // in case of displayTpl check the entire diplayTpl value 
+        // in case of displayTpl check the entire diplayTpl value
         // else just check the value of displayField
-        if (me.getDisplayTpl() && selection) {
-            valueField = selection.get(this.getValueField());
-            displayField = selection.get(this.getDisplayField());
-            displayValueField = me.getDisplayTpl().apply({ abbr: valueField, name: displayField });
+        if (numSelectedElements) {
+            firstSelectedElement = selection[0];
+
+            if (me.getDisplayTpl()) {
+                valueField = firstSelectedElement.get(this.getValueField());
+                displayField = firstSelectedElement.get(this.getDisplayField());
+                displayValueField = me.getDisplayTpl().apply(
+                    { abbr: valueField, name: displayField }
+                );
+            }
+            else {
+                displayValueField = firstSelectedElement.get(this.getDisplayField());
+            }
         }
         else {
-            displayValueField = selection && selection.get(this.getDisplayField());
+            displayValueField = null;
         }
+
         // Don't want to callParent here, we need custom handling
 
         if (me.doFilterTask) {
@@ -824,7 +836,7 @@ Ext.define('Ext.field.ComboBox', {
                 // different underlying values. If the typed value exactly matches
                 // the selection Record, we must not do a syncValue.
 
-                if (!selection || displayValueField !== inputValue) {
+                if (!numSelectedElements || displayValueField !== inputValue) {
                     me.syncMode = 'input';
                     me.syncValue();
 
@@ -839,18 +851,23 @@ Ext.define('Ext.field.ComboBox', {
             // If there's an underlying value:
             //  If we're required, restore the display
             //  Else clear the selection
-            else if (selection) {
+            else if (numSelectedElements) {
                 if (me.getRequired()) {
                     me.setFieldDisplay(selection);
                 }
-                else {
+                else if (!me.getMultiSelect()) {
                     me.setSelection(null);
                 }
+
             }
 
             if (me.getTypeAhead()) {
                 me.select(inputValue ? inputValue.length : 0);
             }
+        }
+
+        if (me.getForceSelection() && me.getMultiSelect()) {
+            me.setInputValue('');
         }
     },
 
@@ -876,10 +893,8 @@ Ext.define('Ext.field.ComboBox', {
                     }
                 });
             }
-            else {
-                if (!selection.isEntered && !store.contains(selection)) {
-                    toRemove.push(selection);
-                }
+            else if (!selection.isEntered && !store.contains(selection)) {
+                toRemove.push(selection);
             }
 
             // Prune out values which are no longer in the source store
@@ -996,6 +1011,8 @@ Ext.define('Ext.field.ComboBox', {
             primaryFilter,
             proxy, oldFilters;
 
+        me.autoSelectCompleted = false;
+
         // Tweak the proxy to encode the primaryFilter's parameter as documented for ComboBox
         if (isRemote) {
             store.setRemoteFilter(true);
@@ -1006,6 +1023,11 @@ Ext.define('Ext.field.ComboBox', {
 
             if (proxy.setFilterParam) {
                 proxy.setFilterParam(me.getQueryParam());
+            }
+
+            // Invoke Store load while filter endupdate.
+            if (!Ext.isDefined(store.getAutoLoadOnFilterEnd())) {
+                store.setAutoLoadOnFilterEnd(true);
             }
         }
 
@@ -1046,6 +1068,7 @@ Ext.define('Ext.field.ComboBox', {
                 scope: me
             });
         }
+
     },
 
     /**

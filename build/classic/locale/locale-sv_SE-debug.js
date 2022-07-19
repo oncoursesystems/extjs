@@ -25,6 +25,11 @@ Ext.onReady(function() {
         };
     }
 });
+Ext.define("Ext.locale.sv_SE.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Sammanfattning"
+});
 Ext.define("Ext.locale.sv_SE.form.field.Base", {
     override: "Ext.form.field.Base",
     invalidText: "Värdet i detta fält är inte tillåtet"
@@ -80,6 +85,18 @@ Ext.define("Ext.locale.sv_SE.grid.PropertyColumnModel", {
     valueText: "Värde",
     dateFormat: "Y-m-d"
 });
+Ext.define("Ext.locale.sv_SE.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Expandera alla",
+    collapseAllText: "Kollapsa alla",
+    groupsText: "Grupp",
+    groupByText: "Grupp vid detta fält",
+    addToGroupingText: "Lägg till gruppering",
+    removeFromGroupingText: "Ta bort från gruppering",
+    groupSummaryTpl: "Sammanfattning ({name})",
+    summaryTpl: "Sammanfattning ({store.data.length})"
+});
 Ext.define("Ext.locale.sv_SE.grid.header.Container", {
     override: "Ext.grid.header.Container",
     sortAscText: "Sortera stigande",
@@ -91,6 +108,62 @@ Ext.define("Ext.locale.sv_SE.grid.header.Container", {
 Ext.define("Ext.locale.sv_SE.grid.plugin.DragDrop", {
     override: "Ext.grid.plugin.DragDrop",
     dragText: "{0} markerade rad(er)"
+});
+Ext.define("Ext.locale.sv_SE.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Ingen",
+    summaryText: "Sammanfattning"
+});
+Ext.define("Ext.locale.sv_SE.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Är jämställd",
+        ne: "Inte jämnlikt",
+        gt: "Större än",
+        ge: "Större än eller lika med",
+        lt: "Mindre än",
+        le: "Mindre än eller lika med",
+        like: "Tycka om",
+        nlike: "Inte som",
+        empty: "Tömma",
+        nempty: "Inte tom",
+        identical: "Identisk",
+        nidentical: "Inte identisk",
+        regex: "Vanligt uttryck",
+        "in": "Är i",
+        notin: "Är inte i"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.sv_SE.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Dra en kolumnrubrik här för att gruppera med den kolumnen",
+    showGroupingPanelText: "Visa grupp efter panel",
+    hideGroupingPanelText: "Dölj gruppen efter panel",
+    clearGroupText: "Klart grupp",
+    sortAscText: "Sortera stigande",
+    sortDescText: "Sortera nedstigande",
+    moveLeftText: "Flytta vänster",
+    moveRightText: "Flytta höger",
+    moveBeginText: "Flytta till början",
+    moveEndText: "Flytta till",
+    removeText: "Avlägsna"
 });
 Ext.define("Ext.locale.sv_SE.picker.Date", {
     override: "Ext.picker.Date",

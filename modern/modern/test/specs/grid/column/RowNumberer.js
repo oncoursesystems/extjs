@@ -1,4 +1,3 @@
-/* global Ext, expect */
 
 topSuite("Ext.grid.column.RowNumberer",
     ['Ext.grid.Grid', 'Ext.data.ArrayStore', 'Ext.layout.Fit',
@@ -154,7 +153,7 @@ function() {
                 data.push({
                     name: 'Name ' + rowNumber,
                     email: 'name' + rowNumber + '@foo.com',
-                    name: '555 123 ' + rowNumber
+                    phone: '555 123 ' + rowNumber
                 });
             }
 

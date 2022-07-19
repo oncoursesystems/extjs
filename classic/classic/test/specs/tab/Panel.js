@@ -1,4 +1,4 @@
-topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function() {
+topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel', 'Ext.ux.TabReorderer'], function() {
     var tabPanel, fakeTabBar;
 
     function createTabPanel(config) {
@@ -2142,6 +2142,66 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel'], function
 
             tabPanel.items.first().destroy();
             expect(tabPanel.componentLayoutCounter - cnt).toBe(1);
+        });
+    });
+
+    describe("re-orderable tabs", function() {
+        var tabPanel;
+
+        beforeEach(function() {
+            tabPanel = Ext.create({
+                xtype: 'tabpanel',
+                renderTo: Ext.getBody(),
+                plugins: {
+                    tabreorderer: {
+                        animate: false
+                    }
+                },
+                items: [{
+                    title: 'Tab 1',
+                    html: 'Reorderable Tab'
+                }, {
+                    title: 'Tab 2',
+                    html: 'Reorderable Tab'
+                }, {
+                    title: 'Tab 3',
+                    html: 'Reorderable Tab'
+                }, {
+                    title: '#Tab 4#',
+                    html: "Non Reorderable Tab",
+                    reorderable: false
+                }, {
+                    title: 'Tab 5',
+                    html: 'Reorderable Tab'
+                }]
+            });
+        });
+
+        afterEach(function() {
+            tabPanel.destroy();
+        });
+
+        it("should honor remainder tab order on drag", function() {
+            var plugin = tabPanel.getPlugin('tabreorderer'),
+                expectedOrder = [],
+                initialOrder, finalOrder;
+
+            initialOrder = Ext.clone(tabPanel.getTabBar().getOverflowEl().component.items.keys);
+            plugin.reorderer = plugin;
+            plugin.startIndex = 0;
+            plugin.curIndex = 0;
+
+            for (var i = 0; i < initialOrder.length; i++) {
+                plugin.doSwap(4);
+            }
+
+            expectedOrder[0] = initialOrder[1];
+            expectedOrder[1] = initialOrder[2];
+            expectedOrder[2] = initialOrder[4];
+            expectedOrder[3] = initialOrder[3]; // non reorderable
+            expectedOrder[4] = initialOrder[0];
+            finalOrder = tabPanel.getTabBar().getOverflowEl().component.items.keys;
+            expect(finalOrder).toEqual(expectedOrder);
         });
     });
 });

@@ -68,6 +68,7 @@ Ext.define('KitchenSink.view.direct.Grid', {
         store: {
             fields: ['name', 'revenue'],
             remoteSort: true,
+            autoLoad: true,
             sorters: [{
                 property: 'name',
                 direction: 'ASC'

@@ -30,6 +30,28 @@ topSuite("Ext.carousel.Carousel",
         carousel = Ext.destroy(carousel);
     });
 
+    describe("rendered", function() {
+        it("should have the rendered state set on decorated components", function() {
+            var items, i;
+
+            makeCarousel({
+                items: [{
+                    html: 'A'
+                }, {
+                    html: 'B'
+                }, {
+                    html: 'C'
+                }]
+            });
+
+            items = carousel.getItems().getRange().slice(1);
+
+            for (i = 0; i < items.length; ++i) {
+                expect(items[i].isVisible(true)).toBe(true);
+            }
+        });
+    });
+
     describe("reference", function() {
         it("should be able to look up components by reference", function() {
             makeCarousel({

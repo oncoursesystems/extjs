@@ -40,14 +40,18 @@ Ext.define('Ext.layout.component.field.FieldContainer', {
         // container to be flushed to the DOM... especially for things like box layouts
         // that size the innerCt since that is all that will contribute to our size!
         return ownerContext.hasDomProp('containerLayoutDone')
-            ? this.callParent([ownerContext])
+            // Parent returns total height, post layout calculation and height
+            // adjustment is calculated in calculateOwnerHeightFromContentHeight
+            // which is why subtract here to prevent erroneous top calculations
+            // for subsequent components
+            ? this.callParent([ownerContext]) - this.getHeightAdjustment()
             : NaN;
     },
 
     measureContentWidth: function(ownerContext) {
         // see measureContentHeight
         return ownerContext.hasDomProp('containerLayoutDone')
-            ? this.callParent([ownerContext])
+            ? this.callParent([ownerContext]) - this.getWidthAdjustment()
             : NaN;
     },
 

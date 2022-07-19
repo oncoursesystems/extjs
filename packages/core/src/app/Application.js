@@ -221,7 +221,7 @@ Ext.define('Ext.app.Application', {
 
         // @cmd-auto-dependency { aliasPrefix: "profile.", mvc: true, blame: "all" }
         /**
-         * @cfg {String/String[]} profiles
+         * @cfg {String[]} profiles
          * Names of the profiles that the app uses.
          */
         profiles: [],

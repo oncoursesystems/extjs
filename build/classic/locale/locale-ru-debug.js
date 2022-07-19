@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.ru.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Считать"
+});
 /**
  * Russian translation
  * By ZooKeeper (utf-8 encoding)
@@ -284,4 +289,72 @@ Ext.define("Ext.locale.ru.form.field.File", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.ru.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.ru.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Расширить все",
+    collapseAllText: "Свернуть все",
+    groupsText: "Группы",
+    groupByText: "Группа по этой области",
+    addToGroupingText: "Добавить в группировку",
+    removeFromGroupingText: "Удалить из группировки",
+    groupSummaryTpl: "Резюме ({name})",
+    summaryTpl: "Резюме ({store.data.length})"
+});
+Ext.define("Ext.locale.ru.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Никто",
+    summaryText: "Резюме"
+});
+Ext.define("Ext.locale.ru.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Равно",
+        ne: "Не равный",
+        gt: "Больше чем",
+        ge: "Больше или равно",
+        lt: "Меньше, чем",
+        le: "Меньше или равно",
+        like: "Нравиться",
+        nlike: "Не как",
+        empty: "Пустой",
+        nempty: "Не пустой",
+        identical: "Идентичный",
+        nidentical: "Не идентично",
+        regex: "Регулярное выражение",
+        "in": "В",
+        notin: "Не включен"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.ru.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Перетащите заголовок столбца здесь в группу этим столбцом",
+    showGroupingPanelText: "Показать группу по панели",
+    hideGroupingPanelText: "Скрыть группу по панели",
+    clearGroupText: "Clear Group.",
+    sortAscText: "Сортировать по возрастанию",
+    sortDescText: "Сортировать по убыванию",
+    moveLeftText: "Двигай влево",
+    moveRightText: "Переместить вправо",
+    moveBeginText: "Перейти к началу",
+    moveEndText: "Перейти к концу",
+    removeText: "Удалять"
 });

@@ -371,7 +371,8 @@ Ext.define('Ext.dataview.selection.Rows', {
         isAllSelected: function() {
             var store = this.view.store;
 
-            return this.getCount() === (store.getTotalCount() || store.getCount());
+            return (this.getCount() === store.getTotalCount()) ||
+                (this.getCount() === store.getCount());
         },
 
         /**

@@ -85,9 +85,9 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
                 type: 'memory',
                 limitParam: null,
                 data: storeData || [
-                    {company: 'Microsoft', person: 'John', date: new Date(), value: 1},
-                    {company: 'Adobe', person: 'John', date: new Date(), value: 2},
-                    {company: 'Microsoft', person: 'Helen', date: new Date(), value: 3}
+                    { company: 'Microsoft', person: 'John', date: new Date(), value: 1 },
+                    { company: 'Adobe', person: 'John', date: new Date(), value: 2 },
+                    { company: 'Microsoft', person: 'Helen', date: new Date(), value: 3 }
                 ],
                 reader: {
                     type: 'json'
@@ -117,11 +117,11 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
             },
 
             columns: [
-                {text: 'Company', dataIndex: 'company', itemId: 'c1', filterType: { type: 'string' }},
-                {text: 'Person', dataIndex: 'person', itemId: 'c2', filterType: { type: 'string' }},
-                {text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', filterType: { type: 'date' }},
-                {text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4', filterType: { type: 'number' }},
-                {text: 'Year', dataIndex: 'year', itemId: 'c5'}
+                { text: 'Company', dataIndex: 'company', itemId: 'c1', filterType: { type: 'string' } },
+                { text: 'Person', dataIndex: 'person', itemId: 'c2', filterType: { type: 'string' } },
+                { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', filterType: { type: 'date' } },
+                { text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4', filterType: { type: 'number' } },
+                { text: 'Year', dataIndex: 'year', itemId: 'c5' }
             ],
 
             renderTo: document.body
@@ -152,11 +152,11 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
             it('should add a filter on a column', function() {
                 makeGrid({
                     columns: [
-                        {text: 'Company', dataIndex: 'company', itemId: 'c1', filterType: { type: 'string', value: 'Adobe' } },
-                        {text: 'Person', dataIndex: 'person', itemId: 'c2'},
-                        {text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3'},
-                        {text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4'},
-                        {text: 'Year', dataIndex: 'year', itemId: 'c5'}
+                        { text: 'Company', dataIndex: 'company', itemId: 'c1', filterType: { type: 'string', value: 'Adobe' } },
+                        { text: 'Person', dataIndex: 'person', itemId: 'c2' },
+                        { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3' },
+                        { text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4' },
+                        { text: 'Year', dataIndex: 'year', itemId: 'c5' }
                     ]
                 });
 
@@ -213,6 +213,106 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
                     expect(store.getCount()).toBe(1);
                 });
             });
+
+            describe('remote filters', function() {
+                var filterParams, allColumns;
+
+                beforeEach(function() {
+                    spyOn(Ext.Ajax, 'request').andCallFake(function(cb, scope) {
+                        filterParams = cb;
+                    });
+
+                    store = Ext.create('Ext.data.Store', {
+                        fields: ['name', 'email', 'phone'],
+                        remoteFilter: true,
+                        proxy: {
+                            type: 'ajax',
+                            url: 'fake',
+                            reader: {
+                                type: 'json'
+                            }
+                        },
+                        autoLoad: true
+                    });
+                    allColumns = [{
+                        text: 'Name',
+                        dataIndex: 'name',
+                        filterType: 'string'
+                    }, {
+                        text: 'Email',
+                        dataIndex: 'email',
+                        flex: 1,
+                        filterType: {
+                            type: 'string',
+                            value: 'abc',
+                            operator: '=='
+                        }
+                    }, {
+                        text: 'Phone',
+                        dataIndex: 'phone'
+                    }];
+
+                    grid = Ext.create('Ext.grid.Grid', {
+                        title: 'Grid Column Filtering',
+                        width: "70%",
+                        height: 300,
+                        store: store,
+                        plugins: {
+                            gridfilterbar: true
+                        },
+
+                        columns: allColumns
+                    });
+                });
+
+                it('should load the store without filter params', function() {
+                    waitsFor(function() {
+                        return filterParams !== undefined;
+                    });
+
+                    runs(function() {
+                        expect(filterParams.params.page).toBe(1);
+                    });
+                });
+
+                it('should load the store with default filter params', function() {
+                    waitsFor(function() {
+                        return filterParams.params.filter !== undefined;
+                    });
+
+                    runs(function() {
+                        expect(filterParams.params.page).toBe(1);
+                        expect(JSON.parse(filterParams.params.filter)[0].operator).toBe('==');
+                    });
+                });
+
+                it('should load the store when filter value is changed', function() {
+                    grid.getPlugin('gridfilterbar').getBar().down('textfield').setValue('abc');
+
+                    waitsFor(function() {
+                        return filterParams.params.filter !== undefined;
+                    });
+
+                    runs(function() {
+                        expect(filterParams.params.page).toBe(1);
+                        expect(JSON.parse(filterParams.params.filter)[0].value).toBe('abc');
+                    });
+                });
+
+                it('should load the store when filter operator is changed', function() {
+                    grid.getPlugin('gridfilterbar').getBar().down('textfield').setOperator('==');
+                    grid.getPlugin('gridfilterbar').getBar().down('textfield').setValue('xyz');
+
+                    waitsFor(function() {
+                        return filterParams.params.filter !== undefined;
+                    });
+
+                    runs(function() {
+                        expect(filterParams.params.page).toBe(1);
+                        expect(JSON.parse(filterParams.params.filter)[0].operator).toBe('==');
+                    });
+                });
+            });
         });
 
         describe('show/hide', function() {
@@ -245,7 +345,105 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
                 });
             });
         });
+
+        describe("column cls decoration", function() {
+            var filterCls = Ext.grid.plugin.BaseFilterBar.prototype.filterCls,
+                cols, col;
+
+            afterEach(function() {
+                cols = null;
+            });
+
+            describe("works for both non-nested and nested columns", function() {
+                it("should add the cls for columns when a filter is preset", function() {
+                    makeGrid(null, {
+                        filters: {
+                            property: 'company',
+                            value: 'Adobe',
+                            operator: '='
+                        }
+                    });
+
+                    cols = grid.getColumns();
+                    col = cols.filter(function(col) {
+                        return col.getDataIndex() === 'company';
+                    })[0];
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        expect(col.el).toHaveCls(filterCls);
+                    });
+                });
+
+                it("should add the cls for columns when setting a value", function() {
+                    makeGrid();
+
+                    cols = grid.getColumns();
+                    col = cols.filter(function(col) {
+                        return col.getDataIndex() === 'company';
+                    })[0];
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        gridEvents = null;
+                        plugin.getBar().down('textfield').setValue('Adobe');
+                    });
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        expect(col.el).toHaveCls(filterCls);
+                    });
+                });
+
+                it("should remove the cls for columns when clearing a value", function() {
+                    makeGrid();
+
+                    cols = grid.getColumns();
+                    col = cols.filter(function(col) {
+                        return col.getDataIndex() === 'company';
+                    })[0];
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        gridEvents = null;
+                        plugin.getBar().down('textfield').setValue('Adobe');
+                    });
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        expect(col.el).toHaveCls(filterCls);
+                    });
+
+                    runs(function() {
+                        gridEvents = null;
+                        plugin.getBar().down('textfield').setValue('');
+                    });
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        expect(col.el).not.toHaveCls(filterCls);
+                    });
+                });
+
+            });
+        });
     });
-
-
 });

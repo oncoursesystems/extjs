@@ -1,4 +1,3 @@
-/* global Ext, spyOn, jasmine, expect */
 
 topSuite('Ext.Widget.floated', [
     false,

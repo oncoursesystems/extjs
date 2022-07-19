@@ -249,7 +249,7 @@ function() {
 
     describe('getRawValue', function() {
 
-        it('should return the checked state of the checkbox', function(){
+        it('should return the checked state of the checkbox', function() {
             makeField();
 
             expect(field.getRawValue()).toBe(false);

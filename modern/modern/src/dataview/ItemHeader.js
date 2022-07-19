@@ -141,7 +141,7 @@ Ext.define('Ext.dataview.ItemHeader', {
                     count: collection.length
                 };
 
-            if (data) {
+            if (data && collection.getCount()) {
                 data.value = collection.items[0].data[data.groupField];
             }
 

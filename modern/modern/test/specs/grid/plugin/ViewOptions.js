@@ -1,4 +1,3 @@
-/* global Ext, expect, jasmine, xit */
 topSuite('Ext.grid.plugin.ViewOptions',
     ['Ext.grid.Grid', 'Ext.grid.plugin.ViewOptions'],
 function() {
@@ -214,7 +213,7 @@ function() {
                 for (i = 0; i < visibleIcons.length; i++) {
                     jasmine.fireMouseEvent(visibleIcons[i], 'click');
                 }
-                
+
                 // Check the visibility of all the columns
                 for (j = 0; j < columns.length; j++) {
                     if (columns[j].isVisible()) {
@@ -223,7 +222,7 @@ function() {
                 }
 
                 // There should be 1 visible column
-                expect(visibleCount).toBe(1); 
+                expect(visibleCount).toBe(1);
             });
         });
     });

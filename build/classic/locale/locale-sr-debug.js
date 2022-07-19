@@ -1,3 +1,8 @@
+Ext.define("Ext.locale.sr.data.summary.Count", {
+    override: "Ext.data.summary.Count",
+
+    text: "Рачунати"
+});
 /**
  * Serbian Latin Translation
  * by Atila Hajnal (latin, utf8 encoding)
@@ -150,4 +155,72 @@ Ext.define("Ext.locale.sr.window.MessageBox", {
 // This is needed until we can refactor all of the locales into individual files
 Ext.define("Ext.locale.sr.Component", {
     override: "Ext.Component"
+});
+Ext.define("Ext.locale.sr.grid.feature.AdvancedGrouping", {
+    override: "Ext.grid.feature.AdvancedGrouping",
+
+    expandAllText: "Прошири све",
+    collapseAllText: "Сруши све",
+    groupsText: "Група",
+    groupByText: "Група овог поља",
+    addToGroupingText: "Додај у груписање",
+    removeFromGroupingText: "Уклони из групе",
+    groupSummaryTpl: "Резиме ({name})",
+    summaryTpl: "Резиме ({store.data.length})"
+});
+Ext.define("Ext.locale.sr.grid.plugin.Summaries", {
+    override: "Ext.grid.plugin.Summaries",
+
+    textNone: "Ниједан",
+    summaryText: "Резиме"
+});
+Ext.define("Ext.locale.sr.grid.plugin.filterbar.Operator", {
+    override: "Ext.grid.plugin.filterbar.Operator",
+
+    operatorsTextMap: {
+        eq: "Једнак",
+        ne: "Није једнако",
+        gt: "Веће од",
+        ge: "Већи или једнак",
+        lt: "Мање од",
+        le: "Мање од или једнако",
+        like: "Као",
+        nlike: "Не волим",
+        empty: "Празан",
+        nempty: "Није празна",
+        identical: "Идентичан",
+        nidentical: "Није идентичан",
+        regex: "Регуларни израз",
+        "in": "Је у",
+        notin: "Није унутра"
+    }
+}, function() {
+    var prototype = this.prototype,
+        texts = prototype.operatorsTextMap;
+
+    texts['='] = texts.eq;
+    texts['=='] = texts.eq;
+    texts['!='] = texts.ne;
+    texts['==='] = texts.identical;
+    texts['!=='] = texts.nidentical;
+    texts['>'] = texts.gt;
+    texts['>='] = texts.ge;
+    texts['<'] = texts.lt;
+    texts['<='] = texts.le;
+    texts['/='] = texts.regex;
+});
+Ext.define("Ext.locale.sr.grid.plugin.grouping.Panel", {
+    override: "Ext.grid.plugin.grouping.Panel",
+
+    groupingPanelText: "Овде превуците заглавље ступаца овде да бисте групирали тим колоном",
+    showGroupingPanelText: "Прикажи групу од стране панела",
+    hideGroupingPanelText: "Сакриј групу од стране панела",
+    clearGroupText: "Јасна група",
+    sortAscText: "Поредај узлазно",
+    sortDescText: "Сортирај силазно",
+    moveLeftText: "Помери се лево",
+    moveRightText: "Помакнути се право",
+    moveBeginText: "Преселити се на почетак",
+    moveEndText: "Пређите на крај",
+    removeText: "Скинути"
 });

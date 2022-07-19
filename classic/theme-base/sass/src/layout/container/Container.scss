@@ -4,6 +4,12 @@
     position:absolute !important;
     left:0;
     top:0;
+
+    // items that are in containers that support the 'overflowHandler' config and that are set to 'menu'
+    // show up in a menu when needed and when they do, this class ensures they are hidden in the owning container
+    &.#{$prefix}menu-item-overflowed {
+        display: none;
+    }
 }
 
 @if $include-rtl {
