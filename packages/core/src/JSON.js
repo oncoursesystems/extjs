@@ -13,7 +13,7 @@ Ext.USE_NATIVE_JSON = true;
  * Modified version of [Douglas Crockford's JSON.js][dc] that doesn't
  * mess with the Object prototype.
  *
- * [dc]: http://www.json.org/js.html
+ * [dc]: https://www.json.org/json-en.html
  *
  * @class Ext.JSON
  * @singleton

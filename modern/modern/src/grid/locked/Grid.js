@@ -227,6 +227,44 @@ Ext.define('Ext.grid.locked.Grid', {
         align: 'stretch'
     },
 
+    /**
+     * @property {Number} columnStateEventDelay
+     * A buffer to be applied if many state events are fired within a short period.
+     */
+    columnStateEventDelay: 100,
+
+    /**
+     * @event beforestaterestore
+     * Fires before the state of the object is restored. 
+     * Return false from an event handler to stop the restore.
+     * @param {Ext.grid.locked.Grid} grid this Grid
+     * @param {Object} state The hash of state values returned from the StateProvider. If this
+     * event is not vetoed, then the state object is passed to *`applyColumnState`.
+     * @since 7.6
+     */
+    /**
+     * @event staterestore
+     * Fires after the state of the object is restored.
+     * @param {Ext.grid.locked.Grid} grid this Grid
+     * @param {Object} state The hash of state values returned from the StateProvider.
+     * @since 7.6
+     */
+    /**
+     * @event beforestatesave
+     * Fires before the state of the object is saved to the configured state provider.
+     * Return false to stop the save.
+     * @param {Ext.grid.locked.Grid} grid this Grid
+     * @param {Object} state The hash of state values.
+     * @since 7.6
+     */
+    /**
+     * @event statesave
+     * Fires after the state of the object is saved to the configured state provider.
+     * @param {Ext.grid.locked.Grid} grid this Grid
+     * @param {Object} state The hash of state values.
+     * @since 7.6
+     */
+
     onRender: function() {
         this.callParent();
 
@@ -510,6 +548,9 @@ Ext.define('Ext.grid.locked.Grid', {
         }
 
         me.setupHeaderSync();
+
+        // restore grid column state
+        me.onGridBeforeStateRestore();
     },
 
     applyStore: function(store) {
@@ -697,6 +738,11 @@ Ext.define('Ext.grid.locked.Grid', {
                 defaults = weight < 0 ? me.getLeftRegionDefaults() : me.getRightRegionDefaults();
             }
 
+            // assign regionKey to columns
+            if (!Ext.isEmpty(columns) && me.isColumnsStateful()) {
+                me.updateColumnRegion(columns, key);
+            }
+
             return Ext.merge({
                 xtype: 'lockedgridregion',
                 regionKey: key,
@@ -709,7 +755,10 @@ Ext.define('Ext.grid.locked.Grid', {
                     grouped: me.getGrouped(),
                     itemConfig: me.getItemConfig(),
                     store: me.getStore(),
-                    variableHeights: me.getVariableHeights()
+                    variableHeights: me.getVariableHeights(),
+                    stateId: key,
+                    stateful: me.config.stateful,
+                    columnStateEventDelay: me.columnStateEventDelay
                 }, gridDefaults)
             }, defaults, cfg);
         },
@@ -773,12 +822,31 @@ Ext.define('Ext.grid.locked.Grid', {
             }
         },
 
+        /**
+         * Remove the parent header if all its child headers are removed
+         * and is not root header container
+         */
+        trackHeaderMove: function(header) {
+            var parentCt;
+
+            if (!header || !header.isHeaderGroup || header.innerItems.length) {
+                return;
+            }
+
+            parentCt = header.getParent();
+
+            header.getRootHeaderCt().fireEvent('columngroupremove', parentCt, header);
+            parentCt.remove(header);
+            this.trackHeaderMove(parentCt);
+        },
+
         handleChangeRegion: function(region, column) {
             var me = this,
                 grid = region.getGrid(),
                 gridItems = me.gridItems,
                 newIdx = gridItems.indexOf(grid),
-                oldIdx = gridItems.indexOf(column.getGrid());
+                oldIdx = gridItems.indexOf(column.getGrid()),
+                columnParent = column.getParent();
 
             // The idea here is to retain the closest position possible.
             // If moving backwards, add it to the end. If moving forwards,
@@ -792,6 +860,16 @@ Ext.define('Ext.grid.locked.Grid', {
                 grid.insertColumn(0, column);
             }
 
+            me.trackHeaderMove(columnParent);
+
+            // If column is moved to new region update
+            // new region information to column
+            if (me.isColumnsStateful()) {
+                column.region = (grid.regionKey !== column.regionKey)
+                    ? grid.regionKey
+                    : null;
+            }
+
             // Refreshing grid on column add or insert.
             grid.syncRowsToHeight(true);
 
@@ -799,6 +877,13 @@ Ext.define('Ext.grid.locked.Grid', {
 
             me.doHorizontalScrollCheck();
             me.doVerticalScrollCheck();
+
+            // Update columns state 
+            if (column.region) {
+                me.onAfterRegionChange(column);
+            }
+
+            me.onBeforeStateSave();
         },
 
         handleRegionVisibilityChange: function(region, hiding) {
@@ -871,12 +956,20 @@ Ext.define('Ext.grid.locked.Grid', {
             }
         },
 
-        onColumnAdd: function(grid) {
-            if (!this.setRegionVisibility(grid.region)) {
-                this.refreshGrids();
+        onColumnAdd: function(grid, column) {
+            var me = this;
+
+            if (!me.setRegionVisibility(grid.region)) {
+                me.refreshGrids();
             }
 
-            this.configureHeaderHeights();
+            me.configureHeaderHeights();
+
+            // If column is moved to new region update
+            // new region information to column
+            if (me.isColumnsStateful()) {
+                column.region = grid.regionKey;
+            }
         },
 
         onColumnHide: function(grid) {
@@ -1083,9 +1176,13 @@ Ext.define('Ext.grid.locked.Grid', {
                 columnhide: 'onColumnHide',
                 columnremove: 'onColumnRemove',
                 columnshow: 'onColumnShow',
+                columnmove: 'onColumnMove',
                 horizontaloverflowchange: 'onGridHorizontalOverflowChange',
                 resize: 'onGridResize',
-                verticaloverflowchange: 'onGridVerticalOverflowChange'
+                verticaloverflowchange: 'onGridVerticalOverflowChange',
+                beforestaterestore: 'onGridBeforeStateRestore',
+                beforestatesave: 'onBeforeStateSave',
+                regioncolumngroupremove: 'onRegionColumnGroupRemove'
             });
         },
 
@@ -1106,6 +1203,395 @@ Ext.define('Ext.grid.locked.Grid', {
                 me.headerSync = new Ext.util.HeightSynchronizer(
                     headers, me.isHeaderVisible.bind(me));
             }
+        },
+
+        onColumnMove: function(grid, column) {
+            var group = column.parent;
+
+            // Avoid state save call if moving in same region
+            if (!this.isColumnsStateful() || !column.region) {
+                return;
+            }
+
+            // assign region key column
+            if (group.isHeaderGroup && group.indexOf(column) !== -1) {
+                group.region = column.region;
+            }
+
+            // re-calculate columns state on region change
+            this.onBeforeStateSave();
+        },
+
+        /**
+         * @private
+         * Prepare state data from all the region grid and assign moved column 
+         * to its original region state.
+         * 
+         * `Ex-` Moving column1 from left region to right Region, grid state returns
+         * state data as 
+         *      {
+         *           left:{h1: {}},
+         *           center:{h1:{}},
+         *           right:{
+         *               left-h0:{
+         *                          width: 100,
+         *                          region: 'right'
+         *                        } // `left-h0` property indicates it belongs to left region
+         *                          // Grid and 0 column state data
+         *           }
+         *       } 
+         *  
+         *   After re-arranging the position
+         *      {
+         *           left:{
+         *               h0: {}
+         *               h1: {}
+         *           },
+         *           center:{h1:{}},
+         *           right:{}
+         *       }     
+         *      
+         * @returns {Object} Grid column object
+         */
+        reCalculateColumnState: function(stateData) {
+            var gridItems = this.gridItems,
+                state = stateData || {},
+                i, grid, header, key, regionState,
+                regKey, data, ids, colRegion;
+
+            for (i = 0; i < gridItems.length; i++) {
+                grid = gridItems[i];
+                header = grid.getHeaderContainer();
+                regionState = state[grid.regionKey] || {};
+
+                state[grid.regionKey] = grid.calculateColumnState(header.items, regionState);
+            }
+
+            for (key in state) {
+                regionState = state[key] || {};
+
+                for (regKey in regionState) {
+                    data = regionState[regKey];
+
+                    // Keep column state with in region state
+                    if (!Ext.isEmpty(data.region) && (regKey.indexOf(':') !== -1)) {
+                        ids = regKey.split(':');
+                        colRegion = ids[0];
+                        state[colRegion] = state[colRegion] || {};
+
+                        state[colRegion][ids[1]] = data;
+
+                        delete regionState[regKey];
+                    }
+                }
+            }
+
+            return state;
+        },
+
+        /**
+         * Restore Grid  column state
+         * @returns false Cancel Grid `beforestaterestore` event
+         * @private
+         */
+        onGridBeforeStateRestore: function() {
+            var me = this,
+                state;
+
+            if (!me.isColumnsStateful()) {
+                return false;
+            }
+
+            state = this.getColumnState() || {};
+
+            if (Ext.Object.isEmpty(state)) {
+                return false;
+            }
+
+            if (me.hasListeners.beforestaterestore &&
+                me.fireEvent('beforestaterestore', me, state) === false) {
+                return;
+            }
+
+            this.applyColumnState(state);
+
+            if (me.hasListeners.staterestore) {
+                me.fireEvent('staterestore', me, state);
+            }
+
+            return false;
+        },
+
+        /**
+         * Calculate Grid column state
+         * @returns false Cancel Grid `beforestaterestore` event
+         * @private
+         */
+        onBeforeStateSave: function() {
+            var me = this;
+
+            if (!me.isColumnsStateful() || me.isConfiguring || me.applyingState) {
+                return false;
+            }
+
+            me.columnStateData = me.reCalculateColumnState(me.columnStateData);
+
+            me.persistColumnState(me.columnStateData);
+
+            return false;
+        },
+
+        /**
+         * Return {Object} saved column state.
+         * @private
+         */
+        getColumnState: function() {
+            var me = this,
+                state, provider, id;
+
+            if (!me.isColumnsStateful()) {
+                return;
+            }
+
+            if (me.columnStateData) {
+                return me.columnStateData;
+            }
+
+            state = me.getStateBuilder();
+
+            if (state) {
+                provider = Ext.state.Provider.get();
+                id = state.root.id + '-column-state';
+
+                return provider.get(id);
+            }
+        },
+
+        /**
+         * Save column state to state provider
+         * @param {Object} columnsState Column State data
+         * @private
+         */
+        persistColumnState: function(columnsState) {
+            var me = this,
+                state, provider, id;
+
+            if (me.hasListeners.beforestatesave &&
+                me.fireEvent('beforestatesave', me, columnsState) === false) {
+                return;
+            }
+
+            state = me.getStateBuilder();
+
+            if (state) {
+                provider = Ext.state.Provider.get();
+                id = state.root.id + '-column-state';
+
+                provider.set(id, columnsState);
+
+                if (me.hasListeners.statesave) {
+                    me.fireEvent('statesave', me, columnsState);
+                }
+            }
+        },
+
+        /**
+         * @returns {Boolean} `true` if grid is stateful
+         */
+        isColumnsStateful: function() {
+            return !(!this.getStateId() || !this.config.stateful);
+        },
+
+        /**
+         * Assign column region key to calculate the moved state
+         * @param {Ext.grid.locked.Grid} grid 
+         * @param {Object[]} column Region grid column
+         * @param {String} regionKey 
+         * @private 
+         */
+        updateColumnRegion: function(columns, regionKey) {
+            var column, i;
+
+            for (i = 0; i < columns.length; i++) {
+                column = columns[i];
+
+                // assign region property to the column definition
+                column.regionKey = regionKey;
+
+                if (column.columns) {
+                    this.updateColumnRegion(column.columns, regionKey);
+                }
+            }
+        },
+
+        /**
+         * Set column config from the saved state
+         * @param {Ext.grid.locked.Grid} grid 
+         * @param {Ext.grid.column.Column} column 
+         * @param {Object} data Column state data
+         * @private 
+         */
+        updateColumnFromState: function(grid, column, stateData) {
+            var eventsMap = grid.columnStateEventMap,
+                key, prop, cfg, data;
+
+            if (Ext.isEmpty(eventsMap)) {
+                return;
+            }
+
+            data = stateData[column.headerId] || {};
+
+            for (key in eventsMap) {
+                prop = eventsMap[key];
+
+                if (!Ext.isEmpty(data[prop])) {
+                    cfg = column.self.$config.configs[prop];
+
+                    if (cfg) {
+                        column[cfg.names.set](data[prop]);
+                    }
+                }
+            }
+
+            // re-iterate for nested column
+            if (column.isHeaderGroup) {
+                column.items.each(function(item) {
+                    this.updateColumnFromState(grid, item, stateData);
+                }, this);
+            }
+        },
+
+        adjustNestedColumnState: function(column, regionData) {
+            var me = this,
+                data, grid, pId, group, region;
+
+            column.items.each(function(item) {
+                data = regionData[item.headerId];
+
+                if (Ext.Object.isEmpty(data) && item.isHeaderGroup) {
+                    me.adjustNestedColumnState(item, regionData);
+                }
+
+                pId = data.parentHeaderId;
+
+                // if dragged into group header and group is also moved but not arranged
+                if (pId) {
+                    group = me.down('[isGridColumn][headerId = ' + pId + ']');
+
+                    if (group && group.indexOf(item) === -1) {
+                        group.insert(data.weight, item);
+                    }
+                }
+                else {
+                    region = me.getRegion((data.region || 'center'));
+                    grid = region.getGrid();
+
+                    grid.insertColumn(data.weight, item);
+                }
+
+                if (item.isHeaderGroup) {
+                    me.adjustNestedColumnState(item, regionData);
+                }
+            });
+        },
+
+        /**
+         * Apply saved state to the grid
+         * @param {Object} stateData Grid column state data
+         * @private 
+         */
+        applyColumnState: function(stateData) {
+            var me = this,
+                states, regionKey, grid, regionData,
+                data, column, key, region, regionGrid,
+                pId, group;
+
+            if (!me.isColumnsStateful()) {
+                return;
+            }
+
+            states = stateData || me.getColumnState();
+
+            if (Ext.Object.isEmpty(states)) {
+                return;
+            }
+
+            me.applyingState = true;
+
+            for (regionKey in states) {
+                regionData = states[regionKey];
+
+                for (key in regionData) {
+                    data = regionData[key];
+                    column = me.down(
+                        '[isGridColumn][headerId = ' + key + '][regionKey=' + regionKey + ']');
+
+                    if (column) {
+                        grid = column.getGrid();
+
+                        if (data.region) {
+                            region = me.getRegion(data.region);
+
+                            regionGrid = region.getGrid();
+
+                            pId = data.parentHeaderId;
+
+                            // if dragged into group header and group is also moved but not arranged
+                            if (pId) {
+                                group = me.down('[isGridColumn][headerId = ' + pId + ']');
+
+                                if (group) {
+                                    group.insert(data.weight, column);
+                                }
+                            }
+                            else {
+                                regionGrid.insertColumn(data.weight, column);
+                            }
+                        }
+
+                        if (column.isHeaderGroup) {
+                            me.adjustNestedColumnState(column, regionData);
+                        }
+
+                        // Update column config from the saved state
+                        me.updateColumnFromState(grid, column, regionData);
+                    }
+                }
+            }
+
+            me.applyingState = false;
+        },
+
+        // Update nested column state region property with header group
+        onAfterRegionChange: function(column, regionKey) {
+            if (!this.isColumnsStateful() || !column.isHeaderGroup) {
+                return;
+            }
+
+            regionKey = regionKey || column.region;
+
+            column.items.each(function(item) {
+                item.region = (item.regionKey !== regionKey) ? regionKey : null;
+
+                if (item.isHeaderGroup) {
+                    this.onAfterRegionChange(item, regionKey);
+                }
+            }, this);
+        },
+
+        /**
+         * Update header group hidden state 
+         * @param {Ext.grid.column.Column} column 
+         * @param {String} id Column State ID
+         */
+        onRegionColumnGroupRemove: function(column, id) {
+            if (!this.isColumnsStateful()) {
+                return;
+            }
+
+            column.setHidden(true);
+
+            this.onBeforeStateSave();
         }
     }
 }, function(LockedGrid) {

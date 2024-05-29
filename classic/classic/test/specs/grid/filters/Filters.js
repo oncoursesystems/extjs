@@ -3936,4 +3936,101 @@ function() {
             });
         });
     });
+
+    // see https://sencha.jira.com/browse/EXTJS-29718
+    describe("Filters on multiple grids", function() {
+        var firstGrid, secondGrid, firstGridColoumns,
+            secondGridColumns, firstGridMenu, secondGridMenu, showSpy;
+
+        function createGridPanel() {
+
+            return new Ext.grid.Panel({
+                store: {
+                    data: [
+                        { name: 'Jimmy Page', email: 'jimmy@page.com', phone: '555-111-1224' },
+                        { name: 'Stevie Ray Vaughan', email: 'stevieray@vaughan.com', phone: '555-222-1234' },
+                        { name: 'John Scofield', email: 'john@scofield.com', phone: '555-222-1234' },
+                        { name: 'Robben Ford', email: 'robben@ford.com', phone: '555-222-1244' }
+                    ]
+                },
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', width: 100 },
+                    { header: 'Phone', dataIndex: 'phone', width: 100 }
+                ],
+                autoLoad: true,
+                plugins: { gridfilters: true },
+                height: 200,
+                width: 500,
+                renderTo: Ext.getBody()
+            });
+        }
+
+        beforeEach(function() {
+            firstGrid = createGridPanel();
+            secondGrid = createGridPanel();
+            firstGridColoumns = firstGrid.columns;
+            secondGridColumns = secondGrid.columns;
+            firstGridMenu = firstGridColoumns[0].getRootHeaderCt().getMenu();
+            secondGridMenu = secondGridColumns[0].getRootHeaderCt().getMenu();
+            showSpy = spyOnEvent(firstGridMenu, 'show');
+        });
+
+        afterEach(function() {
+            firstGrid = secondGrid = firstGridColoumns = firstGridMenu = secondGridMenu = showSpy = Ext.destroy(firstGrid);
+        });
+
+        it("should not break filter creation on multiple grids", function() {
+
+            // Fire the click event of column 1 to check the filter option
+            jasmine.fireMouseEvent(firstGridColoumns[0].triggerEl, 'click');
+
+            waitsForSpy(showSpy);
+
+            runs(function() {
+                expect(firstGridMenu.isVisible()).toBe(true);
+
+                // check if the filter option is visible on first grid column 1
+                expect(firstGridMenu.items.getByKey('filters').isVisible()).toBe(true);
+
+                // fire click on second column of first grid to hide the first column's menu
+                jasmine.fireMouseEvent(firstGridColoumns[1].triggerEl, 'click');
+
+                // Fire click on second grid's first columns
+                jasmine.fireMouseEvent(secondGridColumns[0].triggerEl, 'click');
+            });
+
+            waitsFor(function() {
+                return secondGridMenu.isVisible();
+            });
+
+            runs(function() {
+                expect(secondGridMenu.isVisible()).toBe(true);
+
+                // Check if the filter option is displayed
+                expect(secondGridMenu.items.getByKey('filters').isVisible()).toBe(true);
+
+                secondGrid.destroy();
+            });
+
+            waitsFor(function() {
+                return secondGrid.isDestroyed;
+            });
+
+            runs(function() {
+                jasmine.fireMouseEvent(firstGridColoumns[0].triggerEl, 'click');
+            });
+
+            waitsFor(function() {
+                return firstGridMenu.isVisible();
+            });
+
+            runs(function() {
+                expect(firstGridMenu.isVisible()).toBe(true);
+
+                // Check if the filter is added for the first grid after destroying the second grid
+                expect(firstGridMenu.items.getByKey('filters').isVisible()).toBe(true);
+            });
+        });
+    });
 });

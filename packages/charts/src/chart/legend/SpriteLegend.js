@@ -248,9 +248,11 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
      * @return {Number[]} [left, top, width, height] components as an array, or null.
      */
     computeRect: function(chartRect) {
-        var rect, docked, size, height, width;
+        var chart = this.getChart(),
+            rect, docked, size, height, width;
 
-        if (this.getHidden()) {
+        // Added isDetached condition to check if the chart is removed
+        if (this.getHidden() || chart.isDetached) {
             return null;
         }
 

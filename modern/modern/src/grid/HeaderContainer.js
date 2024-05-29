@@ -474,9 +474,21 @@ Ext.define('Ext.grid.HeaderContainer', {
         me.fireEvent('columnshow', me, column);
         me.updateMenuDisabledState();
 
+        me.updateShowMenuItemCheckedStatus(column, true);
+
         // Call func to re-set width on column show end
         if (this.isRootHeader) {
             this.onColumnComputedWidthChange();
+        }
+    },
+
+    // Update the checked state of showMenuItem when the column is shown/hidden programatically
+    updateShowMenuItemCheckedStatus: function(column, checked) {
+        var hideMenuShowMenuItem = column.getHideShowMenuItem();
+
+        // prevent updating the checked state when the columns are hidden/shown through column menu
+        if (hideMenuShowMenuItem && hideMenuShowMenuItem.getChecked() !== checked) {
+            hideMenuShowMenuItem.setChecked(checked);
         }
     },
 
@@ -487,6 +499,8 @@ Ext.define('Ext.grid.HeaderContainer', {
         me.visibleColumns = null;
         me.fireEvent('columnhide', me, column);
         me.updateMenuDisabledState();
+
+        me.updateShowMenuItemCheckedStatus(column, false);
 
         // Call func to re-set width on column Hide end
         if (this.isRootHeader) {
@@ -642,9 +656,24 @@ Ext.define('Ext.grid.HeaderContainer', {
             var me = this,
                 totalColumnWidth = 0,
                 changedColumns = me.columnsResizing,
+                grid = me.getGrid(),
+                headerContainer = grid._headerContainer,
                 columns, len, i, c, width;
 
             if (me.destroying) {
+                return;
+            }
+
+            // Do not compute the column width if the grid is not visible
+            if (grid.isHidden(true)) {
+
+                // calculate the width of the columns once the grid gets painted
+                grid.on('painted', function() {
+                    if (headerContainer) {
+                        headerContainer.onColumnComputedWidthChange();
+                    }
+                }, null, { single: true });
+
                 return;
             }
 
@@ -723,7 +752,8 @@ Ext.define('Ext.grid.HeaderContainer', {
                 sorter = header.sorter;
 
                 // Is this column being used to group this grid
-                if (groupers && groupers.length) {
+                // and Grouper will be null for treegroupedgrid
+                if (!grouper && groupers && groupers.length) {
                     // if groupers are used then you can sort by anything because
                     // it's taken care of.
                     isGrouped = false;
@@ -732,20 +762,28 @@ Ext.define('Ext.grid.HeaderContainer', {
                     isGroupedHeader = store.getGroupField() === header.getDataIndex();
                 }
 
+                // If sorter instance is not there for column and store sort is applied
+                // Add sorter to the header.
+                if (!sorter) {
+                    sorter = sorters.get(header.getDataIndex());
+
+                    // If sort is applied on groupField column, sorter will be Grouper.
+                    if (store.getGroupField() === header.getDataIndex()) {
+                        sorter = grouper;
+                    }
+                    else if (sorter) {
+                        header.setSorter(sorter);
+                    }
+                }
+
                 if (sorter) {
-                    // FIRST: If the grid is grouped and this is not the column being used to group
-                    // it there is no sorting to be done here. You can only sort by the column
-                    // that is grouping the grid.
-                    // SECOND: If the grid is grouped and this is the column being used to group it
+                    // FIRST: If the grid is grouped and this is the column being used to group it
                     // we need to use the grouper as the sorter to update the UI correctly.
-                    // THIRD: If the column was configured with a sorter, we must check that the
+                    // SECOND: If the column was configured with a sorter, we must check that the
                     // sorter is part of the store's sorter collection to update the UI
                     // to the correct state. The store may not actually BE sorted by that
                     // sorter.
-                    if (isGrouped && !isGroupedHeader) {
-                        sorter = null;
-                    }
-                    else if (isGrouped && isGroupedHeader) {
+                    if (isGrouped && isGroupedHeader) {
                         sorter = grouper;
                     }
                     else if (!(sorters.contains(sorter) || grouper === sorter)) {

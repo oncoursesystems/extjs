@@ -50,13 +50,15 @@ Ext.define('Ext.grid.plugin.Clipboard', {
             isRaw = format === 'raw',
             isText = format === 'text',
             viewNode,
-            cell, data, dataIndex, lastRecord, column, record, row, view;
+            cell, data, dataIndex, lastRecord, column, record, row, view, isEditable, isEditor;
 
         if (selection) {
             selection.eachCell(function(cellContext) {
                 column = cellContext.column;
                 view = cellContext.column.getView();
                 record = cellContext.record;
+                isEditor = column.getEditor ? column.getEditor() : false;
+                isEditable = !!isEditor || !column.getReadOnly();
 
                 // Do not copy the check column or row numberer column
                 if (column.ignoreExport) {
@@ -93,7 +95,7 @@ Ext.define('Ext.grid.plugin.Clipboard', {
 
                 row.push(data);
 
-                if (erase && dataIndex) {
+                if (erase && dataIndex && isEditable) {
                     record.set(dataIndex, null);
                 }
             });
@@ -159,7 +161,8 @@ Ext.define('Ext.grid.plugin.Clipboard', {
             navModel = view.getNavigationModel(),
             destination = selected.startCell || navModel.getPosition(),
             dataIndex, destinationStartColumn,
-            dataObject = {};
+            dataObject = {},
+            isEditable, isEditor, destinationColumn;
 
         // If the view is not focused, use the first cell of the selection as the destination.
         if (!destination && selected) {
@@ -190,9 +193,12 @@ Ext.define('Ext.grid.plugin.Clipboard', {
 
             // Collect new values in dataObject
             for (sourceColIdx = 0; sourceColIdx < colCount; sourceColIdx++) {
-                dataIndex = destination.column.dataIndex;
+                destinationColumn = destination.column;
+                dataIndex = destinationColumn.dataIndex;
+                isEditor = destinationColumn.getEditor ? destinationColumn.getEditor() : false;
+                isEditable = !!isEditor || !destinationColumn.getReadOnly();
 
-                if (dataIndex) {
+                if (dataIndex && isEditable) {
                     switch (format) {
                         // Raw field values
                         case 'raw':

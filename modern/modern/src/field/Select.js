@@ -767,7 +767,7 @@ Ext.define('Ext.field.Select', {
             result,
             ret = null;
 
-        if (store) {
+        if (store && store.byValue) {
             result = store.byValue.get(value);
 
             // If there are duplicate keys, tested behaviour is to return the *first* match.
@@ -1092,7 +1092,7 @@ Ext.define('Ext.field.Select', {
                     if (fromKeyboard || me.getAutoFocusLast()) {
                         location = picker.getNavigationModel().lastLocation;
 
-                        if (location) {
+                        if (location && location.refresh) {
                             location = location.refresh();
                         }
                     }
@@ -1351,7 +1351,10 @@ Ext.define('Ext.field.Select', {
      */
     onStoreLoad: function(store, records, success) {
         var me = this,
-            filtering = me.isFiltering;
+            filtering = me.isFiltering,
+            valueCollection = me.getValueCollection(),
+            isLocal = true,
+            selections, values, i;
 
         me.isFiltering = false;
 
@@ -1360,6 +1363,23 @@ Ext.define('Ext.field.Select', {
             // is using remote filters and the primaryFilter has a value.
             me.syncMode = filtering ? 'filter' : 'store';
             me.syncValue();
+
+            if (me.getQueryMode && me.getQueryMode() === 'remote') {
+                isLocal = false;
+            }
+
+            // if there are any old entries, sync the selection on the picker
+            if (!isLocal && me.getMultiSelect() && valueCollection.getCount()) {
+                selections = valueCollection.getRange();
+                values = [];
+
+                for (i = 0; i < selections.length; i++) {
+                    values.push(selections[i].get(me._valueField));
+                }
+
+                // to keep the selection on the picker after store reload
+                me.syncMultiValues(values);
+            }
         }
     },
 
@@ -1404,7 +1424,9 @@ Ext.define('Ext.field.Select', {
                 return;
             }
 
-            matchedRecord = (isInput ? store.byText : store.byValue).get(value);
+            if (store.byText || store.byValue) {
+                matchedRecord = (isInput ? store.byText : store.byValue).get(value);
+            }
 
             if (matchedRecord) {
                 if (!matchedRecord.isEntity) {
@@ -1433,8 +1455,12 @@ Ext.define('Ext.field.Select', {
             // Value is the typed value.
             if (isInput || is.store) {
                 if (!matchedRecord && forceSelection) {
-                    me.setValue(null);
-                    me.setSelection(null);
+
+                    // if there is existing selection don't remove it
+                    if (!me.getValueCollection().getCount()) {
+                        me.setValue(null);
+                        me.setSelection(null);
+                    }
 
                     // If we're processing a store load in response to remote filtering
                     // then we must not clear the input value used to kick off that filter.
@@ -1487,7 +1513,26 @@ Ext.define('Ext.field.Select', {
             forceSelection = me.getForceSelection(),
             valueField = me.getValueField(),
             valueCollection = me.getValueCollection(),
-            val, record, len, i, key;
+            isLocal = true,
+            val, record, len, i, key, selections, existingValues;
+
+        if (me.getQueryMode && me.getQueryMode() === 'remote') {
+            isLocal = false;
+        }
+
+        // to keep the existing records selected which are available in store.
+        // merge the existing collection values with the current 
+        // value so that existing records retains in the field.
+        if (!isLocal && forceSelection && me.getMultiSelect()) {
+            selections = valueCollection.getRange();
+            existingValues = [];
+
+            for (i = 0; i < selections.length; i++) {
+                existingValues.push(selections[i].get(valueField));
+            }
+
+            values = Ext.Array.merge(existingValues, values);
+        }
 
         // Loop through values, matching each from the Store, and collecting matched records
         for (i = 0, len = values.length; i < len; i++) {
@@ -1749,18 +1794,29 @@ Ext.define('Ext.field.Select', {
                 recordCreator = me.getRecordCreator(),
                 displayField = me.getDisplayField(),
                 valueField = me.getValueField(),
-                dataObj, result;
+                model = this.getStore().getModel(),
+                idProperty = model.idProperty,
+                idField = model.idField,
+                excludeField, dataObj, result;
 
             if (recordCreator) {
                 result = Ext.callback(recordCreator, me.getRecordCreatorScope(), [
-                    value, me.getStore().getModel(), me
+                    value, model, me
                 ], 0, me);
             }
             else {
-                dataObj = {};
-                dataObj[displayField] = value;
+                if ((displayField === idProperty || valueField === idProperty) &&
+                    idField.convert && idField.convert(value) === null) {
+                    excludeField = idProperty;
+                }
 
-                if (valueField && displayField !== valueField) {
+                dataObj = {};
+
+                if (displayField !== excludeField) {
+                    dataObj[displayField] = value;
+                }
+
+                if (valueField && displayField !== valueField && valueField !== excludeField) {
                     dataObj[valueField] = value;
                 }
 

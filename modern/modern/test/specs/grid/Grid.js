@@ -232,6 +232,21 @@ topSuite("Ext.grid.Grid", [
         return cells;
     }
 
+    function moveColumn(column, byX, byY) {
+        var el = column.headerElement,
+            colBox = column.el.getBox(),
+            fromMx = colBox.x + colBox.width / 2,
+            fromMy = colBox.y + colBox.height / 2;
+
+        byY = byY || 0;
+
+        // Mousedown on the header to drag
+        Ext.testHelper.touchStart(el, { x: fromMx, y: fromMy });
+
+        Ext.testHelper.touchMove(el, { x: fromMx + byX, y: fromMy + byY });
+        Ext.testHelper.touchEnd(el, { x: fromMx + byX, y: fromMy + byY });
+    }
+
     describe('pre-created columns', function() {
         it('should be able to create a grid with top-level columns', function() {
             grid = Ext.create({
@@ -3747,6 +3762,24 @@ topSuite("Ext.grid.Grid", [
                     expect(tool.hasFocus).toBe(true);
                 });
             });
+
+            describe('Child key navigation', function() {
+                it('should trigger childkeydown', function() {
+                    var spy = spyOnEvent(grid, 'childkeydown');
+
+                    jasmine.fireKeyEvent(document.activeElement, 'keydown', Ext.event.Event.DOWN);
+                    expectLocation(1, 0);
+                    expect(spy).toHaveBeenCalled();
+                });
+
+                it('should trigger childkeyup', function() {
+                    var spy = spyOnEvent(grid, 'childkeyup');
+
+                    jasmine.fireKeyEvent(document.activeElement, 'keyup', Ext.event.Event.UP);
+                    expectLocation(0, 0);
+                    expect(spy).toHaveBeenCalled();
+                });
+            });
         });
     });
 
@@ -4087,6 +4120,14 @@ topSuite("Ext.grid.Grid", [
                 Ext.testHelper.tap(colf1.el);
                 cells = getCells(colf1);
 
+                // Check that the data is in DESC order. 
+                // Column sorters are removed and data is in last sorted state
+                expect(cells[0].getValue()).toBe('f19');
+                expect(cells[1].getValue()).toBe('f18');
+                expect(cells[2].getValue()).toBe('f17');
+
+                Ext.testHelper.tap(colf1.el);
+                cells = getCells(colf1);
                 // Check that the data is now in ASC order since we toggled the column's Sorter
                 expect(cells[0].getValue()).toBe('f11');
                 expect(cells[1].getValue()).toBe('f110');
@@ -4655,7 +4696,8 @@ topSuite("Ext.grid.Grid", [
 
     describe('selection on infinite scrolling', function() {
         describe('row/record', function() {
-            var captured = null;
+            var spy = jasmine.createSpy(),
+                captured = null;
 
             function getData(start, limit) {
                 var end = start + limit,
@@ -4724,7 +4766,9 @@ topSuite("Ext.grid.Grid", [
                     bufferSize: 25,
                     scrollable: true,
                     store: createStore(),
-
+                    listeners: {
+                        select: spy
+                    },
                     columns: [{
                         text: 'Id',
                         width: 130,
@@ -4776,7 +4820,11 @@ topSuite("Ext.grid.Grid", [
                 runs(function() {
                     expect(row).toHaveCls(cls);
                 });
+            });
 
+            it('the 2nd argument of select event should array and each element in it must be instance of data model', function() {
+                expect(spy.callCount).toBe(1);
+                expect(spy.mostRecentCall.args[1][0].isModel).toBe(true);
             });
         });
     });
@@ -5093,6 +5141,372 @@ topSuite("Ext.grid.Grid", [
                 store.destroy();
                 grid.destroy();
             });
+        });
+    });
+
+    describe('stateful grid', function() {
+        var cols = [{
+            itemId: 'colf1',
+            width: 100
+        }, {
+            width: 100,
+            itemId: 'colf2'
+        }, {
+            width: 100,
+            itemId: 'colf3'
+        }, {
+            width: 100,
+            itemId: 'colf4'
+        }],
+            nestedCols = [{
+                itemId: 'colf1',
+                columns: [{
+                    width: 100,
+                    text: 'Child 1',
+                    itemId: 'child1'
+                }, {
+                    width: 100,
+                    text: 'Child 2',
+                    itemId: 'child2'
+                }]
+            }, {
+                itemId: 'colf2',
+                width: 100
+            }, {
+                width: 100,
+                itemId: 'colf3'
+            }],
+            cols1, cols2;
+
+        describe('stateful props to grid', function() {
+            beforeEach(function() {
+                cols1 = Ext.clone(cols);
+                cols2 = Ext.clone(nestedCols);
+            });
+            it('should be able to persist column order and width', function() {
+                makeGrid(cols1, null, {
+                    stateId: 'grid-11',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                // increase column width from 100 to 200
+                resizeColumn(colMap.colf1, 100);
+
+                // move column from 0 to 1
+                moveColumn(colMap.colf1, 210);
+
+                store = grid = Ext.destroy(grid, store);
+
+                makeGrid(cols1, null, {
+                    stateId: 'grid-11',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                runs(function() {
+                    expect(colMap.colf1.getWidth()).toBe(200);
+                    expect(colMap.colf1.parent.indexOf(colMap.colf1)).toBe(1);
+                });
+            });
+
+            it('should be able to persist column hidden state', function() {
+                makeGrid(cols1, null, {
+                    stateId: 'grid-col-hide',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                colMap.colf2.hide();
+
+                store = grid = Ext.destroy(grid, store);
+
+                makeGrid(cols1, null, {
+                    stateId: 'grid-col-hide',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                runs(function() {
+                    expect(colMap.colf2.getHidden()).toBe(true);
+                });
+            });
+
+            it('should be able to persist grouped column weight', function() {
+                makeGrid(cols2, null, {
+                    stateId: 'grid-nested-col',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                moveColumn(colMap.colf1, 210);
+
+                store = grid = Ext.destroy(grid, store);
+
+                makeGrid(cols2, null, {
+                    stateId: 'grid-nested-col',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                runs(function() {
+                    expect(colMap.colf1.parent.indexOf(colMap.colf1)).toBe(1);
+                });
+            });
+
+            it('should be able to persist grouped child column weight', function() {
+                makeGrid(cols2, null, {
+                    stateId: 'grid-nested-col1',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                moveColumn(colMap.colf1, 210);
+
+                moveColumn(colMap.child1, 170, -20);
+
+                store = grid = Ext.destroy(grid, store);
+
+                makeGrid(cols2, null, {
+                    stateId: 'grid-nested-col1',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                runs(function() {
+                    expect(colMap.colf1.parent.indexOf(colMap.colf1)).toBe(1);
+                    expect(colMap.colf1.parent.indexOf(colMap.child1)).toBe(2);
+                });
+            });
+
+            it('should be able to hide group if no child item is available', function() {
+                makeGrid(cols2, null, {
+                    stateId: 'grid-nested-col2',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                moveColumn(colMap.colf1, 210);
+                moveColumn(colMap.child1, 170, -20);
+                moveColumn(colMap.child2, 170, -20);
+
+                store = grid = Ext.destroy(grid, store);
+
+                makeGrid(cols2, null, {
+                    stateId: 'grid-nested-col2',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                runs(function() {
+                    expect(colMap.colf1.parent.indexOf(colMap.child1)).toBe(2);
+                    expect(colMap.colf1.parent.indexOf(colMap.child2)).toBe(3);
+                });
+            });
+
+            it('should be able to honor column stateful property', function() {
+                makeGrid([{
+                    itemId: 'colf1',
+                    width: 100,
+                    stateful: false
+                }, {
+                    width: 100,
+                    itemId: 'colf2'
+                }, {
+                    width: 100,
+                    itemId: 'colf3'
+                }, {
+                    width: 100,
+                    itemId: 'colf4'
+                }], null, {
+                    stateId: 'grid-2',
+                    stateful: true
+                });
+
+                // increase column width from 100 to 110
+                resizeColumn(colMap.colf1, 10);
+
+                // move column from 0 to 1
+                moveColumn(colMap.colf1, 110);
+
+                store = grid = Ext.destroy(grid, store);
+
+                makeGrid([{
+                    itemId: 'colf1',
+                    width: 100,
+                    stateful: false
+                }, {
+                    width: 100,
+                    itemId: 'colf2'
+                }, {
+                    width: 100,
+                    itemId: 'colf3'
+                }, {
+                    width: 100,
+                    itemId: 'colf4'
+                }], null, {
+                    stateId: 'grid-2',
+                    stateful: true
+                });
+
+                runs(function() {
+                    // column is not stateful
+                    expect(colMap.colf1.getWidth()).toBe(100);
+                    expect(colMap.colf1.parent.indexOf(colMap.colf1)).toBe(0);
+                });
+            });
+
+            it('events', function() {
+                var spy = jasmine.createSpy();
+
+                makeGrid(cols1, null, {
+                    stateId: 'grid-col-event',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                grid.on('beforestatesave', spy);
+                grid.on('statesave', spy);
+
+                colMap.colf2.hide();
+
+                expect(spy.callCount).toBe(2);
+
+                store = grid = Ext.destroy(grid, store);
+
+                makeGrid(cols1, null, {
+                    stateId: 'grid-col-event',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                grid.on('beforestaterestore', spy);
+                grid.on('staterestore', spy);
+
+                expect(spy.callCount).toBe(2);
+            });
+
+            it('should be able to persist dynamic columns', function() {
+                makeGrid(cols1, null, {
+                    stateId: 'grid-col-dynamic',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                var items = grid.getHeaderContainer().add(
+                    [{
+                        text: 'New Column 1',
+                        stateId: 'newCol1'
+                    }, {
+                        text: 'New Column 2',
+                        stateId: 'newCol2'
+                    }]
+                );
+
+                expect(items[0].parent.indexOf(items[0])).toBe(4);
+                expect(items[1].parent.indexOf(items[1])).toBe(5);
+
+                moveColumn(items[0], -210);
+
+                expect(items[0].parent.indexOf(items[0])).toBe(2);
+                store = grid = Ext.destroy(grid, store);
+
+                makeGrid(cols1, null, {
+                    stateId: 'grid-col-dynamic',
+                    stateful: true,
+                    columnStateEventDelay: 0
+                });
+
+                items = grid.getHeaderContainer().add(
+                    [{
+                        text: 'New Column 1',
+                        stateId: 'newCol1'
+                    }, {
+                        text: 'New Column 2',
+                        stateId: 'newCol2'
+                    }]
+                );
+
+                expect(items[0].parent.indexOf(items[0])).toBe(2);
+            });
+        });
+    });
+
+    describe('ensurevisible for hidden grid', function() {
+        it('should not enter infinite loop when calling ensurevisible on hidden grid', function() {
+            var panel = Ext.create({
+                xtype: 'panel',
+                renderTo: Ext.getBody(),
+                width: 600,
+                height: 600,
+                items: [{
+                    xtype: 'container',
+                    items: [{
+                        xtype: 'button',
+                        id: 'btn',
+                        text: 'Click me to hang',
+                        handler: function() {
+                            var grid = Ext.getCmp('grid'),
+                                record = grid.getStore().getAt(0);
+
+                            grid.ensureVisible({
+                                record: record,
+                                focus: true,
+                                select: true
+                            });
+                        }
+                    }]
+                }, {
+                    xtype: 'grid',
+                    id: 'grid',
+                    hidden: true,
+                    columns: [{
+                        dataIndex: 'foo',
+                        text: 'Foo',
+                        flex: 1
+                    }],
+                    store: {
+                        data: {
+                            foo: 1
+                        }
+                    }
+                }]
+            });
+
+            var button = Ext.getCmp('btn');
+
+            jasmine.fireMouseEvent(button.el, 'click');
+            expect(button.isEnabled()).toBe(true);
+            panel.destroy();
+        });
+    });
+
+    describe('Column menu item positions', function() {
+        it('should be at same position when reopened', function() {
+            var errorSpy = spyOn(window, 'onerror'),
+                menu;
+
+            makeGrid(null, null, {
+                plugins: [{
+                    type: 'gridfilters'
+                }]
+            });
+
+            // reopen column menu multiple times to check the position of columns and filter options
+            for (var i = 0; i < 5; i++) {
+
+                Ext.testHelper.tap(colMap.colf1.triggerElement);
+
+                menu = colMap.colf1.getMenu();
+
+                expect(menu.isVisible()).toBe(true);
+                expect(menu.getItems().items[2].getText()).toBe('Columns');
+                expect(menu.getItems().items[3].getText()).toBe('Filter');
+                menu.hide();
+            }
+
+            // And no error
+            expect(errorSpy).not.toHaveBeenCalled();
         });
     });
 });

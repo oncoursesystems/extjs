@@ -913,6 +913,11 @@ Ext.define('Ext.list.Tree', {
          * @private
          */
         onRefresh: function(store) {
+            // T-28372 : Ignore root change on expand, if child node is available.
+            if (this.skipNextRefresh) {
+                return;
+            }
+
             // Because the tree can use bottom up or top down filtering (or reload), 
             // don't try and figure out, what changed here
             // just do a global refresh

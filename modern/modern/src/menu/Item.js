@@ -531,6 +531,11 @@ Ext.define('Ext.menu.Item', {
             var me = this,
                 linkEl = me.bodyElement;
 
+            // EXTJS-29520 - Preventing item click on windows touch device
+            if (Ext.isWindows) {
+                return;
+            }
+
             me.linkClickListener = linkEl.on({
                 click: me.onClick,
                 capture: true,

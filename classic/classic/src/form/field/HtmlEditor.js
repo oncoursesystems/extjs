@@ -732,7 +732,10 @@ Ext.define('Ext.form.field.HtmlEditor', {
             option, i, len, lower;
 
         if (!me.defaultFont) {
-            font = me.textareaEl.getStyle('font-family');
+            // getStyle returns font-family as a string wrapped in double quotes.
+            // Sample: '"Open Sans", "Helvetica Neue", helvetica, arial, verdana, sans-serif'.
+            // Replacing double quotes to have a correct string format.
+            font = me.textareaEl.getStyle('font-family').replace(/"/g, '');
             font = Ext.String.capitalize(font.split(',')[0]);
             fonts = Ext.Array.clone(me.fontFamilies);
             Ext.Array.include(fonts, font);

@@ -1,7 +1,7 @@
 Ext.define('Ext.locale.ja.ux.colorpick.Selector', {
     override: 'Ext.ux.colorpick.Selector',
 
-    okButtonText: 'OK',
+    okButtonText: 'できた',
     cancelButtonText: 'キャンセル'
 });
 // This is needed until we can refactor all of the locales into individual files
@@ -33,7 +33,7 @@ Ext.define('Ext.locale.ja.Panel', {
     config: {
         standardButtons: {
             ok: {
-                text: 'OK'
+                text: 'できた'
             },
             abort: {
                 text: 'やめる'
@@ -548,7 +548,7 @@ Ext.define('Ext.locale.ja.picker.Date', {
     override: 'Ext.picker.Date',
 
     config: {
-        doneButton: 'done',
+        doneButton: 'できた',
         monthText: '月',
         dayText: '日',
         yearText: '年'
@@ -558,7 +558,7 @@ Ext.define('Ext.locale.ja.picker.Picker', {
     override: 'Ext.picker.Picker',
 
     config: {
-        doneButton: 'done',
+        doneButton: 'できた',
         cancelButton: 'キャンセル'
     }
 });

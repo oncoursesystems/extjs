@@ -217,4 +217,100 @@ function() {
             expect(getWidget(0).hasFocus).toBe(true);
         });
     });
+
+    describe("Drag and drop to iframe", function() {
+        it("should be able drag and drop row value to iframe HTML editor", function() {
+            var cell, rec, iframeEl;
+
+            makeTree(null, {
+                store: new Ext.data.TreeStore({
+                    root: {
+                        expanded: true,
+                        children: [{
+                            text: 'detention',
+                            leaf: true
+                        }, {
+                            text: 'homework',
+                            expanded: true,
+                            children: [{
+                                text: 'book report',
+                                leaf: true
+                            }, {
+                                text: 'algebra',
+                                leaf: true
+                            }]
+                        }, {
+                            text: 'buy lottery tickets',
+                            leaf: true
+                        }]
+                    }
+                }),
+                viewConfig: {
+                    plugins: {
+                        ptype: 'treeviewdragdrop',
+                        enableDrop: false,
+                        dragText: 'Drag and drop to reorganize',
+                        dragGroup: 'demo',
+                        dropGroup: 'demo'
+                    }
+                },
+                rootVisible: false,
+                dockedItems: {
+                    xtype: 'htmleditor',
+                    docked: 'top',
+                    listeners: {
+                        afterrender: {
+                            fn: function(HtmlEditor) {
+                                var body = HtmlEditor.iframeEl;
+
+                                this.formPanelDropTarget = new Ext.dd.DropTarget(body, {
+                                    ddGroup: 'demo',
+                                    notifyOver: function(dd, e, data) {
+                                        if (HtmlEditor.activated) {
+                                            HtmlEditor.win.focus();
+                                        }
+                                        else {
+                                            HtmlEditor.onFirstFocus();
+                                        }
+
+                                        return this.dropAllowed;
+                                    },
+                                    notifyDrop: function(ddSource, e, data) {
+                                        var selectedRecord = ddSource.dragData.records[0],
+                                            record = selectedRecord.getData();
+
+                                        if (record.hasOwnProperty('text')) {
+                                            HtmlEditor.insertAtCursor(record.text);
+
+                                            return true;
+                                        }
+
+                                        return false;
+                                    }
+                                });
+                            },
+                            single: true
+                        }
+                    }
+                }
+            });
+
+            rec = store.getAt(0);
+            cell = view.getCell(rec, 0);
+            iframeEl = tree.down('htmleditor').iframeEl;
+
+            // Disable fx to avoid animation errors while destroying the treepanel
+            Ext.enableFx = false;
+
+            runs(function() {
+                jasmine.fireMouseEvent(cell, 'mousedown');
+                jasmine.fireMouseEvent(iframeEl.dom, 'mousemove', 53, 50);
+                expect(Ext.Element.query('.x-dd-drag-current.x-dd-drop-ok').length).toBe(1);
+                // finish the mousemove and mousedown to avoid event publisher leaks
+                jasmine.fireMouseEvent(iframeEl.dom, 'mouseup');
+                jasmine.fireMouseEvent(cell, 'mouseup');
+                Ext.enableFx = true;
+            });
+        });
+    });
 });

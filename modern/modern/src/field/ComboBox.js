@@ -640,7 +640,7 @@ Ext.define('Ext.field.ComboBox', {
                 combo: me,
                 cancel: false
             }, query)),
-            picker, source;
+            picker, source, valueCollection, selections, i;
 
         // Allow veto.
         if (store && queryPlan !== false && !queryPlan.cancel) {
@@ -684,6 +684,28 @@ Ext.define('Ext.field.ComboBox', {
                 // or reload starting at page 1 if remote.
                 filters.beginUpdate();
                 filters.endUpdate();
+
+                // to hold the values getting removed after store reloads if queryMode is 'remote'
+                if (!isLocal && me.getMultiSelect()) {
+                    valueCollection = me.getValueCollection();
+
+                    if (valueCollection.getCount()) {
+                        selections = valueCollection.getRange();
+
+                        for (i = 0; i < selections.length; i++) {
+                            // if the records doesn't have id key 
+                            // then store adds its won ids for each record, 
+                            // which will change on every reload
+
+                            // when store gets reloaded it tries to find already
+                            // selected records by its id, which will not be available
+                            // so the selected records will be removed 
+                            // assuming it doesn't exists in the store
+                            // so marking this records as retainSelection to skip it from removing
+                            selections[i].retainSelection = true;
+                        }
+                    }
+                }
 
                 // If we are doing local filtering, the upstream store MUST be loaded.
                 // Now we use a ChainedStore we must do this. In previous versions

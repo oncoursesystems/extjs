@@ -194,8 +194,8 @@ Ext.define('Ext.picker.Slot', {
      * Updates the {@link #align} configuration
      */
     updateAlign: function(newAlign, oldAlign) {
-        this.element.swapCls(Ext.baseCSSPrefix + 'picker-' + oldAlign,
-                             Ext.baseCSSPrefix + 'picker-' + newAlign);
+        this.element.swapCls(Ext.baseCSSPrefix + 'picker-' + newAlign,
+                             Ext.baseCSSPrefix + 'picker-' + oldAlign);
     },
 
     /**

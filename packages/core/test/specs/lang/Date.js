@@ -85,7 +85,6 @@ topSuite("Ext.Date", function() {
           expect(Ext.Date.getShortDayName(4)).toBe("Thu");
           expect(Ext.Date.getShortDayName(5)).toBe("Fri");
           expect(Ext.Date.getShortDayName(6)).toBe("Sat");
-
        });
     });
 
@@ -1183,6 +1182,56 @@ topSuite("Ext.Date", function() {
                 expect(parse('2016 2 29')).toEqual(twentynineFeb2016);
                 expect(parse('2015 2 29')).toBe(null);
             });
+        });
+    });
+
+    describe('align', function() {
+        it("should align hour", function() {
+            var date = new Date(2001, 0, 1, 10, 30, 0, 0),
+                modifiedDate = Ext.Date.align(date, Ext.Date.HOUR, 3),
+                expectedModifiedDate = new Date(2001, 0, 1, 9, 0, 0, 0);
+
+            expect(modifiedDate).toEqual(expectedModifiedDate);
+
+            modifiedDate = Ext.Date.align(date, Ext.Date.HOUR, 48);
+            expectedModifiedDate = new Date(2001, 0, 1, 0, 0, 0, 0);
+
+            expect(modifiedDate).toEqual(expectedModifiedDate);
+        });
+
+        it("should align day", function() {
+            var date = new Date(2023, 10, 25, 10, 30, 0, 0),
+                modifiedDate = Ext.Date.align(date, Ext.Date.DAY, 7),
+                expectedModifiedDate = new Date(2023, 10, 21, 0, 0, 0, 0);
+
+            expect(modifiedDate).toEqual(expectedModifiedDate);
+
+            modifiedDate = Ext.Date.align(date, Ext.Date.DAY, 60);
+            expectedModifiedDate = new Date(2023, 10, 1, 0, 0, 0, 0);
+
+            expect(modifiedDate).toEqual(expectedModifiedDate);
+        });
+
+        it("should align month", function() {
+            var date = new Date(2000, 2, 1, 0, 0, 0, 0),
+                modifiedDate = Ext.Date.align(date, Ext.Date.MONTH, 6),
+                expectedModifiedDate = new Date(2000, 0, 1, 0, 0, 0, 0);
+
+            expect(modifiedDate).toEqual(expectedModifiedDate);
+        });
+
+        it("should align year", function() {
+            var date = new Date(2001, 0, 1, 0, 0, 0, 0),
+                modifiedDate = Ext.Date.align(date, Ext.Date.YEAR, 1),
+                expectedModifiedDate = new Date(2001, 0, 1, 0, 0, 0, 0);
+
+            expect(modifiedDate).toEqual(expectedModifiedDate);
+
+            date = new Date(2002, 2, 1, 0, 0, 0, 0);
+            modifiedDate = Ext.Date.align(date, Ext.Date.YEAR, 5);
+            expectedModifiedDate = new Date(2000, 0, 1, 0, 0, 0, 0);
+
+            expect(modifiedDate).toEqual(expectedModifiedDate);
         });
     });
 });

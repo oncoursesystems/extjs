@@ -170,6 +170,15 @@ topSuite("Ext.data.BufferedStore", function() {
         expect(spy).toHaveBeenCalled();
     });
 
+    // see https://sencha.jira.com/browse/EXTJS-29617
+    it("should return the groupField when applied", function() {
+        createStore({
+            autoLoad: true,
+            groupField: 'name'
+        });
+        expect(bufferedStore.getGroupField()).toBe('name');
+    });
+
     describe("sorting", function() {
         it("should clear the data when calling sort with parameters when remote sorting", function() {
             createStore();

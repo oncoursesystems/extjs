@@ -1,7 +1,7 @@
 topSuite("Ext.view.View",
-    ['Ext.data.ArrayStore', 'Ext.selection.RowModel', 'Ext.app.ViewModel'],
+    ['Ext.data.ArrayStore', 'Ext.selection.RowModel', 'Ext.app.ViewModel', 'Ext.form.field.Text'],
 function() {
-    var view, store, TestModel, navModel,
+    var view, store, TestModel, navModel, panel,
         synchronousLoad = true,
         proxyStoreLoad = Ext.data.ProxyStore.prototype.load,
         loadStore = function() {
@@ -18,6 +18,12 @@ function() {
         extend: 'Ext.data.Model',
         fields: ['name', 'size']
     });
+
+    function makePanel(cfg) {
+        panel = new Ext.panel.Panel(Ext.apply({
+            renderTo: Ext.getBody()
+        }, cfg));
+    }
 
     function createView(cfg, data) {
         cfg = cfg || {};
@@ -2671,6 +2677,160 @@ function() {
             store.beginUpdate();
             view.destroy();
             expect(Ext.Component.layoutSuspendCount).toBe(count);
+        });
+    });
+
+    describe("Tab Focus on next node in dataview", function() {
+        var views, node, pressTab;
+
+        afterEach(function() {
+            // Assuming you have references to orphaned Ext.dom.Element instances
+            var panelEl = Ext.getCmp('myPanel'),
+                textEl = Ext.getCmp('myTextFld');
+
+            Ext.destroy(view, Ext.get('test1'), Ext.get('test2'), panelEl, textEl);
+
+        });
+
+        beforeEach(function() {
+            views = createView({
+                itemSelector: 'div.dataview',
+                tpl: [
+                    '<tpl for=".">',
+                    '<div style="background-color: #eeeeee; padding: 5px; margin: 5px" class="dataview">',
+                    '<a id="test1" class="test1" href="http://www.sencha.com">{firstName}</a><br>',
+                    '<a id="test2" class="test2" href="http://www.sencha.com">{lastName}</a>',
+                    '</div>',
+                    '</tpl>'
+                ],
+                store: {
+                    autoLoad: true,
+                    sortOnLoad: true,
+                    fields: ['name', 'thumb', 'url', 'type'],
+                    data: [
+                        { firstName: 'Peter', lastName: 'Venkman' },
+                        { firstName: 'Egon', lastName: 'Spengler' }
+                    ]
+                }
+            });
+
+            makePanel({
+                renderTo: Ext.getBody(),
+                id: 'myPanel',
+                items: [
+                    views,
+                    {
+                        xtype: 'textfield',
+                        label: 'Text Field 1',
+                        id: 'myTextFld'
+                    }]
+            });
+        });
+
+        it("Should focus on text field in dataview on tab key press when 'tabInnerItems' is false", function() {
+
+            runs(function() {
+                node = view.getNode(0);
+                node.focus();
+                pressTab = jasmine.pressTabKey;
+                pressTab(node, true);
+
+            });
+
+            waitsFor(function() {
+                expect(document.activeElement.type).toBe('text');
+
+                return true;
+            }, 1000);
+
+        });
+
+    });
+
+    describe("Tab Focus on anchor tag in dataview", function() {
+        var views, node, pressTab;
+
+        afterEach(function() {
+            // Assuming you have references to orphaned Ext.dom.Element instances
+            var panelEl = Ext.getCmp('myPanel'),
+                textEl = Ext.getCmp('myTextFld');
+
+            Ext.destroy(view, Ext.get('test1'), Ext.get('test2'), panelEl, textEl);
+
+        });
+
+        beforeEach(function() {
+            views = createView({
+                itemSelector: 'div.dataview',
+                tabInnerItems: true,
+                tpl: [
+                    '<tpl for=".">',
+                    '<div style="background-color: #eeeeee; padding: 5px; margin: 5px" class="dataview">',
+                    '<a id="test1" class="test1" href="http://www.sencha.com">{firstName}</a><br>',
+                    '<a id="test2" class="test2" href="http://www.sencha.com">{lastName}</a>',
+                    '</div>',
+                    '</tpl>'
+                ],
+                store: {
+                    autoLoad: true,
+                    sortOnLoad: true,
+                    fields: ['name', 'thumb', 'url', 'type'],
+                    data: [
+                        { firstName: 'Peter', lastName: 'Venkman' },
+                        { firstName: 'Egon', lastName: 'Spengler' }
+                    ]
+                }
+            });
+
+            makePanel({
+                renderTo: Ext.getBody(),
+                id: 'myPanel',
+                items: [
+                    views,
+                    {
+                        xtype: 'textfield',
+                        label: 'Text Field 2',
+                        id: 'myTextFld'
+                    }]
+            });
+        });
+
+        it("Should focus on anchor tag in dataview on tab key press when 'tabInnerItems' is true", function() {
+
+            runs(function() {
+                node = view.getNode(0);
+                node.focus();
+                pressTab = jasmine.pressTabKey;
+
+                pressTab(node, true);
+            });
+
+            waitsFor(function() {
+                expect(document.activeElement.innerText).toBe('Peter');
+
+                return true;
+            }, 1000);
+
+            runs(function() {
+                pressTab(document.activeElement, true);
+            });
+
+            waitsFor(function() {
+                expect(document.activeElement.innerText).toBe('Venkman');
+
+                return true;
+            }, 1000);
+
+            runs(function() {
+                pressTab(document.activeElement, true);
+            });
+
+            waitsFor(function() {
+                expect(document.activeElement.type).toBe('text');
+
+                return true;
+            }, 1000);
+
         });
     });
 });

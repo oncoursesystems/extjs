@@ -230,7 +230,7 @@ Ext.define('Ext.util.Grouper', {
             observers = me.observers,
             methodName = me._eventToMethodMap[eventName],
             added = 0,
-            index, length, method, observer;
+            index, method, observer;
 
         args = args || [];
 
@@ -245,7 +245,7 @@ Ext.define('Ext.util.Grouper', {
                 me.dirtyObservers = false;
             }
 
-            for (index = 0, length = observers.length; index < length; ++index) {
+            for (index = 0; index < observers.length; ++index) {
                 method = (observer = observers[index])[methodName];
 
                 if (method) {

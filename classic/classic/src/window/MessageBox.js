@@ -438,14 +438,16 @@ Ext.define('Ext.window.MessageBox', {
     },
 
     onPromptKey: function(textField, e) {
-        var me = this;
+        var me = this,
+            okButton = me.msgButtons.ok,
+            yesButton = me.msgButtons.yes;
 
         if (e.keyCode === e.RETURN || e.keyCode === 10) {
-            if (me.msgButtons.ok.isVisible()) {
-                me.msgButtons.ok.handler.call(me, me.msgButtons.ok);
+            if (okButton.isVisible() && !okButton.isDisabled()) {
+                okButton.handler.call(me, okButton);
             }
-            else if (me.msgButtons.yes.isVisible()) {
-                me.msgButtons.yes.handler.call(me, me.msgButtons.yes);
+            else if (yesButton.isVisible() && !yesButton.isDisabled()) {
+                yesButton.handler.call(me, yesButton);
             }
         }
     },

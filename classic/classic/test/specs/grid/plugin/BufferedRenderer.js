@@ -3540,4 +3540,77 @@ topSuite("Ext.grid.plugin.BufferedRenderer", [
             });
         });
     });
+
+    describe("Grid with viewmodel ", function() {
+        beforeEach(function() {
+            spyOn(console, 'error');
+          });
+
+        it("should not throw error while scrolling", function() {
+            var Person = Ext.define(null, {
+                extend: 'Ext.data.Model',
+                fields: ['name'],
+                proxy: {
+                    type: 'ajax',
+                    url: '/foo',
+                    reader: {
+                        rootProperty: 'data'
+                    }
+                }
+            }),
+            count = 0;
+
+            store = new Ext.data.Store({
+                model: Person,
+                data: makeData(1000)
+            });
+
+            grid = new Ext.grid.Panel({
+                width: 600,
+                height: 305,
+                store: store,
+                deferRowRender: false,
+                viewModel: {
+                    data: {
+                        count: 0
+                    },
+                    formulas: {
+                        testCount: function(get) {
+                            return "Count:" + get('count');
+                        }
+                    }
+                },
+                bind: {
+                    title: '{testCount}'
+                 },
+                columns: [{
+                    dataIndex: 'id',
+                    renderer: function(v) {
+                        return '<span style="line-height:25px">' + v + '</span>';
+                    },
+                    producesHTML: true
+                }, {
+                    dataIndex: 'name'
+                }],
+                renderTo: Ext.getBody()
+            });
+            view = grid.getView();
+            scroller = view.isLockingView ? grid.getScrollable() : view.getScrollable();
+            // Wait until known correct condition is met.
+            // Timeout === test failure.
+            jasmine.waitsForScroll(scroller, function() {
+                if (view.all.endIndex === store.getCount() - 1) {
+                    return true;
+                }
+
+                count++;
+                grid.getViewModel().set('count', count.toString());
+                scroller.scrollBy(0, 1000);
+            }, 'view is scrolled to the last record');
+
+            runs(function() {
+                expect(console.error).not.toHaveBeenCalled();
+            });
+        });
+    });
 });

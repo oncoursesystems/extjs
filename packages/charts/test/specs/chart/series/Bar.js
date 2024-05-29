@@ -238,4 +238,69 @@ topSuite("Ext.chart.series.Bar", ['Ext.chart.*', 'Ext.data.ArrayStore'], functio
             });
         });
     });
+
+    describe("label renderer", function() {
+        var chart, layoutDone;
+
+        afterEach(function() {
+            chart = Ext.destroy(chart);
+            layoutDone = false;
+        });
+
+        it("should have model field information in label renderer rendererData parameter", function() {
+            runs(function() {
+                chart = Ext.create({
+                    xtype: 'cartesian',
+                    renderTo: document.body,
+                    width: 300,
+                    height: 200,
+                    innerPadding: {
+                        top: 40,
+                        left: 10,
+                        right: 10,
+                        bottom: 0
+                    },
+                    insetPadding: '50 10',
+                    store: {
+                        data: [{
+                            name: 'one',
+                            value: 1
+                        }, {
+                            name: 'two',
+                            value: 2
+                        }]
+                    },
+                    axes: [{
+                        type: 'numeric',
+                        position: 'left'
+                    }, {
+                        type: 'category',
+                        position: 'bottom'
+                    }],
+                    series: [{
+                        type: "bar",
+                        xField: "name",
+                        stacked: false,
+                        yField: ["value", "value2"],
+                        label: {
+                            field: ["value", "value2"],
+                            display: "insideEnd",
+                            renderer: function(text, sprite, config, ctx) {
+                                expect(ctx.field).toBeDefined();
+                            }
+                        }
+                    }],
+                    listeners: {
+                        layout: function() {
+                            layoutDone = true;
+                        }
+                    }
+                });
+            });
+
+            waitsFor(function() {
+                return layoutDone;
+            });
+        });
+    });
 });

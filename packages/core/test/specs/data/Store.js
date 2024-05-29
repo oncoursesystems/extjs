@@ -18,7 +18,7 @@ topSuite("Ext.data.Store", [
         var obj = {
             fn: fn || Ext.emptyFn
         },
-        spy = spyOn(obj, "fn");
+            spy = spyOn(obj, "fn");
 
         object.addListener(eventName, obj.fn);
 
@@ -31,8 +31,8 @@ topSuite("Ext.data.Store", [
     }
 
     function assignRecs() {
-        edRec    = store.getAt(0);
-        abeRec   = store.getAt(1);
+        edRec = store.getAt(0);
+        abeRec = store.getAt(1);
         aaronRec = store.getAt(2);
         tommyRec = store.getAt(3);
     }
@@ -86,9 +86,9 @@ topSuite("Ext.data.Store", [
                 }
             };
 
-            permute(arr);
+        permute(arr);
 
-            return result;
+        return result;
     }
 
     function completeWithData(data) {
@@ -112,12 +112,12 @@ topSuite("Ext.data.Store", [
             idProperty: 'email',
 
             fields: [
-                { name: 'name',      type: 'string' },
-                { name: 'email',     type: 'string' },
-                { name: 'evilness',  type: 'int' },
-                { name: 'group',     type: 'string' },
-                { name: 'old',       type: 'boolean' },
-                { name: 'valid',     type: 'string' },
+                { name: 'name', type: 'string' },
+                { name: 'email', type: 'string' },
+                { name: 'evilness', type: 'int' },
+                { name: 'group', type: 'string' },
+                { name: 'old', type: 'boolean' },
+                { name: 'valid', type: 'string' },
                 {
                     name: 'age',
                     type: 'int',
@@ -129,13 +129,13 @@ topSuite("Ext.data.Store", [
             ]
         });
 
-        edRaw    = { name: 'Ed Spencer',   email: 'ed@sencha.com',    evilness: 100, group: 'code',  old: false, age: 25, valid: 'yes' };
-        abeRaw   = { name: 'Abe Elias',    email: 'abe@sencha.com',   evilness: 70,  group: 'admin', old: false, age: 20, valid: 'yes' };
-        aaronRaw = { name: 'Aaron Conran', email: 'aaron@sencha.com', evilness: 5,   group: 'admin', old: true,  age: 26, valid: 'yes' };
-        tommyRaw = { name: 'Tommy Maintz', email: 'tommy@sencha.com', evilness: -15, group: 'code',  old: true,  age: 70, valid: 'yes' };
-        fredRaw = { name: 'Fred Moseley', email: 'fred.moseley@sencha.com', evilness: -10, group: 'support',  old: true,  age: 70, valid: 'yes' };
-        kevinRaw = { name: 'Kevin Cassidy', email: 'kevin.cassidy@sencha.com', evilness: -10, group: 'support',  old: true,  age: 70, valid: 'yes' };
-        scottRaw = { name: 'Scott Martin', email: 'scott.martin@sencha.com', evilness: -10, group: 'support',  old: true,  age: 70, valid: 'yes' };
+        edRaw = { name: 'Ed Spencer', email: 'ed@sencha.com', evilness: 100, group: 'code', old: false, age: 25, valid: 'yes' };
+        abeRaw = { name: 'Abe Elias', email: 'abe@sencha.com', evilness: 70, group: 'admin', old: false, age: 20, valid: 'yes' };
+        aaronRaw = { name: 'Aaron Conran', email: 'aaron@sencha.com', evilness: 5, group: 'admin', old: true, age: 26, valid: 'yes' };
+        tommyRaw = { name: 'Tommy Maintz', email: 'tommy@sencha.com', evilness: -15, group: 'code', old: true, age: 70, valid: 'yes' };
+        fredRaw = { name: 'Fred Moseley', email: 'fred.moseley@sencha.com', evilness: -10, group: 'support', old: true, age: 70, valid: 'yes' };
+        kevinRaw = { name: 'Kevin Cassidy', email: 'kevin.cassidy@sencha.com', evilness: -10, group: 'support', old: true, age: 70, valid: 'yes' };
+        scottRaw = { name: 'Scott Martin', email: 'scott.martin@sencha.com', evilness: -10, group: 'support', old: true, age: 70, valid: 'yes' };
     });
 
     afterEach(function() {
@@ -311,8 +311,8 @@ topSuite("Ext.data.Store", [
 
                 it("should pass the options if autoLoad is an object", function() {
                     var p = {
-                            foo: 'bar'
-                        },
+                        foo: 'bar'
+                    },
                         o = {
                             params: p
                         },
@@ -787,7 +787,7 @@ topSuite("Ext.data.Store", [
             });
 
             it("should match the start of strings as a default", function() {
-                 expect(store.find('email', 'to')).toBe(3);
+                expect(store.find('email', 'to')).toBe(3);
             });
         });
 
@@ -1482,7 +1482,7 @@ topSuite("Ext.data.Store", [
                 refreshMap = {};
 
                 store.on('refresh', function(store) {
-                   refreshMap = Ext.clone(store.moveMap);
+                    refreshMap = Ext.clone(store.moveMap);
                 });
             }
 
@@ -2261,6 +2261,12 @@ topSuite("Ext.data.Store", [
                 }).not.toThrow();
             });
 
+            it('should show exception on empty store to load raw data', function() {
+                expect(function() {
+                    Ext.StoreMgr.get('ext-empty-store').loadRawData();
+                }).toThrow("Cannot modify ext-empty-store");
+            });
+
             it('should return an empty result set', function() {
                 expect(Ext.StoreMgr.get('ext-empty-store').load().getCount()).toBe(0);
             });
@@ -2863,7 +2869,7 @@ topSuite("Ext.data.Store", [
 
                 describe("sorters", function() {
                     function makeSorter(prop, dir) {
-                       return {
+                        return {
                             property: prop,
                             direction: dir
                         };
@@ -2949,7 +2955,7 @@ topSuite("Ext.data.Store", [
 
                 describe("grouper", function() {
                     function makeGrouper(prop, dir) {
-                       return {
+                        return {
                             property: prop,
                             direction: dir
                         };
@@ -3076,7 +3082,7 @@ topSuite("Ext.data.Store", [
 
                 describe("filters", function() {
                     function makeFilter(prop, value) {
-                       return {
+                        return {
                             property: prop,
                             value: value
                         };
@@ -4026,7 +4032,7 @@ topSuite("Ext.data.Store", [
                 });
 
                 it("should trigger a sort when removing a sorter that is not the final sorter", function() {
-                     store.getSorters().add({
+                    store.getSorters().add({
                         property: 'group'
                     }, {
                         property: 'evilness',
@@ -4875,8 +4881,8 @@ topSuite("Ext.data.Store", [
                         groupBy();
 
                         var new1 = makeUser('new1@sencha.com', {
-                                group: 'code'
-                            }),
+                            group: 'code'
+                        }),
                             new2 = makeUser('new2@sencha.com', {
                                 group: 'admin'
                             });
@@ -4985,7 +4991,7 @@ topSuite("Ext.data.Store", [
                                 { name: 'Nige' },
                                 { name: 'Alex' }
                             ],
-                            record;
+                                record;
 
                             // Destroy the store created in the beforeEach(). We need a store of phantom records.
                             store.destroy();
@@ -5298,7 +5304,7 @@ topSuite("Ext.data.Store", [
                     expect(flushLoadSpy).not.toHaveBeenCalled();
                 });
 
-                it("should not load store with default autoLoad config (autoLoad: undefined)", function() {
+                it("should not load store with default autoLoad config(autoLoad: undefined)", function() {
                     var loadSpy = spyOn(Ext.data.ProxyStore.prototype, 'load').andCallThrough(),
                         flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad');
 
@@ -6232,7 +6238,7 @@ topSuite("Ext.data.Store", [
                 });
 
                 it("should unfilter when removing a filter", function() {
-                     store.getFilters().add({
+                    store.getFilters().add({
                         property: 'group',
                         value: 'code'
                     }, {
@@ -6421,14 +6427,14 @@ topSuite("Ext.data.Store", [
 
                 it("should raise an exception when calling filterBy", function() {
                     expect(function() {
-                        store.filterBy(function() {});
+                        store.filterBy(function() { });
                     }).toThrow();
                 });
 
                 it("should raise an exception when calling addFilter with a filterFn", function() {
                     expect(function() {
                         store.addFilter({
-                            filterFn: function() {}
+                            filterFn: function() { }
                         });
                     }).toThrow();
                 });
@@ -6436,7 +6442,7 @@ topSuite("Ext.data.Store", [
                 it("should raise an exception when adding a filter with a filterFn", function() {
                     expect(function() {
                         store.getFilters().add({
-                            filterFn: function() {}
+                            filterFn: function() { }
                         });
                     }).toThrow();
                 });
@@ -7132,7 +7138,7 @@ topSuite("Ext.data.Store", [
                 expect(spy.callCount).toBe(1);
             });
 
-            it("should pass the store, model, type & null (modified fields)", function() {
+            it("should pass the store, model, type & null(modified fields)", function() {
                 edRec.set('name', 'Foo');
                 edRec.set('age', 40);
                 store.on('update', spy);
@@ -7171,7 +7177,7 @@ topSuite("Ext.data.Store", [
                 expect(spy.callCount).toBe(1);
             });
 
-            it("should pass the store, model, type & null (modified fields)", function() {
+            it("should pass the store, model, type & null(modified fields)", function() {
                 edRec.set('name', 'Foo');
                 store.on('update', spy);
                 edRec.reject();
@@ -7699,7 +7705,7 @@ topSuite("Ext.data.Store", [
             expect(args[1]).toBe(metaArg);
         });
 
-        describe("disableMetaChangeEvent (for associated models)", function() {
+        describe("disableMetaChangeEvent(for associated models)", function() {
             var wasCalled = false;
 
             afterEach(function() {
@@ -8602,18 +8608,18 @@ topSuite("Ext.data.Store", [
 
     describe("summaries", function() {
         var M = Ext.define(null, {
-                extend: 'Ext.data.Model',
-                fields: ['group', {
-                    name: 'rate',
-                    summary: 'average'
-                }],
-                summary: {
-                    maxRate: {
-                        summary: 'max',
-                        field: 'rate'
-                    }
+            extend: 'Ext.data.Model',
+            fields: ['group', {
+                name: 'rate',
+                summary: 'average'
+            }],
+            summary: {
+                maxRate: {
+                    summary: 'max',
+                    field: 'rate'
                 }
-            }),
+            }
+        }),
             data;
 
         beforeEach(function() {
@@ -9095,22 +9101,22 @@ topSuite("Ext.data.Store", [
 
         function createRemoteStore(cfg) {
             cfg = Ext.apply({
-            asynchronousLoad: true,
-            remoteSort: true,
-            remoteFilter: true,
-            listeners: {
-                sort: function() {
-                    sortOrdinal = ++callSequence;
-                },
-                groupchange: function() {
-                    groupOrdinal = ++callSequence;
+                asynchronousLoad: true,
+                remoteSort: true,
+                remoteFilter: true,
+                listeners: {
+                    sort: function() {
+                        sortOrdinal = ++callSequence;
+                    },
+                    groupchange: function() {
+                        groupOrdinal = ++callSequence;
+                    }
                 }
-            }
             }, cfg);
             createStore(cfg);
         }
 
-        it('should not trigger a load for remoteSort and remoteFilter with default autoLoad config (autoLoad: undefined)', function() {
+        it('should not trigger a load for remoteSort and remoteFilter with default autoLoad config(autoLoad: undefined)', function() {
             var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough();
 
             createRemoteStore({
@@ -9218,7 +9224,7 @@ topSuite("Ext.data.Store", [
             completeWithData(successData);
 
             waitsFor(function() {
-                return  flushLoadSpy.callCount === 1;
+                return flushLoadSpy.callCount === 1;
             });
 
             runs(function() {

@@ -542,7 +542,8 @@ Ext.define('Ext.grid.header.Container', {
                 }
             }
 
-            targetCmp.focus();
+            // Delaying focus event for FireFox as it's stopping the click event's trigger.
+            targetCmp.focus(null, Ext.isGecko);
         }
     },
 
@@ -1021,6 +1022,7 @@ Ext.define('Ext.grid.header.Container', {
 
         if (menu) {
             item = menu.child('#columnItem');
+            item.menu.hideOnScroll = false;
 
             if (item) {
                 return item.menu;
@@ -1280,6 +1282,7 @@ Ext.define('Ext.grid.header.Container', {
         if (!me.menu) {
             me.menu = new Ext.menu.Menu({
                 hideOnParentHide: false,  // Persists when owning ColumnHeader is hidden
+                hideOnScroll: false,
                 items: me.getMenuItems(),
                 listeners: {
                     beforeshow: me.beforeMenuShow,

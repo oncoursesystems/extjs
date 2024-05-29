@@ -389,6 +389,13 @@ Ext.define('Ext.grid.column.Action', {
      */
     sortable: false,
 
+    /**
+     * @property {Boolean} ignoreEdit
+     * Set to true to prevent editing of row
+     * Check this cfg in {@link Ext.grid.plugin.RowEditing}
+    */
+    ignoreEdit: true,
+
     innerCls: Ext.baseCSSPrefix + 'grid-cell-inner-action-col',
 
     actionIconCls: Ext.baseCSSPrefix + 'action-col-icon',
@@ -523,7 +530,7 @@ Ext.define('Ext.grid.column.Action', {
             ret += '<' + (icon ? 'img' : 'div') +
                 (typeof tabIndex === 'number' ? ' tabIndex="' + tabIndex + '"' : '') +
                 (ariaRole ? ' role="' + ariaRole + '"' : ' role="presentation"') +
-                (' aria-label="' + me.text + '"') +
+                (' aria-label="' + (item.ariaLabel || me.text) + '"') +
                 (icon ? (' alt="' + altText + '" src="' + item.icon + '"') : '') +
                 ' class="' + me.actionIconCls + ' ' + Ext.baseCSSPrefix + 'action-col-' + String(i) + ' ' +
                 (disabled ? me.disabledCls + ' ' : ' ') +

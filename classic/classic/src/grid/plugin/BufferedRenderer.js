@@ -2068,7 +2068,9 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
                 }
                 else {
                     row = rows.first();
-                    rowHeight = row.getHeight();
+                    // here, buffered rows takes time to render ,
+                    // adding null check to 'row' to avoid uncaught errors.
+                    rowHeight = row && row.getHeight();
 
                     // In IE8 we're adding bottom border on all the rows to work around
                     // the lack of :last-child selector, and we compensate that by setting

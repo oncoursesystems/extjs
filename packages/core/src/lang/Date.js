@@ -2134,62 +2134,54 @@ utilDate = {
      * @return {Date} The aligned date.
      */
     align: function(date, unit, step) {
-        var num = new nativeDate(+date);
+        var num = new Date(date);
 
         switch (unit.toLowerCase()) {
             case utilDate.MILLI:
                 return num;
 
             case utilDate.SECOND:
-                num.setUTCSeconds(num.getUTCSeconds() - num.getUTCSeconds() % step);
-                num.setUTCMilliseconds(0);
+                num.setSeconds(Math.floor(num.getSeconds() / step) * step);
+                num.setMilliseconds(0);
 
                 return num;
 
             case utilDate.MINUTE:
-                num.setUTCMinutes(num.getUTCMinutes() - num.getUTCMinutes() % step);
-                num.setUTCSeconds(0);
-                num.setUTCMilliseconds(0);
+                num.setMinutes(Math.floor(num.getMinutes() / step) * step);
+                num.setSeconds(0);
+                num.setMilliseconds(0);
 
                 return num;
 
             case utilDate.HOUR:
-                num.setUTCHours(num.getUTCHours() - num.getUTCHours() % step);
-                num.setUTCMinutes(0);
-                num.setUTCSeconds(0);
-                num.setUTCMilliseconds(0);
+                num.setHours(Math.floor(num.getHours() / step) * step);
+                num.setMinutes(0);
+                num.setSeconds(0);
+                num.setMilliseconds(0);
 
                 return num;
 
             case utilDate.DAY:
-                if (step === 7 || step === 14) {
-                    num.setUTCDate(num.getUTCDate() - num.getUTCDay() + 1);
-                }
-
-                num.setUTCHours(0);
-                num.setUTCMinutes(0);
-                num.setUTCSeconds(0);
-                num.setUTCMilliseconds(0);
+                num.setDate(Math.max(Math.floor(num.getDate() / step) * step, 1));
+                num.setHours(0);
+                num.setMinutes(0);
+                num.setSeconds(0);
+                num.setMilliseconds(0);
 
                 return num;
 
             case utilDate.MONTH:
-                num.setUTCMonth(num.getUTCMonth() - (num.getUTCMonth() - 1) % step, 1);
-                num.setUTCHours(0);
-                num.setUTCMinutes(0);
-                num.setUTCSeconds(0);
-                num.setUTCMilliseconds(0);
+                num.setMonth(Math.floor(num.getMonth() / step) * step);
+                num.setDate(1);
+                num.setHours(0);
+                num.setMinutes(0);
+                num.setSeconds(0);
+                num.setMilliseconds(0);
 
                 return num;
 
             case utilDate.YEAR:
-                num.setUTCFullYear(num.getUTCFullYear() - num.getUTCFullYear() % step, 1, 1);
-                num.setUTCHours(0);
-                num.setUTCMinutes(0);
-                num.setUTCSeconds(0);
-                num.setUTCMilliseconds(0);
-
-                return date;
+                return new Date(Math.floor(num.getFullYear() / step) * step, 0, 1, 0, 0, 0, 0);
         }
     },
 

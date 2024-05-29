@@ -110,7 +110,7 @@ Ext.define("Ext.locale.ja.picker.Date", {
 
 Ext.define("Ext.locale.ja.picker.Month", {
     override: "Ext.picker.Month",
-    okText: "&#160;OK&#160;",
+    okText: "できた",
     cancelText: "キャンセル"
 });
 
@@ -311,7 +311,7 @@ Ext.define("Ext.locale.ja.form.RadioGroup", {
 Ext.define("Ext.locale.ja.window.MessageBox", {
     override: "Ext.window.MessageBox",
     buttonText: {
-        ok: "OK",
+        ok: "できた",
         cancel: "キャンセル",
         yes: "はい",
         no: "いいえ"

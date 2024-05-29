@@ -528,11 +528,14 @@ Ext.define('Ext.field.Panel', {
             load.apply(window, args);
         }
         else if (url) {
-            return Ext.Ajax.request({
+            // Copying unspecified options as is and then passed to Ajax request
+            return Ext.Ajax.request(Ext.applyIf({
                 url: url,
                 timeout: (options.timeout || me.getTimeout()) * 1000,
                 method: options.method || 'GET',
                 autoAbort: options.autoAbort,
+                success: null,
+                failure: null,
                 headers: Ext.apply(
                     {
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -565,7 +568,7 @@ Ext.define('Ext.field.Panel', {
                         failureFn(response, responseText);
                     }
                 }
-            });
+            }, options));
         }
     },
 

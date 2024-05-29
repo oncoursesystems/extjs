@@ -848,7 +848,9 @@ Ext.define('Ext.grid.selection.Model', {
          * @private
          */
         refreshSelection: function() {
-            if (this.getSelection().isRecords) {
+            var selection = this.getSelection();
+
+            if (selection.isRecords || selection.isRows) {
                 this.callParent();
             }
             else {
@@ -1340,7 +1342,7 @@ Ext.define('Ext.grid.selection.Model', {
                 shiftKey = navigateEvent.shiftKey,
                 adding = true,
                 isSpace = navigateEvent.getKey() === navigateEvent.SPACE,
-                count, changedRow, selectionChanged, selected, continueLocation;
+                count, changedRow, selectionChanged, selected, lastSelected;
 
             // Honour the stopSelection flag which any prior handlers may set.
             // A SelectionColumn handles its own processing.
@@ -1417,10 +1419,14 @@ Ext.define('Ext.grid.selection.Model', {
                             sel.setRangeStart(me.selectionStart);
                         }
                         else {
+                            // To have lastselected index to create range for multiple selection
+                            lastSelected = Ext.isEmpty(sel.lastSelectedRecIndx)
+                                ? new Ext.grid.Location(view, me.getLastSelected()).recordIndex
+                                : sel.lastSelectedRecIndx;
+
                             // Because a range has already been started, and we are shift-selecting,
                             // we need to continue selection from the last selected location
-                            continueLocation = new Ext.grid.Location(view, me.getLastSelected());
-                            sel.setRangeStart(continueLocation.recordIndex);
+                            sel.setRangeStart(lastSelected);
                         }
 
                         // end the range selection at the current location

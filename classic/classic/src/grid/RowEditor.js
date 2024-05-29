@@ -1438,7 +1438,8 @@ Ext.define('Ext.grid.RowEditor', {
                 anchorToTarget: true,
                 targetOffset: [Ext.scrollbar.width(), 0],
                 constrainPosition: true,
-                constrainTo: document.body
+                constrainTo: document.body,
+                target: me.el
             });
             grid.add(tip);
 

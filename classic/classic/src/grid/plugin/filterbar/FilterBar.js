@@ -223,15 +223,27 @@ Ext.define('Ext.grid.plugin.filterbar.FilterBar', {
         this.resetFilters();
     },
 
-    onColumnAdd: function(header, column, index) {
-        var filter = column.getFilterType();
+    onColumnAdd: function() {
+        var me = this,
+            // get all the columns excepts group header
+            columns = me.getGridColumns(),
+            i, column, filter;
 
-        if (!filter || !filter.isGridFilter) {
-            filter = this.createColumnFilter(column);
+        // reposition all the filter bar items
+        // otherwise, nested column filters will not be positioned
+        for (i = 0; i < columns.length; i++) {
+            column = columns[i];
+
+            filter = column.getFilterType();
+
+            if (!filter || !filter.isGridFilter) {
+                filter = me.createColumnFilter(column);
+            }
+
+            me.getBar().insert(i, filter.getField());
         }
 
-        this.getBar().insert(index, filter.getField());
-        this.adjustFilterBarSize();
+        me.adjustFilterBarSize();
     },
 
     onColumnRemove: function() {
@@ -246,19 +258,25 @@ Ext.define('Ext.grid.plugin.filterbar.FilterBar', {
         this.setFilterVisibility(column, false);
     },
 
+    setFilterVisibility: function(column, visible) {
+        // Update the column filter component visibility for the nested columns
+        if (column.isGroupHeader) {
+            column.items.each(function(subColumn) {
+                this.setFilterVisibility(subColumn, visible);
+            }, this);
+        }
+
+        this.callParent(arguments);
+    },
+
     adjustFilterBarSize: function() {
         var bar = this.getBar(),
             headerCt = this.getGrid().headerCt,
-            width;
+            innerCt = headerCt.layout.innerCt;
 
-        if (bar.rendered) {
-            width = bar.innerCt.getWidth();
-
-            if (headerCt.tooNarrow) {
-                width += Ext.getScrollbarSize().width;
-            }
-
-            bar.innerCt.setWidth(width);
+        if (bar.rendered && innerCt) {
+            // Synchronize the width of the bars' inner container with that of the column headers'.
+            bar.innerCt.setWidth(innerCt.getWidth());
         }
     },
 

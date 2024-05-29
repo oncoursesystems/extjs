@@ -33,10 +33,17 @@
             border-left-width: 0 !important;
         }
     }
+
+    &.#{$prefix}slider-vertical {
+        justify-content: center;
+
+        .#{$prefix}track-el {
+            height: 100%
+        }
+    }
 }
 
 .#{$prefix}slider:not(.#{$prefix}toggleslider) .#{$prefix}fill-el {
-    border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
 

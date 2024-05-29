@@ -4,7 +4,7 @@ Ext.define('Ext.locale.ja.Panel', {
     config: {
         standardButtons: {
             ok: {
-                text: 'OK'
+                text: 'できた'
             },
             abort: {
                 text: 'やめる'

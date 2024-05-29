@@ -38,9 +38,16 @@ Ext.define('Ext.scroll.indicator.Bar', {
     }],
 
     constructor: function(config) {
-        this.callParent([ config ]);
+        var me = this,
+            cmp;
 
-        this.element.on('scroll', 'onScrollbarScroll', this);
+        me.callParent([ config ]);
+
+        cmp = me.getScroller().component;
+
+        // set the owner of the scroll component
+        me.ownerCmp = cmp && cmp.ownerCmp;
+        me.element.on('scroll', 'onScrollbarScroll', me);
     },
 
     doDestroy: function() {

@@ -129,7 +129,7 @@ Ext.define('Ext.tree.Column', {
         '<div class="{childCls} {elbowCls}-img {elbowCls}',
             '<tpl if="isLast">-end</tpl><tpl if="expandable">-plus {expanderCls}</tpl>" role="presentation"></div>',
         '<tpl if="checked !== null">',
-            '<div role="button" {ariaCellCheckboxAttr}',
+            '<div role="checkbox" {ariaCellCheckboxAttr}',
                 ' class="{childCls} {checkboxCls}<tpl if="checked"> {checkboxCls}-checked</tpl>"></div>',
         '</tpl>',
         '<tpl if="glyph">',
@@ -216,9 +216,10 @@ Ext.define('Ext.tree.Column', {
             parent = record.parentNode,
             rootVisible = view.rootVisible,
             lines = [],
-            parentData,
-            glyph,
-            glyphFontFamily;
+            ariaDescribeIds = [],
+            parentData, glyph, glyphFontFamily,
+            cell, ariaCheckDescId, ariaUnCheckDescId,
+            ariaExpandDescId, ariaCollapseDescId, checkCell, expanderEl;
 
         while (parent && (rootVisible || parent.data.depth > 0)) {
             parentData = parent.data;
@@ -250,6 +251,72 @@ Ext.define('Ext.tree.Column', {
             glyph = Ext.Glyph.fly(glyph);
             glyphFontFamily = glyph.fontFamily;
             glyph = glyph.character;
+        }
+
+        cell = view.getCell(record, me);
+
+        if (me.isTreeColumn) {
+            ariaCheckDescId = view.id + '-aria-description-checked';
+            ariaUnCheckDescId = view.id + '-aria-description-unchecked';
+            ariaExpandDescId = view.id + '-aria-description-expanded';
+            ariaCollapseDescId = view.id + '-aria-description-collapsed';
+
+            if (!Ext.isEmpty(data.checked)) {
+                ariaDescribeIds.push(data.checked ? ariaCheckDescId : ariaUnCheckDescId);
+
+                if (cell) {
+                    checkCell = cell.querySelector('.' + me.checkboxCls);
+
+                    if (checkCell) {
+                        checkCell.setAttribute(
+                            'aria-checked', data.checked);
+                    }
+                }
+            }
+
+            if (data.expandable && !data.leaf) {
+                ariaDescribeIds.push(data.expanded ? ariaExpandDescId : ariaCollapseDescId);
+
+                if (cell && Ext.isIE) {
+                    expanderEl = cell.querySelector('.' + me.expanderCls);
+
+                    if (expanderEl) {
+                        expanderEl.setAttribute(
+                            'aria-labelledby',
+                            data.expanded ? ariaExpandDescId : ariaCollapseDescId
+                        );
+                    }
+                }
+            }
+
+            metaData.tdAttr = metaData.tdAttr || "";
+
+            // If the renderer is called for updating the state of checkbox then
+            // the tdAttr is not used to re-render, hence handling it here
+            if (cell) {
+                if (ariaDescribeIds.length) {
+                    cell.setAttribute('aria-describedby', ariaDescribeIds.join(" "));
+                }
+                else {
+                    cell.removeAttribute('aria-describedby');
+                }
+            }
+            else {
+                if (ariaDescribeIds.length) {
+                    metaData.tdAttr += 'aria-describedby="' + ariaDescribeIds.join(" ") + '"';
+                }
+            }
+
+            // For IE, JAWS is unable to move the focus to the node if clicked on the node text,
+            // setting aria-describedby of inner element as an empty string will help keeping  
+            // focus to the node level
+            if (Ext.isIE) {
+                if (!metaData.cellInnerAttr) {
+                    metaData.cellInnerAttr = {};
+                }
+
+                metaData.cellInnerAttr['aria-describedby'] = "";
+            }
         }
 
         return {

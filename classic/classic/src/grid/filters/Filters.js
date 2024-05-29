@@ -153,11 +153,15 @@ Ext.define('Ext.grid.filters.Filters', {
      * Name of the object to be used to store listeners.
      * @private
      */
-    headerMenuListeners: {},
 
     init: function(grid) {
         var me = this,
             store, headerCt;
+
+        // Initialize headerMenuListeners property by a new empty object
+        // to prevent caching the headerMenuListeners properties
+        // while creating another grid with filters
+        me.headerMenuListeners = {};
 
         //<debug>
         Ext.Assert.falsey(me.grid);

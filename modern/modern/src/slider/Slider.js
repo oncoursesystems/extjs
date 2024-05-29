@@ -68,6 +68,14 @@ Ext.define('Ext.slider.Slider', {
         'Ext.fx.easing.EaseOut'
     ],
 
+    cachedConfig: {
+        /**
+         * @cfg {Boolean} vertical
+         * Orients the slider vertically rather than horizontally.
+         */
+        vertical: false
+    },
+
     /**
     * @event change
     * Fires when the value changes
@@ -106,7 +114,7 @@ Ext.define('Ext.slider.Slider', {
         // eslint-disable-next-line max-len
         // @cmd-auto-dependency { defaultType: "Ext.slider.Thumb", aliasPrefix:'widget.',typeProperty: 'xtype' }
         /**
-         * @cfg {Object} thumbDefaults The config object to factory 
+         * @cfg {Object} thumbDefaults The config object to factory
          * {@link Ext.slider.Thumb} instances
          * @accessor
          */
@@ -117,14 +125,18 @@ Ext.define('Ext.slider.Slider', {
                 easingX: {
                     duration: 300,
                     type: 'ease-out'
+                },
+                easingY: {
+                    duration: 300,
+                    type: 'ease-out'
                 }
             }
         },
 
         /**
          * @cfg {Number} increment The increment by which to snap each thumb when its value
-         * changes. Any thumb movement will be snapped to the nearest value that is a multiple 
-         * of the increment (e.g. if increment is 10 and the user tries to move the thumb to 67, 
+         * changes. Any thumb movement will be snapped to the nearest value that is a multiple
+         * of the increment (e.g. if increment is 10 and the user tries to move the thumb to 67,
          * it will be snapped to 70 instead)
          * @accessor
          */
@@ -160,8 +172,8 @@ Ext.define('Ext.slider.Slider', {
 
         /**
          * @cfg {Boolean} allowThumbsOverlapping Whether or not to allow multiple thumbs to
-         * overlap each other. Setting this to true guarantees the ability to select every 
-         * possible value in between {@link #minValue} and {@link #maxValue} that 
+         * overlap each other. Setting this to true guarantees the ability to select every
+         * possible value in between {@link #minValue} and {@link #maxValue} that
          * satisfies {@link #increment}
          * @accessor
          */
@@ -197,6 +209,7 @@ Ext.define('Ext.slider.Slider', {
      */
 
     classCls: Ext.baseCSSPrefix + 'slider',
+    verticalCls: Ext.baseCSSPrefix + 'slider-vertical',
 
     elementWidth: 0,
 
@@ -284,20 +297,26 @@ Ext.define('Ext.slider.Slider', {
 
     refreshOffsetValueRatio: function() {
         var me = this,
+            vertical = me.getVertical(),
             valueRange = me.getMaxValue() - me.getMinValue(),
-            trackWidth = me.elementWidth - me.thumbWidth;
+            trackWidth = me.elementWidth - me.thumbWidth,
+            trackHeight = me.elementHeight - me.thumbHeight;
 
-        me.offsetValueRatio = valueRange === 0 ? 0 : trackWidth / valueRange;
+        me.offsetValueRatio =
+            valueRange === 0 ? 0 : (vertical ? trackHeight : trackWidth) / valueRange;
     },
 
-    onThumbResize: function(thumb, thumbWidth) {
+    onThumbResize: function(thumb, thumbWidth, thumbHeight) {
         this.thumbWidth = thumbWidth;
+        this.thumbHeight = thumbHeight;
 
         this.refresh();
     },
 
-    onResize: function(width) {
+    onResize: function(width, height) {
         this.elementWidth = width;
+        this.elementHeight = height;
+
         this.refresh();
     },
 
@@ -337,11 +356,14 @@ Ext.define('Ext.slider.Slider', {
         me.fireEvent('dragstart', me, thumb, me.dragStartValue, e);
     },
 
-    onThumbDragMove: function(thumb, e, offsetX) {
+    onThumbDragMove: function(thumb, e, offsetX, offsetY) {
         var me = this,
             index = me.getThumbIndex(thumb),
+            vertical = me.getVertical(),
             offsetValueRatio = me.offsetValueRatio,
-            constrainedValue = me.constrainValue(me.getMinValue() + offsetX / offsetValueRatio);
+            constrainedValue = me.constrainValue(
+                me.getMinValue() + (vertical ? offsetY : offsetX) / offsetValueRatio
+            );
 
         e.stopPropagation();
 
@@ -361,7 +383,6 @@ Ext.define('Ext.slider.Slider', {
             increment = me.getIncrement(),
             pos = (value - minValue) * offsetValueRatio;
 
-        // draggable.setOffset((value - minValue) * offsetValueRatio, null, animation);
         thumb.setXY(pos, null, animation);
 
         values[index] = minValue + Math.round((pos / offsetValueRatio) / increment) * increment;
@@ -398,19 +419,22 @@ Ext.define('Ext.slider.Slider', {
 
     refreshAdjacentThumbConstraints: function(thumb) {
         var me = this,
+            vertical = me.getVertical(),
             offsetX = thumb.getLeft(),
+            offsetY = thumb.getTop(),
             thumbs = me.thumbs,
             index = me.getThumbIndex(thumb),
             previousThumb = thumbs[index - 1],
             nextThumb = thumbs[index + 1],
-            thumbWidth = me.getAllowThumbsOverlapping() ? 0 : me.thumbWidth;
+            thumbWidth = me.getAllowThumbsOverlapping() ? 0 : me.thumbWidth,
+            thumbHeight = me.getAllowThumbsOverlapping() ? 0 : me.thumbHeight;
 
         if (previousThumb) {
-            previousThumb.setDragMax(offsetX - thumbWidth);
+            previousThumb.setDragMax(vertical ? offsetY - thumbHeight : offsetX - thumbWidth);
         }
 
         if (nextThumb) {
-            nextThumb.setDragMin(offsetX + thumbWidth);
+            nextThumb.setDragMin(vertical ? offsetY + thumbHeight : offsetX + thumbWidth);
         }
     },
 
@@ -419,10 +443,11 @@ Ext.define('Ext.slider.Slider', {
      */
     onTap: function(e) {
         var me = this,
+            vertical = me.getVertical(),
             element = me.element,
             minDistance = Infinity,
             i, absDistance, testValue, closestIndex, oldValue, thumb,
-            ln, values, value, offset, elementX, targetElement, touchPointX;
+            ln, values, value, offset, elementX, targetElement, touchPointX, touchPointY, elementY;
 
         if (me.offsetValueRatio === 0 || me.isDisabled() || me.getReadOnly()) {
             return;
@@ -438,8 +463,14 @@ Ext.define('Ext.slider.Slider', {
         }
 
         touchPointX = e.touch.point.x;
+        touchPointY = e.touch.point.y;
+
         elementX = element.getX();
-        offset = touchPointX - elementX - (me.thumbWidth / 2);
+        elementY = element.getY();
+
+        offset = vertical
+            ? touchPointY - elementY - me.thumbHeight / 2
+            : touchPointX - elementX - me.thumbWidth / 2;
         value = me.constrainValue(me.getMinValue() + offset / me.offsetValueRatio);
         values = me.getArrayValues();
         ln = values.length;
@@ -706,6 +737,35 @@ Ext.define('Ext.slider.Slider', {
         }
     },
 
+    updateVertical: function(vertical) {
+        var me = this,
+            thumbs = me.thumbs,
+            i = 0,
+            thumb;
+
+        me.toggleCls(me.verticalCls, vertical);
+
+        if (me.initialized) {
+            for (; i < thumbs.length; i++) {
+                thumb = thumbs[i];
+
+                // Here we clear the drag limits, these will be recalculated on the next press.
+                // We do this as it is likely the dragMin will remain 0 between vert/horz changes
+                // This means the updater for dragMin will not be called on the thumb as the 
+                // previous and current value would both be 0.
+                // The updated is responsible for swapping X and Y constraints so we need to force
+                // the values to undefined values so the next press properly resets them.
+                thumb.setDragMin(null);
+                thumb.setDragMax(null);
+                thumb.updateVertical(vertical);
+            }
+
+            me.refresh();
+            me.fireEvent('directionChange', me, vertical);
+        }
+
+    },
+
     doDestroy: function() {
         this.thumbs = Ext.destroy(this.thumbs);
         this.callParent();
@@ -723,9 +783,11 @@ Ext.define('Ext.slider.Slider', {
          */
         refreshAllThumbConstraints: function() {
             var me = this,
+                vertical = me.getVertical(),
                 thumbs = me.thumbs,
                 len = thumbs.length,
                 thumbWidth = me.getAllowThumbsOverlapping() ? 0 : me.thumbWidth,
+                thumbHeight = me.getAllowThumbsOverlapping() ? 0 : me.thumbHeight,
                 i;
 
             for (i = 0; i < len; i++) {
@@ -733,7 +795,9 @@ Ext.define('Ext.slider.Slider', {
             }
 
             thumbs[0].setDragMin(0);
-            thumbs[len - 1].setDragMax(me.elementWidth - thumbWidth);
+            thumbs[len - 1].setDragMax(
+                vertical ? me.elementHeight - thumbHeight : me.elementWidth - thumbWidth
+            );
         },
 
         refreshSizes: function() {
@@ -741,25 +805,35 @@ Ext.define('Ext.slider.Slider', {
                 thumb = me.thumbs[0];
 
             me.elementWidth = me.element.measure('w');
+            me.elementHeight = me.element.measure('h');
 
             if (thumb) {
                 me.thumbWidth = thumb.element.measure('w');
+                me.thumbHeight = thumb.element.measure('h');
             }
 
             me.refresh();
         },
 
         snapThumbPosition: function(thumb, value) {
-            var ratio = this.offsetValueRatio,
+            var me = this,
+                vertical = me.getVertical(),
+                ratio = me.offsetValueRatio,
                 offset;
 
             if (isFinite(ratio)) {
-                offset = Ext.Number.correctFloat((value - this.getMinValue()) * ratio);
-                thumb.setXY(offset, null);
+                offset = Ext.Number.correctFloat((value - me.getMinValue()) * ratio);
+
+                if (vertical) {
+                    thumb.setXY(0, offset);
+                }
+                else {
+                    thumb.setXY(offset, 0);
+                }
             }
         },
 
-        syncFill: function(thumb, offset) {
+        syncFill: function(thumb, xOffset, yOffset) {
             var me = this,
                 thumbs = me.thumbs,
                 values = me.getArrayValues(),
@@ -767,19 +841,40 @@ Ext.define('Ext.slider.Slider', {
                 prevOffset = 0,
                 fillElements = me.trackElement.query(me.fillSelector, false),
                 thumbIndex = thumbs.indexOf(thumb),
+                vertical = me.getVertical(),
                 thumbOffset, fillElement, i;
 
-            offset = offset + Math.ceil(thumb.element.getWidth() / 2);
+            if (vertical) {
+                yOffset += Math.ceil(thumb.element.getHeight() / 2);
+            }
+            else {
+                xOffset += Math.ceil(thumb.element.getWidth() / 2);
+            }
 
             for (i = 0; i < ln; i++) {
                 thumb = thumbs[i];
                 fillElement = fillElements[i];
-                thumbOffset = (i === thumbIndex)
-                    ? offset
-                    : thumb.getLeft() + (thumb.element.getWidth() / 2);
 
-                fillElement.setWidth(thumbOffset - prevOffset);
-                fillElement.setLocalX(prevOffset);
+                if (vertical) {
+                    thumbOffset =
+                      (i === thumbIndex)
+                          ? yOffset
+                          : thumb.getTop() + (thumb.element.getHeight() / 2);
+                    fillElement.setHeight(thumbOffset - prevOffset);
+                    fillElement.setLocalY(prevOffset);
+                    fillElement.setLocalX(0);
+                    fillElement.setWidth(null);
+                }
+                else {
+                    thumbOffset =
+                      (i === thumbIndex)
+                          ? xOffset
+                          : thumb.getLeft() + (thumb.element.getWidth() / 2);
+                    fillElement.setWidth(thumbOffset - prevOffset);
+                    fillElement.setLocalX(prevOffset);
+                    fillElement.setLocalY(0);
+                    fillElement.setHeight(null);
+                }
 
                 prevOffset = thumbOffset;
             }

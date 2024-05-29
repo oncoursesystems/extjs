@@ -118,6 +118,19 @@ Ext.define('Ext.grid.filters.menu.Base', {
         this.column[active ? 'addCls' : 'removeCls'](this.plugin.filterCls);
     },
 
+    /**
+     * @param {*} filter 
+     * @returns filter.value property, the filter config object, or undefined. 
+     */
+    getDefaultToFilterBy: function(filter) {
+        if (Ext.isObject(filter) && filter.value !== undefined) {
+            return filter.value;
+        }
+        else {
+            return filter;
+        }
+    },
+
     privates: {
         doOnInputChange: function() {
             this.setChecked(true);
@@ -134,7 +147,10 @@ Ext.define('Ext.grid.filters.menu.Base', {
          *         value: 'saturday'
          *     }
          *
-         *  As more than one value, indicating the operator to use with each one, as:
+         *  As more than one value, indicating the operator to use with each one, as shown below.
+         *  Note that the list type is a single combobox which does not use the operator:value 
+         *  syntax. In that case, the initial value is provided by overriding 
+         *  getDefaultToFilterBy().
          *
          *     filter: {
          *         '>': 0,
@@ -164,12 +180,7 @@ Ext.define('Ext.grid.filters.menu.Base', {
 
             if (filter) {
 
-                if (Ext.isObject(filter) && filter.value !== undefined) {
-                    defaultToFilterBy = filter.value;
-                }
-                else {
-                    defaultToFilterBy = filter;
-                }
+                defaultToFilterBy = this.getDefaultToFilterBy(filter);
 
                 if (defaultToFilterBy !== undefined) {
 

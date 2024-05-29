@@ -351,7 +351,8 @@
         "d3",
         "calendar",
         "pivot-d3",
-        "package-loader"
+        "package-loader",
+        "froala-editor"
     ],
     "classic": {
         "js": [
@@ -374,7 +375,6 @@
         "requires": [
             "locale",
             "package-loader",
-            "froala-editor",
             "pivot-locale"
         ],
         "uses": [

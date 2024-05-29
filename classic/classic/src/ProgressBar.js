@@ -346,9 +346,8 @@ Ext.define('Ext.ProgressBar', {
             scope = me;
             config = config || {};
 
-            if (config.text != null) {
-                me.autoText = false;
-            }
+            me.autoText = !config.text;
+            me.text = config.text;
 
             me.updateText(config.text);
 

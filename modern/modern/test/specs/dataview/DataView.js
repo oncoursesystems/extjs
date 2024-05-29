@@ -1,4 +1,4 @@
-topSuite("Ext.dataview.DataView", ['Ext.data.ArrayStore'], function() {
+topSuite("Ext.dataview.DataView", ['Ext.data.ArrayStore', 'Ext.field.Time', 'Ext.viewport.Viewport'], function() {
 
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         view, store, navigationModel, selModel;
@@ -1797,6 +1797,26 @@ topSuite("Ext.dataview.DataView", ['Ext.data.ArrayStore'], function() {
                     selection: store.getAt(2)
                 });
                 expect(getElement(view.getItemAt(2))).toHaveCls('x-selected');
+            });
+
+            // see https://sencha.jira.com/browse/EXTJS-29749
+            (Ext.supports.Touch ? it : xit)("should open the time field's picker on trigger tap", function() {
+                var timeField, expandTrigger;
+
+                makeView({ items: [{
+                    xtype: 'timefield',
+                    width: 200
+                }] });
+                timeField = view.down('timefield');
+                expandTrigger = timeField.getTriggers().expand;
+                Ext.testHelper.touchStart(expandTrigger.el.dom);
+                Ext.testHelper.touchEnd(expandTrigger.el.dom);
+                waitsFor(function() {
+                   return timeField.getPicker().isVisible();
+                });
+                runs(function() {
+                    expect(timeField.getPicker().isVisible()).toBeTruthy();
+                });
             });
         });
 

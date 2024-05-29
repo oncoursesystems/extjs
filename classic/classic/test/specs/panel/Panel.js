@@ -5847,4 +5847,56 @@ topSuite("Ext.panel.Panel", [
             });
         });
     });
+
+    describe("panel collapse and reexpand", function() {
+
+        it("should reexpand a panel with msgTarget under after collapsed", function() {
+
+            var collapseSpy = jasmine.createSpy(),
+                expandSpy = jasmine.createSpy();
+
+            makePanel({
+                width: 300,
+                height: 300,
+                renderTo: Ext.getBody(),
+                title: 'Foo',
+                collapsible: true,
+                collapseDirection: 'top',
+
+                items: [{
+                    xtype: 'textfield',
+                    fieldLabel: 'champ1',
+                    name: 'champ1',
+                    allowBlank: false,
+                    msgTarget: 'under'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: 'champ2',
+                    name: 'champ2',
+                    msgTarget: 'under'
+                }],
+                listeners: {
+                    collapse: collapseSpy,
+                    expand: expandSpy
+                }
+
+            });
+
+            panel.down('textfield').focus();
+            panel.collapse();
+            waitsForSpy(collapseSpy);
+            runs(function() {
+                expect(panel.collapsed).toBe('top');
+                expect(collapseSpy.callCount).toBe(1);
+                panel.expand();
+            });
+            waitsForSpy(expandSpy);
+            runs(function() {
+                expect(panel.collapsed).toBe(false);
+                expect(expandSpy.callCount).toBe(1);
+            });
+
+        });
+    });
+
 });

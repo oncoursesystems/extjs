@@ -80,7 +80,7 @@ Ext.define('Ext.dataview.NavigationModel', {
             view = me.getView(),
             oldLocation = me.location,
             animation = options && options.animation,
-            scroller, child, record, itemContainer, childFloatStyle, locationView;
+            scroller, child, record, itemContainer, childFloatStyle, locationView, srcComp;
 
         if (location == null) {
             return me.clearLocation();
@@ -142,9 +142,11 @@ Ext.define('Ext.dataview.NavigationModel', {
             // Handling the impending focus event is separated because it also needs to
             // happen in case of a focus move caused by assistive technologies.
             me.handleLocationChange(location, options);
+            srcComp = Ext.Component.from(location.sourceElement);
 
             // Event handlers may have destroyed the view (and this)
-            if (!me.destroyed) {
+            // Bypass focus for triggers in Dataview
+            if (!me.destroyed && !(srcComp && srcComp.isTrigger)) {
                 me.doFocus();
             }
         }

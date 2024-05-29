@@ -377,7 +377,8 @@ Ext.define('Ext.grid.plugin.RowExpander', {
             nextBd = normalRow.down(me.rowBodyTrSelector, true),
             wasCollapsed = normalRow.hasCls(me.rowCollapsedCls),
             addOrRemoveCls = wasCollapsed ? 'removeCls' : 'addCls',
-            ownerLockable = me.grid.lockable && me.grid;
+            ownerLockable = me.grid.lockable && me.grid,
+            expanderCell;
 
         normalRow[addOrRemoveCls](me.rowCollapsedCls);
         Ext.fly(nextBd)[addOrRemoveCls](me.rowBodyHiddenCls);
@@ -423,6 +424,21 @@ Ext.define('Ext.grid.plugin.RowExpander', {
 
         fireView.fireEvent(wasCollapsed ? 'expandbody' : 'collapsebody', rowNode, record, nextBd);
         view.refreshSize(true);
+
+        if (me.expanderColumn) {
+            // rowNode is fetched again to consider the locked grid as well
+            rowNode = view.getNode(rowIdx);
+            expanderCell = Ext.fly(rowNode).selectNode(
+                '.' + Ext.baseCSSPrefix + 'grid-row-expander'
+            );
+
+            if (expanderCell) {
+                expanderCell.setAttribute(
+                    (Ext.isIE ? 'aria-labelledby' : 'aria-describedby'), view.id +
+                    '-aria-description-row' + (wasCollapsed ? 'expanded' : 'collapsed')
+                );
+            }
+        }
 
         Ext.resumeLayouts(true);
 
@@ -513,10 +529,15 @@ Ext.define('Ext.grid.plugin.RowExpander', {
             innerCls: Ext.baseCSSPrefix + 'grid-cell-inner-row-expander',
             renderer: function(value, metaData, record) {
                 var cls = Ext.baseCSSPrefix + (record.isNonData
-                    ? 'grid-row-non-expander'
-                    : 'grid-row-expander');
+                        ? 'grid-row-non-expander'
+                        : 'grid-row-expander'),
+                    expanderElId;
 
-                return '<div class="' + cls + '" role="presentation" tabIndex="0"></div>';
+                expanderElId = this.id + '_expanderEl_' + metaData.rowIndex + metaData.columnIndex;
+                metaData.tdAttr += ' aria-activedescendant="' + expanderElId + '"';
+
+                return '<div class="' + cls + '" id="' + expanderElId +
+                    '" role="presentation" tabIndex="-1"></div>';
             },
             processEvent: function(type, view, cell, rowIndex, cellIndex, e, record) {
                 var isTouch = e.pointerType === 'touch',

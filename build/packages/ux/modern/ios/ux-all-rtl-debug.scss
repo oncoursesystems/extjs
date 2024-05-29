@@ -1,4 +1,4 @@
-$image-search-path: '/home/teamcity/buildAgent/work/2ab44da583de48da/sencha/ext/build/packages/ux/modern/ios/resources' !default;
+$image-search-path: '/home/teamcity/buildAgent/work/780e0679d11ca7ca/sencha/ext/build/packages/ux/modern/ios/resources' !default;
 $theme-name:  'theme-ios' !default;
 $include-ext-abstractcomponent: dynamic(false);;
 $include-ext-abstractmanager: dynamic(false);;
@@ -523,6 +523,7 @@ $include-ext-grid-filters-plugin: dynamic(false);;
 $include-ext-grid-filters-menu-base: dynamic(false);;
 $include-ext-grid-filters-menu-boolean: dynamic(false);;
 $include-ext-grid-filters-menu-date: dynamic(false);;
+$include-ext-grid-filters-menu-list: dynamic(false);;
 $include-ext-grid-filters-menu-number: dynamic(false);;
 $include-ext-grid-filters-menu-string: dynamic(false);;
 $include-ext-grid-grouped-navigationmodel: dynamic(false);;

@@ -6,8 +6,8 @@ Ext.define('KitchenSink.store.form.ForumPosts', {
     model: 'KitchenSink.model.form.ForumPost',
 
     proxy: {
-        type: 'jsonp',
-        url: 'https://www.sencha.com/forum/topics-remote.php',
+        type: 'ajax',
+        url: 'https://forum.sencha.com/forum/topics-remote.php',
         reader: {
             type: 'json',
             rootProperty: 'topics',

@@ -81,7 +81,8 @@ Ext.define('Ext.dataview.BoundList', {
 
                 // If this is a record added as a result of forceSelection: false,
                 // remove it from the eviction list.
-                if (rec.isEntered) {
+                // retainSelection - flag to retain the selected values when queryMode:remote  
+                if (rec.isEntered || rec.retainSelection) {
                     toDeselect.splice(i, 1);
                     len--;
                 }

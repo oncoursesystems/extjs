@@ -2674,7 +2674,9 @@ topSuite('Ext.grid.Selection', [
     });
 
     smDescribe('Virtual Store', function() {
-        var captured = null,
+        var selectspy = jasmine.createSpy(),
+            deselectspy = jasmine.createSpy(),
+            captured = null,
             spans;
 
         function getData(start, limit) {
@@ -2740,6 +2742,10 @@ topSuite('Ext.grid.Selection', [
                 height: 400,
                 width: 600,
                 rowNumbers: true,
+                listeners: {
+                    select: selectspy,
+                    deselect: deselectspy
+                },
                 columns: [{
                     text: 'Thread Id',
                     itemId: 'colf1',
@@ -2756,7 +2762,7 @@ topSuite('Ext.grid.Selection', [
                 }
             });
             grid = view = new Ext.grid.Grid(cfg);
-
+            colRef = grid.getVisibleColumns();
             // Kicks the store into action on first refresh, so wait for that
             waits(100);
 
@@ -2786,7 +2792,8 @@ topSuite('Ext.grid.Selection', [
 
             MockAjaxManager.addMethods();
             captured = [];
-
+            selectspy.reset();
+            deselectspy.reset();
             createGrid();
         });
 
@@ -2916,17 +2923,17 @@ topSuite('Ext.grid.Selection', [
 
             view.deselectAll();
             expect(lockedPage.locks['active']).toBe(1);
-            expect(activePage.locks['active']).toBe(0);
+            expect(activePage.locks['active']).toBe(1);
 
             range.goto(4000, 4100);
             lockedPage = store.pageMap.getPageOf(4000);
             expect(lockedPage.locks['active']).toBe(1);
-            expect(activePage.locks['active']).toBe(0);
+            expect(activePage.locks['active']).toBe(1);
 
             range.goto(0, 100);
             waits(100);
             runs(function() {
-                expect(activePage.locks['active']).toBe(1);
+                expect(activePage.locks['active']).toBe(2);
             });
         });
 
@@ -2990,6 +2997,276 @@ topSuite('Ext.grid.Selection', [
 
             colMap.colf1.autoSize();
             expect(colMap.colf1.element.getWidth()).not.toBe(100);
+        });
+
+        itNotTouch("should allow SHIFT select on checkbox and other cell", function() {
+            var  c1 = findCell(2, 2),
+                 c2 = findCell(4, 2),
+                c01 = findCell(0, 1).querySelector('.x-checkbox-el'),
+                c31 = findCell(3, 1).querySelector('.x-checkbox-el'),
+                c41 = findCell(4, 1).querySelector('.x-checkbox-el'),
+                c51 = findCell(5, 1).querySelector('.x-checkbox-el');
+
+            Ext.testHelper.tap(c1, { shiftKey: true });
+            expect(view.getSelectionCount()).toBe(1);
+            Ext.testHelper.tap(c2, { shiftKey: true });
+            expect(view.getSelectionCount()).toBe(3);
+            view.deselectAll();
+            Ext.testHelper.tap(c01, { shiftKey: true });
+            expect(view.getSelectionCount()).toBe(1);
+            jasmine.fireMouseEvent(c01, 'click');
+            Ext.testHelper.tap(c41, { shiftKey: true });
+            expect(view.getSelectionCount()).toBe(1);
+            view.deselectAll();
+            jasmine.fireMouseEvent(c31, 'click');
+            expect(view.getSelectionCount()).toBe(1);
+            Ext.testHelper.tap(c41, { shiftKey: true });
+            jasmine.fireMouseEvent(c51, 'click');
+            expect(view.getSelectionCount()).toBe(3);
+            view.deselectAll();
+            expect(view.getSelectionCount()).toBe(0);
+        });
+
+        itNotTouch("should return selected items when called getSelected", function() {
+            var  c1 = findCell(2, 2),
+                 c2 = findCell(4, 2);
+
+            Ext.testHelper.tap(c1, { shiftKey: true });
+            expect(view.getSelectionCount()).toBe(1);
+            Ext.testHelper.tap(c2, { shiftKey: true });
+            expect(view.getSelectionCount()).toBe(3);
+            expect(view.getSelected().length).toBe(3);
+            view.deselectAll();
+            expect(view.getSelected().length).toBe(0);
+        });
+
+        itNotTouch("should select all the records in the page when checkbox header clicked", function() {
+            var  checkbox;
+
+            checkbox = colRef[1].el.down('.x-checkbox-el');
+            jasmine.fireMouseEvent(checkbox, 'click');
+            expect(view.getSelected().length).toBe(view.dataItems.length);
+            jasmine.fireMouseEvent(checkbox, 'click');
+            expect(view.getSelected().length).toBe(0);
+        });
+
+        it('the 2nd argument of select event should array and each element in it must be instance of data model', function() {
+            var sm = grid.getSelectable(),
+            row = grid.getItemAt(0),
+            rec = row.getRecord();
+
+            sm.selectRows(rec);
+
+            runs(function() {
+                expect(selectspy.callCount).toBe(1);
+                expect(selectspy.mostRecentCall.args[1][0].isModel).toBe(true);
+            });
+        });
+
+        it('the 2nd argument of deselect event should array and each element in it must be instance of data model', function() {
+            var sm = grid.getSelectable(),
+            row = grid.getItemAt(0),
+            rec = row.getRecord();
+
+            sm.selectRows(rec);
+            sm.deselectAll();
+
+            runs(function() {
+                expect(deselectspy.callCount).toBe(1);
+                expect(deselectspy.mostRecentCall.args[1][0].isModel).toBe(true);
+            });
+        });
+
+        it('should clear the selection when sort applied', function() {
+            var sm = grid.getSelectable(),
+            row = grid.getItemAt(0),
+            rec = row.getRecord();
+
+            sm.selectRows(rec);
+            view.store.sort();
+            satisfyRequests(50);
+            waitsFor(function() {
+                return deselectspy.callCount === 1;
+            });
+            runs(function() {
+                expect(view.getSelected().length).toBe(0);
+            });
+        });
+
+        it('should clear the selection when filter applied', function() {
+            var sm = grid.getSelectable(),
+            row = grid.getItemAt(0),
+            rec = row.getRecord();
+
+            sm.selectRows(rec);
+            view.store.filter([
+                { property: "title", value: "Pa", operator: 'like' }
+            ]);
+            satisfyRequests(50);
+            waitsFor(function() {
+                return deselectspy.callCount === 1;
+            });
+            runs(function() {
+                expect(view.getSelected().length).toBe(0);
+            });
+        });
+    });
+    smDescribe('PruneRemoved', function() {
+        var selectspy = jasmine.createSpy(),
+        deselectspy = jasmine.createSpy(),
+        captured = null;
+
+        function getData(start, limit) {
+            var end = start + limit,
+                recs = [],
+                i;
+
+            for (i = start; i < end; ++i) {
+                recs.push({
+                    id: i + 1,
+                    threadid: i + 1,
+                    title: 'Title' + (i + 1)
+                });
+            }
+
+            return recs;
+        }
+
+        function satisfyRequests(total) {
+            var requests = Ext.Ajax.mockGetAllRequests(),
+                empty = total === 0,
+                request, params, data;
+
+            while (requests.length) {
+                request = requests[0];
+
+                captured.push(request.options.params);
+
+                params = request.options.params;
+                data = getData(empty ? 0 : params.start, empty ? 0 : params.limit);
+
+                Ext.Ajax.mockComplete({
+                    status: 200,
+                    responseText: Ext.encode({
+                        total: (total || empty) ? total : 5000,
+                        data: data
+                    })
+                });
+
+                requests = Ext.Ajax.mockGetAllRequests();
+            }
+        }
+
+        function createStore(cfg) {
+            return store = new Ext.data.virtual.Store(Ext.apply({
+                model: 'spec.ForumThread',
+                pageSize: 100,
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl',
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'data'
+                    }
+                },
+                autoLoad: true
+            }, cfg));
+        }
+
+        function createGrid(cfg) {
+            cfg = Ext.apply({
+                title: 'Virtual Store Grid',
+                height: 400,
+                width: 600,
+                rowNumbers: true,
+                listeners: {
+                    select: selectspy,
+                    deselect: deselectspy
+                },
+                columns: [{
+                    text: 'Thread Id',
+                    itemId: 'colf1',
+                    dataIndex: 'threadid'
+                }, {
+                    text: 'Title',
+                    dataIndex: 'title'
+                }],
+                store: createStore(),
+                renderTo: document.body,
+                selectable: {
+                    drag: true,
+                    checkbox: true
+                }
+            });
+            grid = view = new Ext.grid.Grid(cfg);
+            colRef = grid.getVisibleColumns();
+            // Kicks the store into action on first refresh, so wait for that
+            waits(100);
+
+            // Now satisfy the requests
+            runs(function() {
+                satisfyRequests();
+            });
+        }
+
+        beforeEach(function() {
+            Ext.define('spec.ForumThread', {
+                extend: 'Ext.data.Model',
+                fields: [
+                    'title', 'forumtitle', 'forumid', 'username', {
+                        name: 'replycount',
+                        type: 'int'
+                    }, {
+                        name: 'lastpost',
+                        mapping: 'lastpost',
+                        type: 'date',
+                        dateFormat: 'timestamp'
+                    },
+                    'lastposter', 'excerpt', 'threadid'
+                ],
+                idProperty: 'threadid'
+            });
+
+            MockAjaxManager.addMethods();
+            captured = [];
+            selectspy.reset();
+            deselectspy.reset();
+            createGrid();
+        });
+
+        afterEach(function() {
+            MockAjaxManager.removeMethods();
+            grid = Ext.destroy(grid);
+            store.destroy();
+            captured = store = null;
+            Ext.data.Model.schema.clear();
+            Ext.undefine('spec.ForumThread');
+        });
+
+        it('should not clear the selection on filter if pruneRemoved is false', function() {
+            var sm = grid.getSelectable(),
+            row = grid.getItemAt(0),
+            rec = row.getRecord();
+
+            sm.selectRows(rec);
+            view.store.filter([
+                { property: "title", value: "Pa", operator: 'like' }
+            ]);
+            waitsFor(function() {
+                return view.getSelected().length === 1;
+            });
+        });
+
+        it('should not clear the selection on sort if pruneRemoved is false', function() {
+            var sm = grid.getSelectable(),
+            row = grid.getItemAt(0),
+            rec = row.getRecord();
+
+            sm.selectRows(rec);
+            view.store.sort();
+            waitsFor(function() {
+                return view.getSelected().length === 1;
+            });
         });
     });
 });

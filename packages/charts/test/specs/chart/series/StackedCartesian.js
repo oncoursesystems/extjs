@@ -219,4 +219,124 @@ function() {
             });
         });
     });
+
+    describe('series label', function() {
+        var chart;
+
+        it('should hide the label and bar on click of legend item', function() {
+            var layoutDone, legendSprite, seriesSprite,
+                chartElements = [];
+
+            runs(function() {
+                chart = Ext.create({
+                    xtype: 'cartesian',
+                    engine: 'Ext.draw.engine.Svg',
+
+                    renderTo: document.body,
+                    width: 500,
+                    height: 500,
+
+                    store: {
+                        fields: ['name', 'valuea', 'hide_me'],
+                        data: [{
+                            name: 'metric one',
+                            valuea: 8,
+                            hide_me: 10
+                        }, {
+                            name: 'metric two',
+                            valuea: 15,
+                            hide_me: 7
+                        }, {
+                            name: 'metric three',
+                            valuea: 1,
+                            hide_me: 5
+                        }, {
+                            name: 'metric four',
+                            valuea: 5,
+                            hide_me: 2
+                        }, {
+                            name: 'metric five',
+                            valuea: 20,
+                            hide_me: 27
+                        }]
+                    },
+                    axes: [{
+                        type: 'numeric',
+                        position: 'left',
+                        title: {
+                            text: 'Sample Values',
+                            fontSize: 15
+                        },
+                        fields: 'hide_me'
+                    }, {
+                        type: 'category',
+                        position: 'bottom',
+                        title: {
+                            text: 'Sample Values',
+                            fontSize: 15
+                        },
+                        fields: 'name'
+                    }],
+                    series: {
+                        stacked: true,
+                        type: 'bar',
+                        label: {
+                            type: "text",
+                            display: "insideEnd",
+                            field: "hide_me"
+                        },
+                        xField: 'name',
+                        yField: ['hide_me', 'valuea']
+                    },
+                    legend: {
+                        docked: "top"
+                    },
+                    listeners: {
+                        layout: function() {
+                            layoutDone = true;
+                        }
+                    }
+                });
+            });
+
+            waitsFor(function() {
+                return layoutDone;
+            });
+
+            runs(function() {
+                layoutDone = false;
+
+                // Remove when EXTJS-30007 is fixed
+                Ext.Array.forEach(
+                    Ext.Array.from(chart.el.dom.querySelectorAll('[id^="ext-element-"]')),
+                    function(node) {
+                        chartElements.push(node.id);
+                    }
+                );
+
+                legendSprite = chart.getLegend().getSprites()[0];
+                seriesSprite = chart.getSeries()[0].getSprites()[0];
+
+                jasmine.fireMouseEvent(legendSprite.element.el, 'click');
+
+                expect(seriesSprite.getMarker('labels').instances[0].hidden).toBe(true);
+                expect(seriesSprite.getMarker('labels').instances[1].hidden).toBe(true);
+                expect(seriesSprite.getMarker('labels').instances[2].hidden).toBe(true);
+                expect(seriesSprite.getMarker('labels').instances[1].hidden).toBe(true);
+                expect(seriesSprite.getMarker('labels').instances[4].hidden).toBe(true);
+
+                Ext.destroy(chart);
+
+                // Remove when EXTJS-30007 is fixed
+                Ext.Array.forEach(
+                    chartElements,
+                    function(value) {
+                        if (Ext.cache.hasOwnProperty(value)) {
+                            Ext.cache[value].destroy();
+                        }
+                    }
+                );
+            });
+        });
+    });
 });

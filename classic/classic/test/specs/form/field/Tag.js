@@ -1965,6 +1965,62 @@ function() {
         });
     });
 
+    describe("allowProgrammaticUnknownValues", function() {
+
+        it('should set and add unknown object values in local', function() {
+            makeField({
+                grow: false,
+                displayField: 'display',
+                valueField: 'value',
+                store: {
+                    fields: [
+                        { type: 'number', name: 'value' },
+                        { type: 'string', name: 'display' }
+                    ],
+                    data: [
+                        { value: 0, display: 'Foo' },
+                        { value: 1, display: 'Bar' },
+                        { value: 2, display: 'Baz' },
+                        { value: 3, display: 'Cat' },
+                        { value: 4, display: 'Dog' },
+                        { value: 5, display: 'Owl' },
+                        { value: 6, display: 'Roo' },
+                        { value: 7, display: 'Utz' },
+                        { value: 8, display: 'Grr' },
+                        { value: 9, display: 'Pff' }
+                    ]
+                },
+                width: 100,
+                allowProgrammaticUnknownValues: true
+            }, null);
+
+            tagField.setValue({ value: 10, display: 'Spain' });
+
+            expect(tagField.getValue().length).toBe(1);
+            expect(tagField.getValue()[0]).toBe(10);
+            expect(tagField.getRawValue()).toBe("Spain");
+
+            tagField.setValue([
+                { value: 10, display: 'Spain' },
+                { value: 11, display: 'Europe' }
+            ]);
+
+            expect(tagField.getValue().length).toBe(2);
+            expect(tagField.getValue()[0]).toBe(10);
+            expect(tagField.getValue()[1]).toBe(11);
+            expect(tagField.getRawValue()).toBe("Spain,Europe");
+
+            tagField.addValue(
+                { value: 12, display: 'France' }
+            );
+            expect(tagField.getValue()[0]).toBe(10);
+            expect(tagField.getValue()[1]).toBe(11);
+            expect(tagField.getValue()[2]).toBe(12);
+            expect(tagField.getRawValue()).toBe("Spain,Europe,France");
+
+        });
+    });
+
     describe("ARIA", function() {
         beforeEach(function() {
             makeField({

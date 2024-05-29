@@ -48,5 +48,11 @@ Ext.define('KitchenSink.view.forms.Sliders', {
         xtype: 'togglefield',
         label: 'Toggle',
         value: true
+    }, {
+        xtype: 'sliderfield',
+        label: 'Vertical Slider',
+        values: 30,
+        height: 150,
+        vertical: true
     }]
 });

@@ -89,7 +89,7 @@ Ext.define('Ext.LoadMask', {
     cls: Ext.baseCSSPrefix + 'mask',
     componentCls: Ext.baseCSSPrefix + 'border-box',
 
-    ariaRole: 'progressbar',
+    ariaRole: "progressbar",
     focusable: true,
     tabIndex: 0,
 
@@ -593,7 +593,9 @@ Ext.define('Ext.LoadMask', {
     syncMaskState: function() {
         var me = this,
             ownerCt = me.ownerCt,
-            el = me.el;
+            el = me.el,
+            ariaMsg,
+            ariaMsgEl;
 
         if (me.isVisible()) {
             // Allow dynamic setting of msgWrapCls
@@ -603,7 +605,18 @@ Ext.define('Ext.LoadMask', {
 
             if (me.useMsg) {
                 me.msgTextEl.setHtml(me.msg);
-                me.ariaEl.dom.setAttribute('aria-valuetext', me.msg);
+
+                ariaMsg = me.msg;
+                ariaMsgEl = me.ariaEl;
+
+                if (Ext.isIE) {
+                    ariaMsgEl = me.msgTextEl;
+                    ariaMsgEl.dom.setAttribute("aria-live", 'polite');
+                }
+
+                ariaMsgEl.dom.removeAttribute("aria-valuetext");
+                ariaMsgEl.dom.setAttribute("aria-valuetext", ariaMsg);
+                ariaMsgEl.dom.setAttribute("aria-labelledBy", me.msgTextEl.id);
             }
             else {
                 // Only the mask is visible if useMsg is false
@@ -621,7 +634,12 @@ Ext.define('Ext.LoadMask', {
 
             // If owner contains focus, focus this.
             // Component level onHide processing takes care of focus reversion on hide.
-            if (ownerCt.el.contains(Ext.Element.getActiveElement())) {
+            // Also, focus if owner is configured with loadingText, so that
+            // screen-reader will announce changes accordingly
+            if (
+                ownerCt.el.contains(Ext.Element.getActiveElement()) ||
+                ownerCt.focusMaskWhileLoading
+            ) {
                 me.focus();
             }
 

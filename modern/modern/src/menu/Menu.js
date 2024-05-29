@@ -624,7 +624,8 @@ Ext.define('Ext.menu.Menu', {
                 if (
                     clickedItem.getMenu() &&
                     clickResult !== false &&
-                    (isKeyEvent || isTouchEvent)
+                    (isKeyEvent || isTouchEvent ||
+                    (Ext.isWindows && Ext.isFirefox && Ext.supports.Touch))
                 ) {
                     clickedItem.expandMenu(e);
                 }

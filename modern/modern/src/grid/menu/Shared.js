@@ -30,7 +30,24 @@ Ext.define('Ext.grid.menu.Shared', {
     },
 
     onBeforeShowColumnMenu: function(menu /* , column, grid */) {
-        menu.add(this);
+        var items = menu.items.items,
+            len,
+            isExist = false,
+            i;
+
+        len = items.length;
+
+        // do not add the item if it exists already
+        for (i = 0; i < len; i++) {
+            if (items[i].id === this.id) {
+                isExist = items[i];
+                break;
+            }
+        }
+
+        if (!isExist) {
+            menu.add(this);
+        }
     },
 
     onColumnMenuHide: function(menu /* , column, grid */) {

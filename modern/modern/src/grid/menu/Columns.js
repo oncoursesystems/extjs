@@ -55,6 +55,14 @@ Ext.define('Ext.grid.menu.Columns', {
             // See HeaderContainer#updateMenuDisabledState for keeping this
             // synched while hiding and showing columns.
             if (col.getHideable()) {
+                // If nested header group items is moved to different region,
+                // and parent header is destroyed then the last moved column menu item will
+                // also be destroyed, try to re-create the menu check item.
+                if (col._hideShowMenuItem && col._hideShowMenuItem.destroyed) {
+                    col.setHideShowMenuItem(null);
+                    col.setHideShowMenuItem(col.config.hideShowMenuItem);
+                }
+
                 items.push(col.getHideShowMenuItem());
             }
         }

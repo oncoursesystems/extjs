@@ -115,7 +115,10 @@ Ext.define('Ext.chart.series.sprite.Bar', {
                 label.putMarkerFor('labels', {}, labelId);
             }
 
-            params = [text, label, labelCfg, { store: me.getStore() }, labelId];
+            params = [text, label, labelCfg, {
+                store: me.getStore(),
+                field: this.getField()
+            }, labelId];
             changes = Ext.callback(labelTpl.attr.renderer, null, params, 0, me.getSeries());
 
             if (typeof changes === 'string') {
@@ -279,8 +282,9 @@ Ext.define('Ext.chart.series.sprite.Bar', {
             // Finding min/max so that bars render properly in both LTR and RTL modes.
             min = Math.min(dataClipRect[0], dataClipRect[2]),
             max = Math.max(dataClipRect[0], dataClipRect[2]),
-            start = Math.max(0, Math.floor(min)),
-            end = Math.min(dataX.length - 1, Math.ceil(max)),
+            // binarySearch will get the index of max and min in dataX
+            start = Math.max(0, me.binarySearch(min)),
+            end = Math.min(dataX.length - 1, me.binarySearch(max)),
             isDrawLabels = dataText && me.getMarker('labels'),
             yLow, yHi;
 

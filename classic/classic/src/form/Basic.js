@@ -1093,7 +1093,15 @@ Ext.define('Ext.form.Basic', {
             var field = me.findField(fieldId);
 
             if (field) {
-                field.setValue(val);
+                // The fields with allowProgrammaticUnknownValues === true
+                // allow set values non-existing in their stores and need the whole record
+                // with its displayValue and valueField when needed.
+                if (field.allowProgrammaticUnknownValues) {
+                    field.setValue(typeof val === 'object' ? val : values);
+                }
+                else {
+                    field.setValue(val);
+                }
 
                 if (me.trackResetOnLoad) {
                     field.resetOriginalValue();

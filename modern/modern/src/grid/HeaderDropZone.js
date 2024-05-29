@@ -90,6 +90,7 @@ Ext.define('Ext.grid.HeaderDropZone', {
         }
 
         parentCt = header.getParent();
+        headerCt.fireEvent('columngroupremove', parentCt, header);
         parentCt.remove(header);
         this.trackHeaderMove(parentCt, headerCt);
     },

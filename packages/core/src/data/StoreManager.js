@@ -148,9 +148,6 @@ Ext.define('Ext.data.StoreManager', {
             emptyStore = this.$emptyStore =
                 Ext.regStore('ext-empty-store', { proxy: 'memory', useModelWarning: false });
 
-            //<debug>
-            emptyStore.ignoreLeaked = true;
-            //</debug>
             emptyStore.isEmptyStore = true;
 
             emptyStore.on = emptyStore.addListener = function() {
@@ -161,7 +158,7 @@ Ext.define('Ext.data.StoreManager', {
 
             //<debug>
             emptyStore.add = emptyStore.remove = emptyStore.insert = emptyStore.destroy =
-                emptyStore.loadData = function() {
+                emptyStore.loadData = emptyStore.loadRawData = function() {
                     Ext.raise('Cannot modify ext-empty-store');
                 };
             //</debug>

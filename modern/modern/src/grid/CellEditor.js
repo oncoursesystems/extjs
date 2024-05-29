@@ -138,7 +138,10 @@ Ext.define('Ext.grid.CellEditor', {
     onFocusLeave: function(e) {
         var me = this,
             location = me.$activeLocation,
-            row = location && location.row;
+            row = location && location.row,
+            remainVisible = false,
+            followItem = false,
+            column, scrollRef;
 
         // FocusLeave result of destruction. Must not do anything.
         if (!me.editingPlugin.getGrid().destroying) {
@@ -146,10 +149,31 @@ Ext.define('Ext.grid.CellEditor', {
                 me.cancelEdit();
             }
             else {
-                me.completeEdit(
-                    /* remainVisible = */ false,
-                    /* followItem = */ row && e && row.isAncestor(e.fromComponent) &&
-                    row.isAncestor(e.toComponent));
+                // In IE, scroll indicator is focusable. Because of which the editor looses focus
+                // on scroll.
+                if (Ext.isIE) {
+                    scrollRef = Ext.Component.from(e.target);
+
+                    if (scrollRef && scrollRef.isScrollIndicator) {
+                        me.isCancelling = false;
+
+                        return;
+                    }
+                }
+
+                // if the focus is moving within same row then set followItem as true if the
+                // next cell is editable, otherwise, to remove the sticky item, send it as
+                // false.
+                if (row && e && row.isAncestor(e.fromComponent) && row.isAncestor(e.toComponent)) {
+                    column = row.getColumnByCell(e.toComponent);
+                    followItem = column.getEditable();
+
+                    if (Ext.isEmpty(followItem)) {
+                        followItem = !!column.getEditor();
+                    }
+                }
+
+                me.completeEdit(remainVisible, followItem);
             }
         }
 

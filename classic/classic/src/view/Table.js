@@ -39,6 +39,15 @@ Ext.define('Ext.view.Table', {
      */
     isTableView: true,
 
+    /**
+     * @property {Boolean}
+     * If set to `true`, the tableview will focus the loadmask while view is loading. 
+     * This is helpful when one need to have it announce via screen readers 
+     * to make it more accessible. It may cause side effects, including the possibility
+     * of floated elements or other components becoming hidden as the focus shifts.
+     */
+    focusMaskWhileLoading: false,
+
     config: {
         selectionModel: {
             type: 'rowmodel'
@@ -323,6 +332,18 @@ Ext.define('Ext.view.Table', {
 
             // Add the row/column line classes to the container element.
             'tableCls=values.tableCls=[];',
+        '%}',
+        '{% if (values.view.isTreeView === true) {%}',
+            '<span id="{view.id}' + '-aria-description-checked"' + ' class="' + Ext.baseCSSPrefix + 'hidden-offsets">Checkbox is checked. Press space to uncheck</span>',
+            '<span id="{view.id}' + '-aria-description-unchecked"' + ' class="' + Ext.baseCSSPrefix + 'hidden-offsets">Checkbox is not checked. Press space to check</span>',
+            '<span id="{view.id}' + '-aria-description-expanded"' + ' class="' + Ext.baseCSSPrefix + 'hidden-offsets"> Node is expanded.</span>',
+            '<span id="{view.id}' + '-aria-description-collapsed"' + ' class="' + Ext.baseCSSPrefix + 'hidden-offsets"> Node is collapsed.</span>',
+            '{% }',
+        '%}',
+        '{% if (values.view.rowExpander) {%}',
+            '<span id="{view.id}' + '-aria-description-rowexpanded"' + ' class="' + Ext.baseCSSPrefix + 'hidden-offsets">Row expanded</span>',
+            '<span id="{view.id}' + '-aria-description-rowcollapsed"' + ' class="' + Ext.baseCSSPrefix + 'hidden-offsets">Row collapsed</span>',
+            '{%}',
         '%}',
         '<div class="' + Ext.baseCSSPrefix + 'grid-item-container" role="presentation" style="width:{fullWidth}px">',
             '{[view.renderTHead(values, out, parent)]}',
@@ -1854,7 +1875,8 @@ Ext.define('Ext.view.Table', {
             value == null ||
             value.length === 0 ||
             (Ext.isString(value) && value.replace(/\s/g, '').length === 0)
-        ) ? column.emptyCellText
+        )
+            ? column.emptyCellText
             : value;
 
         if (column.tdCls) {
@@ -2526,8 +2548,7 @@ Ext.define('Ext.view.Table', {
      */
     focusCell: function(position, delay) {
         var me = this,
-            focusTask = me.getFocusTask(),
-            cell; // eslint-disable-line no-unused-vars
+            focusTask = me.getFocusTask();
 
         if (delay) {
             focusTask.delay(Ext.isNumber(delay) ? delay : 10, me.focusCell, me, [position, false]);
@@ -2542,8 +2563,7 @@ Ext.define('Ext.view.Table', {
         // Maintainer: Note that to avoid an unnecessary call to me.getCellByPosition
         // if not visible, or another, nested if test, the assignment of the cell var
         // is embedded inside the condition expression.
-        // eslint-disable-next-line no-cond-assign
-        if (me.isVisible(true) && (cell = me.getCellByPosition(position))) {
+        if (me.isVisible(true) && me.getCellByPosition(position)) {
             me.getNavigationModel().setPosition(position);
         }
     },
@@ -2667,6 +2687,31 @@ Ext.define('Ext.view.Table', {
                 return lastFocused;
             }
         }
+    },
+
+    focusPosition: function(cell, currentPosition) {
+        var actionables = this.ownerGrid.actionables,
+            position = currentPosition.clone(),
+            i, editable, tabbableChildren;
+
+        position.setColumn(this.getHeaderByCell(cell));
+
+        for (i = 0; i < actionables.length; i++) {
+            editable = actionables[i].activateCell(position);
+        }
+
+        if (editable) {
+            cell = position.getCell(true);
+            tabbableChildren = Ext.fly(cell).findTabbableElements();
+
+            if (tabbableChildren.length) {
+                Ext.fly(tabbableChildren[tabbableChildren.length - 1]).focus();
+            }
+
+            return position;
+        }
+
+        return null;
     },
 
     scrollCellIntoView: function(cell, animate) {

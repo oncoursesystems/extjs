@@ -484,6 +484,36 @@ function() {
                 });
             });
 
+            // Issue on IE - JIRA - https://sencha.jira.com/browse/EXTJS-29692
+            (Ext.isIE ? it : xit)('should not cancel editing when scroll recieves focus', function() {
+                var data = [],
+                    i;
+
+                for (i = 11; i <= 1000; ++i) {
+                    data.push({
+                        field1: i + '.' + 1,
+                        field2: i + '.' + 2,
+                        field3: i + '.' + 3,
+                        field4: i + '.' + 4,
+                        field5: i + '.' + 5,
+                        field6: i + '.' + 6,
+                        field7: i + '.' + 7,
+                        field8: i + '.' + 8,
+                        field9: i + '.' + 9,
+                        field10: i + '.' + 10
+                    });
+                }
+
+                store.add(data);
+                plugin.startEdit(0, 0);
+
+                jasmine.focusAndWait(grid.getScrollable().getIndicators().y.el.dom, undefined, 'focus the vertical scrollbar');
+
+                runs(function() {
+                    expect(plugin.editing).toBe(true);
+                });
+            });
+
             it('should continue editing after a refresh', function() {
                 triggerCellMouseEvent('dblclick', 0, 0);
 
@@ -1782,6 +1812,45 @@ function() {
                     expect(plugin.getActiveEditor().context.isEqual(grid.normalGrid.view.actionPosition)).toBe(true);
                 });
             });
+
+            it('should replace sticky row with next row if tabbing on the last editable cell', function() {
+                grid.destroy();
+                makeGrid([{
+                    dataIndex: 'field1',
+                    locked: true,
+                    editor: 'textfield'
+                }, {
+                    dataIndex: 'field2',
+                    locked: true,
+                    editable: true
+                }, {
+                    dataIndex: 'field3',
+                    locked: true,
+                    editor: 'textfield'
+                }, {
+                    dataIndex: 'field4',
+                    locked: true,
+                    editor: 'textfield',
+                    editable: false
+                }]);
+
+                startEditing(0, 2);
+
+                runs(function() {
+                    triggerEditorKey(TAB);
+                });
+
+                waitsFor(function() {
+                    return plugin.location &&
+                           plugin.location.column === colRef[0] &&
+                           plugin.location.record === getRec(1);
+                });
+
+                runs(function() {
+                    expect(grid.stickyItems.length).toBe(1);
+                    expect(Ext.Array.contains(grid.stickyItems, plugin.location.item)).toBeTruthy();
+                });
+            });
         });
 
         describe('misc', function() {
@@ -1853,6 +1922,39 @@ function() {
 
                     form.destroy();
                 });
+            });
+
+            it('should realign the editor row when grouping is toggled', function() {
+                var gridHeaderHeight, editorTop;
+
+                makeGrid([{
+                    dataIndex: 'field1',
+                    editor: 'textfield'
+                }, {
+                    dataIndex: 'field2',
+                    editor: 'textfield'
+                }, {
+                    dataIndex: 'field3',
+                    editor: 'textfield'
+                }], {}, {
+                    features: {
+                        ftype: 'grouping'
+                    }
+                });
+
+                plugin.startEdit(0, 0);
+                store.setGroupField('field2');
+                plugin.activeEditor.cancelEdit();
+                store.clearGrouping();
+                plugin.startEdit(0, 0);
+
+                gridHeaderHeight = Ext.Number.roundToNearest(
+                    grid.getHeaderContainer().el.getHeight(false, true) +
+                    grid.getHeaderContainer().el.getBorders().afterY
+                );
+                editorTop = plugin.activeEditor.el.getBox().top;
+
+                expect(editorTop).toBe(gridHeaderHeight);
             });
         });
 

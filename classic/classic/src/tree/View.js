@@ -722,7 +722,8 @@ Ext.define('Ext.tree.View', {
 
     onCellClick: function(cell, cellIndex, record, row, rowIndex, e) {
         var me = this,
-            column = e.position.column;
+            column = e.position.column,
+            ariaDescribedBy;
 
         // We're only interested in clicks in the tree column
         if (column.isTreeColumn) {
@@ -754,6 +755,17 @@ Ext.define('Ext.tree.View', {
                 // the event sequence
                 // This flag will not be necessary.
                 e.nodeToggled = true;
+            }
+
+            // In Opera we need to toggle aria-describedby in order to make screen-reader
+            // read it
+            ariaDescribedBy = cell.getAttribute('aria-describedby');
+
+            if (Ext.isOpera && ariaDescribedBy) {
+                cell.removeAttribute('aria-describedby');
+                Ext.defer(function() {
+                    cell.setAttribute('aria-describedby', ariaDescribedBy);
+                }, 100, me);
             }
 
             return me.callParent([cell, cellIndex, record, row, rowIndex, e]);

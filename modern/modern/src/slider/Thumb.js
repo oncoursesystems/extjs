@@ -47,9 +47,7 @@ Ext.define('Ext.slider.Thumb', {
      */
     draggable: {
         local: true,
-        constrain: {
-            horizontal: true
-        },
+        constrain: { },
         listeners: {
             beforedragstart: 'onBeforeDragStart',
             dragstart: 'onDragStart',
@@ -59,7 +57,7 @@ Ext.define('Ext.slider.Thumb', {
         }
     },
 
-    touchAction: { panX: false },
+    touchAction: { panX: false, panY: false },
 
     translatable: {
         // use cssposition instead of csstransform so that themes can use transform
@@ -193,18 +191,19 @@ Ext.define('Ext.slider.Thumb', {
 
     onTranslate: function(translatable, x, y) {
         if (this.initialized) {
-            this.getSlider().syncFill(this, x);
+            this.getSlider().syncFill(this, x, y);
         }
     },
 
-    onResize: function(width) {
+    onResize: function(width, height) {
         var me = this,
             slider = me.ownerCmp;
 
         me.elementWidth = width;
+        me.elementHeight = height;
 
         if (slider && slider.thumbs && slider.thumbs[0] === me) {
-            slider.onThumbResize(me, width);
+            slider.onThumbResize(me, width, height);
         }
     },
 
@@ -230,16 +229,39 @@ Ext.define('Ext.slider.Thumb', {
 
     updateDragMax: function(max) {
         var constraint = this.getDraggable().getConstrain(),
-            range = constraint.getX();
+            rangeX = constraint.getX(),
+            rangeY = constraint.getY(),
+            vertical = this.getSlider().getVertical();
 
-        constraint.setX([ range && range[0], max ]);
+        if (vertical) {
+            constraint.setY([ rangeY && rangeY[0], max ]);
+        }
+        else {
+            constraint.setX([ rangeX && rangeX[0], max ]);
+        }
     },
 
     updateDragMin: function(min) {
         var constraint = this.getDraggable().getConstrain(),
-            range = constraint.getX();
+            rangeX = constraint.getX(),
+            rangeY = constraint.getY(),
+            vertical = this.getSlider().getVertical();
 
-        constraint.setX([ min, range && range[1] ]);
+        if (vertical) {
+            constraint.setY([ min, rangeY && rangeY[1] ]);
+        }
+        else {
+            constraint.setX([ min, rangeX && rangeX[1] ]);
+        }
+    },
+
+    updateVertical: function(vertical) {
+        var draggable = this.getDraggable();
+
+        draggable.setConstrain({
+            vertical: vertical,
+            horizontal: !vertical
+        });
     },
 
     destroy: function() {

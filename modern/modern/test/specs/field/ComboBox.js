@@ -1,5 +1,5 @@
 topSuite("Ext.field.ComboBox",
-    ['Ext.app.ViewModel', 'Ext.form.Panel', 'Ext.Dialog',
+    ['Ext.app.ViewModel', 'Ext.form.Panel', 'Ext.Dialog', 'Ext.data.virtual.Store', 'Ext.util.Collection',
      'Ext.data.ArrayStore', 'Ext.layout.Fit'],
 function() {
 
@@ -543,6 +543,39 @@ function() {
 
             expect(selectCount).toBe(1);
             expect(value).toBe('a');
+        });
+
+        it('should show the picker with filterd data when we type characters on combo field with type:int without any errors', function() {
+            makeComponent({
+                renderTo: Ext.getBody(),
+                label: 'My combobox',
+                valueField: 'id',
+                displayField: 'description',
+                queryMode: 'local',
+                typeAhead: true,
+                anyMatch: true,
+                store: {
+                    fields: [{ name: 'id', type: 'int' }, 'description'],
+                    data: [{
+                        id: 1,
+                        description: 'Option 1'
+                    }, {
+                        id: 2,
+                        description: 'Option 2'
+                    }]
+                }
+            });
+
+            runs(function() {
+                expect(function() {
+                    doTyping('o');
+                }).not.toThrow();
+            });
+
+            runs(function() {
+                doTyping('p');
+                expect(component.getPicker().isVisible()).toBe(true);
+            });
         });
     });
 
@@ -6568,6 +6601,211 @@ v = component.getValue();
                 { text: 'text 34', value: 'value 34' }
             ]);
             expect(loadSpy.callCount).toBe(0);
+        });
+
+        it('should  retain selection when search with invalid value when configured with multiselect: true and query mode: remote', function() {
+            Ext.data.ProxyStore.prototype.load = storeLoad;
+                store.setAsynchronousLoad(true);
+
+                makeComponent({
+                    queryMode: 'remote',
+                    queryDelay: 0,
+                    multiSelect: true,
+                    grow: true,
+                    forceSelection: true,
+                    renderTo: Ext.getBody()
+                });
+
+                store.load();
+                component.expand();
+                clickListItem('value 3');
+                clickListItem('value 2');
+                doTyping('wrong text', true);
+                component.completeEdit();
+                expect(component.getValue().length).toBe(2);
+        });
+
+        it('should  retain selection when search with valid value when configured with multiselect: true and query mode: remote and component value length increases by one', function() {
+            Ext.data.ProxyStore.prototype.load = storeLoad;
+                store.setAsynchronousLoad(true);
+
+                makeComponent({
+                    queryMode: 'remote',
+                    queryDelay: 0,
+                    multiSelect: true,
+                    grow: true,
+                    forceSelection: true,
+                    renderTo: Ext.getBody()
+                });
+
+                store.load();
+                component.expand();
+                clickListItem('value 3');
+                clickListItem('value 2');
+                doTyping('value 1', true);
+                component.completeEdit();
+                expect(component.getValue().length).toBe(3);
+        });
+
+        it('should  retain selection when search with a value when configured with forceSelection: false and query mode: remote', function() {
+            Ext.data.ProxyStore.prototype.load = storeLoad;
+                store.setAsynchronousLoad(true);
+
+                makeComponent({
+                    queryMode: 'remote',
+                    queryDelay: 0,
+                    multiSelect: true,
+                    grow: true,
+                    forceSelection: false,
+                    renderTo: Ext.getBody()
+                });
+
+                store.load();
+                component.expand();
+                clickListItem('value 3');
+                clickListItem('value 2');
+                doTyping('value 1', true);
+                component.completeEdit();
+                expect(component.getValue().length).toBe(3);
+        });
+    });
+
+    describe('Combo with virtual store', function() {
+        var captured = null;
+
+        function getData(start, limit) {
+            var end = start + limit,
+                recs = [],
+                i;
+
+            for (i = start + 1; i <= end; ++i) {
+                recs.push({
+                    id: i + 1,
+                    firstName: 'Author ' + i,
+                    lastName: 'Title ' + i
+                });
+            }
+
+            return recs;
+        }
+
+        function satisfyRequests(total) {
+            var requests = Ext.Ajax.mockGetAllRequests(),
+                empty = total === 0,
+                request, params, data;
+
+            while (requests.length) {
+                request = requests[0];
+
+                captured.push(request.options.params);
+
+                params = request.options.params;
+                data = getData(empty ? 0 : params.start, empty ? 0 : params.limit);
+
+                Ext.Ajax.mockComplete({
+                    status: 200,
+                    responseText: Ext.encode({
+                        total: (total || empty) ? total : 5000,
+                        data: data
+                    })
+                });
+
+                requests = Ext.Ajax.mockGetAllRequests();
+            }
+        }
+
+        function createStore(cfg) {
+            return new Ext.data.virtual.Store(Ext.apply({
+                pageSize: 100,
+                config: {
+                    extraKeys: null
+                },
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl',
+                    reader: {
+                        rootProperty: 'data'
+                    }
+                },
+                setExtraKeys: Ext.emptyFn,
+                autoLoad: true
+            }, cfg));
+        }
+
+        function createCombo() {
+            makeComponent({
+                renderTo: Ext.getBody(),
+                label: 'First Name',
+                name: 'firstname',
+                width: '300px',
+                padding: 10,
+                valueField: 'id',
+                displayField: 'firstName',
+                store: createStore(),
+                floatedPicker: {
+                    xtype: 'boundlist',
+                    reference: 'nameloader',
+                    loadingText: null,
+                    infinite: true,
+                    navigationModel: {
+                        disabled: true
+                    },
+                    scrollToTopOnRefresh: false,
+                    loadingHeight: 70,
+                    maxHeight: 300,
+                    minHeight: 300,
+                    floated: true,
+                    axisLock: true,
+                    hideAnimation: null
+                }
+            });
+            satisfyRequests();
+        }
+
+        beforeEach(function() {
+            MockAjaxManager.addMethods();
+            captured = [];
+        });
+
+        afterEach(function() {
+            MockAjaxManager.removeMethods();
+        });
+
+        //  Load data on expand for virtual store on combobox doesn't work on IE, so use itNotIE
+        itNotIE('should not hide picker on scroll', function() {
+            createCombo();
+            var loadSpy = spyOn(component, 'expand').andCallThrough();
+
+            component.expand();
+
+            waitsForSpy(loadSpy, 'load event');
+
+            runs(function() {
+                component.getPicker().getScrollable().scrollTo(0, 1000);
+                expect(component.getPicker().isVisible()).toBeTruthy();
+                component.destroy();
+            });
+        });
+
+        //  Load data on expand for virtual store on combobox doesn't work on IE, so use itNotIE
+        itNotIE('should not through error on selecting an item from picker', function() {
+            createCombo();
+            var loadSpy = spyOn(component, 'expand').andCallThrough();
+
+            component.expand();
+
+            waitsForSpy(loadSpy, 'load event');
+
+            runs(function() {
+                expect(function() {
+                    var picker = component.getPicker(),
+                        rec = component.getStore().getById(10);
+
+                    jasmine.fireMouseEvent(picker.itemFromRecord(rec).el, 'click');
+                }).not.toThrow();
+
+                component.destroy();
+            });
         });
     });
 });

@@ -1325,10 +1325,10 @@ Ext.define('Ext.dataview.List', {
             me.suspendSync = true;
             me.setVisibleHeight(me.outerCt.measure('h'));
             me.suspendSync = false;
-
             me.setVisibleWidth(width);
-            me.refreshScrollerSize();
         }
+
+        me.refreshScrollerSize();
     },
 
     onItemAdd: function(item, index) {
@@ -2005,9 +2005,18 @@ Ext.define('Ext.dataview.List', {
         },
 
         onRangeAvailable: function(range, first, last) {
+            var me = this,
+                selectable = me.getSelectable(),
+                selection = selectable.getSelection();
+
             // This method is called by virtual stores when records become
             // available (or possibly reload).
-            this.syncRows();
+            me.syncRows();
+
+            // Reset the selection as the page loads
+            if (selection.type === "rows") {
+                selectable.refreshSelection();
+            }
         },
 
         onScrollDockItemHide: function(item) {
@@ -2589,7 +2598,7 @@ Ext.define('Ext.dataview.List', {
                 return null;
             }
 
-            if (pinnedHeader) {
+            if (pinnedHeader && !pinnedHeader.$hidden) {
                 y0 += me.measureItem(pinnedHeader);
             }
 
@@ -4808,7 +4817,17 @@ Ext.define('Ext.dataview.List', {
             var me = this,
                 len,
                 i, j, selectable, partnerLen,
-                partners = me.partners || [];
+                store = me.store,
+                partners = me.partners || [],
+                record;
+
+            if (store.isVirtualStore) {
+                partners = me.allPartners || me.selfPartner || [];
+
+                // records are coming as number for virtualStore. 
+                // And for mode single it is coming as record.
+                records = records.isEntity ? Ext.Array.from(records) : records;
+            }
 
             me.callParent([records, selected]);
 
@@ -4820,12 +4839,15 @@ Ext.define('Ext.dataview.List', {
             for (i = 0, len = records.length; i < len; i++) {
                 for (j = 0, partnerLen = partners.length; j < partnerLen; ++j) {
                     selectable = partners[j].getSelectable();
+                    record = records[i].isEntity ? records[i] : me.store.getAt(records[i]);
 
                     if (selected) {
-                        selectable.setSelectedRecord(records[i]);
+
+                        selectable.setSelectedRecord(record);
                     }
-                    else {
-                        selectable.deselect(records[i], true);
+                    // Deselect is handled in the `clear` method of selection/Row
+                    else if (!store.isVirtualStore) {
+                        selectable.deselect(record, true);
                     }
                 }
             }
@@ -4844,7 +4866,7 @@ Ext.define('Ext.dataview.List', {
             for (j = 0, partnerLen = partners.length; j < partnerLen; ++j) {
                 selectable = partners[j].getSelectable();
 
-                if (selectable.isRowSelected(record)) {
+                if (record && selectable.isRowSelected(record)) {
                     // If this is selected for any partner, lets select it
                     me.getSelectable().setSelectedRecord(record);
                     break;

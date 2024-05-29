@@ -11,7 +11,7 @@ Ext.define('KitchenSink.model.form.ForumPost', {
         {
             name: 'url',
             convert: function(value, record) {
-                return 'http://www.sencha.com/forum/showthread.php?t=' +
+                return 'http://forum.sencha.com/forum/showthread.php?t=' +
                     record.get('topicId') + '&p=' + record.get('postId');
             }
         }
