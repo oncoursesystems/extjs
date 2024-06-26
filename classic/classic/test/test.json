@@ -23,6 +23,8 @@
             "../../../../../packages/calendar/test/specs",
             "../../../../../packages/pivot/test/specs",
             "../../../../../packages/pivot/test/classic/specs",
+            "../../../../../packages/froala-editor/test/specs",
+            "../../../../../packages/froala-editor/test/classic/specs",
             "../../../../../packages/exporter/test/specs",
             "../../../../../packages/exporter/test/classic/specs"
         ]

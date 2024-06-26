@@ -427,7 +427,8 @@ Ext.define('KitchenSink.store.Navigation', {
                 me.getNavItemsToolbars(),
                 me.getNavItemsWindows(),
                 me.getNavItemsGauge(),
-                me.getNavItemsEnterprise()
+                me.getNavItemsEnterprise(),
+                me.getNavItemsFroalaEditor()
             ]
         };
     },
@@ -452,6 +453,25 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'link-buttons', text: 'Link Buttons', leaf: true },
                 { id: 'segmented-buttons', text: 'Segmented Buttons', leaf: true },
                 { id: 'vertical-segmented-buttons', text: 'Vertical Segmented Buttons', leaf: true }
+            ]
+        };
+    },
+
+    getNavItemsFroalaEditor: function() {
+        return {
+            text: 'Froala Editor',
+            id: 'froala',
+            iconCls: 'icon-editor',
+            description: 'This demonstrates the use of Ext.froala.EditorField, which is a' +
+                'WYSIWYG html editor. There are two versions of the editor' +
+                'Ext.froala.EditorField, which is desiged to be used in forms' +
+                'and a non-field version named Ext.froala.Editor, for when you would' +
+                'like to use the editor component in other situations.',
+            children: [
+                { id: 'froala-editor', text: 'Editor Field', iconCls: 'icon-editor', leaf: true },
+                { id: 'froala-editor-inline', text: 'Inline', iconCls: 'icon-editor', leaf: true },
+                { id: 'froala-file-manager', text: 'File Manager', iconCls: 'icon-editor', leaf: true },
+                { id: 'froala-document-ready', text: 'Document Ready', iconCls: 'icon-editor', leaf: true }
             ]
         };
     },

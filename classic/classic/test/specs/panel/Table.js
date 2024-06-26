@@ -2,7 +2,8 @@ topSuite("Ext.panel.Table",
     ['Ext.grid.Panel',
      'Ext.layout.container.Card',
      'Ext.grid.plugin.RowWidget',
-     'Ext.button.Button'],
+     'Ext.button.Button',
+     'Ext.tree.Panel'],
 function() {
     var createGrid = function(storeCfg, gridCfg) {
             store = Ext.create('Ext.data.Store', Ext.apply({
@@ -155,6 +156,75 @@ function() {
                 card.down('grid').el.dom.querySelectorAll('tr .x-grid-cell')[3].click();
                 card.down('button').el.dom.click();
             }).not.toThrow();
+        });
+    });
+
+    describe('Table focus', function() {
+        var treegrid, cell;
+
+        afterEach(function() {
+            cell = Ext.destroy(cell);
+            treegrid = treegrid.destroy();
+        });
+
+        it('Should focus directly on the cell on tab if headers are hidden', function() {
+            treegrid = Ext.create('Ext.tree.Panel', {
+                renderTo: Ext.getBody(),
+                title: 'TreeGrid',
+                hideHeaders: true,
+                fields: ['name', 'description'],
+                columns: {
+                    items: [{
+                        xtype: 'treecolumn',
+                        text: 'Name',
+                        dataIndex: 'name',
+                        flex: 1,
+                        sortable: true
+                    }, {
+                        text: 'Description',
+                        dataIndex: 'description',
+                        flex: 1,
+                        sortable: true
+                    }]
+                },
+                root: {
+                    name: 'Root',
+                    description: 'Root description',
+                    expanded: true,
+                    children: [{
+                        name: 'Child 1',
+                        description: 'Description 1',
+                        leaf: false,
+                        expanded: true,
+                        children: [{
+                            name: 'Child 1.1',
+                            description: 'Description 1.1',
+                            expanded: true,
+                            leaf: true
+                        }]
+                    }, {
+                        name: 'Child 2',
+                        description: 'Description 2',
+                        leaf: true
+                    }]
+                }
+            });
+
+            Ext.getBody().focus();
+
+            waitsFor(function() {
+                return  expect(Ext.getBody().dom).toEqual(Ext.Element.getActiveElement());
+            }, 'Body to focus');
+
+            runs(function() {
+                cell = treegrid.getView().getCellByPosition({
+                    row: 0,
+                    column: 0
+                    });
+
+                jasmine.simulateTabKey(treegrid.header.el, true);
+                expect(cell.el.dom).toEqual(Ext.Element.getActiveElement());
+            });
         });
     });
 });

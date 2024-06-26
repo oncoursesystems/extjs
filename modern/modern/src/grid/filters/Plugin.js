@@ -270,6 +270,7 @@
  *       data: [
  *           {
  *               firstname:"Michael",
+ *               middlename:"Phineas",
  *               lastname:"Scott",
  *               seniority:7,
  *               department:"Management",
@@ -278,6 +279,7 @@
  *           },
  *           {
  *               firstname:"Dwight",
+ *               middlename:"Thaddeus",
  *               lastname:"Schrute",
  *               seniority:2,
  *               department:"Sales",
@@ -286,6 +288,7 @@
  *           },
  *           {
  *               firstname:"Jim",
+ *               middlename:"Ezekiel",
  *               lastname:"Halpert",
  *               seniority:3,
  *               department:"Sales",
@@ -294,6 +297,7 @@
  *           },
  *           {
  *               firstname:"Kevin",
+ *               middlename:"Jethro",
  *               lastname:"Malone",
  *               seniority:4,
  *               department:"Accounting",
@@ -302,6 +306,7 @@
  *           },
  *           {
  *               firstname:"Angela",
+ *               middlename:"Rebecca",
  *               lastname:"Martin",
  *               seniority:5,
  *               department:"Accounting",
@@ -313,6 +318,7 @@
  *
  *   columns = [
  *       {text: 'First Name', width: 120, dataIndex:'firstname'},
+ *       {text: 'Middle Name',  width: 120, dataIndex:'middlename'},
  *       {text: 'Last Name',  width: 120, dataIndex:'lastname'},
  *       {text: 'Hired Month', width: 150, dataIndex:'hired'},
  *       {text: 'Department', width: 200, cell: {bind: '{record.department} ({record.seniority})'}}
@@ -328,12 +334,15 @@
  *  - {@link Ext.grid.filters.menu.Date}: Renders for date input fields
  *  - {@link Ext.grid.filters.menu.Number}: Renders for numeric input fields
  *  - {@link Ext.grid.filters.menu.String}: Renders for string input fields
+ *  - {@link Ext.grid.filters.menu.List}: Used for a range of values, but must be explicitly 
+ *  configured
  *
  *  These subclasses can be configured in columns as such:
  *
  *
  *      columns: [
  *          {text: 'First Name',  dataIndex:'firstname'},
+ *          {text: 'Middle Name',  dataIndex:'firstname', 'filter': 'list'},
  *          {text: 'Last Name',  dataIndex:'lastname', filter: 'string'},
  *          {text: 'seniority', dataIndex: 'seniority', filter: 'number'},
  *          {text: 'Hired Month',  dataIndex:'hired', filter: 'date'},
@@ -341,13 +350,32 @@
  *      ]
  *
  *
- *  Menu items can also be customised as shown below:
- *
+ *  Menu items can also be customised as shown below. 
+ *  
+ *  Note that most filters specify menu.items members as filter operators. The list filter is 
+ *  different: it's backed by a {@link Ext.field.ComboBox combobox} on the menu.items.list property.
+ *  The combobox {@link Ext.field.ComboBox#multiSelect multiSelect} config is used to determine
+ *  the operator dynamically and defaults to single select which uses == for the selected
+ *  value, whereas multiSelect is `true`, uses "in" with the array of selected values.
  *
  *      columns: [
  *          {
  *              text: 'First Name',
  *              dataIndex:'firstname'
+ *          },
+ *          {
+ *              text: 'Middle Name',
+ *              filter: {
+ *                  type: 'list',
+ *                  menu: {
+ *                      items: {
+ *                          list: {
+ *                              placeholder: 'Choose something',
+ *                              multiSelect: true
+ *                          }
+ *                      }
+ *                  }
+ *              }
  *          },
  *          {
  *              text: 'Last Name',
@@ -361,33 +389,33 @@
  *                      }
  *                  }
  *              }
- *         },
- *         {
- *            text: 'Hired Month',
- *            filter: {
- *              type: 'date',
- *              menu: {
- *                  items: {
- *                      lt: {
- *                          label: 'Custom Less than',
- *                          placeholder: 'Custom Less than...',
- *                          dateFormat: 'd-m-y'
- *                      },
- *                      gt: {
- *                          label: 'Custom Greater than',
- *                          placeholder: 'Custom Greater than...',
- *                          dateFormat: 'd-m-y'
- *                      },
- *                      eq: {
- *                          label: 'Custom On',
- *                          placeholder: 'Custom On...',
- *                          dateFormat: 'd-m-y'
+ *          },
+ *          {
+ *              text: 'Hired Month',
+ *              filter: {
+ *                  type: 'date',
+ *                  menu: {
+ *                      items: {
+ *                          lt: {
+ *                              label: 'Custom Less than',
+ *                              placeholder: 'Custom Less than...',
+ *                              dateFormat: 'd-m-y'
+ *                          },
+ *                          gt: {
+ *                              label: 'Custom Greater than',
+ *                              placeholder: 'Custom Greater than...',
+ *                              dateFormat: 'd-m-y'
+ *                          },
+ *                          eq: {
+ *                              label: 'Custom On',
+ *                              placeholder: 'Custom On...',
+ *                              dateFormat: 'd-m-y'
+ *                          }
  *                      }
  *                  }
  *              }
- *            }
- *         },
- *         {
+ *          },
+ *          {
  *              text: 'seniority'
  *              filter: {
  *                  type: 'number',
@@ -427,6 +455,68 @@
  *          }
  *      ]
  *
+ *  Filters can also specify "value", which is the initial value for the filter. To use this you
+ *  can either specify a value appropriate for the filter type, or for filters that use <, =, 
+ *  and > operators, the initial value for the operator. Here are some examples:
+ * 
+ *      {
+ *          text: 'Active',
+ *          filter: {
+ *              type: 'boolean',
+ *              value: true
+ *          }
+ *      }
+ *
+ *      {
+ *          text: 'Seniority'
+ *          filter: {
+ *              type: 'number',
+ *              value: 7
+ *          }
+ *      }
+ *
+ *      {
+ *          text: 'Seniority'
+ *          filter: {
+ *              type: 'number',
+ *              value: {
+ *                  "<": 100,
+ *                  ">": 10
+ *              }
+ *          }
+ *      }
+ *
+ *      {
+ *          text: 'Hired Month',
+ *          filter: {
+ *              type: 'date',
+ *              value: {
+ *                  "<": new Date()
+ *              }
+ *          }
+ *      }
+ * 
+ *      {
+ *          text: 'Last Name',
+ *          filter: {
+ *              type: 'list',
+ *              value: 'Smith'
+ *          }
+ *      }
+ *      
+ *      {
+ *          text: 'Last Name',
+ *          filter: {
+ *              type: 'list',
+ *              value: ['Smith', 'Jones], // This is an [] because the combobox is multiSelect:true
+ *              menu: {
+ *                  list: {
+ *                      multiSelect: true
+ *                  }
+ *              }
+ *          }
+ *      }
+ * 
  */
 Ext.define('Ext.grid.filters.Plugin', {
     extend: 'Ext.plugin.Abstract',
@@ -434,7 +524,7 @@ Ext.define('Ext.grid.filters.Plugin', {
 
     requires: [
         'Ext.grid.filters.menu.*',
-        'Ext.grid.filters.Column',  // an override that extends Column w/filter config
+        'Ext.grid.filters.Column', // an override that extends Column w/filter config
         'Ext.data.Query',
         'Ext.util.Filter'
     ],

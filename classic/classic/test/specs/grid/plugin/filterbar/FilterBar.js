@@ -404,6 +404,191 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
 
             });
         });
+
+        describe('Filterbar field width on browser zoom', function() {
+            it('should have same width as column on browser zoom', function() {
+                makeGrid({
+                    collapseFirst: false,
+                    frame: true,
+                    columnLines: true
+                });
+
+                waitsFor(function() {
+                    return gridEvents.done;
+                }, 'grid to be ready');
+
+                runs(function() {
+                    var columnWidth, filterFieldWidth, zoomLevel;
+
+                    for (zoomLevel = 100; zoomLevel <= 200; zoomLevel += 25) {
+                        document.body.style.zoom = zoomLevel + "%";
+
+                        columnWidth = grid.columnManager.getFirst().getEl().dom.offsetWidth;
+                        filterFieldWidth = plugin.getBar().down('textfield').getEl().dom.offsetWidth;
+
+                        expect(columnWidth).toBe(filterFieldWidth);
+                    }
+
+                    document.body.style.zoom = "100%";
+                });
+            });
+        });
+
+        describe('Filterbar realignment on column move', function() {
+            it('should realign filters when a column is moved', function() {
+                makeGrid({
+                    collapseFirst: false,
+                    frame: true,
+                    columnLines: true,
+                    columns: [
+                        { text: 'Company', dataIndex: 'company', itemId: 'c1', filterType: { type: 'string' } },
+                        { text: 'Person', dataIndex: 'person', itemId: 'c2', filterType: { type: 'string' } },
+                        { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', filterType: { type: 'date' } },
+                        { text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4', filterType: { type: 'number' } },
+                        {
+                            text: 'Period',
+                            columns: [
+                                { text: 'Year', dataIndex: 'year', itemId: 'c5', filterType: { type: 'string' } },
+                                { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', filterType: { type: 'date' } }
+                            ]
+                        }
+                    ]
+                });
+
+                waitsFor(function() {
+                    return gridEvents.done;
+                }, 'grid to be ready');
+
+                runs(function() {
+                    grid.columnManager.getHeaderByDataIndex('company').getFilterType().setValue('Microsoft');
+                    grid.columnManager.getHeaderByDataIndex('person').getFilterType().setValue('John');
+                    grid.columnManager.getHeaderByDataIndex('value').getFilterType().setValue(2);
+                    grid.columnManager.getHeaderByDataIndex('year').getFilterType().setValue('2022');
+
+                    grid.headerCt.insert(0, grid.headerCt.items.getAt(3));
+
+                    expect(grid.columnManager.columns[0].dataIndex).toBe('value');
+                    expect(grid.columnManager.columns[0].getFilterType().value).toBe(2);
+                    expect(grid.columnManager.columns[1].dataIndex).toBe('company');
+                    expect(grid.columnManager.columns[1].getFilterType().value).toBe('Microsoft');
+
+                });
+            });
+
+            it('should realign filters when grouped column is moved', function() {
+                makeGrid({
+                    collapseFirst: false,
+                    frame: true,
+                    columnLines: true,
+                    columns: [
+                        { text: 'Company', dataIndex: 'company', itemId: 'c1', filterType: { type: 'string' } },
+                        { text: 'Person', dataIndex: 'person', itemId: 'c2', filterType: { type: 'string' } },
+                        { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', filterType: { type: 'date' } },
+                        { text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4', filterType: { type: 'number' } },
+                        {
+                            text: 'Period',
+                            columns: [
+                                { text: 'Year', dataIndex: 'year', itemId: 'c5', filterType: { type: 'string' } },
+                                { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', filterType: { type: 'date' } }
+                            ]
+                        }
+                    ]
+                });
+
+                waitsFor(function() {
+                    return gridEvents.done;
+                }, 'grid to be ready');
+
+                runs(function() {
+                    grid.columnManager.getHeaderByDataIndex('company').getFilterType().setValue('Microsoft');
+                    grid.columnManager.getHeaderByDataIndex('person').getFilterType().setValue('John');
+                    grid.columnManager.getHeaderByDataIndex('value').getFilterType().setValue(2);
+                    grid.columnManager.getHeaderByDataIndex('year').getFilterType().setValue('2022');
+
+                    grid.headerCt.insert(0, grid.headerCt.items.getAt(4));
+
+                    expect(grid.columnManager.columns[0].dataIndex).toBe('year');
+                    expect(grid.columnManager.columns[0].getFilterType().value).toBe('2022');
+                    expect(grid.columnManager.columns[1].dataIndex).toBe('date');
+                    expect(grid.columnManager.columns[1].getFilterType().value).toBe(undefined);
+                });
+            });
+        });
+
+        describe('show/hide filter on toggling visibility of column', function() {
+            it('should show/hide filter when a column is shown/hidden', function() {
+                makeGrid({
+                    collapseFirst: false,
+                    frame: true,
+                    columnLines: true,
+                    columns: [
+                        { text: 'Company', dataIndex: 'company', itemId: 'c1', filterType: { type: 'string' } },
+                        { text: 'Person', dataIndex: 'person', itemId: 'c2', filterType: { type: 'string' } },
+                        { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', filterType: { type: 'date' } },
+                        { text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4', filterType: { type: 'number' } },
+                        {
+                            text: 'Period',
+                            columns: [
+                                { text: 'Year', dataIndex: 'year', itemId: 'c5', filterType: { type: 'string' } },
+                                { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', filterType: { type: 'date' } }
+                            ]
+                        }
+                    ]
+                });
+
+                waitsFor(function() {
+                    return gridEvents.done;
+                }, 'grid to be ready');
+
+                runs(function() {
+                    expect(plugin.getBar().items.getAt(0).hidden).toBe(false);
+
+                    grid.columnManager.getHeaderByDataIndex('company').hide();
+                    expect(plugin.getBar().items.getAt(0).hidden).toBe(true);
+
+                    grid.columnManager.getHeaderByDataIndex('company').show();
+                    expect(plugin.getBar().items.getAt(0).hidden).toBe(false);
+                });
+            });
+
+            it('should show/hide filter when a grouped column is shown/hidden', function() {
+                makeGrid({
+                    collapseFirst: false,
+                    frame: true,
+                    columnLines: true,
+                    columns: [
+                        { text: 'Company', dataIndex: 'company', itemId: 'c1', filterType: { type: 'string' } },
+                        { text: 'Person', dataIndex: 'person', itemId: 'c2', filterType: { type: 'string' } },
+                        { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', filterType: { type: 'date' } },
+                        { text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4', filterType: { type: 'number' } },
+                        {
+                            text: 'Period',
+                            columns: [
+                                { text: 'Year', dataIndex: 'year', itemId: 'c5', filterType: { type: 'string' } },
+                                { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', filterType: { type: 'date' } }
+                            ]
+                        }
+                    ]
+                });
+
+                waitsFor(function() {
+                    return gridEvents.done;
+                }, 'grid to be ready');
+
+                runs(function() {
+                    expect(plugin.getBar().items.getAt(4).hidden).toBe(false);
+                    expect(plugin.getBar().items.getAt(5).hidden).toBe(false);
+
+                    grid.columnManager.getHeaderByDataIndex('year').up('gridcolumn').hide();
+                    expect(plugin.getBar().items.getAt(4).hidden).toBe(true);
+                    expect(plugin.getBar().items.getAt(5).hidden).toBe(true);
+
+                    grid.columnManager.getHeaderByDataIndex('year').up('gridcolumn').show();
+                    expect(plugin.getBar().items.getAt(4).hidden).toBe(false);
+                    expect(plugin.getBar().items.getAt(5).hidden).toBe(false);
+                });
+            });
+        });
     });
 
 });

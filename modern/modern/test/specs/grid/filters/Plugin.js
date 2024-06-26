@@ -6,16 +6,16 @@ topSuite('Ext.grid.filters.Plugin', [
     'Ext.grid.filters.*'
 ], function() {
     var MyStore = Ext.define(null, {
-            extend: 'Ext.data.Store',
+        extend: 'Ext.data.Store',
 
-            load: function() {
-                var ret = this.callParent(arguments);
+        load: function() {
+            var ret = this.callParent(arguments);
 
-                // this.flushLoad();
+            // this.flushLoad();
 
-                return ret;
-            }
-        }),
+            return ret;
+        }
+    }),
         store, grid, plugin, provider, colMap, oldProvider;
 
     function getData() {
@@ -274,7 +274,7 @@ topSuite('Ext.grid.filters.Plugin', [
             data = getData();
             Ext.Ajax.mockCompleteWithData({
                 success: true,
-                data: [ data[1], data[3] ]  // Bart and Marge match "like 'ar'"
+                data: [data[1], data[3]]  // Bart and Marge match "like 'ar'"
             });
 
             // BUG - Store increments loadCount twice (once in onCollectionAdd and the
@@ -464,7 +464,7 @@ topSuite('Ext.grid.filters.Plugin', [
                 { operator: "<", property: "age", value: 44 },
                 { operator: ">", property: "age", value: 14 }
             ],
-            cells;
+                cells;
 
             makeGrid({
                 plugins: {
@@ -784,7 +784,7 @@ topSuite('Ext.grid.filters.Plugin', [
             store = grid.getStore();
             headerContainer = grid.getHeaderContainer();
             headerContainer.innerItems[0].showMenu();
-            filterMenu =  headerContainer.innerItems[0].getMenu().down('[_itemId=filter]').getMenu();
+            filterMenu = headerContainer.innerItems[0].getMenu().down('[_itemId=filter]').getMenu();
             filterField = filterMenu.down();
             store.on({
                 refresh: changeSpy

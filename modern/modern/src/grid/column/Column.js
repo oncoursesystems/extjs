@@ -1127,6 +1127,20 @@ Ext.define('Ext.grid.column.Column', {
         }];
     },
 
+    /**
+     * Return item order in its header group
+     * @returns {Number} column weight
+     */
+    getWeight: function() {
+        var me = this;
+
+        if (me.rendered) {
+            return me.parent.indexOf(me);
+        }
+
+        return me._weight;
+    },
+
     initialize: function() {
         var me = this;
 

@@ -1365,10 +1365,18 @@ Ext.define('Ext.data.AbstractStore', {
 
     getGroupField: function() {
         var groupers = this.getGroupers(false),
-            group = '';
+            group = '',
+            grouper;
 
         if (groupers && groupers.length) {
             group = groupers.getAt(0).getProperty();
+        }
+        else {
+            grouper = this.getGrouper();
+
+            if (grouper) {
+                group = grouper.getProperty();
+            }
         }
 
         return group;

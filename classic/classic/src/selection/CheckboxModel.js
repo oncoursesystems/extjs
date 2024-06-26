@@ -147,7 +147,7 @@ Ext.define('Ext.selection.CheckboxModel', {
      * is not selected.
      * @locale
      */
-    rowSelectText: 'Press Space to select this row',
+    rowSelectText: 'Row {rowIdx} de selected. Press Space to select this row',
 
     /**
      * @cfg {String} rowDeselectText
@@ -155,7 +155,7 @@ Ext.define('Ext.selection.CheckboxModel', {
      * is selected.
      * @locale
      */
-    rowDeselectText: 'Press Space to deselect this row',
+    rowDeselectText: 'Row {rowIdx} selected. Press Space to de select this row',
 
     allowDeselect: true,
 
@@ -443,19 +443,12 @@ Ext.define('Ext.selection.CheckboxModel', {
             isRecordChecked: me.isRowSelected.bind(me)
         };
 
-        if (!me.checkOnly) {
-            // tabIndex and focusable properties should not be removed as
-            // they must depend on actual column configuration
-            config.ariaRole = 'presentation';
-        }
-        else {
-            config.useAriaElements = true;
-            config.ariaLabel = htmlEncode(me.headerAriaLabel);
-            config.headerSelectText = htmlEncode(me.headerSelectText);
-            config.headerDeselectText = htmlEncode(me.headerDeselectText);
-            config.rowSelectText = htmlEncode(me.rowSelectText);
-            config.rowDeselectText = htmlEncode(me.rowDeselectText);
-        }
+        config.useAriaElements = true;
+        config.ariaLabel = htmlEncode(me.headerAriaLabel);
+        config.headerSelectText = htmlEncode(me.headerSelectText);
+        config.headerDeselectText = htmlEncode(me.headerDeselectText);
+        config.rowSelectText = htmlEncode(me.rowSelectText);
+        config.rowDeselectText = htmlEncode(me.rowDeselectText);
 
         return config;
     },

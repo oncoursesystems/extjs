@@ -137,6 +137,7 @@ $input-font-family: $form-field-font-family;
     @include transition-duration(0.3s);
     @include transform(translateY(32px));
 
+    &:not(.#{$prefix}form-item-label-top),
     .#{$prefix}field-focus &,
     .not-empty & {
         font-size: $form-item-label-font-size;

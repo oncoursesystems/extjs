@@ -157,7 +157,8 @@ Ext.onReady(function() {
                         { value: 'crisp-touch', name: 'Crisp Touch' },
                         { value: 'classic', name: 'Classic' },
                         { value: 'graphite', name: 'Graphite' },
-                        { value: 'gray', name: 'Gray' }
+                        { value: 'gray', name: 'Gray' },
+                        { value: 'material', name: 'Material' }
                     ]
                 }),
                 value: theme,

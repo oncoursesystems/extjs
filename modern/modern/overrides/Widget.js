@@ -477,6 +477,9 @@ Ext.define('Ext.overrides.Widget', {
         me.onInheritedRemove(destroying);
 
         me.parent = null;
+
+        // this component is detached from the body
+        me.isDetached = true;
     },
 
     setIsInner: function(isInner) {

@@ -1947,10 +1947,12 @@ Ext.define('Ext.chart.series.Series', {
             // 'showMarkers' updater calls 'series.getSprites()',
             // which we don't want to call here.
             showMarkers = me.getConfig('showMarkers', true), // eslint-disable-line no-unused-vars
-            style, sprite, marker, i;
+            style, sprite, marker, i, labelMarker, category, categoryInstances, hidden;
 
         for (i = 0; i < ln; i++) {
             sprite = sprites[i];
+            category = sprite.id;
+            hidden = sprite.attr.hidden;
 
             style = me.getStyleByIndex(i);
 
@@ -1964,6 +1966,18 @@ Ext.define('Ext.chart.series.Series', {
 
             if (marker) {
                 marker.getTemplate().setAttributes(me.getMarkerStyleByIndex(i));
+            }
+
+            labelMarker = sprite.getMarker('labels');
+
+            if (Ext.isDefined(hidden) && labelMarker) {
+                categoryInstances = labelMarker.categories[category];
+
+                if (!Ext.Object.isEmpty(categoryInstances)) {
+                    Ext.Object.eachValue(categoryInstances, function(value) {
+                        labelMarker.setAttributesFor(value, { hidden: hidden });
+                    });
+                }
             }
         }
     },

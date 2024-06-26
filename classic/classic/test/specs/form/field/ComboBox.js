@@ -1710,7 +1710,7 @@ function() {
             component.expand();
             jasmine.focusAndWait(component);
 
-            // Tap on first item               
+            // Tap on first item
             runs(function() {
                 triggerEl = component.getPicker().all.item(0);
                 x = triggerEl.getX() + triggerEl.getWidth() / 2;
@@ -5983,5 +5983,77 @@ function() {
                expect(loadSpy.callCount).toBe(4);
             });
         });
+    });
+
+    describe("allowProgrammaticUnknownValues", function() {
+
+        it('should allow typeAhead in local', function() {
+            store.load();
+            makeComponent({
+                displayField: 'text',
+                valueField: 'val',
+                forceSelection: true,
+                typeAhead: true,
+                queryMode: 'local',
+                allowProgrammaticUnknownValues: true,
+                renderTo: Ext.getBody()
+            });
+
+            var typeaheadSpy = spyOn(component, 'onTypeAhead').andCallThrough();
+
+            component.setRawValue('t');
+            component.doRawQuery();
+
+            waitsFor(function() {
+                return typeaheadSpy.callCount > 0;
+            });
+            jasmine.blurAndWait(component);
+            runs(function() {
+                expect(component.inputEl.dom.value).toBe('text 1');
+                expect(component.getValue()).toBe('value 1');
+            });
+        });
+
+        it('should allow set value in local', function() {
+            store.load();
+            makeComponent({
+                displayField: 'text',
+                valueField: 'val',
+                forceSelection: true,
+                typeAhead: true,
+                queryMode: 'local',
+                allowProgrammaticUnknownValues: true,
+                renderTo: Ext.getBody()
+            });
+
+            component.setValue("unknown value");
+
+            runs(function() {
+                expect(component.inputEl.dom.value).toBe('unknown value');
+                expect(component.getValue()).toBe('unknown value');
+            });
+        });
+
+        it('should allow set object with its valueField and displayField values in local', function() {
+            store.load();
+            makeComponent({
+                displayField: 'text',
+                valueField: 'val',
+                forceSelection: true,
+                typeAhead: true,
+                queryMode: 'local',
+                allowProgrammaticUnknownValues: true,
+                renderTo: Ext.getBody()
+            });
+
+            component.setValue({ val: 100, text: "unknown value" });
+
+            jasmine.blurAndWait(component);
+            runs(function() {
+                expect(component.inputEl.dom.value).toBe('unknown value');
+                expect(component.getValue()).toBe('100');
+            });
+        });
+
     });
 });

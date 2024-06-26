@@ -527,5 +527,14 @@ Ext.define('Ext.chart.CartesianChart', {
     renderFrame: function() {
         this.refloatAxes();
         this.callParent();
+    },
+
+    onAdded: function(container, pos, instanced) {
+        this.callParent([container, pos, instanced]);
+
+        // Scheduling layout to adjust the sizing computation after chart addition.
+        if (Ext.isIE8) {
+            this.scheduleLayout();
+        }
     }
 });

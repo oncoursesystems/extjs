@@ -225,5 +225,30 @@ function() {
                 expect(visibleCount).toBe(1);
             });
         });
+
+        it('Should show the proper checked state for hideMenuItem after toggling the visibilty options from viewoptions', function() {
+            makeGrid();
+
+            var columns = grid.getColumns(),
+                sheet = plugin.getSheet(),
+                visibleIcon;
+
+            plugin.showViewOptions();
+
+            waitsFor(function() {
+                return !sheet.activeAnimation;
+            });
+
+            runs(function() {
+                visibleIcon = document.querySelector(plugin.getVisibleIndicatorSelector());
+
+                // Click on the first column to hide it
+                jasmine.fireMouseEvent(visibleIcon, 'click');
+
+                // columns[0] is rowNumbers so considering the index 1 as first column
+                // hideMenuItem should be unchecked
+                expect(columns[1].getHideShowMenuItem().getChecked()).toBe(false);
+            });
+        });
     });
 });

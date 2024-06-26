@@ -523,7 +523,8 @@ Ext.define('Ext.mixin.FocusableContainer', {
                     next = next || child.findFocusTarget();
 
                     if (next) {
-                        next.focus();
+                        // Delaying focus event for FireFox as this focus is not getting updated.
+                        next.focus(null, Ext.isGecko);
                     }
                 }
             }

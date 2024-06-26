@@ -112,7 +112,7 @@ Ext.define('Ext.grid.column.Check', {
 
     defaultFilterType: 'boolean',
 
-    checkboxAriaRole: 'button',
+    checkboxAriaRole: 'checkbox',
 
     /**
      * @event beforecheckchange
@@ -371,7 +371,13 @@ Ext.define('Ext.grid.column.Check', {
     defaultRenderer: function(value, cellValues) {
         var me = this,
             cls = me.checkboxCls,
-            tip = '';
+            tip = '',
+            ariaElAttributes = {},
+            ariaRenderConfigs = "",
+            ariaAttr,
+            ariaLabelledBy,
+            ariaDescribedBy,
+            spanElId;
 
         if (me.invert) {
             value = !value;
@@ -393,17 +399,54 @@ Ext.define('Ext.grid.column.Check', {
             cellValues.tdAttr += ' data-qtip="' + Ext.htmlEncode(tip) + '"';
         }
 
+        spanElId = me.id + '-spanEl-' + cellValues.rowIndex + cellValues.columnIndex;
+        // User can change the state of checkbox (span element) by clicking anywhere in cell. Hence
+        // making span as an active descendant to cell to guide the screenreader while focusing.
+        cellValues.tdAttr += 'aria-activedescendant="' + spanElId + '"';
+
         if (me.useAriaElements) {
-            cellValues.tdAttr += ' aria-describedby="' + me.id + '-cell-description' +
-                                 (!value ? '-not' : '') + '-selected"';
+            // Selection column cannot have other aria attributes as it will
+            // hinder the row selection announcement which we have binded 
+            // through aria-describedby attribute below
+            ariaElAttributes["aria-describedby"] = me.id + '-cell-description' +
+            (!value ? '-not' : '') + '-selected';
+            ariaElAttributes['aria-rowindex'] = Ext.Number.from(cellValues.rowIndex, 0) + 1;
+        }
+        else {
+            ariaLabelledBy = me.getAriaLabelEl(me.ariaLabelledBy);
+            ariaDescribedBy = me.getAriaLabelEl(me.ariaDescribedBy);
+
+            if (ariaLabelledBy) {
+                ariaElAttributes["aria-labelledby"] = ariaLabelledBy;
+            }
+            else if (me.ariaLabel) {
+                ariaElAttributes["aria-label"] = me.ariaLabel || me.text;
+            }
+
+            if (ariaDescribedBy) {
+                ariaElAttributes["aria-describedby"] = ariaDescribedBy;
+            }
+
+            // No need to set aria-checked here if cell is already rendered
+            // We are handling it on 'setRecordCheck' method
+            if (!this.getView().getCell(cellValues.record, cellValues.column)) {
+                ariaElAttributes['aria-checked'] = !!value;
+            }
+
+            ariaElAttributes = Ext.apply(ariaElAttributes, me.getAriaAttributes());
+        }
+
+        for (ariaAttr in ariaElAttributes) {
+            ariaRenderConfigs += ariaAttr + '="' + ariaElAttributes[ariaAttr] + '"';
         }
 
         // This will update the header state on the next animation frame
         // after all rows have been rendered.
         me.updateHeaderState();
 
-        return '<span class="' + cls + '" role="' + me.checkboxAriaRole +
-               '" aria-label="' + me.text + '"' +
+        return '<span id="' + spanElId + '"' +
+               'class="' + cls + '" role="' + me.checkboxAriaRole + '" ' +
+                ariaRenderConfigs +
                 (!me.ariaStaticRoles[me.checkboxAriaRole] ? ' tabIndex="0"' : '') +
                '></span>';
     },
@@ -437,9 +480,10 @@ Ext.define('Ext.grid.column.Check', {
         }
     },
 
-    setRecordCheck: function(record, recordIndex, checked, cell) {
+    setRecordCheck: function(record, recordIndex, checked, cell, e) {
         var me = this,
-            prop = me.property;
+            prop = me.property,
+            checkEl;
 
         // Only proceed if we NEED to change
         // eslint-disable-next-line eqeqeq
@@ -450,6 +494,22 @@ Ext.define('Ext.grid.column.Check', {
             }
             else {
                 record.set(me.dataIndex, checked);
+            }
+
+            checkEl = cell.querySelector('.' + me.checkboxCls);
+
+            if (checkEl) {
+                // On click, screenreader is announcing the state inconsistently when 
+                // checkbox is accessed using mouse/cursor. Defer will force reader to
+                // announce both the preceding and the concluding state of the checkbox.
+                if (e && e.type === 'click') {
+                    Ext.defer(function() {
+                        checkEl.setAttribute('aria-checked', checked);
+                    }, 500);
+                }
+                else {
+                    checkEl.setAttribute('aria-checked', checked);
+                }
             }
         }
     },
@@ -508,14 +568,26 @@ Ext.define('Ext.grid.column.Check', {
      * @private
      */
     updateCellAriaDescription: function(record, isSelected, cell) {
-        var me = this;
+        var me = this,
+            cellSpanEl, ariaRowIdx, rowDescribedNode, rowDescribedText;
 
         if (me.useAriaElements) {
             cell = cell || me.getView().getCell(record, me);
 
             if (cell) {
-                cell.setAttribute('aria-describedby', me.id + '-cell-description' +
-                                  (!isSelected ? '-not' : '') + '-selected');
+                cellSpanEl = cell.querySelector('.' + me.checkboxCls);
+
+                if (cellSpanEl) {
+                    rowDescribedNode = me.id + '-cell-description' +
+                        (!isSelected ? '-not' : '') + '-selected';
+                    ariaRowIdx = cellSpanEl.getAttribute('aria-rowindex');
+                    rowDescribedText = !isSelected ? me.rowSelectText : me.rowDeselectText;
+
+                    Ext.fly(rowDescribedNode).setText(
+                        rowDescribedText.replace('{rowIdx}', ariaRowIdx)
+                    );
+                    cellSpanEl.setAttribute('aria-describedby', rowDescribedNode);
+                }
             }
         }
     },

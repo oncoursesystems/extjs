@@ -423,10 +423,17 @@ Ext.define('Ext.grid.plugin.ViewOptions', {
     onVisibleIndicatorTap: function(row, record) {
         var hidden = !record.get('hidden'),
             column = Ext.getCmp(record.get('id')),
-            len = this.getGrid().getVisibleColumns().length;
+            len = this.getGrid().getVisibleColumns().length,
+            hideShowMenuItem = column.getHideShowMenuItem();
 
         if (len > 1 || (len && column.isHidden())) {
             column.setHidden(hidden);
+
+            // Update the checked state of hideShowMenuItem on visible indicator tap
+            if (hideShowMenuItem) {
+                hideShowMenuItem.setChecked(!hidden);
+            }
+
             record.set('hidden', hidden);
         }
     },

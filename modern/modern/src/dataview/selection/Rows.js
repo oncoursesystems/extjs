@@ -41,7 +41,10 @@ Ext.define('Ext.dataview.selection.Rows', {
     add: function(range, keepExisting, suppressEvent) {
         var me = this,
             view = me.view,
-            rowIdx, tmp, record;
+            selected = view.getSelected(),
+            selectable = view.getSelectable(),
+            records = [],
+            rowIdx, tmp, record, span, selGroupIdx, mappedRange;
 
         // Single element array - extract it.
         // We cannot accept an array of records in this Selection class
@@ -53,7 +56,10 @@ Ext.define('Ext.dataview.selection.Rows', {
         // Adding a record selects that index
         if (range.isEntity) {
             record = range;
-            range = view.mapToRecordIndex(range);
+            mappedRange = view.mapToRecordIndex(range);
+            range = (mappedRange === -1)
+                ? view.mapToItem(range).getRecordIndex()
+                : mappedRange;
         }
 
         // Adding a single index - create an *EXCLUSIVE* range
@@ -67,9 +73,14 @@ Ext.define('Ext.dataview.selection.Rows', {
         }
         //</debug>
 
+        // Assigning lastSelectedRecIndx to the first item of range before swapping them. 
+        // Otherwise we will not have true last selected index.
+        me.lastSelectedRecIndx = range[1] - 1;
+
+        // if range is also getting swapped, move offset 1 which was added while invoking
         if (range[0] > range[1]) {
-            tmp = range[1];
-            range[1] = range[0];
+            tmp = range[1] - 1;
+            range[1] = range[0] + 1;
             range[0] = tmp;
         }
 
@@ -80,9 +91,29 @@ Ext.define('Ext.dataview.selection.Rows', {
         }
 
         me.getSelected().add(range);
+        span = me.getSelected().spans;
 
-        for (rowIdx = range[0]; rowIdx < range[1]; rowIdx++) {
-            view.onItemSelect(rowIdx);
+        if (me.getSelectionModel().getMode() !== 'single') {
+        // Collecting all records and moved the onItemSelect call outside loop to avoid
+            for (selGroupIdx = 0; selGroupIdx < span.length; selGroupIdx++) {
+                range = span[selGroupIdx];
+
+                for (rowIdx = range[0]; rowIdx < range[1]; rowIdx++) {
+                    records.push(view.store.getAt(rowIdx));
+                }
+            }
+
+            // Suppressing this event on selected collection as we are already firing 
+            // `onItemSelect` Which will invoke select.
+            selected.suppressEvent = true;
+
+            if (!selectable.pruneRemoved) {
+                selected.add(records);
+                records = selected.items;
+            }
+
+            view.onItemSelect(records);
+            selected.suppressEvent = false;
         }
 
         me.manageSelection(record);
@@ -96,7 +127,10 @@ Ext.define('Ext.dataview.selection.Rows', {
         var me = this,
             selModel = me.getSelectionModel(),
             view = me.view,
-            rowIdx;
+            store = view.store,
+            selected = view.getSelected(),
+            records = [],
+            rowIdx, mappedRange, record;
 
         // If the selection model is deselectable: false, which means there must
         // always be a selection, reject deselection of the last record
@@ -113,7 +147,10 @@ Ext.define('Ext.dataview.selection.Rows', {
 
         // Removing a record selects that index
         if (range.isEntity) {
-            range = view.mapToRecordIndex(range);
+            mappedRange = view.mapToRecordIndex(range);
+            range = (mappedRange === -1)
+                ? view.mapToItem(range).getRecordIndex()
+                : mappedRange;
         }
 
         // Removing a single index - create an *EXCLUSIVE* range
@@ -134,11 +171,57 @@ Ext.define('Ext.dataview.selection.Rows', {
         me.getSelected().remove(range);
 
         for (rowIdx = range[0]; rowIdx < range[1]; rowIdx++) {
-            view.onItemDeselect(rowIdx);
+            record = store.getAt(rowIdx);
+
+            if (record) {
+                records.push(record);
+            }
         }
 
         if (!suppressEvent) {
+            view.onItemDeselect(records);
+            selected.suppressEvent = true;
+            selected.remove(records);
+            selected.suppressEvent = false;
             selModel.fireSelectionChange();
+        }
+    },
+
+    refresh: function() {
+        var me = this,
+            view = me.view,
+            store = view.store,
+            selectable = view.getSelectable(),
+            selected = view.getSelected(),
+            selectedItems = selected.items,
+            toSelect = [],
+            i, record, spans;
+
+        spans = view.el.query('.' + view.selectedCls);
+
+        for (i = 0; i < spans.length; i++) {
+            Ext.get(spans[i]).removeCls(view.selectedCls);
+        }
+
+        if (!selectable.pruneRemoved) {
+            me.setSelected([]);
+            me.getSelectionModel().selectionStart = null;
+            me.dragRange = me.lastSelectedRecIndx = null;
+
+            for (i = 0; i < selectedItems.length; i++) {
+                record = store.getById(selectedItems[i].getId());
+
+                if (record) {
+                    toSelect.push(record);
+                }
+            }
+
+            selected.suppressEvent = true;
+            view.onItemSelect(toSelect, true);
+            selected.suppressEvent = false;
+        }
+        else {
+            selectable.resetSelection(true);
         }
     },
 
@@ -149,9 +232,15 @@ Ext.define('Ext.dataview.selection.Rows', {
      */
     isSelected: function(record) {
         var me = this,
+            view = me.view,
             ranges = me.getSelected().spans,
+            selectable = view.getSelectable(),
             len = ranges.length,
             recIndex, range, i;
+
+        if (record && !selectable.pruneRemoved) {
+            return !!view.getSelected().find(record.getIdProperty(), record.getId());
+        }
 
         recIndex = record.isEntity ? me.view.getStore().indexOf(record) : record;
 
@@ -175,23 +264,35 @@ Ext.define('Ext.dataview.selection.Rows', {
     },
 
     selectAll: function() {
-        var view = this.view,
+        var me = this,
+            view = me.view,
+            store = view.store,
+            selected = view.getSelected(),
             items = view.dataItems,
             len = items.length,
-            i;
+            records = [],
+            record, i;
 
         // Apply selected rendition to all view items.
         // Buffer rendered items will appear selected
         // because the rendering pathway consults the selection.
         for (i = 0; i < len; i++) {
-            view.onItemSelect(i);
+            record = store.getAt(i);
+
+            if (record) {
+                records.push(record);
+            }
+
         }
 
+        selected.suppressEvent = true;
+        view.onItemSelect(records);
+        selected.suppressEvent = false;
         // We have just one range encompassing all rows.
         // Note that the Spans API is exclusive of range end index.
-        this.getSelected().add(0, view.store.getTotalCount() || view.store.getCount());
+        me.getSelected().add(0, store.getTotalCount() || store.getCount());
 
-        this.getSelectionModel().fireSelectionChange();
+        me.getSelectionModel().fireSelectionChange();
     },
 
     /**
@@ -303,6 +404,14 @@ Ext.define('Ext.dataview.selection.Rows', {
         }
     },
 
+    /**
+     * Returns the records selected.
+     * @return {Ext.data.Model[]} The records selected.
+     */
+    getRecords: function() {
+        return this.getSelectionModel().getSelected().getRange();
+    },
+
     //-------------------------------------------------------------------------
 
     privates: {
@@ -323,36 +432,31 @@ Ext.define('Ext.dataview.selection.Rows', {
          */
         clear: function(suppressEvent) {
             var me = this,
-                selModel = me.getSelectionModel(),
                 view = me.view,
-                items = view.dataItems,
-                len = items.length,
-                indexTop = view.renderInfo.indexTop,
-                i;
+                partners = view.allPartners || view.selfPartner || [],
+                selModel, i, partnerLen, selectable, selection, partner;
 
-            // Apply selected rendition to all view items.
-            // Buffer rendered items will appear selected
-            // because the rendering pathway consults the selection.
-            for (i = 0; i < len; i++) {
-                // when looping on view inner items (not rowIndex) at that time
-                // 'renderInfo.indexTop' should not be subtracted,  which is resulting in
-                // negative indexes when we have scrolled down the line to too many records.
-                view.onItemDeselect(i + indexTop);
-            }
+            for (i = 0, partnerLen = partners.length; i < partnerLen; ++i) {
+                partner = partners[i];
+                selectable = partner.getSelectable();
+                selection = selectable.getSelection();
+                selModel = selection.getSelectionModel();
 
-            me.getSelected().clear();
+                selModel.getSelected().removeAll();
+                selection.getSelected().clear();
 
-            // Enforce our selection model's deselectable: false by re-adding the last
-            // selected index.
-            // Suppress event because we might be firing it.
-            if (!selModel.getDeselectable() && me.lastSelected) {
-                me.add(me.lastSelected, true, true);
-            }
+                // Enforce our selection model's deselectable: false by re-adding the last
+                // selected index.
+                // Suppress event because we might be firing it.
+                if (!selModel.getDeselectable() && selection.lastSelected) {
+                    selection.add(selection.lastSelected, true, true);
+                }
 
-            me.manageSelection(null);
+                selection.manageSelection(null);
 
-            if (!suppressEvent) {
-                selModel.fireSelectionChange();
+                if (!suppressEvent) {
+                    selModel.fireSelectionChange();
+                }
             }
         },
 

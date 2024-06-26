@@ -1846,4 +1846,92 @@ function() {
             }
         });
     });
+
+    it('should expand the combo when click on trigger', function() {
+        var editor, value;
+
+        makeGrid(null, {
+            columns: [{
+                header: 'State',
+                dataIndex: 'id',
+                renderer: function(value, metaData, record) {
+                    return record.get('state');
+                },
+                editor: {
+                    xtype: 'combo',
+                    typeAhead: true,
+                    triggerAction: 'all',
+                    editing: true,
+                    selectOnFocus: false,
+                    store: [
+                        ['Alabama'],
+                        ['Alaska'],
+                        ['Arkansas'],
+                        ['Arkansas'],
+                        ['Arizona']
+                    ]
+                }
+            }, {
+                header: 'Available',
+                dataIndex: 'availDate',
+                editor: {
+                    xtype: 'datefield',
+                    selectOnFocus: false,
+                    format: 'm/d/y',
+                    minValue: '01/01/06',
+                    disabledDays: [0, 6],
+                    disabledDaysText: 'Plants are not available on the weekends'
+                }
+            }, {
+                header: 'Price',
+                dataIndex: 'price',
+                width: 70,
+                align: 'right',
+                formatter: 'usMoney',
+                editor: {
+                    xtype: 'numberfield',
+                    selectOnFocus: false,
+                    allowBlank: false,
+                    minValue: 0,
+                    maxValue: 100000
+                }
+            }]
+        }, {
+            fields: ['id', 'state',  'availDate', 'price'],
+            data: [
+                ['AL', 'Alabama', '30/08/2023', '100'],
+                ['AK', 'Alaska', '30/08/2023', '200'],
+                ['AR', 'Arkansas', '30/08/2023', '300'],
+                ['AZ', 'Arizona', '30/08/2023', '400']
+            ],
+            proxy: {
+                type: 'memory',
+                reader: {
+                    type: 'array'
+                }
+            }
+        });
+
+        plugin.startEdit(0, 0);
+        editor = plugin.getActiveEditor();
+        editor.field.onTriggerClick();
+        expect(editor.field.isExpanded).toBe(true);
+
+        plugin.startEdit(1, 1);
+        editor = plugin.getActiveEditor();
+        editor.field.onTriggerClick();
+        expect(editor.field.isVisible()).toBe(true);
+
+        plugin.startEdit(2, 2);
+        editor = plugin.getActiveEditor();
+        value = editor.field.getValue();
+        editor.field.onSpinnerDownClick();
+        expect(editor.field.getValue()).toBe(value - 1);
+
+        plugin.startEdit(2, 2);
+        editor = plugin.getActiveEditor();
+        value = editor.field.getValue();
+        editor.field.onSpinnerUpClick();
+        expect(editor.field.getValue()).toBe(value + 1);
+    });
 });

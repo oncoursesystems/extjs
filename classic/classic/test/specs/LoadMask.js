@@ -893,7 +893,12 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
         it("should have aria-valuetext after show", function() {
             mask.show();
 
-            expect(mask).toHaveAttr('aria-valuetext', 'Loading...');
+            if (Ext.isIE) {
+                expect(mask.msgTextEl).toHaveAttr('aria-valuetext', 'Loading...');
+            }
+            else {
+                expect(mask).toHaveAttr('aria-valuetext', 'Loading...');
+            }
         });
 
         it("should remove aria-valuetext if useMsg is false", function() {
@@ -901,6 +906,50 @@ topSuite("Ext.LoadMask", ['Ext.grid.Panel', 'Ext.button.Button'], function() {
             mask.show();
 
             expect(mask).not.toHaveAttr('aria-valuetext');
+        });
+    });
+
+    describe("grid: load mask", function() {
+        it("should set aria-labelledby attribute to id of text element of mask", function() {
+            var panelMask, store, el,
+            panel = new Ext.grid.Panel({
+                renderTo: document.body,
+                title: 'Test focus',
+                height: 300,
+                width: 600,
+                viewConfig: {
+                    loadMask: {
+                        msg: 'Grid is Loading....'
+                    }
+                },
+                store: {
+                    asynchronousLoad: false,
+                    proxy: {
+                        type: 'ajax',
+                        url: 'foo'
+                    }
+                },
+                loadMask: true,
+                columns: [{
+                    text: 'Columns one',
+                    width: 200
+                }, {
+                    text: 'Column two',
+                    flex: 1
+                }]
+            });
+
+            store = panel.store;
+            store.load();
+
+            runs(function() {
+                panelMask = panel.view.loadMask;
+                el = Ext.isIE ? panelMask.msgTextEl : panelMask.el;
+
+                expect(el.dom.getAttribute('aria-labelledby')).toBe(panelMask.msgTextEl.id);
+
+                panel.destroy();
+            });
         });
     });
 });

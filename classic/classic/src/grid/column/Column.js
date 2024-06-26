@@ -215,7 +215,14 @@ Ext.define('Ext.grid.column.Column', {
          *
          * `'start'` and `'end'` always conform to the locale's text direction.
          */
-        align: 'start'
+        align: 'start',
+
+        /**
+         * @cfg {Boolean} readOnly
+         * Set to true to prevent pasting data on cell.
+         * Checked this cfg in {@link Ext.grid.plugin.Clipboard}
+        */
+        readOnly: true
     },
 
     baseCls: Ext.baseCSSPrefix + 'column-header',
@@ -1033,7 +1040,8 @@ Ext.define('Ext.grid.column.Column', {
     },
 
     initComponent: function() {
-        var me = this;
+        var me = this,
+            headerContainer = me.getRootHeaderCt();
 
         // Preserve the scope to resolve a custom renderer.
         // Subclasses (TreeColumn) may insist on scope being this.
@@ -1075,6 +1083,11 @@ Ext.define('Ext.grid.column.Column', {
             // A group cannot be sorted, or resized - it shrinkwraps its children
             me.sortable = me.resizable = false;
             me.align = 'center';
+
+            // Register add and remove events from root header to group header
+            if (headerContainer) {
+                headerContainer.relayEvents(me, ['add', 'remove']);
+            }
         }
         else {
             // Flexed Headers need to have a minWidth defined so that they can never be squeezed out
@@ -1758,7 +1771,8 @@ Ext.define('Ext.grid.column.Column', {
             activeHeader, el, prevSibling, tapMargin;
 
         // Tap on the resize zone triggers the menu
-        if (e.pointerType === 'touch') {
+        // Window touch device eventType is `mouse` instead of `touch` in Firefox.
+        if (e.pointerType === 'touch' || (Ext.isWindows && Ext.isFirefox && Ext.supports.Touch)) {
             prevSibling = me.previousSibling(':not([hidden])');
 
             // Tap on right edge, activate this header

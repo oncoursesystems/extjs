@@ -80,6 +80,11 @@ Ext.define('Ext.state.Stateful', function(Stateful) { return { // eslint-disable
                     return oldValue || newValue;
                 }
 
+                // null || undefined return newValue
+                if (newValue == null) {
+                    return newValue;
+                }
+
                 if (!newValue) {
                     return false;
                 }

@@ -809,4 +809,28 @@ topSuite("Ext.grid.plugin.RowExpander", ['Ext.grid.Panel'], function() {
             }).not.toThrow();
         });
     });
+
+    describe("aria-expanded Row Expander", function() {
+        it("aria-labelledby/describedby should be pointing to corresponding ", function() {
+            var expanderEl;
+
+            makeGrid();
+
+            expander.toggleRow(0, store.getAt(0));
+
+            // While collapsed
+            jasmine.fireMouseEvent(grid.view.el.dom.querySelector('.x-grid-row-expander'), 'click');
+            expect(getRowBodyTr(0).isVisible()).toBe(false);
+
+            expanderEl = view.getCellByPosition({ row: 0, column: 0 }, true).querySelector('.' + Ext.baseCSSPrefix + 'grid-row-expander');
+            expect(expanderEl.getAttribute((Ext.isIE ? 'aria-labelledby' : 'aria-describedby')))
+                .toBe(grid.view.id + '-aria-description-rowcollapsed');
+
+            // While expanded
+            jasmine.fireMouseEvent(grid.view.el.dom.querySelector('.x-grid-row-expander'), 'click');
+            expect(expanderEl.getAttribute((Ext.isIE ? 'aria-labelledby' : 'aria-describedby')))
+                .toBe(grid.view.id + '-aria-description-rowexpanded');
+
+        });
+    });
 });

@@ -1133,4 +1133,214 @@ topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore',
         });
 
     });
+
+    describe("Legends position test after removing chart and perform data filter and Adding chart again", function() {
+        var layoutDone, stores, chart, legend, container;
+
+        afterEach(function() {
+            Ext.destroy(stores, chart, legend, container);
+        });
+        it("test to check the legend position before and after the data filter the when chart is removed and added later", function() {
+            runs(function() {
+                stores = Ext.create('Ext.data.Store', {
+                    storeId: 'tempStore1',
+                    data: [{
+                        month: 'Jan',
+                        data1: 20,
+                        data2: 37,
+                        data3: 35,
+                        data4: 4,
+                        other: 4
+                    }, {
+                        month: 'Feb',
+                        data1: 20,
+                        data2: 37,
+                        data3: 36,
+                        data4: 5,
+                        other: 2
+                    }, {
+                        month: 'Mar',
+                        data1: 19,
+                        data2: 36,
+                        data3: 37,
+                        data4: 4,
+                        other: 4
+                    }, {
+                        month: 'Apr',
+                        data1: 18,
+                        data2: 36,
+                        data3: 38,
+                        data4: 5,
+                        other: 3
+                    }, {
+                        month: 'May',
+                        data1: 18,
+                        data2: 35,
+                        data3: 39,
+                        data4: 4,
+                        other: 4
+                    }, {
+                        month: 'Jun',
+                        data1: 17,
+                        data2: 34,
+                        data3: 42,
+                        data4: 4,
+                        other: 3
+                    }, {
+                        month: 'Jul',
+                        data1: 16,
+                        data2: 34,
+                        data3: 43,
+                        data4: 4,
+                        other: 3
+                    }, {
+                        month: 'Aug',
+                        data1: 16,
+                        data2: 33,
+                        data3: 44,
+                        data4: 4,
+                        other: 3
+                    }, {
+                        month: 'Sep',
+                        data1: 16,
+                        data2: 32,
+                        data3: 44,
+                        data4: 4,
+                        other: 4
+                    }, {
+                        month: 'Oct',
+                        data1: 16,
+                        data2: 32,
+                        data3: 45,
+                        data4: 4,
+                        other: 3
+                    }, {
+                        month: 'Nov',
+                        data1: 15,
+                        data2: 31,
+                        data3: 46,
+                        data4: 4,
+                        other: 4
+                    }, {
+                        month: 'Dec',
+                        data1: 15,
+                        data2: 31,
+                        data3: 47,
+                        data4: 4,
+                        other: 3
+                    }]
+                });
+
+                chart = Ext.create('Ext.chart.CartesianChart', {
+                    width: 600,
+                    height: 500,
+                    captions: {
+                        title: 'Chart'
+                    },
+                    itemId: 'C1',
+                    store: stores,
+                    legend: {
+                        type: 'sprite',
+                        docked: 'top'
+                    },
+                    listeners: {
+                        layout: function() {
+                            layoutDone = true;
+                        }
+                    },
+                    axes: [{
+                        type: 'numeric',
+                        position: 'left',
+                        fields: ['data1'],
+                        minimum: 0
+                    }, {
+                        type: 'category',
+                        position: 'bottom',
+                        fields: ['month'],
+                        label: {
+                            rotate: {
+                                degrees: -45
+                            }
+                        }
+                    }],
+                    series: [{
+                        type: 'bar',
+                        title: ['btc', 'ltc', 'wave', 'eth'],
+                        xField: 'month',
+                        yField: ['data1', 'data2', 'data3', 'data4'],
+                        stacked: false,
+                        style: {
+                            opacity: 0.80,
+                            minGapWidth: 30
+                        }
+                    }]
+                });
+
+                container = Ext.create('Ext.container.Container', {
+                    items: [{
+                        xtype: 'button',
+                        text: "Remove Chart",
+                        handler: function() {
+                            container.remove(chart, false);
+                        }
+                    }, {
+                        xtype: 'button',
+                        text: "Add Filter",
+                        handler: function() {
+                            chart.getStore().addFilter({
+                                property: 'data1',
+                                operator: 'in',
+                                value: [20]
+                            });
+                        }
+                    }, {
+                        xtype: 'button',
+                        text: "Add Chart",
+                        handler: function() {
+                            container.add(chart);
+                        }
+                    }, {
+                        xtype: 'button',
+                        text: "remove Filter",
+                        handler: function() {
+                            chart.getStore().clearFilter();
+                        }
+                    }, chart ],
+                    renderTo: Ext.getBody()
+                });
+            });
+
+            waitsFor(function() {
+                return layoutDone;
+            });
+
+            runs(function() {
+                var containerItems = container.items.items,
+                    beforelegend = chart.getLegend(),
+                    beforelegendSurface = beforelegend.getSurface(),
+                    beforelegendRect = beforelegendSurface.getRect();
+
+                // condition to remove chart, perform filter store and add the chart again
+                jasmine.fireMouseEvent(containerItems[0].el, 'click');
+                jasmine.fireMouseEvent(containerItems[1].el, 'click');
+                jasmine.fireMouseEvent(containerItems[2].el, 'click');
+
+                var chartRect = chart.getChartRect(),
+                    legend = chart.getLegend(),
+                    legendSize = legend.getSize(),
+                    legendSurface = legend.getSurface(),
+                    legendRect = legendSurface.getRect();
+
+                expect(legendRect[0]).toBe(0);
+                expect(legendRect[1]).toBe(chartRect[1]);
+                expect(legendRect[2]).toBe(chart.getWidth());
+                expect(legendRect[3]).toBe(legendSize.height);
+
+                // check for position before and after the condition
+                for (var i = 0; i < legendRect.length; i++) {
+                    expect(beforelegendRect[i]).toBe(legendRect[i]);
+                }
+            });
+        });
+    });
 });

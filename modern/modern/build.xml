@@ -244,7 +244,7 @@
             <![CDATA[
             classpath
                 -name=froala-editor
-                -path=${framework.dir}/../packages/froala-editor/src
+                -path=${framework.dir}/../packages/froala-editor/modern/src
             and
             classpath
                 -name=froala-editor

@@ -1035,6 +1035,33 @@ function() {
                 expect(item2).toHaveAttr('role', 'throbbe');
             });
         });
+
+        describe("aria attributes", function() {
+            it("should render aria-label attribue to the dom if specified", function() {
+                var rec, cell;
+
+                makeGrid({
+                    columns: [{
+                        dataIndex: 'text',
+                        header: 'Text'
+                    }, {
+                        xtype: 'actioncolumn',
+                        dataIndex: 'actionCls',
+                        header: 'Action',
+                        itemTabIndex: -1,
+                        items: [{
+                            tooltip: 'Edit',
+                            ariaLabel: 'Aria for action column'
+                        }]
+                    }]
+                });
+
+                rec = store.first();
+                cell = grid.getView().getCell(rec, 1);
+
+                expect(cell.querySelector('.x-action-col-icon').getAttribute('aria-label')).toBe('Aria for action column');
+            });
+        });
     });
 
     it("should not fail when using contains()", function() {

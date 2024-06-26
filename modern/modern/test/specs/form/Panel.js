@@ -940,10 +940,10 @@ function() {
         });
 
         describe("load using ajax", function() {
-            var callback, response;
+            var callback, response, requestSpy;
 
             beforeEach(function() {
-                spyOn(Ext.Ajax, 'request').andCallFake(function(cb, scope) {
+                requestSpy = spyOn(Ext.Ajax, 'request').andCallFake(function(cb, scope) {
                     cb.callback(cb, response.success, { responseText: JSON.stringify(response.data) });
                 });
 
@@ -957,6 +957,10 @@ function() {
                     },
                     items: [{ name: 'name', label: 'name' }]
                 });
+            });
+
+            afterEach(function() {
+                requestSpy = null;
             });
 
             it("should load values in the form using ajax call", function() {
@@ -1018,6 +1022,33 @@ function() {
                 expect(callback).toHaveBeenCalled();
                 expect(panel.getValues()).toEqual({ name: null });
 
+            });
+
+            it("should pass params in the ajax call", function() {
+                var ajaxArgs = null;
+
+                callback = jasmine.createSpy('load fn');
+
+                response = {
+                    success: true,
+                    data: {
+                        success: true,
+                        data: { name: 'Bar' }
+                    }
+                };
+
+                panel.load({
+                    method: 'GET',
+                    success: callback,
+                    failure: callback,
+                    params: {
+                        name: 'Name'
+                    }
+                });
+
+                ajaxArgs = requestSpy.mostRecentCall.args[0];
+
+                expect(ajaxArgs.hasOwnProperty('params')).toBeTruthy();
             });
         });
     });

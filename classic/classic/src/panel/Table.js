@@ -2807,6 +2807,9 @@ Ext.define('Ext.panel.Table', {
 
             currentHideHeaderState = headerCt.height === 0;
 
+            // set the focusable to false if the header is hidden
+            headerCt.focusableContainer = !hideHeaders;
+
             if (!headerCt.rendered || hideHeaders !== currentHideHeaderState) {
                 headerCt.setHeight(hideHeaders ? 0 : null);
                 headerCt.hiddenHeaders = hideHeaders;

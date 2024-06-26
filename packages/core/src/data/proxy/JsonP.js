@@ -153,7 +153,26 @@ Ext.define('Ext.data.proxy.JsonP', {
         * @cfg {Boolean} autoAppendParams
         * True to automatically append the request's params to the generated url. Defaults to true
         */
-        autoAppendParams: true
+        autoAppendParams: true,
+
+        /**
+         * @cfg {"name"/"array"/"indexed"} arrayUrlEncodingFormat
+         * Format types of {@link #recordParam}.  Valid values are:
+         *
+         * - **"name"** - Pass records as multiple query {@link #recordParam} params.
+         *
+         *     ?records=1&records=2&records=3
+         *
+         * - **"array"** - Pass records as an array using {@link #recordParam} param.
+         *
+         *     ?records=[1,2,3]
+         *
+         * - **"indexed"** - Pass records as multiple indexed query {@link recordParam} params.
+         *
+         *     ?records[0]=1&record[1]=2&records[3]=3
+         *
+         */
+        arrayUrlEncodingFormat: 'name'
     },
 
     /**
@@ -278,7 +297,9 @@ Ext.define('Ext.data.proxy.JsonP', {
         // The params are cleared in doRequest so that the Ext.data.JsonP singleton does not
         // add them.
         if (me.getAutoAppendParams()) {
-            url = Ext.urlAppend(url, Ext.Object.toQueryString(params));
+            url = Ext.urlAppend(url,
+                                Ext.Object.toQueryString(params,
+                                                         me.arrayUrlEncodingFormat === "indexed"));
         }
 
         return url;
@@ -307,14 +328,17 @@ Ext.define('Ext.data.proxy.JsonP', {
      * @return {Array} An array of record data objects
      */
     encodeRecords: function(records) {
-        var encoded = [],
+        var recs = [],
             i = 0,
-            len = records.length;
+            len = records.length,
+            encodeArray = this.arrayUrlEncodingFormat === "array",
+            data;
 
         for (; i < len; i++) {
-            encoded.push(Ext.encode(records[i].getData()));
+            data = records[i].getData();
+            recs.push(encodeArray ? data : Ext.encode(data));
         }
 
-        return encoded;
+        return encodeArray ? Ext.encode(recs) : recs;
     }
 });

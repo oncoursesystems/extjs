@@ -515,6 +515,12 @@ Ext.define('Ext.dd.DragDropManager', {
         // the drag was initiated.
         // Pointer events standard
         if (DomEventType === 'pointerdown') {
+            // For pointerType mouse need to register mouseup and mousemove events
+            if (e.browserEvent.pointerType === 'mouse') {
+                listeners.mouseup = pointerup;
+                listeners.mousemove = pointermove;
+            }
+
             listeners.pointerup = pointerup;
             listeners.pointermove = pointermove;
         }
@@ -794,8 +800,9 @@ Ext.define('Ext.dd.DragDropManager', {
         // report that they support it. IE8m do not support it so they will auto fall back.
         overDragEl = !(dragCurrent.deltaX < 0 || dragCurrent.deltaY < 0);
 
-        if (isTouch || (!me.notifyOccluded && (!Ext.supports.CSSPointerEvents || Ext.isIE10m ||
-            Ext.isOpera) && overDragEl)) {
+        // finding the element by position as IE9 is not reading the the drop target
+        if ((isTouch || Ext.isIE9) || (!me.notifyOccluded && (!Ext.supports.CSSPointerEvents ||
+            Ext.isIE10m || Ext.isOpera) && overDragEl)) {
             dragEl = dragCurrent.getDragEl();
 
             // Temporarily hide the dragEl instead of moving it off the page. Moving the el

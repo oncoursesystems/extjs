@@ -1878,7 +1878,7 @@ Ext.define('Ext.view.AbstractView', {
         var mask = this.loadMask;
 
         if (this.rendered && mask && store && !mask.bindStore) {
-            mask = this.createMask();
+            mask = this.createMask(mask);
         }
 
         if (mask && mask.bindStore) {

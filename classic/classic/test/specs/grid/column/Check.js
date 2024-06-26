@@ -497,6 +497,42 @@ topSuite("Ext.grid.column.Check", ['Ext.grid.Panel', 'Ext.grid.column.Template']
             cell = grid.getView().getCell(rec, col);
             expect(cell.getAttribute('aria-describedby')).toBe(col.id + '-cell-description-not-selected');
         });
+
+        it("should render aria-label attribue to the dom if specified", function() {
+            var cfg = getColCfg(),
+                rec, cell, spanEl;
+
+            cfg.ariaLabel = 'Is Checked';
+
+            makeGrid([cfg]);
+
+            rec = store.first();
+            cell = grid.getView().getCell(rec, col);
+            spanEl = cell.querySelector('span');
+
+            expect(spanEl.getAttribute('aria-label')).toBe(cfg.ariaLabel);
+        });
+
+        it("should toggle aria-checked attribute on checking/unchecking the checkbox", function() {
+            var rec, cell, spanEl;
+
+            makeGrid();
+
+            rec = store.first();
+            cell = grid.getView().getCell(rec, col);
+            spanEl = cell.querySelector('span');
+
+            expect(spanEl.getAttribute('aria-checked')).toBe('true');
+
+            jasmine.fireMouseEvent(cell, 'click');
+
+            // aria-checked will get changed after 500ms
+            waits(600);
+
+            runs(function() {
+                expect(spanEl.getAttribute('aria-checked')).toBe('false');
+            });
+        });
     });
 
     describe("tips", function() {

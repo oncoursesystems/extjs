@@ -24,6 +24,10 @@
     }
 }
 
+.#{$prefix}windows .#{$prefix}list {
+    touch-action: pinch-zoom pan-x;
+}
+
 .#{$prefix}list-inner-ct.#{$prefix}infinite > * {
     position: absolute;
     width: 100%;

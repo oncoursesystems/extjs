@@ -521,6 +521,12 @@ Ext.define('Ext.form.field.ComboBox', {
     forceSelection: false,
 
     /**
+     * @cfg {Boolean} allowProgrammaticUnknownValues
+     * 'true' to allow setting and binding values from javascript that don't exist in the store.
+     */
+    allowProgrammaticUnknownValues: false,
+
+    /**
      * @cfg {Boolean} growToLongestValue
      * `false` to not allow the component to resize itself when its data changes
      * (and its {@link #grow} property is `true`)
@@ -2366,6 +2372,7 @@ Ext.define('Ext.form.field.ComboBox', {
             pendingLoad = store.hasPendingLoad(),
             unloaded = autoLoadOnValue && !isLoaded && !pendingLoad,
             forceSelection = me.forceSelection,
+            allowProgrammaticUnknownValues = me.allowProgrammaticUnknownValues,
             selModel = me.pickerSelectionModel,
             displayField = me.displayField,
             valueField = me.valueField,
@@ -2387,7 +2394,9 @@ Ext.define('Ext.form.field.ComboBox', {
         // the value may be correct as the raw value, we must still load the store, and
         // upon load, match the value and select a record sop we can publish the *selection* to
         // a ViewModel.
-        if (pendingLoad || unloaded || !isLoaded || isEmptyStore) {
+        // But when allowProgrammaticUnknownValues, we have to accept the received value.
+        if (!allowProgrammaticUnknownValues &&
+            (pendingLoad || unloaded || !isLoaded || isEmptyStore)) {
 
             // If they are setting the value to a record instance, we can
             // just add it to the valueCollection and continue with the setValue.
@@ -2461,8 +2470,12 @@ Ext.define('Ext.form.field.ComboBox', {
                 // If we are allowing insertion of values not represented in the Store,
                 // then push the value and create a new record to push as a display value
                 // for use by the displayTpl
-                if (!forceSelection) {
-                    // We are allowing added values to create their own records.
+                if (!forceSelection || allowProgrammaticUnknownValues) {
+                    // We are allowing added values to create their own records when !forceSelection
+                    // or allowProgrammaticUnknownValues and also with queryMode === 'remote'
+                    // to allow adding not existing values in the store in binding
+                    // or setValue operations.
+
                     // Only if the value is not empty.
                     if (!record && val) {
                         dataObj = {};

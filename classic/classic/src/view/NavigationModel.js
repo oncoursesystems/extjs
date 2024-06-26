@@ -115,7 +115,11 @@ Ext.define('Ext.view.NavigationModel', {
     },
 
     processViewEvent: function(view, record, node, index, event) {
-        return event;
+        if (event.target === node) {
+            return event;
+        }
+
+        return null;
     },
 
     addKeyBindings: function(binding) {
@@ -258,7 +262,8 @@ Ext.define('Ext.view.NavigationModel', {
      * This is used on view refresh and on replace.
      */
     focusPosition: function(recordIndex) {
-        var me = this;
+        var me = this,
+            lastFocusedItem;
 
         if (recordIndex != null && recordIndex !== -1) {
             if (recordIndex.isEntity) {
@@ -268,6 +273,36 @@ Ext.define('Ext.view.NavigationModel', {
             me.item = me.view.all.item(recordIndex);
 
             if (me.item) {
+
+                if (me.view.tabInnerItems) {
+                    lastFocusedItem = Ext.fly(me.view.getNodeByRecord(me.lastFocused));
+
+                    if (lastFocusedItem && lastFocusedItem.el !== me.item.el) {
+
+                        // Save the tabbable state of the current component, 
+                        // including itself and excluding any previously saved state.
+                        // - `skipSelf: false` includes the current component itself, 
+                        // only capturing the tabbable state of its children.
+                        // - `includeSaved: false` ensures that any previously saved 
+                        // tabbable state is not included in this update.
+                        lastFocusedItem.saveTabbableState({
+                            skipSelf: false,
+                            includeSaved: false
+                        });
+                    }
+
+                    // When we focus the dataitem for the first time, tab-index is not saved, hence
+                    // explicitly setting it.
+                    me.item.setTabIndex(0);
+
+                    // Restore the previously saved tabbable state.
+                    // - skipSelf: true because we need to make currently focused item, 
+                    // to be tabbable, for Shift + Tab
+                    me.item.restoreTabbableState({
+                        skipSelf: false
+                    });
+                }
+
                 me.lastFocused = me.record;
                 me.lastFocusedIndex = me.recordIndex;
                 me.focusItem(me.item);

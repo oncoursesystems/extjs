@@ -4523,8 +4523,35 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
                         expect(function() {
                             jasmine.fireMouseEvent(leafItem0.el, 'click');
                         }).not.toThrow();
-                     });
-                 });
+                    });
+                });
+
+                it('should expand sub root node on expand icon click', function() {
+                    var rec6, item6, item61;
+
+                    root.appendChild({
+                        id: 'i6',
+                        text: 'Item 6',
+                        children: [{
+                            id: 'i61',
+                            text: 'Item 6.1',
+                            children: [{
+                                id: 'i611',
+                                text: 'Item 6.1.1',
+                                leaf: true
+                            }]
+                        }]
+                    });
+
+                    rec6 = root.childNodes[5];
+                    item6 = list.getItem(rec6);
+                    item61 = list.getItem(rec6.childNodes[0]);
+
+                    jasmine.fireMouseEvent(item6.toolElement, 'click');
+                    jasmine.fireMouseEvent(item61.expanderElement, 'click');
+
+                    expect(item61.el.destroyed).toBeFalsy();
+                });
             });
 
             describe("starting micro: false", function() {
@@ -4683,8 +4710,8 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
 
             it("should return newly added items", function() {
                 var node = root.appendChild({
-                        id: 'i9'
-                    }),
+                    id: 'i9'
+                }),
                     item = list.getItem(node);
 
                 expect(item.getNode()).toBe(node);
@@ -4693,11 +4720,11 @@ topSuite("Ext.list.Tree", ['Ext.data.TreeStore'], function() {
 
             it("should return children of newly added items", function() {
                 var node = root.appendChild({
-                        id: 'i9',
-                        children: [{
-                            id: 'i91'
-                        }]
-                    }),
+                    id: 'i9',
+                    children: [{
+                        id: 'i91'
+                    }]
+                }),
                     item = list.getItem(node.firstChild);
 
                 expect(item.getNode()).toBe(node.firstChild);

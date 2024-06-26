@@ -212,14 +212,15 @@ Ext.define('Ext.grid.NavigationModel', {
     },
 
     onCellMouseDown: function(view, cell, cellIndex, record, row, recordIndex, mousedownEvent) {
-        var targetComponent = Ext.Component.from(mousedownEvent, cell),
-            actionableEl = mousedownEvent.getTarget(this.isFocusableEl, cell),
-            ac;
+        var me = this,
+            targetComponent = Ext.Component.from(mousedownEvent, cell),
+            actionableEl = mousedownEvent.getTarget(me.isFocusableEl, cell),
+            ac, position;
 
-        // If actionable mode, and		
-        //  (mousedown on a tabbable, or anywhere in the ownership tree of an inner active
-        // component),		 we should just keep the action position synchronized.
-        // The tabbable element will be part of actionability.	
+        // If actionable mode, and 
+        //  (mousedown on a tabbable, or anywhere in the ownership tree of an inner active 
+        // component), we should just keep the action position synchronized.
+        // The tabbable element will be part of actionability.  
         // If the mousedown was NOT on some focusable object, we need to exit actionable mode.
         if (view.actionableMode) {
             // If mousedown is on a focusable element, or in the component tree of the active
@@ -229,13 +230,29 @@ Ext.define('Ext.grid.NavigationModel', {
                                ac !== view && ac.owns(mousedownEvent);
             }
 
-            if (actionableEl) {
-                // Keep actionPosition synched
-                view.setActionableMode(true, mousedownEvent.position);
+            // Attempt to see if we are clicking on another actionable cell.
+            // findFocusPosition will focus and activate any action on the target cell
+            // and return the focusTarget item should be activated.
+            if (me.previousPosition && actionableEl && !targetComponent) {
+                position = view.focusPosition(cell, mousedownEvent.position);
             }
-            // Not on anything actionable, then exit actionable mode
+
+            // If the target cell contains an actionable item, update the actionPosition
+            // and focus on the item.
+            if (position) {
+                me.actionPosition = position.view.actionPosition = position;
+
+                mousedownEvent.preventDefault();
+            }
             else {
-                view.setActionableMode(false, mousedownEvent.position);
+                if (actionableEl) {
+                    // Keep actionPosition synched
+                    view.setActionableMode(true, mousedownEvent.position);
+                }
+                // Not on anything actionable, then exit actionable mode
+                else {
+                    view.setActionableMode(false, mousedownEvent.position);
+                }
             }
 
             return;

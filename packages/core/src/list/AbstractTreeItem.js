@@ -209,7 +209,20 @@ Ext.define('Ext.list.AbstractTreeItem', {
      * Expand this item. Does nothing if already expanded.
      */
     expand: function() {
+        var owner = this.getOwner(),
+            isMicro = owner.getMicro();
+
+        // T-28372 : `refresh` event will be triggered in micro mode.
+        // need to skip that run as it will redraw the element.
+        if (isMicro) {
+            owner.skipNextRefresh = true;
+        }
+
         this.getNode().expand();
+
+        if (isMicro) {
+            owner.skipNextRefresh = null;
+        }
     },
 
     /**

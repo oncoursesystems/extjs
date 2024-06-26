@@ -186,7 +186,6 @@ Ext.define('Ext.menu.Menu', {
 
     bringParentToFront: false,
     alignOnScroll: false,
-
     // Menus are focusable
     focusable: true,
     tabIndex: -1,

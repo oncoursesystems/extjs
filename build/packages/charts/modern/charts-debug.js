@@ -16712,9 +16712,11 @@ Ext.define('Ext.chart.series.Series', {
             // which we don't want to call here.
             showMarkers = me.getConfig('showMarkers', true),
             // eslint-disable-line no-unused-vars
-            style, sprite, marker, i;
+            style, sprite, marker, i, labelMarker, category, categoryInstances, hidden;
         for (i = 0; i < ln; i++) {
             sprite = sprites[i];
+            category = sprite.id;
+            hidden = sprite.attr.hidden;
             style = me.getStyleByIndex(i);
             if (itemInstancing) {
                 sprite.getMarker('items').getTemplate().setAttributes(style);
@@ -16723,6 +16725,17 @@ Ext.define('Ext.chart.series.Series', {
             marker = sprite.isMarkerHolder && sprite.getMarker('markers');
             if (marker) {
                 marker.getTemplate().setAttributes(me.getMarkerStyleByIndex(i));
+            }
+            labelMarker = sprite.getMarker('labels');
+            if (Ext.isDefined(hidden) && labelMarker) {
+                categoryInstances = labelMarker.categories[category];
+                if (!Ext.Object.isEmpty(categoryInstances)) {
+                    Ext.Object.eachValue(categoryInstances, function(value) {
+                        labelMarker.setAttributesFor(value, {
+                            hidden: hidden
+                        });
+                    });
+                }
             }
         }
     },
@@ -21590,8 +21603,10 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
      * @return {Number[]} [left, top, width, height] components as an array, or null.
      */
     computeRect: function(chartRect) {
-        var rect, docked, size, height, width;
-        if (this.getHidden()) {
+        var chart = this.getChart(),
+            rect, docked, size, height, width;
+        // Added isDetached condition to check if the chart is removed
+        if (this.getHidden() || chart.isDetached) {
             return null;
         }
         rect = [
@@ -25037,6 +25052,17 @@ Ext.define('Ext.chart.CartesianChart', {
     renderFrame: function() {
         this.refloatAxes();
         this.callParent();
+    },
+    onAdded: function(container, pos, instanced) {
+        this.callParent([
+            container,
+            pos,
+            instanced
+        ]);
+        // Scheduling layout to adjust the sizing computation after chart addition.
+        if (Ext.isIE8) {
+            this.scheduleLayout();
+        }
     }
 });
 
@@ -30815,7 +30841,8 @@ Ext.define('Ext.chart.series.sprite.Bar', {
                 label,
                 labelCfg,
                 {
-                    store: me.getStore()
+                    store: me.getStore(),
+                    field: this.getField()
                 },
                 labelId
             ];
@@ -30949,8 +30976,9 @@ Ext.define('Ext.chart.series.sprite.Bar', {
             // Finding min/max so that bars render properly in both LTR and RTL modes.
             min = Math.min(dataClipRect[0], dataClipRect[2]),
             max = Math.max(dataClipRect[0], dataClipRect[2]),
-            start = Math.max(0, Math.floor(min)),
-            end = Math.min(dataX.length - 1, Math.ceil(max)),
+            // binarySearch will get the index of max and min in dataX
+            start = Math.max(0, me.binarySearch(min)),
+            end = Math.min(dataX.length - 1, me.binarySearch(max)),
             isDrawLabels = dataText && me.getMarker('labels'),
             yLow, yHi;
         // The scaling (xx) and translation (dx) here will already be such that the midpoints

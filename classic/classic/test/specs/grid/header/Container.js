@@ -87,6 +87,46 @@ topSuite('Ext.grid.header.Container', ['Ext.grid.Panel', 'Ext.form.field.Text'],
                 jasmine.fireMouseEvent(col.titleEl, 'mouseup');
             });
         });
+
+        // see https://sencha.jira.com/browse/EXTJS-28908
+        it('should show the column menu on single click', function() {
+            var col,
+                menu,
+                showSpy;
+
+            createGrid({}, {
+                renderTo: Ext.getBody()
+            });
+
+            col = grid.columns[0];
+            menu = col.getRootHeaderCt().getMenu();
+            showSpy = spyOnEvent(menu, 'show');
+
+            jasmine.fireMouseEvent(col.triggerEl, 'mousedown');
+            jasmine.doFireMouseEvent(col.triggerEl.dom, 'click');
+
+            waitsForSpy(showSpy);
+
+            runs(function() {
+                expect(menu.isVisible()).toBe(true);
+                jasmine.doFireMouseEvent(col.triggerEl, 'mouseup');
+
+                // Perform mouse operations on the second columns
+                jasmine.fireMouseEvent(grid.columns[1].triggerEl, 'mousedown');
+                jasmine.doFireMouseEvent(grid.columns[1].triggerEl.dom, 'click');
+            });
+
+            waitsForSpy(showSpy);
+
+            runs(function() {
+
+                // Check if the second column's menu is available
+                expect(menu.isVisible()).toBe(true);
+                expect(menu.ownerCmp.dataIndex).toBe('email');
+
+                jasmine.fireMouseEvent(grid.columns[1].triggerEl, 'mouseup');
+            });
+        });
     });
 
     describe('columnManager delegations', function() {
@@ -458,6 +498,80 @@ topSuite('Ext.grid.header.Container', ['Ext.grid.Panel', 'Ext.form.field.Text'],
             expect(c0_0).not.toBe(false);
             expect(c0_1).not.toBe(false);
             expect(c0_2).not.toBe(false);
+        });
+    });
+
+    describe('grid column header contextmenu', function() {
+
+        var menu, col, colItem, colMenu, items, lstCol, scroller, columns;
+
+        beforeEach(function() {
+            columns = [
+                { text: 'Name1', dataIndex: 'name', locked: true },
+                { text: 'Email1', dataIndex: 'email', locked: true },
+                { text: 'Phone1', dataIndex: 'phone' },
+                { text: 'Name2', dataIndex: 'name' },
+                { text: 'Email2', dataIndex: 'email' },
+                { text: 'Phone2', dataIndex: 'phone' },
+                { text: 'Name3', dataIndex: 'name' },
+                { text: 'Email3', dataIndex: 'email' },
+                { text: 'Phone3', dataIndex: 'phone' },
+                { text: 'Name14', dataIndex: 'name' },
+                { text: 'Email4', dataIndex: 'email' },
+                { text: 'Phone4', dataIndex: 'phone' }
+            ];
+
+            createGrid({}, {
+                columns: columns,
+                renderTo: Ext.getBody(),
+                width: 600
+            });
+        });
+
+        it('should not hide context menu after hide column from last', function() {
+
+            scroller = grid.view.normalGrid.getScrollable();
+
+            waitsFor(function() {
+
+                var width = grid.width;
+
+                scroller.scrollBy(width - 5, 0);
+
+                return scroller.initialized;
+            });
+
+            lstCol = grid.columns.length;
+
+            col = grid.columns[lstCol - 1];
+
+            Ext.testHelper.showHeaderMenu(col);
+
+            waitsFor(function() {
+
+                menu = col.activeMenu;
+
+                return menu.isVisible();
+            });
+
+            runs(function() {
+                expect(menu.isVisible()).toBe(true);
+                colItem = menu.child('#columnItem');
+                colItem.activated = true;
+                colItem.expandMenu(null, 0);
+                colMenu = colItem.menu;
+                expect(colMenu.isVisible()).toBe(true);
+
+                items = colMenu.items.getAt(0);
+
+                items.setChecked(false);
+                expect(colMenu.isVisible()).toBe(true);
+            });
+        });
+
+        afterEach(function() {
+
+            menu = col = colItem = colMenu = items = lstCol = scroller = columns = null;
         });
     });
 });

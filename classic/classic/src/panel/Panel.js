@@ -1809,6 +1809,15 @@ Ext.define('Ext.panel.Panel', {
             layout = me.ownerLayout,
             rendered = me.rendered;
 
+        // https://sencha.jira.com/browse/EXTJS-26862
+        // https://sencha.jira.com/browse/EXTJS-29572
+        // Set the focus to the collapse tool to ensure any currently
+        // focused components do not remain on screen after collapse
+
+        if (me.containsFocus && me.collapseTool) {
+            me.collapseTool.focus();
+        }
+
         if (me.isCollapsingOrExpanding) {
             return me;
         }
@@ -1835,13 +1844,6 @@ Ext.define('Ext.panel.Panel', {
 
         if (rendered) {
             me.beginCollapse();
-        }
-
-        // https://sencha.jira.com/browse/EXTJS-26862
-        // Set the focus to the collapse tool to ensure any currently
-        // focused components do not remain on screen after collapse
-        if (me.containsFocus && me.collapseTool) {
-            me.collapseTool.focus();
         }
 
         me.getInherited().collapsed = true;

@@ -1,5 +1,12 @@
 topSuite("Ext.window.MessageBox", function() {
-    var M;
+    var M, panel;
+
+    function makePanel(cfg) {
+        panel = new Ext.panel.Panel(Ext.apply({
+            renderTo: Ext.getBody(),
+            animCollapseDuration: 100
+        }, cfg));
+    }
 
     beforeEach(function() {
         M = new Ext.window.MessageBox();
@@ -1026,5 +1033,253 @@ topSuite("Ext.window.MessageBox", function() {
             });
         });
     });
-});
 
+    describe("Messagebox buttons", function() {
+        it("should show the message box on enter click for message box with OKCANCEL buttons", function() {
+            var textField = M.down('textfield'),
+                okBtn = M.down('button#ok');
+
+            Ext.apply(textField, {
+                minLength: 10,
+                allowBlank: false
+            });
+
+            textField.on({
+                validitychange: function(field, isValid) {
+                    okBtn.setDisabled(!isValid);
+                }
+            });
+
+            textField.validate();
+
+            M.show({
+                prompt: true,
+                buttons: M.OKCANCEL
+            });
+
+            textField.setValue('Text');// Invalid string
+            jasmine.fireKeyEvent(textField.inputEl, 'keydown', Ext.event.Event.ENTER);
+            expect(M.isVisible()).toBe(true);
+
+            textField.setValue('Text length should be more than 10');// Valid string
+            jasmine.fireKeyEvent(textField.inputEl, 'keydown', Ext.event.Event.ENTER);
+            expect(M.isVisible()).toBe(false);
+        });
+
+        it("should show the message box on enter click for message box with OK button", function() {
+            var textField = M.down('textfield'),
+                okBtn = M.down('button#ok');
+
+            Ext.apply(textField, {
+                minLength: 10,
+                allowBlank: false
+            });
+
+            textField.on({
+                validitychange: function(field, isValid) {
+                    okBtn.setDisabled(!isValid);
+                }
+            });
+
+            textField.validate();
+
+            M.show({
+                prompt: true,
+                buttons: M.OK
+            });
+
+            textField.setValue('Text');// Invalid string
+            jasmine.fireKeyEvent(textField.inputEl, 'keydown', Ext.event.Event.ENTER);
+            expect(M.isVisible()).toBe(true);
+
+            textField.setValue('Text length should be more than 10');// Valid string
+            jasmine.fireKeyEvent(textField.inputEl, 'keydown', Ext.event.Event.ENTER);
+            expect(M.isVisible()).toBe(false);
+        });
+
+        it("should show the message box on enter click for message box with YES button", function() {
+            var textField = M.down('textfield'),
+                yesBtn = M.down('button#yes');
+
+            Ext.apply(textField, {
+                minLength: 10,
+                allowBlank: false
+            });
+
+            textField.on({
+                validitychange: function(field, isValid) {
+                    yesBtn.setDisabled(!isValid);
+                }
+            });
+
+            textField.validate();
+
+            M.show({
+                prompt: true,
+                buttons: M.YES
+            });
+
+            textField.setValue('Text');// Invalid string
+            jasmine.fireKeyEvent(textField.inputEl, 'keydown', Ext.event.Event.ENTER);
+            expect(M.isVisible()).toBe(true);
+
+            textField.setValue('Text length should be more than 10');// Valid string
+            jasmine.fireKeyEvent(textField.inputEl, 'keydown', Ext.event.Event.ENTER);
+            expect(M.isVisible()).toBe(false);
+        });
+
+        it("should show the message box on enter click for message box with NO button", function() {
+            var textField = M.down('textfield'),
+                noBtn = M.down('button#no');
+
+            Ext.apply(textField, {
+                minLength: 10,
+                allowBlank: false
+            });
+
+            textField.on({
+                validitychange: function(field, isValid) {
+                    noBtn.setDisabled(!isValid);
+                }
+            });
+
+            textField.validate();
+
+            M.show({
+                prompt: true,
+                buttons: M.NO
+            });
+
+            textField.setValue('Text');// Invalid string
+            jasmine.fireKeyEvent(textField.inputEl, 'keydown', Ext.event.Event.ENTER);
+            expect(M.isVisible()).toBe(true);
+
+            textField.setValue('Text length should be more than 10');// Valid string
+            jasmine.fireKeyEvent(textField.inputEl, 'keydown', Ext.event.Event.ENTER);
+            expect(M.isVisible()).toBe(true);
+        });
+
+        it("should show the message box on enter click for message box with CANCEL button", function() {
+            var textField = M.down('textfield'),
+                cancelBtn = M.down('button#cancel');
+
+            Ext.apply(textField, {
+                minLength: 10,
+                allowBlank: false
+            });
+
+            textField.on({
+                validitychange: function(field, isValid) {
+                    cancelBtn.setDisabled(!isValid);
+                }
+            });
+
+            textField.validate();
+
+            M.show({
+                prompt: true,
+                buttons: M.CANCEL
+            });
+
+            textField.setValue('Text');// Invalid string
+            jasmine.fireKeyEvent(textField.inputEl, 'keydown', Ext.event.Event.ENTER);
+            expect(M.isVisible()).toBe(true);
+
+            textField.setValue('Text length should be more than 10');// Valid string
+            jasmine.fireKeyEvent(textField.inputEl, 'keydown', Ext.event.Event.ENTER);
+            expect(M.isVisible()).toBe(true);
+        });
+    });
+
+    describe("test for ProgressBar default text", function() {
+        var docked, innerHtml;
+
+        beforeEach(function() {
+            makePanel({
+                width: 400,
+                height: 200,
+                dockedItems: {
+                    xtype: 'toolbar',
+                    dock: 'top',
+                    items: [{
+                        xtype: 'button',
+                        text: 'MessageBox Wait (Autotext)',
+                        id: 'progressWithoutText',
+                        handler: function() {
+                            Ext.MessageBox.wait('Please Wait...', '', {
+                                duration: 1000,
+                                fn: function() {
+                                    Ext.MessageBox.close();
+                                }
+                            });
+                        }
+                    }, {
+                        xtype: 'button',
+                        text: 'MessageBox Wait (Text Provided)',
+                        id: 'progressWithText',
+                        handler: function() {
+                            Ext.MessageBox.wait('Please Wait...', '', {
+                                duration: 1000,
+                                text: 'My Text',
+                                fn: function() {
+                                    Ext.MessageBox.close();
+                                }
+                            });
+                        }
+                    }]
+                }
+            });
+            docked = panel.down('toolbar');
+        });
+        afterEach(function() {
+            panel = Ext.destroy(panel, docked, innerHtml);
+        });
+
+        it("should display progressbar default text if config text is not declared", function() {
+            var progressWithoutTextBtn = docked.queryById('progressWithoutText'),
+                progressWithText = docked.queryById('progressWithText'),
+                mbox = Ext.MessageBox,
+                pbar;
+
+            runs(function() {
+                jasmine.fireMouseEvent(progressWithText.el, 'click');
+            });
+            waitsFor(function() {
+                return mbox.isVisible();
+            });
+            waitsFor(function() {
+                pbar = mbox.progressBar;
+
+                innerHtml = pbar && pbar.textEl && pbar.textEl.elements[1].innerHTML;
+
+                return innerHtml.length;
+            });
+
+            runs(function() {
+                expect(innerHtml).toBe('My Text');
+            });
+
+            waitsFor(function() {
+                return !mbox.isVisible();
+            }, 2000);
+
+            runs(function() {
+                jasmine.fireMouseEvent(progressWithoutTextBtn.el, 'click');
+            });
+            waitsFor(function() {
+                pbar = mbox.progressBar;
+
+                innerHtml = pbar && pbar.textEl && pbar.textEl.elements[1].innerHTML;
+
+                return innerHtml.length;
+            });
+            runs(function() {
+                expect(innerHtml).toBe('10%');
+            });
+
+            waitsFor(function() {
+                return !mbox.isVisible();
+            }, 2000);
+        });
+    });
+});

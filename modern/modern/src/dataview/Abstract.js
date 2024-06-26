@@ -672,6 +672,8 @@ Ext.define('Ext.dataview.Abstract', {
         // Must use the bodyElement here, because we may want to listen to things like
         // pinned headers or other floating pieces.
         me.bodyElement.on({
+            keydown: '_onChildKeyDown',
+            keyup: '_onChildKeyUp',
             touchstart: '_onChildTouchStart',
             touchend: '_onChildTouchEnd',
             touchcancel: '_onChildTouchCancel',
@@ -764,8 +766,16 @@ Ext.define('Ext.dataview.Abstract', {
      */
     ensureVisible: function(record, options) {
         var me = this,
-            plan = me.ensureVisiblePlan(record, options),
+            plan,
             step;
+
+        // If the component is hidden, avoid the ensureVisible function from being invoked 
+        // when it is explicitly called.
+        if (!this.isVisible()) {
+            return;
+        }
+
+        plan = me.ensureVisiblePlan(record, options);
 
         // TODO highlight
         for (;;) {
@@ -1630,6 +1640,14 @@ Ext.define('Ext.dataview.Abstract', {
 
     onChildSwipe: function(location) {
         this.fireChildEvent('swipe', location);
+    },
+
+    onChildKeyDown: function(location) {
+        this.fireChildEvent('keydown', location);
+    },
+
+    onChildKeyUp: function(location) {
+        this.fireChildEvent('keyup', location);
     },
 
     onChildMouseOver: function(location) {
@@ -2734,11 +2752,14 @@ Ext.define('Ext.dataview.Abstract', {
 
             // eslint-disable-next-line vars-on-top
             var me = this,
+                store = me.store,
                 len = records.length,
                 pressedCls = me.pressedCls,
                 selectedCls = me.selectedCls,
                 toRemove = pressedCls,
-                i, record, item, toAdd;
+                partners, i, record, item, toAdd, j;
+
+            partners = store.isVirtualStore ? (me.allPartners || me.selfPartner || []) : [me];
 
             if (!selected) {
                 toRemove = [pressedCls, selectedCls];
@@ -2747,17 +2768,19 @@ Ext.define('Ext.dataview.Abstract', {
                 toAdd = selectedCls;
             }
 
-            if (!me.isConfiguring && !me.destroyed) {
-                for (i = 0; i < len; i++) {
-                    record = records[i];
-                    item = me.itemFromRecord(record);
+            for (j = 0; j < partners.length; j++) {
+                if (!partners[j].isConfiguring && !partners[j].destroyed) {
+                    for (i = 0; i < len; i++) {
+                        record = records[i];
+                        item = partners[j].itemFromRecord(record);
 
-                    if (item) {
-                        item = item.isWidget ? item.element : Ext.fly(item);
-                        item.removeCls(toRemove);
+                        if (item) {
+                            item = item.isWidget ? item.element : Ext.fly(item);
+                            item.removeCls(toRemove);
 
-                        if (toAdd) {
-                            item.addCls(toAdd);
+                            if (toAdd) {
+                                item.addCls(toAdd);
+                            }
                         }
                     }
                 }
@@ -2900,6 +2923,14 @@ Ext.define('Ext.dataview.Abstract', {
 
         _onChildSwipe: function(e) {
             this._onChildEvent('onChildSwipe', e);
+        },
+
+        _onChildKeyDown: function(e) {
+            this._onChildEvent('onChildKeyDown', e);
+        },
+
+        _onChildKeyUp: function(e) {
+            this._onChildEvent('onChildKeyUp', e);
         },
 
         _onChildMouseOver: function(e) {

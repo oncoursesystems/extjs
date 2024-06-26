@@ -2,7 +2,9 @@ topSuite("Ext.tree.Panel", [
     'Ext.grid.Panel',
     'Ext.app.ViewModel',
     'Ext.app.ViewController',
-    'Ext.grid.column.Widget'
+    'Ext.grid.column.Widget',
+    'Ext.grid.plugin.CellEditing',
+    'Ext.form.field.Text'
 ], function() {
     var itNotTouch = jasmine.supportsTouch ? xit : it,
         TreeItem = Ext.define(null, {
@@ -562,6 +564,48 @@ topSuite("Ext.tree.Panel", [
                     });
                 });
             });
+        });
+
+        describe("ARIA Check tree", function() {
+            it("should set the aria-describedby denoting to checked", function() {
+                var column = view.getColumnByPosition({ column: 0, row: 1 }),
+                    cell = view.getCell(1, 0);
+
+                jasmine.fireMouseEvent(checkbox, 'click');
+
+                expect(cell.getAttribute('aria-describedby')).toBe(view.id + '-aria-description-checked' +
+                    ' ' + view.id + '-aria-description-expanded');
+            });
+
+            it("should set the aria-describedby denoting to unchecked", function() {
+                var column = view.getColumnByPosition({ column: 0, row: 1 }),
+                    cell = view.getCell(1, 0);
+
+                jasmine.fireMouseEvent(checkbox, 'click');
+                record.set('checked', false);
+
+                expect(cell.getAttribute('aria-describedby')).toBe(view.id + '-aria-description-unchecked' +
+                ' ' + view.id + '-aria-description-expanded');
+            });
+        });
+
+        describe("ARIA expand", function() {
+            var ariaDescId;
+
+            it("should set the aria-describedby text denoting to collapsed/expanded", function() {
+                tree.getStore().getNodeById('B').collapse();
+                ariaDescId = view.getCell(2, 0).getAttribute('aria-describedby');
+                ariaDescId = ariaDescId.split(' ')[1];
+
+                expect(Ext.fly(ariaDescId).getText()).toContain('Node is collapsed');
+
+                tree.getStore().getNodeById('B').expand();
+                ariaDescId = view.getCell(2, 0).getAttribute('aria-describedby');
+                ariaDescId = ariaDescId.split(' ')[1];
+
+                expect(Ext.fly(ariaDescId).getText()).toContain('Node is expanded');
+            });
+
         });
     });
 
@@ -3189,7 +3233,7 @@ topSuite("Ext.tree.Panel", [
             makeTree(null, {
                 height: 400,
                 width: 350
-            }, {// lazyFill means childNodes do not load locally available children arrays until expanded.
+            }, { // lazyFill means childNodes do not load locally available children arrays until expanded.
                 lazyFill: true,
                 proxy: {
                     type: 'ajax',
@@ -3650,6 +3694,65 @@ topSuite("Ext.tree.Panel", [
             cell = view.getCell(1, 0).querySelector('.x-tree-expander');
             // "plus" class should be applied
             expect(cell).toHaveCls('x-tree-elbow-end-plus');
+        });
+    });
+
+    describe("Cell editing on tree panel", function() {
+        // see https://sencha.jira.com/browse/EXTJS-29552
+        it('should update the activeEditor point to the new cell when filter applied on Grid', function() {
+            makeTree(null, {
+                store: new Ext.data.TreeStore({
+                    root: {
+                        children: [{
+                            text: 'SFO  &nbsp;✈&nbsp; DFW',
+                            duration: '6h 55m',
+                            origin: 'SFO',
+                            leaf: true
+                        }, {
+                            text: 'SFO  &nbsp;✈&nbsp; DFW',
+                            duration: '6h 55m',
+                            origin: 'SFO',
+                            leaf: true
+                        }, {
+                            text: 'SFO  &nbsp;✈&nbsp; DFW',
+                            duration: '2h 55m',
+                            origin: 'SFO',
+                            leaf: true
+                        }]
+                    }
+                }),
+                rootVisible: false,
+                columns: [{
+                    dataIndex: 'text',
+                    editor: true,
+                    text: "Route"
+                }, {
+                    dataIndex: "origin",
+                    text: "Origin",
+                    editor: true
+                }],
+                plugins: [{
+                    ptype: "cellediting",
+                    clicksToEdit: 1
+                }]
+            });
+            tree.store.addFilter({ property: 'orgin', value: '' });
+            var record = tree.store.getAt(1),
+                node = tree.view.getNodeByRecord(record),
+                cells = Ext.fly(node).query('.x-grid-cell'),
+                plugin = tree.getPlugin();
+
+            jasmine.fireMouseEvent(cells[0], 'click');
+            waitsFor(function() {
+                return plugin.activeEditor && plugin.activeEditor.boundEl.dom === cells[0];
+            });
+            runs(function() {
+                plugin.activeEditor.setValue('Test');
+                jasmine.fireMouseEvent(cells[1], 'click');
+            });
+            waitsFor(function() {
+                return plugin.activeEditor.boundEl.getAttribute('data-columnid') === cells[1].getAttribute('data-columnid');
+            });
         });
     });
 });

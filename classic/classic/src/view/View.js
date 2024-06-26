@@ -107,6 +107,14 @@ Ext.define('Ext.view.View', {
     },
 
     /**
+     * @cfg {Boolean} tabInnerItems
+     * This enables the ability to navigate using the 'Tab' key and focus 
+     * on items that are tabbable within a dataview item.
+     */
+
+    tabInnerItems: false,
+
+    /**
      * @event beforeitemmousedown
      * @preventable
      * Fires before the mousedown event on an item is processed. Return false to cancel 

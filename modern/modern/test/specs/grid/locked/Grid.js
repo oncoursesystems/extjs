@@ -170,6 +170,21 @@ topSuite('Ext.grid.locked.Grid', [
         });
     }
 
+    function moveColumn(column, byX, byY) {
+        var el = column.headerElement,
+            colBox = column.el.getBox(),
+            fromMx = colBox.x + colBox.width / 2,
+            fromMy = colBox.y + colBox.height / 2;
+
+        byY = byY || 0;
+
+        // Mousedown on the header to drag
+        Ext.testHelper.touchStart(el, { x: fromMx, y: fromMy });
+
+        Ext.testHelper.touchMove(el, { x: fromMx + byX, y: fromMy + byY });
+        Ext.testHelper.touchEnd(el, { x: fromMx + byX, y: fromMy + byY });
+    }
+
     describe("columns", function() {
         function expectColOrder(region, cols) {
             region = getRegion(region);
@@ -2028,6 +2043,666 @@ topSuite('Ext.grid.locked.Grid', [
                     rec.set(makeVariableRow('auto', 75, 'auto'));
                     expectRowHeight(rec, 75 + rowPaddingMargin);
                 });
+            });
+        });
+    });
+
+    describe('stateful grid', function() {
+        it('should be able to persist column order and width', function() {
+            makeGrid({
+                stateId: 'grid-3',
+                stateful: true
+            });
+
+            // increase column width from 100 to 200
+            resizeColumn(colMap.colf1, 100);
+
+            // move column from left region to center
+            moveColumn(colMap.colf1, 210);
+
+            store = grid = Ext.destroy(grid, store);
+
+            makeGrid({
+                stateId: 'grid-3',
+                stateful: true
+            });
+
+            runs(function() {
+                expect(colMap.colf1.getWidth()).toBe(200);
+                expect(colMap.colf1.parent.indexOf(colMap.colf1)).toBe(0);
+            });
+        });
+
+        it('should be able to honor column stateful property', function() {
+            makeGrid({
+                stateId: 'grid-4',
+                stateful: true,
+                columns: [{
+                    itemId: 'colf1',
+                    width: 100,
+                    stateful: false,
+                    locked: true
+                }, {
+                    width: 100,
+                    itemId: 'colf2',
+                    locked: true
+                }, {
+                    width: 100,
+                    itemId: 'colf3'
+                }, {
+                    width: 100,
+                    itemId: 'colf4'
+                }]
+            });
+
+            // increase column width from 100 to 110
+            resizeColumn(colMap.colf1, 10);
+
+            // move column to center region
+            moveColumn(colMap.colf1, 110);
+
+            store = grid = Ext.destroy(grid, store);
+
+            makeGrid({
+                stateId: 'grid-4',
+                stateful: true,
+                columns: [{
+                    itemId: 'colf1',
+                    width: 100,
+                    stateful: false,
+                    locked: true
+                }, {
+                    width: 100,
+                    itemId: 'colf2',
+                    locked: true
+                }, {
+                    width: 100,
+                    itemId: 'colf3'
+                }, {
+                    width: 100,
+                    itemId: 'colf4'
+                }]
+            });
+
+            runs(function() {
+                // column is not stateful
+                expect(colMap.colf1.getWidth()).toBe(100);
+                expect(colMap.colf1.parent.indexOf(colMap.colf1)).toBe(0);
+            });
+        });
+
+        it('should persist the region state', function() {
+            makeGrid({
+                stateId: 'grid-5',
+                stateful: true,
+                columns: [{
+                    locked: true,
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    width: 200,
+                    itemId: 'col2'
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    locked: true,
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            grid.handleChangeRegion(getRegion('right'), colMap.col1);
+            grid.handleChangeRegion(getRegion('left'), colMap.col2);
+
+            store = grid = Ext.destroy(grid, store);
+
+            makeGrid({
+                stateId: 'grid-5',
+                stateful: true,
+                columns: [{
+                    locked: true,
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    width: 200,
+                    itemId: 'col2'
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    locked: true,
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            runs(function() {
+                expect(colMap.col1.parent.indexOf(colMap.col1)).toBe(0);
+                expect(colMap.col2.parent.indexOf(colMap.col2)).toBe(1);
+            });
+
+        });
+
+        it('should persist the nested column region state', function() {
+            makeGrid({
+                stateId: 'grid-6',
+                stateful: true,
+                columns: [{
+                    locked: true,
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    locked: true,
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            grid.handleChangeRegion(getRegion('right'), colMap.col2);
+
+            store = grid = Ext.destroy(grid, store);
+
+            makeGrid({
+                stateId: 'grid-6',
+                stateful: true,
+                columns: [{
+                    locked: true,
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    width: 200,
+                    itemId: 'col2',
+                    columns: [{
+                        width: 200,
+                        itemId: 'col11'
+                    }, {
+                        width: 200,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    locked: true,
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            runs(function() {
+                expect(colMap.col2.parent.indexOf(colMap.col2)).toBe(0);
+            });
+        });
+
+        it('should persist the nested column removal', function() {
+            makeGrid({
+                stateId: 'grid-7',
+                stateful: true,
+                columns: [{
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            moveColumn(colMap.col11, 210, -20);
+            moveColumn(colMap.col12, 210, -20);
+            grid.onBeforeStateSave();
+
+            store = grid = Ext.destroy(grid, store);
+
+            makeGrid({
+                stateId: 'grid-7',
+                stateful: true,
+                columns: [{
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            runs(function() {
+                expect(colMap.col2.isHidden()).toBe(true);
+            });
+        });
+
+        it('should persist the nested column hidden state', function() {
+            makeGrid({
+                stateId: 'grid-8',
+                stateful: true,
+                columns: [{
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            grid.handleChangeRegion(getRegion('right'), colMap.col2);
+            colMap.col11.setHidden(true);
+
+            grid.onBeforeStateSave();
+
+            store = grid = Ext.destroy(grid, store);
+
+            makeGrid({
+                stateId: 'grid-8',
+                stateful: true,
+                gridDefaults: {
+                    columnStateEventDelay: 0
+                },
+                columns: [{
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            runs(function() {
+                expect(colMap.col11.isHidden()).toBe(true);
+            });
+        });
+
+        it('should persist the nested column unlocked state', function() {
+            makeGrid({
+                stateId: 'grid-9',
+                stateful: true,
+                columns: [{
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            grid.handleChangeRegion(getRegion('left'), colMap.col2);
+
+            expect(colMap.col2.getGrid().regionKey).toBe('left');
+
+            grid.handleChangeRegion(getRegion('center'), colMap.col2);
+
+            grid.onBeforeStateSave();
+
+            store = grid = Ext.destroy(grid, store);
+
+            makeGrid({
+                stateId: 'grid-9',
+                stateful: true,
+                gridDefaults: {
+                    columnStateEventDelay: 0
+                },
+                columns: [{
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            runs(function() {
+                expect(colMap.col2.getGrid().regionKey).toBe('center');
+                expect(colMap.col2.parent.indexOf(colMap.col2)).toBe(0);
+            });
+        });
+
+        it('should persist the nested column region change state', function() {
+            makeGrid({
+                stateId: 'grid-10',
+                stateful: true,
+                columns: [{
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            colMap.col11.showMenu();
+
+            var menu = colMap.col11.getMenu(),
+                lockItem, lockMenu;
+
+            lockItem = menu.getComponent('region');
+            lockMenu = lockItem.getMenu();
+
+            lockMenu.showBy(lockItem, 'br');
+
+            jasmine.fireMouseEvent(lockMenu.getAt(0).ariaEl, 'click');
+
+            expect(colMap.col11.getGrid().regionKey).toBe('left');
+
+            colMap.col11.showMenu();
+
+            menu = colMap.col11.getMenu();
+            lockItem = menu.getComponent('region');
+            lockMenu = lockItem.getMenu();
+
+            lockMenu.showBy(lockItem, 'br');
+
+            jasmine.fireMouseEvent(lockMenu.getAt(1).ariaEl, 'click');
+
+            expect(colMap.col11.getGrid().regionKey).toBe('center');
+            expect(colMap.col11.getRootHeaderCt().indexOf(colMap.col11)).toBe(0);
+
+            grid.onBeforeStateSave();
+
+            store = grid = Ext.destroy(grid, store);
+
+            makeGrid({
+                stateId: 'grid-10',
+                stateful: true,
+                gridDefaults: {
+                    columnStateEventDelay: 0
+                },
+                columns: [{
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            runs(function() {
+                expect(colMap.col11.getGrid().regionKey).toBe('center');
+                expect(colMap.col11.getRootHeaderCt().indexOf(colMap.col11)).toBe(0);
+            });
+        });
+
+        it('should show the child column menu after moved from group', function() {
+            makeGrid({
+                stateId: 'grid-11',
+                stateful: true,
+                columns: [{
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            colMap.col11.showMenu();
+
+            var menu = colMap.col11.getMenu(),
+                lockItem, lockMenu;
+
+            lockItem = menu.getComponent('region');
+            lockMenu = lockItem.getMenu();
+
+            lockMenu.showBy(lockItem, 'br');
+
+            jasmine.fireMouseEvent(lockMenu.getAt(2).ariaEl, 'click');
+
+            expect(colMap.col11.getGrid().regionKey).toBe('right');
+
+            colMap.col12.showMenu();
+
+            menu = colMap.col12.getMenu();
+            lockItem = menu.getComponent('region');
+            lockMenu = lockItem.getMenu();
+
+            lockMenu.showBy(lockItem, 'br');
+
+            jasmine.fireMouseEvent(lockMenu.getAt(2).ariaEl, 'click');
+
+            expect(colMap.col12.getGrid().regionKey).toBe('right');
+
+            colMap.col11.showMenu();
+
+            expect(colMap.col11.getMenu().isHidden()).toBe(false);
+
+            store = grid = Ext.destroy(grid, store);
+
+            makeGrid({
+                stateId: 'grid-11',
+                stateful: true,
+                columns: [{
+                    width: 100,
+                    itemId: 'col1'
+                }, {
+                    itemId: 'col2',
+                    columns: [{
+                        width: 100,
+                        itemId: 'col11'
+                    }, {
+                        width: 100,
+                        itemId: 'col12'
+                    }]
+                }, {
+                    width: 200,
+                    itemId: 'col3'
+                }, {
+                    width: 200,
+                    itemId: 'col4'
+                }, {
+                    width: 200,
+                    itemId: 'col5'
+                }, {
+                    width: 200,
+                    itemId: 'col6'
+                }]
+            });
+
+            runs(function() {
+                expect(colMap.col11.getGrid().regionKey).toBe('right');
+                expect(colMap.col12.getGrid().regionKey).toBe('right');
+                expect(colMap.col2.isHidden()).toBe(true);
+
+                colMap.col11.showMenu();
+                expect(colMap.col11.getMenu().isHidden()).toBe(false);
+
+                colMap.col12.showMenu();
+                expect(colMap.col12.getMenu().isHidden()).toBe(false);
             });
         });
     });

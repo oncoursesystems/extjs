@@ -15,6 +15,18 @@ $slider-track-height: dynamic(9px);
 $slider-track-height-big: dynamic(18px);
 
 /**
+ * @var {number}
+ * The width of the slider track when vertical
+ */
+$slider-track-width: dynamic(9px);
+
+/**
+ * @var {number}
+ * The width of the slider track when vertical in the {@link Global_CSS#$enable-big big} sizing scheme
+ */
+$slider-track-width-big: dynamic(18px);
+
+/**
  * @var {color/list}
  * The background-color of the slider track
  */
@@ -96,6 +108,12 @@ $slider-disabled-opacity: dynamic(.3);
  * @param {number} $track-height-big
  * The height of the slider track in the {@link Global_CSS#$enable-big big} sizing scheme
  *
+ * @param {number} $track-width
+ * The width of the slider track when vertical
+ *
+ * @param {number} $track-width-big
+ * The width of the slider track when vertical in the {@link Global_CSS#$enable-big big} sizing scheme
+ *
  * @param {color/list} $track-background-color
  * The background-color of the slider track
  *
@@ -134,6 +152,8 @@ $slider-disabled-opacity: dynamic(.3);
     $xtype: slider,
     $track-height: null,
     $track-height-big: null,
+    $track-width: null,
+    $track-width-big: null,
     $track-background-color: null,
     $track-border-width: null,
     $track-border-style: null,
@@ -192,5 +212,23 @@ $slider-disabled-opacity: dynamic(.3);
                 @include border($track-border-width, $track-border-style, $disabled-fill-border-color);
             }
         }
+
+        &.#{$prefix}slider-vertical {
+            .#{$prefix}fill-el {
+                width: $track-width;
+            }
+
+            .#{$prefix}track-el {
+                width: $track-width;
+                height: 100%;
+                
+                @if $enable-big {
+                    .#{$prefix}big & {
+                        width: $track-width-big;
+                        @include border-radius($track-border-radius-big);
+                    }
+                }
+          }
+      }
     }
 }

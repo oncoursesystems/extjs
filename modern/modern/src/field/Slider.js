@@ -346,7 +346,13 @@ Ext.define('Ext.field.Slider', {
              * @cfg maxValue
              * @inheritdoc Ext.slider.Slider#maxValue
              */
-            'maxValue'
+            'maxValue',
+
+            /**
+             * @cfg vertical
+             * @inheritdoc Ext.slider.Slider#vertical
+             */
+            'vertical'
         ]
     },
 

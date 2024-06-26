@@ -1,4 +1,4 @@
-$image-search-path: '/home/teamcity/buildAgent/work/2ab44da583de48da/sencha/ext/build/packages/legacy/classic/classic/resources' !default;
+$image-search-path: '/home/teamcity/buildAgent/work/780e0679d11ca7ca/sencha/ext/build/packages/legacy/classic/classic/resources' !default;
 $theme-name:  'theme-neptune' !default;
 $include-ext-abstractcomponent: dynamic(false);;
 $include-ext-abstractcontainer: dynamic(false);;
@@ -1111,6 +1111,7 @@ $current-package: 'theme-neptune';
 $current-resource-root: $theme-neptune-resource-root;
 $relative-image-path-for-uis: $theme-neptune-resource-path;
 @import '../../../../../classic/theme-neptune/sass/var/Component';
+@import '../../../../../classic/theme-neptune/sass/var/list/TreeItem';
 @import '../../../../../classic/theme-neptune/sass/var/LoadMask';
 @import '../../../../../classic/theme-neptune/sass/var/ProgressBar';
 @import '../../../../../classic/theme-neptune/sass/var/button/Button';

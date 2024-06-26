@@ -149,6 +149,24 @@ Ext.define('Ext.dataview.selection.Model', {
     },
 
     /**
+     * @cfg {Boolean} pruneRemoved
+     * Remove records from the selection when they are removed from the store.
+     *
+     * **Important:** When {@link Ext.data.virtual.Store}, records which are cached in the Store's
+     * {@link Ext.data.Store#property-data data collection} may be removed from the Store
+     * when pages change, or when rows are scrolled out of view. For this reason `pruneRemoved`
+     * should be set to `false` when using a virtual Store.
+     *
+     * Also, when previously pruned pages are returned to the cache, the records objects
+     * in the page will be *new instances*, and will not match the instances in the selection
+     * model's collection. For this reason, you MUST ensure that the Model definition's
+     * {@link Ext.data.Model#idProperty idProperty} references a unique key because in this
+     * situation, records in the Store have their **IDs** compared to records in the
+     * SelectionModel in order to re-select a record which is scrolled back into view.
+     */
+    pruneRemoved: true,
+
+    /**
      * @cfg [publishes='checked']
      * @inheritdoc Ext.mixin.Bindable#cfg-publishes
      */
@@ -173,7 +191,9 @@ Ext.define('Ext.dataview.selection.Model', {
     getSelectedRecords: function() {
         var selection = this.getSelection();
 
-        return selection && selection.isRecords ? selection.getRecords() : Ext.emptyArray;
+        return selection && (selection.isRecords || selection.isRows)
+            ? selection.getRecords()
+            : Ext.emptyArray;
     },
 
     getStoreListeners: function() {
@@ -649,8 +669,10 @@ Ext.define('Ext.dataview.selection.Model', {
      * @private
      */
     refreshSelection: function() {
-        if (this.getSelection().isRecords) {
-            this.getSelection().refresh();
+        var selection = this.getSelection();
+
+        if (selection.isRecords || selection.isRows) {
+            selection.refresh();
         }
     },
 

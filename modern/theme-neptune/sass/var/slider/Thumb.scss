@@ -283,6 +283,21 @@ $thumb-toggle-off-ui: dynamic(null);
         &.#{$prefix}disabled {
             background-color: $disabled-background-color;
         }
+
+        .#{$prefix}slider-vertical & {
+            margin-top: 0;
+            @if $width != null {
+                margin-left: -$width / 2;
+            }
+
+            @if $enable-big {
+                .#{$prefix}big & {
+                    margin-left: -($width-big or $thumb-width-big) / 2;
+                }
+            }
+
+            transform: rotate(90deg);
+        }
     }
 
     // This element ensures the containing slider is at least as high as its largest thumb

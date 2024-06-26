@@ -697,6 +697,38 @@ Ext.define('Ext.grid.Grid', {
      */
 
     /**
+     * @event beforestaterestore
+     * Fires before the state of the object is restored. 
+     * Return false from an event handler to stop the restore.
+     * @param {Ext.grid.Grid} grid this Grid
+     * @param {Object} state The hash of state values returned from the StateProvider. If this
+     * event is not vetoed, then the state object is passed to *`applyColumnState`.
+     * @since 7.6
+     */
+    /**
+     * @event staterestore
+     * Fires after the state of the object is restored.
+     * @param {Ext.grid.Grid} grid this Grid
+     * @param {Object} state The hash of state values returned from the StateProvider.
+     * @since 7.6
+     */
+    /**
+     * @event beforestatesave
+     * Fires before the state of the object is saved to the configured state provider.
+     * Return false to stop the save.
+     * @param {Ext.grid.Grid} grid this Grid
+     * @param {Object} state The hash of state values.
+     * @since 7.6
+     */
+    /**
+     * @event statesave
+     * Fires after the state of the object is saved to the configured state provider.
+     * @param {Ext.grid.Grid} grid this Grid
+     * @param {Object} state The hash of state values.
+     * @since 7.6
+     */
+
+    /**
      * @private
      * @readonly
      * @property {String} [selectionModel=grid]
@@ -710,6 +742,26 @@ Ext.define('Ext.grid.Grid', {
      */
     classCls: Ext.baseCSSPrefix + 'grid',
     columnLinesCls: Ext.baseCSSPrefix + 'column-lines',
+
+    /**
+     * @property {Object} columnStateEventMap Column events to be applied 
+     * when grid is stateful.
+     * Mapping of this property 
+     *      `property`: Column event name
+     *      `value`: Matching event config
+     */
+    columnStateEventMap: {
+        columnhide: 'hidden',
+        columnmove: 'weight',
+        columnresize: 'width',
+        columnshow: 'hidden'
+    },
+
+    /**
+     * @property {Number} columnStateEventDelay
+     * A buffer to be applied if many state events are fired within a short period.
+     */
+    columnStateEventDelay: 100,
 
     getTemplate: function() {
         var template = this.callParent();
@@ -727,6 +779,7 @@ Ext.define('Ext.grid.Grid', {
         // In a locking grid assembly, child grids will have an ownerGrid reference.
         // By default, in a non-locking grid, ownerGrid references this grid.
         this.ownerGrid = this;
+        this.registerColumnState();
         this.callParent();
     },
 
@@ -994,6 +1047,12 @@ Ext.define('Ext.grid.Grid', {
 
             me.onColumnChange('columnadd', [me, column, columnIndex]);
         }
+
+        // Update column state, if new column is added
+        if (!me.isConfiguring && column.headerId == null) {
+            me.onStateChange();
+            me.applyColumnState();
+        }
     },
 
     onColumnHide: function(container, column) {
@@ -1124,6 +1183,22 @@ Ext.define('Ext.grid.Grid', {
         if (hideHeaders) {
             this.updateHideHeaders(hideHeaders);
         }
+
+        // Store will be null for bound store intially.
+        if (this.store) {
+
+            // Will update the sortState for inline store.
+            this.handleStoreSort();
+        }
+    },
+
+    applyColumns: function(columns) {
+        if (this.isColumnsStateful()) {
+            // do not carry state info to the column data
+            columns = Ext.clone(columns);
+        }
+
+        return columns;
     },
 
     privates: {
@@ -1131,6 +1206,9 @@ Ext.define('Ext.grid.Grid', {
             header: 1,
             footer: 1
         },
+
+        // column state header id separator for the nested group 
+        headerIdSeparator: '-',
 
         handleStoreSort: function() {
             if (this.rendered) {
@@ -1412,6 +1490,16 @@ Ext.define('Ext.grid.Grid', {
                     if (count) {
                         me.initializingColumns = me.isConfiguring;
 
+                        // Update column state property
+                        if (me.isColumnsStateful()) {
+                            // calculate column state header id
+                            me.updateColumnStateProp(columns);
+
+                            // update column config with state data
+                            // and re-arrange, if it moved to a different header group
+                            me.adjustColumnFromState(columns);
+                        }
+
                         header.setColumns(columns);
 
                         // Re-add any persistent columns, any adjusted weights are recalculated
@@ -1469,6 +1557,16 @@ Ext.define('Ext.grid.Grid', {
             }
         },
 
+        updateStore: function(newStore, oldStore) {
+            this.callParent([newStore, oldStore]);
+
+            // Need to update sortState for the bound store
+            if (newStore && this.getHeaderContainer().isRendered()) {
+                // Sync Store sorters when grid renders
+                this.handleStoreSort();
+            }
+        },
+
         renderEmpty: function() {
             return '\xA0';
         },
@@ -1520,6 +1618,7 @@ Ext.define('Ext.grid.Grid', {
                     columnmove: 'onColumnMove',
                     columnremove: 'onColumnRemove',
                     columnsort: 'onColumnSort',
+                    columngroupremove: 'onColumnGroupRemove',
                     scope: this
                 });
             }
@@ -1660,6 +1759,475 @@ Ext.define('Ext.grid.Grid', {
             }
 
             return this.callParent();
+        },
+
+        /**
+         * Register events for column state persistance.
+         * @private
+         */
+        registerColumnState: function() {
+            var me = this,
+                eventsMap = me.columnStateEventMap,
+                eventObj = {},
+                key;
+
+            if (!me.isColumnsStateful()) {
+                return;
+            }
+
+            for (key in eventsMap) {
+                eventObj[key] = 'onStateChange';
+            }
+
+            eventObj.scope = me;
+            eventObj.buffer = me.columnStateEventDelay;
+
+            me.on(eventObj);
+        },
+
+        /**
+         * Handler for {@link #columnStateEventMap} events.
+         * @private
+         */
+        onStateChange: function() {
+            var me = this,
+                state, items;
+
+            if (!me.isColumnsStateful()) {
+                return;
+            }
+
+            state = me.columnStateData || {};
+            items = me.getHeaderContainer().items;
+
+            me.updateColumnStateProp(items.items);
+
+            me.columnStateData = me.calculateColumnState(items, state);
+
+            me.persistColumnState(me.columnStateData);
+        },
+
+        /**
+         * Iterate through each column and assign headerId and item group move.
+         * @param {Ext.grid.column.Column[]/Object[]} columns {@link #columns}
+         * @param {String} ownerHeaderId Column Header Id
+         * @private
+         */
+        updateColumnStateProp: function(columns, ownerHeaderId) {
+            var i, column;
+
+            ownerHeaderId = ownerHeaderId ? (ownerHeaderId + this.headerIdSeparator) : '';
+
+            for (i = 0; i < columns.length; i++) {
+                column = columns[i];
+
+                column.headerId = this.getColumnStateId(column) || (ownerHeaderId + 'h' + i);
+
+                // re-iterate for header group
+                if (column.isHeaderGroup || !Ext.isEmpty(column.columns)) {
+                    this.updateColumnStateProp(column.innerItems || column.columns,
+                                               column.headerId);
+                }
+            }
+
+            return columns;
+        },
+
+        /**
+         * Read all the column state.
+         * @param {Ext.grid.column.Column[]} columns {@link #columns}
+         * @param {Object[]} columnsState Column State
+         * @private
+         */
+        calculateColumnState: function(columns, columnsState) {
+            var me = this,
+                eventsMap = me.columnStateEventMap,
+                key, cfg, prop, hId, value;
+
+            columns.each(function(column) {
+                // don't calculate column state if it's explicitly set to false
+                if (column.getStateful() === false) {
+                    return;
+                }
+
+                hId = me.getColumnStateId(column);
+
+                // Locked Grid: If column is moved to different region,
+                // store data to the region specific prefixed ID
+                if (column.region && column.region !== column.regionKey) {
+                    hId = column.regionKey + ':' + hId;
+                }
+
+                columnsState[hId] = columnsState[hId] || {};
+
+                for (key in eventsMap) {
+                    prop = eventsMap[key];
+
+                    cfg = column.self.$config.configs[prop];
+
+                    if (cfg) {
+                        value = column[cfg.names.get]();
+
+                        // do not store the state property, if it's not changed
+                        if (!Ext.isEmpty(value)) {
+                            columnsState[hId][prop] = value;
+                        }
+                    }
+                }
+
+                // assign parent header id to the column, if it's inside nested column
+                delete columnsState[hId].parentHeaderId;
+
+                if (column.parent && column.parent.headerId) {
+                    columnsState[hId].parentHeaderId = column.parent.headerId;
+                }
+
+                // Locked Grid - Pass column new region key info to the state data
+                if (column.region) {
+                    columnsState[hId].region = column.region;
+                }
+                else {
+                    // remove saved region from state data, if column is moved back to
+                    // its original state
+                    delete columnsState[hId].region;
+                }
+
+                // get column order on the nested group
+                if (column.isHeaderGroup) {
+                    me.calculateColumnState(column.items, columnsState);
+                }
+            });
+
+            return columnsState;
+        },
+
+        /**
+         * Reposition columns from the saved state.
+         * @param {Object[]} columns {@link #columns}
+         * @private
+         */
+        adjustColumnFromState: function(columns) {
+            var me = this,
+                stateData;
+
+            if (!me.isColumnsStateful()) {
+                return;
+            }
+
+            stateData = me.getColumnState();
+
+            if (Ext.Object.isEmpty(stateData)) {
+                return;
+            }
+
+            if (me.fireEvent('beforestaterestore', me, stateData) === false) {
+                return;
+            }
+
+            me.updateColumnStateBeforeAdd(stateData, columns);
+
+            me.fireEvent('staterestore', me, stateData);
+        },
+
+        /**
+         * Return matched column from the group
+         * @private
+         */
+        findColumnByParentHeaderId: function(columns, column) {
+            var i, item, matched, innerItems;
+
+            for (i = 0; i < columns.length; i++) {
+                item = columns[i] || columns.items[i];
+
+                if (item.headerId === column.parentHeaderId) {
+                    return item;
+                }
+                else if (!Ext.isEmpty(item.columns) || item.isHeaderGroup) {
+                    innerItems = item.isGridColumn ? item.innerItems : item.columns;
+
+                    matched = this.findColumnByParentHeaderId(innerItems, column);
+
+                    if (matched) {
+                        return matched;
+                    }
+                }
+            }
+        },
+
+        /**
+         * Update column config with saved state data
+         * @private
+         */
+        updateColumnStateBeforeAdd: function(columnsState, columns) {
+            var me = this,
+                i, column, data;
+
+            if (!me.isColumnsStateful() || Ext.isEmpty(columns)) {
+                return;
+            }
+
+            for (i = 0; i < columns.length; i++) {
+                column = columns[i];
+                data = columnsState[column.headerId];
+
+                if (data) {
+                    Ext.apply(column, data);
+
+                    if (!Ext.isEmpty(column.columns)) {
+                        me.updateColumnStateBeforeAdd(columnsState, column.columns);
+                    }
+                }
+            }
+
+            // re-arrange column item based on it's parent header ID
+            me.adjustNestedStateBeforeAdd(columns);
+        },
+
+        /**
+         * If column item is moved to different header, move the item
+         * @private
+         */
+        adjustNestedStateBeforeAdd: function(columns) {
+            var me = this,
+                i, column, matched, mainColumns;
+
+            for (i = 0; i < columns.length; i++) {
+                column = columns[i];
+
+                mainColumns = me._columns;
+
+                if (!column.parentHeaderId) {
+                    // Move nested column to root header container
+                    if (mainColumns.indexOf(column) === -1) {
+                        me.rearrangeColumn(mainColumns, columns, column);
+
+                        // re-iterate the loop to have correct column order after move
+                        i = -1;
+                    }
+
+                    continue;
+                }
+
+                matched = me.findColumnByParentHeaderId(columns, column);
+
+                if (matched && Ext.isArray(matched.columns)) {
+                    me.rearrangeColumn(matched.columns, columns, column);
+
+                    // re-iterate the loop to have correct column order after move
+                    i = -1;
+                }
+                else {
+                    // move deep nested column to its moved header container
+                    matched = me.findColumnByParentHeaderId(mainColumns, column);
+
+                    if (matched && Ext.isArray(matched.columns) &&
+                    matched.columns.indexOf(column) === -1) {
+                        me.rearrangeColumn(matched.columns, columns, column);
+
+                        // re-iterate the loop to have correct column order after move
+                        i = -1;
+                    }
+                }
+            }
+        },
+
+        rearrangeColumn: function(matched, columns, column) {
+            Ext.Array.insert(matched, column.weight, [column]);
+            Ext.Array.removeAt(columns, columns.indexOf(column));
+        },
+
+        /**
+         * Reposition columns from the saved state.
+         * @param {Object} columnsState Columns state data.
+         * @param {Ext.grid.column.Column[]/Object[]} columns {@link #columns}
+         * @private
+         */
+        applyColumnState: function(columnsState, columns) {
+            var me = this,
+                eventsMap = me.columnStateEventMap,
+                data, key, prop, cfg;
+
+            if (!me.isColumnsStateful()) {
+                return;
+            }
+
+            columnsState = columnsState || me.getColumnState();
+
+            if (Ext.Object.isEmpty(columnsState)) {
+                return;
+            }
+
+            if (Ext.isEmpty(columns)) {
+                columns = me.getHeaderContainer().items;
+            }
+
+            columns.each(function(column) {
+                // Locked Grid - do not update the moved column property
+                if (column.region) {
+                    return;
+                }
+
+                data = columnsState[me.getColumnStateId(column)];
+
+                if (data) {
+                    for (key in eventsMap) {
+                        prop = eventsMap[key];
+
+                        // ignore weight property to be set, if it has different new group
+                        if (Ext.isEmpty(data[prop]) || prop === 'weight' &&
+                        data.parentHeaderId !== me.getColumnStateId(column.parent)) {
+                            continue;
+                        }
+
+                        cfg = column.self.$config.configs[prop];
+
+                        if (cfg) {
+                            column[cfg.names.set](data[prop]);
+                        }
+                    }
+
+                    if (column.isHeaderGroup) {
+                        me.applyColumnState(columnsState, column.items);
+                    }
+                }
+            });
+
+            me.adjustNestedState(columns, columnsState);
+        },
+
+        adjustNestedState: function(columns, columnsState) {
+            var matched, pId, stateItem, headerCt;
+
+            columns.each(function(column) {
+                pId = column.parentHeaderId;
+
+                stateItem = columnsState[column.headerId];
+
+                if (stateItem) {
+                    pId = stateItem.parentHeaderId;
+                    column.parentHeaderId = pId;
+                }
+
+                if (!pId) {
+                    headerCt = column.getRootHeaderCt();
+
+                    // Move nested column to root header container, if dragged out side
+                    if (headerCt.indexOf(column) === -1) {
+                        headerCt.insert(stateItem.weight, column);
+
+                        // re-run the loop if column gets re-arranged.
+                        this.adjustNestedState(columns, columnsState);
+
+                        return false;
+                    }
+
+                    return;
+                }
+
+                matched = this.findColumnByParentHeaderId(columns, column);
+
+                if (matched && matched.isHeaderGroup) {
+                    matched.insert(stateItem.weight, column);
+
+                    // re-run the loop if column gets re-arranged.
+                    this.adjustNestedState(columns, columnsState);
+
+                    return false;
+                }
+            }, this);
+        },
+
+        /**
+         * Return {Object} saved column state.
+         * @private
+         */
+        getColumnState: function() {
+            var me = this,
+                state, provider, id;
+
+            if (!me.isColumnsStateful()) {
+                return;
+            }
+
+            if (me.columnStateData) {
+                return me.columnStateData;
+            }
+
+            state = me.getStateBuilder();
+
+            if (state) {
+                provider = Ext.state.Provider.get();
+                id = state.root.id + '-column-state';
+
+                return provider.get(id);
+            }
+        },
+
+        /**
+         * Save column state.
+         * @param {Object} columnsState Column State data
+         * @private
+         */
+        persistColumnState: function(columnsState) {
+            var me = this,
+                state, provider, id;
+
+            if (me.fireEvent('beforestatesave', me, columnsState) === false) {
+                return;
+            }
+
+            state = me.getStateBuilder();
+
+            if (state) {
+                provider = Ext.state.Provider.get();
+                id = state.root.id + '-column-state';
+
+                provider.set(id, columnsState);
+
+                me.fireEvent('statesave', me, columnsState);
+            }
+        },
+
+        /**
+         * Checks if grid is stateful and has column state map events
+         * @returns {Boolean}
+         */
+        isColumnsStateful: function() {
+            var me = this,
+                stateId = me.getStateId(),
+                stateful = me.config.stateful,
+                eventsMap = me.columnStateEventMap;
+
+            return !(!stateId || !stateful || Ext.Object.isEmpty(eventsMap));
+        },
+
+        /**
+         * Manage state for the header group remove
+         */
+        onColumnGroupRemove: function(headerCt, column) {
+            var me = this,
+                id, region;
+
+            if (!me.isColumnsStateful()) {
+                return;
+            }
+
+            region = me.region;
+            id = me.getColumnStateId(column);
+
+            // Locked Grid: notify if header group is removed
+            if (region && region.isLockedGridRegion) {
+                me.fireEvent('regioncolumngroupremove', column, id);
+
+                return;
+            }
+
+            column.setHidden(true);
+            me.onStateChange();
+        },
+
+        getColumnStateId: function(column) {
+            return column.stateId || column._stateId || column.headerId;
         }
     } // privates
 

@@ -1292,12 +1292,12 @@ function() {
                         expect(column.tabIndex).toBe(-1);
                     });
 
-                    it("should have presentation role", function() {
-                        expect(column).toHaveAttr('role', 'presentation');
+                    it("should have columnheader role", function() {
+                        expect(column).toHaveAttr('role', 'columnheader');
                     });
 
-                    it("should not have aria-label", function() {
-                        expect(column).not.toHaveAttr('aria-label');
+                    it("should have aria-label", function() {
+                        expect(column).toHaveAttr('aria-label');
                     });
 
                     it("should not have aria-labelledby", function() {
@@ -1359,20 +1359,20 @@ function() {
                         expect(column.tabIndex).toBe(-1);
                     });
 
-                    it("should have presentation role", function() {
-                        expect(column).toHaveAttr('role', 'presentation');
+                    it("should have columnheader role", function() {
+                        expect(column).toHaveAttr('role', 'columnheader');
                     });
 
-                    it("should not have aria-label", function() {
-                        expect(column).not.toHaveAttr('aria-label');
+                    it("should have aria-label", function() {
+                        expect(column).toHaveAttr('aria-label');
                     });
 
                     it("should not have aria-labelledby", function() {
                         expect(column).not.toHaveAttr('aria-labelledby');
                     });
 
-                    it("should not have aria-describedby", function() {
-                        expect(column).not.toHaveAttr('aria-describedby');
+                    it("should have aria-describedby", function() {
+                        expect(column).toHaveAttr('aria-describedby');
                     });
                 });
 
@@ -1480,12 +1480,12 @@ function() {
                     });
 
                     it("should have aria-describedby when not selected", function() {
-                        expect(cell).toHaveAttr('aria-describedby', column.id + '-cell-description-not-selected');
+                        expect(cell.querySelector('#' + cell.getAttribute('aria-activedescendant'))).toHaveAttr('aria-describedby', column.id + '-cell-description-not-selected');
                     });
 
                     it("should have aria-describedby when selected", function() {
                         checkboxModel.select(0);
-                        expect(cell).toHaveAttr('aria-describedby', column.id + '-cell-description-selected');
+                        expect(cell.querySelector('#' + cell.getAttribute('aria-activedescendant'))).toHaveAttr('aria-describedby', column.id + '-cell-description-selected');
                     });
                 });
             });
@@ -1556,12 +1556,12 @@ function() {
                     });
 
                     it("should have aria-describedby when not selected", function() {
-                        expect(cell).toHaveAttr('aria-describedby', column.id + '-cell-description-not-selected');
+                        expect(cell.querySelector('#' + cell.getAttribute('aria-activedescendant'))).toHaveAttr('aria-describedby', column.id + '-cell-description-not-selected');
                     });
 
                     it("should have aria-describedby when selected", function() {
                         checkboxModel.select(0);
-                        expect(cell).toHaveAttr('aria-describedby', column.id + '-cell-description-selected');
+                        expect(cell.querySelector('#' + cell.getAttribute('aria-activedescendant'))).toHaveAttr('aria-describedby', column.id + '-cell-description-selected');
                     });
                 });
 
@@ -1574,7 +1574,7 @@ function() {
                 {
                     type: 'checkboxmodel',
                     renderer: function(value, metaData, record, rowIndex, colIndex, store, view) {
-                        var result = this.defaultRenderer(value);
+                        var result = this.defaultRenderer(value, metaData);
 
                         if (record) {
                             return (record.get('id') === 1 || record.get('id') === 2) ? result : '';

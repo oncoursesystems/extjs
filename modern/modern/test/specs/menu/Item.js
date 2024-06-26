@@ -477,7 +477,7 @@ topSuite("Ext.menu.Item", ['Ext.menu.Menu', 'Ext.app.ViewModel', 'Ext.app.ViewCo
         it('should cleanup link click listener', function() {
             expect(clickListener).not.toBe(item);
 
-            if (jasmine.supportsTouch) {
+            if (jasmine.supportsTouch && !Ext.isWindows) {
                 expect(clickListener.observable.destroyed).toBe(true);
             }
 

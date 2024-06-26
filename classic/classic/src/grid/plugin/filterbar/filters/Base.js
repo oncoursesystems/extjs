@@ -420,7 +420,7 @@ Ext.define('Ext.grid.plugin.filterbar.filters.Base', {
                 field.setWidth(width);
             }
             else {
-                field.setWidth(column.getWidth());
+                field.setWidth(column.getCellWidth());
             }
         }
     },

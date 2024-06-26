@@ -42,10 +42,14 @@ topSuite('Ext.grid.HeaderContainer', ['Ext.grid.Grid', 'Ext.field.Text'], functi
         return row.cells[cellIdx].element;
     }
 
+    beforeEach(function() {
+        MockAjaxManager.addMethods();
+    });
+
     afterEach(function() {
         store.destroy();
         grid = store = Ext.destroy(grid);
-
+        MockAjaxManager.removeMethods();
         // TODO: reinstate when we have state
         // Ext.state.Manager.clear('foo');
     });
@@ -90,6 +94,34 @@ topSuite('Ext.grid.HeaderContainer', ['Ext.grid.Grid', 'Ext.field.Text'], functi
 
             runs(function() {
                 jasmine.fireMouseEvent(col.titleElement, 'mouseup');
+            });
+        });
+
+        // https://sencha.jira.com/browse/EXTJS-27045
+        it("should toggle the checked state of hideShowMenuItem on column show/hide", function() {
+            var col;
+
+            createGrid(null, {
+                columns: [{
+                    dataIndex: 'name',
+                    itemId: 'col',
+                    text: 'Foo'
+                }, {
+                    dataIndex: 'email',
+                    text: 'Email'
+                }]
+            });
+
+            waitsFor(function() {
+                return grid.isRendered();
+            });
+
+            runs(function() {
+                col = grid.down('#col');
+                col.setHidden(true);
+                expect(col._hideShowMenuItem._checked).toBe(false);
+                col.setHidden(false);
+                expect(col._hideShowMenuItem._checked).toBe(true);
             });
         });
     });
@@ -518,6 +550,172 @@ topSuite('Ext.grid.HeaderContainer', ['Ext.grid.Grid', 'Ext.field.Text'], functi
             expect(c0_0).not.toBe(false);
             expect(c0_1).not.toBe(false);
             expect(c0_2).not.toBe(false);
+        });
+
+        it('should compute the width change on column hide and show when the grid is hidden', function() {
+            var columnLayoutSpy = jasmine.createSpy(),
+                cell, spyCallCount;
+
+            createGrid(null, {
+                columns: [
+                    { header: 'Name', dataIndex: 'name', flex: 1 },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                listeners: {
+                    columnlayout: columnLayoutSpy
+                }
+            });
+
+            cell = columns[1].getCells()[0];
+
+            expect(cell._width).not.toBe(grid._width / 2);
+
+            // Hide the grid and hide one column
+            grid.hide();
+            columns[0].hide();
+
+            // Any further increment in call count indicates that column layout
+            // is done and we can test the width of cells.
+            spyCallCount = columnLayoutSpy.callCount;
+
+            grid.show();
+
+            waitsFor(function() {
+                // Wait until the grid is visible and the computation is done
+                return columnLayoutSpy.callCount > spyCallCount;
+            });
+
+            runs(function() {
+                // check if the cells width has been computed
+                expect(cell._width).toBe(grid._width / 2);
+            });
+        });
+    });
+
+    describe('Show column sorting if store sort applied', function() {
+
+        it('should have DESC sort icon on column header', function() {
+            createGrid({ sorters: [{
+                property: 'name',
+                direction: 'DESC'
+                }]
+            });
+
+            expect(columns[0].el.hasCls('x-sorted-desc')).toBe(true);
+        });
+
+        it('should have ASC sort icon on column header', function() {
+            createGrid({ sorters: [{
+                property: 'name',
+                direction: 'ASC'
+                }]
+            });
+
+            expect(columns[0].el.hasCls('x-sorted-asc')).toBe(true);
+        });
+    });
+
+    describe('Show column sorting if remote store sort applied', function() {
+        it('should have DESC sort icon on column', function() {
+            createGrid({
+                fields: ['name'],
+                sorters: [{
+                    property: 'name',
+                    direction: 'DESC'
+                }],
+                autoLoad: true,
+                remoteSort: true,
+                proxy: {
+                    type: 'ajax',
+                    url: 'fake',
+                    reader: {
+                        rootProperty: 'users',
+                        totalProperty: 'totalCount'
+                    }
+                }
+            });
+
+            Ext.Ajax.mockCompleteWithData([{ 'name': 'Lisa' }, { 'name': 'Bart' }]);
+            expect(columns[0].el.hasCls('x-sorted-desc')).toBe(true);
+        });
+
+        it('should have ASC sort icon on column header', function() {
+            createGrid({ sorters: [{
+                property: 'name',
+                direction: 'ASC'
+                }]
+            });
+
+            expect(columns[0].el.hasCls('x-sorted-asc')).toBe(true);
+        });
+    });
+
+    describe('Can not scroll grid after resize', function() {
+
+        var other, button, container,  scroller;
+
+        beforeEach(function() {
+
+            var columns = [
+                { text: 'Name', dataIndex: 'name' },
+                { text: 'Email', dataIndex: 'email' },
+                { text: 'Phone', dataIndex: 'phone' }
+            ];
+
+            createGrid({}, {
+                flex: 1,
+                border: 1,
+                columns: columns,
+                style: 'border: 1px solid blue',
+                renderTo: Ext.getBody()
+            });
+
+            other = new Ext.Component({
+                flex: 1,
+                hidden: true
+            });
+
+            button = new Ext.Button({
+                text: 'Press me and then try to scroll the grid vertically',
+                pressed: false,
+                listeners: {
+                    tap: function(thisCtr, e, eOpts) {
+
+                        other.setHidden(false);
+                    }
+                }
+            });
+
+            container = new Ext.Container({
+                layout: 'vbox',
+                renderTo: Ext.getBody(),
+                maxHeight: 250,
+                height: 250,
+                items: [button, grid, other],
+                fullscreen: true
+            });
+        });
+
+        it('should scroll grid after resize the height', function() {
+
+            jasmine.fireMouseEvent(button.el.dom, 'click');
+            button.setPressed(true);
+            expect(button.isPressed()).toBe(true);
+
+            var scroller = grid.getScrollable();
+
+            expect(button.isPressed()).toBe(true);
+
+            expect(scroller.isVirtualScroller).toBe(true);
+        });
+
+        afterEach(function() {
+
+            Ext.destroy(other);
+            Ext.destroy(button);
+            Ext.destroy(container);
+            other = button = scroller = container = null;
         });
     });
 });

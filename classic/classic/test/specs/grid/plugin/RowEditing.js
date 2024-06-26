@@ -1,6 +1,6 @@
 topSuite("Ext.grid.plugin.RowEditing",
     ['Ext.grid.Panel', 'Ext.grid.column.Widget', 'Ext.form.field.*',
-     'Ext.grid.selection.SpreadsheetModel', 'Ext.grid.feature.GroupingSummary'],
+     'Ext.grid.selection.SpreadsheetModel', 'Ext.grid.feature.GroupingSummary', 'Ext.tab.Panel', 'Ext.grid.column.Action'],
 function() {
     var store, plugin, grid, view, column,
         synchronousLoad = true,
@@ -853,6 +853,119 @@ function() {
 
                 expect(plugin.editor.floatingButtons.el.hasCls('x-grid-row-editor-buttons-top')).toBe(true);
             });
+        });
+    });
+
+    describe("error tooltip", function() {
+        beforeEach(function() {
+            makeGrid({
+                clicksToEdit: 1
+            }, {
+                columns: [{
+                    header: 'Name',
+                    dataIndex: 'name',
+                    flex: 1,
+                    editor: {
+                        // defaults to textfield if no xtype is supplied
+                        allowBlank: false
+                    }
+                }, {
+                    header: 'Email',
+                    dataIndex: 'email',
+                    editor: {
+                        allowBlank: false,
+                        vtype: 'email'
+                    }
+                }],
+                renderTo: null
+            }, {
+                data: [
+                    { 'name': 'Lisa', 'email': 'lisa', 'phone': '555-111-1224' },
+                    { 'name': 'Bart', 'email': 'bart', 'phone': '555-222-1234' }
+                ]
+            });
+        });
+
+        it("should show the tooltip when re-rendered", function() {
+            var tabPanel = Ext.create({
+                xtype: 'tabpanel',
+                items: [{
+                    xtype: 'panel',
+                    title: 'Tab 1'
+                }, {
+                    xtype: 'panel',
+                    title: 'Tab 2'
+                }],
+                renderTo: document.body
+            });
+
+            tabPanel.items.getAt(0).add(grid);
+            plugin.startEdit(store.getAt(0), grid.columns[0]);
+            tabPanel.setActiveItem(1);
+            tabPanel.setActiveItem(0);
+
+            expect(plugin.editor.tooltip.currentTarget.getParent()).not.toBeNull();
+
+            tabPanel = tabPanel.destroy();
+        });
+    });
+
+    describe('Action grid', function() {
+        it('should not focus editor column on click of action column', function() {
+            var node;
+
+            makeGrid({
+                clicksToEdit: 2
+            }, {
+                columns: [{
+                    text: 'ID',
+                    dataIndex: 'id'
+                }, {
+                    text: 'Street',
+                    dataIndex: 'street',
+                    flex: 1,
+                    editor: 'textfield'
+                }, {
+                    xtype: 'actioncolumn',
+                    header: 'Action',
+                    width: 70,
+                    menuDisabled: true,
+                    sortable: false,
+                    items: [{
+                        iconCls: 'x-fa fa-crown',
+                        tooltip: 'Set as main address'
+                   }]
+                }],
+                store: {
+                    fields: [{
+                        name: 'id',
+                        type: 'integer'
+                    }, {
+                        name: 'street',
+                        type: 'string'
+                    }],
+                    data: [{
+                        id: 1,
+                        street: 'Grace Avenue'
+                    }, {
+                        id: 2,
+                        street: 'First Street'
+                    }, {
+                        id: 3,
+                        street: 'Washington Avenue'
+                    }]
+                }
+            });
+
+            node = grid.view.getNode(0);
+
+            jasmine.fireMouseEvent(Ext.fly(node).down('[aria-label=Action]', true), 'dblclick');
+            expect(plugin.editor).toBeDefined();
+            expect(plugin.editing).toBe(undefined);
+
+            jasmine.fireMouseEvent(Ext.fly(node).down('.x-grid-cell-inner', true), 'dblclick');
+            expect(plugin.editor).toBeDefined();
+            expect(plugin.editing).toBe(true);
         });
     });
 });

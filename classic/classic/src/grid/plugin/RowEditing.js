@@ -223,10 +223,9 @@ Ext.define('Ext.grid.plugin.RowEditing', {
      * @protected
      */
     activateCell: function(pos) {
-        // Only activate editing if there are no readily activatable elements
-        // in the activate position.
-        // We defer to those focusables. Editing may be started on other columns.
-        if (!pos.getCell(true).querySelector('[tabIndex="-1"]')) {
+        // instead of going via focusables, defined property in Action column
+        // activating only when property is set
+        if (!pos.column.ignoreEdit) {
             this.startEdit(pos.record, pos.column);
 
             return true;

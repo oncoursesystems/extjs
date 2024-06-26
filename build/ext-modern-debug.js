@@ -1,7 +1,7 @@
 /*
-This file is part of Ext JS 7.5.1.5
+This file is part of Ext JS 7.8.0.33
 
-Copyright (c) 2011-2022 Sencha Inc
+Copyright (c) 2011-2023 Sencha Inc
 
 license: http://www.sencha.com/legal/sencha-software-license-agreement
 Contact: http://www.sencha.com/contact
@@ -14,7 +14,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Version: 7.5.1.5 Build date: 2022-02-04 16:51:53 (e022145fa993b4c9612a7e3bcaaabc2125de00be)
+Version: 7.8.0.33 Build date: 2023-12-05 06:03:28 ()
 
 */
 // @tag core
@@ -4808,48 +4808,42 @@ Ext.Date = (function() {
         },
         
         align: function(date, unit, step) {
-            var num = new nativeDate(+date);
+            var num = new Date(date);
             switch (unit.toLowerCase()) {
                 case utilDate.MILLI:
                     return num;
                 case utilDate.SECOND:
-                    num.setUTCSeconds(num.getUTCSeconds() - num.getUTCSeconds() % step);
-                    num.setUTCMilliseconds(0);
+                    num.setSeconds(Math.floor(num.getSeconds() / step) * step);
+                    num.setMilliseconds(0);
                     return num;
                 case utilDate.MINUTE:
-                    num.setUTCMinutes(num.getUTCMinutes() - num.getUTCMinutes() % step);
-                    num.setUTCSeconds(0);
-                    num.setUTCMilliseconds(0);
+                    num.setMinutes(Math.floor(num.getMinutes() / step) * step);
+                    num.setSeconds(0);
+                    num.setMilliseconds(0);
                     return num;
                 case utilDate.HOUR:
-                    num.setUTCHours(num.getUTCHours() - num.getUTCHours() % step);
-                    num.setUTCMinutes(0);
-                    num.setUTCSeconds(0);
-                    num.setUTCMilliseconds(0);
+                    num.setHours(Math.floor(num.getHours() / step) * step);
+                    num.setMinutes(0);
+                    num.setSeconds(0);
+                    num.setMilliseconds(0);
                     return num;
                 case utilDate.DAY:
-                    if (step === 7 || step === 14) {
-                        num.setUTCDate(num.getUTCDate() - num.getUTCDay() + 1);
-                    };
-                    num.setUTCHours(0);
-                    num.setUTCMinutes(0);
-                    num.setUTCSeconds(0);
-                    num.setUTCMilliseconds(0);
+                    num.setDate(Math.max(Math.floor(num.getDate() / step) * step, 1));
+                    num.setHours(0);
+                    num.setMinutes(0);
+                    num.setSeconds(0);
+                    num.setMilliseconds(0);
                     return num;
                 case utilDate.MONTH:
-                    num.setUTCMonth(num.getUTCMonth() - (num.getUTCMonth() - 1) % step, 1);
-                    num.setUTCHours(0);
-                    num.setUTCMinutes(0);
-                    num.setUTCSeconds(0);
-                    num.setUTCMilliseconds(0);
+                    num.setMonth(Math.floor(num.getMonth() / step) * step);
+                    num.setDate(1);
+                    num.setHours(0);
+                    num.setMinutes(0);
+                    num.setSeconds(0);
+                    num.setMilliseconds(0);
                     return num;
                 case utilDate.YEAR:
-                    num.setUTCFullYear(num.getUTCFullYear() - num.getUTCFullYear() % step, 1, 1);
-                    num.setUTCHours(0);
-                    num.setUTCMinutes(0);
-                    num.setUTCSeconds(0);
-                    num.setUTCMilliseconds(0);
-                    return date;
+                    return new Date(Math.floor(num.getFullYear() / step) * step, 0, 1, 0, 0, 0, 0);
             }
         },
         flexParse: function(inDate, defaultFormat) {
@@ -7368,8 +7362,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '7.5.1.5');
-        Ext.setVersion('core', '7.5.1.5');
+        Ext.setVersion('ext', '7.8.0.33');
+        Ext.setVersion('core', '7.8.0.33');
     }
 })(Ext.manifest);
 
@@ -41308,7 +41302,7 @@ Ext.define('Ext.util.Grouper', {
             observers = me.observers,
             methodName = me._eventToMethodMap[eventName],
             added = 0,
-            index, length, method, observer;
+            index, method, observer;
         args = args || [];
         if (observers && methodName) {
             me.notifying = true;
@@ -41319,7 +41313,7 @@ Ext.define('Ext.util.Grouper', {
                 Ext.Array.sort(observers, me.prioritySortFn);
                 me.dirtyObservers = false;
             }
-            for (index = 0 , length = observers.length; index < length; ++index) {
+            for (index = 0; index < observers.length; ++index) {
                 method = (observer = observers[index])[methodName];
                 if (method) {
                     if (!added++) {
@@ -46928,9 +46922,15 @@ Ext.define('Ext.data.AbstractStore', {
     },
     getGroupField: function() {
         var groupers = this.getGroupers(false),
-            group = '';
+            group = '',
+            grouper;
         if (groupers && groupers.length) {
             group = groupers.getAt(0).getProperty();
+        } else {
+            grouper = this.getGrouper();
+            if (grouper) {
+                group = grouper.getProperty();
+            }
         }
         return group;
     },
@@ -55863,16 +55863,13 @@ Ext.define('Ext.data.StoreManager', {
                 proxy: 'memory',
                 useModelWarning: false
             });
-            
-            emptyStore.ignoreLeaked = true;
-            
             emptyStore.isEmptyStore = true;
             emptyStore.on = emptyStore.addListener = function() {
                 return destoryable;
             };
             emptyStore.un = emptyStore.removeListener = Ext.emptyFn;
             
-            emptyStore.add = emptyStore.remove = emptyStore.insert = emptyStore.destroy = emptyStore.loadData = function() {
+            emptyStore.add = emptyStore.remove = emptyStore.insert = emptyStore.destroy = emptyStore.loadData = emptyStore.loadRawData = function() {
                 Ext.raise('Cannot modify ext-empty-store');
             };
         }
@@ -57836,7 +57833,8 @@ Ext.define('Ext.mixin.FocusableContainer', {
                 if (child.hasFocus) {
                     next = next || child.findFocusTarget();
                     if (next) {
-                        next.focus();
+                        
+                        next.focus(null, Ext.isGecko);
                     }
                 }
             }
@@ -66212,7 +66210,9 @@ Ext.define('Ext.data.proxy.JsonP', {
         
         recordParam: 'records',
         
-        autoAppendParams: true
+        autoAppendParams: true,
+        
+        arrayUrlEncodingFormat: 'name'
     },
     
     doRequest: function(operation) {
@@ -66287,7 +66287,7 @@ Ext.define('Ext.data.proxy.JsonP', {
         
         
         if (me.getAutoAppendParams()) {
-            url = Ext.urlAppend(url, Ext.Object.toQueryString(params));
+            url = Ext.urlAppend(url, Ext.Object.toQueryString(params, me.arrayUrlEncodingFormat === "indexed"));
         }
         return url;
     },
@@ -66300,13 +66300,16 @@ Ext.define('Ext.data.proxy.JsonP', {
     },
     
     encodeRecords: function(records) {
-        var encoded = [],
+        var recs = [],
             i = 0,
-            len = records.length;
+            len = records.length,
+            encodeArray = this.arrayUrlEncodingFormat === "array",
+            data;
         for (; i < len; i++) {
-            encoded.push(Ext.encode(records[i].getData()));
+            data = records[i].getData();
+            recs.push(encodeArray ? data : Ext.encode(data));
         }
-        return encoded;
+        return encodeArray ? Ext.encode(recs) : recs;
     }
 });
 
@@ -83617,7 +83620,17 @@ Ext.define('Ext.list.AbstractTreeItem', {
     },
     
     expand: function() {
+        var owner = this.getOwner(),
+            isMicro = owner.getMicro();
+        
+        
+        if (isMicro) {
+            owner.skipNextRefresh = true;
+        }
         this.getNode().expand();
+        if (isMicro) {
+            owner.skipNextRefresh = null;
+        }
     },
     
     getToolElement: Ext.emptyFn,
@@ -84757,6 +84770,10 @@ Ext.define('Ext.list.Tree', {
         },
         
         onRefresh: function(store) {
+            
+            if (this.skipNextRefresh) {
+                return;
+            }
             
             
             
@@ -91409,6 +91426,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.grid.filters.menu.Base": [],
   "Ext.grid.filters.menu.Boolean": [],
   "Ext.grid.filters.menu.Date": [],
+  "Ext.grid.filters.menu.List": [],
   "Ext.grid.filters.menu.Number": [],
   "Ext.grid.filters.menu.String": [],
   "Ext.grid.grouped.NavigationModel": [],
@@ -92694,6 +92712,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.grid.filters.menu.Date": [
     "gridFilters.date"
+  ],
+  "Ext.grid.filters.menu.List": [
+    "gridFilters.list"
   ],
   "Ext.grid.filters.menu.Number": [
     "gridFilters.number"
