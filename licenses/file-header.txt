@@ -1,6 +1,6 @@
-This file is part of Ext JS 7.8.0.33
+This file is part of Ext JS 8.0.0.43
 
-Copyright (c) 2011-2023 Sencha Inc
+Copyright (c) 2011-2026 Sencha Inc
 
 license: http://www.sencha.com/legal/sencha-software-license-agreement
 Contact: http://www.sencha.com/contact
@@ -13,4 +13,4 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Version: 7.8.0.33 Build date: 2023-12-05 06:03:28 ()
+Version: 8.0.0.43 Build date: 2026-03-30 11:56:45 ()

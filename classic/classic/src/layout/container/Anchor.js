@@ -309,7 +309,7 @@ Ext.define('Ext.layout.container.Anchor', {
          * Either a number to define the width of the container or an object
          * with `width` and `height` fields.
          * @member Ext.container.Container
-         */ 
+         */
         if (owner.anchorSize) {
             if (typeof owner.anchorSize === 'number') {
                 anchorWidth = owner.anchorSize;

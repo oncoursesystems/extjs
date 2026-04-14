@@ -1,4 +1,3 @@
-/* eslint-disable */
 Ext.data.JsonP.feedCb({
     "proposals": [
         {

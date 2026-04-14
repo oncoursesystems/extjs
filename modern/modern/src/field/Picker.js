@@ -104,6 +104,12 @@ Ext.define('Ext.field.Picker', {
         }
     },
 
+    /**
+     * @property ariaRole
+     * @inheritdoc
+     */
+    ariaRole: 'combobox',
+
     triggers: {
         expand: {
             type: 'expand'
@@ -152,12 +158,21 @@ Ext.define('Ext.field.Picker', {
      * @private
      */
     initialize: function() {
-        var me = this;
+        var me = this,
+            ariaElement = me.ariaEl;
 
         me.callParent();
 
         Ext.on('hide', 'onGlobalHide', me);
         me.inputElement.on('click', 'onInputElementClick', me);
+
+        if (ariaElement && !me.isAriaRoleStatic(me.ariaRole)) {
+            ariaElement.set({
+                'aria-haspopup': me.isSelectField ? 'listbox' : 'dialog',
+                'aria-expanded': 'false',
+                'aria-autocomplete': me.isSelectField ? 'list' : 'none'
+            });
+        }
     },
 
     onFocusEnter: function(info) {
@@ -461,26 +476,39 @@ Ext.define('Ext.field.Picker', {
     },
 
     expand: function() {
+        var me = this,
+            ariaElement = me.ariaEl;
+
         if (!this.expanded && !this.getReadOnly() && !this.getDisabled()) {
             this.showPicker();
+        }
+
+        if (!me.isAriaRoleStatic(me.ariaRole)) {
+            ariaElement.set({ 'aria-expanded': true });
         }
     },
 
     collapse: function() {
         var picker,
+            me = this,
+            ariaElement = me.ariaEl,
             eXt = Ext;  // hide from Cmd
 
-        if (this.expanded) {
-            picker = this.getPicker();
+        if (me.expanded) {
+            picker = me.getPicker();
 
             // If we are collapsing an edge picker, we must not leave it as the default
             // edge swipe menu for that side. It must only be shown by the trigger (or
             // touch-tapping the unfocused field)
-            if (this.pickerType === 'edge') {
+            if (me.pickerType === 'edge') {
                 eXt.Viewport.removeMenu(picker.getSide(), true);
             }
             else {
                 picker.hide();
+            }
+
+            if (!me.isAriaRoleStatic(me.ariaRole)) {
+                ariaElement.set({ 'aria-expanded': false });
             }
         }
     },

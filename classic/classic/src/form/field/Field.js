@@ -147,7 +147,7 @@ Ext.define('Ext.form.field.Field', {
         me.initValue();
 
         //<debug>
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var badNames = [
                 'tagName',
                 'nodeName',

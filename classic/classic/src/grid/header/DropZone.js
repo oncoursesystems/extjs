@@ -239,12 +239,15 @@ Ext.define('Ext.grid.header.DropZone', {
      * at any level.
      */
     getNestedHeader: function(header, first) {
-        var items = header.items,
+        // Update logic to work with visible columns only. When working with
+        // all columns, the returned header was causing drop index to be -1 when
+        // the first or last column in a group was hidden.
+        var items = header.getVisibleGridColumns(),
             pos;
 
         if (header.isGroupHeader && items.length) {
-            pos = !first ? 'first' : 'last';
-            header = this.getNestedHeader(items[pos](), first);
+            pos = !first ? 0 : items.length - 1;
+            header = this.getNestedHeader(items[pos], first);
         }
 
         return header;
@@ -403,7 +406,7 @@ Ext.define('Ext.grid.header.DropZone', {
             //
             // Note that we don't need to save the flex if coming from another group header
             // b/c it couldn't have had one!
-            if (toCt.isGroupHeader && !fromCt.isGroupHeader) {
+            if (toCt.isGroupHeader && !fromCt.isGroupHeader && !dragHeader.isGroupHeader) {
                 // Adjust the width of the "to" group header only if we dragged in
                 // from somewhere else. If not within the same container.
                 if (fromCt !== toCt) {

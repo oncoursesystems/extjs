@@ -145,7 +145,7 @@ Ext.define('Ext.chart.sprite.BoxPlot', {
         }
 
         //<debug>
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var debug = attr.debug || this.statics().debug || Ext.draw.sprite.Sprite.debug;
 
         if (debug) {

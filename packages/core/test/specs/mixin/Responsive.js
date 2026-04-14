@@ -1,5 +1,3 @@
-/* global expect, Ext */
-
 topSuite("Ext.mixin.Responsive", [
         'Ext.Responsive'
     ].concat(

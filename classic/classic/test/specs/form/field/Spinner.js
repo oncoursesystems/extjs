@@ -1,5 +1,3 @@
-/* global expect, spyOn, Ext, jasmine */
-
 topSuite("Ext.form.field.Spinner", function() {
     var component, makeComponent;
 

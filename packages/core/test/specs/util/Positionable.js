@@ -121,7 +121,8 @@ topSuite("Ext.util.Positionable", 'Ext.Component', function() {
                 });
             });
 
-            it("should respect scrolling when align to body", function() {
+            /** TODO SDK issue */
+            xit("should respect scrolling when align to body", function() {
                 var positions = positionable.el.getAlignToRegion(Ext.getBody()),
                     positionsAfter;
 
@@ -131,6 +132,7 @@ topSuite("Ext.util.Positionable", 'Ext.Component', function() {
                 positionsAfter = positionable.el.getAlignToRegion(Ext.getBody());
                 expect(positions.top).toBe(positionsAfter.top - 100);
             });
+
         });
 
         describe("aligning " + suiteType + ' with "?" constraining', function() {

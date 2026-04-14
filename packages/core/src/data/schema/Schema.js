@@ -1001,7 +1001,7 @@ Ext.define('Ext.data.schema.Schema', {
             // that they declare the same thing!
             //
             else {
-                /* eslint-disable-next-line vars-on-top, one-var */
+                /* eslint-disable-next-line vars-on-top */
                 var entry = associations[matrixName],
                     before = [entry.kind, entry.left.type, entry.left.role, entry.left.field,
                               entry.right.type, entry.right.role, entry.right.field].join('|'),
@@ -1368,7 +1368,7 @@ Ext.define('Ext.data.schema.Schema', {
                 associatedType, role, roleName;
 
             //<debug>
-            /* eslint-disable-next-line vars-on-top, one-var */
+            /* eslint-disable-next-line one-var */
             var topoStack = this.topoStack || (this.topoStack = []),
                 entityName = entityType.entityName;
 

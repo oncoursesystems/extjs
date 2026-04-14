@@ -131,7 +131,7 @@ Ext.define('Ext.chart.PolarChart', {
 
             me.suspendThicknessChanged();
 
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var chartRect = me.getSurface('chart').getRect(),
                 inset = me.getInsetPadding(),
                 inner = me.getInnerPadding(),
@@ -158,7 +158,7 @@ Ext.define('Ext.chart.PolarChart', {
                 seriesRadius = radius - inner,
                 grid = me.surfaceMap.grid,
                 captionList = me.captionList,
-                i, ln, shrinkRadius, floating, floatingValue, // eslint-disable-line no-unused-vars
+                i, ln, shrinkRadius, floating, floatingValue,
                 gaugeSeries, gaugeRadius, side, series,
                 axis, thickness, halfLineWidth,
                 caption;
@@ -190,6 +190,7 @@ Ext.define('Ext.chart.PolarChart', {
             for (i = 0, ln = angularAxes.length; i < ln; i++) {
                 axis = angularAxes[i];
                 floating = axis.getFloating();
+                // eslint-disable-next-line no-unused-vars
                 floatingValue = floating ? floating.value : null;
                 me.doSetSurfaceRect(axis.getSurface(), chartRect);
                 thickness = axis.getThickness();

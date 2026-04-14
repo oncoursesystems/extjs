@@ -1,5 +1,5 @@
 $loadmask-animation: dynamic(fa-spin 2s infinite linear);
-$loadmask-font: dynamic(24px/1 'Font Awesome 5 Free');
+$loadmask-font: dynamic(24px/1 $font-awesome-family);
 $loadmask-icon-color: dynamic(#fff);
 $loadmask-icon: dynamic("\f110");
 $loadmask-loading-width: dynamic(24px);

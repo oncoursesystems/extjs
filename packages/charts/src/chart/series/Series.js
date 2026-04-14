@@ -1158,7 +1158,7 @@ Ext.define('Ext.chart.series.Series', {
             return;
         }
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var store = this.getStore(),
             items = store.getData().items,
             sprites = this.getSprites(),

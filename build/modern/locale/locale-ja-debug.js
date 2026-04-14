@@ -1,7 +1,7 @@
 Ext.define('Ext.locale.ja.ux.colorpick.Selector', {
     override: 'Ext.ux.colorpick.Selector',
 
-    okButtonText: 'できた',
+    okButtonText: 'OK',
     cancelButtonText: 'キャンセル'
 });
 // This is needed until we can refactor all of the locales into individual files
@@ -13,10 +13,10 @@ Ext.define('Ext.locale.ja.Dialog', {
 
     config: {
         maximizeTool: {
-            tooltip: "全画面表示に最大化"
+            tooltip: "最大化"
         },
         restoreTool: {
-            tooltip: "元のサイズに復元"
+            tooltip: "元に戻す"
         }
     }
 });
@@ -33,16 +33,16 @@ Ext.define('Ext.locale.ja.Panel', {
     config: {
         standardButtons: {
             ok: {
-                text: 'できた'
+                text: 'OK'
             },
             abort: {
-                text: 'やめる'
+                text: '終了'
             },
             retry: {
-                text: 'リトライ'
+                text: '再試行'
             },
             ignore: {
-                text: '無視する'
+                text: '無視'
             },
             yes: {
                 text: 'はい'
@@ -54,16 +54,16 @@ Ext.define('Ext.locale.ja.Panel', {
                 text: 'キャンセル'
             },
             apply: {
-                text: '適用する'
+                text: '適用'
             },
             save: {
-                text: '保存する'
+                text: '保存'
             },
             submit: {
-                text: '提出する'
+                text: '送信'
             },
             help: {
-                text: '助けて'
+                text: 'ヘルプ'
             },
             close: {
                 text: '閉じる'
@@ -81,10 +81,10 @@ Ext.define('Ext.locale.ja.data.validator.Bound', {
     override: 'Ext.data.validator.Bound',
 
     config: {
-        emptyMessage: '存在する必要があります',
-        minOnlyMessage: '少なくとも{0}にする必要があります',
-        maxOnlyMessage: '{0}以下にする必要があります',
-        bothMessage: '値は{0}と{1}の間になければなりません'
+        emptyMessage: '有効な値でなければなりません',
+        minOnlyMessage: '値は {0} より大きくなければなりません',
+        maxOnlyMessage: '値は {0} より小さくなければなりません',
+        bothMessage: '有効な値の範囲は {0} ～ {1} です'
     }
 });
 Ext.define('Ext.locale.ja.data.validator.CIDRv4', {
@@ -134,14 +134,14 @@ Ext.define('Ext.locale.ja.data.validator.Exclusion', {
     override: 'Ext.data.validator.Exclusion',
 
     config: {
-        message: '除外された値です'
+        message: '値が除外リストに含まれています'
     }
 });
 Ext.define('Ext.locale.ja.data.validator.Format', {
     override: 'Ext.data.validator.Format',
 
     config: {
-        message: 'フォーマットが違います'
+        message: '有効な形式ではありません'
     }
 });
 Ext.define('Ext.locale.ja.data.validator.IPAddress', {
@@ -155,23 +155,23 @@ Ext.define('Ext.locale.ja.data.validator.Inclusion', {
     override: 'Ext.data.validator.Inclusion',
 
     config: {
-        message: '許容値のリストに含まれていません'
+        message: '値が許容リストに含まれていません'
     }
 });
 Ext.define('Ext.locale.ja.data.validator.Length', {
     override: 'Ext.data.validator.Length',
 
     config: {
-        minOnlyMessage: '長さは少なくとも{0}でなければなりません',
-        maxOnlyMessage: '長さは{0}を超えてはいけません',
-        bothMessage: '長さは{0}と{1}の間でなければなりません'
+        minOnlyMessage: '長さは {0} 文字以上でなければなりません',
+        maxOnlyMessage: '長さは {0} 文字以下でなければなりません',
+        bothMessage: '長さは {0} 文字以上 {1} 文字以下でなければなりません'
     }
 });
 Ext.define('Ext.locale.ja.data.validator.Number', {
     override: 'Ext.data.validator.Number',
 
     config: {
-        message: '数字ではありません'
+        message: '有効な数値ではありません'
     }
 });
 Ext.define('Ext.locale.ja.data.validator.Phone', {
@@ -185,7 +185,7 @@ Ext.define('Ext.locale.ja.data.validator.Presence', {
     override: 'Ext.data.validator.Presence',
 
     config: {
-        message: '存在している必要があります'
+        message: '有効な値でなければなりません'
     }
 });
 Ext.define('Ext.locale.ja.data.validator.Range', {
@@ -195,14 +195,14 @@ Ext.define('Ext.locale.ja.data.validator.Range', {
         nanMessage: '数値でなければなりません',
         minOnlyMessage: '少なくとも{0}にする必要があります',
         maxOnlyMessage: '{0}以下にする必要があります',
-        bothMessage: '値は{0}と{1}の間になければなりません'
+        bothMessage: '有効な値の範囲は {0} ～ {1} です'
     }
 });
 Ext.define('Ext.locale.ja.data.validator.Time', {
     override: 'Ext.data.validator.Time',
 
     config: {
-        message: '有効な時間ではありません'
+        message: '有効な時刻ではありません'
     }
 });
 Ext.define('Ext.locale.ja.data.validator.Url', {
@@ -245,7 +245,7 @@ Ext.define('Ext.locale.ja.dataview.plugin.ListPaging', {
 
     config: {
         loadMoreText: 'さらに読み込む...',
-        noMoreRecordsText: 'これ以上レコードがない'
+        noMoreRecordsText: 'これ以上レコードがありません'
     }
 });
 /**
@@ -319,15 +319,15 @@ Ext.onReady(function() {
 Ext.define('Ext.locale.ja.field.Date', {
     override: 'Ext.field.Date',
 
-    minDateMessage: 'このフィールドの日付は、 {0} 以降の日付に設定してください。',
-    maxDateMessage: 'このフィールドの日付は、 {0} 以前の日付に設定してください。'
+    minDateMessage: '{0} 以降の日付を設定してください。',
+    maxDateMessage: '{0} 以前の日付を設定してください。'
 });
 Ext.define('Ext.locale.ja.field.Field', {
     override: 'Ext.field.Field',
 
     config: {
         requiredMessage: 'このフィールドは必須です',
-        validationMessage: '形式が間違っています'
+        validationMessage: '有効な形式ではありません'
     }
 });
 Ext.define("Ext.locale.ja.field.FileButton", {
@@ -340,36 +340,36 @@ Ext.define("Ext.locale.ja.field.FileButton", {
 Ext.define('Ext.locale.ja.field.Number', {
     override: 'Ext.field.Number',
 
-    decimalsText: 'このフィールドの最小値は {0} です。',
+    decimalsText: '小数点以下の最大桁数は {0} です。',
     minValueText: 'このフィールドの最小値は {0} です。',
     maxValueText: 'このフィールドの最大値は {0} です。',
-    badFormatMessage: '{0} は数値ではありません。'
+    badFormatMessage: '有効な数値ではありません。'
 });
 Ext.define('Ext.locale.ja.field.Text', {
     override: 'Ext.field.Text',
 
-    badFormatMessage: '値が必要なフォーマットと一致しません',
+    badFormatMessage: '値が要求される形式と一致しません',
     config: {
         requiredMessage: 'このフィールドは必須です',
-        validationMessage: '形式が間違っています'
+        validationMessage: '有効な形式ではありません'
     }
 });
 Ext.define("Ext.locale.ja.grid.TreeGrouped", {
     override: "Ext.grid.TreeGrouped",
 
     config: {
-        groupSummaryTpl: "概要 ({name})",
-        summaryTpl: "概要 ({store.data.length})"
+        groupSummaryTpl: "集計 ({name})",
+        summaryTpl: "集計 ({store.data.length})"
     }
 });
 Ext.define("Ext.locale.ja.grid.column.Groups", {
     override: "Ext.grid.column.Groups",
 
     config: {
-        groupSummaryTpl: "概要 ({name})",
-        summaryTpl: "概要 ({store.data.length})"
+        groupSummaryTpl: "集計 ({name})",
+        summaryTpl: "集計 ({store.data.length})"
     },
-    text: "群衆"
+    text: "グループ"
 });
 Ext.define("Ext.locale.ja.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
@@ -385,19 +385,19 @@ Ext.define("Ext.locale.ja.grid.locked.Grid", {
         columnMenu: {
             items: {
                 region: {
-                    text: '領域'
+                    text: '固定'
                 }
             }
         },
         regions: {
             left: {
-                menuLabel: 'ロック（左）'
+                menuLabel: '左に固定'
             },
             center: {
-                menuLabel: 'ロック解除'
+                menuLabel: '固定を解除'
             },
             right: {
-                menuLabel: 'ロック（右）'
+                menuLabel: '右に固定'
             }
         }
     }
@@ -406,40 +406,40 @@ Ext.define("Ext.locale.ja.grid.menu.AddGroup", {
     override: "Ext.grid.menu.AddGroup",
 
     config: {
-        text: "グループ化に追加します"
+        text: "グループ化"
     }
 });
 Ext.define("Ext.locale.ja.grid.menu.Columns", {
     override: "Ext.grid.menu.Columns",
 
     config: {
-        text: "カラム"
+        text: "列"
     }
 });
 Ext.define("Ext.locale.ja.grid.menu.GroupByThis", {
     override: "Ext.grid.menu.GroupByThis",
 
     config: {
-        text: "これでグループ化する"
+        text: "このフィールドでグループ化"
     }
 });
 Ext.define("Ext.locale.ja.grid.menu.Groups", {
     override: "Ext.grid.menu.Groups",
 
     config: {
-        text: "群衆",
+        text: "グループ",
 
         menu: [{
-            text: "すべて展開"
+            text: "すべて開く"
         }, {
-            text: "全体を折りたたむ"
+            text: "すべて閉じる"
         }]
     }
 });
 Ext.define("Ext.locale.ja.grid.menu.RemoveGroup", {
     override: "Ext.grid.menu.RemoveGroup",
     config: {
-        text: "グループ化から削除します"
+        text: "グループ解除"
     }
 });
 Ext.define("Ext.locale.ja.grid.menu.ShowInGroups", {
@@ -453,14 +453,14 @@ Ext.define("Ext.locale.ja.grid.menu.SortAsc", {
     override: "Ext.grid.menu.SortAsc",
 
     config: {
-        text: "昇順"
+        text: "昇順で並べ替え"
     }
 });
 Ext.define("Ext.locale.ja.grid.menu.SortDesc", {
     override: "Ext.grid.menu.SortDesc",
 
     config: {
-        text: "降順"
+        text: "降順で並べ替え"
     }
 });
 Ext.define("Ext.locale.ja.grid.plugin.RowDragDrop", {
@@ -471,26 +471,26 @@ Ext.define("Ext.locale.ja.grid.plugin.Summaries", {
     override: "Ext.grid.plugin.Summaries",
 
     textNone: "なし",
-    summaryText: "概要"
+    summaryText: "集計"
 });
 Ext.define("Ext.locale.ja.grid.plugin.filterbar.Operator", {
     override: "Ext.grid.plugin.filterbar.Operator",
     operatorsTextMap: {
-        eq: "等しい",
-        ne: "等しくない",
-        gt: "より大きい",
-        ge: "以上",
-        lt: "未満",
-        le: "それ以上",
-        like: "お気に入り",
-        nlike: "好きじゃない",
-        empty: "空の",
-        nempty: "空ではない",
-        identical: "同一",
-        nidentical: "同一ではない",
-        regex: "正規表現",
-        in: "イン",
-        notin: "インテではありません"
+        eq: "次と等しい",
+        ne: "次と等しくない",
+        gt: "次より大きい",
+        ge: "次以上",
+        lt: "次より小さい",
+        le: "次以下",
+        like: "次を含む",
+        nlike: "次を含まない",
+        empty: "空値である",
+        nempty: "空値ではない",
+        identical: "次と厳密に等しい",
+        nidentical: "次と厳密に等しくない",
+        regex: "次の正規表現に一致する",
+        in: "次に含まれる",
+        notin: "次に含まれない"
     }
 }, function() {
     var prototype = this.prototype,
@@ -510,33 +510,33 @@ Ext.define("Ext.locale.ja.grid.plugin.filterbar.Operator", {
 Ext.define("Ext.locale.ja.grid.plugin.grouping.Panel", {
     override: "Ext.grid.plugin.grouping.Panel",
 
-    groupingPanelText: "ここで列ヘッダーをその列によるグループにドラッグする",
-    showGroupingPanelText: "パネルごとにグループを表示",
-    hideGroupingPanelText: "Panelでグループを隠す",
-    clearGroupText: "クリアグループ",
-    sortAscText: "ソート昇順",
-    sortDescText: "降順に並べ替えます",
-    moveLeftText: "左に移動します",
-    moveRightText: "右に動く",
-    moveBeginText: "始まりに移動",
-    moveEndText: "終わりに移動",
-    removeText: "削除する"
+    groupingPanelText: "グループ化したい列のヘッダーをここにドラッグ",
+    showGroupingPanelText: "グループ化パネルを表示",
+    hideGroupingPanelText: "グループ化パネルを非表示",
+    clearGroupText: "グループ化をすべて解除",
+    sortAscText: "昇順で並べ替え",
+    sortDescText: "降順で並べ替え",
+    moveLeftText: "左に移動",
+    moveRightText: "右に移動",
+    moveBeginText: "先頭に移動",
+    moveEndText: "末尾に移動",
+    removeText: "削除"
 
 });
 Ext.define('Ext.locale.ja.panel.Collapser', {
     override: 'Ext.panel.Collapser',
 
     config: {
-        collapseToolText: "パネルを閉じる",
-        expandToolText: "パネルを開く"
+        collapseToolText: "閉じる",
+        expandToolText: "開く"
     }
 });
 Ext.define('Ext.locale.ja.panel.Date', {
     override: 'Ext.panel.Date',
 
     config: {
-        nextText: '次月へ (コントロール+右)',
-        prevText: '前月へ (コントロール+左)',
+        nextText: '翌月 (Ctrl+→)',
+        prevText: '前月 (Ctrl+←)',
         buttons: {
             footerTodayButton: {
                 text: "今日"
@@ -548,7 +548,7 @@ Ext.define('Ext.locale.ja.picker.Date', {
     override: 'Ext.picker.Date',
 
     config: {
-        doneButton: 'できた',
+        doneButton: '完了',
         monthText: '月',
         dayText: '日',
         yearText: '年'
@@ -558,7 +558,7 @@ Ext.define('Ext.locale.ja.picker.Picker', {
     override: 'Ext.picker.Picker',
 
     config: {
-        doneButton: 'できた',
+        doneButton: '完了',
         cancelButton: 'キャンセル'
     }
 });

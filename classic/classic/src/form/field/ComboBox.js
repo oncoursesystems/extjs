@@ -874,14 +874,14 @@ Ext.define('Ext.form.field.ComboBox', {
         var me = this;
 
         if (!displayTpl) {
-            /* eslint-disable indent, max-len */
+            /* eslint-disable max-len */
             displayTpl = new Ext.XTemplate(
                 '<tpl for=".">' +
                     '{[typeof values === "string" ? values : values["' + me.getDisplayField() + '"]]}' +
                     '<tpl if="xindex < xcount">' + me.getDelimiter() + '</tpl>' +
                 '</tpl>'
             );
-            /* eslint-enable indent, max-len */
+            /* eslint-enable max-len */
 
             displayTpl.auto = true;
         }
@@ -1025,11 +1025,12 @@ Ext.define('Ext.form.field.ComboBox', {
     },
 
     onFocus: function(e) {
-        var me = this;
+        var me = this,
+            picker = me.getPicker();
 
         // For touch devices move focus to the picker
-        if (Ext.isTouchMode()) {
-            me.getPicker().getEl().focus();
+        if (Ext.isTouchMode() && picker.rendered) {
+            picker.getEl().focus();
         }
 
         me.callParent([e]);

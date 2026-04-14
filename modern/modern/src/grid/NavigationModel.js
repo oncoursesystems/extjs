@@ -54,10 +54,12 @@ Ext.define('Ext.grid.NavigationModel', {
             view = me.getView(),
             event = options && options.event;
 
+        options = options || {};
+
         me.columnIndex = -1;
 
         // Massage the incoming location into a form the base class can work with
-        if (location != null && !location.isGridLocation) {
+        if (location !== null && !location.isGridLocation) {
             if (Ext.isArray(location)) {
                 location = {
                     column: location[0],
@@ -75,7 +77,15 @@ Ext.define('Ext.grid.NavigationModel', {
             }
         }
 
-        return me.callParent([location, options]);
+        // Pass current location along in options so it can eventually make it to
+        // the scroller for computing center region information if we are in a locked
+        // grid.
+        options.location = location;
+
+        return me.callParent([
+            location,
+            options
+        ]);
     },
 
     clearLocation: function() {

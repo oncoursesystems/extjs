@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 var Test = {};
 
  var isCommonJS = typeof window === "undefined" && typeof exports === "object";
@@ -1386,7 +1387,7 @@ Test.OptionsImpl.prototype.urlDecode = function(string) {
  * @param {String} name The option name.
  * @param {String} labelText The label text.
  * @return {HTMLElement} The option HTMLElement
- */ 
+ */
 Test.OptionsImpl.prototype.renderCheckbox = function(name, labelText) {
     var me = this,
         checkbox = new jasmine.Dom({
@@ -3667,7 +3668,7 @@ Test.panel.TreeGrid.prototype.log = function(message, cls) {
  * Sets statubar message, this method can also add a className.
  * @param {String} message The message.
  * @param {String} cls The className (optional).
- */ 
+ */
 Test.panel.TreeGrid.prototype.setStatus = function(message, cls) {
     jasmine.Dom.setHTML(this.statusMessage, message);
 
@@ -3693,7 +3694,7 @@ Test.Reporter = function(config) {
 /**
  * Called before runner execution.
  * @param {jasmine.Runner} runner The Jasmine Runner
- */ 
+ */
 Test.Reporter.prototype.reportRunnerStarting = function(runner) {
     this.runner = runner;
     this.startedAt = new Date();
@@ -3720,7 +3721,7 @@ Test.Reporter.prototype.reportRunnerStarting = function(runner) {
 /**
  * Called after Jasmine runner execution ends.
  * @param {jasmine.Runner} runner The Jasmine Runner
- */ 
+ */
 Test.Reporter.prototype.reportRunnerResults = function(runner) {
     Test.jsCoverage.updateTotal();
     this.renderResults(runner);
@@ -3729,7 +3730,7 @@ Test.Reporter.prototype.reportRunnerResults = function(runner) {
 /**
  * Called before spec execution.
  * @param {jasmine.Runner} suite The Jasmine spec
- */ 
+ */
 Test.Reporter.prototype.reportSuiteStarting = function(suite) {
     if (this.options.showTimings) {
         suite.startedAt = new Date();
@@ -3743,7 +3744,7 @@ Test.Reporter.prototype.reportSuiteStarting = function(suite) {
 /**
  * Called after suite execution ends.
  * @param {jasmine.Runner} suite A Jasmine suite
- */ 
+ */
 Test.Reporter.prototype.reportSuiteResults = function(suite) {
     var suiteEl = this.treeGrid ? this.treeGrid.suitesEls[suite.id] : undefined,
         status;
@@ -3787,7 +3788,7 @@ Test.Reporter.prototype.reportSuiteResults = function(suite) {
 /**
  * Called before spec execution.
  * @param {jasmine.Runner} suite The Jasmine spec
- */ 
+ */
 Test.Reporter.prototype.reportSpecStarting = function(spec) {
     this.currentSpec = spec;
 
@@ -3803,7 +3804,7 @@ Test.Reporter.prototype.reportSpecStarting = function(spec) {
 /**
  * Called after spec execution.
  * @param {jasmine.Runner} suite The Jasmine spec
- */ 
+ */
 Test.Reporter.prototype.reportSpecResults = function(spec) {
     var results, status;
 

@@ -117,7 +117,7 @@ Ext.define('Ext.direct.PollingProvider', {
         // when PollingProvider is constructed.
         if (pollFn && Ext.isString(pollFn)) {
             //<debug>
-            var fnName = pollFn; // eslint-disable-line vars-on-top, one-var
+            var fnName = pollFn; // eslint-disable-line vars-on-top
             //</debug>
 
             me.pollFn = pollFn = Ext.direct.Manager.parseMethod(pollFn);

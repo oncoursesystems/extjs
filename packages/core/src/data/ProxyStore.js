@@ -262,7 +262,7 @@ Ext.define('Ext.data.ProxyStore', {
         var me = this;
 
         //<debug>
-        var configModel = me.model; // eslint-disable-line vars-on-top, one-var
+        var configModel = me.model; // eslint-disable-line one-var
         //</debug>
 
         me.callParent(arguments);
@@ -277,7 +277,7 @@ Ext.define('Ext.data.ProxyStore', {
 
             // There are a number of ways things could have gone wrong, try to give as much
             // information as possible
-            var logMsg = [ // eslint-disable-line vars-on-top, one-var
+            var logMsg = [ // eslint-disable-line vars-on-top
                 Ext.getClassName(me) || 'Store',
                 ' created with no model.'
             ];

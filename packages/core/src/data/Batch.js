@@ -174,7 +174,7 @@ Ext.define('Ext.data.Batch', {
             return ret;
         }
 
-        /* eslint-disable-next-line vars-on-top, one-var */
+        /* eslint-disable-next-line vars-on-top */
         var entityType1 = operation1.entityType,
             entityType2 = operation2.entityType,
             rank;

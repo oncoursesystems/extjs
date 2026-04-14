@@ -474,7 +474,6 @@ Ext.define('Ext.field.ComboBox', {
         var me = this,
             filterTask = me.doFilterTask,
             value = me.inputElement.dom.value,
-            filters = me.getStore().getFilters(),
             keyboardEvent, isDelimiter;
 
         if (Ext.supports.inputEventData) {
@@ -521,10 +520,10 @@ Ext.define('Ext.field.ComboBox', {
             filterTask.delay(me.getQueryDelay());
         }
         else {
+            // when value.length == 0 the field retains the filter of last character removed 
+            // so clearing it here
+            me.doRawFilter();
             me.collapse();
-            filters.beginUpdate();
-            me.getPrimaryFilter().setDisabled(true);
-            filters.endUpdate();
         }
     },
 

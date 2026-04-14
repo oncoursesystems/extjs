@@ -1106,7 +1106,7 @@ Ext.Array = (function() {
                     reduced = initialValue;
 
                 if (arguments.length < 3) {
-                    while (true) { // eslint-disable-line no-constant-condition
+                    while (true) {
                         if (index in array) {
                             reduced = array[index++];
 
@@ -1175,7 +1175,7 @@ Ext.Array = (function() {
          * @param {Mixed} sortFn.b The second item to compare.
          * @param {Number} sortFn.return `-1` if a < b, `1` if a > b, otherwise `0`.
          * @return {Array} The sorted array.
-         */                 
+         */
         sort: function(array, sortFn) {
             return stableSort(array, sortFn || ExtArray.lexicalCompare);
         },

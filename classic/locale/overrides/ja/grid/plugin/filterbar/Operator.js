@@ -2,21 +2,21 @@ Ext.define("Ext.locale.ja.grid.plugin.filterbar.Operator", {
     override: "Ext.grid.plugin.filterbar.Operator",
 
     operatorsTextMap: {
-        eq: "等しい",
-        ne: "等しくない",
-        gt: "より大きい",
-        ge: "以上",
-        lt: "未満",
-        le: "それ以上",
-        like: "お気に入り",
-        nlike: "好きじゃない",
-        empty: "空の",
-        nempty: "空ではない",
-        identical: "同一",
-        nidentical: "同一ではない",
-        regex: "正規表現",
-        "in": "イン",
-        notin: "インテではありません"
+        eq: "次と等しい",
+        ne: "次と等しくない",
+        gt: "次より大きい",
+        ge: "次以上",
+        lt: "次より小さい",
+        le: "次以下",
+        like: "次を含む",
+        nlike: "次を含まない",
+        empty: "空値である",
+        nempty: "空値ではない",
+        identical: "次と厳密に等しい",
+        nidentical: "次と厳密に等しくない",
+        regex: "次の正規表現に一致する",
+        "in": "次に含まれる",
+        notin: "次に含まれない"
     }
 }, function() {
     var prototype = this.prototype,

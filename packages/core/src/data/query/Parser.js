@@ -4,7 +4,7 @@
  * @private
  * @since 6.7.0
  */
-Ext.define('Ext.data.query.Parser', function(QueryParser) {  // eslint-disable-line brace-style
+Ext.define('Ext.data.query.Parser', function(QueryParser) {
     var LIST = { list: true, literal: true, type: 'list' };
 
     return {

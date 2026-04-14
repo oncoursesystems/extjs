@@ -1,4 +1,4 @@
-/* global ArrayBuffer, Uint8Array, MockAjax */
+/* global ArrayBuffer, Uint8Array */
 topSuite("Ext.data.Connection", ['Ext.JSON'], function() {
     var originalExtAsap,
         makeConnection, connection, request;

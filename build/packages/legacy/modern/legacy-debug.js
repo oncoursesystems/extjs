@@ -1814,7 +1814,6 @@ Ext.define('Ext.device.contacts.Cordova', {
  *     });
  *
  * @mixins Ext.device.contacts.Abstract
- * @mixins Ext.device.contacts.Sencha
  * @mixins Ext.device.contacts.Cordova
  */
 Ext.define('Ext.device.Contacts', {
@@ -3260,7 +3259,6 @@ Ext.define('Ext.device.filesystem.Simulator', {
 /**
  * Provides an API to navigate file system hierarchies.
  *
- * @mixins Ext.device.filesystem.Sencha
  */
 Ext.define('Ext.device.FileSystem', {
     singleton: true,

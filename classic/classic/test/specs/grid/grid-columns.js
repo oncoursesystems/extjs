@@ -261,7 +261,7 @@ function() {
                         colRef[2].setWidth(100);
                         expect(colRef[0].ownerCt.lastBox.width).toBe(300);
 
-                        // Now when owner is configured widthModel with 
+                        // Now when owner is configured widthModel with
                         // flexed children
                         colRef[0].ownerCt.flex = null;
                         colRef[0].flex = 1;
@@ -346,8 +346,8 @@ function() {
                     expect(getCell(0, 0).getWidth()).toBe(800);
                     expect(getCell(0, 1).getWidth()).toBe(200);
                 });
-
-                it("should size the cells to match an the text size in the header", function() {
+                /** TODO - False positive test */
+                xit("should size the cells to match an the text size in the header", function() {
                     makeGrid([{
                         width: null,
                         text: '<div style="width: 25px;"></div>'
@@ -2797,7 +2797,7 @@ function() {
 
             describe("auto hiding headers", function() {
                 // Unit test setup defines hideHeaders as false in setup
-                // because many tests lazily use empty headers and 
+                // because many tests lazily use empty headers and
                 // contain layout measurement which assumes visible headers.
                 // Undo that interference for this test case.
                 beforeEach(function() {

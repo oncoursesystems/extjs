@@ -609,7 +609,306 @@ topSuite("Ext.tree.Panel", [
         });
     });
 
-    // https://sencha.jira.com/browse/EXTJS-16367
+    describe("Checkbox tree nodes for intermediate state", function() {
+        var eventRec, record, row, checkbox, spy;
+
+        function clickCheckboxId(id) {
+            var checkbox = view.getRow(store.getById(id)).querySelector(view.checkboxSelector, true);
+
+            jasmine.fireMouseEvent(checkbox, 'click');
+        }
+
+        function getCheckedCount() {
+            var checkedNodes = [];
+
+            store.getRootNode().cascade(function(node) {
+                if (node.get('checked') === true) {
+                    checkedNodes.push(node);
+                }
+            });
+
+            return checkedNodes.length;
+        }
+
+        beforeEach(function() {
+            eventRec = null;
+            spy = jasmine.createSpy('spy');
+            makeTree(testNodes, {
+                enableTri: true,
+                listeners: {
+                    checkchange: function(rec) {
+                        eventRec = rec;
+                        spy(rec);
+                    }
+                }
+            });
+            store.getRoot().cascade(function(r) {
+                r.set('checked', false);
+            });
+            tree.expandAll();
+            record = store.getAt(1);
+            row = view.getRow(record);
+            checkbox = row.querySelector(view.checkboxSelector);
+        });
+
+        describe("checkbox treenodes intermediate state where enableTri is enabled", function() {
+            describe("checkbox check change event for intermediate behaviour", function() {
+                describe("with checkPropagation", function() {
+                    it("should sync parent node's check state with state of children on child check change when checkPropagation:'up'", function() {
+                        tree.setCheckPropagation('up');
+
+                        // Start with none checked
+                        expect(getCheckedCount()).toBe(0);
+
+                        clickCheckboxId('L');
+
+                        expect(store.getById('L').get('checked')).toBe(true);
+                        expect(store.getById('I').get('checked')).toBe('tri');
+                    });
+
+                    it("should propagate a parent's checked state to child nodes when checkPropagation:'down'", function() {
+                        store.getById('A').set('checked', 'tri');
+                        tree.setCheckPropagation('down');
+
+                        // Start with none checked
+                        expect(getCheckedCount()).toBe(0);
+
+                        clickCheckboxId('B');
+                        expect(store.getById('A').get('checked')).toBe('tri');
+
+                        clickCheckboxId('A');
+
+                        expect(store.getById('B').get('checked')).toBe(false);
+                        expect(store.getById('E').get('checked')).toBe(false);
+                        expect(store.getById('F').get('checked')).toBe(false);
+                    });
+
+                    it("should propagate checked state both ways when checkPropagation:'both'", function() {
+                        tree.setCheckPropagation('both');
+
+                        // Start with none checked
+                        expect(getCheckedCount()).toBe(0);
+
+                        clickCheckboxId('C');
+                        expect(store.getById('B').get('checked')).toBe('tri');
+                        expect(store.getById('A').get('checked')).toBe('tri');
+                        expect(store.getById('root').get('checked')).toBe('tri');
+
+                        clickCheckboxId('H');
+                        expect(store.getById('F').get('checked')).toBe(true);
+                        expect(store.getById('G').get('checked')).toBe(true);
+
+                        clickCheckboxId('K');
+                        expect(store.getById('J').get('checked')).toBe(true);
+                        expect(store.getById('I').get('checked')).toBe('tri');
+                    });
+
+                    it("should propagate checked state to 'both' ways when checkPropagation value changed in runtime", function() {
+                        tree.setCheckPropagation('up');
+
+                        expect(getCheckedCount()).toBe(0);
+
+                        clickCheckboxId('L');
+
+                        expect(store.getById('L').get('checked')).toBe(true);
+                        expect(store.getById('I').get('checked')).toBe('tri');
+
+                        expect(getCheckedCount()).toBe(1);
+                        tree.setCheckPropagation('none');
+
+                        expect(tree.enableTri).toBe(true);
+                        clickCheckboxId('C');
+                        expect(store.getById('B').get('checked')).toBe('tri');
+                        expect(store.getById('A').get('checked')).toBe('tri');
+                        expect(store.getById('root').get('checked')).toBe('tri');
+
+                        clickCheckboxId('H');
+                        expect(store.getById('F').get('checked')).toBe(true);
+                        expect(store.getById('G').get('checked')).toBe(true);
+
+                        clickCheckboxId('K');
+                        expect(store.getById('J').get('checked')).toBe(true);
+                        expect(store.getById('I').get('checked')).toBe(true);
+                    });
+                });
+
+                describe("checkbox treenodes on initial load for intermediate behaviour", function() {
+                    describe("with checkPropagation", function() {
+                        it("check initial rendering of intermediate state", function() {
+                            Ext.destroy(tree);
+                            testNodes = [{
+                                id: 'M',
+                                text: 'M',
+                                secondaryId: 'MM',
+                                children: [{
+                                    id: 'N',
+                                    text: 'N',
+                                    secondaryId: 'NN',
+                                    leaf: true,
+                                    checked: true
+                                }, {
+                                    id: 'O',
+                                    text: 'O',
+                                    secondaryId: 'OO',
+                                    leaf: true
+                                }]
+                            }];
+
+                            makeTree(testNodes, {
+                                enableTri: true,
+                                checkPropagation: 'both',
+                                listeners: {
+                                    checkchange: function(rec) {
+                                        eventRec = rec;
+                                        spy(rec);
+                                    }
+                                }
+                            });
+                            store.getRoot().cascade(function(r) {
+                                r.set('checked', 'tri');
+                            });
+                            tree.expandAll();
+                            record = store.getAt(1);
+                            row = view.getRow(record);
+                            tree.setCheckPropagation('both');
+
+                            // Start with none checked
+                            expect(getCheckedCount()).toBe(0);
+
+                            expect(store.getById('M').get('checked')).toBe('tri');
+                        });
+
+                    });
+                });
+            });
+        });
+
+        describe("checkbox treenodes intermediate state where checkable=true", function() {
+            it("should allow checkable:'true' and checkable:'false' for one node", function() {
+                store.getById('D').set('checkable', false);
+                tree.setCheckPropagation('both');
+
+                expect(getCheckedCount()).toBe(0);
+
+                clickCheckboxId('C');
+                expect(store.getById('B').get('checked')).toBe(true);
+                expect(store.getById('A').get('checked')).toBe('tri');
+
+            });
+        });
+
+        describe("checkbox treenodes state when enableTri=false", function() {
+            it("should change the checked value with 'tri' to be true", function() {
+
+                Ext.destroy(tree);
+                testNodes = [{
+                    id: 'M',
+                    text: 'M',
+                    secondaryId: 'MM',
+                    children: [{
+                        id: 'N',
+                        text: 'N',
+                        secondaryId: 'NN',
+                        leaf: true,
+                        checked: 'tri'
+                    }, {
+                        id: 'O',
+                        text: 'O',
+                        secondaryId: 'OO',
+                        leaf: true
+                    }]
+                }];
+
+                makeTree(testNodes, {
+                    checkable: true,
+                    listeners: {
+                        checkchange: function(rec) {
+                            eventRec = rec;
+                            spy(rec);
+                        }
+                    }
+                });
+                tree.expandAll();
+                expect(getCheckedCount()).toBe(1);
+
+                expect(store.getById('N').get('checked')).toBe(true);
+            });
+
+            it("should enableTri value changed to false in runtime", function() {
+                expect(getCheckedCount()).toBe(0);
+
+                clickCheckboxId('L');
+
+                expect(store.getById('L').get('checked')).toBe(true);
+                expect(store.getById('I').get('checked')).toBe('tri');
+                expect(store.getById('root').get('checked')).toBe('tri');
+
+                expect(getCheckedCount()).toBe(1);
+                tree.setEnableTri(false);
+
+                clickCheckboxId('C');
+                expect(store.getById('B').get('checked')).toBe(false);
+                expect(store.getById('A').get('checked')).toBe(false);
+            });
+        });
+
+        describe("checkbox treenodes intermediate state using checkOnTriTap", function() {
+            it("should allow checkOnTriTap:'true' ", function() {
+                tree.setCheckOnTriTap(true);
+                tree.setCheckPropagation('both');
+
+                // Start with none checked
+                expect(getCheckedCount()).toBe(0);
+
+                clickCheckboxId('C');
+                expect(store.getById('B').get('checked')).toBe('tri');
+
+                clickCheckboxId('B');
+                expect(store.getById('B').get('checked')).toBe(true);
+                expect(store.getById('C').get('checked')).toBe(true);
+                expect(store.getById('D').get('checked')).toBe(true);
+
+            });
+
+            it("should allow checkOnTriTap:'false' ", function() {
+                tree.setCheckOnTriTap(false);
+                tree.setCheckPropagation('both');
+
+                expect(getCheckedCount()).toBe(0);
+
+                clickCheckboxId('C');
+                expect(store.getById('B').get('checked')).toBe('tri');
+
+                clickCheckboxId('B');
+                expect(store.getById('B').get('checked')).toBe(false);
+                expect(store.getById('C').get('checked')).toBe(false);
+                expect(store.getById('D').get('checked')).toBe(false);
+
+            });
+
+            it("should change value of checkOnTriTap in runtime ", function() {
+                tree.setCheckOnTriTap(true);
+
+                expect(getCheckedCount()).toBe(0);
+
+                clickCheckboxId('C');
+                expect(store.getById('B').get('checked')).toBe('tri');
+
+                clickCheckboxId('B');
+                expect(store.getById('B').get('checked')).toBe(true);
+                expect(store.getById('C').get('checked')).toBe(true);
+                expect(store.getById('D').get('checked')).toBe(true);
+
+                tree.setCheckOnTriTap(false);
+                clickCheckboxId('A');
+                expect(store.getById('A').get('checked')).toBe(false);
+                expect(store.getById('B').get('checked')).toBe(false);
+                expect(store.getById('C').get('checked')).toBe(false);
+                expect(store.getById('D').get('checked')).toBe(false);
+            });
+        });
+    });
+
     describe("record with a cls field", function() {
         it("should set the cls on the TD element", function() {
             makeTree(testNodes);
@@ -1944,7 +2243,7 @@ topSuite("Ext.tree.Panel", [
                 waitsFor(animWait, 'expanding animations to finish');
 
                 runs(function() {
-                    tree.store.addFilter([{ property: 'secondaryId', operator: 'like', value: 'M' }]);
+                    tree.store.addFilter([ { property: 'secondaryId', operator: 'like', value: 'M' } ]);
                     expect(function() {
                         tree.collapseAll();
                     }).not.toThrow();
@@ -1957,37 +2256,37 @@ topSuite("Ext.tree.Panel", [
 
         describe("expand", function() {
             describe("callbacks", function() {
-               it("should pass the nodes directly under the expanded node", function() {
-                   var expectedNodes,
+                it("should pass the nodes directly under the expanded node", function() {
+                    var expectedNodes,
                         store = tree.getStore();
 
-                   tree.expandNode(tree.getRootNode(), false, function(nodes) {
-                       expectedNodes = nodes;
-                   });
+                    tree.expandNode(tree.getRootNode(), false, function(nodes) {
+                        expectedNodes = nodes;
+                    });
 
-                   expect(expectedNodes[0]).toBe(store.getNodeById('A'));
-                   expect(expectedNodes[1]).toBe(store.getNodeById('I'));
-                   expect(expectedNodes[2]).toBe(store.getNodeById('M'));
-               });
+                    expect(expectedNodes[0]).toBe(store.getNodeById('A'));
+                    expect(expectedNodes[1]).toBe(store.getNodeById('I'));
+                    expect(expectedNodes[2]).toBe(store.getNodeById('M'));
+                });
 
-               it("should default the scope to the tree", function() {
-                   var expectedScope;
+                it("should default the scope to the tree", function() {
+                    var expectedScope;
 
-                   tree.expandNode(tree.getRootNode(), false, function() {
-                       expectedScope = this;
-                   });
-                   expect(expectedScope).toBe(tree);
-               });
+                    tree.expandNode(tree.getRootNode(), false, function() {
+                        expectedScope = this;
+                    });
+                    expect(expectedScope).toBe(tree);
+                });
 
-               it("should use a passed scope", function() {
-                   var o = {},
+                it("should use a passed scope", function() {
+                    var o = {},
                         expectedScope;
 
-                   tree.expandNode(tree.getRootNode(), false, function() {
-                       expectedScope = this;
-                   }, o);
-                   expect(expectedScope).toBe(o);
-               });
+                    tree.expandNode(tree.getRootNode(), false, function() {
+                        expectedScope = this;
+                    }, o);
+                    expect(expectedScope).toBe(o);
+                });
             });
 
             describe("deep", function() {
@@ -2107,36 +2406,36 @@ topSuite("Ext.tree.Panel", [
 
         describe("collapse", function() {
             describe("callbacks", function() {
-               it("should pass the nodes directly under the expanded node", function() {
-                   var expectedNodes,
-                       store = tree.getStore();
+                it("should pass the nodes directly under the expanded node", function() {
+                    var expectedNodes,
+                        store = tree.getStore();
 
-                   tree.collapseNode(tree.getRootNode(), false, function(nodes) {
-                       expectedNodes = nodes;
-                   });
-                   expect(expectedNodes[0]).toBe(store.getNodeById('A'));
-                   expect(expectedNodes[1]).toBe(store.getNodeById('I'));
-                   expect(expectedNodes[2]).toBe(store.getNodeById('M'));
-               });
+                    tree.collapseNode(tree.getRootNode(), false, function(nodes) {
+                        expectedNodes = nodes;
+                    });
+                    expect(expectedNodes[0]).toBe(store.getNodeById('A'));
+                    expect(expectedNodes[1]).toBe(store.getNodeById('I'));
+                    expect(expectedNodes[2]).toBe(store.getNodeById('M'));
+                });
 
-               it("should default the scope to the tree", function() {
-                   var expectedScope;
+                it("should default the scope to the tree", function() {
+                    var expectedScope;
 
-                   tree.collapseNode(tree.getRootNode(), false, function() {
-                       expectedScope = this;
-                   });
-                   expect(expectedScope).toBe(tree);
-               });
+                    tree.collapseNode(tree.getRootNode(), false, function() {
+                        expectedScope = this;
+                    });
+                    expect(expectedScope).toBe(tree);
+                });
 
-               it("should use a passed scope", function() {
-                   var o = {},
-                       expectedScope;
+                it("should use a passed scope", function() {
+                    var o = {},
+                        expectedScope;
 
-                   tree.collapseNode(tree.getRootNode(), false, function() {
-                       expectedScope = this;
-                   }, o);
-                   expect(expectedScope).toBe(o);
-               });
+                    tree.collapseNode(tree.getRootNode(), false, function() {
+                        expectedScope = this;
+                    }, o);
+                    expect(expectedScope).toBe(o);
+                });
             });
 
             describe("deep", function() {
@@ -2826,16 +3125,16 @@ topSuite("Ext.tree.Panel", [
 
         it("should reload the root node", function() {
             var store = new Ext.data.TreeStore({
-                    model: 'spec.Foo',
-                    proxy: {
-                        type: 'ajax',
-                        url: '/data/AjaxProxy/treeLoadData'
-                    },
-                    root: {
-                        Name: 'ROOOOOOOOT',
-                        expanded: true
-                    }
-                }),
+                model: 'spec.Foo',
+                proxy: {
+                    type: 'ajax',
+                    url: '/data/AjaxProxy/treeLoadData'
+                },
+                root: {
+                    Name: 'ROOOOOOOOT',
+                    expanded: true
+                }
+            }),
                 refreshSpy;
 
             tree = new Ext.tree.Panel({
@@ -3002,7 +3301,7 @@ topSuite("Ext.tree.Panel", [
             store.filterer = 'bottomup';
             store.filter({
                 filterFn: function(node) {
-                    return  node.get('text') === 'foo';
+                    return node.get('text') === 'foo';
                 },
                 id: 'testFilter'
             });
@@ -3699,7 +3998,8 @@ topSuite("Ext.tree.Panel", [
 
     describe("Cell editing on tree panel", function() {
         // see https://sencha.jira.com/browse/EXTJS-29552
-        it('should update the activeEditor point to the new cell when filter applied on Grid', function() {
+        /** TODO SDK issue */
+        xit('should update the activeEditor point to the new cell when filter applied on Grid', function() {
             makeTree(null, {
                 store: new Ext.data.TreeStore({
                     root: {

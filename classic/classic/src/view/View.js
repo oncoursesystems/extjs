@@ -551,7 +551,6 @@ Ext.define('Ext.view.View', {
         // Note that a mouseout event can trigger either an item event or a container event.
         // If mouseover/out handling is buffered, view might have been destroyed during buffer time.
         if (!me.destroyed) {
-            // eslint-disable-next-line no-cond-assign
             if (item && (sourceView = me.self.getBoundView(item))) {
                 e.item = item;
                 e.newType = 'mouseleave';

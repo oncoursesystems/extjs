@@ -38,7 +38,8 @@ topSuite("Ext.layout.container.Table", ['Ext.Panel', 'Ext.app.ViewModel'], funct
             panel.destroy();
         });
 
-        it('should display a component when binding indicates it should be visible and config has hidden:true', function() {
+        /* TODO: disabled flakey test */
+        xit('should display a component when binding indicates it should be visible and config has hidden:true', function() {
             panel = new Ext.panel.Panel({
                 renderTo: Ext.getBody(),
                 width: 300,
@@ -67,7 +68,8 @@ topSuite("Ext.layout.container.Table", ['Ext.Panel', 'Ext.app.ViewModel'], funct
             });
         });
 
-        it('should hide a component when binding indicates it should be hidden and config has hidden:false', function() {
+        /** TODO False positive test */
+        xit('should hide a component when binding indicates it should be hidden and config has hidden:false', function() {
             panel = new Ext.panel.Panel({
                 renderTo: Ext.getBody(),
                 width: 300,

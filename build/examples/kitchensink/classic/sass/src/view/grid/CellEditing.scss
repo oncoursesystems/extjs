@@ -4,7 +4,7 @@
     }
 } @else {
     .cell-editing-delete-row:before {
-        font: $grid-actioncolumn-icon-height/1 'Font Awesome 5 Free';
+        font: $grid-actioncolumn-icon-height/1 $font-awesome-family;
         color: $red-icon-color;
         content: $fa-var-minus-circle;
     }

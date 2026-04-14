@@ -1170,7 +1170,7 @@ Ext.define('Ext.form.field.Tag', {
             values;
 
         if (!me.ariaListItemTpl) {
-            /* eslint-disable indent, max-len */
+            /* eslint-disable indent */
             me.ariaListItemTpl = new Ext.XTemplate([
                 '<tpl for=".">',
                     '<li id="' + me.id + '-{internalId}" role="option"',
@@ -1194,7 +1194,7 @@ Ext.define('Ext.form.field.Tag', {
                     strict: true
                 }
             ]);
-            /* eslint-enable indent, max-len */
+            /* eslint-enable indent */
         }
 
         if (!me.ariaListItemTpl.isTemplate) {

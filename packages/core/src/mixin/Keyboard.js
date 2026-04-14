@@ -339,7 +339,7 @@ Ext.define('Ext.mixin.Keyboard', function(Keyboard) { return { // eslint-disable
 
         statics: {
             _charCodeRe: /^#([\d]+)$/,
-            // eslint-disable-next-line max-len, no-useless-escape
+            // eslint-disable-next-line no-useless-escape
             _keySpecRe: /^(?:(?:(\*)[\+\-])|(?:([a-z\+\-]*)[\+\-]))?(?:([a-z0-9_]+|[\+\-]|(?:#?\d+))(?:\:([a-z]+))?)$/i,
             _delimiterRe: /-|\+/,
 

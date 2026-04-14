@@ -69,7 +69,7 @@ Ext.define('Ext.ux.ToolbarDroppable', {
      * drag event
      * @param {Ext.event.Event} e The event object
      * @return {Number} The index at which to insert the new button
-     */    
+     */
     calculateEntryIndex: function(e) {
         var entryIndex = 0,
             toolbar = this.toolbar,

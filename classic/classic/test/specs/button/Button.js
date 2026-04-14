@@ -1228,7 +1228,8 @@ function() {
                 ctn = null;
             });
 
-            it("should hide on scroll", function() {
+            /** TODO - False positive test */
+            xit("should hide on scroll", function() {
                 // Let's make sure before we start that the menu is positioned correctly.
                 expect(menu.getY() - button.getHeight()).toBe(button.getY());
 

@@ -539,7 +539,7 @@ Ext.define('Ext.grid.filters.filter.List', {
 
     getOptionsFromStore: function(store) {
         var me = this,
-            data = store.getData(), // eslint-disable-line no-unused-vars
+            data = store.getData(),
             map = {},
             ret = [],
             dataIndex = me.dataIndex,
@@ -547,6 +547,7 @@ Ext.define('Ext.grid.filters.filter.List', {
             recData, idValue, labelValue;
 
         if (store.isFiltered() && !store.remoteFilter) {
+            // eslint-disable-next-line no-unused-vars
             data = data.getSource();
         }
 

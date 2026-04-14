@@ -185,7 +185,7 @@ Ext.define('Ext.layout.container.Box', {
         'targetEl'
     ],
 
-    /* eslint-disable indent, max-len */
+    /* eslint-disable max-len */
     renderTpl: [
         '{%var oc,l=values.$comp.layout,oh=l.overflowHandler;' +
         'if (oh && oh.getPrefixConfig!==Ext.emptyFn) {' +
@@ -205,7 +205,7 @@ Ext.define('Ext.layout.container.Box', {
             definitions: 'var dh=Ext.DomHelper;'
         }
     ],
-    /* eslint-enable indent, max-len */
+    /* eslint-enable max-len */
 
     constructor: function(config) {
         var me = this,

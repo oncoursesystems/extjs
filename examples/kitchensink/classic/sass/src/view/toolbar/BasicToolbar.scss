@@ -21,7 +21,7 @@
 }
 
 .basic-toolbar {
-    font-family: 'Font Awesome 5 Free'!important;
+    font-family: $font-awesome-family !important;
     .pasteMaterial {
         &:before {
             content: '\f0ea';

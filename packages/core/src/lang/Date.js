@@ -277,13 +277,14 @@ Ext.Date = (function() {
         "}",
 
         "if(v){",
-            // favor UTC offset over GMT offset
+            // Check if the date string has a 'Z' or timezone offset (+/-).
+            // These indicate a UTC date value that needs adjustment.
             "if(zz != null){",
-                // reset to UTC, then add offset
-                "v = me.add(v, me.SECOND, -v.getTimezoneOffset() * 60 - zz);",
+                // 'Z' found - create a UTC date and adjust for century if the year is < 100.
+                "v = me.add(new Date(Date.UTC(y < 100 ? 100 : y, m, d, h, i, s, ms)), me.YEAR, y < 100 ? y - 100 : 0);",
             "}else if(o){",
-                // reset to GMT, then add offset
-                "v = me.add(v, me.MINUTE, -v.getTimezoneOffset() + (sn == '+'? -1 : 1) * (hr * 60 + mn));",
+                // Timezone offset found - create a UTC date and adjust for the offset.
+                "v = me.add(new Date(Date.UTC(y < 100 ? 100 : y, m, d, h, i, s, ms)),  me.MINUTE, (sn == '+'? -1 : 1) * (hr * 60 + mn));",
             "}",
         "}",
 
@@ -510,6 +511,12 @@ utilDate = {
      * @type String
      */
     DAY: "d",
+
+    /**
+     * Date interval constant.
+     * @type String
+     */
+    WEEK: "w",
 
     /**
      * Date interval constant.
@@ -1482,7 +1489,7 @@ utilDate = {
      * @return {String} The abbreviated timezone name (e.g. 'CST', 'PDT', 'EDT', 'MPST' ...).
      */
     getTimezone: function(date) {
-        /* eslint-disable max-len, no-useless-escape, newline-per-chained-call */
+        /* eslint-disable max-len, no-useless-escape */
         // the following list shows the differences between date strings from different browsers on a WinXP SP2 machine from an Asian locale:
         //
         // Opera  : "Thu, 25 Oct 2007 22:53:45 GMT+0800" -- shortest (weirdest) date string of the lot
@@ -1496,7 +1503,7 @@ utilDate = {
         // step 2: ([A-Z]{1,4})(?:[\-+][0-9]{4})?(?: -?\d+)?) -- if nothing was found in step 1, find timezone from timezone offset portion of date string
         // step 3: remove all non uppercase characters found in step 1 and 2
         return date.toString().replace(/^.* (?:\((.*)\)|([A-Z]{1,5})(?:[\-+][0-9]{4})?(?: -?\d+)?)$/, "$1$2").replace(/[^A-Z]/g, "");
-        /* eslint-enable max-len, no-useless-escape, newline-per-chained-call */
+        /* eslint-enable max-len, no-useless-escape */
     },
 
     /**
@@ -2083,6 +2090,10 @@ utilDate = {
      */
     diff: function(min, max, unit) {
         var diff = +max - min,
+            // Calculate timezone differences, including daylight savings adjustments
+            timezoneOffsetAdjustment = (min.getTimezoneOffset() - max.getTimezoneOffset()) * 60000,
+            // Apply the timezone adjustment to the date difference
+            adjustedDiff = diff + timezoneOffsetAdjustment,
             est;
 
         switch (unit) {
@@ -2099,10 +2110,10 @@ utilDate = {
                 return Math.floor(diff / 3600000);
 
             case utilDate.DAY:
-                return Math.floor(diff / 86400000);
+                return Math.floor(adjustedDiff / 86400000);
 
-            case 'w':
-                return Math.floor(diff / 604800000);
+            case utilDate.WEEK:
+                return Math.floor(adjustedDiff / 604800000);
 
             case utilDate.MONTH:
                 est = (max.getFullYear() * 12 + max.getMonth()) -
@@ -2216,7 +2227,6 @@ utilDate = {
 
             // Not in a y/m/d locale and (first character is a day token, or first
             // token is definitely a day) - it's d/m/y
-            // eslint-disable-next-line no-undef
             if (!yearInfo[firstFormatToken] && (dayInfo[firstFormatToken] ||
                     (parts[1] > 12 && parts[3] < 13))) {
                 day = parseInt(parts[1]);

@@ -149,6 +149,11 @@ Ext.define('Ext.field.TextArea', {
      */
     classCls: Ext.baseCSSPrefix + 'textareafield',
 
+    initialize: function() {
+        this.callParent();
+        this.ariaEl.set({ 'aria-multiline': true });
+    },
+
     //<debug>
     applyMaxRows: function(maxRows) {
         if (maxRows !== null && typeof maxRows !== 'number') {

@@ -4538,13 +4538,13 @@ jazzman.Suite.prototype.fail = function(args, typeName) {
     this.queue.stop();
 };
 
-jazzman.Suite.prototype.countSpecs = function(which) {
+jazzman.Suite.prototype.countSpecs = function(which, parentSuiteDisabled) {
     var children = this._children,
         count = 0,
         i, len;
     
     for (i = 0, len = children.length; i < len; i++) {
-        count += children[i].countSpecs(which);
+        count += children[i].countSpecs(which, !this.enabled || parentSuiteDisabled);
     }
     
     return count;
@@ -5122,12 +5122,12 @@ jazzman.Spec.prototype.getTopSuite = function() {
     return this.suite.getTopSuite();
 };
 
-jazzman.Spec.prototype.countSpecs = function(which) {
+jazzman.Spec.prototype.countSpecs = function(which, parentSuiteDisabled) {
     if (which === 'disabled') {
-        return this.enabled ? 0 : this.totalSpecs;
+        return parentSuiteDisabled ? this.totalSpecs :this.enabled ? 0 : this.totalSpecs;
     }
     else if (which === 'enabled') {
-        return this.enabled ? this.totalSpecs : 0;
+        return parentSuiteDisabled ? 0 :this.enabled ? this.totalSpecs : 0;
     }
     else {
         return this.totalSpecs;

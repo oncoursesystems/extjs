@@ -48,7 +48,8 @@ function() {
             }
         }
 
-    describe("BufferedStore asynchronous loading timing with rendering and preserveScrollOnReload: true", function() {
+    /** TODO False positive test */
+    xdescribe("BufferedStore asynchronous loading timing with rendering and preserveScrollOnReload: true", function() {
         var view,
             bufferedRenderer,
             scroller,

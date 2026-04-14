@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.icons.Icons', {
         title: 'Info',
         cls: 'card',
         layout: 'center',
-        html: 'Tabs and Buttons can display any <a href="http://fontawesome.github.io/Font-Awesome/icons/">Font Awesome</a> icon using the <code>iconCls</code> config.'
+        html: 'Tabs and Buttons can display any <a href="https://fontawesome.com/icons" target="_blank" rel="noopener noreferrer">Font Awesome</a> icon using the <code>iconCls</code> config.'
     }, {
         iconCls: 'x-fa fa-download',
         title: 'Download',

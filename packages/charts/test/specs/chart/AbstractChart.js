@@ -1,4 +1,3 @@
-/* global topSuite */
 topSuite("Ext.chart.AbstractChart", ['Ext.chart.*', 'Ext.data.ArrayStore'], function() {
     var chart, store,
         Model = Ext.define(null, {

@@ -4,7 +4,7 @@
     "ext-name": "@sencha/ext-google",
     "SenchaExtName": "@sencha/ext-google",
     "SenchaExtReactName": "@sencha/ext-react-google",
-    "version": "7.8.0.33",
+    "version": "8.0.0.43",
     "sencha": {
         "name": "google",
         "namespace": "Ext",
@@ -16,8 +16,8 @@
         "creator": "Sencha",
         "summary": "Google APIs",
         "detailedDescription": "This package provides Google APIs support.",
-        "version": "7.8.0.33",
-        "compatVersion": "7.8.0",
+        "version": "8.0.0.43",
+        "compatVersion": "8.0.0",
         "format": "1",
         "local": true,
         "output": {

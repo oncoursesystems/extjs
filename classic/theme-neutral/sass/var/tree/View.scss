@@ -128,6 +128,12 @@ $tree-arrow-expanded-glyph: dynamic($fa-var-caret-down $tree-glyph-font-size $fo
 $tree-arrow-expanded-glyph-color: dynamic($tree-arrow-glyph-color);
 
 /**
+ * @var {number}
+ * The size of the checkbox
+ */
+$tree-checkbox-size: dynamic(14px);
+
+/**
  * @var {string/list}
  * Glyph for the "expand" tree icon when {@link Global_CSS#$enable-font-icons} is `true`.
  */
@@ -174,3 +180,23 @@ $tree-checkbox-checked-glyph: dynamic($form-checkbox-checked-glyph);
  * Glyph for the tree's "ok" drag/drop icon when {@link Global_CSS#$enable-font-icons} is `true`.
  */
 $tree-statusproxy-ok-glyph: dynamic($fa-var-plus-circle $statusproxy-glyph-font-size $font-icon-font-family);
+
+/**
+* @var {Number}
+* size of the checkbox in "tri" state.
+*/
+$tree-checkbox-intermediate-position: dynamic(39px);
+
+/**
+ * @var {string/list}
+ * Size of the checked checkbox
+ */
+$tree-checkbox-checked-position: dynamic(16px);
+
+/**
+ * @var {string/list}
+ * The glyph for the Tree checkbox in "tri" state when {@link Global_CSS#$enable-font-icons} is `true`.
+ */
+$tree-checkbox-intermediate-glyph: dynamic($fa-var-minus-square $tree-checkbox-size $font-icon-font-family);
+
+$tree-checkbox-icon: theme-background-image('tree/checkbox');

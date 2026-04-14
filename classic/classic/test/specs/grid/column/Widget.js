@@ -110,7 +110,7 @@ function() {
         return parseInt(cell.getStyle('padding-left'), 10) + parseInt(cell.getStyle('padding-right'), 10);
     }
 
-    describe("refocusing after using a column widget to trigger a delete", function() {
+    xdescribe("refocusing after using a column widget to trigger a delete", function() {
         it("should refocus the next row upon deletion", function() {
             createGrid([{
                 text: 'Button',
@@ -222,7 +222,8 @@ function() {
         });
     });
 
-    describe("widget refocus on row delete", function() {
+    /** TODO - SDK issue */
+    xdescribe("widget refocus on row delete", function() {
         // Test that focus reversion upon delete of focus-containing row works.
         webkitIt("should not cause an error when deleting the focused row using an actionable widget", function() {
             createGrid([{

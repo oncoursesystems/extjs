@@ -694,7 +694,11 @@ Ext.define('Ext.dataview.Abstract', {
         // If there are space-taking scrollbars, prevent mousedown on a scrollbar
         // from focusing the view.
         if (Ext.scrollbar.width()) {
-            me.bodyElement.on('touchstart', '_onContainerTouchStart', me);
+            me.bodyElement.on({
+                'touchstart': '_checkScrollbarTouch',
+                'touchend': '_checkScrollbarTouch',
+                scope: me
+            });
         }
 
         me.on(me.getTriggerCtEvent(), 'onContainerTrigger', me);
@@ -2951,8 +2955,10 @@ Ext.define('Ext.dataview.Abstract', {
             }
         },
 
-        _onContainerTouchStart: function(e) {
+        _checkScrollbarTouch: function(e) {
             var me = this,
+                eventType = e.type,
+                lastLocation = eventType === 'touchstart' ? 'scrollbar' : null,
                 isWithinScrollbar;
 
             if (e.getTarget(me.scrollbarSelector)) {
@@ -2970,7 +2976,7 @@ Ext.define('Ext.dataview.Abstract', {
             }
 
             if (isWithinScrollbar) {
-                me.getNavigationModel().lastLocation = 'scrollbar';
+                me.getNavigationModel().lastLocation = lastLocation;
             }
         },
 

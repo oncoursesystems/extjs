@@ -9,8 +9,9 @@ Ext.define('Ext.grid.HeaderDropZone', {
 
     isValidDrag: function(targetCmp, sourceCmp) {
         var info = this.info,
-            cursor, prevSibling,
-            nextSibling, box, diff;
+            regionChange = targetCmp.getLocked() !== sourceCmp.getLocked(),
+            grid = sourceCmp.getGrid && sourceCmp.getGrid(),
+            cursor, prevSibling, nextSibling, box, diff;
 
         // Avoid parent column to be dragged on child column or column container
         if (!!targetCmp.up(sourceCmp)) {
@@ -21,7 +22,13 @@ Ext.define('Ext.grid.HeaderDropZone', {
         prevSibling = sourceCmp.previousSibling();
         nextSibling = sourceCmp.nextSibling();
 
-        if (targetCmp === prevSibling) {
+        // Only a valid drop for siblings if dragged more than
+        // half way through a sibling
+        if (grid && grid.isCssLockedGrid && sourceCmp.getAlwaysLocked() && regionChange) {
+            return false;
+        }
+
+        if (targetCmp === prevSibling && !regionChange) {
             box = prevSibling.element.getBox();
             diff = (cursor.x - box.left) / box.width;
 
@@ -29,7 +36,7 @@ Ext.define('Ext.grid.HeaderDropZone', {
                 return false;
             }
         }
-        else if (targetCmp === nextSibling) {
+        else if (targetCmp === nextSibling && !regionChange) {
             box = nextSibling.element.getBox();
             diff = (cursor.x - box.left) / box.width;
 
@@ -100,7 +107,9 @@ Ext.define('Ext.grid.HeaderDropZone', {
             dropMethod = 'insertBefore',
             ddManager, targetCmp, headerCt,
             sourceCmp, dropAt, position,
-            relativeToItem, fromCtRoot, fromIdx, sourceCmpParent;
+            targetRegion, sourceRegion,
+            relativeToItem, fromCtRoot, fromIdx, sourceCmpParent,
+            grid, isLastUnlockedColumn, isCssLockedGrid, scroller;
 
         if (!me.ddEl) {
             return;
@@ -108,17 +117,24 @@ Ext.define('Ext.grid.HeaderDropZone', {
 
         ddManager = Ext.dd.Manager;
         targetCmp = ddManager.getTargetComp(info);
+        targetRegion = targetCmp.getRegion();
         headerCt = targetCmp.getParent() || targetCmp.getRootHeaderCt();
         sourceCmp = ddManager.getSourceComp(info);
+        sourceRegion = sourceCmp.getRegion();
         fromCtRoot = sourceCmp.getRootHeaderCt();
         fromIdx = fromCtRoot.indexOf(sourceCmp);
         dropAt = headerCt.indexOf(targetCmp);
         position = ddManager.getPosition(info, targetCmp, 'x');
         sourceCmpParent = sourceCmp.getParent();
+        grid = me.view;
+        isCssLockedGrid = grid && grid.isCssLockedGrid;
+        isLastUnlockedColumn = isCssLockedGrid &&
+            grid.getLockedColumns().length === grid.getVisibleColumns().length - 1;
 
         me.removeDropMarker();
 
-        if (dropAt === -1) {
+        if (dropAt === -1 || (isLastUnlockedColumn && sourceRegion === "center" &&
+            targetRegion !== sourceRegion)) {
             return;
         }
 
@@ -139,5 +155,18 @@ Ext.define('Ext.grid.HeaderDropZone', {
         me.trackHeaderMove(sourceCmpParent, fromCtRoot);
 
         fromCtRoot.fireEvent('move', fromCtRoot, sourceCmp, dropAt, fromIdx);
+
+        // Update dropped column 'locked' property to be same as dropped region
+        if (isCssLockedGrid) {
+            scroller = sourceCmp.getGrid().getScrollable();
+            // Work around for visual artifact where, when the center region is scrolled to the
+            // far right, a drop anywhere in the grid will cause the column headers to be 
+            // misaligned. Unable to determine the reason for 
+            // this but this seems to resolve the visual artifact.
+            scroller.scrollBy(-1);
+            scroller.scrollBy(1);
+
+            fromCtRoot.fireEvent('columnlockedchange', sourceCmp, targetRegion, sourceRegion);
+        }
     }
 });

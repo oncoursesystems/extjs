@@ -102,8 +102,9 @@
 
     .#{$prefix}form-checkbox-#{$ui},
     .#{$prefix}form-radio-#{$ui} {
-        width: $ui-checkbox-size;
-        height: $ui-checkbox-size;
+        width: round($ui-checkbox-size + 2);
+        height: round($ui-checkbox-size + 2);
+        padding: 1px;
     }
 
     .#{$prefix}form-radio-#{$ui} {
@@ -116,7 +117,9 @@
             }
         } @else {
             background: theme-background-image($ui-radio-background-image) no-repeat;
-
+            width: $ui-checkbox-size;
+            height: $ui-checkbox-size;
+            
             .#{$prefix}form-cb-checked & {
                 background-position: 0 (0 - $ui-checkbox-size);
             }
@@ -133,6 +136,8 @@
             }
         } @else {
             background: theme-background-image($ui-checkbox-background-image) no-repeat;
+            width: $ui-checkbox-size;
+            height: $ui-checkbox-size;
 
             .#{$prefix}form-cb-checked & {
                 background-position: 0 (0 - $ui-checkbox-size);

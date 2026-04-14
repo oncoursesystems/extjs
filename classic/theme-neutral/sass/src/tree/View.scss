@@ -251,15 +251,16 @@
 
 .#{$prefix}tree-checkbox {
     margin-right: $tree-checkbox-spacing;
-    top: round(($grid-row-height - $form-checkbox-size) / 2);
-    width: $form-checkbox-size;
-    height: $form-checkbox-size;
+    top: round(($grid-row-height - $tree-checkbox-size) / 2);
+    width: $tree-checkbox-size;
+    height: $tree-checkbox-size;
     @if $enable-font-icons and ($tree-checkbox-glyph != null) {
         @include font-icon($tree-checkbox-glyph);
         color: $tree-checkbox-glyph-color;
     } @else {
-        background-image: theme-background-image($form-checkbox-background-image);
+        background-image: $tree-checkbox-icon;
     }
+    cursor: $tree-expander-cursor;
 }
 
 @if $include-rtl {
@@ -273,8 +274,19 @@
     @if $enable-font-icons and ($tree-checkbox-checked-glyph != null) {
         @include font-icon($tree-checkbox-checked-glyph);
     } @else {
-        background-position: 0 (0 - $form-checkbox-size);
+        background-position: 0 (0 - $tree-checkbox-checked-position);
     }
+    cursor: $tree-expander-cursor;
+}
+
+.#{$prefix}tree-checkbox-intermediate {
+    @if $enable-font-icons and ($tree-checkbox-intermediate-glyph != null) {
+        @include font-icon($tree-checkbox-intermediate-glyph);
+    } @else {
+        background-image: $tree-checkbox-icon;
+        background-position: 0 (0 - $tree-checkbox-intermediate-position);
+    }
+    cursor: $tree-expander-cursor;
 }
 
 .#{$prefix}grid-tree-loading .#{$prefix}tree-icon {

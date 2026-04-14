@@ -1,4 +1,3 @@
-/* global Ext, jasmine, expect, spyOn, topSuite */
 /* eslint indent: off */
 
 topSuite("Ext.grid.column.Action",

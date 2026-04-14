@@ -915,6 +915,6 @@
     }
 
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext','7.8.0.33');Ext.setVersion('core','7.8.0.33');
+        Ext.setVersion('ext','8.0.0.43');Ext.setVersion('core','8.0.0.43');
     }
 })(Ext.manifest);

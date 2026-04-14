@@ -4,16 +4,16 @@ Ext.define('Ext.locale.ja.Panel', {
     config: {
         standardButtons: {
             ok: {
-                text: 'できた'
+                text: 'OK'
             },
             abort: {
-                text: 'やめる'
+                text: '終了'
             },
             retry: {
-                text: 'リトライ'
+                text: '再試行'
             },
             ignore: {
-                text: '無視する'
+                text: '無視'
             },
             yes: {
                 text: 'はい'
@@ -25,16 +25,16 @@ Ext.define('Ext.locale.ja.Panel', {
                 text: 'キャンセル'
             },
             apply: {
-                text: '適用する'
+                text: '適用'
             },
             save: {
-                text: '保存する'
+                text: '保存'
             },
             submit: {
-                text: '提出する'
+                text: '送信'
             },
             help: {
-                text: '助けて'
+                text: 'ヘルプ'
             },
             close: {
                 text: '閉じる'

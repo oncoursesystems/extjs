@@ -76,9 +76,9 @@ Ext.define('KitchenSink.view.layout.Accordion', {
     }, {
         title: 'Accordion Item 3',
         tools: [
-            { glyph: 'xf08d@\'Font Awesome 5 Free\'' },
-            { glyph: 'xf08d@\'Font Awesome 5 Free\'', cls: 'fa-rotate-90' },
-            { glyph: 'xf013@\'Font Awesome 5 Free\'' }
+            { glyph: 'xf08d' },
+            { glyph: 'xf08d', cls: 'fa-rotate-90' },
+            { glyph: 'xf013' }
         ],
         html: 'Empty'
     }, {
@@ -92,9 +92,9 @@ Ext.define('KitchenSink.view.layout.Accordion', {
     }, {
         title: 'Accordion Item 5',
         tools: [
-            { glyph: 'xf08d@\'Font Awesome 5 Free\'' },
-            { glyph: 'xf08d@\'Font Awesome 5 Free\'', cls: 'fa-rotate-90' },
-            { glyph: 'xf013@\'Font Awesome 5 Free\'' }
+            { glyph: 'xf08d@' },
+            { glyph: 'xf08d', cls: 'fa-rotate-90' },
+            { glyph: 'xf013' }
         ],
         html: 'Empty'
     }]

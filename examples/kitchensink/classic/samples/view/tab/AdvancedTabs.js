@@ -36,10 +36,10 @@ Ext.define('KitchenSink.view.tab.AdvancedTabs', {
             height: 400,
             width: 580,
             buttonUI: 'default-toolbar',
-            glyph1: 42,
-            glyph2: 70,
-            glyph3: 86,
-            glyphAdd: 43,
+            glyph1: 'f013',
+            glyph2: 'f0ea',
+            glyph3: 'f058',
+            glyphAdd: 'f055',
             icon1: null,
             icon2: null,
             icon3: null,
@@ -132,7 +132,7 @@ Ext.define('KitchenSink.view.tab.AdvancedTabs', {
         listeners: {
             toggle: 'onAutoCycleToggle'
         },
-        glyph: 109
+        glyph: 'f074'
     }],
 
     items: [{

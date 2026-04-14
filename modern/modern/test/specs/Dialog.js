@@ -1,6 +1,6 @@
 topSuite("Ext.Dialog",
     ['Ext.app.ViewModel', 'Ext.layout.Form', 'Ext.Button', 'Ext.field.Text',
-     'Ext.plugin.TabGuard', 'Ext.Dialog', 'Ext.panel.Resizer'],
+     'Ext.plugin.TabGuard', 'Ext.Dialog', 'Ext.panel.Resizer', 'Ext.Panel'],
 function() {
     var dialog, childDialog;
 
@@ -157,6 +157,362 @@ function() {
             // Hidden is only flipped when the hide animation finishes
             waitsFor(function() {
                 return dialog.getHidden();
+            });
+        });
+    });
+
+    describe('constrain dialog to its parent', function() {
+        var helper = Ext.testHelper,
+            panelDialogOwner, panelElement,
+            activeEdge, cursorTrack, resizable,
+            width, height, originalX, originalY;
+
+        function createPanel(dialogConfig) {
+            // Create the main panel structure as shown in the fiddle
+            panelDialogOwner = Ext.create('Ext.Panel', {
+                title: "Dialog Owner should restrict Dialog's Maximizable area",
+                padding: 6,
+                border: true,
+                width: 500,
+                height: 400,
+                items: [{
+                    xtype: 'button',
+                    text: 'Open child dialog',
+                    itemId: 'openDialogBtn',
+                    handler: function() {
+                        createDialog(dialogConfig);
+
+                        panelDialogOwner.add(dialog);
+                        dialog.show(null);
+                    }
+                }]
+            });
+
+            // Create the full panel with toolbars
+            panelElement = Ext.create('Ext.Panel', {
+                renderTo: Ext.getBody(),
+                width: 500,
+                height: 600,
+                items: [{
+                    xtype: 'panel',
+                    items: [panelDialogOwner]
+                }]
+            });
+        }
+
+        afterEach(function() {
+
+            if (dialog && !dialog.destroyed) {
+                dialog.destroy();
+            }
+
+            if (panelElement && !panelElement.destroyed) {
+                panelElement.destroy();
+            }
+
+            dialog = null;
+            panelDialogOwner = null;
+            panelElement = null;
+        });
+
+        function startHeaderDrag() {
+            runs(function() {
+                var header = dialog.getHeader(),
+                    headerEl = header.element,
+                    xy = getCenter(headerEl);
+
+                originalX = dialog.getX();
+                originalY = dialog.getY();
+
+                start({
+                    x: xy[0],
+                    y: xy[1]
+                }, headerEl);
+            });
+            waitsForAnimation();
+        }
+
+        function getCenter(el) {
+            var xy = el.getXY();
+
+            return [xy[0] + (el.getWidth() / 2), xy[1] + (el.getHeight() / 2)];
+        }
+
+        function start(cfg, target) {
+            cursorTrack = [cfg.x || 0, cfg.y || 0];
+            helper.touchStart(target, cfg);
+        }
+
+        function moveBy(x, y) {
+            if (Ext.isArray(x)) {
+                y = x[1];
+                x = x[0];
+            }
+
+            runs(function() {
+                move({
+                    x: cursorTrack[0] + (x || 0),
+                    y: cursorTrack[1] + (y || 0)
+                }, dialog.getHeader().element);
+            });
+            waitsForAnimation();
+        }
+
+        function move(cfg, target) {
+            cursorTrack = [cfg.x || 0, cfg.y || 0];
+            helper.touchMove(target, cfg);
+        }
+
+        function endDrag(x, y) {
+            runs(function() {
+                x = x || cursorTrack[0];
+                y = y || cursorTrack[1];
+
+                end({
+                    x: x,
+                    y: y
+                }, dialog.getHeader().element);
+            });
+            waitsForAnimation();
+        }
+
+        function end(cfg, target) {
+            cursorTrack = [cfg.x || 0, cfg.y || 0];
+            helper.touchEnd(target, cfg);
+        }
+
+        it('should constrain dialog when dragged outside parent panel bounds to the owner', function() {
+            var openBtn;
+
+            createPanel({
+                title: 'Child Dialog',
+                width: 200,
+                height: 150,
+                draggable: true,
+                closable: true,
+                constrainToParent: true,
+                constrainDrag: 'owner',
+                items: [{
+                    html: 'This dialog should be constrained to parent panel'
+                }]
+            });
+            openBtn = panelDialogOwner.down('#openDialogBtn');
+
+            jasmine.fireMouseEvent(openBtn.element, 'click');
+
+            startHeaderDrag();
+
+            // Try to drag dialog far to the right (outside parent bounds)
+            moveBy(500, 0);
+            endDrag();
+
+            runs(function() {
+                var parentBounds = panelDialogOwner.element.getRegion(),
+                    dialogBounds = dialog.element.getRegion();
+
+                // Dialog should be constrained within parent bounds
+                expect(dialogBounds.right).toBeLessThanOrEqual(parentBounds.right);
+                expect(dialogBounds.left).toBeGreaterThanOrEqual(parentBounds.left);
+            });
+        });
+
+        it('should constrain dialog to its owner when maximizable="owner"', function(done) {
+            var openBtn, tool;
+
+            createPanel({
+                title: 'Child Dialog',
+                width: 200,
+                height: 150,
+                closable: true,
+                items: [{
+                    html: 'This dialog should be constrained to parent panel'
+                }]
+            });
+            openBtn = panelDialogOwner.down('#openDialogBtn');
+
+            jasmine.fireMouseEvent(openBtn.element, 'click');
+            dialog.setMaximizable('owner');
+
+            tool = dialog.down('tool[type=maximize]');
+
+            expect(tool.isHidden()).toBe(false);
+
+            dialog.maximize().then(function() {
+                var parentBounds = panelDialogOwner.element.getRegion(),
+                    dialogBounds = dialog.element.getRegion();
+
+                expect(dialogBounds.width).toBe(parentBounds.width);
+                expect(dialogBounds.height).toBe(parentBounds.height);
+
+                done();
+            });
+        });
+
+        it('should constrain dialog to maximizable="owner.el"', function(done) {
+            var openBtn, tool;
+
+            createPanel({
+                title: 'Child Dialog',
+                width: 200,
+                height: 150,
+                draggable: true,
+                items: [{
+                    html: 'This dialog should be constrained to parent panel'
+                }]
+            });
+
+            openBtn = panelDialogOwner.down('#openDialogBtn');
+
+            jasmine.fireMouseEvent(openBtn.element, 'click');
+            dialog.setMaximizable(panelDialogOwner.element);
+            tool = dialog.down('tool[type=maximize]');
+
+            expect(tool.isHidden()).toBe(false);
+
+            dialog.maximize().then(function() {
+                var parentBounds = panelDialogOwner.element.getRegion(),
+                    dialogBounds = dialog.element.getRegion();
+
+                expect(dialogBounds.width).toBe(parentBounds.width);
+                expect(dialogBounds.height).toBe(parentBounds.height);
+
+                done();
+            });
+        });
+
+        it('should constrain the dialog to maximizable="panel.el"', function(done) {
+            var openBtn, tool;
+
+            createPanel({
+                title: 'Child Dialog',
+                width: 200,
+                height: 150,
+                items: [{
+                    html: 'This dialog should be constrained to parent panel'
+                }]
+            });
+
+            openBtn = panelDialogOwner.down('#openDialogBtn');
+
+            jasmine.fireMouseEvent(openBtn.element, 'click');
+            dialog.setMaximizable(panelElement.element);
+
+            tool = dialog.down('tool[type=maximize]');
+
+            expect(tool.isHidden()).toBe(false);
+
+            dialog.maximize().then(function() {
+                var parentBounds = panelElement.element.getRegion(),
+                    dialogBounds = dialog.element.getRegion();
+
+                expect(dialogBounds.width).toBe(parentBounds.width);
+                expect(dialogBounds.height).toBe(parentBounds.height);
+
+                done();
+            });
+        });
+
+        it('should restore from maximized state with maximizable="owner"', function(done) {
+            var openBtn, originalSize, originalX, originalY;
+
+            createPanel({
+                title: 'Restore Test Dialog',
+                width: 200,
+                height: 150,
+                draggable: true,
+                closable: true,
+                maximizable: 'owner'
+            });
+
+            openBtn = panelDialogOwner.down('#openDialogBtn');
+
+            jasmine.fireMouseEvent(openBtn.element, 'click');
+
+            // Capture original state
+            originalX = dialog.getX();
+            originalY = dialog.getY();
+
+            originalSize = dialog.getSize();
+
+            dialog.maximize().then(function() {
+                var maximizeTool = dialog.down('tool[type=maximize]'),
+                    restoreTool = dialog.down('tool[type=restore]'),
+                    relativeMaximizeCls = dialog.relativeMaximizeCls;
+
+                // Verify maximized state
+                expect(maximizeTool.isHidden()).toBe(true);
+                expect(restoreTool.isHidden()).toBe(false);
+
+                expect(dialog.hasCls(relativeMaximizeCls)).toBe(true);
+
+                dialog.restore().then(function() {
+                    var restoredX = dialog.getX(),
+                        restoredY = dialog.getY(),
+                        restoredSize = dialog.getSize();
+
+                    expect(dialog.hasCls(relativeMaximizeCls)).toBe(false);
+
+                    // Verify restored to original state
+                    expect(restoredX).toBe(originalX);
+                    expect(restoredY).toBe(originalY);
+                    expect(restoredSize.width).toBe(originalSize.width);
+                    expect(restoredSize.height).toBe(originalSize.height);
+
+                    // Verify tool visibility restored
+                    expect(maximizeTool.isHidden()).toBe(false);
+                    done();
+                });
+            });
+        });
+
+        it('should restore from maximized state with maximizable=element', function(done) {
+            var openBtn, originalSize, originalX, originalY;
+
+            createPanel({
+                title: 'Element Restore Test',
+                width: 180,
+                height: 120,
+                draggable: true,
+                closable: true
+            });
+
+            openBtn = panelDialogOwner.down('#openDialogBtn');
+
+            jasmine.fireMouseEvent(openBtn.element, 'click');
+
+            dialog.setMaximizable(panelDialogOwner.element);
+
+            // Capture original state
+            originalX = dialog.getX();
+            originalY = dialog.getY();
+
+            originalSize = dialog.getSize();
+
+            dialog.maximize().then(function() {
+                // Verify maximized to element bounds
+                var elementBounds = panelDialogOwner.element.getRegion(),
+                    dialogBounds = dialog.element.getRegion(),
+                    relativeMaximizeCls = dialog.relativeMaximizeCls;
+
+                expect(dialogBounds.width).toBe(elementBounds.width);
+                expect(dialogBounds.height).toBe(elementBounds.height);
+
+                expect(dialog.hasCls(relativeMaximizeCls)).toBe(true);
+
+                dialog.restore().then(function() {
+                    var restoredX = dialog.getX(),
+                        restoredY = dialog.getY(),
+                        restoredSize = dialog.getSize();
+
+                    expect(dialog.hasCls(relativeMaximizeCls)).toBe(false);
+
+                    // Verify restored to original state
+                    expect(restoredX).toBe(originalX);
+                    expect(restoredY).toBe(originalY);
+                    expect(restoredSize.width).toBe(originalSize.width);
+                    expect(restoredSize.height).toBe(originalSize.height);
+                    done();
+                });
             });
         });
     });

@@ -346,6 +346,24 @@ var Ext = Ext || {};
         </x-compile>
     </target>
 
+    <target name="qr-code" depends="init">
+        <x-compile refid="${compiler.ref.id}">
+            <![CDATA[
+            classpath
+                +new
+                -name=qr-code
+                -path=${framework.dir}/packages/qr-code/classic/src
+            and
+            classpath
+                -name=qr-code
+                -path=${framework.dir}/packages/qr-code/src
+            and
+            include
+                -all
+        ]]>
+        </x-compile>
+    </target>
+
     <target name="exporter" depends="init">
         <x-compile refid="${compiler.ref.id}">
             <![CDATA[
@@ -448,6 +466,24 @@ var Ext = Ext || {};
         </x-compile>
     </target>
 
+    <target name="signature" depends="init">
+        <x-compile refid="${compiler.ref.id}">
+            <![CDATA[
+            classpath
+                +new
+                -name=signature
+                -path=${framework.dir}/packages/signature/classic/src
+            and
+            classpath
+                -name=signature
+                -path=${framework.dir}/packages/signature/src
+            and
+            include
+                -all
+        ]]>
+        </x-compile>
+    </target>
+
     <target name="core-bootstrap" depends="init">
         <local name="base.path"/>
         <property name="base.path" value="${framework.dir}"/>
@@ -520,5 +556,5 @@ Ext.Boot.loadSyncBasePrefix([
 
     <target name="bootstrap"
             description="*** Regenerate files needed by standalone examples and unit tests ***"
-            depends="calendar,charts,d3,ux,froala-editor,exporter,pivot,pivot-d3,core-bootstrap,test-bootstrap"/>
+            depends="calendar,charts,d3,ux,froala-editor,exporter,pivot,pivot-d3,signature,qr-code,core-bootstrap,test-bootstrap"/>
 </project>

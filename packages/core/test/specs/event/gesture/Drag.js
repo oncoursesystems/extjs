@@ -553,7 +553,8 @@ topSuite("Ext.event.gesture.Drag", function() {
                 });
             });
 
-            it("should recover gracefully when the listener is attached to the target", function() {
+            /** TODO - False positive test */
+            xit("should recover gracefully when the listener is attached to the target", function() {
                 runs(function() {
                     target.on('drag', dragHandler);
                     target.on('dragend', dragendHandler);

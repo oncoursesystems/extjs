@@ -223,9 +223,9 @@ Ext.define('Ext.app.EventDomain', {
                     else
                     //</debug>
 
-                    if (typeof listener === 'string') {
-                        listener = scope[listener];
-                    }
+                        if (typeof listener === 'string') {
+                            listener = scope[listener];
+                        }
 
                     event.addListener(listener, scope, options);
 

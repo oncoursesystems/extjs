@@ -510,7 +510,7 @@ return {
             Ext.draw.TextMeasurer.precise = textMeasurerPrecision;
         }
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var surface = me.getSurface(),
             isRtl = (surface && surface.getInherited().rtl) || false,
             flipRtlText = isRtl && surface.getFlipRtlText(),

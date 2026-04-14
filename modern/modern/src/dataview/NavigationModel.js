@@ -120,7 +120,6 @@ Ext.define('Ext.dataview.NavigationModel', {
                 child = child.isComponent ? child.el : Ext.fly(child);
                 itemContainer = child.up();
                 childFloatStyle = child.getStyleValue('float');
-
                 me.floatingItems =
                     (view.getInline && view.getInline()) ||
                     child.isStyle('display', 'inline-block') ||
@@ -134,9 +133,7 @@ Ext.define('Ext.dataview.NavigationModel', {
             scroller = locationView.getScrollable();
 
             if (scroller) {
-                scroller.ensureVisible(location.sourceElement, {
-                    animation: options && options.animation
-                });
+                scroller.ensureVisible(location.sourceElement, options);
             }
 
             // Handling the impending focus event is separated because it also needs to

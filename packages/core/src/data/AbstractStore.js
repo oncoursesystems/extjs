@@ -120,7 +120,8 @@ Ext.define('Ext.data.AbstractStore', {
         * @cfg {Boolean} [remoteSort=false]
         * `true` if the sorting should be performed on the server side, false if it is local only.
         * **Note:** if {@link Ext.data.ProxyStore.html#cfg-autoLoad} is false, you will have to 
-        * explicitly make store load initially before applying sorters. (since 7.5).
+        * explicitly set {@link autoLoadOnFilterEnd} to true to load store on applying
+        * sorters. (since 7.5).
         */
         remoteSort: {
             lazy: true,
@@ -132,7 +133,8 @@ Ext.define('Ext.data.AbstractStore', {
         * `true` to defer any filtering operation to the server. If `false`, filtering is done
         * locally on the client.
         * **Note:** if {@link Ext.data.ProxyStore.html#cfg-autoLoad} is false, you will have to 
-        * explicitly make store load initially before applying filters. (since 7.5).
+        * explicitly set {@link autoLoadOnFilterEnd} to true to load store on applying
+        * filters. (since 7.5).
         */
         remoteFilter: {
             lazy: true,
@@ -223,8 +225,9 @@ Ext.define('Ext.data.AbstractStore', {
         /**
          * @cfg {Boolean} autoLoadOnFilterEnd
          * Set this to `true` to trigger store load on filter end.
-         *
-         * @private
+         * To prevent the store from automatically loading data when filters or sorters are added,
+         * set the `autoLoadOnFilterEnd` to false.
+         * This allows developers to manually control when the store should load data.
          */
         autoLoadOnFilterEnd: undefined
     },
@@ -387,6 +390,15 @@ Ext.define('Ext.data.AbstractStore', {
 
         if (storeId) {
             Ext.data.StoreManager.register(me);
+        }
+
+        // Setting the 'autoLoadOnFilterEnd' to true so that the store load happens when ever
+        // a filter or sort is applied initially. Reference EXTJS-29831
+        if (
+            (me.getRemoteFilter() || me.getRemoteSort()) &&
+            !Ext.isDefined(me.getAutoLoadOnFilterEnd())
+        ) {
+            me.setAutoLoadOnFilterEnd(true);
         }
     },
 

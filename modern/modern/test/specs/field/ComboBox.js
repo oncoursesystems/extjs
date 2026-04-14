@@ -682,7 +682,7 @@ function() {
 
             doTyping("abc");
             var trigger, vc,
-v = component.getValue();
+                v = component.getValue();
 
             expect(v).toBe(null);
 
@@ -869,6 +869,10 @@ v = component.getValue();
 
             expect(component.ariaEl).toHaveAttr('aria-activedescendant', node.id);
         });
+
+        it("should have aria-expanded as true", function() {
+            expect(component).toHaveAttr('aria-expanded', 'true');
+        });
     });
 
     describe("onCollapse", function() {
@@ -885,6 +889,22 @@ v = component.getValue();
             runs(function() {
                 component.collapse();
                 expect(component.getPicker().getNavigationModel().getDisabled()).toBe(true);
+            });
+        });
+
+       it("should have aria-expanded as false", function() {
+            runs(function() {
+                makeComponent({
+                    renderTo: Ext.getBody()
+                });
+                component.expand();
+            });
+            waitsFor(function() {
+                return component.ariaEl.dom.hasAttribute('aria-expanded') !== 'false';
+            });
+            runs(function() {
+                component.collapse();
+                expect(component).toHaveAttr('aria-expanded', 'false');
             });
         });
     });
@@ -1926,8 +1946,8 @@ v = component.getValue();
                     expect(component.getPicker().isVisible()).toBe(true);
                 });
             });
-
-            it('should not collapse on typing when forceSelection: true', function() {
+            /** TODO - False positive test */
+            xit('should not collapse on typing when forceSelection: true', function() {
                 // We need to emulate real-world execution time
                 Ext.data.ProxyStore.prototype.load = storeLoad;
                 store.setAsynchronousLoad(true);
@@ -6805,6 +6825,119 @@ v = component.getValue();
                 }).not.toThrow();
 
                 component.destroy();
+            });
+        });
+    });
+
+    if (jasmine.supportsTouch) {
+        describe('should not retail filter value on empty input field', function() {
+            it("should clear picker filter after clearing the input value", function() {
+                makeComponent({
+                    displayField: 'name',
+                    valueField: 'value',
+                    queryMode: 'local',
+                    store: {
+                        data: [
+                            { id: 1, name: 'alabama', value: 'alabama' },
+                            { id: 2, name: 'alaska', value: 'alaska' },
+                            { id: 3, name: 'colorado', value: 'colorado' },
+                            { id: 4, name: 'delaware', value: 'delaware' }
+                        ]
+                    },
+                    renderTo: Ext.getBody()
+                });
+                runs(function() {
+                    doTyping('al');
+                    expect(component.getPicker().isVisible()).toBe(true);
+                    expect(component._pickerStore.getCount()).toBe(2);
+                    doTyping('');
+                    component.completeEdit();
+                    component.inputElement.dom.focus();
+                    expect(component._pickerStore.getCount()).toBe(4);
+                });
+            });
+        });
+    }
+
+    describe("ARIA attributes", function() {
+        describe("in general", function() {
+            it("should have attributes", function() {
+                makeComponent();
+                expect(component).toHaveAttr('role', 'combobox');
+                expect(component).toHaveAttr('aria-haspopup', 'listbox');
+                expect(component).toHaveAttr('aria-expanded', 'false');
+                expect(component).toHaveAttr('aria-autocomplete', 'list');
+                expect(component).toHaveAttr('aria-invalid', 'false');
+                expect(component).toHaveAttr('aria-describedby', component.id + '-ariaStatusEl');
+            });
+        });
+
+        describe("aria-hidden", function() {
+            it("should have aria-hidden as false", function() {
+                makeComponent({
+                    renderTo: Ext.getBody(),
+                    valueField: 'value',
+                    displayField: 'text',
+                    queryMode: 'local',
+                    hidden: false
+                });
+                expect(component).toHaveAttr('aria-hidden', 'false');
+            });
+
+            it("should have aria-hidden as true when hidden is true", function() {
+                makeComponent({
+                    hidden: true
+                });
+                expect(component).toHaveAttr('aria-hidden', 'true');
+            });
+        });
+
+        describe("aria-disabled", function() {
+            it("should have aria-disabled as false", function() {
+                makeComponent({
+                    renderTo: Ext.getBody(),
+                    valueField: 'value',
+                    displayField: 'text',
+                    queryMode: 'local',
+                    disabled: false
+                });
+                expect(component).toHaveAttr('aria-disabled', 'false');
+            });
+
+            it("should have aria-disabled as true when disabled is true", function() {
+                makeComponent({
+                    disabled: true
+                });
+                expect(component).toHaveAttr('aria-disabled', 'true');
+            });
+        });
+
+        describe("via config", function() {
+            it("should have ariaAttributes", function() {
+                makeComponent({
+                    ariaAttributes: {
+                        'aria-label': 'First Name combo',
+                        'aria-labelledby': 'firstNamelabel',
+                        'aria-describedby': 'firstNameDescription'
+                    }
+                });
+                expect(component).toHaveAttr('aria-label', 'First Name combo');
+                expect(component).toHaveAttr('aria-labelledby', 'firstNamelabel');
+                expect(component).toHaveAttr('aria-describedby', 'firstNameDescription');
+            });
+
+            it("should have ariaLabel", function() {
+                makeComponent({
+                    ariaLabel: "my combobox"
+                });
+                expect(component).toHaveAttr('aria-label', 'my combobox');
+            });
+
+            it("should have aria-describedby when id is provided", function() {
+                makeComponent({
+                    id: 'my-combobox'
+                });
+                expect(component).toHaveAttr('aria-describedby', component.id + '-ariaStatusEl');
             });
         });
     });

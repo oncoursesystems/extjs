@@ -151,7 +151,7 @@ Ext.define('Ext.drag.Target', {
      *
      * @param {Ext.drag.Target} this This target.
      * @param {Ext.drag.Info} info The drag info.
-     */ 
+     */
 
     /**
      * @event dragleave
@@ -159,7 +159,7 @@ Ext.define('Ext.drag.Target', {
      *
      * @param {Ext.drag.Target} this This target.
      * @param {Ext.drag.Info} info The drag info.
-     */ 
+     */
 
     /**
      * @event dragmove
@@ -167,7 +167,7 @@ Ext.define('Ext.drag.Target', {
      *
      * @param {Ext.drag.Target} this This target.
      * @param {Ext.drag.Info} info The drag info.
-     */ 
+     */
 
     constructor: function(config) {
         var me = this,

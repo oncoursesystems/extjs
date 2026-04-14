@@ -3,6 +3,6 @@ Ext.define('Ext.locale.ja.dataview.plugin.ListPaging', {
 
     config: {
         loadMoreText: 'さらに読み込む...',
-        noMoreRecordsText: 'これ以上レコードがない'
+        noMoreRecordsText: 'これ以上レコードがありません'
     }
 });

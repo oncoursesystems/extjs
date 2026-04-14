@@ -296,8 +296,9 @@ Ext.define('Ext.ux.DataView.Animated', {
     getExistingCount: function() {
         var count = 0,
             items = this.getExisting(),
-            k; // eslint-disable-line no-unused-vars
+            k;
 
+        // eslint-disable-next-line no-unused-vars
         for (k in items) {
             count++;
         }

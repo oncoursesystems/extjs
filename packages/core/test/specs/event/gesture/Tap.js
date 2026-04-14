@@ -1,5 +1,3 @@
-/* global expect, jasmine, Ext */
-
 topSuite("Ext.event.gesture.Tap", function() {
     var helper = Ext.testHelper,
         tapRecognizer = Ext.event.gesture.Tap.instance,

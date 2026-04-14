@@ -1154,7 +1154,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
             cache.maxY = maxY;
         }
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var sectorWidth = maxX - minX,
             sectorHeight = maxY - minY,
             scaleX = width / sectorWidth,

@@ -28,7 +28,10 @@ Ext.define('KitchenSink.Application', {
             storeId: 'navigation'
         });
 
-        Ext.setGlyphFontFamily('Pictos');
+        // Set the default font family to Font Awesome for glyph icons
+        // This is required for the classic toolkit to use Font Awesome icons
+        // and removed pictos inline font family accross the application.
+        Ext.setGlyphFontFamily("'Font Awesome 7 Free'");
         Ext.tip.QuickTipManager.init(null, {
             showOnTap: true
         });

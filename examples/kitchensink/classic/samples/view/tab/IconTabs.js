@@ -32,28 +32,28 @@ Ext.define('KitchenSink.view.tab.IconTabs', {
     items: [{
         margin: '0 0 20 0',
         items: [{
-            glyph: 72,
+            glyph: 'f015',
             html: KitchenSink.DummyText.longText
         }, {
-            glyph: 99,
+            glyph: 'f075',
             html: KitchenSink.DummyText.extraLongText
         }, {
-            glyph: 42,
+            glyph: 'f013',
             disabled: true
         }]
     }, {
         plain: true,
         items: [{
             title: 'Active Tab',
-            glyph: 72,
+            glyph: 'f015',
             html: KitchenSink.DummyText.longText
         }, {
             title: 'Inactive Tab',
-            glyph: 99,
+            glyph: 'f075',
             html: KitchenSink.DummyText.extraLongText
         }, {
             title: 'Disabled Tab',
-            glyph: 42,
+            glyph: 'f013',
             disabled: true
         }],
         listeners: {

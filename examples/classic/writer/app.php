@@ -10,7 +10,7 @@
     require('remote/app/controllers/' . $request->controller . '.php');
     $controller_name = ucfirst($request->controller);
     $controller = new $controller_name;
-    $callback = $_GET['callback'];
+    $callback = @$_GET['callback'];
 
     // Dispatch request
     $result = $controller->dispatch($request);

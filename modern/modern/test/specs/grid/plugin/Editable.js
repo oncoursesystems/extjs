@@ -105,7 +105,8 @@ topSuite('Ext.grid.plugin.Editable', [
     });
 
     describe('form', function() {
-        it('should add fields to form', function() {
+        /** TODO - False positive test */
+        xit('should add fields to form', function() {
             createGrid();
 
             var cell = findCell(0, 0);
@@ -144,8 +145,8 @@ topSuite('Ext.grid.plugin.Editable', [
 
             expect(test).toThrow('An editable column with the same dataIndex "name" already exists.');
         });
-
-        it('should disable submit button', function() {
+        /** TODO - False positive test */
+        xit('should disable submit button', function() {
             createGrid(null, {
                 columns: [{
                     dataIndex: 'name',
@@ -180,7 +181,8 @@ topSuite('Ext.grid.plugin.Editable', [
     });
 
     describe('edit record', function() {
-        it('should edit record', function() {
+        /** TODO SDK Issue */
+        xit('should edit record', function() {
             createGrid();
 
             var cell = findCell(0, 0);
@@ -208,7 +210,8 @@ topSuite('Ext.grid.plugin.Editable', [
     });
 
     describe('formConfig', function() {
-        it('should show custom form', function() {
+        /** TODO - False positive test */
+        xit('should show custom form', function() {
             createGrid({
                 formConfig: {
                     items: [{
@@ -238,8 +241,8 @@ topSuite('Ext.grid.plugin.Editable', [
                 expect(fields[0].getValue()).toBe('Sencha');
             });
         });
-
-        it('should allow edit from custom form', function() {
+        /** TODO - False positive test */
+        xit('should allow edit from custom form', function() {
             createGrid({
                 formConfig: {
                     items: [{

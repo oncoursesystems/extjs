@@ -68,6 +68,13 @@ Ext.define('Ext.field.trigger.Trigger', {
 
         repeat = me.getRepeat();
 
+        me.ariaEl.set({
+            role: 'button',
+            'aria-labelledby': (me.ownerCmp && me.ownerCmp.labelElement
+                ? me.ownerCmp.labelElement.id
+                : null)
+        });
+
         if (repeat) {
             me.repeater = new Ext.util.ClickRepeater(Ext.apply({
                 target: me,

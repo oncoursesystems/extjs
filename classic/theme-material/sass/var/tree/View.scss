@@ -18,3 +18,6 @@ $tree-arrow-glyph-rtl: dynamic('chevron_right' $tree-glyph-font-size);
 $tree-glyph-font-size: dynamic(18px);
 $tree-checkbox-glyph-color: dynamic($highlight-color);
 $tree-checkbox-checked-glyph-color: dynamic($base-color);
+$tree-checkbox-intermediate-glyph-color: dynamic($base-color);
+$tree-checkbox-intermediate-position: dynamic($tree-glyph-font-size);
+$tree-checkbox-intermediate-glyph: dynamic($tree-collapse-glyph);

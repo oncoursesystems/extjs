@@ -338,6 +338,7 @@ Ext.define('Ext.view.Table', {
             '<span id="{view.id}' + '-aria-description-unchecked"' + ' class="' + Ext.baseCSSPrefix + 'hidden-offsets">Checkbox is not checked. Press space to check</span>',
             '<span id="{view.id}' + '-aria-description-expanded"' + ' class="' + Ext.baseCSSPrefix + 'hidden-offsets"> Node is expanded.</span>',
             '<span id="{view.id}' + '-aria-description-collapsed"' + ' class="' + Ext.baseCSSPrefix + 'hidden-offsets"> Node is collapsed.</span>',
+            '<span id="{view.id}' + '-aria-description-intermediate"' + ' class="' + Ext.baseCSSPrefix + 'hidden-offsets">Checkbox is in tristate mode</span>',
             '{% }',
         '%}',
         '{% if (values.view.rowExpander) {%}',
@@ -3350,7 +3351,7 @@ Ext.define('Ext.view.Table', {
                 }
             }
 
-            /* eslint-disable indent, max-len */
+            /* eslint-disable max-len */
             // if the element whose event is being processed is not an actual cell (for example
             // if using a rowbody feature and the rowbody element's event is being processed)
             // then do not fire any "cell" events
@@ -3364,7 +3365,7 @@ Ext.define('Ext.view.Table', {
                     (me.fireEvent('cell' + type, me, cell, cellIndex, record, row, rowIndex, e) === false)
                 );
             }
-            /* eslint-enable indent, max-len */
+            /* eslint-enable max-len */
 
             if (result !== false) {
                 result = me.fireEvent('row' + type, me, record, row, rowIndex, e);
@@ -3419,7 +3420,6 @@ Ext.define('Ext.view.Table', {
 
                     args = feature.getFireEventArgs(prefix + type, me, featureTarget, e);
 
-                    /* eslint-disable indent */
                     if (
                         // before view event
                         (me.fireEvent.apply(me, beforeArgs) === false) ||
@@ -3432,7 +3432,6 @@ Ext.define('Ext.view.Table', {
                     ) {
                         return false;
                     }
-                    /* eslint-enable indent */
                 }
             }
         }

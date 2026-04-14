@@ -1,8 +1,9 @@
 /**
  * @private
  */
-Ext.define('Ext.dd.ScrollManager', {
+Ext.define('Ext.plugin.dd.ScrollManager', {
     singleton: true,
+    alternateClassName: 'Ext.dd.ScrollManager',
 
     /**
      * Register scroller task while dragging on component

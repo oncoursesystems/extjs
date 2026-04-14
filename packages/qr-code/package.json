@@ -1,0 +1,124 @@
+{
+    "name": "@sencha/ext-qr-code",
+    "ext-react-name": "@sencha/ext-react-qr-code",
+    "ext-name": "@sencha/ext-qr-code",
+    "SenchaExtName": "@sencha/ext-qr-code",
+    "SenchaExtReactName": "@sencha/ext-react-qr-code",
+    "version": "8.0.0.43",
+    "sencha": {
+        "name": "qr-code",
+        "namespace": "Ext",
+        "type": "code",
+        "framework": "ext",
+        "js": [
+            {
+                "path": "qrcode.min.js",
+                "includeInBundle": false,
+                "requiresSdk": false,
+                "isSdk": false,
+                "compress": false
+            },
+            {
+                "path": "html5-qrcode.min.js",
+                "includeInBundle": false,
+                "isSdk": false,
+                "requiresSdk": false,
+                "compress": false
+            }
+        ],
+        "creator": "Sencha",
+        "summary": "Sencha QR Code Generator",
+        "detailedDescription": "Long description of package",
+        "version": "8.0.0.43",
+        "compatVersion": "8.0.0",
+        "format": "1",
+        "slicer": {
+            "js": [
+                {
+                    "path": "${package.dir}/sass/example/custom.js",
+                    "isWidgetManifest": true
+                }
+            ]
+        },
+        "local": true,
+        "output": {
+            "base": "${framework.dir}/build/packages/${package.name}/${toolkit.name}/${build.id}",
+            "js": "..",
+            "sass": ""
+        },
+        "sass": {
+            "namespace": "Ext",
+            "etc": [
+                "${package.dir}/sass/etc/all.scss",
+                "${package.dir}/${toolkit.name}/sass/etc/all.scss"
+            ],
+            "var": [
+                "${package.dir}/sass/var",
+                "${package.dir}/${toolkit.name}/sass/var"
+            ],
+            "src": [
+                "${package.dir}/sass/src",
+                "${package.dir}/${toolkit.name}/sass/src"
+            ]
+        },
+        "classpath": [
+            "${package.dir}/src",
+            "${package.dir}/${toolkit.name}/src"
+        ],
+        "overrides": [
+            "${package.dir}/overrides",
+            "${package.dir}/${toolkit.name}/overrides"
+        ],
+        "resources": [
+            {
+                "path": "resources"
+            },
+            {
+                "path": "${toolkit.name}/resources"
+            }
+        ],
+        "example": {
+            "path": [
+                "${package.dir}/examples"
+            ]
+        },
+        "builds": {
+            "triton": {
+                "toolkit": "classic",
+                "theme": "theme-triton"
+            },
+            "neptune": {
+                "toolkit": "classic",
+                "theme": "theme-neptune"
+            },
+            "crisp": {
+                "toolkit": "classic",
+                "theme": "theme-crisp"
+            },
+            "classic": {
+                "toolkit": "classic",
+                "theme": "theme-classic"
+            },
+            "classic-material": {
+                "toolkit": "classic",
+                "theme": "theme-material"
+            },
+            "modern-triton": {
+                "toolkit": "modern",
+                "theme": "theme-triton"
+            },
+            "modern-neptune": {
+                "toolkit": "modern",
+                "theme": "theme-neptune"
+            },
+            "ios": {
+                "toolkit": "modern",
+                "theme": "theme-ios"
+            },
+            "material": {
+                "toolkit": "modern",
+                "theme": "theme-material"
+            }
+        }
+    }
+}

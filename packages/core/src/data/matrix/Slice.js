@@ -67,11 +67,12 @@ Ext.define('Ext.data.matrix.Slice', {
             members = me.members,
             otherSide = side.inverse,
             otherSlices = otherSide.slices,
-            assoc, call, i, item, otherId, otherSlice, record; // eslint-disable-line no-unused-vars
+            assoc, call, i, item, otherId, otherSlice, record;
 
         for (i = 0; i < length; ++i) {
             call = record = null;
             item = recordsOrIds[i];
+            // eslint-disable-next-line no-unused-vars
             otherId = item.isEntity ? (record = item).id : item;
             assoc = members[otherId];
 

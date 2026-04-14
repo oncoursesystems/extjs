@@ -298,7 +298,7 @@ Ext.define('Ext.data.Model', {
         me.internalId = internalId = modelIdentifier.generate();
 
         //<debug>
-        var dataId = data[idProperty]; // eslint-disable-line vars-on-top, one-var
+        var dataId = data[idProperty]; // eslint-disable-line vars-on-top
 
         if (session && !session.isSession) {
             Ext.raise('Bad Model constructor argument 2 - "session" is not a Session');
@@ -912,7 +912,7 @@ Ext.define('Ext.data.Model', {
             name = field.name;
             prop = field.summaryField || name;
 
-            if (name !== 'id') {
+            if (name !== this.idProperty) {
                 /* eslint-disable-next-line max-len */
                 result[name] = summary ? summary.calculate(records, prop, 'data', 0, recLen) : undefined;
             }
@@ -2186,7 +2186,7 @@ Ext.define('Ext.data.Model', {
         }
 
         //<debug>
-        var doIdCheck = true; // eslint-disable-line vars-on-top, one-var
+        var doIdCheck = true; // eslint-disable-line vars-on-top
 
         if (me.phantom) {
             doIdCheck = false;
@@ -2519,7 +2519,7 @@ Ext.define('Ext.data.Model', {
             var rec;
 
             if (data) {
-                /* eslint-disable-next-line max-len, newline-per-chained-call */
+                /* eslint-disable-next-line max-len */
                 rec = this.getProxy().getReader().readRecords([data], session ? { recordCreator: session.recordCreator } : undefined, this._associatedReadOptions)[0];
             }
             else {
@@ -3389,7 +3389,7 @@ Ext.define('Ext.data.Model', {
                     i, targetField;
 
                 //<debug>
-                /* eslint-disable-next-line vars-on-top, one-var */
+                /* eslint-disable-next-line one-var */
                 var topoStack = cls.topoStack || (cls.topoStack = []);
 
                 topoStack.push(field.name);

@@ -5,19 +5,19 @@ Ext.define("Ext.locale.ja.grid.locked.Grid", {
         columnMenu: {
             items: {
                 region: {
-                    text: '領域'
+                    text: '固定'
                 }
             }
         },
         regions: {
             left: {
-                menuLabel: 'ロック（左）'
+                menuLabel: '左に固定'
             },
             center: {
-                menuLabel: 'ロック解除'
+                menuLabel: '固定を解除'
             },
             right: {
-                menuLabel: 'ロック（右）'
+                menuLabel: '右に固定'
             }
         }
     }

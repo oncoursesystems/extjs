@@ -1,8 +1,9 @@
 /**
  * @private
  */
-Ext.define('Ext.dd.Manager', {
+Ext.define('Ext.plugin.dd.Manager', {
     singleton: true,
+    alternateClassName: 'Ext.dd.Manager',
 
     /**
      * returns hovered node

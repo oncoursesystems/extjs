@@ -1,5 +1,3 @@
-/* global Ext, jasmine, expect, spyOn, describe, xdescribe */
-
 topSuite("Ext.tip.ToolTip", ['Ext.window.Window', 'Ext.form.field.*'], function() {
     var tip,
         target,

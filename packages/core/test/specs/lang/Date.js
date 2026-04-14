@@ -413,6 +413,24 @@ topSuite("Ext.Date", function() {
            });
        });
 
+       it("should correctly parse and compare ISO strings with Ext.Date.parse and new Date()", function() {
+            var dateStr = "2024-03-31T02:00:00Z", // UTC
+                extParse = Ext.Date.parse(dateStr, 'c'),
+                nativeParse = new Date(dateStr);
+
+            expect(extParse.toString()).toBe(nativeParse.toString());
+            expect(extParse.toISOString()).toBe(nativeParse.toISOString());
+        });
+
+        it("should handle ISO strings with timezone offsets correctly", function() {
+            var dateStr = "2024-03-31T02:00:00+01:00", // Offset +01:00
+                extParse = Ext.Date.parse(dateStr, 'c'),
+                nativeParse = new Date(dateStr);
+
+            expect(extParse.toString()).toBe(nativeParse.toString());
+            expect(extParse.toISOString()).toBe(nativeParse.toISOString());
+        });
+
     });
 
     describe("isEqual", function() {
@@ -1232,6 +1250,23 @@ topSuite("Ext.Date", function() {
             expectedModifiedDate = new Date(2000, 0, 1, 0, 0, 0, 0);
 
             expect(modifiedDate).toEqual(expectedModifiedDate);
+        });
+    });
+
+    describe("diff", function() {
+        var startDate = new Date(2024, 3, 10),
+            EndDate = new Date(2024, 3, 11);
+
+        it("should diff day", function() {
+            expect(Ext.Date.diff(startDate, EndDate, Ext.Date.DAY)).toBe(1);
+
+            expect(Ext.Date.diff(startDate, new Date(2024, 3, 12), Ext.Date.DAY)).toBe(2);
+        });
+
+        it("should diff week", function() {
+            expect(Ext.Date.diff(startDate, EndDate, Ext.Date.WEEK)).toBe(0);
+
+            expect(Ext.Date.diff(startDate, new Date(2024, 3, 17), Ext.Date.WEEK)).toBe(1);
         });
     });
 });

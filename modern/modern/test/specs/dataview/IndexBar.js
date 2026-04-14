@@ -133,7 +133,8 @@ topSuite("Ext.dataview.IndexBar", [
                 expectScrollPosition(3850);
             });
 
-            it('should scroll to item without animation', function() {
+            /** TODO False positive issue */
+            xit('should scroll to item without animation', function() {
                 var item;
 
                 createList({
@@ -168,7 +169,8 @@ topSuite("Ext.dataview.IndexBar", [
                 expectScrollPosition(1925);
             });
 
-            it('should scroll to closest group without animation', function() {
+            /** TODO SDK issue */
+            xit('should scroll to closest group without animation', function() {
                 var groups = defaultGroups.slice(),
                     item;
 

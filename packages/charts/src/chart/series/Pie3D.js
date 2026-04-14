@@ -587,7 +587,7 @@ Ext.define('Ext.chart.series.Pie3D', {
             return sprites;
         }
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var surface = me.getSurface(),
             records = store.getData().items,
             spritesPerSlice = me.spritesPerSlice,

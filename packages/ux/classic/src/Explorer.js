@@ -23,7 +23,7 @@ Ext.define('Ext.ux.Explorer', {
             reference: 'breadcrumb'
         },
 
-        /* eslint-disable max-len, indent */
+        /* eslint-disable max-len */
         /**
          * @cfg {Object} contentView
          * Configuration object for the "content" data view
@@ -46,7 +46,7 @@ Ext.define('Ext.ux.Explorer', {
                     '</div>' +
                 '</tpl>'
         },
-        /* eslint-enable max-len, indent */
+        /* eslint-enable max-len */
 
         /**
          * @cfg {Ext.data.TreeStore} store

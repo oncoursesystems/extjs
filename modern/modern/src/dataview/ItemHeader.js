@@ -163,6 +163,14 @@ Ext.define('Ext.dataview.ItemHeader', {
             this.getGroup().toggleCollapsed();
         },
 
+        alignHeader: function(x, width) {
+            var me = this,
+                left = this.isPinnedItem ? 0 : x;
+
+            me.setContentWidth(width);
+            me.el.setWidth(width).setLeft(left);
+        },
+
         updateContentWidth: function(width) {
             var el = this._toolDockWrap || this.bodyElement;
 

@@ -452,6 +452,8 @@ topSuite('Ext.field.Date', ['Ext.viewport.Viewport', 'Ext.data.validator.Date', 
 
             it('should not show the wrong date selection when there are multiple pickers added to the viewport', function() {
 
+                waits(100);
+
                 // create a form panel with two date picker fields
                 formPanel = new Ext.create('Ext.form.Panel', {
                     renderTo: document.body,
@@ -717,6 +719,108 @@ topSuite('Ext.field.Date', ['Ext.viewport.Viewport', 'Ext.data.validator.Date', 
             field.setValue('02/26');
             expect(field.getValue()).toBeNull();
             expect(field.validate()).toBe(true);
+        });
+    });
+
+    describe("OnExpand", function() {
+        beforeEach(function() {
+            makeField();
+            jasmine.fireMouseEvent(field.getTriggers().expand.el, 'click');
+        });
+
+        it("should have aria-expanded", function() {
+            expect(field).toHaveAttr('aria-expanded', 'true');
+        });
+
+    });
+
+    describe("OnCollapse", function() {
+        it("should have aria-expanded false", function() {
+            runs(function() {
+               makeField({
+                    renderTo: Ext.getBody()
+                });
+                field.expand();
+            });
+            waitsFor(function() {
+                return field.ariaEl.dom.hasAttribute('aria-expanded') !== 'false';
+            });
+            runs(function() {
+                field.collapse();
+                expect(field).toHaveAttr('aria-expanded', 'false');
+            });
+        });
+
+    });
+
+    describe("ARIA attributes", function() {
+        describe("in general", function() {
+            it("should have attributes", function() {
+                makeField();
+                expect(field).toHaveAttr('role', 'combobox');
+                expect(field).toHaveAttr('aria-haspopup', 'dialog');
+                expect(field).toHaveAttr('aria-expanded', 'false');
+                expect(field).toHaveAttr('aria-autocomplete', 'none');
+            });
+        });
+
+        describe("aria-hidden", function() {
+            it("should have aria-hidden as false", function() {
+                makeField();
+                expect(field).toHaveAttr('aria-hidden', 'false');
+            });
+
+            it("should have aria-hidden as true when hidden is true", function() {
+                makeField({
+                    hidden: true
+                });
+                expect(field).toHaveAttr('aria-hidden', 'true');
+            });
+        });
+
+        describe("aria-invalid", function() {
+            it("should have aria-invalid as false", function() {
+                makeField();
+                expect(field).toHaveAttr('aria-invalid', 'false');
+            });
+
+            it("should have aria-invalid as true if date is earlier than minDate", function() {
+                makeField({ minDate: new Date(1995, 5, 14) });
+                field.setValue('06/06/1995');
+                expect(field).toHaveAttr('aria-invalid', 'true');
+            });
+
+            it("should have aria-invalid as false if date is after minDate", function() {
+                makeField({ minDate: new Date(1995, 5, 14) });
+                field.setValue('06/15/1995');
+                expect(field).toHaveAttr('aria-invalid', 'false');
+            });
+
+            it("should have aria-invalid as false if date is earlier than maxDate", function() {
+                makeField({ maxDate: new Date(1995, 5, 14) });
+                field.setValue('06/06/1995');
+                expect(field).toHaveAttr('aria-invalid', 'false');
+            });
+
+            it("should have aria-invalid as true if date is after maxDate", function() {
+                makeField({ maxDate: new Date(1995, 5, 14) });
+                field.setValue('06/15/1995');
+                expect(field).toHaveAttr('aria-invalid', 'true');
+            });
+        });
+
+        describe("aria-disabled", function() {
+            it("should have aria-disabled as false", function() {
+                makeField();
+                expect(field).toHaveAttr('aria-disabled', 'false');
+            });
+
+            it("should have aria-disabled as true when disabled is true", function() {
+                makeField({
+                    disabled: true
+                });
+                expect(field).toHaveAttr('aria-disabled', 'true');
+            });
         });
     });
 

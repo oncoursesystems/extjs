@@ -102,7 +102,7 @@ Ext.define('Ext.dom.TouchAction', {
 
         //<debug>
         if (Ext.isFunction(Object.freeze)) {
-            /* eslint-disable-next-line vars-on-top, one-var */
+            /* eslint-disable-next-line vars-on-top */
             var objectValues = me.objectValues,
                 i, ln;
 

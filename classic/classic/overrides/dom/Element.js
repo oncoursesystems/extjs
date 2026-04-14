@@ -3078,9 +3078,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
                 return false;
             }
 
-            // eslint-disable-next-line no-cond-assign
             if (!(testFn = Ext.isFunction(selector) ? selector : cache[selector])) {
-                // eslint-disable-next-line no-cond-assign
                 if (!(match = selector.match(simpleSelectorRe))) {
                     // Not a simple tagName.className selector, do it the hard way
                     root = dom.parentNode;

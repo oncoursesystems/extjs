@@ -538,6 +538,7 @@ topSuite("Ext.Number", ["Ext.JSON"], function() {
         });
 
         it("should correct large overflows", function() {
+            // eslint-disable-next-line no-loss-of-precision
             expect(correctFloat(10000000.12300000000001)).toBe(10000000.123);
         });
     });

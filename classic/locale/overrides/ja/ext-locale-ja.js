@@ -92,17 +92,17 @@ Ext.define("Ext.locale.ja.view.AbstractView", {
 Ext.define("Ext.locale.ja.picker.Date", {
     override: "Ext.picker.Date",
     todayText: "今日",
-    minText: "選択した日付は最小値以下です。",
-    maxText: "選択した日付は最大値以上です。",
-    disabledDaysText: "",
-    disabledDatesText: "",
-    nextText: '次月へ (コントロール+右)',
-    prevText: '前月へ (コントロール+左)',
-    monthYearText: '月選択 (コントロール+上/下で年移動)',
-    todayTip: "{0} (スペースキー)",
+    minText: "選択した日付は有効期間より前です。",
+    maxText: "選択した日付は有効期間より後です。",
+    disabledDaysText: "選択不可",
+    disabledDatesText: "選択不可",
+    nextText: '翌月 (Ctrl+→)',
+    prevText: '前月 (Ctrl+←)',
+    monthYearText: '月選択 (Ctrl+↑/↓で年移動)',
+    todayTip: "{0} (Spaceキー)",
     format: "Y/m/d",
     startDay: 0,
-    ariaTitle: '{0}',
+    ariaTitle: '日付選択: {0}',
     ariaTitleDateFormat: 'Y\u5e74m\u6708d\u65e5',
     longDayFormat: 'Y\u5e74m\u6708d\u65e5',
     monthYearFormat: 'Y\u5e74m\u6708'
@@ -110,7 +110,7 @@ Ext.define("Ext.locale.ja.picker.Date", {
 
 Ext.define("Ext.locale.ja.picker.Month", {
     override: "Ext.picker.Month",
-    okText: "できた",
+    okText: "OK",
     cancelText: "キャンセル"
 });
 
@@ -129,13 +129,13 @@ Ext.define("Ext.locale.ja.toolbar.Paging", {
 
 Ext.define("Ext.locale.ja.form.field.Base", {
     override: "Ext.form.field.Base",
-    invalidText: "フィールドの値が不正です。"
+    invalidText: "有効な値ではありません。"
 });
 
 Ext.define("Ext.locale.ja.form.field.Text", {
     override: "Ext.form.field.Text",
-    minLengthText: "このフィールドの最小値は {0} です。",
-    maxLengthText: "このフィールドの最大値は {0} です。",
+    minLengthText: "値の長さは {0} 文字以下でなければなりません。",
+    maxLengthText: "値の長さは {0} 文字以上でなければなりません。",
     blankText: "必須項目です。",
     regexText: "",
     emptyText: null
@@ -152,16 +152,16 @@ Ext.define("Ext.locale.ja.form.field.Number", {
     minText: "このフィールドの最小値は {0} です。",
     maxText: "このフィールドの最大値は {0} です。",
     nanText: "{0} は数値ではありません。",
-    negativeText: "負の値は無効です。"
+    negativeText: "値は正の数でなければなりません。"
 });
 
 Ext.define("Ext.locale.ja.form.field.Date", {
     override: "Ext.form.field.Date",
-    disabledDaysText: "無効",
-    disabledDatesText: "無効",
-    minText: "このフィールドの日付は、 {0} 以降の日付に設定してください。",
-    maxText: "このフィールドの日付は、 {0} 以前の日付に設定してください。",
-    invalidText: "{0} は間違った日付入力です。 - 入力形式は「{1}」です。",
+    disabledDaysText: "選択不可",
+    disabledDatesText: "選択不可",
+    minText: "{0} 以降の日付を設定してください。",
+    maxText: "{0} 以前の日付を設定してください。",
+    invalidText: "{0} は有効な日付形式「{1}」ではありません。",
     format: "Y/m/d",
     altFormats: "y/m/d|m/d/y|m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d"
 });
@@ -177,10 +177,10 @@ Ext.define("Ext.locale.ja.form.field.ComboBox", {
 
 Ext.define("Ext.locale.ja.form.field.VTypes", {
     override: "Ext.form.field.VTypes",
-    emailText: 'メールアドレスを"user@example.com"の形式で入力してください。',
-    urlText: 'URLを"http:/' + '/www.example.com"の形式で入力してください。',
-    alphaText: '半角英字と"_"のみです。',
-    alphanumText: '半角英数と"_"のみです。'
+    emailText: '「user@example.com」の形式で入力してください。',
+    urlText: '「http(s):/' + '/www.example.com」の形式で入力してください。',
+    alphaText: '半角アルファベットと_で入力してください。',
+    alphanumText: '半角英数字と_で入力してください。'
 });
 
 Ext.define("Ext.locale.ja.form.field.HtmlEditor", {
@@ -190,37 +190,37 @@ Ext.define("Ext.locale.ja.form.field.HtmlEditor", {
     Ext.apply(Ext.form.field.HtmlEditor.prototype, {
         buttonTips: {
             bold: {
-                title: '太字 (コントロール+B)',
+                title: '太字 (Ctrl+B)',
                 text: '選択テキストを太字にします。',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             italic: {
-                title: '斜体 (コントロール+I)',
+                title: '斜体 (Ctrl+I)',
                 text: '選択テキストを斜体にします。',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             underline: {
-                title: '下線 (コントロール+U)',
+                title: '下線 (Ctrl+U)',
                 text: '選択テキストに下線を引きます。',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             increasefontsize: {
-                title: '文字を大きく',
+                title: 'フォントサイズを拡大',
                 text: 'フォントサイズを大きくします。',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             decreasefontsize: {
-                title: '文字を小さく',
+                title: 'フォントサイズを縮小',
                 text: 'フォントサイズを小さくします。',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             backcolor: {
-                title: '文字のハイライト',
+                title: '塗りつぶしの色',
                 text: '選択テキストの背景色を変更します。',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             forecolor: {
-                title: '文字の色',
+                title: 'テキストの色',
                 text: '選択テキストの色を変更します。',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
@@ -240,17 +240,17 @@ Ext.define("Ext.locale.ja.form.field.HtmlEditor", {
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             insertunorderedlist: {
-                title: '番号なし箇条書き',
-                text: '番号なし箇条書きを開始します。',
+                title: '箇条書き',
+                text: '箇条書きを開始します。',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             insertorderedlist: {
-                title: '番号付き箇条書き',
-                text: '番号付き箇条書きを開始します。',
+                title: '番号付きリスト',
+                text: '番号付きリストを開始します。',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
             createlink: {
-                title: 'ハイパーリンク',
+                title: 'リンクを挿入',
                 text: '選択テキストをハイパーリンクにします。',
                 cls: Ext.baseCSSPrefix + 'html-editor-tip'
             },
@@ -265,9 +265,9 @@ Ext.define("Ext.locale.ja.form.field.HtmlEditor", {
 
 Ext.define("Ext.locale.ja.grid.header.Container", {
     override: "Ext.grid.header.Container",
-    sortAscText: "昇順",
-    sortDescText: "降順",
-    columnsText: "カラム"
+    sortAscText: "昇順で並べ替え",
+    sortDescText: "降順で並べ替え",
+    columnsText: "列"
 });
 
 Ext.define("Ext.locale.ja.grid.column.Date", {
@@ -277,41 +277,41 @@ Ext.define("Ext.locale.ja.grid.column.Date", {
 
 Ext.define("Ext.locale.ja.grid.GroupingFeature", {
     override: "Ext.grid.feature.Grouping",
-    emptyGroupText: '(なし)',
-    groupByText: 'このカラムでグルーピング',
-    showGroupsText: 'グルーピング'
+    // emptyGroupText: '(なし)',
+    groupByText: 'この列でグループ化',
+    showGroupsText: 'グループで表示'
 });
 
 Ext.define("Ext.locale.ja.grid.PropertyColumnModel", {
     override: "Ext.grid.PropertyColumnModel",
-    nameText: "名称",
+    nameText: "名前",
     valueText: "値",
     dateFormat: "Y/m/d"
 });
 
 Ext.define("Ext.locale.ja.form.field.Time", {
     override: "Ext.form.field.Time",
-    minText: "このフィールドの時刻は、 {0} 以降の時刻に設定してください。",
-    maxText: "このフィールドの時刻は、 {0} 以前の時刻に設定してください。",
-    invalidText: "{0} は間違った時刻入力です。",
+    minText: "{0} 以降の時刻を設定してください。",
+    maxText: "{0} 以前の時刻を設定してください。",
+    invalidText: "{0} は有効な時刻ではありません。",
     format: "g:i A",
     altFormats: "g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|ha|gA|h a|g a|g A|gi|hi|gia|hia|g|H"
 });
 
 Ext.define("Ext.locale.ja.form.CheckboxGroup", {
     override: "Ext.form.CheckboxGroup",
-    blankText: "このグループから最低１つのアイテムを選択しなければなりません。"
+    blankText: "このグループから1つ以上選択しなければなりません。"
 });
 
 Ext.define("Ext.locale.ja.form.RadioGroup", {
     override: "Ext.form.RadioGroup",
-    blankText: "このグループから１つのアイテムを選択しなければなりません。"
+    blankText: "このグループから1つ選択しなければなりません。"
 });
 
 Ext.define("Ext.locale.ja.window.MessageBox", {
     override: "Ext.window.MessageBox",
     buttonText: {
-        ok: "できた",
+        ok: "OK",
         cancel: "キャンセル",
         yes: "はい",
         no: "いいえ"

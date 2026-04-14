@@ -3,6 +3,6 @@ Ext.define('Ext.locale.ja.field.Field', {
 
     config: {
         requiredMessage: 'このフィールドは必須です',
-        validationMessage: '形式が間違っています'
+        validationMessage: '有効な形式ではありません'
     }
 });

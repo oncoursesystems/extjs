@@ -101,7 +101,21 @@ Ext.define('Ext.grid.cell.Base', {
          * The value of the {@link Ext.grid.column.Column#dataIndex dataIndex} field of
          * the associated record. Application code should not need to set this value.
          */
-        value: null
+        value: null,
+
+        /**
+         * @cfg {Boolean} locked
+         * True to lock the cell in place, preventing it from scrolling horizontally
+         * with the rest of the grid columns.
+         */
+        locked: null
+    },
+
+    lockedCls: Ext.baseCSSPrefix + 'locked',
+
+    lockedRegionCls: {
+        left: Ext.baseCSSPrefix + 'locked-left',
+        right: Ext.baseCSSPrefix + 'locked-right'
     },
 
     classCls: Ext.baseCSSPrefix + 'gridcell',
@@ -122,6 +136,29 @@ Ext.define('Ext.grid.cell.Base', {
     toolDefaults: {
         zone: 'head',
         ui: 'gridcell'
+    },
+
+    /**
+     * Adds or removes locked css for a cell based on updated locked value.
+     * 
+     * @param {String} locked 
+     * @param {String} oldLocked 
+     */
+    updateLocked: function(locked, oldLocked) {
+        var me = this,
+            column = me.getColumn(),
+            grid = column && column.getGrid(),
+            lockable = grid && grid.isCssLockedGrid;
+
+        // Clear any transform settings and remove any locked styling
+        me.setStyle({
+            transform: null
+        });
+        me.removeCls([me.lockedCls, me.lockedRegionCls.left, me.lockedRegionCls.right]);
+
+        if (lockable && me.lockedRegionCls[locked]) {
+            me.addCls([me.lockedCls, me.lockedRegionCls[locked]]);
+        }
     },
 
     getTemplate: function() {

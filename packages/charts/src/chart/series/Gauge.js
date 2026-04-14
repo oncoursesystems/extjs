@@ -467,7 +467,7 @@ Ext.define('Ext.chart.series.Gauge', {
         }
 
         // Return cached sprites
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var chart = me.getChart(),
             animation = me.getAnimation() || chart && chart.getAnimation(),
             sprites = me.sprites,

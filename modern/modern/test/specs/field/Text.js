@@ -2306,4 +2306,104 @@ function() {
             });
         });
     });
+
+    describe("ARIA attributes", function() {
+        describe("in general", function() {
+            it("should not render when !ariaRole", function() {
+                create({ ariaRole: undefined });
+                expect(field.ariaEl.dom.hasAttribute('role')).toBe(false);
+            });
+
+            it("should render when ariaRole is defined", function() {
+                create();
+                expect(field).toHaveAttr('role', 'textbox');
+            });
+
+            it("should have aria-describedby attribute", function() {
+                create();
+                expect(field).toHaveAttr('aria-describedby', field.id + '-ariaStatusEl');
+            });
+        });
+
+        describe("aria-hidden", function() {
+            it("should have aria-hidden as false", function() {
+                create();
+                expect(field).toHaveAttr('aria-hidden', 'false');
+            });
+
+            it("should have aria-hidden as true when hidden is true", function() {
+                create({
+                    hidden: true
+                });
+                expect(field).toHaveAttr('aria-hidden', 'true');
+            });
+        });
+
+        describe("aria-invalid", function() {
+            it("should have aria-invalid as false", function() {
+                create();
+                expect(field).toHaveAttr('aria-invalid', 'false');
+            });
+
+            it("should have aria-invalid as true when required and value is empty", function() {
+                create({
+                    required: true
+                });
+                field.setValue('textfield');
+                field.clearValue();
+                expect(field).toHaveAttr('aria-invalid', 'true');
+            });
+
+            it("should have aria-invalid as false when required and value is present", function() {
+                create({
+                    required: true
+                });
+                field.setValue('textfield');
+                expect(field).toHaveAttr('aria-invalid', 'false');
+            });
+        });
+
+        describe("aria-disabled", function() {
+            it("should have aria-disabled as false", function() {
+                create();
+                expect(field).toHaveAttr('aria-disabled', 'false');
+            });
+
+            it("should have aria-disabled as true when disabled is true", function() {
+                create({
+                    disabled: true
+                });
+                expect(field).toHaveAttr('aria-disabled', 'true');
+            });
+        });
+
+        describe("via config", function() {
+            it("should have ariaAttributes", function() {
+                create({
+                    ariaAttributes: {
+                        'aria-label': 'First Name text',
+                        'aria-labelledby': 'firstNamelabel',
+                        'aria-describedby': 'firstNameDescription'
+                    }
+                });
+                expect(field).toHaveAttr('aria-label', 'First Name text');
+                expect(field).toHaveAttr('aria-labelledby', 'firstNamelabel');
+                expect(field).toHaveAttr('aria-describedby', 'firstNameDescription');
+            });
+
+            it("should have ariaLabel", function() {
+                create({
+                    ariaLabel: "my text"
+                });
+                expect(field).toHaveAttr('aria-label', 'my text');
+            });
+
+            it("should have aria-describedby when id is provided", function() {
+                create({
+                    id: 'my-textfield'
+                });
+                expect(field).toHaveAttr('aria-describedby', field.id + '-ariaStatusEl');
+            });
+        });
+    });
 });

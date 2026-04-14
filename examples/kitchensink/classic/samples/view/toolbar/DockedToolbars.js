@@ -27,10 +27,10 @@ Ext.define('KitchenSink.view.toolbar.DockedToolbars', {
             closeCls: null,
             pasteCls: null,
             editCls: null,
-            listGlyph: 61,
-            closeGlyph: 88,
-            pasteGlyph: 70,
-            editGlyph: 47
+            listGlyph: 'f03a',
+            closeGlyph: 'f057',
+            pasteGlyph: 'f0ea',
+            editGlyph: 'f044'
         },
         graphite: {
             panelHeight: 300,
@@ -43,10 +43,10 @@ Ext.define('KitchenSink.view.toolbar.DockedToolbars', {
             closeCls: null,
             pasteCls: null,
             editCls: null,
-            listGlyph: 61,
-            closeGlyph: 88,
-            pasteGlyph: 70,
-            editGlyph: 47
+            listGlyph: 'f03a',
+            closeGlyph: 'f057',
+            pasteGlyph: 'f0ea',
+            editGlyph: 'f044'
         }
     },
     //</example>

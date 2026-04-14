@@ -29,10 +29,52 @@ topSuite("Ext.tab.Panel", ['Ext.form.field.Text', 'Ext.app.ViewModel', 'Ext.ux.T
         }));
     }
 
+    function isElementOverlapped(element) {
+        var topLeft, bottomRight,
+        rect = element.getBoundingClientRect();
+
+        // Check if the top-left corner of the element is covered
+        topLeft = document.elementFromPoint(rect.left + 1, rect.top + 1);
+
+        // Check if the bottom-right corner of the element is covered
+        bottomRight = document.elementFromPoint(rect.right - 1, rect.bottom - 1);
+
+        // Return true if the element at these points is not the target element
+        return topLeft !== element && bottomRight !== element;
+    }
+
     afterEach(function() {
         if (tabPanel) {
             tabPanel = Ext.destroy(tabPanel);
         }
+    });
+
+    // EXTJS-29715
+    describe("Tab name should be visible on zooming browser", function() {
+        it("should display the tab name on zooming in or out the browser", function() {
+            createTabPanelWithTabs(3, {
+                height: 400,
+                width: 400,
+                tabPosition: 'left'
+            });
+
+            runs(function() {
+                var zoomLevel, tab1,
+                    // Define the minimum zoom level based on browser compatibility:
+                    // Safari does not support zoom levels below 70%, while other browsers like Chrome support zoom levels as low as 30%.
+                    zoomValue = Ext.isSafari ? 70 : 30;
+
+                // Iterate through zoom levels from 100% down to the browser's minimum supported level, decreasing by 10% each step.
+                for (zoomLevel = 100; zoomLevel >= zoomValue; zoomLevel -= 10) {
+                    document.body.style.zoom = zoomLevel + "%";
+                    tab1 = tabPanel.getTabBar().items.items[0].el.dom;
+
+                    expect(isElementOverlapped(tab1)).toBe(false);
+                }
+
+                document.body.style.zoom = "100%";
+            });
+        });
     });
 
     describe("active tab config on init", function() {

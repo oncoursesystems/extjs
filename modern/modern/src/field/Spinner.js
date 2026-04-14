@@ -165,6 +165,12 @@ Ext.define('Ext.field.Spinner', {
         groupButtons: true
     },
 
+    /**
+     * @property ariaRole
+     * @inheritdoc
+     */
+    ariaRole: 'spinbutton',
+
     triggers: {
         spindown: {
             type: 'spindown',

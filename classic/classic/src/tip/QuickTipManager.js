@@ -119,7 +119,7 @@ Ext.define('Ext.tip.QuickTipManager', {
                 return false;
             }
 
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var tipConfig = Ext.apply({
                     //<debug>
                     // tell the spec runner to ignore this element when checking if the dom is clean

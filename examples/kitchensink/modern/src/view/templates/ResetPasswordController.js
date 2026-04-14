@@ -12,7 +12,9 @@ Ext.define('KitchenSink.view.templates.ResetPasswordController', {
             };
 
         if (form.validate()) {
-            Ext.Msg.alert('Password Reset Successful', 'You have successfully changed the password!');
+            Ext.Msg.alert(
+                'Password Reset Successful',
+                'You have successfully changed the password!');
         }
         else {
             Ext.Msg.alert('Failure', 'Please check your email id and retry.');

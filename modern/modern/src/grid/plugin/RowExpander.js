@@ -370,13 +370,26 @@ Ext.define('Ext.grid.plugin.RowExpander', {
     },
 
     updateGrid: function(grid) {
-        var me = this;
+        var me = this,
+            columns, hasLockedColumns;
 
         if (grid) {
             grid.hasRowExpander = true;
             grid.addCls(Ext.baseCSSPrefix + 'has-rowexpander');
 
             me.colInstance = grid.registerColumn(me.getColumn());
+
+            if (grid.isCssLockedGrid) {
+                columns = grid.getColumns();
+                hasLockedColumns = columns.some(function(col) {
+                    return col !== me.colInstance && col.getLocked() === 'left';
+                });
+
+                if (hasLockedColumns) {
+                    me.colInstance.setLocked('left');
+                }
+            }
+
             grid.refreshScrollerSize();
 
             grid.element.on({

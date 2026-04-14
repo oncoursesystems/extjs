@@ -10,6 +10,31 @@ Ext.define('Ext.scroll.VirtualScroller', {
 
     config: {
         /**
+         * @cfg {Object} userClientSize
+         * Stores the user-specified dimensions for the scrollable viewport.
+         * Used by lockable plugin to coordinate scrolling between locked/unlocked sides.
+         * The x/y values represent the available width/height for scrolling content.
+         * @private
+         * 
+         * @cfg {Number} userClientSize.x The available width for horizontal scrolling
+         * @cfg {Number} userClientSize.y The available height for vertical scrolling
+         */
+        userClientSize: { x: null, y: null },
+
+        /**
+         * @cfg {Number} userClientX
+         * Starting X coordinate for the horizontal axis scroller
+         * @private
+         */
+        userClientX: 0,
+
+        /**
+         * @private
+         * Used to determine if x axis scrollbar adjusts left to accommodate y
+         * axis scrollbar. We only do this if there is no left region.
+         */
+        hasRightRegion: null,
+        /**
          * @cfg {Boolean} autoRefresh
          * `true` to refresh the scroller automatically when the element size or content
          * size changes
@@ -370,6 +395,10 @@ Ext.define('Ext.scroll.VirtualScroller', {
             single: true,
             destroyable: true
         };
+    },
+
+    updateUserClientSize: function(value, oldValue) {
+        this.refreshAxes();
     },
 
     doDestroy: function() {
@@ -1135,7 +1164,7 @@ Ext.define('Ext.scroll.VirtualScroller', {
 
                     me.fireScroll(logicalX, logicalY, deltaX, deltaY);
 
-                    me.callPartners('fireScroll', logicalX, logicalY);
+                    me.callPartners('fireScroll', logicalX, logicalY, deltaX, deltaY);
                 }
             }
         },
@@ -1223,8 +1252,8 @@ Ext.define('Ext.scroll.VirtualScroller', {
         onWheel: function(e) {
             var me = this,
                 self = me.self,
-                deltaX = e.deltaX,
-                deltaY = e.deltaY,
+                deltaX = e.shiftKey ? e.deltaY : e.deltaX,
+                deltaY = e.shiftKey ? 0 : e.deltaY,
                 position = me.position,
                 oldX = position.x,
                 oldY = position.y,
@@ -1370,30 +1399,22 @@ Ext.define('Ext.scroll.VirtualScroller', {
                 flags = me.getScrollbarFlags(sizeX, sizeY, clientSizeX, clientSizeY);
                 hasVerticalScrollbar = !!(flags & 1);
                 hasHorizontalScrollbar = !!(flags & 2);
+                recalcX = measuredX && hasVerticalScrollbar;
+                recalcY = measuredY && hasHorizontalScrollbar;
 
                 if (flags && (flags !== me.scrollbarFlags)) {
                     if (xIndicator) {
-                        xIndicator.setEnabled(me.getX() === 'scroll');
+                        xIndicator.setEnabled(recalcY || me.getX() === 'scroll');
                         // make indicator invisible to avoid potential flicker if we have to
                         // perform multiple measurements
                         xIndicator.setStyle('visibility', 'hidden');
                     }
 
                     if (yIndicator) {
-                        yIndicator.setEnabled(me.getY() === 'scroll');
+                        yIndicator.setEnabled(recalcX || me.getY() === 'scroll');
                         // make indicator invisible to avoid potential flicker if we have to
                         // perform multiple measurements
                         yIndicator.setStyle('visibility', 'hidden');
-                    }
-
-                    if (measuredX && hasVerticalScrollbar) {
-                        yIndicator.setEnabled(true);
-                        recalcX = true;
-                    }
-
-                    if (measuredY && hasHorizontalScrollbar) {
-                        xIndicator.setEnabled(true);
-                        recalcY = true;
                     }
 
                     if (recalcX) {

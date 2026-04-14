@@ -1710,7 +1710,7 @@ Ext.define('Ext.dom.Element', function(Element) {
                             }
                         }
                         else if (!(/file|undefined|reset|button/i.test(type))) {
-                            if (!(/radio|checkbox/i.test(type) && !element.checked) && !(type === 'submit' && hasSubmit)) { // eslint-disable-line max-len
+                            if (!(/radio|checkbox/i.test(type) && !element.checked) && !(type === 'submit' && hasSubmit)) {
                                 data += encoder(name) + '=' + encoder(element.value) + '&';
                                 hasSubmit = /submit/i.test(type);
                             }
@@ -7601,7 +7601,7 @@ Ext.define('Ext.dom.Element', function(Element) {
             // of event listeners that will help us detect if the virtual keyboard
             // is open so tha getViewportWidth/getViewportHeight can report the
             // original size as the viewport size while the keyboard is open
-            var win = Ext.getWin(); // eslint-disable-line vars-on-top, one-var
+            var win = Ext.getWin(); // eslint-disable-line vars-on-top
 
             Element._documentWidth = Element._viewportWidth = docEl.clientWidth;
             Element._documentHeight = Element._viewportHeight = docEl.clientHeight;

@@ -207,6 +207,12 @@ Ext.define('Ext.field.Checkbox', {
          */
     },
 
+    /**
+     * @property ariaRole
+     * @inheritdoc
+     */
+    ariaRole: 'native',
+
     inputType: 'checkbox',
 
     /**

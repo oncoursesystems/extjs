@@ -45,7 +45,7 @@ var noArgs = [],
 
         if (message) {
             Ext.Object.defineProperty(object, oldName, {
-                get: function() { // eslint-disable-line getter-return
+                get: function() {
                     Ext.raise(message);
                 },
                 set: function(value) {
@@ -198,6 +198,7 @@ var noArgs = [],
                 //<debug>
                 if (!enabled) {} else // eslint-disable-line no-empty, brace-style
                 //</debug>
+                // eslint-disable-next-line no-dupe-else-if
                 if (!enabled) {
                     // we won't get here in dev mode when !enabled
                     break;
@@ -592,7 +593,7 @@ var noArgs = [],
                 configs, i, ln, member, name, subPrivacy, privateStatics;
 
             //<debug>
-            /* eslint-disable-next-line vars-on-top, one-var */
+            /* eslint-disable-next-line one-var */
             var displayName = (me.$className || '') + '#';
             //</debug>
 

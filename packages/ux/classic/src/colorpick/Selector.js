@@ -75,7 +75,7 @@ Ext.define('Ext.ux.colorpick.Selector', {
 
     /**
      * @cfg fieldPad {Number} padding between the sliders and HEX/R/G/B fields.
-     */    
+     */
     fieldPad: 5,
 
     /**

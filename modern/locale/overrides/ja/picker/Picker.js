@@ -2,7 +2,7 @@ Ext.define('Ext.locale.ja.picker.Picker', {
     override: 'Ext.picker.Picker',
 
     config: {
-        doneButton: 'できた',
+        doneButton: '完了',
         cancelButton: 'キャンセル'
     }
 });

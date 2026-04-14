@@ -442,6 +442,23 @@ topSuite("Ext.field.Time", [
         });
     });
 
+    describe("ARIA attributes", function() {
+        describe("Initial Rendering", function() {
+            it("should have attributes", function() {
+                makeField();
+                expect(field).toHaveAttr('role', 'combobox');
+                expect(field).toHaveAttr('aria-describedby', field.id + '-ariaStatusEl');
+                expect(field).toHaveAttr('aria-invalid', 'false');
+                expect(field).toHaveAttr('aria-haspopup', 'dialog');
+                expect(field).toHaveAttr('aria-expanded', 'false');
+                expect(field).toHaveAttr('aria-autocomplete', 'none');
+                expect(field).toHaveAttr('aria-disabled', 'false');
+                expect(field).toHaveAttr('aria-hidden', 'false');
+
+            });
+        });
+    });
+
     makeFormatSuite(validInputTests);
     makeInvalidFormatSuite(invalidInputTests);
     makeValidAltFormatSuite(altFormatsTests);

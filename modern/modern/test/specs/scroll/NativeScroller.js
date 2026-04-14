@@ -2407,7 +2407,6 @@ topSuite("Ext.scroll.NativeScroller", function() {
                 });
             });
 
-            // eslint-disable-next-line max-len
             it("should fire scroll events starting with the scroller that initiated the scroll", function() {
                 var events = [],
                     done;

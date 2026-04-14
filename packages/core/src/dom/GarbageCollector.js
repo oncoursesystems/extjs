@@ -45,7 +45,7 @@ Ext.define('Ext.dom.GarbageCollector', {
             eid, dom, el, t, isGarbage, tagName;
 
         //<debug>
-        var collectedIds = []; // eslint-disable-line vars-on-top, one-var
+        var collectedIds = []; // eslint-disable-line one-var
         //</debug>
 
         for (eid in cache) {

@@ -751,6 +751,7 @@ Ext.define('Ext.grid.locked.Grid', {
                     regionKey: key,
                     columnMenu: me.getColumnMenu(),
                     columns: columns,
+                    bufferedColumns: cfg.bufferedColumns,
                     hideHeaders: me.getHideHeaders(),
                     grouped: me.getGrouped(),
                     itemConfig: me.getItemConfig(),
@@ -1404,7 +1405,6 @@ Ext.define('Ext.grid.locked.Grid', {
 
         /**
          * Assign column region key to calculate the moved state
-         * @param {Ext.grid.locked.Grid} grid 
          * @param {Object[]} column Region grid column
          * @param {String} regionKey 
          * @private 

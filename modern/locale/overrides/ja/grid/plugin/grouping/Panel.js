@@ -1,16 +1,16 @@
 Ext.define("Ext.locale.ja.grid.plugin.grouping.Panel", {
     override: "Ext.grid.plugin.grouping.Panel",
 
-    groupingPanelText: "ここで列ヘッダーをその列によるグループにドラッグする",
-    showGroupingPanelText: "パネルごとにグループを表示",
-    hideGroupingPanelText: "Panelでグループを隠す",
-    clearGroupText: "クリアグループ",
-    sortAscText: "ソート昇順",
-    sortDescText: "降順に並べ替えます",
-    moveLeftText: "左に移動します",
-    moveRightText: "右に動く",
-    moveBeginText: "始まりに移動",
-    moveEndText: "終わりに移動",
-    removeText: "削除する"
+    groupingPanelText: "グループ化したい列のヘッダーをここにドラッグ",
+    showGroupingPanelText: "グループ化パネルを表示",
+    hideGroupingPanelText: "グループ化パネルを非表示",
+    clearGroupText: "グループ化をすべて解除",
+    sortAscText: "昇順で並べ替え",
+    sortDescText: "降順で並べ替え",
+    moveLeftText: "左に移動",
+    moveRightText: "右に移動",
+    moveBeginText: "先頭に移動",
+    moveEndText: "末尾に移動",
+    removeText: "削除"
 
 });

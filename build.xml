@@ -566,7 +566,8 @@
                                classic/classic/test/specs*/**/*,
                                modern/modern/test/*.*,
                                modern/modern/test/local/**/*,
-                               modern/modern/test/specs*/**/*"/>
+                               modern/modern/test/specs*/**/*,
+                               packages/signature/test/specs*/**/*"/>
         </copy>
         <delete dir="${ext.staging.dir}/build/temp"/>
         <delete dir="${ext.staging.dir}/build/ext"/>

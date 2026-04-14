@@ -123,7 +123,7 @@ Ext.define('Ext.grid.plugin.filterbar.FilterBar', {
 
         if (grid.initialized) {
             me.setBar(grid.insert(pos + 1, {
-                xtype: 'container',
+                xtype: 'fieldpanel',
                 hidden: me.getHidden(),
                 cls: [me.filterBarCls, Ext.baseCSSPrefix + 'headercontainer'],
                 docked: 'top',
@@ -132,13 +132,19 @@ Ext.define('Ext.grid.plugin.filterbar.FilterBar', {
                 weight: 110,
                 weighted: true,
                 autoSize: null,
+                manageBorders: true,
                 layout: {
                     type: 'hbox',
                     align: 'stretch'
                 },
                 scrollable: {
+                    type: 'virtual',
                     x: false,
-                    y: false
+                    y: false,
+                    indicators: {
+                        x: false,
+                        y: false
+                    }
                 }
             }));
         }

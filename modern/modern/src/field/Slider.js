@@ -328,6 +328,12 @@ Ext.define('Ext.field.Slider', {
      */
     classCls: Ext.baseCSSPrefix + 'sliderfield',
 
+    /**
+     * @property ariaRole
+     * @inheritdoc
+     */
+    ariaRole: 'slider',
+
     proxyConfig: {
         slider: [
             /**
@@ -397,16 +403,60 @@ Ext.define('Ext.field.Slider', {
      * @private
      */
     initialize: function() {
-        this.callParent();
+        var me = this,
+            ariaElement = me.ariaEl,
+            id = me.getId(),
+            ariaAttributes = me.getAriaAttributes(),
+            ariaLabel = me.ariaLabel,
+            customAttrs = {},
+            attrs;
 
-        this.getSlider().on({
-            scope: this,
+        me.callParent();
+
+        me.getSlider().on({
+            scope: me,
 
             change: 'onSliderChange',
             dragstart: 'onSliderDragStart',
             drag: 'onSliderDrag',
             dragend: 'onSliderDragEnd'
         });
+
+        customAttrs = ariaAttributes;
+
+        if (me.ariaRole && !Ext.Object.isEmpty(customAttrs)) {
+            ariaElement.set(Object.assign({}, customAttrs));
+        }
+
+        if (me.ariaRole && !me.isAriaRoleStatic(me.ariaRole)) {
+            attrs = {
+                'aria-invalid': false,
+                'aria-readonly': !!me.getReadOnly()
+            };
+
+            // Handle individual ARIA configs
+            if (ariaLabel) {
+                attrs['aria-label'] = Ext.String.htmlEncode(ariaLabel);
+            }
+
+            // Set default aria-describedby if not custom set
+            if (!customAttrs || !customAttrs['aria-describedby']) {
+                attrs['aria-describedby'] = id + '-ariaStatusEl';
+            }
+
+            // Set default aria-labelledby if not custom set
+            if (!customAttrs || !customAttrs['aria-labelledby']) {
+                attrs['aria-labelledby'] = id + '-ariaStatusEl';
+            }
+
+            ariaElement.set(attrs);
+        }
+
+        // Set role if specified and not native
+        if (me.ariaRole && me.ariaRole !== 'native') {
+            ariaElement.set({ role: me.ariaRole });
+        }
+
     },
 
     getBodyTemplate: function() {
@@ -521,7 +571,13 @@ Ext.define('Ext.field.Slider', {
     },
 
     updateReadOnly: function(newValue) {
-        this.getSlider().setReadOnly(newValue);
+        var me = this;
+
+        me.getSlider().setReadOnly(newValue);
+
+        if (!me.isAriaRoleStatic(me.ariaRole)) {
+            me.ariaEl.set({ 'aria-readonly': !!newValue });
+        }
     },
 
     updateMultipleState: function() {

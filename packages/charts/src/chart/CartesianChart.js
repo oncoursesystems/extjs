@@ -124,7 +124,7 @@ Ext.define('Ext.chart.CartesianChart', {
         // 'chart' surface rect is the size of the chart's inner element
         // (see chart.getChartBox), i.e. the portion of the chart minus
         // the legend area (whether DOM or sprite based).
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var chartRect = me.getSurface('chart').getRect(),
             left = chartRect[0],
             top = chartRect[1],

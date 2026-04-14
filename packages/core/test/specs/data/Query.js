@@ -510,6 +510,7 @@ topSuite('Ext.data.Query', [
 
             var v = query.fn(data);
 
+            // eslint-disable-next-line no-constant-binary-expression
             expect(v).toBe((2 && 10) <= 123);
         });
 
@@ -585,7 +586,8 @@ topSuite('Ext.data.Query', [
 
             v = query.fn({ a: 0, c: 1 });
 
-            expect(v).toBe(!0 == !-(1));  // eslint-disable-line eqeqeq
+            // eslint-disable-next-line no-constant-binary-expression, eqeqeq
+            expect(v).toBe(!0 == !-(1));
         });
 
         it('should handle complex unary operators', function() {
@@ -630,7 +632,8 @@ topSuite('Ext.data.Query', [
 
             v = query.fn({ a: 0, b: 2, c: 1, d: 3 });
 
-            expect(v).toBe(!(0 || 2) != !-(1 + 3));  // eslint-disable-line eqeqeq
+            // eslint-disable-next-line no-constant-binary-expression, eqeqeq
+            expect(v).toBe(!(0 || 2) != !-(1 + 3));
         });
 
         it('should handle like wildcards', function() {

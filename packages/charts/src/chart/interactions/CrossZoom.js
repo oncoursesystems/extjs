@@ -292,7 +292,7 @@ Ext.define('Ext.chart.interactions.CrossZoom', {
         }
 
         if (me.getLocks()[me.gestureEvent] === me) {
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var chart = me.getChart(),
                 surface = me.getSurface(),
                 rect = chart.getInnerRect(),
@@ -345,7 +345,7 @@ Ext.define('Ext.chart.interactions.CrossZoom', {
         }
 
         if (me.getLocks()[me.gestureEvent] === me) {
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var chart = me.getChart(),
                 surface = me.getSurface(),
                 rect = chart.getInnerRect(),

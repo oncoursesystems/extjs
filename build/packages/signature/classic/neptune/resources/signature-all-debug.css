@@ -1,0 +1,13 @@
+/* /Users/space/buildAgent/work/bbbb2bac69ba789b/sencha/ext/packages/signature/sass/src/signature/Signature.scss:1 */
+.x-signature-canvas {
+    border: 1px solid #ccc;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+/* /Users/space/buildAgent/work/bbbb2bac69ba789b/sencha/ext/packages/signature/sass/src/signature/Signature.scss:7 */
+.x-disabled .x-signature-canvas {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: pointer;
+}

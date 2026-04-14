@@ -81,7 +81,9 @@ Ext.define('Ext.grid.selection.SelectionExtender', {
 
     alignHandle: function() {
         var me = this,
-            lastCell = me.endPos;
+            shouldDisplay,
+            lastCell = me.endPos,
+            cellLocked = lastCell && lastCell.cell && lastCell.cell.getLocked();
 
         // Cell corresponding to the position might not be rendered.
         // This will be called upon scroll
@@ -101,10 +103,32 @@ Ext.define('Ext.grid.selection.SelectionExtender', {
             }
 
             me.handle.alignTo(lastCell, 'c-br');
+
+            shouldDisplay = cellLocked || me.isHandleWithinView(me.view);
+            me.handle.setVisibility(shouldDisplay);
         }
         else {
             me.disable();
         }
+    },
+
+    isHandleWithinView: function(view) {
+        var me = this,
+            viewBox = view && view.isCssLockedGrid ? view.getCenterRegionBox() : view.el.getBox(),
+            handleBox = me.handle.getBox(),
+            offsets = me.handle.getOffsetsTo(view.el),
+            withinX;
+
+        // Adjust for local coordinates
+        handleBox.left = offsets[0];
+        handleBox.top = offsets[1];
+        handleBox.right = handleBox.left + handleBox.width;
+        handleBox.bottom = handleBox.top + handleBox.height;
+
+        withinX = viewBox.left <= handleBox.left &&
+                  viewBox.right >= (handleBox.right - handleBox.width);
+
+        return withinX;
     },
 
     enable: function() {
@@ -466,3 +490,4 @@ Ext.define('Ext.grid.selection.SelectionExtender', {
         this.destroyMembers('viewListener', 'scrollListener', 'mask', 'handle');
     }
 });
+

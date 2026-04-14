@@ -27,7 +27,6 @@
  *     });
  *
  * @mixins Ext.device.contacts.Abstract
- * @mixins Ext.device.contacts.Sencha
  * @mixins Ext.device.contacts.Cordova
  */
 Ext.define('Ext.device.Contacts', {

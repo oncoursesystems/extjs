@@ -1,7 +1,7 @@
 /*
-This file is part of Ext JS 7.8.0.33
+This file is part of Ext JS 8.0.0.43
 
-Copyright (c) 2011-2023 Sencha Inc
+Copyright (c) 2011-2026 Sencha Inc
 
 license: http://www.sencha.com/legal/sencha-software-license-agreement
 Contact: http://www.sencha.com/contact
@@ -14,7 +14,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Version: 7.8.0.33 Build date: 2023-12-05 06:03:28 ()
+Version: 8.0.0.43 Build date: 2026-03-30 11:56:45 ()
 
 */
 // @tag core
@@ -1456,6 +1456,7 @@ Ext.getResourcePath = function(path, poolName, packageName) {
 
 
 
+
 var Ext = Ext || {};
 
 
@@ -1487,7 +1488,6 @@ var Ext = Ext || {};
         manifest = Ext.manifest || {},
         iterableRe = /\[object\s*(?:Array|Arguments|\w*Collection|\w*List|HTML\s+document\.all\s+class)\]/,
         MSDateRe = /^\\?\/Date\(([-+])?(\d+)(?:[+-]\d{4})?\)\\?\/$/,
-        
         elevateArgs, elevateFn, elevateRet, elevateScope, i;
     Ext.global = global;
     Ext.$nextIid = 0;
@@ -1510,6 +1510,7 @@ var Ext = Ext || {};
     
     
     Ext['suspendLayouts'] = Ext['resumeLayouts'] = emptyFn;
+    
     for (i in {
         toString: 1
     }) {
@@ -1817,6 +1818,7 @@ var Ext = Ext || {};
         },
         
         isDebugEnabled: 
+        
         function(className, defaultEnabled) {
             var debugConfig = Ext.debugConfig.hooks;
             if (debugConfig.hasOwnProperty(className)) {
@@ -1939,6 +1941,7 @@ var Ext = Ext || {};
             }
             return Function.prototype.constructor.apply(Function.prototype, args);
         },
+        
         
         Logger: {
             
@@ -2872,7 +2875,6 @@ Ext.Array = (function() {
                     reduced = initialValue;
                 if (arguments.length < 3) {
                     while (true) {
-                        
                         if (index in array) {
                             reduced = array[index++];
                             break;
@@ -3653,12 +3655,13 @@ Ext.Date = (function() {
             "}",
             "if(v){",
             
+            
             "if(zz != null){",
             
-            "v = me.add(v, me.SECOND, -v.getTimezoneOffset() * 60 - zz);",
+            "v = me.add(new Date(Date.UTC(y < 100 ? 100 : y, m, d, h, i, s, ms)), me.YEAR, y < 100 ? y - 100 : 0);",
             "}else if(o){",
             
-            "v = me.add(v, me.MINUTE, -v.getTimezoneOffset() + (sn == '+'? -1 : 1) * (hr * 60 + mn));",
+            "v = me.add(new Date(Date.UTC(y < 100 ? 100 : y, m, d, h, i, s, ms)),  me.MINUTE, (sn == '+'? -1 : 1) * (hr * 60 + mn));",
             "}",
             "}",
             "return (v != null) ? v : null;"
@@ -3764,6 +3767,8 @@ Ext.Date = (function() {
         HOUR: "h",
         
         DAY: "d",
+        
+        WEEK: "w",
         
         MONTH: "mo",
         
@@ -4777,6 +4782,10 @@ Ext.Date = (function() {
         
         diff: function(min, max, unit) {
             var diff = +max - min,
+                
+                timezoneOffsetAdjustment = (min.getTimezoneOffset() - max.getTimezoneOffset()) * 60000,
+                
+                adjustedDiff = diff + timezoneOffsetAdjustment,
                 est;
             switch (unit) {
                 case utilDate.MILLI:
@@ -4788,9 +4797,9 @@ Ext.Date = (function() {
                 case utilDate.HOUR:
                     return Math.floor(diff / 3600000);
                 case utilDate.DAY:
-                    return Math.floor(diff / 86400000);
-                case 'w':
-                    return Math.floor(diff / 604800000);
+                    return Math.floor(adjustedDiff / 86400000);
+                case utilDate.WEEK:
+                    return Math.floor(adjustedDiff / 604800000);
                 case utilDate.MONTH:
                     est = (max.getFullYear() * 12 + max.getMonth()) - (min.getFullYear() * 12 + min.getMonth());
                     if (utilDate.add(min, unit, est) > max) {
@@ -4872,7 +4881,6 @@ Ext.Date = (function() {
             
             if (!(parts[2] || parts[4])) {
                 firstFormatToken = defaultFormat[0];
-                
                 
                 
                 if (!yearInfo[firstFormatToken] && (dayInfo[firstFormatToken] || (parts[1] > 12 && parts[3] < 13))) {
@@ -7362,8 +7370,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '7.8.0.33');
-        Ext.setVersion('core', '7.8.0.33');
+        Ext.setVersion('ext', '8.0.0.43');
+        Ext.setVersion('core', '8.0.0.43');
     }
 })(Ext.manifest);
 
@@ -8209,7 +8217,7 @@ Ext.Config.prototype = {
                             continue;
                         } else 
                         {
-                            if (name !== 'type') {
+                            if (name !== 'type' && name !== 'xtype') {
                                 Ext.log.warn('No such config "' + name + '" for class ' + instance.$className);
                             }
                         }
@@ -8306,7 +8314,6 @@ Ext.Base = (function(flexSetter) {
             if (message) {
                 Ext.Object.defineProperty(object, oldName, {
                     get: function() {
-                        
                         Ext.raise(message);
                     },
                     set: function(value) {
@@ -8417,6 +8424,7 @@ Ext.Base = (function(flexSetter) {
                 enabled = compatVersion && compatVersion.lt(version);
                 
                 if (!enabled) {}
+                
                 
                 
                 else if (!enabled) {
@@ -9881,7 +9889,6 @@ Ext.Base = (function(flexSetter) {
         
         delete data.mixins;
         hooks.onCreated = function() {
-            
             
             if (Ext.classSystemMonitor) {
                 Ext.classSystemMonitor(Class, 'Ext.Class#mixinsPreprocessor#beforeCreated', arguments);
@@ -12191,7 +12198,6 @@ Ext.feature = {
                     xmlDoc = new ActiveXObject("Microsoft.xmlDOM");
                     
                     xmlDoc.async = false;
-                    
                     xmlDoc.loadXML(xmlString);
                 } else if (window.DOMParser) {
                     var parser = new DOMParser();
@@ -12404,7 +12410,7 @@ Ext.feature = {
                     style.width = '100px';
                     style.height = '30px';
                     body.appendChild(el);
-                    supports = el.getBoundingClientRect().height !== 100;
+                    supports = Math.round(el.getBoundingClientRect().height) !== 100;
                     body.removeChild(el);
                 }
                 return supports;
@@ -17131,6 +17137,10 @@ Ext.Factory.prototype = {
                                 reuse = aliases === type || aliases.indexOf(type) > -1;
                             }
                         }
+                    } else {
+                        
+                        
+                        reuse = true;
                     }
                 } else {
                     
@@ -17580,7 +17590,6 @@ Ext.define('Ext.data.flash.BinaryXhr', {
         me.method = method;
         me.url = url;
         me.async = isAsync !== false;
-        
         me.user = user;
         me.password = password;
         
@@ -18412,7 +18421,6 @@ Ext.define('Ext.data.Connection', {
         url: null,
         
         async: true,
-        
         
         username: '',
         
@@ -24904,7 +24912,6 @@ Ext.define('Ext.event.publisher.Gesture', {
             return firstTargetGroup;
         }
         while (true) {
-            
             target = firstTargetGroup[firstTargetGroup.length - i];
             if (!target) {
                 return commonTargets;
@@ -26840,7 +26847,6 @@ Ext.define('Ext.dom.Element', function(Element) {
                         
                         else if (!(/file|undefined|reset|button/i.test(type))) {
                             if (!(/radio|checkbox/i.test(type) && !element.checked) && !(type === 'submit' && hasSubmit)) {
-                                
                                 data += encoder(name) + '=' + encoder(element.value) + '&';
                                 hasSubmit = /submit/i.test(type);
                             }
@@ -33611,8 +33617,7 @@ Ext.define('Ext.Widget', {
             uiReferences = prototype.hasOwnProperty('uiReferences') ? prototype.uiReferences : (prototype.uiReferences = {
                 element: ''
             }),
-            renderTemplate, renderElement, renderConfig, element, referenceNodes, i, ln, referenceNode, reference, classCls, uiCls, baseCls, 
-            referenceElement;
+            renderTemplate, renderElement, renderConfig, element, referenceNodes, i, ln, referenceNode, reference, classCls, uiCls, baseCls, referenceElement;
         if (isFirstInstance) {
             
             
@@ -33686,6 +33691,7 @@ Ext.define('Ext.Widget', {
             } else {
                 uiCls = uiReferences[reference];
                 if (uiCls && isFirstInstance) {
+                    
                     
                     
                     
@@ -36571,10 +36577,8 @@ Ext.define('Ext.util.translatable.CssTransform', {
 });
 
 
-
 Ext.define('Ext.mixin.Responsive', function(Responsive) {
     return {
-        
         extend: Ext.Mixin,
         mixinConfig: {
             id: 'responsive',
@@ -41863,7 +41867,7 @@ Ext.define('Ext.util.Collection', {
             toRemove = 0,
             itemFiltered = false,
             wasFiltered = false,
-            details, newKey, sortFn, toAdd, index, newIndex;
+            details, newKey, sortFn, toAdd, index, newIndex, removedRecs;
         
         if (source && !source.updating) {
             me.sourceUpdating = true;
@@ -41873,7 +41877,11 @@ Ext.define('Ext.util.Collection', {
         
         {
             newKey = me.getKey(item);
-            if (filtered) {
+            
+            
+            
+            removedRecs = (item.store && item.store.removed) || [];
+            if (filtered && !Ext.Array.contains(removedRecs, item)) {
                 index = me.indexOfKey(keyChanged ? oldKey : newKey);
                 wasFiltered = (index < 0);
                 itemFiltered = me.isItemFiltered(item);
@@ -46412,6 +46420,11 @@ Ext.define('Ext.data.AbstractStore', {
         if (storeId) {
             Ext.data.StoreManager.register(me);
         }
+        
+        
+        if ((me.getRemoteFilter() || me.getRemoteSort()) && !Ext.isDefined(me.getAutoLoadOnFilterEnd())) {
+            me.setAutoLoadOnFilterEnd(true);
+        }
     },
     
     createActiveRange: function(config) {
@@ -47555,7 +47568,6 @@ Ext.define('Ext.data.SortTypes', function() {
         
         asUCText: function(s) {
             
-            
             return (s != null) ? String(s).toUpperCase().replace(me.stripTagsRE, '') : '\x00';
         },
         
@@ -48546,7 +48558,7 @@ Ext.define('Ext.data.Model', {
             result = result || {};
             name = field.name;
             prop = field.summaryField || name;
-            if (name !== 'id') {
+            if (name !== this.idProperty) {
                 
                 result[name] = summary ? summary.calculate(records, prop, 'data', 0, recLen) : undefined;
             }
@@ -58952,10 +58964,10 @@ Ext.define('Ext.data.matrix.Slice', {
             otherSide = side.inverse,
             otherSlices = otherSide.slices,
             assoc, call, i, item, otherId, otherSlice, record;
-        
         for (i = 0; i < length; ++i) {
             call = record = null;
             item = recordsOrIds[i];
+            
             otherId = item.isEntity ? (record = item).id : item;
             assoc = members[otherId];
             
@@ -60143,7 +60155,6 @@ Ext.define('Ext.data.Session', {
         },
         registerReferences: function(record, oldId) {
             var entityName = record.entityName,
-                
                 id = record.id,
                 recordData = record.data,
                 remove = oldId || oldId === 0,
@@ -60157,6 +60168,7 @@ Ext.define('Ext.data.Session', {
                 
                 if (fk || fk === 0) {
                     reference = reference.reference;
+                    
                     
                     entityName = reference.type;
                     roleName = reference.inverse.role;
@@ -60176,7 +60188,6 @@ Ext.define('Ext.data.Session', {
             var len = items.length,
                 i, data, rec, id, modified;
             
-            
             if (Ext.isArray(items)) {
                 for (i = 0; i < len; ++i) {
                     data = items[i];
@@ -60193,6 +60204,7 @@ Ext.define('Ext.data.Session', {
                     data = items[id];
                     rec = this.peekRecord(entityType, id);
                     if (rec && !rec.dropped) {
+                        
                         modified = rec.set(data);
                     } else {
                         this.onInvalidEntityUpdate(entityType, id, !!rec);
@@ -68998,7 +69010,6 @@ Ext.define('Ext.data.query.Stringifier', {
 
 
 Ext.define('Ext.data.query.Parser', function(QueryParser) {
-    
     var LIST = {
             list: true,
             literal: true,
@@ -77198,11 +77209,13 @@ Ext.define('Ext.dom.Fly', {
         return (this.dom = null);
     },
     addListener: 
+    
     function() {
         Ext.raise("Cannot use addListener() on Ext.dom.Fly instances. " + "Please use Ext.get() to retrieve an Ext.dom.Element instance instead.");
     } || 
     null,
     removeListener: 
+    
     function() {
         Ext.raise("Cannot use removeListener() on Ext.dom.Fly instances. " + "Please use Ext.get() to retrieve an Ext.dom.Element instance instead.");
     } || 
@@ -91177,8 +91190,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.dataview.selection.Records": [],
   "Ext.dataview.selection.Rows": [],
   "Ext.dataview.selection.Selection": [],
-  "Ext.dd.Manager": [],
-  "Ext.dd.ScrollManager": [],
   "Ext.direct.Event": [],
   "Ext.direct.ExceptionEvent": [],
   "Ext.direct.JsonProvider": [],
@@ -91433,6 +91444,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.grid.grouped.selection.Model": [],
   "Ext.grid.grouped.selection.Records": [],
   "Ext.grid.grouped.selection.Rows": [],
+  "Ext.grid.lockable.Divider": [],
   "Ext.grid.locked.Grid": [
     "Ext.grid.LockedGrid"
   ],
@@ -91448,16 +91460,19 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.grid.menu.ShowInGroups": [],
   "Ext.grid.menu.SortAsc": [],
   "Ext.grid.menu.SortDesc": [],
+  "Ext.grid.menu.VirtualColumns": [],
   "Ext.grid.mixin.Menus": [],
   "Ext.grid.plugin.BaseFilterBar": [],
   "Ext.grid.plugin.BaseGroupingPanel": [],
   "Ext.grid.plugin.BaseSummaries": [],
+  "Ext.grid.plugin.BottomScrollbar": [],
   "Ext.grid.plugin.CellEditing": [],
   "Ext.grid.plugin.Clipboard": [],
   "Ext.grid.plugin.ColumnResizing": [],
   "Ext.grid.plugin.Editable": [],
   "Ext.grid.plugin.GroupingPanel": [],
   "Ext.grid.plugin.HeaderReorder": [],
+  "Ext.grid.plugin.Lockable": [],
   "Ext.grid.plugin.PagingToolbar": [],
   "Ext.grid.plugin.RowDragDrop": [],
   "Ext.grid.plugin.RowExpander": [],
@@ -91628,6 +91643,12 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.plugin.dd.DragDrop": [],
   "Ext.plugin.dd.DragZone": [],
   "Ext.plugin.dd.DropZone": [],
+  "Ext.plugin.dd.Manager": [
+    "Ext.dd.Manager"
+  ],
+  "Ext.plugin.dd.ScrollManager": [
+    "Ext.dd.ScrollManager"
+  ],
   "Ext.promise.Consequence": [],
   "Ext.promise.Deferred": [],
   "Ext.promise.Promise": [],
@@ -92302,8 +92323,6 @@ Ext.ClassManager.addNameAliasMappings({
     "selection.rows"
   ],
   "Ext.dataview.selection.Selection": [],
-  "Ext.dd.Manager": [],
-  "Ext.dd.ScrollManager": [],
   "Ext.direct.Event": [
     "direct.event"
   ],
@@ -92734,6 +92753,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.grid.grouped.selection.Rows": [
     "selection.groupedrows"
   ],
+  "Ext.grid.lockable.Divider": [
+    "widget.regiondivider"
+  ],
   "Ext.grid.locked.Grid": [
     "widget.lockedgrid"
   ],
@@ -92765,10 +92787,16 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.grid.menu.SortDesc": [
     "widget.gridsortdescmenuitem"
   ],
+  "Ext.grid.menu.VirtualColumns": [
+    "widget.gridvirtualcolumnsmenu"
+  ],
   "Ext.grid.mixin.Menus": [],
   "Ext.grid.plugin.BaseFilterBar": [],
   "Ext.grid.plugin.BaseGroupingPanel": [],
   "Ext.grid.plugin.BaseSummaries": [],
+  "Ext.grid.plugin.BottomScrollbar": [
+    "plugin.gridbottomscrollbar"
+  ],
   "Ext.grid.plugin.CellEditing": [
     "plugin.cellediting",
     "plugin.gridcellediting"
@@ -92788,6 +92816,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.grid.plugin.HeaderReorder": [
     "plugin.headerreorder"
+  ],
+  "Ext.grid.plugin.Lockable": [
+    "plugin.lockable"
   ],
   "Ext.grid.plugin.PagingToolbar": [
     "plugin.gridpagingtoolbar",
@@ -93104,6 +93135,8 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "Ext.plugin.dd.DragZone": [],
   "Ext.plugin.dd.DropZone": [],
+  "Ext.plugin.dd.Manager": [],
+  "Ext.plugin.dd.ScrollManager": [],
   "Ext.promise.Consequence": [],
   "Ext.promise.Deferred": [],
   "Ext.promise.Promise": [],

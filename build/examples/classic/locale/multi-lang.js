@@ -6,7 +6,6 @@ Ext.require([
 ]);
 
 Ext.onReady(function() {
-    // eslint-disable-next-line
     MultiLangDemo = (function() {
         // get the selected language code parameter from url (if exists)
         var params = Ext.urlDecode(window.location.search.substring(1)),

@@ -98,9 +98,27 @@ Ext.define('Ext.field.Display', {
      * The scope to execute the {@link #renderer} function. Defaults to `this` component.
      */
 
+    /**
+     * @property ariaRole
+     * @inheritdoc
+     */
+    ariaRole: undefined,
+
+    ariaEl: 'inputElement',
+
     initialize: function() {
-        this.callParent();
-        this.syncDom();
+        var me = this,
+            ariaElement = me.ariaEl,
+            id = me.getId();
+
+        me.callParent();
+        me.syncDom();
+
+        ariaElement.set({
+            'aria-labelledby': id + '-ariaStatusEl',
+            'aria-readonly': me.readOnly,
+            role: 'textbox'
+        });
     },
 
     /**

@@ -1,7 +1,7 @@
 topSuite("Ext.grid.plugin.filterbar.FilterBar", [
     'Ext.data.ArrayStore', 'Ext.layout.Fit',
     'Ext.grid.Grid', 'Ext.grid.plugin.Summaries',
-    'Ext.MessageBox', 'Ext.grid.SummaryRow', 'Ext.app.ViewModel'
+    'Ext.MessageBox', 'Ext.grid.SummaryRow', 'Ext.app.ViewModel', 'Ext.grid.plugin.CellEditing'
 ], function() {
     function isBlank(s) {
         return !s || s === '\xA0' || s === '&nbsp;';
@@ -107,7 +107,8 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
             width: 750,
 
             listeners: {
-                refresh: getEventHandler('done')
+                refresh: getEventHandler('done'),
+                buffer: 100
             },
 
             store: store,
@@ -145,10 +146,129 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
         gridEvents = {};
     }
 
+    function resizeColumn(column, by) {
+        var el = column.resizerElement,
+            colBox = column.el.getBox(),
+            fromMx = colBox.x + colBox.width - 2,
+            fromMy = colBox.y + colBox.height / 2;
+
+        // Mousedown on the header to drag
+        Ext.testHelper.touchStart(el, { x: fromMx, y: fromMy });
+
+        // Move to resize
+        Ext.testHelper.touchMove(el, { x: fromMx + by, y: fromMy });
+        Ext.testHelper.touchEnd(el, { x: fromMx + by, y: fromMy });
+    }
+
+    // Helper function to create expanded grid for scrollbar tests
+    function makeScrollableGrid(gridConfig, storeConfig, storeData) {
+        var mockData = storeData || [];
+
+        // Generate more data for scrolling if not provided
+        if (!storeData) {
+            for (var i = 0; i < 100; i++) {
+                mockData.push({
+                    id: i,
+                    company: 'Company' + i,
+                    person: 'Person' + i,
+                    date: new Date(2012 + (i % 10), i % 12, 1),
+                    value: (i + 1) * 100
+                });
+            }
+        }
+
+        store = new Ext.data.Store(Ext.merge({
+            model: Sale,
+            proxy: {
+                type: 'memory',
+                limitParam: null,
+                data: mockData,
+                reader: {
+                    type: 'json'
+                }
+            },
+            autoLoad: true
+        }, storeConfig));
+
+        gridEvents = {};
+
+        grid = new Ext.grid.Grid(Ext.merge({
+            title: 'Scrollable Grid Test',
+            height: 400,
+            width: 500, // Narrower to force horizontal scrolling
+
+            listeners: {
+                refresh: getEventHandler('done'),
+                buffer: 100
+            },
+
+            store: store,
+
+            plugins: {
+                gridfilterbar: true,
+                cellediting: true
+            },
+
+            columns: [
+                { text: 'Company', dataIndex: 'company', itemId: 'c1', width: 150, filterType: { type: 'string' }, editor: 'textfield' },
+                { text: 'Person', dataIndex: 'person', itemId: 'c2', width: 150, filterType: { type: 'string' }, editor: 'textfield' },
+                { text: 'Date', dataIndex: 'date', xtype: 'datecolumn', itemId: 'c3', width: 150, filterType: { type: 'date' }, editor: 'datefield' },
+                { text: 'Value', dataIndex: 'value', xtype: 'numbercolumn', itemId: 'c4', width: 150, filterType: { type: 'number' }, editor: 'numberfield' },
+                { text: 'Year', dataIndex: 'year', itemId: 'c5', width: 150 }
+            ],
+
+            selectable: {
+                cells: true
+            },
+
+            renderTo: document.body
+        }, gridConfig));
+
+        setColMap();
+        plugin = grid.getPlugin('gridfilterbar');
+    }
+
     afterEach(destroyGrid);
 
     describe('filterbar', function() {
         describe('filters', function() {
+            it('columns should resize to correct width when the filter removed', function() {
+                makeGrid(null, {
+                    filters: {
+                        property: 'company',
+                        value: 'Adobe',
+                        operator: '='
+                    }
+                });
+
+                waitsFor(function() {
+                    return gridEvents && gridEvents.done;
+                }, 'grid to be ready');
+
+                runs(function() {
+                    gridEvents = null;
+                    plugin.getBar().down('textfield').setValue('Adobe');
+                    resizeColumn(grid.getFirstVisibleColumn(), 400);
+                });
+
+                waitsFor(function() {
+                    return grid.getFirstVisibleColumn().getWidth() >= 400;
+                });
+
+                runs(function() {
+                    plugin.clearFilters();
+                });
+
+                waitsFor(function() {
+                    return grid.items.items[3].cells[0].getWidth() >= 400;
+                });
+
+                runs(function() {
+                    expect(plugin.getBar().items.items[0].getWidth()).toBe(500);
+                    expect(grid.items.items[3].cells[0].getWidth()).toBe(500);
+                });
+            });
+
             it('should add a filter on a column', function() {
                 makeGrid({
                     columns: [
@@ -442,7 +562,213 @@ topSuite("Ext.grid.plugin.filterbar.FilterBar", [
                         expect(col.el).not.toHaveCls(filterCls);
                     });
                 });
+            });
+        });
 
+        // Scrollbar Focus Bug Tests (EXTJS_30089)
+        describe('scrollbar focus behavior', function() {
+            describe('Normal Operation', function() {
+                it('should transfer focus from filter field to grid cell normally', function() {
+                    makeScrollableGrid();
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        var companyFilter = plugin.getBar().down('textfield'),
+                            filterInput = companyFilter.inputElement.dom;
+
+                        companyFilter.focus();
+
+                        expect(document.activeElement).toBe(filterInput);
+                        expect(companyFilter.hasFocus).toBe(true);
+                    });
+
+                    runs(function() {
+                        var firstRow = grid.getItemAt(0),
+                            personCell = firstRow.getCells()[1]; // Second column (Person)
+
+                        jasmine.fireMouseEvent(personCell.element.dom, 'click');
+                    });
+
+                    runs(function() {
+                        // Verify focus transferred to grid cell
+                        var companyFilter = plugin.getBar().down('textfield'),
+                            selectable = grid.getSelectable(),
+                            selection = selectable.getSelection();
+
+                        expect(companyFilter.hasFocus).toBe(false);
+                        expect(selection.getCount()).toBeGreaterThan(0);
+                    });
+                });
+            });
+
+            describe('Navigation Model lastLocation Management', function() {
+                it('should set lastLocation to "scrollbar" on touchstart and clear on touchend', function() {
+                    makeScrollableGrid();
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        var navigationModel = grid.getNavigationModel(),
+                            scrollable = grid.getScrollable(),
+                            scrollbarEl = scrollable.getElement('x'),
+                            scrollbarRect, x, y, mockTouchStartEvent, mockTouchEndEvent;
+
+                        if (scrollbarEl) {
+                            // Get coordinates for scrollbar area
+                            scrollbarRect = scrollbarEl.dom.getBoundingClientRect();
+                            x = scrollbarRect.left + (scrollbarRect.width / 2);
+                            y = scrollbarRect.top + (scrollbarRect.height / 2);
+
+                            // Create a mock touch event that will target the scrollbar
+                            mockTouchStartEvent = {
+                                type: 'touchstart',
+                                preventDefault: jasmine.createSpy('preventDefault'),
+                                getTarget: jasmine.createSpy('getTarget').andCallFake(function(selector) {
+                                    if (selector === grid.scrollbarSelector) {
+                                        return scrollbarEl.dom; // Return scrollbar element for scrollbarSelector
+                                    }
+
+                                    if (selector === grid.itemSelector) {
+                                        return null; // No item target
+                                    }
+
+                                    return null;
+                                }),
+                                getPoint: jasmine.createSpy('getPoint').andReturn({ x: x, y: y })
+                            };
+
+                            // Call the method directly
+                            grid._checkScrollbarTouch(mockTouchStartEvent);
+
+                            // Check that lastLocation is set to 'scrollbar'
+                            expect(navigationModel.lastLocation).toBe('scrollbar');
+                            expect(mockTouchStartEvent.preventDefault).toHaveBeenCalled();
+
+                            // Create mock touchend event
+                            mockTouchEndEvent = {
+                                type: 'touchend',
+                                preventDefault: jasmine.createSpy('preventDefault'),
+                                getTarget: jasmine.createSpy('getTarget').andCallFake(function(selector) {
+                                    if (selector === grid.scrollbarSelector) {
+                                        return scrollbarEl.dom; // Return scrollbar element for scrollbarSelector
+                                    }
+
+                                    if (selector === grid.itemSelector) {
+                                        return null; // No item target
+                                    }
+
+                                    return null;
+                                }),
+                                getPoint: jasmine.createSpy('getPoint').andReturn({ x: x, y: y })
+                            };
+
+                            // Call the method directly for touchend
+                            grid._checkScrollbarTouch(mockTouchEndEvent);
+
+                            // Check that lastLocation is cleared
+                            expect(navigationModel.lastLocation).toBeNull();
+                            expect(mockTouchEndEvent.preventDefault).toHaveBeenCalled();
+                        }
+                    });
+                });
+
+                it('should handle native scrollbar interactions correctly', function() {
+                    makeScrollableGrid();
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                   runs(function() {
+                        var navigationModel = grid.getNavigationModel(),
+                            x = 600,
+                            y = 100,
+                            mockTouchStartEvent, mockTouchEndEvent;
+
+                        mockTouchStartEvent = {
+                            type: 'touchstart',
+                            preventDefault: jasmine.createSpy('preventDefault'),
+                            getTarget: jasmine.createSpy('getTarget').andCallFake(function(selector) {
+                                // Return null for both scrollbarSelector and itemSelector
+                                return null;
+                            }),
+                            getPoint: jasmine.createSpy('getPoint').andReturn({ x: x, y: y })
+                        };
+
+                        // Mock bodyElement.getClientRegion().contains() to return false
+                        spyOn(grid.bodyElement, 'getClientRegion').andReturn({
+                            contains: jasmine.createSpy('contains').andReturn(false)
+                        });
+
+                        // Call the method directly
+                        grid._checkScrollbarTouch(mockTouchStartEvent);
+
+                        expect(navigationModel.lastLocation).toBe('scrollbar');
+                        expect(mockTouchStartEvent.preventDefault).toHaveBeenCalled();
+
+                        // Test touchend clears the location
+                        mockTouchEndEvent = {
+                            type: 'touchend',
+                            preventDefault: jasmine.createSpy('preventDefault'),
+                            getTarget: jasmine.createSpy('getTarget').andReturn(null),
+                            getPoint: jasmine.createSpy('getPoint').andReturn({ x: x, y: y })
+                        };
+
+                        grid._checkScrollbarTouch(mockTouchEndEvent);
+
+                        expect(navigationModel.lastLocation).toBeNull();
+                        expect(mockTouchEndEvent.preventDefault).toHaveBeenCalled();
+                    });
+                });
+            });
+
+            describe('Integration with Cell Editing', function() {
+                it('should not interfere with cell editing when scrollbar is used', function() {
+                    makeScrollableGrid();
+
+                    waitsFor(function() {
+                        return gridEvents && gridEvents.done;
+                    }, 'grid to be ready');
+
+                    runs(function() {
+                        var cellEditingPlugin = grid.getPlugin('cellediting'),
+                            firstRow = grid.getItemAt(0);
+
+                        // Start editing
+                        cellEditingPlugin.startEdit(firstRow, colMap.c1);
+
+                        expect(cellEditingPlugin.getActiveEditor()).toBeTruthy();
+                    });
+
+                    runs(function() {
+                        // Simulate scrollbar interaction while editing
+                        var scrollable = grid.getScrollable(),
+                            scrollbarEl = scrollable.getElement('x'),
+                            touchStartEvent, touchEndEvent, cellEditingPlugin;
+
+                        if (scrollbarEl) {
+                            touchStartEvent = new Event('touchstart', { bubbles: true, cancelable: true });
+                            touchEndEvent = new Event('touchend', { bubbles: true, cancelable: true });
+
+                            Object.defineProperty(touchStartEvent, 'target', { value: scrollbarEl.dom, enumerable: true });
+                            Object.defineProperty(touchEndEvent, 'target', { value: scrollbarEl.dom, enumerable: true });
+
+                            grid.bodyElement.dom.dispatchEvent(touchStartEvent);
+                            scrollable.scrollTo(50, null);
+                            grid.bodyElement.dom.dispatchEvent(touchEndEvent);
+                        }
+
+                        // Cell editing should still be active
+                        cellEditingPlugin = grid.getPlugin('cellediting');
+
+                        expect(cellEditingPlugin.getActiveEditor()).toBeTruthy();
+                    });
+                });
             });
         });
     });
