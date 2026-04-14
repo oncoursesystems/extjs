@@ -297,7 +297,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
             return;
         }
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var attr = me.attr,
             layout = me.getLayout(),
             isRtl = chart.getInherited().rtl,
@@ -416,7 +416,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
             minorTickSize = attr.minorTickSize,
             gaugeAngles;
 
-        /* eslint-disable no-inner-declarations, no-case-declarations */
+        /* eslint-disable no-case-declarations */
         if (majorTicks) {
             switch (docked) {
                 case 'right':
@@ -521,7 +521,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
                     break;
             }
         }
-        /* eslint-enable no-inner-declarations, no-case-declarations */
+        /* eslint-enable no-case-declarations */
     },
 
     renderLabels: function(surface, ctx, layoutContext, clipRect) {
@@ -1074,7 +1074,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
             return;
         }
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var chart = axis.getChart(),
             innerPadding = chart.getInnerPadding(),
             limitsRect = axis.limits.surface.getRect(),

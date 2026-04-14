@@ -5,7 +5,6 @@ Ext.define('KitchenSink.view.direct.NamedFormController', {
     onFormSubmit: function() {
         var values = this.getView().getValues();
 
-        // eslint-disable-next-line no-undef
         TestAction.showDetails(values, this.onShowDetails, this);
     },
 

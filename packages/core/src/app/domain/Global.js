@@ -35,7 +35,7 @@ Ext.define('Ext.app.domain.Global', {
      * @param {Object} controller A controller to force execution scope on
      *
      * @private
-     */              
+     */
     listen: function(listeners, controller) {
         this.callParent([{ global: listeners }, controller]);
     },

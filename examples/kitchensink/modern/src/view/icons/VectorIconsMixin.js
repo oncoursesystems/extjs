@@ -1,4 +1,3 @@
-/* eslint-disable */
 Ext.define('KitchenSink.view.icons.VectorIconsMixin', {
     extend: 'Ext.Mixin',
     mixinId: 'vector-icons',

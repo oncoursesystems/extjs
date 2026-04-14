@@ -97,7 +97,6 @@ Ext.define('Ext.grid.feature.GroupStore', {
             //
             // Note that if a grouper wasn't defined on the feature that we'll just default
             // to the old behavior and still try to group.
-            // eslint-disable-next-line max-len
             if (me.badGrouperKey === key && (grouper = feature.getGrouper(groupField))) {
                 // We must reset the value because store.group() will call
                 // into processStore again!
@@ -372,7 +371,7 @@ Ext.define('Ext.grid.feature.GroupStore', {
         var metaGroup = this.groupingFeature.getMetaGroup(group);
 
         if (!metaGroup.placeholder) {
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var store = this.store,
                 Model = store.getModel(),
                 modelData = {},

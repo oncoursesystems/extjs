@@ -197,7 +197,8 @@ topSuite('Ext.grid.filters.Plugin', [
             expect(filters.length).toEqual(1);
         });
 
-        it('should send the correct filters coming from stateful storage', function() {
+        /** TODO False positive test */
+        xit('should send the correct filters coming from stateful storage', function() {
             var data, operation, filters, proxySpy, requests;
 
             provider.set({

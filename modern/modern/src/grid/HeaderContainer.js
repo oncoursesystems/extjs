@@ -321,7 +321,18 @@ Ext.define('Ext.grid.HeaderContainer', {
 
     add: function(items) {
         var ret,
-            rootHeaders = this.getRootHeaderCt();
+            rootHeaders = this.getRootHeaderCt(),
+            grid = this.getGrid();
+
+        // If (re)configuring - sort items by region first
+        if (grid && grid.isCssLockedGrid && this.items.length === 0) {
+            this.sortByRegion(items);
+        }
+
+        // Fire event first so that selection styling can be removed
+        if (grid) {
+            grid.fireEvent('columnschanged', 'add', this);
+        }
 
         if (rootHeaders) {
             rootHeaders.beginColumnUpdate();
@@ -338,7 +349,13 @@ Ext.define('Ext.grid.HeaderContainer', {
 
     insert: function(index, item) {
         var ret,
-            rootHeaders = this.getRootHeaderCt();
+            rootHeaders = this.getRootHeaderCt(),
+            grid = this.getGrid();
+
+        // Fire event first so that selection styling can be removed
+        if (grid) {
+            grid.fireEvent('columnschanged', 'insert', this);
+        }
 
         if (rootHeaders) {
             rootHeaders.beginColumnUpdate();
@@ -355,7 +372,12 @@ Ext.define('Ext.grid.HeaderContainer', {
 
     remove: function(which, destroy) {
         var ret,
-            rootHeaders = this.getRootHeaderCt();
+            rootHeaders = this.getRootHeaderCt(),
+            grid = this.getGrid();
+
+        if (grid) {
+            grid.fireEvent('columnschanged', 'remove', this);
+        }
 
         if (rootHeaders) {
             rootHeaders.beginColumnUpdate();
@@ -376,7 +398,7 @@ Ext.define('Ext.grid.HeaderContainer', {
             groupColumns, ln, i, ui;
 
         if (column.isHeaderGroup) {
-            groupColumns = column.getItems().items;
+            groupColumns = column.getLeaves();
 
             for (i = 0, ln = groupColumns.length; i < ln; i++) {
                 me.onColumnAdd(column, groupColumns[i]);
@@ -399,7 +421,7 @@ Ext.define('Ext.grid.HeaderContainer', {
         me.updateMenuDisabledState();
     },
 
-    onColumnMove: function(parent, column, toIdx, fromIdx) {
+    onColumnMove: function(parent, column, toIdx, fromIdx, targetCmp) {
         var me = this,
             columns = me.columns,
             group = null,
@@ -410,7 +432,7 @@ Ext.define('Ext.grid.HeaderContainer', {
         me.visibleColumns = null;
 
         if (column.isHeaderGroup) {
-            cols = column.getItems().items;
+            cols = column.getLeaves();
             group = column;
         }
         else {
@@ -419,7 +441,7 @@ Ext.define('Ext.grid.HeaderContainer', {
 
         fromIdx = columns.indexOf(cols[0]);
         me.columns = me.getLeaves();
-        me.fireEvent('columnmove', me, cols, group, fromIdx);
+        me.fireEvent('columnmove', me, cols, group, fromIdx, toIdx, targetCmp);
     },
 
     onColumnRemove: function(parent, column) {
@@ -431,7 +453,7 @@ Ext.define('Ext.grid.HeaderContainer', {
 
         if (column.isHeaderGroup) {
             if (!column.destroying) {
-                columns = column.getItems().items;
+                columns = column.getLeaves();
                 ln = columns.length;
 
                 for (i = 0; i < ln; i++) {
@@ -823,6 +845,28 @@ Ext.define('Ext.grid.HeaderContainer', {
 
         visibleLeafFilter: function(c) {
             return c.isLeafHeader && !c.isHidden();
+        },
+
+        sortByRegion: function(items) {
+            var me = this,
+                regions = me.getGrid().getRegions();
+
+            if (items) {
+                Ext.Array.sort(items, function(lhs, rhs) {
+                    return regions[me.getLockedRegion(lhs)].weight -
+                        regions[me.getLockedRegion(rhs)].weight;
+                });
+            }
+        },
+
+        getLockedRegion: function(item) {
+            var locked = item.locked;
+
+            return locked === true || locked === 'left'
+                ? 'left'
+                : locked === 'right'
+                    ? 'right'
+                    : 'center';
         }
     }
 });

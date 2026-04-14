@@ -238,7 +238,7 @@ Ext.define('Ext.data.writer.Writer', {
          *         },
          *     });
          *
-         */ 
+         */
         transform: null
     },
 

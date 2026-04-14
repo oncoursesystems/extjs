@@ -275,4 +275,19 @@ topSuite("Ext.field.Display", [
         });
     });
 
+    describe("ARIA attributes", function() {
+        describe("Initial Rendering", function() {
+            it("should have attributes", function() {
+                makeComponent();
+                expect(component).toHaveAttr('role', 'textbox');
+                expect(component).toHaveAttr('aria-labelledby', component.id + '-ariaStatusEl');
+                expect(component).toHaveAttr('aria-readonly', 'true');
+            });
+            it("should be inputElement", function() {
+                makeComponent();
+                expect(component.ariaEl).toBe(component.inputElement);
+            });
+        });
+    });
+
 });

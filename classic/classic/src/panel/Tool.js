@@ -110,7 +110,7 @@ Ext.define('Ext.panel.Tool', {
         'toolEl'
     ],
 
-    /* eslint-disable indent, max-len */
+    /* eslint-disable max-len */
     /**
      * @cfg renderTpl
      * @inheritdoc
@@ -127,7 +127,7 @@ Ext.define('Ext.panel.Tool', {
         '</tpl>' +
         '</div>'
     ],
-    /* eslint-enable indent, max-len */
+    /* eslint-enable max-len */
 
     /**
      * @cfg {Ext.Component} toolOwner

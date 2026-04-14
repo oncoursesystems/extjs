@@ -23,6 +23,9 @@ Ext.define('Ext.grid.column.RowNumberer', {
      */
     menu: null,
 
+    locked: true,
+    draggable: false,
+
     align: 'right',
     hideable: false,
     ignore: true,

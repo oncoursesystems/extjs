@@ -619,7 +619,6 @@ topSuite("grid-general-locking", [
             store = new Ext.data.Store({
                 fields: ['name', 'email', 'phone'],
                 data: [
-                    /* eslint-disable no-multi-spaces */
                     { name: 'Lisa',  email: 'lisa@simpsons.com',  phone: '555-111-1224' },
                     { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' },
                     { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
@@ -636,7 +635,6 @@ topSuite("grid-general-locking", [
                     { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234' },
                     { name: 'Homer', email: 'homer@simpsons.com', phone: '555-222-1244' },
                     { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254' }
-                    /* eslint-enable no-multi-spaces */
                 ]
             });
         });

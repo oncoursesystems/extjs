@@ -78,7 +78,7 @@ Ext.define('Ext.form.field.File', {
      * Overridden to undefined as {@link #emptyText} is not supported with
      * {@link #inputType inputType}:'file' and should be avoided.
      * The default text to place into an empty field.
-     */     
+     */
     emptyText: undefined,
 
     needArrowKeys: false,

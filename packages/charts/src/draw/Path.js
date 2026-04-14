@@ -196,7 +196,7 @@ Ext.define('Ext.draw.Path', {
         x2 -= x1;
         y2 -= y1;
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var x0 = me.cursor[0] - x1,
             y0 = me.cursor[1] - y1,
             area = x2 * y0 - y2 * x0,
@@ -244,7 +244,7 @@ Ext.define('Ext.draw.Path', {
         cx *= dist;
         cy *= dist;
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var k0 = (cx * x0 + cy * y0) / (x0 * x0 + y0 * y0),
             k2 = (cx * x2 + cy * y2) / (x2 * x2 + y2 * y2),
             cosStart = x0 * k0 - cx,

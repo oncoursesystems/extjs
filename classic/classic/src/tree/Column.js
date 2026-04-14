@@ -128,9 +128,12 @@ Ext.define('Ext.tree.Column', {
         '</tpl>',
         '<div class="{childCls} {elbowCls}-img {elbowCls}',
             '<tpl if="isLast">-end</tpl><tpl if="expandable">-plus {expanderCls}</tpl>" role="presentation"></div>',
-        '<tpl if="checked !== null">',
+        '<tpl if="checked !== null && checked !== undefined">',
             '<div role="checkbox" {ariaCellCheckboxAttr}',
-                ' class="{childCls} {checkboxCls}<tpl if="checked"> {checkboxCls}-checked</tpl>"></div>',
+                ' class="{childCls} {checkboxCls}',
+                '<tpl if="checked === true"> {checkboxCls}-checked</tpl>',
+                '<tpl if="checked === \'tri\' "> {checkboxCls}-intermediate</tpl>',
+                '"></div>',
         '</tpl>',
         '<tpl if="glyph">',
             '<span class="{baseIconCls}" ',
@@ -219,7 +222,7 @@ Ext.define('Ext.tree.Column', {
             ariaDescribeIds = [],
             parentData, glyph, glyphFontFamily,
             cell, ariaCheckDescId, ariaUnCheckDescId,
-            ariaExpandDescId, ariaCollapseDescId, checkCell, expanderEl;
+            ariaExpandDescId, ariaCollapseDescId, checkCell, expanderEl, ariaIntermediateDescId;
 
         while (parent && (rootVisible || parent.data.depth > 0)) {
             parentData = parent.data;
@@ -260,9 +263,14 @@ Ext.define('Ext.tree.Column', {
             ariaUnCheckDescId = view.id + '-aria-description-unchecked';
             ariaExpandDescId = view.id + '-aria-description-expanded';
             ariaCollapseDescId = view.id + '-aria-description-collapsed';
+            ariaIntermediateDescId = view.id + '-aria-description-intermediate';
 
             if (!Ext.isEmpty(data.checked)) {
-                ariaDescribeIds.push(data.checked ? ariaCheckDescId : ariaUnCheckDescId);
+                ariaDescribeIds.push(data.checked === 'tri'
+                    ? ariaIntermediateDescId
+                    : data.checked
+                        ? ariaCheckDescId
+                        : ariaUnCheckDescId);
 
                 if (cell) {
                     checkCell = cell.querySelector('.' + me.checkboxCls);
@@ -341,6 +349,7 @@ Ext.define('Ext.tree.Column', {
             hrefTarget: data.hrefTarget,
             lines: lines,
             metaData: metaData,
+            enableTri: me.ownerCt.grid.enableTri,
             // subclasses or overrides can implement a getChildCls() method, which can
             // return an extra class to add to all of the cell's child elements (icon,
             // expander, elbow, checkbox).  This is used by the rtl override to add the

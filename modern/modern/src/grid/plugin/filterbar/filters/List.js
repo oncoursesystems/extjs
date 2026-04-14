@@ -64,9 +64,20 @@ Ext.define('Ext.grid.plugin.filterbar.filters.List', {
             add: 'resetFieldStore',
             remove: 'resetFieldStore',
             load: 'resetFieldStore',
+            update: 'updateFieldStore',
             scope: me,
             destroyable: true
         });
+    },
+
+    updateFieldStore: function(ctl, record, operation,
+        modifiedFieldNames) {
+        var me = this,
+            dataIndex = me.getDataIndex();
+
+        if (Ext.Array.contains(modifiedFieldNames, dataIndex)) {
+            me.resetFieldStore();
+        }
     },
 
     getFieldConfig: function() {

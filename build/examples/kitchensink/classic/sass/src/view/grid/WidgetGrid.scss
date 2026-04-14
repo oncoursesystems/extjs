@@ -4,7 +4,7 @@
     }
 } @else {
     .widget-grid-user:before {
-        font: 16px/1 'Font Awesome 5 Free';
+        font: 16px/1 $font-awesome-family;
         content: $fa-var-user;
     }
 }

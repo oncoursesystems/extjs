@@ -1,5 +1,3 @@
-/* global jasmine, Ext, expect */
-
 topSuite("Ext.window.Toast", ['Ext.form.field.Text'], function() {
     var fireMouseEvent = jasmine.fireMouseEvent,
         win, win2, toast, field1, field2, field3,

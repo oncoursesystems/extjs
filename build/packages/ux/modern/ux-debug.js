@@ -1338,6 +1338,7 @@ Ext.define('Ext.ux.event.Maker', {
     }
 });
 
+/* eslint-disable vars-on-top, indent */
 /**
  * @extends Ext.ux.event.Driver
  * This class manages the playback of an array of "event descriptors". For details on the
@@ -1424,7 +1425,6 @@ Ext.define('Ext.ux.event.Maker', {
  *      }
  */
 Ext.define('Ext.ux.event.Player', function(Player) {
-    /* eslint-disable indent, vars-on-top, one-var */
     var defaults = {},
         mouseEvents = {},
         keyEvents = {},
@@ -3938,7 +3938,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
             cache.minY = minY;
             cache.maxY = maxY;
         }
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var sectorWidth = maxX - minX,
             sectorHeight = maxY - minY,
             scaleX = width / sectorWidth,

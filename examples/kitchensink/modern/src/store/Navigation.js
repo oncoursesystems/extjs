@@ -30,6 +30,7 @@ Ext.define('KitchenSink.store.Navigation', {
         items.push(me.getNavItemsGridPivot());
         items.push(me.getNavItemsD3());
         items.push(me.getNavItemsTemplates());
+        items.push(me.getNavItemsSignature());
 
         items = {
             text: 'All',
@@ -608,6 +609,7 @@ Ext.define('KitchenSink.store.Navigation', {
                 me.getNavItemsTabs(),
                 me.getNavItemsToolbars(),
                 me.getNavItemsTips(),
+                me.getNavItemsQRCode(),
                 { id: 'touch-events', text: 'Touch Events', leaf: true },
                 {
                     id: 'virtual-scroller',
@@ -1135,7 +1137,9 @@ Ext.define('KitchenSink.store.Navigation', {
                 // { id: 'row-expander-grid', text: 'Row Expander', leaf: true },
                 // { id: 'property-grid', text: 'Property Grid', leaf: true },
                 { id: 'xml-grid', text: 'XML Grid', leaf: true },
-                { id: 'infinite-grid', text: 'Infinite Grid', iconCls: 'icon-buffer-grid', leaf: true }
+                { id: 'infinite-grid', text: 'Infinite Grid', iconCls: 'icon-buffer-grid', leaf: true },
+                { id: 'bufferedcolumns-grid', text: 'Virtual Column Render', iconCls: 'icon-buffer-grid', leaf: true },
+                { id: 'lockable-plugin-grid', text: 'Lockable Plugin Grid', iconCls: 'icon-locking-grid', leaf: true }
             ]
         };
     },
@@ -1286,6 +1290,42 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'template-create-account', text: 'Create Account', leaf: true, iconCls: 'icon-form-register' },
                 { id: 'template-horizontal-create-account', text: 'Horizontal Create Account', leaf: true, iconCls: 'icon-form-register' },
                 { id: 'template-reset-password', text: 'Reset Password', leaf: true, iconCls: 'icon-direct-named' }
+            ]
+        };
+    },
+
+    getNavItemsSignature: function() {
+        return {
+            text: 'Signature',
+            id: 'signature',
+            iconCls: 'icon-layout-card',
+            expanded: true,
+            since: '8.0',
+
+            description: 'canvas-based signature pad component for capturing hand-drawn signatures.' +
+            'Built on SignaturePad.js and fully integrated with Ext JS layouts,' +
+            'it supports pen customization, undo/redo, and image export.',
+
+            children: [
+                { id: 'signature-pad', text: 'Signature Pad', leaf: true, iconCls: 'icon-form-login' }
+            ]
+        };
+    },
+
+    getNavItemsQRCode: function() {
+        return {
+            text: 'QR Code',
+            id: 'qrcode',
+            iconCls: 'icon-qr-code',
+            description: 'This demonstrates the use of Ext.qrcode.generator.QrComponent ' +
+                        'which is used to generate QR code from the input provided, it also supports various types of QR codes based on the type and input provided. ' +
+                        'QR code reader component Ext.qrcode.reader.QRReader is also been added  to scan the QR code files or through camera scanners.',
+
+            children: [
+                { id: 'qrcode-generator', text: 'QR Code Generator', iconCls: 'icon-qr-code', leaf: true },
+                { id: 'qrcode-styling', text: 'Styling', iconCls: 'icon-qr-code', leaf: true },
+                { id: 'qrcode-types', text: 'Types', iconCls: 'icon-qr-code', leaf: true },
+                { id: 'qrcode-reader', text: 'Scanner', iconCls: 'icon-qr-code-scanner', leaf: true }
             ]
         };
     }

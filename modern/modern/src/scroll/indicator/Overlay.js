@@ -128,7 +128,7 @@ Ext.define('Ext.scroll.indicator.Overlay', {
             axis = me.getAxis(),
             scroller = me.getScroller(),
             maxScrollPosition = scroller.getMaxUserPosition()[axis],
-            clientSize = scroller.getClientSize()[axis],
+            clientSize = scroller.getUserClientSize()[axis] || scroller.getClientSize()[axis],
             baseLength = me.length,
             length = baseLength,
             maxPosition = clientSize - baseLength - me.sizeAdjust,
@@ -145,6 +145,10 @@ Ext.define('Ext.scroll.indicator.Overlay', {
         }
         else {
             position = round(value / maxScrollPosition * maxPosition);
+        }
+
+        if (axis === 'x') {
+            position = position + scroller.getUserClientX();
         }
 
         me[names.translate](position);
@@ -264,7 +268,7 @@ Ext.define('Ext.scroll.indicator.Overlay', {
                 axis = me.getAxis(),
                 scroller = me.getScroller(),
                 scrollSize = scroller.getSize()[axis],
-                clientSize = scroller.getClientSize()[axis],
+                clientSize = scroller.getUserClientSize()[axis] || scroller.getClientSize()[axis],
                 ratio = clientSize / scrollSize,
                 baseSizeAdjust = me.margin * 2,
                 sizeAdjust = me.hasOpposite() ? (baseSizeAdjust + me.size) : baseSizeAdjust,

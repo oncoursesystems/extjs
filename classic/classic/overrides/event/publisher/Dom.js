@@ -45,7 +45,7 @@ Ext.define('Ext.overrides.event.publisher.Dom', {
         var docElement = document.documentElement,
             docBody = document.body,
             prototype = DomPublisher.prototype,
-            onDirectEvent, onDirectCaptureEvent; // eslint-disable-line no-unused-vars
+            onDirectEvent, onDirectCaptureEvent;
 
         prototype.target = document;
         prototype.directBoundListeners = {};
@@ -66,6 +66,7 @@ Ext.define('Ext.overrides.event.publisher.Dom', {
             }
         };
 
+        // eslint-disable-next-line no-unused-vars
         onDirectCaptureEvent = function(e, publisher) {
             e.target = e.srcElement || window;
             e.currentTarget = this; // this, not DomPublisher

@@ -87,7 +87,8 @@ Ext.define('Ext.grid.plugin.filterbar.filters.Base', {
             change: 'onValueChange',
             operatorchange: 'onOperatorChange',
             initialize: 'onFieldRender',
-            specialkey: 'onFieldSpecialKey'
+            specialkey: 'onFieldSpecialKey',
+            focus: 'onFieldFocus'
         }
     },
 
@@ -400,8 +401,9 @@ Ext.define('Ext.grid.plugin.filterbar.filters.Base', {
     },
 
     resizeField: function(width) {
-        var field = this.getField(),
-            column = this.getColumn();
+        var me = this,
+            field = me.getField(),
+            column = me.getColumn();
 
         if (field && field.rendered && column && column.rendered) {
             field.flex = null;
@@ -425,7 +427,18 @@ Ext.define('Ext.grid.plugin.filterbar.filters.Base', {
      * @private
      */
     onFieldSpecialKey: function(field, e) {
-        if ((e.getKey() === e.ESC) && !Ext.isEmpty(field.getValue())) {
+        var me = this,
+            keyCode = e.getKey(),
+            grid = me.grid,
+            owner = me.owner,
+            scrollable = owner.getBar().getScrollable(),
+            nav = grid.getNavigationModel(),
+            location = grid.createLocation(nav),
+            targetField;
+
+        location.column = me.column;
+
+        if ((keyCode === e.ESC) && !Ext.isEmpty(field.getValue())) {
             if (field.clearValue) {
                 field.clearValue();
             }
@@ -433,5 +446,46 @@ Ext.define('Ext.grid.plugin.filterbar.filters.Base', {
                 field.setValue(null);
             }
         }
+
+        // Navigate to next/previous Filter field
+        if (keyCode === e.TAB) {
+            // Prevent native tabbing to next/previous focusable item. We manually do this
+            // using scroller's ensureVisible method for overall consistent navigation 
+            // behavior within a grid.
+            e.preventDefault();
+
+            // Determine target field (if any) based on tab direction.
+            targetField = e.shiftKey
+                ? field.previousSibling("[isInputField]")
+                : field.nextSibling("[isInputField]");
+
+            // If found, focus field - the focus handler will ensure field is scrolled into view.
+            if (targetField) {
+                scrollable.ensureVisible(targetField.el, {
+                    location: location
+                });
+                targetField.focus();
+            }
+        }
+    },
+
+    /**
+     * @param {*} field 
+     * @param {Ext.event.Event} e 
+     * @private
+     */
+    onFieldFocus: function(field, e) {
+        var me = this,
+            grid = me.grid,
+            owner = me.owner,
+            scrollable = owner.getBar().getScrollable(),
+            nav = grid.getNavigationModel(),
+            location = grid.createLocation(nav);
+
+        location.column = me.column;
+
+        scrollable.ensureVisible(field.el, {
+            location: location
+        });
     }
 });

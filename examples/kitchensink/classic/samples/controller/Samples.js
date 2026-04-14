@@ -18,6 +18,7 @@ Ext.define('KitchenSink.controller.Samples', {
         'StockPrice',
         'LinearGeoData',
         'CheckTree',
+        "TristateTree",
         'BufferForum'
     ],
 

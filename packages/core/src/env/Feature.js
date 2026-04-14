@@ -671,7 +671,7 @@ Ext.feature = {
             // IE10 doesn't create IXMLDOMDocument via DOMParser
             if (window.ActiveXObject) {
                 xmlDoc = new ActiveXObject("Microsoft.xmlDOM"); // eslint-disable-line no-undef
-                xmlDoc.async = false; // eslint-disable-line id-blacklist
+                xmlDoc.async = false;
                 xmlDoc.loadXML(xmlString);
             }
             else if (window.DOMParser) {
@@ -1011,7 +1011,7 @@ Ext.feature = {
                 style.height = '30px';
                 body.appendChild(el);
 
-                supports = el.getBoundingClientRect().height !== 100;
+                supports = Math.round(el.getBoundingClientRect().height) !== 100;
                 body.removeChild(el);
             }
 

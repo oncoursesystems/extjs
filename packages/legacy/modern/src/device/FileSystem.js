@@ -1,7 +1,6 @@
 /**
  * Provides an API to navigate file system hierarchies.
  *
- * @mixins Ext.device.filesystem.Sencha
  */
 Ext.define('Ext.device.FileSystem', {
     singleton: true,

@@ -289,7 +289,7 @@ Ext.define('Ext.data.flash.BinaryXhr', {
 
         me.method = method;
         me.url = url;
-        me.async = isAsync !== false; // eslint-disable-line id-blacklist
+        me.async = isAsync !== false;
         me.user = user;
         me.password = password;
 

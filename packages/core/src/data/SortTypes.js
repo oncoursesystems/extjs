@@ -85,7 +85,6 @@ Ext.define('Ext.data.SortTypes', function() {
          */
         asUCText: function(s) {
             // If allowNull, return the Unicode null character.
-            /* eslint-disable-next-line newline-per-chained-call */
             return (s != null) ? String(s).toUpperCase().replace(me.stripTagsRE, '') : '\u0000';
         },
 

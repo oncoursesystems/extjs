@@ -40,7 +40,7 @@ Ext.define('Ext.draw.PathUtil', function() {
                 return this.quadraticRoots(b, c, d);
             }
 
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var A = b / a,
                 B = c / a,
                 C = d / a,

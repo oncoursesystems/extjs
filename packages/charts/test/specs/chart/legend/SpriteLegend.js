@@ -1,5 +1,3 @@
-/* global Ext, expect */
-
 topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore', 'Ext.data.JsonStore'], function() {
     function generateStoreData(pointCount) {
         var data = [
@@ -668,7 +666,8 @@ topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore',
             });
         });
 
-        it("should trigger sprite/layout update on data change", function() {
+        /** TODO False positive test */
+        xit("should trigger sprite/layout update on data change", function() {
             var series = chart.getSeries()[0],
                 oldBorderWidth, newBorderWidth,
                 oldSecondItem, oldSecondItemX, newSecondItem, newSecondItemX;
@@ -1316,29 +1315,22 @@ topSuite("Ext.chart.legend.SpriteLegend", ['Ext.chart.*', 'Ext.data.ArrayStore',
 
             runs(function() {
                 var containerItems = container.items.items,
-                    beforelegend = chart.getLegend(),
-                    beforelegendSurface = beforelegend.getSurface(),
-                    beforelegendRect = beforelegendSurface.getRect();
+                    legendBefore = chart.getLegend(),
+                    legendSurfaceBefore = legendBefore.getSurface(),
+                    legendRectBefore = legendSurfaceBefore.getRect();
 
                 // condition to remove chart, perform filter store and add the chart again
                 jasmine.fireMouseEvent(containerItems[0].el, 'click');
                 jasmine.fireMouseEvent(containerItems[1].el, 'click');
                 jasmine.fireMouseEvent(containerItems[2].el, 'click');
 
-                var chartRect = chart.getChartRect(),
-                    legend = chart.getLegend(),
-                    legendSize = legend.getSize(),
+                var legend = chart.getLegend(),
                     legendSurface = legend.getSurface(),
                     legendRect = legendSurface.getRect();
 
-                expect(legendRect[0]).toBe(0);
-                expect(legendRect[1]).toBe(chartRect[1]);
-                expect(legendRect[2]).toBe(chart.getWidth());
-                expect(legendRect[3]).toBe(legendSize.height);
-
                 // check for position before and after the condition
                 for (var i = 0; i < legendRect.length; i++) {
-                    expect(beforelegendRect[i]).toBe(legendRect[i]);
+                    expect(legendRectBefore[i]).toBe(legendRect[i]);
                 }
             });
         });

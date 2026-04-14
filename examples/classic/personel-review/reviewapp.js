@@ -71,7 +71,7 @@ Ext.onReady(function() {
      * Most of the actual data population and updates done by
      * addUpdateRecordFromReviews() and removeRecordFromReviews()
      * called when add/update/delete events are triggered on the ReviewStore.      
-     */      
+     */
     Ext.define('App.RadarStore', {
         extend: 'Ext.data.Store',
 
@@ -125,7 +125,7 @@ Ext.onReady(function() {
         /**
          * Calculates an average for each metric across all employees.
          * We use this to create the average series always shown in the Radar Chart.      
-         */              
+         */
         calculateAverageScores: function() {
             var me = this, // keeps the store in scope during Ext.Array.each
                 reviewStore = Ext.data.StoreMgr.lookup('reviewStore'),
@@ -218,7 +218,7 @@ Ext.onReady(function() {
      * performance reviews.
      *
      * The class will be registered with an xtype of 'performanceradar'
-     */      
+     */
     Ext.define('App.PerformanceRadar', {
         extend: 'Ext.chart.Chart',
         alias: 'widget.performanceradar',           // register xtype performanceradar

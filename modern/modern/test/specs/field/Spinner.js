@@ -182,6 +182,75 @@ topSuite("Ext.field.Spinner", function() {
         });
     });
 
+    describe("ARIA attributes", function() {
+        beforeEach(function() {
+            createField();
+        });
+
+        afterEach(function() {
+            Ext.destroy(field);
+            field = null;
+        });
+
+        describe("initial renderning", function() {
+            it("should not render when !ariaRole", function() {
+                createField({ ariaRole: undefined });
+
+                expect(field.ariaEl.dom.hasAttribute('role')).toBe(false);
+            });
+
+            it("should render when ariaRole is defined", function() {
+                createField();
+
+                expect(field).toHaveAttr('role', 'spinbutton');
+            });
+
+            it("In general", function() {
+                createField();
+                expect(field).toHaveAttr('aria-describedby', field.id + '-ariaStatusEl');
+                expect(field).toHaveAttr('aria-invalid', 'false');
+            });
+        });
+
+        describe("aria-invalid", function() {
+            it("should set aria-invalid as true for value less than minValue", function() {
+                createField({
+                    minValue: 10
+                });
+
+                field.setValue(9);
+                expect(field).toHaveAttr('aria-invalid', 'true');
+            });
+
+            it("should set aria-invalid as false for value greater than minValue", function() {
+                createField({
+                    minValue: 10
+                });
+
+                field.setValue(11);
+                expect(field).toHaveAttr('aria-invalid', 'false');
+            });
+
+            it("should set aria-invalid as true for value greater than maxValue", function() {
+                createField({
+                    maxValue: 10
+                });
+
+                field.setValue(11);
+                expect(field).toHaveAttr('aria-invalid', 'true');
+            });
+
+            it("should set aria-invalid as false for value less than maxValue", function() {
+                createField({
+                    maxValue: 10
+                });
+
+                field.setValue(9);
+                expect(field).toHaveAttr('aria-invalid', 'false');
+            });
+        });
+    });
+
     (Ext.supports.Touch ? xdescribe : describe)("keyboard interaction", function() {
         beforeEach(function() {
             createField({

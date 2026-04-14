@@ -213,6 +213,17 @@ function() {
         }
     }
 
+    function ObserveGridContentAfterChange(positionOfColumn, dataIndex) {
+        var cellData, i;
+
+        for (i = 0; i < store.getRange().length; i++) {
+            cellData = view.getRow(i).querySelectorAll('.x-grid-cell');
+
+            // Observe the data of columns after change in positon of grouped header 
+            expect(cellData[positionOfColumn].textContent).toBe(store.getAt(i).get(dataIndex));
+        }
+    }
+
     afterEach(function() {
         Ext.destroy(grid, store);
         grid = store = locked = visibleColumns = groupHeader = subGroupHeader = colChangeSpy = colMoveSpy = headerCtMoveSpy = headerCt = null;
@@ -4213,6 +4224,395 @@ function() {
 
                 expect(headers).toBe('EmailNamePhone 1Phone 2Phone 3Phone 4Phones 1Phones 2Phones 3Phones 4');
             });
+        });
+    });
+
+    describe('Dropping before group columns before hidden column', function() {
+        beforeEach(function() {
+            store = Ext.create("Ext.data.Store", {
+                storeId: "simpsonsStore",
+                fields: ["name", "email", "phone"],
+                data: [{
+                    name: "Lisa",
+                    email: "lisa@simpsons.com",
+                    phone: "555-111-1224",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                }, {
+                    name: "Bart",
+                    email: "bart@simpsons.com",
+                    phone: "555-222-1234",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                }, {
+                    name: "Homer",
+                    email: "homer@simpsons.com",
+                    phone: "555-222-1244",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                }, {
+                    name: "Marge",
+                    email: "marge@simpsons.com",
+                    phone: "555-222-1254",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                } ]
+            });
+            grid = new Ext.grid.Panel({
+                store: store,
+                width: 1500,
+                columns: [{
+                    text: "Name",
+                    dataIndex: "name"
+
+                }, {
+
+                    text: " HR Department Information",
+                    columns: [{
+                        text: "DeptNO",
+                        dataIndex: "deptno"
+                    }, {
+                        text: "Department",
+                        dataIndex: "dept"
+                    } ]
+                }, {
+
+                    text: "HR OverAll Information",
+                    columns: [{
+                        "hidden": true,
+                        text: "DeptNO1",
+                        dataIndex: "deptno"
+                    }, {
+                        text: "Department",
+                        dataIndex: "dept"
+                    }, {
+                        text: "EmailId",
+                        dataIndex: "email"
+                    }, {
+                        text: "Phone",
+                        dataIndex: "phone"
+                    }, {
+                        "hidden": true,
+                        text: "AGE1",
+                        dataIndex: "age"
+                    }, {
+                        text: "Name",
+                        dataIndex: "name"
+                    }, {
+                        text: "Phone1",
+                        dataIndex: "phone"
+                    }, {
+                        text: "AGE",
+                        dataIndex: "age"
+                    }]
+                }, {
+
+                    text: "Analyist Personal Information",
+                    columns: [{
+                        text: "EmailId",
+                        dataIndex: "email"
+                    }, {
+                        text: "Phone",
+                        dataIndex: "phone"
+                    }, {
+                        "hidden": true,
+                        text: "AGE1",
+                        dataIndex: "age"
+                    }, {
+                        text: "AGE",
+                        dataIndex: "age"
+                    }, {
+                        text: "Department",
+                        dataIndex: "dept"
+                    }]
+                }, {
+
+                    text: "Developer Personal Information",
+                    columns: [{
+                        "hidden": true,
+                        text: "EmailId1",
+                        dataIndex: "email"
+                    }, {
+                        text: "Phone",
+                        dataIndex: "phone"
+                    }, {
+                        text: "AGE1",
+                        dataIndex: "age"
+                    }, {
+                        text: "AGE",
+                        dataIndex: "age"
+                    }, {
+                        text: "EmailId",
+                        dataIndex: "email"
+                    }, {
+                        text: "Department",
+                        dataIndex: "dept"
+                    }]
+                }, {
+
+                    text: "QC Personal Information",
+                    columns: [{
+                        text: "EmailId",
+                        dataIndex: "email"
+                    }, {
+                        "hidden": true,
+                        text: "Phone",
+                        dataIndex: "phone"
+                    }, {
+                        text: "AGE",
+                        dataIndex: "age"
+                    }, {
+                        text: "Department",
+                        dataIndex: "dept"
+                    }]
+                }, {
+
+                    text: "Developer Department Information",
+                    columns: [{
+                        text: "DeptNO",
+                        dataIndex: "deptno"
+                    }, {
+                        text: "Department",
+                        dataIndex: "dept"
+                    }]
+                }],
+                renderTo: Ext.getBody()
+            });
+            view = grid.getView();
+        });
+
+        afterEach(function() {
+            Ext.destroy(grid, store);
+            store = grid = view = null;
+            Ext.data.Model.schema.clear();
+        });
+
+        it('should show data similar before and after change in positon of grouped header', function() {
+            var hrHeader, analystHeader, cellData, i;
+
+            // Get the header of "HR OverAll Information" column
+            hrHeader = grid.down('headercontainer').items.items[2];
+            // Get the header for "Analyist Personal Information" column
+            analystHeader = grid.down('headercontainer').items.items[3];
+
+            // Drag analystHeader before hrHeader column
+            dragColumn(analystHeader, hrHeader, false);
+
+            runs(function() {
+                ObserveGridContentAfterChange(3, 'email');
+            });
+        });
+    });
+
+    describe('Dropping nested grouped columns inside nested group', function() {
+        beforeEach(function() {
+            store = Ext.create("Ext.data.Store", {
+                storeId: "simpsonsStore",
+                fields: ["name", "email", "phone"],
+                data: [{
+                    name: "Lisa",
+                    email: "lisa@simpsons.com",
+                    phone: "555-111-1224",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                }, {
+                    name: "Bart",
+                    email: "bart@simpsons.com",
+                    phone: "555-222-1234",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                }, {
+                    name: "Homer",
+                    email: "homer@simpsons.com",
+                    phone: "555-222-1244",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                }, {
+                    name: "Marge",
+                    email: "marge@simpsons.com",
+                    phone: "555-222-1254",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                } ]
+            });
+            grid = new Ext.grid.Panel({
+                store: store,
+                width: 1500,
+                columns: [{
+                    text: "Name",
+                    dataIndex: "name"
+
+                }, {
+
+                    text: "Department Information",
+                    columns: [{
+                        text: "DeptNO",
+                        dataIndex: "deptno"
+                    }, {
+                        text: "Department",
+                        dataIndex: "dept"
+                    } ]
+                }, {
+
+                    text: "OverAll Information",
+                    columns: [{
+                        "hidden": true,
+                        text: "DeptNO1",
+                        dataIndex: "deptno"
+                    }, {
+                        text: "Department",
+                        dataIndex: "dept"
+                    }, {
+                        text: "EmailId",
+                        dataIndex: "email"
+                    }]
+                }],
+                renderTo: Ext.getBody()
+            });
+            view = grid.getView();
+        });
+
+        afterEach(function() {
+            Ext.destroy(grid, store);
+            store = grid = view = null;
+            Ext.data.Model.schema.clear();
+        });
+
+        it('should show data similar before and after change in positon of grouped header under nested group', function() {
+            var depInfoColumn, depNestedColumn, overAllInfoColumn, overNestedColumn;
+
+            // Get the header of "Department Information" column
+            depInfoColumn = grid.down('headercontainer').items.items[1];
+            depNestedColumn = depInfoColumn.items.items[0];
+            // Get the header for "OverAll Information" column
+            overAllInfoColumn = grid.down('headercontainer').items.items[2];
+
+            // Drag email column before depInfoColumn column
+            dragColumn(overAllInfoColumn, depNestedColumn, false);
+
+            runs(function() {
+                ObserveGridContentAfterChange(2, 'email');
+            });
+
+            // Moving sub columns of group columns which are dropped under grouped columns
+            // Get overAllInfoColumn after drop which is added under depInfoColumn
+            overAllInfoColumn = depInfoColumn.items.items[0];
+
+            // Get the column which you want to drag and drop under multi nested column
+            overNestedColumn = overAllInfoColumn.items.items[2];
+
+            dragColumn(overNestedColumn, depNestedColumn, false);
+            runs(function() {
+                ObserveGridContentAfterChange(2, 'email');
+            });
+        });
+    });
+
+    describe('Dropping all items out side of nested grouped columns inside nested group which has atleast one column hidden', function() {
+        beforeEach(function() {
+            store = Ext.create("Ext.data.Store", {
+                storeId: "simpsonsStore",
+                fields: ["name", "email", "phone"],
+                data: [{
+                    name: "Lisa",
+                    email: "lisa@simpsons.com",
+                    phone: "555-111-1224",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                }, {
+                    name: "Bart",
+                    email: "bart@simpsons.com",
+                    phone: "555-222-1234",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                }, {
+                    name: "Homer",
+                    email: "homer@simpsons.com",
+                    phone: "555-222-1244",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                }, {
+                    name: "Marge",
+                    email: "marge@simpsons.com",
+                    phone: "555-222-1254",
+                    age: 12,
+                    dept: "A",
+                    deptno: 1
+                } ]
+            });
+            grid = new Ext.grid.Panel({
+                store: store,
+                width: 1500,
+                columns: [{
+                    text: "Name",
+                    dataIndex: "name"
+
+                }, {
+                    text: "OverAll Information",
+                    columns: [{
+                        "hidden": true,
+                        text: "DeptNO1",
+                        dataIndex: "deptno"
+                    }, {
+                        text: "Department",
+                        dataIndex: "dept"
+                    }, {
+                        text: "EmailId",
+                        dataIndex: "email"
+                    }]
+                }],
+                renderTo: Ext.getBody()
+            });
+            view = grid.getView();
+        });
+
+        afterEach(function() {
+            Ext.destroy(grid, store);
+            store = grid = view = null;
+            Ext.data.Model.schema.clear();
+        });
+
+        it('should show data similar before and after change in positon of columns of grouped header under nested group', function() {
+            var nameColumn, overAllInfoColumn, overNestedColumn;
+
+            // Get the header of "Department Information column
+            nameColumn = grid.down('headercontainer').items.items[0];
+            // Get the header for "Name" column
+            overAllInfoColumn = grid.down('headercontainer').items.items[1];
+            overNestedColumn = overAllInfoColumn.items.items[2];
+
+            // Drag email column before name Column
+            dragColumn(overNestedColumn, nameColumn, false);
+
+            runs(function() {
+                ObserveGridContentAfterChange(0, 'email');
+            });
+
+            // Moving last visible column from the grouped grid
+            // observe the data of the columns and header after reposition
+
+            // Get the last visible column from the grouped items
+            overNestedColumn = overAllInfoColumn.items.items[1];
+
+            dragColumn(overNestedColumn, nameColumn, false);
+            runs(function() {
+                ObserveGridContentAfterChange(1, 'dept');
+            });
+
+            // Get the overAllInfoColumn after dropping all visible columns under it
+            overAllInfoColumn = grid.down('headercontainer').items.items[3];
+            expect(overAllInfoColumn.isVisible()).toBe(false);
         });
     });
 });

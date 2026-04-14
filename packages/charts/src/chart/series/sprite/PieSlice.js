@@ -69,7 +69,7 @@ Ext.define('Ext.chart.series.sprite.PieSlice', {
                            (attr.strokeStyle && attr.strokeStyle.isGradient);
 
         if (hasGradients && !attr.constrainGradients) {
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var midAngle = me.getMidAngle(),
                 margin = attr.margin,
                 cx = attr.centerX,

@@ -384,4 +384,71 @@ topSuite("Ext.field.CheckboxGroup", ['Ext.app.ViewModel'], function() {
             expect(item.innerItems[1]).toHaveAttr('value', 'on');
         });
     });
+
+    describe("ARIA attributes", function() {
+        var container;
+
+        describe("Initial Rendering", function() {
+
+            it("should have attributes", function() {
+                makeComponent();
+                container = component.getContainer();
+                expect(container).toHaveAttr('role', 'group');
+                expect(container).toHaveAttr('aria-hidden', 'false');
+                expect(container).toHaveAttr('aria-labelledby', container.id + '-ariaStatusEl');
+                expect(container).toHaveAttr('aria-disabled', 'false');
+                expect(container).toHaveAttr('aria-invalid', 'false');
+            });
+        });
+
+        describe("aria-hidden", function() {
+            it("should have aria-hidden as false", function() {
+                makeComponent();
+                container = component.getContainer();
+                expect(container).toHaveAttr('aria-hidden', 'false');
+            });
+
+            it("should have aria-hidden as true when hidden is true", function() {
+                makeComponent({
+                    hidden: true
+                });
+                container = component.getContainer();
+                expect(container).toHaveAttr('aria-hidden', 'true');
+            });
+        });
+
+        describe("aria-invalid", function() {
+            it("should have aria-invalid as false", function() {
+                makeComponent();
+                container = component.getContainer();
+                expect(container).toHaveAttr('aria-invalid', 'false');
+            });
+
+            it("should have aria-invalid as true", function() {
+                makeComponent({
+                    required: true
+                });
+
+                component.isValid();
+                container = component.getContainer();
+                expect(container).toHaveAttr('aria-invalid', 'true');
+            });
+        });
+
+        describe("aria-disabled", function() {
+            it("should have aria-disabled as false", function() {
+                makeComponent();
+                container = component.getContainer();
+                expect(container).toHaveAttr('aria-disabled', 'false');
+            });
+
+            it("should have aria-disabled as true when disabled is true", function() {
+                makeComponent({
+                    disabled: true
+                });
+                container = component.getContainer();
+                expect(container).toHaveAttr('aria-disabled', 'true');
+            });
+        });
+    });
 });

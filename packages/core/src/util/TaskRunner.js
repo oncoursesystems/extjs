@@ -316,7 +316,7 @@ Ext.define('Ext.util.TaskRunner', {
             expires, newTasks, i, task, rt, remove, args;
 
         //<debug>
-        var timer = Ext.Timer.get(me.timerId); // eslint-disable-line vars-on-top, one-var
+        var timer = Ext.Timer.get(me.timerId); // eslint-disable-line one-var
 
         if (timer) {
             timer.tasks = [];

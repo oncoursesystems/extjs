@@ -389,7 +389,7 @@ Ext.Function = (function() {
                     timerFn, timerId;
 
                 //<debug>
-                var timer; // eslint-disable-line vars-on-top, one-var
+                var timer; // eslint-disable-line one-var
                 //</debug>
 
                 timerFn = function() {
@@ -456,7 +456,7 @@ Ext.Function = (function() {
                 timerFn, boundFn;
 
             //<debug>
-            var timer; // eslint-disable-line vars-on-top, one-var
+            var timer; // eslint-disable-line one-var
             //</debug>
 
             if (!scope && !args && !appendArgs) {
@@ -527,7 +527,7 @@ Ext.Function = (function() {
             var timerFn, timerId, boundFn;
 
             //<debug>
-            var timer; // eslint-disable-line vars-on-top, one-var
+            var timer; // eslint-disable-line one-var
             //</debug>
 
             boundFn = Ext.Function.bind(fn, scope, args, appendArgs);
@@ -621,7 +621,7 @@ Ext.Function = (function() {
                         timerFn;
 
                     //<debug>
-                    var timer; // eslint-disable-line vars-on-top, one-var
+                    var timer; // eslint-disable-line one-var
                     //</debug>
 
                     if (timerId) {
@@ -813,7 +813,7 @@ Ext.Function = (function() {
          * of the passed function.
          * @param {Function} fn The function to call after the required number of invocations.
          * @param {Object} scope The scope (`this` reference) in which the function will be called.
-         */    
+         */
         createBarrier: function(count, fn, scope) {
             var barrierFn = function() {
                 if (!--count) {
@@ -1061,7 +1061,7 @@ Ext.Function = (function() {
                 timerFn, timerId;
 
             //<debug>
-            var timer; // eslint-disable-line vars-on-top, one-var
+            var timer; // eslint-disable-line one-var
             //</debug>
 
             if (scope != null || parameters != null) {
@@ -1096,7 +1096,7 @@ Ext.Function = (function() {
                 timerFn, timerId;
 
             //<debug>
-            var timer; // eslint-disable-line vars-on-top, one-var
+            var timer; // eslint-disable-line one-var
             //</debug>
 
             if (scope != null || parameters != null) {

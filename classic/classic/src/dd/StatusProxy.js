@@ -10,12 +10,12 @@ Ext.define('Ext.dd.StatusProxy', {
         'ghost'
     ],
 
-    /* eslint-disable indent, max-len */
+    /* eslint-disable max-len */
     renderTpl: [
         '<div class="' + Ext.baseCSSPrefix + 'dd-drop-icon" role="presentation"></div>' +
         '<div id="{id}-ghost" data-ref="ghost" class="' + Ext.baseCSSPrefix + 'dd-drag-ghost" role="presentation"></div>'
     ],
-    /* eslint-enable indent, max-len */
+    /* eslint-enable max-len */
 
     repairCls: Ext.baseCSSPrefix + 'dd-drag-repair',
 

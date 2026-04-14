@@ -204,7 +204,7 @@ TestAction.multiply(
      * @param {Ext.direct.AmfRemotingProvider} provider
      * @param {Ext.direct.Transaction} transaction
      * @param {Object} meta The meta data
-     */            
+     */
 
     /**
      * @event call
@@ -213,7 +213,7 @@ TestAction.multiply(
      * @param {Ext.direct.AmfRemotingProvider} provider
      * @param {Ext.direct.Transaction} transaction
      * @param {Object} meta The meta data
-     */            
+     */
 
     constructor: function(config) {
         var me = this;

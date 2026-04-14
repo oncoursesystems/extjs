@@ -424,11 +424,6 @@ Ext.define('Ext.locale.pt.ux.colorpick.Selector', {
     cancelButtonText: 'Cancelar'
 });
 
-// This is needed until we can refactor all of the locales into individual files
-Ext.define("Ext.locale.pt.Component", {
-    override: "Ext.Component"
-});
-
 Ext.define("Ext.locale.pt.grid.filters.menu.Base", {
     override: "Ext.grid.filters.menu.Base",
 
@@ -465,6 +460,11 @@ Ext.define("Ext.locale.pt.grid.locked.Grid", {
 Ext.define("Ext.locale.pt.grid.plugin.RowDragDrop", {
     override: "Ext.grid.plugin.RowDragDrop",
     dragText: "{0} linha(s) seleccionada(s)"
+});
+
+// This is needed until we can refactor all of the locales into individual files
+Ext.define("Ext.locale.pt.Component", {
+    override: "Ext.Component"
 });
 Ext.define("Ext.locale.pt.grid.TreeGrouped", {
     override: "Ext.grid.TreeGrouped",

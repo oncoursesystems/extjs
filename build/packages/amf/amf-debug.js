@@ -2706,7 +2706,6 @@ Ext.define('Ext.data.amf.XmlEncoder', {
             uid += "-";
             // add timestamp
             // get the String representation of milliseconds in hex format
-            // eslint-disable-next-line newline-per-chained-call
             t = new Number(new Date()).valueOf().toString(16).toUpperCase();
             j = 0;
             if (t.length < 8) {

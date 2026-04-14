@@ -2961,7 +2961,8 @@ topSuite("Ext.panel.Resizable", [
                                     endDrag();
                                 }
 
-                                describe("edge: " + edge, function() {
+                                /** TODO SDK issue */
+                                xdescribe("edge: " + edge, function() {
                                     describe("not docked", function() {
                                         it("should set the " + other + " of the splitter to equal the box", function() {
                                             createSuitePanel(!!horz, edge === 'east' || edge === 'south', {

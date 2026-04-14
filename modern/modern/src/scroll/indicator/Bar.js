@@ -47,7 +47,11 @@ Ext.define('Ext.scroll.indicator.Bar', {
 
         // set the owner of the scroll component
         me.ownerCmp = cmp && cmp.ownerCmp;
-        me.element.on('scroll', 'onScrollbarScroll', me);
+
+        // Fix for lagging scroll behaviour when dragging indicator element
+        me.element.on('scroll', 'onScrollbarScroll', me, {
+            buffer: me.getAxis() === 'y' ? 50 : 0
+        });
     },
 
     doDestroy: function() {
@@ -95,20 +99,45 @@ Ext.define('Ext.scroll.indicator.Bar', {
                 names = me.names[axis],
                 axisValue = scroller[names.getAxis](),
                 scrollSize = scroller.getSize()[axis],
-                clientSize = scrollEl[axis === 'x' ? 'getWidth' : 'getHeight'](),
+                scrollElSize = scrollEl[axis === 'x' ? 'getWidth' : 'getHeight'](),
                 scrollMax = scroller.getMaxPosition()[axis],
                 oppositeScrollbarSize = scroller.getScrollbarSize()[names.oppositeSize],
-                maxScrollSize = me.maxScrollSize;
+                maxScrollSize = me.maxScrollSize,
+                clientSize, barWidth, adjust;
 
-            if (clientSize && scrollSize) {
+            if (scrollElSize && scrollSize) {
                 me.setEnabled(scroller.isAxisEnabled(me.getAxis()));
                 me.toggleCls(me.scrollCls, axisValue === 'scroll');
+
                 me.scale = Math.max(scrollMax /
-                    (maxScrollSize - clientSize + oppositeScrollbarSize), 1);
+                    (maxScrollSize - scrollElSize + oppositeScrollbarSize), 1);
 
                 me.spacerElement.setStyle(names.spacerMargin, (
                     Math.min(scrollSize, maxScrollSize) - 1
                 ) + 'px');
+
+                if (axis === 'x') {
+                    if (scroller.getUserClientSize()) {
+                        clientSize = scroller.getUserClientSize().x;
+                        adjust = scrollElSize - clientSize;
+                        scrollSize = scrollSize - adjust;
+                        me.spacerElement.setStyle(names.spacerMargin, (
+                            Math.min(scrollSize, maxScrollSize) - 1
+                        ) + 'px');
+
+                        // this has to be the center region width and adjust bar to this size
+                        barWidth = clientSize;
+
+                        if (!scroller.getHasRightRegion()) {
+                            barWidth -= oppositeScrollbarSize;
+                        }
+
+                        me.el.setStyle('width', barWidth + 'px');
+                        // need to adjust border width as it is not computed in scroller position
+                        me.el.setStyle('left', scroller.getUserClientX() + 'px');
+                    }
+
+                }
             }
         },
 

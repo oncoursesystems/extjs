@@ -42,7 +42,7 @@ Ext.define('Ext.grid.CellEditor', {
 
     alignment: 'tl-tl',
 
-    zIndex: 10,
+    zIndex: 9,
 
     // Do not use the cell's rendered value
     useBoundValue: false,

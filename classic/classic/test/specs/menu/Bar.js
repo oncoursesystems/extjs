@@ -1,5 +1,3 @@
-/* global Ext, expect */
-
 topSuite("Ext.menu.Bar",
     ['Ext.Button', 'Ext.layout.container.boxOverflow.Menu'],
 function() {

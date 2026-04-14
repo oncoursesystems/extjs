@@ -255,6 +255,41 @@ Ext.define('Ext.overrides.Widget', {
         alignSelf: null
     },
 
+    // Some components will have such roles that do not actively participate
+    // in user interaction, and thus do not need their ARIA attributes updated
+    ariaStaticRoles: {
+        presentation: true,
+        article: true,
+        definition: true,
+        directory: true,
+        document: true,
+        img: true,
+        heading: true,
+        math: true,
+        note: true,
+        banner: true,
+        complementary: true,
+        contentinfo: true,
+        navigation: true,
+        search: true
+    },
+
+    /**
+     * Checks if the given ARIA role is considered static.
+     * Static roles include explicitly defined static roles and undefined/null roles.
+     * @param {string|null|undefined} role - The ARIA role to check
+     * @returns {boolean} True if the role is static
+     */
+    isAriaRoleStatic: function(role) {
+        // Treat undefined, null, or empty string as static
+        if (!role) {
+            return true;
+        }
+
+        // Check if explicitly defined as static
+        return this.ariaStaticRoles[role] === true;
+    },
+
     /**
      * @property {Boolean/String}
      * Set to `true` on widgets that should inherit {@link #ui} from their parent container.
@@ -841,11 +876,55 @@ Ext.define('Ext.overrides.Widget', {
      * the component's elements outside the DOM where there is no associated reflow or
      * layout cost. This method is useful for situations where the component's elements
      * must be in the DOM. For example to be measured correctly.
+     * 
+     * Handles the rendering phase by setting up ARIA accessibility attributes
+     * on the component's DOM element. This method ensures proper accessibility
+     * support by configuring visibility, disabled state, and labeling relationships.
+     * 
+     * Called automatically during the component's render lifecycle.
      *
      * @template
      * @since 6.5.0
      */
-    onRender: Ext.emptyFn,
+    onRender: function() {
+        var me = this,
+            hidden = me.getHidden(),
+            disabled = me.getDisabled(),
+            label;
+
+        // Set basic ARIA state attributes (hidden/disabled) for non-static roles
+        // Static roles don't need dynamic state updates as they represent unchanging content
+        if (!me.isAriaRoleStatic(me.ariaRole)) {
+            me.ariaEl.set({
+                'aria-hidden': !!hidden,
+                'aria-disabled': !!disabled
+            });
+        }
+
+        // Configure ARIA labeling relationships if they exist
+        // This establishes semantic connections between this element and its labels/descriptions
+        if (me.ariaLabelledBy || me.ariaDescribedBy) {
+
+            // Set up the labelledby relationship - points to element(s) that label this component
+            if (me.ariaLabelledBy) {
+                label = me.getAriaLabelEl(me.ariaLabelledBy);
+
+                if (label) {
+                    me.ariaEl.set({ 'aria-labelledby': label });
+                }
+            }
+
+            // Set up the describedby relationship - points to element(s) that
+            // provide additional description
+            if (me.ariaDescribedBy) {
+                label = me.getAriaLabelEl(me.ariaDescribedBy);
+
+                if (label) {
+                    me.ariaEl.set({ 'aria-describedby': label });
+                }
+            }
+        }
+    },
 
     // floated
 
@@ -976,13 +1055,28 @@ Ext.define('Ext.overrides.Widget', {
     },
 
     updateHidden: function(hidden, oldHidden) {
-        var globals = Ext.GlobalEvents,
+        var me = this,
+            globals = Ext.GlobalEvents,
             event = hidden ? 'hide' : 'show';
 
-        this.callParent([hidden, oldHidden]);
+        me.callParent([hidden, oldHidden]);
 
-        if (!this.isConfiguring && globals.hasListeners[event]) {
-            globals.fireEvent(event, this);
+        if (!me.isConfiguring && globals.hasListeners[event]) {
+            globals.fireEvent(event, me);
+        }
+
+        if (!me.isAriaRoleStatic(me.ariaRole)) {
+            me.ariaEl.set({ 'aria-hidden': !!hidden });
+        }
+    },
+
+    updateDisabled: function(disabled, oldDisabled) {
+        var me = this;
+
+        me.callParent([disabled, oldDisabled]);
+
+        if (!me.isAriaRoleStatic(me.ariaRole)) {
+            me.ariaEl.set({ 'aria-disabled': !!disabled });
         }
     },
 

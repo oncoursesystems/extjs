@@ -790,7 +790,6 @@
 
         hooks.onCreated = function() {
             //<debug>
-            /* eslint-disable-next-line max-len */
             if (Ext.classSystemMonitor) {
                 Ext.classSystemMonitor(
                     Class, 'Ext.Class#mixinsPreprocessor#beforeCreated', arguments

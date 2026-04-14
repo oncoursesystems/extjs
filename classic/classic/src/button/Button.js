@@ -518,7 +518,7 @@ Ext.define('Ext.button.Button', {
     _arrowOverCls: Ext.baseCSSPrefix + 'arrow-over',
     _arrowPressedCls: Ext.baseCSSPrefix + 'arrow-pressed',
 
-    /* eslint-disable indent, max-len */
+    /* eslint-disable max-len */
     // We have to keep "unselectable" attribute on all elements because it's not inheritable.
     // Without it, clicking anywhere on a button disrupts current selection and cursor position
     // in HtmlEditor.
@@ -571,7 +571,7 @@ Ext.define('Ext.button.Button', {
                 '">' +
             '</tpl>' +
         '</span>',
-    /* eslint-enable indent, max-len */
+    /* eslint-enable max-len */
 
     /**
      * @cfg {"small"/"medium"/"large"} scale

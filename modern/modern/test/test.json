@@ -25,7 +25,9 @@
             "../../../../../packages/froala-editor/test/specs",
             "../../../../../packages/froala-editor/test/modern/specs",
             "../../../../../packages/exporter/test/specs",
-            "../../../../../packages/exporter/test/modern/specs"
+            "../../../../../packages/exporter/test/modern/specs",
+            "../../../../packages/signature/test/specs-modern",
+            "../../../../packages/qr-code/test/modern/specs"
         ]
     }
 }

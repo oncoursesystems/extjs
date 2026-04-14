@@ -892,7 +892,7 @@ Ext.define('Ext.tab.Panel', {
 
             // Ask the TabBar which tab to activate next.
             // Set the active child panel using the index of that tab
-            // eslint-disable-next-line no-cond-assign, max-len
+            // eslint-disable-next-line max-len
             else if (item.tab && (toActivate = me.tabBar.items.indexOf(me.tabBar.findNextActivatable(item.tab))) !== -1) {
                 me.setActiveTab(toActivate);
             }

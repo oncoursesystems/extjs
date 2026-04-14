@@ -45,7 +45,7 @@ Ext.define('Ext.grid.selection.Cells', {
         var range;
 
         if (this.startCell) {
-            if (recordIndex.isGridLocation) {
+            if (recordIndex && recordIndex.isGridLocation) {
                 columnIndex = recordIndex.columnIndex;
                 recordIndex = recordIndex.recordIndex;
             }

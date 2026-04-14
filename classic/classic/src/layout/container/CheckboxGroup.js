@@ -26,7 +26,7 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
         'innerCt'
     ],
 
-    /* eslint-disable indent, max-len */
+    /* eslint-disable max-len */
     renderTpl:
         '<table id="{ownerId}-innerCt" data-ref="innerCt" class="' + Ext.baseCSSPrefix + 'table-plain" cellpadding="0"' +
             'role="presentation" style="{tableStyle}">' +
@@ -40,7 +40,7 @@ Ext.define('Ext.layout.container.CheckboxGroup', {
                 '</tr>' +
             '</tbody>' +
         '</table>',
-    /* eslint-enable indent, max-len */
+    /* eslint-enable max-len */
 
     lastOwnerItemsGeneration: null,
 

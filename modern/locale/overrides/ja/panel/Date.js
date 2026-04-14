@@ -2,8 +2,8 @@ Ext.define('Ext.locale.ja.panel.Date', {
     override: 'Ext.panel.Date',
 
     config: {
-        nextText: '次月へ (コントロール+右)',
-        prevText: '前月へ (コントロール+左)',
+        nextText: '翌月 (Ctrl+→)',
+        prevText: '前月 (Ctrl+←)',
         buttons: {
             footerTodayButton: {
                 text: "今日"

@@ -1338,6 +1338,7 @@ Ext.define('Ext.ux.event.Maker', {
     }
 });
 
+/* eslint-disable vars-on-top, indent */
 /**
  * @extends Ext.ux.event.Driver
  * This class manages the playback of an array of "event descriptors". For details on the
@@ -1424,7 +1425,6 @@ Ext.define('Ext.ux.event.Maker', {
  *      }
  */
 Ext.define('Ext.ux.event.Player', function(Player) {
-    /* eslint-disable indent, vars-on-top, one-var */
     var defaults = {},
         mouseEvents = {},
         keyEvents = {},
@@ -3951,7 +3951,7 @@ Ext.define('Ext.ux.gauge.Gauge', {
             cache.minY = minY;
             cache.maxY = maxY;
         }
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var sectorWidth = maxX - minX,
             sectorHeight = maxY - minY,
             scaleX = width / sectorWidth,
@@ -5645,7 +5645,7 @@ Ext.define('Ext.ux.DataView.Animated', {
         var count = 0,
             items = this.getExisting(),
             k;
-        // eslint-disable-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
         for (k in items) {
             count++;
         }
@@ -6183,7 +6183,7 @@ Ext.define('Ext.ux.DataView.LabelEditor', {
  * @class Ext.ux.DataViewTransition
  * Transition plugin for DataViews
  */
-/* eslint-disable vars-on-top, one-var */
+/* eslint-disable vars-on-top */
 Ext.ux.DataViewTransition = Ext.extend(Object, {
     /**
      * @property defaults
@@ -6485,7 +6485,7 @@ Ext.define('Ext.ux.Explorer', {
             xtype: 'breadcrumb',
             reference: 'breadcrumb'
         },
-        /* eslint-disable max-len, indent */
+        /* eslint-disable max-len */
         /**
          * @cfg {Object} contentView
          * Configuration object for the "content" data view
@@ -6498,7 +6498,7 @@ Ext.define('Ext.ux.Explorer', {
             itemSelector: '.' + Ext.baseCSSPrefix + 'explorer-item',
             tpl: '<tpl for=".">' + '<div class="' + Ext.baseCSSPrefix + 'explorer-item">' + '<div class="{iconCls}">' + '<div class="' + Ext.baseCSSPrefix + 'explorer-node-icon' + '{[values.leaf ? " ' + Ext.baseCSSPrefix + 'explorer-leaf-icon' + '" : ""]}' + '">' + '</div>' + '<div class="' + Ext.baseCSSPrefix + 'explorer-item-text">{text}</div>' + '</div>' + '</div>' + '</tpl>'
         },
-        /* eslint-enable max-len, indent */
+        /* eslint-enable max-len */
         /**
          * @cfg {Ext.data.TreeStore} store
          * The TreeStore to use as the data source

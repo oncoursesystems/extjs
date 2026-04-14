@@ -63,6 +63,7 @@ Ext.define('Ext.dom.Fly', {
 
     addListener:
         //<debug>
+        // eslint-disable-next-line no-constant-binary-expression
         function() {
             Ext.raise(
                 "Cannot use addListener() on Ext.dom.Fly instances. " +
@@ -74,6 +75,7 @@ Ext.define('Ext.dom.Fly', {
 
     removeListener:
         //<debug>
+        // eslint-disable-next-line no-constant-binary-expression
         function() {
             Ext.raise(
                 "Cannot use removeListener() on Ext.dom.Fly instances. " +

@@ -1,4 +1,4 @@
-$image-search-path: '/home/teamcity/buildAgent/work/780e0679d11ca7ca/sencha/ext/build/classic/theme-neptune-touch/resources' !default;
+$image-search-path: '/Users/space/buildAgent/work/bbbb2bac69ba789b/sencha/ext/build/classic/theme-neptune-touch/resources' !default;
 $theme-name:  'theme-neptune-touch' !default;
 $include-ext-abstractcomponent: dynamic(true);;
 $include-ext-abstractcontainer: dynamic(true);;
@@ -1224,6 +1224,7 @@ $current-resource-root: $theme-neptune-touch-resource-root;
 $relative-image-path-for-uis: $theme-neptune-touch-resource-path;
 @import '../../../classic/theme-neptune-touch/sass/var/tip/Tip';
 @import '../../../classic/theme-neptune-touch/sass/var/grid/plugin/filterbar/Operator';
+@import '../../../classic/theme-neptune-touch/sass/var/tree/View';
 
 
 /* ======================== RULE ======================== */

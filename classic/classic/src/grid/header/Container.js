@@ -759,7 +759,7 @@ Ext.define('Ext.grid.header.Container', {
     // when the HeaderDropZone moves Headers around, that will also refresh the view
     onAdd: function(c) {
         var me = this,
-            rootHeader // eslint-disable-line semi
+            rootHeader
 
             //<debug>
             , stateId = c.getStateId(); // eslint-disable-line comma-style
@@ -870,6 +870,11 @@ Ext.define('Ext.grid.header.Container', {
             // from being executed twice, once on remove and then on the subsequent add.
             if (!me.getRootHeaderCt().isDDMoveInGrid) {
                 me.onHeadersChanged(c, false);
+            }
+            else {
+                // Delete column cache since the sub column order has changed.
+                // As purgeCache will update Visible Grid Columns on column change from group
+                me.purgeCache();
             }
 
             if (me.maybeContinueRemove()) {
@@ -1022,9 +1027,10 @@ Ext.define('Ext.grid.header.Container', {
 
         if (menu) {
             item = menu.child('#columnItem');
-            item.menu.hideOnScroll = false;
 
             if (item) {
+                item.menu.hideOnScroll = false;
+
                 return item.menu;
             }
         }
@@ -1495,7 +1501,7 @@ Ext.define('Ext.grid.header.Container', {
         for (i = 0; i < len; i++) {
             column = allColumns[i];
 
-            if (!column.hidden && !column.isColumnHidden(rootHeader)) {
+            if (column.isColumn && !column.hidden && !column.isColumnHidden(rootHeader)) {
                 result[result.length] = column;
             }
         }

@@ -1,4 +1,4 @@
-$image-search-path: '/home/teamcity/buildAgent/work/780e0679d11ca7ca/sencha/ext/build/classic/theme-gray/resources' !default;
+$image-search-path: '/Users/space/buildAgent/work/bbbb2bac69ba789b/sencha/ext/build/classic/theme-gray/resources' !default;
 $theme-name:  '${theme.name}' !default;
 $include-ext-abstractcomponent: dynamic(true);;
 $include-ext-abstractcontainer: dynamic(true);;
@@ -1176,6 +1176,7 @@ $relative-image-path-for-uis: $theme-gray-resource-path;
 @import '../../../classic/theme-gray/sass/var/menu/Menu';
 @import '../../../classic/theme-gray/sass/var/layout/container/Accordion';
 @import '../../../classic/theme-gray/sass/var/tab/Tab';
+@import '../../../classic/theme-gray/sass/var/tree/View';
 
 
 /* ======================== RULE ======================== */

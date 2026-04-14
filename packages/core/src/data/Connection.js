@@ -80,7 +80,7 @@ Ext.define('Ext.data.Connection', {
          * generally be avoided, since it will cause the UI to be blocked, the user won't be able
          * to interact with the browser until the request completes.
          */
-        async: true, // eslint-disable-line id-blacklist
+        async: true,
 
         /**
          * @cfg {String} username

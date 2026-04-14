@@ -73,7 +73,7 @@ Ext.define('Ext.layout.container.Dashboard', {
 
         // We need to reset the heights of the splitters so that they don't influence the
         // layout (mostly overflow management).
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var childItems = ownerContext.childItems,
             rows = (ownerContext.rows = []),
             length = childItems.length,
@@ -204,7 +204,7 @@ Ext.define('Ext.layout.container.Dashboard', {
             index = items.length,
             ok = true,
             shouldBeSplitter = false,
-            item, splitter; // eslint-disable-line no-unused-vars
+            item, splitter;
 
         // Walk backwards over the items so that an insertion index is stable.
         while (index-- > 0) {
@@ -223,6 +223,7 @@ Ext.define('Ext.layout.container.Dashboard', {
                         owner.suspendLayouts();
                     }
 
+                    // eslint-disable-next-line no-unused-vars
                     splitter = owner.add(index + 1, me.getSplitterConfig());
                 }
             }

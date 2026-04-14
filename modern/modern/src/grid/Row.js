@@ -302,6 +302,7 @@ Ext.define('Ext.grid.Row', {
 
     insertColumn: function(index, column) {
         var me = this,
+            bufferedColumns = me.getGrid && me.getGrid().bufferedColumns,
             cells = me.cells,
             cell;
 
@@ -312,11 +313,17 @@ Ext.define('Ext.grid.Row', {
         cell = me.createCell(column);
 
         if (index >= cells.length) {
-            me.cellsElement.appendChild(cell.element);
+            if (!bufferedColumns) {
+                me.cellsElement.appendChild(cell.element);
+            }
+
             cells.push(cell);
         }
         else {
-            cell.element.insertBefore(cells[index].element);
+            if (!bufferedColumns) {
+                cell.element.insertBefore(cells[index].element);
+            }
+
             cells.splice(index, 0, cell);
         }
 

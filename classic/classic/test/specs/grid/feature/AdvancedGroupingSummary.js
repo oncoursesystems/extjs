@@ -153,6 +153,73 @@ topSuite("Ext.grid.feature.AdvancedGroupingSummary", [
 
     afterEach(destroyGrid);
 
+    describe('Model with idProperty', function() {
+        beforeEach(function() {
+            Sale = Ext.define(null, {
+                extend: 'Ext.data.Model',
+                idProperty: '_id',
+
+                fields: [
+                    { name: 'id', type: 'int' },
+                    { name: 'company', type: 'string' },
+                    { name: 'person', type: 'string', summary: 'count' },
+                    { name: 'date', type: 'date', defaultValue: new Date(2012, 0, 1) },
+                    { name: 'value', type: 'float', defaultValue: null, summary: 'sum' },
+                    {
+                        name: 'year',
+                        convert: function(v, record) {
+                            var d = record.get('date');
+
+                            return d ? d.getFullYear() : null;
+                        }
+                    }, {
+                        name: 'month',
+                        convert: function(v, record) {
+                            var d = record.get('date');
+
+                            return d ? d.getMonth() : null;
+                        }
+                    }]
+            });
+        });
+
+        it('should display all the records with idProperty', function() {
+            makeGrid(
+                { summaryPosition: 'bottom' },
+                { groupers: 'company' }
+            );
+
+            runs(function() {
+                checkRowCells(0, ['Adobe', '', '1', '', '2.00', '']);
+                checkRowCells(1, ['Microsoft', '', '2', '', '4.00', '']);
+                checkRowCells(2, ['Summary (3)', '', '3', '', '6.00', '']);
+            });
+        });
+
+        it('should expand first row on cell click', function() {
+            var target, groupedFeature, row, record, data;
+
+            makeGrid(
+                { summaryPosition: 'bottom' },
+                { groupers: 'company' }
+            );
+
+            target = view.getCell(0, 0);
+            groupedFeature = view.getFeature("grouping");
+            row = view.getRow(target);
+            record = view.getRecord(row);
+            data = groupedFeature.dataSource.getRenderData(record);
+
+            runs(function() {
+                jasmine.fireMouseEvent(
+                    view.getCell(0, 0).getElementsByClassName('x-grid-advanced-group-title')[0],
+                    'click'
+                );
+                expect(data.group.isCollapsed).toBe(false);
+            });
+        });
+    });
+
     describe('cells rendering', function() {
         describe('grand summaries', function() {
             it('should render cells correctly with no summary', function() {

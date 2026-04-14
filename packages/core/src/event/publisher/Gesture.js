@@ -224,7 +224,7 @@ Ext.define('Ext.event.publisher.Gesture', {
             return firstTargetGroup;
         }
 
-        while (true) { // eslint-disable-line no-constant-condition
+        while (true) {
             target = firstTargetGroup[firstTargetGroup.length - i];
 
             if (!target) {

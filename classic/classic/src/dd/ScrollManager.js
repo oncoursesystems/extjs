@@ -99,7 +99,7 @@ Ext.define('Ext.dd.ScrollManager', {
         var me = this;
 
         if (me.ddmInstance.dragCurrent) {
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var proc = me.proc,
                 procEl = proc.el,
                 scrollComponent = proc.component,

@@ -262,34 +262,24 @@ Ext.define('Ext.TitleBar', {
     border: false,
 
     beforeInitialize: function() {
-        this.applyItems = this.applyInitialItems;
+        this.applyInitialItems();
     },
 
-    initialize: function() {
+    /**
+     * Set up the intial layout of the toolbar by first creating the three containers
+     * and assign these components to internal titleBar properties leftBox, spacer
+     * and rightBox. Using 'create' rather than 'add' prevents triggering 'addItems'
+     * method before these titleBar properties are initialized.
+     *
+     * Only when all three items are created and properties set do we make a call
+     * to the 'add' method which will add these components to the titleBar along
+     * with any configured items to the appropriate left or right box.
+     */
+    applyInitialItems: function() {
         var me = this;
 
-        me.callParent();
-
-        delete me.applyItems;
-
-        me.add(me.initialItems);
-        delete me.initialItems;
-
-        me.on({
-            scope: me,
-            painted: 'refreshTitlePosition',
-            single: true
-        });
-    },
-
-    applyInitialItems: function(items) {
-        var me = this,
-            titleAlign = me.getTitleAlign(),
-            defaults = me.getDefaults() || {};
-
-        me.initialItems = items;
-
-        me.leftBox = me.add({
+        me.leftBox = Ext.create({
+            $isTitleBarItem: true, // Indicates this is to be added directly to titleBar
             xtype: 'container',
             style: 'position: relative',
             cls: Ext.baseCSSPrefix + 'titlebar-left',
@@ -304,7 +294,8 @@ Ext.define('Ext.TitleBar', {
             }
         });
 
-        me.spacer = me.add({
+        me.spacer = Ext.create({
+            $isTitleBarItem: true, // Indicates this is to be added directly to titleBar
             xtype: 'component',
             style: 'position: relative',
             cls: Ext.baseCSSPrefix + 'titlebar-center',
@@ -313,9 +304,11 @@ Ext.define('Ext.TitleBar', {
                 resize: 'refreshTitlePosition',
                 scope: me
             }
+
         });
 
-        me.rightBox = me.add({
+        me.rightBox = Ext.create({
+            $isTitleBarItem: true, // Indicates this is to be added directly to titleBar
             xtype: 'container',
             style: 'position: relative',
             cls: Ext.baseCSSPrefix + 'titlebar-right',
@@ -330,66 +323,81 @@ Ext.define('Ext.TitleBar', {
             }
         });
 
-        switch (titleAlign) {
-            case 'left':
-                me.titleComponent = me.leftBox.add({
-                    xtype: 'title',
-                    cls: Ext.baseCSSPrefix + 'title-align-left',
-                    hidden: defaults.hidden
-                });
-                me.refreshTitlePosition = Ext.emptyFn;
-                break;
-            case 'right':
-                me.titleComponent = me.rightBox.add({
-                    xtype: 'title',
-                    cls: Ext.baseCSSPrefix + 'title-align-right',
-                    hidden: defaults.hidden
-                });
-                me.refreshTitlePosition = Ext.emptyFn;
-                break;
-            default:
-                me.titleComponent = me.add({
-                    xtype: 'title',
-                    hidden: defaults.hidden,
-                    centered: true
-                });
-                break;
-        }
-
-        me.doAdd = me.doBoxAdd;
-        me.remove = me.doBoxRemove;
-        me.doInsert = me.doBoxInsert;
+        // Trigger applyItems to add these items to the titlebar
+        // and also triggers adding any configured items to right/left boxes
+        me.add([me.leftBox, me.spacer, me.rightBox]);
     },
 
-    doBoxAdd: function(item) {
+    applyItems: function(items) {
+        var me = this;
+
+        // Clear titleBar to create clean slate for adding title and items
+        me.leftBox.removeAll();
+        me.rightBox.removeAll();
+
+        if (me.titleComponent) {
+            me.titleComponent.destroy();
+        }
+
+        // First, position title component as it needs to be first item to
+        // be added to leftBox before any other items are added to accommodate
+        // the insertBefore call for leftBox adds.
+        me.addTitleComponent();
+
+        // Now add configured items to right/left boxes according to their alignment
+        me.add(items);
+    },
+
+    doAdd: function(item) {
         var me = this,
             titleAlign = me.getTitleAlign();
+
+        // Only add item to the titleBar if isTitleBarItem is set to
+        // true. Otherwise the item will be added to either the left or
+        // right boxes of the titleBar.
+        if (item.$isTitleBarItem) {
+            return this.callParent(arguments);
+        }
 
         me.addDefaultButtonUI(item);
 
         if (item.config.align === 'right') {
-            me.rightBox.add(item);
+            return me.rightBox.add(item);
         }
-        else if (me.titleComponent && titleAlign === 'left') {
-            me.leftBox.insertBefore(item, me.titleComponent);
+
+        if (me.titleComponent && titleAlign === 'left') {
+            return me.leftBox.insertBefore(item, me.titleComponent);
         }
-        else {
-            me.leftBox.add(item);
-        }
+
+        return me.leftBox.add(item);
     },
 
-    doBoxRemove: function(item, destroy) {
-        if (item.config.align === 'right') {
-            this.rightBox.remove(item, destroy);
-        }
-        else {
-            this.leftBox.remove(item, destroy);
-        }
-    },
-
-    doBoxInsert: function(index, item) {
+    doRemove: function(item, index, destroy) {
         var me = this;
 
+        // If item is a titleBarItem - remove it from the titleBar
+        if (item.$isTitleBarItem) {
+            return me.callParent(arguments);
+        }
+
+        // otherwise, remove it from the appropriate right/left box
+        if (item.config.align === 'right') {
+            me.rightBox.remove(item, destroy);
+        }
+        else {
+            me.leftBox.remove(item, destroy);
+        }
+    },
+
+    doInsert: function(index, item) {
+        var me = this;
+
+        // If item is a titleBarItem - insert it into the titleBar
+        if (item.$isTitleBarItem) {
+            return me.callParent(arguments);
+        }
+
+        // otherwise - insert it into the appropriate right/left box
         me.addDefaultButtonUI(item);
 
         if (item.config.align === 'right') {
@@ -397,6 +405,36 @@ Ext.define('Ext.TitleBar', {
         }
         else {
             me.leftBox.insert(index, item);
+        }
+    },
+
+    addTitleComponent: function() {
+        var me = this,
+            titleAlign = me.getTitleAlign(),
+            defaults = me.getDefaults() || {};
+
+        switch (titleAlign) {
+            case 'left':
+                me.titleComponent = me.leftBox.add({
+                    xtype: 'title',
+                    cls: Ext.baseCSSPrefix + 'title-align-left',
+                    hidden: defaults.hidden
+                });
+                break;
+            case 'right':
+                me.titleComponent = me.rightBox.add({
+                    xtype: 'title',
+                    cls: Ext.baseCSSPrefix + 'title-align-right',
+                    hidden: defaults.hidden
+                });
+                break;
+            default:
+                me.titleComponent = me.add({
+                    $isTitleBarItem: true,
+                    xtype: 'title',
+                    hidden: defaults.hidden,
+                    centered: true
+                });
         }
     },
 
@@ -409,7 +447,7 @@ Ext.define('Ext.TitleBar', {
                     item.setDefaultUI(defaultButtonUI);
                 }
             }
-            else if (item.isButton && (item.getUi() == null)) {
+            else if (item.isButton && item.getUi() == null) {
                 item.setUi(defaultButtonUI);
             }
         }
@@ -428,23 +466,30 @@ Ext.define('Ext.TitleBar', {
         return maxButtonWidth;
     },
 
+    /**
+     * @private
+     * For center aligned titles, this method ensures that the floated title
+     * element will not overlap right or left box items by setting the left
+     * and right positions of the title element.
+     */
     refreshTitlePosition: function() {
-        var titleElement,
-            leftBox, leftButton, singleButton, leftBoxWidth, maxButtonWidth,
-            spacerBox,
-            titleBox, widthDiff, titleLeft, titleRight, halfWidthDiff, leftDiff, rightDiff;
+        var me = this,
+            titleElement, leftBox, leftButton, singleButton,
+            leftBoxWidth, maxButtonWidth, spacerBox, titleBox,
+            widthDiff, titleLeft, titleRight, halfWidthDiff, leftDiff, rightDiff;
 
-        if (this.destroyed) {
+        // No need to refresh position if title is not centered
+        if (me.destroyed || !(me.titleComponent && me.titleComponent.isCentered())) {
             return;
         }
 
-        titleElement = this.titleComponent.renderElement;
+        titleElement = me.titleComponent.renderElement;
 
         titleElement.setWidth(null);
         titleElement.setLeft(null);
 
         // set the min/max width of the left button
-        leftBox = this.leftBox;
+        leftBox = me.leftBox;
         leftButton = leftBox.down('button');
         singleButton = leftBox.getItems().getCount() === 1;
 
@@ -454,14 +499,14 @@ Ext.define('Ext.TitleBar', {
             }
 
             leftBoxWidth = leftBox.renderElement.getWidth();
-            maxButtonWidth = this.calculateMaxButtonWidth();
+            maxButtonWidth = me.calculateMaxButtonWidth();
 
             if (leftBoxWidth > maxButtonWidth) {
                 leftButton.renderElement.setWidth(maxButtonWidth);
             }
         }
 
-        spacerBox = this.spacer.renderElement.getBox();
+        spacerBox = me.spacer.renderElement.getBox();
 
         if (Ext.browser.is.IE) {
             titleElement.setWidth(spacerBox.width);

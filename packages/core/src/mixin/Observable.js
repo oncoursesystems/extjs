@@ -1158,7 +1158,7 @@ Ext.define('Ext.mixin.Observable', function(Observable) {
          * or
          *
          *     this.btnListeners.destroy();
-         */  
+         */
         addListener: function(eventName, fn, scope, options, order, caller) {
             var me = this,
                 namedScopes = Ext._namedScopes,

@@ -1,7 +1,7 @@
 /*
-This file is part of Ext JS 7.8.0.33
+This file is part of Ext JS 8.0.0.43
 
-Copyright (c) 2011-2023 Sencha Inc
+Copyright (c) 2011-2026 Sencha Inc
 
 license: http://www.sencha.com/legal/sencha-software-license-agreement
 Contact: http://www.sencha.com/contact
@@ -14,7 +14,7 @@ terms contained in a written agreement between you and Sencha.
 If you are unsure which license is appropriate for your use, please contact the sales department
 at http://www.sencha.com/contact.
 
-Version: 7.8.0.33 Build date: 2023-12-05 06:03:28 ()
+Version: 8.0.0.43 Build date: 2026-03-30 11:56:45 ()
 
 */
 
@@ -11769,10 +11769,10 @@ var Ext = Ext || {};
         "core",
         "classic"
       ],
-      "version": "7.8.0"
+      "version": "8.0.0"
     },
     "cmd": {
-      "version": "7.8.0.56"
+      "version": "8.0.0.48"
     },
     "core": {
       "css": true,
@@ -11787,7 +11787,7 @@ var Ext = Ext || {};
       "requires": [
         "ext"
       ],
-      "version": "7.8.0"
+      "version": "8.0.0"
     },
     "ext": {
       "css": true,
@@ -11807,7 +11807,7 @@ var Ext = Ext || {};
       },
       "required": true,
       "requires": [],
-      "version": "7.8.0.33"
+      "version": "8.0.0.43"
     }
   },
   "bootRelative": true
@@ -13358,6 +13358,7 @@ Ext.getResourcePath = function(path, poolName, packageName) {
  *
  * @singleton
  */
+// eslint-disable-next-line no-redeclare
 var Ext = Ext || {};
 // @define Ext
 /* eslint indent: "off" */
@@ -13389,7 +13390,6 @@ var Ext = Ext || {};
         manifest = Ext.manifest || {},
         iterableRe = /\[object\s*(?:Array|Arguments|\w*Collection|\w*List|HTML\s+document\.all\s+class)\]/,
         MSDateRe = /^\\?\/Date\(([-+])?(\d+)(?:[+-]\d{4})?\)\\?\/$/,
-        /* eslint-disable-next-line no-unused-vars */
         elevateArgs, elevateFn, elevateRet, elevateScope, i;
     Ext.global = global;
     Ext.$nextIid = 0;
@@ -13423,6 +13423,7 @@ var Ext = Ext || {};
     // so Cmd does not detect them):
     /* eslint-disable-next-line dot-notation */
     Ext['suspendLayouts'] = Ext['resumeLayouts'] = emptyFn;
+    // eslint-disable-next-line no-unused-vars
     for (i in {
         toString: 1
     }) {
@@ -14089,7 +14090,8 @@ var Ext = Ext || {};
          * @return {Boolean} `true` if debug is enabled for the specified class.
          * @method
          */
-        isDebugEnabled: function(className, defaultEnabled) {
+        isDebugEnabled: // eslint-disable-next-line no-constant-binary-expression
+        function(className, defaultEnabled) {
             var debugConfig = Ext.debugConfig.hooks;
             if (debugConfig.hasOwnProperty(className)) {
                 return debugConfig[className];
@@ -14227,6 +14229,7 @@ var Ext = Ext || {};
         /**
          * @private
          */
+        // eslint-disable-next-line no-constant-binary-expression
         Logger: {
             log: function(message, priority) {
                 if (message && global.console) {
@@ -15672,7 +15675,6 @@ Ext.Array = (function() {
                     reduced = initialValue;
                 if (arguments.length < 3) {
                     while (true) {
-                        // eslint-disable-line no-constant-condition
                         if (index in array) {
                             reduced = array[index++];
                             break;
@@ -17093,13 +17095,14 @@ Ext.Date = (function() {
             "}",
             "}",
             "if(v){",
-            // favor UTC offset over GMT offset
+            // Check if the date string has a 'Z' or timezone offset (+/-).
+            // These indicate a UTC date value that needs adjustment.
             "if(zz != null){",
-            // reset to UTC, then add offset
-            "v = me.add(v, me.SECOND, -v.getTimezoneOffset() * 60 - zz);",
+            // 'Z' found - create a UTC date and adjust for century if the year is < 100.
+            "v = me.add(new Date(Date.UTC(y < 100 ? 100 : y, m, d, h, i, s, ms)), me.YEAR, y < 100 ? y - 100 : 0);",
             "}else if(o){",
-            // reset to GMT, then add offset
-            "v = me.add(v, me.MINUTE, -v.getTimezoneOffset() + (sn == '+'? -1 : 1) * (hr * 60 + mn));",
+            // Timezone offset found - create a UTC date and adjust for the offset.
+            "v = me.add(new Date(Date.UTC(y < 100 ? 100 : y, m, d, h, i, s, ms)),  me.MINUTE, (sn == '+'? -1 : 1) * (hr * 60 + mn));",
             "}",
             "}",
             "return (v != null) ? v : null;"
@@ -17288,6 +17291,11 @@ Ext.Date = (function() {
      * @type String
      */
         DAY: "d",
+        /**
+     * Date interval constant.
+     * @type String
+     */
+        WEEK: "w",
         /**
      * Date interval constant.
      * @type String
@@ -18234,7 +18242,7 @@ Ext.Date = (function() {
      * @return {String} The abbreviated timezone name (e.g. 'CST', 'PDT', 'EDT', 'MPST' ...).
      */
         getTimezone: function(date) {
-            /* eslint-disable max-len, no-useless-escape, newline-per-chained-call */
+            /* eslint-disable max-len, no-useless-escape */
             // the following list shows the differences between date strings from different browsers on a WinXP SP2 machine from an Asian locale:
             //
             // Opera  : "Thu, 25 Oct 2007 22:53:45 GMT+0800" -- shortest (weirdest) date string of the lot
@@ -18249,7 +18257,7 @@ Ext.Date = (function() {
             // step 3: remove all non uppercase characters found in step 1 and 2
             return date.toString().replace(/^.* (?:\((.*)\)|([A-Z]{1,5})(?:[\-+][0-9]{4})?(?: -?\d+)?)$/, "$1$2").replace(/[^A-Z]/g, "");
         },
-        /* eslint-enable max-len, no-useless-escape, newline-per-chained-call */
+        /* eslint-enable max-len, no-useless-escape */
         /**
      * Get the offset from GMT of the current date (equivalent to the format specifier 'O').
      *
@@ -18815,6 +18823,10 @@ Ext.Date = (function() {
      */
         diff: function(min, max, unit) {
             var diff = +max - min,
+                // Calculate timezone differences, including daylight savings adjustments
+                timezoneOffsetAdjustment = (min.getTimezoneOffset() - max.getTimezoneOffset()) * 60000,
+                // Apply the timezone adjustment to the date difference
+                adjustedDiff = diff + timezoneOffsetAdjustment,
                 est;
             switch (unit) {
                 case utilDate.MILLI:
@@ -18826,9 +18838,9 @@ Ext.Date = (function() {
                 case utilDate.HOUR:
                     return Math.floor(diff / 3600000);
                 case utilDate.DAY:
-                    return Math.floor(diff / 86400000);
-                case 'w':
-                    return Math.floor(diff / 604800000);
+                    return Math.floor(adjustedDiff / 86400000);
+                case utilDate.WEEK:
+                    return Math.floor(adjustedDiff / 604800000);
                 case utilDate.MONTH:
                     est = (max.getFullYear() * 12 + max.getMonth()) - (min.getFullYear() * 12 + min.getMonth());
                     if (utilDate.add(min, unit, est) > max) {
@@ -18918,7 +18930,6 @@ Ext.Date = (function() {
                 firstFormatToken = defaultFormat[0];
                 // Not in a y/m/d locale and (first character is a day token, or first
                 // token is definitely a day) - it's d/m/y
-                // eslint-disable-next-line no-undef
                 if (!yearInfo[firstFormatToken] && (dayInfo[firstFormatToken] || (parts[1] > 12 && parts[3] < 13))) {
                     day = parseInt(parts[1]);
                     month = parseInt(parts[3]) - 1;
@@ -19313,7 +19324,7 @@ Ext.Function = (function() {
                         args = slice.call(arguments),
                         timerFn, timerId;
                     var timer;
-                    // eslint-disable-line vars-on-top, one-var
+                    // eslint-disable-line one-var
                     timerFn = function() {
                         Ext.elevate(boundFn, me, args, timer);
                     };
@@ -19368,7 +19379,7 @@ Ext.Function = (function() {
                 var timerId = 0,
                     timerFn, boundFn;
                 var timer;
-                // eslint-disable-line vars-on-top, one-var
+                // eslint-disable-line one-var
                 if (!scope && !args && !appendArgs) {
                     boundFn = fn;
                 } else {
@@ -19423,7 +19434,7 @@ Ext.Function = (function() {
             interval: function(fn, millis, scope, args, appendArgs) {
                 var timerFn, timerId, boundFn;
                 var timer;
-                // eslint-disable-line vars-on-top, one-var
+                // eslint-disable-line one-var
                 boundFn = Ext.Function.bind(fn, scope, args, appendArgs);
                 timerFn = function() {
                     Ext.elevate(boundFn, null, null, timer);
@@ -19499,7 +19510,7 @@ Ext.Function = (function() {
                             me = scope || this,
                             timerFn;
                         var timer;
-                        // eslint-disable-line vars-on-top, one-var
+                        // eslint-disable-line one-var
                         if (timerId) {
                             Ext.undefer(timerId);
                         }
@@ -19855,7 +19866,7 @@ Ext.Function = (function() {
         var boundFn = fn,
             timerFn, timerId;
         var timer;
-        // eslint-disable-line vars-on-top, one-var
+        // eslint-disable-line one-var
         if (scope != null || parameters != null) {
             boundFn = ExtFunction.bind(fn, scope, parameters);
         }
@@ -19876,7 +19887,7 @@ Ext.Function = (function() {
         var boundFn = fn,
             timerFn, timerId;
         var timer;
-        // eslint-disable-line vars-on-top, one-var
+        // eslint-disable-line one-var
         if (scope != null || parameters != null) {
             boundFn = ExtFunction.bind(fn, scope, parameters);
         }
@@ -23095,8 +23106,8 @@ Ext.apply(Ext, {
         }
     }
     if (!packages.ext && !packages.touch) {
-        Ext.setVersion('ext', '7.8.0.33');
-        Ext.setVersion('core', '7.8.0.33');
+        Ext.setVersion('ext', '8.0.0.43');
+        Ext.setVersion('core', '8.0.0.43');
     }
 })(Ext.manifest);
 
@@ -24143,7 +24154,7 @@ Ext.Config.prototype = {
                             
                             continue;
                         } else {
-                            if (name !== 'type') {
+                            if (name !== 'type' && name !== 'xtype') {
                                 Ext.log.warn('No such config "' + name + '" for class ' + instance.$className);
                             }
                         }
@@ -24257,7 +24268,6 @@ Ext.Base = (function(flexSetter) {
             if (message) {
                 Ext.Object.defineProperty(object, oldName, {
                     get: function() {
-                        // eslint-disable-line getter-return
                         Ext.raise(message);
                     },
                     set: function(value) {
@@ -24383,6 +24393,7 @@ Ext.Base = (function(flexSetter) {
                 enabled = compatVersion && compatVersion.lt(version);
                 if (!enabled) {}
                 // eslint-disable-line no-empty, brace-style
+                // eslint-disable-next-line no-dupe-else-if
                 else if (!enabled) {
                     // we won't get here in dev mode when !enabled
                     break;
@@ -24699,7 +24710,7 @@ Ext.Base = (function(flexSetter) {
                 enumerables = Ext.enumerables,
                 privates = members.privates,
                 configs, i, ln, member, name, subPrivacy, privateStatics;
-            /* eslint-disable-next-line vars-on-top, one-var */
+            /* eslint-disable-next-line one-var */
             var displayName = (me.$className || '') + '#';
             if (privates) {
                 // This won't run for normal class private members but will pick up all
@@ -26977,7 +26988,6 @@ Ext.Base = (function(flexSetter) {
         }
         delete data.mixins;
         hooks.onCreated = function() {
-            /* eslint-disable-next-line max-len */
             if (Ext.classSystemMonitor) {
                 Ext.classSystemMonitor(Class, 'Ext.Class#mixinsPreprocessor#beforeCreated', arguments);
             }
@@ -31010,7 +31020,6 @@ Ext.feature = {
                     xmlDoc = new ActiveXObject("Microsoft.xmlDOM");
                     // eslint-disable-line no-undef
                     xmlDoc.async = false;
-                    // eslint-disable-line id-blacklist
                     xmlDoc.loadXML(xmlString);
                 } else if (window.DOMParser) {
                     var parser = new DOMParser();
@@ -31358,7 +31367,7 @@ Ext.feature = {
                     style.width = '100px';
                     style.height = '30px';
                     body.appendChild(el);
-                    supports = el.getBoundingClientRect().height !== 100;
+                    supports = Math.round(el.getBoundingClientRect().height) !== 100;
                     body.removeChild(el);
                 }
                 return supports;
@@ -34395,7 +34404,6 @@ Ext.define('Ext.overrides.event.publisher.Dom', {
             docBody = document.body,
             prototype = DomPublisher.prototype,
             onDirectEvent, onDirectCaptureEvent;
-        // eslint-disable-line no-unused-vars
         prototype.target = document;
         prototype.directBoundListeners = {};
         // This method gets bound to the element scope in addDirectListener so that
@@ -34411,6 +34419,7 @@ Ext.define('Ext.overrides.event.publisher.Dom', {
                 publisher.onDirectEvent(e);
             }
         };
+        // eslint-disable-next-line no-unused-vars
         onDirectCaptureEvent = function(e, publisher) {
             e.target = e.srcElement || window;
             e.currentTarget = this;
@@ -37172,9 +37181,7 @@ Ext.define('Ext.overrides.dom.Element', (function() {
             if (dom.nodeType !== 1) {
                 return false;
             }
-            // eslint-disable-next-line no-cond-assign
             if (!(testFn = Ext.isFunction(selector) ? selector : cache[selector])) {
-                // eslint-disable-next-line no-cond-assign
                 if (!(match = selector.match(simpleSelectorRe))) {
                     // Not a simple tagName.className selector, do it the hard way
                     root = dom.parentNode;

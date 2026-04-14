@@ -267,4 +267,20 @@ topSuite("Ext.field.RadioGroup", ['Ext.app.ViewModel', 'Ext.form.Panel'], functi
             });
         });
     });
+
+    describe("ARIA attributes", function() {
+        describe("Initial Rendering", function() {
+            var container;
+
+            it("should have attributes", function() {
+                makeGroup();
+                container = group.getContainer();
+                expect(container).toHaveAttr('role', 'radiogroup');
+                expect(container).toHaveAttr('aria-hidden', 'false');
+                expect(container).toHaveAttr('aria-labelledby', container.id + '-ariaStatusEl');
+                expect(container).toHaveAttr('aria-disabled', 'false');
+                expect(container).toHaveAttr('aria-invalid', 'false');
+            });
+        });
+    });
 });

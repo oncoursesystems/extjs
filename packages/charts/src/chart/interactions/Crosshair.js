@@ -316,7 +316,7 @@ Ext.define('Ext.chart.interactions.Crosshair', {
             return;
         }
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var chart = me.getChart(),
             surface = chart.getSurface('overlay'),
             rect = Ext.Array.slice(chart.getInnerRect()),

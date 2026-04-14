@@ -27,8 +27,14 @@ Ext.define('KitchenSink.view.templates.CreateAccount', {
     height: '${height}',
     layout: {
         type: 'vbox',
-        // the height is set so that the form is properly visible on the mobile phones of smaller height
-        pack: (Ext.platformTags.phone && window.orientation === 0 && window.innerHeight > 750) ? 'center' : undefined,
+        // the height is set so that the form is properly visible on mobile phones of smaller height
+        pack: (
+            Ext.platformTags.phone &&
+          window.orientation === 0 &&
+          window.innerHeight > 750
+        )
+            ? 'center'
+            : undefined,
         align: 'middle'
     },
     // setting the background of the container

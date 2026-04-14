@@ -692,7 +692,7 @@ Ext.define('Ext.scroll.Scroller', {
             both: { x: 1, y: 1 }
         },
 
-        callPartners: function(method, scrollX, scrollY) {
+        callPartners: function(method, scrollX, scrollY, deltaX, deltaY) {
             var me = this,
                 partners = me._partners,
                 axes, id, partner, pos, scroller, x, y;
@@ -710,7 +710,7 @@ Ext.define('Ext.scroll.Scroller', {
                         x = (!axes.x || scrollX === undefined) ? pos.x : scrollX;
                         y = (!axes.y || scrollY === undefined) ? pos.y : scrollY;
 
-                        scroller[method](x, y, (x - pos.x) || 0, (y - pos.y) || 0);
+                        scroller[method](x, y, deltaX || 0, deltaY || 0);
 
                         scroller.callPartners(method, x, y);
 
@@ -824,7 +824,11 @@ Ext.define('Ext.scroll.Scroller', {
                 viewport = this.component
                     ? this.component.getScrollableClientRegion()
                     : this.getElement(),
-                newPosition, align;
+                location = options && options.location,
+                isCssLockedGrid = location && location.view && location.view.isCssLockedGrid,
+                isCenterRegion = isCssLockedGrid && location && location.column &&
+                    location.column.getRegion() === 'center',
+                newPosition, align, scrollDirection, view, centerRegionBox, cellBox, offsets;
 
             if (el && el.element && !el.isElement) {
                 options = el;
@@ -853,6 +857,58 @@ Ext.define('Ext.scroll.Scroller', {
             }
 
             newPosition = Ext.fly(el).getScrollIntoViewXY(viewport, position.x, position.y, align);
+
+            // If location column is in center region,adjust position translations
+            // accordingly to ensure target cell is not hidden by any locked region.
+            if (isCenterRegion) {
+                scrollDirection = newPosition.x - position.x;
+                view = location.view;
+                centerRegionBox = view.getCenterRegionBox();
+                cellBox = Ext.get(el).getBox();
+                offsets = Ext.get(el).getOffsetsTo(view.el);
+
+                // Adjust for local coordinates
+                cellBox.left = offsets[0];
+                cellBox.top = offsets[1];
+                cellBox.right = cellBox.left + cellBox.width;
+                cellBox.bottom = cellBox.top + cellBox.height;
+
+                if (scrollDirection === 0) {
+                    // Cell is within boundaries of grid - adjust for center
+                    if (cellBox.width > centerRegionBox.width) {
+                        // cellbox width is larger than center width - 
+                        // align cell start to left side of center region
+                        newPosition.x = position.x + (cellBox.left - centerRegionBox.left);
+                    }
+                    else if (cellBox.left < centerRegionBox.left) {
+                        // cell box left is left of center region left - 
+                        // bring cell into view
+                        newPosition.x = newPosition.x + (cellBox.left - centerRegionBox.left);
+                    }
+                    else if (cellBox.right > centerRegionBox.right) {
+                        // cell box right is past center right -
+                        // bring cell into view
+                        newPosition.x = newPosition.x + (cellBox.right - centerRegionBox.right);
+                    }
+                }
+                else if (scrollDirection < 0) {
+                    // cell.left < view.left, always align cell to left side of center region
+                    newPosition.x = newPosition.x - centerRegionBox.left;
+                }
+                else {
+                    // scrollDirection > 0
+                    // Target cell is wider than center region - align to left
+                    // side of region to show start of cell
+                    if (cellBox.width > centerRegionBox.width) {
+                        // cell is wider than center region - align left
+                        newPosition.x = position.x + (cellBox.left - centerRegionBox.left);
+                    }
+                    else {
+                        // Otherwise, align end of cell to right side of region
+                        newPosition.x = newPosition.x + (viewport.right - centerRegionBox.right);
+                    }
+                }
+            }
 
             newPosition.x = options.x === false ? position.x : newPosition.x;
             newPosition.y = options.y === false ? position.y : newPosition.y;

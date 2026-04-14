@@ -1,3 +1,4 @@
+/* eslint-disable vars-on-top, indent */
 /**
  * @extends Ext.ux.event.Driver
  * This class manages the playback of an array of "event descriptors". For details on the
@@ -84,7 +85,7 @@
  *      }
  */
 Ext.define('Ext.ux.event.Player', function(Player) {
-/* eslint-disable indent, vars-on-top, one-var */
+
 var defaults = {},
     mouseEvents = {},
     keyEvents = {},

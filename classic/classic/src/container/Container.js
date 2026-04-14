@@ -723,7 +723,6 @@ Ext.define('Ext.container.Container', {
     // Begin Properties
     // ***********************************************************************************
 
-    /* eslint-disable indent, max-len */
     /**
      * @property {String/String[]/Ext.XTemplate} tabGuardTpl
      * This template is used to generate the `tabGuard` elements. It is used once per
@@ -740,7 +739,6 @@ Ext.define('Ext.container.Container', {
                          Ext.baseCSSPrefix + 'tab-guard-{tabGuardPosition}"' +
             ' style="width:0px;height:0px;">' +
         '</span>',
-    /* eslint-enable indent, max-len */
 
     /**
      * @property {Object} tabGuardElements

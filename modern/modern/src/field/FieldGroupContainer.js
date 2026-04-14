@@ -85,7 +85,12 @@ Ext.define('Ext.field.FieldGroupContainer', {
      */
 
     initialize: function() {
-        var me = this;
+        var me = this,
+            container = me.getContainer(),
+            ariaElement = container.ariaEl,
+            id = container.id,
+            customAttrs = {},
+            ariaAttributes, ariaLabel;
 
         me.callParent();
 
@@ -95,13 +100,49 @@ Ext.define('Ext.field.FieldGroupContainer', {
             scope: me
         });
 
-        me.getContainer().on({
+        container.on({
             add: 'onGroupItemAdd',
             scope: me
         });
 
         me.validate();
         me.resetOriginalValue();
+
+        if (!ariaElement) {
+            return;
+        }
+
+        ariaAttributes = me.getAriaAttributes();
+        customAttrs = ariaAttributes;
+
+        ariaElement.set({
+            role: me.isRadioGroup
+                ? 'radiogroup'
+                : 'group'
+        });
+
+        if (!Ext.Object.isEmpty(customAttrs)) {
+            ariaElement.set(Object.assign({}, customAttrs));
+        }
+
+        // Handle individual ARIA configs
+        ariaLabel = me.ariaLabel;
+
+        if (ariaLabel) {
+            ariaElement.set({ 'aria-label': Ext.String.htmlEncode(ariaLabel) });
+        }
+
+        // Set default aria-labelledby if not custom set
+        if (!customAttrs || !customAttrs['aria-labelledby']) {
+            ariaElement.set({ 'aria-labelledby': id + '-ariaStatusEl' });
+        }
+
+        ariaElement.set({
+            'aria-disabled': me.getDisabled() ? 'true' : 'false',
+            'aria-hidden': me.getHidden() ? 'true' : 'false',
+            'aria-invalid': 'false',
+            required: !!me.getRequired()
+        });
     },
 
     applyFieldsName: function(name) {
@@ -111,6 +152,26 @@ Ext.define('Ext.field.FieldGroupContainer', {
     // update vertical cls
     updateVertical: function(vertical) {
         this.getContainer().toggleCls(this.verticalCls, vertical);
+    },
+
+    updateDisabled: function(disabled, oldDisabled) {
+        var me = this,
+            container = me.getContainer();
+
+        // disabling child items of group container
+        me.mixins.fieldmanager.updateDisabled.call(me, disabled, oldDisabled);
+        me.callParent([disabled, oldDisabled]);
+
+        container.ariaEl.set({ 'aria-disabled': !!disabled });
+    },
+
+    updateHidden: function(hidden, oldHidden) {
+        var me = this,
+            container = me.getContainer();
+
+        me.callParent([hidden, oldHidden]);
+
+        container.ariaEl.set({ 'aria-hidden': !!hidden });
     },
 
     /**
@@ -219,11 +280,16 @@ Ext.define('Ext.field.FieldGroupContainer', {
      */
     isValid: function() {
         var value = this.getValue(),
+            container = this.getContainer(),
             required = this.getRequired();
 
         if (required && Ext.Object.isEmpty(value)) {
+            container.ariaEl.set({ 'aria-invalid': 'true' });
+
             return false;
         }
+
+        container.ariaEl.set({ 'aria-invalid': 'false' });
 
         return true;
     },

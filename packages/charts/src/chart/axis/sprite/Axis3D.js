@@ -44,7 +44,7 @@ Ext.define('Ext.chart.axis.sprite.Axis3D', {
             return;
         }
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var attr = me.attr,
             layout = me.getLayout(),
             depth = layout.isDiscrete ? 0 : attr.depth,

@@ -116,7 +116,7 @@ Ext.define('Ext.picker.Color', {
 
     colorRe: /(?:^|\s)color-(.{6})(?:\s|$)/,
 
-    /* eslint-disable indent, max-len */
+    /* eslint-disable indent */
     renderTpl: [
         '<tpl for="colors">',
             '<a href="#" role="button" class="color-{.} {parent.itemCls}" hidefocus="on">',
@@ -124,7 +124,7 @@ Ext.define('Ext.picker.Color', {
             '</a>',
         '</tpl>'
     ],
-    /* eslint-enable indent, max-len */
+    /* eslint-enable indent */
 
     /**
      * @event select

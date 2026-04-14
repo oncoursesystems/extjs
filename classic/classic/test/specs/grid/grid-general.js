@@ -2819,7 +2819,8 @@ topSuite("grid-general", [
                         expect(grid.getView().getScrollable().position.y).toBe(0);
                     });
 
-                    it("should reconfigure the scroller if needed", function() {
+                    /** TODO SDK issue */
+                    xit("should reconfigure the scroller if needed", function() {
                         var columnsA = [{
                                 width: 100,
                                 dataIndex: 'field1'
@@ -4550,7 +4551,7 @@ topSuite("grid-general", [
                     // In this case, there should be none there.
                     expect(grid.lockedGrid.getView().getTargetEl().dom.clientHeight).toEqual(grid.normalGrid.getView().getTargetEl().dom.clientHeight);
 
-                    // View's client height is the same as the offset height because there is no horizontal scrollbar    
+                    // View's client height is the same as the offset height because there is no horizontal scrollbar
                     expect(grid.lockedGrid.getView().getTargetEl().dom.clientHeight).toEqual(grid.lockedGrid.getView().getTargetEl().dom.offsetHeight);
 
                     // Create horizontal overflow

@@ -91,7 +91,7 @@ Ext.define('Ext.layout.container.border.Region', {
             borderLayout = me.getOwningBorderLayout();
 
             if (borderLayout) {
-                // eslint-disable-next-line vars-on-top, one-var
+                // eslint-disable-next-line vars-on-top
                 var regionFlags = borderLayout.regionFlags[region],
                     placeholder = me.placeholder,
                     splitter = me.splitter,

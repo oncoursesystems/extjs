@@ -5166,7 +5166,7 @@ Ext.define('Ext.draw.Path', {
         }
         x2 -= x1;
         y2 -= y1;
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var x0 = me.cursor[0] - x1,
             y0 = me.cursor[1] - y1,
             area = x2 * y0 - y2 * x0,
@@ -5204,7 +5204,7 @@ Ext.define('Ext.draw.Path', {
         dist = 1 / (Math.sin(Math.asin(Math.abs(area) / (l0 * l2)) * 0.5) * Math.sqrt(cx * cx + cy * cy));
         cx *= dist;
         cy *= dist;
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var k0 = (cx * x0 + cy * y0) / (x0 * x0 + y0 * y0),
             k2 = (cx * x2 + cy * y2) / (x2 * x2 + y2 * y2),
             cosStart = x0 * k0 - cx,
@@ -8950,7 +8950,7 @@ Ext.define('Ext.draw.sprite.Text', function() {
                 size = me.oldSize = Ext.draw.TextMeasurer.measureText(text, font);
                 Ext.draw.TextMeasurer.precise = textMeasurerPrecision;
             }
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var surface = me.getSurface(),
                 isRtl = (surface && surface.getInherited().rtl) || false,
                 flipRtlText = isRtl && surface.getFlipRtlText(),
@@ -16070,7 +16070,7 @@ Ext.define('Ext.chart.series.Series', {
         if (!label) {
             return;
         }
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var store = this.getStore(),
             items = store.getData().items,
             sprites = this.getSprites(),
@@ -17588,7 +17588,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
         if (chart.isInitializing) {
             return;
         }
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var attr = me.attr,
             layout = me.getLayout(),
             isRtl = chart.getInherited().rtl,
@@ -17689,7 +17689,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
             minorTicks = layout.minorTicks,
             minorTickSize = attr.minorTickSize,
             gaugeAngles;
-        /* eslint-disable no-inner-declarations, no-case-declarations */
+        /* eslint-disable no-case-declarations */
         if (majorTicks) {
             switch (docked) {
                 case 'right':
@@ -17762,7 +17762,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
             }
         }
     },
-    /* eslint-enable no-inner-declarations, no-case-declarations */
+    /* eslint-enable no-case-declarations */
     renderLabels: function(surface, ctx, layoutContext, clipRect) {
         var me = this,
             attr = me.attr,
@@ -18205,7 +18205,7 @@ Ext.define('Ext.chart.axis.sprite.Axis', {
             }
             return;
         }
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var chart = axis.getChart(),
             innerPadding = chart.getInnerPadding(),
             limitsRect = axis.limits.surface.getRect(),
@@ -20918,7 +20918,7 @@ Ext.define('Ext.draw.PathUtil', function() {
             if (a === 0) {
                 return this.quadraticRoots(b, c, d);
             }
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var A = b / a,
                 B = c / a,
                 C = d / a,
@@ -21701,7 +21701,7 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
             return false;
         }
         me.cancelLayout();
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var docked = me.getDocked(),
             surfaceWidth = surfaceRect[2],
             surfaceHeight = surfaceRect[3],
@@ -21713,8 +21713,7 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
             columnCount, // Number of columns.
             columnWidth, itemsWidth, itemsHeight, paddedItemsWidth, // The horizontal span of all 'legenditem' sprites.
             paddedItemsHeight, // The vertical span of all 'legenditem' sprites.
-            paddedBorderWidth, paddedBorderHeight, // eslint-disable-line no-unused-vars
-            itemHeight, bbox, x, y;
+            paddedBorderWidth, paddedBorderHeight, itemHeight, bbox, x, y;
         for (i = 0; i < ln; i++) {
             sprite = sprites[i];
             bbox = sprite.getBBox();
@@ -21853,6 +21852,7 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
                     paddedBorderHeight = paddedItemsHeight + gap * 4;
                 } while (// Integer division by 2, plus remainder.
                 // itemsHeight is determined by the height of the first column.
+                // eslint-disable-next-line no-unused-vars
                 paddedItemsHeight > surfaceHeight);
                 break;
         }
@@ -24710,7 +24710,7 @@ Ext.define('Ext.chart.CartesianChart', {
         // 'chart' surface rect is the size of the chart's inner element
         // (see chart.getChartBox), i.e. the portion of the chart minus
         // the legend area (whether DOM or sprite based).
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var chartRect = me.getSurface('chart').getRect(),
             left = chartRect[0],
             top = chartRect[1],
@@ -25243,7 +25243,7 @@ Ext.define('Ext.chart.PolarChart', {
                 return;
             }
             me.suspendThicknessChanged();
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var chartRect = me.getSurface('chart').getRect(),
                 inset = me.getInsetPadding(),
                 inner = me.getInnerPadding(),
@@ -25270,8 +25270,7 @@ Ext.define('Ext.chart.PolarChart', {
                 seriesRadius = radius - inner,
                 grid = me.surfaceMap.grid,
                 captionList = me.captionList,
-                i, ln, shrinkRadius, floating, floatingValue, // eslint-disable-line no-unused-vars
-                gaugeSeries, gaugeRadius, side, series, axis, thickness, halfLineWidth, caption;
+                i, ln, shrinkRadius, floating, floatingValue, gaugeSeries, gaugeRadius, side, series, axis, thickness, halfLineWidth, caption;
             me.setMainRect(mainRect);
             me.doSetSurfaceRect(me.getSurface(), mainRect);
             if (grid) {
@@ -25293,6 +25292,7 @@ Ext.define('Ext.chart.PolarChart', {
             for (i = 0 , ln = angularAxes.length; i < ln; i++) {
                 axis = angularAxes[i];
                 floating = axis.getFloating();
+                // eslint-disable-next-line no-unused-vars
                 floatingValue = floating ? floating.value : null;
                 me.doSetSurfaceRect(axis.getSurface(), chartRect);
                 thickness = axis.getThickness();
@@ -25448,7 +25448,7 @@ Ext.define('Ext.chart.SpaceFillingChart', {
                 // animationSuspendCount will still be decremented
                 return;
             }
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var chartRect = me.getSurface('chart').getRect(),
                 padding = me.getInsetPadding(),
                 width = chartRect[2] - padding.left - padding.right,
@@ -25529,7 +25529,7 @@ Ext.define('Ext.chart.axis.sprite.Axis3D', {
         if (chart.isInitializing) {
             return;
         }
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var attr = me.attr,
             layout = me.getLayout(),
             depth = layout.isDiscrete ? 0 : attr.depth,
@@ -26521,7 +26521,7 @@ Ext.define('Ext.chart.interactions.CrossZoom', {
             return;
         }
         if (me.getLocks()[me.gestureEvent] === me) {
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var chart = me.getChart(),
                 surface = me.getSurface(),
                 rect = chart.getInnerRect(),
@@ -26566,7 +26566,7 @@ Ext.define('Ext.chart.interactions.CrossZoom', {
             return;
         }
         if (me.getLocks()[me.gestureEvent] === me) {
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var chart = me.getChart(),
                 surface = me.getSurface(),
                 rect = chart.getInnerRect(),
@@ -26996,7 +26996,7 @@ Ext.define('Ext.chart.interactions.Crosshair', {
         if (me.getLocks()[me.getGesture()] !== me) {
             return;
         }
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var chart = me.getChart(),
             surface = chart.getSurface('overlay'),
             rect = Ext.Array.slice(chart.getInnerRect()),
@@ -31904,7 +31904,7 @@ Ext.define('Ext.chart.sprite.BoxPlot', {
             me.softRender(surface, ctx);
         }
         //<debug>
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var debug = attr.debug || this.statics().debug || Ext.draw.sprite.Sprite.debug;
         if (debug) {
             // This assumes no part of the sprite is rendered after this call.
@@ -33770,7 +33770,7 @@ Ext.define('Ext.chart.series.Gauge', {
             return Ext.emptyArray;
         }
         // Return cached sprites
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var chart = me.getChart(),
             animation = me.getAnimation() || chart && chart.getAnimation(),
             sprites = me.sprites,
@@ -34841,7 +34841,7 @@ Ext.define('Ext.chart.series.sprite.PieSlice', {
             attr = me.attr,
             hasGradients = (attr.fillStyle && attr.fillStyle.isGradient) || (attr.strokeStyle && attr.strokeStyle.isGradient);
         if (hasGradients && !attr.constrainGradients) {
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var midAngle = me.getMidAngle(),
                 margin = attr.margin,
                 cx = attr.centerX,
@@ -35377,7 +35377,7 @@ Ext.define('Ext.chart.series.Pie', {
         }
         me.getColors();
         me.getSubStyle();
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var items = store.getData().items,
             length = items.length,
             animation = me.getAnimation() || chart && chart.getAnimation(),
@@ -36911,7 +36911,7 @@ Ext.define('Ext.chart.series.Pie3D', {
         if (sprites && !createMissing) {
             return sprites;
         }
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var surface = me.getSurface(),
             records = store.getData().items,
             spritesPerSlice = me.spritesPerSlice,

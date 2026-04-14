@@ -565,4 +565,15 @@ topSuite("Ext.field.Number", function() {
             expect(field.inputElement.dom.value).toBe('13:72');
         });
     });
+
+    describe("ARIA attributes", function() {
+        describe("Initial Rendering", function() {
+            it("should have attributes", function() {
+                createField();
+                expect(field).toHaveAttr('role', 'textbox');
+                expect(field).toHaveAttr('aria-describedby', field.id + '-ariaStatusEl');
+                expect(field).toHaveAttr('aria-invalid', 'false');
+            });
+        });
+    });
 });

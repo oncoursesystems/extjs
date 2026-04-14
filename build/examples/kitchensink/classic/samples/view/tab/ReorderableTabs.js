@@ -55,7 +55,7 @@ Ext.define('KitchenSink.view.tab.ReorderableTabs', {
         xtype: 'toolbar',
         items: [{
             text: 'Add a Tab',
-            glyph: 43,
+            glyph: 'f055',
             listeners: {
                 click: 'onAddTabClick'
             }

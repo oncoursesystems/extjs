@@ -36,6 +36,7 @@
  *
  * @singleton
  */
+// eslint-disable-next-line no-redeclare
 var Ext = Ext || {};
 // @define Ext
 
@@ -61,7 +62,6 @@ var Ext = Ext || {};
         manifest = Ext.manifest || {},
         iterableRe = /\[object\s*(?:Array|Arguments|\w*Collection|\w*List|HTML\s+document\.all\s+class)\]/,
         MSDateRe = /^\\?\/Date\(([-+])?(\d+)(?:[+-]\d{4})?\)\\?\/$/,
-        /* eslint-disable-next-line no-unused-vars */
         elevateArgs, elevateFn, elevateRet, elevateScope, i;
 
     Ext.global = global;
@@ -106,6 +106,7 @@ var Ext = Ext || {};
     /* eslint-disable-next-line dot-notation */
     Ext['suspendLayouts'] = Ext['resumeLayouts'] = emptyFn;
 
+    // eslint-disable-next-line no-unused-vars
     for (i in { toString: 1 }) {
         enumerables = null;
     }
@@ -872,6 +873,7 @@ var Ext = Ext || {};
          */
         isDebugEnabled:
             //<debug>
+            // eslint-disable-next-line no-constant-binary-expression
             function(className, defaultEnabled) {
                 var debugConfig = Ext.debugConfig.hooks;
 
@@ -1047,6 +1049,7 @@ var Ext = Ext || {};
         /**
          * @private
          */
+        // eslint-disable-next-line no-constant-binary-expression
         Logger: {
         //<feature logger>
             log: function(message, priority) {

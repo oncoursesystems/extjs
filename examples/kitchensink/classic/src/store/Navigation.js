@@ -29,6 +29,7 @@ Ext.define('KitchenSink.store.Navigation', {
         }
 
         items.push(me.getNavItemsTemplates());
+        items.push(me.getNavItemsSignature());
 
         items = {
             text: 'All',
@@ -428,7 +429,8 @@ Ext.define('KitchenSink.store.Navigation', {
                 me.getNavItemsWindows(),
                 me.getNavItemsGauge(),
                 me.getNavItemsEnterprise(),
-                me.getNavItemsFroalaEditor()
+                me.getNavItemsFroalaEditor(),
+                me.getNavItemsQRCode()
             ]
         };
     },
@@ -963,7 +965,8 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'lineardata-tree', text: 'Linear Data Geographical Tree', leaf: true },
 
                 { id: 'tree-list', text: 'Tree List', leaf: true },
-                { id: 'tree-xml', text: 'XML Tree', leaf: true }
+                { id: 'tree-xml', text: 'XML Tree', leaf: true },
+                { id: 'tristatetree', text: 'Tristate Tree', leaf: true, iconCls: 'icon-check-tree' }
             ]
         };
     },
@@ -985,6 +988,41 @@ Ext.define('KitchenSink.store.Navigation', {
                 { id: 'template-create-account', text: 'Create Account', leaf: true, iconCls: 'icon-form-register' },
                 { id: 'template-horizontal-create-account', text: 'Horizontal Create Account', leaf: true, iconCls: 'icon-form-register' },
                 { id: 'template-reset-password', text: 'Reset Password', leaf: true, iconCls: 'icon-direct-named' }
+            ]
+        };
+    },
+
+    getNavItemsSignature: function() {
+        return {
+            text: 'Signature',
+            id: 'signature',
+            iconCls: 'icon-layout-card',
+            expanded: true,
+            since: '8.0',
+
+            description: 'canvas-based signature pad component for capturing hand-drawn signatures.' +
+            'Built on SignaturePad.js and fully integrated with Ext JS layouts,' +
+            'it supports pen customization, undo/redo, and image export.',
+
+            children: [
+                { id: 'signature-pad', text: 'Signature', leaf: true, iconCls: 'icon-form-login' }
+            ]
+        };
+    },
+
+    getNavItemsQRCode: function() {
+        return {
+            text: 'QR Code',
+            id: 'qr-code',
+            description: 'This demonstrates the use of Ext.qrcode.generator.QrComponent ' +
+                        'which is used to generate QR code from the input provided, it also supports various types of QR codes based on the type and input provided. ' +
+                        'QR code reader component Ext.qrcode.reader.QRReader is also been added  to scan the QR code files or through camera scanners.',
+
+            children: [
+                { id: 'qrcode-generator', text: 'QR Code', iconCls: 'icon-qr-code', leaf: true },
+                { id: 'qrcode-styling', text: 'Styling', iconCls: 'icon-qr-code', leaf: true },
+                { id: 'qrcode-types', text: 'Types', iconCls: 'icon-qr-code', leaf: true },
+                { id: 'qrcode-reader', text: 'Scanner', iconCls: 'icon-qr-code-scanner', leaf: true }
             ]
         };
     }

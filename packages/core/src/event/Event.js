@@ -794,7 +794,7 @@ Ext.define('Ext.event.Event', {
         if (!xy) {
             xy = me.xy = [me.pageX, me.pageY];
             //<feature legacyBrowser>
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var x = xy[0],
                 browserEvent, doc, docEl, body;
 

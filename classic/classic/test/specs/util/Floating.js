@@ -1,5 +1,3 @@
-/* global expect, spyOn, Ext, jasmine, xdescribe, describe */
-
 topSuite("Ext.util.Floating",
     ['Ext.window.Window', 'Ext.menu.Menu', 'Ext.Button', 'Ext.form.Panel', 'Ext.form.Label', 'Ext.form.field.*',
      'Ext.grid.Panel'],

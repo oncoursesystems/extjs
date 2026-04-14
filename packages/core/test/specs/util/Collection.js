@@ -3201,7 +3201,6 @@ topSuite("Ext.util.Collection", ['Ext.JSON'], function() {
             });
 
             function generateTest(records, groupers) {
-                /* eslint-disable-next-line max-len */
                 it("should match groups when dealing with" + records + " items and " + groupers.length + " groupers", function() {
                     var levelsData = {},
                         length = groupers.length,

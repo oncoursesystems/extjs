@@ -148,6 +148,8 @@ Ext.define('Ext.Dialog', {
      */
     classCls: Ext.baseCSSPrefix + 'dialog',
 
+    relativeMaximizeCls: Ext.baseCSSPrefix + 'relative-maximize',
+
     /**
      * @event beforemaximize
      * Fires before maximizing the dialog. Returning `false` from this event will cancel
@@ -261,9 +263,10 @@ Ext.define('Ext.Dialog', {
 
     config: {
         /**
-         * @cfg {Boolean/Ext.drag.Constraint} constrainDrag
+         * @cfg {String/Boolean/Ext.drag.Constraint} constrainDrag
          * Set to `false` to not constrain the dialog to the viewport.
-         *
+         * Set to 'owner' to constrain the dialog to its parent container (since 8.0.0).
+         * 
          * @since 6.5.0
          */
         constrainDrag: true,
@@ -281,15 +284,19 @@ Ext.define('Ext.Dialog', {
         dismissHandler: null,
 
         /**
-         * @cfg {Boolean} [maximizable=false]
+         * @cfg {Boolean/String/Ext.dom.Element} [maximizable=false]
          * Set to `true` to display the 'maximizeTool` to allow the user to maximize the
          * dialog. Note that when a dialog is maximized, the `maximizeTool` is replaced
          * with the `restoreTool` to give the user the ability to restore the dialog to
          * its previous size.
-         *
-         * This config only controls the presence of the `maximize` and `restore` tools.
-         * The dialog can always be set to `maximized` by directly setting the config or
-         * calling the `maximize` and `restore` methods.
+         * Set to `'owner'` to maximize the dialog within its owner component's bounds (since 8.0.0)
+         * Set to an `Ext.dom.Element` to maximize the dialog within that
+         * element's bounds (since 8.0.0).
+         * 
+         * This config controls both the presence of the `maximize` and `restore` tools
+         * and determines the region that the dialog will maximize to. The dialog can
+         * always be set to `maximized` by directly setting the config or calling the
+         * `maximize` and `restore` methods.
          *
          * @since 6.5.0
          */
@@ -470,9 +477,14 @@ Ext.define('Ext.Dialog', {
     },
 
     doDestroy: function() {
-        Ext.destroy(this.maximizeTool, this.restoreTool);
+        var me = this;
 
-        this.callParent();
+        if (me.resizeListener) {
+            me.resizeListener.un('resize', me.onParentResize, me);
+        }
+
+        Ext.destroy(me.maximizeTool, me.restoreTool, me.restoreState);
+        me.callParent();
     },
 
     close: function(event) {
@@ -603,11 +615,15 @@ Ext.define('Ext.Dialog', {
     // constrainDrag
 
     updateConstrainDrag: function(constrain) {
-        var dragger = this.getDraggable();
+        var dragger = this.getDraggable(),
+            ownerCt = this.getParent();
 
         if (dragger) {
             if (constrain === true) {
                 constrain = Ext.getBody();
+            }
+            else if (constrain === 'owner' && ownerCt) {
+                constrain = ownerCt.el.getRegion();
             }
 
             dragger.setConstrain(constrain);
@@ -646,6 +662,26 @@ Ext.define('Ext.Dialog', {
         }
     },
 
+    onAdded: function(parent, instanced) {
+        var me = this,
+            dragger;
+
+        dragger = me.getDraggable();
+
+        // Constrain dialog to parent container when constrainDrag is 'owner'
+        if (parent && me.getConstrainDrag() === 'owner') {
+            dragger.setConstrain(parent.el.getRegion());
+        }
+
+        if (parent && !me.resizeListener) {
+            me.resizeListener = parent.on('resize', me.onParentResize, me, {
+                delay: 300
+            });
+        }
+
+        this.callParent(arguments);
+    },
+
     // maximizable
 
     applyMaximizable: function(maximizable) {
@@ -653,7 +689,8 @@ Ext.define('Ext.Dialog', {
 
         me.maximizeTool = Ext.updateWidget(
             me.maximizeTool,
-            maximizable,
+            maximizable === 'owner' || maximizable === true ||
+            (maximizable && maximizable.isElement),
             me,
             'createMaximizeTool',
             'maximizeTool'
@@ -688,22 +725,24 @@ Ext.define('Ext.Dialog', {
         var me = this,
             el = me.el,
             maximizedCls = me.maximizedCls,
+            relativeMaximizeCls = me.relativeMaximizeCls,
             maximizeTool = me.maximizeTool,
             pendingName = maximized ? 'restoring' : 'maximizing',
             pending = me[pendingName],
-            after, anim, before, center;
+            maximizable = me.getMaximizable(),
+            isRelative = (maximizable === 'owner' || (maximizable && maximizable.isElement)),
+            anim, before, after, center;
 
         if (me.isConfiguring) {
             me.needsCenter = maximized;
         }
         else {
-            anim = me._maximizeAnim;
+            anim = me._maximizeAnim !== undefined
+                ? me._maximizeAnim
+                : maximized ? me.getMaximizeAnimation() : me.getRestoreAnimation();
+
             center = me.needsCenter && !maximized;
             me.needsCenter = false;
-
-            if (anim === undefined) {
-                anim = me[maximized ? 'getMaximizeAnimation' : 'getRestoreAnimation']();
-            }
         }
 
         me._maximizeAnim = undefined; // null disables the animation
@@ -712,7 +751,7 @@ Ext.define('Ext.Dialog', {
             pending.destroy(); // this pushes anim to end and calls our callback
         }
 
-        if (me.getMaximizable()) {
+        if (maximizable) {
             me.setRestorable(maximized);
         }
         else {
@@ -726,6 +765,20 @@ Ext.define('Ext.Dialog', {
         }
 
         if (!anim) {
+            if (isRelative) {
+                maximizedCls = relativeMaximizeCls;
+
+                if (!me.restoreState) {
+                    me.restoreState = me.el.getBox();
+                }
+
+                after = maximized ? me.captureSize(true) : me.restoreState;
+
+                el.setMaxWidth(null);
+                el.setMaxHeight(null);
+                el.setBox(after);
+            }
+
             el.toggleCls(maximizedCls, maximized);
 
             if (center) {
@@ -733,44 +786,63 @@ Ext.define('Ext.Dialog', {
             }
 
             me.fireEvent(maximized ? 'maximize' : 'restore', me);
+
+            return;
+        }
+
+        if (maximized) {
+
+            // When we are maximizing, we need the current size (before) and the
+            // viewport size (after). We don't add the x-maximized class until
+            // after the animation.
+            before = me.captureSize();
+            after = me.captureSize(true);
+            pendingName = 'maximizing';
         }
         else {
-            if (maximized) {
-                pendingName = 'maximizing';
+            before = me.captureSize(true);
 
-                // When we are maximizing, we need the current size (before) and the
-                // viewport size (after). We don't add the x-maximized class until
-                // after the animation.
-                before = me.captureSize();
-                after = me.captureSize(true);
-            }
-            else {
-                pendingName = 'restoring';
+            after = me.restoreState;
 
-                // When restoring, we snap the dialog to the restored size immediately
-                // and animate the proxy from fullscreen down to that place.
-                el.removeCls(maximizedCls);
-
-                if (center) {
-                    me.center();
-                }
-
-                before = me.captureSize(true);
-                after = me.captureSize();
+            if (!after) {
+                after = me.el.getBox(); // fallback to current size
             }
 
-            me[pendingName] = me.animateMaximizeRestore(before, after, anim, function() {
-                if (maximized) {
-                    // Now that the proxy has animated up and is gone, snap the dialog
-                    // to full screen.
-                    el.addCls(maximizedCls);
-                }
+            if (isRelative) {
+                maximizedCls = relativeMaximizeCls;
+                el.setBox(after);
+            }
 
-                me[pendingName] = null;
+            el.toggleCls(maximizedCls, maximized);
 
-                me.fireEvent(maximized ? 'maximize' : 'restore', me);
-            });
+            if (center) {
+                me.center();
+            }
+
+            // When we are restoring, we animate the proxy dialog to the original size
+            pendingName = 'restoring';
         }
+
+        me[pendingName] = me.animateMaximizeRestore(before, after, anim, function() {
+            if (maximized) {
+                // Now that the proxy has animated up and is gone, snap the dialog
+                // to full screen if maximizable is true.
+                el.addCls(isRelative ? relativeMaximizeCls : maximizedCls);
+
+                if (!isRelative && !after) {
+                    after = me.el.getBox();
+                }
+
+                if (isRelative) {
+                    el.setMaxWidth(null);
+                    el.setMaxHeight(null);
+                    el.setBox(after);
+                }
+            }
+
+            me[pendingName] = null;
+            me.fireEvent(maximized ? 'maximize' : 'restore', me);
+        });
     },
 
     // maximizeTool
@@ -899,6 +971,7 @@ Ext.define('Ext.Dialog', {
         draggableCls: Ext.baseCSSPrefix + 'draggable',
         needsCenter: false,
         maximizedCls: Ext.baseCSSPrefix + 'maximized',
+        restoreState: null,
 
         animateMaximizeRestore: function(before, after, anim, callback) {
             var me = this,
@@ -907,8 +980,8 @@ Ext.define('Ext.Dialog', {
                 a = Ext.merge({
                     // duration: 3000,
                     from: {
-                        width: before.w + 'px',
-                        height: before.h + 'px',
+                        width: before.width + 'px',
+                        height: before.height + 'px',
                         transform: {
                             translateX: before.x + 'px',
                             translateY: before.y + 'px'
@@ -916,8 +989,8 @@ Ext.define('Ext.Dialog', {
                     },
 
                     to: {
-                        width: after.w + 'px',
-                        height: after.h + 'px',
+                        width: after.width + 'px',
+                        height: after.height + 'px',
                         transform: {
                             translateX: after.x + 'px',
                             translateY: after.y + 'px'
@@ -950,25 +1023,51 @@ Ext.define('Ext.Dialog', {
         },
 
         captureSize: function(maximized) {
-            var me, size;
+            var me = this,
+                position;
 
-            if (maximized) {
-                return {
-                    x: 0,
-                    y: 0,
-                    w: Ext.getViewportWidth(),
-                    h: Ext.getViewportHeight()
-                };
+            if (!maximized) {
+                position = me.el.getBox();
+                me.restoreState = position;
+
+                return position;
             }
 
-            me = this;
-            size = me.el.measure();
+            return me.getMaximizeRegion();
+        },
 
+        /**
+         * Returns the region to which the dialog should maximize.
+         * This region is determined based on the `maximizable` config.
+         * If `maximizable` is set to 'owner', it returns the box of the parent container.
+         * If `maximizable` is an `Ext.dom.Element`, it returns the box of that element.
+         * If `maximizable` is `true`, `false`, or `null`, it defaults to the full viewport size.
+         * @return {Object} An object with `x`, `y`, `width`, and `height` properties
+         * representing the region to which the dialog should maximize.
+         */
+        getMaximizeRegion: function() {
+            var me = this,
+                maximizable = me.getMaximizable(),
+                parent;
+
+            // Handle 'owner' type
+            if (maximizable === 'owner') {
+                parent = me.getParent();
+
+                return parent.el.getBox();
+            }
+
+            // Handle Ext.dom.Element type
+            if (maximizable && maximizable.isElement) {
+                return me.getOwnerContainer(maximizable.component);
+            }
+
+            // Handle true, false, null, or any other value - default to full viewport
             return {
-                x: me.getX(),
-                y: me.getY(),
-                w: size.width,
-                h: size.height
+                x: 0,
+                y: 0,
+                width: Ext.getViewportWidth(),
+                height: Ext.getViewportHeight()
             };
         },
 
@@ -1008,6 +1107,41 @@ Ext.define('Ext.Dialog', {
             // one of them...
             if (!this._centering && this.getCentered()) {
                 this.setCentered(false);
+            }
+        },
+
+        /**
+         * Recursively traverses up the component hierarchy to find the nearest parent
+         * that is a container (i.e., has `isContainer: true`) and returns the result
+         * of calling `getBox()` on its element.
+         *
+         * This function is useful in scenarios where a component is deeply nested inside
+         * non-container components, and you want to determine the box dimensions of the
+         * nearest logical container for operations like constraining dialogs.
+         *
+         * @param {Ext.Component} component The component from which to start the traversal.
+         * @return {Object|null} The box object (with `x`, `y`, `width`, `height`) 
+         * of the container's element,
+         * or `null` if no suitable container is found.
+         */
+        getOwnerContainer: function(component) {
+            while (component && !component.isContainer) {
+                component = component.getParent && component.getParent();
+            }
+
+            return component ? component.el.getBox() : null;
+        },
+
+        onParentResize: function() {
+            var me = this,
+                maximized = me.getMaximized(),
+                maximizable = me.getMaximizable(),
+                isRelative = (maximizable === 'owner' || (maximizable && maximizable.isElement)),
+                after;
+
+            if (maximized && isRelative) {
+                after = me.captureSize(true);
+                me.el.setBox(after);
             }
         }
     } // privates

@@ -258,4 +258,73 @@ function() {
             expect(field.getRawValue()).toBe(true);
         });
     });
+
+    describe("ARIA attributes", function() {
+        describe("Initial Rendering", function() {
+            it("should have attributes", function() {
+                makeField();
+                expect(field).toHaveAttr('aria-hidden', 'false');
+                expect(field).toHaveAttr('aria-disabled', 'false');
+                expect(field).toHaveAttr('aria-describedby', field.id + '-ariaStatusEl');
+                expect(field).toHaveAttr('aria-invalid', 'false');
+            });
+        });
+
+        describe("aria-hidden", function() {
+            it("should have aria-hidden as false", function() {
+                makeField();
+                expect(field).toHaveAttr('aria-hidden', 'false');
+            });
+
+            it("should have aria-hidden as true when hidden is true", function() {
+                makeField({
+                    hidden: true
+                });
+                expect(field).toHaveAttr('aria-hidden', 'true');
+            });
+        });
+
+        describe("aria-disabled", function() {
+            it("should have aria-disabled as false", function() {
+                makeField();
+                expect(field).toHaveAttr('aria-disabled', 'false');
+            });
+
+            it("should have aria-disabled as true when disabled is true", function() {
+                makeField({
+                    disabled: true
+                });
+                expect(field).toHaveAttr('aria-disabled', 'true');
+            });
+        });
+
+        describe("via config", function() {
+            it("should have ariaAttributes", function() {
+                makeField({
+                    ariaAttributes: {
+                        'aria-label': 'First Name text',
+                        'aria-labelledby': 'firstNamelabel',
+                        'aria-describedby': 'firstNameDescription'
+                    }
+                });
+                expect(field).toHaveAttr('aria-label', 'First Name text');
+                expect(field).toHaveAttr('aria-labelledby', 'firstNamelabel');
+                expect(field).toHaveAttr('aria-describedby', 'firstNameDescription');
+            });
+
+            it("should have ariaLabel", function() {
+                makeField({
+                    ariaLabel: "my text"
+                });
+                expect(field).toHaveAttr('aria-label', 'my text');
+            });
+
+            it("should have aria-describedby when id is provided", function() {
+                makeField({
+                    id: 'my-textfield'
+                });
+                expect(field).toHaveAttr('aria-describedby', field.id + '-ariaStatusEl');
+            });
+        });
+    });
 });

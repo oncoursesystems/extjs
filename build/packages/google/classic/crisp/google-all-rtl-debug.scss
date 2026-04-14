@@ -1,4 +1,4 @@
-$image-search-path: '/home/teamcity/buildAgent/work/780e0679d11ca7ca/sencha/ext/build/packages/google/classic/crisp/resources' !default;
+$image-search-path: '/Users/space/buildAgent/work/bbbb2bac69ba789b/sencha/ext/build/packages/google/classic/crisp/resources' !default;
 $theme-name:  'theme-crisp' !default;
 $include-ext-abstractcomponent: dynamic(false);;
 $include-ext-abstractcontainer: dynamic(false);;
@@ -1207,4 +1207,5 @@ $relative-image-path-for-uis: $theme-crisp-resource-path;
 @import '../../../../../classic/theme-crisp/sass/var/resizer/Resizer';
 @import '../../../../../classic/theme-crisp/sass/var/tab/Tab';
 @import '../../../../../classic/theme-crisp/sass/var/tab/Bar';
+@import '../../../../../classic/theme-crisp/sass/var/tree/View';
 @import '../../../../../classic/theme-crisp/sass/var/window/Toast';

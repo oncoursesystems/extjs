@@ -51,13 +51,13 @@ Ext.define('Ext.layout.container.Center', {
         'targetEl'
     ],
 
-    /* eslint-disable indent, max-len */
+    /* eslint-disable max-len */
     renderTpl: [
         '<div id="{ownerId}-targetEl" data-ref="targetEl" class="{targetElCls}" role="presentation">' +
             '{%this.renderBody(out, values)%}' +
         '</div>'
     ],
-    /* eslint-enable indent, max-len */
+    /* eslint-enable max-len */
 
     targetElCls: Ext.baseCSSPrefix + 'center-target',
 

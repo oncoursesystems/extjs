@@ -246,7 +246,7 @@ Ext.define('KitchenSink.controller.Global', {
         // Passed in from the block above, we keep the proto cloned copy.
         loader.resource.html = code;
         loader.getTarget().setHtml(code);
-        // eslint-disable-next-line
+        // eslint-disable-next-line no-undef
         prettyPrint();
 
         return true;

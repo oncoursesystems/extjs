@@ -23,7 +23,7 @@ Ext.define('Neptune.view.button.widget.SmallSplit', {
 
     constructor: function(cfg) {
         if (cfg.icon) {
-            this.glyph = 'xF015@\'Font Awesome 5 Free\'';
+            this.glyph = 'xF015';
             delete cfg.icon;
         }
 

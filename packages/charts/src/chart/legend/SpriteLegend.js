@@ -363,7 +363,7 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
 
         me.cancelLayout();
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var docked = me.getDocked(),
             surfaceWidth = surfaceRect[2],
             surfaceHeight = surfaceRect[3],
@@ -379,7 +379,7 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
             paddedItemsWidth,  // The horizontal span of all 'legenditem' sprites.
             paddedItemsHeight, // The vertical span of all 'legenditem' sprites.
             paddedBorderWidth,
-            paddedBorderHeight, // eslint-disable-line no-unused-vars
+            paddedBorderHeight,
             itemHeight,
             bbox, x, y;
 
@@ -545,6 +545,7 @@ Ext.define('Ext.chart.legend.SpriteLegend', {
                     paddedItemsWidth = itemsWidth + (columnCount - 1) * gap;
                     paddedItemsHeight = itemsHeight + (columnSize - 1) * gap;
                     paddedBorderWidth = paddedItemsWidth + gap * 4;
+                    // eslint-disable-next-line no-unused-vars
                     paddedBorderHeight = paddedItemsHeight + gap * 4;
 
                 } while (paddedItemsHeight > surfaceHeight);

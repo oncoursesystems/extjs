@@ -1750,7 +1750,7 @@ Ext.define('Ext.util.Collection', {
             itemFiltered = false,
             wasFiltered = false,
             details, newKey, sortFn,
-            toAdd, index, newIndex;
+            toAdd, index, newIndex, removedRecs;
 
         // We are owned, we cannot react, inform owning collection.
         if (source && !source.updating) {
@@ -1764,7 +1764,12 @@ Ext.define('Ext.util.Collection', {
         else {
             newKey = me.getKey(item);
 
-            if (filtered) {
+            // 'removedRecs' from store which is filtered, is a check to ensure we are not doing
+            // any 'filtered' or 'filterChanged' logic for a record that has already been removed. 
+            // 'item.store.removed' is an array containing list of all the removed records.
+            removedRecs = (item.store && item.store.removed) || [];
+
+            if (filtered && !Ext.Array.contains(removedRecs, item)) {
                 index = me.indexOfKey(keyChanged ? oldKey : newKey);
                 wasFiltered = (index < 0);
                 itemFiltered = me.isItemFiltered(item);

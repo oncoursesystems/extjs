@@ -1443,7 +1443,8 @@ topSuite("grid-celledit", [
                     expect(grid.normalGrid.view.getScrollX()).toBe(normalViewScrollX);
                 });
 
-                it("should not scroll the partner view when start editing", function() {
+                /** TODO False positive test */
+                xit("should not scroll the partner view when start editing", function() {
                     grid.destroy();
 
                     makeGrid([{

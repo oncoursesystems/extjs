@@ -67,6 +67,49 @@ Ext.define('Ext.field.Input', {
         this.labelElement.dom.setAttribute('for', this.inputElement.id);
     },
 
+    initialize: function() {
+        var me = this,
+            ariaElement = me.ariaEl,
+            id = me.id,
+            customAttrs = {},
+            ariaAttributes, ariaLabel, attrs;
+
+        me.callParent();
+
+        if (!ariaElement) {
+            return;
+        }
+
+        ariaAttributes = me.getAriaAttributes();
+        customAttrs = ariaAttributes;
+
+        if (me.ariaRole && !Ext.Object.isEmpty(customAttrs)) {
+            ariaElement.set(Object.assign({}, customAttrs));
+        }
+
+        if (me.ariaRole && !me.isAriaRoleStatic(me.ariaRole)) {
+            attrs = { 'aria-invalid': false };
+            ariaLabel = me.ariaLabel;
+
+            // Handle individual ARIA configs
+            if (ariaLabel) {
+                attrs['aria-label'] = Ext.String.htmlEncode(ariaLabel);
+            }
+
+            // Set default aria-describedby if not custom set
+            if (!customAttrs || !customAttrs['aria-describedby']) {
+                attrs['aria-describedby'] = id + '-ariaStatusEl';
+            }
+
+            ariaElement.set(attrs);
+        }
+
+        // Set role if specified and not native
+        if (me.ariaRole && me.ariaRole !== 'native') {
+            ariaElement.set({ role: me.ariaRole });
+        }
+    },
+
     updateDisabled: function(disabled, oldDisabled) {
         this.callParent([disabled, oldDisabled]);
 

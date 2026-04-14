@@ -546,6 +546,11 @@ Ext.define('Ext.dataview.selection.Rows', {
             }
 
             if (removeRange.length) {
+                // Ensure that we have an end remove range value - not null
+                if (!removeRange[1]) {
+                    removeRange[1] = removeRange[0];
+                }
+
                 me.removeRecordRange(removeRange[0], removeRange[1]);
             }
 

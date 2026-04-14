@@ -9,3 +9,8 @@ $tree-cell-inner-padding: dynamic(
     bottom($grid-cell-inner-padding)
     6px
 );
+/**
+ * @var {Number}
+ * size of the checkbox in "tri" state.
+ */
+$tree-checkbox-intermediate-position: dynamic(30px);

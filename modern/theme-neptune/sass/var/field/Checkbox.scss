@@ -126,7 +126,7 @@ $checkboxfield-box-label-font-family: dynamic($field-box-label-font-family);
  * @var {string}
  * Checkbox Field box font-family
  */
- $checkboxfield-box-font-family: dynamic('Font Awesome 5 Free Regular');
+ $checkboxfield-box-font-family: dynamic($font-awesome-family-regular);
 
 /**
  * @var {number/list}

@@ -1914,6 +1914,212 @@ function() {
         });
 
         describe('locked column state', function() {
+            var userStore = Ext.create('Ext.data.Store', {
+                data: [{
+                        name: 'Lisa1',
+                        email: 'lisa@simpsons.com',
+                        phone: '555-111-1224'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Lisa',
+                        email: 'lisa@simpsons.com',
+                        phone: '555-111-1224'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Bart',
+                        email: 'bart@simpsons.com',
+                        phone: '<q =\"'
+                    }, {
+                        name: 'Homer',
+                        email: 'homer@simpsons.com',
+                        phone: '555-222-1244'
+                    }, {
+                        name: 'Marge',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }, {
+                        name: 'Shreya',
+                        email: 'marge@simpsons.com',
+                        phone: '555-222-1254'
+                    }
+
+                ]
+            });
+
             // https://sencha.jira.com/browse/EXTJS-19598
             // If the only visible locked column was moved to the locked side
             // as a result of state restoration, the locked grid did not display properly.
@@ -1955,6 +2161,72 @@ function() {
 
                 // We now expect the locked grid to be the width of colRef[0] plus its border width
                 expect(grid.lockedGrid.width).toBe(colRef[0].getWidth() + grid.lockedGrid.gridPanelBorderWidth);
+            });
+
+            it('should match rows of locked and normal grid when record deleted does not exist within the buffer', function() {
+                createGrid(null, {
+                    stateful: true,
+                    stateId: 'lockedColumnState',
+                    enableLocking: true,
+                    bufferedRenderer: true,
+                    store: userStore,
+                    columns: [{
+                        dataIndex: 'id',
+                        locked: true,
+                        text: 'ID'
+                    }, {
+                        text: 'Name',
+                        width: 100,
+                        locked: true,
+                        sortable: false,
+                        dataIndex: 'name',
+                        hidden: true
+                    }, {
+                        dataIndex: 'id',
+                        text: 'ID'
+                    }, {
+                        dataIndex: 'name',
+                        text: 'Name'
+                    }, {
+                        text: 'Email Address',
+                        width: 150,
+                        dataIndex: 'email',
+                        hidden: true
+                    }, {
+                        text: 'Phone Number',
+                        flex: 1,
+                        hidden: true,
+                        dataIndex: 'phone',
+                        renderer: function(v) {
+                            return Ext.htmlEncode(v);
+                        }
+                    }]
+                });
+
+                waitsFor(function() {
+                    return !grid.store.isEmptyStore;
+                });
+
+                runs(function() {
+                    grid.getSelectionModel().select(0);
+                    grid.scrollTo(0, 1000);
+                });
+                waitsFor(function() {
+                    return !grid.store.isEmptyStore;
+                }, 'grid to be ready', 2000);
+                runs(function() {
+                    userStore.remove(userStore.removeAt(0));
+
+                    for (var i = 0; i < 3; i++) {
+                        var cls = 'x-grid-scrollbar-clipper-locked',
+                            clmDom = document.getElementsByClassName(cls)[0],
+                            tables = document.querySelectorAll('#' + clmDom.id + ' table'),
+                            lockedGridID = tables[i].innerText,
+                            normalGridID = grid.normalGrid.view.getCell(i, 0).innerText;
+
+                        expect(lockedGridID).toEqual(normalGridID);
+                    }
+                });
             });
         });
 
@@ -4135,7 +4407,7 @@ function() {
             });
         });
 
-        it('should not trigger a load for remoteSort and remoteFilter with autoLoad false', function() {
+        it('should trigger a load for remoteSort and remoteFilter with autoLoad false', function() {
             var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
                 flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
                 store, grid, colRef;
@@ -4170,20 +4442,21 @@ function() {
                 }]
             });
 
+            expect(store.isLoaded()).toBe(false);
+
             colRef = grid.getColumns();
             Ext.testHelper.tap(colRef[0].el);
 
             colRef[0].filter.setValue('ar');
 
-            // no remote calls to be made if autoload false
-            expect(ajaxSpy.callCount).toBe(0);
+            expect(ajaxSpy.callCount).toBe(2);
             expect(store.isLoaded()).toBe(false);
 
             store.destroy();
             grid.destroy();
         });
 
-        it('should not trigger a load for remoteSort and remoteFilter with default autoLoad config (autoLoad: undefined)', function() {
+        it('should trigger a load for remoteSort and remoteFilter with default autoLoad config (autoLoad: undefined)', function() {
             var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
                 flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
                 store, grid, colRef;
@@ -4222,67 +4495,79 @@ function() {
 
             colRef[0].filter.setValue('ar');
 
-            // no remote calls to be made if autoload not configured
-            expect(ajaxSpy.callCount).toBe(0);
-            expect(store.isLoaded()).toBe(false);
-
-            store.destroy();
-            grid.destroy();
-        });
-
-        it('should send filters and sorters remotely after intialLoad of store if autoload false', function() {
-            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
-                flushLoadSpy = spyOn(Ext.data.Store.prototype, 'flushLoad').andCallThrough(),
-                store, grid, colRef;
-
-            ajaxSpy.reset();
-            flushLoadSpy.reset();
-
-            store = Ext.create('Ext.data.Store', {
-                fields: ['name', 'email', 'phone'],
-                proxy: {
-                    type: 'ajax',
-                    url: 'fakeUrl'
-                },
-                autoLoad: false,
-                remoteSort: true,
-                remoteFilter: true
-            });
-
-            grid = Ext.create('Ext.grid.Panel', {
-                title: 'Simpsons',
-                store: store,
-                columns: [
-                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
-                    { header: 'Email', dataIndex: 'email', flex: 1 },
-                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
-                ],
-                height: 200,
-                width: 400,
-                renderTo: Ext.getBody(),
-                plugins: [{
-                    ptype: 'gridfilters'
-                }]
-            });
-
-            colRef = grid.getColumns();
-            Ext.testHelper.tap(colRef[0].el);
-
-            colRef[0].filter.setValue('ar');
-
-            // no remote calls to be made if autoload false
-            expect(ajaxSpy.callCount).toBe(0);
-            expect(store.isLoaded()).toBe(false);
-
-            store.load();
             completeWithData([
                 { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
                 { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  }
             ]);
 
-            waitsFor(function() {
-                return flushLoadSpy.callCount === 1;
+            runs(function() {
+                // Sort
+                expect(ajaxSpy.mostRecentCall.args[0].params.sort).toBe(Ext.encode([
+                    {
+                        "property": "name",
+                        "direction": "ASC"
+                    }
+                ]));
+
+                // Filter
+                expect(ajaxSpy.mostRecentCall.args[0].params.filter).toBe(Ext.encode([{
+                    "operator": "like",
+                    "value": "ar",
+                    "property": "name"
+                }]));
+
+                expect(ajaxSpy.callCount).toBe(2);
+                expect(store.isLoaded()).toBe(true);
+
+                store.destroy();
+                grid.destroy();
             });
+        });
+
+        it('should send filters and sorters remotely after intialLoad of store if autoload false', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                store, grid, colRef;
+
+            ajaxSpy.reset();
+
+            store = Ext.create('Ext.data.Store', {
+                fields: ['name', 'email', 'phone'],
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                autoLoad: false,
+                remoteSort: true,
+                remoteFilter: true
+            });
+
+            grid = Ext.create('Ext.grid.Panel', {
+                title: 'Simpsons',
+                store: store,
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                height: 200,
+                width: 400,
+                renderTo: Ext.getBody(),
+                plugins: [{
+                    ptype: 'gridfilters'
+                }]
+            });
+
+            colRef = grid.getColumns();
+            Ext.testHelper.tap(colRef[0].el);
+
+            colRef[0].filter.setValue('ar');
+
+            completeWithData([
+                { name: 'Bart',  email: 'bart@simpsons.com',  phone: '555-222-1234'  },
+                { name: 'Marge', email: 'marge@simpsons.com', phone: '555-222-1254'  }
+            ]);
+            expect(ajaxSpy.callCount).toBe(2);
+            expect(store.isLoaded()).toBe(true);
 
             runs(function() {
                 expect(ajaxSpy.mostRecentCall.args[0].params.sort).toBe(Ext.encode([{
@@ -4298,10 +4583,6 @@ function() {
                 colRef[0].filter.setValue('art');
             });
 
-            waitsFor(function() {
-                return flushLoadSpy.callCount === 2;
-            });
-
             runs(function() {
                 expect(ajaxSpy.mostRecentCall.args[0].params.filter).toBe(Ext.encode([{
                     "operator": "like",
@@ -4309,13 +4590,7 @@ function() {
                     "property": "name"
                 }]));
                 Ext.testHelper.tap(colRef[0].el);
-            });
 
-            waitsFor(function() {
-                return flushLoadSpy.callCount === 3;
-            });
-
-            runs(function() {
                 expect(ajaxSpy.mostRecentCall.args[0].params.sort).toBe(Ext.encode([{
                     "property": "name",
                     "direction": "DESC"
@@ -4323,6 +4598,52 @@ function() {
                 store.destroy();
                 grid.destroy();
             });
+        });
+
+        it('should not trigger a load for remoteSort and remoteFilter with autoLoad false and autoLoadOnFilterEnd is false', function() {
+            var ajaxSpy = spyOn(Ext.Ajax, 'request').andCallThrough(),
+                store, grid, colRef;
+
+            ajaxSpy.reset();
+
+            store = Ext.create('Ext.data.Store', {
+                fields: ['name', 'email', 'phone'],
+                proxy: {
+                    type: 'ajax',
+                    url: 'fakeUrl'
+                },
+                autoLoad: false,
+                remoteSort: true,
+                autoLoadOnFilterEnd: false,
+                remoteFilter: true
+            });
+
+            grid = Ext.create('Ext.grid.Panel', {
+                title: 'Simpsons',
+                store: store,
+                columns: [
+                    { header: 'Name',  dataIndex: 'name', width: 100, filter: true },
+                    { header: 'Email', dataIndex: 'email', flex: 1 },
+                    { header: 'Phone', dataIndex: 'phone', flex: 1 }
+                ],
+                height: 200,
+                width: 400,
+                renderTo: Ext.getBody(),
+                plugins: [{
+                    ptype: 'gridfilters'
+                }]
+            });
+
+            colRef = grid.getColumns();
+            Ext.testHelper.tap(colRef[0].el);
+
+            colRef[0].filter.setValue('ar');
+
+            expect(ajaxSpy.callCount).toBe(0);
+            expect(store.isLoaded()).toBe(false);
+
+            store.destroy();
+            grid.destroy();
         });
     });
 

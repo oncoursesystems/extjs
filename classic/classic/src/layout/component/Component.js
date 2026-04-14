@@ -382,7 +382,7 @@ Ext.define('Ext.layout.component.Component', {
                     ret.gotHeight = true;
                     ++got;
                 }
-                // eslint-disable-next-line no-cond-assign, max-len
+                // eslint-disable-next-line max-len
                 else if ((ret.contentHeight = ownerContext.getProp('contentHeight')) !== undefined) {
                     ret.gotHeight = true;
                     ++got;

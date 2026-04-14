@@ -1163,7 +1163,6 @@ topSuite("Ext.app.bind.Template", function() {
         });
 
         it('should fail on wrong literals', function() {
-            // eslint-disable-next-line no-useless-escape
             var tpl = new BindTemplate('Hello { foo.bar:this.test("yep\" it fails") }!');
 
             expect(function() {

@@ -1,5 +1,3 @@
-/* global expect, Ext, jasmine, spyOn */
-
 topSuite("Ext.panel.Tool", function() {
     var describeNotTouch = jasmine.supportsTouch ? xdescribe : describe,
         tool, el;

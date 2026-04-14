@@ -35,11 +35,11 @@ Ext.define('KitchenSink.view.toolbar.BasicToolbar', {
             copyIconCls: null,
             formatIconCls: null,
             listIconCls: null,
-            pasteGlyph: 70,
-            cutGlyph: 67,
-            copyGlyph: 102,
-            formatGlyph: 76,
-            listGlyph: 61
+            pasteGlyph: 'f0ea',
+            cutGlyph: 'f0c4',
+            copyGlyph: 'f0c5',
+            formatGlyph: 'f15b',
+            listGlyph: 'f03a'
         },
         triton: {
             width: 560

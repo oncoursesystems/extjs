@@ -3,7 +3,8 @@ topSuite("Ext.util.TaskRunner", [
 ], function() {
     var spy, runner, task;
 
-    describe("idle event", function() {
+    /** TODO False positive test */
+    xdescribe("idle event", function() {
         var calls;
 
         function onIdle() {

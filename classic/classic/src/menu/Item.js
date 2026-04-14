@@ -208,7 +208,7 @@ Ext.define('Ext.menu.Item', {
         'itemEl', 'iconEl', 'textEl', 'arrowEl'
     ],
 
-    /* eslint-disable indent, max-len */
+    /* eslint-disable max-len */
     /**
      * @cfg renderTpl
      * @inheritdoc
@@ -256,7 +256,7 @@ Ext.define('Ext.menu.Item', {
                 '</tpl>' +
             '</a>' +
         '</tpl>',
-    /* eslint-enable indent, max-len */
+    /* eslint-enable max-len */
 
     /**
      * @cfg autoEl

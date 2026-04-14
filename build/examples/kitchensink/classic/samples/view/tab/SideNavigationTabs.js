@@ -33,19 +33,19 @@ Ext.define('KitchenSink.view.tab.SideNavigationTabs', {
 
     items: [{
         title: 'Home',
-        glyph: 72,
+        glyph: 'f015',
         html: KitchenSink.DummyText.longText
     }, {
         title: 'Users',
-        glyph: 117,
+        glyph: 'f007',
         html: KitchenSink.DummyText.extraLongText
     }, {
         title: 'Groups',
-        glyph: 85,
+        glyph: 'f500',
         html: KitchenSink.DummyText.longText
     }, {
         title: 'Settings',
-        glyph: 42,
+        glyph: 'f013',
         html: KitchenSink.DummyText.extraLongText
     }]
 });

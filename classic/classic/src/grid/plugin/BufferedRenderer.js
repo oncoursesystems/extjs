@@ -783,6 +783,9 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             lastAffectedIndex = startIndex + oldRecords.length - 1,
             recordIncrement = newRecords.length - oldRecords.length,
             scrollIncrement = recordIncrement * me.rowHeight,
+            lockingPartner = view.lockingPartner,
+            hasLockingPartner = lockingPartner && view.grid.isVisible() &&
+                                lockingPartner.grid.isVisible(),
             preserveScrollOnRefresh;
 
         // All replacement activity is past the end of a full-sized rendered block;
@@ -799,8 +802,13 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             // Move the index-based NodeCache up or down depending on whether it's a net
             // adding or removal above.
             rows.moveBlock(recordIncrement);
-            me.refreshSize();
 
+            // Move locking partners NodeCache as well
+            if (hasLockingPartner) {
+                lockingPartner.all.moveBlock(recordIncrement);
+            }
+
+            me.refreshSize();
             // If the change above us was an addition, pretend that we just scrolled upwards
             // which will ensure that there is at least this.numFromEdge rows above the fold.
             oldStartIndex = rows.startIndex;
@@ -835,6 +843,14 @@ Ext.define('Ext.grid.plugin.BufferedRenderer', {
             }
 
             view.refreshSize(rows.getCount() !== renderedSize);
+
+            // The refreshView method has been deferred to avoid conflicts with the execution 
+            // of the refreshSize method, as both cannot run within the same event loop.
+            if (hasLockingPartner) {
+                Ext.defer(function() {
+                    me.refreshView(rows.startIndex, scrollIncrement);
+                }, 1, me);
+            }
 
             return;
         }

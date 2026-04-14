@@ -78,7 +78,7 @@ Ext.define('KitchenSink.view.dd.GridToForm', {
         },
 
         tools: [{
-            glyph: 'xf021@\'Font Awesome 5 Free\'',
+            glyph: 'xf021',
             tooltip: 'Reset example',
             handler: 'onResetClick'
         }],

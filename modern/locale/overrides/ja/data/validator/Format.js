@@ -2,6 +2,6 @@ Ext.define('Ext.locale.ja.data.validator.Format', {
     override: 'Ext.data.validator.Format',
 
     config: {
-        message: 'フォーマットが違います'
+        message: '有効な形式ではありません'
     }
 });

@@ -384,13 +384,29 @@ Ext.define('Ext.grid.Grid', {
 
         /**
          * @cfg {String} title
-         * The title that will be displayed in the TitleBar at the top of this Grid.
+         * The title that will be displayed in the {@link #titleBar} at the top of this Grid.
+         * Setting this value automatically creates a titleBar with the provided
+         * title using the following defaults:
+         *
+         *    {
+         *        xtype: 'titlebar',
+         *        docked: 'top'
+         *    }
+         *
+         * Note: Using this config triggers behaviour where the grid titleBar
+         * is only displayed when the title is not empty. Use the {@link #titleBar} config
+         * for more control of the grid's titlebar behaviour and settings.
+         *
+         * Should not be used in conjunction with {@link #titleBar}.
          */
         title: '',
 
         /**
          * @cfg {Object} titleBar
-         * The TitleBar.
+         * A configuration object for {@link Ext.TitleBar}. May be used to specify
+         * a custom configuration for the grid's titleBar.
+         *
+         * Should not be used in conjunction with {@link #title}.
          */
         titleBar: {
             xtype: 'titlebar',
@@ -433,7 +449,6 @@ Ext.define('Ext.grid.Grid', {
         columnsMenuItem: {
             lazy: true,
             $value: {
-                xtype: 'gridcolumnsmenu',
                 weight: -80,
                 separator: true
             }
@@ -477,6 +492,20 @@ Ext.define('Ext.grid.Grid', {
     itemConfig: {
         xtype: 'gridrow'
     },
+
+    /**
+     * @cfg {Boolean} bufferedColumns
+     * Configure as `true` to enable buffered rendering for columns.
+     * 
+     * When `bufferedColumns` is `true`, and {@link #cfg-infinite} is true,
+     * {@link #cfg-variableHeights} is explicitly defaulted to `true`.
+     * 
+     * Note that this configuration can not be dynamically changed
+     * after the grid has instantiated.
+     * 
+     * @since 8.0.0
+     */
+    bufferedColumns: false,
 
     /**
      * @cfg groupHeader
@@ -754,7 +783,8 @@ Ext.define('Ext.grid.Grid', {
         columnhide: 'hidden',
         columnmove: 'weight',
         columnresize: 'width',
-        columnshow: 'hidden'
+        columnshow: 'hidden',
+        columnlockedchange: 'locked'
     },
 
     /**
@@ -815,9 +845,81 @@ Ext.define('Ext.grid.Grid', {
         if (!columns.length && persist && persist.length) {
             headerContainer.add(persist);
         }
+
+        if (!me.delayedResizeTask && me.bufferedColumns) {
+            me.delayedResizeTask = new Ext.util.DelayedTask(me.onResizeComplete, me);
+        }
+
+        if (me.bufferedColumns && scroller.type === 'virtual') {
+            // Listen for animation end events on the scroller's translatable element
+            // This handles the completion of touch scroll animations in virtual scrolling mode
+            scroller.getTranslatable().on({
+                animationend: 'onAnimationEnd',
+                scope: me
+            });
+        }
+    },
+
+    /**
+     * Called after the grid has rendered.
+     * If virtual column rendering is enabled, this triggers loading of visible column cells.
+     * ensures that virtual columns are properly
+     * initialized after the grid DOM structure is available.
+     * 
+     * @method afterRender
+     */
+    afterRender: function() {
+        var me = this;
+
+        // Call parent implementation to maintain proper inheritance chain
+        me.callParent();
+
+        // Initialize virtual column rendering if enabled
+        // This will load only the visible columns to improve performance
+        if (me.bufferedColumns) {
+            me.refreshBufferedColumns(true);
+        }
+    },
+
+    /**
+     * Handle scroll events for virtual column rendering optimization.
+     * This method specifically monitors horizontal scrolling to trigger column virtualization.
+     * Vertical scrolling is tracked but doesn't trigger column loading 
+     * to avoid unnecessary processing.
+     * Uses asynchronous processing to debounce scroll events and improve performance.
+     * 
+     * @method onScrollMove
+     */
+    onScrollMove: function() {
+        this.doScrollMove();
+    },
+
+    onResize: function() {
+        if (!this.delayedResizeTask) {
+            return;
+        }
+
+        this.delayedResizeTask.delay(100);
+    },
+
+    onResizeComplete: function() {
+
+        if (this.bufferedColumns) {
+            this.refreshBufferedColumns(true);
+
+            // In Safari, after a resize the column cells can be out of alignment with
+            // the headers. This forces a redraw to fix that.
+            if (Ext.isSafari) {
+                this.element.redraw();
+            }
+        }
     },
 
     doDestroy: function() {
+        if (this.delayedResizeTask) {
+            this.delayedResizeTask.cancel();
+        }
+
         this.destroyMembers('columnsMenu', 'columnsMenuItem', 'rowNumbererColumn');
         this.callParent();
     },
@@ -842,13 +944,12 @@ Ext.define('Ext.grid.Grid', {
         var me = this,
             i, n, item, sharedMenuItems;
 
-        me.getColumnsMenuItem();  // ensure "Columns" menu is created and registered
+        me.getColumnsMenuItem(); // ensure "Columns" menu is created and registered
 
         sharedMenuItems = me.sharedMenuItems;
 
         for (i = 0, n = sharedMenuItems && sharedMenuItems.length; i < n; ++i) {
             item = sharedMenuItems[i];
-
             item.onBeforeShowColumnMenu(menu, column, me);
         }
 
@@ -1100,6 +1201,11 @@ Ext.define('Ext.grid.Grid', {
                     row = items[j];
 
                     if (row.hasGridCells) {
+                        if (me.bufferedColumns &&
+                            before && !me.isColumnInView(before.el.dom, true)) {
+                            continue;
+                        }
+
                         row.insertColumnBefore(column, before);
                     }
                 }
@@ -1143,6 +1249,10 @@ Ext.define('Ext.grid.Grid', {
             if (oldWidth && !column.getHidden()) {
                 if (me.infinite) {
                     me.refreshScrollerSize();
+                }
+
+                if (me.bufferedColumns) {
+                    me.refreshBufferedColumns(true);
                 }
 
                 me.fireEvent('columnresize', me, column, width);
@@ -1363,6 +1473,12 @@ Ext.define('Ext.grid.Grid', {
             // be handled by using variableHeights, but the grid could re-measure as
             // needed
             // this.refreshScrollerSize();
+
+            // Refresh buffered columns if not a locked grid  as the locked side
+            // will handle its own refresh.
+            if (me.bufferedColumns && !me.isCssLockedGrid && !me.regionKey) {
+                me.refreshBufferedColumns(false);
+            }
         },
 
         refreshInnerWidth: function() {
@@ -1380,7 +1496,7 @@ Ext.define('Ext.grid.Grid', {
                 me.setInnerWidth(totalColumnWidth);
 
                 me.setCellSizes(changedColumns, me.items.items);
-                me.setCellSizes(changedColumns, me.itemCache);
+                me.setCellSizes(changedColumns, me.itemCache.unused);
 
                 if (me.isGrouping()) {
                     me.setCellSizes(changedColumns, groupingInfo.header.unused);
@@ -1547,6 +1663,15 @@ Ext.define('Ext.grid.Grid', {
             return rowNumbers;
         },
 
+        applyVariableHeights: function(variable) {
+            if (!Ext.isEmpty(variable) && this.bufferedColumns && this.infinite) {
+                // Buffered columns requires variableHeights to be true
+                return true;
+            }
+
+            return variable;
+        },
+
         updateRowNumbers: function(rowNumbers, oldRowNumbers) {
             if (oldRowNumbers) {
                 this.unregisterColumn(oldRowNumbers, true);
@@ -1574,6 +1699,14 @@ Ext.define('Ext.grid.Grid', {
         // columnsMenuItem
 
         applyColumnsMenuItem: function(config, existing) {
+            // Determine the appropriate xtype based on virtual column rendering
+            var xtype = this.bufferedColumns ? 'gridvirtualcolumnsmenu' : 'gridcolumnsmenu';
+
+            // If config doesn't have xtype set, apply the dynamic one
+            if (config && !config.xtype) {
+                config = Ext.apply({ xtype: xtype }, config);
+            }
+
             return Ext.updateWidget(existing, config, this, 'createColumnsMenuItem');
         },
 
@@ -1608,7 +1741,6 @@ Ext.define('Ext.grid.Grid', {
 
         updateHeaderContainer: function(headerContainer) {
             if (headerContainer) {
-                // TODO just call these methods directly from rootHeaderCt?
                 // the old headerContainers are destroyed if they are replaced...
                 headerContainer.on({
                     columnresize: 'onColumnResize',
@@ -1656,17 +1788,15 @@ Ext.define('Ext.grid.Grid', {
         // title
 
         updateTitle: function(title) {
-            var titleBar = this.getTitleBar();
+            var titleBar = this.getTitleBar(),
+                hasCustomTitleBar = !!this.initialConfig.titleBar;
 
             if (titleBar) {
                 if (title) {
                     titleBar.setTitle(title);
-
-                    if (titleBar.isHidden()) {
-                        titleBar.show();
-                    }
+                    titleBar.show();
                 }
-                else {
+                else if (!hasCustomTitleBar) {
                     titleBar.hide();
                 }
             }
@@ -1675,13 +1805,28 @@ Ext.define('Ext.grid.Grid', {
         // titleBar
 
         applyTitleBar: function(config, existing) {
+            if (existing && !Ext.isDefined(config.hidden)) {
+                Ext.merge(config, {
+                    hidden: false
+                });
+            }
+
+            if (existing && !Ext.isDefined(config.items)) {
+                Ext.merge(config, {
+                    items: []
+                });
+            }
+
             return Ext.updateWidget(existing, config);
         },
 
         updateTitleBar: function(titleBar) {
-            if (titleBar && !titleBar.getTitle()) {
-                titleBar.setTitle(this.getTitle());
+            if (!titleBar || !titleBar.getTitle || !titleBar.setTitle || !!
+            titleBar.getTitle()) {
+                return;
             }
+
+            titleBar.setTitle(this.getTitle());
         },
 
         // totalColumnWidth
@@ -2228,6 +2373,210 @@ Ext.define('Ext.grid.Grid', {
 
         getColumnStateId: function(column) {
             return column.stateId || column._stateId || column.headerId;
+        },
+
+        /**
+         * Performs optimized scroll handling for virtual column rendering by monitoring
+         * horizontal scroll position changes and triggering column cell loading when
+         * necessary. This method implements scroll throttling to improve performance
+         * during rapid scrolling operations.
+         * 
+         * The function uses a threshold-based approach to determine when to refresh
+         * column cells, avoiding unnecessary rendering during minor scroll movements
+         * while ensuring cells are loaded for significant position changes.
+         * 
+         * @method doScrollMove
+         */
+        doScrollMove: function() {
+            var me = this,
+                scroller = me.getScrollable(),
+                scrollThreshold = 50,
+                currentScrollX, scrollDifferenceX;
+
+            if (!me.bufferedColumns) {
+                return;
+            }
+
+            currentScrollX = scroller.getPosition().x;
+
+            if (Ext.isEmpty(me.previousScrollX)) {
+                me.previousScrollX = currentScrollX;
+
+                // First time scroll, always process as scrollDifferenceX will be 0
+                me.isFirstTimeScroll = true;
+            }
+
+            scrollDifferenceX = Math.abs(currentScrollX - me.previousScrollX);
+
+            if (scrollDifferenceX > scrollThreshold || me.isFirstTimeScroll) {
+                Ext.unasap(me.timerIdCol);
+                me.timerIdCol = Ext.asap(function() {
+                    me.refreshBufferedColumns(false);
+                });
+
+                me.previousScrollX = currentScrollX;
+                me.isFirstTimeScroll = false;
+            }
+        },
+
+        /**
+         * Determines whether the column is in visible area or not.
+         * Uses element positioning and grid viewport dimensions to calculate visibility.
+         * Supports both full and partial visibility detection.
+         * 
+         * @method isColumnInView
+         * @param {HTMLElement} elem The column element to check for visibility
+         * @param {Boolean} partial Whether to include partially visible columns
+         * @return {Boolean} True if column is visible (fully or partially based on partial param)
+         */
+        isColumnInView: function(elem, partial) {
+            var me = this,
+                contHeight = me.el.getWidth(),
+                elemTop = elem.offsetLeft - me.getScrollable().getPosition().x,
+                elemBottom = elemTop + elem.offsetWidth,
+                isTotal = elemTop >= 0 && elemBottom <= contHeight + me.el.getLeft(),
+                isPart = ((elemTop < 0 && elemBottom > 0) ||
+                 (elemTop > 0 && elemTop <= contHeight)) && partial;
+
+            return isTotal || isPart;
+
+        },
+
+        /**
+         * Load the cells in the grid based on column visibility.
+         * This is the core method for virtual column rendering that manages DOM manipulation
+         * for visible/invisible columns to optimize performance.
+         * Handles both regular data rows and summary rows if present.
+         * 
+         * @method refreshBufferedColumns
+         * @param {Boolean} syncRows Indicates if method was called from scroll event
+         */
+        refreshBufferedColumns: function(syncRows) {
+            var me = this,
+                marginOffset = 0,
+                hasVisibleColumn = false,
+                columns = me.getColumns(),
+                rows = me.innerItems.slice(0),
+                rightLockedCls = Ext.baseCSSPrefix + 'locked-right',
+                hasLockedColumn = false,
+                summaryPlugin, summaryRowWidget,
+                row, column, cell, el, j, i, lockedRightCell,
+                isLocked, lockedRegion;
+
+            if (!me.bufferedColumns || !columns.length) {
+                return;
+            }
+
+            summaryPlugin = me.getPlugin('gridsummaryrow');
+            summaryRowWidget = summaryPlugin ? summaryPlugin.getRow() : null;
+
+            if (summaryRowWidget && !rows.includes(summaryRowWidget)) {
+                rows.push(summaryRowWidget);
+            }
+
+            if (!rows.length) {
+                return;
+            }
+
+            for (i = 0; i < columns.length; i++) {
+                column = columns[i];
+                // For grouped headers, use the parent element for visibility checks
+                el = (column.parent && column.parent.isGridColumn)
+                    ? column.parent.el.dom
+                    : column.el.dom;
+                isLocked = column.isLocked();
+                lockedRegion = isLocked && column.getLocked();
+
+                hasLockedColumn = hasLockedColumn || isLocked;
+
+                if (lockedRegion === "right" || me.isColumnInView(el, true)) {
+                    for (j = 0; j < rows.length; j++) {
+                        row = rows[j];
+
+                        if (!row) {
+                            continue;
+                        }
+
+                        cell = row.isGridRow && row.getCellByColumn(column);
+
+                        if (!cell) {
+                            continue;
+                        }
+
+                        lockedRightCell = row.cellsElement.down('.' + rightLockedCls);
+
+                        if (cell.hasCls(rightLockedCls) && cell.el.dom.isConnected) {
+                            continue;
+                        }
+
+                        if (lockedRightCell) {
+                            cell.element.insertBefore(lockedRightCell);
+                        }
+                        else {
+                            row.cellsElement.append(cell.element.dom);
+                        }
+
+                        row.cellsElement.setMargin('0 0 0 ' + Math.max(0, marginOffset));
+                    }
+
+                    hasVisibleColumn = true;
+                }
+                else {
+                    if (isLocked) {
+                        continue;
+                    }
+
+                    for (j = 0; j < rows.length; j++) {
+                        row = rows[j];
+
+                        if (!row) {
+                            continue;
+                        }
+
+                        cell = row.isGridRow && row.getCellByColumn(column);
+
+                        if (!cell) {
+                            continue;
+                        }
+
+                        cell.element.dom.remove();
+                    }
+
+                    if (!hasVisibleColumn) {
+                        marginOffset += (column.el.getWidth(false, true) || 0);
+                    }
+                }
+            }
+
+            // Force row height synchronization for data changes or locked column alignment
+            // syncRows indicates row structure/data requires re-rendering 
+            // hasLockedColumn requires forced sync to maintain 
+            // alignment between locked and scrollable regions
+            if (syncRows || hasLockedColumn) {
+                me.syncRowsToHeight(true);
+            }
+        },
+
+        // This handles the completion of touch scroll animations in virtual scrolling mode
+        onAnimationEnd: function() {
+            this.refreshBufferedColumns();
+        },
+
+        /**
+         * Remove the parent header if all its child headers are removed
+         * and is not root header container
+         */
+        trackHeaderMove: function(header, headerCt) {
+            var parentCt;
+
+            if (!header || header === headerCt || header.innerItems.length) {
+                return;
+            }
+
+            parentCt = header.getParent();
+            header.getRootHeaderCt().fireEvent('columngroupremove', parentCt, header);
+            parentCt.remove(header);
+            this.trackHeaderMove(parentCt, headerCt);
         }
     } // privates
 

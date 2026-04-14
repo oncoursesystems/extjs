@@ -26,7 +26,7 @@ Ext.define('Ext.chart.SpaceFillingChart', {
                 return;
             }
 
-            // eslint-disable-next-line vars-on-top, one-var
+            // eslint-disable-next-line vars-on-top
             var chartRect = me.getSurface('chart').getRect(),
                 padding = me.getInsetPadding(),
                 width = chartRect[2] - padding.left - padding.right,

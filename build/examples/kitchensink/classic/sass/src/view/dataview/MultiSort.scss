@@ -34,7 +34,7 @@
 
             &:after {
                 content: "\f175";
-                font: 14px/1 'Font Awesome 5 Free';
+                font: 14px/1 $font-awesome-family;
                 color: #1b1b1b;
             }
         }
@@ -44,7 +44,7 @@
 
             &:after {
                 content: "\f176";
-                font: 14px/1 'Font Awesome 5 Free';
+                font: 14px/1 $font-awesome-family;
                 color: #1b1b1b;
             }
         }
@@ -67,7 +67,7 @@
             &:after {
                 content: "\f0dd";
 
-                font: 14px/1 'Font Awesome 5 Free';
+                font: 14px/1 $font-awesome-family;
                 color: $base-color;
                 vertical-align: 'text-top';
             }
@@ -79,7 +79,7 @@
             &:after {
                 content: "\f0de";
 
-                font: 14px/1 'Font Awesome 5 Free';
+                font: 14px/1 $font-awesome-family;
                 color: $base-color;
                 vertical-align: -webkit-baseline-middle;
             }

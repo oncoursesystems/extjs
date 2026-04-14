@@ -159,6 +159,7 @@ Ext.define('Ext.tree.View', {
         me.callParent();
         me.store.setRootVisible(me.rootVisible);
         me.addRowTpl(me.lookupTpl('treeRowTpl'));
+
     },
 
     onFillComplete: function(treeStore, fillRoot, newNodes) {
@@ -778,13 +779,10 @@ Ext.define('Ext.tree.View', {
             wasChecked = record.get('checked'),
             checked;
 
-        // 1 means semi-checked.
-        // Toggle of that state checks.
-        if (wasChecked === 1) {
-            checked = true;
-        }
-        else {
-            checked = !wasChecked;
+        checked = wasChecked === false;
+
+        if (me.ownerGrid.enableTri && !Ext.isEmpty(me.ownerGrid.checkOnTriTap)) {
+            checked = me.getCheckOnTriTapFlags(wasChecked, checked);
         }
 
         me.setChecked(record, checked, e);
@@ -794,93 +792,38 @@ Ext.define('Ext.tree.View', {
         var me = this,
             checkPropagation =
                 me.checkPropagationFlags[me.ownerGrid.checkPropagation.toLowerCase()],
-            wasChecked = record.data.checked,
-            halfCheckedValue = me.ownerGrid.triStateCheckbox ? 1 : false,
-            progagateCheck = (!options || options.propagateCheck !== false) &&
-                             (checkPropagation & 1),
-            checkParent = (!options || options.checkParent !== false) && (checkPropagation & 2),
-            matchedChildCount = 0,
-            parentNode, parentChecked, foundCheck, foundClear, childNodes, len, i;
+            wasChecked = record.get('checked'),
+            shouldPropagateDown = (!options || options.propagateCheck !== false) &&
+                (checkPropagation & 1),
+            shouldPropagateUp = (!options || options.checkParent !== false) &&
+                (checkPropagation & 2),
+            parentNode;
 
         if (me.fireEvent('beforecheckchange', record, wasChecked, e) === false) {
             return;
         }
 
-        // Propagate full ->true and ->false changes to child nodes
-        // unless we're being called from a setChecked on a child node.
-        if (meChecked !== 1 && progagateCheck) {
-            childNodes = record.childNodes;
-            len = childNodes.length;
+        if (shouldPropagateDown) {
+            me.propagateToChildren(record, meChecked, e, wasChecked);
+        }
 
-            for (i = 0; i < len; i++) {
+        if (record.get('checkable') !== false && !Ext.isEmpty(record.get('checked'))) {
 
-                // We are setting child nodes, so pass the
-                // checkParent flag as false to avoid reentry back into this node.
-                me.setChecked(childNodes[i], meChecked, e, {
-                    checkParent: false
-                });
-
-                if (childNodes[i].get('checked') === meChecked) {
-                    matchedChildCount++;
-                }
+            if (record.hasChildNodes() && me.ownerGrid.enableTri && shouldPropagateDown) {
+                meChecked = me.calculateParentCheckState(record);
             }
 
-            // If one or more of the child nodes refused
-            if (matchedChildCount !== len) {
-                meChecked = matchedChildCount ? halfCheckedValue : false;
+            if (meChecked !== wasChecked) {
+                record.set('checked', meChecked, options);
+                me.fireEvent('checkchange', record, meChecked, e);
             }
         }
 
-        // If the new valud was not reset due to vetoing from
-        // changes propagated to child nodes, then go ahead with the change.
-        if (record.get('checked') !== meChecked) {
-            record.set('checked', meChecked, options);
+        if (shouldPropagateUp) {
+            parentNode = record.parentNode;
 
-            // Fire checkchange now we know the valus has changed.
-            me.fireEvent('checkchange', record, meChecked, e);
-
-            // If there's a parent node, and the parent node has a checked data property
-            // keep parent up to date with checkedness of its child nodes.
-            if (checkParent && (parentNode = record.parentNode) &&
-                (parentChecked = parentNode.data.checked) != null) {
-                childNodes = parentNode.childNodes;
-                len = childNodes.length;
-
-                // If we're semi checked, the parent is semi checked.
-                if (meChecked === halfCheckedValue) {
-                    parentChecked = halfCheckedValue;
-                }
-                // If we're the sole child, the parent is our state.
-                else if (len === 1) {
-                    parentChecked = meChecked;
-                }
-                else {
-                    foundCheck = foundClear = false;
-
-                    for (i = 0; !(foundCheck && foundClear) & i < len; i++) {
-                        if (childNodes[i].data.checked === 1) {
-                            foundCheck = foundClear = true;
-                        }
-                        else if (!childNodes[i].data.checked) {
-                            foundClear = true;
-                        }
-                        else {
-                            foundCheck = true;
-                        }
-                    }
-
-                    parentChecked = foundCheck && foundClear
-                        ? halfCheckedValue
-                        : (foundCheck ? true : false);
-                }
-
-                if (parentNode.get('checked') !== parentChecked) {
-                    // We are setting the parent node, so pass the
-                    // progagateCheck flag as false to avoid reentry back into this node.
-                    me.setChecked(parentNode, parentChecked, e, {
-                        propagateCheck: false
-                    });
-                }
+            if (parentNode && parentNode.get('checked') != null) {
+                me.updateParentState(parentNode, e);
             }
         }
     },
@@ -896,7 +839,22 @@ Ext.define('Ext.tree.View', {
     getStoreListeners: function() {
         return Ext.apply(this.callParent(), {
             rootchange: this.onRootChange,
-            fillcomplete: this.onFillComplete
+            fillcomplete: this.onFillComplete,
+            nodeappend: this.onNodeAppend
+        });
+    },
+
+    onNodeAppend: function(cmp, node) {
+        var me = this;
+
+        me.syncNodeState(node);
+
+        // on bulk node append refresh on last node
+        Ext.unasap(me.nodeAppendInterval);
+        me.nodeAppendInterval = Ext.asap(function() {
+            if (me.refresh) {
+                me.refresh();
+            }
         });
     },
 
@@ -934,6 +892,9 @@ Ext.define('Ext.tree.View', {
             });
 
             grid.addRelayers(newRoot);
+
+            // Initialize checkboxes for all nodes when checkable: true
+            me.syncCheckboxes();
         }
     },
 
@@ -973,6 +934,248 @@ Ext.define('Ext.tree.View', {
             }
 
             return ret;
+        },
+
+        updateParent: function(parent) {
+            var checked, unchecked, tri, total,
+                newValue, oldValue;
+
+            if (!parent) {
+                return;
+            }
+
+            checked = parent.currentCheckState && parent.currentCheckState.checked;
+            unchecked = parent.currentCheckState && parent.currentCheckState.unchecked;
+            tri = parent.currentCheckState && parent.currentCheckState.tri;
+            total = parent.childNodes.length;
+
+            newValue = tri > 0
+                ? 'tri'
+                : checked === total
+                    ? 'checked'
+                    : unchecked === total ? 'unchecked' : 'tri';
+
+            oldValue = parent.data.checked === 'tri'
+                ? 'tri'
+                : (parent.data.checked ? 'checked' : 'unchecked');
+
+            if (oldValue !== newValue) {
+
+                if (parent.get('checkable') !== false && !Ext.isEmpty(parent.get('checked'))) {
+
+                    parent.set('checked', newValue === 'tri'
+                        ? 'tri'
+                        : newValue !== 'checked' ? false : true);
+                }
+
+                if (parent.parentNode) {
+                    this.updateCount(parent.parentNode, oldValue, newValue);
+                    this.updateParent(parent.parentNode);
+                }
+            }
+        },
+
+        updateCount: function(parent, oldVal, newVal) {
+            if (parent && parent.currentCheckState) {
+                parent.currentCheckState[oldVal]--;
+                parent.currentCheckState[newVal]++;
+            }
+        },
+
+        /**
+         * Initializes syncing checkboxes for all nodes in the tree.
+         * syncCheckboxes is triggered when the tree is first rendered or when the store is bound.
+         * It sets the initial checked state for each node based on its 'checked' field.
+         * If the 'checked' field is not set, it defaults to false unless the node is not checkable.
+         * If tri-state checkboxes are enabled, it calculates the initial tri-state
+         * based on the children of each node.
+         * @private
+         * */
+        syncCheckboxes: function() {
+            var me = this,
+                store = me.store,
+                root = store && store.getRoot();
+
+            if (store && root) {
+                root.cascade(function(node) {
+                    me.syncNodeState(node);
+                });
+
+            }
+        },
+
+        syncNodeState: function(node) {
+            var me = this,
+                parent, checkedValue,
+                checkedNode = node.get('checked');
+
+            if (checkedNode === null && node.get('checkable') !== false &&
+            me.ownerGrid.checkable === true) {
+                node.set('checked', false);
+            }
+
+            if (me.ownerGrid.enableTri) {
+                parent = node.parentNode;
+
+                node.currentCheckState = { checked: 0, unchecked: 0, tri: 0 };
+
+                if (parent != null) {
+                    if (!parent.currentCheckState) {
+                        parent.currentCheckState = { checked: 0, unchecked: 0, tri: 0 };
+                    }
+
+                    checkedValue = node.data.checked === 'tri'
+                        ? 'tri'
+                        : node.data.checked ? 'checked' : 'unchecked';
+
+                    parent.currentCheckState[checkedValue]++;
+                    me.updateParent(parent);
+                }
+            }
+            else {
+                // Handle initial tri-state logic for the current node
+                if (!Ext.isEmpty(checkedNode)) {
+                    // If enableTri mode is disabled and the node is set to 'tri',
+                    //  convert it to true
+                    if (checkedNode === 'tri') {
+                        node.set('checked', true);
+                    }
+                }
+            }
+        },
+
+        /**
+         * Propagates the checked state to all child nodes.
+         * - If tri-state is enabled, determines the correct state for children.
+         * - Recursively sets the checked state for each child.
+         * @param {Ext.data.Model} record The parent node.
+         * @param {Boolean|String} childStateToSet The state to set for children.
+         * @param {Event} e The event that triggered the change.
+         * @param {Boolean|String} wasHalfChecked The previous state of the parent node.
+         * @private
+         */
+        propagateToChildren: function(record, childStateToSet, e, wasHalfChecked) {
+            var me = this,
+                childNodes = record.childNodes,
+                len = childNodes.length,
+                i;
+
+            if (!len) {
+                return;
+            }
+
+            if (me.ownerGrid.enableTri && !Ext.isEmpty(me.ownerGrid.checkOnTriTap)) {
+                childStateToSet = me.getCheckOnTriTapFlags(wasHalfChecked, childStateToSet);
+            }
+
+            // Set all children to the determined state
+            for (i = 0; i < len; i++) {
+                me.setChecked(childNodes[i], childStateToSet, e, {
+                    checkParent: false,      // Don't propagate back up during child setting
+                    propagateCheck: true     // Continue propagating down
+                });
+            }
+        },
+
+        /**
+         * Determines the checked state to set when a tri-state node is tapped.
+         * - If checkOnTriTap is true and previous state was 'tri', set to true.
+         * - If checkOnTriTap is false and previous state was 'tri', set to false.
+         * - Otherwise, use the provided checked value.
+         * @param {Boolean|String} wasChecked Previous checked state.
+         * @param {Boolean|String} checked Intended checked state.
+         * @return {Boolean|String} The state to set.
+         * @private
+         */
+        getCheckOnTriTapFlags: function(wasChecked, checked) {
+            var me = this,
+                checkOnTriTap = me.ownerGrid.checkOnTriTap;
+
+            return wasChecked === 'tri' ? !!checkOnTriTap : checked; // ensure boolean true/false 
+
+        },
+
+        /**
+         * Updates the checked state of a parent node based on its children's states.
+         * Can optionally just calculate and return the state without applying it.
+         * @param {Ext.data.NodeInterface} parentNode The parent node to update.
+         * @param {Event} e The event that triggered the change.
+         * @param {Object} options Optional configuration object.
+         * @param {Boolean} options.calculateOnly If true, only calculates
+         *  and returns the state without applying it.
+         * @returns {Boolean|String|undefined} Returns the calculated
+         *  state when calculateOnly is true, undefined otherwise.
+         * @private
+         */
+        updateParentState: function(parentNode, e) {
+            var me = this,
+                parentChecked;
+
+            parentChecked = me.calculateParentCheckState(parentNode);
+
+            if (parentNode.get('checked') !== parentChecked) {
+                // We are setting the parent node, so pass the
+                // propagateCheck flag as false to avoid circular propagation
+                me.setChecked(parentNode, parentChecked, e, {
+                    propagateCheck: false,
+                    checkParent: true // Allow further propagation up the tree
+                });
+            }
+        },
+
+        /**
+         * Determines the state of the parent node based on its children's states.
+         * - If all children are checked, returns true.
+         * - If some children are checked and some are unchecked, returns 'tri'.
+         * - If no children are checkable, returns undefined.
+         * @param {Ext.data.NodeInterface} parentNode The parent node to evaluate.
+         * @returns {Boolean|String|undefined} Returns true, 'tri', or undefined
+         *  based on the children's states.
+         */
+        calculateParentCheckState: function(parentNode) {
+            var me = this,
+                triModeEnabled = me.ownerGrid.enableTri && 'tri',
+                childNodes = parentNode.childNodes,
+                len = childNodes.length,
+                checkedCount = 0,
+                uncheckedCount = 0,
+                triCount = 0,
+                checkableCount = 0,
+                childChecked, i;
+
+            if (!len) {
+                return;
+            }
+
+            for (i = 0; i < len; i++) {
+                childChecked = childNodes[i].get('checked');
+
+                if (childNodes[i].get('checkable') === false) {
+                    continue;
+                }
+
+                checkableCount++;
+
+                if (childChecked === 'tri') {
+                    triCount++;
+                }
+
+                if (childChecked) {
+                    checkedCount++;
+                }
+                else {
+                    uncheckedCount++;
+                }
+            }
+
+            if (!checkableCount) {
+                return;
+            }
+
+            return triCount > 0 || (checkedCount > 0 && uncheckedCount > 0)
+                ? triModeEnabled
+                : checkedCount === checkableCount;
+
         }
     }
 });

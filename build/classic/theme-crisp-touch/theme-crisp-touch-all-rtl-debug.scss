@@ -1,4 +1,4 @@
-$image-search-path: '/home/teamcity/buildAgent/work/780e0679d11ca7ca/sencha/ext/build/classic/theme-crisp-touch/resources' !default;
+$image-search-path: '/Users/space/buildAgent/work/bbbb2bac69ba789b/sencha/ext/build/classic/theme-crisp-touch/resources' !default;
 $theme-name:  'theme-crisp-touch' !default;
 $include-ext-abstractcomponent: dynamic(true);;
 $include-ext-abstractcontainer: dynamic(true);;
@@ -1217,6 +1217,7 @@ $relative-image-path-for-uis: $theme-crisp-resource-path;
 @import '../../../classic/theme-crisp/sass/var/resizer/Resizer';
 @import '../../../classic/theme-crisp/sass/var/tab/Tab';
 @import '../../../classic/theme-crisp/sass/var/tab/Bar';
+@import '../../../classic/theme-crisp/sass/var/tree/View';
 @import '../../../classic/theme-crisp/sass/var/window/Toast';
 
 /* including package touch-sizing */
@@ -1273,6 +1274,7 @@ $relative-image-path-for-uis: $theme-crisp-touch-resource-path;
 @import '../../../classic/theme-crisp-touch/sass/var/resizer/Resizer';
 @import '../../../classic/theme-crisp-touch/sass/var/tab/Tab';
 @import '../../../classic/theme-crisp-touch/sass/var/tab/Bar';
+@import '../../../classic/theme-crisp-touch/sass/var/tree/View';
 
 
 /* ======================== RULE ======================== */

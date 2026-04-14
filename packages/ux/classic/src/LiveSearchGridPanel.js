@@ -253,7 +253,7 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
     /**
      * Selects the previous row containing a match.
      * @private
-     */   
+     */
     onPreviousClick: function() {
         var me = this,
             matches = me.matches,
@@ -269,7 +269,7 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
     /**
      * Selects the next row containing a match.
      * @private
-     */    
+     */
     onNextClick: function() {
         var me = this,
             matches = me.matches,
@@ -285,7 +285,7 @@ Ext.define('Ext.ux.LiveSearchGridPanel', {
     /**
      * Switch to case sensitive mode.
      * @private
-     */    
+     */
     caseSensitiveToggle: function(checkbox, checked) {
         this.caseSensitive = checked;
         this.onTextFieldChange();

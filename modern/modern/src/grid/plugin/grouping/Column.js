@@ -22,7 +22,9 @@ Ext.define('Ext.grid.plugin.grouping.Column', {
         menu: {
             lazy: true,
             $value: {}
-        }
+        },
+
+        locked: null
     },
     layout: {
         type: 'hbox'

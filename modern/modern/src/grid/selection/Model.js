@@ -363,6 +363,7 @@ Ext.define('Ext.grid.selection.Model', {
                     config.selected = this.getSelected();
                 }
 
+                this.selectionStart = null;
                 this.setSelection(config);
 
                 result = this.callParent();
@@ -837,8 +838,9 @@ Ext.define('Ext.grid.selection.Model', {
          */
         getViewListeners: function() {
             return {
-                columnschanged: 'onColumnsChanged',
-                columnmove: 'onColumnMove',
+                columnadd: 'onColumnsChanged',
+                columnremove: 'onColumnsChanged',
+                columnmove: 'onColumnsChanged',
                 scope: this,
                 destroyable: true
             };
@@ -872,14 +874,8 @@ Ext.define('Ext.grid.selection.Model', {
                 view = selData.view;
 
                 if (selData.isCells) {
-                    if (view.visibleColumns().length) {
-                        selData.eachCell(function(location) {
-                            view.onCellDeselect(location);
-                        });
-                    }
-                    else {
-                        me.clearSelections();
-                    }
+                    selData.clear();
+                    selectionChanged = true;
                 }
                 // We have to deselect columns which have been hidden/removed
                 else if (selData.isColumns) {
@@ -894,11 +890,12 @@ Ext.define('Ext.grid.selection.Model', {
                 }
             }
 
-            // This event is fired directly from the HeaderContainer before the view updates.
-            // So we have to wait until idle to update the selection UI.
-            // NB: fireSelectionChange calls updateSelectionExtender after firing its event.
-            Ext.on('idle', selectionChanged ? me.fireSelectionChange : me.updateSelectionExtender,
-                   me, { single: true });
+            if (selectionChanged) {
+                me.fireSelectionChange();
+            }
+            else {
+                me.updateSelectionExtender();
+            }
         },
 
         // The selection may have acquired or lost contiguity, so the replicator may need
@@ -1407,12 +1404,16 @@ Ext.define('Ext.grid.selection.Model', {
                             return;
                         }
 
+                        if (!shiftKey && !ctrlKey) {
+                            sel.clear();
+                        }
+
                         // Ensure selection object is of the correct type
                         sel = me.getSelection('records');
 
                         // First shift
-                        if (!sel.getRangeSize()) {
-                            if (me.selectionStart == null) {
+                        if (!sel.getRangeSize() || !(shiftKey || ctrlKey)) {
+                            if (me.selectionStart == null || !(shiftKey || ctrlKey)) {
                                 me.selectionStart = location.recordIndex;
                             }
 
@@ -1467,27 +1468,46 @@ Ext.define('Ext.grid.selection.Model', {
                 }
             }
             else {
+                // Clear selection start as we are not in SHIFT state.
                 me.selectionStart = null;
 
+                // Check for change in selection type
                 if (sel && (mode !== 'multi' || !ctrlKey) && !isSpace) {
                     sel.clear(true);
                 }
 
                 // If we are selecting rows and (the event is in one of the row selecting
                 // cells or we're *only* selecting rows) then select this row
-                if (selectingRows && (toColumn === me.numbererColumn ||
-                        toColumn === checkbox || !selectingCells)) {
-                    // If checkOnly is set, and we're attempting to select a row outside
-                    // of the checkbox column, reject
+                if (selectingRows &&
+                    (toColumn === me.numbererColumn || toColumn === checkbox || !selectingCells)) {
+
+                    // Ensure selection object is of the correct type
+                    sel = me.getSelection('records');
+
+                    if (mode === 'multi') {
+
+                        if (!ctrlKey) {
+                            sel.clear();
+                        }
+
+                        if (!sel.getRangeSize() || !(shiftKey || ctrlKey)) {
+                            if (me.selectionStart == null || !(shiftKey || ctrlKey)) {
+                                me.selectionStart = location.recordIndex;
+                            }
+
+                            sel.setRangeStart(me.selectionStart);
+                        }
+                    }
+
+                    // If checkOnly is set, and we're attempting to select a row outside of the
+                    // checkbox column, reject. 
                     // Also reject if we're navigating by key within the same row.
                     if (toColumn !== checkbox && checkboxOnly || (navigateEvent.keyCode &&
                             navigateEvent.from && record === navigateEvent.from.record)) {
                         return;
                     }
 
-                    // Ensure selection object is of the correct type
-                    sel = me.getSelection('records');
-
+                    // Toggle row selection
                     if (sel.isSelected(record)) {
                         if (ctrlKey || toColumn === checkbox || me.getDeselectable()) {
                             sel.remove(record);
@@ -1495,11 +1515,12 @@ Ext.define('Ext.grid.selection.Model', {
                         }
                     }
                     else {
-                        sel.add(record, ctrlKey || toColumn === checkbox);
+                        // Add row to selection
+                        sel.add(record, ctrlKey || toColumn === checkbox || mode === 'simple');
                         selectionChanged = true;
                     }
 
-                    if (selectionChanged && (selected = sel.getSelected()) && selected.length) {
+                    if (selectionChanged && (selected = me.getSelected()) && selected.length) {
                         me.selectionStart = store.indexOf(selected.first());
                         sel.setRangeStart(me.selectionStart);
                     }

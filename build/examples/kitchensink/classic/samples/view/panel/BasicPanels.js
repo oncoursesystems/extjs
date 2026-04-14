@@ -155,10 +155,10 @@ Ext.define('KitchenSink.view.panel.BasicPanels', {
         width: '${itemWidth}',
         html: KitchenSink.DummyText.mediumText,
         tools: [
-            { glyph: 'xf0ad@\'Font Awesome 5 Free\'' },
-            { glyph: 'xf3e5@\'Font Awesome 5 Free\'' },
-            { glyph: 'xf122@\'Font Awesome 5 Free\'' },
-            { glyph: 'xf135@\'Font Awesome 5 Free\'' }
+            { glyph: 'xf0ad' },
+            { glyph: 'xf3e5' },
+            { glyph: 'xf122' },
+            { glyph: 'xf135' }
         ],
         colspan: '${columns}'
     }, {
@@ -177,10 +177,10 @@ Ext.define('KitchenSink.view.panel.BasicPanels', {
         width: '${itemWidth}',
         html: KitchenSink.DummyText.mediumText,
         tools: [
-            { glyph: 'xf0ad@\'Font Awesome 5 Free\'' },
-            { glyph: 'xf3e5@\'Font Awesome 5 Free\'' },
-            { glyph: 'xf122@\'Font Awesome 5 Free\'' },
-            { glyph: 'xf135@\'Font Awesome 5 Free\'' }
+            { glyph: 'xf0ad' },
+            { glyph: 'xf3e5' },
+            { glyph: 'xf122' },
+            { glyph: 'xf135' }
         ],
         colspan: '${columns}'
     }]

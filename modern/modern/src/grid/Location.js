@@ -724,7 +724,9 @@ Ext.define('Ext.grid.Location', {
                 startPoint = me.clone(),
                 result = me.clone(),
                 columns = me.getVisibleColumns(),
-                rowIndex = me.view.store.indexOf(me.row.getRecord()),
+                store = me.view.store,
+                rowIndex = store.indexOf(me.row.getRecord()),
+
                 targetIndex,
                 wrap = false;
 
@@ -744,7 +746,7 @@ Ext.define('Ext.grid.Location', {
 
                 if (targetIndex === columns.length || !me.child.isGridRow) {
                     // We need to move down only if current row index > 1
-                    if (rowIndex < me.view.store.getData().count() - 1) {
+                    if (rowIndex < store.getCount() - 1) {
                         result = me.getUpdatedLocation(columns[0], rowIndex + 1);
                     }
                     else if (wrap) {
@@ -856,7 +858,11 @@ Ext.define('Ext.grid.Location', {
         getUpdatedLocation: function(column, targetRowIndex) {
             var me = this,
                 grid = column.getGrid(),
-                targetRecord = me.view.store.getData().getAt(targetRowIndex),
+                store = me.view.store,
+                isVirtualStore = store.isVirtualStore,
+                targetRecord = isVirtualStore
+                    ? store.getAt(targetRowIndex)
+                    : store.getData().getAt(targetRowIndex),
                 location = grid.createLocation(targetRecord);
 
             // Update location

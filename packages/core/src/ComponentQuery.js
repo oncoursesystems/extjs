@@ -638,7 +638,7 @@ Ext.define('Ext.ComponentQuery', {
             // For example:
             //     [attribute=value], [attribute^=value], [attribute$=value], [attribute*=value],
             //     [attribute~=value], [attribute%=value], [attribute!=value]
-            /* eslint-disable-next-line max-len, no-useless-escape */
+            /* eslint-disable-next-line no-useless-escape */
             re: /^(?:\[((?:[@?$])?[\w\-]*)\s*(?:([\^$*~%!\/]?=)\s*(['"])?((?:\\\]|.)*?)\3)?(?!\\)\])/,
             method: filterByAttribute,
             argTransform: function(args) {

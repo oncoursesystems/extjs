@@ -4,12 +4,10 @@ topSuite("Ext.chart.series.Pie", ['Ext.chart.*', 'Ext.data.ArrayStore'], functio
             var proto = Ext.chart.series.Pie.prototype,
                 betweenAngle = proto.betweenAngle,
                 context1 = {
-                    // eslint-disable-next-line brace-style
                     getClockwise: function() { return true; },
                     rotationOffset: proto.rotationOffset
                 },
                 context2 = {
-                    // eslint-disable-next-line brace-style
                     getClockwise: function() { return true; },
                     rotationOffset: context1.rotationOffset + 0.123
                 };

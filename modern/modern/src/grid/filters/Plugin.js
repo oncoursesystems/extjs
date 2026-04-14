@@ -648,9 +648,12 @@ Ext.define('Ext.grid.filters.Plugin', {
                 len = columns.length,
                 i, column;
 
-            for (i = 0; i < len; i++) {
-                column = columns[i];
-                this.createFilter(grid, column, column.getMenu());
+            // For virtual column filter will be created in the beforeShowColumnMenu
+            if (!grid.bufferedColumns) {
+                for (i = 0; i < len; i++) {
+                    column = columns[i];
+                    this.createFilter(grid, column, column.getMenu());
+                }
             }
         },
 

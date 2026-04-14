@@ -985,7 +985,6 @@ Ext.define('Ext.Widget', {
                 : (prototype.uiReferences = { element: '' }),
             renderTemplate, renderElement, renderConfig, element, referenceNodes, i, ln,
             referenceNode, reference, classCls, uiCls, baseCls,
-            /* eslint-disable-next-line no-unused-vars */
             referenceElement;
 
         if (isFirstInstance) {
@@ -1090,6 +1089,7 @@ Ext.define('Ext.Widget', {
                     // On the first instance these element must be immediately instantiated
                     // so that the CSS class names can be added in the render template,
                     // but they can be lazily instantiated on successive instances.
+                    // eslint-disable-next-line no-unused-vars
                     referenceElement = me.addElementReference(reference, referenceNode);
 
                     me.initUiReference(reference, uiCls, false);

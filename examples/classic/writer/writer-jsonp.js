@@ -238,7 +238,6 @@ Ext.define('Writer.Grid', {
     },
 
     onAddClick: function() {
-        // eslint-disable-next-line no-undef
         var rec = new Writer.Person({
                 first: '',
                 last: '',

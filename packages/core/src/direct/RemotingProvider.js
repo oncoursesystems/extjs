@@ -236,7 +236,7 @@ Ext.define('Ext.direct.RemotingProvider', {
      * @param {Ext.direct.RemotingProvider} provider
      * @param {Ext.direct.Transaction} transaction
      * @param {Object} meta The meta data
-     */            
+     */
 
     /**
      * @event call
@@ -247,7 +247,7 @@ Ext.define('Ext.direct.RemotingProvider', {
      * @param {Ext.direct.RemotingProvider} provider
      * @param {Ext.direct.Transaction} transaction
      * @param {Object} meta The meta data
-     */            
+     */
 
     /**
      * @event beforecallback

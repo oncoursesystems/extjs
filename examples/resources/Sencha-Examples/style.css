@@ -1,18 +1,19 @@
 @font-face {
   font-family: 'Sencha-Examples';
-  src:  url('fonts/Sencha-Examples.eot?vojc4q');
-  src:  url('fonts/Sencha-Examples.eot?vojc4q#iefix') format('embedded-opentype'),
-    url('fonts/Sencha-Examples.ttf?vojc4q') format('truetype'),
-    url('fonts/Sencha-Examples.woff?vojc4q') format('woff'),
-    url('fonts/Sencha-Examples.svg?vojc4q#Sencha-Examples') format('svg');
+  src:  url('fonts/Sencha-Examples.eot?g809ze');
+  src:  url('fonts/Sencha-Examples.eot?g809ze#iefix') format('embedded-opentype'),
+    url('fonts/Sencha-Examples.ttf?g809ze') format('truetype'),
+    url('fonts/Sencha-Examples.woff?g809ze') format('woff'),
+    url('fonts/Sencha-Examples.svg?g809ze#Sencha-Examples') format('svg');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'Sencha-Examples' !important;
-  speak: none;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -23,6 +24,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-qr-code:before {
+  content: "\e998";
+}
+.icon-qr-code-scanner:before {
+  content: "\e999";
+}
 .icon-cell-overflow-grid:before {
   content: "\e992";
 }
@@ -325,6 +332,66 @@
 }
 .icon-border-square:before {
   content: "\e710";
+}
+.icon-column-stacked-3d:before {
+  content: "\e611";
+}
+.icon-column-grouped-3d:before {
+  content: "\e612";
+}
+.icon-column-basic-3d:before {
+  content: "\e613";
+}
+.icon-binding-selection:before {
+  content: "\e615";
+}
+.icon-lineardata-tree:before {
+  content: "\e616";
+}
+.icon-form-rating:before {
+  content: "\e617";
+}
+.icon-form-color-picker:before {
+  content: "\e618";
+}
+.icon-color-selector:before {
+  content: "\e618";
+}
+.icon-direct-named:before {
+  content: "\e619";
+}
+.icon-direct-tree:before {
+  content: "\e61a";
+}
+.icon-direct-generic:before {
+  content: "\e61b";
+}
+.icon-bar-stacked-100-3d:before {
+  content: "\e61c";
+}
+.icon-bar-stacked-3d:before {
+  content: "\e61d";
+}
+.icon-bar-basic-3d:before {
+  content: "\e61e";
+}
+.icon-draw-composite:before {
+  content: "\e61f";
+}
+.icon-intersections:before {
+  content: "\e620";
+}
+.icon-hit-test:before {
+  content: "\e621";
+}
+.icon-bar-charts-3d:before {
+  content: "\e622";
+}
+.icon-column-charts-3d:before {
+  content: "\e623";
+}
+.icon-reorderable-tabs:before {
+  content: "\e604";
 }
 .icon-datachanges-pivot-grid:before {
   content: "\e93b";

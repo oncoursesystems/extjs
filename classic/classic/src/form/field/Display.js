@@ -42,7 +42,6 @@ Ext.define('Ext.form.field.Display', {
         'Ext.XTemplate'
     ],
 
-    /* eslint-disable indent, max-len */
     /**
      * @cfg fieldSubTpl
      * @inheritdoc
@@ -58,7 +57,6 @@ Ext.define('Ext.form.field.Display', {
             disableFormats: true
         }
     ],
-    /* eslint-enable indent, max-len */
 
     // We have the ARIA markup pre-rendered so we don't want it to be applied
     /**

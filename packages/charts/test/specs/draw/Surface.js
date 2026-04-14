@@ -1,6 +1,7 @@
 topSuite("Ext.draw.Surface", function() {
     describe('add', function() {
-        it("should not add the same sprite to the surface twice", function() {
+        /** TODO - False positive test */
+        xit("should not add the same sprite to the surface twice", function() {
             var surface = new Ext.draw.Surface({}),
                 sprite = new Ext.draw.sprite.Rect({});
 

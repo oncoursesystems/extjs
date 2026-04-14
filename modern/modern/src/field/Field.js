@@ -420,6 +420,7 @@ Ext.define('Ext.field.Field', {
     errorElement: null,
     errorIconElement: null,
     errorMessageElement: null,
+    ariaStatusElement: null,
 
     element: {
         reference: 'element',
@@ -480,6 +481,12 @@ Ext.define('Ext.field.Field', {
                     reference: 'errorMessageElement',
                     cls: Ext.baseCSSPrefix + 'error-message-el'
                 }]
+            }, {
+                reference: 'ariaStatusElement',
+                cls: Ext.baseCSSPrefix + 'aria-status-el ' + Ext.baseCSSPrefix + 'hidden-offsets',
+                tag: 'span',
+                'aria-live': 'polite',
+                'aria-hidden': 'true'
             }]
         }];
     },
@@ -491,6 +498,7 @@ Ext.define('Ext.field.Field', {
 
         // alias for backward compatibility
         this.innerElement = this.innerElement || this.bodyElement;
+        this.ariaStatusElement.set({ id: this.getId() + '-ariaStatusEl' });
     },
 
     onFocusLeave: function(e) {
@@ -559,9 +567,16 @@ Ext.define('Ext.field.Field', {
     },
 
     updateError: function(value) {
-        var msg = this.formatErrors(Ext.Array.from(value));
+        var me = this,
+            msg = me.formatErrors(Ext.Array.from(value));
 
-        this.setErrorMessage(msg);
+        if (!me.isAriaRoleStatic(me.ariaRole)) {
+            me.ariaEl.set({ 'aria-invalid': msg ? true : false });
+        }
+
+        me.ariaStatusElement.dom.innerHTML = Ext.String.htmlEncode(msg || '');
+
+        me.setErrorMessage(msg);
     },
 
     updateErrorMessage: function(msg) {
@@ -774,13 +789,18 @@ Ext.define('Ext.field.Field', {
     },
 
     updateRequired: function(required) {
-        var me = this;
+        var me = this,
+            component;
 
         me.element.toggleCls(me.requiredCls, required);
 
         if (!me.isConfiguring) {
             me.validate();
         }
+
+        component = (me.isCheckboxGroup || me.isRadioGroup) ? me.getContainer() : me;
+
+        component.ariaEl.dom.required = !!required;
     },
 
     updateRequiredMessage: function() {

@@ -150,7 +150,6 @@ Ext.define('KitchenSink.view.direct.GenericController', {
     },
 
     doEcho: function(field) {
-        // eslint-disable-next-line no-undef
         TestAction.doEcho(field.getValue(), this.onEcho, this);
 
         field.reset();
@@ -163,7 +162,6 @@ Ext.define('KitchenSink.view.direct.GenericController', {
     },
 
     doMultiply: function(field) {
-        // eslint-disable-next-line no-undef
         TestAction.multiply(field.getValue(), this.onMultiply, this);
 
         field.reset();

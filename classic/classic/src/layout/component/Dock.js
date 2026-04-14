@@ -1115,7 +1115,7 @@ Ext.define('Ext.layout.component.Dock', {
      * So when we are shrinkWrapDock on the horizontal, the stretch size for top/bottom
      * docked items is the final axis size. For the vertical axis, however, the stretch
      *
-     */ 
+     */
     invalidateAxes: function(ownerContext, horz, vert) {
         var before = this.beforeInvalidateShrinkWrapDock,
             after = this.afterInvalidateShrinkWrapDock,

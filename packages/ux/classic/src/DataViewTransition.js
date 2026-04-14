@@ -2,7 +2,7 @@
  * @class Ext.ux.DataViewTransition
  * Transition plugin for DataViews
  */
-/* eslint-disable vars-on-top, one-var */
+/* eslint-disable vars-on-top */
 Ext.ux.DataViewTransition = Ext.extend(Object, {
     /**
      * @property defaults

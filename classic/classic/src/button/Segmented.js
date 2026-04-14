@@ -339,7 +339,7 @@ Ext.define('Ext.button.Segmented', {
         var me = this,
             syncItemClasses = '_syncItemClasses';
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line one-var
         var items = me.items.items,
             ln = items.length,
             i = 0,

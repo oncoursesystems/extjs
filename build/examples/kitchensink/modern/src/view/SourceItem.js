@@ -33,7 +33,6 @@ Ext.define('KitchenSink.view.SourceItem', {
         if (this.prettyPrint) {
             renderDiv.innerHTML = html;
 
-            // eslint-disable-next-line no-undef
             PR.prettyPrint(function() {
                 if (!me.destroyed) {
                     me.superclass.updateHtml.call(me, renderDiv.innerHTML, oldHtml);

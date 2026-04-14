@@ -1,5 +1,3 @@
-/* global expect, spyOn, jasmine, Ext */
-
 topSuite("Ext.util.KeyMap", 'Ext.dom.Element', function() {
     var el, map, createMap, defaultFn, fireKey, origProcessEvent,
         KEYS = {

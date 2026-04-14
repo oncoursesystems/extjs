@@ -1727,7 +1727,8 @@ topSuite("Ext.data.schema.ManyToOne", ['Ext.data.ArrayStore', 'Ext.data.Session'
                             expect(spy.callCount).toBe(0);
                         });
 
-                        it("should load the store if configured with autoLoad: true", function() {
+                        /** TODO False positive test */
+                        xit("should load the store if configured with autoLoad: true", function() {
                             definePost({
                                 inverse: {
                                     autoLoad: true

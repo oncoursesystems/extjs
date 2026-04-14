@@ -1,12 +1,12 @@
 Ext.define("Ext.locale.ja.grid.feature.AdvancedGrouping", {
     override: "Ext.grid.feature.AdvancedGrouping",
 
-    expandAllText: "すべて展開",
-    collapseAllText: "全体を折りたたむ",
-    groupsText: "群衆",
-    groupByText: "このフィールドによるグループ",
-    addToGroupingText: "グループ化に追加します",
-    removeFromGroupingText: "グループ化から削除します",
-    groupSummaryTpl: "概要 ({name})",
-    summaryTpl: "概要 ({store.data.length})"
+    expandAllText: "すべて開く",
+    collapseAllText: "すべて閉じる",
+    groupsText: "グループ",
+    groupByText: "このフィールドでグループ化",
+    addToGroupingText: "グループ化",
+    removeFromGroupingText: "グループ解除",
+    groupSummaryTpl: "集計 ({name})",
+    summaryTpl: "集計 ({store.data.length})"
 });

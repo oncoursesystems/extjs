@@ -1151,7 +1151,7 @@ Ext.define('Ext.data.Session', {
         },
 
         registerReferences: function(record, oldId) {
-            var entityName = record.entityName, // eslint-disable-line no-unused-vars
+            var entityName = record.entityName,
                 id = record.id,
                 recordData = record.data,
                 remove = oldId || oldId === 0,
@@ -1166,6 +1166,7 @@ Ext.define('Ext.data.Session', {
 
                 if (fk || fk === 0) {
                     reference = reference.reference; // the "order" association role
+                    // eslint-disable-next-line no-unused-vars
                     entityName = reference.type;
                     roleName = reference.inverse.role;
 
@@ -1192,7 +1193,7 @@ Ext.define('Ext.data.Session', {
          */
         updateEntities: function(entityType, items) {
             var len = items.length,
-                i, data, rec, id, modified; // eslint-disable-line no-unused-vars
+                i, data, rec, id, modified;
 
             // Repeating some code here, but we want to optimize this for speed
             if (Ext.isArray(items)) {
@@ -1215,6 +1216,7 @@ Ext.define('Ext.data.Session', {
                     rec = this.peekRecord(entityType, id);
 
                     if (rec && !rec.dropped) {
+                        // eslint-disable-next-line no-unused-vars
                         modified = rec.set(data);
                     }
                     else {

@@ -26,7 +26,9 @@
             "../../../../../packages/froala-editor/test/specs",
             "../../../../../packages/froala-editor/test/classic/specs",
             "../../../../../packages/exporter/test/specs",
-            "../../../../../packages/exporter/test/classic/specs"
+            "../../../../../packages/exporter/test/classic/specs",
+            "../../../../packages/signature/test/specs-classic",
+            "../../../../packages/qr-code/test/classic/specs"
         ]
     } 
 }

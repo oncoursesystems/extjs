@@ -370,7 +370,7 @@ Ext.define('Ext.chart.series.Pie', {
         me.getColors();
         me.getSubStyle();
 
-        // eslint-disable-next-line vars-on-top, one-var
+        // eslint-disable-next-line vars-on-top
         var items = store.getData().items,
             length = items.length,
             animation = me.getAnimation() || chart && chart.getAnimation(),

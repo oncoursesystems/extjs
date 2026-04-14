@@ -318,6 +318,11 @@ Ext.Factory.prototype = {
                             }
                         }
                     }
+                    else {
+                        // The config object does not contain an xtype/xclass so reuse
+                        // the current component, reconfiguring it.
+                        reuse = true;
+                    }
                 }
                 else {
                     // config = { xtype: ... }

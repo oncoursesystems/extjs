@@ -452,6 +452,12 @@ Ext.define('Ext.Container', {
      */
     manageBorders: false,
 
+    /**
+     * @property ariaRole
+     * @inheritdoc
+     */
+    ariaRole: 'presentation',
+
     classCls: Ext.baseCSSPrefix + 'container',
 
     managedBordersCls: Ext.baseCSSPrefix + 'managed-borders',
@@ -482,8 +488,16 @@ Ext.define('Ext.Container', {
         me.reference = me.setupReference(me.reference);
         me.callParent();
 
+        if (me.bodyElement) {
+            me.bodyElement.set({ role: me.ariaRole });
+        }
+
         if (me.manageBorders) {
             me.addCls(me.managedBordersCls);
+        }
+
+        if (me.ariaEl) {
+            me.ariaEl.set({ role: me.ariaRole });
         }
 
         // Ensure the container's layout instance is created, even if the container
@@ -1348,14 +1362,31 @@ Ext.define('Ext.Container', {
      * @private
      */
     insertAfter: function(item, relativeToItem) {
-        var index = this.indexOf(relativeToItem);
+        var items = this.getItems(),
+            ret, index, itemIndex;
 
-        // TODO this is just as buggy as insertBefore was...
-        if (index !== -1) {
-            this.insert(index + 1, item);
+        if (relativeToItem === null) {
+            ret = this.add(item);
+        }
+        else {
+            index = items.indexOf(relativeToItem);
+
+            //<debug>
+            if (index === -1) {
+                Ext.raise('Item does not exist in container');
+            }
+            //</debug>
+
+            itemIndex = items.indexOf(item);
+
+            if (itemIndex > index || itemIndex === -1) {
+                ++index;
+            }
+
+            ret = this.insert(index, item);
         }
 
-        return this;
+        return ret;
     },
 
     /**

@@ -2007,7 +2007,7 @@ Ext.define('Ext.panel.Table', {
         // The headerCt may be hiding multiple children if a leaf level column
         // causes a parent (and possibly other parents) to be hidden. Only run the refresh
         // once we're done
-        if (!headerCt.childHideCount && view.refreshCounter) {
+        if (!headerCt.childHideCount && !headerCt.isDDMoveInGrid && view.refreshCounter) {
             view.refreshView();
         }
     },

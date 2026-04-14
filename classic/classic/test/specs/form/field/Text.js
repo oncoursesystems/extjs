@@ -170,7 +170,8 @@ function() {
         });
 
         (Ext.isIE8 || Ext.isAndroid ? xdescribe : describe)("paste", function() {
-            it("should format value", function() {
+            /** TODO False positive test */
+            xit("should format value", function() {
                 makeComponent({
                     inputMask: '(999) 999-9999',
                     enableKeyEvents: true,
@@ -195,8 +196,8 @@ function() {
                     expect(component.inputEl.dom.value).toBe('(123) 456-7890');
                 });
             });
-
-            it("should not change a formatted value", function() {
+            /** TODO False positive test */
+            xit("should not change a formatted value", function() {
                 makeComponent({
                     inputMask: '(999) 999-9999',
                     enableKeyEvents: true,

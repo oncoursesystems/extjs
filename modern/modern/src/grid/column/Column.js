@@ -958,26 +958,228 @@ Ext.define('Ext.grid.column.Column', {
             $value: {
                 xtype: 'menucheckitem'
             }
-        }
+        },
+
+        /**
+         * @cfg {Boolean} lockable
+         * Set to false to prevent a column from being locked or dragged to a locked
+         * region. This property is set to true if the column's @{cfg:locked} config
+         * is configured.
+         */
+        lockable: null,
+
+        /**
+         * @cfg {Boolean} alwaysLocked
+         * Set to true to prevent a locked column from being moved from 
+         * its locked region via dragging
+         * or use of column menu locked option.
+         */
+        alwaysLocked: false
     },
 
-    updateLocked: function(v) {
+    isLocked: function() {
+        return this.getRegion() !== 'center';
+    },
+
+    getRegion: function() {
+        var me = this,
+            locked = me.getLocked(),
+            parent;
+
+        // If this column doesn't have a locked state but has a parent column,
+        // inherit the locked state from the parent
+        if (!locked && me.parent && me.parent.isGridColumn && me.parent.isHeaderGroup) {
+            parent = me.parent;
+            locked = parent.getLocked() || parent.getRegion();
+        }
+
+        return locked || 'center';
+    },
+
+    updateLocked: function(newVal, oldVal) {
         var me = this,
             grid = me.getGrid(),
             region = grid && grid.region,
             lockedGrid, key, targetRegion;
 
-        if (region) {
-            lockedGrid = region.lockedGrid;
-            key = lockedGrid.getRegionKey(v);
-            targetRegion = lockedGrid.getRegion(key);
+        if (grid && !grid.isCssLockedGrid) {
+            if (region) {
+                lockedGrid = region.lockedGrid;
+                key = lockedGrid.getRegionKey(newVal);
+                targetRegion = lockedGrid.getRegion(key);
 
-            if (targetRegion && targetRegion !== region) {
-                lockedGrid.handleChangeRegion(targetRegion, me);
+                if (targetRegion && targetRegion !== region) {
+                    lockedGrid.handleChangeRegion(targetRegion, me);
+                }
+            }
+        }
+    },
+
+    applyLocked: function(locked, oldLocked) {
+        var me = this,
+            grid = me.getGrid();
+
+        if (grid && !grid.isCssLockedGrid) {
+            return locked;
+        }
+
+        // Default to 'left' if locked value is true
+        if (locked === true) {
+            locked = 'left';
+        }
+
+        me.setColumnRegion(locked, oldLocked);
+
+        return locked;
+    },
+
+    setColumnRegion: function(newVal, oldVal) {
+        var me = this,
+            grid = me.getGrid(),
+            headerCt = me.getRootHeaderCt(),
+            headers = headerCt ? headerCt.innerItems : [],
+            headerLength = headers.length,
+            parent = me.getParent(),
+            fromRegion = oldVal || me.getRegion(),
+            toRegion = newVal,
+            centerStart, centerEnd, i;
+
+        //
+        //  CSS LOCKED GRID CODE BEYOND THIS POINT
+        //
+
+        // Get first unlocked column
+        for (i = 0; i < headerLength; i++) {
+            if (!headers[i].hasCls(Ext.baseCSSPrefix + 'locked')) {
+                if (headers[i].parent.xtype === 'gridcolumn') {
+                    centerStart = headers[i].parent;
+                }
+                else {
+                    centerStart = headers[i];
+                }
+
+                break;
             }
         }
 
-        return v;
+        // Get last unlocked column
+        for (i = headerLength - 1; i >= 0; i--) {
+            if (!headers[i].hasCls(Ext.baseCSSPrefix + 'locked')) {
+                centerEnd = headers[i];
+                break;
+            }
+        }
+
+        if (me.isRendered()) {
+            me._locked = newVal;
+
+            switch ((fromRegion + toRegion)) {
+                case 'leftcenter':
+                case 'centerleft':
+                case 'rightleft':
+                    headerCt.insertBefore(me, centerStart);
+                    break;
+                case 'leftright':
+                case 'centerright':
+                case 'rightcenter':
+                    headerCt.insertAfter(me, centerEnd);
+            }
+
+            // Work around for visual artifact where, when the center region is scrolled to the
+            // far right, a drop anywhere in the grid 
+            // will cause the column headers to be misaligned.
+            // Unable to determine the reason for this 
+            // but this seems to resolve the visual artifact.
+            grid.getScrollable().scrollBy(-1);
+            grid.getScrollable().scrollBy(1);
+
+            grid.trackHeaderMove(parent, headerCt);
+            // locked state may have changed for a header group
+            me._locked = newVal;
+            me.updateLockedCls(me.getRegion());
+            me.fireEvent('columnlockedchange', grid, newVal, oldVal);
+        }
+    },
+
+    updateLockedCls: function(locked) {
+        var me = this,
+            isLocked = me.isLocked(),
+            filterType = me.getFilterType(),
+            filterField = filterType && filterType.field,
+            parent = me.getParent(),
+            cells = this.getCells();
+
+        me.removeCls([
+            Ext.baseCSSPrefix + 'locked',
+            Ext.baseCSSPrefix + 'locked-left',
+            Ext.baseCSSPrefix + 'locked-right'
+        ]);
+
+        me.setStyle({
+            transform: null
+        }); // Clear transformations
+
+        if (isLocked) {
+            if (parent.isRootHeader) {
+                me.addCls([Ext.baseCSSPrefix + 'locked', Ext.baseCSSPrefix + 'locked-' + locked]);
+            }
+
+            // If a header group, only apply locked styling
+            // if this is also the top level header group.
+            if (parent.parent && parent.isHeaderGroup &&
+                parent.parent.isRootHeader) {
+                parent.addCls([Ext.baseCSSPrefix + 'locked',
+                               Ext.baseCSSPrefix + 'locked-' + locked]);
+            }
+        }
+
+        cells.forEach(function(cell) {
+            cell.setLocked(locked);
+        });
+
+        // Check for filterbar and update style
+        if (filterField) {
+            this.applyLockedCls(filterField);
+        }
+    },
+
+    applyLockedCls: function(cmp) {
+        var me = this,
+            cmps = Ext.Array.from(cmp),
+            isLocked = me.isLocked(),
+            region = me.getRegion(),
+            grid = me.getGrid();
+
+        if (grid && !grid.isCssLockedGrid) {
+            return;
+        }
+
+        cmps.forEach(function(cmp) {
+            cmp.removeCls([
+                Ext.baseCSSPrefix + 'locked',
+                Ext.baseCSSPrefix + 'locked-left',
+                Ext.baseCSSPrefix + 'locked-right'
+            ]);
+            cmp.setStyle({
+                transform: null
+            });
+
+            if (isLocked) {
+                cmp.addCls([Ext.baseCSSPrefix + 'locked', Ext.baseCSSPrefix + 'locked-' + region]);
+            }
+        });
+    },
+
+    onColumnLockedChange: function(grid, col, newVal, oldVal) {
+        grid.refresh();
+    },
+
+    updateFilterType: function(newFilterType, oldFilterType) {
+        var filterField = newFilterType && newFilterType.field;
+
+        if (filterField) {
+            this.applyLockedCls(filterField);
+        }
     },
 
     toolDefaults: {
@@ -1163,6 +1365,11 @@ Ext.define('Ext.grid.column.Column', {
             tap: 'onResizerTap',
             doubletap: 'onResizerDoubleTap',
             scope: this
+        });
+
+        me.on({
+            scope: me,
+            columnlockedchange: 'onColumnLockedChange'
         });
 
         if (me.isHeaderGroup) {
@@ -1431,17 +1638,26 @@ Ext.define('Ext.grid.column.Column', {
         }
     },
 
-    getCells: function() {
-        var cells = [],
-            rows = this.getGrid().items.items,
-            len = rows.length,
-            i, row;
+    /*
+     * @param {Boolean} all
+     * True to return all column cells, not just ones associated with view rows
+     */
+    getCells: function(all) {
+        var me = this,
+            cells = [],
+            rows = me.rendered ? this.getGrid().items.items : [],
+            columns = me.isHeaderGroup ? me.getLeaves() : [ me ],
+            i, j, row, col;
 
-        for (i = 0; i < len; ++i) {
+        for (i = 0; i < rows.length; ++i) {
             row = rows[i];
 
-            if (row.isGridRow) {
-                cells.push(row.getCellByColumn(this));
+            for (j = 0; j < columns.length; j++) {
+                col = columns[j];
+
+                if (all || row.isGridRow) {
+                    cells.push(row.getCellByColumn(col));
+                }
             }
         }
 
@@ -1746,7 +1962,10 @@ Ext.define('Ext.grid.column.Column', {
 
         for (i = 0; i < len; ++i) {
             grid = grids[i];
-            grid.syncRowsToHeight(true);
+
+            if (!grid.bufferedColumns) {
+                grid.syncRowsToHeight(true);
+            }
         }
     },
 
@@ -2170,6 +2389,7 @@ Ext.define('Ext.grid.column.Column', {
                 row: row,
                 ownerCmp: row || me,
                 column: me,
+                locked: me.getRegion(), // Use getRegion instead of getLocked
                 width: me.rendered ? (me.getComputedWidth() || me.measureWidth()) : me.getWidth(),
                 minWidth: me.getMinWidth()
             },

@@ -524,7 +524,7 @@ Ext.define('Ext.data.operation.Operation', {
     /**
      * Returns true if the Operation has completed and was successful
      * @return {Boolean} True if successful
-     */        
+     */
     wasSuccessful: function() {
         return this.isComplete() && this.success === true; // success can be undefined
     },

@@ -1,0 +1,7 @@
+.#{$prefix}gridbottomscrollbar .#{$prefix}button {
+    @extend .#{$prefix}pagingtoolbar;
+
+    .#{$prefix}inner-el{
+        padding: unset;
+    }
+}

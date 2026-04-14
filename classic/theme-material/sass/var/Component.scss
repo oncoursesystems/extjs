@@ -60,8 +60,8 @@ $font-size-big: dynamic(14px);
 $font-weight: dynamic(400);
 $font-weight-normal: dynamic(400);
 $font-weight-bold: dynamic(600);
-$font-icon-font-family: dynamic('Material Icons', 'Font Awesome 5 Free');
-$fontawesome-font-family: dynamic('Font Awesome 5 Free');
+$font-icon-font-family: dynamic('Material Icons', $font-awesome-family);
+$fontawesome-font-family: dynamic($font-awesome-family);
 
 $base-gradient: none;
 //------------------------------------------

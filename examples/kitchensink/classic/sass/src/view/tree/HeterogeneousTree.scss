@@ -4,7 +4,7 @@
     }
 } @else {
     .heterogeneous-tree-area-info:before {
-        font: 16px/1 'Font Awesome 5 Free';
+        font: 16px/1 $font-awesome-family;
         content: $fa-var-info-circle;
     }
 }

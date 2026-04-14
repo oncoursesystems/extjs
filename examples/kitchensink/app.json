@@ -352,7 +352,9 @@
         "calendar",
         "pivot-d3",
         "package-loader",
-        "froala-editor"
+        "froala-editor",
+        "signature",
+        "qr-code"
     ],
     "classic": {
         "js": [

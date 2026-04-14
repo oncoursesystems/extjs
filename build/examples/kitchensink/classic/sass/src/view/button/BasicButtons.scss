@@ -12,7 +12,7 @@
     .button-home-small:before,
     .button-home-medium:before,
     .button-home-large:before {
-        font-family: 'Font Awesome 5 Free';
+        font-family: $font-awesome-family;
         content: $fa-var-home;
     }
 }

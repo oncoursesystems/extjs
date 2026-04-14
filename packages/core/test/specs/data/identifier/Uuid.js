@@ -58,7 +58,6 @@ topSuite("Ext.data.identifier.Uuid", function() {
             make();
 
             // 2fc0fdf4-d127-4db1-a47e-7b4bc2fb8d5a
-            // eslint-disable-next-line no-useless-escape
             var guidRegex = /[0-9a-f]{8}(\-[0-9a-f]{4}){3}\-[0-9a-f]{12}/;
 
             var id1 = idgen.generate(),

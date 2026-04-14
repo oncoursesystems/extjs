@@ -993,6 +993,8 @@ Ext.define('Ext.dataview.List', {
 
     placeholderHeight: null,
 
+    isResizing: false,
+
     /**
      * @property {Number} rowHeight
      * The height of rows in the list. If `variableHeights` is `true` this is the minimum
@@ -1316,6 +1318,12 @@ Ext.define('Ext.dataview.List', {
             height = info.height,
             width = info.width;
 
+        // Check if resizing is currently not happening
+        if (!me.isResizing) {
+            // Mark that resizing is in progress
+            me.isResizing = true;
+        }
+
         if (width === me.getVisibleWidth()) {
             me.setVisibleHeight(height);
         }
@@ -1326,9 +1334,20 @@ Ext.define('Ext.dataview.List', {
             me.setVisibleHeight(me.outerCt.measure('h'));
             me.suspendSync = false;
             me.setVisibleWidth(width);
+            me.refreshScrollerSize();
+            me.refreshItemHeaders();
         }
 
         me.refreshScrollerSize();
+
+        if (me.resizeTask) {
+            Ext.undefer(me.resizeTask); // Stop any previous task to prevent conflicts
+        }
+
+        me.resizeTask = Ext.defer(function() {
+            // Mark that resizing has finished
+            me.isResizing = false;
+        }, 200, me);
     },
 
     onItemAdd: function(item, index) {
@@ -1924,6 +1943,38 @@ Ext.define('Ext.dataview.List', {
                     oldX: oldX,
                     oldY: oldY
                 });
+            }
+
+            me.refreshItemHeaders();
+        },
+
+        /**
+         * Aligns item headers when the list is scrolled horizontally.
+         * This method ensures headers stay properly positioned relative to their 
+         * content during horizontal scrolling.
+         * Only processes headers if grouping is enabled.
+         * @private
+         */
+        refreshItemHeaders: function() {
+            var me = this,
+                width, headers,
+                scroller = me.getScrollable(),
+                left = scroller.getPosition().x,
+                i;
+
+            if (!me.isGrouping()) {
+                return;
+            }
+
+            width = scroller.getClientSize().x;
+            headers = me.query('itemheader');
+
+            if (headers.length) {
+                // show entire header on screen - no overflow
+                // Align each item header
+                for (i = 0; i < headers.length; i++) {
+                    headers[i].alignHeader(left, width);
+                }
             }
         },
 
@@ -4693,7 +4744,11 @@ Ext.define('Ext.dataview.List', {
             }
 
             if (force || firstTime) {
-                me.syncRows();
+                // While resizing we want to perform a 'positionItemsBottomUp' because if
+                // the first item is not positioned at 0, would cause 
+                // an Ext.raise at 'positionItemsTopDown'. 
+                me.syncRows(me.isResizing);
+                me.fireEvent('viewready', me);
             }
         },
 
@@ -4972,6 +5027,9 @@ Ext.define('Ext.dataview.List', {
             if (pinnedFooter) {
                 me.syncPinnedHorz(pinnedFooter);
             }
+
+            me.refreshItemHeaders();
+
         },
 
         // itemCount

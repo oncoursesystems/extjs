@@ -835,7 +835,7 @@ Ext.Configurator.prototype = {
                     }
                     //<debug>
                     else {
-                        if (name !== 'type') {
+                        if (name !== 'type' && name !== 'xtype') {
                             Ext.log.warn('No such config "' + name + '" for class ' +
                                 instance.$className);
                         }

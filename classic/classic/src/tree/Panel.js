@@ -307,6 +307,73 @@ Ext.define('Ext.tree.Panel', {
      */
     singleExpand: false,
 
+    /**
+     * @cfg {Boolean} [checkable=undefined]
+     * If `undefined` this cell will check the node's data for a `checked`
+     * field to exist and to be a boolean. Allowing the node data to
+     * control whether the cell is checkable.
+     *
+     * If `true`, this cell will be checkable by default with no other
+     * configuration. Nodes can still opt out if their `checkable` field is
+     * set to `false`.
+     *
+     * If `false`, this cell does not support checking regardless of
+     * node data.
+     *
+     * @since 8.0.0
+     */
+    checkable: undefined,
+
+    config: {
+        /**
+         * @cfg {Boolean} [checkOnTriTap=undefined]
+         * Controls whether current node (and child nodes depending on
+         * {@link #checkPropagation}) should be checked or unchecked
+         * when clicked on if {@link #enableTri} is true (tri-state mode). So if the node is in
+         * tri-mode and you click on it, `true` will check the item while
+         * `false` will uncheck it.
+         * 
+         * @since 8.0.0
+         */
+        checkOnTriTap: undefined,
+
+        /**
+        * @cfg {Boolean} [enableTri=true]
+        * Determines whether tri-state checkboxes are supported.
+        *
+        * When enabled, parent nodes will reflect a "tri-state" (indeterminate) checkbox
+        * if their child nodes are in a mixed state (some checked, some unchecked).
+        *
+        * This requires the {@link #checkable} config to be enabled.
+        *
+        * When `enableTri` is `true`, the {@link Ext.data.NodeInterface#checked} value
+        * can also be set to `'tri'` to explicitly display the tri-state.
+        *
+        * **Note:** If this config is set to `false`, any `'tri'` values will be
+        * interpreted as `true` (checked).
+        * 
+        * @since 8.0.0
+        */
+        enableTri: false,
+
+        /**
+         * @cfg {String} [checkPropagation=none]
+         * This configuration controls whether, and how checkbox click gestures are propagated to
+         * child nodes, or to a parent node.
+         *
+         * Valid values are
+         *
+         *      - `'none'` Checking a check node does not affect any other nodes.
+         *          When {@link #cfg-enableTri} is true, checkPropagation is explicitly
+         *          defaulted to 'both'.
+         *      - `'up'` Checking a check node synchronizes the value of its parent node 
+         *          with the state of its children.
+         *      - `'down'` Checking a check node propagates the value to its child nodes.
+         *      - `'both'` Checking a check node updates its child nodes, and syncs its parent node.
+         */
+        checkPropagation: 'none'
+    },
+
     ddConfig: {
         enableDrag: true,
         enableDrop: true
@@ -363,26 +430,12 @@ Ext.define('Ext.tree.Panel', {
      */
     root: null,
 
-    /**
-     * @cfg {String} [checkPropagation=none]
-     * This configuration controls whether, and how checkbox click gestures are propagated to
-     * child nodes, or to a parent node.
-     *
-     * Valid values are
-     *
-     *      - `'none'` Checking a check node does not affect any other nodes.
-     *      - `'up'` Checking a check node synchronizes the value of its parent node with the state
-     *         of its children.
-     *      - `'down'` Checking a check node propagates the value to its child nodes.
-     *      - `'both'` Checking a check node updates its child nodes, and syncs its parent node.
-     */
-    checkPropagation: 'none',
-
     // Required for the Lockable Mixin. These are the configurations which will be copied to the
     // normal and locked sub tablepanels
     normalCfgCopy: ['displayField', 'root', 'singleExpand', 'useArrows', 'lines', 'rootVisible',
-                    'scroll'],
-    lockedCfgCopy: ['displayField', 'root', 'singleExpand', 'useArrows', 'lines', 'rootVisible'],
+                    'scroll', 'enableTri', 'checkable', 'checkOnTriTap'],
+    lockedCfgCopy: ['displayField', 'root', 'singleExpand', 'useArrows', 'lines', 'rootVisible',
+                    'enableTri', 'checkable', 'checkOnTriTap'],
 
     isTree: true,
 
@@ -1096,5 +1149,21 @@ Ext.define('Ext.tree.Panel', {
             callback: callback,
             scope: scope
         });
+    },
+
+    applyCheckPropagation: function(value) {
+        if (value === 'none' && this.getEnableTri() === true) {
+            value = 'both';
+        }
+
+        return value;
+    },
+
+    applyEnableTri: function(value) {
+        if (value && this.getCheckPropagation() === 'none') {
+            this.setCheckPropagation('both');
+        }
+
+        return value;
     }
 });

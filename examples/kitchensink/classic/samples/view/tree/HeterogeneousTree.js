@@ -73,7 +73,7 @@ Ext.define('KitchenSink.view.tree.HeterogeneousTree', {
         }
     }, {
         xtype: 'actioncolumn',
-        glyph: 'xf05a@\'Font Awesome 5 Free\'',
+        glyph: 'xf05a',
         width: 30,
         getTip: function(value, meta, rec, rowIdx, colIdx, store, view) {
             // Go up from the view to the owning TreePanel

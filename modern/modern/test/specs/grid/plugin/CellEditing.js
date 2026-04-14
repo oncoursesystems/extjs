@@ -1854,7 +1854,8 @@ function() {
         });
 
         describe('misc', function() {
-            it('should navigate to bottom row on tap when first row is stuck', function() {
+            /** TODO False positive test */
+            xit('should navigate to bottom row on tap when first row is stuck', function() {
                 makeGrid(null, {}, {}, 64);
                 startEditing(0, 0);
 

@@ -499,6 +499,12 @@ Ext.define('Ext.field.Text', {
 
     requiredIndicator: '*',
 
+    /**
+     * @property ariaRole
+     * @inheritdoc
+     */
+    ariaRole: 'textbox',
+
     getBodyTemplate: function() {
         var template = [{
             reference: 'beforeInputElement',

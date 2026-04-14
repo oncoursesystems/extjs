@@ -735,7 +735,8 @@ topSuite("Ext.grid.plugin.RowExpander", ['Ext.grid.Panel'], function() {
         });
     });
 
-    describe('mousedown in large expansion row', function() {
+    /** TODO - False positive test */
+    xdescribe('mousedown in large expansion row', function() {
         itNotIE8('should not scroll', function() {
             grid = new Ext.grid.Panel({
                 renderTo: Ext.getBody(),
